@@ -1703,11 +1703,8 @@ data_0204b7ec kind:data(any) addr:0x0204b7ec
 data_0204b800 kind:data(any) addr:0x0204b800
 data_0204b810 kind:data(any) addr:0x0204b810
 FX_SinCosTable_ kind:data(short[8192]) addr:0x0204b8c4
-data_0204b9c4 kind:data(any) addr:0x0204b9c4
-data_0204c3c4 kind:data(any) addr:0x0204c3c4
-data_0204ccc4 kind:data(any) addr:0x0204ccc4
-FX_AtanTable_ kind:data(short[129]) addr:0x0204f8c4
-FX_AtanIdxTable_ kind:data(short[129]) addr:0x0204f9c4
+FX_AtanTable_ kind:data(short[128]) addr:0x0204f8c4
+FX_AtanIdxTable_ kind:data(short[128]) addr:0x0204f9c4
 data_0204fac4 kind:data(any) addr:0x0204fac4
 data_0204fad4 kind:data(any) addr:0x0204fad4
 data_0204fad6 kind:data(any) addr:0x0204fad6
