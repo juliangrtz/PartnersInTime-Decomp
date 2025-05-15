@@ -8,6 +8,6 @@ func_01ff8480 kind:function(arm,size=0x40) addr:0x01ff8480
 func_01ff84c0 kind:function(arm,size=0x60) addr:0x01ff84c0
 func_01ff8520 kind:function(arm,size=0x38) addr:0x01ff8520
 func_01ff8558 kind:function(arm,size=0x74) addr:0x01ff8558
-func_01ff85cc kind:function(arm,size=0x50) addr:0x01ff85cc
+MIi_DmaSetParams kind:function(arm,size=0x50) addr:0x01ff85cc
 func_01ff861c kind:function(arm,size=0xac) addr:0x01ff861c
 func_01ff86c8 kind:function(arm,size=0xcc) addr:0x01ff86c8
