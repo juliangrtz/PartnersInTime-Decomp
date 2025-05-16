@@ -23,11 +23,11 @@ args = parser.parse_args()
 
 # Config
 GAME = "PiT"
-DSD_VERSION = 'v0.7.0'
+DSD_VERSION = 'v0.8.1'
 WIBO_VERSION = '0.6.16'
 OBJDIFF_VERSION = 'v2.7.1'
-MWCC_VERSION = "2.0/sp1p5"
-DECOMP_ME_COMPILER = "mwcc_30_131"
+MWCC_VERSION = "1.2/base"
+DECOMP_ME_COMPILER = "mwcc_20_72"
 CC_FLAGS = " ".join([
     "-O4,p",                # Optimize maximally for performance
     "-enum int",            # Use int-sized enums
