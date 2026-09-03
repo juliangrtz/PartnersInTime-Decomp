@@ -377,7 +377,7 @@ TP_Init kind:function(arm,size=0x110) addr:0x0380490c
 TP_ExecSampling kind:function(arm,size=0x250) addr:0x03804a1c
 TPi_ReadChannel kind:function(arm,size=0x1f8) addr:0x03804c6c
 TPi_CheckTouch kind:function(arm,size=0x15c) addr:0x03804e64
-PM_ExecuteProcess kind:function(arm) addr:0x03804fc0
+PM_ExecuteProcess kind:function(arm,size=0x188) addr:0x03804fc0
 PM_AnalyzeCommand kind:function(arm) addr:0x03805148
 PM_Init kind:function(arm) addr:0x0380531c
 MIC_ExecuteProcess kind:function(arm) addr:0x03805cc4
@@ -499,6 +499,14 @@ SNDi_AttackTable kind:data(any) addr:0x03807490
 SNDi_SineTable kind:data(any) addr:0x03807358
 PMi_ResetControl kind:function(arm) addr:0x038053b4
 PMi_SetControl kind:function(arm) addr:0x038053e0
+PMi_GetRegister kind:function(arm) addr:0x03805404
+PMi_SetRegister kind:function(arm) addr:0x03805494
+PMi_SetLED kind:function(arm) addr:0x03805520
+PMi_SwitchUtilityProc kind:function(arm) addr:0x03805588
+PMi_DoSleep kind:function(arm) addr:0x038056bc
+PMi_KeyPattern kind:data(any) addr:0x0380a1d0
+PMi_TriggerBL kind:data(any) addr:0x0380a1d4
+PMi_Work kind:data(any) addr:0x0380a1dc
 CTRDGi_Initialized kind:data(any) addr:0x0380b1b0
 ARM7_Autoload000_End kind:data(any) addr:0x0380b1cc
 ARM7_Autoload001_End kind:data(any) addr:0x027f8bd0
