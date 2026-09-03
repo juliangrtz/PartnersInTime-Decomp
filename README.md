@@ -19,7 +19,7 @@ ignored by Git.
   and LLVM with zero differing bytes.
 - The raw generated sources initially use `.word` and `.byte`; they are a
   lossless starting representation, not a claim of semantic decompilation.
-- Every ARM9 and ARM7 runtime image now relinks as 43 components and 176
+- Every ARM9 and ARM7 runtime image now relinks as 43 components and 178
   independent, fixed-address ELF units.
 - `BattleActor_GetPartySlot` and `BattleActor_GetById` are maintained symbolic
   ARM functions. Both use linker-resolved `gBattleContext` references and match
@@ -34,7 +34,8 @@ ignored by Git.
   switch-callback registration, CPSR/IRQ mask control, reset coordination, and
   the `SVC_Halt`/`SVC_WaitByLoop` Thumb wrappers, and `MI_StopDma` are also
   maintained. Lock initialization, PXI FIFO initialization, the hardware-timer
-  tick subsystem, and alarm initialization are symbolic too.
+  tick subsystem, alarm initialization, and the public Game Pak initializer are
+  symbolic too.
 - Only the existing `src/` files are presently maintained high-level source.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
@@ -100,15 +101,15 @@ python .\tools\relink_native.py `
   --require-matching
 ```
 
-The verified pass covers 43 components, 176 section units, 31 maintained
-units, and 29,736 currently known relocations with zero differing bytes. To
+The verified pass covers 43 components, 178 section units, 32 maintained
+units, and 29,744 currently known relocations with zero differing bytes. To
 iterate on one CPU family or overlay, use `tools/relink_arm7.py`,
 `tools/relink_arm9.py`, or `tools/relink_overlay.py`. ROM-derived fallback
 units, binaries, and JSON build reports remain below ignored `build/` paths.
 
 The resident ARM7 startup is fully symbolic source. Its two large autoloads are
-still conservatively marked as mixed code/data images; 24 proven autoload-0
-units are maintained source and 156 autoload relocations are mapped, but
+still conservatively marked as mixed code/data images; 25 proven autoload-0
+units are maintained source and 164 autoload relocations are mapped, but
 the upstream project contains no further ARM7 analysis. See
 [`docs/research/ARM7_MAP.md`](docs/research/ARM7_MAP.md) for the exact confidence
 boundary.
