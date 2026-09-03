@@ -858,6 +858,24 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x038020CC",
+      "size": "0x194",
+      "kind": "code",
+      "section": ".pit_SND_Alarm",
+      "source": "arm7/SND_Alarm.s",
+      "externals": {
+        "OS_CancelAlarm": "0x037FD298",
+        "OS_CreateAlarm": "0x037FD548",
+        "OS_GetTick": "0x037FCFAC",
+        "OS_SetAlarm": "0x037FD3A4",
+        "OS_SetPeriodicAlarm": "0x037FD328",
+        "PXI_SendWordByFifo": "0x037FE2F0",
+        "SNDi_AlarmWork": "0x0380920C"
+      },
+      "expected_sha256": "610f32be1f71da5784a25b4d5553c2fff0c408fefa1fc975b7c72d68bda15be5"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
