@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-286 independent units. Those units cover raw
+287 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -120,6 +120,9 @@ resolves actors symbolically, subtracts positive damage, clamps HP to zero,
 sets the KO flag, and byte-matches overlay 2. `BattleStatus_ClearEffect` at `0x0209C278` and
 `BattleStatus_ClearAll` at `0x0209C3F8` now expose individual ailment/stat
 removal, base-stat restoration, and the unrolled eight-effect reset path.
+The adjacent `BattleStatus_TryApply` is maintained in full, including enemy
+resistance fields, RNG chance scaling, equipment guards, ailment-state setup,
+temporary stat calculation and clamping, sound cues, and effect spawning.
 `BattleItemEffect_Apply` at `0x02076584`, its healing-badge multiplier at
 `0x020768A4`, and resident `ItemEffect_CalculateValue` at `0x02018F48` expose
 fixed and percentage healing, revival, cures, POW/DEF/SPD items, maximum-HP
@@ -308,7 +311,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the sixteen
+2. Continue promoting small overlay-2 battle leaf functions using the seventeen
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the

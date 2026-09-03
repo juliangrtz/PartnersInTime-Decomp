@@ -76,8 +76,23 @@ maps attack categories to Q8 multiplier columns, optionally applies a second
 multiplier table, clamps the intermediate and final values, scales by the
 battle-wide percentage, and honors the defender's forced-one-damage flag.
 
-`BattleStatus_TryApply(actor, status_id, duration, magnitude_percent,
-chance_percent)` handles both ailments and temporary stat changes:
+The maintained `BattleStatus_TryApply(actor, status_id, duration,
+magnitude_percent, chance_percent)` handles both ailments and temporary stat
+changes. For enemy IDs 60-67 it reads four two-bit resistance fields from
+enemy-record offset `+0E`; their values leave chance unchanged, double it,
+halve it, or reject the effect. A random value in `[0, 99]` then decides the
+application. Party targets additionally pass through two equipment-effect
+special cases.
+
+On success it initializes the corresponding 12-byte effect state, preserves
+the requested duration, emits the original sound/effect event, and returns the
+status ID. Failed applications return zero. For stat changes it calculates:
+
+```c
+current_stat = clamp((base_stat * (100 + magnitude) + 50) / 100, 0, 999);
+```
+
+The stat IDs are:
 
 - status 6 changes power from `base_power`;
 - status 7 changes defense from `base_defense`;
