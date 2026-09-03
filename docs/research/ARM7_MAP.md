@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-Ninety proven autoload-0 units are now maintained ARMv4T/Thumb source:
+Ninety-three proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -127,11 +127,14 @@ Ninety proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `03803758` | CARD ROM transfer | `0x2AC` | Reads cartridge pages, emits eight-byte ROM commands, serves unaligned requests from cache, and completes waiting tasks |
 | `03803A04` | CARD request dispatch | `0xDC` | Adapts the 13 ARM9 request IDs to ROM/backup core calls, no-op handlers, or the unsupported-operation result |
 | `03803AE0` | CARD pull-out handling | `0x2B0` | Sends pull-out notifications, polls cartridge presence, compares ROM IDs, and registers the PXI termination callback |
+| `03803D90` | `SVC_SoftReset` | `0x04` | Thumb wrapper for supervisor call 0 |
 | `03803D94` | `SVC_WaitByLoop` | `0x04` | Thumb wrapper for supervisor call 3 |
+| `03803D98` | interrupt-wait SVC wrappers | `0x16` | Waits for an interrupt or specifically for VBlank through supervisor calls 4 and 5 |
 | `03803DAE` | `SVC_Halt` | `0x04` | Thumb wrapper for supervisor call 6 |
+| `03803DB2` | remaining SVC wrappers | `0x5A` | Exposes stop, sound-bias, division, memory, decompression, and lookup-table supervisor calls |
 | `03806D04` | `CTRDG_Init` | `0x5C` | Initializes ARM7 Game Pak state and transitions its PXI callback |
 
-Together these replace `0x80A8` bytes of the first mixed autoload image with
+Together these replace `0x811C` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -143,9 +146,9 @@ encodings are valid, so those two context-switch instructions use documented
 ## Current confidence boundary
 
 There are 1,079 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 1,060 covering the 90 maintained autoload-0 units. The
+resident startup and 1,060 covering the 93 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x8218` currently promoted
+referenced literal value, or stored pointer. All `0x828C` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no

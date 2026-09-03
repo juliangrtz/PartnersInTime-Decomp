@@ -1270,6 +1270,33 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03803D90",
+      "size": "0x4",
+      "kind": "code",
+      "section": ".pit_SVC_SoftReset",
+      "source": "arm7/SVC_SoftReset.s",
+      "expected_sha256": "0047f9d2959e3a3cd24f18be3adbfeddd3b2259e27e52eb8fcffac6211c15407"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x03803D98",
+      "size": "0x16",
+      "kind": "code",
+      "section": ".pit_SVC_WaitInterrupt",
+      "source": "arm7/SVC_WaitInterrupt.s",
+      "expected_sha256": "27dd4447c4ef734d90957b88ef9bae22f25acc0bcfeabbc56060bee06f0eab13"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x03803DB2",
+      "size": "0x5A",
+      "kind": "code",
+      "section": ".pit_SVC_Core",
+      "source": "arm7/SVC_Core.s",
+      "expected_sha256": "18849451bccac7db498dc5f5fc27d6ea3a4dbb2e2ce49bffb7be90afd99822bf"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",

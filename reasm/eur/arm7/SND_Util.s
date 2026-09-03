@@ -112,7 +112,8 @@ SND_GetVolumeTable:
     bx r12
 .size SND_GetVolumeTable, . - SND_GetVolumeTable
 .L_volume_table_svc:
-    .word SVC_GetVolumeTable + 1
+    /* ELF marks the now-defined .thumb_func symbol odd as a callable pointer. */
+    .word SVC_GetVolumeTable
 
 .global SND_CalcTimer
 .type SND_CalcTimer, %function
@@ -210,4 +211,5 @@ SND_GetPitchTable:
     bx r12
 .size SND_GetPitchTable, . - SND_GetPitchTable
 .L_pitch_table_svc:
-    .word SVC_GetPitchTable + 1
+    /* ELF marks the now-defined .thumb_func symbol odd as a callable pointer. */
+    .word SVC_GetPitchTable
