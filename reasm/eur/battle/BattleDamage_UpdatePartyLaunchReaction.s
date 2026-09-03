@@ -29,7 +29,7 @@
 .extern data_ov002_020bfa3c
 .extern BattlePosition_StoreViewRelative
 .extern func_ov002_02091198
-.extern func_ov002_02091a58
+.extern BattleSceneObject_IsAnimationActiveById
 .extern BattleSceneObject_GetActiveModel
 .extern func_ov002_020a3f9c
 .extern func_ov002_020a4934
@@ -113,7 +113,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     beq .L_count_ready
     ldrh r0, [sl, #TASK_DATA_ACTOR_ID]
     mov r1, #2
-    bl func_ov002_02091a58
+    bl BattleSceneObject_IsAnimationActiveById
     cmp r0, #0
     addne sp, sp, #0x2C
     popne {r4, r5, r6, r7, r8, sb, sl, fp, lr}

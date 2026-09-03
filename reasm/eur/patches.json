@@ -340,6 +340,30 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x02091A18",
+      "size": "0x40",
+      "section": ".pit_BattleSceneObject_IsAnimationChannelActive",
+      "source": "battle/BattleSceneObject_IsAnimationChannelActive.s",
+      "externals": {
+        "OS_Terminate": "0x0203AE78"
+      },
+      "expected_sha256": "32575bf756602b9664691b67a382fa03f31d96bb381f323938d1344e62b66901"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x02091A58",
+      "size": "0x38",
+      "section": ".pit_BattleSceneObject_IsAnimationActiveById",
+      "source": "battle/BattleSceneObject_IsAnimationActiveById.s",
+      "externals": {
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "BattleSceneObject_IsAnimationChannelActive": "0x02091A18",
+        "OS_Terminate": "0x0203AE78"
+      },
+      "expected_sha256": "1b2a7c5e0a34713d981aefaa790a8c83d184aa0a1a7376f16ca2778dd981f6a5"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209234C",
       "size": "0x44",
       "section": ".pit_BattleObjectData_ResolveSlot",
@@ -468,7 +492,7 @@
         "data_ov002_020bfa3c": "0x020BFA3C",
         "BattlePosition_StoreViewRelative": "0x02076B0C",
         "func_ov002_02091198": "0x02091198",
-        "func_ov002_02091a58": "0x02091A58",
+        "BattleSceneObject_IsAnimationActiveById": "0x02091A58",
         "BattleSceneObject_GetActiveModel": "0x020A3370",
         "func_ov002_020a3f9c": "0x020A3F9C",
         "func_ov002_020a4934": "0x020A4934",
