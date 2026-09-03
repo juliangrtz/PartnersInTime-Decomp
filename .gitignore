@@ -16,5 +16,7 @@ build.ninja
 .ninja_log*
 .ninja_lock
 /wibo
-tools/__pycache__/
+__pycache__/
+*.py[cod]
+.pytest_cache/
 asm/
