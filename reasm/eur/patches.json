@@ -122,6 +122,17 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209C278",
+      "size": "0x180",
+      "section": ".pit_BattleStatus_ClearEffect",
+      "source": "battle/BattleStatus_ClearEffect.s",
+      "externals": {
+        "func_ov002_020a8320": "0x020A8320"
+      },
+      "expected_sha256": "ddefb151c0fb6ef997a68f92f2a36b4b6c5cd34cd4fc20055b4954400676faa6"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209C3F8",
       "size": "0x6C",
       "section": ".pit_BattleStatus_ClearAll",
