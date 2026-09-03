@@ -466,6 +466,28 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FE620",
+      "size": "0x170",
+      "kind": "code",
+      "section": ".pit_SND_Control",
+      "source": "arm7/SND_Control.s",
+      "externals": {
+        "OS_SpinWait": "0x037FDD08",
+        "PMi_ResetControl": "0x038053B4",
+        "PMi_SetControl": "0x038053E0",
+        "REG_POWCNT2": "0x04000304",
+        "REG_SNDCAP0CNT": "0x04000508",
+        "REG_SNDCAP1CNT": "0x04000509",
+        "REG_SOUNDCNT_ENABLE": "0x04000501",
+        "REG_SOUNDCNT_VOLUME": "0x04000500",
+        "SND_StopChannel": "0x037FEA08",
+        "SVC_SoundBiasReset": "0x03803DC2",
+        "SVC_SoundBiasSet": "0x03803DBA"
+      },
+      "expected_sha256": "9d99d4a8815328efde4cec83cf78bd39bff73584c347e98a0ce632111bcb6c5c"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
@@ -547,7 +569,7 @@
         "SVC_Halt_Thunk": "0x037F8524",
         "SVC_WaitByLoop": "0x03803D94",
         "_s32_div_f": "0x03806F68",
-        "func_037FE70C": "0x037FE70C",
+        "SND_Shutdown": "0x037FE70C",
         "func_03807604": "0x03807604"
       },
       "expected_sha256": "cec00059e2535470eda475c5c34ff1885cd8579c80383b33cfa40f4edea0096b"

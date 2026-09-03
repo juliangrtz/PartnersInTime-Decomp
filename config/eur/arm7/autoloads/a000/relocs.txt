@@ -454,6 +454,27 @@ from:0x037fe5cc kind:load to:0x037fe540 module:arm7_autoload(0)
 from:0x037fe5e4 kind:load to:0x03807d38 module:arm7_autoload(0)
 from:0x037fe5f4 kind:arm_call to:0x037fd328 module:arm7_autoload(0)
 from:0x037fe5fc kind:load to:0x03807d34 module:arm7_autoload(0)
+from:0x037fe620 kind:load to:0x04000501 module:memory
+from:0x037fe648 kind:load to:0x04000501 module:memory
+from:0x037fe658 kind:load to:0x04000500 module:memory
+from:0x037fe670 kind:load to:0x04000304 module:memory
+from:0x037fe684 kind:arm_call to:0x038053e0 module:arm7_autoload(0)
+from:0x037fe68c kind:arm_call to:0x037fe6b0 module:arm7_autoload(0)
+from:0x037fe694 kind:arm_call to:0x037fdd08 module:arm7_autoload(0)
+from:0x037fe698 kind:arm_call to:0x037fe778 module:arm7_autoload(0)
+from:0x037fe6b0 kind:load to:0x03803dba add:0x1 module:arm7_autoload(0)
+from:0x037fe6c4 kind:arm_call to:0x037fe760 module:arm7_autoload(0)
+from:0x037fe6cc kind:arm_call to:0x037fe700 module:arm7_autoload(0)
+from:0x037fe6d4 kind:arm_call to:0x037fdd08 module:arm7_autoload(0)
+from:0x037fe6dc kind:arm_call to:0x038053b4 module:arm7_autoload(0)
+from:0x037fe6e0 kind:load to:0x04000304 module:memory
+from:0x037fe700 kind:load to:0x03803dc2 add:0x1 module:arm7_autoload(0)
+from:0x037fe714 kind:arm_call to:0x037fe760 module:arm7_autoload(0)
+from:0x037fe728 kind:arm_call to:0x037fea08 module:arm7_autoload(0)
+from:0x037fe73c kind:load to:0x04000508 module:memory
+from:0x037fe744 kind:load to:0x04000509 module:memory
+from:0x037fe760 kind:load to:0x04000501 module:memory
+from:0x037fe778 kind:load to:0x04000501 module:memory
 from:0x03806d0c kind:load to:0x0380b1b0 module:arm7_autoload(0)
 from:0x03806d24 kind:arm_call to:0x0380698c module:arm7_autoload(0)
 from:0x03806d28 kind:arm_call to:0x037fe1c4 module:arm7_autoload(0)
