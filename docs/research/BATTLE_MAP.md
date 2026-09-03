@@ -71,6 +71,9 @@ chance_percent)` handles both ailments and temporary stat changes:
 - status 7 changes defense from `base_defense`;
 - status 8 changes speed from `base_speed`.
 
+`BattleStatus_ClearAll` is maintained symbolic assembly and explicitly invokes
+the per-effect reset for status IDs 1 through 8.
+
 Property IDs 16-20 directly expose current HP, max HP, POW, DEF, and SPD.
 
 ## Enemy stat records
