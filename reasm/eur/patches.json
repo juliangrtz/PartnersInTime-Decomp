@@ -1,0 +1,13 @@
+{
+  "format": 1,
+  "patches": [
+    {
+      "module": "arm9_ov002",
+      "address": "0x02076F44",
+      "size": "0x20",
+      "source": "battle/BattleActor_GetPartySlot.s",
+      "expected_sha256": "c74cf0dd865366d3f9fd1f136a0f6ab6d1df794954e2ff4a097b073814297a36"
+    }
+  ]
+}
+
