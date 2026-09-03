@@ -501,8 +501,9 @@ SNDi_AttackTable kind:data(any) addr:0x03807490
 SNDi_SineTable kind:data(any) addr:0x03807358
 PMi_ResetControl kind:function(arm,size=0x2c) addr:0x038053b4
 PMi_SetControl kind:function(arm,size=0x24) addr:0x038053e0
-PMi_GetRegister kind:function(arm) addr:0x03805404
-PMi_SetRegister kind:function(arm) addr:0x03805494
+PMi_GetRegister kind:function(arm,size=0x90) addr:0x03805404
+PMi_SetRegister kind:function(arm,size=0x70) addr:0x03805494
+PMi_SetSpiControl kind:function(arm,size=0x1c) addr:0x03805504
 PMi_SetLED kind:function(arm) addr:0x03805520
 PMi_SwitchUtilityProc kind:function(arm) addr:0x03805588
 PMi_DoSleep kind:function(arm) addr:0x038056bc
