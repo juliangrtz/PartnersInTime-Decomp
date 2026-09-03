@@ -115,7 +115,7 @@
         "PAD_InitXYButton": "0x037FE580",
         "func_037FF0CC": "0x037FF0CC",
         "FS_Init": "0x03802ABC",
-        "func_03802B48": "0x03802B48",
+        "CARD_SetThreadPriority": "0x03802B48",
         "func_03803B48": "0x03803B48",
         "func_03804244": "0x03804244",
         "func_03805ACC": "0x03805ACC",
@@ -994,6 +994,21 @@
         "OS_GetLockID": "0x037FB934"
       },
       "expected_sha256": "bf8f37528a642fe11026b7c8281238fe9a3458c4922ae7cbb909264984c85bd0"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x03802B48",
+      "size": "0x48",
+      "kind": "code",
+      "section": ".pit_CARD_SetThreadPriority",
+      "source": "arm7/CARD_SetThreadPriority.s",
+      "externals": {
+        "CARDi_Work": "0x03809460",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SetThreadPriority": "0x037FBD70"
+      },
+      "expected_sha256": "3e9aa3146ce62db0c69b035f16ddf77a194ba8d659627880fe3315ef3e2dea8d"
     },
     {
       "module": "arm7_autoload_000",

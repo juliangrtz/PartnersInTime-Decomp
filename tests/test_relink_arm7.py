@@ -231,6 +231,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["FS_Init"], 0x03802ABC)
         self.assertEqual(symbols["FSi_Init"], 0x03802AF0)
         self.assertEqual(symbols["CARD_Init"], 0x03803594)
+        self.assertEqual(symbols["CARD_SetThreadPriority"], 0x03802B48)
         self.assertEqual(symbols["CTRDG_Init"], 0x03806D04)
         self.assertEqual(symbols["_ll_sdiv"], 0x03806DB8)
         self.assertEqual(symbols["CTRDGi_Initialized"], 0x0380B1B0)

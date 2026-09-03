@@ -26,7 +26,7 @@
 .extern PAD_InitXYButton
 .extern func_037FF0CC
 .extern FS_Init
-.extern func_03802B48
+.extern CARD_SetThreadPriority
 .extern func_03803B48
 .extern func_03804244
 .extern func_03805ACC
@@ -62,7 +62,7 @@ ARM7_Main:
     mvn r0, #0
     bl FS_Init
     mov r0, #15
-    bl func_03802B48
+    bl CARD_SetThreadPriority
     mov r0, #12
     bl func_027F6124
     mov r0, r4
