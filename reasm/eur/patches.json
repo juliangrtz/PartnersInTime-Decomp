@@ -24,6 +24,17 @@
       "expected_sha256": "684dd9edc891cc18303e406ee9a001836478f0853c5c4b62d831a22f0e7d9140"
     },
     {
+      "module": "arm9_ov002",
+      "address": "0x0209D694",
+      "size": "0x84",
+      "section": ".pit_BattleActor_ApplyDamage",
+      "source": "battle/BattleActor_ApplyDamage.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64"
+      },
+      "expected_sha256": "b57fc3d485d100aa5def96ef56bbc1567e251f770884cc431ea5e1969fff1a9e"
+    },
+    {
       "module": "arm7",
       "address": "0x02380118",
       "size": "0x4",

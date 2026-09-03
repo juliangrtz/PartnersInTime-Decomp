@@ -105,14 +105,17 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-261 independent units. Those units cover raw
+263 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
-DSD-validated external definition. All resident ARM7 bytes are maintained
+DSD-validated external definition. `BattleActor_ApplyDamage` at `0x0209D694`
+is also maintained ARM assembly: it resolves an actor symbolically, subtracts
+positive damage, clamps HP to zero, sets the KO flag, and byte-matches overlay
+2. All resident ARM7 bytes are maintained
 ARMv4T assembly or symbolic module parameters. One hundred and eighteen maintained units
 from autoload 0 now cover `ARM7_Main`, its `SVC_Halt` thunk, `OS_Init`, IRQ mask
 and
@@ -286,11 +289,11 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Crawl outward from the maintained `ARM7_Main` call graph to recover further
-   ARM/Thumb function boundaries, data sections, and relocations in both ARM7
-   autoload images; the upstream project supplies no additional analysis.
-3. Continue promoting small overlay-2 battle leaf functions using the two
-   exact symbolic units as the template.
+2. Continue promoting small overlay-2 battle leaf functions using the three
+   exact symbolic actor/damage units as the template.
+3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
+   recover further ARM/Thumb boundaries and relocations without blocking the
+   overlay-2 work on unrelated SDK cleanup.
 4. Split section fallbacks at DSD translation-unit boundaries, then retire
    fixed-layout patch registration.
 5. Promote the confirmed battle actor/stat structures into maintained headers.

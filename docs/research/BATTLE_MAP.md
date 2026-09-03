@@ -47,8 +47,9 @@ and runtime overlay 2.
 
 Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are
-coordinates rather than HP or stats. The two actor resolvers are now maintained
-symbolic assembly in `reasm/eur/battle/` and byte-match the European overlay.
+coordinates rather than HP or stats. Both actor resolvers and the compact
+damage/KO updater are now maintained symbolic assembly in `reasm/eur/battle/`
+and byte-match the European overlay.
 
 ## Damage and status behavior
 
