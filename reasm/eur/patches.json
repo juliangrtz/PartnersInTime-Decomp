@@ -1429,6 +1429,20 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03804658",
+      "size": "0xF4",
+      "kind": "code",
+      "section": ".pit_TP_UpdateTouchData",
+      "source": "arm7/TP_UpdateTouchData.s",
+      "externals": {
+        "TPi_PenDownCounter": "0x0380A0F4",
+        "TPi_PenUpCounter": "0x0380A0F0",
+        "TPi_Work": "0x0380A0F8"
+      },
+      "expected_sha256": "f7fc8073fee6c8483aed75e03c2be0b8785c91d7cee733db0e28b29e3968b5a6"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",

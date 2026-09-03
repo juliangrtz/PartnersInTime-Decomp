@@ -105,15 +105,15 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-242 independent units. Those units cover raw
+243 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
-images. There are 30,750 currently known relocations. `BattleActor_GetPartySlot`
+images. There are 30,758 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
 DSD-validated external definition. All resident ARM7 bytes are maintained
-ARMv4T assembly or symbolic module parameters. Ninety-nine maintained units
+ARMv4T assembly or symbolic module parameters. One hundred maintained units
 from autoload 0 now cover `ARM7_Main`, its `SVC_Halt` thunk, `OS_Init`, IRQ mask
 and
 handler registration, `OS_IrqHandler`, callback-backed VBlank/timer/DMA IRQ
@@ -147,8 +147,8 @@ the timer-0 tick subsystem, alarm initialization and scheduling, the Game Pak
 initializer, all 25 Thumb SVC wrappers, the population-count helper, SPI
 PXI/worker dispatch, the common SPI request ring, result path and exception
 lock, complete SPI service/thread initialization, and touch-panel worker
-sampling and alarm scheduling. They include 1,170 verified autoload
-relocations; ARM7 now has 1,189 verified
+sampling, alarm scheduling, and pen-state debounce processing. They include
+1,178 verified autoload relocations; ARM7 now has 1,197 verified
 relocations in total. Every linked component and the resulting NDS have zero
 differing bytes from the verified European ROM.
 
