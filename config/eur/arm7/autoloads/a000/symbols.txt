@@ -302,7 +302,9 @@ CARDi_CommandEnd kind:function(arm,size=0xe0) addr:0x038033e0
 CARDi_CommandBegin kind:function(arm,size=0x10) addr:0x038034c0
 CARDi_CommandCheckBusy kind:function(arm,size=0x6c) addr:0x038034d0
 CARDi_CheckCommandTimeout kind:function(arm,size=0x58) addr:0x0380353c
-CARD_Init kind:function(arm) addr:0x03803594
+CARD_Init kind:function(arm,size=0x80) addr:0x03803594
+CARDi_RomAccessor kind:function(arm) addr:0x03803758
+CARD_InitPulledOutCallback kind:function(arm) addr:0x03803d30
 func_03803B48 kind:label addr:0x03803b48
 SVC_WaitByLoop kind:function(thumb,size=0x4) addr:0x03803d94
 SVC_Halt kind:function(thumb,size=0x4) addr:0x03803dae
@@ -384,6 +386,8 @@ CARDi_Work kind:data(any) addr:0x03809460
 CARDi_Thread kind:data(any) addr:0x038094a0
 CARDi_ThreadStackTop kind:data(any) addr:0x03809a40
 CARDi_SpiWork kind:data(any) addr:0x03809a40
+CARDi_RomBase kind:data(any) addr:0x03809a50
+CARDi_RomStat kind:data(any) addr:0x03809a60
 CARDi_BootMode kind:data(any) addr:0x027ffc40
 CARDi_CommandTable kind:data(any) addr:0x038074ac
 CARDi_WriteEnableCommand kind:data(any) addr:0x038074a4
