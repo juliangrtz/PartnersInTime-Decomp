@@ -1012,6 +1012,27 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03802B90",
+      "size": "0xB8",
+      "kind": "code",
+      "section": ".pit_CARD_InitCommon",
+      "source": "arm7/CARD_InitCommon.s",
+      "externals": {
+        "CARDi_BootMode": "0x027FFC40",
+        "CARDi_Enabled": "0x0380945C",
+        "CARDi_OnFifoRecv": "0x03802D6C",
+        "CARDi_TaskThread": "0x03802C48",
+        "CARDi_Thread": "0x038094A0",
+        "CARDi_ThreadStackTop": "0x03809A40",
+        "CARDi_Work": "0x03809460",
+        "OS_CreateThread": "0x037FC088",
+        "OS_WakeupThreadDirect": "0x037FBF20",
+        "PXI_SetFifoRecvCallback": "0x037FE3BC"
+      },
+      "expected_sha256": "4980e950536a742b7e928845b699cfb25f30427e807b96d54fd9e4e34c18b2f6"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
