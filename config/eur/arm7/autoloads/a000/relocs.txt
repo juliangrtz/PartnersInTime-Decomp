@@ -85,6 +85,12 @@ from:0x037fbbf4 kind:load to:0x027ffff0 module:memory
 from:0x037fbc00 kind:arm_call to:0x037fb9fc module:arm7_autoload(0)
 from:0x037fbc14 kind:load to:0x027fffb8 module:memory
 from:0x037fbc24 kind:load to:0x027fffb8 add:0x4 module:memory
+from:0x037fbc54 kind:arm_call to:0x037fdca4 module:arm7_autoload(0)
+from:0x037fbc5c kind:load to:0x03807af8 module:arm7_autoload(0)
+from:0x037fbc74 kind:arm_call to:0x037fdcb8 module:arm7_autoload(0)
+from:0x037fbc8c kind:arm_call to:0x037fdca4 module:arm7_autoload(0)
+from:0x037fbc90 kind:load to:0x03807af8 module:arm7_autoload(0)
+from:0x037fbcac kind:arm_call to:0x037fdcb8 module:arm7_autoload(0)
 from:0x037fb494 kind:load to:0x0380794c module:arm7_autoload(0)
 from:0x037fb49c kind:load to:0x037fb4ac module:arm7_autoload(0)
 from:0x037fb4ac kind:load to:0x03807a84 module:arm7_autoload(0)
