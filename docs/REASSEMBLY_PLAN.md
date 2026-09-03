@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-362 independent units. Those units cover raw
+369 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -130,6 +130,10 @@ slots used by reaction state machines. Their full `BattleSceneObject_SetAnimatio
 producer at `0x02091198` is maintained too: it classifies party/enemy objects,
 creates or retires models, selects party status/HP animation variants, handles
 linked party forms, and notifies the scene after resource changes.
+The battle object-data load path is symbolic as well: its 48-byte state lookup,
+asynchronous queue setup, duplicate-resource guard, ordinary-slot routing, and
+eight large enemy-load slots are exposed by the functions at `0x02077058`,
+`0x02089EEC`, and `0x02092048`.
 The party knockout task pair at `0x020A90F4` and `0x020A9280` now exposes
 status clearing, animation completion, actor/global locks, form-specific sound
 pairs, linked-character movement and the follow-up character-load callbacks.

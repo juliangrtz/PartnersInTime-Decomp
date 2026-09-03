@@ -16,6 +16,7 @@ and runtime overlay 2.
 | `02076F64` | `BattleActor_GetById` | Resolves party IDs 56-59 or enemy IDs 60+ to actor pointers |
 | `02076BD4` | `BattleActor_CanReceiveStatus` | Rejects dead, unloaded, or inactive-form status targets |
 | `02076FB4` | `BattleSceneObject_GetById` | Resolves field, party, enemy, and auxiliary visual-object IDs |
+| `02077058` | `BattleObjectData_GetLoadState` | Resolves a 48-byte object-resource load state |
 | `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
@@ -70,7 +71,10 @@ and runtime overlay 2.
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
 | `02018F48` | `ItemEffect_CalculateValue` | Resident item-record value calculation and HP clamps |
 | `0208908C` | `BattleEnemyData_RequestLoad` | Initializes and queues one enemy-data request |
+| `02089EEC` | `BattleObjectData_QueueLoad` | Resets an object-data state and queues its asynchronous loader |
+| `02092048` | `BattleObjectData_EnsureLoaded` | Routes ordinary and enemy resource requests while suppressing duplicates |
 | `0209234C` | `BattleObjectData_ResolveSlot` | Decodes a packed object ID into a 44-byte runtime descriptor |
+| `020A32F4` | `BattleSceneObject_SetStateFlags` | Sets the low state byte and independent bit-18 flag |
 
 ## Battle actor layout
 

@@ -9,11 +9,11 @@
 .extern BattleActor_GetPartySlot
 .extern BattleParty_UpdateKnockout
 .extern BattleSceneObject_SetAnimation
+.extern BattleSceneObject_SetStateFlags
 .extern BattleSound_Play
 .extern BattleStatus_ClearAll
 .extern BattleTaskList_Insert
 .extern func_ov002_02065ec4
-.extern func_ov002_020a32f4
 .extern gBattleContext
 
 .global BattleParty_StartKnockout
@@ -39,7 +39,7 @@ BattleParty_StartKnockout:
     mov r0, r6
     mov r1, #1
     mov r2, #0
-    bl func_ov002_020a32f4
+    bl BattleSceneObject_SetStateFlags
     ldrh r2, [r6, #0xEC]
     ldr r0, .L_battle_context
     ldr r1, .L_update_callback

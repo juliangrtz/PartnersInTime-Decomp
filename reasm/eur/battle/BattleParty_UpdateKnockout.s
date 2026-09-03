@@ -9,7 +9,7 @@
 .extern BattleActor_GetPartySlot
 .extern BattleSceneObject_GetById
 .extern BattleSceneObject_SetAnimation
-.extern func_ov002_02092048
+.extern BattleObjectData_EnsureLoaded
 .extern BattleSceneObject_AdjustPosition
 .extern func_ov002_020a8bec
 .extern func_ov002_020a906c
@@ -95,7 +95,7 @@ BattleParty_UpdateKnockout:
     bne .L_luigi
     mov r0, #5
     mov r1, #0xC000003B
-    bl func_ov002_02092048
+    bl BattleObjectData_EnsureLoaded
     ldr r0, .L_battle_context
     mov r2, #3
     ldr r0, [r0]
@@ -109,7 +109,7 @@ BattleParty_UpdateKnockout:
 .L_luigi:
     mov r0, #6
     mov r1, #0xC000003C
-    bl func_ov002_02092048
+    bl BattleObjectData_EnsureLoaded
     ldr r0, .L_battle_context
     mov r2, #3
     ldr r0, [r0]
