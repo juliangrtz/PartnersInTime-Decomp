@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-407 independent units. Those units cover raw
+409 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -157,8 +157,10 @@ action and reaction VM states, sorted per-actor task insertion, 184-byte state
 initialization, script pointer binding and completion handling through
 `VM_Run`. Its order-wait gate scans both task families, compares the signed
 script-order field with an actor-ID tie break, and resumes a paused state only
-when no earlier live task remains. Hit-queue damage against an enemy explicitly
-starts its reaction VM.
+when no earlier live task remains. The matching stop path clears one of four
+party VM slots directly or decodes typed IDs `0x1000`-`0x4000`, removes the
+sorted task from the corresponding pool, and invalidates its attached script
+state. Hit-queue damage against an enemy explicitly starts its reaction VM.
 `BattleDamage_CalculateBase` at `0x0209BF38`
 and `BattleDamage_CalculateAttack` at `0x02071C84` expose the compact and full
 level/POW/DEF calculations, including Q8 modifier tables, category minima,

@@ -31,6 +31,8 @@ and runtime overlay 2.
 | `0207E9C0` | `BattleAI_UpdateActionTask` | Runs one enemy action VM task to completion |
 | `0207EA58` | `BattleAITask_GetOrInsert` | Finds or inserts a task in actor-ID order |
 | `0207E684` | `BattleAI_TryClearOrderWait` | Resumes a paused VM state once no earlier action or reaction task blocks it |
+| `0207E430` | `BattleAITask_StopById` | Stops one sorted task and invalidates its attached VM state |
+| `0207E4F8` | `BattleAI_StopScriptById` | Decodes party or typed task IDs and routes script cancellation |
 | `0207ECA8` | `BattleAI_StartReactionScript` | Starts an enemy reaction state with mode `0x2000` |
 | `0207ECC0` | `BattleAI_StartActionScript` | Starts an enemy action state with mode `0x1000` |
 | `0207ED70` | `BattleAI_StartScriptTask` | Initializes and attaches an enemy AI VM state |
@@ -372,6 +374,11 @@ active task lists. It ignores the same actor, empty scripts, and bit-0-disabled
 states, then compares the signed order field at `+0xB4` with an actor-ID tie
 break. It clears the wait bit and permits `VM_Run` only after every earlier
 live task has passed.
+`BattleAI_StopScriptById` is the inverse routing layer. IDs 1-4 clear the four
+party VM pointers at context offsets `+0x6A64`, `+0x6B1C`, `+0x6BD4`, and
+`+0x6C8C`; high nibbles `0x1000` through `0x4000` select the four task pools.
+The sorted-list helper stops at IDs greater than the target, clears the found
+task's state script pointer, and releases the task node.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds

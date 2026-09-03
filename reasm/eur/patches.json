@@ -76,6 +76,33 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0207E430",
+      "size": "0xC8",
+      "section": ".pit_BattleAITask_StopById",
+      "source": "battle/BattleAITask_StopById.s",
+      "externals": {
+        "BattleTask_Release": "0x020A51B8"
+      },
+      "expected_sha256": "48fcdf5adfcced5824d3c78123599e53b7e10e171850138e45daba62eedc626d"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0207E4F8",
+      "size": "0x18C",
+      "section": ".pit_BattleAI_StopScriptById",
+      "source": "battle/BattleAI_StopScriptById.s",
+      "externals": {
+        "BattleAITask_StopById": "0x0207E430",
+        "data_ov002_020c0720": "0x020C0720",
+        "data_ov002_020c0918": "0x020C0918",
+        "gBattleAIActionTaskPool": "0x020C07C8",
+        "gBattleAIReactionTaskPool": "0x020C0870",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "e1ff9e323efad509c42dfe65d4a4a27392b441625fbfb18bd79b0e9bfa378406"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0207E684",
       "size": "0x11C",
       "section": ".pit_BattleAI_TryClearOrderWait",
