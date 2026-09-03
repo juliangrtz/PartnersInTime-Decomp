@@ -74,8 +74,10 @@ chance_percent)` handles both ailments and temporary stat changes:
 - status 7 changes defense from `base_defense`;
 - status 8 changes speed from `base_speed`.
 
-`BattleStatus_ClearAll` is maintained symbolic assembly and explicitly invokes
-the per-effect reset for status IDs 1 through 8.
+`BattleStatus_ClearEffect` is maintained symbolic assembly: it verifies the
+requested status is active, removes the associated battle effect, clears its
+state, and restores base POW, DEF, or SPD for status IDs 6-8. The maintained
+`BattleStatus_ClearAll` wrapper explicitly invokes it for IDs 1 through 8.
 
 Property IDs 16-20 directly expose current HP, max HP, POW, DEF, and SPD.
 
