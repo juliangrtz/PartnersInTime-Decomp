@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-392 independent units. Those units cover raw
+394 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -159,7 +159,9 @@ global battle scaling, and clamps. `BattleActor_ApplyDamage` at `0x0209D694`
 resolves actors symbolically, subtracts positive damage, clamps HP to zero,
 sets the KO flag, and byte-matches overlay 2. `BattleStatus_ClearEffect` at `0x0209C278` and
 `BattleStatus_ClearAll` at `0x0209C3F8` now expose individual ailment/stat
-removal, base-stat restoration, and the unrolled eight-effect reset path.
+removal, actor-local timer/delta cancellation, base-stat restoration, and the
+unrolled eight-effect reset path. The shared cancellation dispatcher at
+`0x020A8320` covers all eight status IDs for party and enemy actors.
 The adjacent `BattleStatus_TryApply` is maintained in full, including enemy
 resistance fields, RNG chance scaling, equipment guards, ailment-state setup,
 temporary stat calculation and clamping, sound cues, and effect spawning.

@@ -65,6 +65,17 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x020A8320",
+      "size": "0x23C",
+      "section": ".pit_BattleStatus_StopActorEffect",
+      "source": "battle/BattleStatus_StopActorEffect.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64"
+      },
+      "expected_sha256": "90c8d7598c8421857cc1ff0cf4969d1b441de1fc3a221bf3574c32a1b2357f36"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02077058",
       "size": "0x24",
       "section": ".pit_BattleObjectData_GetLoadState",
@@ -996,7 +1007,7 @@
       "section": ".pit_BattleStatus_ClearEffect",
       "source": "battle/BattleStatus_ClearEffect.s",
       "externals": {
-        "func_ov002_020a8320": "0x020A8320"
+        "BattleStatus_StopActorEffect": "0x020A8320"
       },
       "expected_sha256": "ddefb151c0fb6ef997a68f92f2a36b4b6c5cd34cd4fc20055b4954400676faa6"
     },
