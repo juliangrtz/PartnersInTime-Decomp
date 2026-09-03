@@ -27,7 +27,7 @@
 .extern BattleEntity_BindResource
 .extern BattleSceneObject_GetById
 .extern data_ov002_020bfa3c
-.extern func_ov002_02076b0c
+.extern BattlePosition_StoreViewRelative
 .extern func_ov002_02091198
 .extern func_ov002_02091a58
 .extern BattleSceneObject_GetActiveModel
@@ -66,7 +66,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     add r0, sp, #0x20
     mov r2, r2, asr #16
     mov r3, r3, asr #16
-    bl func_ov002_02076b0c
+    bl BattlePosition_StoreViewRelative
 
     ldrsh r0, [sl, #TASK_DATA_PHASE]
     cmp r0, #1

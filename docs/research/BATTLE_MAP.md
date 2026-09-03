@@ -10,6 +10,7 @@ and runtime overlay 2.
 |---:|---|---|
 | `020726B0` | `BattleTaskQueue_Enqueue` | Appends a callback/argument pair to the 32-entry battle task queue |
 | `02073068` | `BattleMain_Update` | Per-frame battle update and central turn-state owner |
+| `02076B0C` | `BattlePosition_StoreViewRelative` | Stores coordinates raw or relative to one of two battle-view offsets |
 | `02076F44` | `BattleActor_GetPartySlot` | Resolves party IDs 56-59 through the battle context |
 | `02076F24` | `BattleActor_GetEnemySlot` | Resolves enemy IDs 60-67 through the battle context |
 | `02076F64` | `BattleActor_GetById` | Resolves party IDs 56-59 or enemy IDs 60+ to actor pointers |
@@ -72,7 +73,10 @@ coordinates rather than HP or stats. `BattleSceneObject_GetById` resolves IDs
 below 56 through the field-object table, 56-59 through party slots, 60-67
 through enemy slots, and IDs from 68 through the auxiliary table. The active
 model helper then selects scene-object pointer `+0xC0` or `+0xC4` from flag bit
-14 at `+0xF4`. Both actor resolvers, the compact base
+14 at `+0xF4`. `BattlePosition_StoreViewRelative` accepts a raw-coordinate
+bypass flag and otherwise subtracts either context offset pair
+`+0xCB9C/+0xCB9E` or `+0xCBA0/+0xCBA2`; its stored depth is clamped at zero.
+Both actor resolvers, the compact base
 damage calculation, and the damage/KO updater are now maintained symbolic
 assembly in `reasm/eur/battle/` and byte-match the European overlay.
 
