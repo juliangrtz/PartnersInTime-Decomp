@@ -762,6 +762,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03801178",
+      "size": "0x3FC",
+      "kind": "code",
+      "section": ".pit_SND_SeqData",
+      "source": "arm7/SND_SeqData.s",
+      "externals": {
+        "SND_CalcRandom": "0x037FEC6C",
+        "SND_InitLfoParam": "0x037FF4FC",
+        "SNDi_SeqCacheData": "0x03808278",
+        "SNDi_SeqCacheState": "0x03808270",
+        "SNDi_SharedWork": "0x03808288"
+      },
+      "expected_sha256": "ad197d6729f5731dc2bed6ccf536f236b2fbac34073b7489b54c22fe4fddf3fd"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
