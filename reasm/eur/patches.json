@@ -504,6 +504,21 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FEC6C",
+      "size": "0x258",
+      "kind": "code",
+      "section": ".pit_SND_Util",
+      "source": "arm7/SND_Util.s",
+      "externals": {
+        "SVC_GetPitchTable": "0x03803E04",
+        "SVC_GetVolumeTable": "0x03803E08",
+        "SNDi_Random": "0x038079B8",
+        "SNDi_SineTable": "0x03807358"
+      },
+      "expected_sha256": "c5b2e8dcbc284e083088ae6580243d7101996e8a2c718ef0e619ac4f69e4b2de"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",

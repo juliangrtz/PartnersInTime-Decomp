@@ -19,7 +19,7 @@ ignored by Git.
   and LLVM with zero differing bytes.
 - The raw generated sources initially use `.word` and `.byte`; they are a
   lossless starting representation, not a claim of semantic decompilation.
-- Every ARM9 and ARM7 runtime image now relinks as 43 components and 194
+- Every ARM9 and ARM7 runtime image now relinks as 43 components and 195
   independent, fixed-address ELF units.
 - `BattleActor_GetPartySlot` and `BattleActor_GetById` are maintained symbolic
   ARM functions. Both use linker-resolved `gBattleContext` references and match
@@ -52,6 +52,7 @@ ignored by Git.
   Periodic ARM7 sampling of the X/Y buttons and hinge state is symbolic too.
   Sound output, sleep, bias, master-enable, and shutdown controls are symbolic.
   Sound-channel pan, volume, timer, surround, PCM, PSG, and noise setup follows.
+  Sound random, sine, logarithmic volume, and pitch/timer helpers are symbolic.
 - Only the existing `src/` files are presently maintained high-level source.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
@@ -117,15 +118,15 @@ python .\tools\relink_native.py `
   --require-matching
 ```
 
-The verified pass covers 43 components, 194 section units, 57 maintained
-units, and 30,096 currently known relocations with zero differing bytes. To
+The verified pass covers 43 components, 195 section units, 58 maintained
+units, and 30,105 currently known relocations with zero differing bytes. To
 iterate on one CPU family or overlay, use `tools/relink_arm7.py`,
 `tools/relink_arm9.py`, or `tools/relink_overlay.py`. ROM-derived fallback
 units, binaries, and JSON build reports remain below ignored `build/` paths.
 
 The resident ARM7 startup is fully symbolic source. Its two large autoloads are
-still conservatively marked as mixed code/data images; 50 proven autoload-0
-units are maintained source and 516 autoload relocations are mapped, but
+still conservatively marked as mixed code/data images; 51 proven autoload-0
+units are maintained source and 525 autoload relocations are mapped, but
 the upstream project contains no further ARM7 analysis. See
 [`docs/research/ARM7_MAP.md`](docs/research/ARM7_MAP.md) for the exact confidence
 boundary.
