@@ -24,9 +24,9 @@ OS_ExitThread:
     ldr r0, [r0]
     ldr r4, [r0]
     mov r0, r4
-    bl OSi_RemoveThreadFromList
-    mov r0, r4
     bl OSi_UnlockAllMutex
+    mov r0, r4
+    bl OSi_RemoveThreadFromList
     mov r2, #0
     ldr r1, [r4, #0x50]
     ldr r0, .L_thread_table

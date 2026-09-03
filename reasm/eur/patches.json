@@ -292,10 +292,10 @@
         "OS_Terminate": "0x037FDD34",
         "OS_WakeupThread": "0x037FBF54",
         "OSi_CurrentThreadPtr": "0x03807AFC",
-        "OSi_RemoveThreadFromList": "0x037FC698",
+        "OSi_RemoveThreadFromList": "0x037FC2B4",
         "OSi_RescheduleThread": "0x037FBE20",
         "OSi_ThreadTable": "0x03807B1C",
-        "OSi_UnlockAllMutex": "0x037FC2B4"
+        "OSi_UnlockAllMutex": "0x037FC698"
       },
       "expected_sha256": "a24029404b520d2c7b1952939f87987d9af730f9bde321eb16523c6835af3ee4"
     },
@@ -336,6 +336,18 @@
         "OSi_ThreadInitialized": "0x03807B00"
       },
       "expected_sha256": "09b6e05837a7564b05578da1a5bad2608f68f15b4d526dc321ad862feb1de786"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FC2B4",
+      "size": "0x1A8",
+      "kind": "code",
+      "section": ".pit_OS_ThreadCore",
+      "source": "arm7/OS_ThreadCore.s",
+      "externals": {
+        "OSi_ThreadInfo": "0x03807B08"
+      },
+      "expected_sha256": "86af8b84d7c8552f1dd564553aecf290458f9e6df2fd8fb3e43d3003d07bbf53"
     },
     {
       "module": "arm7_autoload_000",
