@@ -504,8 +504,8 @@ PMi_SetControl kind:function(arm,size=0x24) addr:0x038053e0
 PMi_GetRegister kind:function(arm,size=0x90) addr:0x03805404
 PMi_SetRegister kind:function(arm,size=0x70) addr:0x03805494
 PMi_SetSpiControl kind:function(arm,size=0x1c) addr:0x03805504
-PMi_SetLED kind:function(arm) addr:0x03805520
-PMi_SwitchUtilityProc kind:function(arm) addr:0x03805588
+PMi_SetLED kind:function(arm,size=0x68) addr:0x03805520
+PMi_SwitchUtilityProc kind:function(arm,size=0x134) addr:0x03805588
 PMi_DoSleep kind:function(arm) addr:0x038056bc
 PM_GetLEDPattern kind:function(arm) addr:0x03805894
 PM_SetLEDPattern kind:function(arm) addr:0x038058a4
@@ -513,6 +513,7 @@ PMi_KeyPattern kind:data(any) addr:0x0380a1d0
 PMi_TriggerBL kind:data(any) addr:0x0380a1d4
 PMi_Work kind:data(any) addr:0x0380a1dc
 PMi_Initialized kind:data(any) addr:0x0380a1d8
+PMi_LEDStatus kind:data(any) addr:0x038079e8
 CTRDGi_Initialized kind:data(any) addr:0x0380b1b0
 ARM7_Autoload000_End kind:data(any) addr:0x0380b1cc
 ARM7_Autoload001_End kind:data(any) addr:0x027f8bd0
