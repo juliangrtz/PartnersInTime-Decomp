@@ -367,6 +367,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FC628",
+      "size": "0x1C0",
+      "kind": "code",
+      "section": ".pit_OS_Mutex",
+      "source": "arm7/OS_Mutex.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SleepThread": "0x037FBFC4",
+        "OS_WakeupThread": "0x037FBF54",
+        "OSi_ThreadInfo": "0x03807B08"
+      },
+      "expected_sha256": "567dda1942f2e02a958a7fdc1d0bb2d05556716bb0822d617b24e31869647828"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDC90",
       "size": "0x78",
       "kind": "code",
