@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-Fifty-one proven autoload-0 units are now maintained ARMv4T/Thumb source:
+Fifty-three proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -88,11 +88,13 @@ Fifty-one proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `037FE620` | sound control | `0x170` | Output routing, master volume, sleep/bias transitions, enable/disable, and shutdown |
 | `037FE790` | sound-channel control | `0x4DC` | Surround decay, pan/volume/timer, stop, and PCM/PSG/noise channel setup |
 | `037FEC6C` | sound utilities | `0x258` | LCG random, indexed sine, logarithmic volume, and pitch-to-timer calculations |
+| `037FEEC4` | `SndThread` | `0x80` | Initializes the ARM7 sound driver and runs its message-driven update loop |
+| `037FEF44` | sound thread control | `0x1C0` | Alarm callback, queue wake/wait, interval timer, thread construction, and guarded initialization |
 | `03803D94` | `SVC_WaitByLoop` | `0x04` | Thumb wrapper for supervisor call 3 |
 | `03803DAE` | `SVC_Halt` | `0x04` | Thumb wrapper for supervisor call 6 |
 | `03806D04` | `CTRDG_Init` | `0x5C` | Initializes ARM7 Game Pak state and transitions its PXI callback |
 
-Together these replace `0x3B90` bytes of the first mixed autoload image with
+Together these replace `0x3DD0` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -103,10 +105,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 544 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 525 covering the 51 maintained autoload-0 units. The
+There are 587 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 568 covering the 53 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x3D00` currently promoted
+referenced literal value, or stored pointer. All `0x3F40` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no
