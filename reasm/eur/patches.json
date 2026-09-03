@@ -616,6 +616,67 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FF7C4",
+      "size": "0x35C",
+      "kind": "code",
+      "section": ".pit_SND_ExChannelControl",
+      "source": "arm7/SND_ExChannelControl.s",
+      "externals": {
+        "SNDi_AttackTable": "0x03807490",
+        "SNDi_CalcDecay": "0x037FF3D8",
+        "SNDi_ChannelOrder": "0x03807480",
+        "SNDi_CompareChannelPriority": "0x037FF280",
+        "SNDi_DecibelSquareTable": "0x0380737C",
+        "SNDi_InitExChannel": "0x037FF32C",
+        "SNDi_StartExChannel": "0x037FF2E0",
+        "SNDi_Work": "0x0380828C",
+        "sLockedChannelMask": "0x03808264",
+        "sWeakLockedChannelMask": "0x03808268"
+      },
+      "expected_sha256": "c8c1a48d1f87d68594617533f67a9588904f29a47817a8023ce444e29a7c4848"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FFB20",
+      "size": "0x30C",
+      "kind": "code",
+      "section": ".pit_SND_ExChannelMain",
+      "source": "arm7/SND_ExChannelMain.s",
+      "externals": {
+        "SND_CalcChannelVolume": "0x037FED0C",
+        "SND_CalcTimer": "0x037FED90",
+        "SND_IsChannelActive": "0x037FE8D4",
+        "SND_UpdateExChannelEnvelope": "0x037FF990",
+        "SNDi_DecibelSquareTable": "0x0380737C",
+        "SNDi_GetExChannelLfoValue": "0x037FF174",
+        "SNDi_GetExChannelSweep": "0x037FF210",
+        "SNDi_Work": "0x0380828C"
+      },
+      "expected_sha256": "55c89bbcf126b384135e8004c48912ad08edf2522c253804ffc3f5b8d44bc456"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FFE2C",
+      "size": "0x24C",
+      "kind": "code",
+      "section": ".pit_SND_UpdateExChannel",
+      "source": "arm7/SND_UpdateExChannel.s",
+      "externals": {
+        "SND_SetChannelPan": "0x037FE8F0",
+        "SND_SetChannelTimer": "0x037FE96C",
+        "SND_SetChannelVolume": "0x037FE984",
+        "SND_SetupChannelNoise": "0x037FEA34",
+        "SND_SetupChannelPcm": "0x037FEB9C",
+        "SND_SetupChannelPsg": "0x037FEAE4",
+        "SND_StopChannel": "0x037FEA08",
+        "SNDi_Work": "0x0380828C",
+        "sLockedChannelMask": "0x03808264",
+        "sWeakLockedChannelMask": "0x03808268"
+      },
+      "expected_sha256": "0433ad0e553caeb495490d8278b74ca45bc1a52e9ccbdfa14f66ffba4aa8f10f"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
