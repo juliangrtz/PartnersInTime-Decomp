@@ -171,6 +171,11 @@ initializer, all-family per-frame updater, and task-pool initializer are now
 maintained as well. This closes the scheduler around the large opcode
 dispatcher: all four typed families and all four party slots have named start,
 update, continuation, cancellation, and allocation paths.
+`tools/analyze_battle_ai_dispatch.py` validates the user-supplied ROM and
+extracts the dispatcher's complete 182-entry jump table into JSON or Markdown.
+The report also groups shared case entries, observes direct command-record
+loads, and joins DSD call relocations to their current symbolic names. This is
+the working index for translating the remaining `0x4AE0`-byte dispatcher.
 `BattleDamage_CalculateBase` at `0x0209BF38`
 and `BattleDamage_CalculateAttack` at `0x02071C84` expose the compact and full
 level/POW/DEF calculations, including Q8 modifier tables, category minima,

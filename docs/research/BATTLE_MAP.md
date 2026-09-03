@@ -459,4 +459,13 @@ scene-object resource record.
 `BattleTurnState_Update` is one real `0x7D5C`-byte function. They are genuine
 large switches, not accidental merged functions. Reconstruct their leaf
 operations and state layouts before attempting to translate either dispatcher
-as one unit.
+as one unit. The complete 182-entry range, handler addresses, aliases,
+observed command-record fields, and direct calls are indexed in
+[`BATTLE_AI_OPCODES.md`](BATTLE_AI_OPCODES.md). Regenerate it from a matching
+ROM with:
+
+```powershell
+python tools\analyze_battle_ai_dispatch.py `
+  --rom 'C:\path\to\your\PiT.nds' --version eur `
+  --format markdown --output docs\research\BATTLE_AI_OPCODES.md
+```
