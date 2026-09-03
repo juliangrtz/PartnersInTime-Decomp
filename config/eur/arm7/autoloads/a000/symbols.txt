@@ -276,7 +276,7 @@ SNDi_SetChannelVolume kind:function(arm,size=0x58) addr:0x038024f8
 SNDi_SetChannelTimer kind:function(arm,size=0x48) addr:0x03802550
 SNDi_InitPxi kind:function(arm,size=0x18) addr:0x03802598
 SNDi_PxiFifoCallback kind:function(arm,size=0x54) addr:0x038025b0
-SND_CommandProc kind:function(arm) addr:0x03802604
+SND_CommandProc kind:function(arm,size=0x478) addr:0x03802604
 SND_CommandInit kind:function(arm) addr:0x03802a7c
 func_037FF0CC kind:label addr:0x037ff0cc
 func_03802ABC kind:label addr:0x03802abc
