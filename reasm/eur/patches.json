@@ -479,6 +479,23 @@
         "func_03806C1C": "0x03806C1C"
       },
       "expected_sha256": "2e0ef3468479522bc8fa2cd0a597d9bf574eb73dbd320a5976ac1e9bb79efa3b"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FE2F0",
+      "size": "0x138",
+      "kind": "code",
+      "section": ".pit_PXI_FifoApi",
+      "source": "arm7/PXI_FifoApi.s",
+      "externals": {
+        "HW_MAIN_MEM_SYSTEM": "0x027FFC00",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "PXIi_FifoRecvCallbackTable": "0x03807CB4",
+        "REG_PXI_FIFO_CNT": "0x04000184",
+        "REG_PXI_SEND_FIFO": "0x04000188"
+      },
+      "expected_sha256": "d4deb0d226b654b3ca54fe001dc5b05a40b70423216f8db5ccf602df959934e0"
     }
   ]
 }

@@ -105,22 +105,22 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-178 independent units. Those units cover raw
+179 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
-images. There are 29,744 currently known relocations. `BattleActor_GetPartySlot`
+images. There are 29,756 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
 DSD-validated external definition. All resident ARM7 bytes are maintained
-ARMv4T assembly or symbolic module parameters. Twenty-five maintained units
+ARMv4T assembly or symbolic module parameters. Twenty-six maintained units
 from autoload 0 now cover `ARM7_Main`, its `SVC_Halt` thunk, `OS_Init`, IRQ mask
 and
 handler registration, `OS_IrqHandler`, thread bootstrap and switch-callback
 state, CPSR interrupt control, reset coordination, IRQ-table, arena and lock
-setup, PXI FIFO initialization, the timer-0 tick subsystem, alarm
+setup, PXI FIFO initialization and public send/callback APIs, the timer-0 tick subsystem, alarm
 initialization, the Game Pak initializer, and two Thumb SVC wrappers. They
-include 164 verified autoload relocations; ARM7 now has 183 verified
+include 176 verified autoload relocations; ARM7 now has 195 verified
 relocations in total. Every linked component and the resulting NDS have zero
 differing bytes from the verified European ROM.
 

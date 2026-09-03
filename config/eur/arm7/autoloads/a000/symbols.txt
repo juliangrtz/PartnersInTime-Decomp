@@ -47,8 +47,9 @@ OS_IsResetOccurred kind:function(arm,size=0x10) addr:0x037fde08
 OS_InitReset kind:function(arm,size=0x40) addr:0x037fde18
 MI_StopDma kind:function(arm,size=0x84) addr:0x037fde58
 PXI_Init kind:function(arm,size=0xc) addr:0x037fe1c4
-PXI_SendWordByFifo kind:label addr:0x037fe2f0
-PXI_SetFifoRecvCallback kind:label addr:0x037fe3bc
+PXI_SendWordByFifo kind:function(arm,size=0xa4) addr:0x037fe2f0
+PXI_IsCallbackReady kind:function(arm,size=0x28) addr:0x037fe394
+PXI_SetFifoRecvCallback kind:function(arm,size=0x6c) addr:0x037fe3bc
 PXIi_HandlerRecvFifoNotEmpty kind:label addr:0x037fe1d0
 PXIi_InitFifo kind:function(arm,size=0xdc) addr:0x037fe428
 func_037FE580 kind:label addr:0x037fe580
@@ -104,6 +105,7 @@ REG_TM0CNT_L kind:data(any) addr:0x04000100
 REG_TM0CNT_H kind:data(any) addr:0x04000102
 REG_PXI_SYNC kind:data(any) addr:0x04000180
 REG_PXI_FIFO_CNT kind:data(any) addr:0x04000184
+REG_PXI_SEND_FIFO kind:data(any) addr:0x04000188
 REG_IME kind:data(any) addr:0x04000208
 REG_IE kind:data(any) addr:0x04000210
 REG_IF kind:data(any) addr:0x04000214

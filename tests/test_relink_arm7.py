@@ -76,6 +76,9 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["MI_StopDma"], 0x037FDE58)
         self.assertEqual(symbols["PXI_Init"], 0x037FE1C4)
         self.assertEqual(symbols["PXIi_HandlerRecvFifoNotEmpty"], 0x037FE1D0)
+        self.assertEqual(symbols["PXI_SendWordByFifo"], 0x037FE2F0)
+        self.assertEqual(symbols["PXI_IsCallbackReady"], 0x037FE394)
+        self.assertEqual(symbols["PXI_SetFifoRecvCallback"], 0x037FE3BC)
         self.assertEqual(symbols["PXIi_InitFifo"], 0x037FE428)
         self.assertEqual(symbols["CTRDG_Init"], 0x03806D04)
         self.assertEqual(symbols["CTRDGi_Initialized"], 0x0380B1B0)
@@ -96,6 +99,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["HW_THREADINFO_SUBP"], 0x027FFFA4)
         self.assertEqual(symbols["HW_VBLANK_COUNT_BUF"], 0x027FFC3C)
         self.assertEqual(symbols["REG_DMA0SAD"], 0x040000B0)
+        self.assertEqual(symbols["REG_PXI_SEND_FIFO"], 0x04000188)
 
     def synthetic_layout(self) -> tuple[bytes, reassembly.Module]:
         load_address = 0x02380000
