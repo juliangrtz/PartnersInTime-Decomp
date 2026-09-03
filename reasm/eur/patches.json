@@ -431,6 +431,29 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FDEDC",
+      "size": "0x70",
+      "kind": "code",
+      "section": ".pit_MI_WaitDma",
+      "source": "arm7/MI_WaitDma.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "REG_DMA0SAD": "0x040000B0"
+      },
+      "expected_sha256": "4100dd2f49cdb5f4fc5904ea8a694861785a47129be910038e707580b5929da4"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FDF4C",
+      "size": "0x270",
+      "kind": "code",
+      "section": ".pit_MI_Memory",
+      "source": "arm7/MI_Memory.s",
+      "expected_sha256": "1b9657f554ef165be29b308ab2deaf296a62d7ff0ecd47c6f632becdee9439b1"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FB5C8",
       "size": "0x170",
       "kind": "code",
