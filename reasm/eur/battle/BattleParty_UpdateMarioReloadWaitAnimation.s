@@ -9,7 +9,7 @@
 .extern BattleSceneObject_GetById
 .extern BattleSceneObject_SetAnimation
 .extern BattleSound_Play
-.extern func_ov002_020a8f24
+.extern BattleParty_UpdateMarioReloadStartRetreat
 .extern gBattleContext
 
 .global BattleParty_UpdateMarioReloadWaitAnimation
@@ -48,5 +48,5 @@ BattleParty_UpdateMarioReloadWaitAnimation:
 .L_battle_context:
     .word gBattleContext
 .L_next_callback:
-    .word func_ov002_020a8f24
+    .word BattleParty_UpdateMarioReloadStartRetreat
 .size BattleParty_UpdateMarioReloadWaitAnimation, . - BattleParty_UpdateMarioReloadWaitAnimation

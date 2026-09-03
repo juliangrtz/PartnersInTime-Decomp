@@ -73,6 +73,135 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x020A87F4",
+      "size": "0x19C",
+      "section": ".pit_BattleParty_UpdateLuigiReloadFinish",
+      "source": "battle/BattleParty_UpdateLuigiReloadFinish.s",
+      "externals": {
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleEntity_BindResource": "0x02091C20",
+        "BattleObjectData_IsLoadPending": "0x02091EDC",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "BattleSceneObject_SetAnimation": "0x02091198",
+        "BattleStatus_TryApply": "0x0209C464",
+        "func_ov002_02090c18": "0x02090C18",
+        "gBattleContext": "0x020C0718",
+        "gSaveData": "0x02059FE8"
+      },
+      "expected_sha256": "63730c0711ba09f0ae37a31dfdbeb8caa7830519120b6027e23fb0d4ce107d53"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A8C74",
+      "size": "0x19C",
+      "section": ".pit_BattleParty_UpdateMarioReloadFinish",
+      "source": "battle/BattleParty_UpdateMarioReloadFinish.s",
+      "externals": {
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleEntity_BindResource": "0x02091C20",
+        "BattleObjectData_IsLoadPending": "0x02091EDC",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "BattleSceneObject_SetAnimation": "0x02091198",
+        "BattleStatus_TryApply": "0x0209C464",
+        "func_ov002_02090c18": "0x02090C18",
+        "gBattleContext": "0x020C0718",
+        "gSaveData": "0x02059FE8"
+      },
+      "expected_sha256": "64de78762062bb6e25a6d0f06cc8095dfa8613136005189bdb56ee0bce4689eb"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A8990",
+      "size": "0x5C",
+      "section": ".pit_BattleParty_UpdateLuigiReloadRequestBaby",
+      "source": "battle/BattleParty_UpdateLuigiReloadRequestBaby.s",
+      "externals": {
+        "BattleObjectData_EnsureLoaded": "0x02092048",
+        "BattleParty_UpdateLuigiReloadFinish": "0x020A87F4",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "2125fcd70b371848374fc66252ed677d76c0972688149901ff71c15beb964521"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A89EC",
+      "size": "0xB8",
+      "section": ".pit_BattleParty_UpdateLuigiReloadWaitRetreat",
+      "source": "battle/BattleParty_UpdateLuigiReloadWaitRetreat.s",
+      "externals": {
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleParty_UpdateLuigiReloadRequestBaby": "0x020A8990",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "BattleSceneObject_IsAnimationActiveById": "0x02091A58",
+        "BattleSceneObject_SetAnimation": "0x02091198",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "66cbdae4f1e9c110a6f91dab755569de6ec759855480a6f568c950ac8a222572"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A8AA4",
+      "size": "0xDC",
+      "section": ".pit_BattleParty_UpdateLuigiReloadStartRetreat",
+      "source": "battle/BattleParty_UpdateLuigiReloadStartRetreat.s",
+      "externals": {
+        "BattleParty_UpdateLuigiReloadWaitRetreat": "0x020A89EC",
+        "BattleSceneObject_AdjustPosition": "0x020A4B9C",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "BattleSceneObject_MoveTo": "0x020A483C",
+        "BattleSceneObject_SetAnimation": "0x02091198",
+        "BattleSound_Play": "0x02076428",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "63ef36fd5ca6d5c4c89998925bacea4d32a5485b4f3d913352458b932b76f44e"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A8E10",
+      "size": "0x5C",
+      "section": ".pit_BattleParty_UpdateMarioReloadRequestBaby",
+      "source": "battle/BattleParty_UpdateMarioReloadRequestBaby.s",
+      "externals": {
+        "BattleObjectData_EnsureLoaded": "0x02092048",
+        "BattleParty_UpdateMarioReloadFinish": "0x020A8C74",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "fdcaa893ef92e794c9c7a335908e638572cafd155d316884fe80af6b98b8f108"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A8E6C",
+      "size": "0xB8",
+      "section": ".pit_BattleParty_UpdateMarioReloadWaitRetreat",
+      "source": "battle/BattleParty_UpdateMarioReloadWaitRetreat.s",
+      "externals": {
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleParty_UpdateMarioReloadRequestBaby": "0x020A8E10",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "BattleSceneObject_IsAnimationActiveById": "0x02091A58",
+        "BattleSceneObject_SetAnimation": "0x02091198",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "04877c2f82f19ab99e73ac4caff1f9f2c8dfa53f14344eb83e0310721b2368a9"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A8F24",
+      "size": "0xC8",
+      "section": ".pit_BattleParty_UpdateMarioReloadStartRetreat",
+      "source": "battle/BattleParty_UpdateMarioReloadStartRetreat.s",
+      "externals": {
+        "BattleParty_UpdateMarioReloadWaitRetreat": "0x020A8E6C",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "BattleSceneObject_MoveTo": "0x020A483C",
+        "BattleSceneObject_SetAnimation": "0x02091198",
+        "BattleSound_Play": "0x02076428",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "6fd2c15eab9f74087811d86195f310066a547e56715b21f19387ce5ca92738bb"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x020A8B80",
       "size": "0x6C",
       "section": ".pit_BattleParty_UpdateLuigiReloadWaitAnimation",
@@ -80,7 +209,7 @@
       "externals": {
         "BattleSceneObject_GetById": "0x02076FB4",
         "BattleSceneObject_SetAnimation": "0x02091198",
-        "func_ov002_020a8aa4": "0x020A8AA4",
+        "BattleParty_UpdateLuigiReloadStartRetreat": "0x020A8AA4",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "3f1b3f5b99a693fa679e234315e4d84515af82c67ba12c9ef07fe8ed26d67a9a"
@@ -112,7 +241,7 @@
         "BattleSceneObject_GetById": "0x02076FB4",
         "BattleSceneObject_SetAnimation": "0x02091198",
         "BattleSound_Play": "0x02076428",
-        "func_ov002_020a8f24": "0x020A8F24",
+        "BattleParty_UpdateMarioReloadStartRetreat": "0x020A8F24",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "479ad78a4e21886e234111c00e11e5ffde89d38d7c5b4d4abedd915200afe195"

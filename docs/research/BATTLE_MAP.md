@@ -62,8 +62,16 @@ and runtime overlay 2.
 | `020A51F8` | `BattleTaskList_Insert` | Allocates if needed and prepends a task to an active list |
 | `020A5254` | `BattleTaskPool_Init` | Builds an aligned fixed-payload task free list |
 | `020A90F4` | `BattleParty_UpdateKnockout` | Completes party knockout and linked-character transitions |
+| `020A87F4` | `BattleParty_UpdateLuigiReloadFinish` | Rebinds Luigi/Baby Luigi and completes linked KO recovery |
+| `020A8990` | `BattleParty_UpdateLuigiReloadRequestBaby` | Requests Baby Luigi after the battle transition state |
+| `020A89EC` | `BattleParty_UpdateLuigiReloadWaitRetreat` | Transfers locks after Luigi leaves the battle view |
+| `020A8AA4` | `BattleParty_UpdateLuigiReloadStartRetreat` | Starts Luigi's timed off-screen retreat |
 | `020A8B80` | `BattleParty_UpdateLuigiReloadWaitAnimation` | Advances Luigi's KO recovery after the rebound animation is ready |
 | `020A8BEC` | `BattleParty_UpdateLuigiReloadWaitResource` | Waits for and binds Luigi's rebound resource |
+| `020A8C74` | `BattleParty_UpdateMarioReloadFinish` | Rebinds Mario/Baby Mario and completes linked KO recovery |
+| `020A8E10` | `BattleParty_UpdateMarioReloadRequestBaby` | Requests Baby Mario after the battle transition state |
+| `020A8E6C` | `BattleParty_UpdateMarioReloadWaitRetreat` | Transfers locks after Mario leaves the battle view |
+| `020A8F24` | `BattleParty_UpdateMarioReloadStartRetreat` | Starts Mario's timed off-screen retreat |
 | `020A8FEC` | `BattleParty_UpdateMarioReloadWaitAnimation` | Advances Mario's KO recovery after the rebound animation is ready |
 | `020A906C` | `BattleParty_UpdateMarioReloadWaitResource` | Waits for and binds Mario's rebound resource |
 | `020A9280` | `BattleParty_StartKnockout` | Starts party knockout state, animation, sounds, and task |
@@ -284,10 +292,14 @@ form-specific sound pairs, and installs `BattleParty_UpdateKnockout`. The
 update callback waits for the model flags, releases ordinary party actors, or
 for linked forms moves the paired scene object and chains into the appropriate
 Mario/Luigi follow-up load callback.
-Those follow-ups now expose the asynchronous boundary explicitly: while the
-requested object-data slot remains pending they leave the task unchanged;
-after completion they bind resource slots 5 or 6 to scene objects 56 or 57,
-start the rebound animations and advance to the character-specific continuation.
+Those follow-ups now expose the whole asynchronous boundary explicitly. They
+wait for resource slots 5 or 6, bind them to scene objects 56 or 57, play the
+rebound animation, interpolate an off-screen retreat on motion channel 3,
+transfer the actor lock to Baby Mario or Baby Luigi, and wait for battle state
+`0x200A`. The final stage loads resource slot 0 or 1, copies the adult's
+position to the baby scene object, rebinds both actors, and clears the task.
+If the adult's equipped-effect byte resolves to `0x3024`, it also reapplies
+status 6 at magnitude 40 and clears the actor's one-shot byte at `+0x51`.
 
 The launch reaction's movement helper either updates both live and base
 coordinates immediately or installs a fixed-point per-frame interpolation
