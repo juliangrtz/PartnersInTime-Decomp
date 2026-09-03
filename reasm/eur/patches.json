@@ -189,7 +189,7 @@
         "OS_InitThread": "0x037FC188",
         "OS_InitArena": "0x037FC938",
         "OS_InitTick": "0x037FD0F4",
-        "func_037FD568": "0x037FD568",
+        "OS_InitAlarm": "0x037FD568",
         "OS_InitReset": "0x037FDE18",
         "func_037FE1C4": "0x037FE1C4",
         "func_03806D04": "0x03806D04"
@@ -383,6 +383,21 @@
         "REG_TM0CNT_L": "0x04000100"
       },
       "expected_sha256": "d09a9743824479979a7b10f4182370439baa5a786fe398e6fcd18107e39dffb2"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FD548",
+      "size": "0x70",
+      "kind": "code",
+      "section": ".pit_OS_AlarmInit",
+      "source": "arm7/OS_AlarmInit.s",
+      "externals": {
+        "OS_DisableIrqMask": "0x037FB76C",
+        "OSi_AlarmInitialized": "0x03807C88",
+        "OSi_AlarmQueue": "0x03807C8C",
+        "OSi_SetTimerReserved": "0x037FCF90"
+      },
+      "expected_sha256": "f5123fd8daa24acd8b785f026a2fdc2cae3a197f8a2d31b5ec756ae9042e2e26"
     }
   ]
 }
