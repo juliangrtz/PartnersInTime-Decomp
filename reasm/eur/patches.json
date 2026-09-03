@@ -794,6 +794,20 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03801A5C",
+      "size": "0x154",
+      "kind": "code",
+      "section": ".pit_SND_PrepareSeq",
+      "source": "arm7/SND_PrepareSeq.s",
+      "externals": {
+        "SNDi_PlayerPool": "0x038087CC",
+        "SNDi_SharedWork": "0x03808288",
+        "SNDi_TrackPool": "0x03808A0C"
+      },
+      "expected_sha256": "9100b1e9b5eae5d6e8b3306eef9e110defda90ef34469c342134ade396821fa3"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
