@@ -8,7 +8,7 @@
 
 .extern BattleSceneObject_GetById
 .extern BattleSceneObject_SetAnimation
-.extern func_ov002_020a8aa4
+.extern BattleParty_UpdateLuigiReloadStartRetreat
 .extern gBattleContext
 
 .global BattleParty_UpdateLuigiReloadWaitAnimation
@@ -42,5 +42,5 @@ BattleParty_UpdateLuigiReloadWaitAnimation:
 .L_battle_context:
     .word gBattleContext
 .L_next_callback:
-    .word func_ov002_020a8aa4
+    .word BattleParty_UpdateLuigiReloadStartRetreat
 .size BattleParty_UpdateLuigiReloadWaitAnimation, . - BattleParty_UpdateLuigiReloadWaitAnimation
