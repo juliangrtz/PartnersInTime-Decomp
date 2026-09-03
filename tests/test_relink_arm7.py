@@ -231,6 +231,8 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["FS_Init"], 0x03802ABC)
         self.assertEqual(symbols["FSi_Init"], 0x03802AF0)
         self.assertEqual(symbols["CARD_Init"], 0x03803594)
+        self.assertEqual(symbols["CARDi_RomAccessor"], 0x03803758)
+        self.assertEqual(symbols["CARD_InitPulledOutCallback"], 0x03803D30)
         self.assertEqual(symbols["CARD_SetThreadPriority"], 0x03802B48)
         self.assertEqual(symbols["CARD_Enable"], 0x03802B90)
         self.assertEqual(symbols["CARDi_InitCommon"], 0x03802BA0)
