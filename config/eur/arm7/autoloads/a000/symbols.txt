@@ -169,6 +169,12 @@ SND_StopChannel kind:function(arm,size=0x2c) addr:0x037fea08
 SND_SetupChannelNoise kind:function(arm,size=0xb0) addr:0x037fea34
 SND_SetupChannelPsg kind:function(arm,size=0xb8) addr:0x037feae4
 SND_SetupChannelPcm kind:function(arm,size=0xd0) addr:0x037feb9c
+SND_CalcRandom kind:function(arm,size=0x34) addr:0x037fec6c
+SND_SinIdx kind:function(arm,size=0x6c) addr:0x037feca0
+SND_CalcChannelVolume kind:function(arm,size=0x78) addr:0x037fed0c
+SND_GetVolumeTable kind:function(arm,size=0xc) addr:0x037fed84
+SND_CalcTimer kind:function(arm,size=0x128) addr:0x037fed90
+SND_GetPitchTable kind:function(arm,size=0xc) addr:0x037feeb8
 func_037FF0CC kind:label addr:0x037ff0cc
 func_03802ABC kind:label addr:0x03802abc
 func_03802B48 kind:label addr:0x03802b48
@@ -177,6 +183,8 @@ SVC_WaitByLoop kind:function(thumb,size=0x4) addr:0x03803d94
 SVC_Halt kind:function(thumb,size=0x4) addr:0x03803dae
 SVC_SoundBiasSet kind:function(thumb,size=0x8) addr:0x03803dba
 SVC_SoundBiasReset kind:function(thumb,size=0x8) addr:0x03803dc2
+SVC_GetPitchTable kind:function(thumb,size=0x4) addr:0x03803e04
+SVC_GetVolumeTable kind:function(thumb,size=0x4) addr:0x03803e08
 func_03804244 kind:label addr:0x03804244
 func_03805ACC kind:label addr:0x03805acc
 func_038069F8 kind:label addr:0x038069f8
@@ -195,6 +203,7 @@ OSi_IrqCallbackInfo kind:data(any) addr:0x03807a88
 OSi_VBlankCallbackInfo kind:data(any) addr:0x03807ae8
 OSi_TimerCallbackInfo kind:data(any) addr:0x03807ab8
 sMasterPan kind:data(any) addr:0x038079b4
+SNDi_Random kind:data(any) addr:0x038079b8
 OSi_LockInitialized kind:data(any) addr:0x03807af4
 OSi_RescheduleCount kind:data(any) addr:0x03807af8
 OSi_CurrentThreadPtr kind:data(any) addr:0x03807afc
@@ -225,6 +234,7 @@ PADi_XYButtonAlarm kind:data(any) addr:0x03807d38
 sSurroundDecay kind:data(any) addr:0x03807d64
 sOrgPan kind:data(any) addr:0x03807d68
 sOrgVolume kind:data(any) addr:0x03807d78
+SNDi_SineTable kind:data(any) addr:0x03807358
 PMi_ResetControl kind:function(arm) addr:0x038053b4
 PMi_SetControl kind:function(arm) addr:0x038053e0
 CTRDGi_Initialized kind:data(any) addr:0x0380b1b0
