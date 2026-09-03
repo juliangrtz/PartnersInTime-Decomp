@@ -386,8 +386,9 @@ PMi_SendPxiData kind:function(arm,size=0x30) addr:0x03805384
 MIC_ExecuteProcess kind:function(arm) addr:0x03805cc4
 MIC_AnalyzeCommand kind:function(arm) addr:0x03805fc4
 MIC_Init kind:function(arm) addr:0x03806298
-WVR_Shutdown kind:function(arm) addr:0x03805a94
-func_03805ACC kind:label addr:0x03805acc
+WVRi_InitWmsp kind:function(arm,size=0xa4) addr:0x038059f0
+WVR_Shutdown kind:function(arm,size=0x38) addr:0x03805a94
+WVR_Init kind:function(arm,size=0x54) addr:0x03805acc
 func_038069F8 kind:label addr:0x038069f8
 func_0380698C kind:label addr:0x0380698c
 func_03806BB8 kind:label addr:0x03806bb8
@@ -520,6 +521,12 @@ PMi_LEDStatus kind:data(any) addr:0x038079e8
 PMi_BlinkPatternData kind:data(any) addr:0x038079ec
 PMi_BlinkCounter kind:data(any) addr:0x0380a208
 PMi_BlinkPatternNo kind:data(any) addr:0x0380a20c
+WVRi_Initialized kind:data(any) addr:0x0380a210
+WVRi_ShutdownPending kind:data(any) addr:0x0380a214
+WVRi_Callback kind:data(any) addr:0x0380a218
+WVRi_SystemWork kind:data(any) addr:0x0380a21c
+WVRi_WmspSystemWork kind:data(any) addr:0x0380a294
+WVRi_WmspWork kind:data(any) addr:0x0380aa54
 CTRDGi_Initialized kind:data(any) addr:0x0380b1b0
 ARM7_Autoload000_End kind:data(any) addr:0x0380b1cc
 ARM7_Autoload001_End kind:data(any) addr:0x027f8bd0
