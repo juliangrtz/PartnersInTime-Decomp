@@ -47,9 +47,9 @@ and runtime overlay 2.
 
 Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are
-coordinates rather than HP or stats. Both actor resolvers and the compact
-damage/KO updater are now maintained symbolic assembly in `reasm/eur/battle/`
-and byte-match the European overlay.
+coordinates rather than HP or stats. Both actor resolvers, the compact base
+damage calculation, and the damage/KO updater are now maintained symbolic
+assembly in `reasm/eur/battle/` and byte-match the European overlay.
 
 ## Damage and status behavior
 
@@ -59,6 +59,10 @@ The compact base formula at `BattleDamage_CalculateBase` is:
 damage = ((level * power * scale_q8) / defense + 128) / 256;
 damage = min(damage, 999);
 ```
+
+The maintained function resolves both actor IDs, extracts the attacker's level
+from the low seven flag bits, reads signed POW/DEF fields, calls the signed
+division helper, reproduces the original rounding, and caps the result at 999.
 
 `BattleStatus_TryApply(actor, status_id, duration, magnitude_percent,
 chance_percent)` handles both ailments and temporary stat changes:
