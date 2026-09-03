@@ -105,15 +105,15 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-225 independent units. Those units cover raw
+226 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
-images. There are 30,465 currently known relocations. `BattleActor_GetPartySlot`
+images. There are 30,472 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
 DSD-validated external definition. All resident ARM7 bytes are maintained
-ARMv4T assembly or symbolic module parameters. Eighty maintained units
+ARMv4T assembly or symbolic module parameters. Eighty-one maintained units
 from autoload 0 now cover `ARM7_Main`, its `SVC_Halt` thunk, `OS_Init`, IRQ mask
 and
 handler registration, `OS_IrqHandler`, callback-backed VBlank/timer/DMA IRQ
@@ -132,15 +132,15 @@ sound-alarm scheduling/PXI notification, and low-level sound-command timer,
 channel, driver-info, FIFO/queue initialization helpers, plus all 34 ARM7
 sound-command opcodes, ARM7 file-system/CARD-back-end initialization, CARD
 worker-priority control, common CARD worker/PXI initialization, asynchronous
-CARD request dispatch, and PXI request reception,
+CARD request dispatch, PXI request reception, and backup-sector erasure,
 wave invalidation, channel locking,
 extended-voice allocation, envelopes, mixing and hardware commits,
 CPSR interrupt
 control, reset coordination, IRQ-table, arena, lock-ID,
 and Game Pak lock setup, PXI FIFO initialization and public send/callback APIs,
 the timer-0 tick subsystem, alarm initialization and scheduling, the Game Pak
-initializer, and two Thumb SVC wrappers. They include 885 verified autoload
-relocations; ARM7 now has 904 verified
+initializer, and two Thumb SVC wrappers. They include 892 verified autoload
+relocations; ARM7 now has 911 verified
 relocations in total. Every linked component and the resulting NDS have zero
 differing bytes from the verified European ROM.
 
