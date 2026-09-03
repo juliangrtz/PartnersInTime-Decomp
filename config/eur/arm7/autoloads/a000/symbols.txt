@@ -66,6 +66,7 @@ OS_IRQTable kind:data(any) addr:0x0380794c
 OS_IRQCheckFlag kind:data(any) addr:0x03807a84
 OSi_IrqCallbackInfo kind:data(any) addr:0x03807a88
 OSi_VBlankCallbackInfo kind:data(any) addr:0x03807ae8
+OSi_TimerCallbackInfo kind:data(any) addr:0x03807ab8
 OSi_CurrentThreadPtr kind:data(any) addr:0x03807afc
 OSi_ThreadInitialized kind:data(any) addr:0x03807b00
 OSi_ThreadInfo kind:data(any) addr:0x03807b08

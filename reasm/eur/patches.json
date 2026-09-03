@@ -398,6 +398,19 @@
         "OSi_SetTimerReserved": "0x037FCF90"
       },
       "expected_sha256": "f5123fd8daa24acd8b785f026a2fdc2cae3a197f8a2d31b5ec756ae9042e2e26"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FB814",
+      "size": "0x4C",
+      "kind": "code",
+      "section": ".pit_OSi_SetTimerCallback",
+      "source": "arm7/OSi_SetTimerCallback.s",
+      "externals": {
+        "OS_EnableIrqMask": "0x037FB7A8",
+        "OSi_TimerCallbackInfo": "0x03807AB8"
+      },
+      "expected_sha256": "ef8ccab935bac23fa9aca617a14ca02616c793ff996c24d913967d943db3f294"
     }
   ]
 }
