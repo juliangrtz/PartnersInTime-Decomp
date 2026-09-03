@@ -25,6 +25,7 @@ and runtime overlay 2.
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
 | `0208908C` | `BattleEnemyData_RequestLoad` | Initializes and queues one enemy-data request |
+| `0209234C` | `BattleObjectData_ResolveSlot` | Decodes a packed object ID into a 44-byte runtime descriptor |
 
 ## Battle actor layout
 
@@ -102,8 +103,9 @@ the selected enemy index by 44, queues exactly that byte range from the primary
 battle resource, and installs `BattleEnemyData_LoadObjectData` as the next load
 callback. `BattleEnemyData_RequestLoad` initializes that request and submits it
 through the maintained `BattleTaskQueue_Enqueue` path. The object-data callback
-resolves and queues the variable-sized payload after the stat record; its
-maintained fixup callback converts embedded offsets to RAM pointers.
+uses the maintained packed-ID resolver and queues the variable-sized payload
+after the stat record; its maintained fixup callback converts embedded offsets
+to RAM pointers.
 `BattleEntity_BindResource` later copies the numeric fields into the live actor.
 
 ## Large native dispatchers
