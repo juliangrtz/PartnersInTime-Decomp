@@ -14,7 +14,7 @@
 .extern func_037FC938
 .extern func_037FD0F4
 .extern func_037FD568
-.extern func_037FDE18
+.extern OS_InitReset
 .extern func_037FE1C4
 .extern func_03806D04
 OS_Init:
@@ -27,7 +27,7 @@ OS_Init:
     bl func_037FD0F4
     bl func_037FD568
     bl OS_InitThread
-    bl func_037FDE18
+    bl OS_InitReset
     bl func_03806D04
     add sp, sp, #4
     ldmia sp!, {lr}
