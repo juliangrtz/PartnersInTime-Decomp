@@ -80,7 +80,8 @@ SND_SetSoundBias:
     bx r12
 .size SND_SetSoundBias, . - SND_SetSoundBias
 .L_sound_bias_set:
-    .word SVC_SoundBiasSet + 1
+    /* ELF marks the now-defined .thumb_func symbol odd as a callable pointer. */
+    .word SVC_SoundBiasSet
 
 .global SND_BeginSleep
 .type SND_BeginSleep, %function
@@ -112,7 +113,8 @@ SND_ResetSoundBias:
     bx r12
 .size SND_ResetSoundBias, . - SND_ResetSoundBias
 .L_sound_bias_reset:
-    .word SVC_SoundBiasReset + 1
+    /* ELF marks the now-defined .thumb_func symbol odd as a callable pointer. */
+    .word SVC_SoundBiasReset
 
 .global SND_Shutdown
 .type SND_Shutdown, %function
