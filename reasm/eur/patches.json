@@ -1683,6 +1683,31 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03805CC4",
+      "size": "0x300",
+      "kind": "code",
+      "section": ".pit_MIC_ExecuteProcess",
+      "source": "arm7/MIC_ExecuteProcess.s",
+      "externals": {
+        "MIC_DisableMultipleInterrupt": "0x038065EC",
+        "MIC_EnableMultipleInterrupt": "0x03806638",
+        "MIC_ExecSampling12": "0x038062D8",
+        "MIC_ExecSampling8": "0x038063A0",
+        "MIC_SetIrqFunction": "0x038066A4",
+        "MICi_TimerIrqHandler": "0x03805C88",
+        "MICi_Work": "0x0380B154",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_EnableIrqMask": "0x037FB7A8",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "SPIi_CheckException": "0x03804084",
+        "SPIi_GetException": "0x0380406C",
+        "SPIi_ReleaseException": "0x03804028",
+        "SPIi_ReturnResult": "0x038040A0"
+      },
+      "expected_sha256": "b9d45f68eca8bb6155c2e64ec2543fa7417b0be2de6fec5a49b5856c479668ef"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
