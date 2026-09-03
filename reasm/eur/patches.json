@@ -778,6 +778,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03801574",
+      "size": "0x4E8",
+      "kind": "code",
+      "section": ".pit_SND_SeqControl",
+      "source": "arm7/SND_SeqControl.s",
+      "externals": {
+        "SND_PrepareSeq": "0x03801A5C",
+        "SND_StartIntervalTimer": "0x037FEFF4",
+        "SND_StopIntervalTimer": "0x037FEFE0",
+        "SNDi_PlayerPool": "0x038087CC",
+        "SNDi_SharedWork": "0x03808288"
+      },
+      "expected_sha256": "da2e0bd37f15daab0c9f6acf560b54d13e48ae960f3a48de660a8ae1d60cde61"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
