@@ -5,9 +5,23 @@
       "module": "arm9_ov002",
       "address": "0x02076F44",
       "size": "0x20",
+      "section": ".pit_BattleActor_GetPartySlot",
       "source": "battle/BattleActor_GetPartySlot.s",
+      "externals": {
+        "gBattleContext": "0x020C0718"
+      },
       "expected_sha256": "c74cf0dd865366d3f9fd1f136a0f6ab6d1df794954e2ff4a097b073814297a36"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x02076F64",
+      "size": "0x50",
+      "section": ".pit_BattleActor_GetById",
+      "source": "battle/BattleActor_GetById.s",
+      "externals": {
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "684dd9edc891cc18303e406ee9a001836478f0853c5c4b62d831a22f0e7d9140"
     }
   ]
 }
-

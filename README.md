@@ -19,8 +19,11 @@ ignored by Git.
   and LLVM with zero differing bytes.
 - The raw generated sources initially use `.word` and `.byte`; they are a
   lossless starting representation, not a claim of semantic decompilation.
-- `BattleActor_GetPartySlot` in overlay 2 is the first maintained symbolic ARM
-  function and still matches its original 32 bytes exactly.
+- All 37 ARM9 overlays now relink as 123 independent, fixed-address ELF units
+  spanning code, read-only data, constructors, padding, and writable data.
+- `BattleActor_GetPartySlot` and `BattleActor_GetById` are maintained symbolic
+  ARM functions. Both use linker-resolved `gBattleContext` references and match
+  their original bytes exactly.
 - Only the existing `src/` files are presently maintained high-level source.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
@@ -39,7 +42,7 @@ SHA-256:  8b16b1f1f0aca4a78dae540be56a219adbde6ee3f1cd33d3f0fba777de01d6a3
 Requirements:
 
 - Python 3.11 or newer;
-- LLVM tools `llvm-mc` and `llvm-objcopy` on `PATH`;
+- LLVM tools `llvm-mc`, `ld.lld`, and `llvm-objcopy` on `PATH`;
 - your own matching NDS ROM.
 
 Check the environment:
@@ -69,6 +72,30 @@ mod. A maintained whole-module source with the same filename under
 This bootstrap deliberately refuses size changes and modifications to the
 encrypted DS secure area. Those require the relocatable linker and encryption
 stages described in the plan.
+
+## Sectioned overlay relink
+
+The Stage-1 linker supports all uncompressed ARM9 overlays described by the
+existing `dsd` maps. This command splits all European overlays at their
+verified section and maintained-source boundaries, assembles each unit
+separately, links each overlay at its runtime address, and writes all results
+into a copy of your ROM:
+
+```powershell
+python .\tools\relink_overlay.py `
+  --version eur `
+  --all-overlays `
+  --rom 'C:\path\to\your\PiT.nds' `
+  --output-rom '.\build\PiT_eur_sectioned.nds' `
+  --require-matching
+```
+
+The verified pass covers 37 overlays, 123 section units, and all 24,212 known
+overlay relocations with zero differing bytes. To work on one overlay, replace
+`--all-overlays` with `--overlay-id 2` and supply `--output-bin`. Every external
+used by maintained source is validated against both `symbols.txt` and a
+supporting relocation record. ROM-derived fallback units, binaries, and JSON
+build reports remain below ignored `build/` paths.
 
 ## Existing `dsd` matching-decompilation build
 
