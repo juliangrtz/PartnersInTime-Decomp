@@ -34,10 +34,10 @@
 .extern BattleActor_ApplyDamage
 .extern BattleActor_GetById
 .extern BattleActor_GetEnemySlot
+.extern BattleDamage_StartEnemyReaction
 .extern func_ov002_02076b0c
 .extern func_ov002_02091198
 .extern func_ov002_0209cd9c
-.extern func_ov002_0209d5cc
 .extern func_ov002_020acb88
 .extern func_ov002_020accb8
 
@@ -114,7 +114,7 @@ BattleDamage_ApplyToEnemy:
 .L_reaction_done:
     ldr r1, [sp, #ARG_EFFECT_KIND]
     mov r0, sb
-    bl func_ov002_0209d5cc
+    bl BattleDamage_StartEnemyReaction
     ldr r0, [r5, #BATTLE_ACTOR_STATE_FLAGS]
     mov r0, r0, lsl #27
     movs r0, r0, lsr #31

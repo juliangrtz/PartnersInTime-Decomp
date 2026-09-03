@@ -133,6 +133,11 @@ paths. Its 20-byte hit record supplies target ID, hit coordinates, pending hit
 kind, and the optional party status payload. It accepts party IDs 56-59 and
 enemy IDs 60-67, resolves the corresponding scene object and actor, computes
 relative offsets, then dispatches to the exact target-specific implementation.
+The adjacent maintained party/enemy reaction starters allocate or reuse the
+per-actor task at `actor + 0x28`, set actor flag `0x200` while the reaction is
+active, and install their original update callbacks. The party pre-hit hook
+also consumes its one-shot flag and clears POW status 6 when equipment effect
+`0x3024` is active.
 
 ## Enemy stat records
 

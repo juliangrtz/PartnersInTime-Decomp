@@ -22,19 +22,19 @@
 .equ LOCAL_POSITION, 0x08
 
 .extern BattleActor_ApplyDamage
+.extern BattleActor_HandleHitEquipmentEffect
 .extern BattleActor_GetById
 .extern BattleActor_GetPartySlot
 .extern BattleEntity_BindResource
 .extern BattleSound_Play
 .extern BattleStatus_ClearEffect
 .extern BattleStatus_TryApply
+.extern BattleDamage_StartPartyReaction
 .extern func_ov002_02065ec4
 .extern func_ov002_02076b0c
 .extern func_ov002_02076bd4
 .extern func_ov002_02091198
 .extern func_ov002_0209cd9c
-.extern func_ov002_0209d2b0
-.extern func_ov002_0209de04
 .extern func_ov002_020acb88
 .extern func_ov002_020accb8
 .extern gBattleContext
@@ -59,7 +59,7 @@ BattleDamage_ApplyToParty:
     cmp r5, r0
     movgt r5, r0
     ldrsh r0, [r8, #SCENE_OBJECT_ACTOR_ID]
-    bl func_ov002_0209de04
+    bl BattleActor_HandleHitEquipmentEffect
     mov r0, sb
     mov r1, #1
     bl BattleStatus_ClearEffect
@@ -79,7 +79,7 @@ BattleDamage_ApplyToParty:
     cmp r0, #2
     beq .L_position
     mov r0, r8
-    bl func_ov002_0209d2b0
+    bl BattleDamage_StartPartyReaction
 
 .L_position:
     ldr r1, [r8, #SCENE_OBJECT_FLAGS]
