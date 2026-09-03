@@ -19,6 +19,7 @@ and runtime overlay 2.
 | `0208FB6C` | `BattleScript_SetProperty` | Writes properties; cases 16-20 are actor stats |
 | `02071C84` | `BattleDamage_CalculateAttack` | General POW/DEF/level damage calculation |
 | `0209BF38` | `BattleDamage_CalculateBase` | Compact actor-ID-based damage calculation |
+| `0209BFA0` | `BattleDamage_CalculateByObject` | Resolves scene objects and selects damage modes/equipment |
 | `0209D694` | `BattleActor_ApplyDamage` | Subtracts HP, clamps at zero, and marks knockout |
 | `0209D718` | `BattleDamage_ApplyToEnemy` | Enemy damage, animation, popup, sound, effects |
 | `0209D9DC` | `BattleDamage_ApplyToParty` | Party damage, animation, popup, sound, effects |
@@ -78,6 +79,12 @@ full calculation for live actors. It resolves an implicit defender when needed,
 maps attack categories to Q8 multiplier columns, optionally applies a second
 multiplier table, clamps the intermediate and final values, scales by the
 battle-wide percentage, and honors the defender's forced-one-damage flag.
+
+`BattleDamage_CalculateByObject` is now maintained in full. It maps both scene
+objects through their linked actor IDs, rejects invalid IDs and the defender
+immunity flag, selects Q8 scales `0x126`, `0x10C`, or `0x100` from the active
+battle mode, calls the appropriate maintained damage path, applies a
+140-percent equipment bonus for effect `0x301B`, and caps the result at 999.
 
 The maintained `BattleStatus_TryApply(actor, status_id, duration,
 magnitude_percent, chance_percent)` handles both ailments and temporary stat
