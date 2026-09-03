@@ -28,6 +28,7 @@ and runtime overlay 2.
 | `0209DE8C` | `BattleDamage_DispatchHit` | Routes queued hit records to enemy or party handling |
 | `0209DFF4` | `BattleDamage_ReflectQueuedHits` | Reverses queued source/target pairs and rebuilds payloads |
 | `0209E10C` | `BattleHitDescriptor_Configure` | Configures a source/target hit before queue expansion |
+| `0209E918` | `BattleCollision_GetBounds` | Resolves party, special-object, or resource collision bounds |
 | `0209EBAC` | `BattleHitDescriptor_GetByActorId` | Resolves per-actor 16-byte hit descriptors |
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
@@ -190,6 +191,10 @@ descriptor in the battle-context table at `+0xC8F4`. The maintained configure,
 lookup, status-payload, and disable helpers expose its linked-list pointer,
 callback, source/target IDs, six-bit hit kind, seven-bit status ID, signed
 chance/magnitude bytes, and the active-list head at context offset `+0xCAD4`.
+`BattleCollision_GetBounds` supplies the queue compiler with six signed
+halfwords. It contains explicit body-size presets for the six party-member
+forms and object IDs 8-9, while ordinary battle objects obtain their bounds
+from the bound resource and receive the original coordinate-axis conversion.
 
 ## Enemy stat records
 
