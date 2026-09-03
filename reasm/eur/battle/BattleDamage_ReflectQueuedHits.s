@@ -20,7 +20,7 @@
 .extern BattleActor_GetById
 .extern BattleDamage_CalculateByObject
 .extern BattleSceneObject_GetById
-.extern func_ov002_0209ebac
+.extern BattleHitDescriptor_GetByActorId
 .extern gBattleContext
 
 .global BattleDamage_ReflectQueuedHits
@@ -60,7 +60,7 @@ BattleDamage_ReflectQueuedHits:
     ldrh r1, [r4, #HIT_RECORD_SOURCE_ID]
     strh r1, [r4, #HIT_RECORD_TARGET_ID]
     strh r0, [r4, #HIT_RECORD_SOURCE_ID]
-    bl func_ov002_0209ebac
+    bl BattleHitDescriptor_GetByActorId
     ldrh r1, [r0, #0x0C]
     mov r1, r1, lsl #16
     mov r1, r1, lsr #25
