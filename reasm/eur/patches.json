@@ -362,6 +362,30 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x020A483C",
+      "size": "0x70",
+      "section": ".pit_BattleSceneObject_MoveTo",
+      "source": "battle/BattleSceneObject_MoveTo.s",
+      "externals": {
+        "BattleSceneObject_AdjustPosition": "0x020A4B9C",
+        "BattleSceneObject_BeginMotionChannel": "0x020A4E08",
+        "BattleSceneObject_UpdateMoveTo": "0x020A48AC"
+      },
+      "expected_sha256": "9c7d6d01937c485f118a3c05c4d17dc0abee306bb95ed8095b0f7d5a745f4d65"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A48AC",
+      "size": "0x88",
+      "section": ".pit_BattleSceneObject_UpdateMoveTo",
+      "source": "battle/BattleSceneObject_UpdateMoveTo.s",
+      "externals": {
+        "_s32_div_f": "0x02046474"
+      },
+      "expected_sha256": "b9c2cd6efda49131e0f79a06d50d144adbb607676943a2a726bb0b15d5215f94"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x020A4934",
       "size": "0x9C",
       "section": ".pit_BattleSceneObject_MoveBy",
