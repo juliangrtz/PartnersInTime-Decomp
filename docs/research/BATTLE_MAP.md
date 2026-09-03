@@ -182,6 +182,9 @@ also consumes its one-shot flag and clears POW status 6 when equipment effect
 Their two maintained per-frame callbacks now close the lifecycle: wait for the
 animation completion flags, choose party KO or idle behavior, restore ordinary
 enemy impact offsets, clear the task callback, and release actor flag `0x200`.
+The alternate maintained effect-reaction pair uses the same `actor + 0x28`
+ownership and hit-lock flag, but waits for an attached effect or invalidated
+resource rather than selecting a full party/enemy animation sequence.
 
 The hit queue at battle-context offset `0xCAD8` contains up to eight packed
 20-byte records. `BattleDamage_ReflectQueuedHits` stops at the first inactive

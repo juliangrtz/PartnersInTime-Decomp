@@ -392,6 +392,35 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209D32C",
+      "size": "0x78",
+      "section": ".pit_BattleDamage_UpdateEffectReaction",
+      "source": "battle/BattleDamage_UpdateEffectReaction.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "func_ov002_020a3370": "0x020A3370"
+      },
+      "expected_sha256": "bb94b6c17d74972b6378a331a6d884c7266514ffd56f335f672e449110078069"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209D3A4",
+      "size": "0xC8",
+      "section": ".pit_BattleDamage_StartEffectReaction",
+      "source": "battle/BattleDamage_StartEffectReaction.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "BattleDamage_UpdateEffectReaction": "0x0209D32C",
+        "func_ov002_020a519c": "0x020A519C",
+        "func_ov002_020a51f8": "0x020A51F8",
+        "func_ov002_020acb44": "0x020ACB44",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "83a40e7b019cd2b93ecdad761ebd016607129906d018bac6adc4a832dccbe3ef"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209DE04",
       "size": "0x88",
       "section": ".pit_BattleActor_HandleHitEquipmentEffect",
