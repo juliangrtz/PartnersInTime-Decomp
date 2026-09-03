@@ -41,12 +41,15 @@ and runtime overlay 2.
 | `0209EBFC` | `BattleCollision_TestObjects` | Tests all source/target bounds and returns a hit position |
 | `0209EF3C` | `BattleCollision_TestVolumes` | Swept six-axis overlap and time-of-impact calculation |
 | `020A3370` | `BattleSceneObject_GetActiveModel` | Selects a scene object's primary or alternate model pointer |
+| `020A3F9C` | `BattleMotion_StartBallistic` | Derives launch velocity with the DS square-root unit and starts motion |
+| `020A4934` | `BattleSceneObject_MoveBy` | Applies a position delta immediately or over a duration |
 | `020A50D4` | `BattleTaskList_Update` | Runs live callbacks and recycles stopped tasks |
 | `020A519C` | `BattleTask_BindOwnerSlot` | Binds a task handle to its owning object and returns the displaced task |
 | `020A51F8` | `BattleTaskList_Insert` | Allocates if needed and prepends a task to an active list |
 | `020A5254` | `BattleTaskPool_Init` | Builds an aligned fixed-payload task free list |
 | `020A90F4` | `BattleParty_UpdateKnockout` | Completes party knockout and linked-character transitions |
 | `020A9280` | `BattleParty_StartKnockout` | Starts party knockout state, animation, sounds, and task |
+| `020A9C18` | `BattleParty_SpawnLaunchImpact` | Emits the form-specific launch impact effect and sound |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
 | `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
 | `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Creates a sprite effect in the first free tracked slot |
@@ -260,6 +263,14 @@ form-specific sound pairs, and installs `BattleParty_UpdateKnockout`. The
 update callback waits for the model flags, releases ordinary party actors, or
 for linked forms moves the paired scene object and chains into the appropriate
 Mario/Luigi follow-up load callback.
+
+The launch reaction's movement helper either updates both live and base
+coordinates immediately or installs a fixed-point per-frame interpolation
+callback. Its ballistic companion derives the signed initial velocity from
+displacement and acceleration with the DS square-root registers at
+`0x040002B0`-`0x040002B8`. The final impact helper chooses effect variant
+`0x10` or `0x11` from the party form, converts through the maintained view
+offset helper, creates effect family `0x13`, and plays sound `0x39`.
 
 The hit queue at battle-context offset `0xCAD8` contains up to eight packed
 20-byte records. `BattleDamage_ReflectQueuedHits` stops at the first inactive
