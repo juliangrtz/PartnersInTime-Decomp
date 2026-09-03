@@ -55,6 +55,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["OS_ResetSystem"], 0x037FDD48)
         self.assertEqual(symbols["OS_IsResetOccurred"], 0x037FDE08)
         self.assertEqual(symbols["OS_InitReset"], 0x037FDE18)
+        self.assertEqual(symbols["MI_StopDma"], 0x037FDE58)
         self.assertEqual(symbols["OS_IRQTable"], 0x0380794C)
         self.assertEqual(symbols["OS_IRQCheckFlag"], 0x03807A84)
         self.assertEqual(symbols["OSi_IrqCallbackInfo"], 0x03807A88)
@@ -64,6 +65,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["OSi_ResetInitialized"], 0x03807CA8)
         self.assertEqual(symbols["OSi_IsResetOccurred"], 0x03807CAC)
         self.assertEqual(symbols["HW_THREADINFO_SUBP"], 0x027FFFA4)
+        self.assertEqual(symbols["REG_DMA0SAD"], 0x040000B0)
 
     def synthetic_layout(self) -> tuple[bytes, reassembly.Module]:
         load_address = 0x02380000
