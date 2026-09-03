@@ -25,6 +25,18 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209BF38",
+      "size": "0x68",
+      "section": ".pit_BattleDamage_CalculateBase",
+      "source": "battle/BattleDamage_CalculateBase.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "_s32_div_f": "0x02046474"
+      },
+      "expected_sha256": "628263d8656615d4c3d86adf728090a706fd801ace1ee6470d3a86c5c995f700"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209D694",
       "size": "0x84",
       "section": ".pit_BattleActor_ApplyDamage",
