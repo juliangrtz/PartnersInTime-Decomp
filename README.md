@@ -39,7 +39,8 @@ ignored by Git.
   symbolic too. Callback-backed VBlank, timer, and DMA IRQ dispatch is also
   maintained with the SDK handler names, along with the nested scheduler
   enable/disable counter, alarm-backed thread sleep, priority updates, and
-  context switching.
+  context switching. Direct and wait-queue sleep/wakeup primitives are
+  symbolic as well.
 - Only the existing `src/` files are presently maintained high-level source.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
@@ -105,15 +106,15 @@ python .\tools\relink_native.py `
   --require-matching
 ```
 
-The verified pass covers 43 components, 186 section units, 44 maintained
-units, and 29,877 currently known relocations with zero differing bytes. To
+The verified pass covers 43 components, 187 section units, 45 maintained
+units, and 29,888 currently known relocations with zero differing bytes. To
 iterate on one CPU family or overlay, use `tools/relink_arm7.py`,
 `tools/relink_arm9.py`, or `tools/relink_overlay.py`. ROM-derived fallback
 units, binaries, and JSON build reports remain below ignored `build/` paths.
 
 The resident ARM7 startup is fully symbolic source. Its two large autoloads are
-still conservatively marked as mixed code/data images; 37 proven autoload-0
-units are maintained source and 297 autoload relocations are mapped, but
+still conservatively marked as mixed code/data images; 38 proven autoload-0
+units are maintained source and 308 autoload relocations are mapped, but
 the upstream project contains no further ARM7 analysis. See
 [`docs/research/ARM7_MAP.md`](docs/research/ARM7_MAP.md) for the exact confidence
 boundary.

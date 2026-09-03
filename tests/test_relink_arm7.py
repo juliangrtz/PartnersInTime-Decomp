@@ -75,6 +75,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["OSi_RescheduleThread"], 0x037FBE20)
         self.assertEqual(symbols["OS_SelectThread"], 0x037FBEF4)
         self.assertEqual(symbols["OS_WakeupThreadDirect"], 0x037FBF20)
+        self.assertEqual(symbols["OS_WakeupThread"], 0x037FBF54)
         self.assertEqual(symbols["OS_SleepThread"], 0x037FBFC4)
         self.assertEqual(symbols["OS_InitThread"], 0x037FC188)
         self.assertEqual(symbols["OS_Init"], 0x037FC7E8)
