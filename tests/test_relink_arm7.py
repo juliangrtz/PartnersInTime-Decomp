@@ -227,6 +227,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["SNDi_InitPxi"], 0x03802598)
         self.assertEqual(symbols["SNDi_PxiFifoCallback"], 0x038025B0)
         self.assertEqual(symbols["SND_CommandProc"], 0x03802604)
+        self.assertEqual(symbols["SND_CommandInit"], 0x03802A7C)
         self.assertEqual(symbols["CTRDG_Init"], 0x03806D04)
         self.assertEqual(symbols["_ll_sdiv"], 0x03806DB8)
         self.assertEqual(symbols["CTRDGi_Initialized"], 0x0380B1B0)
