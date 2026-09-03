@@ -23,6 +23,7 @@ and runtime overlay 2.
 | `0209D718` | `BattleDamage_ApplyToEnemy` | Enemy damage, animation, popup, sound, effects |
 | `0209D9DC` | `BattleDamage_ApplyToParty` | Party damage, animation, popup, sound, effects |
 | `0209DE8C` | `BattleDamage_DispatchHit` | Routes queued hit records to enemy or party handling |
+| `0209DFF4` | `BattleDamage_ReflectQueuedHits` | Reverses queued source/target pairs and rebuilds payloads |
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
@@ -141,6 +142,12 @@ also consumes its one-shot flag and clears POW status 6 when equipment effect
 Their two maintained per-frame callbacks now close the lifecycle: wait for the
 animation completion flags, choose party KO or idle behavior, restore ordinary
 enemy impact offsets, clear the task callback, and release actor flag `0x200`.
+
+The hit queue at battle-context offset `0xCAD8` contains up to eight packed
+20-byte records. `BattleDamage_ReflectQueuedHits` stops at the first inactive
+entry, finds records targeting the requested actor, recalculates damage for the
+reversed pairing, swaps source and target, and reloads the reflected attack's
+status ID, chance, and magnitude.
 
 ## Enemy stat records
 

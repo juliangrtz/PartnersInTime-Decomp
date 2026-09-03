@@ -373,6 +373,21 @@
       "expected_sha256": "890df32ffb73a2d57d0701c7a78df7a0745d456660c92e5a1952c6ee154b4663"
     },
     {
+      "module": "arm9_ov002",
+      "address": "0x0209DFF4",
+      "size": "0xC0",
+      "section": ".pit_BattleDamage_ReflectQueuedHits",
+      "source": "battle/BattleDamage_ReflectQueuedHits.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "BattleDamage_CalculateByObject": "0x0209BFA0",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "func_ov002_0209ebac": "0x0209EBAC",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "a7226ab4b91bddeef6a28a19048ed072c00658f75774d7db91c3f46a4ff8334f"
+    },
+    {
       "module": "arm7",
       "address": "0x02380118",
       "size": "0x4",
