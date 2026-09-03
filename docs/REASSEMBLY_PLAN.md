@@ -105,15 +105,15 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-218 independent units. Those units cover raw
+219 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
-images. There are 30,385 currently known relocations. `BattleActor_GetPartySlot`
+images. There are 30,423 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
 DSD-validated external definition. All resident ARM7 bytes are maintained
-ARMv4T assembly or symbolic module parameters. Seventy-three maintained units
+ARMv4T assembly or symbolic module parameters. Seventy-four maintained units
 from autoload 0 now cover `ARM7_Main`, its `SVC_Halt` thunk, `OS_Init`, IRQ mask
 and
 handler registration, `OS_IrqHandler`, callback-backed VBlank/timer/DMA IRQ
@@ -129,7 +129,7 @@ note-to-voice translation, channel/track lifecycle, and cached sequence-data
 decoding, playback controls, preparation, runtime update, wave lookup, and
 instrument/bank resolution, shared status/sequence-variable publication, and
 sound-alarm scheduling/PXI notification, and low-level sound-command timer,
-channel, driver-info, and FIFO helpers,
+channel, driver-info, and FIFO helpers, plus all 34 ARM7 sound-command opcodes,
 wave invalidation, channel locking,
 extended-voice allocation, envelopes, mixing and hardware commits,
 CPSR interrupt
