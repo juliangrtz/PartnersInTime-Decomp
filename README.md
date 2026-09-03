@@ -19,16 +19,16 @@ ignored by Git.
   and LLVM with zero differing bytes.
 - The raw generated sources initially use `.word` and `.byte`; they are a
   lossless starting representation, not a claim of semantic decompilation.
-- Every ARM9 and ARM7 runtime image now relinks as 43 components and 289
+- Every ARM9 and ARM7 runtime image now relinks as 43 components and 290
   independent, fixed-address ELF units.
-- Nineteen named overlay-2 battle functions are maintained symbolic ARM source,
+- Twenty named overlay-2 battle functions are maintained symbolic ARM source,
   together with the resident item-value calculator they call.
   They cover task enqueueing, actor lookup, enemy-load requests and 44-byte stat
   reads, packed object-ID resolution, object-data loading and pointer fixups,
   live actor/resource binding, both base and fully modified POW/DEF/level damage
-  formulas, HP/KO updates, the complete enemy-hit/popup/effect path, status
-  removal/reset, healing, revival, cures, stat items, and equipped healing-badge
-  boosts. Every function matches its original bytes.
+  formulas, HP/KO updates, the complete enemy and party hit/popup/effect paths,
+  status removal/reset, healing, revival, cures, stat items, and equipped
+  healing-badge boosts. Every function matches its original bytes.
 - The complete `0x170`-byte resident ARM7 startup is maintained ARMv4T source:
   four functions plus its NitroSDK module parameters, all matching exactly.
 - ARM7 autoload 0 now has exact symbolic sources for `ARM7_Main` and the
@@ -129,7 +129,7 @@ python .\tools\relink_native.py `
   --require-matching
 ```
 
-The verified pass covers 43 components, 289 section units, 143 maintained
+The verified pass covers 43 components, 290 section units, 144 maintained
 units, and 31,138 currently known relocations with zero differing bytes. To
 iterate on one CPU family or overlay, use `tools/relink_arm7.py`,
 `tools/relink_arm9.py`, or `tools/relink_overlay.py`. ROM-derived fallback
