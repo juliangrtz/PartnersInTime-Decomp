@@ -1512,6 +1512,31 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03804FC0",
+      "size": "0x188",
+      "kind": "code",
+      "section": ".pit_PM_ExecuteProcess",
+      "source": "arm7/PM_ExecuteProcess.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "PMi_DoSleep": "0x038056BC",
+        "PMi_GetRegister": "0x03805404",
+        "PMi_KeyPattern": "0x0380A1D0",
+        "PMi_SetLED": "0x03805520",
+        "PMi_SetRegister": "0x03805494",
+        "PMi_SwitchUtilityProc": "0x03805588",
+        "PMi_TriggerBL": "0x0380A1D4",
+        "PMi_Work": "0x0380A1DC",
+        "SPIi_CheckException": "0x03804084",
+        "SPIi_GetException": "0x0380406C",
+        "SPIi_ReleaseException": "0x03804028",
+        "SPIi_ReturnResult": "0x038040A0"
+      },
+      "expected_sha256": "337a5de4487c35ff7216dd717ff634a8f8b64f98b82ed97dab90af10eb4680af"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
