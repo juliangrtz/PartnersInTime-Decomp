@@ -47,10 +47,13 @@ OS_SelectThread kind:function(arm,size=0x2c) addr:0x037fbef4
 OS_WakeupThreadDirect kind:function(arm,size=0x34) addr:0x037fbf20
 OS_WakeupThread kind:function(arm,size=0x70) addr:0x037fbf54
 OS_SleepThread kind:function(arm,size=0x68) addr:0x037fbfc4
+OS_ExitThread kind:function(arm,size=0x5c) addr:0x037fc02c
 OS_InitThread kind:function(arm,size=0x12c) addr:0x037fc188
+OSi_UnlockAllMutex kind:label addr:0x037fc2b4
 OSi_InsertThreadToList kind:label addr:0x037fc2fc
 OS_SaveContext kind:label addr:0x037fc3fc
 OS_LoadContext kind:label addr:0x037fc430
+OSi_RemoveThreadFromList kind:label addr:0x037fc698
 OS_Init kind:function(arm,size=0x38) addr:0x037fc7e8
 OS_SetArenaLo kind:function(arm,size=0x14) addr:0x037fc820
 OS_SetArenaHi kind:function(arm,size=0x14) addr:0x037fc834
@@ -127,6 +130,7 @@ OSi_CurrentThreadPtr kind:data(any) addr:0x03807afc
 OSi_ThreadInitialized kind:data(any) addr:0x03807b00
 OSi_SystemCallbackInSwitchThread kind:data(any) addr:0x03807b04
 OSi_ThreadInfo kind:data(any) addr:0x03807b08
+OSi_ThreadTable kind:data(any) addr:0x03807b1c
 OSi_IdleThread kind:data(any) addr:0x03807b5c
 OSi_MainThread kind:data(any) addr:0x03807bd4
 OSi_ResetInitialized kind:data(any) addr:0x03807ca8
