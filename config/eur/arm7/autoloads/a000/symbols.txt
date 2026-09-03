@@ -11,6 +11,8 @@ OS_SetIrqMask kind:function(arm,size=0x34) addr:0x037fb7e0
 OS_SetIrqFunction kind:function(arm,size=0xa8) addr:0x037fb860
 OSi_SetTimerCallback kind:function(arm,size=0x4c) addr:0x037fb814
 OS_InitIrqTable kind:function(arm,size=0x20) addr:0x037fb908
+OS_GetLockID kind:function(arm,size=0x98) addr:0x037fb934
+OS_ReleaseLockID kind:function(arm,size=0x30) addr:0x037fb9cc
 func_037FB9FC kind:label addr:0x037fb9fc
 OS_InitLock kind:function(arm,size=0x78) addr:0x037fbbd4
 OS_SetSwitchThreadCallback kind:function(arm,size=0x34) addr:0x037fbcc0
