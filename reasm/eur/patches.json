@@ -282,6 +282,25 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FC02C",
+      "size": "0x5C",
+      "kind": "code",
+      "section": ".pit_OS_ExitThread",
+      "source": "arm7/OS_ExitThread.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_Terminate": "0x037FDD34",
+        "OS_WakeupThread": "0x037FBF54",
+        "OSi_CurrentThreadPtr": "0x03807AFC",
+        "OSi_RemoveThreadFromList": "0x037FC698",
+        "OSi_RescheduleThread": "0x037FBE20",
+        "OSi_ThreadTable": "0x03807B1C",
+        "OSi_UnlockAllMutex": "0x037FC2B4"
+      },
+      "expected_sha256": "a24029404b520d2c7b1952939f87987d9af730f9bde321eb16523c6835af3ee4"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FC188",
       "size": "0x12C",
       "kind": "code",
