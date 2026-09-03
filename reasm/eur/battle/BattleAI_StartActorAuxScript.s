@@ -8,7 +8,7 @@
 
 .extern BattleAITask_GetOrInsert
 .extern BattleAI_UpdateAuxTask
-.extern data_ov002_020c0720
+.extern gBattleAIAuxTaskPool
 .extern gBattleContext
 
 .global BattleAI_StartActorAuxScript
@@ -49,7 +49,7 @@ BattleAI_StartActorAuxScript:
 .L_battle_context:
     .word gBattleContext
 .L_aux_pool:
-    .word data_ov002_020c0720
+    .word gBattleAIAuxTaskPool
 .L_update_callback:
     .word BattleAI_UpdateAuxTask
 .size BattleAI_StartActorAuxScript, . - BattleAI_StartActorAuxScript

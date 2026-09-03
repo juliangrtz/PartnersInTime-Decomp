@@ -8,7 +8,7 @@
 
 .extern BattleAITask_GetOrInsert
 .extern BattleAI_UpdateChainedTask
-.extern data_ov002_020c0918
+.extern gBattleAIObjectTaskPool
 .extern BattleScriptState_GetByObjectId
 
 .global BattleAI_StartObjectScript
@@ -85,7 +85,7 @@ BattleAI_StartObjectScript:
 .L_id_mask:
     .word 0x0fff
 .L_object_pool:
-    .word data_ov002_020c0918
+    .word gBattleAIObjectTaskPool
 .L_update_callback:
     .word BattleAI_UpdateChainedTask
 .size BattleAI_StartObjectScript, . - BattleAI_StartObjectScript
