@@ -20,6 +20,7 @@ and runtime overlay 2.
 | `02071C84` | `BattleDamage_CalculateAttack` | General POW/DEF/level damage calculation |
 | `0209BF38` | `BattleDamage_CalculateBase` | Compact actor-ID-based damage calculation |
 | `0209BFA0` | `BattleDamage_CalculateByObject` | Resolves scene objects and selects damage modes/equipment |
+| `0209BCCC` | `BattleDamage_ApplyEquipmentModifiers` | Applies attacker/defender equipment multipliers |
 | `0209D694` | `BattleActor_ApplyDamage` | Subtracts HP, clamps at zero, and marks knockout |
 | `0209D718` | `BattleDamage_ApplyToEnemy` | Enemy damage, animation, popup, sound, effects |
 | `0209D9DC` | `BattleDamage_ApplyToParty` | Party damage, animation, popup, sound, effects |
@@ -85,6 +86,23 @@ objects through their linked actor IDs, rejects invalid IDs and the defender
 immunity flag, selects Q8 scales `0x126`, `0x10C`, or `0x100` from the active
 battle mode, calls the appropriate maintained damage path, applies a
 140-percent equipment bonus for effect `0x301B`, and caps the result at 999.
+
+`BattleDamage_ApplyEquipmentModifiers` first calculates base damage, then
+rounds each equipment stage as `(damage * percent + 50) / 100`. Its recovered
+effect table is:
+
+| Effect | Side | Rule |
+|---:|---|---|
+| `3015` | defender | 25% damage |
+| `301F` | defender / attacker | 50% damage |
+| `3020` | defender / attacker | 150% damage |
+| `3014` | attacker | 250% while HP is at most 25% |
+| `300D` | attacker | 250% when the caller condition is active |
+| `3016` | attacker | 150% damage |
+| `301D` | attacker | `max(100, 300 - 8 * eligible_item_count)` percent |
+
+The HP-at-most-quarter predicate is maintained separately and compares
+`current_hp * 100 <= max_hp * 25` without division.
 
 The maintained `BattleStatus_TryApply(actor, status_id, duration,
 magnitude_percent, chance_percent)` handles both ailments and temporary stat
