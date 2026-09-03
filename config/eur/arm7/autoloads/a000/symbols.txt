@@ -378,7 +378,7 @@ TP_ExecSampling kind:function(arm,size=0x250) addr:0x03804a1c
 TPi_ReadChannel kind:function(arm,size=0x1f8) addr:0x03804c6c
 TPi_CheckTouch kind:function(arm,size=0x15c) addr:0x03804e64
 PM_ExecuteProcess kind:function(arm,size=0x188) addr:0x03804fc0
-PM_AnalyzeCommand kind:function(arm) addr:0x03805148
+PM_AnalyzeCommand kind:function(arm,size=0x1d4) addr:0x03805148
 PM_Init kind:function(arm) addr:0x0380531c
 MIC_ExecuteProcess kind:function(arm) addr:0x03805cc4
 MIC_AnalyzeCommand kind:function(arm) addr:0x03805fc4
@@ -504,6 +504,8 @@ PMi_SetRegister kind:function(arm) addr:0x03805494
 PMi_SetLED kind:function(arm) addr:0x03805520
 PMi_SwitchUtilityProc kind:function(arm) addr:0x03805588
 PMi_DoSleep kind:function(arm) addr:0x038056bc
+PM_GetLEDPattern kind:function(arm) addr:0x03805894
+PM_SetLEDPattern kind:function(arm) addr:0x038058a4
 PMi_KeyPattern kind:data(any) addr:0x0380a1d0
 PMi_TriggerBL kind:data(any) addr:0x0380a1d4
 PMi_Work kind:data(any) addr:0x0380a1dc

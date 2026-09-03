@@ -1537,6 +1537,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03805148",
+      "size": "0x1D4",
+      "kind": "code",
+      "section": ".pit_PM_AnalyzeCommand",
+      "source": "arm7/PM_AnalyzeCommand.s",
+      "externals": {
+        "PM_GetLEDPattern": "0x03805894",
+        "PM_SetLEDPattern": "0x038058A4",
+        "PMi_Work": "0x0380A1DC",
+        "SPIi_ReturnResult": "0x038040A0",
+        "SPIi_SetEntry": "0x03803F54"
+      },
+      "expected_sha256": "99801682257da18942814f9dd3b1cee8838fa5c38fb13d0e820bf0c3b692de47"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
