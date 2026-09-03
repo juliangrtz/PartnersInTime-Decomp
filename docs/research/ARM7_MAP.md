@@ -32,8 +32,9 @@ exactly at the descriptor table.
 | `0238011C` | `ARM7_MemoryAliasTest` | `0x3C` | Probes the ARM7-visible memory alias |
 | `02380158` | `ARM7_ModuleParams` | `0x18` | NitroSDK static-module parameters |
 
-`ARM7_AutoloadDone` is the first maintained ARM7 source function. It assembles
-for ARMv4T and byte-matches the original instruction.
+All four functions above and `ARM7_ModuleParams` are maintained source units.
+They assemble for ARMv4T, use symbolic cross-component references, and
+byte-match all `0x170` resident bytes.
 
 Two proven autoload-0 entry points are currently named:
 
@@ -44,10 +45,11 @@ Two proven autoload-0 entry points are currently named:
 
 ## Current confidence boundary
 
-There are 41 directly verified ARM call/literal relocations: 13 in resident
-startup and 28 covering `ARM7_Main` and `OS_IrqHandler`. The build decodes each
-source opcode and checks its calculated branch target or referenced literal
-value. The two autoload images clearly contain a mixture of executable code,
+There are 47 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 28 covering `ARM7_Main` and `OS_IrqHandler`. The build
+decodes each instruction source and checks its calculated branch target,
+referenced literal value, or stored pointer. The two autoload images clearly
+contain a mixture of executable code,
 literal pools, strings, tables, and writable data, but the upstream repository
 supplies no ARM7 symbols, section maps, or relocation maps. Remaining ranges
 are therefore marked `kind:mixed`, not mislabeled as wholly executable code.

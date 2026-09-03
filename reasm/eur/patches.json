@@ -30,6 +30,64 @@
       "section": ".pit_ARM7_AutoloadDone",
       "source": "arm7/ARM7_AutoloadDone.s",
       "expected_sha256": "379bec29dccd0a93c94826144d7ef6e42fab64ef195a3b8313a16926f66f388f"
+    },
+    {
+      "module": "arm7",
+      "address": "0x02380000",
+      "size": "0xC0",
+      "section": ".pit_ARM7_Entry",
+      "source": "arm7/ARM7_Entry.s",
+      "externals": {
+        "ARM7_AutoloadDataStart": "0x02380170",
+        "ARM7_LoadAutoloads": "0x023800C0",
+        "ARM7_Main": "0x037F846C",
+        "ARM7_MemoryAliasTest": "0x0238011C",
+        "ARM7_ModuleParams": "0x02380158",
+        "HW_ARM7BiosIrqHandler": "0xFFFF0000",
+        "HW_ARM7ClearEnd": "0x0380FF00",
+        "HW_ARM7IrqStack": "0x0380FFC0",
+        "HW_ARM7IrqVector": "0x0380FFFC",
+        "HW_ARM7SystemStack": "0x0380FF80",
+        "OS_IrqHandler": "0x037FB458"
+      },
+      "expected_sha256": "54d899a95d22909b60332762fb74ddb68f80bdce7fd0911426f54d456e4b309d"
+    },
+    {
+      "module": "arm7",
+      "address": "0x023800C0",
+      "size": "0x58",
+      "section": ".pit_ARM7_LoadAutoloads",
+      "source": "arm7/ARM7_LoadAutoloads.s",
+      "externals": {
+        "ARM7_AutoloadDone": "0x02380118",
+        "ARM7_ModuleParams": "0x02380158"
+      },
+      "expected_sha256": "2bae35e7380a197d746ffc4ee8b9f878b269bb79702256e73f897ca0c29ae746"
+    },
+    {
+      "module": "arm7",
+      "address": "0x0238011C",
+      "size": "0x3C",
+      "section": ".pit_ARM7_MemoryAliasTest",
+      "source": "arm7/ARM7_MemoryAliasTest.s",
+      "externals": {
+        "HW_ARM7MemoryAliasProbe": "0x027FFFFA"
+      },
+      "expected_sha256": "e78df792397027d185bb19d2e245f6804e56de4ae5d6766a63d4c15cc4586fa7"
+    },
+    {
+      "module": "arm7",
+      "address": "0x02380158",
+      "size": "0x18",
+      "kind": "rodata",
+      "section": ".pit_ARM7_ModuleParams",
+      "source": "arm7/ARM7_ModuleParams.s",
+      "externals": {
+        "ARM7_AutoloadDataStart": "0x02380170",
+        "ARM7_AutoloadListEnd": "0x023A6F24",
+        "ARM7_AutoloadListStart": "0x023A6F0C"
+      },
+      "expected_sha256": "cc7f50d72d43f863e67e06b485e6ec70d4a9edd0e506f30c1addf12ffc05f064"
     }
   ]
 }

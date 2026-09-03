@@ -3,3 +3,12 @@ ARM7_LoadAutoloads kind:function(arm,size=0x58) addr:0x023800c0
 ARM7_AutoloadDone kind:function(arm,size=0x4) addr:0x02380118
 ARM7_MemoryAliasTest kind:function(arm,size=0x3c) addr:0x0238011c
 ARM7_ModuleParams kind:data(any) addr:0x02380158
+ARM7_AutoloadDataStart kind:data(any) addr:0x02380170
+ARM7_AutoloadListStart kind:data(any) addr:0x023a6f0c
+ARM7_AutoloadListEnd kind:data(any) addr:0x023a6f24
+HW_ARM7ClearEnd kind:data(any) addr:0x0380ff00
+HW_ARM7IrqStack kind:data(any) addr:0x0380ffc0
+HW_ARM7SystemStack kind:data(any) addr:0x0380ff80
+HW_ARM7IrqVector kind:data(any) addr:0x0380fffc
+HW_ARM7BiosIrqHandler kind:data(any) addr:0xffff0000
+HW_ARM7MemoryAliasProbe kind:data(any) addr:0x027ffffa

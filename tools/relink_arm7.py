@@ -158,10 +158,13 @@ def sign_extend(value: int, bits: int) -> int:
 
 
 def resolve_arm_relocation(word: int, source: int, kind: str) -> int:
-    if kind == "arm_call":
-        if word & 0x0F000000 != 0x0B000000:
+    if kind in ("arm_call", "arm_branch"):
+        expected_opcode = 0x0B000000 if kind == "arm_call" else 0x0A000000
+        if word & 0x0F000000 != expected_opcode:
             raise reassembly.ReassemblyError(
-                f"0x{source:08X} is not an ARM BL instruction"
+                f"0x{source:08X} is not an ARM "
+                + ("BL" if kind == "arm_call" else "B")
+                + " instruction"
             )
         return source + 8 + sign_extend(word & 0x00FFFFFF, 24) * 4
     if kind == "load":
@@ -171,6 +174,8 @@ def resolve_arm_relocation(word: int, source: int, kind: str) -> int:
             )
         displacement = word & 0xFFF
         return source + 8 + (displacement if word & 0x00800000 else -displacement)
+    if kind == "data":
+        return word
     raise reassembly.ReassemblyError(f"unsupported ARM7 relocation kind: {kind}")
 
 

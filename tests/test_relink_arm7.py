@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import reassembly  # noqa: E402
 import relink_arm7  # noqa: E402
+import relink_overlay  # noqa: E402
 
 
 class Arm7LayoutTests(unittest.TestCase):
@@ -22,8 +23,21 @@ class Arm7LayoutTests(unittest.TestCase):
             relink_arm7.resolve_arm_relocation(0xE59F0010, 0x2000, "load"),
             0x2018,
         )
+        self.assertEqual(
+            relink_arm7.resolve_arm_relocation(0xEA000000, 0x3000, "arm_branch"),
+            0x3008,
+        )
+        self.assertEqual(
+            relink_arm7.resolve_arm_relocation(0x02380170, 0x4000, "data"),
+            0x02380170,
+        )
         with self.assertRaises(reassembly.ReassemblyError):
             relink_arm7.resolve_arm_relocation(0xE1A00000, 0x2000, "load")
+
+    def test_arm7_symbol_map_is_cpu_specific(self) -> None:
+        symbols = relink_overlay.read_all_symbols("eur", "arm7")
+        self.assertEqual(symbols["ARM7_Entry"], 0x02380000)
+        self.assertEqual(symbols["OS_IrqHandler"], 0x037FB458)
 
     def synthetic_layout(self) -> tuple[bytes, reassembly.Module]:
         load_address = 0x02380000

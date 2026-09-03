@@ -105,23 +105,24 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-137 independent units. Those units cover raw
+138 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
-images. There are 29,602 currently known relocations. `BattleActor_GetPartySlot`
+images. There are 29,608 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
-DSD-validated external definition. `ARM7_AutoloadDone` at `0x02380118` is the
-first maintained ARMv4T function. Every linked component and the resulting NDS
-have zero differing bytes from the verified European ROM.
+DSD-validated external definition. All resident ARM7 bytes are maintained
+ARMv4T assembly or symbolic module parameters; its five source units have 19
+validated relocations. Every linked component and the resulting NDS have zero
+differing bytes from the verified European ROM.
 
 Work items:
 
 1. Normalize the existing `symbols.txt`, `relocs.txt`, and `delinks.txt` files
    into one machine-readable module graph. Overlay parsing and validation are
-   implemented for the EUR ARM9 graph and resident ARM7 startup. The mixed ARM7
-   autoload images still need symbol and relocation discovery.
+   implemented for the EUR ARM9 graph and all resident ARM7 bytes. The mixed
+   ARM7 autoload images still need full symbol and relocation discovery.
 2. Split ARM9 and overlays into `.text`, `.rodata`, constructors, `.data`, BSS,
    ITCM, and DTCM according to the verified `dsd` boundaries.
 3. Emit one assembly translation unit per delink unit rather than one flat
