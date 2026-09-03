@@ -1327,6 +1327,27 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03803F2C",
+      "size": "0x174",
+      "kind": "code",
+      "section": ".pit_SPI_Queue",
+      "source": "arm7/SPI_Queue.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_ReadMessage": "0x037FC45C",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SendMessage": "0x037FC574",
+        "OS_WakeupThread": "0x037FBF54",
+        "SPIi_EntryCommands": "0x03809F64",
+        "SPIi_EntryMessages": "0x03809F68",
+        "SPIi_ExceptionThreadQueue": "0x0380A0E8",
+        "SPIi_MessageQueue": "0x03809F10",
+        "SPIi_Work": "0x03809C90"
+      },
+      "expected_sha256": "e5c46b43870eefd105b7c6314cf5a29e5956d4e24970d9a7adbd8cccfd743d91"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",

@@ -358,6 +358,11 @@ SVC_GetVolumeTable kind:function(thumb,size=0x4) addr:0x03803e08
 MATH_CountPopulation kind:function(arm,size=0x44) addr:0x03803e0c
 SPIi_FifoRecvCallback kind:function(arm,size=0x70) addr:0x03803e50
 SPIi_TaskThread kind:function(arm,size=0x6c) addr:0x03803ec0
+SPIi_CheckEntry kind:function(arm,size=0x28) addr:0x03803f2c
+SPIi_SetEntry kind:function(arm,size=0xd4) addr:0x03803f54
+SPIi_ReleaseException kind:function(arm,size=0x44) addr:0x03804028
+SPIi_GetException kind:function(arm,size=0x18) addr:0x0380406c
+SPIi_CheckException kind:function(arm,size=0x1c) addr:0x03804084
 TP_ExecuteProcess kind:function(arm) addr:0x03804424
 TP_AnalyzeCommand kind:function(arm) addr:0x0380474c
 PM_ExecuteProcess kind:function(arm) addr:0x03804fc0
@@ -445,6 +450,10 @@ CARDi_PulledOut kind:data(any) addr:0x03809c80
 CARDi_PullOutCallbackInitialized kind:data(any) addr:0x03809c84
 CARDi_IsPulledOutResult kind:data(any) addr:0x03809c88
 SPIi_MessageQueue kind:data(any) addr:0x03809f10
+SPIi_Work kind:data(any) addr:0x03809c90
+SPIi_EntryCommands kind:data(any) addr:0x03809f64
+SPIi_EntryMessages kind:data(any) addr:0x03809f68
+SPIi_ExceptionThreadQueue kind:data(any) addr:0x0380a0e8
 CARDi_BootMode kind:data(any) addr:0x027ffc40
 CARDi_RomIdSourceSelect kind:data(any) addr:0x027ffc10
 CARDi_RomIdPrimary kind:data(any) addr:0x027ff800
