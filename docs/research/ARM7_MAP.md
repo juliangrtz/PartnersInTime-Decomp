@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-Thirty-five proven autoload-0 units are now maintained ARMv4T/Thumb source:
+Thirty-six proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -57,6 +57,7 @@ Thirty-five proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `037FBBD4` | `OS_InitLock` | `0x78` | Initializes the shared init lock and ARM7 lock-ID allocation flags |
 | `037FBC50` | scheduler control | `0x70` | Atomically increments/decrements the nested scheduler-suppression counter |
 | `037FBCC0` | `OS_SetSwitchThreadCallback` | `0x34` | Atomically replaces the scheduler's context-switch callback |
+| `037FBCF4` | sleep subsystem | `0x7C` | Alarm callback veneer and millisecond sleep using thread suspension |
 | `037FC188` | `OS_InitThread` | `0x12C` | Builds `OSThreadInfo`, the bootstrap thread, stack guards, and shared pointer |
 | `037FC7E8` | `OS_Init` | `0x38` | Top-level NitroSDK operating-system initialization sequence |
 | `037FC820` | arena subsystem | `0x1BC` | Arena accessors, initial-bound helpers, and guarded initialization for all ARM7 arenas |
@@ -76,7 +77,7 @@ Thirty-five proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `03803DAE` | `SVC_Halt` | `0x04` | Thumb wrapper for supervisor call 6 |
 | `03806D04` | `CTRDG_Init` | `0x5C` | Initializes ARM7 Game Pak state and transitions its PXI callback |
 
-Together these replace `0x1938` bytes of the first mixed autoload image with
+Together these replace `0x19B4` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -87,10 +88,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 290 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 271 covering the 35 maintained autoload-0 units. The
+There are 298 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 279 covering the 36 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x1AA8` currently promoted
+referenced literal value, or stored pointer. All `0x1B24` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no
