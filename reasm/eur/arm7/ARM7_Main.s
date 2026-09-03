@@ -27,7 +27,7 @@
 .extern func_037FF0CC
 .extern FS_Init
 .extern CARD_SetThreadPriority
-.extern func_03803B48
+.extern CARD_CheckPullOut_Polling
 .extern func_03804244
 .extern func_03805ACC
 .extern func_038069F8
@@ -78,7 +78,7 @@ ARM7_Main:
     bl OS_ResetSystem
 .L_skip_optional_work:
     bl func_038069F8
-    bl func_03803B48
+    bl CARD_CheckPullOut_Polling
     b .L_main_loop
 
 .L_autoload_start:

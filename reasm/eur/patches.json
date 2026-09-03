@@ -116,7 +116,7 @@
         "func_037FF0CC": "0x037FF0CC",
         "FS_Init": "0x03802ABC",
         "CARD_SetThreadPriority": "0x03802B48",
-        "func_03803B48": "0x03803B48",
+        "CARD_CheckPullOut_Polling": "0x03803B48",
         "func_03804244": "0x03804244",
         "func_03805ACC": "0x03805ACC",
         "func_038069F8": "0x038069F8"
@@ -1235,6 +1235,38 @@
         "CARDi_WriteBackupCore": "0x03802F48"
       },
       "expected_sha256": "2f9b405fa809a0e50f4b6e32340f866146228945d01cb374006dfc845f55c2ed"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x03803AE0",
+      "size": "0x2B0",
+      "kind": "code",
+      "section": ".pit_CARD_PullOut",
+      "source": "arm7/CARD_PullOut.s",
+      "externals": {
+        "CARDi_BootMode": "0x027FFC40",
+        "CARDi_CardDetectMode": "0x027FFC1F",
+        "CARDi_IsPulledOutResult": "0x03809C88",
+        "CARDi_NextPollVBlank": "0x038079E0",
+        "CARDi_PullOutCallbackInitialized": "0x03809C84",
+        "CARDi_PullOutMessagePending": "0x038079E4",
+        "CARDi_PulledOut": "0x03809C80",
+        "CARDi_RomIdPrimary": "0x027FF800",
+        "CARDi_RomIdSourceSelect": "0x027FFC10",
+        "CARDi_ReadRomID": "0x03803614",
+        "HW_MAIN_MEM_SYSTEM": "0x027FFC00",
+        "HW_VBLANK_COUNT_BUF": "0x027FFC3C",
+        "OS_Terminate": "0x037FDD34",
+        "PXI_Init": "0x037FE1C4",
+        "PXI_IsCallbackReady": "0x037FE394",
+        "PXI_SendWordByFifo": "0x037FE2F0",
+        "PXI_SetFifoRecvCallback": "0x037FE3BC",
+        "REG_IF": "0x04000214",
+        "SND_BeginSleep": "0x037FE6BC",
+        "SVC_WaitByLoop_Thunk": "0x037FDD28",
+        "WVR_Shutdown": "0x03805A94"
+      },
+      "expected_sha256": "34b7a16ba04d5b8538b010c5f3dbdf1f95ad2e53998fed421344906698410f55"
     },
     {
       "module": "arm7_autoload_000",
