@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-369 independent units. Those units cover raw
+375 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -137,6 +137,9 @@ eight large enemy-load slots are exposed by the functions at `0x02077058`,
 The party knockout task pair at `0x020A90F4` and `0x020A9280` now exposes
 status clearing, animation completion, actor/global locks, form-specific sound
 pairs, linked-character movement and the follow-up character-load callbacks.
+The Mario/Luigi resource-wait and animation-wait callbacks at `0x020A8B80`,
+`0x020A8BEC`, `0x020A8FEC`, and `0x020A906C` are symbolic too, including the
+ordinary/enemy load-pending test at `0x02091EDC`.
 The launch-reaction closure additionally includes immediate/interpolated
 scene-object deltas, their fixed-point update callback, DS-hardware square-root
 ballistic velocity setup, and the form-specific landing effect. The surrounding

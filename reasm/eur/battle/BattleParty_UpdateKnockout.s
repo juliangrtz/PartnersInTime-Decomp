@@ -10,9 +10,9 @@
 .extern BattleSceneObject_GetById
 .extern BattleSceneObject_SetAnimation
 .extern BattleObjectData_EnsureLoaded
+.extern BattleParty_UpdateLuigiReloadWaitResource
+.extern BattleParty_UpdateMarioReloadWaitResource
 .extern BattleSceneObject_AdjustPosition
-.extern func_ov002_020a8bec
-.extern func_ov002_020a906c
 .extern gBattleContext
 
 .global BattleParty_UpdateKnockout
@@ -123,7 +123,7 @@ BattleParty_UpdateKnockout:
 .L_battle_context:
     .word gBattleContext
 .L_mario_callback:
-    .word func_ov002_020a906c
+    .word BattleParty_UpdateMarioReloadWaitResource
 .L_luigi_callback:
-    .word func_ov002_020a8bec
+    .word BattleParty_UpdateLuigiReloadWaitResource
 .size BattleParty_UpdateKnockout, . - BattleParty_UpdateKnockout
