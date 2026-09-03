@@ -1175,6 +1175,30 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03803614",
+      "size": "0x144",
+      "kind": "code",
+      "section": ".pit_CARD_RomRequest",
+      "source": "arm7/CARD_RomRequest.s",
+      "externals": {
+        "CARDi_ReadCard": "0x03803758",
+        "CARDi_ReadEnd": "0x038038F0",
+        "CARDi_RomHeaderControl": "0x027FFE60",
+        "CARDi_RomStat": "0x03809A60",
+        "CARDi_SetRomOp": "0x03803850",
+        "CARDi_Work": "0x03809460",
+        "MI_StopDma": "0x037FDE58",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SleepThread": "0x037FBFC4",
+        "OSi_ThreadInfo": "0x03807B08",
+        "REG_CARD_CNT": "0x040001A4",
+        "REG_CARD_DATA": "0x04100010"
+      },
+      "expected_sha256": "bd41962b2983801d21fa3473adda50fa764391ccad92b51f441d22090ddda0fd"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
