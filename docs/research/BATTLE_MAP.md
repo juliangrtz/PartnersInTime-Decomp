@@ -37,6 +37,10 @@ and runtime overlay 2.
 | `0209EBFC` | `BattleCollision_TestObjects` | Tests all source/target bounds and returns a hit position |
 | `0209EF3C` | `BattleCollision_TestVolumes` | Swept six-axis overlap and time-of-impact calculation |
 | `020A3370` | `BattleSceneObject_GetActiveModel` | Selects a scene object's primary or alternate model pointer |
+| `020A50D4` | `BattleTaskList_Update` | Runs live callbacks and recycles stopped tasks |
+| `020A519C` | `BattleTask_BindOwnerSlot` | Binds a task handle to its owning object and returns the displaced task |
+| `020A51F8` | `BattleTaskList_Insert` | Allocates if needed and prepends a task to an active list |
+| `020A5254` | `BattleTaskPool_Init` | Builds an aligned fixed-payload task free list |
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
@@ -79,6 +83,23 @@ bypass flag and otherwise subtracts either context offset pair
 Both actor resolvers, the compact base
 damage calculation, and the damage/KO updater are now maintained symbolic
 assembly in `reasm/eur/battle/` and byte-match the European overlay.
+
+## Battle task lists
+
+Battle task pools begin with active-list and free-list pointers, followed by
+nodes whose 12-byte header contains `next`, `callback`, and an optional pointer
+to the owner's task slot. `BattleTaskPool_Init` links a fixed number of nodes
+whose payload size is rounded to four bytes. `BattleTaskList_Insert` allocates
+from that free list when the caller does not provide a node and prepends the
+result to the active list.
+
+`BattleTaskList_Update` calls every non-null callback once, detects owner slots
+that no longer refer to their task, and recycles stopped nodes. Binding a task
+stores both sides of the owner relationship and returns any displaced task.
+`BattleTask_Release` clears an active callback for deferred removal, but can
+immediately return a newly allocated, not-yet-inserted node to its pool. The
+separate raw-node take/return pair serves callers that use the same free-list
+layout without task callbacks.
 
 ## Damage and status behavior
 

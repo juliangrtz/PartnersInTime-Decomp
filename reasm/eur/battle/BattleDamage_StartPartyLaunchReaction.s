@@ -15,8 +15,8 @@
 .equ TASK_DATA, 0x0C
 
 .extern BattleDamage_UpdatePartyLaunchReaction
-.extern func_ov002_020a519c
-.extern func_ov002_020a51f8
+.extern BattleTask_BindOwnerSlot
+.extern BattleTaskList_Insert
 .extern gBattleContext
 
 .global BattleDamage_StartPartyLaunchReaction
@@ -33,10 +33,10 @@ BattleDamage_StartPartyLaunchReaction:
     ldr r2, [r1]
     mov r1, #0
     add r0, r2, r0
-    bl func_ov002_020a51f8
+    bl BattleTaskList_Insert
     add r1, r5, #BATTLE_ACTOR_REACTION_TASK
     mov r4, r0
-    bl func_ov002_020a519c
+    bl BattleTask_BindOwnerSlot
 .L_task_ready:
     ldr r0, [r5, #BATTLE_ACTOR_SCENE_OBJECT]
     add r3, r4, #TASK_DATA

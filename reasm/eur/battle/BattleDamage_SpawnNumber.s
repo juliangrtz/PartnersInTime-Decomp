@@ -16,7 +16,7 @@
 .equ TASK_CALLBACK, 0x04
 
 .extern BattleDamageNumber_MergeAttached
-.extern func_ov002_020a51f8
+.extern BattleTaskList_Insert
 .extern func_ov002_020acb88
 .extern gBattleContext
 
@@ -74,7 +74,7 @@ BattleDamage_SpawnNumber:
     ldr r2, [r1]
     mov r1, #0
     add r0, r2, r0
-    bl func_ov002_020a51f8
+    bl BattleTaskList_Insert
     ldrh r2, [sp, #0x18]
     str r4, [r0, #TASK_DATA]
     add r3, r0, #TASK_DATA

@@ -144,6 +144,80 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x020A50D4",
+      "size": "0xA4",
+      "section": ".pit_BattleTaskList_Update",
+      "source": "battle/BattleTaskList_Update.s",
+      "externals": {},
+      "expected_sha256": "b6622fda697a0bb5a47e9efabf289c2a247cf12a3e52356171114a7a9bb1fb91"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A5178",
+      "size": "0x10",
+      "section": ".pit_BattlePool_ReturnNode",
+      "source": "battle/BattlePool_ReturnNode.s",
+      "externals": {},
+      "expected_sha256": "351094d752f5830bc9e4fe9ab866728f0629baad7f265f96227eae011d9b90dc"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A5188",
+      "size": "0x14",
+      "section": ".pit_BattlePool_TakeNode",
+      "source": "battle/BattlePool_TakeNode.s",
+      "externals": {},
+      "expected_sha256": "3925038ae2006d68c81562f8d36f426a37219f938aa30bb176383f640655c829"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A519C",
+      "size": "0x1C",
+      "section": ".pit_BattleTask_BindOwnerSlot",
+      "source": "battle/BattleTask_BindOwnerSlot.s",
+      "externals": {},
+      "expected_sha256": "02aa591da4436b1237874d490e608f2ebbed127cdfa33e9dabfe70d710ff23ca"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A51B8",
+      "size": "0x40",
+      "section": ".pit_BattleTask_Release",
+      "source": "battle/BattleTask_Release.s",
+      "externals": {},
+      "expected_sha256": "cc2a8cd0a3bb8d9dedbda67eb2389fbf021dcda4cfcb75eedf62a5220e711297"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A51F8",
+      "size": "0x38",
+      "section": ".pit_BattleTaskList_Insert",
+      "source": "battle/BattleTaskList_Insert.s",
+      "externals": {
+        "BattleTaskPool_Allocate": "0x020A5230"
+      },
+      "expected_sha256": "cadfeb8ecd0c8b57c4e78c8e6e0bd2715b32f1f7ba6295e44e7917032153f6b2"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A5230",
+      "size": "0x24",
+      "section": ".pit_BattleTaskPool_Allocate",
+      "source": "battle/BattleTaskPool_Allocate.s",
+      "externals": {},
+      "expected_sha256": "a2c2fcf955aaeaebcb59491cb81adf5e1618ee22c8b04b6cac950686121be7a2"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A5254",
+      "size": "0x40",
+      "section": ".pit_BattleTaskPool_Init",
+      "source": "battle/BattleTaskPool_Init.s",
+      "externals": {},
+      "expected_sha256": "300a62fa6c5362881fda773f72b1823352bdacf80e3f1b84f2eafb79b1639d4f"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02088EF4",
       "size": "0x30",
       "section": ".pit_BattleEnemyData_FixupObjectPointers",
@@ -315,8 +389,8 @@
       "externals": {
         "BattleActor_GetById": "0x02076F64",
         "BattleDamage_UpdatePartyReaction": "0x0209D208",
-        "func_ov002_020a519c": "0x020A519C",
-        "func_ov002_020a51f8": "0x020A51F8",
+        "BattleTask_BindOwnerSlot": "0x020A519C",
+        "BattleTaskList_Insert": "0x020A51F8",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "737ce7ce0a48e6f9c4ecfdcb248eda95683a2146bfd1580ecfe80b38adf60c83"
@@ -352,8 +426,8 @@
       "source": "battle/BattleDamage_StartPartyLaunchReaction.s",
       "externals": {
         "BattleDamage_UpdatePartyLaunchReaction": "0x0209CE98",
-        "func_ov002_020a519c": "0x020A519C",
-        "func_ov002_020a51f8": "0x020A51F8",
+        "BattleTask_BindOwnerSlot": "0x020A519C",
+        "BattleTaskList_Insert": "0x020A51F8",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "1d2828db4af3c5f39933ce07ff88606364c3a5165764bd7c23c81f6cc462d50c"
@@ -366,7 +440,7 @@
       "source": "battle/BattleDamage_SpawnNumber.s",
       "externals": {
         "BattleDamageNumber_MergeAttached": "0x0209CC84",
-        "func_ov002_020a51f8": "0x020A51F8",
+        "BattleTaskList_Insert": "0x020A51F8",
         "func_ov002_020acb88": "0x020ACB88",
         "gBattleContext": "0x020C0718"
       },
@@ -420,8 +494,8 @@
       "externals": {
         "BattleActor_GetById": "0x02076F64",
         "BattleDamage_UpdateEnemyReaction": "0x0209D46C",
-        "func_ov002_020a519c": "0x020A519C",
-        "func_ov002_020a51f8": "0x020A51F8",
+        "BattleTask_BindOwnerSlot": "0x020A519C",
+        "BattleTaskList_Insert": "0x020A51F8",
         "func_ov002_020acb44": "0x020ACB44",
         "gBattleContext": "0x020C0718"
       },
@@ -480,8 +554,8 @@
       "externals": {
         "BattleActor_GetById": "0x02076F64",
         "BattleDamage_UpdateEffectReaction": "0x0209D32C",
-        "func_ov002_020a519c": "0x020A519C",
-        "func_ov002_020a51f8": "0x020A51F8",
+        "BattleTask_BindOwnerSlot": "0x020A519C",
+        "BattleTaskList_Insert": "0x020A51F8",
         "func_ov002_020acb44": "0x020ACB44",
         "gBattleContext": "0x020C0718"
       },
