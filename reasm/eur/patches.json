@@ -1569,6 +1569,15 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03805404",
+      "size": "0x11C",
+      "kind": "code",
+      "section": ".pit_PM_RegisterAccess",
+      "source": "arm7/PM_RegisterAccess.s",
+      "expected_sha256": "a2f40a2c11660fdaf096c5e41accb52e5bca86f96c744188c2e6e9289f4e2926"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
