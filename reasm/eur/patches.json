@@ -461,6 +461,24 @@
         "REG_PXI_SYNC": "0x04000180"
       },
       "expected_sha256": "33f7d5dd9ac9214d618608b017a73c3159f640fbd7d550dc7f37e7cd6e2edfe0"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x03806D04",
+      "size": "0x5C",
+      "kind": "code",
+      "section": ".pit_CTRDG_Init",
+      "source": "arm7/CTRDG_Init.s",
+      "externals": {
+        "CTRDGi_Initialized": "0x0380B1B0",
+        "PXI_Init": "0x037FE1C4",
+        "PXI_SetFifoRecvCallback": "0x037FE3BC",
+        "func_0380698C": "0x0380698C",
+        "func_03806BB8": "0x03806BB8",
+        "func_03806BE4": "0x03806BE4",
+        "func_03806C1C": "0x03806C1C"
+      },
+      "expected_sha256": "2e0ef3468479522bc8fa2cd0a597d9bf574eb73dbd320a5976ac1e9bb79efa3b"
     }
   ]
 }

@@ -62,7 +62,11 @@ SVC_Halt kind:function(thumb,size=0x4) addr:0x03803dae
 func_03804244 kind:label addr:0x03804244
 func_03805ACC kind:label addr:0x03805acc
 func_038069F8 kind:label addr:0x038069f8
-CTRDG_Init kind:label addr:0x03806d04
+func_0380698C kind:label addr:0x0380698c
+func_03806BB8 kind:label addr:0x03806bb8
+func_03806BE4 kind:label addr:0x03806be4
+func_03806C1C kind:label addr:0x03806c1c
+CTRDG_Init kind:function(arm,size=0x5c) addr:0x03806d04
 _s32_div_f kind:label addr:0x03806f68
 func_03807604 kind:label addr:0x03807604
 OS_IRQTable kind:data(any) addr:0x0380794c
@@ -86,6 +90,7 @@ OSi_AlarmInitialized kind:data(any) addr:0x03807c88
 OSi_AlarmQueue kind:data(any) addr:0x03807c8c
 PXIi_FifoInitialized kind:data(any) addr:0x03807cb0
 PXIi_FifoRecvCallbackTable kind:data(any) addr:0x03807cb4
+CTRDGi_Initialized kind:data(any) addr:0x0380b1b0
 ARM7_Autoload000_End kind:data(any) addr:0x0380b1cc
 ARM7_Autoload001_End kind:data(any) addr:0x027f8bd0
 HW_THREADINFO_SUBP kind:data(any) addr:0x027fffa4

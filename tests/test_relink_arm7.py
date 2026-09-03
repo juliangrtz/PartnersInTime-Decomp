@@ -78,6 +78,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["PXIi_HandlerRecvFifoNotEmpty"], 0x037FE1D0)
         self.assertEqual(symbols["PXIi_InitFifo"], 0x037FE428)
         self.assertEqual(symbols["CTRDG_Init"], 0x03806D04)
+        self.assertEqual(symbols["CTRDGi_Initialized"], 0x0380B1B0)
         self.assertEqual(symbols["OS_IRQTable"], 0x0380794C)
         self.assertEqual(symbols["OS_IRQCheckFlag"], 0x03807A84)
         self.assertEqual(symbols["OSi_IrqCallbackInfo"], 0x03807A88)
