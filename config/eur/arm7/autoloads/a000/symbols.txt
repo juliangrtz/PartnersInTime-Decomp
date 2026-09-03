@@ -242,6 +242,18 @@ SNDi_Read24 kind:function(arm,size=0x60) addr:0x03801438
 SNDi_Read16 kind:function(arm,size=0x50) addr:0x03801498
 SNDi_GetByteCache kind:function(arm,size=0x50) addr:0x038014e8
 SNDi_InitCache kind:function(arm,size=0x3c) addr:0x03801538
+SNDi_SetTrackParam kind:function(arm,size=0xa4) addr:0x03801574
+SNDi_SetPlayerParam kind:function(arm,size=0x4c) addr:0x03801618
+SND_InvalidateBank kind:function(arm,size=0x60) addr:0x03801664
+SND_InvalidateSeq kind:function(arm,size=0x9c) addr:0x038016c4
+SND_SetTrackAllocatableChannel kind:function(arm,size=0x78) addr:0x03801760
+SND_SetTrackMute kind:function(arm,size=0x9c) addr:0x038017d8
+SND_SkipSeq kind:function(arm,size=0xcc) addr:0x03801874
+SND_PauseSeq kind:function(arm,size=0x84) addr:0x03801940
+SND_StopSeq kind:function(arm,size=0x5c) addr:0x038019c4
+SND_StartSeq kind:function(arm,size=0x1c) addr:0x03801a20
+SND_StartPreparedSeq kind:function(arm,size=0x20) addr:0x03801a3c
+SND_PrepareSeq kind:function(arm) addr:0x03801a5c
 SND_SeqMain kind:function(arm) addr:0x03801bb0
 SND_SeqInit kind:function(arm) addr:0x03801c50
 SND_NoteOn kind:function(arm) addr:0x03801cfc
@@ -324,6 +336,7 @@ SNDi_Work kind:data(any) addr:0x0380828c
 SNDi_SharedWork kind:data(any) addr:0x03808288
 SNDi_SeqCacheState kind:data(any) addr:0x03808270
 SNDi_SeqCacheData kind:data(any) addr:0x03808278
+SNDi_PlayerPool kind:data(any) addr:0x038087cc
 SNDi_TrackPool kind:data(any) addr:0x03808a0c
 SNDi_DecibelSquareTable kind:data(any) addr:0x0380737c
 SNDi_VolumeShiftTable kind:data(any) addr:0x0380747c
