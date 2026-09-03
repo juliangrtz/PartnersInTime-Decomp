@@ -246,7 +246,7 @@
       "source": "battle/BattleSceneObject_MoveBy.s",
       "externals": {
         "BattleSceneObject_UpdateMoveBy": "0x020A49D0",
-        "func_ov002_020a4e08": "0x020A4E08"
+        "BattleSceneObject_BeginMotionChannel": "0x020A4E08"
       },
       "expected_sha256": "483d3ebd76ca62eca49791ebfd7234832f6824bc4f2dbbc8ae65eeec2e23da64"
     },
@@ -260,6 +260,79 @@
         "_s32_div_f": "0x02046474"
       },
       "expected_sha256": "b7a49be719b3a5fc2d7779044ea9cee69c68128eaa22fddd08435c72b66c1582"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A4ADC",
+      "size": "0x1C",
+      "section": ".pit_BattleSceneObject_SnapshotPosition",
+      "source": "battle/BattleSceneObject_SnapshotPosition.s",
+      "externals": {},
+      "expected_sha256": "b1df0c0fd83224482c04ebbee699d8a258757103da9e9174d610abd91b011945"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A4AF8",
+      "size": "0x58",
+      "section": ".pit_BattleSceneObject_MoveByImmediate",
+      "source": "battle/BattleSceneObject_MoveByImmediate.s",
+      "externals": {},
+      "expected_sha256": "678318752c4d74aef19bdeaf53dad09c2dad2f3008ebcad6fa60ba19d0d22273"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A4B50",
+      "size": "0x4C",
+      "section": ".pit_BattleSceneObject_AddPositionDelta",
+      "source": "battle/BattleSceneObject_AddPositionDelta.s",
+      "externals": {},
+      "expected_sha256": "b4c48b509dbaaed3125bcd76ef2e2e6760dcee34f874d117c77536265b634a89"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A4B9C",
+      "size": "0x58",
+      "section": ".pit_BattleSceneObject_AdjustPosition",
+      "source": "battle/BattleSceneObject_AdjustPosition.s",
+      "externals": {
+        "BattleSceneObject_AddPositionDelta": "0x020A4B50",
+        "BattleSceneObject_MoveByImmediate": "0x020A4AF8",
+        "gBattleMotionObjectList": "0x020C0CCC"
+      },
+      "expected_sha256": "c296a7cfe62226a18e8eaeb914385a1a332d2713ee2efe4ca80b253335201768"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A4E08",
+      "size": "0xA8",
+      "section": ".pit_BattleSceneObject_BeginMotionChannel",
+      "source": "battle/BattleSceneObject_BeginMotionChannel.s",
+      "externals": {
+        "BattleSceneObject_GetMotionChannel": "0x020A50C4",
+        "func_ov002_020a4f18": "0x020A4F18",
+        "gBattleMotionObjectList": "0x020C0CCC"
+      },
+      "expected_sha256": "87f620d851e1c26f7b66b650c34656e399b5db1d8ca5fea86488bb7f55db6ece"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A4EB0",
+      "size": "0x68",
+      "section": ".pit_BattleSceneObject_UnlinkMotion",
+      "source": "battle/BattleSceneObject_UnlinkMotion.s",
+      "externals": {
+        "gBattleMotionObjectList": "0x020C0CCC"
+      },
+      "expected_sha256": "cf55a4b7c8ef5460f0909956d71f349eff2a980ded793d53f0b2ad3e99647bdd"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A50C4",
+      "size": "0x10",
+      "section": ".pit_BattleSceneObject_GetMotionChannel",
+      "source": "battle/BattleSceneObject_GetMotionChannel.s",
+      "externals": {},
+      "expected_sha256": "48a23a6fdb8fb2145861d01998e3321f0b2a5dcd10c65496acf265c4dbbdd293"
     },
     {
       "module": "arm9_ov002",
@@ -455,7 +528,7 @@
         "BattleSceneObject_GetById": "0x02076FB4",
         "BattleSceneObject_SetAnimation": "0x02091198",
         "func_ov002_02092048": "0x02092048",
-        "func_ov002_020a4b9c": "0x020A4B9C",
+        "BattleSceneObject_AdjustPosition": "0x020A4B9C",
         "func_ov002_020a8bec": "0x020A8BEC",
         "func_ov002_020a906c": "0x020A906C",
         "gBattleContext": "0x020C0718"

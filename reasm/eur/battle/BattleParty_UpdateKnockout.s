@@ -10,7 +10,7 @@
 .extern BattleSceneObject_GetById
 .extern BattleSceneObject_SetAnimation
 .extern func_ov002_02092048
-.extern func_ov002_020a4b9c
+.extern BattleSceneObject_AdjustPosition
 .extern func_ov002_020a8bec
 .extern func_ov002_020a906c
 .extern gBattleContext
@@ -85,7 +85,7 @@ BattleParty_UpdateKnockout:
     sub r1, lr, r1
     sub r2, ip, r2
     rsb r3, r3, #0
-    bl func_ov002_020a4b9c
+    bl BattleSceneObject_AdjustPosition
     mov r0, #0x30
     strh r0, [r4, #0xEA]
 

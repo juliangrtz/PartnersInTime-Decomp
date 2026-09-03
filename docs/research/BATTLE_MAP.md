@@ -43,6 +43,13 @@ and runtime overlay 2.
 | `020A3370` | `BattleSceneObject_GetActiveModel` | Selects a scene object's primary or alternate model pointer |
 | `020A3F9C` | `BattleMotion_StartBallistic` | Derives launch velocity with the DS square-root unit and starts motion |
 | `020A4934` | `BattleSceneObject_MoveBy` | Applies a position delta immediately or over a duration |
+| `020A4ADC` | `BattleSceneObject_SnapshotPosition` | Copies live coordinates into the stored motion origin |
+| `020A4AF8` | `BattleSceneObject_MoveByImmediate` | Applies a delta and synchronizes both stored targets |
+| `020A4B50` | `BattleSceneObject_AddPositionDelta` | Offsets live and target coordinates during active motion |
+| `020A4B9C` | `BattleSceneObject_AdjustPosition` | Selects active-motion or immediate coordinate adjustment |
+| `020A4E08` | `BattleSceneObject_BeginMotionChannel` | Links an object and initializes one motion callback channel |
+| `020A4EB0` | `BattleSceneObject_UnlinkMotion` | Preserves the final target and removes an object from the motion list |
+| `020A50C4` | `BattleSceneObject_GetMotionChannel` | Resolves one of the fixed-size per-object motion channels |
 | `020A50D4` | `BattleTaskList_Update` | Runs live callbacks and recycles stopped tasks |
 | `020A519C` | `BattleTask_BindOwnerSlot` | Binds a task handle to its owning object and returns the displaced task |
 | `020A51F8` | `BattleTaskList_Insert` | Allocates if needed and prepends a task to an active list |
@@ -271,6 +278,12 @@ displacement and acceleration with the DS square-root registers at
 `0x040002B0`-`0x040002B8`. The final impact helper chooses effect variant
 `0x10` or `0x11` from the party form, converts through the maintained view
 offset helper, creates effect family `0x13`, and plays sound `0x39`.
+Scene objects with active motion are kept in the intrusive list rooted at
+`gBattleMotionObjectList`. Each object owns fixed-size `0x28`-byte motion
+channels beginning at offset `+0x1C`; starting a channel replaces an existing
+callback, clears its transient accumulators, stores its duration, and returns
+the channel payload at `+0x18`. Coordinate adjustment preserves interpolation
+targets for listed objects, while unlisted objects receive an immediate move.
 
 The hit queue at battle-context offset `0xCAD8` contains up to eight packed
 20-byte records. `BattleDamage_ReflectQueuedHits` stops at the first inactive

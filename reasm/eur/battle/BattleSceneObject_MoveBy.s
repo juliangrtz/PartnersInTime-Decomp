@@ -7,7 +7,7 @@
 .balign 4
 
 .extern BattleSceneObject_UpdateMoveBy
-.extern func_ov002_020a4e08
+.extern BattleSceneObject_BeginMotionChannel
 
 .global BattleSceneObject_MoveBy
 .type BattleSceneObject_MoveBy, %function
@@ -43,7 +43,7 @@ BattleSceneObject_MoveBy:
     bx lr
 .L_interpolate:
     ldr r3, .L_update_callback
-    bl func_ov002_020a4e08
+    bl BattleSceneObject_BeginMotionChannel
     strh r5, [r0]
     ldr r1, [sp, #0x10]
     strh r4, [r0, #2]
