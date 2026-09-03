@@ -4,6 +4,17 @@ func_037F83C0 kind:label addr:0x037f83c0
 ARM7_Main kind:function(arm,size=0xb8) addr:0x037f846c
 SVC_Halt_Thunk kind:function(arm,size=0xc) addr:0x037f8524
 OS_IrqHandler kind:function(arm,size=0x170) addr:0x037fb458
+OSi_IrqVBlank kind:function(arm,size=0x58) addr:0x037fb5c8
+OSi_IrqTimer3 kind:function(arm,size=0x10) addr:0x037fb620
+OSi_IrqTimer2 kind:function(arm,size=0x10) addr:0x037fb630
+OSi_IrqTimer1 kind:function(arm,size=0x10) addr:0x037fb640
+OSi_IrqTimer0 kind:function(arm,size=0x10) addr:0x037fb650
+OSi_IrqDma3 kind:function(arm,size=0x10) addr:0x037fb660
+OSi_IrqDma2 kind:function(arm,size=0x10) addr:0x037fb670
+OSi_IrqDma1 kind:function(arm,size=0x10) addr:0x037fb680
+OSi_IrqDma0 kind:function(arm,size=0x10) addr:0x037fb690
+OSi_IrqCallback kind:function(arm,size=0x94) addr:0x037fb6a0
+OS_IrqDummy kind:function(arm,size=0x4) addr:0x037fb734
 OS_ResetRequestIrqMask kind:function(arm,size=0x34) addr:0x037fb738
 OS_DisableIrqMask kind:function(arm,size=0x3c) addr:0x037fb76c
 OS_EnableIrqMask kind:function(arm,size=0x38) addr:0x037fb7a8
@@ -93,6 +104,7 @@ _s32_div_f kind:label addr:0x03806f68
 func_03807604 kind:label addr:0x03807604
 OS_IRQTable kind:data(any) addr:0x0380794c
 OS_IRQCheckFlag kind:data(any) addr:0x03807a84
+OSi_IrqCallbackInfoIndex kind:data(any) addr:0x03807938
 OSi_IrqCallbackInfo kind:data(any) addr:0x03807a88
 OSi_VBlankCallbackInfo kind:data(any) addr:0x03807ae8
 OSi_TimerCallbackInfo kind:data(any) addr:0x03807ab8

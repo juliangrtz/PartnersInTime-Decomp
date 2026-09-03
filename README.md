@@ -36,7 +36,8 @@ ignored by Git.
   maintained. Lock initialization, lock-ID allocation, Game Pak lock
   primitives, PXI FIFO initialization and public APIs, the hardware-timer tick
   subsystem, alarm initialization, and the public Game Pak initializer are
-  symbolic too.
+  symbolic too. Callback-backed VBlank, timer, and DMA IRQ dispatch is also
+  maintained with the SDK handler names.
 - Only the existing `src/` files are presently maintained high-level source.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
@@ -102,15 +103,15 @@ python .\tools\relink_native.py `
   --require-matching
 ```
 
-The verified pass covers 43 components, 183 section units, 40 maintained
-units, and 29,828 currently known relocations with zero differing bytes. To
+The verified pass covers 43 components, 183 section units, 41 maintained
+units, and 29,845 currently known relocations with zero differing bytes. To
 iterate on one CPU family or overlay, use `tools/relink_arm7.py`,
 `tools/relink_arm9.py`, or `tools/relink_overlay.py`. ROM-derived fallback
 units, binaries, and JSON build reports remain below ignored `build/` paths.
 
 The resident ARM7 startup is fully symbolic source. Its two large autoloads are
-still conservatively marked as mixed code/data images; 33 proven autoload-0
-units are maintained source and 248 autoload relocations are mapped, but
+still conservatively marked as mixed code/data images; 34 proven autoload-0
+units are maintained source and 265 autoload relocations are mapped, but
 the upstream project contains no further ARM7 analysis. See
 [`docs/research/ARM7_MAP.md`](docs/research/ARM7_MAP.md) for the exact confidence
 boundary.

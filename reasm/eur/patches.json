@@ -240,6 +240,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FB5C8",
+      "size": "0x170",
+      "kind": "code",
+      "section": ".pit_OS_IrqCallbacks",
+      "source": "arm7/OS_IrqCallbacks.s",
+      "externals": {
+        "HW_INTR_CHECK_BUF": "0x0380FFF8",
+        "HW_VBLANK_COUNT_BUF": "0x027FFC3C",
+        "OS_DisableIrqMask": "0x037FB76C",
+        "OSi_IrqCallbackInfo": "0x03807A88",
+        "OSi_IrqCallbackInfoIndex": "0x03807938"
+      },
+      "expected_sha256": "a5db2055781f3c867b6855f7ee0b4e859199ae49822ae690bcff65fe78d153e1"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FB738",
       "size": "0x34",
       "kind": "code",
