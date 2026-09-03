@@ -83,6 +83,14 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x02076BAC",
+      "size": "0x28",
+      "section": ".pit_BattleActor_IsHpAtMostQuarter",
+      "source": "battle/BattleActor_IsHpAtMostQuarter.s",
+      "expected_sha256": "92c3ead4dfa99c9dc3716513fe7054aa318017eaba27c6c0ad12e0ce01cb3276"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02076F44",
       "size": "0x20",
       "section": ".pit_BattleActor_GetPartySlot",
@@ -188,6 +196,21 @@
         "_s32_div_f": "0x02046474"
       },
       "expected_sha256": "628263d8656615d4c3d86adf728090a706fd801ace1ee6470d3a86c5c995f700"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209BCCC",
+      "size": "0x26C",
+      "section": ".pit_BattleDamage_ApplyEquipmentModifiers",
+      "source": "battle/BattleDamage_ApplyEquipmentModifiers.s",
+      "externals": {
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleActor_IsHpAtMostQuarter": "0x02076BAC",
+        "BattleDamage_CalculateBase": "0x0209BF38",
+        "gItemRecords": "0x02050044",
+        "gSaveData": "0x02059FE8"
+      },
+      "expected_sha256": "b2d429d037ef52a35a16773f5d29b46262f3e688d6ef3e3ce5746e30d06a8849"
     },
     {
       "module": "arm9_ov002",
