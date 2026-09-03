@@ -44,6 +44,8 @@ and runtime overlay 2.
 | `0209EF3C` | `BattleCollision_TestVolumes` | Swept six-axis overlap and time-of-impact calculation |
 | `020A3370` | `BattleSceneObject_GetActiveModel` | Selects a scene object's primary or alternate model pointer |
 | `020A3F9C` | `BattleMotion_StartBallistic` | Derives launch velocity with the DS square-root unit and starts motion |
+| `020A411C` | `BattleSceneObject_StartAcceleratedMotion` | Normalizes a path and solves constant or accelerated duration |
+| `020A43D8` | `BattleSceneObject_UpdateAcceleratedMotion` | Advances normalized acceleration and applies the terminal correction |
 | `020A483C` | `BattleSceneObject_MoveTo` | Moves immediately or interpolates toward absolute coordinates |
 | `020A48AC` | `BattleSceneObject_UpdateMoveTo` | Advances absolute-target interpolation by one frame |
 | `020A4934` | `BattleSceneObject_MoveBy` | Applies a position delta immediately or over a duration |
@@ -320,6 +322,14 @@ The common per-frame updater snapshots each object's coordinates, advances its
 four callbacks, clamps timed channels, transfers deferred deltas between
 overlapping channels, removes idle objects, and updates a smoothed travel
 distance using the DS square-root unit.
+
+The accelerated-motion primitive first normalizes a requested X/Y/Z vector
+with the DS square-root unit. With zero acceleration it derives duration from
+distance and speed; otherwise it solves the fixed-point quadratic, selects the
+requested positive root, and installs the normalized direction plus speed and
+acceleration in the channel payload. Its update callback integrates that
+scalar along all three axes and applies a separate final-frame correction so
+rounding cannot leave the object short of its requested displacement.
 
 The hit queue at battle-context offset `0xCAD8` contains up to eight packed
 20-byte records. `BattleDamage_ReflectQueuedHits` stops at the first inactive

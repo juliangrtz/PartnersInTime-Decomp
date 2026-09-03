@@ -485,9 +485,31 @@
       "section": ".pit_BattleMotion_StartBallistic",
       "source": "battle/BattleMotion_StartBallistic.s",
       "externals": {
-        "func_ov002_020a411c": "0x020A411C"
+        "BattleSceneObject_StartAcceleratedMotion": "0x020A411C"
       },
       "expected_sha256": "f0c9b0f6c4fdaa24d5fcb5ab202ff8e70c74b44f116e8ca4ff5dfb2ec56920ed"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A411C",
+      "size": "0x2BC",
+      "section": ".pit_BattleSceneObject_StartAcceleratedMotion",
+      "source": "battle/BattleSceneObject_StartAcceleratedMotion.s",
+      "externals": {
+        "BattleSceneObject_BeginMotionChannel": "0x020A4E08",
+        "BattleSceneObject_UpdateAcceleratedMotion": "0x020A43D8",
+        "_s32_div_f": "0x02046474"
+      },
+      "expected_sha256": "841b1b5d4498a5820756b03999a2859f71704cf351441152177ed8f22a2470e7"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A43D8",
+      "size": "0x140",
+      "section": ".pit_BattleSceneObject_UpdateAcceleratedMotion",
+      "source": "battle/BattleSceneObject_UpdateAcceleratedMotion.s",
+      "externals": {},
+      "expected_sha256": "a66b4ff9c984fa49bff40e5918006ecbf51ba62b01e04a4570f253924cab72f9"
     },
     {
       "module": "arm9_ov002",
