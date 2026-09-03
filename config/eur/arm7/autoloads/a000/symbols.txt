@@ -306,10 +306,11 @@ CARD_Init kind:function(arm,size=0x80) addr:0x03803594
 CARDi_ReadRomID kind:function(arm,size=0x68) addr:0x03803614
 CARDi_ReadRom kind:function(arm,size=0x78) addr:0x0380367c
 CARDi_ReadRomIDCore kind:function(arm,size=0x64) addr:0x038036f4
-CARDi_RomAccessor kind:function(arm) addr:0x03803758
-CARDi_ReadCard kind:function(arm) addr:0x03803758
-CARDi_SetRomOp kind:function(arm) addr:0x03803850
-CARDi_ReadEnd kind:function(arm) addr:0x038038f0
+CARDi_RomAccessor kind:function(arm,size=0xf8) addr:0x03803758
+CARDi_ReadCard kind:function(arm,size=0xf8) addr:0x03803758
+CARDi_SetRomOp kind:function(arm,size=0xa0) addr:0x03803850
+CARDi_ReadEnd kind:function(arm,size=0x7c) addr:0x038038f0
+CARDi_ReadFromCache kind:function(arm,size=0x98) addr:0x0380396c
 CARD_InitPulledOutCallback kind:function(arm) addr:0x03803d30
 func_03803B48 kind:label addr:0x03803b48
 SVC_WaitByLoop kind:function(thumb,size=0x4) addr:0x03803d94
@@ -432,6 +433,8 @@ REG_TM1CNT_H kind:data(any) addr:0x04000106
 REG_AUXSPICNT kind:data(any) addr:0x040001a0
 REG_AUXSPIDATA kind:data(any) addr:0x040001a2
 REG_CARD_CNT kind:data(any) addr:0x040001a4
+REG_CARD_MASTERCNT kind:data(any) addr:0x040001a1
+REG_CARD_CMD kind:data(any) addr:0x040001a8
 REG_CARD_DATA kind:data(any) addr:0x04100010
 REG_RCNT kind:data(any) addr:0x04000134
 REG_EXTKEYIN kind:data(any) addr:0x04000136
