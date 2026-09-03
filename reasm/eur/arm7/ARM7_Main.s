@@ -25,7 +25,7 @@
 .extern PXI_Init
 .extern PAD_InitXYButton
 .extern func_037FF0CC
-.extern func_03802ABC
+.extern FS_Init
 .extern func_03802B48
 .extern func_03803B48
 .extern func_03804244
@@ -60,7 +60,7 @@ ARM7_Main:
     strh r0, [r1]
     bl OS_EnableInterrupts
     mvn r0, #0
-    bl func_03802ABC
+    bl FS_Init
     mov r0, #15
     bl func_03802B48
     mov r0, #12
