@@ -1475,6 +1475,21 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03804A1C",
+      "size": "0x250",
+      "kind": "code",
+      "section": ".pit_TP_ExecSampling",
+      "source": "arm7/TP_ExecSampling.s",
+      "externals": {
+        "OS_Terminate": "0x037FDD34",
+        "TPi_CheckTouch": "0x03804E64",
+        "TPi_PenState": "0x0380A1CC",
+        "TPi_ReadChannel": "0x03804C6C"
+      },
+      "expected_sha256": "5683d39a087231249e8ced185f30f30e72a47ad7c9330446f1a4b891477171a1"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
