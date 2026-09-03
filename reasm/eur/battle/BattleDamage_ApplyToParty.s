@@ -32,7 +32,7 @@
 .extern BattleDamage_StartPartyReaction
 .extern func_ov002_02065ec4
 .extern BattlePosition_StoreViewRelative
-.extern func_ov002_02076bd4
+.extern BattleActor_CanReceiveStatus
 .extern BattleSceneObject_SetAnimation
 .extern BattleDamage_SpawnNumber
 .extern BattleModelEffect_Spawn
@@ -311,7 +311,7 @@ BattleDamage_ApplyToParty:
     bxeq lr
     ldrh r0, [r8, #SCENE_OBJECT_ACTOR_ID]
     bl BattleActor_GetById
-    bl func_ov002_02076bd4
+    bl BattleActor_CanReceiveStatus
     cmp r0, #0
     addeq sp, sp, #0x14
     popeq {r4, r5, r6, r7, r8, sb, lr}

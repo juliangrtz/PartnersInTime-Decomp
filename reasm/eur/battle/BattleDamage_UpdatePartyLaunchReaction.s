@@ -33,7 +33,7 @@
 .extern BattleSceneObject_GetActiveModel
 .extern func_ov002_020a3f9c
 .extern func_ov002_020a4934
-.extern func_ov002_020a9280
+.extern BattleParty_StartKnockout
 .extern func_ov002_020a9c18
 
 .global BattleDamage_UpdatePartyLaunchReaction
@@ -140,7 +140,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     cmp r0, #0
     bgt .L_restore_actor
     mov r0, sb
-    bl func_ov002_020a9280
+    bl BattleParty_StartKnockout
     add sp, sp, #0x2C
     pop {r4, r5, r6, r7, r8, sb, sl, fp, lr}
     bx lr
