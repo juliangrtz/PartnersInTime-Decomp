@@ -1101,6 +1101,26 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03802F48",
+      "size": "0x208",
+      "kind": "code",
+      "section": ".pit_CARD_BackupTransfer",
+      "source": "arm7/CARD_BackupTransfer.s",
+      "externals": {
+        "CARDi_CommandBegin": "0x038034C0",
+        "CARDi_CommandEnd": "0x038033E0",
+        "CARDi_CommArray": "0x03803338",
+        "CARDi_CommReadCore": "0x038032F4",
+        "CARDi_CommWriteCore": "0x038032A8",
+        "CARDi_SendSpiAddressingCommand": "0x03803150",
+        "CARDi_WaitPrevCommand": "0x038033C8",
+        "CARDi_Work": "0x03809460",
+        "CARDi_WriteEnable": "0x038031FC"
+      },
+      "expected_sha256": "69c0a885ec16c00d29b7cc958913ffac35525bbab27766b5372aff69d45a6757"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
