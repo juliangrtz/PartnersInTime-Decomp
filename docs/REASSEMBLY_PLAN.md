@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-302 independent units. Those units cover raw
+304 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -126,6 +126,8 @@ temporary stat calculation and clamping, sound cues, and effect spawning.
 `BattleDamage_ApplyToEnemy` at `0x0209D718` is maintained in full: it resolves
 the enemy slot, clamps and applies damage, sets the hit reaction, computes the
 popup position, emits the number, and selects the two special impact effects.
+The shared `BattleDamage_SpawnNumber` constructor at `0x0209CD9C` applies the
+battle-wide popup offsets and creates either a free or actor-attached number.
 `BattleDamage_ApplyToParty` at `0x0209D9DC` now covers the parallel party path,
 including the nonlethal hit type, status-1 clearing, six reaction variants,
 Mario/Luigi popup metadata, and optional post-hit status application.
@@ -336,7 +338,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the thirty
+2. Continue promoting small overlay-2 battle leaf functions using the thirty-one
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the

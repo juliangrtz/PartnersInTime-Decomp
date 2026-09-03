@@ -22,6 +22,7 @@ and runtime overlay 2.
 | `0209BFA0` | `BattleDamage_CalculateByObject` | Resolves scene objects and selects damage modes/equipment |
 | `0209BCCC` | `BattleDamage_ApplyEquipmentModifiers` | Applies attacker/defender equipment multipliers |
 | `0209D694` | `BattleActor_ApplyDamage` | Subtracts HP, clamps at zero, and marks knockout |
+| `0209CD9C` | `BattleDamage_SpawnNumber` | Creates free or actor-attached damage-number effects |
 | `0209D718` | `BattleDamage_ApplyToEnemy` | Enemy damage, animation, popup, sound, effects |
 | `0209D9DC` | `BattleDamage_ApplyToParty` | Party damage, animation, popup, sound, effects |
 | `0209DE8C` | `BattleDamage_DispatchHit` | Routes queued hit records to enemy or party handling |
@@ -147,6 +148,11 @@ selects the enemy hit reaction, preserves special-object state, computes the
 world/screen position for the damage number, honors the enemy record's popup
 suppression bit, and emits the impact variants selected by hit kinds `0x11`
 and `0x13`.
+
+`BattleDamage_SpawnNumber` is the shared popup constructor used by both target
+paths and several attack scripts. It applies the battle-wide X/Y popup offsets,
+stores the displayed value in the effect, and can either use a caller-selected
+effect or create the actor-attached `0x369` variant with its own task lifecycle.
 
 `BattleDamage_ApplyToParty` is maintained too. It clamps damage, clears status
 1, handles the special nonlethal hit kind, selects one of six party reaction
