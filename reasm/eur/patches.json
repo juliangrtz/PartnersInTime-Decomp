@@ -112,7 +112,7 @@
         "OS_ResetSystem": "0x037FDD48",
         "OS_IsResetOccurred": "0x037FDE08",
         "PXI_Init": "0x037FE1C4",
-        "func_037FE580": "0x037FE580",
+        "PAD_InitXYButton": "0x037FE580",
         "func_037FF0CC": "0x037FF0CC",
         "func_03802ABC": "0x03802ABC",
         "func_03802B48": "0x03802B48",
@@ -442,6 +442,27 @@
         "REG_DMA0SAD": "0x040000B0"
       },
       "expected_sha256": "4100dd2f49cdb5f4fc5904ea8a694861785a47129be910038e707580b5929da4"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FE504",
+      "size": "0x11C",
+      "kind": "code",
+      "section": ".pit_PAD_XYButton",
+      "source": "arm7/PAD_XYButton.s",
+      "externals": {
+        "HW_BUTTON_XY_BUF": "0x027FFFA8",
+        "OS_CreateAlarm": "0x037FD548",
+        "OS_GetTick": "0x037FCFAC",
+        "OS_IsAlarmAvailable": "0x037FD558",
+        "OS_IsTickAvailable": "0x037FD0E4",
+        "OS_SetPeriodicAlarm": "0x037FD328",
+        "PADi_XYButtonAlarm": "0x03807D38",
+        "PADi_XYButtonAvailable": "0x03807D34",
+        "REG_EXTKEYIN": "0x04000136",
+        "REG_RCNT": "0x04000134"
+      },
+      "expected_sha256": "fcc294e54fd2babb109144b9fabbe1b29f60f5204456f5bbad7401d445aeda38"
     },
     {
       "module": "arm7_autoload_000",

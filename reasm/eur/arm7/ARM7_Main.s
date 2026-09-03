@@ -23,7 +23,7 @@
 .extern OS_IsResetOccurred
 .extern OS_ResetSystem
 .extern PXI_Init
-.extern func_037FE580
+.extern PAD_InitXYButton
 .extern func_037FF0CC
 .extern func_03802ABC
 .extern func_03802B48
@@ -41,7 +41,7 @@ ARM7_Main:
     mov r4, r0
     mov r0, #6
     bl func_037FF0CC
-    bl func_037FE580
+    bl PAD_InitXYButton
     mov r0, #1
     ldr r1, .L_autoload_start
     bl OS_SetIrqFunction

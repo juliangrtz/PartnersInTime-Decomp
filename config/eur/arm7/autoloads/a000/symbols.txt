@@ -144,7 +144,10 @@ PXI_IsCallbackReady kind:function(arm,size=0x28) addr:0x037fe394
 PXI_SetFifoRecvCallback kind:function(arm,size=0x6c) addr:0x037fe3bc
 PXIi_HandlerRecvFifoNotEmpty kind:function(arm,size=0x120) addr:0x037fe1d0
 PXIi_InitFifo kind:function(arm,size=0xdc) addr:0x037fe428
-func_037FE580 kind:label addr:0x037fe580
+PADi_SetRcntMode kind:function(arm,size=0x1c) addr:0x037fe504
+PADi_WriteRcnt kind:function(arm,size=0x20) addr:0x037fe520
+PADi_XYButtonAlarmHandler kind:function(arm,size=0x40) addr:0x037fe540
+PAD_InitXYButton kind:function(arm,size=0xa0) addr:0x037fe580
 func_037FE70C kind:label addr:0x037fe70c
 func_037FF0CC kind:label addr:0x037ff0cc
 func_03802ABC kind:label addr:0x03802abc
@@ -194,10 +197,13 @@ OSi_VFrameCount kind:data(any) addr:0x03807c9c
 OSi_VAlarmQueue kind:data(any) addr:0x03807ca0
 PXIi_FifoInitialized kind:data(any) addr:0x03807cb0
 PXIi_FifoRecvCallbackTable kind:data(any) addr:0x03807cb4
+PADi_XYButtonAvailable kind:data(any) addr:0x03807d34
+PADi_XYButtonAlarm kind:data(any) addr:0x03807d38
 CTRDGi_Initialized kind:data(any) addr:0x0380b1b0
 ARM7_Autoload000_End kind:data(any) addr:0x0380b1cc
 ARM7_Autoload001_End kind:data(any) addr:0x027f8bd0
 HW_THREADINFO_SUBP kind:data(any) addr:0x027fffa4
+HW_BUTTON_XY_BUF kind:data(any) addr:0x027fffa8
 HW_VBLANK_COUNT_BUF kind:data(any) addr:0x027ffc3c
 HW_LOCK_ID_FLAG_SUBP kind:data(any) addr:0x027fffb8
 HW_LOCK_CARTRIDGE kind:data(any) addr:0x027fffe8
@@ -211,6 +217,8 @@ REG_TM0CNT_L kind:data(any) addr:0x04000100
 REG_TM0CNT_H kind:data(any) addr:0x04000102
 REG_TM1CNT_L kind:data(any) addr:0x04000104
 REG_TM1CNT_H kind:data(any) addr:0x04000106
+REG_RCNT kind:data(any) addr:0x04000134
+REG_EXTKEYIN kind:data(any) addr:0x04000136
 REG_PXI_SYNC kind:data(any) addr:0x04000180
 REG_PXI_FIFO_CNT kind:data(any) addr:0x04000184
 REG_PXI_SEND_FIFO kind:data(any) addr:0x04000188
