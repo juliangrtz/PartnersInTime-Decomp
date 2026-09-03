@@ -138,6 +138,9 @@ per-actor task at `actor + 0x28`, set actor flag `0x200` while the reaction is
 active, and install their original update callbacks. The party pre-hit hook
 also consumes its one-shot flag and clears POW status 6 when equipment effect
 `0x3024` is active.
+Their two maintained per-frame callbacks now close the lifecycle: wait for the
+animation completion flags, choose party KO or idle behavior, restore ordinary
+enemy impact offsets, clear the task callback, and release actor flag `0x200`.
 
 ## Enemy stat records
 
