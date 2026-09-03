@@ -101,8 +101,10 @@ Property IDs 16-20 directly expose current HP, max HP, POW, DEF, and SPD.
 the selected enemy index by 44, queues exactly that byte range from the primary
 battle resource, and installs `BattleEnemyData_LoadObjectData` as the next load
 callback. `BattleEnemyData_RequestLoad` initializes that request and submits it
-through the maintained `BattleTaskQueue_Enqueue` path. `BattleEntity_BindResource`
-later copies the numeric fields into the live actor.
+through the maintained `BattleTaskQueue_Enqueue` path. The object-data callback
+resolves and queues the variable-sized payload after the stat record; its
+maintained fixup callback converts embedded offsets to RAM pointers.
+`BattleEntity_BindResource` later copies the numeric fields into the live actor.
 
 ## Large native dispatchers
 
