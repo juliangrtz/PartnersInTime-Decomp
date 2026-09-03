@@ -67,6 +67,12 @@ The maintained function resolves both actor IDs, extracts the attacker's level
 from the low seven flag bits, reads signed POW/DEF fields, calls the signed
 division helper, reproduces the original rounding, and caps the result at 999.
 
+The maintained `BattleDamage_CalculateAttack` path performs the corresponding
+full calculation for live actors. It resolves an implicit defender when needed,
+maps attack categories to Q8 multiplier columns, optionally applies a second
+multiplier table, clamps the intermediate and final values, scales by the
+battle-wide percentage, and honors the defender's forced-one-damage flag.
+
 `BattleStatus_TryApply(actor, status_id, duration, magnitude_percent,
 chance_percent)` handles both ailments and temporary stat changes:
 

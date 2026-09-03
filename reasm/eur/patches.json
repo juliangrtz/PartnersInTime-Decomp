@@ -3,6 +3,20 @@
   "patches": [
     {
       "module": "arm9_ov002",
+      "address": "0x02071C84",
+      "size": "0x1BC",
+      "section": ".pit_BattleDamage_CalculateAttack",
+      "source": "battle/BattleDamage_CalculateAttack.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "_s32_div_f": "0x02046474",
+        "gBattleContext": "0x020C0718",
+        "gBattleDamageMultipliersQ8": "0x020BE904"
+      },
+      "expected_sha256": "1cdaf805990c7a80f6ec3274678032a635242b1e0362c59ea0eab6edc9a6a561"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x020726B0",
       "size": "0x64",
       "section": ".pit_BattleTaskQueue_Enqueue",
