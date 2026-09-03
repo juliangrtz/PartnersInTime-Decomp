@@ -44,6 +44,8 @@ and runtime overlay 2.
 | `0209EF3C` | `BattleCollision_TestVolumes` | Swept six-axis overlap and time-of-impact calculation |
 | `020A3370` | `BattleSceneObject_GetActiveModel` | Selects a scene object's primary or alternate model pointer |
 | `020A3F9C` | `BattleMotion_StartBallistic` | Derives launch velocity with the DS square-root unit and starts motion |
+| `020A483C` | `BattleSceneObject_MoveTo` | Moves immediately or interpolates toward absolute coordinates |
+| `020A48AC` | `BattleSceneObject_UpdateMoveTo` | Advances absolute-target interpolation by one frame |
 | `020A4934` | `BattleSceneObject_MoveBy` | Applies a position delta immediately or over a duration |
 | `020A4A4C` | `BattleSceneObject_UpdateTravelDistance` | Averages the frame displacement into the object's travel metric |
 | `020A4ADC` | `BattleSceneObject_SnapshotPosition` | Copies live coordinates into the stored motion origin |
@@ -289,7 +291,9 @@ start the rebound animations and advance to the character-specific continuation.
 
 The launch reaction's movement helper either updates both live and base
 coordinates immediately or installs a fixed-point per-frame interpolation
-callback. Its ballistic companion derives the signed initial velocity from
+callback. The adjacent absolute-target helper performs the same immediate or
+timed choice, but each update interpolates the remaining distance toward its
+stored X/Y/Z target. Its ballistic companion derives the signed initial velocity from
 displacement and acceleration with the DS square-root registers at
 `0x040002B0`-`0x040002B8`. The final impact helper chooses effect variant
 `0x10` or `0x11` from the party form, converts through the maintained view
