@@ -240,6 +240,7 @@ def emit_source(
     symbols: list[tuple[str, int]],
 ) -> None:
     symbol = f"pit_{module.name}"
+    architecture = "armv4t" if module.cpu == "arm7" else "armv5te"
     lines = [
         "/* Generated locally from a user-supplied ROM. Do not commit this file. */",
         f"/* ROM SHA-1: {identity['sha1']} */",
@@ -247,7 +248,7 @@ def emit_source(
         f"load 0x{module.load_address:08X}; size 0x{module.size:X}. */",
         "",
         ".syntax unified",
-        ".arch armv5te",
+        f".arch {architecture}",
         '.section .text, "ax", %progbits',
         ".balign 1",
         f".global {symbol}_start",
@@ -353,17 +354,26 @@ def run(command: list[str]) -> None:
         )
 
 
+def target_triple(cpu: str) -> str:
+    if cpu == "arm7":
+        return "armv4t-none-eabi"
+    if cpu == "arm9":
+        return "armv5te-none-eabi"
+    raise ReassemblyError(f"unsupported CPU: {cpu}")
+
+
 def assemble_source(
     source: Path,
     obj: Path,
     binary: Path,
     llvm_mc: str,
     llvm_objcopy: str,
+    cpu: str = "arm9",
 ) -> bytes:
     run(
         [
             llvm_mc,
-            "-triple=armv5te-none-eabi",
+            f"-triple={target_triple(cpu)}",
             "-filetype=obj",
             str(source),
             "-o",
@@ -393,6 +403,7 @@ def assemble_linked_patch(
     size: int,
     source_section: str,
     externals: dict[str, str | int],
+    cpu: str,
     llvm_mc: str,
     llvm_objcopy: str,
     lld: str,
@@ -402,7 +413,7 @@ def assemble_linked_patch(
     run(
         [
             llvm_mc,
-            "-triple=armv5te-none-eabi",
+            f"-triple={target_triple(cpu)}",
             "-filetype=obj",
             str(source),
             "-o",
@@ -528,7 +539,9 @@ def build_rom(
 
         obj = object_root / f"{module.name}.o"
         binary = binary_root / f"{module.name}.bin"
-        payload = assemble_source(source, obj, binary, llvm_mc, llvm_objcopy)
+        payload = assemble_source(
+            source, obj, binary, llvm_mc, llvm_objcopy, module.cpu
+        )
         if len(payload) != module.size:
             raise ReassemblyError(
                 f"{module.name} rebuilt size is 0x{len(payload):X}; "
@@ -583,6 +596,7 @@ def build_rom(
                 patch_size,
                 patch["section"],
                 externals,
+                module.cpu,
                 llvm_mc,
                 llvm_objcopy,
                 lld,

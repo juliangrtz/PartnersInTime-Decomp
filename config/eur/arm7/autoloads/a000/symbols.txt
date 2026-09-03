@@ -1,0 +1,3 @@
+ARM7_Autoload000_Start kind:data(any) addr:0x037f8000
+ARM7_Main kind:function(arm,size=0xb8) addr:0x037f846c
+OS_IrqHandler kind:function(arm,size=0x170) addr:0x037fb458

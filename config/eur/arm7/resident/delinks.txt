@@ -1,0 +1,2 @@
+    .text          start:0x02380000 end:0x02380158 kind:code align:4
+    .module_params start:0x02380158 end:0x02380170 kind:rodata align:4

@@ -16,8 +16,10 @@ hash. The bootstrap builder injects the resulting fixed-size binary range.
 `tools/relink_overlay.py` instead assembles the function as its own object and
 links it together with sectioned fallback units at verified runtime addresses.
 `tools/relink_arm9.py` applies that path to resident ARM9, ITCM, DTCM, and every
-overlay in one build. External definitions must agree with the DSD symbol maps
-and have a supporting DSD relocation in the maintained unit.
+overlay in one build. `tools/relink_arm7.py` applies ARMv4T rules to resident
+ARM7 and its two descriptor-defined autoloads. `tools/relink_native.py` combines
+both CPU families into one ROM. External definitions must agree with the known
+symbol maps and have a supporting relocation in the maintained unit.
 
 Human-written symbolic assembly belongs here. Original ROM bytes, generated
 `.word` dumps, extracted assets, and build outputs do not.

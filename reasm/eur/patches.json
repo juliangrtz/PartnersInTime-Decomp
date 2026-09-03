@@ -22,6 +22,14 @@
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "684dd9edc891cc18303e406ee9a001836478f0853c5c4b62d831a22f0e7d9140"
+    },
+    {
+      "module": "arm7",
+      "address": "0x02380118",
+      "size": "0x4",
+      "section": ".pit_ARM7_AutoloadDone",
+      "source": "arm7/ARM7_AutoloadDone.s",
+      "expected_sha256": "379bec29dccd0a93c94826144d7ef6e42fab64ef195a3b8313a16926f66f388f"
     }
   ]
 }

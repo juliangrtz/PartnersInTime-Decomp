@@ -271,12 +271,13 @@ def plan_units(
     return result
 
 
-def emit_raw_unit(unit: Unit, payload: bytes) -> None:
+def emit_raw_unit(unit: Unit, payload: bytes, cpu: str = "arm9") -> None:
+    architecture = "armv4t" if cpu == "arm7" else "armv5te"
     flags = "ax" if unit.kind == "code" else "aw" if unit.kind == "data" else "a"
     lines = [
         "/* Generated from a user-supplied ROM. Do not commit. */",
         ".syntax unified",
-        ".arch armv5te",
+        f".arch {architecture}",
         f'.section {unit.input_section}, "{flags}", %progbits',
         ".balign 1",
         f".global pit_{unit.name}_start",
@@ -367,14 +368,14 @@ def relink_module(
         if not unit.maintained:
             start = unit.start - module.load_address
             payload = module_payload[start : start + unit.size]
-            emit_raw_unit(unit, payload)
+            emit_raw_unit(unit, payload, module.cpu)
         if not unit.source.is_file():
             raise reassembly.ReassemblyError(f"missing source unit: {unit.source}")
         obj = object_root / f"unit_{index:03d}.o"
         reassembly.run(
             [
                 llvm_mc,
-                "-triple=armv5te-none-eabi",
+                f"-triple={reassembly.target_triple(module.cpu)}",
                 "-filetype=obj",
                 str(unit.source),
                 "-o",
