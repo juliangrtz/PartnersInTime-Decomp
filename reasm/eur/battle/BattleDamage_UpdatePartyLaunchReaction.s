@@ -30,7 +30,7 @@
 .extern func_ov002_02076b0c
 .extern func_ov002_02091198
 .extern func_ov002_02091a58
-.extern func_ov002_020a3370
+.extern BattleSceneObject_GetActiveModel
 .extern func_ov002_020a3f9c
 .extern func_ov002_020a4934
 .extern func_ov002_020a9280
@@ -76,7 +76,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     bge .L_wait_for_action
     ldrh r0, [sl, #TASK_DATA_ACTOR_ID]
     bl BattleSceneObject_GetById
-    bl func_ov002_020a3370
+    bl BattleSceneObject_GetActiveModel
     ldrsh r1, [r0, #0x54]
     mov r0, sb
     mov r2, #1
@@ -96,7 +96,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     blt .L_wait_for_action
     ldrh r0, [sl, #TASK_DATA_ACTOR_ID]
     bl BattleSceneObject_GetById
-    bl func_ov002_020a3370
+    bl BattleSceneObject_GetActiveModel
     ldrsh r1, [r0, #0x54]
     mov r0, sb
     mov r2, #0

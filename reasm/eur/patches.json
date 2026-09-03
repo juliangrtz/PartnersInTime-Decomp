@@ -113,6 +113,26 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x02076FB4",
+      "size": "0xA4",
+      "section": ".pit_BattleSceneObject_GetById",
+      "source": "battle/BattleSceneObject_GetById.s",
+      "externals": {
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "2ef1082caf28060f82ab852ae38c60f51de381620ade4016b69f6bcc640623b9"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A3370",
+      "size": "0x18",
+      "section": ".pit_BattleSceneObject_GetActiveModel",
+      "source": "battle/BattleSceneObject_GetActiveModel.s",
+      "externals": {},
+      "expected_sha256": "429ea2158e958ebc968217ad3c0976247be6bc2e0770afa31d9a9cb512c90c22"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02088EF4",
       "size": "0x30",
       "section": ".pit_BattleEnemyData_FixupObjectPointers",
@@ -305,7 +325,7 @@
         "func_ov002_02076b0c": "0x02076B0C",
         "func_ov002_02091198": "0x02091198",
         "func_ov002_02091a58": "0x02091A58",
-        "func_ov002_020a3370": "0x020A3370",
+        "BattleSceneObject_GetActiveModel": "0x020A3370",
         "func_ov002_020a3f9c": "0x020A3F9C",
         "func_ov002_020a4934": "0x020A4934",
         "func_ov002_020a9280": "0x020A9280",
@@ -407,7 +427,7 @@
         "BattleEntity_BindResource": "0x02091C20",
         "BattleSceneObject_GetById": "0x02076FB4",
         "func_ov002_02091198": "0x02091198",
-        "func_ov002_020a3370": "0x020A3370",
+        "BattleSceneObject_GetActiveModel": "0x020A3370",
         "func_ov002_020a9280": "0x020A9280"
       },
       "expected_sha256": "e420f91b6eec13333141fa949f2da3ed2c2fcdd9b3ada51eba127cda67bd4e4e"
@@ -423,7 +443,7 @@
         "BattleActor_GetEnemySlot": "0x02076F24",
         "BattleSceneObject_GetById": "0x02076FB4",
         "func_ov002_02091198": "0x02091198",
-        "func_ov002_020a3370": "0x020A3370"
+        "BattleSceneObject_GetActiveModel": "0x020A3370"
       },
       "expected_sha256": "271e002416aabe691557c957850b4f66552007a3b0f65a92ad582915789cf0d4"
     },
@@ -436,7 +456,7 @@
       "externals": {
         "BattleActor_GetById": "0x02076F64",
         "BattleSceneObject_GetById": "0x02076FB4",
-        "func_ov002_020a3370": "0x020A3370"
+        "BattleSceneObject_GetActiveModel": "0x020A3370"
       },
       "expected_sha256": "bb94b6c17d74972b6378a331a6d884c7266514ffd56f335f672e449110078069"
     },
@@ -622,7 +642,7 @@
         "BattleActor_GetPartySlot": "0x02076F44",
         "BattleSceneObject_GetById": "0x02076FB4",
         "func_ov002_020681e8": "0x020681E8",
-        "func_ov002_020a3370": "0x020A3370"
+        "BattleSceneObject_GetActiveModel": "0x020A3370"
       },
       "expected_sha256": "eefc4acb580aa4994a0b5c68fc811e2d7f9e54f23175c1def58c07cae4e17a11"
     },
@@ -654,7 +674,7 @@
         "BattleCollision_GetBounds": "0x0209E918",
         "BattleSceneObject_GetById": "0x02076FB4",
         "BattleCollision_TestVolumes": "0x0209EF3C",
-        "func_ov002_020a3370": "0x020A3370"
+        "BattleSceneObject_GetActiveModel": "0x020A3370"
       },
       "expected_sha256": "396dddcab3c3cc35dfb9ae841e0ab870b471f69573c9272a84ad26a1945d0c58"
     },

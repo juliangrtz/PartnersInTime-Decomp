@@ -29,7 +29,7 @@
 .extern BattleActor_GetEnemySlot
 .extern BattleSceneObject_GetById
 .extern func_ov002_02091198
-.extern func_ov002_020a3370
+.extern BattleSceneObject_GetActiveModel
 
 .global BattleDamage_UpdateEnemyReaction
 .type BattleDamage_UpdateEnemyReaction, %function
@@ -44,7 +44,7 @@ BattleDamage_UpdateEnemyReaction:
     ldrh r0, [r6, #STATE_ACTOR_ID]
     ldr r4, [r5]
     bl BattleSceneObject_GetById
-    bl func_ov002_020a3370
+    bl BattleSceneObject_GetActiveModel
     cmp r0, #0
     beq .L_finish_task
     ldr r1, [r0, #0x7C]

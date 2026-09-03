@@ -18,7 +18,7 @@
 .extern BattleEntity_BindResource
 .extern BattleSceneObject_GetById
 .extern func_ov002_02091198
-.extern func_ov002_020a3370
+.extern BattleSceneObject_GetActiveModel
 .extern func_ov002_020a9280
 
 .global BattleDamage_UpdatePartyReaction
@@ -32,7 +32,7 @@ BattleDamage_UpdatePartyReaction:
     ldr r4, [r0]
     ldrh r0, [r5, #STATE_ACTOR_ID]
     bl BattleSceneObject_GetById
-    bl func_ov002_020a3370
+    bl BattleSceneObject_GetActiveModel
     ldr r0, [r0, #0x7C]
     mov r0, r0, lsl #29
     movs r0, r0, lsr #31
