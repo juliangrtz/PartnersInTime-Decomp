@@ -60,7 +60,13 @@ OS_ReadMessage kind:function(arm,size=0x78) addr:0x037fc45c
 OS_ReceiveMessage kind:function(arm,size=0xa0) addr:0x037fc4d4
 OS_SendMessage kind:function(arm,size=0x94) addr:0x037fc574
 OS_InitMessageQueue kind:function(arm,size=0x20) addr:0x037fc608
-OSi_UnlockAllMutex kind:label addr:0x037fc698
+OSi_RemoveMutexLinkFromQueue kind:function(arm,size=0x28) addr:0x037fc628
+OSi_DequeueItem kind:function(arm,size=0x24) addr:0x037fc650
+OSi_EnqueueTail kind:function(arm,size=0x24) addr:0x037fc674
+OSi_UnlockAllMutex kind:function(arm,size=0x40) addr:0x037fc698
+OS_UnlockMutex kind:function(arm,size=0x70) addr:0x037fc6d8
+OS_LockMutex kind:function(arm,size=0x8c) addr:0x037fc748
+OS_InitMutex kind:function(arm,size=0x14) addr:0x037fc7d4
 OS_Init kind:function(arm,size=0x38) addr:0x037fc7e8
 OS_SetArenaLo kind:function(arm,size=0x14) addr:0x037fc820
 OS_SetArenaHi kind:function(arm,size=0x14) addr:0x037fc834
