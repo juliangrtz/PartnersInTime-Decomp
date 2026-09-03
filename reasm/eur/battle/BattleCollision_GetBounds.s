@@ -10,7 +10,7 @@
 .extern BattleActor_GetPartySlot
 .extern BattleSceneObject_GetById
 .extern func_ov002_020681e8
-.extern func_ov002_020a3370
+.extern BattleSceneObject_GetActiveModel
 
 .global BattleCollision_GetBounds
 .type BattleCollision_GetBounds, %function
@@ -161,7 +161,7 @@ BattleCollision_GetBounds:
     mov r0, r6, lsl #16
     mov r0, r0, lsr #16
     bl BattleSceneObject_GetById
-    bl func_ov002_020a3370
+    bl BattleSceneObject_GetActiveModel
     movs r1, r0
     addeq sp, sp, #4
     moveq r0, #0

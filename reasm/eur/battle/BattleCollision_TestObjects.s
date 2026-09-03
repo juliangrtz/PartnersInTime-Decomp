@@ -9,7 +9,7 @@
 .extern BattleCollision_GetBounds
 .extern BattleSceneObject_GetById
 .extern BattleCollision_TestVolumes
-.extern func_ov002_020a3370
+.extern BattleSceneObject_GetActiveModel
 
 .global BattleCollision_TestObjects
 .type BattleCollision_TestObjects, %function
@@ -31,11 +31,11 @@ BattleCollision_TestObjects:
     mov r1, r1, lsl #16
     mov r0, r1, lsr #16
     bl BattleSceneObject_GetById
-    bl func_ov002_020a3370
+    bl BattleSceneObject_GetActiveModel
     mov r0, r6, lsl #16
     mov r0, r0, lsr #16
     bl BattleSceneObject_GetById
-    bl func_ov002_020a3370
+    bl BattleSceneObject_GetActiveModel
     cmp r0, #0
     addeq sp, sp, #0x54
     moveq r0, #0

@@ -13,6 +13,7 @@ and runtime overlay 2.
 | `02076F44` | `BattleActor_GetPartySlot` | Resolves party IDs 56-59 through the battle context |
 | `02076F24` | `BattleActor_GetEnemySlot` | Resolves enemy IDs 60-67 through the battle context |
 | `02076F64` | `BattleActor_GetById` | Resolves party IDs 56-59 or enemy IDs 60+ to actor pointers |
+| `02076FB4` | `BattleSceneObject_GetById` | Resolves field, party, enemy, and auxiliary visual-object IDs |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079950` | `BattleAI_DispatchOpcode` | Executes loaded `BAI_*.dat` battle bytecode |
 | `0208ED90` | `BattleScript_GetProperty` | Reads actor, object, and global properties |
@@ -34,6 +35,7 @@ and runtime overlay 2.
 | `0209EBAC` | `BattleHitDescriptor_GetByActorId` | Resolves per-actor 16-byte hit descriptors |
 | `0209EBFC` | `BattleCollision_TestObjects` | Tests all source/target bounds and returns a hit position |
 | `0209EF3C` | `BattleCollision_TestVolumes` | Swept six-axis overlap and time-of-impact calculation |
+| `020A3370` | `BattleSceneObject_GetActiveModel` | Selects a scene object's primary or alternate model pointer |
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
@@ -66,7 +68,11 @@ and runtime overlay 2.
 
 Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are
-coordinates rather than HP or stats. Both actor resolvers, the compact base
+coordinates rather than HP or stats. `BattleSceneObject_GetById` resolves IDs
+below 56 through the field-object table, 56-59 through party slots, 60-67
+through enemy slots, and IDs from 68 through the auxiliary table. The active
+model helper then selects scene-object pointer `+0xC0` or `+0xC4` from flag bit
+14 at `+0xF4`. Both actor resolvers, the compact base
 damage calculation, and the damage/KO updater are now maintained symbolic
 assembly in `reasm/eur/battle/` and byte-match the European overlay.
 

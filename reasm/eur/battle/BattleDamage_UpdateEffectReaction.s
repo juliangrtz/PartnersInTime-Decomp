@@ -16,7 +16,7 @@
 
 .extern BattleActor_GetById
 .extern BattleSceneObject_GetById
-.extern func_ov002_020a3370
+.extern BattleSceneObject_GetActiveModel
 
 .global BattleDamage_UpdateEffectReaction
 .type BattleDamage_UpdateEffectReaction, %function
@@ -29,7 +29,7 @@ BattleDamage_UpdateEffectReaction:
     bl BattleSceneObject_GetById
     ldrh r0, [r4, #TASK_DATA_ACTOR_ID]
     bl BattleSceneObject_GetById
-    bl func_ov002_020a3370
+    bl BattleSceneObject_GetActiveModel
     cmp r0, #0
     beq .L_release
     ldr r0, [r0, #RESOURCE_FLAGS]

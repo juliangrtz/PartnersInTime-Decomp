@@ -105,14 +105,17 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-318 independent units. Those units cover raw
+321 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
-DSD-validated external definition. `BattleDamage_CalculateBase` at `0x0209BF38`
+DSD-validated external definition. `BattleSceneObject_GetById` at `0x02076FB4`
+now exposes the field, party, enemy, and auxiliary visual-object pools, while
+`BattleSceneObject_GetActiveModel` at `0x020A3370` selects the primary or
+alternate bound model. `BattleDamage_CalculateBase` at `0x0209BF38`
 and `BattleDamage_CalculateAttack` at `0x02071C84` expose the compact and full
 level/POW/DEF calculations, including Q8 modifier tables, category minima,
 global battle scaling, and clamps. `BattleActor_ApplyDamage` at `0x0209D694`
@@ -357,7 +360,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the forty-eight
+2. Continue promoting small overlay-2 battle leaf functions using the fifty
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the
