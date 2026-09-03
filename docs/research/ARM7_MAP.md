@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-One hundred and sixteen proven autoload-0 units are now maintained ARMv4T/Thumb source:
+One hundred and seventeen proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -155,9 +155,10 @@ One hundred and sixteen proven autoload-0 units are now maintained ARMv4T/Thumb 
 | `03805B20` | MIC timer sampling | `0x1A4` | Samples 8- or 12-bit microphone data, publishes the ring-buffer cursor, handles completion, and acknowledges timer 3 |
 | `03805CC4` | MIC request execution | `0x300` | Runs one-shot/start/stop requests, owns the SPI exception, controls timer 3 IRQ sampling, and selects timer prescaling |
 | `03805FC4` | `MIC_AnalyzeCommand` | `0x2D4` | Reassembles PXI requests and validates sample format, RAM buffer bounds, period, and state transitions |
+| `03806298` | MIC initialization and ADC | `0x1D0` | Clears microphone state and performs the raw SPI transfers for 12- and 8-bit samples |
 | `03806D04` | `CTRDG_Init` | `0x5C` | Initializes ARM7 Game Pak state and transitions its PXI callback |
 
-Together these replace `0xA5A8` bytes of the first mixed autoload image with
+Together these replace `0xA778` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -168,10 +169,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 1,528 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 1,509 covering the 116 maintained autoload-0 units. The
+There are 1,552 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 1,533 covering the 117 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0xA718` currently promoted
+referenced literal value, or stored pointer. All `0xA8E8` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no

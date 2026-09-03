@@ -1725,6 +1725,18 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03806298",
+      "size": "0x1D0",
+      "kind": "code",
+      "section": ".pit_MIC_Sampling",
+      "source": "arm7/MIC_Sampling.s",
+      "externals": {
+        "MICi_Work": "0x0380B154"
+      },
+      "expected_sha256": "bbcdbfc75fb5500a7fc95fac95003ccda80b530de49ae7952c2ecbf6fdaf7125"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
