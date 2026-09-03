@@ -14,6 +14,57 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x02065E30",
+      "size": "0x94",
+      "section": ".pit_BattleScreenEffect_StartSecondary",
+      "source": "battle/BattleScreenEffect_StartSecondary.s",
+      "externals": {
+        "BattleScreenEffect_FindFreeDelaySlot": "0x02065FCC",
+        "BattleScreenEffect_UpdateDelayed": "0x02065F58",
+        "data_ov002_020c0660": "0x020C0660",
+        "func_020074bc": "0x020074BC"
+      },
+      "expected_sha256": "fbcf50f2a59d099793231aa1cdab4f044e41aa1198ca18bfec53217a20741b9e"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x02065EC4",
+      "size": "0x94",
+      "section": ".pit_BattleScreenEffect_StartPrimary",
+      "source": "battle/BattleScreenEffect_StartPrimary.s",
+      "externals": {
+        "BattleScreenEffect_FindFreeDelaySlot": "0x02065FCC",
+        "BattleScreenEffect_UpdateDelayed": "0x02065F58",
+        "data_ov002_020c0660": "0x020C0660",
+        "func_02007408": "0x02007408"
+      },
+      "expected_sha256": "8681911908ac39ccf68f36a30c32144edecd469184c6f41e24c57d3040264cfd"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x02065F58",
+      "size": "0x74",
+      "section": ".pit_BattleScreenEffect_UpdateDelayed",
+      "source": "battle/BattleScreenEffect_UpdateDelayed.s",
+      "externals": {
+        "BattleScreenEffect_StartPrimary": "0x02065EC4",
+        "BattleScreenEffect_StartSecondary": "0x02065E30"
+      },
+      "expected_sha256": "638fa93bdd5b4e42384646430f208d65b87d2a0cce72c54dddbc716cbaf95b8b"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x02065FCC",
+      "size": "0x38",
+      "section": ".pit_BattleScreenEffect_FindFreeDelaySlot",
+      "source": "battle/BattleScreenEffect_FindFreeDelaySlot.s",
+      "externals": {
+        "data_ov002_020c0660": "0x020C0660"
+      },
+      "expected_sha256": "6c79c98ab7a4705242b279ad53bb10b13e3117ec12d1a15b35e5f6277b53c2d4"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02077058",
       "size": "0x24",
       "section": ".pit_BattleObjectData_GetLoadState",
@@ -878,7 +929,7 @@
         "BattleSound_Play": "0x02076428",
         "BattleStatus_ClearAll": "0x0209C3F8",
         "BattleTaskList_Insert": "0x020A51F8",
-        "func_ov002_02065ec4": "0x02065EC4",
+        "BattleScreenEffect_StartPrimary": "0x02065EC4",
         "BattleSceneObject_SetStateFlags": "0x020A32F4",
         "gBattleContext": "0x020C0718"
       },
@@ -1212,7 +1263,7 @@
         "BattleSound_Play": "0x02076428",
         "BattleStatus_ClearEffect": "0x0209C278",
         "BattleStatus_TryApply": "0x0209C464",
-        "func_ov002_02065ec4": "0x02065EC4",
+        "BattleScreenEffect_StartPrimary": "0x02065EC4",
         "BattlePosition_StoreViewRelative": "0x02076B0C",
         "BattleActor_CanReceiveStatus": "0x02076BD4",
         "BattleSceneObject_SetAnimation": "0x02091198",

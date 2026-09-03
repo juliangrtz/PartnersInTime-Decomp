@@ -9,6 +9,10 @@ and runtime overlay 2.
 | Address | Working name | Purpose |
 |---:|---|---|
 | `020726B0` | `BattleTaskQueue_Enqueue` | Appends a callback/argument pair to the 32-entry battle task queue |
+| `02065E30` | `BattleScreenEffect_StartSecondary` | Starts or defers a secondary screen-effect preset |
+| `02065EC4` | `BattleScreenEffect_StartPrimary` | Starts or defers the primary screen-effect presets used by hits and KO |
+| `02065F58` | `BattleScreenEffect_UpdateDelayed` | Counts down and dispatches a deferred screen effect |
+| `02065FCC` | `BattleScreenEffect_FindFreeDelaySlot` | Finds one of four deferred-effect records |
 | `02073068` | `BattleMain_Update` | Per-frame battle update and central turn-state owner |
 | `02076B0C` | `BattlePosition_StoreViewRelative` | Stores coordinates raw or relative to one of two battle-view offsets |
 | `02076F44` | `BattleActor_GetPartySlot` | Resolves party IDs 56-59 through the battle context |

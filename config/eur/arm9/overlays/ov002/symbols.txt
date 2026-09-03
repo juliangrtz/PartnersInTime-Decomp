@@ -1,9 +1,9 @@
 func_ov002_02065d40 kind:function(arm,size=0xbc) addr:0x02065d40
 func_ov002_02065dfc kind:function(arm,size=0x34) addr:0x02065dfc
-func_ov002_02065e30 kind:function(arm,size=0x94) addr:0x02065e30
-func_ov002_02065ec4 kind:function(arm,size=0x94) addr:0x02065ec4
-func_ov002_02065f58 kind:function(arm,size=0x74) addr:0x02065f58
-func_ov002_02065fcc kind:function(arm,size=0x38) addr:0x02065fcc
+BattleScreenEffect_StartSecondary kind:function(arm,size=0x94) addr:0x02065e30
+BattleScreenEffect_StartPrimary kind:function(arm,size=0x94) addr:0x02065ec4
+BattleScreenEffect_UpdateDelayed kind:function(arm,size=0x74) addr:0x02065f58
+BattleScreenEffect_FindFreeDelaySlot kind:function(arm,size=0x38) addr:0x02065fcc
 func_ov002_02066004 kind:function(arm,size=0xf8) addr:0x02066004
 func_ov002_020660fc kind:function(arm,size=0x60) addr:0x020660fc
 func_ov002_0206615c kind:function(arm,size=0x7c) addr:0x0206615c

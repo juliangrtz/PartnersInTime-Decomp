@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-387 independent units. Those units cover raw
+392 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -124,6 +124,9 @@ fixed-payload pool initialization. The model- and sprite-effect constructors
 at `0x020ACB44`-`0x020ACD18` are
 symbolic too, including resource-table lookup, coordinates and scale,
 owner-slot binding, and the 64-entry tracked sprite-effect table.
+The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
+`0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
+slot allocation, countdown and primary/secondary routing used by damage and KO.
 The scene-object animation activity helpers at `0x02091A18` and `0x02091A58`
 validate their channel/object IDs and expose the four per-object animation
 slots used by reaction state machines. Their full `BattleSceneObject_SetAnimation`
