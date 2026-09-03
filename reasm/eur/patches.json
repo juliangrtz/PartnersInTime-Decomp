@@ -708,6 +708,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03800078",
+      "size": "0x108",
+      "kind": "code",
+      "section": ".pit_SND_SeqCore",
+      "source": "arm7/SND_SeqCore.s",
+      "externals": {
+        "SNDi_ClosePlayerTrack": "0x03800F6C",
+        "SNDi_GetPlayerTrack": "0x03800FE0",
+        "SNDi_SharedWork": "0x03808288",
+        "SNDi_TrackPool": "0x03808A0C",
+        "SNDi_TrackSeqMain": "0x03800180"
+      },
+      "expected_sha256": "7aff8f379b5a0abd12a50462c86d959e869db75883a2c596ff5e7b6b961f78c7"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
