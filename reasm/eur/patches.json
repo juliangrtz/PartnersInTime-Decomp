@@ -474,10 +474,65 @@
         "BattleActor_GetById": "0x02076F64",
         "BattleDamage_CalculateByObject": "0x0209BFA0",
         "BattleSceneObject_GetById": "0x02076FB4",
-        "func_ov002_0209ebac": "0x0209EBAC",
+        "BattleHitDescriptor_GetByActorId": "0x0209EBAC",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "a7226ab4b91bddeef6a28a19048ed072c00658f75774d7db91c3f46a4ff8334f"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209E0B4",
+      "size": "0xC",
+      "section": ".pit_BattleHitDescriptor_Disable",
+      "source": "battle/BattleHitDescriptor_Disable.s",
+      "externals": {},
+      "expected_sha256": "2042a6056d9c1dc3b9f623c2892f00132703cac4f2e3f36213122d0c7f102b0f"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209E0C0",
+      "size": "0x24",
+      "section": ".pit_BattleHitDescriptor_DisableByActor",
+      "source": "battle/BattleHitDescriptor_DisableByActor.s",
+      "externals": {
+        "BattleHitDescriptor_Disable": "0x0209E0B4",
+        "BattleHitDescriptor_GetByActorId": "0x0209EBAC"
+      },
+      "expected_sha256": "7c7ba940f79ece9aaee22c7566792820ab3c3b3f89aeaf3fe24fa7a00cf87557"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209E0E4",
+      "size": "0x28",
+      "section": ".pit_BattleHitDescriptor_SetStatus",
+      "source": "battle/BattleHitDescriptor_SetStatus.s",
+      "externals": {},
+      "expected_sha256": "556ca4dfb3d3fc3f6ba6bc03678279cfbdfb3fc36b4eb5b3774542451d69f696"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209E10C",
+      "size": "0x100",
+      "section": ".pit_BattleHitDescriptor_Configure",
+      "source": "battle/BattleHitDescriptor_Configure.s",
+      "externals": {
+        "BattleDamage_DispatchHit": "0x0209DE8C",
+        "BattleHitDescriptor_GetByActorId": "0x0209EBAC",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "829e04c0e3604524427bf7717a00aabc072d5fd4295c224ab55550b44993eee3"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209EBAC",
+      "size": "0x50",
+      "section": ".pit_BattleHitDescriptor_GetByActorId",
+      "source": "battle/BattleHitDescriptor_GetByActorId.s",
+      "externals": {
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "6fd1ea190b75af34791107d1c9aee7d847825570025c4a55c633c12216e26801"
     },
     {
       "module": "arm7",

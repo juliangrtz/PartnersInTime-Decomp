@@ -27,6 +27,8 @@ and runtime overlay 2.
 | `0209D9DC` | `BattleDamage_ApplyToParty` | Party damage, animation, popup, sound, effects |
 | `0209DE8C` | `BattleDamage_DispatchHit` | Routes queued hit records to enemy or party handling |
 | `0209DFF4` | `BattleDamage_ReflectQueuedHits` | Reverses queued source/target pairs and rebuilds payloads |
+| `0209E10C` | `BattleHitDescriptor_Configure` | Configures a source/target hit before queue expansion |
+| `0209EBAC` | `BattleHitDescriptor_GetByActorId` | Resolves per-actor 16-byte hit descriptors |
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
@@ -182,6 +184,12 @@ The hit queue at battle-context offset `0xCAD8` contains up to eight packed
 entry, finds records targeting the requested actor, recalculates damage for the
 reversed pairing, swaps source and target, and reloads the reflected attack's
 status ID, chance, and magnitude.
+
+Before expansion into that queue, each active attacker owns a 16-byte hit
+descriptor in the battle-context table at `+0xC8F4`. The maintained configure,
+lookup, status-payload, and disable helpers expose its linked-list pointer,
+callback, source/target IDs, six-bit hit kind, seven-bit status ID, signed
+chance/magnitude bytes, and the active-list head at context offset `+0xCAD4`.
 
 ## Enemy stat records
 
