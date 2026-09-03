@@ -341,7 +341,7 @@ func_02018ce0 kind:function(arm,size=0x6c) addr:0x02018ce0
 func_02018d4c kind:function(arm,size=0x18c) addr:0x02018d4c
 func_02018ed8 kind:function(arm,size=0x30) addr:0x02018ed8
 func_02018f08 kind:function(arm,size=0x40) addr:0x02018f08
-func_02018f48 kind:function(arm,size=0x104) addr:0x02018f48
+ItemEffect_CalculateValue kind:function(arm,size=0x104) addr:0x02018f48
 func_0201904c kind:function(arm,size=0x128) addr:0x0201904c
 func_02019174 kind:function(arm,size=0x1bc) addr:0x02019174
 func_02019330 kind:function(arm,size=0x3c8) addr:0x02019330
@@ -1732,7 +1732,7 @@ data_02050020 kind:data(any) addr:0x02050020
 data_0205002c kind:data(any) addr:0x0205002c
 data_0205003c kind:data(any) addr:0x0205003c
 data_02050040 kind:data(any) addr:0x02050040
-data_02050044 kind:data(any) addr:0x02050044
+gItemRecords kind:data(any) addr:0x02050044
 data_02050046 kind:data(any) addr:0x02050046
 data_0205004a kind:data(any) addr:0x0205004a
 data_0205004d kind:data(any) addr:0x0205004d
@@ -1928,7 +1928,7 @@ data_02059f7c kind:bss addr:0x02059f7c
 data_02059f80 kind:bss addr:0x02059f80
 data_02059f88 kind:bss addr:0x02059f88
 data_02059fd8 kind:bss addr:0x02059fd8
-data_02059fe8 kind:bss addr:0x02059fe8
+gSaveData kind:bss addr:0x02059fe8
 data_02059fec kind:bss addr:0x02059fec
 data_02059ffc kind:bss addr:0x02059ffc
 data_0205a000 kind:bss addr:0x0205a000

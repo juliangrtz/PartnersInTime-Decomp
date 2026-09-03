@@ -2,6 +2,17 @@
   "format": 1,
   "patches": [
     {
+      "module": "arm9",
+      "address": "0x02018F48",
+      "size": "0x104",
+      "section": ".pit_ItemEffect_CalculateValue",
+      "source": "battle/ItemEffect_CalculateValue.s",
+      "externals": {
+        "gItemRecords": "0x02050044"
+      },
+      "expected_sha256": "071707ffaefffab5054eed29095c93874559aa5b92f6aa9ecef8ad908d7f5ff8"
+    },
+    {
       "module": "arm9_ov002",
       "address": "0x02071C84",
       "size": "0x1BC",
@@ -14,6 +25,39 @@
         "gBattleDamageMultipliersQ8": "0x020BE904"
       },
       "expected_sha256": "1cdaf805990c7a80f6ec3274678032a635242b1e0362c59ea0eab6edc9a6a561"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x02076584",
+      "size": "0x320",
+      "section": ".pit_BattleItemEffect_Apply",
+      "source": "battle/BattleItemEffect_Apply.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleItemEffect_ApplyBadgeBoost": "0x020768A4",
+        "BattleStatus_ClearAll": "0x0209C3F8",
+        "BattleStatus_ClearEffect": "0x0209C278",
+        "BattleStatus_TryApply": "0x0209C464",
+        "ItemEffect_CalculateValue": "0x02018F48",
+        "gBattleContext": "0x020C0718",
+        "gItemRecords": "0x02050044",
+        "gSaveData": "0x02059FE8"
+      },
+      "expected_sha256": "e2ab91b432bd589629b995a1d2280d50af91529a808e07531eeb85c68218d9c2"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020768A4",
+      "size": "0xF4",
+      "section": ".pit_BattleItemEffect_ApplyBadgeBoost",
+      "source": "battle/BattleItemEffect_ApplyBadgeBoost.s",
+      "externals": {
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "gBattleContext": "0x020C0718",
+        "gSaveData": "0x02059FE8"
+      },
+      "expected_sha256": "9f7dbde812c013ef08b2ee8fbe7f51b228e199431d75bcd42b70e5500a70be75"
     },
     {
       "module": "arm9_ov002",
