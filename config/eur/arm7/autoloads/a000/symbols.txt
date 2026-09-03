@@ -145,6 +145,7 @@ PXI_SetFifoRecvCallback kind:function(arm,size=0x6c) addr:0x037fe3bc
 PXIi_HandlerRecvFifoNotEmpty kind:function(arm,size=0x120) addr:0x037fe1d0
 PXIi_InitFifo kind:function(arm,size=0xdc) addr:0x037fe428
 PADi_SetRcntMode kind:function(arm,size=0x1c) addr:0x037fe504
+EXIi_SelectRcnt kind:function(arm,size=0x1c) addr:0x037fe504
 PADi_WriteRcnt kind:function(arm,size=0x20) addr:0x037fe520
 PADi_XYButtonAlarmHandler kind:function(arm,size=0x40) addr:0x037fe540
 PAD_InitXYButton kind:function(arm,size=0xa0) addr:0x037fe580
@@ -375,7 +376,7 @@ TP_AnalyzeCommand kind:function(arm,size=0x1c0) addr:0x0380474c
 TP_Init kind:function(arm,size=0x110) addr:0x0380490c
 TP_ExecSampling kind:function(arm,size=0x250) addr:0x03804a1c
 TPi_ReadChannel kind:function(arm,size=0x1f8) addr:0x03804c6c
-TPi_CheckTouch kind:function(arm) addr:0x03804e64
+TPi_CheckTouch kind:function(arm,size=0x15c) addr:0x03804e64
 PM_ExecuteProcess kind:function(arm) addr:0x03804fc0
 PM_AnalyzeCommand kind:function(arm) addr:0x03805148
 PM_Init kind:function(arm) addr:0x0380531c

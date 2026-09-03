@@ -1499,6 +1499,19 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03804E64",
+      "size": "0x15C",
+      "kind": "code",
+      "section": ".pit_TP_CheckTouch",
+      "source": "arm7/TP_CheckTouch.s",
+      "externals": {
+        "EXIi_SelectRcnt": "0x037FE504",
+        "TPi_PenState": "0x0380A1CC"
+      },
+      "expected_sha256": "2303a6643e5100daafb831d2868d846a41ee851b0cc0842956e4eee564178196"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
