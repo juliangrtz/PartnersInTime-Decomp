@@ -55,6 +55,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["TPi_VAlarmCallback"], 0x038043AC)
         self.assertEqual(symbols["TP_ExecuteProcess"], 0x03804424)
         self.assertEqual(symbols["TPi_UpdateTouchData"], 0x03804658)
+        self.assertEqual(symbols["TP_AnalyzeCommand"], 0x0380474C)
         self.assertEqual(symbols["TP_ExecSampling"], 0x03804A1C)
         self.assertEqual(symbols["OSi_IrqVBlank"], 0x037FB5C8)
         self.assertEqual(symbols["OSi_IrqTimer3"], 0x037FB620)

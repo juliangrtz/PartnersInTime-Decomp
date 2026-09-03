@@ -1443,6 +1443,21 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x0380474C",
+      "size": "0x1C0",
+      "kind": "code",
+      "section": ".pit_TP_AnalyzeCommand",
+      "source": "arm7/TP_AnalyzeCommand.s",
+      "externals": {
+        "SPIi_ReturnResult": "0x038040A0",
+        "SPIi_SetEntry": "0x03803F54",
+        "SPIi_SetTouchPanelCallbackValue": "0x03804364",
+        "TPi_Work": "0x0380A0F8"
+      },
+      "expected_sha256": "2dc778c2f78d3f31cacfc2c4827b158c38f134e209ea38a5f406d30967ce6576"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
