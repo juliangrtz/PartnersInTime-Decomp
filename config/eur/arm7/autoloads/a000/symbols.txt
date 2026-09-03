@@ -287,8 +287,11 @@ CARDi_InitCommon kind:function(arm,size=0xa8) addr:0x03802ba0
 CARDi_TaskThread kind:function(arm,size=0x124) addr:0x03802c48
 CARDi_OnFifoRecv kind:function(arm,size=0xec) addr:0x03802d6c
 CARDi_EraseBackupSectorCore kind:function(arm,size=0x50) addr:0x03802e58
+CARDi_VerifyBackupCore kind:function(arm,size=0xa0) addr:0x03802ea8
 CARDi_SendSpiAddressingCommand kind:function(arm) addr:0x03803150
 CARDi_WriteEnable kind:function(arm) addr:0x038031fc
+CARDi_CommVerifyCore kind:function(arm) addr:0x03803240
+CARDi_CommArray kind:function(arm) addr:0x03803338
 CARDi_WaitPrevCommand kind:function(arm) addr:0x038033c8
 CARDi_CommandEnd kind:function(arm) addr:0x038033e0
 CARDi_CommandBegin kind:function(arm) addr:0x038034c0
@@ -373,6 +376,7 @@ CARDi_Enabled kind:data(any) addr:0x0380945c
 CARDi_Work kind:data(any) addr:0x03809460
 CARDi_Thread kind:data(any) addr:0x038094a0
 CARDi_ThreadStackTop kind:data(any) addr:0x03809a40
+CARDi_SpiWork kind:data(any) addr:0x03809a40
 CARDi_BootMode kind:data(any) addr:0x027ffc40
 CARDi_CommandTable kind:data(any) addr:0x038074ac
 SNDi_SharedWork kind:data(any) addr:0x03808288
