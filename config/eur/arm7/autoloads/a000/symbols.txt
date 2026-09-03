@@ -129,8 +129,15 @@ OSi_ResetCallback kind:function(arm,size=0x3c) addr:0x037fddcc
 OS_IsResetOccurred kind:function(arm,size=0x10) addr:0x037fde08
 OS_InitReset kind:function(arm,size=0x40) addr:0x037fde18
 MI_StopDma kind:function(arm,size=0x84) addr:0x037fde58
+MI_WaitDma kind:function(arm,size=0x70) addr:0x037fdedc
+MIi_CpuClear16 kind:function(arm,size=0x18) addr:0x037fdf4c
+MIi_CpuCopy16 kind:function(arm,size=0x1c) addr:0x037fdf64
+MIi_CpuClear32 kind:function(arm,size=0x14) addr:0x037fdf80
+MIi_CpuCopy32 kind:function(arm,size=0x18) addr:0x037fdf94
+MIi_CpuClearFast kind:function(arm,size=0x4c) addr:0x037fdfac
+MI_CpuFill8 kind:function(arm,size=0x94) addr:0x037fdff8
+MI_CpuCopy8 kind:function(arm,size=0x130) addr:0x037fe08c
 MI_SwapWord kind:function(arm,size=0x8) addr:0x037fe1bc
-MIi_CpuClear32 kind:label addr:0x037fdf80
 PXI_Init kind:function(arm,size=0xc) addr:0x037fe1c4
 PXI_SendWordByFifo kind:function(arm,size=0xa4) addr:0x037fe2f0
 PXI_IsCallbackReady kind:function(arm,size=0x28) addr:0x037fe394
