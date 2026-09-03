@@ -291,12 +291,12 @@ CARDi_VerifyBackupCore kind:function(arm,size=0xa0) addr:0x03802ea8
 CARDi_WriteBackupCore kind:function(arm,size=0xd0) addr:0x03802f48
 CARDi_ProgramBackupCore kind:function(arm,size=0xd0) addr:0x03803018
 CARDi_ReadBackupCore kind:function(arm,size=0x68) addr:0x038030e8
-CARDi_SendSpiAddressingCommand kind:function(arm) addr:0x03803150
-CARDi_WriteEnable kind:function(arm) addr:0x038031fc
-CARDi_CommVerifyCore kind:function(arm) addr:0x03803240
-CARDi_CommWriteCore kind:function(arm) addr:0x038032a8
-CARDi_CommReadCore kind:function(arm) addr:0x038032f4
-CARDi_CommArray kind:function(arm) addr:0x03803338
+CARDi_SendSpiAddressingCommand kind:function(arm,size=0xac) addr:0x03803150
+CARDi_WriteEnable kind:function(arm,size=0x44) addr:0x038031fc
+CARDi_CommVerifyCore kind:function(arm,size=0x68) addr:0x03803240
+CARDi_CommWriteCore kind:function(arm,size=0x4c) addr:0x038032a8
+CARDi_CommReadCore kind:function(arm,size=0x44) addr:0x038032f4
+CARDi_CommArray kind:function(arm,size=0x90) addr:0x03803338
 CARDi_WaitPrevCommand kind:function(arm) addr:0x038033c8
 CARDi_CommandEnd kind:function(arm) addr:0x038033e0
 CARDi_CommandBegin kind:function(arm) addr:0x038034c0
@@ -384,6 +384,7 @@ CARDi_ThreadStackTop kind:data(any) addr:0x03809a40
 CARDi_SpiWork kind:data(any) addr:0x03809a40
 CARDi_BootMode kind:data(any) addr:0x027ffc40
 CARDi_CommandTable kind:data(any) addr:0x038074ac
+CARDi_WriteEnableCommand kind:data(any) addr:0x038074a4
 SNDi_SharedWork kind:data(any) addr:0x03808288
 SNDi_SeqCacheState kind:data(any) addr:0x03808270
 SNDi_SeqCacheData kind:data(any) addr:0x03808278
@@ -414,6 +415,8 @@ REG_TM0CNT_L kind:data(any) addr:0x04000100
 REG_TM0CNT_H kind:data(any) addr:0x04000102
 REG_TM1CNT_L kind:data(any) addr:0x04000104
 REG_TM1CNT_H kind:data(any) addr:0x04000106
+REG_AUXSPICNT kind:data(any) addr:0x040001a0
+REG_AUXSPIDATA kind:data(any) addr:0x040001a2
 REG_RCNT kind:data(any) addr:0x04000134
 REG_EXTKEYIN kind:data(any) addr:0x04000136
 REG_POWCNT2 kind:data(any) addr:0x04000304

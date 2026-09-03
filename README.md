@@ -124,15 +124,15 @@ python .\tools\relink_native.py `
   --require-matching
 ```
 
-The verified pass covers 43 components, 228 section units, 90 maintained
-units, and 30,511 currently known relocations with zero differing bytes. To
+The verified pass covers 43 components, 229 section units, 91 maintained
+units, and 30,532 currently known relocations with zero differing bytes. To
 iterate on one CPU family or overlay, use `tools/relink_arm7.py`,
 `tools/relink_arm9.py`, or `tools/relink_overlay.py`. ROM-derived fallback
 units, binaries, and JSON build reports remain below ignored `build/` paths.
 
 The resident ARM7 startup is fully symbolic source. Its two large autoloads are
-still conservatively marked as mixed code/data images; 83 proven autoload-0
-units are maintained source and 931 autoload relocations are mapped, but
+still conservatively marked as mixed code/data images; 84 proven autoload-0
+units are maintained source and 952 autoload relocations are mapped, but
 the upstream project contains no further ARM7 analysis. See
 [`docs/research/ARM7_MAP.md`](docs/research/ARM7_MAP.md) for the exact confidence
 boundary.
