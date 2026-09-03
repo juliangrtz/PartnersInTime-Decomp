@@ -1708,6 +1708,23 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03805FC4",
+      "size": "0x2D4",
+      "kind": "code",
+      "section": ".pit_MIC_AnalyzeCommand",
+      "source": "arm7/MIC_AnalyzeCommand.s",
+      "externals": {
+        "MICi_SetTimerValue": "0x03805F20",
+        "MICi_Work": "0x0380B154",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "SPIi_ReturnResult": "0x038040A0",
+        "SPIi_SetEntry": "0x03803F54"
+      },
+      "expected_sha256": "99d91db476bdb852733cefd9d5c6302397ff66ca5fbde173b5cabfbb3d906d83"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
