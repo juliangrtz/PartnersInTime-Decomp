@@ -157,7 +157,18 @@ SND_ResetSoundBias kind:function(arm,size=0xc) addr:0x037fe700
 SND_Shutdown kind:function(arm,size=0x54) addr:0x037fe70c
 SND_Disable kind:function(arm,size=0x18) addr:0x037fe760
 SND_Enable kind:function(arm,size=0x18) addr:0x037fe778
+CalcSurroundDecay kind:function(arm,size=0x6c) addr:0x037fe790
+SNDi_SetSurroundDecay kind:function(arm,size=0x64) addr:0x037fe7fc
+SND_GetChannelControl kind:function(arm,size=0x10) addr:0x037fe860
+SND_SetMasterPan kind:function(arm,size=0x64) addr:0x037fe870
+SND_IsChannelActive kind:function(arm,size=0x1c) addr:0x037fe8d4
+SND_SetChannelPan kind:function(arm,size=0x7c) addr:0x037fe8f0
+SND_SetChannelTimer kind:function(arm,size=0x18) addr:0x037fe96c
+SND_SetChannelVolume kind:function(arm,size=0x84) addr:0x037fe984
 SND_StopChannel kind:function(arm,size=0x2c) addr:0x037fea08
+SND_SetupChannelNoise kind:function(arm,size=0xb0) addr:0x037fea34
+SND_SetupChannelPsg kind:function(arm,size=0xb8) addr:0x037feae4
+SND_SetupChannelPcm kind:function(arm,size=0xd0) addr:0x037feb9c
 func_037FF0CC kind:label addr:0x037ff0cc
 func_03802ABC kind:label addr:0x03802abc
 func_03802B48 kind:label addr:0x03802b48
@@ -183,6 +194,7 @@ OSi_IrqCallbackInfoIndex kind:data(any) addr:0x03807938
 OSi_IrqCallbackInfo kind:data(any) addr:0x03807a88
 OSi_VBlankCallbackInfo kind:data(any) addr:0x03807ae8
 OSi_TimerCallbackInfo kind:data(any) addr:0x03807ab8
+sMasterPan kind:data(any) addr:0x038079b4
 OSi_LockInitialized kind:data(any) addr:0x03807af4
 OSi_RescheduleCount kind:data(any) addr:0x03807af8
 OSi_CurrentThreadPtr kind:data(any) addr:0x03807afc
@@ -210,6 +222,9 @@ PXIi_FifoInitialized kind:data(any) addr:0x03807cb0
 PXIi_FifoRecvCallbackTable kind:data(any) addr:0x03807cb4
 PADi_XYButtonAvailable kind:data(any) addr:0x03807d34
 PADi_XYButtonAlarm kind:data(any) addr:0x03807d38
+sSurroundDecay kind:data(any) addr:0x03807d64
+sOrgPan kind:data(any) addr:0x03807d68
+sOrgVolume kind:data(any) addr:0x03807d78
 PMi_ResetControl kind:function(arm) addr:0x038053b4
 PMi_SetControl kind:function(arm) addr:0x038053e0
 CTRDGi_Initialized kind:data(any) addr:0x0380b1b0
@@ -237,6 +252,7 @@ REG_SOUNDCNT_VOLUME kind:data(any) addr:0x04000500
 REG_SOUNDCNT_ENABLE kind:data(any) addr:0x04000501
 REG_SNDCAP0CNT kind:data(any) addr:0x04000508
 REG_SNDCAP1CNT kind:data(any) addr:0x04000509
+REG_SOUND_CHANNEL0 kind:data(any) addr:0x04000400
 REG_PXI_SYNC kind:data(any) addr:0x04000180
 REG_PXI_FIFO_CNT kind:data(any) addr:0x04000184
 REG_PXI_SEND_FIFO kind:data(any) addr:0x04000188
