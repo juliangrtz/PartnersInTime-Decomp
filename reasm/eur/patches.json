@@ -1665,6 +1665,24 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03805B20",
+      "size": "0x1A4",
+      "kind": "code",
+      "section": ".pit_MIC_Timer",
+      "source": "arm7/MIC_Timer.s",
+      "externals": {
+        "MIC_ExecSampling12": "0x038062D8",
+        "MIC_ExecSampling8": "0x038063A0",
+        "MICi_Work": "0x0380B154",
+        "SPIi_CheckEntry": "0x03803F2C",
+        "SPIi_CheckException": "0x03804084",
+        "SPIi_ReturnResult": "0x038040A0",
+        "SPIi_SetEntry": "0x03803F54"
+      },
+      "expected_sha256": "95fe6af20be58678a320e61550e31ef821110dca1c629b26da48a70984696fdd"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
