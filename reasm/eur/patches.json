@@ -547,6 +547,17 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209DFDC",
+      "size": "0x18",
+      "section": ".pit_BattleEffect_SetVariant",
+      "source": "battle/BattleEffect_SetVariant.s",
+      "externals": {
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "49f9151196132e20b2bd3783e450d420bc07d94971f4111e5e77ff073d61c2f2"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209E0B4",
       "size": "0xC",
       "section": ".pit_BattleHitDescriptor_Disable",

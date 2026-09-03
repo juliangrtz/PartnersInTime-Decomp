@@ -27,6 +27,7 @@ and runtime overlay 2.
 | `0209D9DC` | `BattleDamage_ApplyToParty` | Party damage, animation, popup, sound, effects |
 | `0209DE8C` | `BattleDamage_DispatchHit` | Routes queued hit records to enemy or party handling |
 | `0209DFF4` | `BattleDamage_ReflectQueuedHits` | Reverses queued source/target pairs and rebuilds payloads |
+| `0209DFDC` | `BattleEffect_SetVariant` | Sets the signed effect variant at battle-context offset `+0xCB7A` |
 | `0209E10C` | `BattleHitDescriptor_Configure` | Configures a source/target hit before queue expansion |
 | `0209E20C` | `BattleHitQueue_Update` | Dispatches old hits and compiles active descriptors into the next queue |
 | `0209E918` | `BattleCollision_GetBounds` | Resolves party, special-object, or resource collision bounds |
