@@ -320,31 +320,18 @@ def write_linker_script(
     path.write_text("\n".join(lines), encoding="utf-8", newline="\n")
 
 
-def relink(
-    rom: Path,
+def relink_module(
+    rom_data: bytes,
+    identity: dict,
     version: str,
-    overlay_id: int,
+    module: reassembly.Module,
+    config: Path,
     work: Path,
     output_binary: Path,
-    output_rom: Path | None,
     require_matching: bool,
     announce: bool = True,
 ) -> RelinkResult:
-    rom_data = rom.read_bytes()
-    identity = reassembly.verify_version(rom_data, version)
-    module_name = f"arm9_ov{overlay_id:03d}"
-    try:
-        module = next(
-            module for module in reassembly.parse_modules(rom_data) if module.name == module_name
-        )
-    except StopIteration as error:
-        raise reassembly.ReassemblyError(f"overlay {overlay_id} is not present") from error
-    if module.compressed_size_field:
-        raise reassembly.ReassemblyError(
-            f"{module_name} is compressed; decompression/recompression is not implemented"
-        )
-
-    config = overlay_config(version, overlay_id)
+    module_name = module.name
     sections = read_sections(config / "delinks.txt")
     relocations = read_relocations(config / "relocs.txt")
     known_symbols = read_all_symbols(version)
@@ -437,7 +424,7 @@ def relink(
             }
         )
 
-    linker_script = work / "overlay.ld"
+    linker_script = work / "module.ld"
     linked_elf = work / f"{module_name}.elf"
     write_linker_script(linker_script, units, external_definitions)
     reassembly.run(
@@ -448,19 +435,19 @@ def relink(
     rebuilt_payload = output_binary.read_bytes()
     if len(rebuilt_payload) != module.size:
         raise reassembly.ReassemblyError(
-            f"linked overlay size is 0x{len(rebuilt_payload):X}, expected 0x{module.size:X}"
+            f"linked module size is 0x{len(rebuilt_payload):X}, expected 0x{module.size:X}"
         )
     differing_bytes = sum(a != b for a, b in zip(module_payload, rebuilt_payload))
     if require_matching and differing_bytes:
         raise reassembly.ReassemblyError(
-            f"linked overlay differs in {differing_bytes} bytes"
+            f"linked module differs in {differing_bytes} bytes"
         )
 
     report = {
         "format": 1,
         "rom_sha1": identity["sha1"],
         "module": module_name,
-        "overlay_id": overlay_id,
+        "overlay_id": module.overlay_id,
         "load_address": f"0x{module.load_address:08X}",
         "rom_offset": f"0x{module.rom_offset:08X}",
         "size": module.size,
@@ -478,15 +465,6 @@ def relink(
         newline="\n",
     )
 
-    if output_rom is not None:
-        rebuilt_rom = bytearray(rom_data)
-        rebuilt_rom[module.rom_offset : module.rom_offset + module.size] = rebuilt_payload
-        output_rom.parent.mkdir(parents=True, exist_ok=True)
-        output_rom.write_bytes(rebuilt_rom)
-        if announce:
-            print(f"ROM: {output_rom}")
-            print(f"ROM SHA-1: {hashlib.sha1(rebuilt_rom).hexdigest()}")
-
     result = RelinkResult(
         module=module,
         payload=rebuilt_payload,
@@ -497,12 +475,60 @@ def relink(
         report=report_path,
     )
     if announce:
-        print(f"Overlay: {module_name}")
+        print(f"Module: {module_name}")
         print(f"Units: {result.unit_count} ({result.maintained_unit_count} maintained)")
         print(f"DSD relocations inventoried: {result.relocation_count}")
         print(f"Differing bytes: {result.differing_bytes}")
         print(f"Binary: {output_binary}")
         print(f"Report: {result.report}")
+    return result
+
+
+def relink(
+    rom: Path,
+    version: str,
+    overlay_id: int,
+    work: Path,
+    output_binary: Path,
+    output_rom: Path | None,
+    require_matching: bool,
+    announce: bool = True,
+) -> RelinkResult:
+    rom_data = rom.read_bytes()
+    identity = reassembly.verify_version(rom_data, version)
+    module_name = f"arm9_ov{overlay_id:03d}"
+    try:
+        module = next(
+            module
+            for module in reassembly.parse_modules(rom_data)
+            if module.name == module_name
+        )
+    except StopIteration as error:
+        raise reassembly.ReassemblyError(f"overlay {overlay_id} is not present") from error
+    if module.compressed_size_field:
+        raise reassembly.ReassemblyError(
+            f"{module_name} is compressed; decompression/recompression is not implemented"
+        )
+
+    result = relink_module(
+        rom_data,
+        identity,
+        version,
+        module,
+        overlay_config(version, overlay_id),
+        work,
+        output_binary,
+        require_matching,
+        announce,
+    )
+    if output_rom is not None:
+        rebuilt_rom = bytearray(rom_data)
+        rebuilt_rom[module.rom_offset : module.rom_offset + module.size] = result.payload
+        output_rom.parent.mkdir(parents=True, exist_ok=True)
+        output_rom.write_bytes(rebuilt_rom)
+        if announce:
+            print(f"ROM: {output_rom}")
+            print(f"ROM SHA-1: {hashlib.sha1(rebuilt_rom).hexdigest()}")
     return result
 
 
