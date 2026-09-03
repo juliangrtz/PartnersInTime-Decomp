@@ -42,12 +42,19 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["OS_EnableIrqMask"], 0x037FB7A8)
         self.assertEqual(symbols["OS_SetIrqFunction"], 0x037FB860)
         self.assertEqual(symbols["OS_IrqHandler"], 0x037FB458)
+        self.assertEqual(symbols["OS_SetSwitchThreadCallback"], 0x037FBCC0)
+        self.assertEqual(symbols["OS_InitThread"], 0x037FC188)
         self.assertEqual(symbols["OS_Init"], 0x037FC7E8)
+        self.assertEqual(symbols["OS_EnableInterrupts"], 0x037FDC90)
+        self.assertEqual(symbols["OS_DisableInterrupts"], 0x037FDCA4)
+        self.assertEqual(symbols["OS_RestoreInterrupts"], 0x037FDCB8)
         self.assertEqual(symbols["OS_IRQTable"], 0x0380794C)
         self.assertEqual(symbols["OS_IRQCheckFlag"], 0x03807A84)
         self.assertEqual(symbols["OSi_IrqCallbackInfo"], 0x03807A88)
         self.assertEqual(symbols["OSi_VBlankCallbackInfo"], 0x03807AE8)
         self.assertEqual(symbols["OSi_ThreadInfo"], 0x03807B08)
+        self.assertEqual(symbols["OSi_MainThread"], 0x03807BD4)
+        self.assertEqual(symbols["HW_THREADINFO_SUBP"], 0x027FFFA4)
 
     def synthetic_layout(self) -> tuple[bytes, reassembly.Module]:
         load_address = 0x02380000
