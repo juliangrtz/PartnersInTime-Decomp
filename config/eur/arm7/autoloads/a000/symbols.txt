@@ -27,7 +27,9 @@ OS_GetTick kind:function(arm,size=0xb0) addr:0x037fcfac
 OSi_CountUpTick kind:function(arm,size=0x88) addr:0x037fd05c
 OS_IsTickAvailable kind:function(arm,size=0x10) addr:0x037fd0e4
 OS_InitTick kind:function(arm,size=0x94) addr:0x037fd0f4
-func_037FD568 kind:label addr:0x037fd568
+OS_CreateAlarm kind:function(arm,size=0x10) addr:0x037fd548
+OS_IsAlarmAvailable kind:function(arm,size=0x10) addr:0x037fd558
+OS_InitAlarm kind:function(arm,size=0x50) addr:0x037fd568
 OS_EnableInterrupts kind:function(arm,size=0x14) addr:0x037fdc90
 OS_DisableInterrupts kind:function(arm,size=0x14) addr:0x037fdca4
 OS_RestoreInterrupts kind:function(arm,size=0x18) addr:0x037fdcb8
@@ -75,6 +77,8 @@ OSi_TimerReserved kind:data(any) addr:0x03807c74
 OSi_TickInitialized kind:data(any) addr:0x03807c78
 OSi_TickResetRequested kind:data(any) addr:0x03807c7c
 OSi_TickCounter kind:data(any) addr:0x03807c80
+OSi_AlarmInitialized kind:data(any) addr:0x03807c88
+OSi_AlarmQueue kind:data(any) addr:0x03807c8c
 ARM7_Autoload000_End kind:data(any) addr:0x0380b1cc
 ARM7_Autoload001_End kind:data(any) addr:0x027f8bd0
 HW_THREADINFO_SUBP kind:data(any) addr:0x027fffa4
