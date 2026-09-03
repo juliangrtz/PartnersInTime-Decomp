@@ -1033,6 +1033,25 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03802C48",
+      "size": "0x124",
+      "kind": "code",
+      "section": ".pit_CARD_TaskThread",
+      "source": "arm7/CARD_TaskThread.s",
+      "externals": {
+        "CARDi_CommandTable": "0x038074AC",
+        "CARDi_Work": "0x03809460",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SleepThread": "0x037FBFC4",
+        "OS_WakeupThread": "0x037FBF54",
+        "OS_WakeupThreadDirect": "0x037FBF20",
+        "PXI_SendWordByFifo": "0x037FE2F0"
+      },
+      "expected_sha256": "a8bc759d115c8b974a6ccba0212e7f80695c7370d403727ba73056522d53f7aa"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",

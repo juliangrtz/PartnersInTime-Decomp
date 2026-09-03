@@ -236,6 +236,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["CARDi_InitCommon"], 0x03802BA0)
         self.assertEqual(symbols["CARDi_TaskThread"], 0x03802C48)
         self.assertEqual(symbols["CARDi_OnFifoRecv"], 0x03802D6C)
+        self.assertEqual(symbols["CARDi_CommandTable"], 0x038074AC)
         self.assertEqual(symbols["CTRDG_Init"], 0x03806D04)
         self.assertEqual(symbols["_ll_sdiv"], 0x03806DB8)
         self.assertEqual(symbols["CTRDGi_Initialized"], 0x0380B1B0)
