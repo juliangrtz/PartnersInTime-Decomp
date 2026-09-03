@@ -58,6 +58,8 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["TP_AnalyzeCommand"], 0x0380474C)
         self.assertEqual(symbols["TP_Init"], 0x0380490C)
         self.assertEqual(symbols["TP_ExecSampling"], 0x03804A1C)
+        self.assertEqual(symbols["TPi_ReadChannel"], 0x03804C6C)
+        self.assertEqual(symbols["TPi_CheckTouch"], 0x03804E64)
         self.assertEqual(symbols["OSi_IrqVBlank"], 0x037FB5C8)
         self.assertEqual(symbols["OSi_IrqTimer3"], 0x037FB620)
         self.assertEqual(symbols["OSi_IrqTimer0"], 0x037FB650)

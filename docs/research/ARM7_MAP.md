@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-One hundred and two proven autoload-0 units are now maintained ARMv4T/Thumb source:
+One hundred and three proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -141,9 +141,10 @@ One hundred and two proven autoload-0 units are now maintained ARMv4T/Thumb sour
 | `03804658` | `TPi_UpdateTouchData` | `0xF4` | Debounces pen-state transitions and adapts the sampling threshold |
 | `0380474C` | `TP_AnalyzeCommand` | `0x1C0` | Reassembles PXI fragments, validates touch commands, and queues sampling state transitions |
 | `0380490C` | `TP_Init` | `0x110` | Initializes touch state, four VAlarms, and the touch-controller SPI mode |
+| `03804A1C` | `TP_ExecSampling` | `0x250` | Reads both axes, encodes validity and pen state, and publishes the consolidated sample |
 | `03806D04` | `CTRDG_Init` | `0x5C` | Initializes ARM7 Game Pak state and transitions its PXI callback |
 
-Together these replace `0x8D2C` bytes of the first mixed autoload image with
+Together these replace `0x8F7C` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -154,10 +155,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 1,228 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 1,209 covering the 102 maintained autoload-0 units. The
+There are 1,247 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 1,228 covering the 103 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x8E9C` currently promoted
+referenced literal value, or stored pointer. All `0x90EC` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no
