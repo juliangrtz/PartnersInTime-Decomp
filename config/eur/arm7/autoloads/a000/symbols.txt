@@ -263,6 +263,10 @@ SND_ReadInstData kind:function(arm,size=0x184) addr:0x03801e6c
 SND_UpdateSharedWork kind:function(arm,size=0xa0) addr:0x03801ff0
 SND_SetPlayerGlobalVariable kind:function(arm,size=0x1c) addr:0x03802090
 SND_SetPlayerLocalVariable kind:function(arm,size=0x20) addr:0x038020ac
+SNDi_AlarmHandler kind:function(arm,size=0x30) addr:0x038020cc
+SND_StopAlarm kind:function(arm,size=0x40) addr:0x038020fc
+SND_StartAlarm kind:function(arm,size=0xc8) addr:0x0380213c
+SND_SetupAlarm kind:function(arm,size=0x5c) addr:0x03802204
 SND_AlarmInit kind:function(arm) addr:0x03802260
 SND_CommandProc kind:function(arm) addr:0x03802604
 SND_CommandInit kind:function(arm) addr:0x03802a7c
@@ -337,6 +341,7 @@ sSndThreadStackTop kind:data(any) addr:0x03808264
 sLockedChannelMask kind:data(any) addr:0x03808264
 sWeakLockedChannelMask kind:data(any) addr:0x03808268
 SNDi_Work kind:data(any) addr:0x0380828c
+SNDi_AlarmWork kind:data(any) addr:0x0380920c
 SNDi_SharedWork kind:data(any) addr:0x03808288
 SNDi_SeqCacheState kind:data(any) addr:0x03808270
 SNDi_SeqCacheData kind:data(any) addr:0x03808278
