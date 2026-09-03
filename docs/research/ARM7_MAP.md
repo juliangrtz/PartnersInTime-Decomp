@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-Forty-seven proven autoload-0 units are now maintained ARMv4T/Thumb source:
+Forty-eight proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -84,11 +84,12 @@ Forty-seven proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `037FE1D0` | `PXIi_HandlerRecvFifoNotEmpty` | `0x120` | Drains the receive FIFO, dispatches tagged callbacks, and rejects unhandled messages |
 | `037FE2F0` | PXI FIFO APIs | `0x138` | FIFO send, callback readiness, and receive-callback registration |
 | `037FE428` | `PXIi_InitFifo` | `0xDC` | Initializes FIFO state, receive IRQ handling, callbacks, and processor sync |
+| `037FE504` | X/Y button sampling | `0x11C` | RCNT setup, shared key-state sampling, and periodic alarm initialization |
 | `03803D94` | `SVC_WaitByLoop` | `0x04` | Thumb wrapper for supervisor call 3 |
 | `03803DAE` | `SVC_Halt` | `0x04` | Thumb wrapper for supervisor call 6 |
 | `03806D04` | `CTRDG_Init` | `0x5C` | Initializes ARM7 Game Pak state and transitions its PXI callback |
 
-Together these replace `0x31D0` bytes of the first mixed autoload image with
+Together these replace `0x32EC` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -99,10 +100,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 468 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 449 covering the 47 maintained autoload-0 units. The
+There are 483 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 464 covering the 48 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x3340` currently promoted
+referenced literal value, or stored pointer. All `0x345C` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no
