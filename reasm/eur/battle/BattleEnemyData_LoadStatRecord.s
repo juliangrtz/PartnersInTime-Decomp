@@ -17,7 +17,7 @@
 .extern BattleEnemyData_LoadObjectData
 .extern func_0202c3d0
 .extern gBattleContext
-.extern gBattleFileArchive
+.extern gBattleSystem
 .extern gBattlePrimaryResourcePaths
 
 .global BattleEnemyData_LoadStatRecord
@@ -83,7 +83,7 @@ BattleEnemyData_LoadStatRecord:
 .L_read_range_offset:
     .word BATTLE_CONTEXT_READ_RANGE_OFFSET
 .L_file_archive:
-    .word gBattleFileArchive
+    .word gBattleSystem
 .L_next_callback:
     .word BattleEnemyData_LoadObjectData
 .size BattleEnemyData_LoadStatRecord, . - BattleEnemyData_LoadStatRecord

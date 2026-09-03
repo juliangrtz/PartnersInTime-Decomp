@@ -3,6 +3,17 @@
   "patches": [
     {
       "module": "arm9_ov002",
+      "address": "0x020726B0",
+      "size": "0x64",
+      "section": ".pit_BattleTaskQueue_Enqueue",
+      "source": "battle/BattleTaskQueue_Enqueue.s",
+      "externals": {
+        "gBattleSystem": "0x020C0714"
+      },
+      "expected_sha256": "528d49703a704cceb53cc8bfaaa6f640032c15138dd6a14b0ddad9cfdf569994"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02076F44",
       "size": "0x20",
       "section": ".pit_BattleActor_GetPartySlot",
@@ -33,10 +44,22 @@
         "BattleEnemyData_LoadObjectData": "0x02088F24",
         "func_0202c3d0": "0x0202C3D0",
         "gBattleContext": "0x020C0718",
-        "gBattleFileArchive": "0x020C0714",
+        "gBattleSystem": "0x020C0714",
         "gBattlePrimaryResourcePaths": "0x020BEBC4"
       },
       "expected_sha256": "44dada45d4dcd98c5394cad7c0e331988a7813c2fef29536b65da3fa67a86326"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0208908C",
+      "size": "0x28",
+      "section": ".pit_BattleEnemyData_RequestLoad",
+      "source": "battle/BattleEnemyData_RequestLoad.s",
+      "externals": {
+        "BattleEnemyData_LoadStatRecord": "0x02088FB8",
+        "BattleTaskQueue_Enqueue": "0x020726B0"
+      },
+      "expected_sha256": "0dd8af0c713e0166c4c4f1fdafcd3b3a55ceabe2a7d1f6307b39e63264f66009"
     },
     {
       "module": "arm9_ov002",
