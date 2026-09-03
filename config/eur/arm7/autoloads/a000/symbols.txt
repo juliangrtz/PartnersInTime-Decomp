@@ -369,9 +369,11 @@ SPI_Lock kind:function(arm,size=0x64) addr:0x038041e0
 SPI_Init kind:function(arm,size=0x120) addr:0x03804244
 SPIi_SetTouchPanelCallbackValue kind:function(arm,size=0x48) addr:0x03804364
 TPi_VAlarmCallback kind:function(arm,size=0x78) addr:0x038043ac
-TP_ExecuteProcess kind:function(arm) addr:0x03804424
+TP_ExecuteProcess kind:function(arm,size=0x234) addr:0x03804424
+TPi_UpdateTouchData kind:function(arm) addr:0x03804658
 TP_AnalyzeCommand kind:function(arm) addr:0x0380474c
 TP_Init kind:function(arm) addr:0x0380490c
+TP_ExecSampling kind:function(arm) addr:0x03804a1c
 PM_ExecuteProcess kind:function(arm) addr:0x03804fc0
 PM_AnalyzeCommand kind:function(arm) addr:0x03805148
 PM_Init kind:function(arm) addr:0x0380531c
@@ -389,6 +391,7 @@ CTRDG_Init kind:function(arm,size=0x5c) addr:0x03806d04
 _ll_udiv kind:label addr:0x03806d60
 _ll_sdiv kind:label addr:0x03806db8
 _s32_div_f kind:label addr:0x03806f68
+_u32_div_f kind:function(arm) addr:0x03807174
 func_03807604 kind:label addr:0x03807604
 OS_IRQTable kind:data(any) addr:0x0380794c
 OS_IRQCheckFlag kind:data(any) addr:0x03807a84
@@ -467,6 +470,7 @@ SPIi_MessageBuffer kind:data(any) addr:0x03809f24
 SPIi_ExceptionThreadQueue kind:data(any) addr:0x0380a0e8
 SPIi_ThreadStackTop kind:data(any) addr:0x0380a090
 TPi_Work kind:data(any) addr:0x0380a0f8
+TPi_VAlarmArray kind:data(any) addr:0x0380a124
 CARDi_BootMode kind:data(any) addr:0x027ffc40
 CARDi_RomIdSourceSelect kind:data(any) addr:0x027ffc10
 CARDi_RomIdPrimary kind:data(any) addr:0x027ff800

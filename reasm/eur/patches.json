@@ -1402,6 +1402,33 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03804424",
+      "size": "0x234",
+      "kind": "code",
+      "section": ".pit_TP_ExecuteProcess",
+      "source": "arm7/TP_ExecuteProcess.s",
+      "externals": {
+        "HW_TOUCHPANEL_X": "0x027FFFAA",
+        "HW_TOUCHPANEL_Y": "0x027FFFAC",
+        "OS_CancelVAlarms": "0x037FD878",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SetPeriodicVAlarm": "0x037FD9D0",
+        "SPIi_CheckException": "0x03804084",
+        "SPIi_GetException": "0x0380406C",
+        "SPIi_ReleaseException": "0x03804028",
+        "SPIi_ReturnResult": "0x038040A0",
+        "TPi_UpdateTouchData": "0x03804658",
+        "TPi_VAlarmArray": "0x0380A124",
+        "TPi_VAlarmCallback": "0x038043AC",
+        "TPi_Work": "0x0380A0F8",
+        "TP_ExecSampling": "0x03804A1C",
+        "_u32_div_f": "0x03807174"
+      },
+      "expected_sha256": "d70e793b22c9c1150e7497153330c82e68e40739016bef6b5a61fd33d68cba62"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
