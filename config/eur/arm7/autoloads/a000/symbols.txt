@@ -311,6 +311,17 @@ CARDi_ReadCard kind:function(arm,size=0xf8) addr:0x03803758
 CARDi_SetRomOp kind:function(arm,size=0xa0) addr:0x03803850
 CARDi_ReadEnd kind:function(arm,size=0x7c) addr:0x038038f0
 CARDi_ReadFromCache kind:function(arm,size=0x98) addr:0x0380396c
+CARDi_TaskEraseSector kind:function(arm,size=0x14) addr:0x03803a04
+CARDi_TaskVerifyBackup kind:function(arm,size=0x1c) addr:0x03803a18
+CARDi_TaskWriteBackup kind:function(arm,size=0x1c) addr:0x03803a34
+CARDi_TaskProgramBackup kind:function(arm,size=0x1c) addr:0x03803a50
+CARDi_TaskReadBackup kind:function(arm,size=0x1c) addr:0x03803a6c
+CARDi_TaskReadRom kind:function(arm,size=0x20) addr:0x03803a88
+CARDi_TaskReadRomID kind:function(arm,size=0x1c) addr:0x03803aa8
+CARDi_TaskIdentify kind:function(arm,size=0x4) addr:0x03803ac4
+CARDi_TaskAck kind:function(arm,size=0x4) addr:0x03803ac8
+CARDi_TaskInit kind:function(arm,size=0x4) addr:0x03803acc
+CARDi_TaskUnsupported kind:function(arm,size=0x10) addr:0x03803ad0
 CARD_InitPulledOutCallback kind:function(arm) addr:0x03803d30
 func_03803B48 kind:label addr:0x03803b48
 SVC_WaitByLoop kind:function(thumb,size=0x4) addr:0x03803d94
