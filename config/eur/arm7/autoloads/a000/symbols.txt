@@ -56,6 +56,10 @@ OSi_GetUnusedThreadId kind:function(arm,size=0x34) addr:0x037fc364
 OS_InitContext kind:function(arm,size=0x64) addr:0x037fc398
 OS_SaveContext kind:function(arm,size=0x34) addr:0x037fc3fc
 OS_LoadContext kind:function(arm,size=0x2c) addr:0x037fc430
+OS_ReadMessage kind:function(arm,size=0x78) addr:0x037fc45c
+OS_ReceiveMessage kind:function(arm,size=0xa0) addr:0x037fc4d4
+OS_SendMessage kind:function(arm,size=0x94) addr:0x037fc574
+OS_InitMessageQueue kind:function(arm,size=0x20) addr:0x037fc608
 OSi_UnlockAllMutex kind:label addr:0x037fc698
 OS_Init kind:function(arm,size=0x38) addr:0x037fc7e8
 OS_SetArenaLo kind:function(arm,size=0x14) addr:0x037fc820
