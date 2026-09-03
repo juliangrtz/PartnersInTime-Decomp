@@ -121,6 +121,12 @@ world/screen position for the damage number, honors the enemy record's popup
 suppression bit, and emits the impact variants selected by hit kinds `0x11`
 and `0x13`.
 
+`BattleDamage_ApplyToParty` is maintained too. It clamps damage, clears status
+1, handles the special nonlethal hit kind, selects one of six party reaction
+paths, generates Mario/Luigi-specific popup metadata, and optionally decodes a
+post-hit status record into status ID, chance, magnitude, and the battle-wide
+duration before calling `BattleStatus_TryApply`.
+
 ## Enemy stat records
 
 `/BData/BDataMon.dat` is 4,312 bytes: 98 records of 44 bytes.

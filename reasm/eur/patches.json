@@ -256,6 +256,33 @@
       "expected_sha256": "014ca443be798afd11b24e8f4983c7073edf80bc245981bbd66ba38ab665b874"
     },
     {
+      "module": "arm9_ov002",
+      "address": "0x0209D9DC",
+      "size": "0x428",
+      "section": ".pit_BattleDamage_ApplyToParty",
+      "source": "battle/BattleDamage_ApplyToParty.s",
+      "externals": {
+        "BattleActor_ApplyDamage": "0x0209D694",
+        "BattleActor_GetById": "0x02076F64",
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleEntity_BindResource": "0x02091C20",
+        "BattleSound_Play": "0x02076428",
+        "BattleStatus_ClearEffect": "0x0209C278",
+        "BattleStatus_TryApply": "0x0209C464",
+        "func_ov002_02065ec4": "0x02065EC4",
+        "func_ov002_02076b0c": "0x02076B0C",
+        "func_ov002_02076bd4": "0x02076BD4",
+        "func_ov002_02091198": "0x02091198",
+        "func_ov002_0209cd9c": "0x0209CD9C",
+        "func_ov002_0209d2b0": "0x0209D2B0",
+        "func_ov002_0209de04": "0x0209DE04",
+        "func_ov002_020acb88": "0x020ACB88",
+        "func_ov002_020accb8": "0x020ACCB8",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "64eb79fa4700c8b20af78a4adf0b497f933d0c95bcaa1443ee95faa744e0378f"
+    },
+    {
       "module": "arm7",
       "address": "0x02380118",
       "size": "0x4",
