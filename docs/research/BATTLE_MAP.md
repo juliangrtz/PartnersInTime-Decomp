@@ -20,6 +20,7 @@ and runtime overlay 2.
 | `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
+| `02091EDC` | `BattleObjectData_IsLoadPending` | Tests pending state for ordinary and large enemy data slots |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079950` | `BattleAI_DispatchOpcode` | Executes loaded `BAI_*.dat` battle bytecode |
 | `0208ED90` | `BattleScript_GetProperty` | Reads actor, object, and global properties |
@@ -59,6 +60,10 @@ and runtime overlay 2.
 | `020A51F8` | `BattleTaskList_Insert` | Allocates if needed and prepends a task to an active list |
 | `020A5254` | `BattleTaskPool_Init` | Builds an aligned fixed-payload task free list |
 | `020A90F4` | `BattleParty_UpdateKnockout` | Completes party knockout and linked-character transitions |
+| `020A8B80` | `BattleParty_UpdateLuigiReloadWaitAnimation` | Advances Luigi's KO recovery after the rebound animation is ready |
+| `020A8BEC` | `BattleParty_UpdateLuigiReloadWaitResource` | Waits for and binds Luigi's rebound resource |
+| `020A8FEC` | `BattleParty_UpdateMarioReloadWaitAnimation` | Advances Mario's KO recovery after the rebound animation is ready |
+| `020A906C` | `BattleParty_UpdateMarioReloadWaitResource` | Waits for and binds Mario's rebound resource |
 | `020A9280` | `BattleParty_StartKnockout` | Starts party knockout state, animation, sounds, and task |
 | `020A9C18` | `BattleParty_SpawnLaunchImpact` | Emits the form-specific launch impact effect and sound |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
@@ -277,6 +282,10 @@ form-specific sound pairs, and installs `BattleParty_UpdateKnockout`. The
 update callback waits for the model flags, releases ordinary party actors, or
 for linked forms moves the paired scene object and chains into the appropriate
 Mario/Luigi follow-up load callback.
+Those follow-ups now expose the asynchronous boundary explicitly: while the
+requested object-data slot remains pending they leave the task unchanged;
+after completion they bind resource slots 5 or 6 to scene objects 56 or 57,
+start the rebound animations and advance to the character-specific continuation.
 
 The launch reaction's movement helper either updates both live and base
 coordinates immediately or installs a fixed-point per-frame interpolation
