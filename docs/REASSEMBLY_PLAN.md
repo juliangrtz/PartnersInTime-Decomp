@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-403 independent units. Those units cover raw
+405 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -200,6 +200,11 @@ and `0x0209EBAC` configure source/target IDs, callback, hit kind and status
 payload, link active descriptors, resolve them by actor ID, and disable them.
 `BattleCollision_GetBounds` at `0x0209E918` adds the party-form, special-object,
 and resource-backed collision volumes consumed during hit expansion.
+Its resource path now reaches the maintained `BattleModel_GetAnimationBounds`
+at `0x020681E8`, which temporarily advances or rewinds the live model when
+requested, decodes the selected animation frame's compact signed origin and
+extent metadata, applies optional model scaling, and restores the original
+frame state. Missing metadata falls back to the original `[-16,-32,16,0]` box.
 `BattleCollision_TestObjects` at `0x0209EBFC` iterates those bounds in world
 coordinates and returns the collision result plus hit position.
 The complete `BattleHitQueue_Update` compiler at `0x0209E20C` dispatches the

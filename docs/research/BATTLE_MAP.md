@@ -48,6 +48,7 @@ and runtime overlay 2.
 | `0209DFDC` | `BattleEffect_SetVariant` | Sets the signed effect variant at battle-context offset `+0xCB7A` |
 | `0209E10C` | `BattleHitDescriptor_Configure` | Configures a source/target hit before queue expansion |
 | `0209E20C` | `BattleHitQueue_Update` | Dispatches old hits and compiles active descriptors into the next queue |
+| `020681E8` | `BattleModel_GetAnimationBounds` | Decodes collision bounds from the current or temporarily selected animation frame |
 | `0209E918` | `BattleCollision_GetBounds` | Resolves party, special-object, or resource collision bounds |
 | `0209EBAC` | `BattleHitDescriptor_GetByActorId` | Resolves per-actor 16-byte hit descriptors |
 | `0209EBFC` | `BattleCollision_TestObjects` | Tests all source/target bounds and returns a hit position |
@@ -369,6 +370,12 @@ when it returns completion code 1 or 2.
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds
 from the bound resource and receive the original coordinate-axis conversion.
+The resource-backed path now continues through
+`BattleModel_GetAnimationBounds`. That function can advance or rewind the live
+model by a signed frame offset, decode the chosen frame's packed signed origin
+and extent metadata, optionally scale centered bounds through the model table,
+and then restore the model state. Invalid or missing frame metadata produces
+the original fallback rectangle `[-16, -32, 16, 0]`.
 The maintained object test iterates every available source/target bound pair,
 transforms both objects' bounds into battle-scene coordinates, and passes the
 four resulting volumes plus the output position to the low-level overlap test.

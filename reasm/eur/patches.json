@@ -1462,6 +1462,22 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x020681E8",
+      "size": "0x2F0",
+      "section": ".pit_BattleModel_GetAnimationBounds",
+      "source": "battle/BattleModel_GetAnimationBounds.s",
+      "externals": {
+        "data_02049918": "0x02049918",
+        "data_02049924": "0x02049924",
+        "data_ov002_020c0660": "0x020C0660",
+        "func_0200940c": "0x0200940C",
+        "func_0202cc58": "0x0202CC58",
+        "func_0202cd2c": "0x0202CD2C"
+      },
+      "expected_sha256": "7d693b2c7340002e0b48c01a66d3b0dafff9d5f341dd61e99420251964700367"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209E918",
       "size": "0x294",
       "section": ".pit_BattleCollision_GetBounds",
@@ -1470,7 +1486,7 @@
         "BattleActor_GetById": "0x02076F64",
         "BattleActor_GetPartySlot": "0x02076F44",
         "BattleSceneObject_GetById": "0x02076FB4",
-        "func_ov002_020681e8": "0x020681E8",
+        "BattleModel_GetAnimationBounds": "0x020681E8",
         "BattleSceneObject_GetActiveModel": "0x020A3370"
       },
       "expected_sha256": "eefc4acb580aa4994a0b5c68fc811e2d7f9e54f23175c1def58c07cae4e17a11"
