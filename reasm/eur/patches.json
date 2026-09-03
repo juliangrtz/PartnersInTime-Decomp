@@ -844,6 +844,20 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03801FF0",
+      "size": "0xDC",
+      "kind": "code",
+      "section": ".pit_SND_SharedWork",
+      "source": "arm7/SND_SharedWork.s",
+      "externals": {
+        "SND_IsCaptureActive": "0x037FF104",
+        "SND_IsChannelActive": "0x037FE8D4",
+        "SNDi_SharedWork": "0x03808288"
+      },
+      "expected_sha256": "04a7e0ebc45557fca1c4fb1745642a2600a41eb9ede06e227e2bfcd48edb8fe3"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",

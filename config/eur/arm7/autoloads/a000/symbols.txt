@@ -260,7 +260,9 @@ SNDi_GetWaveData kind:function(arm,size=0x40) addr:0x03801cbc
 SND_NoteOn kind:function(arm,size=0x128) addr:0x03801cfc
 SND_GetWaveDataAddress kind:function(arm,size=0x48) addr:0x03801e24
 SND_ReadInstData kind:function(arm,size=0x184) addr:0x03801e6c
-SND_UpdateSharedWork kind:function(arm) addr:0x03801ff0
+SND_UpdateSharedWork kind:function(arm,size=0xa0) addr:0x03801ff0
+SND_SetPlayerGlobalVariable kind:function(arm,size=0x1c) addr:0x03802090
+SND_SetPlayerLocalVariable kind:function(arm,size=0x20) addr:0x038020ac
 SND_AlarmInit kind:function(arm) addr:0x03802260
 SND_CommandProc kind:function(arm) addr:0x03802604
 SND_CommandInit kind:function(arm) addr:0x03802a7c
