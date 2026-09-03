@@ -47,6 +47,8 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["OS_SetIrqFunction"], 0x037FB860)
         self.assertEqual(symbols["OSi_SetTimerCallback"], 0x037FB814)
         self.assertEqual(symbols["OS_InitIrqTable"], 0x037FB908)
+        self.assertEqual(symbols["OS_GetLockID"], 0x037FB934)
+        self.assertEqual(symbols["OS_ReleaseLockID"], 0x037FB9CC)
         self.assertEqual(symbols["OS_InitLock"], 0x037FBBD4)
         self.assertEqual(symbols["OS_IrqHandler"], 0x037FB458)
         self.assertEqual(symbols["OS_SetSwitchThreadCallback"], 0x037FBCC0)
@@ -98,6 +100,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["ARM7_Autoload001_End"], 0x027F8BD0)
         self.assertEqual(symbols["HW_THREADINFO_SUBP"], 0x027FFFA4)
         self.assertEqual(symbols["HW_VBLANK_COUNT_BUF"], 0x027FFC3C)
+        self.assertEqual(symbols["HW_LOCK_ID_FLAG_SUBP"], 0x027FFFB8)
         self.assertEqual(symbols["REG_DMA0SAD"], 0x040000B0)
         self.assertEqual(symbols["REG_PXI_SEND_FIFO"], 0x04000188)
 

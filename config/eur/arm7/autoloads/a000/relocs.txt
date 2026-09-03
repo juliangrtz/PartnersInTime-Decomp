@@ -39,6 +39,8 @@ from:0x037fb874 kind:load to:0x03807ae8 module:arm7_autoload(0)
 from:0x037fb878 kind:load to:0x03807a88 module:arm7_autoload(0)
 from:0x037fb90c kind:load to:0x03807a84 module:arm7_autoload(0)
 from:0x037fb914 kind:load to:0x027ffc3c module:memory
+from:0x037fb934 kind:load to:0x027fffb8 module:memory
+from:0x037fb9cc kind:load to:0x027fffb8 module:memory
 from:0x037fbbd8 kind:load to:0x03807af4 module:arm7_autoload(0)
 from:0x037fbbf4 kind:load to:0x027ffff0 module:memory
 from:0x037fbc00 kind:arm_call to:0x037fb9fc module:arm7_autoload(0)

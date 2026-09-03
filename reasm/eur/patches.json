@@ -512,6 +512,18 @@
         "REG_PXI_SEND_FIFO": "0x04000188"
       },
       "expected_sha256": "623d3967f5bb7136cbb6f34e987701ae28d3cbf5e99c63095b4a346e341568db"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FB934",
+      "size": "0xC8",
+      "kind": "code",
+      "section": ".pit_OS_LockId",
+      "source": "arm7/OS_LockId.s",
+      "externals": {
+        "HW_LOCK_ID_FLAG_SUBP": "0x027FFFB8"
+      },
+      "expected_sha256": "211966d3597c78c7f296d9081341088e8885a03f2a15d046aca92d2cff059952"
     }
   ]
 }
