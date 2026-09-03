@@ -496,6 +496,22 @@
         "REG_PXI_SEND_FIFO": "0x04000188"
       },
       "expected_sha256": "d4deb0d226b654b3ca54fe001dc5b05a40b70423216f8db5ccf602df959934e0"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FE1D0",
+      "size": "0x120",
+      "kind": "code",
+      "section": ".pit_PXIi_HandlerRecvFifoNotEmpty",
+      "source": "arm7/PXIi_HandlerRecvFifoNotEmpty.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "PXIi_FifoRecvCallbackTable": "0x03807CB4",
+        "REG_PXI_FIFO_CNT": "0x04000184",
+        "REG_PXI_SEND_FIFO": "0x04000188"
+      },
+      "expected_sha256": "623d3967f5bb7136cbb6f34e987701ae28d3cbf5e99c63095b4a346e341568db"
     }
   ]
 }
