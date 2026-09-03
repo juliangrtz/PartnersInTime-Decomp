@@ -363,6 +363,9 @@ SPIi_SetEntry kind:function(arm,size=0xd4) addr:0x03803f54
 SPIi_ReleaseException kind:function(arm,size=0x44) addr:0x03804028
 SPIi_GetException kind:function(arm,size=0x18) addr:0x0380406c
 SPIi_CheckException kind:function(arm,size=0x1c) addr:0x03804084
+SPIi_ReturnResult kind:function(arm,size=0xd4) addr:0x038040a0
+SPI_Unlock kind:function(arm,size=0x6c) addr:0x03804174
+SPI_Lock kind:function(arm,size=0x64) addr:0x038041e0
 TP_ExecuteProcess kind:function(arm) addr:0x03804424
 TP_AnalyzeCommand kind:function(arm) addr:0x0380474c
 PM_ExecuteProcess kind:function(arm) addr:0x03804fc0
