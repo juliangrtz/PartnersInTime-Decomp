@@ -19,7 +19,7 @@
 .equ BATTLE_ACTOR_SPEED_CHANGE, 0x60
 .equ BATTLE_STATUS_ACTIVE_OFFSET, 0x08
 
-.extern func_ov002_020a8320
+.extern BattleStatus_StopActorEffect
 
 .global BattleStatus_ClearEffect
 .type BattleStatus_ClearEffect, %function
@@ -122,7 +122,7 @@ BattleStatus_ClearEffect:
     ldr r0, [r6]
     mov r1, r5
     ldrh r0, [r0, #0xEC]
-    bl func_ov002_020a8320
+    bl BattleStatus_StopActorEffect
     mov r0, #0
     strb r0, [r4, #BATTLE_STATUS_ACTIVE_OFFSET]
 
