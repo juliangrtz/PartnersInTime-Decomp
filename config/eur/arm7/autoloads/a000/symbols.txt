@@ -48,9 +48,12 @@ OS_WakeupThreadDirect kind:function(arm,size=0x34) addr:0x037fbf20
 OS_WakeupThread kind:function(arm,size=0x70) addr:0x037fbf54
 OS_SleepThread kind:function(arm,size=0x68) addr:0x037fbfc4
 OS_ExitThread kind:function(arm,size=0x5c) addr:0x037fc02c
+OS_CreateThread kind:function(arm,size=0x100) addr:0x037fc088
 OS_InitThread kind:function(arm,size=0x12c) addr:0x037fc188
 OSi_UnlockAllMutex kind:label addr:0x037fc2b4
 OSi_InsertThreadToList kind:label addr:0x037fc2fc
+OSi_GetUnusedThreadId kind:label addr:0x037fc364
+OS_InitContext kind:label addr:0x037fc398
 OS_SaveContext kind:label addr:0x037fc3fc
 OS_LoadContext kind:label addr:0x037fc430
 OSi_RemoveThreadFromList kind:label addr:0x037fc698
@@ -93,6 +96,7 @@ OS_IsResetOccurred kind:function(arm,size=0x10) addr:0x037fde08
 OS_InitReset kind:function(arm,size=0x40) addr:0x037fde18
 MI_StopDma kind:function(arm,size=0x84) addr:0x037fde58
 MI_SwapWord kind:function(arm,size=0x8) addr:0x037fe1bc
+MIi_CpuClear32 kind:label addr:0x037fdf80
 PXI_Init kind:function(arm,size=0xc) addr:0x037fe1c4
 PXI_SendWordByFifo kind:function(arm,size=0xa4) addr:0x037fe2f0
 PXI_IsCallbackReady kind:function(arm,size=0x28) addr:0x037fe394

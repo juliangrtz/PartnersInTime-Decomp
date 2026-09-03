@@ -301,6 +301,25 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FC088",
+      "size": "0x100",
+      "kind": "code",
+      "section": ".pit_OS_CreateThread",
+      "source": "arm7/OS_CreateThread.s",
+      "externals": {
+        "MIi_CpuClear32": "0x037FDF80",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_ExitThread": "0x037FC02C",
+        "OS_InitContext": "0x037FC398",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OSi_GetUnusedThreadId": "0x037FC364",
+        "OSi_InsertThreadToList": "0x037FC2FC",
+        "OSi_ThreadTable": "0x03807B1C"
+      },
+      "expected_sha256": "4728e748f08c77ffade0c9cbca53825707793b921e1bcc3caa39c0c0d680e043"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FC188",
       "size": "0x12C",
       "kind": "code",
