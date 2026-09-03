@@ -41,6 +41,8 @@ OS_IrqHandler:
 .L_irq_return_address:
     .word .L_irq_return
 
+.global OS_IrqHandler_ThreadSwitch
+OS_IrqHandler_ThreadSwitch:
 .L_irq_return:
     ldr r12, .L_irq_check_flag
     ldrh r3, [r12]

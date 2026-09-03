@@ -1737,6 +1737,24 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03806468",
+      "size": "0x264",
+      "kind": "code",
+      "section": ".pit_MIC_MultipleIrq",
+      "source": "arm7/MIC_MultipleIrq.s",
+      "externals": {
+        "MICi_IrqDispatchTable": "0x038074E0",
+        "MICi_IrqStackInfo": "0x0380B190",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_IrqHandler_ThreadSwitch": "0x037FB4AC",
+        "OS_IRQTable": "0x0380794C",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OSi_ThreadInfo": "0x03807B08"
+      },
+      "expected_sha256": "d8422fe4e3582e0a4de2b2ad7b5a6e2cdbf57661a0a8c3edb0678d742495a432"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",

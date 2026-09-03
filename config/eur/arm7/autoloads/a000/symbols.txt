@@ -4,6 +4,7 @@ func_037F83C0 kind:label addr:0x037f83c0
 ARM7_Main kind:function(arm,size=0xb8) addr:0x037f846c
 SVC_Halt_Thunk kind:function(arm,size=0xc) addr:0x037f8524
 OS_IrqHandler kind:function(arm,size=0x170) addr:0x037fb458
+OS_IrqHandler_ThreadSwitch kind:label addr:0x037fb4ac
 OSi_IrqVBlank kind:function(arm,size=0x58) addr:0x037fb5c8
 OSi_IrqTimer3 kind:function(arm,size=0x10) addr:0x037fb620
 OSi_IrqTimer2 kind:function(arm,size=0x10) addr:0x037fb630
@@ -394,9 +395,10 @@ MICi_TimerHandler kind:function(arm,size=0x168) addr:0x03805b20
 MICi_TimerIrqHandler kind:function(arm,size=0x3c) addr:0x03805c88
 MIC_ExecSampling12 kind:function(arm,size=0xc8) addr:0x038062d8
 MIC_ExecSampling8 kind:function(arm,size=0xc8) addr:0x038063a0
-MIC_DisableMultipleInterrupt kind:function(arm) addr:0x038065ec
-MIC_EnableMultipleInterrupt kind:function(arm) addr:0x03806638
-MIC_SetIrqFunction kind:function(arm) addr:0x038066a4
+MICi_MultipleIrqHandler kind:function(arm,size=0x184) addr:0x03806468
+MIC_DisableMultipleInterrupt kind:function(arm,size=0x4c) addr:0x038065ec
+MIC_EnableMultipleInterrupt kind:function(arm,size=0x6c) addr:0x03806638
+MIC_SetIrqFunction kind:function(arm,size=0x28) addr:0x038066a4
 func_038069F8 kind:label addr:0x038069f8
 func_0380698C kind:label addr:0x0380698c
 func_03806BB8 kind:label addr:0x03806bb8
@@ -407,6 +409,7 @@ _ll_udiv kind:label addr:0x03806d60
 _ll_sdiv kind:label addr:0x03806db8
 _s32_div_f kind:label addr:0x03806f68
 _u32_div_f kind:function(arm) addr:0x03807174
+MICi_IrqDispatchTable kind:data(any) addr:0x038074e0
 func_03807604 kind:label addr:0x03807604
 OS_IRQTable kind:data(any) addr:0x0380794c
 OS_IRQCheckFlag kind:data(any) addr:0x03807a84
@@ -536,6 +539,7 @@ WVRi_SystemWork kind:data(any) addr:0x0380a21c
 WVRi_WmspSystemWork kind:data(any) addr:0x0380a294
 WVRi_WmspWork kind:data(any) addr:0x0380aa54
 MICi_Work kind:data(any) addr:0x0380b154
+MICi_IrqStackInfo kind:data(any) addr:0x0380b190
 CTRDGi_Initialized kind:data(any) addr:0x0380b1b0
 ARM7_Autoload000_End kind:data(any) addr:0x0380b1cc
 ARM7_Autoload001_End kind:data(any) addr:0x027f8bd0
