@@ -12,7 +12,7 @@
 .extern func_037FBBD4
 .extern OS_InitThread
 .extern OS_InitArena
-.extern func_037FD0F4
+.extern OS_InitTick
 .extern func_037FD568
 .extern OS_InitReset
 .extern func_037FE1C4
@@ -24,7 +24,7 @@ OS_Init:
     bl func_037FE1C4
     bl func_037FBBD4
     bl OS_InitIrqTable
-    bl func_037FD0F4
+    bl OS_InitTick
     bl func_037FD568
     bl OS_InitThread
     bl OS_InitReset

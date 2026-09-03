@@ -188,7 +188,7 @@
         "func_037FBBD4": "0x037FBBD4",
         "OS_InitThread": "0x037FC188",
         "OS_InitArena": "0x037FC938",
-        "func_037FD0F4": "0x037FD0F4",
+        "OS_InitTick": "0x037FD0F4",
         "func_037FD568": "0x037FD568",
         "OS_InitReset": "0x037FDE18",
         "func_037FE1C4": "0x037FE1C4",
@@ -360,6 +360,29 @@
         "OSi_ArenaInitialized": "0x03807C4C"
       },
       "expected_sha256": "167cab845b1384d9ce8139a3c03c2304ddd9206429beb671166ef788a2d0a501"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FCF90",
+      "size": "0x1F8",
+      "kind": "code",
+      "section": ".pit_OS_Tick",
+      "source": "arm7/OS_Tick.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_EnableIrqMask": "0x037FB7A8",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SetIrqFunction": "0x037FB860",
+        "OSi_SetTimerCallback": "0x037FB814",
+        "OSi_TickCounter": "0x03807C80",
+        "OSi_TickInitialized": "0x03807C78",
+        "OSi_TickResetRequested": "0x03807C7C",
+        "OSi_TimerReserved": "0x03807C74",
+        "REG_IF": "0x04000214",
+        "REG_TM0CNT_H": "0x04000102",
+        "REG_TM0CNT_L": "0x04000100"
+      },
+      "expected_sha256": "d09a9743824479979a7b10f4182370439baa5a786fe398e6fcd18107e39dffb2"
     }
   ]
 }
