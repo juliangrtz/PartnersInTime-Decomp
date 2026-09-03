@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-316 independent units. Those units cover raw
+317 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -142,6 +142,8 @@ attached hit effects, and equipment effect `0x3024` consuming POW status 6.
 Both reaction-task callbacks are maintained too: they wait for the scene
 animation, handle the party KO/alive split, restore enemy impact offsets where
 applicable, clear task callbacks, and release actor hit-lock flag `0x200`.
+The alternate attached-effect reaction pair is maintained as well, including
+task reuse, effect replacement, resource validity, and hit-lock release.
 `BattleDamage_ReflectQueuedHits` walks the packed eight-entry hit queue,
 recalculates reflected damage, swaps source/target IDs, and refreshes the
 status ID, chance, and magnitude bytes from the reflected attack descriptor.
@@ -352,7 +354,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the forty-three
+2. Continue promoting small overlay-2 battle leaf functions using the forty-five
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the
