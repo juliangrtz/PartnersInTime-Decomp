@@ -238,6 +238,50 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209D2B0",
+      "size": "0x7C",
+      "section": ".pit_BattleDamage_StartPartyReaction",
+      "source": "battle/BattleDamage_StartPartyReaction.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "func_ov002_0209d208": "0x0209D208",
+        "func_ov002_020a519c": "0x020A519C",
+        "func_ov002_020a51f8": "0x020A51F8",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "737ce7ce0a48e6f9c4ecfdcb248eda95683a2146bfd1580ecfe80b38adf60c83"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209D5CC",
+      "size": "0xC8",
+      "section": ".pit_BattleDamage_StartEnemyReaction",
+      "source": "battle/BattleDamage_StartEnemyReaction.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "func_ov002_0209d46c": "0x0209D46C",
+        "func_ov002_020a519c": "0x020A519C",
+        "func_ov002_020a51f8": "0x020A51F8",
+        "func_ov002_020acb44": "0x020ACB44",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "94055a40a06884dbbdfc3610654526f87458471142e45eba9fa078ee23f9f46f"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209DE04",
+      "size": "0x88",
+      "section": ".pit_BattleActor_HandleHitEquipmentEffect",
+      "source": "battle/BattleActor_HandleHitEquipmentEffect.s",
+      "externals": {
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleStatus_ClearEffect": "0x0209C278",
+        "gSaveData": "0x02059FE8"
+      },
+      "expected_sha256": "138d117dc167bef94601d88d0667ddee5ec3a6149c71703b5ea978ba4b7c9125"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209D718",
       "size": "0x2C4",
       "section": ".pit_BattleDamage_ApplyToEnemy",
@@ -249,7 +293,7 @@
         "func_ov002_02076b0c": "0x02076B0C",
         "func_ov002_02091198": "0x02091198",
         "func_ov002_0209cd9c": "0x0209CD9C",
-        "func_ov002_0209d5cc": "0x0209D5CC",
+        "BattleDamage_StartEnemyReaction": "0x0209D5CC",
         "func_ov002_020acb88": "0x020ACB88",
         "func_ov002_020accb8": "0x020ACCB8"
       },
@@ -274,8 +318,8 @@
         "func_ov002_02076bd4": "0x02076BD4",
         "func_ov002_02091198": "0x02091198",
         "func_ov002_0209cd9c": "0x0209CD9C",
-        "func_ov002_0209d2b0": "0x0209D2B0",
-        "func_ov002_0209de04": "0x0209DE04",
+        "BattleActor_HandleHitEquipmentEffect": "0x0209DE04",
+        "BattleDamage_StartPartyReaction": "0x0209D2B0",
         "func_ov002_020acb88": "0x020ACB88",
         "func_ov002_020accb8": "0x020ACCB8",
         "gBattleContext": "0x020C0718"
