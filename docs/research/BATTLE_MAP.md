@@ -30,6 +30,7 @@ and runtime overlay 2.
 | `0209E10C` | `BattleHitDescriptor_Configure` | Configures a source/target hit before queue expansion |
 | `0209E918` | `BattleCollision_GetBounds` | Resolves party, special-object, or resource collision bounds |
 | `0209EBAC` | `BattleHitDescriptor_GetByActorId` | Resolves per-actor 16-byte hit descriptors |
+| `0209EBFC` | `BattleCollision_TestObjects` | Tests all source/target bounds and returns a hit position |
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
@@ -195,6 +196,9 @@ chance/magnitude bytes, and the active-list head at context offset `+0xCAD4`.
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds
 from the bound resource and receive the original coordinate-axis conversion.
+The maintained object test iterates every available source/target bound pair,
+transforms both objects' bounds into battle-scene coordinates, and passes the
+four resulting volumes plus the output position to the low-level overlap test.
 
 ## Enemy stat records
 
