@@ -244,6 +244,28 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FBD70",
+      "size": "0x1B0",
+      "kind": "code",
+      "section": ".pit_OS_ThreadScheduling",
+      "source": "arm7/OS_ThreadScheduling.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_GetProcessorMode": "0x037FDCFC",
+        "OS_LoadContext": "0x037FC430",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SaveContext": "0x037FC3FC",
+        "OSi_CurrentThreadPtr": "0x03807AFC",
+        "OSi_IdleThread": "0x03807B5C",
+        "OSi_InsertThreadToList": "0x037FC2FC",
+        "OSi_RescheduleCount": "0x03807AF8",
+        "OSi_SystemCallbackInSwitchThread": "0x03807B04",
+        "OSi_ThreadInfo": "0x03807B08"
+      },
+      "expected_sha256": "b628ab914fd720d3961137ab732a91ef48bd19ca5d989c189fe33df0bc9c4ec8"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FC188",
       "size": "0x12C",
       "kind": "code",
