@@ -33,8 +33,13 @@ and runtime overlay 2.
 | `0207E684` | `BattleAI_TryClearOrderWait` | Resumes a paused VM state once no earlier action or reaction task blocks it |
 | `0207E430` | `BattleAITask_StopById` | Stops one sorted task and invalidates its attached VM state |
 | `0207E4F8` | `BattleAI_StopScriptById` | Decodes party or typed task IDs and routes script cancellation |
+| `0207E7A0` | `BattleAI_HandleVmResult` | Completes a task or activates its saved continuation script |
+| `0207E820` | `BattleAI_UpdateChainedTask` | Runs an object VM and any continuation activated in the same frame |
+| `0207E8C8` | `BattleAI_UpdateAuxTask` | Runs one actor-embedded auxiliary VM task |
 | `0207ECA8` | `BattleAI_StartReactionScript` | Starts an enemy reaction state with mode `0x2000` |
 | `0207ECC0` | `BattleAI_StartActionScript` | Starts an enemy action state with mode `0x1000` |
+| `0207EB14` | `BattleAI_StartObjectScript` | Starts or queues a `0x4000`-family object script |
+| `0207EC1C` | `BattleAI_StartActorAuxScript` | Starts a `0x3000`-family actor auxiliary script |
 | `0207ED70` | `BattleAI_StartScriptTask` | Initializes and attaches an enemy AI VM state |
 | `0208ED90` | `BattleScript_GetProperty` | Reads actor, object, and global properties |
 | `0208FB6C` | `BattleScript_SetProperty` | Writes properties; cases 16-20 are actor stats |
@@ -105,6 +110,7 @@ and runtime overlay 2.
 | `0208908C` | `BattleEnemyData_RequestLoad` | Initializes and queues one enemy-data request |
 | `02089EEC` | `BattleObjectData_QueueLoad` | Resets an object-data state and queues its asynchronous loader |
 | `02092048` | `BattleObjectData_EnsureLoaded` | Routes ordinary and enemy resource requests while suppressing duplicates |
+| `020922DC` | `BattleScriptState_GetByObjectId` | Resolves an object ID to its fixed 192-byte VM state |
 | `0209234C` | `BattleObjectData_ResolveSlot` | Decodes a packed object ID into a 44-byte runtime descriptor |
 | `020A32F4` | `BattleSceneObject_SetStateFlags` | Sets the low state byte and independent bit-18 flag |
 
@@ -379,6 +385,13 @@ party VM pointers at context offsets `+0x6A64`, `+0x6B1C`, `+0x6BD4`, and
 `+0x6C8C`; high nibbles `0x1000` through `0x4000` select the four task pools.
 The sorted-list helper stops at IDs greater than the target, clears the found
 task's state script pointer, and releases the task node.
+The `0x4000` family uses one fixed 192-byte state per battle object. Starting
+over can instead queue a continuation at state `+0xB8`, with its order and
+tie-break fields at `+0xBC/+0xBE`; VM completion code 2 promotes those values
+and immediately runs the continuation. The `0x3000` family uses the same VM
+header embedded at enemy-actor offset `+0x1E0`, but completes without the
+continuation loop. `BattleScriptState_GetByObjectId` maps valid object IDs into
+the table at context offset `+0x6D44` with a `0xC0`-byte stride.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds

@@ -115,6 +115,40 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0207E7A0",
+      "size": "0x80",
+      "section": ".pit_BattleAI_HandleVmResult",
+      "source": "battle/BattleAI_HandleVmResult.s",
+      "externals": {},
+      "expected_sha256": "57325b392254f338e376f571b96c70db814ba2491f18d853bc57c7f66082316d"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0207E820",
+      "size": "0xA8",
+      "section": ".pit_BattleAI_UpdateChainedTask",
+      "source": "battle/BattleAI_UpdateChainedTask.s",
+      "externals": {
+        "BattleAI_HandleVmResult": "0x0207E7A0",
+        "VM_Run": "0x020063A4",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "97e03f40d832489d5708af9b0749825af2e871bb58cdecb0afa3f4b2d8f3ad1d"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0207E8C8",
+      "size": "0x60",
+      "section": ".pit_BattleAI_UpdateAuxTask",
+      "source": "battle/BattleAI_UpdateAuxTask.s",
+      "externals": {
+        "VM_Run": "0x020063A4",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "7d0df8094261dd8652b2bbd0b9b0f785469ae1b84a3d0cae33a13429047b96f4"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0207E928",
       "size": "0x98",
       "section": ".pit_BattleAI_UpdateReactionTask",
@@ -150,6 +184,34 @@
         "BattleTaskPool_Allocate": "0x020A5230"
       },
       "expected_sha256": "24b60317c221d1c692c5dd2cc43afc79086ac32d3c02dbaef5267ff6343b0f44"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0207EB14",
+      "size": "0x108",
+      "section": ".pit_BattleAI_StartObjectScript",
+      "source": "battle/BattleAI_StartObjectScript.s",
+      "externals": {
+        "BattleAITask_GetOrInsert": "0x0207EA58",
+        "BattleAI_UpdateChainedTask": "0x0207E820",
+        "data_ov002_020c0918": "0x020C0918",
+        "BattleScriptState_GetByObjectId": "0x020922DC"
+      },
+      "expected_sha256": "05036f80431434412b3ca7d9f698caa23d386b76b7a50bab88050cc0073d4437"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0207EC1C",
+      "size": "0x8C",
+      "section": ".pit_BattleAI_StartActorAuxScript",
+      "source": "battle/BattleAI_StartActorAuxScript.s",
+      "externals": {
+        "BattleAITask_GetOrInsert": "0x0207EA58",
+        "BattleAI_UpdateAuxTask": "0x0207E8C8",
+        "data_ov002_020c0720": "0x020C0720",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "f341dbf22d978c7c085982efb6aa5e36608f7804d029ce9c1d51e300d10c8221"
     },
     {
       "module": "arm9_ov002",
@@ -212,6 +274,17 @@
         "func_ov002_02089c78": "0x02089C78"
       },
       "expected_sha256": "dbf146109c509ff1f7eb776af1725c36929266676284f4f5eec795352ce67291"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020922DC",
+      "size": "0x70",
+      "section": ".pit_BattleScriptState_GetByObjectId",
+      "source": "battle/BattleScriptState_GetByObjectId.s",
+      "externals": {
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "171ecd88414aa4f01a4f90e90945d47d0640dfdeda360db288579f759de9b1c8"
     },
     {
       "module": "arm9_ov002",
