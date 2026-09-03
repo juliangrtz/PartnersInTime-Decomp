@@ -45,6 +45,7 @@ OS_SetThreadPriority kind:function(arm,size=0xb0) addr:0x037fbd70
 OSi_RescheduleThread kind:function(arm,size=0xd4) addr:0x037fbe20
 OS_SelectThread kind:function(arm,size=0x2c) addr:0x037fbef4
 OS_WakeupThreadDirect kind:function(arm,size=0x34) addr:0x037fbf20
+OS_WakeupThread kind:function(arm,size=0x70) addr:0x037fbf54
 OS_SleepThread kind:function(arm,size=0x68) addr:0x037fbfc4
 OS_InitThread kind:function(arm,size=0x12c) addr:0x037fc188
 OSi_InsertThreadToList kind:label addr:0x037fc2fc

@@ -266,6 +266,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FBF20",
+      "size": "0x10C",
+      "kind": "code",
+      "section": ".pit_OS_ThreadSleepWake",
+      "source": "arm7/OS_ThreadSleepWake.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OSi_CurrentThreadPtr": "0x03807AFC",
+        "OSi_RescheduleThread": "0x037FBE20",
+        "OSi_ThreadInfo": "0x03807B08"
+      },
+      "expected_sha256": "4a17c985b6fc8d7c6099f247cd32601a75e5a756d117240935d644aac9a2bb00"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FC188",
       "size": "0x12C",
       "kind": "code",
