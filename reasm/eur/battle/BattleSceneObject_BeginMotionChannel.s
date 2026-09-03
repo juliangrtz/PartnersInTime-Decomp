@@ -7,7 +7,7 @@
 .balign 4
 
 .extern BattleSceneObject_GetMotionChannel
-.extern func_ov002_020a4f18
+.extern BattleSceneObject_StopMotionChannel
 .extern gBattleMotionObjectList
 
 .global BattleSceneObject_BeginMotionChannel
@@ -41,7 +41,7 @@ BattleSceneObject_BeginMotionChannel:
     mov r0, r8
     mov r1, r7
     mov r2, #0
-    bl func_ov002_020a4f18
+    bl BattleSceneObject_StopMotionChannel
 .L_initialize:
     ldrh r0, [r4, #0xa]
     cmp r0, #0

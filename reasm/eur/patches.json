@@ -263,6 +263,15 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x020A4A4C",
+      "size": "0x90",
+      "section": ".pit_BattleSceneObject_UpdateTravelDistance",
+      "source": "battle/BattleSceneObject_UpdateTravelDistance.s",
+      "externals": {},
+      "expected_sha256": "8fdeb7270fd027327cd45ee899165607aff9a7e17fd63abef45dad88fe287a9f"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x020A4ADC",
       "size": "0x1C",
       "section": ".pit_BattleSceneObject_SnapshotPosition",
@@ -303,13 +312,26 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x020A4BF4",
+      "size": "0x214",
+      "section": ".pit_BattleSceneMotion_UpdateAll",
+      "source": "battle/BattleSceneMotion_UpdateAll.s",
+      "externals": {
+        "BattleSceneObject_StopMotionChannel": "0x020A4F18",
+        "BattleSceneObject_UpdateTravelDistance": "0x020A4A4C",
+        "gBattleMotionObjectList": "0x020C0CCC"
+      },
+      "expected_sha256": "ac48215e8a4b414174c0bdde054cb9160b74b75c5be2fe325c06992034bb10e4"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x020A4E08",
       "size": "0xA8",
       "section": ".pit_BattleSceneObject_BeginMotionChannel",
       "source": "battle/BattleSceneObject_BeginMotionChannel.s",
       "externals": {
         "BattleSceneObject_GetMotionChannel": "0x020A50C4",
-        "func_ov002_020a4f18": "0x020A4F18",
+        "BattleSceneObject_StopMotionChannel": "0x020A4F18",
         "gBattleMotionObjectList": "0x020C0CCC"
       },
       "expected_sha256": "87f620d851e1c26f7b66b650c34656e399b5db1d8ca5fea86488bb7f55db6ece"
@@ -324,6 +346,17 @@
         "gBattleMotionObjectList": "0x020C0CCC"
       },
       "expected_sha256": "cf55a4b7c8ef5460f0909956d71f349eff2a980ded793d53f0b2ad3e99647bdd"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A4F18",
+      "size": "0x1A4",
+      "section": ".pit_BattleSceneObject_StopMotionChannel",
+      "source": "battle/BattleSceneObject_StopMotionChannel.s",
+      "externals": {
+        "BattleSceneObject_GetMotionChannel": "0x020A50C4"
+      },
+      "expected_sha256": "00cf15c205ea22c871505194cfefa28e7a0dc80b95965154c2faaa45b916c0e8"
     },
     {
       "module": "arm9_ov002",

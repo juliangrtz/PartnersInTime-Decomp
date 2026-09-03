@@ -43,12 +43,15 @@ and runtime overlay 2.
 | `020A3370` | `BattleSceneObject_GetActiveModel` | Selects a scene object's primary or alternate model pointer |
 | `020A3F9C` | `BattleMotion_StartBallistic` | Derives launch velocity with the DS square-root unit and starts motion |
 | `020A4934` | `BattleSceneObject_MoveBy` | Applies a position delta immediately or over a duration |
+| `020A4A4C` | `BattleSceneObject_UpdateTravelDistance` | Averages the frame displacement into the object's travel metric |
 | `020A4ADC` | `BattleSceneObject_SnapshotPosition` | Copies live coordinates into the stored motion origin |
 | `020A4AF8` | `BattleSceneObject_MoveByImmediate` | Applies a delta and synchronizes both stored targets |
 | `020A4B50` | `BattleSceneObject_AddPositionDelta` | Offsets live and target coordinates during active motion |
 | `020A4B9C` | `BattleSceneObject_AdjustPosition` | Selects active-motion or immediate coordinate adjustment |
+| `020A4BF4` | `BattleSceneMotion_UpdateAll` | Runs every active object's four motion callback channels |
 | `020A4E08` | `BattleSceneObject_BeginMotionChannel` | Links an object and initializes one motion callback channel |
 | `020A4EB0` | `BattleSceneObject_UnlinkMotion` | Preserves the final target and removes an object from the motion list |
+| `020A4F18` | `BattleSceneObject_StopMotionChannel` | Stops a channel and reconciles accumulated coordinate deltas |
 | `020A50C4` | `BattleSceneObject_GetMotionChannel` | Resolves one of the fixed-size per-object motion channels |
 | `020A50D4` | `BattleTaskList_Update` | Runs live callbacks and recycles stopped tasks |
 | `020A519C` | `BattleTask_BindOwnerSlot` | Binds a task handle to its owning object and returns the displaced task |
@@ -284,6 +287,10 @@ channels beginning at offset `+0x1C`; starting a channel replaces an existing
 callback, clears its transient accumulators, stores its duration, and returns
 the channel payload at `+0x18`. Coordinate adjustment preserves interpolation
 targets for listed objects, while unlisted objects receive an immediate move.
+The common per-frame updater snapshots each object's coordinates, advances its
+four callbacks, clamps timed channels, transfers deferred deltas between
+overlapping channels, removes idle objects, and updates a smoothed travel
+distance using the DS square-root unit.
 
 The hit queue at battle-context offset `0xCAD8` contains up to eight packed
 20-byte records. `BattleDamage_ReflectQueuedHits` stops at the first inactive
