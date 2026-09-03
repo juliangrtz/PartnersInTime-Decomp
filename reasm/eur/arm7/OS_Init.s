@@ -9,26 +9,26 @@
 .global OS_Init
 .type OS_Init, %function
 .extern OS_InitIrqTable
-.extern func_037FBBD4
+.extern OS_InitLock
 .extern OS_InitThread
 .extern OS_InitArena
 .extern OS_InitTick
 .extern OS_InitAlarm
 .extern OS_InitReset
-.extern func_037FE1C4
-.extern func_03806D04
+.extern PXI_Init
+.extern CTRDG_Init
 OS_Init:
     stmdb sp!, {lr}
     sub sp, sp, #4
     bl OS_InitArena
-    bl func_037FE1C4
-    bl func_037FBBD4
+    bl PXI_Init
+    bl OS_InitLock
     bl OS_InitIrqTable
     bl OS_InitTick
     bl OS_InitAlarm
     bl OS_InitThread
     bl OS_InitReset
-    bl func_03806D04
+    bl CTRDG_Init
     add sp, sp, #4
     ldmia sp!, {lr}
     bx lr

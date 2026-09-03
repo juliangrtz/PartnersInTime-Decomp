@@ -111,7 +111,7 @@
         "OS_EnableInterrupts": "0x037FDC90",
         "OS_ResetSystem": "0x037FDD48",
         "OS_IsResetOccurred": "0x037FDE08",
-        "func_037FE1C4": "0x037FE1C4",
+        "PXI_Init": "0x037FE1C4",
         "func_037FE580": "0x037FE580",
         "func_037FF0CC": "0x037FF0CC",
         "func_03802ABC": "0x03802ABC",
@@ -185,14 +185,14 @@
       "source": "arm7/OS_Init.s",
       "externals": {
         "OS_InitIrqTable": "0x037FB908",
-        "func_037FBBD4": "0x037FBBD4",
+        "OS_InitLock": "0x037FBBD4",
         "OS_InitThread": "0x037FC188",
         "OS_InitArena": "0x037FC938",
         "OS_InitTick": "0x037FD0F4",
         "OS_InitAlarm": "0x037FD568",
         "OS_InitReset": "0x037FDE18",
-        "func_037FE1C4": "0x037FE1C4",
-        "func_03806D04": "0x03806D04"
+        "PXI_Init": "0x037FE1C4",
+        "CTRDG_Init": "0x03806D04"
       },
       "expected_sha256": "98e95828e42df8ddfbf48bdbf01a9e49d38626daf8c2c9347663eae3a807d39e"
     },
@@ -411,6 +411,33 @@
         "OSi_TimerCallbackInfo": "0x03807AB8"
       },
       "expected_sha256": "ef8ccab935bac23fa9aca617a14ca02616c793ff996c24d913967d943db3f294"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FBBD4",
+      "size": "0x78",
+      "kind": "code",
+      "section": ".pit_OS_InitLock",
+      "source": "arm7/OS_InitLock.s",
+      "externals": {
+        "HW_LOCK_ID_FLAG_SUBP": "0x027FFFB8",
+        "HW_LOCK_INIT": "0x027FFFF0",
+        "OSi_LockInitialized": "0x03807AF4",
+        "func_037FB9FC": "0x037FB9FC"
+      },
+      "expected_sha256": "ace7cd5c4f96d3000eaec446066e8be61b4dfac7113a5271135065ee88bd803e"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FE1C4",
+      "size": "0xC",
+      "kind": "code",
+      "section": ".pit_PXI_Init",
+      "source": "arm7/PXI_Init.s",
+      "externals": {
+        "PXIi_InitFifo": "0x037FE428"
+      },
+      "expected_sha256": "ca65d49cc3e9f39e2005a205ff9cb795c518f5bdf2bcd3152ef3208071c120af"
     }
   ]
 }
