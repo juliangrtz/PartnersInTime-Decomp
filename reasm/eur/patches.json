@@ -37,6 +37,17 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209C3F8",
+      "size": "0x6C",
+      "section": ".pit_BattleStatus_ClearAll",
+      "source": "battle/BattleStatus_ClearAll.s",
+      "externals": {
+        "BattleStatus_ClearEffect": "0x0209C278"
+      },
+      "expected_sha256": "a92a2be1c76465aa2861eb8bde3e0e7b9d830b7e13d509313509bc57eeb15a32"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209D694",
       "size": "0x84",
       "section": ".pit_BattleActor_ApplyDamage",
