@@ -30,6 +30,9 @@ ignored by Git.
   formulas, HP/KO updates, the complete enemy and party hit/popup/effect paths,
   status removal/reset, healing, revival, cures, stat items, and equipped
   healing-badge boosts. Every function matches its original bytes.
+- The ROM-backed battle-AI analyzer inventories all 182 dispatcher opcodes,
+  their handler addresses, shared entries, command-record offsets, and direct
+  call edges without copying ROM bytes into the repository.
 - The complete `0x170`-byte resident ARM7 startup is maintained ARMv4T source:
   four functions plus its NitroSDK module parameters, all matching exactly.
 - ARM7 autoload 0 now has exact symbolic sources for `ARM7_Main` and the
@@ -69,6 +72,8 @@ ignored by Git.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.
+The generated [`docs/research/BATTLE_AI_OPCODES.md`](docs/research/BATTLE_AI_OPCODES.md)
+provides a compact navigation index for the large enemy-script dispatcher.
 
 ## Verified European ROM
 
