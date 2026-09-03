@@ -41,6 +41,10 @@ and runtime overlay 2.
 | `020A519C` | `BattleTask_BindOwnerSlot` | Binds a task handle to its owning object and returns the displaced task |
 | `020A51F8` | `BattleTaskList_Insert` | Allocates if needed and prepends a task to an active list |
 | `020A5254` | `BattleTaskPool_Init` | Builds an aligned fixed-payload task free list |
+| `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
+| `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
+| `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Creates a sprite effect in the first free tracked slot |
+| `020ACCB8` | `BattleSpriteEffect_Spawn` | Creates a sprite effect at view-adjusted coordinates |
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
@@ -100,6 +104,14 @@ stores both sides of the owner relationship and returns any displaced task.
 immediately return a newly allocated, not-yet-inserted node to its pool. The
 separate raw-node take/return pair serves callers that use the same free-list
 layout without task callbacks.
+
+The two effect families share the same ownership pattern but use separate
+resource tables and constructors. Model effects store signed X/Y/Z halfwords,
+a Q8-scale argument shifted into their internal fixed-point field, an optional
+object pointer, and an owner slot at `+0x34`. Sprite effects add the current
+view origin to X/Y before construction and use owner slot `+0x2C`. A convenience
+allocator scans the 64 pointers at context offset `+0xCBF8`, binds the first
+free slot, and returns its index or `-1` when all slots are occupied.
 
 ## Damage and status behavior
 

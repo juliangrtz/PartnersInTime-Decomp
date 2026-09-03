@@ -23,7 +23,7 @@
 
 .extern BattleActor_GetById
 .extern BattleDamageNumber_UpdateAttached
-.extern func_ov002_020acb88
+.extern BattleModelEffect_Spawn
 .extern gBattleContext
 
 .global BattleDamageNumber_MergeAttached
@@ -73,7 +73,7 @@ BattleDamageNumber_MergeAttached:
     mov r7, r4
     add r6, r4, #TASK_DATA
     add r5, r5, ip
-    bl func_ov002_020acb88
+    bl BattleModelEffect_Spawn
     str r0, [r4, #TASK_DATA]
     b .L_finish
 
@@ -86,7 +86,7 @@ BattleDamageNumber_MergeAttached:
     ldrsh r2, [r3, #EFFECT_X]
     ldrsh r3, [r3, #EFFECT_Y]
     ldr r0, .L_first_effect
-    bl func_ov002_020acb88
+    bl BattleModelEffect_Spawn
     str r0, [r6]
 
 .L_finish:

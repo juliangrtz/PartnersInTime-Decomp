@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-331 independent units. Those units cover raw
+337 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -120,7 +120,11 @@ stores raw coordinates or subtracts either battle-view offset pair while
 clamping depth to zero. The task-list and task-pool functions at
 `0x020A50D4`-`0x020A5294` now expose callback iteration, owner-slot invalidation,
 deferred recycling, explicit free-list access, task insertion, allocation, and
-fixed-payload pool initialization. `BattleDamage_CalculateBase` at `0x0209BF38`
+fixed-payload pool initialization. The model- and sprite-effect constructors
+at `0x020ACB44`-`0x020ACD18` are
+symbolic too, including resource-table lookup, coordinates and scale,
+owner-slot binding, and the 64-entry tracked sprite-effect table.
+`BattleDamage_CalculateBase` at `0x0209BF38`
 and `BattleDamage_CalculateAttack` at `0x02071C84` expose the compact and full
 level/POW/DEF calculations, including Q8 modifier tables, category minima,
 global battle scaling, and clamps. `BattleActor_ApplyDamage` at `0x0209D694`
@@ -365,7 +369,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the fifty-nine
+2. Continue promoting small overlay-2 battle leaf functions using the sixty-four
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the
