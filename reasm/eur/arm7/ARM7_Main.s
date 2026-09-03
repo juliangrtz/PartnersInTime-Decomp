@@ -15,11 +15,11 @@
 .extern func_037F8228
 .extern func_037F83C0
 .extern ARM7_MainLoopThumbThunk
-.extern func_037FB7A8
-.extern func_037FB860
-.extern func_037FC188
-.extern func_037FC7E8
-.extern func_037FDC90
+.extern OS_EnableIrqMask
+.extern OS_SetIrqFunction
+.extern OS_InitThread
+.extern OS_Init
+.extern OS_EnableInterrupts
 .extern func_037FDD48
 .extern func_037FDE08
 .extern func_037FE1C4
@@ -33,8 +33,8 @@
 .extern func_038069F8
 ARM7_Main:
     push {r4, lr}
-    bl func_037FC7E8
-    bl func_037FC188
+    bl OS_Init
+    bl OS_InitThread
     bl func_037F8228
     bl func_037FE1C4
     bl func_037F83C0
@@ -44,9 +44,9 @@ ARM7_Main:
     bl func_037FE580
     mov r0, #1
     ldr r1, .L_autoload_start
-    bl func_037FB860
+    bl OS_SetIrqFunction
     mov r0, #1
-    bl func_037FB7A8
+    bl OS_EnableIrqMask
 
     ldr r1, .L_dispstat
     ldrh r0, [r1]
@@ -58,7 +58,7 @@ ARM7_Main:
     ldrh r0, [r1]
     mov r0, #1
     strh r0, [r1]
-    bl func_037FDC90
+    bl OS_EnableInterrupts
     mvn r0, #0
     bl func_03802ABC
     mov r0, #15

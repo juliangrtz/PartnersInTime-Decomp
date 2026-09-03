@@ -106,9 +106,9 @@
         "ARM7_MainLoopThumbThunk": "0x037F8524",
         "OS_EnableIrqMask": "0x037FB7A8",
         "OS_SetIrqFunction": "0x037FB860",
-        "func_037FC188": "0x037FC188",
+        "OS_InitThread": "0x037FC188",
         "OS_Init": "0x037FC7E8",
-        "func_037FDC90": "0x037FDC90",
+        "OS_EnableInterrupts": "0x037FDC90",
         "func_037FDD48": "0x037FDD48",
         "func_037FDE08": "0x037FDE08",
         "func_037FE1C4": "0x037FE1C4",
@@ -186,7 +186,7 @@
       "externals": {
         "func_037FB908": "0x037FB908",
         "func_037FBBD4": "0x037FBBD4",
-        "func_037FC188": "0x037FC188",
+        "OS_InitThread": "0x037FC188",
         "func_037FC938": "0x037FC938",
         "func_037FD0F4": "0x037FD0F4",
         "func_037FD568": "0x037FD568",
@@ -195,6 +195,48 @@
         "func_03806D04": "0x03806D04"
       },
       "expected_sha256": "98e95828e42df8ddfbf48bdbf01a9e49d38626daf8c2c9347663eae3a807d39e"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FBCC0",
+      "size": "0x34",
+      "kind": "code",
+      "section": ".pit_OS_SetSwitchThreadCallback",
+      "source": "arm7/OS_SetSwitchThreadCallback.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OSi_ThreadInfo": "0x03807B08"
+      },
+      "expected_sha256": "4d3d2b215ab85fc1c1cdc0c4cf24cf9fe19b0967f3626f0b16f2655bb339d860"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FC188",
+      "size": "0x12C",
+      "kind": "code",
+      "section": ".pit_OS_InitThread",
+      "source": "arm7/OS_InitThread.s",
+      "externals": {
+        "ARM7_Autoload000_Start": "0x037F8000",
+        "HW_ARM7SystemStack": "0x0380FF80",
+        "HW_THREADINFO_SUBP": "0x027FFFA4",
+        "OS_SetSwitchThreadCallback": "0x037FBCC0",
+        "OSi_CurrentThreadPtr": "0x03807AFC",
+        "OSi_MainThread": "0x03807BD4",
+        "OSi_ThreadInfo": "0x03807B08",
+        "OSi_ThreadInitialized": "0x03807B00"
+      },
+      "expected_sha256": "09b6e05837a7564b05578da1a5bad2608f68f15b4d526dc321ad862feb1de786"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FDC90",
+      "size": "0x78",
+      "kind": "code",
+      "section": ".pit_OS_InterruptControl",
+      "source": "arm7/OS_InterruptControl.s",
+      "expected_sha256": "bdd8f9f71088212084ca76307b02de1c2253ca47713b6e1eef7bd208480dd8e5"
     }
   ]
 }
