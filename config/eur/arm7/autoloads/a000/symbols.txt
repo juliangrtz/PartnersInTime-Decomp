@@ -147,6 +147,7 @@ PXIi_InitFifo kind:function(arm,size=0xdc) addr:0x037fe428
 PADi_SetRcntMode kind:function(arm,size=0x1c) addr:0x037fe504
 EXIi_SelectRcnt kind:function(arm,size=0x1c) addr:0x037fe504
 PADi_WriteRcnt kind:function(arm,size=0x20) addr:0x037fe520
+EXIi_SetBitRcnt0L kind:function(arm,size=0x20) addr:0x037fe520
 PADi_XYButtonAlarmHandler kind:function(arm,size=0x40) addr:0x037fe540
 PAD_InitXYButton kind:function(arm,size=0xa0) addr:0x037fe580
 SND_SetOutputSelector kind:function(arm,size=0x38) addr:0x037fe620
@@ -506,7 +507,8 @@ PMi_SetRegister kind:function(arm,size=0x70) addr:0x03805494
 PMi_SetSpiControl kind:function(arm,size=0x1c) addr:0x03805504
 PMi_SetLED kind:function(arm,size=0x68) addr:0x03805520
 PMi_SwitchUtilityProc kind:function(arm,size=0x134) addr:0x03805588
-PMi_DoSleep kind:function(arm) addr:0x038056bc
+PMi_DoSleep kind:function(arm,size=0x1cc) addr:0x038056bc
+PMi_Stop kind:function(arm,size=0xc) addr:0x03805888
 PM_GetLEDPattern kind:function(arm) addr:0x03805894
 PM_SetLEDPattern kind:function(arm) addr:0x038058a4
 PMi_KeyPattern kind:data(any) addr:0x0380a1d0
