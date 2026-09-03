@@ -823,6 +823,27 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03801CFC",
+      "size": "0x2F4",
+      "kind": "code",
+      "section": ".pit_SND_Bank",
+      "source": "arm7/SND_Bank.s",
+      "externals": {
+        "SND_SetExChannelAttack": "0x037FF96C",
+        "SND_SetExChannelDecay": "0x037FF950",
+        "SND_SetExChannelRelease": "0x037FF92C",
+        "SND_SetExChannelSustain": "0x037FF948",
+        "SND_StartExChannelNoise": "0x037FFA44",
+        "SND_StartExChannelPcm": "0x037FFAE4",
+        "SND_StartExChannelPsg": "0x037FFA90",
+        "SNDi_GetWaveData": "0x03801CBC",
+        "SNDi_LockMutex": "0x037FEF94",
+        "SNDi_UnlockMutex": "0x037FEF90"
+      },
+      "expected_sha256": "b58549707fefad0978b918257edb06899bcfcbf3a4980b9434ab352de656fbdc"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
