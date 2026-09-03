@@ -46,6 +46,8 @@ ignored by Git.
   Recursive mutex ownership and its thread wait queues are symbolic as well.
   The ARM7 heap allocator is maintained too, including arena initialization,
   allocation/free, consistency checks, and its ordered free-list helpers.
+  V-count alarms now have symbolic frame tracking, IRQ dispatch, cancellation,
+  one-shot/periodic setup, and sorted queue maintenance.
 - Only the existing `src/` files are presently maintained high-level source.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
@@ -111,15 +113,15 @@ python .\tools\relink_native.py `
   --require-matching
 ```
 
-The verified pass covers 43 components, 190 section units, 51 maintained
-units, and 29,962 currently known relocations with zero differing bytes. To
+The verified pass covers 43 components, 190 section units, 52 maintained
+units, and 30,025 currently known relocations with zero differing bytes. To
 iterate on one CPU family or overlay, use `tools/relink_arm7.py`,
 `tools/relink_arm9.py`, or `tools/relink_overlay.py`. ROM-derived fallback
 units, binaries, and JSON build reports remain below ignored `build/` paths.
 
 The resident ARM7 startup is fully symbolic source. Its two large autoloads are
-still conservatively marked as mixed code/data images; 44 proven autoload-0
-units are maintained source and 382 autoload relocations are mapped, but
+still conservatively marked as mixed code/data images; 45 proven autoload-0
+units are maintained source and 445 autoload relocations are mapped, but
 the upstream project contains no further ARM7 analysis. See
 [`docs/research/ARM7_MAP.md`](docs/research/ARM7_MAP.md) for the exact confidence
 boundary.
