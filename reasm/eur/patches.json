@@ -1082,6 +1082,25 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03802EA8",
+      "size": "0xA0",
+      "kind": "code",
+      "section": ".pit_CARD_VerifyBackup",
+      "source": "arm7/CARD_VerifyBackup.s",
+      "externals": {
+        "CARDi_CommandBegin": "0x038034C0",
+        "CARDi_CommandEnd": "0x038033E0",
+        "CARDi_CommArray": "0x03803338",
+        "CARDi_CommVerifyCore": "0x03803240",
+        "CARDi_SendSpiAddressingCommand": "0x03803150",
+        "CARDi_SpiWork": "0x03809A40",
+        "CARDi_WaitPrevCommand": "0x038033C8",
+        "CARDi_Work": "0x03809460"
+      },
+      "expected_sha256": "ce46093f14406d8ef32a92083e3bc2bc226e68627f224bed490d7b8c7b606528"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
