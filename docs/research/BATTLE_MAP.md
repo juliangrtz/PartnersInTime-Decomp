@@ -24,6 +24,8 @@ and runtime overlay 2.
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
+| `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
+| `02018F48` | `ItemEffect_CalculateValue` | Resident item-record value calculation and HP clamps |
 | `0208908C` | `BattleEnemyData_RequestLoad` | Initializes and queues one enemy-data request |
 | `0209234C` | `BattleObjectData_ResolveSlot` | Decodes a packed object ID into a 44-byte runtime descriptor |
 
@@ -47,6 +49,7 @@ and runtime overlay 2.
 | `+54` | `defense_change` | Signed percentage for status 7 |
 | `+60` | `speed_change` | Signed percentage for status 8 |
 | `+6C` | `resource_slot` | Leads to the loaded enemy stat record |
+| `+7E` | `party_member` | Identifies linked party members during revival handling |
 
 Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are
@@ -84,6 +87,14 @@ chance_percent)` handles both ailments and temporary stat changes:
 requested status is active, removes the associated battle effect, clears its
 state, and restores base POW, DEF, or SPD for status IDs 6-8. The maintained
 `BattleStatus_ClearAll` wrapper explicitly invokes it for IDs 1 through 8.
+
+`BattleItemEffect_Apply` decodes the effect type from each 20-byte resident
+item record. Types 0-1 add a fixed HP amount, type 2 restores a percentage of
+maximum HP, type 3 cures ailments and negative stat changes, and types 4-6
+apply POW, DEF, or SPD changes with a battle-configured duration. The adjacent
+badge helper scales the actual HP delta to 150 or 200 percent and clamps it to
+maximum HP. These two overlay functions and the resident
+`ItemEffect_CalculateValue` dependency are all maintained exact assembly.
 
 Property IDs 16-20 directly expose current HP, max HP, POW, DEF, and SPD.
 
