@@ -36,6 +36,29 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x02088EF4",
+      "size": "0x30",
+      "section": ".pit_BattleEnemyData_FixupObjectPointers",
+      "source": "battle/BattleEnemyData_FixupObjectPointers.s",
+      "expected_sha256": "5e9bb810774137c5e1beace72177075d6cead6af6ac9ce69784d719c1063168a"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x02088F24",
+      "size": "0x94",
+      "section": ".pit_BattleEnemyData_LoadObjectData",
+      "source": "battle/BattleEnemyData_LoadObjectData.s",
+      "externals": {
+        "BattleEnemyData_FixupObjectPointers": "0x02088EF4",
+        "func_0202c3d0": "0x0202C3D0",
+        "func_ov002_0209234c": "0x0209234C",
+        "gBattleContext": "0x020C0718",
+        "gBattleSystem": "0x020C0714"
+      },
+      "expected_sha256": "fc1ff74e0ba2f4af6c230238796fbe642403c33945cece959c05597e320fd330"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02088FB8",
       "size": "0xD4",
       "section": ".pit_BattleEnemyData_LoadStatRecord",
