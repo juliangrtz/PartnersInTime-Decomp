@@ -318,6 +318,20 @@
       "section": ".pit_SVC_Halt",
       "source": "arm7/SVC_Halt.s",
       "expected_sha256": "8e93a1720c694e06005b83e2dbaf36a800649ab8948fc4e15efa39309f4c5ce6"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FDE58",
+      "size": "0x84",
+      "kind": "code",
+      "section": ".pit_MI_StopDma",
+      "source": "arm7/MI_StopDma.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "REG_DMA0SAD": "0x040000B0"
+      },
+      "expected_sha256": "d4c8d063ff9c57533e61dca39783393e5beef34aa3aa87f572e827f59a8793fb"
     }
   ]
 }

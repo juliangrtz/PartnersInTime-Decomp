@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-Fifteen proven autoload-0 units are now maintained ARMv4T/Thumb source:
+Sixteen proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -53,10 +53,11 @@ Fifteen proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `037FC7E8` | `OS_Init` | `0x38` | Top-level NitroSDK operating-system initialization sequence |
 | `037FDC90` | interrupt-control leaves | `0x78` | Six contiguous CPSR IRQ/FIQ enable, disable, restore, and mode helpers |
 | `037FDD08` | reset subsystem | `0x150` | Spin wait, termination, FIFO reset callback, reset detection and execution |
+| `037FDE58` | `MI_StopDma` | `0x84` | Atomically stops one DMA channel using NitroSDK's register sequence |
 | `03803D94` | `SVC_WaitByLoop` | `0x04` | Thumb wrapper for supervisor call 3 |
 | `03803DAE` | `SVC_Halt` | `0x04` | Thumb wrapper for supervisor call 6 |
 
-Together these replace `0x720` bytes of the first mixed autoload image with
+Together these replace `0x7A4` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -67,10 +68,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 104 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 85 covering the 15 maintained autoload-0 units. The
+There are 107 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 88 covering the 16 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x890` currently promoted
+referenced literal value, or stored pointer. All `0x914` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no

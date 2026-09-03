@@ -31,7 +31,7 @@ OSi_SendResetCommand kind:function(arm,size=0x30) addr:0x037fdd9c
 OSi_ResetCallback kind:function(arm,size=0x3c) addr:0x037fddcc
 OS_IsResetOccurred kind:function(arm,size=0x10) addr:0x037fde08
 OS_InitReset kind:function(arm,size=0x40) addr:0x037fde18
-MI_StopDma kind:label addr:0x037fde58
+MI_StopDma kind:function(arm,size=0x84) addr:0x037fde58
 func_037FE1C4 kind:label addr:0x037fe1c4
 PXI_SendWordByFifo kind:label addr:0x037fe2f0
 PXI_SetFifoRecvCallback kind:label addr:0x037fe3bc
@@ -61,6 +61,7 @@ OSi_ResetInitialized kind:data(any) addr:0x03807ca8
 OSi_IsResetOccurred kind:data(any) addr:0x03807cac
 HW_THREADINFO_SUBP kind:data(any) addr:0x027fffa4
 REG_DISPSTAT kind:data(any) addr:0x04000004
+REG_DMA0SAD kind:data(any) addr:0x040000b0
 REG_IME kind:data(any) addr:0x04000208
 REG_IE kind:data(any) addr:0x04000210
 REG_IF kind:data(any) addr:0x04000214
