@@ -488,6 +488,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FE790",
+      "size": "0x4DC",
+      "kind": "code",
+      "section": ".pit_SND_ChannelControl",
+      "source": "arm7/SND_ChannelControl.s",
+      "externals": {
+        "REG_SOUND_CHANNEL0": "0x04000400",
+        "sMasterPan": "0x038079B4",
+        "sOrgPan": "0x03807D68",
+        "sOrgVolume": "0x03807D78",
+        "sSurroundDecay": "0x03807D64"
+      },
+      "expected_sha256": "d18e36b738133505970567ca0fe98d4ffcd301f38c4309d3b0b40109441ba8e6"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
