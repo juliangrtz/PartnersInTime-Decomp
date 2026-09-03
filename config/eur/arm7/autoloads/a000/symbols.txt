@@ -372,7 +372,7 @@ TPi_VAlarmCallback kind:function(arm,size=0x78) addr:0x038043ac
 TP_ExecuteProcess kind:function(arm,size=0x234) addr:0x03804424
 TPi_UpdateTouchData kind:function(arm,size=0xf4) addr:0x03804658
 TP_AnalyzeCommand kind:function(arm,size=0x1c0) addr:0x0380474c
-TP_Init kind:function(arm) addr:0x0380490c
+TP_Init kind:function(arm,size=0x110) addr:0x0380490c
 TP_ExecSampling kind:function(arm) addr:0x03804a1c
 PM_ExecuteProcess kind:function(arm) addr:0x03804fc0
 PM_AnalyzeCommand kind:function(arm) addr:0x03805148
