@@ -1052,6 +1052,19 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03802D6C",
+      "size": "0xEC",
+      "kind": "code",
+      "section": ".pit_CARD_Fifo",
+      "source": "arm7/CARD_Fifo.s",
+      "externals": {
+        "CARDi_Work": "0x03809460",
+        "OS_WakeupThreadDirect": "0x037FBF20"
+      },
+      "expected_sha256": "56f86eaddc27f7a1a5c679bc12126f3838159cd88d161165d51122fb848c95b1"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
