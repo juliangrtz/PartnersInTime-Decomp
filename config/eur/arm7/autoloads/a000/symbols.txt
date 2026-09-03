@@ -267,7 +267,15 @@ SNDi_AlarmHandler kind:function(arm,size=0x30) addr:0x038020cc
 SND_StopAlarm kind:function(arm,size=0x40) addr:0x038020fc
 SND_StartAlarm kind:function(arm,size=0xc8) addr:0x0380213c
 SND_SetupAlarm kind:function(arm,size=0x5c) addr:0x03802204
-SND_AlarmInit kind:function(arm) addr:0x03802260
+SND_AlarmInit kind:function(arm,size=0x2c) addr:0x03802260
+SNDi_ReadDriverInfo kind:function(arm,size=0x6c) addr:0x0380228c
+SNDi_StopTimer kind:function(arm,size=0xc4) addr:0x038022f8
+SNDi_StartTimer kind:function(arm,size=0xf4) addr:0x038023bc
+SNDi_SetChannelPan kind:function(arm,size=0x48) addr:0x038024b0
+SNDi_SetChannelVolume kind:function(arm,size=0x58) addr:0x038024f8
+SNDi_SetChannelTimer kind:function(arm,size=0x48) addr:0x03802550
+SNDi_InitPxi kind:function(arm,size=0x18) addr:0x03802598
+SNDi_PxiFifoCallback kind:function(arm,size=0x54) addr:0x038025b0
 SND_CommandProc kind:function(arm) addr:0x03802604
 SND_CommandInit kind:function(arm) addr:0x03802a7c
 func_037FF0CC kind:label addr:0x037ff0cc
@@ -342,6 +350,7 @@ sLockedChannelMask kind:data(any) addr:0x03808264
 sWeakLockedChannelMask kind:data(any) addr:0x03808268
 SNDi_Work kind:data(any) addr:0x0380828c
 SNDi_AlarmWork kind:data(any) addr:0x0380920c
+SNDi_CommandMesgQueue kind:data(any) addr:0x0380940c
 SNDi_SharedWork kind:data(any) addr:0x03808288
 SNDi_SeqCacheState kind:data(any) addr:0x03808270
 SNDi_SeqCacheData kind:data(any) addr:0x03808278
