@@ -1306,6 +1306,27 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03803E50",
+      "size": "0xDC",
+      "kind": "code",
+      "section": ".pit_SPI_Dispatch",
+      "source": "arm7/SPI_Dispatch.s",
+      "externals": {
+        "MIC_AnalyzeCommand": "0x03805FC4",
+        "MIC_ExecuteProcess": "0x03805CC4",
+        "NVRAM_AnalyzeCommand": "0x027F4DB0",
+        "NVRAM_ExecuteProcess": "0x027F4AD4",
+        "OS_ReceiveMessage": "0x037FC4D4",
+        "PM_AnalyzeCommand": "0x03805148",
+        "PM_ExecuteProcess": "0x03804FC0",
+        "SPIi_MessageQueue": "0x03809F10",
+        "TP_AnalyzeCommand": "0x0380474C",
+        "TP_ExecuteProcess": "0x03804424"
+      },
+      "expected_sha256": "f6c8f3b636328271b8e34de0181acbf671e40f5c6016d79e8d5c1fc518848877"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",

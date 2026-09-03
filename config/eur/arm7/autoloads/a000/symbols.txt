@@ -356,6 +356,14 @@ SVC_GetSineTable kind:function(thumb,size=0x4) addr:0x03803e00
 SVC_GetPitchTable kind:function(thumb,size=0x4) addr:0x03803e04
 SVC_GetVolumeTable kind:function(thumb,size=0x4) addr:0x03803e08
 MATH_CountPopulation kind:function(arm,size=0x44) addr:0x03803e0c
+SPIi_FifoRecvCallback kind:function(arm,size=0x70) addr:0x03803e50
+SPIi_TaskThread kind:function(arm,size=0x6c) addr:0x03803ec0
+TP_ExecuteProcess kind:function(arm) addr:0x03804424
+TP_AnalyzeCommand kind:function(arm) addr:0x0380474c
+PM_ExecuteProcess kind:function(arm) addr:0x03804fc0
+PM_AnalyzeCommand kind:function(arm) addr:0x03805148
+MIC_ExecuteProcess kind:function(arm) addr:0x03805cc4
+MIC_AnalyzeCommand kind:function(arm) addr:0x03805fc4
 func_03804244 kind:label addr:0x03804244
 WVR_Shutdown kind:function(arm) addr:0x03805a94
 func_03805ACC kind:label addr:0x03805acc
@@ -436,6 +444,7 @@ CARDi_RomStat kind:data(any) addr:0x03809a60
 CARDi_PulledOut kind:data(any) addr:0x03809c80
 CARDi_PullOutCallbackInitialized kind:data(any) addr:0x03809c84
 CARDi_IsPulledOutResult kind:data(any) addr:0x03809c88
+SPIi_MessageQueue kind:data(any) addr:0x03809f10
 CARDi_BootMode kind:data(any) addr:0x027ffc40
 CARDi_RomIdSourceSelect kind:data(any) addr:0x027ffc10
 CARDi_RomIdPrimary kind:data(any) addr:0x027ff800

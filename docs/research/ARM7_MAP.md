@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-Ninety-four proven autoload-0 units are now maintained ARMv4T/Thumb source:
+Ninety-five proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -133,9 +133,10 @@ Ninety-four proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `03803DAE` | `SVC_Halt` | `0x04` | Thumb wrapper for supervisor call 6 |
 | `03803DB2` | remaining SVC wrappers | `0x5A` | Exposes stop, sound-bias, division, memory, decompression, and lookup-table supervisor calls |
 | `03803E0C` | `MATH_CountPopulation` | `0x44` | Counts set bits with parallel masks and folding operations |
+| `03803E50` | SPI command dispatch | `0xDC` | Routes PXI commands and worker-thread requests to touch, power, microphone, or NVRAM services |
 | `03806D04` | `CTRDG_Init` | `0x5C` | Initializes ARM7 Game Pak state and transitions its PXI callback |
 
-Together these replace `0x8160` bytes of the first mixed autoload image with
+Together these replace `0x823C` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -146,10 +147,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 1,082 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 1,063 covering the 94 maintained autoload-0 units. The
+There are 1,092 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 1,073 covering the 95 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x82D0` currently promoted
+referenced literal value, or stored pointer. All `0x83AC` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no

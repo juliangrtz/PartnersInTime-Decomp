@@ -45,6 +45,8 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["SVC_CpuSet"], 0x03803DD4)
         self.assertEqual(symbols["SVC_GetVolumeTable"], 0x03803E08)
         self.assertEqual(symbols["MATH_CountPopulation"], 0x03803E0C)
+        self.assertEqual(symbols["SPIi_FifoRecvCallback"], 0x03803E50)
+        self.assertEqual(symbols["SPIi_TaskThread"], 0x03803EC0)
         self.assertEqual(symbols["OSi_IrqVBlank"], 0x037FB5C8)
         self.assertEqual(symbols["OSi_IrqTimer3"], 0x037FB620)
         self.assertEqual(symbols["OSi_IrqTimer0"], 0x037FB650)
