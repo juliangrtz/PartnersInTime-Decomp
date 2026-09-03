@@ -1553,6 +1553,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x0380531C",
+      "size": "0xE8",
+      "kind": "code",
+      "section": ".pit_PM_Control",
+      "source": "arm7/PM_Control.s",
+      "externals": {
+        "PMi_GetRegister": "0x03805404",
+        "PMi_Initialized": "0x0380A1D8",
+        "PMi_SetRegister": "0x03805494",
+        "PMi_Work": "0x0380A1DC",
+        "PXI_SendWordByFifo": "0x037FE2F0"
+      },
+      "expected_sha256": "fa6c445ade2ff02b4d2ea791ce82a6a9d8ef34c561bba4cfdf6f5d2a6f86e506"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
