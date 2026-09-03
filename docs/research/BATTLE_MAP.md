@@ -8,6 +8,7 @@ and runtime overlay 2.
 
 | Address | Working name | Purpose |
 |---:|---|---|
+| `020726B0` | `BattleTaskQueue_Enqueue` | Appends a callback/argument pair to the 32-entry battle task queue |
 | `02073068` | `BattleMain_Update` | Per-frame battle update and central turn-state owner |
 | `02076F44` | `BattleActor_GetPartySlot` | Resolves party IDs 56-59 through the battle context |
 | `02076F64` | `BattleActor_GetById` | Resolves party IDs 56-59 or enemy IDs 60+ to actor pointers |
@@ -23,6 +24,7 @@ and runtime overlay 2.
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
+| `0208908C` | `BattleEnemyData_RequestLoad` | Initializes and queues one enemy-data request |
 
 ## Battle actor layout
 
@@ -98,8 +100,9 @@ Property IDs 16-20 directly expose current HP, max HP, POW, DEF, and SPD.
 `BattleEnemyData_LoadStatRecord` is maintained symbolic assembly. It multiplies
 the selected enemy index by 44, queues exactly that byte range from the primary
 battle resource, and installs `BattleEnemyData_LoadObjectData` as the next load
-callback. `BattleEntity_BindResource` later copies the numeric fields into the
-live actor.
+callback. `BattleEnemyData_RequestLoad` initializes that request and submits it
+through the maintained `BattleTaskQueue_Enqueue` path. `BattleEntity_BindResource`
+later copies the numeric fields into the live actor.
 
 ## Large native dispatchers
 
