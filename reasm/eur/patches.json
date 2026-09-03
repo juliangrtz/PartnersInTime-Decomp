@@ -297,12 +297,51 @@
       "section": ".pit_BattleDamage_SpawnNumber",
       "source": "battle/BattleDamage_SpawnNumber.s",
       "externals": {
-        "func_ov002_0209cc84": "0x0209CC84",
+        "BattleDamageNumber_MergeAttached": "0x0209CC84",
         "func_ov002_020a51f8": "0x020A51F8",
         "func_ov002_020acb88": "0x020ACB88",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "1e1bc4d16ea13ba0fc95110df660898abe19a1ce0d25e7fabf3e88a43b5844b2"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209CB3C",
+      "size": "0x30",
+      "section": ".pit_BattleDamageNumber_CleanupAttached",
+      "source": "battle/BattleDamageNumber_CleanupAttached.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64"
+      },
+      "expected_sha256": "7d52ae96f105d177c5e1f49a83105d08cc066d50f3cc8d5b4b1605091cf7756c"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209CB6C",
+      "size": "0x118",
+      "section": ".pit_BattleDamageNumber_UpdateAttached",
+      "source": "battle/BattleDamageNumber_UpdateAttached.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "BattleDamageNumber_CleanupAttached": "0x0209CB3C",
+        "func_ov002_020acb44": "0x020ACB44",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "0e6a8485801c1d4a5490d722844e4b8477d1d642b1279931e42aa7c483b94270"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209CC84",
+      "size": "0x118",
+      "section": ".pit_BattleDamageNumber_MergeAttached",
+      "source": "battle/BattleDamageNumber_MergeAttached.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "BattleDamageNumber_UpdateAttached": "0x0209CB6C",
+        "func_ov002_020acb88": "0x020ACB88",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "95a26ded0aa987547a5836c345aaac0e38ba50f269310de78feb43cc3d8bf76a"
     },
     {
       "module": "arm9_ov002",

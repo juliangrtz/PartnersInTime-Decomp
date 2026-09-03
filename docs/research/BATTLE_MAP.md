@@ -153,6 +153,9 @@ and `0x13`.
 paths and several attack scripts. It applies the battle-wide X/Y popup offsets,
 stores the displayed value in the effect, and can either use a caller-selected
 effect or create the actor-attached `0x369` variant with its own task lifecycle.
+The maintained lifecycle merges overlapping values through effects `0x36A` and
+`0x36B`, selects final actor-state variants `0x36C` or `0x36D`, and releases the
+task pointer at actor offset `+0x2C` only after the last effect has disappeared.
 
 `BattleDamage_ApplyToParty` is maintained too. It clamps damage, clears status
 1, handles the special nonlethal hit kind, selects one of six party reaction

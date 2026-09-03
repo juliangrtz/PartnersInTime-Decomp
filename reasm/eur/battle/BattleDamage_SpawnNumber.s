@@ -15,7 +15,7 @@
 .equ TASK_DATA, 0x0C
 .equ TASK_CALLBACK, 0x04
 
-.extern func_ov002_0209cc84
+.extern BattleDamageNumber_MergeAttached
 .extern func_ov002_020a51f8
 .extern func_ov002_020acb88
 .extern gBattleContext
@@ -95,5 +95,5 @@ BattleDamage_SpawnNumber:
 .L_task_pool_offset:
     .word BATTLE_TASK_POOL_OFFSET
 .L_update_callback:
-    .word func_ov002_0209cc84
+    .word BattleDamageNumber_MergeAttached
 .size BattleDamage_SpawnNumber, . - BattleDamage_SpawnNumber
