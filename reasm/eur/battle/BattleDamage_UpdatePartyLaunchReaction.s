@@ -28,7 +28,7 @@
 .extern BattleSceneObject_GetById
 .extern data_ov002_020bfa3c
 .extern BattlePosition_StoreViewRelative
-.extern func_ov002_02091198
+.extern BattleSceneObject_SetAnimation
 .extern BattleSceneObject_IsAnimationActiveById
 .extern BattleSceneObject_GetActiveModel
 .extern func_ov002_020a3f9c
@@ -80,7 +80,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     ldrsh r1, [r0, #0x54]
     mov r0, sb
     mov r2, #1
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     ldrsh r1, [sb, #SCENE_OBJECT_OFFSET_Y]
     mov r0, #2
     sub r1, r1, #0xE0
@@ -100,7 +100,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     ldrsh r1, [r0, #0x54]
     mov r0, sb
     mov r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     ldrsh r1, [sb, #SCENE_OBJECT_OFFSET_Y]
     mov r0, #1
     add r1, r1, #0xE0
@@ -148,7 +148,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     mov r0, sb
     mov r1, #0
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     ldrh r0, [sl, #TASK_DATA_ACTOR_ID]
     bl BattleActor_GetById
     ldrh r1, [r0, #BATTLE_ACTOR_FLAGS]

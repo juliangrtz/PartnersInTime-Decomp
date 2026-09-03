@@ -15,6 +15,7 @@ and runtime overlay 2.
 | `02076F24` | `BattleActor_GetEnemySlot` | Resolves enemy IDs 60-67 through the battle context |
 | `02076F64` | `BattleActor_GetById` | Resolves party IDs 56-59 or enemy IDs 60+ to actor pointers |
 | `02076FB4` | `BattleSceneObject_GetById` | Resolves field, party, enemy, and auxiliary visual-object IDs |
+| `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
@@ -89,6 +90,15 @@ bypass flag and otherwise subtracts either context offset pair
 Both actor resolvers, the compact base
 damage calculation, and the damage/KO updater are now maintained symbolic
 assembly in `reasm/eur/battle/` and byte-match the European overlay.
+
+`BattleSceneObject_SetAnimation` is the common animation path used by damage
+and reaction code. It validates the bound resource, classifies scene-object
+IDs as party or enemy, creates a model on demand, stops negative animation
+requests, and starts the selected animation through the model vtable. Party
+idle selection is adjusted for three actor status values, a separate party
+flag, and the low-HP predicate. It also remaps animations for linked party
+forms, preserves model flags across resource replacement, and calls the battle
+scene's model-change callback when the active model changes.
 
 ## Battle task lists
 

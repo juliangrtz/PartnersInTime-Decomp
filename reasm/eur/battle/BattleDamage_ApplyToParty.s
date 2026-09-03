@@ -33,7 +33,7 @@
 .extern func_ov002_02065ec4
 .extern BattlePosition_StoreViewRelative
 .extern func_ov002_02076bd4
-.extern func_ov002_02091198
+.extern BattleSceneObject_SetAnimation
 .extern BattleDamage_SpawnNumber
 .extern BattleModelEffect_Spawn
 .extern BattleSpriteEffect_Spawn
@@ -147,7 +147,7 @@ BattleDamage_ApplyToParty:
     mov r0, r8
     mov r1, #0x0A
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     b .L_hit_done
 
 .L_hit_kind_1:
@@ -173,7 +173,7 @@ BattleDamage_ApplyToParty:
     mov r0, r8
     mov r1, #0x0B
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     b .L_hit_done
 
 .L_hit_kind_2:
@@ -199,7 +199,7 @@ BattleDamage_ApplyToParty:
     mov r0, r8
     mov r1, #0x0C
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     mov r0, #0
     str r0, [sp]
     mov r0, #0x100
@@ -244,7 +244,7 @@ BattleDamage_ApplyToParty:
     mov r0, r8
     mov r1, #0x1F
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     b .L_hit_done
 
 .L_hit_kind_4:
@@ -265,7 +265,7 @@ BattleDamage_ApplyToParty:
     mov r0, r8
     mov r1, #0x21
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     b .L_hit_done
 
 .L_hit_kind_5:
@@ -286,7 +286,7 @@ BattleDamage_ApplyToParty:
     mov r0, r8
     mov r1, #0x21
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
 
 .L_hit_done:
     cmp sb, #0

@@ -36,7 +36,7 @@
 .extern BattleActor_GetEnemySlot
 .extern BattleDamage_StartEnemyReaction
 .extern BattlePosition_StoreViewRelative
-.extern func_ov002_02091198
+.extern BattleSceneObject_SetAnimation
 .extern BattleDamage_SpawnNumber
 .extern BattleModelEffect_Spawn
 .extern BattleSpriteEffect_Spawn
@@ -104,7 +104,7 @@ BattleDamage_ApplyToEnemy:
     ldrsh r1, [r0, #0x9A]
     mov r0, sb
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     ldrh r0, [sb, #SCENE_OBJECT_ACTOR_ID]
     bl BattleActor_GetById
     ldrh r0, [r0, #BATTLE_ACTOR_FLAGS]

@@ -28,7 +28,7 @@
 .extern BattleActor_GetById
 .extern BattleActor_GetEnemySlot
 .extern BattleSceneObject_GetById
-.extern func_ov002_02091198
+.extern BattleSceneObject_SetAnimation
 .extern BattleSceneObject_GetActiveModel
 
 .global BattleDamage_UpdateEnemyReaction
@@ -79,7 +79,7 @@ BattleDamage_UpdateEnemyReaction:
     mvn r2, #0
     add r3, r3, r5
     strh r3, [r4, #SCENE_OBJECT_ANIMATION_OFFSET]
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     ldrsh r0, [r4, #SCENE_OBJECT_ANIMATION_OFFSET]
     sub r0, r0, r5
     strh r0, [r4, #SCENE_OBJECT_ANIMATION_OFFSET]
@@ -88,7 +88,7 @@ BattleDamage_UpdateEnemyReaction:
     mov r0, r4
     mov r1, r5
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
 
 .L_restore_impact_offsets:
     ldrh r0, [r4, #SCENE_OBJECT_ACTOR_ID]

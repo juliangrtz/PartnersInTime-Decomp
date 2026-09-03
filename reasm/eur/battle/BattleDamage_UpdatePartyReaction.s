@@ -17,7 +17,7 @@
 .extern BattleActor_GetById
 .extern BattleEntity_BindResource
 .extern BattleSceneObject_GetById
-.extern func_ov002_02091198
+.extern BattleSceneObject_SetAnimation
 .extern BattleSceneObject_GetActiveModel
 .extern func_ov002_020a9280
 
@@ -60,7 +60,7 @@ BattleDamage_UpdatePartyReaction:
     mov r0, r4
     mov r1, #0
     mvn r2, #0
-    bl func_ov002_02091198
+    bl BattleSceneObject_SetAnimation
     ldrh r0, [r5, #STATE_ACTOR_ID]
     bl BattleActor_GetById
     ldrh r1, [r0, #BATTLE_ACTOR_FLAGS]
