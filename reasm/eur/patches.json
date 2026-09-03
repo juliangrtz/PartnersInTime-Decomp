@@ -292,6 +292,20 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209CD9C",
+      "size": "0xFC",
+      "section": ".pit_BattleDamage_SpawnNumber",
+      "source": "battle/BattleDamage_SpawnNumber.s",
+      "externals": {
+        "func_ov002_0209cc84": "0x0209CC84",
+        "func_ov002_020a51f8": "0x020A51F8",
+        "func_ov002_020acb88": "0x020ACB88",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "1e1bc4d16ea13ba0fc95110df660898abe19a1ce0d25e7fabf3e88a43b5844b2"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209D5CC",
       "size": "0xC8",
       "section": ".pit_BattleDamage_StartEnemyReaction",
@@ -362,7 +376,7 @@
         "BattleActor_GetEnemySlot": "0x02076F24",
         "func_ov002_02076b0c": "0x02076B0C",
         "func_ov002_02091198": "0x02091198",
-        "func_ov002_0209cd9c": "0x0209CD9C",
+        "BattleDamage_SpawnNumber": "0x0209CD9C",
         "BattleDamage_StartEnemyReaction": "0x0209D5CC",
         "func_ov002_020acb88": "0x020ACB88",
         "func_ov002_020accb8": "0x020ACCB8"
@@ -387,7 +401,7 @@
         "func_ov002_02076b0c": "0x02076B0C",
         "func_ov002_02076bd4": "0x02076BD4",
         "func_ov002_02091198": "0x02091198",
-        "func_ov002_0209cd9c": "0x0209CD9C",
+        "BattleDamage_SpawnNumber": "0x0209CD9C",
         "BattleActor_HandleHitEquipmentEffect": "0x0209DE04",
         "BattleDamage_StartPartyReaction": "0x0209D2B0",
         "func_ov002_020acb88": "0x020ACB88",

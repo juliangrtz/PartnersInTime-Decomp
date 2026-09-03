@@ -34,7 +34,7 @@
 .extern func_ov002_02076b0c
 .extern func_ov002_02076bd4
 .extern func_ov002_02091198
-.extern func_ov002_0209cd9c
+.extern BattleDamage_SpawnNumber
 .extern func_ov002_020acb88
 .extern func_ov002_020accb8
 .extern gBattleContext
@@ -142,7 +142,7 @@ BattleDamage_ApplyToParty:
     mov r3, #4
     add r1, r1, r7
     add r2, r2, r6
-    bl func_ov002_0209cd9c
+    bl BattleDamage_SpawnNumber
     mov sb, r0
     mov r0, r8
     mov r1, #0x0A
@@ -168,7 +168,7 @@ BattleDamage_ApplyToParty:
     mov r3, #5
     add r1, r1, r7
     add r2, r2, r6
-    bl func_ov002_0209cd9c
+    bl BattleDamage_SpawnNumber
     mov sb, r0
     mov r0, r8
     mov r1, #0x0B
@@ -194,7 +194,7 @@ BattleDamage_ApplyToParty:
     mov r3, #4
     add r1, r1, r7
     add r2, r2, r6
-    bl func_ov002_0209cd9c
+    bl BattleDamage_SpawnNumber
     mov sb, r0
     mov r0, r8
     mov r1, #0x0C
@@ -239,7 +239,7 @@ BattleDamage_ApplyToParty:
     add r1, r1, r7
     add r2, r2, r6
     mov r3, #4
-    bl func_ov002_0209cd9c
+    bl BattleDamage_SpawnNumber
     mov sb, r0
     mov r0, r8
     mov r1, #0x1F
@@ -260,7 +260,7 @@ BattleDamage_ApplyToParty:
     add r1, r1, r7
     add r2, r2, r6
     mov r3, #4
-    bl func_ov002_0209cd9c
+    bl BattleDamage_SpawnNumber
     mov sb, r0
     mov r0, r8
     mov r1, #0x21
@@ -281,7 +281,7 @@ BattleDamage_ApplyToParty:
     add r1, r1, r7
     add r2, r2, r6
     mov r3, #4
-    bl func_ov002_0209cd9c
+    bl BattleDamage_SpawnNumber
     mov sb, r0
     mov r0, r8
     mov r1, #0x21

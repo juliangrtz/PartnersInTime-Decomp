@@ -37,7 +37,7 @@
 .extern BattleDamage_StartEnemyReaction
 .extern func_ov002_02076b0c
 .extern func_ov002_02091198
-.extern func_ov002_0209cd9c
+.extern BattleDamage_SpawnNumber
 .extern func_ov002_020acb88
 .extern func_ov002_020accb8
 
@@ -166,7 +166,7 @@ BattleDamage_ApplyToEnemy:
     mov r0, r6
     add r1, r1, r8
     add r2, r2, r7
-    bl func_ov002_0209cd9c
+    bl BattleDamage_SpawnNumber
 .L_number_done:
     ldr r0, [sp, #ARG_EFFECT_KIND]
     cmp r0, #0x11
