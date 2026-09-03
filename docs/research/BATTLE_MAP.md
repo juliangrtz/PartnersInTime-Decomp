@@ -11,6 +11,7 @@ and runtime overlay 2.
 | `020726B0` | `BattleTaskQueue_Enqueue` | Appends a callback/argument pair to the 32-entry battle task queue |
 | `02073068` | `BattleMain_Update` | Per-frame battle update and central turn-state owner |
 | `02076F44` | `BattleActor_GetPartySlot` | Resolves party IDs 56-59 through the battle context |
+| `02076F24` | `BattleActor_GetEnemySlot` | Resolves enemy IDs 60-67 through the battle context |
 | `02076F64` | `BattleActor_GetById` | Resolves party IDs 56-59 or enemy IDs 60+ to actor pointers |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079950` | `BattleAI_DispatchOpcode` | Executes loaded `BAI_*.dat` battle bytecode |
@@ -112,6 +113,13 @@ maximum HP. These two overlay functions and the resident
 `ItemEffect_CalculateValue` dependency are all maintained exact assembly.
 
 Property IDs 16-20 directly expose current HP, max HP, POW, DEF, and SPD.
+
+`BattleDamage_ApplyToEnemy` is maintained end to end. It rejects already
+defeated targets, clamps incoming damage to 1-999, calls the HP/KO primitive,
+selects the enemy hit reaction, preserves special-object state, computes the
+world/screen position for the damage number, honors the enemy record's popup
+suppression bit, and emits the impact variants selected by hit kinds `0x11`
+and `0x13`.
 
 ## Enemy stat records
 
