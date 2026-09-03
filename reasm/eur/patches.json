@@ -86,6 +86,19 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x02091C20",
+      "size": "0x2BC",
+      "section": ".pit_BattleEntity_BindResource",
+      "source": "battle/BattleEntity_BindResource.s",
+      "externals": {
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "OS_Terminate": "0x0203AE78",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "8ad921b304d5f23db459ed5724359b09487509bb553abbd75cf37e9f5b8a024c"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209234C",
       "size": "0x44",
       "section": ".pit_BattleObjectData_ResolveSlot",

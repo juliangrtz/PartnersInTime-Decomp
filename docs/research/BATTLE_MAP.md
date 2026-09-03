@@ -105,8 +105,10 @@ callback. `BattleEnemyData_RequestLoad` initializes that request and submits it
 through the maintained `BattleTaskQueue_Enqueue` path. The object-data callback
 uses the maintained packed-ID resolver and queues the variable-sized payload
 after the stat record; its maintained fixup callback converts embedded offsets
-to RAM pointers.
-`BattleEntity_BindResource` later copies the numeric fields into the live actor.
+to RAM pointers. `BattleEntity_BindResource` is maintained too: its enemy branch
+copies max/current HP, base/current POW, DEF, and SPD, installs level/trait
+bits, and clears transient actor flags; its party branch binds the corresponding
+scene-object resource record.
 
 ## Large native dispatchers
 
