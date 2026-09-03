@@ -12,7 +12,7 @@
 .equ BATTLE_TASK_POOL_OFFSET, 0x8B44
 
 .extern BattleActor_GetById
-.extern func_ov002_0209d46c
+.extern BattleDamage_UpdateEnemyReaction
 .extern func_ov002_020a519c
 .extern func_ov002_020a51f8
 .extern func_ov002_020acb44
@@ -75,5 +75,5 @@ BattleDamage_StartEnemyReaction:
 .L_task_pool_offset:
     .word BATTLE_TASK_POOL_OFFSET
 .L_update_callback:
-    .word func_ov002_0209d46c
+    .word BattleDamage_UpdateEnemyReaction
 .size BattleDamage_StartEnemyReaction, . - BattleDamage_StartEnemyReaction
