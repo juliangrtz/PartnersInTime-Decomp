@@ -575,6 +575,47 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FF438",
+      "size": "0xE8",
+      "kind": "code",
+      "section": ".pit_SND_Lfo",
+      "source": "arm7/SND_Lfo.s",
+      "externals": {
+        "SND_SinIdx": "0x037FECA0"
+      },
+      "expected_sha256": "17c206474b9d69369fb6a04b7e42ab42dc7d9713a65249ba78a0e2b042363546"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FF520",
+      "size": "0x88",
+      "kind": "code",
+      "section": ".pit_SND_Wave",
+      "source": "arm7/SND_Wave.s",
+      "externals": {
+        "SND_StopChannel": "0x037FEA08",
+        "SNDi_Work": "0x0380828C"
+      },
+      "expected_sha256": "6c24d4caea6316527be59328431c52aba86c64302038a22455a8ff75d172e9d6"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FF5A8",
+      "size": "0x21C",
+      "kind": "code",
+      "section": ".pit_SND_LockChannel",
+      "source": "arm7/SND_LockChannel.s",
+      "externals": {
+        "SND_FreeExChannel": "0x037FF7C4",
+        "SND_StopChannel": "0x037FEA08",
+        "SNDi_Work": "0x0380828C",
+        "sLockedChannelMask": "0x03808264",
+        "sWeakLockedChannelMask": "0x03808268"
+      },
+      "expected_sha256": "bf843a8bc925b2744e45d05f319bad01632bc4b636d8e2a94818173d6ccc933b"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
