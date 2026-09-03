@@ -222,10 +222,14 @@ SNDi_AllocTrack kind:function(arm,size=0x44) addr:0x03800078
 SNDi_GetVariablePtr kind:function(arm,size=0x44) addr:0x038000bc
 SNDi_PlayerSeqMain kind:function(arm,size=0x80) addr:0x03800100
 SNDi_TrackSeqMain kind:function(arm) addr:0x03800180
+SNDi_NoteOnCommandProc kind:function(arm,size=0x20c) addr:0x03800b34
+SNDi_ChannelCallback kind:function(arm) addr:0x03800ec4
 SNDi_ClosePlayerTrack kind:function(arm) addr:0x03800f6c
 SNDi_GetPlayerTrack kind:function(arm) addr:0x03800fe0
 SND_SeqMain kind:function(arm) addr:0x03801bb0
 SND_SeqInit kind:function(arm) addr:0x03801c50
+SND_NoteOn kind:function(arm) addr:0x03801cfc
+SND_ReadInstData kind:function(arm) addr:0x03801e6c
 SND_UpdateSharedWork kind:function(arm) addr:0x03801ff0
 SND_AlarmInit kind:function(arm) addr:0x03802260
 SND_CommandProc kind:function(arm) addr:0x03802604

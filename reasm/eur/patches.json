@@ -724,6 +724,26 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03800B34",
+      "size": "0x20C",
+      "kind": "code",
+      "section": ".pit_SND_NoteOnCommand",
+      "source": "arm7/SND_NoteOnCommand.s",
+      "externals": {
+        "SND_AllocExChannel": "0x037FF7D8",
+        "SND_FreeExChannel": "0x037FF7C4",
+        "SND_NoteOn": "0x03801CFC",
+        "SND_ReadInstData": "0x03801E6C",
+        "SND_SetExChannelAttack": "0x037FF96C",
+        "SND_SetExChannelDecay": "0x037FF950",
+        "SND_SetExChannelRelease": "0x037FF92C",
+        "SND_SetExChannelSustain": "0x037FF948",
+        "SNDi_ChannelCallback": "0x03800EC4"
+      },
+      "expected_sha256": "ec87c6a6348e18d3283ea82319b2f661fb4c08c20876ed0f7314a988c49bd69a"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
