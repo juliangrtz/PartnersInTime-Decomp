@@ -6,7 +6,7 @@
 .section .pit_BattleMotion_StartBallistic, "ax", %progbits
 .balign 4
 
-.extern func_ov002_020a411c
+.extern BattleSceneObject_StartAcceleratedMotion
 
 .global BattleMotion_StartBallistic
 .type BattleMotion_StartBallistic, %function
@@ -50,7 +50,7 @@ BattleMotion_StartBallistic:
     ldr ip, [sp, #0x38]
     str lr, [sp, #0x0C]
     str ip, [sp, #0x10]
-    bl func_ov002_020a411c
+    bl BattleSceneObject_StartAcceleratedMotion
     add sp, sp, #0x18
     pop {r4, r5, r6, lr}
     bx lr
