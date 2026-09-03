@@ -550,6 +550,20 @@
       "expected_sha256": "eefc4acb580aa4994a0b5c68fc811e2d7f9e54f23175c1def58c07cae4e17a11"
     },
     {
+      "module": "arm9_ov002",
+      "address": "0x0209EBFC",
+      "size": "0x334",
+      "section": ".pit_BattleCollision_TestObjects",
+      "source": "battle/BattleCollision_TestObjects.s",
+      "externals": {
+        "BattleCollision_GetBounds": "0x0209E918",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "func_ov002_0209ef3c": "0x0209EF3C",
+        "func_ov002_020a3370": "0x020A3370"
+      },
+      "expected_sha256": "396dddcab3c3cc35dfb9ae841e0ab870b471f69573c9272a84ad26a1945d0c58"
+    },
+    {
       "module": "arm7",
       "address": "0x02380118",
       "size": "0x4",
