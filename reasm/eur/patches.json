@@ -351,6 +351,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FC45C",
+      "size": "0x1CC",
+      "kind": "code",
+      "section": ".pit_OS_MessageQueue",
+      "source": "arm7/OS_MessageQueue.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SleepThread": "0x037FBFC4",
+        "OS_WakeupThread": "0x037FBF54",
+        "_s32_div_f": "0x03806F68"
+      },
+      "expected_sha256": "2e94eb8ece814d7d8e56b650ac4b54c3e29b784309fa75a1c61cd3600619bc94"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDC90",
       "size": "0x78",
       "kind": "code",
