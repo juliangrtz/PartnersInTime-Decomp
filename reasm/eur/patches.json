@@ -14,6 +14,53 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x02077058",
+      "size": "0x24",
+      "section": ".pit_BattleObjectData_GetLoadState",
+      "source": "battle/BattleObjectData_GetLoadState.s",
+      "externals": {
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "d9313de8ec8cad7fd556ff47c04d19b622572881eb21639767047fdf261707a8"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x02089EEC",
+      "size": "0x40",
+      "section": ".pit_BattleObjectData_QueueLoad",
+      "source": "battle/BattleObjectData_QueueLoad.s",
+      "externals": {
+        "BattleTaskQueue_Enqueue": "0x020726B0",
+        "func_ov002_02089c78": "0x02089C78"
+      },
+      "expected_sha256": "dbf146109c509ff1f7eb776af1725c36929266676284f4f5eec795352ce67291"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x02092048",
+      "size": "0xC4",
+      "section": ".pit_BattleObjectData_EnsureLoaded",
+      "source": "battle/BattleObjectData_EnsureLoaded.s",
+      "externals": {
+        "BattleEnemyData_RequestLoad": "0x0208908C",
+        "BattleObjectData_GetLoadState": "0x02077058",
+        "BattleObjectData_QueueLoad": "0x02089EEC",
+        "OS_Terminate": "0x0203AE78",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "ad6925c8fa8256312e876182a8243b794a63aaf2ae213a9d73692dbd3cfc9c9e"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A32F4",
+      "size": "0x1C",
+      "section": ".pit_BattleSceneObject_SetStateFlags",
+      "source": "battle/BattleSceneObject_SetStateFlags.s",
+      "externals": {},
+      "expected_sha256": "2db2a91e0547279104a7706ad4ee3c95e349b837c55736e318ae6e06104460b2"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02071C84",
       "size": "0x1BC",
       "section": ".pit_BattleDamage_CalculateAttack",
@@ -560,7 +607,7 @@
         "BattleActor_GetPartySlot": "0x02076F44",
         "BattleSceneObject_GetById": "0x02076FB4",
         "BattleSceneObject_SetAnimation": "0x02091198",
-        "func_ov002_02092048": "0x02092048",
+        "BattleObjectData_EnsureLoaded": "0x02092048",
         "BattleSceneObject_AdjustPosition": "0x020A4B9C",
         "func_ov002_020a8bec": "0x020A8BEC",
         "func_ov002_020a906c": "0x020A906C",
@@ -582,7 +629,7 @@
         "BattleStatus_ClearAll": "0x0209C3F8",
         "BattleTaskList_Insert": "0x020A51F8",
         "func_ov002_02065ec4": "0x02065EC4",
-        "func_ov002_020a32f4": "0x020A32F4",
+        "BattleSceneObject_SetStateFlags": "0x020A32F4",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "c6f274363bc27f4dc731562c67a54b73efead3eabdd5626761f3d6edbe6ccbf6"
