@@ -1220,6 +1220,24 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03803A04",
+      "size": "0xDC",
+      "kind": "code",
+      "section": ".pit_CARD_RequestDispatch",
+      "source": "arm7/CARD_RequestDispatch.s",
+      "externals": {
+        "CARDi_EraseBackupSectorCore": "0x03802E58",
+        "CARDi_ProgramBackupCore": "0x03803018",
+        "CARDi_ReadBackupCore": "0x038030E8",
+        "CARDi_ReadRom": "0x0380367C",
+        "CARDi_ReadRomIDCore": "0x038036F4",
+        "CARDi_VerifyBackupCore": "0x03802EA8",
+        "CARDi_WriteBackupCore": "0x03802F48"
+      },
+      "expected_sha256": "2f9b405fa809a0e50f4b6e32340f866146228945d01cb374006dfc845f55c2ed"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
