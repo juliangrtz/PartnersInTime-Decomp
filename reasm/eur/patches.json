@@ -1490,6 +1490,15 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03804C6C",
+      "size": "0x1F8",
+      "kind": "code",
+      "section": ".pit_TP_ReadChannel",
+      "source": "arm7/TP_ReadChannel.s",
+      "expected_sha256": "66fe311f5eb76f9fb0c4147de910b0ad3ab5893f22a08638f667eac08b057a8e"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
