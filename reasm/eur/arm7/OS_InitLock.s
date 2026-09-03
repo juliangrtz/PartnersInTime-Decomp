@@ -11,7 +11,7 @@
 .extern HW_LOCK_ID_FLAG_SUBP
 .extern HW_LOCK_INIT
 .extern OSi_LockInitialized
-.extern func_037FB9FC
+.extern OSi_LockWordSpinWait
 OS_InitLock:
     stmdb sp!, {r4, lr}
     ldr r0, .L_lock_initialized
@@ -25,7 +25,7 @@ OS_InitLock:
     strh r0, [r4, #6]
     b .L_wait_for_main
 .L_wait:
-    bl func_037FB9FC
+    bl OSi_LockWordSpinWait
 .L_wait_for_main:
     ldrh r0, [r4, #4]
     cmp r0, #0x7F

@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-Twenty-eight proven autoload-0 units are now maintained ARMv4T/Thumb source:
+Thirty-one proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -50,7 +50,9 @@ Twenty-eight proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `037FB814` | `OSi_SetTimerCallback` | `0x4C` | Populates and enables one callback-backed timer IRQ record |
 | `037FB860` | `OS_SetIrqFunction` | `0xA8` | Registers direct or callback-backed handlers for each selected IRQ bit |
 | `037FB908` | `OS_InitIrqTable` | `0x20` | Clears the IRQ check flag and shared VBlank counter |
+| `037FB928` | `OS_UnLockCartridge` | `0x0C` | Legacy compatibility veneer for the Game Pak unlock function |
 | `037FB934` | lock-ID subsystem | `0xC8` | Allocates and releases ARM7 spin-lock IDs using the shared availability masks |
+| `037FB9FC` | Game Pak lock subsystem | `0x1D8` | Try, unlock, and blocking lock wrappers plus shared lock-word primitives |
 | `037FBBD4` | `OS_InitLock` | `0x78` | Initializes the shared init lock and ARM7 lock-ID allocation flags |
 | `037FBCC0` | `OS_SetSwitchThreadCallback` | `0x34` | Atomically replaces the scheduler's context-switch callback |
 | `037FC188` | `OS_InitThread` | `0x12C` | Builds `OSThreadInfo`, the bootstrap thread, stack guards, and shared pointer |
@@ -61,6 +63,7 @@ Twenty-eight proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `037FDC90` | interrupt-control leaves | `0x78` | Six contiguous CPSR IRQ/FIQ enable, disable, restore, and mode helpers |
 | `037FDD08` | reset subsystem | `0x150` | Spin wait, termination, FIFO reset callback, reset detection and execution |
 | `037FDE58` | `MI_StopDma` | `0x84` | Atomically stops one DMA channel using NitroSDK's register sequence |
+| `037FE1BC` | `MI_SwapWord` | `0x08` | Atomically exchanges a lock word and returns its previous owner |
 | `037FE1C4` | `PXI_Init` | `0x0C` | Public entry forwarding to the guarded PXI FIFO initializer |
 | `037FE1D0` | `PXIi_HandlerRecvFifoNotEmpty` | `0x120` | Drains the receive FIFO, dispatches tagged callbacks, and rejects unhandled messages |
 | `037FE2F0` | PXI FIFO APIs | `0x138` | FIFO send, callback readiness, and receive-callback registration |
@@ -69,7 +72,7 @@ Twenty-eight proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `03803DAE` | `SVC_Halt` | `0x04` | Thumb wrapper for supervisor call 6 |
 | `03806D04` | `CTRDG_Init` | `0x5C` | Initializes ARM7 Game Pak state and transitions its PXI callback |
 
-Together these replace `0x1110` bytes of the first mixed autoload image with
+Together these replace `0x12FC` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -80,10 +83,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 206 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 187 covering the 28 maintained autoload-0 units. The
+There are 228 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 209 covering the 31 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x1280` currently promoted
+referenced literal value, or stored pointer. All `0x146C` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no

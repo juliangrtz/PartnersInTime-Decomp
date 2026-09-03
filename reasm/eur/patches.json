@@ -423,7 +423,7 @@
         "HW_LOCK_ID_FLAG_SUBP": "0x027FFFB8",
         "HW_LOCK_INIT": "0x027FFFF0",
         "OSi_LockInitialized": "0x03807AF4",
-        "func_037FB9FC": "0x037FB9FC"
+        "OSi_LockWordSpinWait": "0x037FB9FC"
       },
       "expected_sha256": "ace7cd5c4f96d3000eaec446066e8be61b4dfac7113a5271135065ee88bd803e"
     },
@@ -524,6 +524,45 @@
         "HW_LOCK_ID_FLAG_SUBP": "0x027FFFB8"
       },
       "expected_sha256": "211966d3597c78c7f296d9081341088e8885a03f2a15d046aca92d2cff059952"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FB928",
+      "size": "0xC",
+      "kind": "code",
+      "section": ".pit_OS_CartridgeLockAlias",
+      "source": "arm7/OS_CartridgeLockAlias.s",
+      "externals": {
+        "OS_UnlockCartridge": "0x037FBA3C"
+      },
+      "expected_sha256": "c902db981d646dcf47286e9a7c3af1f49f74110ae6a81e068cb4048d950e0e3d"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FB9FC",
+      "size": "0x1D8",
+      "kind": "code",
+      "section": ".pit_OS_CartridgeLock",
+      "source": "arm7/OS_CartridgeLock.s",
+      "externals": {
+        "HW_LOCK_CARTRIDGE": "0x027FFFE8",
+        "MI_SwapWord": "0x037FE1BC",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_DisableInterrupts_IrqAndFiq": "0x037FDCD0",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_RestoreInterrupts_IrqAndFiq": "0x037FDCE4",
+        "OS_SpinWait": "0x037FDD08"
+      },
+      "expected_sha256": "44c3197796276478f3a6df381ff9c7a759db3b35adf546db3f7fcdd68c19090c"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FE1BC",
+      "size": "0x8",
+      "kind": "code",
+      "section": ".pit_MI_SwapWord",
+      "source": "arm7/MI_SwapWord.s",
+      "expected_sha256": "97cc6ada39388bbf4899441b1363060543fa78d5477c410985b5f214641a9f25"
     }
   ]
 }
