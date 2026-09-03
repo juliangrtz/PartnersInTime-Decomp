@@ -19,7 +19,7 @@ ignored by Git.
   and LLVM with zero differing bytes.
 - The raw generated sources initially use `.word` and `.byte`; they are a
   lossless starting representation, not a claim of semantic decompilation.
-- Every ARM9 and ARM7 runtime image now relinks as 43 components and 237
+- Every ARM9 and ARM7 runtime image now relinks as 43 components and 238
   independent, fixed-address ELF units.
 - `BattleActor_GetPartySlot` and `BattleActor_GetById` are maintained symbolic
   ARM functions. Both use linker-resolved `gBattleContext` references and match
@@ -124,15 +124,15 @@ python .\tools\relink_native.py `
   --require-matching
 ```
 
-The verified pass covers 43 components, 237 section units, 101 maintained
-units, and 30,643 currently known relocations with zero differing bytes. To
+The verified pass covers 43 components, 238 section units, 102 maintained
+units, and 30,653 currently known relocations with zero differing bytes. To
 iterate on one CPU family or overlay, use `tools/relink_arm7.py`,
 `tools/relink_arm9.py`, or `tools/relink_overlay.py`. ROM-derived fallback
 units, binaries, and JSON build reports remain below ignored `build/` paths.
 
 The resident ARM7 startup is fully symbolic source. Its two large autoloads are
-still conservatively marked as mixed code/data images; 94 proven autoload-0
-units are maintained source and 1,063 autoload relocations are mapped, but
+still conservatively marked as mixed code/data images; 95 proven autoload-0
+units are maintained source and 1,073 autoload relocations are mapped, but
 the upstream project contains no further ARM7 analysis. See
 [`docs/research/ARM7_MAP.md`](docs/research/ARM7_MAP.md) for the exact confidence
 boundary.
