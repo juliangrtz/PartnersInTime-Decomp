@@ -10,10 +10,10 @@
 .extern BattleParty_UpdateKnockout
 .extern BattleSceneObject_SetAnimation
 .extern BattleSceneObject_SetStateFlags
+.extern BattleScreenEffect_StartPrimary
 .extern BattleSound_Play
 .extern BattleStatus_ClearAll
 .extern BattleTaskList_Insert
-.extern func_ov002_02065ec4
 .extern gBattleContext
 
 .global BattleParty_StartKnockout
@@ -142,7 +142,7 @@ BattleParty_StartKnockout:
     mov r0, #3
     mov r1, #0x0A
     mov r2, #0x0C
-    bl func_ov002_02065ec4
+    bl BattleScreenEffect_StartPrimary
     mov r0, r5
     pop {r4, r5, r6, lr}
     bx lr
