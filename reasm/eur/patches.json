@@ -1121,6 +1121,24 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03803150",
+      "size": "0x278",
+      "kind": "code",
+      "section": ".pit_CARD_SpiTransfer",
+      "source": "arm7/CARD_SpiTransfer.s",
+      "externals": {
+        "CARDi_CommandBegin": "0x038034C0",
+        "CARDi_CommandEnd": "0x038033E0",
+        "CARDi_SpiWork": "0x03809A40",
+        "CARDi_Work": "0x03809460",
+        "CARDi_WriteEnableCommand": "0x038074A4",
+        "REG_AUXSPICNT": "0x040001A0",
+        "REG_AUXSPIDATA": "0x040001A2"
+      },
+      "expected_sha256": "e409d0583f7340ee9a74bda242a9ebda769a7b38b324ddfdb6387b5d4206ce94"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",

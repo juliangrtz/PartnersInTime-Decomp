@@ -251,6 +251,8 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["CARDi_WaitPrevCommand"], 0x038033C8)
         self.assertEqual(symbols["CARDi_CommandEnd"], 0x038033E0)
         self.assertEqual(symbols["CARDi_CommandBegin"], 0x038034C0)
+        self.assertEqual(symbols["REG_AUXSPICNT"], 0x040001A0)
+        self.assertEqual(symbols["REG_AUXSPIDATA"], 0x040001A2)
         self.assertEqual(symbols["CTRDG_Init"], 0x03806D04)
         self.assertEqual(symbols["_ll_sdiv"], 0x03806DB8)
         self.assertEqual(symbols["CTRDGi_Initialized"], 0x0380B1B0)
