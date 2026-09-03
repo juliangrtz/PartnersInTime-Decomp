@@ -233,6 +233,15 @@ SNDi_GetPlayerTrack kind:function(arm,size=0x2c) addr:0x03800fe0
 SNDi_PlayerTempoMain kind:function(arm,size=0xc0) addr:0x0380100c
 SNDi_FreeTrackChannelAll kind:function(arm,size=0x3c) addr:0x038010cc
 SNDi_ReleaseTrackChannelAll kind:function(arm,size=0x70) addr:0x03801108
+SNDi_InitPlayer kind:function(arm,size=0xb0) addr:0x03801178
+SNDi_StartTrack kind:function(arm,size=0x14) addr:0x03801228
+SNDi_InitTrack kind:function(arm,size=0xf4) addr:0x0380123c
+SNDi_ReadArg kind:function(arm,size=0xc8) addr:0x03801330
+SNDi_ReadVar kind:function(arm,size=0x40) addr:0x038013f8
+SNDi_Read24 kind:function(arm,size=0x60) addr:0x03801438
+SNDi_Read16 kind:function(arm,size=0x50) addr:0x03801498
+SNDi_GetByteCache kind:function(arm,size=0x50) addr:0x038014e8
+SNDi_InitCache kind:function(arm,size=0x3c) addr:0x03801538
 SND_SeqMain kind:function(arm) addr:0x03801bb0
 SND_SeqInit kind:function(arm) addr:0x03801c50
 SND_NoteOn kind:function(arm) addr:0x03801cfc
@@ -313,6 +322,8 @@ sLockedChannelMask kind:data(any) addr:0x03808264
 sWeakLockedChannelMask kind:data(any) addr:0x03808268
 SNDi_Work kind:data(any) addr:0x0380828c
 SNDi_SharedWork kind:data(any) addr:0x03808288
+SNDi_SeqCacheState kind:data(any) addr:0x03808270
+SNDi_SeqCacheData kind:data(any) addr:0x03808278
 SNDi_TrackPool kind:data(any) addr:0x03808a0c
 SNDi_DecibelSquareTable kind:data(any) addr:0x0380737c
 SNDi_VolumeShiftTable kind:data(any) addr:0x0380747c
