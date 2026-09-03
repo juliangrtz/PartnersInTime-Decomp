@@ -563,6 +563,27 @@
       "section": ".pit_MI_SwapWord",
       "source": "arm7/MI_SwapWord.s",
       "expected_sha256": "97cc6ada39388bbf4899441b1363060543fa78d5477c410985b5f214641a9f25"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FD188",
+      "size": "0x3C0",
+      "kind": "code",
+      "section": ".pit_OS_Alarm",
+      "source": "arm7/OS_Alarm.s",
+      "externals": {
+        "HW_INTR_CHECK_BUF": "0x0380FFF8",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_DisableIrqMask": "0x037FB76C",
+        "OS_GetTick": "0x037FCFAC",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_Terminate": "0x037FDD34",
+        "OSi_AlarmQueue": "0x03807C8C",
+        "OSi_SetTimer": "0x037FD5B8",
+        "REG_TM1CNT_H": "0x04000106",
+        "_ll_udiv": "0x03806D60"
+      },
+      "expected_sha256": "39ca46f136ab508181ad806602250706024731bd2265df22835b7c6cf87772b0"
     }
   ]
 }
