@@ -744,6 +744,24 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03800D40",
+      "size": "0x438",
+      "kind": "code",
+      "section": ".pit_SND_SeqLifecycle",
+      "source": "arm7/SND_SeqLifecycle.s",
+      "externals": {
+        "SND_FreeExChannel": "0x037FF7C4",
+        "SND_IsExChannelActive": "0x037FF910",
+        "SND_ReleaseExChannel": "0x037FF920",
+        "SND_SetExChannelRelease": "0x037FF92C",
+        "SNDi_DecibelSquareTable": "0x0380737C",
+        "SNDi_SharedWork": "0x03808288",
+        "SNDi_TrackPool": "0x03808A0C"
+      },
+      "expected_sha256": "46e748e43f5e7a8f2959c63e6fba52ce9a1d4b40526d16266cb8f89f2f43ffe3"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
