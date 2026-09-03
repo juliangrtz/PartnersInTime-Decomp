@@ -36,7 +36,7 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-Seventy-eight proven autoload-0 units are now maintained ARMv4T/Thumb source:
+Seventy-nine proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
@@ -115,11 +115,12 @@ Seventy-eight proven autoload-0 units are now maintained ARMv4T/Thumb source:
 | `03802ABC` | file-system initialization | `0x8C` | Guards FS startup, allocates the CARD lock ID, initializes archive lists, and starts the CARD back end |
 | `03802B48` | `CARD_SetThreadPriority` | `0x48` | Atomically changes the CARD worker's OS priority and returns the previous value |
 | `03802B90` | CARD common initialization | `0xB8` | Enables the CARD service, constructs and wakes its worker thread, and registers PXI tag 11 |
+| `03802C48` | `CARDi_TaskThread` | `0x124` | Sleeps until work arrives, dispatches one of 13 CARD operations, notifies ARM9, and wakes request waiters |
 | `03803D94` | `SVC_WaitByLoop` | `0x04` | Thumb wrapper for supervisor call 3 |
 | `03803DAE` | `SVC_Halt` | `0x04` | Thumb wrapper for supervisor call 6 |
 | `03806D04` | `CTRDG_Init` | `0x5C` | Initializes ARM7 Game Pak state and transitions its PXI callback |
 
-Together these replace `0x6F60` bytes of the first mixed autoload image with
+Together these replace `0x7084` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -130,10 +131,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 891 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 872 covering the 78 maintained autoload-0 units. The
+There are 901 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 882 covering the 79 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x70D0` currently promoted
+referenced literal value, or stored pointer. All `0x71F4` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no

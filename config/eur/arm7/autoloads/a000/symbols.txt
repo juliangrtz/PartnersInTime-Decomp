@@ -284,7 +284,7 @@ FSi_Init kind:function(arm,size=0x58) addr:0x03802af0
 CARD_SetThreadPriority kind:function(arm,size=0x48) addr:0x03802b48
 CARD_Enable kind:function(arm,size=0x10) addr:0x03802b90
 CARDi_InitCommon kind:function(arm,size=0xa8) addr:0x03802ba0
-CARDi_TaskThread kind:function(arm) addr:0x03802c48
+CARDi_TaskThread kind:function(arm,size=0x124) addr:0x03802c48
 CARDi_OnFifoRecv kind:function(arm) addr:0x03802d6c
 CARD_Init kind:function(arm) addr:0x03803594
 func_03803B48 kind:label addr:0x03803b48
@@ -368,6 +368,7 @@ CARDi_Work kind:data(any) addr:0x03809460
 CARDi_Thread kind:data(any) addr:0x038094a0
 CARDi_ThreadStackTop kind:data(any) addr:0x03809a40
 CARDi_BootMode kind:data(any) addr:0x027ffc40
+CARDi_CommandTable kind:data(any) addr:0x038074ac
 SNDi_SharedWork kind:data(any) addr:0x03808288
 SNDi_SeqCacheState kind:data(any) addr:0x03808270
 SNDi_SeqCacheData kind:data(any) addr:0x03808278
