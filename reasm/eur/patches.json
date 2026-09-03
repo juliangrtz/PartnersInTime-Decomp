@@ -191,6 +191,22 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209BFA0",
+      "size": "0x2D8",
+      "section": ".pit_BattleDamage_CalculateByObject",
+      "source": "battle/BattleDamage_CalculateByObject.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "BattleDamage_ApplyEquipmentModifiers": "0x0209BCCC",
+        "BattleDamage_CalculateBase": "0x0209BF38",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "gBattleContext": "0x020C0718",
+        "gSaveData": "0x02059FE8"
+      },
+      "expected_sha256": "ae732e397bac94ef8ad4cecfd384e18fee7a113e07b01fd0911310e01825653d"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209C278",
       "size": "0x180",
       "section": ".pit_BattleStatus_ClearEffect",

@@ -141,6 +141,9 @@ applicable, clear task callbacks, and release actor hit-lock flag `0x200`.
 `BattleDamage_ReflectQueuedHits` walks the packed eight-entry hit queue,
 recalculates reflected damage, swaps source/target IDs, and refreshes the
 status ID, chance, and magnitude bytes from the reflected attack descriptor.
+`BattleDamage_CalculateByObject` now exposes the scene-object-to-actor bridge,
+target immunity flag, active-turn mode selection, per-party-member Q8 inputs,
+equipment effect `0x301B` (140-percent damage), and final 999 clamp.
 `BattleItemEffect_Apply` at `0x02076584`, its healing-badge multiplier at
 `0x020768A4`, and resident `ItemEffect_CalculateValue` at `0x02018F48` expose
 fixed and percentage healing, revival, cures, POW/DEF/SPD items, maximum-HP
@@ -329,7 +332,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the twenty-seven
+2. Continue promoting small overlay-2 battle leaf functions using the twenty-eight
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the
