@@ -229,6 +229,53 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x020A3F9C",
+      "size": "0xB0",
+      "section": ".pit_BattleMotion_StartBallistic",
+      "source": "battle/BattleMotion_StartBallistic.s",
+      "externals": {
+        "func_ov002_020a411c": "0x020A411C"
+      },
+      "expected_sha256": "f0c9b0f6c4fdaa24d5fcb5ab202ff8e70c74b44f116e8ca4ff5dfb2ec56920ed"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A4934",
+      "size": "0x9C",
+      "section": ".pit_BattleSceneObject_MoveBy",
+      "source": "battle/BattleSceneObject_MoveBy.s",
+      "externals": {
+        "BattleSceneObject_UpdateMoveBy": "0x020A49D0",
+        "func_ov002_020a4e08": "0x020A4E08"
+      },
+      "expected_sha256": "483d3ebd76ca62eca49791ebfd7234832f6824bc4f2dbbc8ae65eeec2e23da64"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A49D0",
+      "size": "0x7C",
+      "section": ".pit_BattleSceneObject_UpdateMoveBy",
+      "source": "battle/BattleSceneObject_UpdateMoveBy.s",
+      "externals": {
+        "_s32_div_f": "0x02046474"
+      },
+      "expected_sha256": "b7a49be719b3a5fc2d7779044ea9cee69c68128eaa22fddd08435c72b66c1582"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A9C18",
+      "size": "0xC8",
+      "section": ".pit_BattleParty_SpawnLaunchImpact",
+      "source": "battle/BattleParty_SpawnLaunchImpact.s",
+      "externals": {
+        "BattlePosition_StoreViewRelative": "0x02076B0C",
+        "BattleSound_Play": "0x02076428",
+        "func_ov002_020ac904": "0x020AC904"
+      },
+      "expected_sha256": "ac9b40bb63dbc064789843bd81192c8b9eabe4f8ef8737749071dba34a8ed6bf"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x020ACB44",
       "size": "0x44",
       "section": ".pit_BattleModelEffect_SpawnAttached",
@@ -566,10 +613,10 @@
         "BattleSceneObject_SetAnimation": "0x02091198",
         "BattleSceneObject_IsAnimationActiveById": "0x02091A58",
         "BattleSceneObject_GetActiveModel": "0x020A3370",
-        "func_ov002_020a3f9c": "0x020A3F9C",
-        "func_ov002_020a4934": "0x020A4934",
+        "BattleMotion_StartBallistic": "0x020A3F9C",
+        "BattleSceneObject_MoveBy": "0x020A4934",
         "BattleParty_StartKnockout": "0x020A9280",
-        "func_ov002_020a9c18": "0x020A9C18"
+        "BattleParty_SpawnLaunchImpact": "0x020A9C18"
       },
       "expected_sha256": "7a18d425c288c1c363dca2f09613f772853ac2904b04cea62e3810e5bdbd44dc"
     },

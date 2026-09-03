@@ -31,10 +31,10 @@
 .extern BattleSceneObject_SetAnimation
 .extern BattleSceneObject_IsAnimationActiveById
 .extern BattleSceneObject_GetActiveModel
-.extern func_ov002_020a3f9c
-.extern func_ov002_020a4934
+.extern BattleMotion_StartBallistic
+.extern BattleSceneObject_MoveBy
 .extern BattleParty_StartKnockout
-.extern func_ov002_020a9c18
+.extern BattleParty_SpawnLaunchImpact
 
 .global BattleDamage_UpdatePartyLaunchReaction
 .type BattleDamage_UpdatePartyLaunchReaction, %function
@@ -120,7 +120,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     bxne lr
     ldrh r0, [sl, #TASK_DATA_ACTOR_ID]
     bl BattleActor_GetPartySlot
-    bl func_ov002_020a9c18
+    bl BattleParty_SpawnLaunchImpact
 
 .L_count_ready:
     ldrsh r0, [sl, #TASK_DATA_COUNT]
@@ -201,7 +201,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     ldr r2, [sp, #0x1C]
     str r6, [sp, #0x10]
     mov r3, r2
-    bl func_ov002_020a3f9c
+    bl BattleMotion_StartBallistic
     add r8, r8, r0
     mov r0, r4
     subs r7, r7, #1
@@ -212,7 +212,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     mov r0, sb
     mov r1, #3
     str r8, [sp, #4]
-    bl func_ov002_020a4934
+    bl BattleSceneObject_MoveBy
 
 .L_emit_count_effect:
     ldrsh r0, [sl, #TASK_DATA_COUNT]
@@ -235,7 +235,7 @@ BattleDamage_UpdatePartyLaunchReaction:
     mov r1, #2
     str r5, [sp, #0x0C]
     str r4, [sp, #0x10]
-    bl func_ov002_020a3f9c
+    bl BattleMotion_StartBallistic
     add sp, sp, #0x2C
     pop {r4, r5, r6, r7, r8, sb, sl, fp, lr}
     bx lr
