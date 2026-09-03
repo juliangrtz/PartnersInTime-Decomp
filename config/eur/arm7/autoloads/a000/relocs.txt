@@ -164,6 +164,13 @@ from:0x037fd570 kind:load to:0x03807c88 module:arm7_autoload(0)
 from:0x037fd588 kind:arm_call to:0x037fcf90 module:arm7_autoload(0)
 from:0x037fd590 kind:load to:0x03807c8c module:arm7_autoload(0)
 from:0x037fd5a0 kind:arm_call to:0x037fb76c module:arm7_autoload(0)
+from:0x037fd5c4 kind:arm_call to:0x037fcfac module:arm7_autoload(0)
+from:0x037fd5cc kind:load to:0x04000106 module:memory
+from:0x037fd5e8 kind:load to:0x037fd188 module:arm7_autoload(0)
+from:0x037fd5ec kind:arm_call to:0x037fb814 module:arm7_autoload(0)
+from:0x037fd61c kind:load to:0x04000104 module:memory
+from:0x037fd628 kind:load to:0x04000106 module:memory
+from:0x037fd634 kind:arm_call to:0x037fb7a8 module:arm7_autoload(0)
 from:0x037fc7f0 kind:arm_call to:0x037fc938 module:arm7_autoload(0)
 from:0x037fc7f4 kind:arm_call to:0x037fe1c4 module:arm7_autoload(0)
 from:0x037fc7f8 kind:arm_call to:0x037fbbd4 module:arm7_autoload(0)

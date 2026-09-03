@@ -83,6 +83,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["OS_CreateAlarm"], 0x037FD548)
         self.assertEqual(symbols["OS_IsAlarmAvailable"], 0x037FD558)
         self.assertEqual(symbols["OS_InitAlarm"], 0x037FD568)
+        self.assertEqual(symbols["OSi_SetTimer"], 0x037FD5B8)
         self.assertEqual(symbols["OS_EnableInterrupts"], 0x037FDC90)
         self.assertEqual(symbols["OS_DisableInterrupts"], 0x037FDCA4)
         self.assertEqual(symbols["OS_RestoreInterrupts"], 0x037FDCB8)
@@ -120,6 +121,7 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["HW_INTR_CHECK_BUF"], 0x0380FFF8)
         self.assertEqual(symbols["REG_DMA0SAD"], 0x040000B0)
         self.assertEqual(symbols["REG_TM1CNT_H"], 0x04000106)
+        self.assertEqual(symbols["REG_TM1CNT_L"], 0x04000104)
         self.assertEqual(symbols["REG_PXI_SEND_FIFO"], 0x04000188)
 
     def synthetic_layout(self) -> tuple[bytes, reassembly.Module]:

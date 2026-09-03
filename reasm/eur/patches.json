@@ -584,6 +584,23 @@
         "_ll_udiv": "0x03806D60"
       },
       "expected_sha256": "39ca46f136ab508181ad806602250706024731bd2265df22835b7c6cf87772b0"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FD5B8",
+      "size": "0x9C",
+      "kind": "code",
+      "section": ".pit_OSi_SetTimer",
+      "source": "arm7/OSi_SetTimer.s",
+      "externals": {
+        "OS_EnableIrqMask": "0x037FB7A8",
+        "OS_GetTick": "0x037FCFAC",
+        "OSi_AlarmHandler": "0x037FD188",
+        "OSi_SetTimerCallback": "0x037FB814",
+        "REG_TM1CNT_H": "0x04000106",
+        "REG_TM1CNT_L": "0x04000104"
+      },
+      "expected_sha256": "70fe51e51a0f39ea79101f3a183eedae65433e5db1ab6a0350d5e95b292b4d5f"
     }
   ]
 }
