@@ -22,6 +22,7 @@ and runtime overlay 2.
 | `0209D694` | `BattleActor_ApplyDamage` | Subtracts HP, clamps at zero, and marks knockout |
 | `0209D718` | `BattleDamage_ApplyToEnemy` | Enemy damage, animation, popup, sound, effects |
 | `0209D9DC` | `BattleDamage_ApplyToParty` | Party damage, animation, popup, sound, effects |
+| `0209DE8C` | `BattleDamage_DispatchHit` | Routes queued hit records to enemy or party handling |
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
@@ -126,6 +127,12 @@ and `0x13`.
 paths, generates Mario/Luigi-specific popup metadata, and optionally decodes a
 post-hit status record into status ID, chance, magnitude, and the battle-wide
 duration before calling `BattleStatus_TryApply`.
+
+The maintained `BattleDamage_DispatchHit` is the common entry above those two
+paths. Its 20-byte hit record supplies target ID, hit coordinates, pending hit
+kind, and the optional party status payload. It accepts party IDs 56-59 and
+enemy IDs 60-67, resolves the corresponding scene object and actor, computes
+relative offsets, then dispatches to the exact target-specific implementation.
 
 ## Enemy stat records
 
