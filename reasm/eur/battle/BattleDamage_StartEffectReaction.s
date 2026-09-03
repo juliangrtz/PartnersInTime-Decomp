@@ -17,8 +17,8 @@
 
 .extern BattleActor_GetById
 .extern BattleDamage_UpdateEffectReaction
-.extern func_ov002_020a519c
-.extern func_ov002_020a51f8
+.extern BattleTask_BindOwnerSlot
+.extern BattleTaskList_Insert
 .extern func_ov002_020acb44
 .extern gBattleContext
 
@@ -40,10 +40,10 @@ BattleDamage_StartEffectReaction:
     ldr r2, [r1]
     mov r1, #0
     add r0, r2, r0
-    bl func_ov002_020a51f8
+    bl BattleTaskList_Insert
     mov r5, r0
     add r1, r4, #BATTLE_ACTOR_REACTION_TASK
-    bl func_ov002_020a519c
+    bl BattleTask_BindOwnerSlot
     add r4, r5, #TASK_DATA
     b .L_task_ready
 .L_reuse_task:
