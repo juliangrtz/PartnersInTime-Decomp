@@ -218,6 +218,12 @@ SND_StartExChannelPcm kind:function(arm,size=0x3c) addr:0x037ffae4
 SND_ExChannelMain kind:function(arm,size=0x30c) addr:0x037ffb20
 SND_UpdateExChannel kind:function(arm,size=0x1ec) addr:0x037ffe2c
 SND_ExChannelInit kind:function(arm,size=0x60) addr:0x03800018
+SNDi_AllocTrack kind:function(arm,size=0x44) addr:0x03800078
+SNDi_GetVariablePtr kind:function(arm,size=0x44) addr:0x038000bc
+SNDi_PlayerSeqMain kind:function(arm,size=0x80) addr:0x03800100
+SNDi_TrackSeqMain kind:function(arm) addr:0x03800180
+SNDi_ClosePlayerTrack kind:function(arm) addr:0x03800f6c
+SNDi_GetPlayerTrack kind:function(arm) addr:0x03800fe0
 SND_SeqMain kind:function(arm) addr:0x03801bb0
 SND_SeqInit kind:function(arm) addr:0x03801c50
 SND_UpdateSharedWork kind:function(arm) addr:0x03801ff0
@@ -295,6 +301,8 @@ sSndThreadStackTop kind:data(any) addr:0x03808264
 sLockedChannelMask kind:data(any) addr:0x03808264
 sWeakLockedChannelMask kind:data(any) addr:0x03808268
 SNDi_Work kind:data(any) addr:0x0380828c
+SNDi_SharedWork kind:data(any) addr:0x03808288
+SNDi_TrackPool kind:data(any) addr:0x03808a0c
 SNDi_DecibelSquareTable kind:data(any) addr:0x0380737c
 SNDi_VolumeShiftTable kind:data(any) addr:0x0380747c
 SNDi_ChannelOrder kind:data(any) addr:0x03807480
