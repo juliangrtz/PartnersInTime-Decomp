@@ -38,8 +38,8 @@
 .extern BattlePosition_StoreViewRelative
 .extern func_ov002_02091198
 .extern BattleDamage_SpawnNumber
-.extern func_ov002_020acb88
-.extern func_ov002_020accb8
+.extern BattleModelEffect_Spawn
+.extern BattleSpriteEffect_Spawn
 
 .global BattleDamage_ApplyToEnemy
 .type BattleDamage_ApplyToEnemy, %function
@@ -181,7 +181,7 @@ BattleDamage_ApplyToEnemy:
     mov r3, r3, asr #16
     mov r0, #0x10
     str r4, [sp, #4]
-    bl func_ov002_020acb88
+    bl BattleModelEffect_Spawn
     mov r0, r4
     str r0, [sp]
     ldrsh r1, [sp, #LOCAL_POSITION]
@@ -194,7 +194,7 @@ BattleDamage_ApplyToEnemy:
     mov r1, r0, asr #16
     mov r2, r2, asr #16
     mov r0, #0x0A
-    bl func_ov002_020accb8
+    bl BattleSpriteEffect_Spawn
 .L_check_second_effect:
     ldr r0, [sp, #ARG_EFFECT_KIND]
     cmp r0, #0x13
@@ -211,7 +211,7 @@ BattleDamage_ApplyToEnemy:
     mov r3, r3, asr #16
     mov r0, #0x12
     str r4, [sp, #4]
-    bl func_ov002_020acb88
+    bl BattleModelEffect_Spawn
     mov r0, r4
     str r0, [sp]
     ldrsh r1, [sp, #LOCAL_POSITION]
@@ -224,7 +224,7 @@ BattleDamage_ApplyToEnemy:
     mov r1, r0, asr #16
     mov r2, r2, asr #16
     mov r0, #0x0B
-    bl func_ov002_020accb8
+    bl BattleSpriteEffect_Spawn
     add sp, sp, #0x14
     pop {r4, r5, r6, r7, r8, sb, lr}
     bx lr

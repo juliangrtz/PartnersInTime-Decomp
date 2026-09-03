@@ -15,7 +15,7 @@
 .extern BattleDamage_UpdateEnemyReaction
 .extern BattleTask_BindOwnerSlot
 .extern BattleTaskList_Insert
-.extern func_ov002_020acb44
+.extern BattleModelEffect_SpawnAttached
 .extern gBattleContext
 
 .global BattleDamage_StartEnemyReaction
@@ -57,7 +57,7 @@ BattleDamage_StartEnemyReaction:
     mov r2, r7
     str r0, [sp, #8]
     add r0, r4, #4
-    bl func_ov002_020acb44
+    bl BattleModelEffect_SpawnAttached
     ldrh r0, [r7, #SCENE_OBJECT_ACTOR_ID]
     strh r0, [r4, #2]
     ldrh r0, [r7, #SCENE_OBJECT_ACTOR_ID]

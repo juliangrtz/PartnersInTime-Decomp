@@ -35,8 +35,8 @@
 .extern func_ov002_02076bd4
 .extern func_ov002_02091198
 .extern BattleDamage_SpawnNumber
-.extern func_ov002_020acb88
-.extern func_ov002_020accb8
+.extern BattleModelEffect_Spawn
+.extern BattleSpriteEffect_Spawn
 .extern gBattleContext
 
 .global BattleDamage_ApplyToParty
@@ -210,7 +210,7 @@ BattleDamage_ApplyToParty:
     mov r1, r8
     mov r2, r2, asr #16
     mov r3, r3, asr #16
-    bl func_ov002_020acb88
+    bl BattleModelEffect_Spawn
     mov r0, #0x100
     str r0, [sp]
     ldrsh r2, [sp, #LOCAL_POSITION]
@@ -223,7 +223,7 @@ BattleDamage_ApplyToParty:
     mov r0, #0x0C
     mov r1, r1, asr #16
     mov r2, r2, asr #16
-    bl func_ov002_020accb8
+    bl BattleSpriteEffect_Spawn
     b .L_hit_done
 
 .L_hit_kind_3:

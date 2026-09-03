@@ -21,7 +21,7 @@
 
 .extern BattleActor_GetById
 .extern BattleDamageNumber_CleanupAttached
-.extern func_ov002_020acb44
+.extern BattleModelEffect_SpawnAttached
 .extern gBattleContext
 
 .global BattleDamageNumber_UpdateAttached
@@ -60,7 +60,7 @@ BattleDamageNumber_UpdateAttached:
     ldrsh r3, [r1, #EFFECT_X]
     mov r0, r4
     mov r1, #NUMBER_EFFECT_NORMAL
-    bl func_ov002_020acb44
+    bl BattleModelEffect_SpawnAttached
     ldr r0, [r4]
     add sp, sp, #0x0C
     str r5, [r0, #EFFECT_VALUE]
@@ -91,7 +91,7 @@ BattleDamageNumber_UpdateAttached:
     ldrsh r3, [r1, #EFFECT_X]
     ldr r1, .L_alternate_effect
     mov r0, r4
-    bl func_ov002_020acb44
+    bl BattleModelEffect_SpawnAttached
     ldr r0, [r4]
     str r5, [r0, #EFFECT_VALUE]
     add sp, sp, #0x0C
