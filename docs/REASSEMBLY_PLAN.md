@@ -86,27 +86,36 @@ instructions are still represented as raw words.
 Goal: every native byte is represented by assembler-aware sections and every
 address-bearing location is explicit.
 
-Status: **started**. `BattleActor_GetPartySlot` at `0x02076F44` is maintained as
-real ARM assembly, is injected through a checked fixed-layout unit, and matches
-the original 32 bytes exactly. It is the pattern for promoting further leaf
-functions while the module linker is constructed.
+Status: **section-level overlay relink implemented for EUR**.
+`tools/relink_overlay.py` reads the existing DSD section and relocation maps
+and links all 37 overlays from 123 independent units. Those units cover raw
+`.text` fragments around maintained functions, `.rodata`, constructors,
+alignment padding, and `.data`; all 24,212 listed overlay relocations are
+inventoried. `BattleActor_GetPartySlot` at `0x02076F44` and
+`BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
+`gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
+DSD-validated external definition. Every linked overlay and the resulting NDS
+have zero differing bytes from the verified European ROM.
 
 Work items:
 
 1. Normalize the existing `symbols.txt`, `relocs.txt`, and `delinks.txt` files
-   into one machine-readable module graph.
+   into one machine-readable module graph. Overlay parsing and validation are
+   implemented for EUR; ARM9 autoload and ARM7 graphs remain.
 2. Split ARM9 and overlays into `.text`, `.rodata`, constructors, `.data`, BSS,
    ITCM, and DTCM according to the verified `dsd` boundaries.
 3. Emit one assembly translation unit per delink unit rather than one flat
-   module dump.
+   module dump. Fixed-address section units are implemented for every EUR
+   overlay; DSD object boundaries are the next split level.
 4. Convert branch/call words to symbolic ARM or Thumb instructions only when
    their target and execution mode are proven.
 5. Convert literal pools, pointer tables, vtables, jump tables, and constructor
    lists to explicit relocation expressions.
 6. Keep ambiguous bytes as `.word`/`.byte`, but classify them and attach an
    expected-byte test.
-7. Link with a generated LCF at the original addresses and compare each module
-   byte-for-byte.
+7. Link with a generated linker script at the original addresses and compare
+   each module byte-for-byte. Achieved for all EUR overlays; resident ARM9,
+   autoloads, and ARM7 remain on the Stage-0 path.
 
 Exit criterion: deleting the locally generated flat module source does not
 change the matching build; every byte comes from sectioned source units.
@@ -207,12 +216,12 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Add a module/symbol/relocation inventory generator from the existing `dsd`
-   configuration.
-3. Continue promoting small overlay-2 battle leaf functions using the first
-   exact symbolic unit as the template.
-4. Build the module-level relocatable linker, then retire fixed-layout patch
-   registration.
+2. Generalize the section/symbol/relocation graph from all overlays to resident
+   ARM9 and its autoload regions, then ARM7.
+3. Continue promoting small overlay-2 battle leaf functions using the two
+   exact symbolic units as the template.
+4. Split section fallbacks at DSD translation-unit boundaries, then retire
+   fixed-layout patch registration.
 5. Promote the confirmed battle actor/stat structures into maintained headers.
 6. Replace a tiny matching function deliberately, build a nonmatching mod ROM,
    and test it in an emulator.

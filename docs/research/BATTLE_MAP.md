@@ -9,6 +9,8 @@ and runtime overlay 2.
 | Address | Working name | Purpose |
 |---:|---|---|
 | `02073068` | `BattleMain_Update` | Per-frame battle update and central turn-state owner |
+| `02076F44` | `BattleActor_GetPartySlot` | Resolves party IDs 56-59 through the battle context |
+| `02076F64` | `BattleActor_GetById` | Resolves party IDs 56-59 or enemy IDs 60+ to actor pointers |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079950` | `BattleAI_DispatchOpcode` | Executes loaded `BAI_*.dat` battle bytecode |
 | `0208ED90` | `BattleScript_GetProperty` | Reads actor, object, and global properties |
@@ -45,7 +47,8 @@ and runtime overlay 2.
 
 Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are
-coordinates rather than HP or stats.
+coordinates rather than HP or stats. The two actor resolvers are now maintained
+symbolic assembly in `reasm/eur/battle/` and byte-match the European overlay.
 
 ## Damage and status behavior
 
@@ -94,4 +97,3 @@ Property IDs 16-20 directly expose current HP, max HP, POW, DEF, and SPD.
 large switches, not accidental merged functions. Reconstruct their leaf
 operations and state layouts before attempting to translate either dispatcher
 as one unit.
-

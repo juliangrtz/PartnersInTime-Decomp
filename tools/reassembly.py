@@ -383,6 +383,65 @@ def assemble_source(
     return binary.read_bytes()
 
 
+def assemble_linked_patch(
+    source: Path,
+    obj: Path,
+    elf: Path,
+    binary: Path,
+    linker_script: Path,
+    address: int,
+    size: int,
+    source_section: str,
+    externals: dict[str, str | int],
+    llvm_mc: str,
+    llvm_objcopy: str,
+    lld: str,
+) -> bytes:
+    if not re.fullmatch(r"\.[A-Za-z_.$][A-Za-z0-9_.$]*", source_section):
+        raise ReassemblyError(f"invalid patch section name: {source_section!r}")
+    run(
+        [
+            llvm_mc,
+            "-triple=armv5te-none-eabi",
+            "-filetype=obj",
+            str(source),
+            "-o",
+            str(obj),
+        ]
+    )
+    definitions = []
+    for name, raw_value in sorted(externals.items()):
+        if not re.fullmatch(r"[A-Za-z_.$][A-Za-z0-9_.$]*", name):
+            raise ReassemblyError(f"invalid external symbol name: {name!r}")
+        value = int(str(raw_value), 0)
+        definitions.append(f"PROVIDE({name} = 0x{value:X});")
+    script = [
+        "OUTPUT_FORMAT(elf32-littlearm)",
+        "OUTPUT_ARCH(arm)",
+        "SECTIONS",
+        "{",
+        f"  .text 0x{address:X} : {{ KEEP(*({source_section})) }}",
+        "  /DISCARD/ : { *(.ARM.attributes) *(.comment) }",
+        "}",
+        *definitions,
+        f'ASSERT(SIZEOF(.text) == 0x{size:X}, "maintained patch size mismatch");',
+        "",
+    ]
+    linker_script.write_text("\n".join(script), encoding="utf-8", newline="\n")
+    run([lld, "-m", "armelf", "-T", str(linker_script), str(obj), "-o", str(elf)])
+    run(
+        [
+            llvm_objcopy,
+            "-O",
+            "binary",
+            "--only-section=.text",
+            str(elf),
+            str(binary),
+        ]
+    )
+    return binary.read_bytes()
+
+
 def module_from_manifest(entry: dict) -> Module:
     fields = {field.name for field in dataclasses.fields(Module)}
     return Module(**{key: value for key, value in entry.items() if key in fields})
@@ -401,7 +460,14 @@ def load_maintained_patches(version: str) -> dict[str, list[dict]]:
         raise ReassemblyError(f"invalid maintained-patch file: {patch_file}")
     result: dict[str, list[dict]] = {}
     for index, patch in enumerate(document["patches"]):
-        required = {"module", "address", "size", "source", "expected_sha256"}
+        required = {
+            "module",
+            "address",
+            "size",
+            "section",
+            "source",
+            "expected_sha256",
+        }
         missing = required.difference(patch)
         if missing:
             raise ReassemblyError(
@@ -418,6 +484,7 @@ def build_rom(
     output: Path,
     llvm_mc_arg: str | None,
     llvm_objcopy_arg: str | None,
+    lld_arg: str | None,
     require_matching: bool,
     allow_secure_area_change: bool,
 ) -> None:
@@ -438,6 +505,7 @@ def build_rom(
     llvm_objcopy = resolve_tool(
         llvm_objcopy_arg, ("llvm-objcopy", "llvm-objcopy.exe")
     )
+    lld = resolve_tool(lld_arg, ("ld.lld", "ld.lld.exe"))
     object_root = work / "obj"
     binary_root = work / "bin"
     object_root.mkdir(parents=True, exist_ok=True)
@@ -497,13 +565,27 @@ def build_rom(
             if not patch_source.is_file():
                 raise ReassemblyError(f"missing maintained patch source: {patch_source}")
             patch_obj = object_root / f"{module.name}_patch_{patch_index:03d}.o"
+            patch_elf = object_root / f"{module.name}_patch_{patch_index:03d}.elf"
             patch_binary = binary_root / f"{module.name}_patch_{patch_index:03d}.bin"
-            patch_payload = assemble_source(
+            patch_linker_script = object_root / f"{module.name}_patch_{patch_index:03d}.ld"
+            externals = patch.get("externals", {})
+            if not isinstance(externals, dict):
+                raise ReassemblyError(
+                    f"maintained patch {patch['source']} has invalid externals"
+                )
+            patch_payload = assemble_linked_patch(
                 patch_source,
                 patch_obj,
+                patch_elf,
                 patch_binary,
+                patch_linker_script,
+                address,
+                patch_size,
+                patch["section"],
+                externals,
                 llvm_mc,
                 llvm_objcopy,
+                lld,
             )
             if len(patch_payload) != patch_size:
                 raise ReassemblyError(
@@ -563,10 +645,12 @@ def doctor(rom: Path, version: str, work: Path) -> None:
     modules = parse_modules(data)
     llvm_mc = resolve_tool(None, ("llvm-mc", "llvm-mc.exe"))
     llvm_objcopy = resolve_tool(None, ("llvm-objcopy", "llvm-objcopy.exe"))
+    lld = resolve_tool(None, ("ld.lld", "ld.lld.exe"))
     print(json.dumps(identity, indent=2, sort_keys=True))
     print(f"Native modules: {len(modules)}")
     print(f"LLVM assembler: {llvm_mc}")
     print(f"LLVM objcopy: {llvm_objcopy}")
+    print(f"LLVM linker: {lld}")
     print(f"Work directory: {work}")
 
 
@@ -597,6 +681,7 @@ def main() -> int:
     build_parser.add_argument("--output", type=Path, required=True)
     build_parser.add_argument("--llvm-mc")
     build_parser.add_argument("--llvm-objcopy")
+    build_parser.add_argument("--lld")
     build_parser.add_argument(
         "--require-matching",
         action="store_true",
@@ -613,6 +698,7 @@ def main() -> int:
     all_parser.add_argument("--output", type=Path, required=True)
     all_parser.add_argument("--llvm-mc")
     all_parser.add_argument("--llvm-objcopy")
+    all_parser.add_argument("--lld")
     all_parser.add_argument("--force", action="store_true")
     all_parser.add_argument("--require-matching", action="store_true")
 
@@ -632,6 +718,7 @@ def main() -> int:
                 args.output,
                 args.llvm_mc,
                 args.llvm_objcopy,
+                args.lld,
                 args.require_matching,
                 args.allow_secure_area_change,
             )
@@ -644,6 +731,7 @@ def main() -> int:
                 args.output,
                 args.llvm_mc,
                 args.llvm_objcopy,
+                args.lld,
                 args.require_matching,
                 False,
             )
