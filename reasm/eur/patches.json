@@ -118,7 +118,7 @@
         "CARD_SetThreadPriority": "0x03802B48",
         "CARD_CheckPullOut_Polling": "0x03803B48",
         "SPI_Init": "0x03804244",
-        "func_03805ACC": "0x03805ACC",
+        "WVR_Init": "0x03805ACC",
         "func_038069F8": "0x038069F8"
       },
       "expected_sha256": "431a15cc6f7f99b8d7bc3034ada0cdb358c1b638669ec4a8004bf6b4298fe30e"
@@ -1641,6 +1641,27 @@
         "_u32_div_f": "0x03807174"
       },
       "expected_sha256": "4455af235612e33d0eb73b5c0fdaeb206b82a7694f4c5dd17f1db038a2a41e6f"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x038059F0",
+      "size": "0x130",
+      "kind": "code",
+      "section": ".pit_WVR_Control",
+      "source": "arm7/WVR_Control.s",
+      "externals": {
+        "MI_CpuFill8": "0x037FDFF8",
+        "PM_SetLEDPattern": "0x038058A4",
+        "PMi_SetLED": "0x03805520",
+        "WMSP_Init": "0x027E05EC",
+        "WVRi_Callback": "0x0380A218",
+        "WVRi_Initialized": "0x0380A210",
+        "WVRi_ShutdownPending": "0x0380A214",
+        "WVRi_SystemWork": "0x0380A21C",
+        "WVRi_WmspSystemWork": "0x0380A294",
+        "WVRi_WmspWork": "0x0380AA54"
+      },
+      "expected_sha256": "12d8f74d0196286197ee76557f63c4f8b24bdce1abc3d8f8126bdb4df9a7e1f4"
     },
     {
       "module": "arm7_autoload_000",

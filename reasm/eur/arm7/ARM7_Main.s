@@ -29,7 +29,7 @@
 .extern CARD_SetThreadPriority
 .extern CARD_CheckPullOut_Polling
 .extern SPI_Init
-.extern func_03805ACC
+.extern WVR_Init
 .extern func_038069F8
 ARM7_Main:
     push {r4, lr}
@@ -66,7 +66,7 @@ ARM7_Main:
     mov r0, #12
     bl func_027F6124
     mov r0, r4
-    bl func_03805ACC
+    bl WVR_Init
     mov r0, #2
     bl SPI_Init
 

@@ -1,4 +1,5 @@
 ARM7_Autoload001_Start kind:data(any) addr:0x027e0000
+WMSP_Init kind:function(arm) addr:0x027e05ec
 NVRAM_ExecuteProcess kind:function(arm) addr:0x027f4ad4
 NVRAM_AnalyzeCommand kind:function(arm) addr:0x027f4db0
 NVRAM_Init kind:function(arm) addr:0x027f4f54
