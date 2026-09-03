@@ -185,6 +185,10 @@ enemy impact offsets, clear the task callback, and release actor flag `0x200`.
 The alternate maintained effect-reaction pair uses the same `actor + 0x28`
 ownership and hit-lock flag, but waits for an attached effect or invalidated
 resource rather than selecting a full party/enemy animation sequence.
+The maintained party launch-reaction pair owns the remaining state machine in
+this region: it moves a party object through the screen boundary, switches its
+resource animation, emits the three-stage impact burst, restores or retires
+the actor according to HP, and finally releases the same hit-lock flag.
 
 The hit queue at battle-context offset `0xCAD8` contains up to eight packed
 20-byte records. `BattleDamage_ReflectQueuedHits` stops at the first inactive
