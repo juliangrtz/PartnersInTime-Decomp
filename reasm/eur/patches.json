@@ -551,6 +551,24 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209E20C",
+      "size": "0x70C",
+      "section": ".pit_BattleHitQueue_Update",
+      "source": "battle/BattleHitQueue_Update.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleCollision_TestObjects": "0x0209EBFC",
+        "BattleDamage_CalculateByObject": "0x0209BFA0",
+        "BattleHitDescriptor_GetByActorId": "0x0209EBAC",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "func_ov002_0207eca8": "0x0207ECA8",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "f016f36eb3f1aa2f3998185d4ae9d053d3434a6c5184c87c939b8785b3466ac6"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209EBFC",
       "size": "0x334",
       "section": ".pit_BattleCollision_TestObjects",
