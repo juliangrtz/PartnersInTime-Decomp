@@ -41,7 +41,7 @@
 .extern BattleDamage_CalculateByObject
 .extern BattleHitDescriptor_GetByActorId
 .extern BattleSceneObject_GetById
-.extern func_ov002_0207eca8
+.extern BattleAI_StartReactionScript
 .extern gBattleContext
 
 .global BattleHitQueue_Update
@@ -533,7 +533,7 @@ BattleHitQueue_Update:
     cmp r0, #ENEMY_ID_END
     bhs .L_clear_processing_flag
     mov r0, r5
-    bl func_ov002_0207eca8
+    bl BattleAI_StartReactionScript
 .L_clear_processing_flag:
     ldr r0, [r8]
     add r0, r0, #0xD000

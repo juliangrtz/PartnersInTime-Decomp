@@ -27,6 +27,12 @@ and runtime overlay 2.
 | `02091EDC` | `BattleObjectData_IsLoadPending` | Tests pending state for ordinary and large enemy data slots |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079950` | `BattleAI_DispatchOpcode` | Executes loaded `BAI_*.dat` battle bytecode |
+| `0207E928` | `BattleAI_UpdateReactionTask` | Runs one enemy reaction VM task to completion |
+| `0207E9C0` | `BattleAI_UpdateActionTask` | Runs one enemy action VM task to completion |
+| `0207EA58` | `BattleAITask_GetOrInsert` | Finds or inserts a task in actor-ID order |
+| `0207ECA8` | `BattleAI_StartReactionScript` | Starts an enemy reaction state with mode `0x2000` |
+| `0207ECC0` | `BattleAI_StartActionScript` | Starts an enemy action state with mode `0x1000` |
+| `0207ED70` | `BattleAI_StartScriptTask` | Initializes and attaches an enemy AI VM state |
 | `0208ED90` | `BattleScript_GetProperty` | Reads actor, object, and global properties |
 | `0208FB6C` | `BattleScript_SetProperty` | Writes properties; cases 16-20 are actor stats |
 | `02071C84` | `BattleDamage_CalculateAttack` | General POW/DEF/level damage calculation |
@@ -353,6 +359,12 @@ then walks and unlinks active descriptors, expands party and enemy wildcard
 targets, collision-tests candidates, copies status/callback payloads, removes
 conflicting chains and duplicate targets, calculates pending damage, handles
 negative/reversed damage, and leaves at most eight records for the next pass.
+When both the current actor and a computed damage target are enemies, the queue
+compiler starts the target's reaction script. Action and reaction modes use
+separate task pools and separate 184-byte actor-local VM states at actor offsets
+`+0x70` and `+0x128`. Tasks remain sorted by actor ID; their update callbacks
+honor the VM pause bits at state `+0xB2`, call `VM_Run`, and clear themselves
+when it returns completion code 1 or 2.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds
