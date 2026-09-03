@@ -152,6 +152,9 @@ payload, link active descriptors, resolve them by actor ID, and disable them.
 and resource-backed collision volumes consumed during hit expansion.
 `BattleCollision_TestObjects` at `0x0209EBFC` iterates those bounds in world
 coordinates and returns the collision result plus hit position.
+The complete `BattleHitQueue_Update` compiler at `0x0209E20C` dispatches the
+old queue, expands active descriptors and wildcard targets, filters collisions
+and duplicates, calculates pending damage, and prepares the next eight records.
 `BattleDamage_CalculateByObject` now exposes the scene-object-to-actor bridge,
 target immunity flag, active-turn mode selection, per-party-member Q8 inputs,
 equipment effect `0x301B` (140-percent damage), and final 999 clamp.
@@ -347,7 +350,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the forty-one
+2. Continue promoting small overlay-2 battle leaf functions using the forty-two
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the
