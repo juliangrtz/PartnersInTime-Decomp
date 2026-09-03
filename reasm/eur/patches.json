@@ -1458,6 +1458,23 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x0380490C",
+      "size": "0x110",
+      "kind": "code",
+      "section": ".pit_TP_Init",
+      "source": "arm7/TP_Init.s",
+      "externals": {
+        "OS_CreateVAlarm": "0x037FDB00",
+        "OS_InitVAlarm": "0x037FDC28",
+        "OS_IsVAlarmAvailable": "0x037FDC18",
+        "OS_SetVAlarmTag": "0x037FD948",
+        "TPi_VAlarmArray": "0x0380A124",
+        "TPi_Work": "0x0380A0F8"
+      },
+      "expected_sha256": "67b75ae7e497addb1c0b279238637995a413a331e96f11f6903a49aa658d3220"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
