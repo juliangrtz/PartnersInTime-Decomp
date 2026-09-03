@@ -355,6 +355,7 @@ SVC_RLUnCompVramWithReadCB kind:function(thumb,size=0x4) addr:0x03803dfc
 SVC_GetSineTable kind:function(thumb,size=0x4) addr:0x03803e00
 SVC_GetPitchTable kind:function(thumb,size=0x4) addr:0x03803e04
 SVC_GetVolumeTable kind:function(thumb,size=0x4) addr:0x03803e08
+MATH_CountPopulation kind:function(arm,size=0x44) addr:0x03803e0c
 func_03804244 kind:label addr:0x03804244
 WVR_Shutdown kind:function(arm) addr:0x03805a94
 func_03805ACC kind:label addr:0x03805acc
