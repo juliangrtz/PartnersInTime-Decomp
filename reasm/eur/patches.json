@@ -102,6 +102,17 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x02076BD4",
+      "size": "0x64",
+      "section": ".pit_BattleActor_CanReceiveStatus",
+      "source": "battle/BattleActor_CanReceiveStatus.s",
+      "externals": {
+        "gSaveData": "0x02059FE8"
+      },
+      "expected_sha256": "22284176a03b21b510ca9a350a9cd479e188a3ee620b3823403568f85d0c26b4"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02076F44",
       "size": "0x20",
       "section": ".pit_BattleActor_GetPartySlot",
@@ -388,6 +399,43 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x020A90F4",
+      "size": "0x18C",
+      "section": ".pit_BattleParty_UpdateKnockout",
+      "source": "battle/BattleParty_UpdateKnockout.s",
+      "externals": {
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "BattleSceneObject_SetAnimation": "0x02091198",
+        "func_ov002_02092048": "0x02092048",
+        "func_ov002_020a4b9c": "0x020A4B9C",
+        "func_ov002_020a8bec": "0x020A8BEC",
+        "func_ov002_020a906c": "0x020A906C",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "02fed04d2de7e717c885b5685df0b1d75bb9a5275a5ebec8bc8ad010dd16b1b1"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x020A9280",
+      "size": "0x1F8",
+      "section": ".pit_BattleParty_StartKnockout",
+      "source": "battle/BattleParty_StartKnockout.s",
+      "externals": {
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleParty_UpdateKnockout": "0x020A90F4",
+        "BattleSceneObject_SetAnimation": "0x02091198",
+        "BattleSound_Play": "0x02076428",
+        "BattleStatus_ClearAll": "0x0209C3F8",
+        "BattleTaskList_Insert": "0x020A51F8",
+        "func_ov002_02065ec4": "0x02065EC4",
+        "func_ov002_020a32f4": "0x020A32F4",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "c6f274363bc27f4dc731562c67a54b73efead3eabdd5626761f3d6edbe6ccbf6"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209234C",
       "size": "0x44",
       "section": ".pit_BattleObjectData_ResolveSlot",
@@ -520,7 +568,7 @@
         "BattleSceneObject_GetActiveModel": "0x020A3370",
         "func_ov002_020a3f9c": "0x020A3F9C",
         "func_ov002_020a4934": "0x020A4934",
-        "func_ov002_020a9280": "0x020A9280",
+        "BattleParty_StartKnockout": "0x020A9280",
         "func_ov002_020a9c18": "0x020A9C18"
       },
       "expected_sha256": "7a18d425c288c1c363dca2f09613f772853ac2904b04cea62e3810e5bdbd44dc"
@@ -620,7 +668,7 @@
         "BattleSceneObject_GetById": "0x02076FB4",
         "BattleSceneObject_SetAnimation": "0x02091198",
         "BattleSceneObject_GetActiveModel": "0x020A3370",
-        "func_ov002_020a9280": "0x020A9280"
+        "BattleParty_StartKnockout": "0x020A9280"
       },
       "expected_sha256": "e420f91b6eec13333141fa949f2da3ed2c2fcdd9b3ada51eba127cda67bd4e4e"
     },
@@ -716,7 +764,7 @@
         "BattleStatus_TryApply": "0x0209C464",
         "func_ov002_02065ec4": "0x02065EC4",
         "BattlePosition_StoreViewRelative": "0x02076B0C",
-        "func_ov002_02076bd4": "0x02076BD4",
+        "BattleActor_CanReceiveStatus": "0x02076BD4",
         "BattleSceneObject_SetAnimation": "0x02091198",
         "BattleDamage_SpawnNumber": "0x0209CD9C",
         "BattleActor_HandleHitEquipmentEffect": "0x0209DE04",

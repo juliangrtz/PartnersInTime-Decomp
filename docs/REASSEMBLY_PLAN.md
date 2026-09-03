@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-341 independent units. Those units cover raw
+345 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -130,6 +130,9 @@ slots used by reaction state machines. Their full `BattleSceneObject_SetAnimatio
 producer at `0x02091198` is maintained too: it classifies party/enemy objects,
 creates or retires models, selects party status/HP animation variants, handles
 linked party forms, and notifies the scene after resource changes.
+The party knockout task pair at `0x020A90F4` and `0x020A9280` now exposes
+status clearing, animation completion, actor/global locks, form-specific sound
+pairs, linked-character movement and the follow-up character-load callbacks.
 `BattleDamage_CalculateBase` at `0x0209BF38`
 and `BattleDamage_CalculateAttack` at `0x02071C84` expose the compact and full
 level/POW/DEF calculations, including Q8 modifier tables, category minima,
@@ -375,7 +378,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the sixty-seven
+2. Continue promoting small overlay-2 battle leaf functions using the seventy
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the

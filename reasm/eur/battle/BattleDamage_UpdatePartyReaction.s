@@ -19,7 +19,7 @@
 .extern BattleSceneObject_GetById
 .extern BattleSceneObject_SetAnimation
 .extern BattleSceneObject_GetActiveModel
-.extern func_ov002_020a9280
+.extern BattleParty_StartKnockout
 
 .global BattleDamage_UpdatePartyReaction
 .type BattleDamage_UpdatePartyReaction, %function
@@ -53,7 +53,7 @@ BattleDamage_UpdatePartyReaction:
     cmp r0, #0
     bgt .L_alive
     mov r0, r4
-    bl func_ov002_020a9280
+    bl BattleParty_StartKnockout
     pop {r4, r5, r6, lr}
     bx lr
 .L_alive:

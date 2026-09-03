@@ -14,6 +14,7 @@ and runtime overlay 2.
 | `02076F44` | `BattleActor_GetPartySlot` | Resolves party IDs 56-59 through the battle context |
 | `02076F24` | `BattleActor_GetEnemySlot` | Resolves enemy IDs 60-67 through the battle context |
 | `02076F64` | `BattleActor_GetById` | Resolves party IDs 56-59 or enemy IDs 60+ to actor pointers |
+| `02076BD4` | `BattleActor_CanReceiveStatus` | Rejects dead, unloaded, or inactive-form status targets |
 | `02076FB4` | `BattleSceneObject_GetById` | Resolves field, party, enemy, and auxiliary visual-object IDs |
 | `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
@@ -44,6 +45,8 @@ and runtime overlay 2.
 | `020A519C` | `BattleTask_BindOwnerSlot` | Binds a task handle to its owning object and returns the displaced task |
 | `020A51F8` | `BattleTaskList_Insert` | Allocates if needed and prepends a task to an active list |
 | `020A5254` | `BattleTaskPool_Init` | Builds an aligned fixed-payload task free list |
+| `020A90F4` | `BattleParty_UpdateKnockout` | Completes party knockout and linked-character transitions |
+| `020A9280` | `BattleParty_StartKnockout` | Starts party knockout state, animation, sounds, and task |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
 | `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
 | `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Creates a sprite effect in the first free tracked slot |
@@ -175,6 +178,11 @@ halve it, or reject the effect. A random value in `[0, 99]` then decides the
 application. Party targets additionally pass through two equipment-effect
 special cases.
 
+The caller-side `BattleActor_CanReceiveStatus` gate additionally requires
+positive HP. Enemy targets must have a loaded resource slot; the two adult
+party IDs are accepted directly, while the baby IDs require save-state field
+`+0x558` to equal 2.
+
 On success it initializes the corresponding 12-byte effect state, preserves
 the requested duration, emits the original sound/effect event, and returns the
 status ID. Failed applications return zero. For stat changes it calculates:
@@ -245,6 +253,13 @@ The maintained party launch-reaction pair owns the remaining state machine in
 this region: it moves a party object through the screen boundary, switches its
 resource animation, emits the three-stage impact burst, restores or retires
 the actor according to HP, and finally releases the same hit-lock flag.
+
+If HP reached zero, `BattleParty_StartKnockout` clears all eight statuses,
+starts animation 13, sets actor and battle-global locks, selects one of six
+form-specific sound pairs, and installs `BattleParty_UpdateKnockout`. The
+update callback waits for the model flags, releases ordinary party actors, or
+for linked forms moves the paired scene object and chains into the appropriate
+Mario/Luigi follow-up load callback.
 
 The hit queue at battle-context offset `0xCAD8` contains up to eight packed
 20-byte records. `BattleDamage_ReflectQueuedHits` stops at the first inactive
