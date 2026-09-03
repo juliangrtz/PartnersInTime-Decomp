@@ -963,6 +963,22 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03802A7C",
+      "size": "0x40",
+      "kind": "code",
+      "section": ".pit_SND_CommandInit",
+      "source": "arm7/SND_CommandInit.s",
+      "externals": {
+        "OS_InitMessageQueue": "0x037FC608",
+        "SNDi_CommandMesgBuffer": "0x03809420",
+        "SNDi_CommandMesgQueue": "0x0380940C",
+        "SNDi_InitPxi": "0x03802598",
+        "SNDi_SharedWork": "0x03808288"
+      },
+      "expected_sha256": "0ec6f8000c4cb199c41ab0c9c037b963a6b604f80d67ae8aaf4d6ef87dc05bf6"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
