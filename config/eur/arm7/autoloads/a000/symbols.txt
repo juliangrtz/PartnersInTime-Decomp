@@ -11,9 +11,19 @@ OS_SetIrqMask kind:function(arm,size=0x34) addr:0x037fb7e0
 OS_SetIrqFunction kind:function(arm,size=0xa8) addr:0x037fb860
 OSi_SetTimerCallback kind:function(arm,size=0x4c) addr:0x037fb814
 OS_InitIrqTable kind:function(arm,size=0x20) addr:0x037fb908
+OS_UnLockCartridge kind:function(arm,size=0xc) addr:0x037fb928
 OS_GetLockID kind:function(arm,size=0x98) addr:0x037fb934
 OS_ReleaseLockID kind:function(arm,size=0x30) addr:0x037fb9cc
-func_037FB9FC kind:label addr:0x037fb9fc
+OSi_LockWordSpinWait kind:function(arm,size=0x10) addr:0x037fb9fc
+OS_ReadOwnerOfLockWord kind:function(arm,size=0x8) addr:0x037fba0c
+OSi_UnlockCartridgeCallback kind:function(arm,size=0x4) addr:0x037fba14
+OSi_LockCartridgeCallback kind:function(arm,size=0x4) addr:0x037fba18
+OS_TryLockCartridge kind:function(arm,size=0x20) addr:0x037fba1c
+OS_UnlockCartridge kind:function(arm,size=0x20) addr:0x037fba3c
+OS_LockCartridge kind:function(arm,size=0x20) addr:0x037fba5c
+OSi_DoTryLockByWord kind:function(arm,size=0x84) addr:0x037fba7c
+OSi_DoUnlockByWord kind:function(arm,size=0x8c) addr:0x037fbb00
+OSi_DoLockByWord kind:function(arm,size=0x48) addr:0x037fbb8c
 OS_InitLock kind:function(arm,size=0x78) addr:0x037fbbd4
 OS_SetSwitchThreadCallback kind:function(arm,size=0x34) addr:0x037fbcc0
 OS_InitThread kind:function(arm,size=0x12c) addr:0x037fc188
@@ -48,6 +58,7 @@ OSi_ResetCallback kind:function(arm,size=0x3c) addr:0x037fddcc
 OS_IsResetOccurred kind:function(arm,size=0x10) addr:0x037fde08
 OS_InitReset kind:function(arm,size=0x40) addr:0x037fde18
 MI_StopDma kind:function(arm,size=0x84) addr:0x037fde58
+MI_SwapWord kind:function(arm,size=0x8) addr:0x037fe1bc
 PXI_Init kind:function(arm,size=0xc) addr:0x037fe1c4
 PXI_SendWordByFifo kind:function(arm,size=0xa4) addr:0x037fe2f0
 PXI_IsCallbackReady kind:function(arm,size=0x28) addr:0x037fe394
@@ -99,6 +110,7 @@ ARM7_Autoload001_End kind:data(any) addr:0x027f8bd0
 HW_THREADINFO_SUBP kind:data(any) addr:0x027fffa4
 HW_VBLANK_COUNT_BUF kind:data(any) addr:0x027ffc3c
 HW_LOCK_ID_FLAG_SUBP kind:data(any) addr:0x027fffb8
+HW_LOCK_CARTRIDGE kind:data(any) addr:0x027fffe8
 HW_LOCK_INIT kind:data(any) addr:0x027ffff0
 HW_MAIN_MEM_SYSTEM kind:data(any) addr:0x027ffc00
 REG_DISPSTAT kind:data(any) addr:0x04000004
