@@ -808,6 +808,21 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03801BB0",
+      "size": "0x14C",
+      "kind": "code",
+      "section": ".pit_SND_SeqRuntime",
+      "source": "arm7/SND_SeqRuntime.s",
+      "externals": {
+        "SND_GetWaveDataAddress": "0x03801E24",
+        "SNDi_PlayerPool": "0x038087CC",
+        "SNDi_SharedWork": "0x03808288",
+        "SNDi_TrackPool": "0x03808A0C"
+      },
+      "expected_sha256": "78c4437bd7e841c560ce18d5a856c9f6c83911c856f8c4f87da25001e76b1b95"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
