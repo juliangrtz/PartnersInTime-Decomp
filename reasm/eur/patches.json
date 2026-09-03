@@ -292,6 +292,43 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209CE98",
+      "size": "0x2E8",
+      "section": ".pit_BattleDamage_UpdatePartyLaunchReaction",
+      "source": "battle/BattleDamage_UpdatePartyLaunchReaction.s",
+      "externals": {
+        "BattleActor_GetById": "0x02076F64",
+        "BattleActor_GetPartySlot": "0x02076F44",
+        "BattleEntity_BindResource": "0x02091C20",
+        "BattleSceneObject_GetById": "0x02076FB4",
+        "data_ov002_020bfa3c": "0x020BFA3C",
+        "func_ov002_02076b0c": "0x02076B0C",
+        "func_ov002_02091198": "0x02091198",
+        "func_ov002_02091a58": "0x02091A58",
+        "func_ov002_020a3370": "0x020A3370",
+        "func_ov002_020a3f9c": "0x020A3F9C",
+        "func_ov002_020a4934": "0x020A4934",
+        "func_ov002_020a9280": "0x020A9280",
+        "func_ov002_020a9c18": "0x020A9C18"
+      },
+      "expected_sha256": "7a18d425c288c1c363dca2f09613f772853ac2904b04cea62e3810e5bdbd44dc"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209D180",
+      "size": "0x88",
+      "section": ".pit_BattleDamage_StartPartyLaunchReaction",
+      "source": "battle/BattleDamage_StartPartyLaunchReaction.s",
+      "externals": {
+        "BattleDamage_UpdatePartyLaunchReaction": "0x0209CE98",
+        "func_ov002_020a519c": "0x020A519C",
+        "func_ov002_020a51f8": "0x020A51F8",
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "1d2828db4af3c5f39933ce07ff88606364c3a5165764bd7c23c81f6cc462d50c"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209CD9C",
       "size": "0xFC",
       "section": ".pit_BattleDamage_SpawnNumber",
