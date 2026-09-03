@@ -40,7 +40,11 @@ directory. Public builds therefore require a user-supplied matching ROM.
 
 | Component | ROM location | Runtime address | Stored size |
 |---|---:|---:|---:|
-| ARM9 | `0x00004000` | `0x02004000` | `0x56758` |
+| ARM9 container | `0x00004000` | n/a | `0x56758` |
+| Resident ARM9 | `0x00004000` | `0x02004000` | `0x55F40` |
+| ITCM autoload | `0x00059F40` | `0x01FF8000` | `0x7A0` |
+| DTCM autoload | `0x0005A6E0` | `0x027E0000` | `0x60` |
+| Autoload descriptors | `0x0005A740` | n/a | `0x18` |
 | ARM7 | `0x0019F800` | `0x02380000` | `0x26F24` |
 | ARM9 overlay table | `0x0005A800` | n/a | 37 entries |
 
@@ -50,10 +54,17 @@ overlays are real code/data modules. All overlay compression-size fields are
 zero in the verified European ROM; executable overlay compression is therefore
 not a blocker for this build.
 
-The ARM9 secure area begins at ROM `0x4000`. Its first portion is KEY1-encrypted,
-while executable entry is at runtime `0x02004800`. A byte-identical roundtrip
-may preserve it as data. Editing this region requires a proper BIOS-backed
-decrypt/checksum/encrypt path and is intentionally blocked by the bootstrap.
+The ARM9 container is serialized as resident image, 32-byte-aligned ITCM image,
+DTCM image, then two 12-byte autoload descriptors. The relinker derives the
+first three sizes from the DSD section maps and rejects the ROM unless both
+descriptors reproduce the derived destination, stored size, and BSS size.
+
+The ARM9 secure area begins at ROM `0x4000`, while executable entry is at
+runtime `0x02004800`. The verified decomp base ROM is already in decrypted
+secure-area form: its opening marker is `E7FFDEFF E7FFDEFF`, and DSD extracts
+the resident image byte-for-byte with `encrypted: false`. The conservative
+Stage-0 builder still blocks edits in this region until checksum and hardware
+behavior are covered by tests.
 
 The current `dsd` symbol maps list roughly 4,967 functions across about 1.49 MiB
 of ARM9/overlay text. This includes SDK routines, thunks, and tiny helpers; it is
@@ -86,27 +97,28 @@ instructions are still represented as raw words.
 Goal: every native byte is represented by assembler-aware sections and every
 address-bearing location is explicit.
 
-Status: **section-level overlay relink implemented for EUR**.
-`tools/relink_overlay.py` reads the existing DSD section and relocation maps
-and links all 37 overlays from 123 independent units. Those units cover raw
-`.text` fragments around maintained functions, `.rodata`, constructors,
-alignment padding, and `.data`; all 24,212 listed overlay relocations are
-inventoried. `BattleActor_GetPartySlot` at `0x02076F44` and
+Status: **section-level ARM9 relink implemented for EUR**.
+`tools/relink_arm9.py` discovers the resident/autoload layout, validates both
+autoload descriptors, and links resident ARM9, ITCM, DTCM, and all 37 overlays
+as 40 components containing 131 independent units. Those units cover raw
+`.text` fragments around maintained functions, `.init`, `.rodata`,
+constructors, alignment padding, and `.data`; all 29,561 listed ARM9
+relocations are inventoried. `BattleActor_GetPartySlot` at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
-DSD-validated external definition. Every linked overlay and the resulting NDS
-have zero differing bytes from the verified European ROM.
+DSD-validated external definition. Every linked component and the resulting
+NDS have zero differing bytes from the verified European ROM.
 
 Work items:
 
 1. Normalize the existing `symbols.txt`, `relocs.txt`, and `delinks.txt` files
    into one machine-readable module graph. Overlay parsing and validation are
-   implemented for EUR; ARM9 autoload and ARM7 graphs remain.
+   implemented for the EUR ARM9 graph; ARM7 metadata remains.
 2. Split ARM9 and overlays into `.text`, `.rodata`, constructors, `.data`, BSS,
    ITCM, and DTCM according to the verified `dsd` boundaries.
 3. Emit one assembly translation unit per delink unit rather than one flat
    module dump. Fixed-address section units are implemented for every EUR
-   overlay; DSD object boundaries are the next split level.
+   ARM9 component; source/function boundaries are the next split level.
 4. Convert branch/call words to symbolic ARM or Thumb instructions only when
    their target and execution mode are proven.
 5. Convert literal pools, pointer tables, vtables, jump tables, and constructor
@@ -114,8 +126,8 @@ Work items:
 6. Keep ambiguous bytes as `.word`/`.byte`, but classify them and attach an
    expected-byte test.
 7. Link with a generated linker script at the original addresses and compare
-   each module byte-for-byte. Achieved for all EUR overlays; resident ARM9,
-   autoloads, and ARM7 remain on the Stage-0 path.
+   each module byte-for-byte. Achieved for all EUR ARM9 runtime components;
+   ARM7 remains on the Stage-0 path.
 
 Exit criterion: deleting the locally generated flat module source does not
 change the matching build; every byte comes from sectioned source units.
@@ -216,8 +228,8 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Generalize the section/symbol/relocation graph from all overlays to resident
-   ARM9 and its autoload regions, then ARM7.
+2. Establish conservative ARM7 section, symbol, and relocation metadata; the
+   upstream project currently supplies none.
 3. Continue promoting small overlay-2 battle leaf functions using the two
    exact symbolic units as the template.
 4. Split section fallbacks at DSD translation-unit boundaries, then retire
