@@ -1627,6 +1627,23 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03805894",
+      "size": "0x15C",
+      "kind": "code",
+      "section": ".pit_PM_Blink",
+      "source": "arm7/PM_Blink.s",
+      "externals": {
+        "PMi_BlinkCounter": "0x0380A208",
+        "PMi_BlinkPatternData": "0x038079EC",
+        "PMi_BlinkPatternNo": "0x0380A20C",
+        "PMi_LEDStatus": "0x038079E8",
+        "SPIi_SetEntry": "0x03803F54",
+        "_u32_div_f": "0x03807174"
+      },
+      "expected_sha256": "4455af235612e33d0eb73b5c0fdaeb206b82a7694f4c5dd17f1db038a2a41e6f"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
