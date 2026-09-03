@@ -41,6 +41,10 @@ and runtime overlay 2.
 | `0207EB14` | `BattleAI_StartObjectScript` | Starts or queues a `0x4000`-family object script |
 | `0207EC1C` | `BattleAI_StartActorAuxScript` | Starts a `0x3000`-family actor auxiliary script |
 | `0207ED70` | `BattleAI_StartScriptTask` | Initializes and attaches an enemy AI VM state |
+| `0207EE1C` | `BattleAI_InitStateFromScriptBlock` | Resets a VM state and selects the stream encoded by a script block |
+| `0207EE54` | `BattleAI_StartScriptById` | Routes fixed party slots and typed IDs to their script starters |
+| `0207EF10` | `BattleAI_UpdateAll` | Runs all fixed party VMs and all four typed task lists |
+| `0207F01C` | `BattleAI_TaskPoolsInit` | Initializes the four battle-AI task pools |
 | `0208ED90` | `BattleScript_GetProperty` | Reads actor, object, and global properties |
 | `0208FB6C` | `BattleScript_SetProperty` | Writes properties; cases 16-20 are actor stats |
 | `02071C84` | `BattleDamage_CalculateAttack` | General POW/DEF/level damage calculation |
@@ -392,6 +396,15 @@ and immediately runs the continuation. The `0x3000` family uses the same VM
 header embedded at enemy-actor offset `+0x1E0`, but completes without the
 continuation loop. `BattleScriptState_GetByObjectId` maps valid object IDs into
 the table at context offset `+0x6D44` with a `0xC0`-byte stride.
+`BattleAI_StartScriptById` is the common public router. IDs 1-4 select four
+fixed party VM states, while typed IDs currently route `0x1000` and `0x2000`
+to enemy action and reaction starters. The fixed-state initializer clears
+184 bytes, derives the executable stream from the first script-block halfword,
+and records the slot ID at `+0xB0`; slot 2 deliberately has a no-op starter and
+is serviced by its dedicated update helper. `BattleAI_UpdateAll` runs all four
+fixed states, then action, reaction, auxiliary, and object task lists. Pool
+initialization reserves eight action, eight reaction, eight auxiliary, and 40
+object-script task nodes, each with an eight-byte payload.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds

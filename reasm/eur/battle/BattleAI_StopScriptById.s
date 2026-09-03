@@ -7,8 +7,8 @@
 .balign 4
 
 .extern BattleAITask_StopById
-.extern data_ov002_020c0720
-.extern data_ov002_020c0918
+.extern gBattleAIAuxTaskPool
+.extern gBattleAIObjectTaskPool
 .extern gBattleAIActionTaskPool
 .extern gBattleAIReactionTaskPool
 .extern gBattleContext
@@ -129,7 +129,7 @@ BattleAI_StopScriptById:
 .L_reaction_pool:
     .word gBattleAIReactionTaskPool
 .L_aux_pool:
-    .word data_ov002_020c0720
+    .word gBattleAIAuxTaskPool
 .L_event_pool:
-    .word data_ov002_020c0918
+    .word gBattleAIObjectTaskPool
 .size BattleAI_StopScriptById, . - BattleAI_StopScriptById
