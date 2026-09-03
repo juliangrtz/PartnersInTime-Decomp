@@ -114,7 +114,7 @@
         "PXI_Init": "0x037FE1C4",
         "PAD_InitXYButton": "0x037FE580",
         "func_037FF0CC": "0x037FF0CC",
-        "func_03802ABC": "0x03802ABC",
+        "FS_Init": "0x03802ABC",
         "func_03802B48": "0x03802B48",
         "func_03803B48": "0x03803B48",
         "func_03804244": "0x03804244",
@@ -976,6 +976,24 @@
         "SNDi_SharedWork": "0x03808288"
       },
       "expected_sha256": "0ec6f8000c4cb199c41ab0c9c037b963a6b604f80d67ae8aaf4d6ef87dc05bf6"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x03802ABC",
+      "size": "0x8C",
+      "kind": "code",
+      "section": ".pit_FS_Init",
+      "source": "arm7/FS_Init.s",
+      "externals": {
+        "CARD_Init": "0x03803594",
+        "FSi_ArchiveList": "0x0380944C",
+        "FSi_CardLockId": "0x03809448",
+        "FSi_DefaultDmaNo": "0x03809444",
+        "FSi_Initialized": "0x03809440",
+        "FSi_OverlayList": "0x03809454",
+        "OS_GetLockID": "0x037FB934"
+      },
+      "expected_sha256": "bf8f37528a642fe11026b7c8281238fe9a3458c4922ae7cbb909264984c85bd0"
     },
     {
       "module": "arm7_autoload_000",

@@ -279,8 +279,10 @@ SNDi_PxiFifoCallback kind:function(arm,size=0x54) addr:0x038025b0
 SND_CommandProc kind:function(arm,size=0x478) addr:0x03802604
 SND_CommandInit kind:function(arm,size=0x40) addr:0x03802a7c
 func_037FF0CC kind:label addr:0x037ff0cc
-func_03802ABC kind:label addr:0x03802abc
+FS_Init kind:function(arm,size=0x34) addr:0x03802abc
+FSi_Init kind:function(arm,size=0x58) addr:0x03802af0
 func_03802B48 kind:label addr:0x03802b48
+CARD_Init kind:function(arm) addr:0x03803594
 func_03803B48 kind:label addr:0x03803b48
 SVC_WaitByLoop kind:function(thumb,size=0x4) addr:0x03803d94
 SVC_Halt kind:function(thumb,size=0x4) addr:0x03803dae
@@ -352,6 +354,11 @@ SNDi_Work kind:data(any) addr:0x0380828c
 SNDi_AlarmWork kind:data(any) addr:0x0380920c
 SNDi_CommandMesgQueue kind:data(any) addr:0x0380940c
 SNDi_CommandMesgBuffer kind:data(any) addr:0x03809420
+FSi_Initialized kind:data(any) addr:0x03809440
+FSi_DefaultDmaNo kind:data(any) addr:0x03809444
+FSi_CardLockId kind:data(any) addr:0x03809448
+FSi_ArchiveList kind:data(any) addr:0x0380944c
+FSi_OverlayList kind:data(any) addr:0x03809454
 SNDi_SharedWork kind:data(any) addr:0x03808288
 SNDi_SeqCacheState kind:data(any) addr:0x03808270
 SNDi_SeqCacheData kind:data(any) addr:0x03808278
