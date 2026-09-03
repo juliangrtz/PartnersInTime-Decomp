@@ -386,14 +386,14 @@ PMi_SendPxiData kind:function(arm,size=0x30) addr:0x03805384
 MIC_ExecuteProcess kind:function(arm,size=0x25c) addr:0x03805cc4
 MICi_SetTimerValue kind:function(arm,size=0xa4) addr:0x03805f20
 MIC_AnalyzeCommand kind:function(arm,size=0x2d4) addr:0x03805fc4
-MIC_Init kind:function(arm) addr:0x03806298
+MIC_Init kind:function(arm,size=0x40) addr:0x03806298
 WVRi_InitWmsp kind:function(arm,size=0xa4) addr:0x038059f0
 WVR_Shutdown kind:function(arm,size=0x38) addr:0x03805a94
 WVR_Init kind:function(arm,size=0x54) addr:0x03805acc
 MICi_TimerHandler kind:function(arm,size=0x168) addr:0x03805b20
 MICi_TimerIrqHandler kind:function(arm,size=0x3c) addr:0x03805c88
-MIC_ExecSampling12 kind:function(arm) addr:0x038062d8
-MIC_ExecSampling8 kind:function(arm) addr:0x038063a0
+MIC_ExecSampling12 kind:function(arm,size=0xc8) addr:0x038062d8
+MIC_ExecSampling8 kind:function(arm,size=0xc8) addr:0x038063a0
 MIC_DisableMultipleInterrupt kind:function(arm) addr:0x038065ec
 MIC_EnableMultipleInterrupt kind:function(arm) addr:0x03806638
 MIC_SetIrqFunction kind:function(arm) addr:0x038066a4
