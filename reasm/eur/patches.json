@@ -184,10 +184,10 @@
       "section": ".pit_OS_Init",
       "source": "arm7/OS_Init.s",
       "externals": {
-        "func_037FB908": "0x037FB908",
+        "OS_InitIrqTable": "0x037FB908",
         "func_037FBBD4": "0x037FBBD4",
         "OS_InitThread": "0x037FC188",
-        "func_037FC938": "0x037FC938",
+        "OS_InitArena": "0x037FC938",
         "func_037FD0F4": "0x037FD0F4",
         "func_037FD568": "0x037FD568",
         "OS_InitReset": "0x037FDE18",
@@ -332,6 +332,34 @@
         "REG_DMA0SAD": "0x040000B0"
       },
       "expected_sha256": "d4c8d063ff9c57533e61dca39783393e5beef34aa3aa87f572e827f59a8793fb"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FB908",
+      "size": "0x20",
+      "kind": "code",
+      "section": ".pit_OS_InitIrqTable",
+      "source": "arm7/OS_InitIrqTable.s",
+      "externals": {
+        "HW_VBLANK_COUNT_BUF": "0x027FFC3C",
+        "OS_IRQCheckFlag": "0x03807A84"
+      },
+      "expected_sha256": "9667c7f08b10584e0cb79ead34a89a6ccfa7340be0684e2bd39539cb0d019b13"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FC820",
+      "size": "0x1BC",
+      "kind": "code",
+      "section": ".pit_OS_Arena",
+      "source": "arm7/OS_Arena.s",
+      "externals": {
+        "ARM7_Autoload000_End": "0x0380B1CC",
+        "ARM7_Autoload001_End": "0x027F8BD0",
+        "HW_ARM7SystemStack": "0x0380FF80",
+        "OSi_ArenaInitialized": "0x03807C4C"
+      },
+      "expected_sha256": "167cab845b1384d9ce8139a3c03c2304ddd9206429beb671166ef788a2d0a501"
     }
   ]
 }
