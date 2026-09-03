@@ -575,6 +575,37 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FF104",
+      "size": "0x70",
+      "kind": "code",
+      "section": ".pit_SND_Capture",
+      "source": "arm7/SND_Capture.s",
+      "expected_sha256": "85cc52cf26016ca24b8ebef17a2f538fa0a9fe0197730807991a7b4803b747ea"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FF174",
+      "size": "0x2C4",
+      "kind": "code",
+      "section": ".pit_SND_ExChannelHelpers",
+      "source": "arm7/SND_ExChannelHelpers.s",
+      "externals": {
+        "SND_GetLfoValue": "0x037FF438",
+        "SND_InitLfoParam": "0x037FF4FC",
+        "SND_SetExChannelAttack": "0x037FF96C",
+        "SND_SetExChannelDecay": "0x037FF950",
+        "SND_SetExChannelRelease": "0x037FF92C",
+        "SND_SetExChannelSustain": "0x037FF948",
+        "SND_StartLfo": "0x037FF4EC",
+        "SND_UpdateLfo": "0x037FF488",
+        "SNDi_VolumeShiftTable": "0x0380747C",
+        "_ll_sdiv": "0x03806DB8",
+        "_s32_div_f": "0x03806F68"
+      },
+      "expected_sha256": "680ef3553c0922eb354ac3eb8898d942cfd5a61063375c6f6dbdd0217e30571e"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FF438",
       "size": "0xE8",
       "kind": "code",
