@@ -876,6 +876,46 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03802260",
+      "size": "0x2C",
+      "kind": "code",
+      "section": ".pit_SND_AlarmInit",
+      "source": "arm7/SND_AlarmInit.s",
+      "externals": {
+        "SNDi_Work": "0x0380828C"
+      },
+      "expected_sha256": "2a527c1c23a767aa3906acd7fbd73e02427c701bd916c58862ccd9a4c6cdda02"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x0380228C",
+      "size": "0x378",
+      "kind": "code",
+      "section": ".pit_SND_CommandHelpers",
+      "source": "arm7/SND_CommandHelpers.s",
+      "externals": {
+        "MIi_CpuCopy32": "0x037FDF94",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_SendMessage": "0x037FC574",
+        "PXI_SetFifoRecvCallback": "0x037FE3BC",
+        "SND_GetChannelControl": "0x037FE860",
+        "SND_GetLockedChannel": "0x037FF5A8",
+        "SND_SendWakeupMessage": "0x037FEF98",
+        "SND_SetChannelPan": "0x037FE8F0",
+        "SND_SetChannelTimer": "0x037FE96C",
+        "SND_SetChannelVolume": "0x037FE984",
+        "SND_StartAlarm": "0x0380213C",
+        "SND_StopAlarm": "0x038020FC",
+        "SND_StopChannel": "0x037FEA08",
+        "SND_UpdateSharedWork": "0x03801FF0",
+        "SNDi_CommandMesgQueue": "0x0380940C",
+        "SNDi_Work": "0x0380828C"
+      },
+      "expected_sha256": "72b831fafd97d69812898b51c476f09ab41f0ef6ff9b841aa3bace3fc3e0d250"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
