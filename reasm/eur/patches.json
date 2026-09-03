@@ -1297,6 +1297,15 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03803E0C",
+      "size": "0x44",
+      "kind": "code",
+      "section": ".pit_MATH_CountPopulation",
+      "source": "arm7/MATH_CountPopulation.s",
+      "expected_sha256": "9921f3874140f31c1f029efcada78fbe75681667d601e092b41932fda38f1443"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
