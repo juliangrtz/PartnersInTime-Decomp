@@ -39,9 +39,14 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["ARM7_Entry"], 0x02380000)
         self.assertEqual(symbols["ARM7_MainLoopThumbThunk"], 0x037F8524)
         self.assertEqual(symbols["ARM7_MainLoopThumbTarget"], 0x03803DAE)
+        self.assertEqual(symbols["OS_EnableIrqMask"], 0x037FB7A8)
+        self.assertEqual(symbols["OS_SetIrqFunction"], 0x037FB860)
         self.assertEqual(symbols["OS_IrqHandler"], 0x037FB458)
+        self.assertEqual(symbols["OS_Init"], 0x037FC7E8)
         self.assertEqual(symbols["OS_IRQTable"], 0x0380794C)
         self.assertEqual(symbols["OS_IRQCheckFlag"], 0x03807A84)
+        self.assertEqual(symbols["OSi_IrqCallbackInfo"], 0x03807A88)
+        self.assertEqual(symbols["OSi_VBlankCallbackInfo"], 0x03807AE8)
         self.assertEqual(symbols["OSi_ThreadInfo"], 0x03807B08)
 
     def synthetic_layout(self) -> tuple[bytes, reassembly.Module]:
