@@ -22,7 +22,7 @@
 .extern OS_EnableInterrupts
 .extern OS_IsResetOccurred
 .extern OS_ResetSystem
-.extern func_037FE1C4
+.extern PXI_Init
 .extern func_037FE580
 .extern func_037FF0CC
 .extern func_03802ABC
@@ -36,7 +36,7 @@ ARM7_Main:
     bl OS_Init
     bl OS_InitThread
     bl func_037F8228
-    bl func_037FE1C4
+    bl PXI_Init
     bl func_037F83C0
     mov r4, r0
     mov r0, #6
