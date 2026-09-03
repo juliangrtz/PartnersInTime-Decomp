@@ -1065,6 +1065,23 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03802E58",
+      "size": "0x50",
+      "kind": "code",
+      "section": ".pit_CARD_EraseSector",
+      "source": "arm7/CARD_EraseSector.s",
+      "externals": {
+        "CARDi_CommandBegin": "0x038034C0",
+        "CARDi_CommandEnd": "0x038033E0",
+        "CARDi_SendSpiAddressingCommand": "0x03803150",
+        "CARDi_WaitPrevCommand": "0x038033C8",
+        "CARDi_Work": "0x03809460",
+        "CARDi_WriteEnable": "0x038031FC"
+      },
+      "expected_sha256": "97ef247c6c7d78ba613e40eaf24642dd627cef96c09017f40ab5106b0f00b3ac"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
