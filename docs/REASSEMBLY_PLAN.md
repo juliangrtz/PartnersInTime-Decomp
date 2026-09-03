@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-276 independent units. Those units cover raw
+278 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -124,7 +124,10 @@ request and select one 44-byte `BDataMon.dat` record. The adjacent
 `BattleEnemyData_LoadObjectData` and `BattleEnemyData_FixupObjectPointers`
 stages are maintained too, covering the variable-sized object read and its
 offset-to-pointer conversion. `BattleObjectData_ResolveSlot` at `0x0209234C`
-decodes packed object IDs into 44-byte runtime descriptors. All resident ARM7 bytes are maintained
+decodes packed object IDs into 44-byte runtime descriptors.
+`BattleEntity_BindResource` at `0x02091C20` now exposes the party-resource
+binding branch plus enemy HP, POW, DEF, SPD, level, trait, and initial-flag
+setup. All resident ARM7 bytes are maintained
 ARMv4T assembly or symbolic module parameters. One hundred and eighteen maintained units
 from autoload 0 now cover `ARM7_Main`, its `SVC_Halt` thunk, `OS_Init`, IRQ mask
 and
@@ -298,7 +301,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the eleven
+2. Continue promoting small overlay-2 battle leaf functions using the twelve
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the
