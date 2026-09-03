@@ -383,6 +383,20 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FC9DC",
+      "size": "0x5B4",
+      "kind": "code",
+      "section": ".pit_OS_Alloc",
+      "source": "arm7/OS_Alloc.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OSiHeapInfo": "0x03807C50"
+      },
+      "expected_sha256": "1e59d266bd721a693d9f7b931a5475f5a289345ede0d85f6077e7e558f24dcb2"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDC90",
       "size": "0x78",
       "kind": "code",

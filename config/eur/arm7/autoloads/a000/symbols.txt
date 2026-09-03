@@ -75,6 +75,15 @@ OSi_GetInitArenaHi kind:function(arm,size=0x70) addr:0x037fc8a0
 OS_GetArenaLo kind:function(arm,size=0x14) addr:0x037fc910
 OS_GetArenaHi kind:function(arm,size=0x14) addr:0x037fc924
 OS_InitArena kind:function(arm,size=0xa4) addr:0x037fc938
+OS_CheckHeap kind:function(arm,size=0x1a4) addr:0x037fc9dc
+OS_CreateHeap kind:function(arm,size=0xa8) addr:0x037fcb80
+OS_InitAlloc kind:function(arm,size=0xa8) addr:0x037fcc28
+OS_SetCurrentHeap kind:function(arm,size=0x3c) addr:0x037fccd0
+OS_FreeToHeap kind:function(arm,size=0x74) addr:0x037fcd0c
+OS_AllocFromHeap kind:function(arm,size=0x118) addr:0x037fcd80
+DLInsert kind:function(arm,size=0xb4) addr:0x037fce98
+DLExtract kind:function(arm,size=0x28) addr:0x037fcf4c
+DLAddFront kind:function(arm,size=0x1c) addr:0x037fcf74
 OSi_SetTimerReserved kind:function(arm,size=0x1c) addr:0x037fcf90
 OS_GetTick kind:function(arm,size=0xb0) addr:0x037fcfac
 OSi_CountUpTick kind:function(arm,size=0x88) addr:0x037fd05c
@@ -150,6 +159,7 @@ OSi_MainThread kind:data(any) addr:0x03807bd4
 OSi_ResetInitialized kind:data(any) addr:0x03807ca8
 OSi_IsResetOccurred kind:data(any) addr:0x03807cac
 OSi_ArenaInitialized kind:data(any) addr:0x03807c4c
+OSiHeapInfo kind:data(any) addr:0x03807c50
 OSi_TimerReserved kind:data(any) addr:0x03807c74
 OSi_TickInitialized kind:data(any) addr:0x03807c78
 OSi_TickResetRequested kind:data(any) addr:0x03807c7c
