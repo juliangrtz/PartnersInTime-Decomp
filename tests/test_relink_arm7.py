@@ -51,6 +51,8 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["SPIi_CheckException"], 0x03804084)
         self.assertEqual(symbols["SPIi_ReturnResult"], 0x038040A0)
         self.assertEqual(symbols["SPI_Lock"], 0x038041E0)
+        self.assertEqual(symbols["SPI_Init"], 0x03804244)
+        self.assertEqual(symbols["TPi_VAlarmCallback"], 0x038043AC)
         self.assertEqual(symbols["OSi_IrqVBlank"], 0x037FB5C8)
         self.assertEqual(symbols["OSi_IrqTimer3"], 0x037FB620)
         self.assertEqual(symbols["OSi_IrqTimer0"], 0x037FB650)

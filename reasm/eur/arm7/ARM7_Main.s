@@ -28,7 +28,7 @@
 .extern FS_Init
 .extern CARD_SetThreadPriority
 .extern CARD_CheckPullOut_Polling
-.extern func_03804244
+.extern SPI_Init
 .extern func_03805ACC
 .extern func_038069F8
 ARM7_Main:
@@ -68,7 +68,7 @@ ARM7_Main:
     mov r0, r4
     bl func_03805ACC
     mov r0, #2
-    bl func_03804244
+    bl SPI_Init
 
 .L_main_loop:
     bl SVC_Halt_Thunk
