@@ -202,6 +202,20 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0209C464",
+      "size": "0x6D8",
+      "section": ".pit_BattleStatus_TryApply",
+      "source": "battle/BattleStatus_TryApply.s",
+      "externals": {
+        "BattleSound_Play": "0x02076428",
+        "BattleStatus_SpawnEffect": "0x020A855C",
+        "Random_NextModulo": "0x0202CB48",
+        "gSaveData": "0x02059FE8"
+      },
+      "expected_sha256": "c145a57fbe06a1603bbb317ecbef0ea0326fcc3a5b25d359adb64db73bfbe5c5"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0209D694",
       "size": "0x84",
       "section": ".pit_BattleActor_ApplyDamage",
