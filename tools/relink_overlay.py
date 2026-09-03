@@ -133,8 +133,8 @@ def read_relocations(path: Path) -> list[dict]:
     return result
 
 
-def read_all_symbols(version: str) -> dict[str, int]:
-    config_root = ROOT / "config" / version / "arm9"
+def read_all_symbols(version: str, cpu: str = "arm9") -> dict[str, int]:
+    config_root = ROOT / "config" / version / cpu
     result: dict[str, int] = {}
     for path in config_root.rglob("symbols.txt"):
         for line in path.read_text(encoding="utf-8").splitlines():
@@ -238,7 +238,7 @@ def plan_units(
             result.append(
                 Unit(
                     name=Path(patch["source"]).stem,
-                    kind="code",
+                    kind=patch.get("kind", "code"),
                     start=patch_start,
                     end=patch_end,
                     input_section=patch["section"],
@@ -335,7 +335,7 @@ def relink_module(
     module_name = module.name
     sections = read_sections(config / "delinks.txt")
     relocations = read_relocations(config / "relocs.txt")
-    known_symbols = read_all_symbols(version)
+    known_symbols = read_all_symbols(version, module.cpu)
     patches = reassembly.load_maintained_patches(version).get(module_name, [])
     intervals = raw_intervals(module, sections)
     generated_root = work / "generated"

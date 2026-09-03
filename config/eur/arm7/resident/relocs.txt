@@ -10,4 +10,10 @@ from:0x02380084 kind:load to:0x037fb458 module:arm7_autoload(0)
 from:0x0238008c kind:load to:0x037f846c module:arm7_autoload(0)
 from:0x02380090 kind:load to:0xffff0000 module:memory
 from:0x023800c0 kind:load to:0x02380158 module:arm7
+from:0x02380110 kind:arm_branch to:0x02380118 module:arm7
 from:0x02380124 kind:load to:0x027ffffa module:memory
+from:0x02380158 kind:data to:0x023a6f0c module:arm7
+from:0x0238015c kind:data to:0x023a6f24 module:arm7
+from:0x02380160 kind:data to:0x02380170 module:arm7
+from:0x02380164 kind:data to:0x02380170 module:arm7
+from:0x02380168 kind:data to:0x02380170 module:arm7
