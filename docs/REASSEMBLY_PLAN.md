@@ -45,7 +45,11 @@ directory. Public builds therefore require a user-supplied matching ROM.
 | ITCM autoload | `0x00059F40` | `0x01FF8000` | `0x7A0` |
 | DTCM autoload | `0x0005A6E0` | `0x027E0000` | `0x60` |
 | Autoload descriptors | `0x0005A740` | n/a | `0x18` |
-| ARM7 | `0x0019F800` | `0x02380000` | `0x26F24` |
+| ARM7 container | `0x0019F800` | n/a | `0x26F24` |
+| Resident ARM7 | `0x0019F800` | `0x02380000` | `0x170` |
+| ARM7 autoload 0 | `0x0019F970` | `0x037F8000` | `0xFA84` |
+| ARM7 autoload 1 | `0x001AF3F4` | `0x027E0000` | `0x17318` |
+| ARM7 autoload descriptors | `0x001C670C` | `0x023A6F0C` | `0x18` |
 | ARM9 overlay table | `0x0005A800` | n/a | 37 entries |
 
 There are 39 native module records in total: ARM9, ARM7, and 37 ARM9 overlays.
@@ -97,23 +101,27 @@ instructions are still represented as raw words.
 Goal: every native byte is represented by assembler-aware sections and every
 address-bearing location is explicit.
 
-Status: **section-level ARM9 relink implemented for EUR**.
-`tools/relink_arm9.py` discovers the resident/autoload layout, validates both
-autoload descriptors, and links resident ARM9, ITCM, DTCM, and all 37 overlays
-as 40 components containing 131 independent units. Those units cover raw
+Status: **fixed-address native relink implemented for EUR**.
+`tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
+validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
+37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
+137 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
-constructors, alignment padding, and `.data`; all 29,561 listed ARM9
-relocations are inventoried. `BattleActor_GetPartySlot` at `0x02076F44` and
+constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
+images. There are 29,602 currently known relocations. `BattleActor_GetPartySlot`
+at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
-DSD-validated external definition. Every linked component and the resulting
-NDS have zero differing bytes from the verified European ROM.
+DSD-validated external definition. `ARM7_AutoloadDone` at `0x02380118` is the
+first maintained ARMv4T function. Every linked component and the resulting NDS
+have zero differing bytes from the verified European ROM.
 
 Work items:
 
 1. Normalize the existing `symbols.txt`, `relocs.txt`, and `delinks.txt` files
    into one machine-readable module graph. Overlay parsing and validation are
-   implemented for the EUR ARM9 graph; ARM7 metadata remains.
+   implemented for the EUR ARM9 graph and resident ARM7 startup. The mixed ARM7
+   autoload images still need symbol and relocation discovery.
 2. Split ARM9 and overlays into `.text`, `.rodata`, constructors, `.data`, BSS,
    ITCM, and DTCM according to the verified `dsd` boundaries.
 3. Emit one assembly translation unit per delink unit rather than one flat
@@ -126,8 +134,8 @@ Work items:
 6. Keep ambiguous bytes as `.word`/`.byte`, but classify them and attach an
    expected-byte test.
 7. Link with a generated linker script at the original addresses and compare
-   each module byte-for-byte. Achieved for all EUR ARM9 runtime components;
-   ARM7 remains on the Stage-0 path.
+   each module byte-for-byte. Achieved for all EUR ARM9 and ARM7 runtime
+   components.
 
 Exit criterion: deleting the locally generated flat module source does not
 change the matching build; every byte comes from sectioned source units.
@@ -228,8 +236,8 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Establish conservative ARM7 section, symbol, and relocation metadata; the
-   upstream project currently supplies none.
+2. Recover ARM/Thumb function boundaries, data sections, and relocations inside
+   both ARM7 autoload images; the upstream project currently supplies none.
 3. Continue promoting small overlay-2 battle leaf functions using the two
    exact symbolic units as the template.
 4. Split section fallbacks at DSD translation-unit boundaries, then retire

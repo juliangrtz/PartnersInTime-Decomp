@@ -54,6 +54,12 @@ def synthetic_nds() -> bytes:
 
 
 class ParseModulesTests(unittest.TestCase):
+    def test_uses_cpu_specific_llvm_targets(self) -> None:
+        self.assertEqual(reassembly.target_triple("arm9"), "armv5te-none-eabi")
+        self.assertEqual(reassembly.target_triple("arm7"), "armv4t-none-eabi")
+        with self.assertRaises(reassembly.ReassemblyError):
+            reassembly.target_triple("unknown")
+
     def test_reads_header_fat_and_overlay_table(self) -> None:
         modules = reassembly.parse_modules(synthetic_nds())
         self.assertEqual([module.name for module in modules], ["arm9", "arm7", "arm9_ov007"])

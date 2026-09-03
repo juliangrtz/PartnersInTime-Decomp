@@ -1,0 +1,2 @@
+    .image start:0x027e0000 end:0x027f7318 kind:mixed align:4
+    .bss   start:0x027f7318 end:0x027f8bd0 kind:bss align:4

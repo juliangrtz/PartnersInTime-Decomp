@@ -1,0 +1,5 @@
+ARM7_Entry kind:function(arm,size=0xc0) addr:0x02380000
+ARM7_LoadAutoloads kind:function(arm,size=0x58) addr:0x023800c0
+ARM7_AutoloadDone kind:function(arm,size=0x4) addr:0x02380118
+ARM7_MemoryAliasTest kind:function(arm,size=0x3c) addr:0x0238011c
+ARM7_ModuleParams kind:data(any) addr:0x02380158

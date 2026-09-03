@@ -19,11 +19,13 @@ ignored by Git.
   and LLVM with zero differing bytes.
 - The raw generated sources initially use `.word` and `.byte`; they are a
   lossless starting representation, not a claim of semantic decompilation.
-- The resident ARM9 image, ITCM, DTCM, and all 37 ARM9 overlays now relink as
-  40 components and 131 independent, fixed-address ELF units.
+- Every ARM9 and ARM7 runtime image now relinks as 43 components and 137
+  independent, fixed-address ELF units.
 - `BattleActor_GetPartySlot` and `BattleActor_GetById` are maintained symbolic
   ARM functions. Both use linker-resolved `gBattleContext` references and match
   their original bytes exactly.
+- `ARM7_AutoloadDone` is the first maintained ARMv4T function and also matches
+  exactly.
 - Only the existing `src/` files are presently maintained high-level source.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
@@ -73,30 +75,33 @@ This bootstrap deliberately refuses size changes and modifications to the
 encrypted DS secure area. Those require the relocatable linker and encryption
 stages described in the plan.
 
-## Sectioned ARM9 relink
+## Sectioned native-code relink
 
-The Stage-1 linker supports the resident ARM9 image, its ITCM/DTCM autoloads,
-and all uncompressed ARM9 overlays described by the existing `dsd` maps. It
-validates the serialized autoload descriptors, splits every component at its
-verified section and maintained-source boundaries, and links each one at its
-runtime address:
+The Stage-1 linker supports resident ARM9, ITCM/DTCM, all ARM9 overlays,
+resident ARM7, and both ARM7 autoload images. It validates both CPUs' serialized
+autoload layouts, splits every component at verified section and
+maintained-source boundaries, and links each one for its correct architecture
+and runtime address:
 
 ```powershell
-python .\tools\relink_arm9.py `
+python .\tools\relink_native.py `
   --version eur `
   --rom 'C:\path\to\your\PiT.nds' `
-  --output-rom '.\build\PiT_eur_arm9_relinked.nds' `
+  --output-rom '.\build\PiT_eur_native_relinked.nds' `
   --require-matching
 ```
 
-The verified pass covers 40 ARM9 components, 131 section units, and all 29,561
-known ARM9 relocations with zero differing bytes. To iterate on one overlay,
-use `tools/relink_overlay.py --overlay-id 2` and supply `--output-bin`. Every
-external used by maintained source is validated against both `symbols.txt` and
-a supporting relocation record. ROM-derived fallback units, binaries, and JSON
-build reports remain below ignored `build/` paths. ARM7 is still represented by
-the lossless Stage-0 module because the upstream repository has no ARM7 symbol,
-section, or relocation maps yet.
+The verified pass covers 43 components, 137 section units, and 29,602 currently
+known relocations with zero differing bytes. To iterate on one CPU family or
+overlay, use `tools/relink_arm7.py`, `tools/relink_arm9.py`, or
+`tools/relink_overlay.py`. ROM-derived fallback units, binaries, and JSON build
+reports remain below ignored `build/` paths.
+
+The ARM7 startup is sectioned and partially named. Its two large autoloads are
+still conservatively marked as mixed code/data images because the upstream
+project contains no ARM7 analysis. See
+[`docs/research/ARM7_MAP.md`](docs/research/ARM7_MAP.md) for the exact confidence
+boundary.
 
 ## Existing `dsd` matching-decompilation build
 
