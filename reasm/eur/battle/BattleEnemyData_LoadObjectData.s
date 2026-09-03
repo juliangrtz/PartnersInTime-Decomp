@@ -14,7 +14,7 @@
 
 .extern BattleEnemyData_FixupObjectPointers
 .extern func_0202c3d0
-.extern func_ov002_0209234c
+.extern BattleObjectData_ResolveSlot
 .extern gBattleContext
 .extern gBattleSystem
 
@@ -26,7 +26,7 @@ BattleEnemyData_LoadObjectData:
     mov r4, r0
     ldr r5, [r4, #BATTLE_ENEMY_REQUEST_DATA]
     ldrh r0, [r5, #BATTLE_ENEMY_OBJECT_ID]
-    bl func_ov002_0209234c
+    bl BattleObjectData_ResolveSlot
 
     ldr r1, .L_battle_context
     add r2, r5, #BATTLE_ENEMY_PAYLOAD_OFFSET

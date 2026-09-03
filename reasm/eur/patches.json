@@ -51,7 +51,7 @@
       "externals": {
         "BattleEnemyData_FixupObjectPointers": "0x02088EF4",
         "func_0202c3d0": "0x0202C3D0",
-        "func_ov002_0209234c": "0x0209234C",
+        "BattleObjectData_ResolveSlot": "0x0209234C",
         "gBattleContext": "0x020C0718",
         "gBattleSystem": "0x020C0714"
       },
@@ -83,6 +83,17 @@
         "BattleTaskQueue_Enqueue": "0x020726B0"
       },
       "expected_sha256": "0dd8af0c713e0166c4c4f1fdafcd3b3a55ceabe2a7d1f6307b39e63264f66009"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209234C",
+      "size": "0x44",
+      "section": ".pit_BattleObjectData_ResolveSlot",
+      "source": "battle/BattleObjectData_ResolveSlot.s",
+      "externals": {
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "93f39765fa623c988552a278a2eb5e5c1816d875a7e13cf6716fce4dba3772a6"
     },
     {
       "module": "arm9_ov002",
