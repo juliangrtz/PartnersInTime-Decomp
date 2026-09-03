@@ -1199,6 +1199,27 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x03803758",
+      "size": "0x2AC",
+      "kind": "code",
+      "section": ".pit_CARD_RomTransfer",
+      "source": "arm7/CARD_RomTransfer.s",
+      "externals": {
+        "CARDi_Work": "0x03809460",
+        "MI_CpuCopy8": "0x037FE08C",
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OS_WakeupThread": "0x037FBF54",
+        "OS_WakeupThreadDirect": "0x037FBF20",
+        "REG_CARD_CMD": "0x040001A8",
+        "REG_CARD_CNT": "0x040001A4",
+        "REG_CARD_DATA": "0x04100010",
+        "REG_CARD_MASTERCNT": "0x040001A1"
+      },
+      "expected_sha256": "d6741543c17a8613e823bab870aa5483848b7a6129e6d6bffd0e814e277d1729"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
