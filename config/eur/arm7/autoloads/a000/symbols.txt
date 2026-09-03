@@ -40,9 +40,16 @@ OS_GetTick kind:function(arm,size=0xb0) addr:0x037fcfac
 OSi_CountUpTick kind:function(arm,size=0x88) addr:0x037fd05c
 OS_IsTickAvailable kind:function(arm,size=0x10) addr:0x037fd0e4
 OS_InitTick kind:function(arm,size=0x94) addr:0x037fd0f4
+OSi_AlarmHandler kind:function(arm,size=0x10) addr:0x037fd188
+OSi_ArrangeTimer kind:function(arm,size=0x100) addr:0x037fd198
+OS_CancelAlarm kind:function(arm,size=0x90) addr:0x037fd298
+OS_SetPeriodicAlarm kind:function(arm,size=0x7c) addr:0x037fd328
+OS_SetAlarm kind:function(arm,size=0x74) addr:0x037fd3a4
+OSi_InsertAlarm kind:function(arm,size=0x130) addr:0x037fd418
 OS_CreateAlarm kind:function(arm,size=0x10) addr:0x037fd548
 OS_IsAlarmAvailable kind:function(arm,size=0x10) addr:0x037fd558
 OS_InitAlarm kind:function(arm,size=0x50) addr:0x037fd568
+OSi_SetTimer kind:label addr:0x037fd5b8
 OS_EnableInterrupts kind:function(arm,size=0x14) addr:0x037fdc90
 OS_DisableInterrupts kind:function(arm,size=0x14) addr:0x037fdca4
 OS_RestoreInterrupts kind:function(arm,size=0x18) addr:0x037fdcb8
@@ -81,6 +88,7 @@ func_03806BB8 kind:label addr:0x03806bb8
 func_03806BE4 kind:label addr:0x03806be4
 func_03806C1C kind:label addr:0x03806c1c
 CTRDG_Init kind:function(arm,size=0x5c) addr:0x03806d04
+_ll_udiv kind:label addr:0x03806d60
 _s32_div_f kind:label addr:0x03806f68
 func_03807604 kind:label addr:0x03807604
 OS_IRQTable kind:data(any) addr:0x0380794c
@@ -113,10 +121,12 @@ HW_LOCK_ID_FLAG_SUBP kind:data(any) addr:0x027fffb8
 HW_LOCK_CARTRIDGE kind:data(any) addr:0x027fffe8
 HW_LOCK_INIT kind:data(any) addr:0x027ffff0
 HW_MAIN_MEM_SYSTEM kind:data(any) addr:0x027ffc00
+HW_INTR_CHECK_BUF kind:data(any) addr:0x0380fff8
 REG_DISPSTAT kind:data(any) addr:0x04000004
 REG_DMA0SAD kind:data(any) addr:0x040000b0
 REG_TM0CNT_L kind:data(any) addr:0x04000100
 REG_TM0CNT_H kind:data(any) addr:0x04000102
+REG_TM1CNT_H kind:data(any) addr:0x04000106
 REG_PXI_SYNC kind:data(any) addr:0x04000180
 REG_PXI_FIFO_CNT kind:data(any) addr:0x04000184
 REG_PXI_SEND_FIFO kind:data(any) addr:0x04000188

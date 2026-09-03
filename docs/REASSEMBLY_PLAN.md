@@ -108,20 +108,20 @@ validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 182 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
-images. There are 29,789 currently known relocations. `BattleActor_GetPartySlot`
+images. There are 29,821 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
 DSD-validated external definition. All resident ARM7 bytes are maintained
-ARMv4T assembly or symbolic module parameters. Thirty-one maintained units
+ARMv4T assembly or symbolic module parameters. Thirty-two maintained units
 from autoload 0 now cover `ARM7_Main`, its `SVC_Halt` thunk, `OS_Init`, IRQ mask
 and
 handler registration, `OS_IrqHandler`, thread bootstrap and switch-callback
 state, CPSR interrupt control, reset coordination, IRQ-table, arena, lock-ID,
 and Game Pak lock setup, PXI FIFO initialization and public send/callback APIs,
-the timer-0 tick subsystem, alarm
-initialization, the Game Pak initializer, and two Thumb SVC wrappers. They
-include 209 verified autoload relocations; ARM7 now has 228 verified
+the timer-0 tick subsystem, alarm initialization and scheduling, the Game Pak
+initializer, and two Thumb SVC wrappers. They include 241 verified autoload
+relocations; ARM7 now has 260 verified
 relocations in total. Every linked component and the resulting NDS have zero
 differing bytes from the verified European ROM.
 

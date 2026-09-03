@@ -74,6 +74,12 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["OSi_CountUpTick"], 0x037FD05C)
         self.assertEqual(symbols["OS_IsTickAvailable"], 0x037FD0E4)
         self.assertEqual(symbols["OS_InitTick"], 0x037FD0F4)
+        self.assertEqual(symbols["OSi_AlarmHandler"], 0x037FD188)
+        self.assertEqual(symbols["OSi_ArrangeTimer"], 0x037FD198)
+        self.assertEqual(symbols["OS_CancelAlarm"], 0x037FD298)
+        self.assertEqual(symbols["OS_SetPeriodicAlarm"], 0x037FD328)
+        self.assertEqual(symbols["OS_SetAlarm"], 0x037FD3A4)
+        self.assertEqual(symbols["OSi_InsertAlarm"], 0x037FD418)
         self.assertEqual(symbols["OS_CreateAlarm"], 0x037FD548)
         self.assertEqual(symbols["OS_IsAlarmAvailable"], 0x037FD558)
         self.assertEqual(symbols["OS_InitAlarm"], 0x037FD568)
@@ -111,7 +117,9 @@ class Arm7LayoutTests(unittest.TestCase):
         self.assertEqual(symbols["HW_VBLANK_COUNT_BUF"], 0x027FFC3C)
         self.assertEqual(symbols["HW_LOCK_ID_FLAG_SUBP"], 0x027FFFB8)
         self.assertEqual(symbols["HW_LOCK_CARTRIDGE"], 0x027FFFE8)
+        self.assertEqual(symbols["HW_INTR_CHECK_BUF"], 0x0380FFF8)
         self.assertEqual(symbols["REG_DMA0SAD"], 0x040000B0)
+        self.assertEqual(symbols["REG_TM1CNT_H"], 0x04000106)
         self.assertEqual(symbols["REG_PXI_SEND_FIFO"], 0x04000188)
 
     def synthetic_layout(self) -> tuple[bytes, reassembly.Module]:
