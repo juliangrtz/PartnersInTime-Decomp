@@ -198,6 +198,20 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x037FBC50",
+      "size": "0x70",
+      "kind": "code",
+      "section": ".pit_OS_SchedulerControl",
+      "source": "arm7/OS_SchedulerControl.s",
+      "externals": {
+        "OS_DisableInterrupts": "0x037FDCA4",
+        "OS_RestoreInterrupts": "0x037FDCB8",
+        "OSi_RescheduleCount": "0x03807AF8"
+      },
+      "expected_sha256": "169ac32bcde1acc8a8ecd3cc43ee70d2f6763cae6c8c6fa498b4cfc095cc4f5c"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FBCC0",
       "size": "0x34",
       "kind": "code",

@@ -36,6 +36,8 @@ OSi_DoTryLockByWord kind:function(arm,size=0x84) addr:0x037fba7c
 OSi_DoUnlockByWord kind:function(arm,size=0x8c) addr:0x037fbb00
 OSi_DoLockByWord kind:function(arm,size=0x48) addr:0x037fbb8c
 OS_InitLock kind:function(arm,size=0x78) addr:0x037fbbd4
+OS_EnableScheduler kind:function(arm,size=0x38) addr:0x037fbc50
+OS_DisableScheduler kind:function(arm,size=0x38) addr:0x037fbc88
 OS_SetSwitchThreadCallback kind:function(arm,size=0x34) addr:0x037fbcc0
 OS_InitThread kind:function(arm,size=0x12c) addr:0x037fc188
 OS_Init kind:function(arm,size=0x38) addr:0x037fc7e8
@@ -109,6 +111,7 @@ OSi_IrqCallbackInfo kind:data(any) addr:0x03807a88
 OSi_VBlankCallbackInfo kind:data(any) addr:0x03807ae8
 OSi_TimerCallbackInfo kind:data(any) addr:0x03807ab8
 OSi_LockInitialized kind:data(any) addr:0x03807af4
+OSi_RescheduleCount kind:data(any) addr:0x03807af8
 OSi_CurrentThreadPtr kind:data(any) addr:0x03807afc
 OSi_ThreadInitialized kind:data(any) addr:0x03807b00
 OSi_ThreadInfo kind:data(any) addr:0x03807b08
