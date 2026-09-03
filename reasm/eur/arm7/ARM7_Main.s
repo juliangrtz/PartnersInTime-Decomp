@@ -14,14 +14,14 @@
 .extern func_027F6124
 .extern func_037F8228
 .extern func_037F83C0
-.extern ARM7_MainLoopThumbThunk
+.extern SVC_Halt_Thunk
 .extern OS_EnableIrqMask
 .extern OS_SetIrqFunction
 .extern OS_InitThread
 .extern OS_Init
 .extern OS_EnableInterrupts
-.extern func_037FDD48
-.extern func_037FDE08
+.extern OS_IsResetOccurred
+.extern OS_ResetSystem
 .extern func_037FE1C4
 .extern func_037FE580
 .extern func_037FF0CC
@@ -71,11 +71,11 @@ ARM7_Main:
     bl func_03804244
 
 .L_main_loop:
-    bl ARM7_MainLoopThumbThunk
-    bl func_037FDE08
+    bl SVC_Halt_Thunk
+    bl OS_IsResetOccurred
     cmp r0, #0
     beq .L_skip_optional_work
-    bl func_037FDD48
+    bl OS_ResetSystem
 .L_skip_optional_work:
     bl func_038069F8
     bl func_03803B48

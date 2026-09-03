@@ -36,21 +36,27 @@ All four functions above and `ARM7_ModuleParams` are maintained source units.
 They assemble for ARMv4T, use symbolic cross-component references, and
 byte-match all `0x170` resident bytes.
 
-Nine proven autoload-0 units are now maintained ARMv4T source:
+Fifteen proven autoload-0 units are now maintained ARMv4T/Thumb source:
 
 | Address | Working name | Size | Evidence |
 |---:|---|---:|---|
 | `037F846C` | `ARM7_Main` | `0xB8` | Final startup jump; initializes services then enters the main loop |
-| `037F8524` | `ARM7_MainLoopThumbThunk` | `0x0C` | ARM veneer loading the Thumb pointer `0x03803DAF` |
+| `037F8524` | `SVC_Halt_Thunk` | `0x0C` | ARM veneer loading the Thumb `SVC_Halt` pointer |
 | `037FB458` | `OS_IrqHandler` | `0x170` | Written to the ARM7 IRQ vector by startup; dispatches and restores IRQ state |
+| `037FB738` | `OS_ResetRequestIrqMask` | `0x34` | Replaces the hardware IRQ request mask while preserving IME |
+| `037FB76C` | `OS_DisableIrqMask` | `0x3C` | Clears selected hardware interrupt-enable bits while preserving IME |
 | `037FB7A8` | `OS_EnableIrqMask` | `0x38` | IME-preserving update of the hardware interrupt-enable mask |
+| `037FB7E0` | `OS_SetIrqMask` | `0x34` | Replaces the hardware interrupt-enable mask while preserving IME |
 | `037FB860` | `OS_SetIrqFunction` | `0xA8` | Registers direct or callback-backed handlers for each selected IRQ bit |
 | `037FBCC0` | `OS_SetSwitchThreadCallback` | `0x34` | Atomically replaces the scheduler's context-switch callback |
 | `037FC188` | `OS_InitThread` | `0x12C` | Builds `OSThreadInfo`, the bootstrap thread, stack guards, and shared pointer |
 | `037FC7E8` | `OS_Init` | `0x38` | Top-level NitroSDK operating-system initialization sequence |
 | `037FDC90` | interrupt-control leaves | `0x78` | Six contiguous CPSR IRQ/FIQ enable, disable, restore, and mode helpers |
+| `037FDD08` | reset subsystem | `0x150` | Spin wait, termination, FIFO reset callback, reset detection and execution |
+| `03803D94` | `SVC_WaitByLoop` | `0x04` | Thumb wrapper for supervisor call 3 |
+| `03803DAE` | `SVC_Halt` | `0x04` | Thumb wrapper for supervisor call 6 |
 
-Together these replace `0x524` bytes of the first mixed autoload image with
+Together these replace `0x720` bytes of the first mixed autoload image with
 symbolic instructions. `ARM7_Main` exposes 20 calls, including one into
 autoload 1, plus its three literal references. The main-loop thunk records the
 Thumb target as a relocation with a `+1` interworking addend. `OS_IrqHandler`
@@ -61,10 +67,10 @@ encodings are valid, so those two context-switch instructions use documented
 
 ## Current confidence boundary
 
-There are 77 directly verified ARM call/branch/literal/data relocations: 19 in
-resident startup and 58 covering the nine maintained autoload-0 units. The
+There are 104 directly verified ARM call/branch/literal/data relocations: 19 in
+resident startup and 85 covering the 15 maintained autoload-0 units. The
 build decodes each instruction source and checks its calculated branch target,
-referenced literal value, or stored pointer. All `0x694` currently promoted
+referenced literal value, or stored pointer. All `0x890` currently promoted
 ARM7 bytes match exactly. The two autoload images
 still contain large mixtures of executable code, literal pools, strings,
 tables, and writable data, while the upstream repository supplies no
