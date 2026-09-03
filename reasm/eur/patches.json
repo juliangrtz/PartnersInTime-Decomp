@@ -1139,6 +1139,25 @@
     },
     {
       "module": "arm7_autoload_000",
+      "address": "0x038033C8",
+      "size": "0x1CC",
+      "kind": "code",
+      "section": ".pit_CARD_CommandControl",
+      "source": "arm7/CARD_CommandControl.s",
+      "externals": {
+        "CARDi_CommArray": "0x03803338",
+        "CARDi_CommReadCore": "0x038032F4",
+        "CARDi_CommWriteCore": "0x038032A8",
+        "CARDi_ReadStatusCommand": "0x038074A8",
+        "CARDi_SpiWork": "0x03809A40",
+        "CARDi_Work": "0x03809460",
+        "OS_SpinWait": "0x037FDD08",
+        "REG_VCOUNT": "0x04000006"
+      },
+      "expected_sha256": "bab3244c889939fbf0d46f9ee4166ac4419ed35c12f8ac0330558c4dc60d4cc3"
+    },
+    {
+      "module": "arm7_autoload_000",
       "address": "0x037FDF4C",
       "size": "0x270",
       "kind": "code",
