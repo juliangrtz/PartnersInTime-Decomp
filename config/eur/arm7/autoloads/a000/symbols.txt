@@ -257,9 +257,9 @@ SND_PrepareSeq kind:function(arm,size=0x154) addr:0x03801a5c
 SND_SeqMain kind:function(arm,size=0xa0) addr:0x03801bb0
 SND_SeqInit kind:function(arm,size=0x6c) addr:0x03801c50
 SNDi_GetWaveData kind:function(arm,size=0x40) addr:0x03801cbc
-SND_NoteOn kind:function(arm) addr:0x03801cfc
-SND_GetWaveDataAddress kind:function(arm) addr:0x03801e24
-SND_ReadInstData kind:function(arm) addr:0x03801e6c
+SND_NoteOn kind:function(arm,size=0x128) addr:0x03801cfc
+SND_GetWaveDataAddress kind:function(arm,size=0x48) addr:0x03801e24
+SND_ReadInstData kind:function(arm,size=0x184) addr:0x03801e6c
 SND_UpdateSharedWork kind:function(arm) addr:0x03801ff0
 SND_AlarmInit kind:function(arm) addr:0x03802260
 SND_CommandProc kind:function(arm) addr:0x03802604
