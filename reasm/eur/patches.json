@@ -576,10 +576,21 @@
       "externals": {
         "BattleCollision_GetBounds": "0x0209E918",
         "BattleSceneObject_GetById": "0x02076FB4",
-        "func_ov002_0209ef3c": "0x0209EF3C",
+        "BattleCollision_TestVolumes": "0x0209EF3C",
         "func_ov002_020a3370": "0x020A3370"
       },
       "expected_sha256": "396dddcab3c3cc35dfb9ae841e0ab870b471f69573c9272a84ad26a1945d0c58"
+    },
+    {
+      "module": "arm9_ov002",
+      "address": "0x0209EF3C",
+      "size": "0x660",
+      "section": ".pit_BattleCollision_TestVolumes",
+      "source": "battle/BattleCollision_TestVolumes.s",
+      "externals": {
+        "_s32_div_f": "0x02046474"
+      },
+      "expected_sha256": "b58c8c53ed5ffc94f5742df418dd0597158a02f9a2400c17647272c08272b251"
     },
     {
       "module": "arm7",

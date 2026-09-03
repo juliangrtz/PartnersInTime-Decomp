@@ -8,7 +8,7 @@
 
 .extern BattleCollision_GetBounds
 .extern BattleSceneObject_GetById
-.extern func_ov002_0209ef3c
+.extern BattleCollision_TestVolumes
 .extern func_ov002_020a3370
 
 .global BattleCollision_TestObjects
@@ -215,7 +215,7 @@ BattleCollision_TestObjects:
     strh r7, [sp, #0x4E]
     ldr r7, [sp, #8]
     str r7, [sp]
-    bl func_ov002_0209ef3c
+    bl BattleCollision_TestVolumes
     cmp r0, #0
     addne sp, sp, #0x54
     popne {r4, r5, r6, r7, r8, sb, sl, fp, lr}

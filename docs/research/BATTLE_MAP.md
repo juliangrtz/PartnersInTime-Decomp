@@ -32,6 +32,7 @@ and runtime overlay 2.
 | `0209E918` | `BattleCollision_GetBounds` | Resolves party, special-object, or resource collision bounds |
 | `0209EBAC` | `BattleHitDescriptor_GetByActorId` | Resolves per-actor 16-byte hit descriptors |
 | `0209EBFC` | `BattleCollision_TestObjects` | Tests all source/target bounds and returns a hit position |
+| `0209EF3C` | `BattleCollision_TestVolumes` | Swept six-axis overlap and time-of-impact calculation |
 | `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
@@ -206,6 +207,9 @@ from the bound resource and receive the original coordinate-axis conversion.
 The maintained object test iterates every available source/target bound pair,
 transforms both objects' bounds into battle-scene coordinates, and passes the
 four resulting volumes plus the output position to the low-level overlap test.
+That maintained low-level test rejects separated or nonconverging axes, derives
+fixed-point entry/exit times across all six faces, rejects misses, returns a
+six-bit impact-axis mask, and interpolates the three-dimensional hit position.
 
 ## Enemy stat records
 
