@@ -370,7 +370,7 @@ SPI_Init kind:function(arm,size=0x120) addr:0x03804244
 SPIi_SetTouchPanelCallbackValue kind:function(arm,size=0x48) addr:0x03804364
 TPi_VAlarmCallback kind:function(arm,size=0x78) addr:0x038043ac
 TP_ExecuteProcess kind:function(arm,size=0x234) addr:0x03804424
-TPi_UpdateTouchData kind:function(arm) addr:0x03804658
+TPi_UpdateTouchData kind:function(arm,size=0xf4) addr:0x03804658
 TP_AnalyzeCommand kind:function(arm) addr:0x0380474c
 TP_Init kind:function(arm) addr:0x0380490c
 TP_ExecSampling kind:function(arm) addr:0x03804a1c
@@ -471,6 +471,8 @@ SPIi_ExceptionThreadQueue kind:data(any) addr:0x0380a0e8
 SPIi_ThreadStackTop kind:data(any) addr:0x0380a090
 TPi_Work kind:data(any) addr:0x0380a0f8
 TPi_VAlarmArray kind:data(any) addr:0x0380a124
+TPi_PenUpCounter kind:data(any) addr:0x0380a0f0
+TPi_PenDownCounter kind:data(any) addr:0x0380a0f4
 CARDi_BootMode kind:data(any) addr:0x027ffc40
 CARDi_RomIdSourceSelect kind:data(any) addr:0x027ffc10
 CARDi_RomIdPrimary kind:data(any) addr:0x027ff800
