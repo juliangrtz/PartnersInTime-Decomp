@@ -7,7 +7,7 @@
 .balign 4
 
 .extern VM_Run
-.extern func_ov002_0207e684
+.extern BattleAI_TryClearOrderWait
 .extern gBattleContext
 
 .global BattleAI_UpdateActionTask
@@ -27,7 +27,7 @@ BattleAI_UpdateActionTask:
     lsrs r0, r0, #0x1f
     beq .L_run_vm
     mov r0, r4
-    bl func_ov002_0207e684
+    bl BattleAI_TryClearOrderWait
     cmp r0, #0
     addeq sp, sp, #4
     popeq {r4, r5, lr}

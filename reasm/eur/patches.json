@@ -76,13 +76,25 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x0207E684",
+      "size": "0x11C",
+      "section": ".pit_BattleAI_TryClearOrderWait",
+      "source": "battle/BattleAI_TryClearOrderWait.s",
+      "externals": {
+        "gBattleAIActionTaskPool": "0x020C07C8",
+        "gBattleAIReactionTaskPool": "0x020C0870"
+      },
+      "expected_sha256": "ad79e84255524c8487e079d573397be2cbd50352c68be03a329aa4bfd86c43d1"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x0207E928",
       "size": "0x98",
       "section": ".pit_BattleAI_UpdateReactionTask",
       "source": "battle/BattleAI_UpdateReactionTask.s",
       "externals": {
         "VM_Run": "0x020063A4",
-        "func_ov002_0207e684": "0x0207E684",
+        "BattleAI_TryClearOrderWait": "0x0207E684",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "d3ac20740f20d73005d92cc7516fb3180d4223948d9d6c17a7a9afc31188f326"
@@ -95,7 +107,7 @@
       "source": "battle/BattleAI_UpdateActionTask.s",
       "externals": {
         "VM_Run": "0x020063A4",
-        "func_ov002_0207e684": "0x0207E684",
+        "BattleAI_TryClearOrderWait": "0x0207E684",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "4914157f0aca02f413a8c6e7dd9d7b6feb3766a56b8df1486afa8cb122640a98"

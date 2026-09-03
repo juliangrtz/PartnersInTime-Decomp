@@ -30,6 +30,7 @@ and runtime overlay 2.
 | `0207E928` | `BattleAI_UpdateReactionTask` | Runs one enemy reaction VM task to completion |
 | `0207E9C0` | `BattleAI_UpdateActionTask` | Runs one enemy action VM task to completion |
 | `0207EA58` | `BattleAITask_GetOrInsert` | Finds or inserts a task in actor-ID order |
+| `0207E684` | `BattleAI_TryClearOrderWait` | Resumes a paused VM state once no earlier action or reaction task blocks it |
 | `0207ECA8` | `BattleAI_StartReactionScript` | Starts an enemy reaction state with mode `0x2000` |
 | `0207ECC0` | `BattleAI_StartActionScript` | Starts an enemy action state with mode `0x1000` |
 | `0207ED70` | `BattleAI_StartScriptTask` | Initializes and attaches an enemy AI VM state |
@@ -366,6 +367,11 @@ separate task pools and separate 184-byte actor-local VM states at actor offsets
 `+0x70` and `+0x128`. Tasks remain sorted by actor ID; their update callbacks
 honor the VM pause bits at state `+0xB2`, call `VM_Run`, and clear themselves
 when it returns completion code 1 or 2.
+When pause bit 1 requests ordering, `BattleAI_TryClearOrderWait` scans both
+active task lists. It ignores the same actor, empty scripts, and bit-0-disabled
+states, then compares the signed order field at `+0xB4` with an actor-ID tie
+break. It clears the wait bit and permits `VM_Run` only after every earlier
+live task has passed.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds
