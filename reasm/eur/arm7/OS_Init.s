@@ -8,10 +8,10 @@
 
 .global OS_Init
 .type OS_Init, %function
-.extern func_037FB908
+.extern OS_InitIrqTable
 .extern func_037FBBD4
 .extern OS_InitThread
-.extern func_037FC938
+.extern OS_InitArena
 .extern func_037FD0F4
 .extern func_037FD568
 .extern OS_InitReset
@@ -20,10 +20,10 @@
 OS_Init:
     stmdb sp!, {lr}
     sub sp, sp, #4
-    bl func_037FC938
+    bl OS_InitArena
     bl func_037FE1C4
     bl func_037FBBD4
-    bl func_037FB908
+    bl OS_InitIrqTable
     bl func_037FD0F4
     bl func_037FD568
     bl OS_InitThread
