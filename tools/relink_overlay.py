@@ -395,7 +395,9 @@ def relink_module(
                     )
                 if not any(
                     unit.start <= relocation["source"] < unit.end
-                    and relocation["target"] + relocation["add"] == value
+                    # Externals define the symbol base; the relocation addend
+                    # belongs to expressions such as a Thumb pointer's +1.
+                    and relocation["target"] == value
                     for relocation in relocations
                 ):
                     raise reassembly.ReassemblyError(

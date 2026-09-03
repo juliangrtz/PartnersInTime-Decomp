@@ -105,17 +105,19 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-138 independent units. Those units cover raw
+143 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
-images. There are 29,608 currently known relocations. `BattleActor_GetPartySlot`
+images. There are 29,609 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
 `BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
 DSD-validated external definition. All resident ARM7 bytes are maintained
-ARMv4T assembly or symbolic module parameters; its five source units have 19
-validated relocations. Every linked component and the resulting NDS have zero
-differing bytes from the verified European ROM.
+ARMv4T assembly or symbolic module parameters. Together, `ARM7_Main`,
+`OS_IrqHandler`, and the main-loop ARM-to-Thumb thunk add three maintained
+units from autoload 0, including 29 verified autoload relocations; ARM7 now has
+48 verified relocations in total. Every linked component and the resulting NDS
+have zero differing bytes from the verified European ROM.
 
 Work items:
 
@@ -237,8 +239,9 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Recover ARM/Thumb function boundaries, data sections, and relocations inside
-   both ARM7 autoload images; the upstream project currently supplies none.
+2. Crawl outward from the maintained `ARM7_Main` call graph to recover further
+   ARM/Thumb function boundaries, data sections, and relocations in both ARM7
+   autoload images; the upstream project supplies no additional analysis.
 3. Continue promoting small overlay-2 battle leaf functions using the two
    exact symbolic units as the template.
 4. Split section fallbacks at DSD translation-unit boundaries, then retire

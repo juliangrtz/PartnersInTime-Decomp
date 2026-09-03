@@ -260,6 +260,9 @@ def relink_all_arm7(
         "output_rom_sha1": hashlib.sha1(rebuilt_rom).hexdigest(),
         "arm7_components": len(results),
         "section_units": sum(result.unit_count for result in results),
+        "maintained_units": sum(
+            result.maintained_unit_count for result in results
+        ),
         "known_relocations": sum(result.relocation_count for result in results),
         "validated_relocations": validated_relocations,
         "differing_bytes": sum(result.differing_bytes for result in results),
@@ -291,6 +294,7 @@ def relink_all_arm7(
     print(f"ROM SHA-1: {summary['output_rom_sha1']}")
     print(f"ARM7 components: {summary['arm7_components']}")
     print(f"Section units: {summary['section_units']}")
+    print(f"Maintained units: {summary['maintained_units']}")
     print(f"Known relocations: {summary['known_relocations']}")
     print(f"Differing bytes: {summary['differing_bytes']}")
     print(f"Summary: {summary_path}")

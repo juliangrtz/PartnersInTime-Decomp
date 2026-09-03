@@ -88,6 +88,66 @@
         "ARM7_AutoloadListStart": "0x023A6F0C"
       },
       "expected_sha256": "cc7f50d72d43f863e67e06b485e6ec70d4a9edd0e506f30c1addf12ffc05f064"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037F846C",
+      "size": "0xB8",
+      "kind": "code",
+      "section": ".pit_ARM7_Main",
+      "source": "arm7/ARM7_Main.s",
+      "externals": {
+        "ARM7_Autoload000_Start": "0x037F8000",
+        "REG_DISPSTAT": "0x04000004",
+        "REG_IME": "0x04000208",
+        "func_027F6124": "0x027F6124",
+        "func_037F8228": "0x037F8228",
+        "func_037F83C0": "0x037F83C0",
+        "ARM7_MainLoopThumbThunk": "0x037F8524",
+        "func_037FB7A8": "0x037FB7A8",
+        "func_037FB860": "0x037FB860",
+        "func_037FC188": "0x037FC188",
+        "func_037FC7E8": "0x037FC7E8",
+        "func_037FDC90": "0x037FDC90",
+        "func_037FDD48": "0x037FDD48",
+        "func_037FDE08": "0x037FDE08",
+        "func_037FE1C4": "0x037FE1C4",
+        "func_037FE580": "0x037FE580",
+        "func_037FF0CC": "0x037FF0CC",
+        "func_03802ABC": "0x03802ABC",
+        "func_03802B48": "0x03802B48",
+        "func_03803B48": "0x03803B48",
+        "func_03804244": "0x03804244",
+        "func_03805ACC": "0x03805ACC",
+        "func_038069F8": "0x038069F8"
+      },
+      "expected_sha256": "431a15cc6f7f99b8d7bc3034ada0cdb358c1b638669ec4a8004bf6b4298fe30e"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037FB458",
+      "size": "0x170",
+      "kind": "code",
+      "section": ".pit_OS_IrqHandler",
+      "source": "arm7/OS_IrqHandler.s",
+      "externals": {
+        "OS_IRQTable": "0x0380794C",
+        "OS_IRQCheckFlag": "0x03807A84",
+        "OSi_ThreadInfo": "0x03807B08"
+      },
+      "expected_sha256": "36ef98dcced342d63b4c0accea0c1ff2327f60b96a070ad84ecc893a7c73152c"
+    },
+    {
+      "module": "arm7_autoload_000",
+      "address": "0x037F8524",
+      "size": "0xC",
+      "kind": "code",
+      "section": ".pit_ARM7_MainLoopThumbThunk",
+      "source": "arm7/ARM7_MainLoopThumbThunk.s",
+      "externals": {
+        "ARM7_MainLoopThumbTarget": "0x03803DAE"
+      },
+      "expected_sha256": "2611d7e5ab76547bf147bce32ef75eef56cf59c93386a097c6b5540effb2c67f"
     }
   ]
 }

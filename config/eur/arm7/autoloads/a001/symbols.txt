@@ -1,1 +1,2 @@
 ARM7_Autoload001_Start kind:data(any) addr:0x027e0000
+func_027F6124 kind:label addr:0x027f6124

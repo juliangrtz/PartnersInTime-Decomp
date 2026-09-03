@@ -37,7 +37,12 @@ class Arm7LayoutTests(unittest.TestCase):
     def test_arm7_symbol_map_is_cpu_specific(self) -> None:
         symbols = relink_overlay.read_all_symbols("eur", "arm7")
         self.assertEqual(symbols["ARM7_Entry"], 0x02380000)
+        self.assertEqual(symbols["ARM7_MainLoopThumbThunk"], 0x037F8524)
+        self.assertEqual(symbols["ARM7_MainLoopThumbTarget"], 0x03803DAE)
         self.assertEqual(symbols["OS_IrqHandler"], 0x037FB458)
+        self.assertEqual(symbols["OS_IRQTable"], 0x0380794C)
+        self.assertEqual(symbols["OS_IRQCheckFlag"], 0x03807A84)
+        self.assertEqual(symbols["OSi_ThreadInfo"], 0x03807B08)
 
     def synthetic_layout(self) -> tuple[bytes, reassembly.Module]:
         load_address = 0x02380000
