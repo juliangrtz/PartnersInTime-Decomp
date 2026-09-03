@@ -105,7 +105,7 @@ Status: **fixed-address native relink implemented for EUR**.
 `tools/relink_native.py` discovers both CPUs' resident/autoload layouts,
 validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 37 overlays, resident ARM7, and both ARM7 autoloads as 43 components containing
-352 independent units. Those units cover raw
+361 independent units. Those units cover raw
 `.text` fragments around maintained functions, `.init`, `.rodata`,
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
@@ -135,7 +135,10 @@ status clearing, animation completion, actor/global locks, form-specific sound
 pairs, linked-character movement and the follow-up character-load callbacks.
 The launch-reaction closure additionally includes immediate/interpolated
 scene-object deltas, their fixed-point update callback, DS-hardware square-root
-ballistic velocity setup, and the form-specific landing effect.
+ballistic velocity setup, and the form-specific landing effect. The surrounding
+motion infrastructure now exposes coordinate snapshots, synchronized target
+updates, active-object list membership, channel lookup and initialization, and
+motion-list unlinking.
 `BattleDamage_CalculateBase` at `0x0209BF38`
 and `BattleDamage_CalculateAttack` at `0x02071C84` expose the compact and full
 level/POW/DEF calculations, including Q8 modifier tables, category minima,
