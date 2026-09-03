@@ -95,8 +95,11 @@ Property IDs 16-20 directly expose current HP, max HP, POW, DEF, and SPD.
 | `24` | 4 | item drop 1 |
 | `28` | 4 | item drop 2 |
 
-`BattleEnemyData_LoadStatRecord` reads exactly 44 bytes and
-`BattleEntity_BindResource` copies the numeric fields into the live actor.
+`BattleEnemyData_LoadStatRecord` is maintained symbolic assembly. It multiplies
+the selected enemy index by 44, queues exactly that byte range from the primary
+battle resource, and installs `BattleEnemyData_LoadObjectData` as the next load
+callback. `BattleEntity_BindResource` later copies the numeric fields into the
+live actor.
 
 ## Large native dispatchers
 
