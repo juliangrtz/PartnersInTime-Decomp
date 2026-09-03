@@ -31,7 +31,7 @@
 .extern BattleStatus_TryApply
 .extern BattleDamage_StartPartyReaction
 .extern func_ov002_02065ec4
-.extern func_ov002_02076b0c
+.extern BattlePosition_StoreViewRelative
 .extern func_ov002_02076bd4
 .extern func_ov002_02091198
 .extern BattleDamage_SpawnNumber
@@ -102,7 +102,7 @@ BattleDamage_ApplyToParty:
     add r0, sp, #LOCAL_POSITION
     mov r2, r2, asr #16
     mov r3, r3, asr #16
-    bl func_ov002_02076b0c
+    bl BattlePosition_StoreViewRelative
 
     ldrh r0, [r8, #SCENE_OBJECT_ACTOR_ID]
     cmp r0, #PARTY_ACTOR_MARIO

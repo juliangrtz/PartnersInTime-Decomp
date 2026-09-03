@@ -83,6 +83,17 @@
     },
     {
       "module": "arm9_ov002",
+      "address": "0x02076B0C",
+      "size": "0xA0",
+      "section": ".pit_BattlePosition_StoreViewRelative",
+      "source": "battle/BattlePosition_StoreViewRelative.s",
+      "externals": {
+        "gBattleContext": "0x020C0718"
+      },
+      "expected_sha256": "c89e85a701c014a06d460c59752b1f51da202f5748489dce971b3f399572c7f1"
+    },
+    {
+      "module": "arm9_ov002",
       "address": "0x02076BAC",
       "size": "0x28",
       "section": ".pit_BattleActor_IsHpAtMostQuarter",
@@ -322,7 +333,7 @@
         "BattleEntity_BindResource": "0x02091C20",
         "BattleSceneObject_GetById": "0x02076FB4",
         "data_ov002_020bfa3c": "0x020BFA3C",
-        "func_ov002_02076b0c": "0x02076B0C",
+        "BattlePosition_StoreViewRelative": "0x02076B0C",
         "func_ov002_02091198": "0x02091198",
         "func_ov002_02091a58": "0x02091A58",
         "BattleSceneObject_GetActiveModel": "0x020A3370",
@@ -499,7 +510,7 @@
         "BattleActor_ApplyDamage": "0x0209D694",
         "BattleActor_GetById": "0x02076F64",
         "BattleActor_GetEnemySlot": "0x02076F24",
-        "func_ov002_02076b0c": "0x02076B0C",
+        "BattlePosition_StoreViewRelative": "0x02076B0C",
         "func_ov002_02091198": "0x02091198",
         "BattleDamage_SpawnNumber": "0x0209CD9C",
         "BattleDamage_StartEnemyReaction": "0x0209D5CC",
@@ -523,7 +534,7 @@
         "BattleStatus_ClearEffect": "0x0209C278",
         "BattleStatus_TryApply": "0x0209C464",
         "func_ov002_02065ec4": "0x02065EC4",
-        "func_ov002_02076b0c": "0x02076B0C",
+        "BattlePosition_StoreViewRelative": "0x02076B0C",
         "func_ov002_02076bd4": "0x02076BD4",
         "func_ov002_02091198": "0x02091198",
         "BattleDamage_SpawnNumber": "0x0209CD9C",

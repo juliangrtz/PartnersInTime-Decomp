@@ -35,7 +35,7 @@
 .extern BattleActor_GetById
 .extern BattleActor_GetEnemySlot
 .extern BattleDamage_StartEnemyReaction
-.extern func_ov002_02076b0c
+.extern BattlePosition_StoreViewRelative
 .extern func_ov002_02091198
 .extern BattleDamage_SpawnNumber
 .extern func_ov002_020acb88
@@ -142,7 +142,7 @@ BattleDamage_ApplyToEnemy:
     add r0, sp, #LOCAL_POSITION
     mov r2, r2, asr #16
     mov r3, r3, asr #16
-    bl func_ov002_02076b0c
+    bl BattlePosition_StoreViewRelative
 
     ldr r0, [r5, #BATTLE_ACTOR_RESOURCE_SLOT]
     cmp r0, #0
