@@ -17,7 +17,7 @@
 .extern SVC_Halt_Thunk
 .extern SVC_WaitByLoop
 .extern _s32_div_f
-.extern func_037FE70C
+.extern SND_Shutdown
 .extern func_03807604
 
 .global OS_SpinWait
@@ -71,7 +71,7 @@ OS_ResetSystem:
     bl OS_SetIrqMask
     mvn r0, #0
     bl OS_ResetRequestIrqMask
-    bl func_037FE70C
+    bl SND_Shutdown
     mov r0, #0x10
     bl OSi_SendResetCommand
     bl func_03807604
