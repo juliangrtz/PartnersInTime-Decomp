@@ -52,6 +52,9 @@ src/battle/battle_common_assets.c:
 src/battle/battle_interface_assets.c:
     .text       start:0x020884e8 end:0x02088bdc
 
+src/battle/battle_action_scripts.c:
+    .text       start:0x02088bdc end:0x02088ef4
+
 src/battle/battle_script_state.c:
     .text       start:0x020922dc end:0x0209234c
 
