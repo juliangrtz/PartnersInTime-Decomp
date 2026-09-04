@@ -21,6 +21,14 @@ and runtime overlay 2.
 | `02076BD4` | `BattleActor_CanReceiveStatus` | Rejects dead, unloaded, or inactive-form status targets |
 | `02076FB4` | `BattleSceneObject_GetById` | Resolves field, party, enemy, and auxiliary visual-object IDs |
 | `02077058` | `BattleObjectData_GetLoadState` | Resolves a 48-byte object-resource load state |
+| `02087B88` | `BattleMath_WaitForSqrtResult` | Waits for and reads the DS square-root coprocessor result |
+| `02087BAC` | `BattleMath_StartSqrt` | Starts a 32-bit DS hardware square root |
+| `02087BCC` | `BattlePosition_StoreBattleRelative` | Converts a battle anchor and offsets through the active view |
+| `02087C14` | `BattleSceneObject_SetBattleAnimation` | Applies the standard battle animation and model flags to an object |
+| `02087C58` | `BattleSceneObject_SetBattleAnimationById` | Object-ID wrapper for standard battle animation setup |
+| `02087CE4` | `BattleFieldAssets_RequestReload` | Queues the current map's field-asset reload when battle exits |
+| `02087D98` | `BattleBackground_RequestToggle` | Queues a swap of the double-buffered 3D battle background |
+| `02087E5C` | `BattleBackground_RequestLoad` | Queues a battle-background load into the inactive buffer |
 | `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
@@ -196,6 +204,15 @@ model helper then selects scene-object pointer `+0xC0` or `+0xC4` from flag bit
 14 at `+0xF4`. `BattlePosition_StoreViewRelative` accepts a raw-coordinate
 bypass flag and otherwise subtracts either context offset pair
 `+0xCB9C/+0xCB9E` or `+0xCBA0/+0xCBA2`; its stored depth is clamped at zero.
+The matching utility wrapper at `0x02087BCC` converts a battle anchor into that
+view-relative coordinate system. The adjacent animation wrappers select the
+standard model mode, while two leaf functions encapsulate the asynchronous DS
+square-root registers.
+The next matching task group owns double-buffered background changes. It loads
+the configured background ID from context offset `+0x3A`, uses runtime flag bit
+19 as the inactive-buffer selector, fades/toggles the resident scene, and uses
+bit 8 as the pending marker. The neighboring battle-exit task rebuilds the
+field asset set from the signed current-map ID at save-state offset `+0x55A`.
 All actor resolvers, the compact base-damage calculation, and the damage/KO
 updater are now maintained byte-identical C.
 The state-bit setter, active-model selectors, model-bit setters, position

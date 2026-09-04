@@ -43,6 +43,9 @@ src/battle/battle_party_progression.c:
 src/battle/battle_scene_util.c:
     .text       start:0x02087b88 end:0x02087c84
 
+src/battle/battle_scene_background.c:
+    .text       start:0x02087c84 end:0x02087ec4
+
 src/battle/battle_script_state.c:
     .text       start:0x020922dc end:0x0209234c
 

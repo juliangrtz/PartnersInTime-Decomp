@@ -1,23 +1,14 @@
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
+#include <game/battle_context.h>
 #include <game/battle_object.h>
 #include <game/battle_scene.h>
 #include <hardware.h>
 
 enum BattlePartyFormationOffset {
     BATTLE_NEXT_STATE_OFFSET = 0x18,
-    BATTLE_PARTY_TASK_POOL_OFFSET = 0x8B44,
-    BATTLE_RUNTIME_FLAGS_OFFSET = 0xD3A0
+    BATTLE_PARTY_TASK_POOL_OFFSET = 0x8B44
 };
-
-typedef union BattlePartyRuntimeFlags {
-    u32 raw;
-    struct {
-        u32 unknown_00_15 : 16;
-        u32 alternate_formation : 1;
-        u32 unknown_17_31 : 15;
-    } bits;
-} BattlePartyRuntimeFlags;
 
 enum BattlePartyTransitionConstant {
     BATTLE_PARTY_TRANSITION_OBJECT_DATA_ID = 52,
@@ -67,9 +58,7 @@ int BattleParty_StartFormationTransition(int next_state, u16 mario_target_x,
             continue;
         }
 
-        if (((BattlePartyRuntimeFlags *)(gBattleContext +
-                                         BATTLE_RUNTIME_FLAGS_OFFSET))
-                ->bits.alternate_formation) {
+        if (BattleContext_GetRuntimeState()->flags.bits.alternate_formation) {
             switch (actor->formation_index) {
             case 0:
                 target_resource_id = (s32)0xC0000053;
@@ -134,9 +123,7 @@ int BattleParty_StartFormationTransition(int next_state, u16 mario_target_x,
                                       target_resource_id);
         scene_object->transition_flags = 0;
 
-        if (((BattlePartyRuntimeFlags *)(gBattleContext +
-                                         BATTLE_RUNTIME_FLAGS_OFFSET))
-                ->bits.alternate_formation) {
+        if (BattleContext_GetRuntimeState()->flags.bits.alternate_formation) {
             int delta_x = linked_object->x - scene_object->x + 16;
             int delta_y = linked_object->y - scene_object->y;
             int delta_y_squared = delta_y * delta_y;
