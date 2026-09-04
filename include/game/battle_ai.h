@@ -23,6 +23,19 @@ enum BattleAIScriptTaskType {
     BATTLE_AI_TASK_ACTOR_ID_MASK = 0x0FFF
 };
 
+enum BattleAIStateFlag {
+    BATTLE_AI_STATE_FLAG_DISABLED = 1 << 0,
+    BATTLE_AI_STATE_FLAG_ORDER_WAIT = 1 << 1
+};
+
+enum BattleAIContextOffset {
+    BATTLE_AI_PARTY_STATE_1_OFFSET = 0x6A64,
+    BATTLE_AI_PARTY_STATE_2_OFFSET = 0x6B1C,
+    BATTLE_AI_PARTY_STATE_3_OFFSET = 0x6BD4,
+    BATTLE_AI_PARTY_STATE_4_OFFSET = 0x6C8C,
+    BATTLE_AI_PARTY_STATE_STRIDE = 0xB8
+};
+
 enum BattleVmVariable {
     BATTLE_VM_VAR_OWNER_ACTOR_ID = 0x4000,
     BATTLE_VM_VAR_OWNER_TASK_TYPE = 0x4001,
@@ -39,6 +52,10 @@ enum BattleVmVariable {
 };
 
 extern u8 *gBattleContext;
+extern BattleTaskPool gBattleAIAuxTaskPool;
+extern BattleTaskPool gBattleAIActionTaskPool;
+extern BattleTaskPool gBattleAIReactionTaskPool;
+extern BattleTaskPool gBattleAIObjectTaskPool;
 
 struct BattleAIState {
     const void *script;
@@ -47,7 +64,14 @@ struct BattleAIState {
     u16 scratch_aa;
     u8 unk_0ac[4];
     u16 owner_id;
-    u16 flags;
+    union {
+        u16 flags;
+        struct {
+            u16 disabled : 1;
+            u16 wait_for_order : 1;
+            u16 unknown_flags : 14;
+        };
+    };
     s16 order;
     u16 order_tie_break;
     const void *continuation_script;
@@ -74,6 +98,9 @@ typedef char BattleAITask_SizeCheck[sizeof(BattleAITask) == 0x14 ? 1 : -1];
 typedef char BattleTaskPool_SizeCheck[sizeof(BattleTaskPool) == 8 ? 1 : -1];
 
 int BattleAI_HandleVmResult(BattleAITask *task, int result, BattleAIState *state);
+void BattleAITask_StopById(BattleAITask **head, int actor_id);
+void BattleAI_StopScriptById(int script_id);
+int BattleAI_TryClearOrderWait(BattleAIState *state);
 void BattleAI_StartReactionScript(int actor_id);
 void BattleAI_StartActionScript(int actor_id);
 void BattleAI_StartPartyVmSlot4(void);
