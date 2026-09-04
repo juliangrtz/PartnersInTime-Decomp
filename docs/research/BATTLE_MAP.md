@@ -146,6 +146,7 @@ and runtime overlay 2.
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
 | `02018F48` | `ItemEffect_CalculateValue` | Resident item-record value calculation and HP clamps |
 | `0208908C` | `BattleEnemyData_RequestLoad` | Initializes and queues one enemy-data request |
+| `02089300` | `BattleObjectData_QueueLoadAndMarkPending` | Queues a resource ID and marks its destination load pending |
 | `02089320` | `BattleObjectData_CopyResource` | Copies a loaded resource, rebases its internal pointers, and schedules upload |
 | `02089EEC` | `BattleObjectData_QueueLoad` | Resets an object-data state and queues its asynchronous loader |
 | `02092048` | `BattleObjectData_EnsureLoaded` | Routes ordinary and enemy resource requests while suppressing duplicates |
@@ -605,6 +606,10 @@ rebases the five component pointers against the destination buffer, preserves
 slot-owned object/allocation fields, and transfers only flags 27 and 28. A
 nonzero resource index whose upload-complete flag is clear is then queued for
 resource upload.
+`BattleObjectData_QueueLoadAndMarkPending` is the small forced-load entry used
+by the ordinary-slot request path: it forwards both arguments to the common
+queue loader, sets descriptor flag 29, and returns the queued task so the
+caller can retain its object-data slot ID.
 `BattleEntity_BindResource` is maintained too: its enemy branch
 copies max/current HP, base/current POW, DEF, and SPD, installs level/trait
 bits, and clears transient actor flags; its party branch binds the corresponding

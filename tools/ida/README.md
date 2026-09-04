@@ -36,6 +36,14 @@ For a quick batch decompiler check:
   'build/ida/PiT_eur_ov002_battle.i64'
 ```
 
+For an address-annotated instruction listing without opening the GUI, use the
+companion disassembly helper:
+
+```powershell
+& $ida '-A' '-Stools/ida/disassemble_function.py BattleAI_HandleVmResult' `
+  'build/ida/PiT_eur_ov002_battle.i64'
+```
+
 The resident ARM9 image can be imported in the same way. This database is the
 useful companion for the generic script VM, save logic, item tables, and engine
 code outside overlays:
