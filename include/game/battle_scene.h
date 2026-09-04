@@ -37,7 +37,8 @@ struct BattleSceneObject {
     void *alternate_model;
     u8 unk_0c8[0x24];
     u16 actor_id;
-    u8 unk_0ee[6];
+    u16 linked_actor_id;
+    u8 unk_0f0[4];
     BattleSceneFlags flags;
 };
 
@@ -50,5 +51,6 @@ void *BattleSceneObject_GetActiveModel(BattleSceneObject *object);
 BattleMotionChannel *BattleSceneObject_GetMotionChannel(
     BattleSceneObject *object, int channel_index);
 void BattleSceneObject_SnapshotPosition(BattleSceneObject *object);
+BattleSceneObject *BattleSceneObject_GetById(u16 object_id);
 
 #endif
