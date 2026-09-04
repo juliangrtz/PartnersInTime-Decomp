@@ -51,7 +51,7 @@ word loads observed from the command-record register (`r5`).
 | `0x55` | `0x0207AA50` | — | `0x8`, `0xC`, `0x10` | `BattleActor_GetEnemySlot`, `func_ov002_02076ee8` |
 | `0x56` | `0x0207AE2C` | — | `0x8` | `BattleSceneObject_GetById` |
 | `0x57` | `0x0207AEAC` | — | `0x8`, `0xC` | `BattleSceneObject_GetById`, `BattleSceneObject_GetActiveModel` |
-| `0x58` | `0x0207AF08` | — | `0x8`, `0xC` | `BattleSceneObject_GetById`, `BattleSceneObject_GetActiveModel`, `func_ov002_0208e3bc` |
+| `0x58` | `0x0207AF08` | — | `0x8`, `0xC` | `BattleSceneObject_GetById`, `BattleSceneObject_GetActiveModel`, `BattleSceneObject_ConfigureAnimationLayer` |
 | `0x59` | `0x0207AF94` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleSceneObject_GetById`, `BattleSceneObject_GetActiveModel` |
 | `0x5A` | `0x0207B028` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleSceneObject_GetById`, `func_ov002_020a2f74` |
 | `0x5B` | `0x0207B070` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24` | `BattleSceneObject_GetById`, `BattleSceneObject_AdjustPosition`, `BattleSceneObject_MoveBy`, `BattleSceneObject_MoveTo`, `func_ov002_020a3b2c` |
@@ -83,14 +83,14 @@ word loads observed from the command-record register (`r5`).
 | `0x75` | `0x0207BBC8` | — | `0x8` | `BattleActor_GetById`, `BattleSceneObject_GetById`, `BattleSceneObject_GetActiveModel` |
 | `0x76` | `0x0207BC30` | — | `0x8` | `BattleActor_GetById`, `BattleSceneObject_GetById`, `BattleSceneObject_GetActiveModel` |
 | `0x77` | `0x0207BC98` | — | — | — |
-| `0x78` | `0x0207BCA8` | — | `0x8`, `0xC` | `func_ov002_0208e238` |
+| `0x78` | `0x0207BCA8` | — | `0x8`, `0xC` | `BattleEnemy_Remove` |
 | `0x79` | `0x0207BCD4` | — | — | — |
 | `0x7A` | `0x0207BCE4` | — | — | — |
 | `0x7B` | `0x0207BCF4` | — | — | — |
 | `0x7C` | `0x0207BD04` | — | — | — |
 | `0x7D` | `0x0207BD14` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleSceneObject_GetById`, `BattleDamage_ApplyToParty`, `BattleActor_ApplyDamage`, `BattlePosition_StoreViewRelative`, `BattleDamage_SpawnNumber` |
 | `0x7E` | `0x0207BE14` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleActor_GetById`, `BattleModelEffect_Spawn` |
-| `0x7F` | `0x0207BF44` | — | — | `func_ov002_0208e10c` |
+| `0x7F` | `0x0207BF44` | — | — | `BattleActor_IsAnyHitLocked` |
 | `0x80` | `0x0207BFA0` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleDamage_ApplyEquipmentModifiers`, `VM_WriteVariable` |
 | `0x81` | `0x0207BEB0` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleActor_GetById`, `BattleStatus_TryApply`, `VM_WriteVariable` |
 | `0x82` | `0x0207BF08` | — | `0x8`, `0xC` | `BattleActor_GetById`, `BattleStatus_ClearAll`, `BattleStatus_ClearEffect` |
@@ -122,8 +122,8 @@ word loads observed from the command-record register (`r5`).
 | `0x9C` | `0x0207CBBC` | — | — | — |
 | `0x9D` | `0x0207CBCC` | — | `0x8`, `0xC` | — |
 | `0x9E` | `0x0207CC94` | — | `0x8` | — |
-| `0x9F` | `0x0207CD14` | — | `0x8` | `func_ov002_0208e3f0` |
-| `0xA0` | `0x0207CD7C` | — | `0x8` | `func_ov002_0208e3f0`, `VM_WriteVariable` |
+| `0x9F` | `0x0207CD14` | — | `0x8` | `BattleScriptHandle_IsActive` |
+| `0xA0` | `0x0207CD7C` | — | `0x8` | `BattleScriptHandle_IsActive`, `VM_WriteVariable` |
 | `0xA1` | `0x0207CDB0` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28`, `0x2C`, `0x30`, `0x34`, `0x38`, `0x3C` | `func_ov002_020a53e0` |
 | `0xA2` | `0x0207CE94` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24` | `func_ov002_020aa38c` |
 | `0xA3` | `0x0207CEEC` | — | `0x8` | `BattleSceneObject_GetById` |

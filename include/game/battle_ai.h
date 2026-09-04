@@ -56,11 +56,19 @@ enum BattleVmVariable {
     BATTLE_VM_VAR_SHARED_LAST = 0x402F
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern u8 *gBattleContext;
 extern BattleTaskPool gBattleAIAuxTaskPool;
 extern BattleTaskPool gBattleAIActionTaskPool;
 extern BattleTaskPool gBattleAIReactionTaskPool;
 extern BattleTaskPool gBattleAIObjectTaskPool;
+
+#ifdef __cplusplus
+}
+#endif
 
 struct BattleAIState {
     const void *script;
@@ -105,6 +113,10 @@ typedef char BattleAIState_SizeCheck[sizeof(BattleAIState) == 0xC0 ? 1 : -1];
 typedef char BattleAITask_SizeCheck[sizeof(BattleAITask) == 0x14 ? 1 : -1];
 typedef char BattleTaskPool_SizeCheck[sizeof(BattleTaskPool) == 8 ? 1 : -1];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int BattleAI_HandleVmResult(BattleAITask *task, int result, BattleAIState *state);
 void BattleAI_UpdateChainedTask(BattleAITask *task);
 void BattleAI_UpdateAuxTask(BattleAITask *task);
@@ -134,6 +146,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
                             ScriptVmCommand *command);
 int BattleActor_IsHitLocked(int actor_id);
 void BattleAI_UpdateControlMask(int mask, int enabled);
+int BattleScriptHandle_IsActive(int handle);
 void BattleAI_InitStateFromScriptBlock(BattleAIState *state,
                                        const u16 *script_block, int owner_id);
 BattleAIState *BattleScriptState_GetByObjectId(u16 object_id);
@@ -160,5 +173,9 @@ BattleAITask *BattleTaskList_Insert(BattleTaskPool *pool, BattleAITask *task);
 BattleAITask *BattleTaskPool_Allocate(BattleTaskPool *pool);
 void BattleTaskPool_Init(BattleTaskPool *pool, int count, u32 payload_size);
 int BattleTaskList_Update(BattleTaskPool *pool);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

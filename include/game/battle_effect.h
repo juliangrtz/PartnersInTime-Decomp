@@ -31,6 +31,10 @@ typedef char BattlePosition_SizeCheck[
 ];
 typedef char BattleEffect_SizeCheck[sizeof(BattleEffect) == 0x30 ? 1 : -1];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void BattlePosition_StoreViewRelative(BattlePosition *position,
                                       int x, int y, int z,
                                       int use_raw_position, int view_index);
@@ -54,5 +58,9 @@ int BattleSound_Play(int sound_id, int argument_1, int argument_2,
 void BattleReward_ClearCounterEffects(void);
 BattleEffect *BattleReward_AdvanceCounterEffect(BattleEffect *effect);
 BattleEffect *BattleReward_EnsureCounterEffect(int reward_type);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

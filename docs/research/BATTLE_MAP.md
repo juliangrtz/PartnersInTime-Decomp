@@ -74,6 +74,10 @@ and runtime overlay 2.
 | `0208E080` | `BattleSpecialHandle_QueueReload` | Queues the special-handle reload task |
 | `0208E098` | `BattleActor_IsHitLocked` | Tests an actor's hit-lock flag |
 | `0208E0C4` | `BattleAI_UpdateControlMask` | Sets or clears one bit in the shared AI control mask |
+| `0208E10C` | `BattleActor_IsAnyHitLocked` | Tests both active party slots and all six enemy hit locks |
+| `0208E238` | `BattleEnemy_Remove` | Removes an enemy with optional animation and damage-number feedback |
+| `0208E3BC` | `BattleSceneObject_ConfigureAnimationLayer` | Configures one active-model animation layer through its virtual interface |
+| `0208E3F0` | `BattleScriptHandle_IsActive` | Tests one entry in any of the three typed battle-handle families |
 | `0207F080` | `BattleReward_ClearCounterEffects` | Stops and detaches the post-battle coin/experience counter effects |
 | `0207F100` | `BattleReward_AdvanceCounterEffect` | Replaces a completed counter sprite while preserving its owner slot |
 | `0207F17C` | `BattleReward_EnsureCounterEffect` | Creates the positioned coin or experience tally effect when absent |
@@ -570,6 +574,13 @@ and opens all fourteen BAI archives into typed resource requests, and resets
 the four task pools. Its adjacent helpers implement the asynchronous
 special-handle reload chain, test actor flag `0x200`, and update the shared
 16-bit control mask at context offset `+0x10C`.
+The following four script-command helpers are byte-identical C/C++. They scan
+the two active party actors and all six enemy actors for hit-lock flag `0x200`,
+remove an enemy with optional position-corrected damage feedback, invoke the
+active model's animation-layer method at virtual slot `0x88`, and resolve the
+`0x4000`, `0x8000`, and `0xC000` battle-handle families. The enemy-removal
+path also confirms a 20-byte position record at context offset `+0xCAD8` and
+its view origin at `+0xCB9C/+0xCB9E`.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds

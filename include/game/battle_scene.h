@@ -7,6 +7,7 @@
 typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleModel BattleModel;
+typedef struct BattleModelVTable BattleModelVTable;
 typedef void (*BattleMotionCallback)(BattleSceneObject *object,
                                      BattleMotionChannel *channel);
 
@@ -50,12 +51,64 @@ struct BattleMotionChannel {
     s16 parameters[8];
 };
 
+struct BattleModelVTable {
+    u8 unknown_000[0x88];
+    int (*configure_animation_layer)(BattleModel *model, s8 layer,
+                                     int animation_id, int enabled);
+};
+
+#ifdef __cplusplus
 struct BattleModel {
-    u8 unk_000[0x54];
+    virtual void unknown_00();
+    virtual void unknown_04();
+    virtual void unknown_08();
+    virtual void unknown_0c();
+    virtual void unknown_10();
+    virtual void unknown_14();
+    virtual void unknown_18();
+    virtual void unknown_1c();
+    virtual void unknown_20();
+    virtual void unknown_24();
+    virtual void unknown_28();
+    virtual void unknown_2c();
+    virtual void unknown_30();
+    virtual void unknown_34();
+    virtual void unknown_38();
+    virtual void unknown_3c();
+    virtual void unknown_40();
+    virtual void unknown_44();
+    virtual void unknown_48();
+    virtual void unknown_4c();
+    virtual void unknown_50();
+    virtual void unknown_54();
+    virtual void unknown_58();
+    virtual void unknown_5c();
+    virtual void unknown_60();
+    virtual void unknown_64();
+    virtual void unknown_68();
+    virtual void unknown_6c();
+    virtual void unknown_70();
+    virtual void unknown_74();
+    virtual void unknown_78();
+    virtual void unknown_7c();
+    virtual void unknown_80();
+    virtual void unknown_84();
+    virtual int configure_animation_layer(s8 layer, int animation_id,
+                                           int enabled);
+    u8 unk_004[0x50];
     s16 animation_id;
     u8 unk_056[0x26];
     u32 flags;
 };
+#else
+struct BattleModel {
+    BattleModelVTable *vtable;
+    u8 unk_004[0x50];
+    s16 animation_id;
+    u8 unk_056[0x26];
+    u32 flags;
+};
+#endif
 
 struct BattleSceneObject {
     BattleSceneObject *motion_next;
@@ -89,8 +142,13 @@ typedef char BattleMotionChannel_SizeCheck[
     sizeof(BattleMotionChannel) == 0x28 ? 1 : -1];
 typedef char BattleSceneObject_SizeCheck[
     sizeof(BattleSceneObject) == 0xF8 ? 1 : -1];
+typedef char BattleModel_SizeCheck[sizeof(BattleModel) == 0x80 ? 1 : -1];
 
 extern BattleSceneObject *gBattleMotionObjectList;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 u32 BattleMath_StartSqrt(u32 value);
 u32 BattleMath_WaitForSqrtResult(void);
@@ -146,6 +204,11 @@ int BattleSceneObject_IsAnimationChannelActive(BattleSceneObject *object,
                                                int channel_index);
 int BattleSceneObject_IsAnimationActiveById(u32 object_id,
                                             int channel_index);
+int BattleSceneObject_ConfigureAnimationLayer(int object_id, int layer);
 BattleSceneObject *BattleSceneObject_GetById(u32 object_id);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
