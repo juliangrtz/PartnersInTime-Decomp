@@ -40,6 +40,9 @@ src/battle/battle_scene_object.c:
 src/battle/battle_scene_movement.c:
     .text       start:0x020a483c end:0x020a4bf4
 
+src/battle/battle_scene_motion_list.c:
+    .text       start:0x020a4e08 end:0x020a4f18
+
 src/battle/battle_scene_motion_channel.c:
     .text       start:0x020a50c4 end:0x020a50d4
 

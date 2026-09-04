@@ -357,7 +357,9 @@ Scene objects with active motion are kept in the intrusive list rooted at
 `gBattleMotionObjectList`. Each object owns fixed-size `0x28`-byte motion
 channels beginning at offset `+0x1C`; starting a channel replaces an existing
 callback, clears its transient accumulators, stores its duration, and returns
-the channel payload at `+0x18`. Coordinate adjustment preserves interpolation
+the channel payload at `+0x18`. List insertion/channel initialization and
+unlinking are byte-identical C; the more branch-sensitive channel-stop routine
+remains maintained symbolic assembly. Coordinate adjustment preserves interpolation
 targets for listed objects, while unlisted objects receive an immediate move.
 The absolute/relative move constructors, their fixed-point update callbacks,
 travel-distance smoothing, snapshot, immediate move, active-motion delta, and
