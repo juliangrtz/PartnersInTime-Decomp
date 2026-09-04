@@ -421,12 +421,15 @@ When pause bit 1 requests ordering, `BattleAI_TryClearOrderWait` scans both
 active task lists. It ignores the same actor, empty scripts, and bit-0-disabled
 states, then compares the signed order field at `+0xB4` with an actor-ID tie
 break. It clears the wait bit and permits `VM_Run` only after every earlier
-live task has passed.
-`BattleAI_StopScriptById` is the inverse routing layer. IDs 1-4 clear the four
+live task has passed. Its behavior is named and documented, but the function
+remains symbolic assembly until readable C reproduces its original register
+allocation exactly.
+`BattleAI_StopScriptById` is now byte-identical C for the inverse routing
+layer. IDs 1-4 clear the four
 party VM pointers at context offsets `+0x6A64`, `+0x6B1C`, `+0x6BD4`, and
 `+0x6C8C`; high nibbles `0x1000` through `0x4000` select the four task pools.
-The sorted-list helper stops at IDs greater than the target, clears the found
-task's state script pointer, and releases the task node.
+The matching C sorted-list helper stops at IDs greater than the target, clears
+the found task's state script pointer, and releases the task node.
 The `0x4000` family uses one fixed 192-byte state per battle object. Starting
 over can instead queue a continuation at state `+0xB8`, with its order and
 tie-break fields at `+0xBC/+0xBE`; VM completion code 2 promotes those values

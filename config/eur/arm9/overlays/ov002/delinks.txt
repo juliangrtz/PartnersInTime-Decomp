@@ -7,6 +7,9 @@
 src/battle/battle_ai_result.c:
     .text       start:0x0207e7a0 end:0x0207e820
 
+src/battle/battle_ai_control.c:
+    .text       start:0x0207e430 end:0x0207e684
+
 src/battle/battle_vm_variables.c:
     .text       start:0x02079320 end:0x0207959c
 

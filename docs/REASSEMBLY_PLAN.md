@@ -157,7 +157,8 @@ action and reaction VM states, sorted per-actor task insertion, 184-byte state
 initialization, script pointer binding and completion handling through
 `VM_Run`. Its order-wait gate scans both task families, compares the signed
 script-order field with an actor-ID tie break, and resumes a paused state only
-when no earlier live task remains. The matching stop path clears one of four
+when no earlier live task remains; this register-sensitive gate remains
+maintained symbolic assembly. The byte-matching C stop path clears one of four
 party VM slots directly or decodes typed IDs `0x1000`-`0x4000`, removes the
 sorted task from the corresponding pool, and invalidates its attached script
 state. Hit-queue damage against an enemy explicitly starts its reaction VM.
