@@ -82,6 +82,9 @@ and runtime overlay 2.
 | `02097F58` | `BattlePartyHpPanel_Update` | Fades a party HP panel and synchronizes the model's low-five-bit intensity state |
 | `02098084` | `BattlePartyHpPanel_Draw` | Draws one party member's current/max HP panel and updates its number anchor |
 | `02098490` | `BattlePartyHpPanel_UpdateMember` | Selects the party member for one panel, animates HP changes, and maintains its low-HP warning |
+| `020988B0` | `BattleTargetCursor_Draw` | Draws the focused-target sprite, including uniform-target rotation and confirmation bounce (semantic C; 78.00% matching) |
+| `02098B08` | `BattleTargetCursor_Update` | Advances the focused-target cursor rotation while it is visible or bouncing |
+| `02098B44` | `BattleTargetCursor_TriggerBounce` | Starts the uniform-target cursor confirmation bounce and plays its UI sound |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -306,6 +309,14 @@ states select Mario, Luigi, Baby Mario, and Baby Luigi according to the paired
 formation. Their displayed HP converges linearly over 20 frames after a change,
 and each state creates and positions effect 506 while its living member is at
 or below one quarter of maximum HP.
+
+The target-cursor block at `0x020988B0`-`0x02098B90` attaches sprite frame 17
+to the currently focused battle object. Uniform multi-target selection raises
+the cursor scale, rotates its vertical offset through the DS sine table, and
+enables a 12-frame squash-and-stretch confirmation bounce. The update and
+confirmation functions are matching C; the readable renderer currently matches
+78.00 percent and therefore remains on the original reference object in exact
+ROM builds.
 
 The neighboring formation pair at
 `0x0207F5A0`-`0x0207FC78` has a readable semantic C translation: it selects one
