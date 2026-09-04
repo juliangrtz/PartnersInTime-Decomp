@@ -117,7 +117,11 @@ now exposes the field, party, enemy, and auxiliary visual-object pools, while
 `BattleSceneObject_GetActiveModel` at `0x020A3370` selects the primary or
 alternate bound model. `BattlePosition_StoreViewRelative` at `0x02076B0C`
 stores raw coordinates or subtracts either battle-view offset pair while
-clamping depth to zero. The task-list and task-pool functions at
+clamping depth to zero. Its `BattlePosition_StoreBattleRelative` caller at
+`0x02087BCC` converts the battle anchor and vertical/depth offsets used by turn
+effects. The adjacent matching helpers expose the asynchronous DS square-root
+unit and the object/pool-ID forms of the standard battle-animation setup.
+The task-list and task-pool functions at
 `0x020A50D4`-`0x020A5294` are byte-matching C and expose callback iteration,
 owner-slot invalidation, deferred recycling, explicit free-list access, task
 insertion, allocation, and fixed-payload pool initialization. The model- and
