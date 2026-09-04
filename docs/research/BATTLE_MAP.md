@@ -36,6 +36,7 @@ and runtime overlay 2.
 | `02088BC4` | `BattleInterface_RequestScreenLoad` | Loads one of the two selectable battle-screen resources |
 | `02088CAC` | `BattlePartyScript_RequestLoad` | Resolves and asynchronously loads a packed party-script resource |
 | `02088E44` | `BattleActionScript_RequestLoad` | Marks an action pending and queues its battle-AI script load |
+| `02091118` | `BattleSceneObject_SetAnimationFromComponent` | Temporarily selects one packed resource component and starts its animation |
 | `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
@@ -270,14 +271,17 @@ match. Their common scene-object
 type records positions at `+0x04..+0x0E`, four `0x28`-byte motion channels at
 `+0x1C`, models at `+0xC0/+0xC4`, actor ID `+0xEC`, and flags at `+0xF4`.
 
-`BattleSceneObject_SetAnimation` is the common animation path used by damage
-and reaction code. It validates the bound resource, classifies scene-object
-IDs as party or enemy, creates a model on demand, stops negative animation
-requests, and starts the selected animation through the model vtable. Party
-idle selection is adjusted for three actor status values, a separate party
-flag, and the low-HP predicate. It also remaps animations for linked party
-forms, preserves model flags across resource replacement, and calls the battle
-scene's model-change callback when the active model changes.
+`BattleSceneObject_SetAnimation` is the byte-matching common animation path
+used by damage and reaction code. It validates the bound resource, classifies
+scene-object IDs as party or enemy, creates a model on demand, stops negative
+animation requests, and starts the selected animation through the original
+C++ model vtable. Party idle selection is adjusted for three actor status
+values, a separate party flag, and the low-HP predicate. It also offsets linked
+party formation animations in 44-frame groups, preserves the low five model
+animation-state bits across resource replacement, and calls the battle scene's
+model-change observer when the active model changes. The preceding component
+wrapper switches the resource's five-bit component index only for the duration
+of that call, then restores it without disturbing the other packed flags.
 
 ## Battle task lists
 

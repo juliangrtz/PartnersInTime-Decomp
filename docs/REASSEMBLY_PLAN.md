@@ -154,12 +154,15 @@ owner-slot binding, and the 64-entry tracked sprite-effect table.
 The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
 `0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
 slot allocation, countdown and primary/secondary routing used by damage and KO.
-The scene-object animation activity helpers at `0x02091A18` and `0x02091A58`
-validate their channel/object IDs and expose the four per-object animation
-slots used by reaction state machines. Their full `BattleSceneObject_SetAnimation`
-producer at `0x02091198` is maintained too: it classifies party/enemy objects,
+The complete scene-object animation block at `0x02091118`-`0x02091A90` is
+byte-matching C++. Its component wrapper temporarily selects one packed
+resource component and restores the original selection after dispatch. The
+main `BattleSceneObject_SetAnimation` path classifies party/enemy objects,
 creates or retires models, selects party status/HP animation variants, handles
-linked party forms, and notifies the scene after resource changes.
+linked party formations, preserves animation state across resource changes,
+and notifies the scene renderer when its active model changes. The two guarded
+activity helpers expose the four per-object animation channels used by reaction
+state machines. C++ is retained for the original `BattleModel` virtual calls.
 The remaining general battle object-data path is symbolic: its 48-byte state
 lookup, asynchronous queue setup, duplicate-resource guard, ordinary-slot
 routing, and selection of eight large enemy-load slots are exposed by the

@@ -121,7 +121,7 @@ int BattleParty_StartFormationTransition(int next_state, u16 mario_target_x,
                                   BATTLE_PARTY_TRANSITION_OBJECT_DATA_ID);
         BattleObjectData_EnsureLoaded(resource->object_data_id,
                                       target_resource_id);
-        scene_object->transition_flags = 0;
+        scene_object->loaded_resource_id = 0;
 
         if (BattleContext_GetRuntimeState()->flags.bits.alternate_formation) {
             int delta_x = linked_object->x - scene_object->x + 16;
