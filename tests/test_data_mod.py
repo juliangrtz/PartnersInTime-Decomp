@@ -68,10 +68,18 @@ class MfsetTests(unittest.TestCase):
             data_mod.parse_mfset_entry(rebuilt, "english", header_size=2), parsed
         )
 
-    def test_rebuilds_fevent_chunk_without_touching_metadata(self) -> None:
-        rows = [{"header_hex": "0c 05", "text": "Hello<$END>"}]
+    def test_rebuilds_fevent_chunk_with_event_labels(self) -> None:
+        rows = [
+            {
+                "header_hex": "0c 05",
+                "text": "Hello<$END>",
+                "event_label": "Mario_00",
+            }
+        ]
         inner = data_mod.build_mfset_entry(rows, "english", header_size=2)
-        metadata = b"\x12\x34\x56\x78"
+        metadata = data_mod.build_mfset_entry(
+            [{"text": "Mario_00"}], "english"
+        )
         source = struct.pack("<I", len(inner)) + inner + metadata
         chunk_format, parsed = data_mod.parse_dialogue_chunk(source, "english")
         self.assertEqual(chunk_format, "fevent-mfset")

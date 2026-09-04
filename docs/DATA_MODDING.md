@@ -70,7 +70,10 @@ format investigation establishes a reason to change the two-byte
 `header_hex` present in menu, battle, and field message records.  Field
 containers also identify their `room_id`/`room_part`; battle containers expose
 their `battle_group`, making the large archives searchable without relying on
-binary offsets.
+binary offsets.  Every field string also carries its paired `event_label`
+(for example `Mario_00` or `Opening_1`).  These labels select event-side
+presentation resources/behavior and can be rebuilt at arbitrary lengths, but
+should only be changed when the referenced field-event behavior is understood.
 
 Control sequences use an explicit notation:
 

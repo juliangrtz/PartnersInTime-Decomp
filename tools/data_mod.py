@@ -457,7 +457,13 @@ def parse_dialogue_chunk(
     if text_end < 8 or text_end > len(data):
         raise DataModError("FEv message text-end marker is outside the chunk")
     inner = data[4:text_end]
-    return "fevent-mfset", parse_mfset_entry(inner, language, header_size=2)
+    rows = parse_mfset_entry(inner, language, header_size=2)
+    label_rows = parse_mfset_entry(data[text_end:], "english")
+    if len(label_rows) != len(rows):
+        raise DataModError("FEv message and event-label counts do not match")
+    for row, label_row in zip(rows, label_rows):
+        row["event_label"] = label_row["text"]
+    return "fevent-mfset", rows
 
 
 def build_dialogue_chunk(
@@ -474,9 +480,16 @@ def build_dialogue_chunk(
         source_format, _ = parse_dialogue_chunk(source_data, language)
         if source_format != chunk_format:
             raise DataModError(f"dialogue format changed from {source_format}")
-        text_end = 4 + struct.unpack_from("<I", source_data)[0]
-        metadata = source_data[text_end:]
         inner = build_mfset_entry(rows, language, header_size=2)
+        labels = []
+        for string_id, row in enumerate(rows):
+            event_label = row.get("event_label")
+            if not isinstance(event_label, str):
+                raise DataModError(
+                    f"FEv message {string_id} event_label must be a string"
+                )
+            labels.append({"text": event_label})
+        metadata = build_mfset_entry(labels, "english")
         return struct.pack("<I", len(inner)) + inner + metadata
     raise DataModError(f"unsupported dialogue chunk format {chunk_format!r}")
 
@@ -608,6 +621,13 @@ def build_dialogue(document: dict[str, Any], source_data: bytes) -> bytes:
                         f"entry {archive_entry} {language} string {string_id} needs text/header_hex"
                     )
                 strings.append({"text": text, "header_hex": header_hex})
+                if chunk_format == "fevent-mfset":
+                    event_label = row.get("event_label")
+                    if not isinstance(event_label, str):
+                        raise DataModError(
+                            f"entry {archive_entry} {language} string {string_id} needs event_label"
+                        )
+                    strings[-1]["event_label"] = event_label
             segments[slot] = build_dialogue_chunk(
                 strings, language, chunk_format, segments[slot]
             )
