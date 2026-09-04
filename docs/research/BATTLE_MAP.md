@@ -74,6 +74,7 @@ and runtime overlay 2.
 | `02096878` | `BattleResults_UpdateCounters` | Updates result-screen fade intensity and synchronizes its animated EXP/coin counters with save data |
 | `02096990` | `BattlePartyIndicator_Update` | Fades and animates a party indicator as the active adult/baby group or actor availability changes |
 | `02096BD4` | `BattleTargetOverlay_Draw` | Draws the focused target cursor and the additional eligible-target markers for enemy or party selection |
+| `02097458` | `BattleTargetMarker_Update` | Fades a target marker and switches its active model animation |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
