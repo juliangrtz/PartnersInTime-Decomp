@@ -4,10 +4,11 @@
 #include <nitro.h>
 
 typedef struct BattleHitDescriptor BattleHitDescriptor;
+typedef void (*BattleHitCallback)(BattleHitDescriptor *descriptor);
 
 struct BattleHitDescriptor {
     BattleHitDescriptor *next;
-    void (*callback)(BattleHitDescriptor *descriptor);
+    BattleHitCallback callback;
     u16 source_id;
     u16 target_id;
     u16 flags;
@@ -23,5 +24,8 @@ void BattleHitDescriptor_DisableByActor(int actor_id);
 void BattleHitDescriptor_SetStatus(BattleHitDescriptor *descriptor,
                                    int status_id, s8 chance, s8 magnitude);
 BattleHitDescriptor *BattleHitDescriptor_GetByActorId(u16 actor_id);
+BattleHitDescriptor *BattleHitDescriptor_Configure(
+    u16 source_id, u16 target_id, BattleHitCallback callback,
+    u16 linked_actor_id, int hit_kind);
 
 #endif

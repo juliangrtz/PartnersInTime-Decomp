@@ -52,6 +52,7 @@ typedef struct BattleActor BattleActor;
 typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleHitDescriptor BattleHitDescriptor;
+typedef void (*BattleHitCallback)(BattleHitDescriptor *descriptor);
 typedef union BattleSceneFlags BattleSceneFlags;
 
 struct BattleActor {
@@ -172,6 +173,8 @@ FUNCTION_TYPES = {
         "void BattleHitDescriptor_SetStatus(BattleHitDescriptor *, int, signed char, signed char);",
     "BattleHitDescriptor_GetByActorId":
         "BattleHitDescriptor *BattleHitDescriptor_GetByActorId(u16);",
+    "BattleHitDescriptor_Configure":
+        "BattleHitDescriptor *BattleHitDescriptor_Configure(u16, u16, BattleHitCallback, u16, int);",
     "BattleAI_HandleVmResult":
         "int BattleAI_HandleVmResult(BattleAITask *, int, BattleAIState *);",
     "BattleAI_StartReactionScript": "void BattleAI_StartReactionScript(int);",
