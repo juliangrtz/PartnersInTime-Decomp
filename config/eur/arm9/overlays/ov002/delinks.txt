@@ -31,6 +31,9 @@ src/battle/battle_ai_start.c:
 src/battle/battle_ai_runtime.c:
     .text       start:0x0207ee54 end:0x0207f080
 
+src/battle/battle_reward_effects.c:
+    .text       start:0x0207f080 end:0x0207f5a0
+
 src/battle/battle_script_state.c:
     .text       start:0x020922dc end:0x0209234c
 

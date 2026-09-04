@@ -272,6 +272,11 @@ equipment effect `0x301D`.
 `0x020768A4`, and resident `ItemEffect_CalculateValue` at `0x02018F48` expose
 fixed and percentage healing, revival, cures, POW/DEF/SPD items, maximum-HP
 clamps, and the 150/200-percent equipped-badge bonuses.
+The matching `0x0207F080`-`0x0207F5A0` reward/effect unit owns the coin and
+experience counter sprites used by the post-battle tally and the visible
+sprite/model/number feedback used when a party member regains HP. Its typed
+effect and position records also distinguish the signed `+0xEA` visual anchor
+from the scene object's actor ID at `+0xEC`.
 `BattleTaskQueue_Enqueue` at `0x020726B0`,
 `BattleEnemyData_RequestLoad` at `0x0208908C`, and
 `BattleEnemyData_LoadStatRecord` at `0x02088FB8` symbolically enqueue the

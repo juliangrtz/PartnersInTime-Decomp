@@ -285,10 +285,10 @@ BattleAI_InitStateFromScriptBlock kind:function(arm,size=0x38) addr:0x0207ee1c
 BattleAI_StartScriptById kind:function(arm,size=0xbc) addr:0x0207ee54
 BattleAI_UpdateAll kind:function(arm,size=0x10c) addr:0x0207ef10
 BattleAI_TaskPoolsInit kind:function(arm,size=0x64) addr:0x0207f01c
-func_ov002_0207f080 kind:function(arm,size=0x80) addr:0x0207f080
-func_ov002_0207f100 kind:function(arm,size=0x7c) addr:0x0207f100
-func_ov002_0207f17c kind:function(arm,size=0x224) addr:0x0207f17c
-func_ov002_0207f3a0 kind:function(arm,size=0x200) addr:0x0207f3a0
+BattleReward_ClearCounterEffects kind:function(arm,size=0x80) addr:0x0207f080
+BattleReward_AdvanceCounterEffect kind:function(arm,size=0x7c) addr:0x0207f100
+BattleReward_EnsureCounterEffect kind:function(arm,size=0x224) addr:0x0207f17c
+BattleParty_ShowHealingEffect kind:function(arm,size=0x200) addr:0x0207f3a0
 func_ov002_0207f5a0 kind:function(arm,size=0x380) addr:0x0207f5a0
 func_ov002_0207f920 kind:function(arm,size=0x358) addr:0x0207f920
 func_ov002_0207fc78 kind:function(arm,size=0x1b4) addr:0x0207fc78
@@ -887,8 +887,8 @@ data_ov002_020beb24 kind:data(any) addr:0x020beb24
 data_ov002_020beb30 kind:data(any) addr:0x020beb30
 data_ov002_020beb3c kind:data(any) addr:0x020beb3c
 data_ov002_020beb9c kind:data(any) addr:0x020beb9c
-data_ov002_020beba4 kind:data(any) addr:0x020beba4
-data_ov002_020bebb4 kind:data(any) addr:0x020bebb4
+gBattlePartyHealingEffectOffsets kind:data(any) addr:0x020beba4
+gBattlePartyHealingNumberOffsets kind:data(any) addr:0x020bebb4
 gBattlePrimaryResourcePaths kind:data(any) addr:0x020bebc4
 data_ov002_020bebc8 kind:data(any) addr:0x020bebc8
 data_ov002_020bebcc kind:data(any) addr:0x020bebcc
