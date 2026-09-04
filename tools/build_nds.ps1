@@ -1,7 +1,9 @@
 [CmdletBinding()]
 param(
     [ValidateSet('eur')]
-    [string]$Version = 'eur'
+    [string]$Version = 'eur',
+
+    [string]$EmulatorPath = ''
 )
 
 Set-StrictMode -Version Latest
@@ -122,3 +124,15 @@ $sha1 = (Get-FileHash -LiteralPath $outputRom -Algorithm SHA1).Hash.ToLowerInvar
 Write-Host ''
 Write-Host "Built ROM: $outputRom"
 Write-Host "SHA-1:    $sha1"
+
+if (-not [string]::IsNullOrWhiteSpace($EmulatorPath)) {
+    if (-not (Test-Path -LiteralPath $EmulatorPath -PathType Leaf)) {
+        throw "Emulator executable not found: $EmulatorPath"
+    }
+
+    $emulatorDirectory = Split-Path -Parent $EmulatorPath
+    Write-Host "Starting:  $EmulatorPath"
+    Start-Process -FilePath $EmulatorPath `
+        -ArgumentList @("`"$outputRom`"") `
+        -WorkingDirectory $emulatorDirectory
+}
