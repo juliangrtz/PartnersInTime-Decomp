@@ -83,7 +83,9 @@ typedef struct BattleTextureDecodeState {
 typedef struct BattleRuntimeState {
     u8 unknown_000[0x3A0];
     BattleRuntimeFlags flags;
-    u8 unknown_3a4[0xDA4];
+    void *object_texture_sources[3];
+    BattleObjectTextureCatalog *object_texture_catalogs[3];
+    u8 unknown_3bc[0xD8C];
     u32 heap_id;
     u8 unknown_114c[0x0C];
     u32 resource_heap_id;
@@ -96,12 +98,15 @@ typedef struct BattleContext {
     u16 background_id;
     u8 unknown_003c[8];
     void *screen_assets[2];
-    u8 unknown_004c[0xF4];
+    u8 unknown_004c[0xC0];
+    u16 ai_control_mask;
+    u8 unknown_010e[0x32];
     BattleArchiveReadRequest asset_read;
     u8 unknown_0168[0x18];
     BattleTextureUploadRequest texture_upload_requests[4];
     BattleTextureUploadRequest *current_texture_upload;
-    u8 unknown_0284[0x2C0];
+    BattleObjectResourceRequest ai_archives[14];
+    u8 unknown_04ec[0x58];
     BattleObjectResourceRequest *active_object_resource;
     BattleTextureDecodeState texture_decode;
     u16 texture_body_id;
@@ -122,8 +127,11 @@ typedef struct BattleContext {
     void *interface_assets[2];
     void *common_asset_pointers[BATTLE_COMMON_ASSET_COUNT];
     void *common_asset_end;
-    u8 unknown_6954[0x66AC];
+    ScriptVm battle_ai_vm;
+    u8 unknown_6964[0x669C];
     BattleRuntimeState runtime;
+    u8 unknown_e16c[0x2949C];
+    BattleObjectFallbackStorage object_fallback;
 } BattleContext;
 
 typedef char BattleArchiveReadRequest_SizeCheck[
@@ -142,7 +150,7 @@ typedef char BattleRuntimeState_SizeCheck[
     sizeof(BattleRuntimeState) == 0x116C ? 1 : -1
 ];
 typedef char BattleContext_KnownPrefixSizeCheck[
-    sizeof(BattleContext) == 0xE16C ? 1 : -1
+    sizeof(BattleContext) == 0x3F608 ? 1 : -1
 ];
 
 static inline BattleRuntimeState *BattleContext_GetRuntimeState(void) {

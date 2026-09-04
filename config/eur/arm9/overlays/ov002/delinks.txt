@@ -73,6 +73,13 @@ src/battle/battle_object_texture_decode.c:
 src/battle/battle_object_texture_setup.c:
     .text       start:0x020899f0 end:0x02089c78
 
+src/battle/battle_object_load.c:
+    .text       start:0x02089c78 end:0x02089f2c
+
+src/battle/battle_ai_system.c:
+    .text       start:0x0208dec0 end:0x0208e10c
+    .data       start:0x020bef78 end:0x020befb0
+
 src/battle/battle_script_state.c:
     .text       start:0x020922dc end:0x0209234c
 

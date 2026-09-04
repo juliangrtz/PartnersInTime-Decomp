@@ -62,7 +62,8 @@ enum ScriptVmVariableMask {
 };
 
 struct ScriptVm {
-    u8 unknown_00[8];
+    u32 unknown_00;
+    u32 unknown_04;
     ScriptVmCommandHandler command_handler;
     const u32 *command_descriptors;
 };

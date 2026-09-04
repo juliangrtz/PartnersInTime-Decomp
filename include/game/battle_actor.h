@@ -15,7 +15,8 @@ enum BattleActorIdRange {
 
 enum BattleActorFlag {
     BATTLE_ACTOR_LEVEL_MASK = 0x007F,
-    BATTLE_ACTOR_FLAG_KO = 0x0100
+    BATTLE_ACTOR_FLAG_KO = 0x0100,
+    BATTLE_ACTOR_FLAG_HIT_LOCK = 0x0200
 };
 
 struct BattleActor {
@@ -33,7 +34,16 @@ struct BattleActor {
     s16 pending_damage;
     s16 target_actor_id;
     u8 unk_022[2];
-    u16 flags;
+    union {
+        u16 flags;
+        struct {
+            u16 level : 7;
+            u16 unknown_flag_07 : 1;
+            u16 knocked_out : 1;
+            u16 hit_locked : 1;
+            u16 unknown_flags_10_15 : 6;
+        } flag_bits;
+    };
     u8 unk_026[0x12];
     s8 transition_state;
     u8 unk_039[0x33];

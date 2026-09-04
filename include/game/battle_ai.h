@@ -28,6 +28,10 @@ enum BattleAIStateFlag {
     BATTLE_AI_STATE_FLAG_ORDER_WAIT = 1 << 1
 };
 
+enum BattleAIConstant {
+    BATTLE_AI_ARCHIVE_COUNT = 14
+};
+
 enum BattleAIContextOffset {
     BATTLE_AI_VM_OFFSET = 0x6954,
     BATTLE_AI_PARTY_STATE_1_OFFSET = 0x6A64,
@@ -125,6 +129,11 @@ void BattleAI_StartPartyVmSlot1(void);
 void BattleAI_StartScriptById(int script_id);
 void BattleAI_UpdateAll(void);
 void BattleAI_TaskPoolsInit(void);
+void BattleAI_Initialize(void);
+int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
+                            ScriptVmCommand *command);
+int BattleActor_IsHitLocked(int actor_id);
+void BattleAI_UpdateControlMask(int mask, int enabled);
 void BattleAI_InitStateFromScriptBlock(BattleAIState *state,
                                        const u16 *script_block, int owner_id);
 BattleAIState *BattleScriptState_GetByObjectId(u16 object_id);

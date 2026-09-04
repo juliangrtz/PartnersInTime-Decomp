@@ -251,6 +251,11 @@ initializer, all-family per-frame updater, and task-pool initializer are now
 byte-matching C as well. This closes the scheduler around the large opcode
 dispatcher: all four typed families and all four party slots have named start,
 update, continuation, cancellation, and allocation paths.
+The independent AI-system block at `0x0208DEC0`-`0x0208E10C` is matching C as
+well. It configures the shared `ScriptVm` with the battle opcode dispatcher and
+260-entry command table, allocates and opens all fourteen battle-AI archives,
+initializes every AI task pool, and exposes the special-handle reload,
+actor-hit-lock, and shared-control-mask helpers.
 `tools/analyze_battle_ai_dispatch.py` validates the user-supplied ROM and
 extracts the dispatcher's complete 182-entry jump table into JSON or Markdown.
 The report also groups shared case entries, observes direct command-record

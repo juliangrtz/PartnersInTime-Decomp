@@ -12,6 +12,7 @@ typedef struct BattleResourceStream {
 } BattleResourceStream;
 
 typedef struct BattleResourceModel BattleResourceModel;
+typedef struct BattleObjectTextureSet BattleObjectTextureSet;
 
 typedef struct BattleResourceModelVTable {
     u8 unknown_00[0x14];
@@ -101,10 +102,10 @@ typedef struct BattleSceneResource {
     void *component_0c;
     void *component_10;
     void *component_14;
-    u32 unknown_18;
+    BattleObjectTextureSet *texture_set;
     void *stream_state;
     u16 object_data_id;
-    u16 unknown_22;
+    u16 texture_variant;
     s32 resource_id;
     u32 allocation_size;
     union {
@@ -119,6 +120,39 @@ typedef struct BattleSceneResource {
         } bits;
     } flags;
 } BattleSceneResource;
+
+struct BattleObjectTextureSet {
+    u16 body_texture_id;
+    u16 variant_index;
+    u8 unknown_04[3];
+    union {
+        u8 raw;
+        struct {
+            u8 localized : 1;
+            u8 unknown_01_07 : 7;
+        } bits;
+    } flags;
+    u8 unknown_08[0x0C];
+};
+
+typedef struct BattleObjectTextureVariant {
+    u16 tail_texture_id;
+    u16 optional_texture_id;
+    u8 resource_variant;
+    u8 unknown_05[3];
+} BattleObjectTextureVariant;
+
+typedef struct BattleObjectTextureCatalog {
+    u32 texture_set_count;
+    u32 unknown_04;
+    BattleObjectTextureSet texture_sets[1];
+} BattleObjectTextureCatalog;
+
+typedef struct BattleObjectFallbackStorage {
+    BattleSceneResource *source;
+    BattleSceneResource resource;
+    u8 data[0x7FCC];
+} BattleObjectFallbackStorage;
 
 typedef struct BattleObjectResourceRequest {
     u8 unknown_00[4];
@@ -145,6 +179,12 @@ typedef char BattleObjectDataLoadState_SizeCheck[
     sizeof(BattleObjectDataLoadState) == 0x30 ? 1 : -1];
 typedef char BattleSceneResource_SizeCheck[
     sizeof(BattleSceneResource) == 0x30 ? 1 : -1];
+typedef char BattleObjectTextureSet_SizeCheck[
+    sizeof(BattleObjectTextureSet) == 0x14 ? 1 : -1];
+typedef char BattleObjectTextureVariant_SizeCheck[
+    sizeof(BattleObjectTextureVariant) == 8 ? 1 : -1];
+typedef char BattleObjectFallbackStorage_SizeCheck[
+    sizeof(BattleObjectFallbackStorage) == 0x8000 ? 1 : -1];
 typedef char BattleResourceStream_SizeCheck[
     sizeof(BattleResourceStream) == 0x14 ? 1 : -1];
 typedef char BattleResourceModel_SizeCheck[
@@ -179,6 +219,8 @@ void BattleObjectData_PrepareBodyDecodeTask(struct BattleQueuedTask *task);
 void BattleObjectData_SetupOptionalTextureTask(struct BattleQueuedTask *task);
 void BattleObjectData_SetupTailTextureTask(struct BattleQueuedTask *task);
 void BattleObjectData_BeginTextureSetupTask(struct BattleQueuedTask *task);
+void BattleObjectData_ResolveTextureMetadataTask(
+    struct BattleQueuedTask *task);
 void BattleObjectData_CopyResource(BattleSceneResource *resource,
                                    BattleObjectDataLoadState *load_state);
 int BattleObjectData_EnsureLoaded(u16 object_data_id, s32 resource_id);

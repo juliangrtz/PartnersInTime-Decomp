@@ -67,6 +67,13 @@ and runtime overlay 2.
 | `0207EE54` | `BattleAI_StartScriptById` | Routes fixed party slots and typed IDs to their script starters |
 | `0207EF10` | `BattleAI_UpdateAll` | Runs all fixed party VMs and all four typed task lists |
 | `0207F01C` | `BattleAI_TaskPoolsInit` | Initializes the four battle-AI task pools |
+| `0208DEC0` | `BattleAIArchives_Load` | Allocates and opens all fourteen battle-AI archives |
+| `0208DFD0` | `BattleAI_Initialize` | Initializes the shared VM, archive requests, and AI task pools |
+| `0208E034` | `BattleSpecialHandle_ClearTask` | Clears the special-handle owner slot after its task completes |
+| `0208E048` | `BattleSpecialHandle_ReloadTask` | Waits for the active resource before requesting a special-handle reload |
+| `0208E080` | `BattleSpecialHandle_QueueReload` | Queues the special-handle reload task |
+| `0208E098` | `BattleActor_IsHitLocked` | Tests an actor's hit-lock flag |
+| `0208E0C4` | `BattleAI_UpdateControlMask` | Sets or clears one bit in the shared AI control mask |
 | `0207F080` | `BattleReward_ClearCounterEffects` | Stops and detaches the post-battle coin/experience counter effects |
 | `0207F100` | `BattleReward_AdvanceCounterEffect` | Replaces a completed counter sprite while preserving its owner slot |
 | `0207F17C` | `BattleReward_EnsureCounterEffect` | Creates the positioned coin or experience tally effect when absent |
@@ -556,6 +563,13 @@ is serviced by its dedicated update helper. The matching C
 auxiliary, and object task lists. Matching pool initialization reserves eight
 action, eight reaction, eight auxiliary, and 40 object-script task nodes, each
 with an eight-byte payload.
+The separate AI-system initializer at `0x0208DEC0`-`0x0208E10C` is matching C
+too. It configures the shared `ScriptVm` at context offset `+0x6954` with
+`BattleAI_DispatchOpcode` and the 260-entry command-descriptor table, allocates
+and opens all fourteen BAI archives into typed resource requests, and resets
+the four task pools. Its adjacent helpers implement the asynchronous
+special-handle reload chain, test actor flag `0x200`, and update the shared
+16-bit control mask at context offset `+0x10C`.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds
