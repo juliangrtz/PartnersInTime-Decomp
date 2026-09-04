@@ -1,0 +1,2 @@
+# Add a translation unit only after its USA build matches the original code,
+# size, and function order. Until then, the linker keeps its delinked object.

@@ -1,0 +1,3 @@
+# Only translation units that match the original ROM, including function order,
+# belong here. Delinked reference objects remain linked for all other C files.
+src/battle/battle_actor_damage.c
