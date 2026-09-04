@@ -69,16 +69,19 @@ ignored by Git.
   Extended-channel allocation, ADSR progression, PCM/PSG/noise voice startup,
   mixer calculations, and staged register updates are symbolic too.
 - Maintained high-level source now includes the original Nitro math unit and
-  thirty-two byte-matching overlay-2 battle functions: nine battle-AI/state
+  thirty-six byte-matching overlay-2 battle functions: nine battle-AI/state
   helpers, the seven-function generic task-pool unit, and four actor HP/lookup
   helpers plus status eligibility, base damage, and the central HP/KO primitive.
-  Four scene-object state/model/motion helpers and the complete five-function
+  Eight scene-object state/model/motion helpers and the complete five-function
   hit-descriptor setup layer are high-level source too. The remaining game
   functions stay in symbolic assembly until an equivalent C translation
   reproduces their original code and layout.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.
+[`docs/DECOMPILATION_STYLE.md`](docs/DECOMPILATION_STYLE.md) records the
+matching, source-organization, naming, and runtime-evidence rules for readable
+high-level code.
 The generated [`docs/research/BATTLE_AI_OPCODES.md`](docs/research/BATTLE_AI_OPCODES.md)
 provides a compact navigation index for the large enemy-script dispatcher.
 [`tools/ida/README.md`](tools/ida/README.md) documents the reproducible IDA

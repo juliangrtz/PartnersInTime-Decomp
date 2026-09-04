@@ -7,6 +7,16 @@ typedef struct BattleAIState BattleAIState;
 typedef struct BattleAITask BattleAITask;
 typedef struct BattleTaskPool BattleTaskPool;
 
+enum BattleAIVmResult {
+    BATTLE_AI_VM_FINISHED = 1,
+    BATTLE_AI_VM_CHAIN_SCRIPT = 2
+};
+
+enum BattleAIScriptTaskType {
+    BATTLE_AI_TASK_ACTION = 0x1000,
+    BATTLE_AI_TASK_REACTION = 0x2000
+};
+
 extern u8 *gBattleContext;
 
 struct BattleAIState {

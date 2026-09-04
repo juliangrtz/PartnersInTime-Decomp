@@ -110,7 +110,7 @@ validates four autoload descriptors, and links resident ARM9, ITCM, DTCM, all
 constructors, alignment padding, `.data`, and explicitly mixed ARM7 fallback
 images. There are 31,138 currently known relocations. `BattleActor_GetPartySlot`
 at `0x02076F44` and
-`BattleActor_GetById` at `0x02076F64` are real ARM assembly. Their
+`BattleActor_GetById` at `0x02076F64` are byte-identical C. Their
 `gBattleContext` literal is emitted as `R_ARM_ABS32` and resolved by LLD from a
 DSD-validated external definition. `BattleSceneObject_GetById` at `0x02076FB4`
 now exposes the field, party, enemy, and auxiliary visual-object pools, while

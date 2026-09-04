@@ -66,6 +66,10 @@ and runtime overlay 2.
 | `0209EBFC` | `BattleCollision_TestObjects` | Tests all source/target bounds and returns a hit position |
 | `0209EF3C` | `BattleCollision_TestVolumes` | Swept six-axis overlap and time-of-impact calculation |
 | `020A3370` | `BattleSceneObject_GetActiveModel` | Selects a scene object's primary or alternate model pointer |
+| `020A3310` | `BattleSceneObject_SetModelFlag11ById` | Resolves the active model and updates its currently unknown bit 11 |
+| `020A3338` | `BattleSceneObject_SetModelFlag10` | Object-pointer wrapper for the active model's currently unknown bit 10 |
+| `020A3348` | `BattleSceneObject_SetModelFlag10ById` | Resolves the active model and updates its currently unknown bit 10 |
+| `020A3388` | `BattleSceneObject_GetActiveModelById` | Resolves an object ID and returns its primary or alternate model |
 | `020A3F9C` | `BattleMotion_StartBallistic` | Derives launch velocity with the DS square-root unit and starts motion |
 | `020A411C` | `BattleSceneObject_StartAcceleratedMotion` | Normalizes a path and solves constant or accelerated duration |
 | `020A43D8` | `BattleSceneObject_UpdateAcceleratedMotion` | Advances normalized acceleration and applies the terminal correction |
@@ -159,8 +163,9 @@ bypass flag and otherwise subtracts either context offset pair
 `+0xCB9C/+0xCB9E` or `+0xCBA0/+0xCBA2`; its stored depth is clamped at zero.
 All actor resolvers, the compact base-damage calculation, and the damage/KO
 updater are now maintained byte-identical C.
-The state-bit setter, active-model selector, position snapshot, and fixed-stride
-motion-channel accessor are byte-identical C as well. Their common scene-object
+The state-bit setter, active-model selectors, model-bit setters, position
+snapshot, and fixed-stride motion-channel accessor are byte-identical C as
+well. Their common scene-object
 type records positions at `+0x04..+0x0E`, four `0x28`-byte motion channels at
 `+0x1C`, models at `+0xC0/+0xC4`, actor ID `+0xEC`, and flags at `+0xF4`.
 
@@ -414,8 +419,8 @@ action/reaction start wrappers, the VM state initializer, and
 `BattleScriptState_GetByObjectId` are the first overlay-2 battle functions
 promoted from matching assembly into byte-identical C. Their shared header
 records the confirmed `BattleAITask` size (`0x14`) and the relevant fields of
-the `0xC0`-byte VM state. DSD delinks the functions as independent source
-modules and verifies the rebuilt overlay against the original.
+the `0xC0`-byte VM state. DSD delinks cohesive, contiguous source modules and
+verifies the rebuilt overlay against the original.
 The generic battle-task pool is matching C as well. It covers free-list
 initialization/allocation/return, active-list insertion, owner-slot binding, and
 safe task release. `BattleAITask` is its 12-byte generic header followed by the

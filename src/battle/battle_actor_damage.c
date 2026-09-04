@@ -12,13 +12,13 @@ int BattleActor_ApplyDamage(BattleSceneObject *object, int damage) {
     actor->hit_state = 0;
     if (actor->current_hp <= 0) {
         actor->current_hp = 0;
-        actor->flags |= 0x100;
+        actor->flags |= BATTLE_ACTOR_FLAG_KO;
         return 0;
     }
 
     if (actor->current_hp <= damage) {
         actor->current_hp = 0;
-        actor->flags |= 0x100;
+        actor->flags |= BATTLE_ACTOR_FLAG_KO;
         return 1;
     }
     actor->current_hp -= damage;

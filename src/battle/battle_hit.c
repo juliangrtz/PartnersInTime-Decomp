@@ -4,22 +4,40 @@
 
 extern void BattleDamage_DispatchHit(BattleHitDescriptor *descriptor);
 
+void BattleHitDescriptor_Disable(BattleHitDescriptor *descriptor) {
+    descriptor->callback = 0;
+}
+
+void BattleHitDescriptor_DisableByActor(int actor_id) {
+    BattleHitDescriptor_Disable(
+        BattleHitDescriptor_GetByActorId((u16)actor_id));
+}
+
+void BattleHitDescriptor_SetStatus(BattleHitDescriptor *descriptor,
+                                   int status_id, s8 chance, s8 magnitude) {
+    descriptor->flags =
+        (descriptor->flags & ~BATTLE_HIT_STATUS_MASK) |
+        (((u16)status_id << BATTLE_HIT_STATUS_SHIFT) & BATTLE_HIT_STATUS_MASK);
+    descriptor->status_chance = chance;
+    descriptor->status_magnitude = magnitude;
+}
+
 BattleHitDescriptor *BattleHitDescriptor_Configure(
     u16 source_id, u16 target_id, BattleHitCallback callback,
     u16 linked_actor_id, int hit_kind) {
     BattleHitDescriptor *descriptor =
         BattleHitDescriptor_GetByActorId(source_id);
 
-    descriptor->flags &= ~0xFE00;
-    if (target_id >= 0xFFFF) {
+    descriptor->flags &= ~BATTLE_HIT_STATUS_MASK;
+    if (target_id == 0xFFFF) {
         descriptor->callback = 0;
         return descriptor;
     }
 
-    if (((u32)descriptor->flags << 25) >> 31 == 0) {
+    if ((descriptor->flags & BATTLE_HIT_FLAG_ACTIVE) == 0) {
         u8 *volatile *context_slot = &gBattleContext;
 
-        descriptor->flags |= 0x40;
+        descriptor->flags |= BATTLE_HIT_FLAG_ACTIVE;
         descriptor->next = *(BattleHitDescriptor **)(*context_slot + 0xCAD4);
         *(BattleHitDescriptor **)(*context_slot + 0xCAD4) = descriptor;
     }
@@ -31,19 +49,20 @@ BattleHitDescriptor *BattleHitDescriptor_Configure(
         descriptor->source_id = source_id;
         descriptor->target_id = target_id;
         if (effective_hit_kind == 0) {
-            effective_hit_kind = 0x3F;
+            effective_hit_kind = BATTLE_HIT_KIND_DEFAULT;
         }
         flags = descriptor->flags;
         effective_hit_kind = (u16)effective_hit_kind;
         if (callback == 0) {
             callback = BattleDamage_DispatchHit;
         }
-        flags = (flags & ~0x3F) | (effective_hit_kind & 0x3F);
+        flags = (flags & ~BATTLE_HIT_KIND_MASK) |
+                (effective_hit_kind & BATTLE_HIT_KIND_MASK);
         descriptor->flags = flags;
     }
     descriptor->callback = callback;
-    descriptor->flags &= ~0x80;
-    descriptor->flags &= ~0x100;
+    descriptor->flags &= ~BATTLE_HIT_FLAG_UNKNOWN_0080;
+    descriptor->flags &= ~BATTLE_HIT_FLAG_UNKNOWN_0100;
 
     if (linked_actor_id == 0) {
         linked_actor_id = source_id;
