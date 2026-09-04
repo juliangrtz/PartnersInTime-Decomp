@@ -94,6 +94,14 @@ and runtime overlay 2.
 | `020999D8` | `BattleMenu_UpdateVerticalSelection` | Applies wrapping/clamped up-down menu input and its selection sound (semantic C; 94.87% matching) |
 | `02099A74` | `BattleCommand_IsAvailable` | Tests command resources, item targets, and retreat restrictions (semantic C) |
 | `02099E78` | `BattleCommandWheel_UpdateSelection` | Accelerates and wraps left-right radial command selection (semantic C) |
+| `0209AB3C` | `BattleCommandWheel_GetEntryCommand` | Decodes a command ID from a wheel entry and optionally rejects disabled entries |
+| `0209AB88` | `BattleItemSelection_SelectUsableId` | Restores a consumable selection by tagged item ID, falling back to the first available item |
+| `0209AC04` | `BattleItemSelection_SelectActionId` | Restores a Bros. Item selection by tagged item ID, falling back to the first available item |
+| `0209AC80` | `BattleItemSelection_SelectUsableIndex` | Selects a consumable list entry and resolves its resident item record |
+| `0209ACE8` | `BattleItemSelection_SelectActionIndex` | Selects a Bros. Item list entry and resolves its resident item record |
+| `0209AD50` | `BattleItemList_RebuildUsableItems` | Rebuilds the battle consumable list from the fourteen save inventory counts |
+| `0209ADD8` | `BattleItemList_RebuildActionItems` | Rebuilds the battle Bros. Item list from the eleven save inventory counts |
+| `0209AE60` | `BattleTarget_ComputeDirectionalScore` | Scores a candidate target by its distance and alignment with directional input (semantic C) |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -537,6 +545,14 @@ The stat IDs are:
 requested status is active, removes the associated battle effect, clears its
 state, and restores base POW, DEF, or SPD for status IDs 6-8. The maintained
 `BattleStatus_ClearAll` wrapper explicitly invokes it for IDs 1 through 8.
+
+The exact battle item-selection helpers rebuild two compact tagged-ID lists
+directly from the save inventory: fourteen ordinary consumables at save offset
+`+0x48E` and eleven Bros. Items at `+0x49E`. Selection by ID preserves the
+previous item across menu rebuilds and falls back to list entry zero if that
+item is no longer available. Selection by index also caches the corresponding
+20-byte `UsableItemRecord` or 28-byte `ActionItemRecord` for the command and
+target-selection state machines.
 
 `BattleItemEffect_Apply` decodes the effect type from each 20-byte resident
 item record. Types 0-1 add a fixed HP amount, type 2 restores a percentage of
