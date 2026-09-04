@@ -68,6 +68,31 @@ class MfsetTests(unittest.TestCase):
             data_mod.parse_mfset_entry(rebuilt, "english", header_size=2), parsed
         )
 
+    def test_rebuilds_fevent_chunk_without_touching_metadata(self) -> None:
+        rows = [{"header_hex": "0c 05", "text": "Hello<$END>"}]
+        inner = data_mod.build_mfset_entry(rows, "english", header_size=2)
+        metadata = b"\x12\x34\x56\x78"
+        source = struct.pack("<I", len(inner)) + inner + metadata
+        chunk_format, parsed = data_mod.parse_dialogue_chunk(source, "english")
+        self.assertEqual(chunk_format, "fevent-mfset")
+        parsed[0]["text"] = "A longer greeting<$END>"
+        rebuilt = data_mod.build_dialogue_chunk(
+            parsed, "english", chunk_format, source
+        )
+        rebuilt_text_end = 4 + struct.unpack_from("<I", rebuilt)[0]
+        self.assertEqual(rebuilt[rebuilt_text_end:], metadata)
+        self.assertEqual(
+            data_mod.parse_dialogue_chunk(rebuilt, "english")[1], parsed
+        )
+
+    def test_round_trips_localized_container_with_empty_slots(self) -> None:
+        segments = [b"" for _ in range(91)]
+        segments[0] = b"metadata"
+        segments[84] = b"japanese"
+        segments[85] = b"english"
+        container = data_mod.build_localized_container(segments)
+        self.assertEqual(data_mod.parse_localized_container(container), segments)
+
 
 class EnemyTableTests(unittest.TestCase):
     def test_round_trips_complete_record_layout(self) -> None:
