@@ -113,6 +113,9 @@ src/battle/battle_entity_resources.c:
 src/battle/battle_object_load_control.c:
     .text       start:0x02091edc end:0x020922dc
 
+src/battle/battle_texture_dimensions.c:
+    .text       start:0x020927a0 end:0x02092918
+
 src/battle/battle_damage_base.c:
     .text       start:0x0209bf38 end:0x0209bfa0
 

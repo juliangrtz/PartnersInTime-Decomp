@@ -167,6 +167,8 @@ The adjacent `BattleSceneObject_ApplyMovement` dispatcher at `0x02091A90`
 is byte-matching C too. It validates the object ID and maps seven script-facing
 movement modes onto immediate positioning, relative and absolute interpolation,
 two ballistic solvers, target-relative motion, and configurable acceleration.
+The adjacent texture-size encoders at `0x020927A0` and `0x0209285C` are
+byte-matching C and expose the DS `G3_TEXIMAGE_PARAM` T/S dimension codes.
 The general battle object-data path is now matching C: its 48-byte state
 lookup, asynchronous queue setup, duplicate-resource guard, ordinary-slot
 routing, selection of eight large enemy-load slots, load configuration, and
