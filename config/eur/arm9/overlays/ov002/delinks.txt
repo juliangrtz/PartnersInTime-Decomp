@@ -10,6 +10,9 @@ src/battle/battle_ai_result.c:
 src/battle/battle_actor_hp.c:
     .text       start:0x02076bac end:0x02076bd4
 
+src/battle/battle_actor_status.c:
+    .text       start:0x02076bd4 end:0x02076c38
+
 src/battle/battle_actor_lookup.c:
     .text       start:0x02076f24 end:0x02076fb4
 
