@@ -86,7 +86,7 @@ and runtime overlay 2.
 | `0207F920` | `BattleParty_StartFormationTransition` | Selects and loads an adult party formation resource and starts its transition |
 | `0207FC78` | `BattleParty_AddExperience` | Adds capped experience, crosses level thresholds, and updates the remaining requirement |
 | `0208ED90` | `BattleScript_GetProperty` | Reads actor, object, and global properties |
-| `0208FB6C` | `BattleScript_SetProperty` | Writes properties; cases 16-20 are actor stats |
+| `0208FB6C` | `BattleScript_SetProperty` | Writes actor stats, HP, positions, model/animation flags, and scene channels |
 | `02071C84` | `BattleDamage_CalculateAttack` | General POW/DEF/level damage calculation |
 | `0209BF38` | `BattleDamage_CalculateBase` | Compact actor-ID-based damage calculation |
 | `0209BFA0` | `BattleDamage_CalculateByObject` | Resolves scene objects and selects damage modes/equipment |
@@ -598,6 +598,13 @@ resource state, party formation state, and several transition channels. The
 checked-in BAI corpus calls this reader 7,548 times. Properties whose precise
 gameplay meaning is still ambiguous retain field-offset names; this keeps the
 ABI editable without turning guesses into permanent structure names.
+The paired 4,268-byte `BattleScript_SetProperty` at `0x0208FB6C` is
+byte-identical, linked C as well. It implements all writable members of the
+same 134-value ABI, including core HP/POW/DEF/SPD changes, position and model
+state, hit flags, party formation fields, enemy-private flags, and the scene
+operation channels. Opcode `0x4E` invokes it 6,042 times in the checked-in BAI
+corpus. Setter-only operations retain neutral numeric names until their callees
+or observed in-game effects prove stronger semantics.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds

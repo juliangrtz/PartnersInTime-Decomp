@@ -32,7 +32,7 @@ void BattleSceneObject_SetModelFlag11ById(int object_id, int enabled) {
         ((enabled & 1) << BATTLE_MODEL_FLAG_11_SHIFT);
 }
 
-void BattleSceneObject_SetStateFlags(BattleSceneObject *object, u8 state,
+void BattleSceneObject_SetStateFlags(BattleSceneObject *object, int state,
                                      int independent_flag) {
     object->flags.bits.state = state;
     object->flags.bits.independent_flag = independent_flag;
