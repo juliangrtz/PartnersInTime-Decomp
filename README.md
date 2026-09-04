@@ -174,3 +174,22 @@ ninja
 The two pipelines have different purposes: `dsd` supplies delinked objects,
 relocations, linker layout, and `objdiff`; `tools/reassembly.py` supplies a
 complete local assembly representation from day one.
+
+## Build from CLion
+
+The shared `Build EUR NDS` run configuration regenerates `build.ninja`, builds
+the editable C/assembly sources, and packages `PiT_eur.nds` in the repository
+root. Put your own matching ROM at `extract/baserom_PiT_eur.nds` first; neither
+the private input nor the built ROM is tracked by Git.
+
+Select `Build EUR NDS` in CLion's run-configuration menu and press Run. This
+configuration deliberately builds the `rom` target without enforcing a match,
+so experimental code changes still produce a testable image. Use `ninja check`
+when you want to verify byte-identical reconstruction separately. The wrapper
+also restores the fixed-layout secure-area and header CRC fields that `dsd`
+does not preserve; it refuses any unexpected header difference. The same build
+is available in a terminal with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\build_nds.ps1
+```

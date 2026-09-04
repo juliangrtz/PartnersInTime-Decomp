@@ -57,3 +57,8 @@ Overlay 2 is loaded at its fixed runtime addresses during battle.
 halfword at actor offset `+0x06`. Begin with read-only breakpoints and memory
 logging. Only after a hypothesis is reproducible should it change a public C
 name or structure field.
+
+For scripted emulator sessions, [`py-desmume`](https://pypi.org/project/py-desmume/)
+is the preferred first automation candidate. Keep it out of the mandatory build
+dependencies; introduce a pinned optional probe environment only when the first
+repeatable RAM experiment is implemented.
