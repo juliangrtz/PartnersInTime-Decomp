@@ -249,7 +249,7 @@ void BattleTargetLabel_Draw(BattleInterfacePanelState *state) {
         BattleSprite_DrawFrame(
             19, 31, &transform.value, 0, 0x20, 3, 0x7FFF);
         transform.value.matrix[0] = -transform.value.matrix[0];
-        transform.value.scale--;
+        transform.value.z--;
         *(volatile u32 *)0x04000440 = 2;
         func_02036cc0(&transform.value);
         func_ov002_020925bc(&transform.value, &state->interface.layer);
@@ -350,7 +350,7 @@ void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
                 );
                 transform->x = position.x << 8;
                 transform->y = position.y << 8;
-                transform->scale = 0;
+                transform->z = 0;
                 model->draw(0, 0, 0);
                 transform->matrix[0] = 4096;
             }
@@ -376,7 +376,7 @@ void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
         transform->matrix[5] = -4096;
         transform->x = position.x << 8;
         transform->y = position.y << 8;
-        transform->scale = 0;
+        transform->z = 0;
         model->prepare_render();
         model->draw(0, 0, 0);
         transform->matrix[5] = 4096;
@@ -397,7 +397,7 @@ void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
         );
         transform->x = position.x << 8;
         transform->y = position.y << 8;
-        transform->scale = 0;
+        transform->z = 0;
         model->prepare_render();
         model->draw(0, 0, 0);
         transform->matrix[0] = 4096;
@@ -437,7 +437,7 @@ void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
             transform->matrix[5] = -4096;
             transform->x = position.x << 8;
             transform->y = position.y << 8;
-            transform->scale = 0;
+            transform->z = 0;
             model->draw(0, 0, 0);
             transform->matrix[5] = 4096;
         }
@@ -475,7 +475,7 @@ void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
                 );
                 transform->x = position.x << 8;
                 transform->y = position.y << 8;
-                transform->scale = 16;
+                transform->z = 16;
                 model->draw(0, 0, 0);
             }
         }
@@ -502,7 +502,7 @@ void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
             transform->matrix[5] = -4096;
             transform->x = 10240;
             transform->y = position.y << 8;
-            transform->scale = 0;
+            transform->z = 0;
             model->draw(0, 0, 0);
             transform->matrix[0] = 4096;
             transform->matrix[5] = 4096;
@@ -542,7 +542,7 @@ void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
                 }
                 transform->x = position.x << 8;
                 transform->y = position.y << 8;
-                transform->scale = 0;
+                transform->z = 0;
                 model->draw(0, 0, 0);
                 transform->matrix[0] = 4096;
             }

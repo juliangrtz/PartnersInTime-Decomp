@@ -128,7 +128,7 @@ void BattleTargetCursor_Draw(BattleTargetCursorState *state) {
     transform = gBattleTargetCursorTransformTemplate;
     transform.value.x = position.x << 8;
     transform.value.y = position.y << 8;
-    transform.value.scale = position.z - 8;
+    transform.value.z = position.z - 8;
     transform.value.matrix[0] = scale;
     transform.value.matrix[5] = scale;
     transform.value.matrix[10] = scale;

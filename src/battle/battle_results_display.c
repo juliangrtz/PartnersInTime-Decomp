@@ -194,7 +194,7 @@ void BattleResults_DrawScreen(BattleResultsDisplayState *state) {
         BattleSpriteTransform transform =
             gBattleResultsSummaryTransformTemplate;
 
-        transform.scale = position.z;
+        transform.z = position.z;
         if (*(s16 *)(gSaveData + BATTLE_RESULTS_PARTY_FORM_OFFSET) == 2) {
             transform.x = (position.x + 100) << 8;
             transform.y = (position.y + 44) << 8;
@@ -280,7 +280,7 @@ int BattleResults_DrawPartyExperienceRow(
 ) {
     gBattleResultsRowTransform.x = (position->x + offset_x) << 8;
     gBattleResultsRowTransform.y = (position->y + offset_y) << 8;
-    gBattleResultsRowTransform.scale = position->z;
+    gBattleResultsRowTransform.z = position->z;
     BattleSprite_DrawFrame(
         member_frame, intensity, &gBattleResultsRowTransform, 0, 0,
         BATTLE_RESULTS_ROW_RESOURCE_ID, render_flags
