@@ -436,8 +436,8 @@ BattleResults_UpdateCounters kind:function(arm,size=0x118) addr:0x02096878
 BattlePartyIndicator_Update kind:function(arm,size=0x244) addr:0x02096990
 BattleTargetOverlay_Draw kind:function(arm,size=0x884) addr:0x02096bd4
 BattleTargetMarker_Update kind:function(arm,size=0xec) addr:0x02097458
-func_ov002_02097544 kind:function(arm,size=0x1dc) addr:0x02097544
-func_ov002_02097720 kind:function(arm,size=0xe8) addr:0x02097720
+BattleTargetLabel_Draw kind:function(arm,size=0x1dc) addr:0x02097544
+BattleTargetLabel_Update kind:function(arm,size=0xe8) addr:0x02097720
 func_ov002_02097808 kind:function(arm,size=0x134) addr:0x02097808
 func_ov002_0209793c kind:function(arm,size=0x138) addr:0x0209793c
 func_ov002_02097a74 kind:function(arm,size=0x4e4) addr:0x02097a74
@@ -956,7 +956,7 @@ data_ov002_020bf724 kind:data(any) addr:0x020bf724
 data_ov002_020bf73c kind:data(any) addr:0x020bf73c
 data_ov002_020bf74c kind:data(any) addr:0x020bf74c
 gBattleLevelUpGrowthTables kind:data(any) addr:0x020bf75c
-data_ov002_020bf77c kind:data(any) addr:0x020bf77c
+gBattleTargetLabelTransformTemplate kind:data(any) addr:0x020bf77c
 data_ov002_020bf7bc kind:data(any) addr:0x020bf7bc
 data_ov002_020bf7c0 kind:data(any) addr:0x020bf7c0
 data_ov002_020bf7c4 kind:data(any) addr:0x020bf7c4
