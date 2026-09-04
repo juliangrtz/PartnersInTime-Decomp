@@ -9,7 +9,7 @@ int BattleActor_ApplyDamage(BattleSceneObject *object, int damage) {
     }
 
     actor = BattleActor_GetById(object->actor_id);
-    actor->hit_state = 0;
+    actor->pending_damage = 0;
     if (actor->current_hp <= 0) {
         actor->current_hp = 0;
         actor->flags |= BATTLE_ACTOR_FLAG_KO;

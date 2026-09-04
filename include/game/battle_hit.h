@@ -4,7 +4,9 @@
 #include <nitro.h>
 
 typedef struct BattleHitDescriptor BattleHitDescriptor;
+typedef struct BattleHitRecord BattleHitRecord;
 typedef void (*BattleHitCallback)(BattleHitDescriptor *descriptor);
+typedef void (*BattleHitRecordCallback)(BattleHitRecord *record);
 
 enum BattleHitDescriptorFlag {
     BATTLE_HIT_KIND_MASK = 0x003F,
@@ -29,8 +31,24 @@ struct BattleHitDescriptor {
     s8 status_magnitude;
 };
 
+struct BattleHitRecord {
+    u16 source_id;
+    u16 target_id;
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 kind;
+    u8 status_id;
+    s8 status_chance;
+    s8 status_magnitude;
+    u8 padding_0f;
+    BattleHitRecordCallback callback;
+};
+
 typedef char BattleHitDescriptor_SizeCheck[
     sizeof(BattleHitDescriptor) == 0x10 ? 1 : -1];
+typedef char BattleHitRecord_SizeCheck[
+    sizeof(BattleHitRecord) == 0x14 ? 1 : -1];
 
 void BattleHitDescriptor_Disable(BattleHitDescriptor *descriptor);
 void BattleHitDescriptor_DisableByActor(int actor_id);

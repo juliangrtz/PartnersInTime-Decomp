@@ -30,7 +30,7 @@ struct BattleActor {
     s16 base_power;
     s16 base_defense;
     u8 unk_016[8];
-    s16 hit_state;
+    s16 pending_damage;
     s16 target_actor_id;
     u8 unk_022[2];
     u16 flags;
@@ -41,7 +41,6 @@ struct BattleActor {
 typedef char BattleActor_SizeCheck[sizeof(BattleActor) == 0x70 ? 1 : -1];
 
 int BattleActor_IsHpAtMostQuarter(BattleActor *actor);
-int BattleDamage_CalculateBase(int attacker_id, int defender_id, int scale_q8);
 int BattleActor_ApplyDamage(struct BattleSceneObject *object, int damage);
 int BattleActor_CanReceiveStatus(BattleActor *actor);
 BattleActor *BattleActor_GetEnemySlot(int actor_id);

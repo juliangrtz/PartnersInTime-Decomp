@@ -1,8 +1,16 @@
+#include <game/battle_actor.h>
 #include <game/battle_ai.h>
+#include <game/battle_damage.h>
 #include <game/battle_hit.h>
 #include <game/battle_scene.h>
 
 extern void BattleDamage_DispatchHit(BattleHitDescriptor *descriptor);
+
+enum {
+    BATTLE_HIT_QUEUE_OFFSET = 0xCAD8,
+    BATTLE_HIT_QUEUE_CAPACITY = 8,
+    BATTLE_EFFECT_VARIANT_OFFSET = 0xCB7A
+};
 
 BattleHitDescriptor *BattleHitDescriptor_Configure(
     u16 source_id, u16 target_id, BattleHitCallback callback,
@@ -72,4 +80,49 @@ void BattleHitDescriptor_DisableByActor(int actor_id) {
 
 void BattleHitDescriptor_Disable(BattleHitDescriptor *descriptor) {
     descriptor->callback = 0;
+}
+
+void BattleDamage_ReflectQueuedHits(int target_actor_id) {
+    int index = 0;
+    BattleHitRecord *record =
+        (BattleHitRecord *)(gBattleContext + BATTLE_HIT_QUEUE_OFFSET);
+
+    do {
+        int damage;
+
+        if (record->kind == 0) {
+            return;
+        }
+        if (target_actor_id == record->target_id) {
+            damage = BattleDamage_CalculateByObject(record->target_id,
+                                                    record->source_id);
+            if (damage > 0) {
+                BattleSceneObject *source =
+                    BattleSceneObject_GetById(record->source_id);
+                BattleActor_GetById(source->linked_actor_id)->pending_damage =
+                    damage;
+            }
+
+            {
+                u16 target_id = record->target_id;
+                BattleHitDescriptor *descriptor;
+
+                record->target_id = record->source_id;
+                record->source_id = target_id;
+                descriptor = BattleHitDescriptor_GetByActorId(target_id);
+                record->status_id =
+                    (u32)(descriptor->flags << 16) >>
+                    (16 + BATTLE_HIT_STATUS_SHIFT);
+                record->status_chance = descriptor->status_chance;
+                record->status_magnitude = descriptor->status_magnitude;
+            }
+        }
+
+        ++index;
+        ++record;
+    } while (index < BATTLE_HIT_QUEUE_CAPACITY);
+}
+
+void BattleEffect_SetVariant(int variant) {
+    *(s16 *)(gBattleContext + BATTLE_EFFECT_VARIANT_OFFSET) = variant;
 }
