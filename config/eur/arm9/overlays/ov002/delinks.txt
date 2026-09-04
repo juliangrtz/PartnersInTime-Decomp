@@ -144,7 +144,7 @@ src/battle/battle_target_cursor.c:
     .text       start:0x020988b0 end:0x02098b90
 
 src/battle/battle_command_wheel.c:
-    .text       start:0x0209918c end:0x02099598
+    .text       start:0x02098b90 end:0x02099598
 
 src/battle/battle_interface_render.c:
     .text       start:0x02099598 end:0x020999d8

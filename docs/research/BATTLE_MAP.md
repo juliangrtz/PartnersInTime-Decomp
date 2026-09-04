@@ -85,6 +85,7 @@ and runtime overlay 2.
 | `020988B0` | `BattleTargetCursor_Draw` | Draws the focused-target sprite, including uniform-target rotation and confirmation bounce (semantic C; 78.00% matching) |
 | `02098B08` | `BattleTargetCursor_Update` | Advances the focused-target cursor rotation while it is visible or bouncing |
 | `02098B44` | `BattleTargetCursor_TriggerBounce` | Starts the uniform-target cursor confirmation bounce and plays its UI sound |
+| `02098B90` | `BattleCommandWheel_Draw` | Depth-sorts and perspective-renders the radial command entries (semantic C draft) |
 | `0209918C` | `BattleCommandWheel_Update` | Attaches, opens, and rotates the active actor's five-entry radial command wheel (semantic C; 59.64% matching) |
 | `02099508` | `BattleCommandWheel_TriggerEntryBounce` | Starts a 12-frame confirmation bounce on the selected command entry |
 | `02099598` | `BattleNumber_DrawDecimal` | Builds and uploads right-to-left decimal digit display lists |
@@ -323,14 +324,16 @@ confirmation functions are matching C; the readable renderer currently matches
 78.00 percent and therefore remains on the original reference object in exact
 ROM builds.
 
-The adjacent command-wheel state at `0x0209918C` stores five eight-byte radial
-entries. Its three phases attach the wheel to the active adult or baby actor,
-grow the radius to `0x2400`, and rotate each icon toward the selected slot.
-Odd icon IDs lift and spin when selected. Confirmation starts a 12-frame entry
-bounce, optionally marks the wheel for dismissal, and plays sound 9. The
-trigger is byte-identical C; the readable 892-byte update has the original 229
-instructions but different register allocation and currently matches 59.64
-percent, so exact builds retain its reference object.
+The adjacent command-wheel block at `0x02098B90` stores five eight-byte radial
+entries. Its three update phases attach the wheel to the active adult or baby
+actor, grow the radius to `0x2400`, and rotate each icon toward the selected
+slot. Odd icon IDs lift and spin when selected. The reconstructed renderer
+sorts translucent entries by cosine depth, projects them onto the battle view,
+applies depth-dependent scale and shading, and draws a separate ground marker.
+Confirmation starts a 12-frame squash-and-stretch bounce, optionally marks the
+wheel for dismissal, and plays sound 9. The trigger is byte-identical C; the
+readable update and renderer still have different MWCC register/stack layouts,
+so exact builds retain the complete block's reference object.
 
 The following interface-render block at `0x02099598`-`0x020999D8` is linked
 byte-identical C. It emits decimal digits right-to-left, clamps interface

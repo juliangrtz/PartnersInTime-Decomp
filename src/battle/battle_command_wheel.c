@@ -15,7 +15,10 @@ enum BattleCommandWheelConstant {
     BATTLE_COMMAND_WHEEL_RADIUS_STEP = 0x480,
     BATTLE_COMMAND_WHEEL_ENTRY_LIFT = 0x400,
     BATTLE_COMMAND_WHEEL_ENTRY_LIFT_STEP = 0x66,
-    BATTLE_COMMAND_WHEEL_BOUNCE_FRAMES = 12
+    BATTLE_COMMAND_WHEEL_BOUNCE_FRAMES = 12,
+    BATTLE_COMMAND_WHEEL_SORT_CAPACITY = 8,
+    BATTLE_COMMAND_WHEEL_RENDER_RESOURCE_ID = 3,
+    BATTLE_COMMAND_WHEEL_FULL_INTENSITY = 31
 };
 
 enum BattleCommandWheelPhase {
@@ -58,6 +61,19 @@ typedef struct BattleCommandWheelState {
     s16 radius;
     BattleCommandWheelFlags flags;
 } BattleCommandWheelState;
+
+typedef union BattleCommandWheelTransform {
+    BattleSpriteTransform value;
+    s32 words[16];
+} BattleCommandWheelTransform;
+
+extern s16 FX_SinCosTable_[8192];
+extern const BattleCommandWheelTransform
+    gBattleCommandWheelTransformTemplate;
+extern const s8 gBattleCommandWheelFrames[];
+extern void func_ov002_020a2fd8(int resource_id, int intensity,
+                                int x, int y, int z,
+                                int render_flags);
 
 int BattleCommandWheel_TriggerEntryBounce(int dismiss_after_bounce) {
     BattleCommandWheelEntry *entry =
@@ -200,4 +216,188 @@ void BattleCommandWheel_Update(BattleCommandWheelState *state,
         break;
     }
     }
+}
+
+int BattleCommandWheel_Draw(BattleCommandWheelState *state) {
+    s16 sorted_indices[BATTLE_COMMAND_WHEEL_SORT_CAPACITY];
+    s16 sort_depth[BATTLE_COMMAND_WHEEL_SORT_CAPACITY];
+    int entry_count = state->entry_count;
+    int radius = state->radius;
+    int draw_index;
+
+    if (state->intensity < BATTLE_COMMAND_WHEEL_FULL_INTENSITY) {
+        int i;
+
+        for (i = 0; i < entry_count; i++) {
+            int insert_at = 0;
+            int angle_index =
+                ((u16)(state->entries[i].angle << 8) >> 4) * 2;
+            int depth = FX_SinCosTable_[angle_index + 1];
+
+            sorted_indices[i] = i;
+            sort_depth[i] = depth;
+            if (i > 0) {
+                while (insert_at < i &&
+                       sort_depth[insert_at] <= depth) {
+                    insert_at++;
+                }
+                if (insert_at < i) {
+                    int shift;
+
+                    for (shift = i; shift > insert_at; shift--) {
+                        sorted_indices[shift] =
+                            sorted_indices[shift - 1];
+                        sort_depth[shift] = sort_depth[shift - 1];
+                    }
+                    sorted_indices[insert_at] = i;
+                    sort_depth[insert_at] = depth;
+                }
+            }
+        }
+    }
+
+    if (entry_count > 0) {
+        int perspective_radius = 5 * radius / 256;
+
+        for (draw_index = 0; draw_index < entry_count; draw_index++) {
+            int intensity = state->intensity;
+            int entry_index =
+                intensity < BATTLE_COMMAND_WHEEL_FULL_INTENSITY
+                    ? sorted_indices[draw_index]
+                    : draw_index;
+            BattleCommandWheelEntry *entry =
+                &state->entries[entry_index];
+            int should_draw = intensity >= 1;
+
+            if (entry->bounce_timer != 0) {
+                should_draw = 1;
+                entry->bounce_timer--;
+                if (entry->bounce_timer == 0) {
+                    (*(s16 *)(gBattleContext +
+                              BATTLE_INTERFACE_ANIMATION_COUNT_OFFSET))--;
+                    if (!entry->flags.bits.dismiss_after_bounce) {
+                        entry->lift = 0;
+                        entry->spin_angle = 0;
+                        should_draw = 0;
+                    }
+                }
+            }
+
+            if (should_draw) {
+                BattleSceneObject *object = state->scene_object;
+                BattlePosition position;
+                BattleCommandWheelTransform transform;
+                int angle_index =
+                    ((u16)(entry->angle << 8) >> 4) * 2;
+                int horizontal_offset =
+                    radius * FX_SinCosTable_[angle_index] / 0x100000;
+                int depth_offset =
+                    radius *
+                    (FX_SinCosTable_[angle_index + 1] - 4096) /
+                    0x100000;
+                int spin_index =
+                    ((u16)(entry->spin_angle << 8) >> 4) * 2;
+                int lift_offset =
+                    entry->lift * FX_SinCosTable_[spin_index] /
+                    0x100000;
+                int bounce_timer = entry->bounce_timer;
+                int perspective_denominator;
+                int perspective_depth;
+                int perspective_x;
+                int anchor_y;
+                int shade;
+
+                if (bounce_timer != 0) {
+                    int bounce_step;
+
+                    if (bounce_timer <= 1) {
+                        bounce_timer = 2;
+                    }
+                    bounce_step = bounce_timer - 4;
+                    lift_offset +=
+                        48 * bounce_step / 8 -
+                        48 * bounce_step * bounce_step / 64;
+                }
+
+                perspective_denominator =
+                    perspective_radius - depth_offset;
+                perspective_depth =
+                    depth_offset * perspective_radius /
+                    perspective_denominator;
+                perspective_x =
+                    horizontal_offset * perspective_radius /
+                    perspective_denominator;
+                anchor_y = object->y + 2 * perspective_depth / 3;
+
+                BattlePosition_StoreViewRelative(
+                    &position,
+                    (s16)(object->x + perspective_x),
+                    (s16)(anchor_y - (object->z + lift_offset)),
+                    (s16)(object->effect_anchor_z +
+                          16 * (256 - anchor_y)),
+                    object->flags.bits.use_raw_position,
+                    object->flags.bits.use_alternate_model);
+
+                transform = gBattleCommandWheelTransformTemplate;
+                transform.value.matrix[0] =
+                    (perspective_radius << 12) /
+                    perspective_denominator;
+                transform.value.matrix[5] =
+                    transform.value.matrix[0];
+                transform.value.x = position.x << 8;
+                transform.value.y = position.y << 8;
+                transform.value.z = position.z - 4;
+
+                if (1 - depth_offset >= 12) {
+                    shade = 156 / (1 - depth_offset) + 18;
+                } else {
+                    shade = 31;
+                }
+
+                if (entry->bounce_timer != 0 &&
+                    entry->bounce_timer <= 4) {
+                    if (entry->flags.bits.dismiss_after_bounce) {
+                        entry->bounce_timer = 0;
+                        (*(s16 *)(gBattleContext +
+                                  BATTLE_INTERFACE_ANIMATION_COUNT_OFFSET))--;
+                    } else {
+                        transform.value.matrix[0] =
+                            transform.value.matrix[0] *
+                            (6 - entry->bounce_timer / 2) / 4;
+                        transform.value.matrix[5] =
+                            transform.value.matrix[5] *
+                            entry->bounce_timer / 4;
+                    }
+                }
+                if (entry->bounce_timer != 0) {
+                    intensity = BATTLE_COMMAND_WHEEL_FULL_INTENSITY;
+                }
+
+                BattleSprite_DrawFrame(
+                    gBattleCommandWheelFrames[
+                        entry->flags.bits.icon_id],
+                    intensity, &transform.value, 0, 0,
+                    BATTLE_COMMAND_WHEEL_RENDER_RESOURCE_ID,
+                    (shade & 0x1F) |
+                        ((shade & 0x1F) << 5) |
+                        ((shade & 0x1F) << 10));
+
+                anchor_y = object->y + perspective_depth / 3;
+                BattlePosition_StoreViewRelative(
+                    &position,
+                    (s16)(object->x + perspective_x),
+                    (s16)anchor_y,
+                    (s16)(object->effect_anchor_z +
+                          16 * (256 - anchor_y)),
+                    object->flags.bits.use_raw_position,
+                    object->flags.bits.use_alternate_model);
+                func_ov002_020a2fd8(
+                    BATTLE_COMMAND_WHEEL_RENDER_RESOURCE_ID,
+                    intensity, position.x, position.y,
+                    object->z, 0);
+            }
+        }
+    }
+
+    return entry_count;
 }

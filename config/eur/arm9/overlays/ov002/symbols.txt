@@ -447,7 +447,7 @@ BattlePartyHpPanel_UpdateMember kind:function(arm,size=0x420) addr:0x02098490
 BattleTargetCursor_Draw kind:function(arm,size=0x258) addr:0x020988b0
 BattleTargetCursor_Update kind:function(arm,size=0x3c) addr:0x02098b08
 BattleTargetCursor_TriggerBounce kind:function(arm,size=0x4c) addr:0x02098b44
-func_ov002_02098b90 kind:function(arm,size=0x5fc) addr:0x02098b90
+BattleCommandWheel_Draw kind:function(arm,size=0x5fc) addr:0x02098b90
 BattleCommandWheel_Update kind:function(arm,size=0x37c) addr:0x0209918c
 BattleCommandWheel_TriggerEntryBounce kind:function(arm,size=0x90) addr:0x02099508
 BattleNumber_DrawDecimal kind:function(arm,size=0x200) addr:0x02099598
@@ -845,7 +845,7 @@ data_ov002_020be6ec kind:data(any) addr:0x020be6ec
 data_ov002_020be6fc kind:data(any) addr:0x020be6fc
 data_ov002_020be704 kind:data(any) addr:0x020be704
 data_ov002_020be710 kind:data(any) addr:0x020be710
-data_ov002_020be718 kind:data(any) addr:0x020be718
+gBattleCommandWheelFrames kind:data(any) addr:0x020be718
 data_ov002_020be740 kind:data(any) addr:0x020be740
 data_ov002_020be74c kind:data(any) addr:0x020be74c
 data_ov002_020be758 kind:data(any) addr:0x020be758
@@ -964,7 +964,7 @@ data_ov002_020bf7c4 kind:data(any) addr:0x020bf7c4
 gBattleResultsSummaryTransformTemplate kind:data(any) addr:0x020bf83c
 gBattleResultsRowTransform kind:data(any) addr:0x020bf87c
 gBattleLevelUpBonusPreviewTransform kind:data(any) addr:0x020bf8bc
-data_ov002_020bf8fc kind:data(any) addr:0x020bf8fc
+gBattleCommandWheelTransformTemplate kind:data(any) addr:0x020bf8fc
 gBattleTargetCursorTransformTemplate kind:data(any) addr:0x020bf93c
 gBattlePartyHpPanelTransformTemplate kind:data(any) addr:0x020bf97c
 gBattleLevelUpStatRowTransform kind:data(any) addr:0x020bf9bc
