@@ -34,6 +34,8 @@ and runtime overlay 2.
 | `020884E8` | `BattleInterface_InitLayersTask` | Initializes four battle-interface layers and their fixed VRAM regions |
 | `02088A34` | `BattleInterface_RequestLoad` | Starts the shared/localized battle-interface asset pipeline |
 | `02088BC4` | `BattleInterface_RequestScreenLoad` | Loads one of the two selectable battle-screen resources |
+| `02088CAC` | `BattlePartyScript_RequestLoad` | Resolves and asynchronously loads a packed party-script resource |
+| `02088E44` | `BattleActionScript_RequestLoad` | Marks an action pending and queues its battle-AI script load |
 | `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
@@ -235,6 +237,14 @@ size, position, dimensions, and fixed VRAM offsets `0x38000` through `0x3CC00`.
 A sibling two-request pipeline selects one of two archive descriptors and
 stores its loaded screen resource at context `+0x44` or `+0x48`. The allocations
 use the battle runtime's heap selector at `+0xE148`.
+The adjacent six-function script pipeline resolves packed object-data IDs into
+the shared 44-byte runtime descriptor, rounds archive reads to four-byte
+boundaries, and streams party and action BAI data into context buffers
+`+0x35608` and `+0x25608`. Completion starts fixed party VM slot 4 or the
+requesting action's actor VM and selects the script stream from the payload's
+leading offset. Action flag bit 2 records the pending load. Map `0x2028` also
+passes through a pre-load synchronization path whose exact gameplay meaning
+still needs runtime confirmation.
 All actor resolvers, the compact base-damage calculation, and the damage/KO
 updater are now maintained byte-identical C.
 The state-bit setter, active-model selectors, model-bit setters, position

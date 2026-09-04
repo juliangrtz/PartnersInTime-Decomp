@@ -3,6 +3,8 @@
 
 #include <game/battle_ai.h>
 
+struct BattleObjectResourceRequest;
+
 enum BattleContextOffset {
     BATTLE_CONTEXT_BACKGROUND_ID_OFFSET = 0x3A,
     BATTLE_RUNTIME_STATE_OFFSET = 0xD000,
@@ -79,7 +81,9 @@ typedef struct BattleContext {
     void *screen_assets[2];
     u8 unknown_004c[0xF4];
     BattleArchiveReadRequest asset_read;
-    u8 unknown_0168[0x648C];
+    u8 unknown_0168[0x3DC];
+    struct BattleObjectResourceRequest *active_object_resource;
+    u8 unknown_0548[0x60AC];
     BattleInterfaceLayer interface_layer_0;
     u8 unknown_6634[0x14];
     BattleInterfaceLayer interface_layer_1;
