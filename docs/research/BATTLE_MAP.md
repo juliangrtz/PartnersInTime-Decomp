@@ -146,6 +146,8 @@ and runtime overlay 2.
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
 | `02018F48` | `ItemEffect_CalculateValue` | Resident item-record value calculation and HP clamps |
 | `0208908C` | `BattleEnemyData_RequestLoad` | Initializes and queues one enemy-data request |
+| `020890B4` | `BattleObjectData_RebuildNextComponentTask` | Serializes one model component and finalizes the destination resource |
+| `020891D8` | `BattleObjectData_BeginRebuildTask` | Allocates a model and prepares its destination component table |
 | `02089300` | `BattleObjectData_QueueLoadAndMarkPending` | Queues a resource ID and marks its destination load pending |
 | `02089320` | `BattleObjectData_CopyResource` | Copies a loaded resource, rebases its internal pointers, and schedules upload |
 | `02089EEC` | `BattleObjectData_QueueLoad` | Resets an object-data state and queues its asynchronous loader |
@@ -610,6 +612,14 @@ resource upload.
 by the ordinary-slot request path: it forwards both arguments to the common
 queue loader, sets descriptor flag 29, and returns the queued task so the
 caller can retain its object-data slot ID.
+The adjacent rebuild callbacks turn a loaded source descriptor into the
+destination's runtime component layout. The setup callback replaces the
+destination slot's 440-byte polymorphic model, configures it from the packed
+resource index, reads the component count from model metadata, and reserves a
+leading pointer table in the destination buffer. The update callback writes one
+component per task tick through the shared stream state at context `+0x68B4`.
+After the final component it clears flag 30 on both descriptors and, when at
+least 101 bytes remain, clears a 100-byte tail workspace and seeds its cursor.
 `BattleEntity_BindResource` is maintained too: its enemy branch
 copies max/current HP, base/current POW, DEF, and SPD, installs level/trait
 bits, and clears transient actor flags; its party branch binds the corresponding

@@ -166,7 +166,7 @@ def parse_delinks(
         source_path = ROOT / source
         if (
             section.group("section") == ".text"
-            and source.endswith(".c")
+            and Path(source).suffix in {".c", ".cpp"}
             and source.replace("\\", "/") in matching_sources
             and source_path.is_file()
         ):
@@ -516,8 +516,8 @@ def render_svg(components: Sequence[Component], arm7_bytes: int) -> str:
         '<title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>',
         (
             '<desc id="desc">A treemap of mapped ARM9 code. '
-            f"{c_percent:.2f} percent is matching C and {source_percent:.2f} "
-            "percent has matching C or maintained symbolic assembly.</desc>"
+            f"{c_percent:.2f} percent is matching C/C++ and {source_percent:.2f} "
+            "percent has matching C/C++ or maintained symbolic assembly.</desc>"
         ),
         "<style>",
         ".bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}",
@@ -532,7 +532,7 @@ def render_svg(components: Sequence[Component], arm7_bytes: int) -> str:
         svg_text(margin, 34, "DECOMPILATION PROGRESS · EUROPEAN ROM", "eyebrow"),
         svg_text(margin, 68, "Mario & Luigi: Partners in Time", "title"),
         svg_text(margin, 113, f"{c_percent:.2f}%", "percent"),
-        svg_text(145, 110, "matching C", "subtitle"),
+        svg_text(145, 110, "matching C/C++", "subtitle"),
         svg_text(
             width - margin,
             63,
@@ -554,7 +554,7 @@ def render_svg(components: Sequence[Component], arm7_bytes: int) -> str:
 
     legend_y = 181
     legend = [
-        (STATUS_C, f"Matching C  {human_bytes(c_bytes)}"),
+        (STATUS_C, f"Matching C/C++  {human_bytes(c_bytes)}"),
         (STATUS_ASM, f"Symbolic ASM  {human_bytes(asm_bytes)}"),
         (
             STATUS_REMAINING,
@@ -597,7 +597,7 @@ def render_svg(components: Sequence[Component], arm7_bytes: int) -> str:
             unit = unit_obj
             assert isinstance(unit, Unit)
             status_label = {
-                STATUS_C: "matching C",
+                STATUS_C: "matching C/C++",
                 STATUS_ASM: "symbolic ASM",
                 STATUS_REMAINING: "remaining",
             }[unit.status]
@@ -684,9 +684,9 @@ def main() -> int:
     )
     summary = totals(components)
     print(
-        f"matching C: {summary[STATUS_C]}/{summary['code']} bytes "
+        f"matching C/C++: {summary[STATUS_C]}/{summary['code']} bytes "
         f"({summary[STATUS_C] * 100 / summary['code']:.2f}%); "
-        f"C + ASM: {(summary[STATUS_C] + summary[STATUS_ASM]) * 100 / summary['code']:.2f}%"
+        f"C/C++ + ASM: {(summary[STATUS_C] + summary[STATUS_ASM]) * 100 / summary['code']:.2f}%"
     )
     return 0 if ok_svg and ok_json else 1
 

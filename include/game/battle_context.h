@@ -2,8 +2,7 @@
 #define PIT_GAME_BATTLE_CONTEXT_H
 
 #include <game/battle_ai.h>
-
-struct BattleObjectResourceRequest;
+#include <game/battle_object.h>
 
 enum BattleContextOffset {
     BATTLE_CONTEXT_BACKGROUND_ID_OFFSET = 0x3A,
@@ -70,7 +69,9 @@ typedef struct BattleRuntimeState {
     BattleRuntimeFlags flags;
     u8 unknown_3a4[0xDA4];
     u32 heap_id;
-    u8 unknown_114c[0x14];
+    u8 unknown_114c[0x0C];
+    u32 resource_heap_id;
+    u8 unknown_115c[4];
     BattleCommonAssetArchive common_assets;
 } BattleRuntimeState;
 
@@ -82,7 +83,7 @@ typedef struct BattleContext {
     u8 unknown_004c[0xF4];
     BattleArchiveReadRequest asset_read;
     u8 unknown_0168[0x3DC];
-    struct BattleObjectResourceRequest *active_object_resource;
+    BattleObjectResourceRequest *active_object_resource;
     u8 unknown_0548[0x60AC];
     BattleInterfaceLayer interface_layer_0;
     u8 unknown_6634[0x14];
@@ -91,7 +92,10 @@ typedef struct BattleContext {
     BattleInterfaceLayer interface_layer_2;
     u8 unknown_66dc[0x10];
     BattleInterfaceLayer interface_layer_3;
-    u8 unknown_672c[0x1C8];
+    u8 unknown_672c[0x68];
+    BattleResourceModel *resource_models[72];
+    BattleResourceStream resource_stream;
+    u8 unknown_68c8[0x2C];
     void *interface_assets[2];
     void *common_asset_pointers[BATTLE_COMMON_ASSET_COUNT];
     void *common_asset_end;

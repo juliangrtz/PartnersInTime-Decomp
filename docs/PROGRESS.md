@@ -16,12 +16,14 @@ The denominator is every European ARM9, ITCM, and overlay range marked
 `kind:code` in the DSD `delinks.txt` files. BSS, data, graphics, audio, and
 filesystem assets do not inflate it.
 
-- **Matching C** is a `.text` range assigned to a C translation unit that is
-  present in the repository, reproduces the original layout, and is enabled in
-  the exact build's `linked_sources.txt` manifest. Work-in-progress C remains
-  visible in objdiff without inflating this total.
+- **Matching C/C++** is a `.text` range assigned to a high-level translation
+  unit that is present in the repository, reproduces the original layout, and
+  is enabled in the exact build's `linked_sources.txt` manifest.
+  Work-in-progress source remains visible in objdiff without inflating this
+  total.
 - **Symbolic ASM** is a maintained source range in
-  `reasm/eur/patches.json`. If C and assembly cover the same bytes, C wins.
+  `reasm/eur/patches.json`. If high-level source and assembly cover the same
+  bytes, the high-level source wins.
 - **Remaining** is mapped machine code that has not yet reached either source
   state. It may already have function names or research notes; those alone do
   not count as decompilation.

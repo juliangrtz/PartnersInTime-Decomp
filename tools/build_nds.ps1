@@ -183,7 +183,7 @@ if ($null -ne $resolvedDataProject) {
     Write-Host "Data:     $resolvedDataProject"
 }
 if (Test-Path -LiteralPath $linkedSources -PathType Leaf) {
-    Write-Host 'Linked C sources:'
+    Write-Host 'Linked source units:'
     Get-Content -LiteralPath $linkedSources |
         ForEach-Object { $_.Split('#', 2)[0].Trim() } |
         Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
