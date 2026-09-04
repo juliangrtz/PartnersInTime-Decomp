@@ -90,7 +90,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   inverse encoders also cover all 765 treasure records, reproduce every covered
   binary byte for byte before edits, and support length-changing text. Four
   shop datasets and 99 item-master records are editable through validated
-  copies of their overlay-9 and resident-ARM9 tables.
+  copies of their overlay-9 and resident-ARM9 tables. All 14 battle-scenario
+  and enemy-AI archives are decoded into 242 scripts and 129,127 editable VM
+  commands; their assembler preserves private, not-yet-understood tail data
+  without checking opaque bytes into Git.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.

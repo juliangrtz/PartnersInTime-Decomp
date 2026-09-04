@@ -24,6 +24,9 @@ copied unchanged when the modded NitroFS tree is staged.
   six progression tiers with resolved English item-name hints;
 - all 99 resident ARM9 item-master records, with the confirmed purchase-price
   field named and every not-yet-understood word/byte preserved explicitly;
+- all 14 battle-scenario, enemy-AI, and related `BAI_*.dat` VM archives: 230
+  archive entries, 242 entry-point scripts, and 129,127 decoded commands using
+  191 distinct opcodes;
 - length-changing MFset edits: string pointers, language-entry sizes, and outer
   archive offsets are regenerated instead of patched in place.
 
@@ -187,6 +190,47 @@ actual load base is `0x02004000`.  The builder uses runtime-address-minus-load-
 base offsets, validates each original table region, patches a copy of the
 freshly linked `arm9.bin`, and redirects the derived ROM config.  This preserves
 unrelated C changes in resident ARM9.
+
+## Battle scenarios and enemy AI
+
+The 14 files under `data/eur/scripts/` expose every decoded command from the
+`BAI_scn_*`, `BAI_mon_*`, `BAI_iwasaki`, and `BAI_sugiyama` archives. Each JSON
+line inside a `commands` array is one instruction and retains its entry-local
+byte offset, making an emulator trace or IDA address easy to correlate with
+source. For example:
+
+```json
+{"offset": "0x00F4", "opcode": "op_011", "result": "0x1000", "args": [512, 0]}
+{"offset": "0x00FE", "opcode": "op_011", "result": "0x1001", "args": [{"variable": "0x1000"}, -128]}
+```
+
+A plain integer is a signed 16-bit literal. `{"variable": "0x1000"}` tells the
+VM to resolve that argument through its variable accessor, and `result` is the
+optional destination variable used by opcodes that return a value. A small
+number of original commands also carry `unused_mode_bits`; keep those preserved
+bits unless runtime research proves their meaning.
+
+Only opcodes `end` and `return` have names because their implementations are
+confirmed. The remaining `op_000` through `op_103` identifiers are deliberately
+neutral; do not turn a guess from one script into a global name. The compact
+command layouts come from the validated 260-entry descriptor table documented
+in `config/eur/battle_ai_vm.json`. The dispatcher navigation report in
+`docs/research/BATTLE_AI_OPCODES.md` is the starting point for assigning further
+semantics.
+
+Schema v1 is intentionally fixed-layout. Arguments, variable references,
+result variables, and opcodes with the same encoded command size can be edited.
+Commands, scripts, and archive entries cannot yet be inserted, removed, or
+resized. The builder compares every command boundary with the private source
+and rejects a shape change before packaging. This is necessary because branch
+and call operands are still numeric script offsets; label-based relocation is
+the next format milestone.
+
+Some entries contain data after their final VM return. Those 129,804 bytes are
+not silently treated as commands and are not committed as opaque hex. Each
+document stores only the tail offset, size, and SHA-1. During a build, the tool
+verifies and copies the tail from the user's matching private extraction. An
+unchanged export rebuilds every archive byte for byte.
 
 ## Generated build artifacts
 
