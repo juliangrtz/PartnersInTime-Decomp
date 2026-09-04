@@ -1,0 +1,132 @@
+# Editable game data
+
+The European data project under `data/eur/` turns understood NitroFS formats
+into reviewable JSON.  It is rebuilt during the normal ROM build, so a data mod
+does not need an ad-hoc binary patch or fixed-length replacement text.
+
+Only formats with a validated inverse encoder belong here.  The exporter and
+builder currently round-trip all covered files byte for byte before edits.
+Unknown files remain in the user's private `extract/eur/files/` tree and are
+copied unchanged when the modded NitroFS tree is staged.
+
+## Current coverage
+
+- all 21 `mfset*.dat` archives: item, equipment, badge, enemy, help, area,
+  save/load, menu, outline, option, and shop text in all six ROM language slots;
+- all 98 fixed-size enemy records from `BData/BDataMon.dat`, including level,
+  HP, POW, DEF, speed, experience, coins, drops, traits, and unknown bytes;
+- length-changing MFset edits: string pointers, language-entry sizes, and outer
+  archive offsets are regenerated instead of patched in place.
+
+Player growth/base stats are not present in this DAT corpus.  They are created
+by executable and save-data logic and therefore remain part of the C
+reconstruction.  Field dialogue (`FEvent/FEvData.dat`) and battle messages
+(`BAI/BMes.dat`) use an additional localized wrapper and are the next text
+formats to promote from the datamine into this editable pipeline.
+
+## Building a data mod
+
+Edit JSON below `data/eur/`, then use the existing CLion **Build and Run EUR
+NDS** configuration.  `tools/build_nds.ps1` automatically detects
+`data/eur/project.json`, validates the files, stages a complete derived NitroFS
+tree below ignored `build/eur/data_mod_files/`, packages the ROM, and launches
+the configured emulator.
+
+From PowerShell, the equivalent build without launching an emulator is:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\build_nds.ps1
+```
+
+Useful standalone commands are:
+
+```powershell
+# Validate every editable file and report which binaries differ from the base.
+python .\tools\data_mod.py check `
+  --files-root .\extract\eur\files `
+  --project-root .\data\eur
+
+# Re-export the currently supported formats from your private extraction.
+python .\tools\data_mod.py export `
+  --version eur `
+  --files-root .\extract\eur\files `
+  --project-root .\data\eur
+```
+
+Re-exporting overwrites the editable documents with data from the private base
+files, so do that only when intentionally refreshing the project.  Pass
+`-DisableDataMods` to `tools/build_nds.ps1` to package the unmodified private
+NitroFS, or `-DataProject path` to test a separate data-project directory.
+
+## Text documents
+
+Each file under `data/eur/text/` rebuilds the NitroFS path in its `source`
+field.  Languages contain ordered string records.  The numeric `id` is the
+index used by game code and must stay contiguous; only edit `text` unless a
+format investigation establishes a reason to change the two-byte
+`header_hex` present in the main menu-message archive.
+
+Control sequences use an explicit notation:
+
+| Editable form | Encoded bytes | Meaning |
+| --- | --- | --- |
+| a real JSON newline | `FF 00` | line break |
+| `<$END>` | `FF 0A` | end of message |
+| `<$TEXTBOX:03>` | `FF 0B 03` | text-box control with one argument |
+| `<$PAUSE:xx>` | `FF 0C xx` | timed/controlled pause |
+| `<$WAIT:xx>` | `FF 11 xx` | wait control |
+| `<$COLOR_RED>` | `FF 2D` | select red text |
+| `<$CTRL:xx>` | `FF xx` | not-yet-named control |
+| `<$BYTE:xx>` | `xx` | raw byte or game-specific glyph/control |
+
+Literal backslashes are written as `\\`; a literal `<` is written as `\<` so
+it cannot be mistaken for a token.  Western text uses Windows-1252, matching
+the current European files.  The Japanese slot uses a game-specific one-byte
+font map rather than Shift-JIS, so its glyphs deliberately remain lossless
+`<$BYTE:xx>` tokens until that map is recovered.  This is less pretty than
+plausible-looking mojibake and prevents accidental corruption.
+
+Longer strings are supported by the archive builder, but the original text
+renderer still has its original box widths, line limits, timing, and script
+assumptions.  Test layout and message flow in-game after substantial edits.
+
+## Enemy records
+
+`data/eur/stats/enemies.json` is ordered by `record_id`; records cannot yet be
+added or removed because executable code is known to use the original table
+shape.  Decimal gameplay quantities can be edited directly.  Flags, unknowns,
+and packed drop values are displayed in hexadecimal so bit changes are visible
+in diffs.
+
+The known compiled fields are:
+
+| Offset | Field | Size |
+| --- | --- | --- |
+| `0x00` | `name_id` | 16 bits |
+| `0x02` | `flags_or_ai_id` | 16 bits |
+| `0x04` | `unknown_04` | 8 bits |
+| `0x05` | `level` | 8 bits |
+| `0x06` | `max_hp` | 16 bits |
+| `0x08` | `power` | 16 bits |
+| `0x0A` | `defense` | 16 bits |
+| `0x0C` | `speed` | 16 bits |
+| `0x0E` | `traits` | 16 bits |
+| `0x10` | `unknown_10` | 16 bits |
+| `0x12` | `unknown_12_hex` | 14 bytes |
+| `0x20` | `experience` | 16 bits |
+| `0x22` | `coins` | 16 bits |
+| `0x24` | `item_drop_1` | 32 bits |
+| `0x28` | `item_drop_2` | 32 bits |
+
+`name_hint` is a human-readable lookup from the English monster-name MFset and
+is not compiled.  Change the corresponding string in
+`text/BData__mfset_MonN.dat.json` to rename an enemy.  The builder range-checks
+every numeric field and requires all 14 unknown bytes, so malformed edits fail
+before ROM packaging.
+
+## Generated build artifacts
+
+`build/eur/data_mod_report.json` lists each rebuilt source, old/new size and
+SHA-1, and whether it changed.  `build/eur/build/rom_config_data_mod.yaml` is a
+derived `dsd` configuration pointing at the staged NitroFS.  Both are ignored
+and may be deleted at any time; original extracted files are never modified.

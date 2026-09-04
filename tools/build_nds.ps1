@@ -3,7 +3,11 @@ param(
     [ValidateSet('eur')]
     [string]$Version = 'eur',
 
-    [string]$EmulatorPath = ''
+    [string]$EmulatorPath = '',
+
+    [string]$DataProject = '',
+
+    [switch]$DisableDataMods
 )
 
 Set-StrictMode -Version Latest
@@ -60,6 +64,27 @@ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $baseRom = Join-Path $repoRoot "extract\baserom_PiT_$Version.nds"
 $outputRom = Join-Path $repoRoot "PiT_$Version.nds"
 $linkedSources = Join-Path $repoRoot "config\$Version\arm9\linked_sources.txt"
+$filesRoot = Join-Path $repoRoot "extract\$Version\files"
+$resolvedDataProject = $null
+
+if (-not $DisableDataMods) {
+    if ([string]::IsNullOrWhiteSpace($DataProject)) {
+        $candidate = Join-Path $repoRoot "data\$Version"
+        if (Test-Path -LiteralPath (Join-Path $candidate 'project.json') -PathType Leaf) {
+            $resolvedDataProject = $candidate
+        }
+    } else {
+        if ([System.IO.Path]::IsPathRooted($DataProject)) {
+            $candidate = $DataProject
+        } else {
+            $candidate = Join-Path $repoRoot $DataProject
+        }
+        $resolvedDataProject = (Resolve-Path -LiteralPath $candidate).Path
+        if (-not (Test-Path -LiteralPath (Join-Path $resolvedDataProject 'project.json') -PathType Leaf)) {
+            throw "Data project has no project.json: $resolvedDataProject"
+        }
+    }
+}
 
 if (-not (Test-Path -LiteralPath $baseRom -PathType Leaf)) {
     throw "Missing private base ROM: $baseRom`nCopy your matching ROM there before building."
@@ -111,6 +136,29 @@ try {
     if ($LASTEXITCODE -ne 0) {
         throw "ROM build failed with exit code $LASTEXITCODE."
     }
+
+    if ($null -ne $resolvedDataProject) {
+        $baseRomConfig = Join-Path $repoRoot "build\$Version\build\rom_config.yaml"
+        $dataRomConfig = Join-Path $repoRoot "build\$Version\build\rom_config_data_mod.yaml"
+        $stagedFiles = Join-Path $repoRoot "build\$Version\data_mod_files"
+        $dataReport = Join-Path $repoRoot "build\$Version\data_mod_report.json"
+        & $python.Source tools\data_mod.py build `
+            --files-root $filesRoot `
+            --project-root $resolvedDataProject `
+            --output-files $stagedFiles `
+            --rom-config-input $baseRomConfig `
+            --rom-config-output $dataRomConfig `
+            --report $dataReport
+        if ($LASTEXITCODE -ne 0) {
+            throw "Data rebuild failed with exit code $LASTEXITCODE."
+        }
+
+        $dsd = Join-Path $repoRoot 'dsd.exe'
+        & $dsd rom build --config $dataRomConfig --rom $outputRom
+        if ($LASTEXITCODE -ne 0) {
+            throw "Modded ROM packaging failed with exit code $LASTEXITCODE."
+        }
+    }
 } finally {
     Pop-Location
 }
@@ -125,6 +173,9 @@ $sha1 = (Get-FileHash -LiteralPath $outputRom -Algorithm SHA1).Hash.ToLowerInvar
 Write-Host ''
 Write-Host "Built ROM: $outputRom"
 Write-Host "SHA-1:    $sha1"
+if ($null -ne $resolvedDataProject) {
+    Write-Host "Data:     $resolvedDataProject"
+}
 if (Test-Path -LiteralPath $linkedSources -PathType Leaf) {
     Write-Host 'Linked C sources:'
     Get-Content -LiteralPath $linkedSources |

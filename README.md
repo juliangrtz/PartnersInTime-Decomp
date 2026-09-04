@@ -4,10 +4,11 @@ This repository is a work in progress. Its long-term goal is a fully
 source-buildable, mod-friendly reconstruction of the Nintendo DS game, not a
 collection of binary patches.
 
-No ROM, extracted game asset, generated machine-code dump, or proprietary
-AlphaDream/Nintendo data belongs in this repository. You must supply your own
-matching ROM. Generated sources and build outputs stay below `build/`, which is
-ignored by Git.
+No ROM, generated machine-code dump, graphical/audio asset, or opaque extracted
+game binary belongs in this repository. Reconstructed source plus understood,
+editable non-graphical text and data tables are versioned. You must supply your
+own matching ROM for verification and packaging. Generated sources and build
+outputs stay below `build/`, which is ignored by Git.
 
 ## Current status
 
@@ -76,6 +77,9 @@ ignored by Git.
   hit-descriptor setup layer are high-level source too. The remaining game
   functions stay in symbolic assembly until an equivalent C translation
   reproduces their original code and layout.
+- The European editable-data project covers 21 multilingual MFset text
+  archives and all 98 enemy-stat records. Its inverse encoders reproduce every
+  covered binary byte for byte before edits and support length-changing text.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.
@@ -86,6 +90,8 @@ The generated [`docs/research/BATTLE_AI_OPCODES.md`](docs/research/BATTLE_AI_OPC
 provides a compact navigation index for the large enemy-script dispatcher.
 [`tools/ida/README.md`](tools/ida/README.md) documents the reproducible IDA
 9.1/9.2 ARM32 database import and batch Hex-Rays helper for overlay 2.
+[`docs/DATA_MODDING.md`](docs/DATA_MODDING.md) documents editable text/stats,
+control tokens, validation, and ROM packaging.
 
 ## Verified European ROM
 
@@ -189,6 +195,11 @@ builds the editable C/assembly sources, packages `PiT_eur.nds` in the repository
 root, and launches it in DeSmuME. Put your own matching ROM at
 `extract/baserom_PiT_eur.nds` first; neither the private input nor the built ROM
 is tracked by Git.
+
+The same run configuration also detects `data/eur/project.json` and rebuilds
+the editable text and enemy-stat documents into a staged NitroFS before final
+packaging. It never changes the private extraction. Use `-DisableDataMods` with
+`tools/build_nds.ps1` when an unmodified data tree is desired.
 
 Select `Build and Run EUR NDS` in CLion's run-configuration menu and press Run.
 Its configured emulator is
