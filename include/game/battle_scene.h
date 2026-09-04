@@ -36,14 +36,17 @@ struct BattleModel {
 };
 
 struct BattleSceneObject {
-    u8 unk_000[4];
+    BattleSceneObject *motion_next;
     s16 x;
     s16 y;
     s16 z;
     s16 motion_origin_x;
     s16 motion_origin_y;
     s16 motion_origin_z;
-    u8 unk_010[0x0C];
+    s16 motion_target_x;
+    s16 motion_target_y;
+    s16 motion_target_z;
+    u8 unk_016[6];
     BattleMotionChannel motion_channels[4];
     void *resource;
     BattleModel *primary_model;
@@ -60,6 +63,8 @@ typedef char BattleMotionChannel_SizeCheck[
 typedef char BattleSceneObject_SizeCheck[
     sizeof(BattleSceneObject) == 0xF8 ? 1 : -1];
 
+extern BattleSceneObject *gBattleMotionObjectList;
+
 void BattleSceneObject_SetStateFlags(BattleSceneObject *object, u8 state,
                                      int independent_flag);
 void BattleSceneObject_SetModelFlag11ById(int object_id, int enabled);
@@ -70,6 +75,12 @@ BattleModel *BattleSceneObject_GetActiveModelById(int object_id);
 BattleMotionChannel *BattleSceneObject_GetMotionChannel(
     BattleSceneObject *object, int channel_index);
 void BattleSceneObject_SnapshotPosition(BattleSceneObject *object);
+void BattleSceneObject_MoveByImmediate(BattleSceneObject *object,
+                                       int delta_x, int delta_y, int delta_z);
+void BattleSceneObject_AddPositionDelta(BattleSceneObject *object,
+                                        int delta_x, int delta_y, int delta_z);
+void BattleSceneObject_AdjustPosition(BattleSceneObject *object,
+                                      int delta_x, int delta_y, int delta_z);
 BattleSceneObject *BattleSceneObject_GetById(int object_id);
 
 #endif
