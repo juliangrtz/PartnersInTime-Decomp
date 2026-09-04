@@ -395,9 +395,11 @@ behavior in proprietary archives and bytecode.
 The first data-source milestone is implemented for EUR.  Versioned JSON plus
 `tools/data_mod.py` now round-trips all 21 MFset archives, every localized
 battle and field-dialogue chunk (including field event labels), the 98 enemy
-records, and all 765 treasure records.  The normal CLion/PowerShell build
-stages these sources into a derived NitroFS and still produces the verified ROM
-hash when the JSON is unchanged.  See `docs/DATA_MODDING.md`.
+records, all 765 treasure records, four tiered shop-stock datasets, and the 99
+resident item-master records.  The normal CLion/PowerShell build stages these
+sources into a derived NitroFS plus copies of patched ARM9/overlay data and
+still produces the verified ROM hash when the JSON is unchanged.  See
+`docs/DATA_MODDING.md`.
 
 Priority formats:
 
