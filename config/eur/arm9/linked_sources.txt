@@ -7,6 +7,7 @@ src/battle/battle_ai_result.c
 src/battle/battle_ai_control.c
 src/battle/battle_ai_update.c
 src/battle/battle_ai_runtime.c
+src/battle/battle_reward_effects.c
 src/battle/battle_vm_variables.c
 src/battle/battle_vm_helpers.c
 src/battle/battle_scene_animation.c

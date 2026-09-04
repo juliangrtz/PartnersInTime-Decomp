@@ -52,6 +52,10 @@ and runtime overlay 2.
 | `0207EE54` | `BattleAI_StartScriptById` | Routes fixed party slots and typed IDs to their script starters |
 | `0207EF10` | `BattleAI_UpdateAll` | Runs all fixed party VMs and all four typed task lists |
 | `0207F01C` | `BattleAI_TaskPoolsInit` | Initializes the four battle-AI task pools |
+| `0207F080` | `BattleReward_ClearCounterEffects` | Stops and detaches the post-battle coin/experience counter effects |
+| `0207F100` | `BattleReward_AdvanceCounterEffect` | Replaces a completed counter sprite while preserving its owner slot |
+| `0207F17C` | `BattleReward_EnsureCounterEffect` | Creates the positioned coin or experience tally effect when absent |
+| `0207F3A0` | `BattleParty_ShowHealingEffect` | Shows the party healing sprite, model, number, and sound feedback |
 | `0208ED90` | `BattleScript_GetProperty` | Reads actor, object, and global properties |
 | `0208FB6C` | `BattleScript_SetProperty` | Writes properties; cases 16-20 are actor stats |
 | `02071C84` | `BattleDamage_CalculateAttack` | General POW/DEF/level damage calculation |
@@ -159,6 +163,13 @@ later damage, healing, and KO translations a common high-level representation.
 `BattleActor_CanReceiveStatus` is matching C too: defeated actors are rejected,
 enemies require a bound resource slot, adults are always eligible, and the two
 baby slots depend on save-state halfword `+0x558` being 2.
+The byte-identical reward/effect unit creates and tears down the coin and
+experience counter visuals during the post-battle tally. Its healing helper
+uses a party-form offset table to place sprite, model, and number effects,
+attaches the positive-heal sparkle to the appropriate adult, and plays sound
+333. The reconstructed `BattlePosition` record is eight bytes; scene-object
+offset `+0xEA` is its signed effect-height anchor, distinct from `actor_id` at
+`+0xEC`.
 
 Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are

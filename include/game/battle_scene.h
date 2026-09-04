@@ -26,7 +26,8 @@ typedef union BattleSceneFlags {
         u32 state : 8;
         u32 unk_08_13 : 6;
         u32 use_alternate_model : 1;
-        u32 unk_15_17 : 3;
+        u32 unk_15_16 : 2;
+        u32 use_raw_position : 1;
         u32 independent_flag : 1;
         u32 unk_19_31 : 13;
     } bits;
@@ -69,7 +70,8 @@ struct BattleSceneObject {
     void *resource;
     BattleModel *primary_model;
     BattleModel *alternate_model;
-    u8 unk_0c8[0x24];
+    u8 unk_0c8[0x22];
+    s16 effect_anchor_z;
     u16 actor_id;
     u16 linked_actor_id;
     u8 unk_0f0[4];

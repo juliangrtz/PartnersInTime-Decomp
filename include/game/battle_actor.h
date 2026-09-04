@@ -43,6 +43,7 @@ typedef char BattleActor_SizeCheck[sizeof(BattleActor) == 0x70 ? 1 : -1];
 int BattleActor_IsHpAtMostQuarter(BattleActor *actor);
 int BattleActor_ApplyDamage(struct BattleSceneObject *object, int damage);
 int BattleActor_CanReceiveStatus(BattleActor *actor);
+int BattleParty_ShowHealingEffect(BattleActor *actor, int amount);
 BattleActor *BattleActor_GetEnemySlot(int actor_id);
 BattleActor *BattleActor_GetPartySlot(int actor_id);
 BattleActor *BattleActor_GetById(int actor_id);
