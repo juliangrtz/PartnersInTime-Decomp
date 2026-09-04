@@ -26,6 +26,7 @@ ENEMY_SCHEMA = "pit-enemy-stats-v1"
 DIALOGUE_SCHEMA = "pit-localized-dialogue-v1"
 TREASURE_SCHEMA = "pit-treasure-v1"
 SHOP_SCHEMA = "pit-shop-stock-v1"
+ITEM_MASTER_SCHEMA = "pit-item-master-v1"
 LANGUAGES = ("japanese", "english", "french", "german", "italian", "spanish")
 
 CONTROL_CODES = {
@@ -44,6 +45,7 @@ CONTROL_ARGUMENT_BYTES = {0x01: 1, 0x0B: 1, 0x0C: 1, 0x11: 1}
 TOKEN_RE = re.compile(r"<\$([^>]+)>")
 
 OV009_LOAD_ADDRESS = 0x0206AB80
+ARM9_LOAD_ADDRESS = 0x02004000
 SHOP_LAYOUT = (
     (0, 0x0207E3C4, 0x0207E88C, 199),
     (1, 0x0207E364, 0x0207E5F8, 143),
@@ -55,6 +57,12 @@ SHOP_CLASSES = (
     (1, 0x1000, "action_items", "BData/mfset_AItmN.dat"),
     (2, 0x4000, "wear", "BData/mfset_WearN.dat"),
     (3, 0x3000, "badges", "BData/mfset_BadgeN.dat"),
+)
+ITEM_MASTER_LAYOUT = (
+    (0x2000, "usable_items", 0x02050044, 14, 20, "BData/mfset_UItmN.dat"),
+    (0x1000, "action_items", 0x0205015C, 11, 28, "BData/mfset_AItmN.dat"),
+    (0x3000, "badges", 0x02050290, 41, 20, "BData/mfset_BadgeN.dat"),
+    (0x4000, "wear", 0x020505C4, 33, 28, "BData/mfset_WearN.dat"),
 )
 
 
@@ -1053,6 +1061,139 @@ def build_shop_stock(document: dict[str, Any], overlay: bytes) -> bytes:
     return bytes(rebuilt)
 
 
+def export_item_master(files_root: Path, arm9: bytes) -> dict[str, Any]:
+    names = item_name_tables(files_root)
+    categories = []
+    for tag, category_name, address, count, stride, _ in ITEM_MASTER_LAYOUT:
+        offset = address - ARM9_LOAD_ADDRESS
+        size = count * stride
+        if offset < 0 or offset + size > len(arm9):
+            raise DataModError(
+                f"item master {category_name} at 0x{address:08X} is outside ARM9"
+            )
+        table = arm9[offset : offset + size]
+        records = []
+        for index in range(count):
+            record = table[index * stride : (index + 1) * stride]
+            words = struct.unpack_from("<6H", record)
+            records.append(
+                {
+                    "index": index,
+                    "item_id": f"0x{tag | index:04X}",
+                    "name_hint": names[tag][index] if index < len(names[tag]) else "",
+                    "unknown_words_00_0A": [f"0x{word:04X}" for word in words],
+                    "price": struct.unpack_from("<H", record, 0x0C)[0],
+                    "unknown_0E_hex": record[0x0E:].hex(" "),
+                }
+            )
+        categories.append(
+            {
+                "class": category_name,
+                "item_tag": f"0x{tag:04X}",
+                "runtime_address": f"0x{address:08X}",
+                "record_count": count,
+                "record_size": stride,
+                "source_region_sha1": sha1(table),
+                "records": records,
+            }
+        )
+    return {
+        "schema": ITEM_MASTER_SCHEMA,
+        "binary": "arm9_main",
+        "load_address": f"0x{ARM9_LOAD_ADDRESS:08X}",
+        "source_sha1": sha1(arm9),
+        "categories": categories,
+    }
+
+
+def build_item_master(document: dict[str, Any], arm9: bytes) -> bytes:
+    if document.get("schema") != ITEM_MASTER_SCHEMA:
+        raise DataModError(f"expected schema {ITEM_MASTER_SCHEMA!r}")
+    if document.get("binary") != "arm9_main":
+        raise DataModError("item master must target arm9_main")
+    categories = _require_list(document.get("categories"), "item categories")
+    if len(categories) != len(ITEM_MASTER_LAYOUT):
+        raise DataModError("item master must retain all four categories")
+    rebuilt = bytearray(arm9)
+
+    for layout, category in zip(ITEM_MASTER_LAYOUT, categories):
+        tag, category_name, address, count, stride, _ = layout
+        if not isinstance(category, dict) or category.get("class") != category_name:
+            raise DataModError(f"item category must remain {category_name}")
+        if parse_integer(
+            category.get("item_tag"), 16, f"{category_name} item_tag"
+        ) != tag:
+            raise DataModError(f"{category_name} item tag changed")
+        if category.get("record_count") != count or category.get("record_size") != stride:
+            raise DataModError(f"{category_name} table shape changed")
+        offset = address - ARM9_LOAD_ADDRESS
+        source_table = arm9[offset : offset + count * stride]
+        if category.get("source_region_sha1") != sha1(source_table):
+            raise DataModError(f"{category_name} ARM9 source bytes changed")
+        rows = _require_list(category.get("records"), f"{category_name} records")
+        if len(rows) != count:
+            raise DataModError(f"{category_name} must retain {count} records")
+
+        for index, row in enumerate(rows):
+            if not isinstance(row, dict) or row.get("index") != index:
+                raise DataModError(f"{category_name} records must remain ordered")
+            item_id = parse_integer(
+                row.get("item_id"), 16, f"{category_name} record {index} item_id"
+            )
+            if item_id != tag | index:
+                raise DataModError(
+                    f"{category_name} record {index} must keep item ID 0x{tag | index:04X}"
+                )
+            words = _require_list(
+                row.get("unknown_words_00_0A"),
+                f"{category_name} record {index} unknown_words_00_0A",
+            )
+            if len(words) != 6:
+                raise DataModError(
+                    f"{category_name} record {index} needs six unknown leading words"
+                )
+            record = bytearray(
+                struct.pack(
+                    "<6H",
+                    *(
+                        parse_integer(
+                            value,
+                            16,
+                            f"{category_name} record {index} unknown word {word_index}",
+                        )
+                        for word_index, value in enumerate(words)
+                    ),
+                )
+            )
+            record.extend(
+                struct.pack(
+                    "<H",
+                    parse_integer(
+                        row.get("price"), 16, f"{category_name} record {index} price"
+                    ),
+                )
+            )
+            tail_hex = row.get("unknown_0E_hex")
+            if not isinstance(tail_hex, str):
+                raise DataModError(
+                    f"{category_name} record {index} unknown_0E_hex must be a string"
+                )
+            try:
+                tail = bytes.fromhex(tail_hex)
+            except ValueError as exc:
+                raise DataModError(
+                    f"{category_name} record {index} unknown_0E_hex is not hexadecimal"
+                ) from exc
+            if len(tail) != stride - 0x0E:
+                raise DataModError(
+                    f"{category_name} record {index} needs {stride - 0x0E} tail bytes"
+                )
+            record.extend(tail)
+            start = offset + index * stride
+            rebuilt[start : start + stride] = record
+    return bytes(rebuilt)
+
+
 def discover_mfsets(files_root: Path) -> list[Path]:
     return sorted(
         path
@@ -1088,6 +1229,14 @@ def command_export(args: argparse.Namespace) -> None:
         project_root / shop_relative,
         export_shop_stock(files_root, overlay_9_path.read_bytes()),
     )
+    arm9_path = files_root.parent / "arm9" / "arm9.bin"
+    if not arm9_path.is_file():
+        raise DataModError(f"private ARM9 is missing: {arm9_path}")
+    item_master_relative = "items/master.json"
+    write_json(
+        project_root / item_master_relative,
+        export_item_master(files_root, arm9_path.read_bytes()),
+    )
     dialogue_documents = []
     for relative_source in ("BAI/BMes.dat", "FEvent/FEvData.dat"):
         source_path = files_root / relative_source
@@ -1107,12 +1256,12 @@ def command_export(args: argparse.Namespace) -> None:
             "text_documents": text_documents,
             "dialogue_documents": dialogue_documents,
             "stat_documents": [enemy_relative, treasure_relative],
-            "binary_documents": [shop_relative],
+            "binary_documents": [shop_relative, item_master_relative],
         },
     )
     print(
         f"Exported {len(text_documents)} MFsets, {len(dialogue_documents)} dialogue archives, "
-        f"an enemy table, a treasure table, and shop stock to {project_root}"
+        f"an enemy table, a treasure table, shop stock, and item masters to {project_root}"
     )
 
 
@@ -1191,9 +1340,12 @@ def compile_binary_project(
         if not isinstance(relative_document, str):
             raise DataModError("every binary_documents item must be a path string")
         document = read_json(project_root / relative_document)
-        if not isinstance(document, dict) or document.get("schema") != SHOP_SCHEMA:
+        if not isinstance(document, dict) or document.get("schema") not in {
+            SHOP_SCHEMA,
+            ITEM_MASTER_SCHEMA,
+        }:
             raise DataModError(
-                f"{relative_document} must use schema {SHOP_SCHEMA!r}"
+                f"{relative_document} has an unsupported binary-data schema"
             )
         target = document.get("binary")
         if not isinstance(target, str) or target not in rebuilt_binaries:
@@ -1202,7 +1354,10 @@ def compile_binary_project(
             raise DataModError(f"more than one document rebuilds binary {target}")
         seen_targets.add(target)
         original = rebuilt_binaries[target]
-        rebuilt = build_shop_stock(document, original)
+        if document["schema"] == SHOP_SCHEMA:
+            rebuilt = build_shop_stock(document, original)
+        else:
+            rebuilt = build_item_master(document, original)
         rebuilt_binaries[target] = rebuilt
         report.append(
             {
@@ -1262,6 +1417,18 @@ def write_modded_rom_config(
         if overlay_ref_count != 1:
             raise DataModError("could not redirect the ARM9 overlay configuration")
 
+    if "arm9_main" in patched_binaries:
+        if output_code is None:
+            raise DataModError("output code directory is required for ARM9 patches")
+        arm9_relative = os.path.relpath(
+            output_code / "arm9.bin", output_path.parent
+        ).replace("\\", "/")
+        config, arm9_count = re.subn(
+            r"(?m)^arm9_bin:\s*.*$", f"arm9_bin: '{arm9_relative}'", config
+        )
+        if arm9_count != 1:
+            raise DataModError(f"expected exactly one arm9_bin in {input_path}")
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(config, encoding="utf-8")
 
@@ -1273,7 +1440,13 @@ def command_check(args: argparse.Namespace) -> None:
     del replacements
     overlay_9 = args.files_root.resolve().parent / "arm9_overlays" / "ov009.bin"
     _, binary_report = compile_binary_project(
-        args.project_root.resolve(), {"arm9_overlay_9": overlay_9.read_bytes()}
+        args.project_root.resolve(),
+        {
+            "arm9_overlay_9": overlay_9.read_bytes(),
+            "arm9_main": (
+                args.files_root.resolve().parent / "arm9" / "arm9.bin"
+            ).read_bytes(),
+        },
     )
     report.extend(binary_report)
     changed = sum(row["changed"] for row in report)
@@ -1298,14 +1471,21 @@ def command_build(args: argparse.Namespace) -> None:
     rebuilt_binaries: dict[str, bytes] = {}
     output_code: Path | None = None
     if binary_documents:
-        if args.overlay_9_bin is None or args.output_code is None:
+        if (
+            args.overlay_9_bin is None
+            or args.arm9_bin is None
+            or args.output_code is None
+        ):
             raise DataModError(
-                "binary data documents require --overlay-9-bin and --output-code"
+                "binary data documents require --arm9-bin, --overlay-9-bin, and --output-code"
             )
         output_code = args.output_code.resolve()
         rebuilt_binaries, binary_report = compile_binary_project(
             project_root,
-            {"arm9_overlay_9": args.overlay_9_bin.resolve().read_bytes()},
+            {
+                "arm9_overlay_9": args.overlay_9_bin.resolve().read_bytes(),
+                "arm9_main": args.arm9_bin.resolve().read_bytes(),
+            },
         )
         report.extend(binary_report)
 
@@ -1322,6 +1502,7 @@ def command_build(args: argparse.Namespace) -> None:
         (output_code / "arm9_ov009.bin").write_bytes(
             rebuilt_binaries["arm9_overlay_9"]
         )
+        (output_code / "arm9.bin").write_bytes(rebuilt_binaries["arm9_main"])
 
     if args.rom_config_input is not None or args.rom_config_output is not None:
         if args.rom_config_input is None or args.rom_config_output is None:
@@ -1369,6 +1550,7 @@ def create_parser() -> argparse.ArgumentParser:
     build_parser.add_argument("--files-root", type=Path, required=True)
     build_parser.add_argument("--project-root", type=Path, required=True)
     build_parser.add_argument("--output-files", type=Path, required=True)
+    build_parser.add_argument("--arm9-bin", type=Path)
     build_parser.add_argument("--overlay-9-bin", type=Path)
     build_parser.add_argument("--output-code", type=Path)
     build_parser.add_argument("--rom-config-input", type=Path)

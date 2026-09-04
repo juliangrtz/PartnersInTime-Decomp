@@ -22,6 +22,8 @@ copied unchanged when the modded NitroFS tree is staged.
   by their 283 original file/room entries;
 - all four overlay-9 shop-stock datasets, each split into four item classes and
   six progression tiers with resolved English item-name hints;
+- all 99 resident ARM9 item-master records, with the confirmed purchase-price
+  field named and every not-yet-understood word/byte preserved explicitly;
 - length-changing MFset edits: string pointers, language-entry sizes, and outer
   archive offsets are regenerated instead of patched in place.
 
@@ -166,6 +168,25 @@ Each `item_id` has a high-nibble class tag:
 compiled.  Schema v1 intentionally keeps descriptor starts/counts fixed:
 replace IDs inside a tier, do not add/remove rows, and keep the required class
 tag.  These constraints make malformed stock fail validation before packaging.
+
+## Item master records and prices
+
+`data/eur/items/master.json` contains the 14 usable-item, 11 action-item, 41
+badge, and 33 wear records resident in the main ARM9 image.  The game resolves
+the high-nibble item tag to these four tables.  Record sizes are 20 or 28 bytes
+depending on class; the `u16` at `+0x0C` is the confirmed shop price.
+
+All bytes outside the price are currently retained as six
+`unknown_words_00_0A` values plus `unknown_0E_hex`.  They remain editable for
+controlled experiments, but do not assign gameplay meaning to them until a
+code access or runtime probe establishes it.  `name_hint` comes from the
+English MFsets and is not compiled.
+
+These tables live at runtime addresses `0x02050044..0x02050960` in ARM9, whose
+actual load base is `0x02004000`.  The builder uses runtime-address-minus-load-
+base offsets, validates each original table region, patches a copy of the
+freshly linked `arm9.bin`, and redirects the derived ROM config.  This preserves
+unrelated C changes in resident ARM9.
 
 ## Generated build artifacts
 
