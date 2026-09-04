@@ -49,11 +49,21 @@ typedef struct BattleAIState BattleAIState;
 typedef struct BattleAITask BattleAITask;
 typedef struct BattleTaskPool BattleTaskPool;
 typedef struct BattleActor BattleActor;
+typedef struct BattleSceneObject BattleSceneObject;
 
 struct BattleActor {
     const void *resource;
     s16 max_hp;
     s16 current_hp;
+    u8 unk_008[0x16];
+    s16 hit_state;
+    u8 unk_020[4];
+    u16 flags;
+};
+
+struct BattleSceneObject {
+    u8 unk_000[0xEC];
+    u16 actor_id;
 };
 
 struct BattleAIState {
@@ -89,6 +99,8 @@ struct BattleTaskPool {
 FUNCTION_TYPES = {
     "BattleActor_IsHpAtMostQuarter":
         "int BattleActor_IsHpAtMostQuarter(BattleActor *);",
+    "BattleActor_ApplyDamage":
+        "int BattleActor_ApplyDamage(BattleSceneObject *, int);",
     "BattleActor_GetEnemySlot": "BattleActor *BattleActor_GetEnemySlot(int);",
     "BattleActor_GetPartySlot": "BattleActor *BattleActor_GetPartySlot(int);",
     "BattleActor_GetById": "BattleActor *BattleActor_GetById(int);",
