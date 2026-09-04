@@ -30,10 +30,13 @@ typedef union BattleSceneFlags {
         u32 state : 8;
         u32 unk_08_13 : 6;
         u32 use_alternate_model : 1;
-        u32 unk_15_16 : 2;
+        u32 unk_15 : 1;
+        u32 flag_16 : 1;
         u32 use_raw_position : 1;
         u32 independent_flag : 1;
-        u32 unk_19_31 : 13;
+        u32 unk_19_23 : 5;
+        u32 script_mode : 3;
+        u32 unk_27_31 : 5;
     } bits;
 } BattleSceneFlags;
 
@@ -153,7 +156,7 @@ extern "C" {
 u32 BattleMath_StartSqrt(u32 value);
 u32 BattleMath_WaitForSqrtResult(void);
 
-void BattleSceneObject_SetStateFlags(BattleSceneObject *object, u8 state,
+void BattleSceneObject_SetStateFlags(BattleSceneObject *object, int state,
                                      int independent_flag);
 void BattleSceneObject_SetModelFlag11ById(int object_id, int enabled);
 void BattleSceneObject_SetModelFlag10(BattleSceneObject *object, int enabled);
