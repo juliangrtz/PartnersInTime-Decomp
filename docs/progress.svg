@@ -897,7 +897,7 @@
 <rect class="cell" x="351.49" y="581.19" width="14.31" height="14.86" fill="#263244"><title>Overlay 02 · BattleObjectData_ResetAll · 628 B · remaining</title></rect>
 <rect class="cell" x="351.49" y="596.05" width="14.31" height="14.86" fill="#263244"><title>Overlay 02 · BattleObjectData_ResolveTextureMetadataTask · 628 B · remaining</title></rect>
 <rect class="cell" x="351.49" y="610.91" width="14.31" height="14.67" fill="#38bdf8"><title>Overlay 02 · BattleDamage_ApplyEquipmentModifiers · 620 B · symbolic ASM</title></rect>
-<rect class="cell" x="351.49" y="625.58" width="14.31" height="14.20" fill="#263244"><title>Overlay 02 · func_ov002_020988b0 · 600 B · remaining</title></rect>
+<rect class="cell" x="351.49" y="625.58" width="14.31" height="14.20" fill="#263244"><title>Overlay 02 · BattleTargetCursor_Draw · 600 B · remaining</title></rect>
 <rect class="cell" x="351.49" y="639.78" width="14.31" height="14.10" fill="#263244"><title>Overlay 02 · func_ov002_020750e0 · 596 B · remaining</title></rect>
 <rect class="cell" x="351.49" y="653.88" width="14.31" height="14.10" fill="#263244"><title>Overlay 02 · func_ov002_020a0c64 · 596 B · remaining</title></rect>
 <rect class="cell" x="351.49" y="667.98" width="14.31" height="14.01" fill="#263244"><title>Overlay 02 · BattleObjectData_PrepareBodyDecodeTask · 592 B · remaining</title></rect>
@@ -1383,7 +1383,7 @@
 <rect class="cell" x="498.83" y="671.33" width="5.22" height="4.93" fill="#263244"><title>Overlay 02 · func_ov002_0206faec · 76 B · remaining</title></rect>
 <rect class="cell" x="498.83" y="676.26" width="5.22" height="4.93" fill="#263244"><title>Overlay 02 · func_ov002_02071750 · 76 B · remaining</title></rect>
 <rect class="cell" x="498.83" y="681.20" width="5.22" height="4.93" fill="#2dd4a0"><title>Overlay 02 · battle_scene_background · 76 B · matching C/C++</title></rect>
-<rect class="cell" x="498.83" y="686.13" width="5.22" height="4.93" fill="#263244"><title>Overlay 02 · func_ov002_02098b44 · 76 B · remaining</title></rect>
+<rect class="cell" x="498.83" y="686.13" width="5.22" height="4.93" fill="#263244"><title>Overlay 02 · BattleTargetCursor_TriggerBounce · 76 B · remaining</title></rect>
 <rect class="cell" x="498.83" y="691.07" width="5.22" height="4.93" fill="#263244"><title>Overlay 02 · func_ov002_0209ab3c · 76 B · remaining</title></rect>
 <rect class="cell" x="504.04" y="640.42" width="5.21" height="4.94" fill="#2dd4a0"><title>Overlay 02 · battle_scene_movement · 76 B · matching C/C++</title></rect>
 <rect class="cell" x="509.26" y="640.42" width="5.21" height="4.94" fill="#263244"><title>Overlay 02 · func_ov002_020ac7d4 · 76 B · remaining</title></rect>
@@ -1435,7 +1435,7 @@
 <rect class="cell" x="536.94" y="650.08" width="4.50" height="4.52" fill="#263244"><title>Overlay 02 · func_ov002_02075e94 · 60 B · remaining</title></rect>
 <rect class="cell" x="541.44" y="650.08" width="4.50" height="4.52" fill="#263244"><title>Overlay 02 · func_ov002_02076c38 · 60 B · remaining</title></rect>
 <rect class="cell" x="545.94" y="650.08" width="4.50" height="4.52" fill="#2dd4a0"><title>Overlay 02 · battle_object_lookup · 60 B · matching C/C++</title></rect>
-<rect class="cell" x="550.44" y="650.08" width="4.50" height="4.52" fill="#263244"><title>Overlay 02 · func_ov002_02098b08 · 60 B · remaining</title></rect>
+<rect class="cell" x="550.44" y="650.08" width="4.50" height="4.52" fill="#263244"><title>Overlay 02 · BattleTargetCursor_Update · 60 B · remaining</title></rect>
 <rect class="cell" x="554.94" y="650.08" width="4.50" height="4.52" fill="#263244"><title>Overlay 02 · func_ov002_020aaa8c · 60 B · remaining</title></rect>
 <rect class="cell" x="513.54" y="654.60" width="4.42" height="4.60" fill="#38bdf8"><title>Overlay 02 · BattleSpriteEffect_SpawnAttached · 60 B · symbolic ASM</title></rect>
 <rect class="cell" x="513.54" y="659.20" width="4.42" height="4.60" fill="#263244"><title>Overlay 02 · func_ov002_020ad058 · 60 B · remaining</title></rect>
