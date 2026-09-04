@@ -52,5 +52,6 @@ typedef char BattleEnemyDataRequest_SizeCheck[
 
 BattleQueuedTask *BattleEnemyData_RequestLoad(BattleEnemyDataRequest *request,
                                               s32 stat_index);
+BattleEnemyStatRecord *BattleEnemy_GetStats(int actor_id);
 
 #endif

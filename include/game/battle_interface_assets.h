@@ -8,5 +8,6 @@ BattleQueuedTask *BattleInterface_RequestScreenLoad(int screen_index);
 int BattleInterface_LoadItemName(int item_id);
 int BattleInterface_LoadCommandMenu(int resource_id);
 int BattleInterface_LoadTargetLabelResource(int resource_id);
+int BattleInterface_LoadTargetName(u32 actor_id);
 
 #endif

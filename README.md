@@ -87,7 +87,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
   High-level source also includes
-  one hundred and fifty-nine byte-matching overlay-2 battle functions: forty-four
+  one hundred and sixty-one byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
   and four actor HP/lookup
   helpers plus status eligibility, base damage, the central HP/KO primitive,
@@ -101,9 +101,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   suppression, slot configuration, and heap-backed buffer allocation.
   Two matching texture helpers encode 8-1024-pixel S/T dimensions for the DS
   `G3_TEXIMAGE_PARAM` register.
-  Three matching battle-interface helpers now select the active character's
-  command menu, resolve ordinary and Bros. item-name resources, and refresh
-  the target-label layer.
+  Four matching battle-interface helpers now select the active character's
+  command menu, resolve ordinary and Bros. item-name resources, translate
+  enemy stat/name IDs, and refresh the target-label layer. A matching enemy
+  accessor exposes the stat record already bound to each loaded enemy actor.
   Eight more matching task helpers expose double-buffered battle-background
   loads/fades and the field-asset reload used when leaving battle.
   The adjacent six-function common-asset loader is matching C as well: it

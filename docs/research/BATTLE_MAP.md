@@ -17,6 +17,7 @@ and runtime overlay 2.
 | `02076B0C` | `BattlePosition_StoreViewRelative` | Stores coordinates raw or relative to one of two battle-view offsets |
 | `02076F44` | `BattleActor_GetPartySlot` | Resolves party IDs 56-59 through the battle context |
 | `02076F24` | `BattleActor_GetEnemySlot` | Resolves enemy IDs 60-67 through the battle context |
+| `02076EE8` | `BattleEnemy_GetStats` | Returns the loaded stat record bound through an enemy actor's resource slot |
 | `02076F64` | `BattleActor_GetById` | Resolves party IDs 56-59 or enemy IDs 60+ to actor pointers |
 | `02076BD4` | `BattleActor_CanReceiveStatus` | Rejects dead, unloaded, or inactive-form status targets |
 | `02076FB4` | `BattleSceneObject_GetById` | Resolves field, party, enemy, and auxiliary visual-object IDs |
@@ -53,6 +54,7 @@ and runtime overlay 2.
 | `02092918` | `BattleInterface_LoadItemName` | Resolves typed ordinary/Bros. item IDs and refreshes the localized item-name layer |
 | `02092A2C` | `BattleInterface_LoadCommandMenu` | Selects a command-menu resource from the active party member and formation mode |
 | `02092B04` | `BattleInterface_LoadTargetLabelResource` | Loads a target-label resource and refreshes its interface layer |
+| `02092B8C` | `BattleInterface_LoadTargetName` | Maps battle-menu states or enemy `name_id` values to target-label resources |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |

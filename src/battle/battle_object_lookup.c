@@ -1,5 +1,6 @@
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
+#include <game/battle_enemy_data.h>
 #include <game/battle_object.h>
 #include <game/battle_scene.h>
 
@@ -71,4 +72,18 @@ BattleActor *BattleActor_GetPartySlot(int actor_id) {
 BattleActor *BattleActor_GetEnemySlot(int actor_id) {
     return *(BattleActor **)(gBattleContext + BATTLE_ENEMY_ACTOR_TABLE_OFFSET +
                              (actor_id - BATTLE_ACTOR_ENEMY_FIRST) * 4);
+}
+
+BattleEnemyStatRecord *BattleEnemy_GetStats(int actor_id) {
+    BattleActor *enemy = BattleActor_GetEnemySlot(actor_id);
+    BattleEnemyDataRequest *resource;
+
+    if (enemy == 0) {
+        return 0;
+    }
+    resource = (BattleEnemyDataRequest *)enemy->resource_slot;
+    if (resource != 0) {
+        return resource->stats;
+    }
+    return 0;
 }
