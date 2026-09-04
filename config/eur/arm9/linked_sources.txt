@@ -12,6 +12,7 @@ src/battle/battle_party_progression.c
 src/battle/battle_scene_util.c
 src/battle/battle_scene_background.c
 src/battle/battle_common_assets.c
+src/battle/battle_interface_assets.c
 src/battle/battle_vm_variables.c
 src/battle/battle_vm_helpers.c
 src/battle/battle_scene_animation.c

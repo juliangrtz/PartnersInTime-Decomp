@@ -133,6 +133,11 @@ relocation, the twenty-one-entry runtime pointer table, and the language-based
 entry mapping driven by save byte `+0x515`. The partial context now also types
 the shared archive request at `+0x140`, the pointer table at `+0x68FC`, and the
 runtime archive source/header at `+0xE160/+0xE168`.
+The following `0x020884E8`-`0x02088BDC` interface-loader family is also linked
+matching C. Its eight functions recover the two-stage shared/localized asset
+load, two selectable screen-resource loads, four typed 2D-layer descriptors,
+and their original allocation sizes, coordinates, dimensions, and VRAM
+offsets. No opaque graphical asset is checked into the repository.
 The task-list and task-pool functions at
 `0x020A50D4`-`0x020A5294` are byte-matching C and expose callback iteration,
 owner-slot invalidation, deferred recycling, explicit free-list access, task

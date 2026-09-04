@@ -31,6 +31,9 @@ and runtime overlay 2.
 | `02087E5C` | `BattleBackground_RequestLoad` | Queues a battle-background load into the inactive buffer |
 | `02087F98` | `BattleCommonAssets_LoadEntriesTask` | Relocates the battle archive table and loads its localized/common entries |
 | `0208848C` | `BattleCommonAssets_RequestLoad` | Starts the asynchronous common battle-asset load pipeline |
+| `020884E8` | `BattleInterface_InitLayersTask` | Initializes four battle-interface layers and their fixed VRAM regions |
+| `02088A34` | `BattleInterface_RequestLoad` | Starts the shared/localized battle-interface asset pipeline |
+| `02088BC4` | `BattleInterface_RequestScreenLoad` | Loads one of the two selectable battle-screen resources |
 | `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
@@ -224,6 +227,14 @@ resident fallback, slots 1-13 select language-specific entries from save byte
 `+0x515`, and slots 14-20 use shared entries except for the final localized
 one. Runtime flag bit 7 marks this pipeline pending. The exact content types of
 the individual slots remain to be named from their consumers.
+The next eight matching functions load the battle interface itself. They open
+one common archive, select entry 3 or 8 from save language byte `+0x515`, load
+shared entry 4, and initialize four 2D-layer records at context offsets
+`+0x65F4`, `+0x6648`, `+0x669C`, and `+0x66EC`. Those records expose allocation
+size, position, dimensions, and fixed VRAM offsets `0x38000` through `0x3CC00`.
+A sibling two-request pipeline selects one of two archive descriptors and
+stores its loaded screen resource at context `+0x44` or `+0x48`. The allocations
+use the battle runtime's heap selector at `+0xE148`.
 All actor resolvers, the compact base-damage calculation, and the damage/KO
 updater are now maintained byte-identical C.
 The state-bit setter, active-model selectors, model-bit setters, position

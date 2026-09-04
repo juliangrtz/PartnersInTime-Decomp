@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 1.11 percent is matching C and 2.88 percent has matching C or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 1.23 percent is matching C and 2.99 percent has matching C or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -13,15 +13,15 @@
 <rect class="bg" width="1200" height="760" rx="12"/>
 <text x="28.0" y="34.0" class="eyebrow">DECOMPILATION PROGRESS · EUROPEAN ROM</text>
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
-<text x="28.0" y="113.0" class="percent">1.11%</text>
+<text x="28.0" y="113.0" class="percent">1.23%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C</text>
-<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">2.88% source-understood</text>
+<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">2.99% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="12.744" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="40.744" y="130" width="20.157" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="14.047" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="42.047" y="130" width="20.157" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C  17.0 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C  18.8 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
 <text x="267.0" y="181.0" class="legend">Symbolic ASM  26.9 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
@@ -866,7 +866,7 @@
 <rect class="cell" x="335.37" y="522.47" width="16.12" height="16.30" fill="#263244"><title>Overlay 02 · func_ov002_020b2b48 · 776 B · remaining</title></rect>
 <rect class="cell" x="335.37" y="538.78" width="16.12" height="16.30" fill="#263244"><title>Overlay 02 · func_ov002_020bc73c · 776 B · remaining</title></rect>
 <rect class="cell" x="335.37" y="555.08" width="16.12" height="16.22" fill="#263244"><title>Overlay 02 · func_ov002_020b3410 · 772 B · remaining</title></rect>
-<rect class="cell" x="335.37" y="571.30" width="16.12" height="16.13" fill="#263244"><title>Overlay 02 · func_ov002_020884e8 · 768 B · remaining</title></rect>
+<rect class="cell" x="335.37" y="571.30" width="16.12" height="16.13" fill="#2dd4a0"><title>Overlay 02 · battle_interface_assets · 768 B · matching C</title></rect>
 <rect class="cell" x="335.37" y="587.43" width="16.12" height="16.05" fill="#263244"><title>Overlay 02 · func_ov002_020a21c0 · 764 B · remaining</title></rect>
 <rect class="cell" x="335.37" y="603.48" width="16.12" height="15.80" fill="#38bdf8"><title>Overlay 02 · BattleModel_GetAnimationBounds · 752 B · symbolic ASM</title></rect>
 <rect class="cell" x="335.37" y="619.28" width="16.12" height="15.63" fill="#38bdf8"><title>Overlay 02 · BattleDamage_UpdatePartyLaunchReaction · 744 B · symbolic ASM</title></rect>
@@ -1068,8 +1068,8 @@
 <rect class="cell" x="421.32" y="567.31" width="8.80" height="9.39" fill="#263244"><title>Overlay 02 · func_ov002_020af97c · 244 B · remaining</title></rect>
 <rect class="cell" x="421.32" y="576.70" width="8.80" height="9.39" fill="#263244"><title>Overlay 02 · func_ov002_020b0ecc · 244 B · remaining</title></rect>
 <rect class="cell" x="421.32" y="586.09" width="8.80" height="9.24" fill="#263244"><title>Overlay 02 · func_ov002_0206f1f0 · 240 B · remaining</title></rect>
-<rect class="cell" x="421.32" y="595.33" width="8.80" height="9.24" fill="#263244"><title>Overlay 02 · func_ov002_020888c0 · 240 B · remaining</title></rect>
-<rect class="cell" x="421.32" y="604.56" width="8.80" height="9.24" fill="#263244"><title>Overlay 02 · func_ov002_02088a4c · 240 B · remaining</title></rect>
+<rect class="cell" x="421.32" y="595.33" width="8.80" height="9.24" fill="#2dd4a0"><title>Overlay 02 · battle_interface_assets · 240 B · matching C</title></rect>
+<rect class="cell" x="421.32" y="604.56" width="8.80" height="9.24" fill="#2dd4a0"><title>Overlay 02 · battle_interface_assets · 240 B · matching C</title></rect>
 <rect class="cell" x="421.32" y="613.80" width="8.80" height="9.24" fill="#263244"><title>Overlay 02 · func_ov002_0208ddd0 · 240 B · remaining</title></rect>
 <rect class="cell" x="421.32" y="623.04" width="8.80" height="9.24" fill="#263244"><title>Overlay 02 · func_ov002_0209b450 · 240 B · remaining</title></rect>
 <rect class="cell" x="421.32" y="632.27" width="8.80" height="9.24" fill="#263244"><title>Overlay 02 · func_ov002_020bbb5c · 240 B · remaining</title></rect>
@@ -1097,7 +1097,7 @@
 <rect class="cell" x="430.12" y="566.88" width="8.41" height="9.02" fill="#263244"><title>Overlay 02 · func_ov002_020b6928 · 224 B · remaining</title></rect>
 <rect class="cell" x="430.12" y="575.89" width="8.41" height="8.85" fill="#38bdf8"><title>Overlay 02 · BattleParty_UpdateLuigiReloadStartRetreat · 220 B · symbolic ASM</title></rect>
 <rect class="cell" x="430.12" y="584.75" width="8.41" height="8.85" fill="#263244"><title>Overlay 02 · func_ov002_020a94f0 · 220 B · remaining</title></rect>
-<rect class="cell" x="430.12" y="593.60" width="8.41" height="8.69" fill="#263244"><title>Overlay 02 · func_ov002_020887e8 · 216 B · remaining</title></rect>
+<rect class="cell" x="430.12" y="593.60" width="8.41" height="8.69" fill="#2dd4a0"><title>Overlay 02 · battle_interface_assets · 216 B · matching C</title></rect>
 <rect class="cell" x="430.12" y="602.30" width="8.41" height="8.69" fill="#263244"><title>Overlay 02 · func_ov002_02092a2c · 216 B · remaining</title></rect>
 <rect class="cell" x="430.12" y="610.99" width="8.41" height="8.69" fill="#263244"><title>Overlay 02 · func_ov002_020bc318 · 216 B · remaining</title></rect>
 <rect class="cell" x="430.12" y="619.69" width="8.41" height="8.69" fill="#263244"><title>Overlay 02 · func_ov002_020bc3f0 · 216 B · remaining</title></rect>
@@ -1232,7 +1232,7 @@
 <rect class="cell" x="461.03" y="630.65" width="7.05" height="6.53" fill="#263244"><title>Overlay 02 · func_ov002_02077bb0 · 136 B · remaining</title></rect>
 <rect class="cell" x="461.03" y="637.19" width="7.05" height="6.53" fill="#2dd4a0"><title>Overlay 02 · battle_vm_helpers · 136 B · matching C</title></rect>
 <rect class="cell" x="461.03" y="643.72" width="7.05" height="6.53" fill="#2dd4a0"><title>Overlay 02 · battle_common_assets · 136 B · matching C</title></rect>
-<rect class="cell" x="461.03" y="650.26" width="7.05" height="6.53" fill="#263244"><title>Overlay 02 · func_ov002_02088b3c · 136 B · remaining</title></rect>
+<rect class="cell" x="461.03" y="650.26" width="7.05" height="6.53" fill="#2dd4a0"><title>Overlay 02 · battle_interface_assets · 136 B · matching C</title></rect>
 <rect class="cell" x="461.03" y="656.79" width="7.05" height="6.53" fill="#263244"><title>Overlay 02 · func_ov002_0208ac58 · 136 B · remaining</title></rect>
 <rect class="cell" x="461.03" y="663.33" width="7.05" height="6.53" fill="#263244"><title>Overlay 02 · func_ov002_0208bcb0 · 136 B · remaining</title></rect>
 <rect class="cell" x="461.03" y="669.86" width="7.05" height="6.53" fill="#263244"><title>Overlay 02 · func_ov002_02092b04 · 136 B · remaining</title></rect>
@@ -1250,7 +1250,7 @@
 <rect class="cell" x="520.79" y="604.32" width="6.44" height="6.94" fill="#263244"><title>Overlay 02 · func_ov002_0206e984 · 132 B · remaining</title></rect>
 <rect class="cell" x="527.23" y="604.32" width="6.44" height="6.94" fill="#2dd4a0"><title>Overlay 02 · battle_vm_helpers · 132 B · matching C</title></rect>
 <rect class="cell" x="533.67" y="604.32" width="6.44" height="6.94" fill="#2dd4a0"><title>Overlay 02 · battle_vm_helpers · 132 B · matching C</title></rect>
-<rect class="cell" x="540.12" y="604.32" width="6.44" height="6.94" fill="#263244"><title>Overlay 02 · func_ov002_020889b0 · 132 B · remaining</title></rect>
+<rect class="cell" x="540.12" y="604.32" width="6.44" height="6.94" fill="#2dd4a0"><title>Overlay 02 · battle_interface_assets · 132 B · matching C</title></rect>
 <rect class="cell" x="546.56" y="604.32" width="6.44" height="6.94" fill="#263244"><title>Overlay 02 · func_ov002_0208b2c4 · 132 B · remaining</title></rect>
 <rect class="cell" x="553.00" y="604.32" width="6.44" height="6.94" fill="#263244"><title>Overlay 02 · func_ov002_0208b348 · 132 B · remaining</title></rect>
 <rect class="cell" x="468.08" y="611.26" width="6.71" height="6.66" fill="#2dd4a0"><title>Overlay 02 · battle_actor_damage · 132 B · matching C</title></rect>
@@ -1547,8 +1547,8 @@
 <rect class="cell" x="541.04" y="693.19" width="2.89" height="2.81" fill="#263244"><title>Overlay 02 · func_ov002_020724b0 · 24 B · remaining</title></rect>
 <rect class="cell" x="543.93" y="677.75" width="3.10" height="2.62" fill="#2dd4a0"><title>Overlay 02 · battle_ai_start · 24 B · matching C</title></rect>
 <rect class="cell" x="547.03" y="677.75" width="3.10" height="2.62" fill="#2dd4a0"><title>Overlay 02 · battle_ai_start · 24 B · matching C</title></rect>
-<rect class="cell" x="550.14" y="677.75" width="3.10" height="2.62" fill="#263244"><title>Overlay 02 · func_ov002_02088a34 · 24 B · remaining</title></rect>
-<rect class="cell" x="553.24" y="677.75" width="3.10" height="2.62" fill="#263244"><title>Overlay 02 · func_ov002_02088bc4 · 24 B · remaining</title></rect>
+<rect class="cell" x="550.14" y="677.75" width="3.10" height="2.62" fill="#2dd4a0"><title>Overlay 02 · battle_interface_assets · 24 B · matching C</title></rect>
+<rect class="cell" x="553.24" y="677.75" width="3.10" height="2.62" fill="#2dd4a0"><title>Overlay 02 · battle_interface_assets · 24 B · matching C</title></rect>
 <rect class="cell" x="556.34" y="677.75" width="3.10" height="2.62" fill="#263244"><title>Overlay 02 · func_ov002_02088cac · 24 B · remaining</title></rect>
 <rect class="cell" x="543.93" y="680.37" width="3.10" height="2.62" fill="#263244"><title>Overlay 02 · func_ov002_0208e080 · 24 B · remaining</title></rect>
 <rect class="cell" x="547.03" y="680.37" width="3.10" height="2.62" fill="#2dd4a0"><title>Overlay 02 · battle_hit · 24 B · matching C</title></rect>
