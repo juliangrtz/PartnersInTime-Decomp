@@ -144,6 +144,9 @@ and runtime overlay 2.
 are maintained as byte-identical C. The shared `BattleActor` declaration now
 types the confirmed `max_hp` and `current_hp` fields at `+0x04/+0x06`, giving
 later damage, healing, and KO translations a common high-level representation.
+`BattleActor_CanReceiveStatus` is matching C too: defeated actors are rejected,
+enemies require a bound resource slot, adults are always eligible, and the two
+baby slots depend on save-state halfword `+0x558` being 2.
 
 Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are

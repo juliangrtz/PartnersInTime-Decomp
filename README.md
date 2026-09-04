@@ -69,11 +69,11 @@ ignored by Git.
   Extended-channel allocation, ADSR progression, PCM/PSG/noise voice startup,
   mixer calculations, and staged register updates are symbolic too.
 - Maintained high-level source now includes the original Nitro math unit and
-  twenty-two byte-matching overlay-2 battle functions: nine battle-AI/state
+  twenty-three byte-matching overlay-2 battle functions: nine battle-AI/state
   helpers, the seven-function generic task-pool unit, and four actor HP/lookup
-  helpers plus the base-damage and central HP/KO primitives. The remaining game
-  functions stay in symbolic assembly until an equivalent C translation
-  reproduces their original code and layout.
+  helpers plus status eligibility, base damage, and the central HP/KO primitive.
+  The remaining game functions stay in symbolic assembly until an equivalent C
+  translation reproduces their original code and layout.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.

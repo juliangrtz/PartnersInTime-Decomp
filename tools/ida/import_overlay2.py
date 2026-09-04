@@ -52,7 +52,7 @@ typedef struct BattleActor BattleActor;
 typedef struct BattleSceneObject BattleSceneObject;
 
 struct BattleActor {
-    const void *resource;
+    BattleSceneObject *scene_object;
     s16 max_hp;
     s16 current_hp;
     s16 speed;
@@ -62,6 +62,8 @@ struct BattleActor {
     s16 hit_state;
     u8 unk_020[4];
     u16 flags;
+    u8 unk_026[0x46];
+    void *resource_slot;
 };
 
 struct BattleSceneObject {
@@ -104,6 +106,8 @@ FUNCTION_TYPES = {
         "int BattleActor_IsHpAtMostQuarter(BattleActor *);",
     "BattleActor_ApplyDamage":
         "int BattleActor_ApplyDamage(BattleSceneObject *, int);",
+    "BattleActor_CanReceiveStatus":
+        "int BattleActor_CanReceiveStatus(BattleActor *);",
     "BattleActor_GetEnemySlot": "BattleActor *BattleActor_GetEnemySlot(int);",
     "BattleActor_GetPartySlot": "BattleActor *BattleActor_GetPartySlot(int);",
     "BattleActor_GetById": "BattleActor *BattleActor_GetById(int);",
