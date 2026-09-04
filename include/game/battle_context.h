@@ -64,6 +64,22 @@ typedef struct BattleInterfaceLayer {
     u32 vram_offset;
 } BattleInterfaceLayer;
 
+typedef struct BattleTextureUploadRequest {
+    u8 unknown_00[4];
+    void *source;
+    u8 unknown_08[4];
+    void *destination;
+    void *component;
+    u32 size;
+    u8 unknown_18[0x0C];
+    u16 texture_id;
+    u8 unknown_26[0x1A];
+} BattleTextureUploadRequest;
+
+typedef struct BattleTextureDecodeState {
+    u8 unknown_00[0x24];
+} BattleTextureDecodeState;
+
 typedef struct BattleRuntimeState {
     u8 unknown_000[0x3A0];
     BattleRuntimeFlags flags;
@@ -82,9 +98,16 @@ typedef struct BattleContext {
     void *screen_assets[2];
     u8 unknown_004c[0xF4];
     BattleArchiveReadRequest asset_read;
-    u8 unknown_0168[0x3DC];
+    u8 unknown_0168[0x18];
+    BattleTextureUploadRequest texture_upload_requests[4];
+    BattleTextureUploadRequest *current_texture_upload;
+    u8 unknown_0284[0x2C0];
     BattleObjectResourceRequest *active_object_resource;
-    u8 unknown_0548[0x60AC];
+    BattleTextureDecodeState texture_decode;
+    u16 texture_body_id;
+    u16 texture_tail_id;
+    u16 texture_optional_id;
+    u8 unknown_0572[0x6082];
     BattleInterfaceLayer interface_layer_0;
     u8 unknown_6634[0x14];
     BattleInterfaceLayer interface_layer_1;
@@ -108,6 +131,12 @@ typedef char BattleArchiveReadRequest_SizeCheck[
 ];
 typedef char BattleInterfaceLayer_SizeCheck[
     sizeof(BattleInterfaceLayer) == 0x40 ? 1 : -1
+];
+typedef char BattleTextureUploadRequest_SizeCheck[
+    sizeof(BattleTextureUploadRequest) == 0x40 ? 1 : -1
+];
+typedef char BattleTextureDecodeState_SizeCheck[
+    sizeof(BattleTextureDecodeState) == 0x24 ? 1 : -1
 ];
 typedef char BattleRuntimeState_SizeCheck[
     sizeof(BattleRuntimeState) == 0x116C ? 1 : -1

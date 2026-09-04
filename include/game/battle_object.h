@@ -133,6 +133,11 @@ typedef struct BattleObjectResourceRequest {
     u8 unknown_28[4];
 } BattleObjectResourceRequest;
 
+typedef struct BattleObjectUploadTask {
+    int (*callback)(struct BattleObjectUploadTask *task);
+    BattleSceneResource *resource;
+} BattleObjectUploadTask;
+
 typedef BattleSceneResource BattleObjectDataLoadState;
 struct BattleQueuedTask;
 
@@ -146,6 +151,8 @@ typedef char BattleResourceModel_SizeCheck[
     sizeof(BattleResourceModel) == 0x1B8 ? 1 : -1];
 typedef char BattleObjectResourceRequest_SizeCheck[
     sizeof(BattleObjectResourceRequest) == 0x2C ? 1 : -1];
+typedef char BattleObjectUploadTask_SizeCheck[
+    sizeof(BattleObjectUploadTask) == 8 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
@@ -161,6 +168,17 @@ struct BattleQueuedTask *BattleObjectData_QueueLoadAndMarkPending(
     BattleObjectDataLoadState *load_state, s32 resource_id);
 void BattleObjectData_BeginRebuildTask(struct BattleQueuedTask *task);
 void BattleObjectData_RebuildNextComponentTask(struct BattleQueuedTask *task);
+int BattleObjectData_UploadSpriteTask(BattleObjectUploadTask *task);
+int BattleObjectData_UploadTextureTask(BattleObjectUploadTask *task);
+void BattleObjectData_CompleteUploadTask(struct BattleQueuedTask *task);
+void BattleObjectData_QueueFinalUploadTask(struct BattleQueuedTask *task);
+void BattleObjectData_WaitTailDecodeTask(struct BattleQueuedTask *task);
+void BattleObjectData_BeginTailDecodeTask(struct BattleQueuedTask *task);
+void BattleObjectData_WaitBodyDecodeTask(struct BattleQueuedTask *task);
+void BattleObjectData_PrepareBodyDecodeTask(struct BattleQueuedTask *task);
+void BattleObjectData_SetupOptionalTextureTask(struct BattleQueuedTask *task);
+void BattleObjectData_SetupTailTextureTask(struct BattleQueuedTask *task);
+void BattleObjectData_BeginTextureSetupTask(struct BattleQueuedTask *task);
 void BattleObjectData_CopyResource(BattleSceneResource *resource,
                                    BattleObjectDataLoadState *load_state);
 int BattleObjectData_EnsureLoaded(u16 object_data_id, s32 resource_id);
