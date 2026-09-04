@@ -28,7 +28,19 @@ typedef union SavePartyExperienceToNextLevel {
 } SavePartyExperienceToNextLevel;
 
 typedef struct SavePartyMember {
-    u8 unknown_000[0x18];
+    u8 level;
+    u8 unknown_001;
+    u16 base_max_hp;
+    u16 base_power;
+    u16 base_defense;
+    u16 base_speed;
+    u16 base_stache;
+    u16 max_hp;
+    u16 current_hp;
+    u16 power;
+    u16 defense;
+    u16 speed;
+    u16 stache;
     SavePartyExperience experience;
     SavePartyExperienceToNextLevel experience_to_next_level;
     u8 unknown_020[4];

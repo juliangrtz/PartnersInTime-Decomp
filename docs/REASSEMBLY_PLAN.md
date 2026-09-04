@@ -391,7 +391,15 @@ The adjacent party progression work now separates exact gameplay logic from a
 still-matching-in-progress visual transition. `BattleParty_AddExperience` at
 `0x0207FC78` is linked byte-matching C and documents the save record's two
 24-bit experience fields, all four character growth tables, and the level and
-experience caps. `BattleParty_StartFormationTransition` and
+experience caps. The later level-up bonus block now contributes three more
+matching C functions: `BattleLevelUpBonus_MapPhaseToValue` converts its
+eight-phase wheel to a 1-6 reward, `BattleLevelUpBonus_UpdateRisingObject`
+animates the stopped result, and `BattleLevelUpBonus_UpdateAppliedStats`
+increments the selected HP/POW/DEF/SPEED/STACHE base stat at eight-tick
+intervals before synchronizing all active stats. This also types the previously
+opaque `SavePartyMember` stat prefix. The adjacent transition into the apply
+task is semantically named but remains reference code pending one MWCC
+address-materialization difference. `BattleParty_StartFormationTransition` and
 `BattleParty_UpdateFormationTransition` are grouped in a readable formation
 source unit with equivalent control flow and exact function sizes. Until their
 remaining compiler register-allocation differences are eliminated, the linker
