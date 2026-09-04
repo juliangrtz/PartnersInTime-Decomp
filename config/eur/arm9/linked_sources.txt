@@ -32,6 +32,7 @@ src/battle/battle_scene_movement_dispatch.c
 src/battle/battle_entity_resources.c
 src/battle/battle_object_load_control.c
 src/battle/battle_texture_dimensions.c
+src/battle/battle_interface_resources.c
 src/battle/battle_script_state.c
 src/battle/battle_damage_base.c
 src/battle/battle_actor_damage.c
