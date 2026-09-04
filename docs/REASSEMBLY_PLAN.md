@@ -178,6 +178,12 @@ resident table strides and the interface-resource field at offset `0x06`.
 The matching accessor at `0x02076EE8` confirms that an enemy actor's
 `resource_slot` points to its loaded `BattleEnemyDataRequest` and returns that
 request's `BattleEnemyStatRecord`.
+The interface-layer entry points at `0x02093EA8`-`0x0209401C` are matching C.
+They reject duplicate resources, pack the two signed layout modes and the
+completion/clear flags into a 16-byte pooled request, derive the upload row size,
+and enqueue the asynchronous resource-application callback. Analysis of the
+adjacent callbacks also identifies the layer's pixel buffer, resource cursor,
+asset table, render/layout bitfields, and upload-state flags.
 The general battle object-data path is now matching C: its 48-byte state
 lookup, asynchronous queue setup, duplicate-resource guard, ordinary-slot
 routing, selection of eight large enemy-load slots, load configuration, and
