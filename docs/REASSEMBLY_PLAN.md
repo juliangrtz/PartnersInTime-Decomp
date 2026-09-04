@@ -260,6 +260,13 @@ The four following command helpers are matching high-level source as well.
 They expose the global hit-lock predicate, scripted enemy removal with its
 optional damage feedback, the active model's virtual animation-layer call, and
 lookups across the three typed battle-handle arrays.
+The adjacent `BattleGlobalProperty_Get` is matching C too. It recovers the
+shared property namespace consumed by battle-AI opcode `0x46`, covering
+selected actors, save/map state, battle-context values, masks, fade progress,
+and runtime flags. The corresponding opcode `0x47` setter is retained as a
+readable, size-matching C translation but is not linked yet: only its final
+fade toggle differs, where MWCC chooses three caller-saved registers instead
+of the original caller/callee-saved allocation.
 `tools/analyze_battle_ai_dispatch.py` validates the user-supplied ROM and
 extracts the dispatcher's complete 182-entry jump table into JSON or Markdown.
 The report also groups shared case entries, observes direct command-record
@@ -546,7 +553,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the seventy-four
+2. Continue promoting small overlay-2 battle leaf functions using the seventy-five
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the
