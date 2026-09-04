@@ -19,3 +19,4 @@ src/battle/battle_task.c
 src/game/script_vm.c
 src/game/script_vm_control.c
 src/game/script_vm_execute.c
+src/game/script_vm_variables.c

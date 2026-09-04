@@ -166,15 +166,18 @@ use fixed 192-byte states and may save a continuation pointer plus inherited
 ordering fields; VM result 2 activates that continuation in the same frame.
 Enemy auxiliary scripts use the actor-embedded state at `+0x1E0`. Both task
 families are initialized, linked, updated, and completed in maintained source.
-The resident `VM_Run`, `VM_CheckJumpCondition`, `VM_ExecuteCommand`, and
-`VM_ReadCommand` functions at `0x020063A4`, `0x02006414`, `0x02006508`, and
+The resident `VM_WriteVariable`, `VM_ReadVariable`, `VM_Run`,
+`VM_CheckJumpCondition`, `VM_ExecuteCommand`, and `VM_ReadCommand` functions at
+`0x020055F8`, `0x02005938`, `0x020063A4`, `0x02006414`, `0x02006508`, and
 `0x020071B0` are byte-matching C as well. They expose the yield countdown and
 read/execute loop, all eleven comparison modes, and the complete 51-command
 core executor: call and loop stacks, branches, table reads, integer and
 fixed-point arithmetic, trigonometry, random values, and extension-command
-fallback. The decoder implements the 260-entry command descriptor format used
-by the BAI JSON assembler: optional result variables, optional argument-mode
-masks, signed literals, and arguments resolved through `VM_ReadVariable`.
+fallback. The variable layer maps its encoded namespaces to VM-local state,
+save-data word/byte/bit regions, and runtime-overlay extension hooks. The
+decoder implements the 260-entry command descriptor format used by the BAI
+JSON assembler: optional result variables, optional argument-mode masks,
+signed literals, and variable-resolved arguments.
 The common script-ID router, four fixed party-VM starters, script-block state
 initializer, all-family per-frame updater, and task-pool initializer are now
 maintained as well. This closes the scheduler around the large opcode

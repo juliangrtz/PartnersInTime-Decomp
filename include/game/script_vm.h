@@ -37,6 +37,30 @@ enum ScriptVmJumpCondition {
     SCRIPT_VM_NOT_NEGATIVE_ONE = 10
 };
 
+enum ScriptVmVariableNamespace {
+    SCRIPT_VM_VAR_STATE = 0x1000,
+    SCRIPT_VM_VAR_SAVE_FLAGS_48 = 0x2000,
+    SCRIPT_VM_VAR_EXTENSION_3 = 0x3000,
+    SCRIPT_VM_VAR_EXTENSION_4 = 0x4000,
+    SCRIPT_VM_VAR_SAVE_WORDS = 0x5000,
+    SCRIPT_VM_VAR_SAVE_BYTES_D0 = 0x6000,
+    SCRIPT_VM_VAR_EXTENSION_7 = 0x7000,
+    SCRIPT_VM_VAR_CONTEXT = 0x8000,
+    SCRIPT_VM_VAR_STATE_24 = 0xA000,
+    SCRIPT_VM_VAR_STATE_FLAGS_64 = 0xB000,
+    SCRIPT_VM_VAR_SAVE_WORDS_40 = 0xC000,
+    SCRIPT_VM_VAR_SAVE_FLAGS_50 = 0xD000,
+    SCRIPT_VM_VAR_SAVE_FLAGS_1F0 = 0xE000
+};
+
+enum ScriptVmVariableMask {
+    SCRIPT_VM_VAR_NAMESPACE_MASK = 0xF000,
+    SCRIPT_VM_VAR_INDEX_MASK = 0x0FFF,
+    SCRIPT_VM_VAR_BIT_INDEX_MASK = 0x001F,
+    SCRIPT_VM_VAR_EXTENDED_NAMESPACE_MASK = 0xE000,
+    SCRIPT_VM_VAR_EXTENDED_INDEX_MASK = 0x1FFF
+};
+
 struct ScriptVm {
     u8 unknown_00[8];
     ScriptVmCommandHandler command_handler;
@@ -53,7 +77,10 @@ struct ScriptVmCommand {
 
 struct ScriptVmState {
     const u16 *script;
-    u8 unknown_04[0x60];
+    union {
+        u8 unknown_04[0x60];
+        s32 variables_04[24];
+    };
     union {
         s32 loop_stack[17];
         struct {
@@ -70,12 +97,17 @@ typedef char ScriptVmCommand_SizeCheck[
 ];
 typedef char ScriptVmState_SizeCheck[sizeof(ScriptVmState) == 0xAC ? 1 : -1];
 
-s32 VM_ReadVariable(u16 variable, ScriptVm *vm, const u16 **script);
+s32 VM_ReadVariable(u16 variable, ScriptVm *vm, ScriptVmState *state);
+void VM_WriteVariable(
+    u16 variable, s32 value, ScriptVm *vm, ScriptVmState *state
+);
 int VM_CheckJumpCondition(int condition, s32 left, s32 right);
 int VM_ExecuteCommand(
     ScriptVm *vm, ScriptVmState *state, ScriptVmCommand *command
 );
 int VM_Run(ScriptVm *vm, ScriptVmState *state);
-void VM_ReadCommand(ScriptVm *vm, const u16 **script, ScriptVmCommand *command);
+void VM_ReadCommand(
+    ScriptVm *vm, ScriptVmState *state, ScriptVmCommand *command
+);
 
 #endif

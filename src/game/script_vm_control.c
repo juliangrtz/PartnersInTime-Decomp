@@ -41,7 +41,7 @@ int VM_Run(ScriptVm *vm, ScriptVmState *state) {
     }
 
     do {
-        VM_ReadCommand(vm, &state->script, &command);
+        VM_ReadCommand(vm, state, &command);
         result = VM_ExecuteCommand(vm, state, &command);
     } while (result == SCRIPT_VM_CONTINUE);
     return result;

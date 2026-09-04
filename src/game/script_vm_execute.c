@@ -9,10 +9,6 @@ extern void (*data_02059d8c)(void *marker);
 extern u32 data_0205003c;
 extern u32 data_02050040;
 
-void VM_WriteVariable(
-    u16 variable, s32 value, ScriptVm *vm, ScriptVmState *state
-);
-
 enum ScriptVmCoreOpcode {
     SCRIPT_VM_OP_END = 0,
     SCRIPT_VM_OP_RETURN = 1,
