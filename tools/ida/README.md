@@ -19,7 +19,7 @@ Then run IDA's text-mode executable from the repository root. IDA's raw-binary
 $ida = 'C:\Program Files\IDA Essential 9.2\idat.exe'
 & $ida '-A' '-c' '-TBinary file' '-pARM' '-b2065D4' '-i2065D40' `
   '-Stools/ida/import_overlay2.py' '-Lbuild/ida/ov002_arm32.log' `
-  '-obuild/ida/PiT_eur_ov002_arm32_ready.i64' `
+  '-obuild/ida/PiT_eur_ov002_battle.i64' `
   'build/reassembly/eur/native/arm9/arm9_ov002/arm9_ov002.bin'
 ```
 
@@ -33,7 +33,7 @@ For a quick batch decompiler check:
 
 ```powershell
 & $ida '-A' '-Stools/ida/decompile_function.py BattleAI_HandleVmResult' `
-  'build/ida/PiT_eur_ov002_arm32_ready.i64'
+  'build/ida/PiT_eur_ov002_battle.i64'
 ```
 
 IDA may print warnings from optional third-party plugins whose Python packages

@@ -159,6 +159,10 @@ bypass flag and otherwise subtracts either context offset pair
 `+0xCB9C/+0xCB9E` or `+0xCBA0/+0xCBA2`; its stored depth is clamped at zero.
 All actor resolvers, the compact base-damage calculation, and the damage/KO
 updater are now maintained byte-identical C.
+The state-bit setter, active-model selector, position snapshot, and fixed-stride
+motion-channel accessor are byte-identical C as well. Their common scene-object
+type records positions at `+0x04..+0x0E`, four `0x28`-byte motion channels at
+`+0x1C`, models at `+0xC0/+0xC4`, actor ID `+0xEC`, and flags at `+0xF4`.
 
 `BattleSceneObject_SetAnimation` is the common animation path used by damage
 and reaction code. It validates the bound resource, classifies scene-object
