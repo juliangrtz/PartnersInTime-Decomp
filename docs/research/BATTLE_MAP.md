@@ -575,8 +575,8 @@ six-bit impact-axis mask, and interpolates the three-dimensional hit position.
 
 | Offset | Size | Working field |
 |---:|---:|---|
-| `00` | 2 | object-data ID |
-| `02` | 2 | partially understood flags/AI-related ID |
+| `00` | 2 | localized enemy-name ID |
+| `02` | 2 | packed object-data/AI resource ID |
 | `05` | 1 | level |
 | `06` | 2 | max HP |
 | `08` | 2 | POW |
@@ -588,14 +588,16 @@ six-bit impact-axis mask, and interpolates the three-dimensional hit position.
 | `24` | 4 | item drop 1 |
 | `28` | 4 | item drop 2 |
 
-`BattleEnemyData_LoadStatRecord` is maintained symbolic assembly. It multiplies
+`BattleEnemyData_LoadStatRecord` is linked byte-identical C. It multiplies
 the selected enemy index by 44, queues exactly that byte range from the primary
 battle resource, and installs `BattleEnemyData_LoadObjectData` as the next load
 callback. `BattleEnemyData_RequestLoad` initializes that request and submits it
-through the maintained `BattleTaskQueue_Enqueue` path. The object-data callback
-uses the maintained packed-ID resolver and queues the variable-sized payload
-after the stat record; its maintained fixup callback converts embedded offsets
-to RAM pointers. `BattleEntity_BindResource` is maintained too: its enemy branch
+through the matching `BattleTaskQueue_Enqueue` path. The object-data callback
+uses the packed-ID resolver and queues the following 8,148-byte payload; its
+matching fixup callback exposes typed stat and object-data pointers and applies
+the payload's leading relative offset. The complete request occupies 0x200C
+bytes, including its 12-byte header and 0x2000-byte private payload buffer.
+`BattleEntity_BindResource` is maintained too: its enemy branch
 copies max/current HP, base/current POW, DEF, and SPD, installs level/trait
 bits, and clears transient actor flags; its party branch binds the corresponding
 scene-object resource record.

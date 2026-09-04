@@ -30,11 +30,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   lossless starting representation, not a claim of semantic decompilation.
 - Every ARM9 and ARM7 runtime image now relinks as 43 components and 420
   independent, fixed-address ELF units.
-- One hundred and thirty-four named overlay-2 battle functions are maintained symbolic ARM source,
+- One hundred and thirty named overlay-2 battle functions are maintained symbolic ARM source,
   together with the resident item-value calculator they call.
   They cover task enqueueing, intrusive task lists and pools, actor lookup,
-  enemy-load requests and 44-byte stat
-  reads, packed object-ID resolution, object-data loading and pointer fixups,
+  packed object-ID resolution and ordinary object-data loading,
   live actor/resource binding, both base and fully modified POW/DEF/level damage
   formulas, HP/KO updates, the complete enemy and party hit/popup/effect paths,
   status removal/reset, healing, revival, cures, stat items, and equipped
@@ -87,7 +86,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
   High-level source also includes
-  ninety-five byte-matching overlay-2 battle functions: twenty-nine
+  ninety-nine byte-matching overlay-2 battle functions: twenty-nine
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
   and four actor HP/lookup
   helpers plus status eligibility, base damage, the central HP/KO primitive,
@@ -107,6 +106,9 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   Six adjacent action/party script-loader functions resolve packed object-data
   IDs, stream the selected BAI payloads into their dedicated buffers, and start
   the corresponding action or fixed party VM once asynchronous reads finish.
+  Four matching enemy-data functions select one editable 44-byte `BDataMon`
+  record, load its referenced object payload into a typed 0x200C-byte request,
+  and fix its stat/object pointers after the asynchronous reads complete.
   The remaining game
   functions stay in symbolic assembly until an equivalent C translation
   reproduces their original code and layout. The adjacent two-function party
