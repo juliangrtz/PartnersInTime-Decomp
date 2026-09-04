@@ -9,5 +9,9 @@ int BattleInterface_LoadItemName(int item_id);
 int BattleInterface_LoadCommandMenu(int resource_id);
 int BattleInterface_LoadTargetLabelResource(int resource_id);
 int BattleInterface_LoadTargetName(u32 actor_id);
+int BattleInterfaceLayer_SetResource(
+    BattleInterfaceLayer *layer, const void *resource, int horizontal_mode,
+    int vertical_mode, int notify_on_complete, int clear_before_upload
+);
 
 #endif

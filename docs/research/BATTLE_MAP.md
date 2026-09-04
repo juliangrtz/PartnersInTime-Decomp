@@ -55,6 +55,10 @@ and runtime overlay 2.
 | `02092A2C` | `BattleInterface_LoadCommandMenu` | Selects a command-menu resource from the active party member and formation mode |
 | `02092B04` | `BattleInterface_LoadTargetLabelResource` | Loads a target-label resource and refreshes its interface layer |
 | `02092B8C` | `BattleInterface_LoadTargetName` | Maps battle-menu states or enemy `name_id` values to target-label resources |
+| `02093C00` | `BattleInterface_ProcessResourceTask` | Streams rows from the selected interface resource and completes its layer upload |
+| `02093D30` | `BattleInterface_ApplyResourceTask` | Returns the pooled request, configures the layer, and advances to row processing |
+| `02093EA8` | `BattleInterfaceLayer_SetResource` | Suppresses duplicate resources and resets the layer transition state |
+| `02093F30` | `BattleInterfaceLayer_QueueResource` | Packs layout/render flags into a pooled asynchronous layer request |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |

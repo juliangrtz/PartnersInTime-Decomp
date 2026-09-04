@@ -65,8 +65,46 @@ typedef struct BattleCommonAssetArchive {
     u32 header[1];
 } BattleCommonAssetArchive;
 
+typedef union BattleInterfaceLayoutParameters {
+    u32 raw;
+    struct {
+        u32 unknown_00_03 : 4;
+        u32 row_offset : 5;
+        u32 row_tiles_minus_one : 7;
+        u32 unknown_16_31 : 16;
+    } bits;
+} BattleInterfaceLayoutParameters;
+
+typedef union BattleInterfaceRenderParameters {
+    u32 raw;
+    struct {
+        u32 unknown_00_19 : 20;
+        u32 mode_a : 4;
+        u32 mode_b : 4;
+        u32 mode_c : 4;
+    } bits;
+} BattleInterfaceRenderParameters;
+
+typedef union BattleInterfaceLayerFlags {
+    u16 raw;
+    struct {
+        u16 row_bytes : 12;
+        u16 resource_ready : 1;
+        u16 notify_on_complete : 1;
+        u16 clear_before_upload : 1;
+        u16 state_15 : 1;
+    } bits;
+} BattleInterfaceLayerFlags;
+
 typedef struct BattleInterfaceLayer {
-    u8 unknown_00[0x32];
+    void *pixel_buffer;
+    const u8 *resource_cursor;
+    BattleInterfaceRenderParameters render;
+    BattleInterfaceLayoutParameters layout;
+    u8 unknown_10[4];
+    void *asset_table;
+    u8 unknown_18[0x18];
+    BattleInterfaceLayerFlags flags;
     u16 allocation_size;
     s16 x;
     s16 y;
@@ -74,6 +112,14 @@ typedef struct BattleInterfaceLayer {
     u16 height;
     u32 vram_offset;
 } BattleInterfaceLayer;
+
+typedef struct BattleInterfaceLayerState {
+    BattleInterfaceLayer layer;
+    const void *resource;
+    u16 transition_progress;
+    u8 transition_state;
+    u8 transition_step;
+} BattleInterfaceLayerState;
 
 typedef struct BattleTextureUploadRequest {
     u8 unknown_00[4];
@@ -160,6 +206,9 @@ typedef char BattleArchiveReadRequest_SizeCheck[
 ];
 typedef char BattleInterfaceLayer_SizeCheck[
     sizeof(BattleInterfaceLayer) == 0x40 ? 1 : -1
+];
+typedef char BattleInterfaceLayerState_SizeCheck[
+    sizeof(BattleInterfaceLayerState) == 0x48 ? 1 : -1
 ];
 typedef char BattleTextureUploadRequest_SizeCheck[
     sizeof(BattleTextureUploadRequest) == 0x40 ? 1 : -1

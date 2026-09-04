@@ -18,10 +18,6 @@ enum BattleInterfaceResourceOffset {
 };
 
 extern void *func_ov002_02076b00(int archive_id, u16 resource_id);
-extern int BattleInterfaceLayer_SetResource(
-    BattleInterfaceLayer *layer, void *resource, int unknown_2, int unknown_3,
-    int unknown_4, int unknown_5);
-
 typedef struct BattleTargetSelectionEntry {
     s16 packed_command;
     u8 unknown_02[6];
