@@ -386,7 +386,9 @@ The hit queue at battle-context offset `0xCAD8` contains up to eight packed
 20-byte records. `BattleDamage_ReflectQueuedHits` stops at the first inactive
 entry, finds records targeting the requested actor, recalculates damage for the
 reversed pairing, swaps source and target, and reloads the reflected attack's
-status ID, chance, and magnitude.
+status ID, chance, and magnitude. The reflector and effect-variant setter are
+now byte-identical C, backed by a size-checked `BattleHitRecord`; actor offset
+`+0x1E` is correspondingly named `pending_damage`.
 
 Before expansion into that queue, each active attacker owns a 16-byte hit
 descriptor in the battle-context table at `+0xC8F4`. The maintained configure,

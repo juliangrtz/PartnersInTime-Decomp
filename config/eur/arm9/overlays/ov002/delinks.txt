@@ -29,7 +29,7 @@ src/battle/battle_actor_damage.c:
     .text       start:0x0209d694 end:0x0209d718
 
 src/battle/battle_hit.c:
-    .text       start:0x0209e0b4 end:0x0209e20c
+    .text       start:0x0209dfdc end:0x0209e20c
 
 src/battle/battle_hit_lookup.c:
     .text       start:0x0209ebac end:0x0209ebfc
