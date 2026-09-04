@@ -137,6 +137,9 @@ src/battle/battle_results_display.c:
 src/battle/battle_target_interface.cpp:
     .text       start:0x02096990 end:0x02097a74
 
+src/battle/battle_party_hp_panel.c:
+    .text       start:0x02097f58 end:0x02098490
+
 src/battle/battle_damage_base.c:
     .text       start:0x0209bf38 end:0x0209bfa0
 
@@ -163,4 +166,3 @@ src/battle/battle_scene_motion_channel.c:
 
 src/battle/battle_task.c:
     .text       start:0x020a50d4 end:0x020a5294
-
