@@ -35,5 +35,6 @@ typedef char BattleAITask_SizeCheck[sizeof(BattleAITask) == 0x14 ? 1 : -1];
 
 int BattleAI_HandleVmResult(BattleAITask *task, int result, BattleAIState *state);
 void BattleAI_StartPartyVmSlot2(void);
+BattleAIState *BattleScriptState_GetByObjectId(u16 object_id);
 
 #endif

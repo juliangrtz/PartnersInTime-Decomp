@@ -10,3 +10,6 @@ src/battle/battle_ai_result.c:
 src/battle/battle_ai_party_slot2.c:
     .text       start:0x0207ed3c end:0x0207ed40
 
+src/battle/battle_script_state.c:
+    .text       start:0x020922dc end:0x0209234c
+
