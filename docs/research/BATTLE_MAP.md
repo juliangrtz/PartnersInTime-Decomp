@@ -70,6 +70,7 @@ and runtime overlay 2.
 | `02095C34` | `BattleLevelUpGrowth_UpdateRowSpawner` | Starts the five stat rows at three-frame intervals |
 | `02095CE0` | `BattleLevelUpGrowth_StartDisplay` | Computes cumulative-table growth deltas and starts the row sequence |
 | `02095F6C` | `BattleResults_DrawPartyExperienceRow` | Draws one party member's current experience and points remaining to the next level |
+| `020960AC` | `BattleResults_DrawScreen` | Draws the post-battle party experience, earned experience, earned coins, and coin total |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
