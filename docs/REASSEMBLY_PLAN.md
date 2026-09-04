@@ -162,11 +162,14 @@ maintained symbolic assembly. The byte-matching C stop path clears one of four
 party VM slots directly or decodes typed IDs `0x1000`-`0x4000`, removes the
 sorted task from the corresponding pool, and invalidates its attached script
 state. Hit-queue damage against an enemy explicitly starts its reaction VM.
-The other two VM families now expose their update paths as well. Object scripts
-use fixed 192-byte states and may save a continuation pointer plus inherited
-ordering fields; VM result 2 activates that continuation in the same frame.
+The other two VM families now expose byte-matching C update paths as well.
+Object scripts use fixed 192-byte states and may save a continuation pointer
+plus inherited ordering fields; VM result 2 activates that continuation in the
+same frame.
 Enemy auxiliary scripts use the actor-embedded state at `+0x1E0`. Both task
 families are initialized, linked, updated, and completed in maintained source.
+The action and reaction callbacks are matching C too, as is the common helper
+that finds an existing actor task or inserts a new node in actor-ID order.
 The resident `VM_WriteVariable`, `VM_ReadVariable`, `VM_Run`,
 `VM_CheckJumpCondition`, `VM_ExecuteCommand`, and `VM_ReadCommand` functions at
 `0x020055F8`, `0x02005938`, `0x020063A4`, `0x02006414`, `0x02006508`, and

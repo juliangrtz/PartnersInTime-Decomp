@@ -416,7 +416,9 @@ compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets
 `+0x70` and `+0x128`. Tasks remain sorted by actor ID; their update callbacks
 honor the VM pause bits at state `+0xB2`, call `VM_Run`, and clear themselves
-when it returns completion code 1 or 2.
+when it returns completion code 1 or 2. All four update callbacks and the
+common sorted find-or-insert helper are now byte-identical C in one cohesive
+source unit.
 When pause bit 1 requests ordering, `BattleAI_TryClearOrderWait` scans both
 active task lists. It ignores the same actor, empty scripts, and bit-0-disabled
 states, then compares the signed order field at `+0xB4` with an actor-ID tie
