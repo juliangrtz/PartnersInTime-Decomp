@@ -73,6 +73,7 @@ int BattleNumber_DrawDecimal(int value, int palette,
 void *BattleSprite_DrawFrame(int frame, int palette,
                              BattleSpriteTransform *transform, int object,
                              u16 priority, u16 resource_id, u16 flags);
+int BattleRender_UpdateIntensity(int direction, s16 *intensity);
 void BattleReward_ClearCounterEffects(void);
 BattleEffect *BattleReward_AdvanceCounterEffect(BattleEffect *effect);
 BattleEffect *BattleReward_EnsureCounterEffect(int reward_type);

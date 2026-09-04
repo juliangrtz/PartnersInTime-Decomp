@@ -22,7 +22,7 @@ enum BattleResultsDisplayConstant {
 typedef struct BattleResultsDisplayState {
     BattleSceneObject *scene_object;
     s16 intensity;
-    u16 unknown_006;
+    s16 fade_direction;
     BattleEffect *experience_counters[PARTY_MEMBER_COUNT];
     BattleEffect *coin_counter;
     union {
@@ -66,6 +66,76 @@ int BattleResults_DrawPartyExperienceRow(
                 BATTLE_RESULTS_INACTIVE_RENDER_FLAGS); \
         } \
     } while (0)
+
+void BattleResults_UpdateCounters(BattleResultsDisplayState *state) {
+    BattleRender_UpdateIntensity(state->fade_direction, &state->intensity);
+
+    if (state->experience_counters[PARTY_MEMBER_BABY_LUIGI] != 0) {
+        *(u32 *)((u8 *)state->experience_counters[
+                     PARTY_MEMBER_BABY_LUIGI] +
+                 BATTLE_RESULTS_COUNTER_VALUE_OFFSET) =
+            ((SavePartyMember *)(gSaveData +
+                BATTLE_RESULTS_PARTY_MEMBERS_OFFSET))[
+                    PARTY_MEMBER_BABY_LUIGI].experience.packed >> 8;
+    }
+    if (state->experience_counters[PARTY_MEMBER_BABY_LUIGI] != 0) {
+        *(u32 *)((u8 *)state->experience_counters[
+                     PARTY_MEMBER_BABY_LUIGI] +
+                 BATTLE_RESULTS_COUNTER_VALUE_OFFSET) =
+            ((SavePartyMember *)(gSaveData +
+                BATTLE_RESULTS_PARTY_MEMBERS_OFFSET))[
+                    PARTY_MEMBER_BABY_LUIGI].experience.packed >> 8;
+    }
+    if (state->experience_counters[PARTY_MEMBER_BABY_MARIO] != 0) {
+        *(u32 *)((u8 *)state->experience_counters[
+                     PARTY_MEMBER_BABY_MARIO] +
+                 BATTLE_RESULTS_COUNTER_VALUE_OFFSET) =
+            ((SavePartyMember *)(gSaveData +
+                BATTLE_RESULTS_PARTY_MEMBERS_OFFSET))[
+                    PARTY_MEMBER_BABY_MARIO].experience.packed >> 8;
+    }
+    if (state->experience_counters[PARTY_MEMBER_BABY_MARIO] != 0) {
+        *(u32 *)((u8 *)state->experience_counters[
+                     PARTY_MEMBER_BABY_MARIO] +
+                 BATTLE_RESULTS_COUNTER_VALUE_OFFSET) =
+            ((SavePartyMember *)(gSaveData +
+                BATTLE_RESULTS_PARTY_MEMBERS_OFFSET))[
+                    PARTY_MEMBER_BABY_MARIO].experience.packed >> 8;
+    }
+    if (state->experience_counters[PARTY_MEMBER_LUIGI] != 0) {
+        *(u32 *)((u8 *)state->experience_counters[PARTY_MEMBER_LUIGI] +
+                 BATTLE_RESULTS_COUNTER_VALUE_OFFSET) =
+            ((SavePartyMember *)(gSaveData +
+                BATTLE_RESULTS_PARTY_MEMBERS_OFFSET))[
+                    PARTY_MEMBER_LUIGI].experience.packed >> 8;
+    }
+    if (state->experience_counters[PARTY_MEMBER_LUIGI] != 0) {
+        *(u32 *)((u8 *)state->experience_counters[PARTY_MEMBER_LUIGI] +
+                 BATTLE_RESULTS_COUNTER_VALUE_OFFSET) =
+            ((SavePartyMember *)(gSaveData +
+                BATTLE_RESULTS_PARTY_MEMBERS_OFFSET))[
+                    PARTY_MEMBER_LUIGI].experience.packed >> 8;
+    }
+    if (state->experience_counters[PARTY_MEMBER_MARIO] != 0) {
+        *(u32 *)((u8 *)state->experience_counters[PARTY_MEMBER_MARIO] +
+                 BATTLE_RESULTS_COUNTER_VALUE_OFFSET) =
+            ((SavePartyMember *)(gSaveData +
+                BATTLE_RESULTS_PARTY_MEMBERS_OFFSET))[
+                    PARTY_MEMBER_MARIO].experience.packed >> 8;
+    }
+    if (state->experience_counters[PARTY_MEMBER_MARIO] != 0) {
+        *(u32 *)((u8 *)state->experience_counters[PARTY_MEMBER_MARIO] +
+                 BATTLE_RESULTS_COUNTER_VALUE_OFFSET) =
+            ((SavePartyMember *)(gSaveData +
+                BATTLE_RESULTS_PARTY_MEMBERS_OFFSET))[
+                    PARTY_MEMBER_MARIO].experience.packed >> 8;
+    }
+    if (state->coin_counter != 0) {
+        *(u32 *)((u8 *)state->coin_counter +
+                 BATTLE_RESULTS_COUNTER_VALUE_OFFSET) =
+            *(u32 *)(gSaveData + BATTLE_RESULTS_COINS_OFFSET);
+    }
+}
 
 void BattleResults_DrawScreen(BattleResultsDisplayState *state) {
     BattlePosition position;
