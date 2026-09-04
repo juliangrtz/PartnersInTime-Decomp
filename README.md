@@ -87,8 +87,9 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
   High-level source also includes
-  thirty-eight byte-matching overlay-2 battle functions: eleven battle-AI/VM/state
-  helpers, the seven-function generic task-pool unit, and four actor HP/lookup
+  forty-three byte-matching overlay-2 battle functions: sixteen
+  battle-AI/VM/target/state helpers, the seven-function generic task-pool unit,
+  and four actor HP/lookup
   helpers plus status eligibility, base damage, and the central HP/KO primitive.
   Eight scene-object state/model/motion helpers and the complete five-function
   hit-descriptor setup layer are high-level source too. The remaining game

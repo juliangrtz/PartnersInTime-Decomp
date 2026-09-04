@@ -28,6 +28,11 @@ and runtime overlay 2.
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
+| `0207959C` | `BattleActor_SelectRandomStatusTarget` | Uniformly selects one valid status target from an actor-ID range |
+| `02079624` | `BattleActor_FindMostDamagedEnemy` | Finds the loaded enemy with the greatest missing HP above a threshold |
+| `020796BC` | `BattleActor_FindLowestHpEnemy` | Finds the loaded enemy with the lowest HP at or below a threshold |
+| `02079740` | `BattleActor_FindHighestHpEnemy` | Finds the loaded enemy with the highest HP at or above a threshold |
+| `020797C4` | `BattleAI_GetStateById` | Resolves party slots and all four typed Battle-AI state families |
 | `02079950` | `BattleAI_DispatchOpcode` | Executes loaded `BAI_*.dat` battle bytecode |
 | `0207E928` | `BattleAI_UpdateReactionTask` | Runs one enemy reaction VM task to completion |
 | `0207E9C0` | `BattleAI_UpdateActionTask` | Runs one enemy action VM task to completion |
@@ -436,6 +441,13 @@ variables `0x4000` through `0x402F`. They expose the current state's low
 three battle-context masks, and 32 shared signed integers at context offset
 `+0x69E4`. Context fields whose gameplay meaning is not yet proven retain
 offset-based names rather than speculative labels.
+The five adjacent dispatcher helpers are matching C as one cohesive unit.
+Three scan the six ordinary enemy slots for highest HP, lowest HP, or greatest
+missing HP while rejecting unloaded actors. A fourth uses reservoir sampling
+to select a valid status target uniformly from a requested party/enemy range;
+Baby Mario and Baby Luigi are deliberately excluded. `BattleAI_GetStateById`
+maps fixed party IDs 1-4 and typed IDs `0x1000`-`0x4000` to their action,
+reaction, auxiliary, or object-script VM state.
 `BattleAI_HandleVmResult`, all four fixed party VM starters, both enemy
 action/reaction start wrappers, the VM state initializer, and
 `BattleScriptState_GetByObjectId` are the first overlay-2 battle functions
