@@ -83,3 +83,36 @@ void BattlePool_ReturnNode(BattleTaskPool *pool, BattleAITask *task) {
     task->next = pool->free;
     pool->free = task;
 }
+
+int BattleTaskList_Update(BattleTaskPool *pool) {
+    BattleAITask *task = pool->active;
+    BattleAITask **link = &pool->active;
+    int updated_count = 0;
+
+    while (task != 0) {
+        if (task->owner_slot != 0 && *task->owner_slot != task) {
+            task->callback = 0;
+        }
+
+        if (task->callback != 0) {
+            task->callback(task);
+            link = &task->next;
+            ++updated_count;
+            task = task->next;
+        } else {
+            BattleAITask *next;
+
+            if (task->owner_slot != 0 && *task->owner_slot == task) {
+                *task->owner_slot = 0;
+            }
+
+            next = task->next;
+            task->next = pool->free;
+            pool->free = task;
+            task = next;
+            *link = next;
+        }
+    }
+
+    return updated_count;
+}
