@@ -51,6 +51,7 @@ typedef struct BattleTaskPool BattleTaskPool;
 typedef struct BattleActor BattleActor;
 typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
+typedef struct BattleModel BattleModel;
 typedef struct BattleHitDescriptor BattleHitDescriptor;
 typedef void (*BattleHitCallback)(BattleHitDescriptor *descriptor);
 typedef union BattleSceneFlags BattleSceneFlags;
@@ -62,9 +63,14 @@ struct BattleActor {
     s16 speed;
     s16 power;
     s16 defense;
-    u8 unk_00e[0x10];
+    u8 unk_00e[2];
+    s16 base_speed;
+    s16 base_power;
+    s16 base_defense;
+    u8 unk_016[8];
     s16 hit_state;
-    u8 unk_020[4];
+    s16 target_actor_id;
+    u8 unk_022[2];
     u16 flags;
     u8 unk_026[0x46];
     void *resource_slot;
@@ -86,6 +92,11 @@ struct BattleMotionChannel {
     u8 data[0x28];
 };
 
+struct BattleModel {
+    u8 unk_000[0x7C];
+    u32 flags;
+};
+
 struct BattleSceneObject {
     u8 unk_000[4];
     s16 x;
@@ -97,11 +108,12 @@ struct BattleSceneObject {
     u8 unk_010[0x0C];
     BattleMotionChannel motion_channels[4];
     void *resource;
-    void *primary_model;
-    void *alternate_model;
+    BattleModel *primary_model;
+    BattleModel *alternate_model;
     u8 unk_0c8[0x24];
     u16 actor_id;
-    u8 unk_0ee[6];
+    u16 linked_actor_id;
+    u8 unk_0f0[4];
     BattleSceneFlags flags;
 };
 
@@ -159,8 +171,16 @@ FUNCTION_TYPES = {
         "int BattleDamage_CalculateBase(int, int, int);",
     "BattleSceneObject_SetStateFlags":
         "void BattleSceneObject_SetStateFlags(BattleSceneObject *, u8, int);",
+    "BattleSceneObject_SetModelFlag11ById":
+        "void BattleSceneObject_SetModelFlag11ById(int, int);",
+    "BattleSceneObject_SetModelFlag10":
+        "void BattleSceneObject_SetModelFlag10(BattleSceneObject *, int);",
+    "BattleSceneObject_SetModelFlag10ById":
+        "void BattleSceneObject_SetModelFlag10ById(int, int);",
     "BattleSceneObject_GetActiveModel":
-        "void *BattleSceneObject_GetActiveModel(BattleSceneObject *);",
+        "BattleModel *BattleSceneObject_GetActiveModel(BattleSceneObject *);",
+    "BattleSceneObject_GetActiveModelById":
+        "BattleModel *BattleSceneObject_GetActiveModelById(int);",
     "BattleSceneObject_GetMotionChannel":
         "BattleMotionChannel *BattleSceneObject_GetMotionChannel(BattleSceneObject *, int);",
     "BattleSceneObject_SnapshotPosition":
