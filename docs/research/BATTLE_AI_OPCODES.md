@@ -14,8 +14,8 @@ word loads observed from the command-record register (`r5`).
 
 | Opcode | Handler | Aliases | Record offsets | Direct calls |
 |---:|---:|---|---|---|
-| `0x33` | `0x02079C50` | — | `0x8`, `0xC` | `func_ov002_02092184` |
-| `0x34` | `0x02079C7C` | — | `0x8`, `0xC`, `0x10` | `func_ov002_0209210c` |
+| `0x33` | `0x02079C50` | — | `0x8`, `0xC` | `BattleObjectData_AllocateLoadBuffer` |
+| `0x34` | `0x02079C7C` | — | `0x8`, `0xC`, `0x10` | `BattleObjectData_ConfigureLoad` |
 | `0x35` | `0x02079CB4` | — | `0x8`, `0xC`, `0x10` | `BattleObjectData_EnsureLoaded` |
 | `0x36` | `0x02079CE8` | — | `0x8`, `0xC`, `0x10` | `func_ov002_020ad3c4` |
 | `0x37` | `0x02079D38` | — | `0x8`, `0xC`, `0x10` | `func_ov002_02091fd8` |
@@ -23,7 +23,7 @@ word loads observed from the command-record register (`r5`).
 | `0x39` | `0x02079D90` | — | `0x8` | `BattleObjectData_IsLoadPending` |
 | `0x3A` | `0x02079DF8` | — | `0x8` | `BattleObjectData_GetLoadState`, `VM_WriteVariable` |
 | `0x3B` | `0x02079E30` | — | `0x8`, `0xC` | `BattleEntity_BindResource` |
-| `0x3C` | `0x02079E5C` | — | — | `func_ov002_02076c74` |
+| `0x3C` | `0x02079E5C` | — | — | `BattleObjectData_ResetAll` |
 | `0x3D` | `0x02079E70` | — | `0x8`, `0xC`, `0x10` | `BattleSceneObject_GetById`, `BattleSceneObject_GetActiveModel`, `BattleSceneObject_SetAnimation` |
 | `0x3E` | `0x02079EC0` | — | `0x8` | `BattleAI_StartScriptById` |
 | `0x3F` | `0x02079EE0` | — | `0x8`, `0xC` | `BattleAI_StopScriptById` |
@@ -45,7 +45,7 @@ word loads observed from the command-record register (`r5`).
 | `0x4F` | `0x0207A2F0` | — | `0x10`, `0x14` | — |
 | `0x50` | `0x0207A344` | — | `0x8`, `0xC`, `0x10` | `BattleSceneObject_GetById`, `BattlePosition_StoreViewRelative` |
 | `0x51` | `0x0207A444` | — | — | — |
-| `0x52` | `0x0207A454` | — | `0x8`, `0xC`, `0x10`, `0x14` | `func_ov002_02091a90`, `BattleActor_GetById` |
+| `0x52` | `0x0207A454` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleSceneObject_ApplyMovement`, `BattleActor_GetById` |
 | `0x53` | `0x0207A508` | — | `0x8`, `0xC` | `BattleSceneObject_GetById`, `BattlePosition_StoreViewRelative`, `VM_WriteVariable` |
 | `0x54` | `0x0207A5E4` | — | `0x8`, `0xC` | `BattleActor_GetEnemySlot`, `func_ov002_02076ee8`, `VM_WriteVariable` |
 | `0x55` | `0x0207AA50` | — | `0x8`, `0xC`, `0x10` | `BattleActor_GetEnemySlot`, `func_ov002_02076ee8` |
@@ -69,7 +69,7 @@ word loads observed from the command-record register (`r5`).
 | `0x67` | `0x0207B5EC` | — | — | `func_ov002_02078460` |
 | `0x68` | `0x0207B604` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28` | `BattleSceneObject_GetById`, `func_ov002_020a3ebc` |
 | `0x69` | `0x0207B68C` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28` | `BattleSceneObject_GetById`, `func_ov002_020a3dd8` |
-| `0x6A` | `0x0207B714` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28` | `BattleSceneObject_GetById`, `func_ov002_020a3c5c` |
+| `0x6A` | `0x0207B714` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28` | `BattleSceneObject_GetById`, `BattleSceneObject_StartAcceleratedMotionForDuration` |
 | `0x6B` | `0x0207B77C` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28` | `BattleSceneObject_GetById`, `func_ov002_020be478` |
 | `0x6C` | `0x0207B7E4` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28`, `0x2C`, `0x30` | `BattleSceneObject_GetById`, `func_ov002_020be3e8` |
 | `0x6D` | `0x0207B8AC` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28`, `0x2C` | `BattleSceneObject_GetById`, `func_ov002_020a3810` |
@@ -166,8 +166,8 @@ word loads observed from the command-record register (`r5`).
 | `0xC8` | `0x0207D758` | — | `0x8` | `func_0201904c`, `VM_WriteVariable` |
 | `0xC9` | `0x0207D78C` | — | `0x8` | `VM_WriteVariable` |
 | `0xCA` | `0x0207D748` | — | — | — |
-| `0xCB` | `0x0207D898` | — | `0x8`, `0xC` | `func_ov002_0208e0c4` |
-| `0xCC` | `0x0207D8FC` | — | `0x8`, `0xC` | `func_ov002_0208e0c4` |
+| `0xCB` | `0x0207D898` | — | `0x8`, `0xC` | `BattleAI_UpdateControlMask` |
+| `0xCC` | `0x0207D8FC` | — | `0x8`, `0xC` | `BattleAI_UpdateControlMask` |
 | `0xCD` | `0x0207D928` | — | `0x8` | — |
 | `0xCE` | `0x0207D94C` | — | `0x8` | — |
 | `0xCF` | `0x0207D970` | — | — | — |
@@ -186,7 +186,7 @@ word loads observed from the command-record register (`r5`).
 | `0xDC` | `0x0207DEC0` | — | `0x8` | — |
 | `0xDD` | `0x0207DF84` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C` | — |
 | `0xDE` | `0x0207E0CC` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleScript_GetProperty` |
-| `0xDF` | `0x0207E11C` | — | `0x8`, `0xC`, `0x10` | `func_ov002_0208e098` |
+| `0xDF` | `0x0207E11C` | — | `0x8`, `0xC`, `0x10` | `BattleActor_IsHitLocked` |
 | `0xE0` | `0x0207E15C` | — | — | — |
 | `0xE1` | `0x0207E16C` | — | `0x8`, `0xC`, `0x10` | `BattleAI_GetStateById` |
 | `0xE2` | `0x0207E1BC` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleSceneObject_IsAnimationActiveById` |

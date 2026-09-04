@@ -2,7 +2,10 @@
 #define PIT_GAME_BATTLE_CONTEXT_H
 
 #include <game/battle_ai.h>
+#include <game/battle_enemy_data.h>
 #include <game/battle_object.h>
+
+struct BattleActor;
 
 enum BattleContextOffset {
     BATTLE_CONTEXT_BACKGROUND_ID_OFFSET = 0x3A,
@@ -93,9 +96,15 @@ typedef struct BattleRuntimeState {
     BattleRuntimeFlags flags;
     void *object_texture_sources[3];
     BattleObjectTextureCatalog *object_texture_catalogs[3];
-    u8 unknown_3bc[0xD8C];
-    u32 heap_id;
-    u8 unknown_114c[0x0C];
+    u8 unknown_3bc[0x0C];
+    BattleObjectDataLoadState object_data_load_states[72];
+    union {
+        u32 object_data_heap_ids[4];
+        struct {
+            u32 heap_id;
+            u32 unknown_heap_ids[3];
+        };
+    };
     u32 resource_heap_id;
     u8 unknown_115c[4];
     BattleCommonAssetArchive common_assets;
@@ -120,7 +129,9 @@ typedef struct BattleContext {
     u16 texture_body_id;
     u16 texture_tail_id;
     u16 texture_optional_id;
-    u8 unknown_0572[0x6082];
+    u8 unknown_0572[0x5F96];
+    struct BattleActor *enemy_actors[8];
+    u8 unknown_6528[0xCC];
     BattleInterfaceLayer interface_layer_0;
     u8 unknown_6634[0x14];
     BattleInterfaceLayer interface_layer_1;
@@ -138,7 +149,9 @@ typedef struct BattleContext {
     ScriptVm battle_ai_vm;
     u8 unknown_6964[0x669C];
     BattleRuntimeState runtime;
-    u8 unknown_e16c[0x2949C];
+    u8 unknown_e16c[0x743C];
+    BattleEnemyDataRequest enemy_data_requests[8];
+    u8 unknown_25608[0x12000];
     BattleObjectFallbackStorage object_fallback;
 } BattleContext;
 

@@ -17,8 +17,14 @@ enum BattleActorIdRange {
 
 enum BattleActorFlag {
     BATTLE_ACTOR_LEVEL_MASK = 0x007F,
+    BATTLE_ACTOR_FLAG_07 = 0x0080,
     BATTLE_ACTOR_FLAG_KO = 0x0100,
-    BATTLE_ACTOR_FLAG_HIT_LOCK = 0x0200
+    BATTLE_ACTOR_FLAG_HIT_LOCK = 0x0200,
+    BATTLE_ACTOR_FLAG_10 = 0x0400,
+    BATTLE_ACTOR_FLAG_RESOURCE_BOUND = 0x0800,
+    BATTLE_ACTOR_FLAG_12 = 0x1000,
+    BATTLE_ACTOR_FLAG_13 = 0x2000,
+    BATTLE_ACTOR_FLAG_14 = 0x4000
 };
 
 struct BattleActor {
@@ -28,11 +34,14 @@ struct BattleActor {
     s16 speed;
     s16 power;
     s16 defense;
-    u8 unk_00e[2];
+    s16 unk_00e;
     s16 base_speed;
     s16 base_power;
     s16 base_defense;
-    u8 unk_016[8];
+    s16 unk_016;
+    s16 unk_018;
+    s16 unk_01a;
+    s16 unk_01c;
     s16 pending_damage;
     s16 target_actor_id;
     u8 unk_022[2];
@@ -68,9 +77,31 @@ typedef struct BattlePartyActor {
     u16 linked_object_id;
 } BattlePartyActor;
 
+typedef struct BattleEnemyActor {
+    BattleActor actor;
+    u8 unknown_070[0x22A];
+    u16 resource_initialized;
+    union {
+        u32 state_flags;
+        struct {
+            u32 flag_00 : 1;
+            u32 flag_01 : 1;
+            u32 flag_02 : 1;
+            u32 flag_03 : 1;
+            u32 flag_04 : 1;
+            u32 flag_05 : 1;
+            u32 traits : 2;
+            u32 unknown_08_31 : 24;
+        } state_flag_bits;
+    };
+} BattleEnemyActor;
+
 typedef char BattleActor_SizeCheck[sizeof(BattleActor) == 0x70 ? 1 : -1];
 typedef char BattlePartyActor_SizeCheck[
     sizeof(BattlePartyActor) == 0x84 ? 1 : -1
+];
+typedef char BattleEnemyActor_SizeCheck[
+    sizeof(BattleEnemyActor) == 0x2A0 ? 1 : -1
 ];
 
 #ifdef __cplusplus

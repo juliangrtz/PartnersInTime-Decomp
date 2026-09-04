@@ -167,11 +167,14 @@ The adjacent `BattleSceneObject_ApplyMovement` dispatcher at `0x02091A90`
 is byte-matching C too. It validates the object ID and maps seven script-facing
 movement modes onto immediate positioning, relative and absolute interpolation,
 two ballistic solvers, target-relative motion, and configurable acceleration.
-The remaining general battle object-data path is symbolic: its 48-byte state
+The general battle object-data path is now matching C: its 48-byte state
 lookup, asynchronous queue setup, duplicate-resource guard, ordinary-slot
-routing, and selection of eight large enemy-load slots are exposed by the
-functions at `0x02077058`, `0x02089EEC`, and `0x02092048`. The four callbacks
-that actually fill each large enemy-data slot are matching C below.
+routing, selection of eight large enemy-load slots, load configuration, and
+four heap-backed allocation groups are exposed by the functions at
+`0x02077058`, `0x02089EEC`, and the contiguous `0x02091C20`-`0x020922DC`
+block. The latter also binds loaded scene resources and initializes enemy HP,
+POW, DEF, SPD, level, and trait state. The four callbacks that fill each large
+enemy-data slot are matching C below.
 `BattleObjectData_CopyResource` at `0x02089320` is linked matching C. It uses
 the original overlap-safe forward/backward copy helpers, adjusts the copied
 length around an active stream writer, rebases five internal component

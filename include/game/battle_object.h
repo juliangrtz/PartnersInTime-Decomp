@@ -132,7 +132,16 @@ struct BattleObjectTextureSet {
             u8 unknown_01_07 : 7;
         } bits;
     } flags;
-    u8 unknown_08[0x0C];
+    u8 unknown_08;
+    s8 scene_property_0fc;
+    s8 scene_property_0fd;
+    s8 scene_property_0f8;
+    s8 scene_property_0fe;
+    s8 scene_property_0ff;
+    s8 scene_property_0fa;
+    s8 scene_property_100;
+    s8 scene_property_101;
+    u8 unknown_11[3];
 };
 
 typedef struct BattleObjectTextureVariant {
@@ -199,13 +208,18 @@ extern "C" {
 #endif
 
 BattleObjectDataLoadState *BattleObjectData_GetLoadState(int object_data_id);
-int BattleObjectData_AllocateLoadBuffer(int object_data_id, u32 size);
-int BattleObjectData_ConfigureLoad(int object_data_id, int resource_index,
-                                   int compressed);
+void BattleEntity_BindResource(u32 actor_id, u16 object_data_id);
+void BattleObjectData_AllocateLoadBuffer(int object_data_id, u32 size);
+void BattleObjectData_ConfigureLoad(int object_data_id, int resource_index,
+                                    int compressed);
 struct BattleQueuedTask *BattleObjectData_QueueLoad(
     BattleObjectDataLoadState *load_state, s32 resource_id);
 struct BattleQueuedTask *BattleObjectData_QueueLoadAndMarkPending(
     BattleObjectDataLoadState *load_state, s32 resource_id);
+struct BattleQueuedTask *func_ov002_02091f68(int object_data_id,
+                                             s32 resource_id);
+struct BattleQueuedTask *func_ov002_02091fd8(int object_data_id,
+                                             s32 resource_id);
 void BattleObjectData_BeginRebuildTask(struct BattleQueuedTask *task);
 void BattleObjectData_RebuildNextComponentTask(struct BattleQueuedTask *task);
 int BattleObjectData_UploadSpriteTask(BattleObjectUploadTask *task);

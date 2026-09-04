@@ -29,7 +29,6 @@ typedef struct BattlePartyFormationTask {
 typedef char BattlePartyFormationTask_SizeCheck
     [sizeof(BattlePartyFormationTask) == 0x14 ? 1 : -1];
 
-void BattleEntity_BindResource(int actor_id, u16 object_data_id);
 int BattleParty_SpawnLaunchImpact(BattleActor *actor);
 
 int BattleParty_UpdateFormationTransition(BattleAITask *task);

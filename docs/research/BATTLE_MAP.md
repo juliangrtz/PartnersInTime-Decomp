@@ -41,7 +41,13 @@ and runtime overlay 2.
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
 | `02091A90` | `BattleSceneObject_ApplyMovement` | Dispatches one of seven scene-object movement modes |
+| `02091C20` | `BattleEntity_BindResource` | Binds an ordinary visual resource or initializes an enemy actor from loaded stats |
 | `02091EDC` | `BattleObjectData_IsLoadPending` | Tests pending state for ordinary and large enemy data slots |
+| `02091F68` | `func_ov002_02091f68` | Validates an ordinary slot and queues its alternate archive-load path |
+| `02091FD8` | `func_ov002_02091fd8` | Validates an ordinary slot and queues a load with flag 29 set |
+| `02092048` | `BattleObjectData_EnsureLoaded` | Suppresses duplicate loads and routes ordinary versus enemy data requests |
+| `0209210C` | `BattleObjectData_ConfigureLoad` | Stores the packed resource index and configurable flag 28 |
+| `02092184` | `BattleObjectData_AllocateLoadBuffer` | Selects a slot heap, allocates its payload, and initializes stream state |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -706,10 +712,14 @@ structured C draft beside this unit. Its component layout, allocation bounds,
 100-byte stream workspace, and pending-load behavior are recovered; it remains
 on the reference object because MWCC orders two equivalent conditional moves
 differently. This localized compiler match is the only known code difference.
-`BattleEntity_BindResource` is maintained too: its enemy branch
+The contiguous resource-control block from `0x02091C20` through `0x020922DC`
+is linked byte-identical C. `BattleEntity_BindResource`'s enemy branch
 copies max/current HP, base/current POW, DEF, and SPD, installs level/trait
 bits, and clears transient actor flags; its party branch binds the corresponding
-scene-object resource record.
+scene-object resource record. The following six functions expose ordinary and
+enemy pending-state checks, guarded queue entry points, duplicate suppression,
+packed load configuration, four heap groups, the slot-51 allocation override,
+and initialization of the 100-byte streaming workspace.
 
 ## Large native dispatchers
 

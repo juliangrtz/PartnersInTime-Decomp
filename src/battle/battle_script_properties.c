@@ -46,17 +46,7 @@ typedef struct BattleEnemyScriptPropertyView {
     u32 flags_29c;
 } BattleEnemyScriptPropertyView;
 
-typedef struct BattleSceneObjectScriptPropertyView {
-    BattleSceneObject object;
-    s16 property_0f8;
-    s16 property_0fa;
-    s8 property_0fc;
-    s8 property_0fd;
-    s8 property_0fe;
-    s8 property_0ff;
-    s8 property_100;
-    s8 property_101;
-} BattleSceneObjectScriptPropertyView;
+typedef BattleSceneObject BattleSceneObjectScriptPropertyView;
 
 typedef char BattlePositionRecord_SizeCheck[
     sizeof(BattlePositionRecord) == 0x14 ? 1 : -1];
