@@ -581,6 +581,15 @@ active model's animation-layer method at virtual slot `0x88`, and resolve the
 `0x4000`, `0x8000`, and `0xC000` battle-handle families. The enemy-removal
 path also confirms a 20-byte position record at context offset `+0xCAD8` and
 its view origin at `+0xCB9C/+0xCB9E`.
+`BattleGlobalProperty_Get` at `0x0208E494` is byte-identical C for battle-AI
+opcode `0x46`. Its 34-value namespace exposes the active party and target
+actors, save-backed map state, background ID and fade progress, shared masks,
+and individual runtime flags. Unknown properties retain numeric names pending
+script analysis or runtime observation. The paired 1,304-byte
+`BattleGlobalProperty_Set` is maintained as structured C and reproduces every
+opcode and side effect, including hit-descriptor invalidation and background
+reloads; it remains on the reference object because MWCC selects different
+registers for eleven instructions in the final fade-toggle case.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds

@@ -33,8 +33,8 @@ word loads observed from the command-record register (`r5`).
 | `0x43` | `0x0207A0FC` | — | `0x8` | — |
 | `0x44` | `0x0207A124` | — | `0x8` | — |
 | `0x45` | `0x0207A148` | — | — | — |
-| `0x46` | `0x0207A164` | — | `0x8` | `func_ov002_0208e494`, `VM_WriteVariable` |
-| `0x47` | `0x0207A198` | — | `0x8`, `0xC` | `func_ov002_0208e878` |
+| `0x46` | `0x0207A164` | — | `0x8` | `BattleGlobalProperty_Get`, `VM_WriteVariable` |
+| `0x47` | `0x0207A198` | — | `0x8`, `0xC` | `BattleGlobalProperty_Set` |
 | `0x48` | `0x0207A1BC` | — | `0x8`, `0xC` | `BattleActor_FindHighestHpEnemy`, `BattleActor_FindLowestHpEnemy`, `BattleActor_FindMostDamagedEnemy`, `VM_WriteVariable` |
 | `0x49` | `0x0207A234` | — | — | — |
 | `0x4A` | `0x0207A244` | — | — | `VM_WriteVariable` |
