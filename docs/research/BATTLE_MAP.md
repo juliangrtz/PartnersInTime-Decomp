@@ -48,6 +48,8 @@ and runtime overlay 2.
 | `02092048` | `BattleObjectData_EnsureLoaded` | Suppresses duplicate loads and routes ordinary versus enemy data requests |
 | `0209210C` | `BattleObjectData_ConfigureLoad` | Stores the packed resource index and configurable flag 28 |
 | `02092184` | `BattleObjectData_AllocateLoadBuffer` | Selects a slot heap, allocates its payload, and initializes stream state |
+| `020927A0` | `BattleTexture_EncodeHeight` | Encodes an 8-1024-pixel T dimension for `G3_TEXIMAGE_PARAM` |
+| `0209285C` | `BattleTexture_EncodeWidth` | Encodes an 8-1024-pixel S dimension for `G3_TEXIMAGE_PARAM` |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
