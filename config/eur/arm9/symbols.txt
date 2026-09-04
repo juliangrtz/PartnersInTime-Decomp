@@ -1736,7 +1736,7 @@ gItemRecords kind:data(any) addr:0x02050044
 data_02050046 kind:data(any) addr:0x02050046
 data_0205004a kind:data(any) addr:0x0205004a
 data_0205004d kind:data(any) addr:0x0205004d
-data_0205015c kind:data(any) addr:0x0205015c
+gActionItemRecords kind:data(any) addr:0x0205015c
 data_0205015e kind:data(any) addr:0x0205015e
 data_02050162 kind:data(any) addr:0x02050162
 data_02050165 kind:data(any) addr:0x02050165

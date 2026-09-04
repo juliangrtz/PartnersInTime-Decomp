@@ -169,6 +169,11 @@ movement modes onto immediate positioning, relative and absolute interpolation,
 two ballistic solvers, target-relative motion, and configurable acceleration.
 The adjacent texture-size encoders at `0x020927A0` and `0x0209285C` are
 byte-matching C and expose the DS `G3_TEXIMAGE_PARAM` T/S dimension codes.
+The next matching interface-resource block at `0x02092918`-`0x02092B8C`
+selects localized names for typed ordinary/Bros. item IDs, chooses the command
+menu variant from the active party formation, and refreshes the target-label
+layer. Its item-record declarations also document the proven 20- and 28-byte
+resident table strides and the interface-resource field at offset `0x06`.
 The general battle object-data path is now matching C: its 48-byte state
 lookup, asynchronous queue setup, duplicate-resource guard, ordinary-slot
 routing, selection of eight large enemy-load slots, load configuration, and

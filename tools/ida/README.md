@@ -44,6 +44,14 @@ companion disassembly helper:
   'build/ida/PiT_eur_ov002_battle.i64'
 ```
 
+To identify the containing function and incoming/outgoing code references for
+one or more runtime addresses:
+
+```powershell
+& $ida '-A' '-Stools/ida/inspect_address.py 0x02092918 0x02092A2C' `
+  'build/ida/PiT_eur_ov002_battle.i64'
+```
+
 The resident ARM9 image can be imported in the same way. This database is the
 useful companion for the generic script VM, save logic, item tables, and engine
 code outside overlays:

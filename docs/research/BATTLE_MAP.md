@@ -50,6 +50,9 @@ and runtime overlay 2.
 | `02092184` | `BattleObjectData_AllocateLoadBuffer` | Selects a slot heap, allocates its payload, and initializes stream state |
 | `020927A0` | `BattleTexture_EncodeHeight` | Encodes an 8-1024-pixel T dimension for `G3_TEXIMAGE_PARAM` |
 | `0209285C` | `BattleTexture_EncodeWidth` | Encodes an 8-1024-pixel S dimension for `G3_TEXIMAGE_PARAM` |
+| `02092918` | `BattleInterface_LoadItemName` | Resolves typed ordinary/Bros. item IDs and refreshes the localized item-name layer |
+| `02092A2C` | `BattleInterface_LoadCommandMenu` | Selects a command-menu resource from the active party member and formation mode |
+| `02092B04` | `BattleInterface_LoadTargetLabelResource` | Loads a target-label resource and refreshes its interface layer |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
