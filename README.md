@@ -69,7 +69,7 @@ ignored by Git.
   Extended-channel allocation, ADSR progression, PCM/PSG/noise voice startup,
   mixer calculations, and staged register updates are symbolic too.
 - Maintained high-level source now includes the original Nitro math unit and
-  thirteen byte-matching overlay-2 battle functions: six battle-AI/state
+  sixteen byte-matching overlay-2 battle functions: nine battle-AI/state
   helpers and the seven-function generic task-pool unit. The remaining game
   functions stay in symbolic assembly until an equivalent C translation
   reproduces their original code and layout.
