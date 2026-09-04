@@ -10,3 +10,6 @@ src/nitro/math/fx_coprocessor.c:
 
 src/game/script_vm.c:
     .text       start:0x020071b0 end:0x020072e8
+
+src/game/script_vm_control.c:
+    .text       start:0x020063a4 end:0x02006508
