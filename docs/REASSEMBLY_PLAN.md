@@ -165,6 +165,11 @@ lookup, asynchronous queue setup, duplicate-resource guard, ordinary-slot
 routing, and selection of eight large enemy-load slots are exposed by the
 functions at `0x02077058`, `0x02089EEC`, and `0x02092048`. The four callbacks
 that actually fill each large enemy-data slot are matching C below.
+`BattleObjectData_CopyResource` at `0x02089320` is linked matching C. It uses
+the original overlap-safe forward/backward copy helpers, adjusts the copied
+length around an active stream writer, rebases five internal component
+pointers, and carries only the two appropriate source flags into the existing
+destination slot before scheduling its resource upload.
 The party knockout task pair at `0x020A90F4` and `0x020A9280` now exposes
 status clearing, animation completion, actor/global locks, form-specific sound
 pairs, linked-character movement and the follow-up character-load callbacks.

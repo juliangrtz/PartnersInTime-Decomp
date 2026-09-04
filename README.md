@@ -86,7 +86,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
   High-level source also includes
-  ninety-nine byte-matching overlay-2 battle functions: twenty-nine
+  one hundred byte-matching overlay-2 battle functions: twenty-nine
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
   and four actor HP/lookup
   helpers plus status eligibility, base damage, the central HP/KO primitive,
@@ -109,6 +109,9 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   Four matching enemy-data functions select one editable 44-byte `BDataMon`
   record, load its referenced object payload into a typed 0x200C-byte request,
   and fix its stat/object pointers after the asynchronous reads complete.
+  The matching object-resource copier performs overlap-safe payload copies,
+  rebases five embedded component pointers, preserves destination ownership
+  fields, and schedules the resource upload when required.
   The remaining game
   functions stay in symbolic assembly until an equivalent C translation
   reproduces their original code and layout. The adjacent two-function party

@@ -1,12 +1,12 @@
 #ifndef PIT_GAME_BATTLE_SCENE_H
 #define PIT_GAME_BATTLE_SCENE_H
 
+#include <game/battle_object.h>
 #include <nitro.h>
 
 typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleModel BattleModel;
-typedef struct BattleSceneResource BattleSceneResource;
 typedef void (*BattleMotionCallback)(BattleSceneObject *object,
                                      BattleMotionChannel *channel);
 
@@ -55,14 +55,6 @@ struct BattleModel {
     s16 animation_id;
     u8 unk_056[0x26];
     u32 flags;
-};
-
-struct BattleSceneResource {
-    u8 unknown_000[0x20];
-    u16 object_data_id;
-    u8 unknown_022[2];
-    s32 resource_id;
-    u32 allocation_size;
 };
 
 struct BattleSceneObject {
