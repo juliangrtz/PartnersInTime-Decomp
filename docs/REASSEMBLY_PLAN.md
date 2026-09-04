@@ -173,6 +173,15 @@ destination slot before scheduling its resource upload.
 The adjacent `BattleObjectData_QueueLoadAndMarkPending` wrapper at `0x02089300`
 also matches; it forwards the destination and resource ID to the common loader
 and sets resource flag 29 while preserving the returned queue-task handle.
+The preceding `BattleObjectData_BeginRebuildTask` and
+`BattleObjectData_RebuildNextComponentTask` callbacks at `0x020891D8` and
+`0x020890B4` are linked matching source as well. They allocate and configure a
+440-byte polymorphic resource model, derive its component count, serialize one
+component per task tick through the shared stream writer, populate the leading
+component-pointer table, clear both processing flags, and initialize the
+remaining 100-byte stream workspace. This unit is intentionally C++: expressing
+the three original virtual calls as actual member calls reproduces Metrowerks'
+implicit-`this` register scheduling without inline assembly.
 The party knockout task pair at `0x020A90F4` and `0x020A9280` now exposes
 status clearing, animation completion, actor/global locks, form-specific sound
 pairs, linked-character movement and the follow-up character-load callbacks.
