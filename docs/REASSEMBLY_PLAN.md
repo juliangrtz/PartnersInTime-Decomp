@@ -160,10 +160,11 @@ slots used by reaction state machines. Their full `BattleSceneObject_SetAnimatio
 producer at `0x02091198` is maintained too: it classifies party/enemy objects,
 creates or retires models, selects party status/HP animation variants, handles
 linked party forms, and notifies the scene after resource changes.
-The battle object-data load path is symbolic as well: its 48-byte state lookup,
-asynchronous queue setup, duplicate-resource guard, ordinary-slot routing, and
-eight large enemy-load slots are exposed by the functions at `0x02077058`,
-`0x02089EEC`, and `0x02092048`.
+The remaining general battle object-data path is symbolic: its 48-byte state
+lookup, asynchronous queue setup, duplicate-resource guard, ordinary-slot
+routing, and selection of eight large enemy-load slots are exposed by the
+functions at `0x02077058`, `0x02089EEC`, and `0x02092048`. The four callbacks
+that actually fill each large enemy-data slot are matching C below.
 The party knockout task pair at `0x020A90F4` and `0x020A9280` now exposes
 status clearing, animation completion, actor/global locks, form-specific sound
 pairs, linked-character movement and the follow-up character-load callbacks.
@@ -313,13 +314,14 @@ experience caps. `BattleParty_StartFormationTransition` and
 source unit with equivalent control flow and exact function sizes. Until their
 remaining compiler register-allocation differences are eliminated, the linker
 keeps the original delinked object for those two functions.
-`BattleTaskQueue_Enqueue` at `0x020726B0`,
-`BattleEnemyData_RequestLoad` at `0x0208908C`, and
-`BattleEnemyData_LoadStatRecord` at `0x02088FB8` symbolically enqueue the
+`BattleTaskQueue_Enqueue` at `0x020726B0` is matching C. The four-function
+enemy-data pipeline at `0x02088EF4`-`0x020890B4` is linked matching C as well:
+`BattleEnemyData_RequestLoad` and `BattleEnemyData_LoadStatRecord` enqueue the
 request and select one 44-byte `BDataMon.dat` record. The adjacent
 `BattleEnemyData_LoadObjectData` and `BattleEnemyData_FixupObjectPointers`
-stages are maintained too, covering the variable-sized object read and its
-offset-to-pointer conversion. `BattleObjectData_ResolveSlot` at `0x0209234C`
+stages cover the 8,148-byte object read and its offset-to-pointer conversion.
+The typed 0x200C-byte request exposes its selected stat record and object-data
+pointers without checking either payload into Git. `BattleObjectData_ResolveSlot` at `0x0209234C`
 decodes packed object IDs into 44-byte runtime descriptors.
 `BattleEntity_BindResource` at `0x02091C20` now exposes the party-resource
 binding branch plus enemy HP, POW, DEF, SPD, level, trait, and initial-flag
