@@ -6,6 +6,10 @@
 #include <game/save_data.h>
 
 enum BattlePartyHpPanelConstant {
+    BATTLE_PARTY_HP_PANEL_MARIO_OFFSET = 0x6578,
+    BATTLE_PARTY_HP_PANEL_LUIGI_OFFSET = 0x6594,
+    BATTLE_PARTY_HP_PANEL_BABY_MARIO_OFFSET = 0x65B0,
+    BATTLE_PARTY_HP_PANEL_BABY_LUIGI_OFFSET = 0x65CC,
     BATTLE_PARTY_HP_PANEL_OBJECT_OFFSET = 0x65E8,
     BATTLE_PARTY_HP_PANEL_TEXTURE_FRAME_OFFSET = 0x68D0,
     BATTLE_VIEW_X_OFFSET = 0xCB9C,
@@ -13,29 +17,25 @@ enum BattlePartyHpPanelConstant {
     SAVE_PARTY_FORM_OFFSET = 0x558
 };
 
-typedef struct BattlePartyHpPanelNumberEffect {
+typedef struct BattlePartyHpCounterEffect {
     u8 unknown_00[0x16];
     s16 y_offset;
-} BattlePartyHpPanelNumberEffect;
-
-typedef struct BattlePartyHpPanelAnchor {
-    u8 unknown_00[0x0E];
-    s16 x;
-    s16 y;
-    s16 size;
-} BattlePartyHpPanelAnchor;
+    u8 unknown_18[4];
+    s32 displayed_hp;
+} BattlePartyHpCounterEffect;
 
 typedef struct BattlePartyHpPanelState {
     BattleSceneObject *scene_object;
     s16 intensity;
-    s16 visible;
+    s16 requested_layout;
     u16 actor_id;
     s16 displayed_hp;
-    u8 unknown_0c[4];
+    s16 target_hp;
+    s16 hp_transition_frames;
     s16 y;
-    s16 layout;
-    BattlePartyHpPanelNumberEffect *number_effect;
-    BattlePartyHpPanelAnchor *anchor;
+    s16 active_layout;
+    BattlePartyHpCounterEffect *hp_counter_effect;
+    BattleEffect *low_hp_effect;
 } BattlePartyHpPanelState;
 
 typedef union BattlePartyHpPanelTransform {
@@ -55,6 +55,186 @@ extern void func_0202cc58(const void *source, void *destination, u32 size);
 extern void func_0202cd2c(const void *source, void *destination, u32 size);
 extern void DC_FlushRange(const void *start, u32 size);
 extern void func_01ff861c(int channel, void *source, u32 size);
+
+void BattlePartyHpPanel_UpdateMember(BattlePartyHpPanelState *state) {
+    int requested_layout;
+    int active_layout;
+    int y;
+    int current_hp;
+    int displayed_hp;
+
+    if (BattleRender_UpdateIntensity(
+            state->requested_layout, &state->intensity) == 0) {
+        goto close_panel;
+    }
+
+    requested_layout = state->requested_layout;
+    active_layout = state->active_layout;
+    if (active_layout != requested_layout) {
+        if (active_layout == 0) {
+            state->y = 44;
+        }
+
+        y = state->y;
+        if (y > 44) {
+            state->y = y - 4;
+        } else if (y < 44) {
+            state->y = y + 4;
+        }
+
+        if (state->y == 44) {
+            state->active_layout = state->requested_layout;
+            if (state->requested_layout == 2) {
+                if (state == (BattlePartyHpPanelState *)(
+                                 gBattleContext +
+                                 BATTLE_PARTY_HP_PANEL_MARIO_OFFSET)) {
+                    *(s16 *)(gBattleContext + 0x6500 + 0xB6) = 2;
+                    *(s16 *)(gBattleContext + 0x6500 + 0xC0) = 44;
+                }
+                if (state == (BattlePartyHpPanelState *)(
+                                 gBattleContext +
+                                 BATTLE_PARTY_HP_PANEL_LUIGI_OFFSET)) {
+                    *(s16 *)(gBattleContext + 0x6500 + 0xD2) = 2;
+                    *(s16 *)(gBattleContext + 0x6500 + 0xDC) = 44;
+                }
+            }
+        }
+    } else {
+        if (requested_layout == 3) {
+            goto close_panel;
+        }
+
+        y = state->y;
+        if (y > 0) {
+            state->y = y - 4;
+            state->displayed_hp = state->target_hp;
+        } else if (y < 0) {
+            state->y = y + 4;
+        }
+    }
+
+    if (*(s16 *)(gSaveData + SAVE_PARTY_FORM_OFFSET) == 2 &&
+        state->active_layout == 2) {
+        if (((BattlePartyActor *)BattleActor_GetPartySlot(
+                 BATTLE_ACTOR_MARIO))->formation_index ==
+            PARTY_MEMBER_BABY_MARIO) {
+            if (state == (BattlePartyHpPanelState *)(
+                             gBattleContext +
+                             BATTLE_PARTY_HP_PANEL_MARIO_OFFSET)) {
+                state->actor_id = BATTLE_ACTOR_BABY_MARIO;
+            }
+            if (state == (BattlePartyHpPanelState *)(
+                             gBattleContext +
+                             BATTLE_PARTY_HP_PANEL_BABY_MARIO_OFFSET)) {
+                state->actor_id = BATTLE_ACTOR_MARIO;
+            }
+        } else {
+            if (state == (BattlePartyHpPanelState *)(
+                             gBattleContext +
+                             BATTLE_PARTY_HP_PANEL_MARIO_OFFSET)) {
+                state->actor_id = BATTLE_ACTOR_MARIO;
+            }
+            if (state == (BattlePartyHpPanelState *)(
+                             gBattleContext +
+                             BATTLE_PARTY_HP_PANEL_BABY_MARIO_OFFSET)) {
+                state->actor_id = BATTLE_ACTOR_BABY_MARIO;
+            }
+        }
+
+        if (((BattlePartyActor *)BattleActor_GetPartySlot(
+                 BATTLE_ACTOR_LUIGI))->formation_index ==
+            PARTY_MEMBER_BABY_LUIGI) {
+            if (state == (BattlePartyHpPanelState *)(
+                             gBattleContext +
+                             BATTLE_PARTY_HP_PANEL_LUIGI_OFFSET)) {
+                state->actor_id = BATTLE_ACTOR_BABY_LUIGI;
+            }
+            if (state == (BattlePartyHpPanelState *)(
+                             gBattleContext +
+                             BATTLE_PARTY_HP_PANEL_BABY_LUIGI_OFFSET)) {
+                state->actor_id = BATTLE_ACTOR_LUIGI;
+            }
+        } else {
+            if (state == (BattlePartyHpPanelState *)(
+                             gBattleContext +
+                             BATTLE_PARTY_HP_PANEL_LUIGI_OFFSET)) {
+                state->actor_id = BATTLE_ACTOR_LUIGI;
+            }
+            if (state == (BattlePartyHpPanelState *)(
+                             gBattleContext +
+                             BATTLE_PARTY_HP_PANEL_BABY_LUIGI_OFFSET)) {
+                state->actor_id = BATTLE_ACTOR_BABY_LUIGI;
+            }
+        }
+    } else if (state == (BattlePartyHpPanelState *)(
+                            gBattleContext +
+                            BATTLE_PARTY_HP_PANEL_MARIO_OFFSET)) {
+        state->actor_id = BATTLE_ACTOR_MARIO;
+    } else if (state == (BattlePartyHpPanelState *)(
+                            gBattleContext +
+                            BATTLE_PARTY_HP_PANEL_LUIGI_OFFSET)) {
+        state->actor_id = BATTLE_ACTOR_LUIGI;
+    } else if (state == (BattlePartyHpPanelState *)(
+                            gBattleContext +
+                            BATTLE_PARTY_HP_PANEL_BABY_MARIO_OFFSET)) {
+        state->actor_id = 0;
+    } else if (state == (BattlePartyHpPanelState *)(
+                            gBattleContext +
+                            BATTLE_PARTY_HP_PANEL_BABY_LUIGI_OFFSET)) {
+        state->actor_id = 0;
+    }
+
+    if (state->actor_id == 0) {
+        goto close_panel;
+    }
+
+    current_hp = BattleActor_GetPartySlot(state->actor_id)->current_hp;
+    if (state->target_hp != current_hp) {
+        state->target_hp = current_hp;
+        state->hp_transition_frames = 20;
+    }
+    if (state->hp_transition_frames > 0) {
+        displayed_hp = state->displayed_hp;
+        state->displayed_hp = displayed_hp +
+            (state->target_hp - displayed_hp) /
+            state->hp_transition_frames;
+        state->hp_transition_frames--;
+    } else {
+        state->displayed_hp = state->target_hp;
+        state->hp_transition_frames = 0;
+    }
+
+    if (BattleActor_IsHpAtMostQuarter(
+            BattleActor_GetById(state->actor_id)) &&
+        BattleActor_GetPartySlot(state->actor_id)->current_hp > 0) {
+        if (state->low_hp_effect == 0) {
+            state->low_hp_effect = BattleSpriteEffect_Spawn(
+                506, -100, -100, 0, 256);
+            *(u16 *)((u8 *)state->low_hp_effect + 0x14) |= 0x4000;
+            *(u32 *)((u8 *)state->low_hp_effect + 0x24) = 0xA00;
+        }
+        return;
+    }
+
+    if (state->low_hp_effect != 0) {
+        state->low_hp_effect->update_callback = 0;
+        state->low_hp_effect = 0;
+    }
+    if (state->hp_counter_effect != 0) {
+        state->hp_counter_effect->displayed_hp = state->displayed_hp;
+    }
+    return;
+
+close_panel:
+    if (state->low_hp_effect != 0) {
+        state->low_hp_effect->update_callback = 0;
+        state->low_hp_effect = 0;
+    }
+    if (state->hp_counter_effect != 0) {
+        *(void **)((u8 *)state->hp_counter_effect + 4) = 0;
+        state->hp_counter_effect = 0;
+    }
+}
 
 void BattlePartyHpPanel_Draw(BattlePartyHpPanelState *state) {
     BattlePartyHpPanelTransform transform;
@@ -99,7 +279,7 @@ void BattlePartyHpPanel_Draw(BattlePartyHpPanelState *state) {
 
     transform = gBattlePartyHpPanelTransformTemplate;
     transform.value.y = state->y << 8;
-    if (state->layout == 2) {
+    if (state->active_layout == 2) {
         int current_x;
         int current_y;
 
@@ -123,8 +303,8 @@ void BattlePartyHpPanel_Draw(BattlePartyHpPanelState *state) {
             str r1, [sp, #0x40]
         }
 
-        if (state->number_effect != 0) {
-            state->number_effect->y_offset = -8;
+        if (state->hp_counter_effect != 0) {
+            state->hp_counter_effect->y_offset = -8;
         } else {
             BattleNumber_DrawDecimal(
                 state->displayed_hp, intensity, &transform.value,
@@ -195,7 +375,7 @@ void BattlePartyHpPanel_Draw(BattlePartyHpPanelState *state) {
         transform.value.x += 3072;
         transform.value.y -= 1024;
         transform.value.scale -= 2;
-        if (state->number_effect == 0) {
+        if (state->hp_counter_effect == 0) {
             BattleNumber_DrawDecimal(
                 state->displayed_hp, intensity, &transform.value,
                 0, 0x7FFF, 0, 0);
@@ -210,14 +390,14 @@ void BattlePartyHpPanel_Draw(BattlePartyHpPanelState *state) {
         }
     }
 
-    if (state->anchor != 0) {
-        state->anchor->x =
+    if (state->low_hp_effect != 0) {
+        state->low_hp_effect->x =
             aligned_x / 256 + 2 +
             *(s16 *)(gBattleContext + BATTLE_VIEW_X_OFFSET);
-        state->anchor->y =
+        state->low_hp_effect->y =
             aligned_y / 256 +
             *(s16 *)(gBattleContext + BATTLE_VIEW_Y_OFFSET);
-        state->anchor->size = 8;
+        state->low_hp_effect->z = 8;
     }
 }
 
@@ -229,7 +409,7 @@ void BattlePartyHpPanel_Update(BattlePartyHpPanelState *state) {
     }
 
     intensity = state->intensity;
-    if (state->visible != 0) {
+    if (state->requested_layout != 0) {
         if (state->scene_object->primary_model->
                 flag_bits.panel_animation_trigger != 0 &&
             state->scene_object->primary_model->animation_id == 0) {
