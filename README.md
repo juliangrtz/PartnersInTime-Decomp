@@ -10,6 +10,14 @@ editable non-graphical text and data tables are versioned. You must supply your
 own matching ROM for verification and packaging. Generated sources and build
 outputs stay below `build/`, which is ignored by Git.
 
+## Decompilation progress
+
+[![Mario & Luigi: Partners in Time decompilation progress](docs/progress.svg)](docs/PROGRESS.md)
+
+The headline percentage counts byte-matching C against mapped ARM9 code.
+Maintained symbolic assembly is shown separately and does not count as C.
+See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
+
 ## Current status
 
 - The upstream `dsd` project layout covers the European and US ARM9, ITCM,

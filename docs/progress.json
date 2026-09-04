@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "version": "eur",
+  "scope": "DSD ranges marked as ARM9 code; BSS, assets, and ARM7 mixed images are excluded",
+  "totals": {
+    "mapped_code_bytes": 1563700,
+    "matching_c_bytes": 4356,
+    "symbolic_asm_bytes": 30200,
+    "remaining_bytes": 1529144,
+    "matching_c_percent": 0.2786,
+    "source_coverage_percent": 2.2099,
+    "arm7_symbolic_bytes": 43852
+  },
+  "components": [
+    {
+      "id": "arm9",
+      "label": "ARM9 resident",
+      "mapped_code_bytes": 282376,
+      "matching_c_bytes": 680,
+      "symbolic_asm_bytes": 260,
+      "remaining_bytes": 281436,
+      "function_symbols": 1616
+    },
+    {
+      "id": "itcm",
+      "label": "ARM9 ITCM",
+      "mapped_code_bytes": 1940,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 1940,
+      "function_symbols": 13
+    },
+    {
+      "id": "arm9_ov000",
+      "label": "Overlay 00",
+      "mapped_code_bytes": 366712,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 366712,
+      "function_symbols": 725
+    },
+    {
+      "id": "arm9_ov002",
+      "label": "Overlay 02",
+      "mapped_code_bytes": 362436,
+      "matching_c_bytes": 3676,
+      "symbolic_asm_bytes": 29940,
+      "remaining_bytes": 328820,
+      "function_symbols": 839
+    },
+    {
+      "id": "arm9_ov005",
+      "label": "Overlay 05",
+      "mapped_code_bytes": 16760,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 16760,
+      "function_symbols": 204
+    },
+    {
+      "id": "arm9_ov006",
+      "label": "Overlay 06",
+      "mapped_code_bytes": 66492,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 66492,
+      "function_symbols": 245
+    },
+    {
+      "id": "arm9_ov007",
+      "label": "Overlay 07",
+      "mapped_code_bytes": 142264,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 142264,
+      "function_symbols": 390
+    },
+    {
+      "id": "arm9_ov008",
+      "label": "Overlay 08",
+      "mapped_code_bytes": 54068,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 54068,
+      "function_symbols": 135
+    },
+    {
+      "id": "arm9_ov009",
+      "label": "Overlay 09",
+      "mapped_code_bytes": 78984,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 78984,
+      "function_symbols": 246
+    },
+    {
+      "id": "arm9_ov010",
+      "label": "Overlay 10",
+      "mapped_code_bytes": 6820,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 6820,
+      "function_symbols": 30
+    },
+    {
+      "id": "arm9_ov011",
+      "label": "Overlay 11",
+      "mapped_code_bytes": 13372,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 13372,
+      "function_symbols": 38
+    },
+    {
+      "id": "arm9_ov012",
+      "label": "Overlay 12",
+      "mapped_code_bytes": 12032,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 12032,
+      "function_symbols": 28
+    },
+    {
+      "id": "arm9_ov013",
+      "label": "Overlay 13",
+      "mapped_code_bytes": 12316,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 12316,
+      "function_symbols": 18
+    },
+    {
+      "id": "arm9_ov014",
+      "label": "Overlay 14",
+      "mapped_code_bytes": 13860,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 13860,
+      "function_symbols": 55
+    },
+    {
+      "id": "arm9_ov015",
+      "label": "Overlay 15",
+      "mapped_code_bytes": 13164,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 13164,
+      "function_symbols": 33
+    },
+    {
+      "id": "arm9_ov016",
+      "label": "Overlay 16",
+      "mapped_code_bytes": 18324,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 18324,
+      "function_symbols": 59
+    },
+    {
+      "id": "arm9_ov017",
+      "label": "Overlay 17",
+      "mapped_code_bytes": 16784,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 16784,
+      "function_symbols": 57
+    },
+    {
+      "id": "arm9_ov018",
+      "label": "Overlay 18",
+      "mapped_code_bytes": 18036,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 18036,
+      "function_symbols": 77
+    },
+    {
+      "id": "arm9_ov020",
+      "label": "Overlay 20",
+      "mapped_code_bytes": 9204,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 9204,
+      "function_symbols": 25
+    },
+    {
+      "id": "arm9_ov021",
+      "label": "Overlay 21",
+      "mapped_code_bytes": 5280,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 5280,
+      "function_symbols": 27
+    },
+    {
+      "id": "arm9_ov025",
+      "label": "Overlay 25",
+      "mapped_code_bytes": 38024,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 38024,
+      "function_symbols": 83
+    },
+    {
+      "id": "arm9_ov026",
+      "label": "Overlay 26",
+      "mapped_code_bytes": 14452,
+      "matching_c_bytes": 0,
+      "symbolic_asm_bytes": 0,
+      "remaining_bytes": 14452,
+      "function_symbols": 24
+    }
+  ]
+}
