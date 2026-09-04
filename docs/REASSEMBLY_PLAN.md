@@ -396,19 +396,22 @@ The first data-source milestone is implemented for EUR.  Versioned JSON plus
 `tools/data_mod.py` now round-trips all 21 MFset archives, every localized
 battle and field-dialogue chunk (including field event labels), the 98 enemy
 records, all 765 treasure records, four tiered shop-stock datasets, and the 99
-resident item-master records.  The normal CLion/PowerShell build stages these
-sources into a derived NitroFS plus copies of patched ARM9/overlay data and
-still produces the verified ROM hash when the JSON is unchanged.  See
-`docs/DATA_MODDING.md`.
+resident item-master records. It also decodes all 14 `BAI_scn_*`/`BAI_mon_*`
+and related battle-VM archives: 230 blocks, 242 entry-point scripts, and
+129,127 commands. The fixed-boundary assembler recompiles those commands while
+splicing in verified private tails that have not yet been decoded. The normal
+CLion/PowerShell build stages these sources into a derived NitroFS plus copies
+of patched ARM9/overlay data and still produces the verified ROM hash when the
+JSON is unchanged. See `docs/DATA_MODDING.md`.
 
 Priority formats:
 
-1. `BAI_scn_*` battle scenarios and `BAI_mon_*` enemy AI;
+1. label control flow and name semantics in the implemented `BAI_scn_*` battle
+   scenario and `BAI_mon_*` enemy-AI command assembler;
 2. `FEvent/FEvData.dat` field events, flags, warps, and story progression;
-3. `BData/BDataMon.dat` enemy stats and rewards;
-4. `Treasure/TreasureInfo.dat`;
-5. shop tables and item master records;
-6. field maps, object placement, sprites, palettes, animation banks, text, and
+3. add/remove support for the implemented enemy, treasure, shop, and item
+   tables after their executable count references are understood;
+4. field maps, object placement, sprites, palettes, animation banks, text, and
    audio containers.
 
 Each format needs a lossless `extract -> source representation -> rebuild`

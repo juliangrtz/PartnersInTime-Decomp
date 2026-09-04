@@ -27,6 +27,8 @@ DIALOGUE_SCHEMA = "pit-localized-dialogue-v1"
 TREASURE_SCHEMA = "pit-treasure-v1"
 SHOP_SCHEMA = "pit-shop-stock-v1"
 ITEM_MASTER_SCHEMA = "pit-item-master-v1"
+BATTLE_SCRIPT_SCHEMA = "pit-battle-script-v1"
+BATTLE_VM_SCHEMA = "pit-battle-vm-v1"
 LANGUAGES = ("japanese", "english", "french", "german", "italian", "spanish")
 
 CONTROL_CODES = {
@@ -46,6 +48,25 @@ TOKEN_RE = re.compile(r"<\$([^>]+)>")
 
 OV009_LOAD_ADDRESS = 0x0206AB80
 ARM9_LOAD_ADDRESS = 0x02004000
+OV002_LOAD_ADDRESS = 0x02065D40
+BATTLE_VM_DESCRIPTOR_ADDRESS = 0x020BF2C8
+BATTLE_VM_DESCRIPTOR_COUNT = 0x104
+BATTLE_SCRIPT_SOURCES = (
+    "BAI/BAI_iwasaki.dat",
+    "BAI/BAI_mon_0_hn.dat",
+    "BAI/BAI_mon_1_hn.dat",
+    "BAI/BAI_mon_2_hn.dat",
+    "BAI/BAI_mon_3_hn.dat",
+    "BAI/BAI_mon_4_hn.dat",
+    "BAI/BAI_mon_ji.dat",
+    "BAI/BAI_scn_0_hn.dat",
+    "BAI/BAI_scn_1_hn.dat",
+    "BAI/BAI_scn_2_hn.dat",
+    "BAI/BAI_scn_3_hn.dat",
+    "BAI/BAI_scn_4_hn.dat",
+    "BAI/BAI_scn_ji.dat",
+    "BAI/BAI_sugiyama.dat",
+)
 SHOP_LAYOUT = (
     (0, 0x0207E3C4, 0x0207E88C, 199),
     (1, 0x0207E364, 0x0207E5F8, 143),
@@ -86,6 +107,54 @@ def write_json(path: Path, value: Any) -> None:
     path.write_text(
         json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
+
+
+def write_battle_script_json(path: Path, value: Any) -> None:
+    """Write large script documents with one readable line per VM command."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    def is_scalar(item: Any) -> bool:
+        return item is None or isinstance(item, (str, int, float, bool))
+
+    def write_value(stream: Any, item: Any, level: int) -> None:
+        is_command = isinstance(item, dict) and {"offset", "opcode", "args"} <= set(
+            item
+        )
+        if is_command:
+            stream.write(json.dumps(item, ensure_ascii=False, separators=(", ", ": ")))
+        elif isinstance(item, dict):
+            if not item:
+                stream.write("{}")
+                return
+            stream.write("{\n")
+            rows = list(item.items())
+            for index, (key, child) in enumerate(rows):
+                stream.write("  " * (level + 1))
+                stream.write(json.dumps(key, ensure_ascii=False))
+                stream.write(": ")
+                write_value(stream, child, level + 1)
+                stream.write("," if index + 1 < len(rows) else "")
+                stream.write("\n")
+            stream.write("  " * level + "}")
+        elif isinstance(item, list):
+            if not item or all(is_scalar(child) for child in item):
+                stream.write(
+                    json.dumps(item, ensure_ascii=False, separators=(", ", ": "))
+                )
+                return
+            stream.write("[\n")
+            for index, child in enumerate(item):
+                stream.write("  " * (level + 1))
+                write_value(stream, child, level + 1)
+                stream.write("," if index + 1 < len(item) else "")
+                stream.write("\n")
+            stream.write("  " * level + "]")
+        else:
+            stream.write(json.dumps(item, ensure_ascii=False))
+
+    with path.open("w", encoding="utf-8", newline="\n") as stream:
+        write_value(stream, value, 0)
+        stream.write("\n")
 
 
 def relative_posix(path: Path, root: Path) -> str:
@@ -689,6 +758,417 @@ def parse_integer(value: Any, bits: int, context: str) -> int:
     return result
 
 
+def parse_signed_integer(value: Any, bits: int, context: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise DataModError(f"{context} must be a signed integer")
+    minimum = -(1 << (bits - 1))
+    maximum = (1 << (bits - 1)) - 1
+    if not minimum <= value <= maximum:
+        raise DataModError(f"{context} must fit in a signed {bits}-bit field")
+    return value
+
+
+def load_battle_vm_schema(version: str) -> tuple[tuple[int, ...], dict[int, str]]:
+    if not re.fullmatch(r"[a-z0-9_-]+", version):
+        raise DataModError(f"invalid data-project version {version!r}")
+    path = (
+        Path(__file__).resolve().parents[1]
+        / "config"
+        / version
+        / "battle_ai_vm.json"
+    )
+    document = read_json(path)
+    if not isinstance(document, dict) or document.get("schema") != BATTLE_VM_SCHEMA:
+        raise DataModError(f"{path} must use schema {BATTLE_VM_SCHEMA!r}")
+    if document.get("descriptor_table_address") != (
+        f"0x{BATTLE_VM_DESCRIPTOR_ADDRESS:08X}"
+    ):
+        raise DataModError(f"{path} has the wrong descriptor-table address")
+    values = _require_list(document.get("descriptors"), "battle VM descriptors")
+    if len(values) != BATTLE_VM_DESCRIPTOR_COUNT:
+        raise DataModError(
+            f"battle VM schema needs {BATTLE_VM_DESCRIPTOR_COUNT} descriptors"
+        )
+    descriptors = tuple(
+        parse_integer(value, 7, f"battle VM descriptor {opcode}")
+        for opcode, value in enumerate(values)
+    )
+    names_value = document.get("known_names")
+    if not isinstance(names_value, dict):
+        raise DataModError("battle VM known_names must be an object")
+    names: dict[int, str] = {}
+    used_names: set[str] = set()
+    for raw_opcode, name in names_value.items():
+        try:
+            opcode = int(raw_opcode, 0)
+        except (TypeError, ValueError) as exc:
+            raise DataModError(f"invalid named battle opcode {raw_opcode!r}") from exc
+        if not 0 <= opcode < len(descriptors):
+            raise DataModError(f"named battle opcode {opcode} is outside the table")
+        if not isinstance(name, str) or not re.fullmatch(r"[a-z][a-z0-9_]*", name):
+            raise DataModError(f"invalid battle opcode name {name!r}")
+        if name in used_names:
+            raise DataModError(f"duplicate battle opcode name {name!r}")
+        names[opcode] = name
+        used_names.add(name)
+    return descriptors, names
+
+
+def verify_battle_vm_descriptors(overlay: bytes, descriptors: tuple[int, ...]) -> None:
+    offset = BATTLE_VM_DESCRIPTOR_ADDRESS - OV002_LOAD_ADDRESS
+    size = BATTLE_VM_DESCRIPTOR_COUNT * 4
+    if offset < 0 or offset + size > len(overlay):
+        raise DataModError("battle VM descriptor table is outside overlay 2")
+    source_descriptors = struct.unpack_from(
+        f"<{BATTLE_VM_DESCRIPTOR_COUNT}I", overlay, offset
+    )
+    if source_descriptors != descriptors:
+        raise DataModError(
+            "battle VM schema does not match the private overlay-2 descriptor table"
+        )
+
+
+def _battle_opcode_name(opcode: int, names: dict[int, str]) -> str:
+    return names.get(opcode, f"op_{opcode:03X}")
+
+
+def _parse_battle_opcode(
+    value: Any, descriptors: tuple[int, ...], names: dict[int, str], context: str
+) -> int:
+    if isinstance(value, str):
+        reverse_names = {name: opcode for opcode, name in names.items()}
+        if value in reverse_names:
+            return reverse_names[value]
+        match = re.fullmatch(r"op_([0-9A-Fa-f]{3})", value)
+        if match:
+            opcode = int(match.group(1), 16)
+        else:
+            try:
+                opcode = int(value, 0)
+            except ValueError as exc:
+                raise DataModError(f"{context} has invalid opcode {value!r}") from exc
+    else:
+        opcode = parse_integer(value, 16, f"{context} opcode")
+    if not 0 <= opcode < len(descriptors):
+        raise DataModError(f"{context} opcode 0x{opcode:X} is outside the VM table")
+    return opcode
+
+
+def _decode_battle_command(
+    data: bytes,
+    position: int,
+    limit: int,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+    context: str,
+) -> tuple[dict[str, Any], int, int]:
+    if position + 2 > limit:
+        raise DataModError(f"{context}: truncated opcode at 0x{position:X}")
+    opcode = struct.unpack_from("<H", data, position)[0]
+    if opcode >= len(descriptors):
+        raise DataModError(f"{context}: invalid opcode 0x{opcode:X} at 0x{position:X}")
+    descriptor = descriptors[opcode]
+    argument_count = descriptor & 0x1F
+    cursor = position + 2
+    command: dict[str, Any] = {
+        "offset": f"0x{position:04X}",
+        "opcode": _battle_opcode_name(opcode, names),
+    }
+    if descriptor & 0x20:
+        if cursor + 2 > limit:
+            raise DataModError(f"{context}: truncated result at 0x{position:X}")
+        command["result"] = f"0x{struct.unpack_from('<H', data, cursor)[0]:04X}"
+        cursor += 2
+    mode_mask = 0
+    if descriptor & 0x40:
+        if cursor + 2 > limit:
+            raise DataModError(f"{context}: truncated mode mask at 0x{position:X}")
+        mode_mask = struct.unpack_from("<H", data, cursor)[0]
+        cursor += 2
+    arguments_end = cursor + argument_count * 2
+    if arguments_end > limit:
+        raise DataModError(f"{context}: truncated arguments at 0x{position:X}")
+    arguments: list[Any] = []
+    for argument_index in range(argument_count):
+        raw = struct.unpack_from("<H", data, cursor + argument_index * 2)[0]
+        if mode_mask & (1 << argument_index):
+            arguments.append({"variable": f"0x{raw:04X}"})
+        else:
+            arguments.append(raw if raw < 0x8000 else raw - 0x10000)
+    command["args"] = arguments
+    unused_mode_bits = mode_mask & ~((1 << argument_count) - 1)
+    if unused_mode_bits:
+        command["unused_mode_bits"] = f"0x{unused_mode_bits:04X}"
+    return command, arguments_end, opcode
+
+
+def _parse_battle_script_entry(
+    entry: bytes,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+    context: str,
+) -> dict[str, Any]:
+    if len(entry) < 2:
+        raise DataModError(f"{context}: script block is shorter than its header")
+    header_size = struct.unpack_from("<H", entry)[0]
+    if header_size < 2 or header_size > len(entry) or header_size % 2:
+        raise DataModError(f"{context}: invalid script header size 0x{header_size:X}")
+    raw_entry_points = list(struct.unpack_from(f"<{header_size // 2}H", entry))
+    starts = sorted(set(offset for offset in raw_entry_points if offset))
+    if not starts or starts[0] != header_size:
+        raise DataModError(f"{context}: first script does not follow its header")
+    if any(offset < header_size or offset >= len(entry) or offset % 2 for offset in starts):
+        raise DataModError(f"{context}: script entry point is invalid")
+    start_to_id = {offset: script_id for script_id, offset in enumerate(starts)}
+    entry_points = [
+        None if offset == 0 else start_to_id[offset] for offset in raw_entry_points
+    ]
+    scripts = []
+    tail_offset = len(entry)
+    for script_id, start in enumerate(starts):
+        fixed_end = starts[script_id + 1] if script_id + 1 < len(starts) else None
+        limit = fixed_end if fixed_end is not None else len(entry)
+        position = start
+        decoded: list[tuple[dict[str, Any], int, int]] = []
+        last_return_count: int | None = None
+        while position < limit:
+            try:
+                command, next_position, opcode = _decode_battle_command(
+                    entry,
+                    position,
+                    limit,
+                    descriptors,
+                    names,
+                    f"{context} script {script_id}",
+                )
+            except DataModError:
+                if fixed_end is not None:
+                    raise
+                break
+            decoded.append((command, next_position, opcode))
+            position = next_position
+            if opcode == 1:
+                last_return_count = len(decoded)
+
+        if fixed_end is not None:
+            if position != fixed_end:
+                raise DataModError(
+                    f"{context} script {script_id} does not fill its entry-point region"
+                )
+            if not decoded or decoded[-1][2] != 1:
+                raise DataModError(
+                    f"{context} script {script_id} does not end with return"
+                )
+            selected = decoded
+            script_end = fixed_end
+        else:
+            if last_return_count is None:
+                raise DataModError(f"{context} final script has no terminating return")
+            selected = decoded[:last_return_count]
+            script_end = selected[-1][1]
+            tail_offset = script_end
+        scripts.append(
+            {
+                "script_id": script_id,
+                "offset": f"0x{start:04X}",
+                "encoded_size": script_end - start,
+                "commands": [command for command, _, _ in selected],
+            }
+        )
+    tail = entry[tail_offset:]
+    return {
+        "entry_size": len(entry),
+        "entry_points": entry_points,
+        "scripts": scripts,
+        "private_tail": {
+            "offset": f"0x{tail_offset:04X}",
+            "size": len(tail),
+            "sha1": sha1(tail),
+        },
+    }
+
+
+def export_battle_scripts(
+    source_path: Path,
+    relative_source: str,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+) -> dict[str, Any]:
+    source_data = source_path.read_bytes()
+    entries = []
+    command_count = 0
+    for entry_id, entry in enumerate(parse_offset_archive(source_data)):
+        parsed = _parse_battle_script_entry(
+            entry, descriptors, names, f"{relative_source} entry {entry_id}"
+        )
+        command_count += sum(len(script["commands"]) for script in parsed["scripts"])
+        entries.append({"entry_id": entry_id, **parsed})
+    return {
+        "schema": BATTLE_SCRIPT_SCHEMA,
+        "source": relative_source,
+        "source_sha1": sha1(source_data),
+        "layout": "fixed-command-boundaries",
+        "command_count": command_count,
+        "entries": entries,
+    }
+
+
+def _compile_battle_command(
+    row: Any,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+    context: str,
+) -> tuple[bytes, int]:
+    if not isinstance(row, dict):
+        raise DataModError(f"{context} must be an object")
+    opcode = _parse_battle_opcode(row.get("opcode"), descriptors, names, context)
+    descriptor = descriptors[opcode]
+    result = bytearray(struct.pack("<H", opcode))
+    has_result = bool(descriptor & 0x20)
+    if has_result != ("result" in row):
+        requirement = "requires" if has_result else "does not use"
+        raise DataModError(f"{context} opcode {requirement} a result variable")
+    if has_result:
+        result.extend(
+            struct.pack(
+                "<H", parse_integer(row["result"], 16, f"{context} result")
+            )
+        )
+    arguments = _require_list(row.get("args"), f"{context} args")
+    argument_count = descriptor & 0x1F
+    if len(arguments) != argument_count:
+        raise DataModError(
+            f"{context} opcode needs {argument_count} arguments, got {len(arguments)}"
+        )
+    has_modes = bool(descriptor & 0x40)
+    mode_mask = 0
+    encoded_arguments = bytearray()
+    for argument_index, argument in enumerate(arguments):
+        argument_context = f"{context} argument {argument_index}"
+        if isinstance(argument, dict):
+            if not has_modes:
+                raise DataModError(f"{argument_context} cannot be a variable")
+            if set(argument) != {"variable"}:
+                raise DataModError(
+                    f"{argument_context} variable must contain only 'variable'"
+                )
+            value = parse_integer(argument["variable"], 16, argument_context)
+            mode_mask |= 1 << argument_index
+        else:
+            value = parse_signed_integer(argument, 16, argument_context) & 0xFFFF
+        encoded_arguments.extend(struct.pack("<H", value))
+    if has_modes:
+        unused_mode_bits = parse_integer(
+            row.get("unused_mode_bits", 0), 16, f"{context} unused_mode_bits"
+        )
+        used_mask = (1 << argument_count) - 1
+        if unused_mode_bits & used_mask:
+            raise DataModError(f"{context} unused_mode_bits overlaps argument modes")
+        mode_mask |= unused_mode_bits
+        result.extend(struct.pack("<H", mode_mask))
+    elif "unused_mode_bits" in row:
+        raise DataModError(f"{context} opcode has no argument-mode mask")
+    result.extend(encoded_arguments)
+    return bytes(result), opcode
+
+
+def build_battle_scripts(
+    document: dict[str, Any],
+    source_data: bytes,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+) -> bytes:
+    if document.get("schema") != BATTLE_SCRIPT_SCHEMA:
+        raise DataModError(f"expected schema {BATTLE_SCRIPT_SCHEMA!r}")
+    source = document.get("source")
+    if document.get("source_sha1") != sha1(source_data):
+        raise DataModError(f"private source {source} does not match source_sha1")
+    if document.get("layout") != "fixed-command-boundaries":
+        raise DataModError("battle script layout must remain fixed-command-boundaries")
+    source_entries = parse_offset_archive(source_data)
+    rows = _require_list(document.get("entries"), "battle script entries")
+    if len(rows) != len(source_entries):
+        raise DataModError(
+            f"battle script archive must retain its {len(source_entries)} entries"
+        )
+    rebuilt_entries = []
+    total_commands = 0
+    for entry_id, (row, source_entry) in enumerate(zip(rows, source_entries)):
+        context = f"{source} entry {entry_id}"
+        if not isinstance(row, dict) or row.get("entry_id") != entry_id:
+            raise DataModError("battle script entries must retain contiguous entry_id values")
+        expected = _parse_battle_script_entry(
+            source_entry, descriptors, names, context
+        )
+        if row.get("entry_size") != expected["entry_size"]:
+            raise DataModError(f"{context} entry_size changed")
+        if row.get("entry_points") != expected["entry_points"]:
+            raise DataModError(f"{context} entry_points changed")
+        private_tail = row.get("private_tail")
+        if not isinstance(private_tail, dict) or private_tail != expected["private_tail"]:
+            raise DataModError(f"{context} private-tail metadata changed")
+        scripts = _require_list(row.get("scripts"), f"{context} scripts")
+        expected_scripts = expected["scripts"]
+        if len(scripts) != len(expected_scripts):
+            raise DataModError(f"{context} script count changed")
+        rebuilt_entry = bytearray(source_entry)
+        for script_id, (script, expected_script) in enumerate(
+            zip(scripts, expected_scripts)
+        ):
+            script_context = f"{context} script {script_id}"
+            if not isinstance(script, dict) or script.get("script_id") != script_id:
+                raise DataModError(f"{context} scripts must retain contiguous script_id values")
+            if script.get("offset") != expected_script["offset"]:
+                raise DataModError(f"{script_context} offset changed")
+            if script.get("encoded_size") != expected_script["encoded_size"]:
+                raise DataModError(f"{script_context} encoded_size changed")
+            commands = _require_list(script.get("commands"), f"{script_context} commands")
+            expected_commands = expected_script["commands"]
+            if len(commands) != len(expected_commands):
+                raise DataModError(f"{script_context} command count changed")
+            start = parse_integer(script["offset"], 16, f"{script_context} offset")
+            cursor = start
+            encoded_script = bytearray()
+            for command_index, (command, expected_command) in enumerate(
+                zip(commands, expected_commands)
+            ):
+                command_context = f"{script_context} command {command_index}"
+                expected_offset = parse_integer(
+                    expected_command["offset"], 16, f"{command_context} source offset"
+                )
+                if (
+                    not isinstance(command, dict)
+                    or command.get("offset") != expected_command["offset"]
+                ):
+                    raise DataModError(f"{command_context} offset changed")
+                encoded, _ = _compile_battle_command(
+                    command, descriptors, names, command_context
+                )
+                next_expected = (
+                    parse_integer(
+                        expected_commands[command_index + 1]["offset"],
+                        16,
+                        f"{command_context} next source offset",
+                    )
+                    if command_index + 1 < len(expected_commands)
+                    else start + expected_script["encoded_size"]
+                )
+                if cursor != expected_offset or len(encoded) != next_expected - expected_offset:
+                    raise DataModError(
+                        f"{command_context} must retain its encoded size and boundary"
+                    )
+                encoded_script.extend(encoded)
+                cursor += len(encoded)
+            if len(encoded_script) != expected_script["encoded_size"]:
+                raise DataModError(f"{script_context} encoded size changed")
+            rebuilt_entry[start : start + len(encoded_script)] = encoded_script
+            total_commands += len(commands)
+        rebuilt_entries.append(bytes(rebuilt_entry))
+    if document.get("command_count") != total_commands:
+        raise DataModError(f"{source} command_count does not match its entries")
+    return build_offset_archive(rebuilt_entries)
+
+
 def english_enemy_names(files_root: Path) -> list[str]:
     archive = parse_offset_archive((files_root / "BData/mfset_MonN.dat").read_bytes())
     strings = parse_mfset_entry(archive[1], "english")
@@ -1248,6 +1728,24 @@ def command_export(args: argparse.Namespace) -> None:
             export_dialogue(source_path, relative_source),
         )
         dialogue_documents.append(output_relative)
+    descriptors, opcode_names = load_battle_vm_schema(args.version)
+    overlay_2_path = files_root.parent / "arm9_overlays" / "ov002.bin"
+    if not overlay_2_path.is_file():
+        raise DataModError(f"private overlay 2 is missing: {overlay_2_path}")
+    verify_battle_vm_descriptors(overlay_2_path.read_bytes(), descriptors)
+    script_documents = []
+    for relative_source in BATTLE_SCRIPT_SOURCES:
+        source_path = files_root / relative_source
+        if not source_path.is_file():
+            raise DataModError(f"battle script source file is missing: {source_path}")
+        output_relative = f"scripts/{relative_source.replace('/', '__')}.json"
+        write_battle_script_json(
+            project_root / output_relative,
+            export_battle_scripts(
+                source_path, relative_source, descriptors, opcode_names
+            ),
+        )
+        script_documents.append(output_relative)
     write_json(
         project_root / "project.json",
         {
@@ -1255,13 +1753,15 @@ def command_export(args: argparse.Namespace) -> None:
             "version": args.version,
             "text_documents": text_documents,
             "dialogue_documents": dialogue_documents,
+            "script_documents": script_documents,
             "stat_documents": [enemy_relative, treasure_relative],
             "binary_documents": [shop_relative, item_master_relative],
         },
     )
     print(
         f"Exported {len(text_documents)} MFsets, {len(dialogue_documents)} dialogue archives, "
-        f"an enemy table, a treasure table, shop stock, and item masters to {project_root}"
+        f"{len(script_documents)} battle-script archives, an enemy table, a treasure table, "
+        f"shop stock, and item masters to {project_root}"
     )
 
 
@@ -1284,13 +1784,32 @@ def compile_project(
     replacements: dict[str, bytes] = {}
     report = []
 
+    script_documents = _require_list(
+        project.get("script_documents", []), "script_documents"
+    )
+    descriptors: tuple[int, ...] = ()
+    opcode_names: dict[int, str] = {}
+    if script_documents:
+        version = project.get("version")
+        if not isinstance(version, str):
+            raise DataModError("project version must be a string")
+        descriptors, opcode_names = load_battle_vm_schema(version)
+        overlay_2_path = files_root.parent / "arm9_overlays" / "ov002.bin"
+        if not overlay_2_path.is_file():
+            raise DataModError(f"private overlay 2 is missing: {overlay_2_path}")
+        verify_battle_vm_descriptors(overlay_2_path.read_bytes(), descriptors)
+
     document_groups = (
         ("text_documents", {MFSET_SCHEMA}),
         ("dialogue_documents", {DIALOGUE_SCHEMA}),
+        ("script_documents", {BATTLE_SCRIPT_SCHEMA}),
         ("stat_documents", {ENEMY_SCHEMA, TREASURE_SCHEMA}),
     )
     for key, expected_schemas in document_groups:
-        for relative_document in _require_list(project.get(key), key):
+        documents = script_documents if key == "script_documents" else _require_list(
+            project.get(key), key
+        )
+        for relative_document in documents:
             if not isinstance(relative_document, str):
                 raise DataModError(f"every {key} item must be a path string")
             document = read_json(project_root / relative_document)
@@ -1312,6 +1831,10 @@ def compile_project(
                 rebuilt = build_dialogue(document, source_data)
             elif schema == ENEMY_SCHEMA:
                 rebuilt = build_enemy_stats(document, source_data)
+            elif schema == BATTLE_SCRIPT_SCHEMA:
+                rebuilt = build_battle_scripts(
+                    document, source_data, descriptors, opcode_names
+                )
             else:
                 rebuilt = build_treasure(document, source_data)
             replacements[source] = rebuilt

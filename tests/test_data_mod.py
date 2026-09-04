@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import struct
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -301,6 +302,74 @@ class ItemMasterTests(unittest.TestCase):
             data_mod.ITEM_MASTER_LAYOUT[0][2] - data_mod.ARM9_LOAD_ADDRESS + 0x0C
         )
         self.assertEqual(struct.unpack_from("<H", rebuilt, first_price)[0], 1234)
+
+
+class BattleScriptTests(unittest.TestCase):
+    def setUp(self) -> None:
+        descriptors = [0] * data_mod.BATTLE_VM_DESCRIPTOR_COUNT
+        descriptors[2] = 0x02
+        descriptors[3] = 0x41
+        descriptors[5] = 0x01
+        descriptors[13] = 0x62
+        self.descriptors = tuple(descriptors)
+        self.names = {0: "end", 1: "return"}
+
+        entry = bytearray(struct.pack("<3H", 6, 6, 0))
+        entry.extend(struct.pack("<3H", 3, 1, 0x4001))
+        entry.extend(struct.pack("<5H", 13, 0x4010, 0x0011, 0x4002, 0xFFFD))
+        entry.extend(struct.pack("<H", 1))
+        entry.extend(b"TAIL")
+        self.source = data_mod.build_offset_archive([bytes(entry)])
+
+    def _document(self) -> dict:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "test_battle_scripts.dat"
+            path.write_bytes(self.source)
+            return data_mod.export_battle_scripts(
+                path, "BAI/test.dat", self.descriptors, self.names
+            )
+
+    def test_round_trips_commands_duplicate_entry_points_and_private_tail(self) -> None:
+        document = self._document()
+        entry = document["entries"][0]
+        self.assertEqual(entry["entry_points"], [0, 0, None])
+        self.assertEqual(entry["private_tail"]["size"], 4)
+        self.assertNotIn("data", entry["private_tail"])
+        command = entry["scripts"][0]["commands"][1]
+        self.assertEqual(command["result"], "0x4010")
+        self.assertEqual(command["args"], [{"variable": "0x4002"}, -3])
+        self.assertEqual(command["unused_mode_bits"], "0x0010")
+        self.assertEqual(
+            data_mod.build_battle_scripts(
+                document, self.source, self.descriptors, self.names
+            ),
+            self.source,
+        )
+
+    def test_edit_changes_only_the_selected_argument(self) -> None:
+        document = self._document()
+        commands = document["entries"][0]["scripts"][0]["commands"]
+        commands[1]["args"][1] = 7
+        rebuilt = data_mod.build_battle_scripts(
+            document, self.source, self.descriptors, self.names
+        )
+        differences = [
+            index
+            for index, (before, after) in enumerate(zip(self.source, rebuilt))
+            if before != after
+        ]
+        self.assertEqual(differences, [28, 29])
+        self.assertEqual(rebuilt[-4:], b"TAIL")
+
+    def test_rejects_an_opcode_that_changes_a_command_boundary(self) -> None:
+        document = self._document()
+        command = document["entries"][0]["scripts"][0]["commands"][-1]
+        command["opcode"] = "op_005"
+        command["args"] = [0]
+        with self.assertRaisesRegex(data_mod.DataModError, "boundary"):
+            data_mod.build_battle_scripts(
+                document, self.source, self.descriptors, self.names
+            )
 
 
 if __name__ == "__main__":
