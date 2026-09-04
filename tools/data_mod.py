@@ -24,6 +24,7 @@ PROJECT_SCHEMA = "pit-data-project-v1"
 MFSET_SCHEMA = "pit-mfset-v1"
 ENEMY_SCHEMA = "pit-enemy-stats-v1"
 DIALOGUE_SCHEMA = "pit-localized-dialogue-v1"
+TREASURE_SCHEMA = "pit-treasure-v1"
 LANGUAGES = ("japanese", "english", "french", "german", "italian", "spanish")
 
 CONTROL_CODES = {
@@ -625,6 +626,7 @@ def build_dialogue(document: dict[str, Any], source_data: bytes) -> bytes:
 
 
 ENEMY_STRUCT = struct.Struct("<HHBBHHHHHH14sHHII")
+TREASURE_STRUCT = struct.Struct("<BBHHHHH")
 
 
 def parse_integer(value: Any, bits: int, context: str) -> int:
@@ -748,6 +750,93 @@ def build_enemy_stats(document: dict[str, Any], source_data: bytes) -> bytes:
     return bytes(result)
 
 
+def export_treasure(files_root: Path) -> dict[str, Any]:
+    source = "Treasure/TreasureInfo.dat"
+    raw = (files_root / source).read_bytes()
+    entries = parse_offset_archive(raw)
+    files = []
+    for file_id, entry in enumerate(entries):
+        if len(entry) % TREASURE_STRUCT.size:
+            raise DataModError(
+                f"{source} entry {file_id} is not a whole number of treasure records"
+            )
+        records = []
+        for record_id, values in enumerate(TREASURE_STRUCT.iter_unpack(entry)):
+            records.append(
+                {
+                    "record_id": record_id,
+                    "type": values[0],
+                    "subtype": values[1],
+                    "contents": values[2],
+                    "id": values[3],
+                    "x": values[4],
+                    "y": values[5],
+                    "z": values[6],
+                }
+            )
+        files.append({"file_id": file_id, "records": records})
+    return {
+        "schema": TREASURE_SCHEMA,
+        "source": source,
+        "source_sha1": sha1(raw),
+        "record_size": TREASURE_STRUCT.size,
+        "files": files,
+    }
+
+
+def build_treasure(document: dict[str, Any], source_data: bytes) -> bytes:
+    if document.get("schema") != TREASURE_SCHEMA:
+        raise DataModError(f"expected schema {TREASURE_SCHEMA!r}")
+    source = document.get("source")
+    if document.get("source_sha1") != sha1(source_data):
+        raise DataModError(f"private source {source} does not match source_sha1")
+    source_entries = parse_offset_archive(source_data)
+    files = _require_list(document.get("files"), "treasure files")
+    if len(files) != len(source_entries):
+        raise DataModError(
+            f"treasure table must retain its original {len(source_entries)} file entries"
+        )
+
+    rebuilt_entries = []
+    for file_id, (file_row, source_entry) in enumerate(zip(files, source_entries)):
+        if not isinstance(file_row, dict) or file_row.get("file_id") != file_id:
+            raise DataModError("treasure files must have contiguous file_id values")
+        rows = _require_list(file_row.get("records"), f"treasure file {file_id} records")
+        expected_count = len(source_entry) // TREASURE_STRUCT.size
+        if len(rows) != expected_count:
+            raise DataModError(
+                f"treasure file {file_id} must retain its {expected_count} records"
+            )
+        entry = bytearray()
+        for record_id, row in enumerate(rows):
+            if not isinstance(row, dict) or row.get("record_id") != record_id:
+                raise DataModError(
+                    f"treasure file {file_id} needs contiguous record_id values"
+                )
+            entry.extend(
+                TREASURE_STRUCT.pack(
+                    *(
+                        parse_integer(
+                            row.get(name),
+                            bits,
+                            f"treasure {file_id}:{record_id} {name}",
+                        )
+                        for name, bits in (
+                            ("type", 8),
+                            ("subtype", 8),
+                            ("contents", 16),
+                            ("id", 16),
+                            ("x", 16),
+                            ("y", 16),
+                            ("z", 16),
+                        )
+                    )
+                )
+            )
+        rebuilt_entries.append(bytes(entry))
+    return build_offset_archive(rebuilt_entries)
+
+
 def discover_mfsets(files_root: Path) -> list[Path]:
     return sorted(
         path
@@ -773,6 +862,8 @@ def command_export(args: argparse.Namespace) -> None:
 
     enemy_relative = "stats/enemies.json"
     write_json(project_root / enemy_relative, export_enemy_stats(files_root))
+    treasure_relative = "stats/treasure.json"
+    write_json(project_root / treasure_relative, export_treasure(files_root))
     dialogue_documents = []
     for relative_source in ("BAI/BMes.dat", "FEvent/FEvData.dat"):
         source_path = files_root / relative_source
@@ -791,12 +882,12 @@ def command_export(args: argparse.Namespace) -> None:
             "version": args.version,
             "text_documents": text_documents,
             "dialogue_documents": dialogue_documents,
-            "stat_documents": [enemy_relative],
+            "stat_documents": [enemy_relative, treasure_relative],
         },
     )
     print(
         f"Exported {len(text_documents)} MFsets, {len(dialogue_documents)} dialogue archives, "
-        f"and one enemy table to {project_root}"
+        f"an enemy table, and a treasure table to {project_root}"
     )
 
 
@@ -820,18 +911,18 @@ def compile_project(
     report = []
 
     document_groups = (
-        ("text_documents", MFSET_SCHEMA),
-        ("dialogue_documents", DIALOGUE_SCHEMA),
-        ("stat_documents", ENEMY_SCHEMA),
+        ("text_documents", {MFSET_SCHEMA}),
+        ("dialogue_documents", {DIALOGUE_SCHEMA}),
+        ("stat_documents", {ENEMY_SCHEMA, TREASURE_SCHEMA}),
     )
-    for key, expected_schema in document_groups:
+    for key, expected_schemas in document_groups:
         for relative_document in _require_list(project.get(key), key):
             if not isinstance(relative_document, str):
                 raise DataModError(f"every {key} item must be a path string")
             document = read_json(project_root / relative_document)
-            if not isinstance(document, dict) or document.get("schema") != expected_schema:
+            if not isinstance(document, dict) or document.get("schema") not in expected_schemas:
                 raise DataModError(
-                    f"{relative_document} must use schema {expected_schema!r}"
+                    f"{relative_document} must use one of {sorted(expected_schemas)!r}"
                 )
             source = _validated_source(project_root, document)
             if source in replacements:
@@ -840,12 +931,15 @@ def compile_project(
             if not source_path.is_file():
                 raise DataModError(f"private source file is missing: {source_path}")
             source_data = source_path.read_bytes()
-            if expected_schema == MFSET_SCHEMA:
+            schema = document["schema"]
+            if schema == MFSET_SCHEMA:
                 rebuilt = build_mfset(document, source_data)
-            elif expected_schema == DIALOGUE_SCHEMA:
+            elif schema == DIALOGUE_SCHEMA:
                 rebuilt = build_dialogue(document, source_data)
-            else:
+            elif schema == ENEMY_SCHEMA:
                 rebuilt = build_enemy_stats(document, source_data)
+            else:
+                rebuilt = build_treasure(document, source_data)
             replacements[source] = rebuilt
             report.append(
                 {

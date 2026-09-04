@@ -143,5 +143,36 @@ class EnemyTableTests(unittest.TestCase):
         self.assertEqual(data_mod.build_enemy_stats(document, record), record)
 
 
+class TreasureTableTests(unittest.TestCase):
+    def test_round_trips_archive_and_record_layout(self) -> None:
+        entry = data_mod.TREASURE_STRUCT.pack(1, 2, 300, 4, 500, 600, 700)
+        source = data_mod.build_offset_archive([entry, b""])
+        document = {
+            "schema": data_mod.TREASURE_SCHEMA,
+            "source": "Treasure/TreasureInfo.dat",
+            "source_sha1": data_mod.sha1(source),
+            "record_size": data_mod.TREASURE_STRUCT.size,
+            "files": [
+                {
+                    "file_id": 0,
+                    "records": [
+                        {
+                            "record_id": 0,
+                            "type": 1,
+                            "subtype": 2,
+                            "contents": 300,
+                            "id": 4,
+                            "x": 500,
+                            "y": 600,
+                            "z": 700,
+                        }
+                    ],
+                },
+                {"file_id": 1, "records": []},
+            ],
+        }
+        self.assertEqual(data_mod.build_treasure(document, source), source)
+
+
 if __name__ == "__main__":
     unittest.main()

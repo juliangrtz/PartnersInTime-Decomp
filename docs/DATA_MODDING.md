@@ -18,6 +18,8 @@ copied unchanged when the modded NitroFS tree is staged.
   headers and localized container structure;
 - all 98 fixed-size enemy records from `BData/BDataMon.dat`, including level,
   HP, POW, DEF, speed, experience, coins, drops, traits, and unknown bytes;
+- all 765 twelve-byte treasure records from `Treasure/TreasureInfo.dat`, grouped
+  by their 283 original file/room entries;
 - length-changing MFset edits: string pointers, language-entry sizes, and outer
   archive offsets are regenerated instead of patched in place.
 
@@ -127,6 +129,15 @@ is not compiled.  Change the corresponding string in
 `text/BData__mfset_MonN.dat.json` to rename an enemy.  The builder range-checks
 every numeric field and requires all 14 unknown bytes, so malformed edits fail
 before ROM packaging.
+
+## Treasure records
+
+`data/eur/stats/treasure.json` exposes every existing treasure object as
+`type`, `subtype`, `contents`, unique `id`, and `x`/`y`/`z` coordinates.  The
+outer `file_id` corresponds to the original archive entry.  The semantic item
+mapping of `contents` is not named yet, so values remain numeric rather than
+being assigned speculative labels.  Schema v1 keeps the original file and
+record counts fixed while allowing every record field to be changed.
 
 ## Generated build artifacts
 
