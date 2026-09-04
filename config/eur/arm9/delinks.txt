@@ -13,3 +13,6 @@ src/game/script_vm.c:
 
 src/game/script_vm_control.c:
     .text       start:0x020063a4 end:0x02006508
+
+src/game/script_vm_execute.c:
+    .text       start:0x02006508 end:0x020071b0

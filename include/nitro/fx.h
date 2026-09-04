@@ -53,6 +53,7 @@ fx32 FX_GetDivResult();
 fx64c FX_GetDivResultFx64c();
 fx32 FX_Div(fx32 numer, fx32 denom);
 s32 FX_DivS32(s32 numer, s32 denom);
+s32 FX_ModS32(s32 numer, s32 denom);
 
 void FX_SqrtAsync(fx32 x);
 fx32 FX_GetSqrtResult();
