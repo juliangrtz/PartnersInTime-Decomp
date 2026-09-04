@@ -7,6 +7,8 @@ typedef struct BattleAIState BattleAIState;
 typedef struct BattleAITask BattleAITask;
 typedef struct BattleTaskPool BattleTaskPool;
 
+extern u8 *gBattleContext;
+
 struct BattleAIState {
     const void *script;
     u8 unk_004[0xA4];
@@ -43,7 +45,10 @@ typedef char BattleTaskPool_SizeCheck[sizeof(BattleTaskPool) == 8 ? 1 : -1];
 int BattleAI_HandleVmResult(BattleAITask *task, int result, BattleAIState *state);
 void BattleAI_StartReactionScript(int actor_id);
 void BattleAI_StartActionScript(int actor_id);
+void BattleAI_StartPartyVmSlot4(void);
+void BattleAI_StartPartyVmSlot3(void);
 void BattleAI_StartPartyVmSlot2(void);
+void BattleAI_StartPartyVmSlot1(void);
 void BattleAI_InitStateFromScriptBlock(BattleAIState *state,
                                        const u16 *script_block, int owner_id);
 BattleAIState *BattleScriptState_GetByObjectId(u16 object_id);

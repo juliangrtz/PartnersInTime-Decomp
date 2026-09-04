@@ -84,7 +84,10 @@ FUNCTION_TYPES = {
         "int BattleAI_HandleVmResult(BattleAITask *, int, BattleAIState *);",
     "BattleAI_StartReactionScript": "void BattleAI_StartReactionScript(int);",
     "BattleAI_StartActionScript": "void BattleAI_StartActionScript(int);",
+    "BattleAI_StartPartyVmSlot4": "void BattleAI_StartPartyVmSlot4(void);",
+    "BattleAI_StartPartyVmSlot3": "void BattleAI_StartPartyVmSlot3(void);",
     "BattleAI_StartPartyVmSlot2": "void BattleAI_StartPartyVmSlot2(void);",
+    "BattleAI_StartPartyVmSlot1": "void BattleAI_StartPartyVmSlot1(void);",
     "BattleAI_InitStateFromScriptBlock":
         "void BattleAI_InitStateFromScriptBlock(BattleAIState *, const u16 *, int);",
     "BattleScriptState_GetByObjectId":
