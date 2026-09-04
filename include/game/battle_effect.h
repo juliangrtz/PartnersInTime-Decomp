@@ -6,6 +6,7 @@
 
 typedef struct BattleEffect BattleEffect;
 typedef struct BattlePosition BattlePosition;
+typedef struct BattleSpriteTransform BattleSpriteTransform;
 
 struct BattlePosition {
     s16 x;
@@ -26,10 +27,21 @@ struct BattleEffect {
     BattleEffect **owner_slot;
 };
 
+struct BattleSpriteTransform {
+    s32 matrix[12];
+    s32 x;
+    s32 y;
+    s32 scale;
+    u8 unknown_3c[4];
+};
+
 typedef char BattlePosition_SizeCheck[
     sizeof(BattlePosition) == 8 ? 1 : -1
 ];
 typedef char BattleEffect_SizeCheck[sizeof(BattleEffect) == 0x30 ? 1 : -1];
+typedef char BattleSpriteTransform_SizeCheck[
+    sizeof(BattleSpriteTransform) == 0x40 ? 1 : -1
+];
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,6 +67,12 @@ BattleEffect *BattleDamage_SpawnNumber(int value, int x, int y,
                                        int effect_id, int attach_to_actor);
 int BattleSound_Play(int sound_id, int argument_1, int argument_2,
                      int argument_3);
+int BattleNumber_DrawDecimal(int value, int palette,
+                             BattleSpriteTransform *transform, int object,
+                             u16 priority, int first_digit, int spacing);
+void *BattleSprite_DrawFrame(int frame, int palette,
+                             BattleSpriteTransform *transform, int object,
+                             u16 priority, u16 resource_id, u16 flags);
 void BattleReward_ClearCounterEffects(void);
 BattleEffect *BattleReward_AdvanceCounterEffect(BattleEffect *effect);
 BattleEffect *BattleReward_EnsureCounterEffect(int reward_type);

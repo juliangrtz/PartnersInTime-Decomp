@@ -967,7 +967,7 @@ gBattleLevelUpBonusPreviewTransform kind:data(any) addr:0x020bf8bc
 data_ov002_020bf8fc kind:data(any) addr:0x020bf8fc
 data_ov002_020bf93c kind:data(any) addr:0x020bf93c
 data_ov002_020bf97c kind:data(any) addr:0x020bf97c
-data_ov002_020bf9bc kind:data(any) addr:0x020bf9bc
+gBattleLevelUpStatRowTransform kind:data(any) addr:0x020bf9bc
 gBattleLevelUpBonusApplyTransform kind:data(any) addr:0x020bf9fc
 data_ov002_020bfa3c kind:data(any) addr:0x020bfa3c
 data_ov002_020bfa44 kind:data(any) addr:0x020bfa44

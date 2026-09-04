@@ -1,4 +1,5 @@
 #include <game/battle_context.h>
+#include <game/battle_effect.h>
 #include <game/battle_scene.h>
 #include <game/save_data.h>
 
@@ -11,14 +12,6 @@ enum BattleEffectSequenceOffset {
     SAVE_PARTY_MEMBERS_OFFSET = 0x3F8,
     SAVE_PARTY_MEMBER_SIZE = 0x24
 };
-
-typedef struct BattleSpriteTransform {
-    s32 matrix[12];
-    s32 x;
-    s32 y;
-    s32 scale;
-    u8 unknown_3c[4];
-} BattleSpriteTransform;
 
 typedef struct BattleLevelUpBonusApplyState {
     u8 unknown_00[8];
@@ -51,12 +44,6 @@ extern const s16 gBattleLevelUpBonusPhaseOffsets[8];
 extern BattleSpriteTransform gBattleLevelUpBonusApplyTransform;
 
 s32 _s32_div_f(s32 numerator, s32 denominator);
-int BattleNumber_DrawDecimal(int value, int palette,
-                             BattleSpriteTransform *transform, int object,
-                             u16 priority, int first_digit, int spacing);
-void *BattleSprite_DrawFrame(int frame, int palette,
-                             BattleSpriteTransform *transform, int object,
-                             u16 priority, u16 resource_id, u16 flags);
 
 void BattleLevelUpBonus_UpdateAppliedStats(BattleAITask *task) {
     BattleLevelUpBonusApplyState *state =
