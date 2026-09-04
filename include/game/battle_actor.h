@@ -70,7 +70,13 @@ struct BattleActor {
     s8 transition_state;
     u8 unk_039[0x0B];
     s8 force_low_hp_animation;
-    u8 unk_045[0x27];
+    u8 unk_045[0x0B];
+    s8 status_channel_50;
+    u8 unk_051[0x0B];
+    s8 status_channel_5c;
+    u8 unk_05d[0x0B];
+    s8 status_channel_68;
+    u8 unk_069[3];
     void *resource_slot;
 };
 

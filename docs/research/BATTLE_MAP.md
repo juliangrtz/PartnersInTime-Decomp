@@ -91,6 +91,9 @@ and runtime overlay 2.
 | `02099598` | `BattleNumber_DrawDecimal` | Builds and uploads right-to-left decimal digit display lists |
 | `02099798` | `BattleRender_UpdateIntensity` | Moves a shared interface intensity toward hidden or visible state |
 | `020997C4` | `BattleSprite_DrawFrame` | Positions, patches, flushes, and submits one battle-interface sprite frame |
+| `020999D8` | `BattleMenu_UpdateVerticalSelection` | Applies wrapping/clamped up-down menu input and its selection sound (semantic C; 94.87% matching) |
+| `02099A74` | `BattleCommand_IsAvailable` | Tests command resources, item targets, and retreat restrictions (semantic C) |
+| `02099E78` | `BattleCommandWheel_UpdateSelection` | Accelerates and wraps left-right radial command selection (semantic C) |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -343,6 +346,17 @@ range, and submits it to the DS geometry path. A scene object can supply the
 base position; otherwise callers may provide an absolute transform. The final
 transform word is a Z/depth coordinate rather than a scale value; actual
 sprite scaling lives in the transform matrix diagonal.
+
+The following selection helpers recover both input behavior and command
+eligibility. Vertical lists wrap only on newly pressed up/down input, use the
+repeat channel for clamped movement, and play sound 1 on changes. The radial
+wheel accelerates while left or right is held, preserves every icon's visual
+angle when the selected index wraps, and plays sound 8. Its lock bit and a
+party-state flag can suppress movement. The command predicate always permits
+slots 1-2, validates the selected Bros. item bit for slot 3, derives legal
+living, KO, full-HP, or status targets for ordinary items, and rejects retreat
+during flagged encounters or adult transition states. These three readable
+functions remain on their reference object pending compiler matching.
 
 The neighboring formation pair at
 `0x0207F5A0`-`0x0207FC78` has a readable semantic C translation: it selects one
