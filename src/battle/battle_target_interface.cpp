@@ -1,5 +1,6 @@
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
+#include <game/battle_context.h>
 #include <game/battle_effect.h>
 #include <game/battle_global_properties.h>
 #include <game/battle_scene.h>
@@ -50,6 +51,27 @@ typedef struct BattleTargetOverlayState {
     s16 animation_id;
 } BattleTargetOverlayState;
 
+typedef struct BattleTargetLabelState {
+    BattleSceneObject *scene_object;
+    s16 intensity;
+    s16 requested_side;
+    s16 displayed_side;
+    s16 transition_angle;
+    BattleInterfaceLayer layer;
+} BattleTargetLabelState;
+
+typedef union BattleTargetLabelTransform {
+    BattleSpriteTransform value;
+    s32 words[16];
+} BattleTargetLabelTransform;
+
+typedef char BattleTargetLabelState_SizeCheck[
+    sizeof(BattleTargetLabelState) == 0x4C ? 1 : -1
+];
+typedef char BattleTargetLabelTransform_SizeCheck[
+    sizeof(BattleTargetLabelTransform) == 0x40 ? 1 : -1
+];
+
 typedef struct BattlePartyIndicatorState {
     BattleSceneObject *object;
     s16 alpha;
@@ -59,6 +81,94 @@ typedef struct BattlePartyIndicatorState {
 } BattlePartyIndicatorState;
 
 extern "C" {
+
+extern const BattleTargetLabelTransform gBattleTargetLabelTransformTemplate;
+extern s16 FX_SinCosTable_[8192];
+
+extern int func_ov002_020925bc(BattleSpriteTransform *transform,
+                               BattleInterfaceLayer *layer);
+extern void func_02036cc0(BattleSpriteTransform *transform);
+extern int func_ov002_02093b88(void *task);
+extern void *func_ov002_020725a4(int (*callback)(void *task),
+                                 void *argument, int priority, int flags);
+
+void BattleTargetLabel_Update(BattleTargetLabelState *state) {
+    if (BattleRender_UpdateIntensity(
+            state->requested_side, &state->intensity) == 0) {
+        return;
+    }
+
+    if (state->displayed_side != state->requested_side) {
+        if (state->transition_angle < 64) {
+            state->transition_angle += 12;
+        }
+        if (state->transition_angle >= 64) {
+            state->transition_angle = 64;
+            if (state->layer.flags.bits.resource_ready != 0) {
+                state->layer.flags.bits.resource_ready = 0;
+                func_ov002_020725a4(
+                    func_ov002_02093b88, &state->layer, 0, 0);
+                state->displayed_side = state->requested_side;
+            }
+        }
+    } else if (state->layer.flags.bits.resource_ready != 0) {
+        state->layer.flags.bits.resource_ready = 0;
+        func_ov002_020725a4(
+            func_ov002_02093b88, &state->layer, 0, 0);
+    } else if (state->transition_angle > 0) {
+        state->transition_angle -= 12;
+    }
+
+    if (state->transition_angle < 0) {
+        state->transition_angle = 0;
+    }
+}
+
+void BattleTargetLabel_Draw(BattleTargetLabelState *state) {
+    BattlePosition position;
+    BattleTargetLabelTransform transform;
+    BattleSceneObject *object;
+    int sine_index;
+
+    if (state->displayed_side == 0 || state->intensity <= 0) {
+        return;
+    }
+
+    object = state->scene_object;
+    BattlePosition_StoreViewRelative(
+        &position,
+        object->x,
+        (s16)(object->y - object->z),
+        (s16)(object->effect_anchor_z + 16 * (256 - object->y)),
+        object->flags.bits.use_raw_position,
+        object->flags.bits.use_alternate_model
+    );
+
+    sine_index =
+        2 * ((int)(u16)(state->transition_angle << 8) >> 4) + 1;
+    transform = gBattleTargetLabelTransformTemplate;
+    transform.value.matrix[5] = FX_SinCosTable_[sine_index];
+    transform.value.x = position.x << 8;
+    transform.value.y = position.y << 8;
+
+    if (state->displayed_side == 2) {
+        transform.value.matrix[0] = -transform.value.matrix[0];
+        transform.value.x = (position.x << 8) - 30720;
+        BattleSprite_DrawFrame(
+            19, 31, &transform.value, 0, 0x20, 3, 0x7FFF);
+        transform.value.matrix[0] = -transform.value.matrix[0];
+        transform.value.scale--;
+        *(volatile u32 *)0x04000440 = 2;
+        func_02036cc0(&transform.value);
+        func_ov002_020925bc(&transform.value, &state->layer);
+        return;
+    } else {
+        BattleSprite_DrawFrame(
+            19, 31, &transform.value, 0, 0x20, 3, 0x7FFF);
+        func_ov002_020925bc(&transform.value, &state->layer);
+        return;
+    }
+}
 
 void BattleTargetMarker_Update(BattleTargetOverlayState *state) {
     BattleSceneObject *object = state->primary_marker;
