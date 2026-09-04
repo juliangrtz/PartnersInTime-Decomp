@@ -16,6 +16,10 @@ enum BattleModelFlag {
     BATTLE_MODEL_FLAG_11 = 1 << BATTLE_MODEL_FLAG_11_SHIFT
 };
 
+enum {
+    BATTLE_MOTION_CHANNEL_COUNT = 4
+};
+
 typedef union BattleSceneFlags {
     u32 raw;
     struct {
@@ -36,9 +40,9 @@ struct BattleMotionChannel {
     s16 deferred_delta_x;
     s16 deferred_delta_y;
     s16 deferred_delta_z;
-    s16 previous_x;
-    s16 previous_y;
-    s16 previous_z;
+    s16 frame_delta_x;
+    s16 frame_delta_y;
+    s16 frame_delta_z;
     s16 parameters[8];
 };
 
@@ -61,7 +65,7 @@ struct BattleSceneObject {
     s16 unk_016;
     s16 smoothed_travel_distance;
     u16 unk_01a;
-    BattleMotionChannel motion_channels[4];
+    BattleMotionChannel motion_channels[BATTLE_MOTION_CHANNEL_COUNT];
     void *resource;
     BattleModel *primary_model;
     BattleModel *alternate_model;
@@ -109,6 +113,10 @@ void BattleSceneObject_UpdateTravelDistance(BattleSceneObject *object);
 s16 *BattleSceneObject_BeginMotionChannel(BattleSceneObject *object,
                                           int channel_index, int duration,
                                           BattleMotionCallback callback);
+void BattleSceneObject_UnlinkMotion(BattleSceneObject *object);
+void BattleSceneObject_StopMotionChannel(BattleSceneObject *object,
+                                         int channel_index,
+                                         int apply_deferred_delta);
 BattleSceneObject *BattleSceneObject_GetById(int object_id);
 
 #endif
