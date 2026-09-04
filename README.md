@@ -31,7 +31,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   lossless starting representation, not a claim of semantic decompilation.
 - Every ARM9 and ARM7 runtime image now relinks as 43 components and 420
   independent, fixed-address ELF units.
-- One hundred and thirty named overlay-2 battle functions are maintained symbolic ARM source,
+- One hundred and thirty-one named overlay-2 battle functions are maintained symbolic ARM source,
   together with the resident item-value calculator they call.
   They cover task enqueueing, intrusive task lists and pools, actor lookup,
   packed object-ID resolution and ordinary object-data loading,
@@ -87,7 +87,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
   High-level source also includes
-  one hundred and thirty byte-matching overlay-2 battle functions: forty-four
+  one hundred and thirty-one byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
   and four actor HP/lookup
   helpers plus status eligibility, base damage, the central HP/KO primitive,
@@ -134,6 +134,9 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   component selection, party/enemy idle variants, linked-party formation
   offsets, resource-driven model replacement, and the renderer notification
   path while retaining the original model virtual calls.
+  The adjacent seven-mode movement dispatcher is matching C and routes scene
+  objects through immediate, relative, absolute, target-relative, ballistic,
+  and accelerated motion primitives.
   Four matching enemy-data functions select one editable 44-byte `BDataMon`
   record, load its referenced object payload into a typed 0x200C-byte request,
   and fix its stat/object pointers after the asynchronous reads complete.

@@ -256,6 +256,10 @@ void BattleSceneObject_MoveBy(BattleSceneObject *object, int channel_index,
 void BattleSceneObject_UpdateMoveBy(BattleSceneObject *object,
                                     BattleMotionChannel *channel);
 void BattleSceneObject_UpdateTravelDistance(BattleSceneObject *object);
+void BattleSceneObject_ApplyMovement(u32 object_id, int channel_index,
+                                     int movement_kind, int x, int y, int z,
+                                     int duration, int target_object_id,
+                                     int argument_8, int argument_9);
 void BattleSceneObject_SetAnimation(BattleSceneObject *object,
                                     int animation_id, int argument_2);
 u32 BattleSceneObject_SetAnimationFromComponent(BattleSceneObject *object,

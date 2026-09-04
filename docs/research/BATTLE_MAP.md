@@ -40,6 +40,7 @@ and runtime overlay 2.
 | `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
+| `02091A90` | `BattleSceneObject_ApplyMovement` | Dispatches one of seven scene-object movement modes |
 | `02091EDC` | `BattleObjectData_IsLoadPending` | Tests pending state for ordinary and large enemy data slots |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
@@ -282,6 +283,14 @@ animation-state bits across resource replacement, and calls the battle scene's
 model-change observer when the active model changes. The preceding component
 wrapper switches the resource's five-bit component index only for the duration
 of that call, then restores it without disturbing the other packed flags.
+
+`BattleSceneObject_ApplyMovement` is the common script-facing movement
+dispatcher. Mode 0 adjusts an object to absolute coordinates while respecting
+an already active motion-list entry. Modes 1 and 2 select relative and absolute
+linear interpolation. Modes 3 and 4 select the two vertical ballistic solvers,
+mode 5 keeps an offset relative to another scene object, and mode 6 configures
+an accelerated motion channel. The dispatcher validates the 70-entry scene
+object index before resolving it.
 
 ## Battle task lists
 

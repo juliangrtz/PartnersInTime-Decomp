@@ -104,6 +104,9 @@ src/battle/battle_script_state.c:
 src/battle/battle_scene_animation.cpp:
     .text       start:0x02091118 end:0x02091a90
 
+src/battle/battle_scene_movement_dispatch.c:
+    .text       start:0x02091a90 end:0x02091c20
+
 src/battle/battle_damage_base.c:
     .text       start:0x0209bf38 end:0x0209bfa0
 
