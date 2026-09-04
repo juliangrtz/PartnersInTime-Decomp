@@ -23,12 +23,6 @@ enum BattleRewardSaveOffset {
     BATTLE_REWARD_PARTY_FORM_OFFSET = 0x558
 };
 
-typedef struct BattlePartyActor {
-    BattleActor actor;
-    u8 unknown_070[0x0E];
-    u16 effect_position_index;
-} BattlePartyActor;
-
 int BattleParty_ShowHealingEffect(BattleActor *base_actor, int amount) {
     BattlePartyActor *actor = (BattlePartyActor *)base_actor;
     BattlePosition position;
@@ -36,7 +30,7 @@ int BattleParty_ShowHealingEffect(BattleActor *base_actor, int amount) {
     int table_index;
     int next_table_index;
 
-    switch (actor->effect_position_index) {
+    switch (actor->formation_index) {
     case 0:
         position_index = 0;
         break;

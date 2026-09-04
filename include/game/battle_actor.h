@@ -34,18 +34,33 @@ struct BattleActor {
     s16 target_actor_id;
     u8 unk_022[2];
     u16 flags;
-    u8 unk_026[0x46];
+    u8 unk_026[0x12];
+    s8 transition_state;
+    u8 unk_039[0x33];
     void *resource_slot;
 };
 
+typedef struct BattlePartyActor {
+    BattleActor actor;
+    u8 unknown_070[0x0E];
+    u16 formation_index;
+    u16 linked_object_id;
+} BattlePartyActor;
+
 typedef char BattleActor_SizeCheck[sizeof(BattleActor) == 0x70 ? 1 : -1];
+typedef char BattlePartyActor_SizeCheck[
+    sizeof(BattlePartyActor) == 0x84 ? 1 : -1
+];
 
 int BattleActor_IsHpAtMostQuarter(BattleActor *actor);
 int BattleActor_ApplyDamage(struct BattleSceneObject *object, int damage);
 int BattleActor_CanReceiveStatus(BattleActor *actor);
 int BattleParty_ShowHealingEffect(BattleActor *actor, int amount);
+u32 BattleParty_AddExperience(u32 member_id, u32 amount);
+int BattleParty_StartFormationTransition(int next_state, u16 mario_target_x,
+                                         u16 luigi_target_x);
 BattleActor *BattleActor_GetEnemySlot(int actor_id);
-BattleActor *BattleActor_GetPartySlot(int actor_id);
+BattleActor *BattleActor_GetPartySlot(u16 actor_id);
 BattleActor *BattleActor_GetById(int actor_id);
 
 #endif

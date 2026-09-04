@@ -17,7 +17,9 @@ The denominator is every European ARM9, ITCM, and overlay range marked
 filesystem assets do not inflate it.
 
 - **Matching C** is a `.text` range assigned to a C translation unit that is
-  present in the repository and reproduces the original layout.
+  present in the repository, reproduces the original layout, and is enabled in
+  the exact build's `linked_sources.txt` manifest. Work-in-progress C remains
+  visible in objdiff without inflating this total.
 - **Symbolic ASM** is a maintained source range in
   `reasm/eur/patches.json`. If C and assembly cover the same bytes, C wins.
 - **Remaining** is mapped machine code that has not yet reached either source

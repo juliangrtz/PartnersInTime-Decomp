@@ -277,6 +277,15 @@ experience counter sprites used by the post-battle tally and the visible
 sprite/model/number feedback used when a party member regains HP. Its typed
 effect and position records also distinguish the signed `+0xEA` visual anchor
 from the scene object's actor ID at `+0xEC`.
+The adjacent party progression work now separates exact gameplay logic from a
+still-matching-in-progress visual transition. `BattleParty_AddExperience` at
+`0x0207FC78` is linked byte-matching C and documents the save record's two
+24-bit experience fields, all four character growth tables, and the level and
+experience caps. `BattleParty_StartFormationTransition` and
+`BattleParty_UpdateFormationTransition` are grouped in a readable formation
+source unit with equivalent control flow and exact function sizes. Until their
+remaining compiler register-allocation differences are eliminated, the linker
+keeps the original delinked object for those two functions.
 `BattleTaskQueue_Enqueue` at `0x020726B0`,
 `BattleEnemyData_RequestLoad` at `0x0208908C`, and
 `BattleEnemyData_LoadStatRecord` at `0x02088FB8` symbolically enqueue the

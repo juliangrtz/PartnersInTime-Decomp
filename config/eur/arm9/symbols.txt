@@ -1823,11 +1823,11 @@ data_02055154 kind:data(any) addr:0x02055154
 data_0205516c kind:data(any) addr:0x0205516c
 data_02055184 kind:data(any) addr:0x02055184
 data_0205519c kind:data(any) addr:0x0205519c
-data_020551d4 kind:data(any) addr:0x020551d4
-data_02055684 kind:data(any) addr:0x02055684
-data_02055b34 kind:data(any) addr:0x02055b34
+gBabyMarioLevelGrowth kind:data(any) addr:0x020551d4
+gLuigiLevelGrowth kind:data(any) addr:0x02055684
+gMarioLevelGrowth kind:data(any) addr:0x02055b34
 data_02055c30 kind:data(any) addr:0x02055c30
-data_02055fe4 kind:data(any) addr:0x02055fe4
+gBabyLuigiLevelGrowth kind:data(any) addr:0x02055fe4
 data_02056494 kind:data(any) addr:0x02056494
 data_020564a0 kind:data(any) addr:0x020564a0
 data_020564ac kind:data(any) addr:0x020564ac

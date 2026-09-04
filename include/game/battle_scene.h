@@ -6,6 +6,7 @@
 typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleModel BattleModel;
+typedef struct BattleSceneResource BattleSceneResource;
 typedef void (*BattleMotionCallback)(BattleSceneObject *object,
                                      BattleMotionChannel *channel);
 
@@ -48,8 +49,18 @@ struct BattleMotionChannel {
 };
 
 struct BattleModel {
-    u8 unk_000[0x7C];
+    u8 unk_000[0x54];
+    s16 animation_id;
+    u8 unk_056[0x26];
     u32 flags;
+};
+
+struct BattleSceneResource {
+    u8 unknown_000[0x20];
+    u16 object_data_id;
+    u8 unknown_022[2];
+    s32 resource_id;
+    u32 allocation_size;
 };
 
 struct BattleSceneObject {
@@ -67,10 +78,12 @@ struct BattleSceneObject {
     s16 smoothed_travel_distance;
     u16 unk_01a;
     BattleMotionChannel motion_channels[BATTLE_MOTION_CHANNEL_COUNT];
-    void *resource;
+    BattleSceneResource *resource;
     BattleModel *primary_model;
     BattleModel *alternate_model;
-    u8 unk_0c8[0x22];
+    u8 unk_0c8[0x18];
+    u32 transition_flags;
+    u8 unk_0e4[6];
     s16 effect_anchor_z;
     u16 actor_id;
     u16 linked_actor_id;
@@ -112,6 +125,14 @@ void BattleSceneObject_MoveBy(BattleSceneObject *object, int channel_index,
 void BattleSceneObject_UpdateMoveBy(BattleSceneObject *object,
                                     BattleMotionChannel *channel);
 void BattleSceneObject_UpdateTravelDistance(BattleSceneObject *object);
+u32 BattleSceneObject_SetBattleAnimation(BattleSceneObject *object,
+                                         int animation_id, int model_flag);
+int BattleSceneObject_StartAcceleratedMotionForDuration(
+    BattleSceneObject *object, int channel_index,
+    int direction_x, int direction_y, int direction_z,
+    int initial_speed, int duration, int target_speed,
+    int positive_acceleration
+);
 s16 *BattleSceneObject_BeginMotionChannel(BattleSceneObject *object,
                                           int channel_index, int duration,
                                           BattleMotionCallback callback);
