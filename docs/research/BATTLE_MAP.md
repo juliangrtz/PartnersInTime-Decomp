@@ -378,6 +378,9 @@ descriptor in the battle-context table at `+0xC8F4`. The maintained configure,
 lookup, status-payload, and disable helpers expose its linked-list pointer,
 callback, source/target IDs, six-bit hit kind, seven-bit status ID, signed
 chance/magnitude bytes, and the active-list head at context offset `+0xCAD4`.
+The lookup, status-payload, direct-disable, and actor-ID-disable helpers are now
+byte-identical C with a size-checked `BattleHitDescriptor`; the larger configure
+function remains exact symbolic assembly.
 The maintained `BattleHitQueue_Update` is the complete bridge between both
 representations. Each update first invokes callbacks for the previous queue,
 then walks and unlinks active descriptors, expands party and enemy wildcard
