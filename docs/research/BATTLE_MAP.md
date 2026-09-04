@@ -81,6 +81,7 @@ and runtime overlay 2.
 | `0209793C` | `BattleCommandMenu_Update` | Slides command-menu variants through resource changes and hides them during blocked paired-party states |
 | `02097F58` | `BattlePartyHpPanel_Update` | Fades a party HP panel and synchronizes the model's low-five-bit intensity state |
 | `02098084` | `BattlePartyHpPanel_Draw` | Draws one party member's current/max HP panel and updates its number anchor |
+| `02098490` | `BattlePartyHpPanel_UpdateMember` | Selects the party member for one panel, animates HP changes, and maintains its low-HP warning |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -293,14 +294,18 @@ fully hidden it loads resource `side - 1` into the embedded interface layer;
 the paired-party formation also suppresses the menu while any of four related
 interface states is in mode 2.
 
-The matching party-HP-panel pair at `0x02097F58`-`0x02098490` raises panel
+The matching party-HP-panel block at `0x02097F58`-`0x020988B0` raises panel
 intensity to 31 while visible and lowers it by three per update while closing.
 Model flag bit 2 starts the panel object's opening animation when the model is
 on its base animation; the same 0-31 value is mirrored into the model's packed
 animation-state field. The renderer maps the party formation slot to the
 adult/baby portrait frame, draws current and optional maximum HP, centers its
 number anchor with the active battle-view origin, and uploads a 64-byte
-transform-backed display-list fragment for the two-line layout.
+transform-backed display-list fragment for the two-line layout. Four member
+states select Mario, Luigi, Baby Mario, and Baby Luigi according to the paired
+formation. Their displayed HP converges linearly over 20 frames after a change,
+and each state creates and positions effect 506 while its living member is at
+or below one quarter of maximum HP.
 
 The neighboring formation pair at
 `0x0207F5A0`-`0x0207FC78` has a readable semantic C translation: it selects one
