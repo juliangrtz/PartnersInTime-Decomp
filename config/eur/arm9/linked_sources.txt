@@ -37,6 +37,7 @@ src/battle/battle_interface_layer.c
 src/battle/battle_level_up_bonus.c
 src/battle/battle_level_up_stat_rows.c
 src/battle/battle_level_up_growth.c
+src/battle/battle_results_display.c
 src/battle/battle_script_state.c
 src/battle/battle_damage_base.c
 src/battle/battle_actor_damage.c
