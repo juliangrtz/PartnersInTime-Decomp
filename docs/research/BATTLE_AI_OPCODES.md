@@ -28,7 +28,7 @@ word loads observed from the command-record register (`r5`).
 | `0x3E` | `0x02079EC0` | — | `0x8` | `BattleAI_StartScriptById` |
 | `0x3F` | `0x02079EE0` | — | `0x8`, `0xC` | `BattleAI_StopScriptById` |
 | `0x40` | `0x0207A064` | — | `0x8` | — |
-| `0x41` | `0x0207A094` | — | `0x8`, `0xC` | `func_ov002_02090c18` |
+| `0x41` | `0x0207A094` | — | `0x8`, `0xC` | `BattleSceneObject_SwapSlots` |
 | `0x42` | `0x0207A0C0` | — | `0x8` | — |
 | `0x43` | `0x0207A0FC` | — | `0x8` | — |
 | `0x44` | `0x0207A124` | — | `0x8` | — |
