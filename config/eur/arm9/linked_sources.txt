@@ -42,6 +42,7 @@ src/battle/battle_target_interface.cpp
 src/battle/battle_party_hp_panel.c
 src/battle/battle_interface_render.c
 src/battle/battle_item_selection.c
+src/battle/battle_target_cursor_movement.c
 src/battle/battle_script_state.c
 src/battle/battle_damage_base.c
 src/battle/battle_actor_damage.c
