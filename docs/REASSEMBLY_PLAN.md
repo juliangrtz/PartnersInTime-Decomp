@@ -127,6 +127,12 @@ toggles the active buffer, drives the resident background fade API, and reloads
 the current map's field assets after battle. A typed partial `BattleContext`
 now anchors the background ID at `+0x3A`, runtime state at `+0xD000`, and its
 flags at `+0x3A0`.
+The adjacent `0x02087EC4`-`0x020884E8` common battle-asset loader is matching C
+too. It exposes the asynchronous archive-open/read sequence, offset-table
+relocation, the twenty-one-entry runtime pointer table, and the language-based
+entry mapping driven by save byte `+0x515`. The partial context now also types
+the shared archive request at `+0x140`, the pointer table at `+0x68FC`, and the
+runtime archive source/header at `+0xE160/+0xE168`.
 The task-list and task-pool functions at
 `0x020A50D4`-`0x020A5294` are byte-matching C and expose callback iteration,
 owner-slot invalidation, deferred recycling, explicit free-list access, task

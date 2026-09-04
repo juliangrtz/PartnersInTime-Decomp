@@ -29,6 +29,8 @@ and runtime overlay 2.
 | `02087CE4` | `BattleFieldAssets_RequestReload` | Queues the current map's field-asset reload when battle exits |
 | `02087D98` | `BattleBackground_RequestToggle` | Queues a swap of the double-buffered 3D battle background |
 | `02087E5C` | `BattleBackground_RequestLoad` | Queues a battle-background load into the inactive buffer |
+| `02087F98` | `BattleCommonAssets_LoadEntriesTask` | Relocates the battle archive table and loads its localized/common entries |
+| `0208848C` | `BattleCommonAssets_RequestLoad` | Starts the asynchronous common battle-asset load pipeline |
 | `02091198` | `BattleSceneObject_SetAnimation` | Selects, creates, stops, or starts a scene-object animation |
 | `02091A18` | `BattleSceneObject_IsAnimationChannelActive` | Tests one of four per-object animation slots |
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
@@ -213,6 +215,15 @@ the configured background ID from context offset `+0x3A`, uses runtime flag bit
 19 as the inactive-buffer selector, fades/toggles the resident scene, and uses
 bit 8 as the pending marker. The neighboring battle-exit task rebuilds the
 field asset set from the signed current-map ID at save-state offset `+0x55A`.
+The following six-function common-asset pipeline is matching C too. Its
+asynchronous tasks open the archive referenced at context offset `+0xE160`,
+read an eight-byte header followed by its offset table, relocate every table
+word to the selected archive member, and stream entries into a contiguous
+buffer. The loader fills twenty-one pointers at `+0x68FC`; slot zero uses a
+resident fallback, slots 1-13 select language-specific entries from save byte
+`+0x515`, and slots 14-20 use shared entries except for the final localized
+one. Runtime flag bit 7 marks this pipeline pending. The exact content types of
+the individual slots remain to be named from their consumers.
 All actor resolvers, the compact base-damage calculation, and the damage/KO
 updater are now maintained byte-identical C.
 The state-bit setter, active-model selectors, model-bit setters, position
