@@ -77,9 +77,10 @@ outputs stay below `build/`, which is ignored by Git.
   hit-descriptor setup layer are high-level source too. The remaining game
   functions stay in symbolic assembly until an equivalent C translation
   reproduces their original code and layout.
-- The European editable-data project covers 21 multilingual MFset text
-  archives and all 98 enemy-stat records. Its inverse encoders reproduce every
-  covered binary byte for byte before edits and support length-changing text.
+- The European editable-data project covers 21 multilingual MFset archives,
+  10,510 battle/field dialogue strings, and all 98 enemy-stat records. Its
+  inverse encoders reproduce every covered binary byte for byte before edits
+  and support length-changing text.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.

@@ -13,6 +13,9 @@ copied unchanged when the modded NitroFS tree is staged.
 
 - all 21 `mfset*.dat` archives: item, equipment, badge, enemy, help, area,
   save/load, menu, outline, option, and shop text in all six ROM language slots;
+- all 834 battle-message strings from `BAI/BMes.dat` and all 9,676 field
+  dialogue strings from `FEvent/FEvData.dat`, including their per-message
+  headers and localized container structure;
 - all 98 fixed-size enemy records from `BData/BDataMon.dat`, including level,
   HP, POW, DEF, speed, experience, coins, drops, traits, and unknown bytes;
 - length-changing MFset edits: string pointers, language-entry sizes, and outer
@@ -20,9 +23,7 @@ copied unchanged when the modded NitroFS tree is staged.
 
 Player growth/base stats are not present in this DAT corpus.  They are created
 by executable and save-data logic and therefore remain part of the C
-reconstruction.  Field dialogue (`FEvent/FEvData.dat`) and battle messages
-(`BAI/BMes.dat`) use an additional localized wrapper and are the next text
-formats to promote from the datamine into this editable pipeline.
+reconstruction.
 
 ## Building a data mod
 
@@ -64,7 +65,10 @@ Each file under `data/eur/text/` rebuilds the NitroFS path in its `source`
 field.  Languages contain ordered string records.  The numeric `id` is the
 index used by game code and must stay contiguous; only edit `text` unless a
 format investigation establishes a reason to change the two-byte
-`header_hex` present in the main menu-message archive.
+`header_hex` present in menu, battle, and field message records.  Field
+containers also identify their `room_id`/`room_part`; battle containers expose
+their `battle_group`, making the large archives searchable without relying on
+binary offsets.
 
 Control sequences use an explicit notation:
 

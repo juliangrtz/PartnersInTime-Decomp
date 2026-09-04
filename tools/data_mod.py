@@ -23,6 +23,7 @@ from typing import Any, Iterable
 PROJECT_SCHEMA = "pit-data-project-v1"
 MFSET_SCHEMA = "pit-mfset-v1"
 ENEMY_SCHEMA = "pit-enemy-stats-v1"
+DIALOGUE_SCHEMA = "pit-localized-dialogue-v1"
 LANGUAGES = ("japanese", "english", "french", "german", "italian", "spanish")
 
 CONTROL_CODES = {
@@ -410,6 +411,219 @@ def build_mfset(document: dict[str, Any], source_data: bytes) -> bytes:
     return build_offset_archive(entries)
 
 
+def parse_localized_container(data: bytes) -> list[bytes]:
+    """Split the 91-pointer event/message container without losing metadata."""
+    table_size = 91 * 4
+    if len(data) < table_size or struct.unpack_from("<I", data)[0] != table_size:
+        raise DataModError("not a 91-pointer localized container")
+    pointers = list(struct.unpack_from("<91I", data))
+    if pointers[0] != table_size:
+        raise DataModError("localized container payload does not follow its table")
+    if any(pointer < table_size or pointer > len(data) for pointer in pointers):
+        raise DataModError("localized container pointer is outside the entry")
+    if any(a > b for a, b in zip(pointers, pointers[1:])):
+        raise DataModError("localized container pointers are not ordered")
+    return [
+        data[pointers[index] : pointers[index + 1]]
+        if index + 1 < len(pointers)
+        else data[pointers[index] :]
+        for index in range(len(pointers))
+    ]
+
+
+def build_localized_container(segments: list[bytes]) -> bytes:
+    if len(segments) != 91:
+        raise DataModError("localized container must retain all 91 segments")
+    position = 91 * 4
+    pointers = []
+    for segment in segments:
+        pointers.append(position)
+        position += len(segment)
+    return struct.pack("<91I", *pointers) + b"".join(segments)
+
+
+def parse_dialogue_chunk(
+    data: bytes, language: str
+) -> tuple[str, list[dict[str, str]]]:
+    try:
+        return "mfset", parse_mfset_entry(data, language, header_size=2)
+    except DataModError:
+        pass
+
+    if len(data) < 12:
+        raise DataModError("dialogue chunk is neither MFset nor FEv message format")
+    text_end = 4 + struct.unpack_from("<I", data)[0]
+    if text_end < 8 or text_end > len(data):
+        raise DataModError("FEv message text-end marker is outside the chunk")
+    inner = data[4:text_end]
+    return "fevent-mfset", parse_mfset_entry(inner, language, header_size=2)
+
+
+def build_dialogue_chunk(
+    rows: list[dict[str, str]], language: str, chunk_format: str, source_data: bytes
+) -> bytes:
+    if chunk_format == "mfset":
+        # Parsing the source again verifies that the editable format label was
+        # not changed independently of the private binary.
+        source_format, _ = parse_dialogue_chunk(source_data, language)
+        if source_format != chunk_format:
+            raise DataModError(f"dialogue format changed from {source_format}")
+        return build_mfset_entry(rows, language, header_size=2)
+    if chunk_format == "fevent-mfset":
+        source_format, _ = parse_dialogue_chunk(source_data, language)
+        if source_format != chunk_format:
+            raise DataModError(f"dialogue format changed from {source_format}")
+        text_end = 4 + struct.unpack_from("<I", source_data)[0]
+        metadata = source_data[text_end:]
+        inner = build_mfset_entry(rows, language, header_size=2)
+        return struct.pack("<I", len(inner)) + inner + metadata
+    raise DataModError(f"unsupported dialogue chunk format {chunk_format!r}")
+
+
+def discover_dialogue_containers(
+    entries: list[bytes], relative_source: str
+) -> dict[int, tuple[list[bytes], dict[int, tuple[str, list[dict[str, str]]]]]]:
+    discovered = {}
+    for archive_entry, entry in enumerate(entries):
+        try:
+            segments = parse_localized_container(entry)
+        except DataModError:
+            continue
+        languages = {}
+        for language_id, language in enumerate(LANGUAGES):
+            slot = 84 + language_id
+            if not segments[slot]:
+                continue
+            try:
+                languages[slot] = parse_dialogue_chunk(segments[slot], language)
+            except DataModError as exc:
+                raise DataModError(
+                    f"{relative_source} entry {archive_entry} slot {slot}: {exc}"
+                ) from exc
+        if languages:
+            discovered[archive_entry] = (segments, languages)
+    return discovered
+
+
+def export_dialogue(source_path: Path, relative_source: str) -> dict[str, Any]:
+    source_data = source_path.read_bytes()
+    entries = parse_offset_archive(source_data)
+    discovered = discover_dialogue_containers(entries, relative_source)
+    kind = "battle" if relative_source == "BAI/BMes.dat" else "field"
+    containers = []
+    for archive_entry, (_, language_chunks) in discovered.items():
+        container: dict[str, Any] = {
+            "archive_entry": archive_entry,
+            "languages": [],
+        }
+        if kind == "battle":
+            container["battle_group"] = archive_entry
+        else:
+            container["room_id"] = archive_entry // 3
+            container["room_part"] = archive_entry % 3
+        for slot, (chunk_format, rows) in language_chunks.items():
+            language = LANGUAGES[slot - 84]
+            container["languages"].append(
+                {
+                    "archive_slot": slot,
+                    "language": language,
+                    "encoding": language_encoding(language),
+                    "chunk_format": chunk_format,
+                    "strings": [
+                        {"id": string_id, **row}
+                        for string_id, row in enumerate(rows)
+                    ],
+                }
+            )
+        containers.append(container)
+    return {
+        "schema": DIALOGUE_SCHEMA,
+        "kind": kind,
+        "source": relative_source,
+        "source_sha1": sha1(source_data),
+        "containers": containers,
+    }
+
+
+def build_dialogue(document: dict[str, Any], source_data: bytes) -> bytes:
+    if document.get("schema") != DIALOGUE_SCHEMA:
+        raise DataModError(f"expected schema {DIALOGUE_SCHEMA!r}")
+    source = document.get("source")
+    if document.get("source_sha1") != sha1(source_data):
+        raise DataModError(f"private source {source} does not match source_sha1")
+    entries = parse_offset_archive(source_data)
+    discovered = discover_dialogue_containers(entries, str(source))
+    seen_containers: set[int] = set()
+
+    for container in _require_list(document.get("containers"), "containers"):
+        if not isinstance(container, dict):
+            raise DataModError("every containers item must be an object")
+        archive_entry = container.get("archive_entry")
+        if not isinstance(archive_entry, int) or archive_entry not in discovered:
+            raise DataModError(f"invalid dialogue archive entry {archive_entry!r}")
+        if archive_entry in seen_containers:
+            raise DataModError(f"duplicate dialogue archive entry {archive_entry}")
+        seen_containers.add(archive_entry)
+        segments, expected_languages = discovered[archive_entry]
+        seen_slots: set[int] = set()
+
+        for language_row in _require_list(
+            container.get("languages"), f"entry {archive_entry} languages"
+        ):
+            if not isinstance(language_row, dict):
+                raise DataModError("every dialogue language must be an object")
+            slot = language_row.get("archive_slot")
+            if not isinstance(slot, int) or slot not in expected_languages:
+                raise DataModError(
+                    f"entry {archive_entry} has invalid language slot {slot!r}"
+                )
+            language = LANGUAGES[slot - 84]
+            if language_row.get("language") != language:
+                raise DataModError(f"archive slot {slot} must use {language}")
+            if slot in seen_slots:
+                raise DataModError(
+                    f"entry {archive_entry} repeats language slot {slot}"
+                )
+            seen_slots.add(slot)
+            expected_format, _ = expected_languages[slot]
+            chunk_format = language_row.get("chunk_format")
+            if chunk_format != expected_format:
+                raise DataModError(
+                    f"entry {archive_entry} slot {slot} must use {expected_format}"
+                )
+
+            strings = []
+            for string_id, row in enumerate(
+                _require_list(language_row.get("strings"), "dialogue strings")
+            ):
+                if not isinstance(row, dict) or row.get("id") != string_id:
+                    raise DataModError(
+                        f"entry {archive_entry} {language} strings need contiguous IDs"
+                    )
+                text = row.get("text")
+                header_hex = row.get("header_hex")
+                if not isinstance(text, str) or not isinstance(header_hex, str):
+                    raise DataModError(
+                        f"entry {archive_entry} {language} string {string_id} needs text/header_hex"
+                    )
+                strings.append({"text": text, "header_hex": header_hex})
+            segments[slot] = build_dialogue_chunk(
+                strings, language, chunk_format, segments[slot]
+            )
+
+        if seen_slots != set(expected_languages):
+            missing = sorted(set(expected_languages) - seen_slots)
+            raise DataModError(
+                f"dialogue entry {archive_entry} is missing language slots {missing}"
+            )
+        entries[archive_entry] = build_localized_container(segments)
+
+    if seen_containers != set(discovered):
+        missing = sorted(set(discovered) - seen_containers)
+        raise DataModError(f"dialogue document is missing archive entries {missing}")
+    return build_offset_archive(entries)
+
+
 ENEMY_STRUCT = struct.Struct("<HHBBHHHHHH14sHHII")
 
 
@@ -559,17 +773,30 @@ def command_export(args: argparse.Namespace) -> None:
 
     enemy_relative = "stats/enemies.json"
     write_json(project_root / enemy_relative, export_enemy_stats(files_root))
+    dialogue_documents = []
+    for relative_source in ("BAI/BMes.dat", "FEvent/FEvData.dat"):
+        source_path = files_root / relative_source
+        if not source_path.is_file():
+            raise DataModError(f"dialogue source file is missing: {source_path}")
+        output_relative = f"text/{relative_source.replace('/', '__')}.json"
+        write_json(
+            project_root / output_relative,
+            export_dialogue(source_path, relative_source),
+        )
+        dialogue_documents.append(output_relative)
     write_json(
         project_root / "project.json",
         {
             "schema": PROJECT_SCHEMA,
             "version": args.version,
             "text_documents": text_documents,
+            "dialogue_documents": dialogue_documents,
             "stat_documents": [enemy_relative],
         },
     )
     print(
-        f"Exported {len(text_documents)} text archives and one enemy table to {project_root}"
+        f"Exported {len(text_documents)} MFsets, {len(dialogue_documents)} dialogue archives, "
+        f"and one enemy table to {project_root}"
     )
 
 
@@ -594,6 +821,7 @@ def compile_project(
 
     document_groups = (
         ("text_documents", MFSET_SCHEMA),
+        ("dialogue_documents", DIALOGUE_SCHEMA),
         ("stat_documents", ENEMY_SCHEMA),
     )
     for key, expected_schema in document_groups:
@@ -614,6 +842,8 @@ def compile_project(
             source_data = source_path.read_bytes()
             if expected_schema == MFSET_SCHEMA:
                 rebuilt = build_mfset(document, source_data)
+            elif expected_schema == DIALOGUE_SCHEMA:
+                rebuilt = build_dialogue(document, source_data)
             else:
                 rebuilt = build_enemy_stats(document, source_data)
             replacements[source] = rebuilt
