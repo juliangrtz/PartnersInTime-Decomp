@@ -1,0 +1,35 @@
+#include <game/battle_ai.h>
+
+int BattleAI_HandleVmResult(BattleAITask *task, int result, BattleAIState *state) {
+    switch (result) {
+    case 1:
+        goto finish;
+    case 2:
+        if (state->continuation_script == 0) {
+            goto finish;
+        }
+
+        state->script = state->continuation_script;
+        state->order = state->continuation_order;
+        state->order_tie_break = state->continuation_tie_break;
+        state->continuation_script = 0;
+        state->continuation_order = 0;
+        state->continuation_tie_break = 0xFFFF;
+        return 1;
+    case 3:
+        goto done;
+    default:
+        goto done;
+    }
+
+finish:
+    task->callback = 0;
+    state->order = 0;
+    state->order_tie_break = 0xFFFF;
+    state->continuation_script = 0;
+    state->continuation_order = 0;
+    state->continuation_tie_break = 0xFFFF;
+
+done:
+    return 0;
+}
