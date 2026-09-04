@@ -53,19 +53,42 @@ typedef struct BattleCommonAssetArchive {
     u32 header[1];
 } BattleCommonAssetArchive;
 
+typedef struct BattleInterfaceLayer {
+    u8 unknown_00[0x32];
+    u16 allocation_size;
+    s16 x;
+    s16 y;
+    u16 width;
+    u16 height;
+    u32 vram_offset;
+} BattleInterfaceLayer;
+
 typedef struct BattleRuntimeState {
     u8 unknown_000[0x3A0];
     BattleRuntimeFlags flags;
-    u8 unknown_3a4[0xDBC];
+    u8 unknown_3a4[0xDA4];
+    u32 heap_id;
+    u8 unknown_114c[0x14];
     BattleCommonAssetArchive common_assets;
 } BattleRuntimeState;
 
 typedef struct BattleContext {
     u8 unknown_0000[0x3A];
     u16 background_id;
-    u8 unknown_003c[0x104];
+    u8 unknown_003c[8];
+    void *screen_assets[2];
+    u8 unknown_004c[0xF4];
     BattleArchiveReadRequest asset_read;
-    u8 unknown_0168[0x6794];
+    u8 unknown_0168[0x648C];
+    BattleInterfaceLayer interface_layer_0;
+    u8 unknown_6634[0x14];
+    BattleInterfaceLayer interface_layer_1;
+    u8 unknown_6688[0x14];
+    BattleInterfaceLayer interface_layer_2;
+    u8 unknown_66dc[0x10];
+    BattleInterfaceLayer interface_layer_3;
+    u8 unknown_672c[0x1C8];
+    void *interface_assets[2];
     void *common_asset_pointers[BATTLE_COMMON_ASSET_COUNT];
     void *common_asset_end;
     u8 unknown_6954[0x66AC];
@@ -74,6 +97,9 @@ typedef struct BattleContext {
 
 typedef char BattleArchiveReadRequest_SizeCheck[
     sizeof(BattleArchiveReadRequest) == 0x28 ? 1 : -1
+];
+typedef char BattleInterfaceLayer_SizeCheck[
+    sizeof(BattleInterfaceLayer) == 0x40 ? 1 : -1
 ];
 typedef char BattleRuntimeState_SizeCheck[
     sizeof(BattleRuntimeState) == 0x116C ? 1 : -1
