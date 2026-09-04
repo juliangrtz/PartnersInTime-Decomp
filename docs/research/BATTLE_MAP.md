@@ -359,6 +359,9 @@ channels beginning at offset `+0x1C`; starting a channel replaces an existing
 callback, clears its transient accumulators, stores its duration, and returns
 the channel payload at `+0x18`. Coordinate adjustment preserves interpolation
 targets for listed objects, while unlisted objects receive an immediate move.
+The snapshot, immediate move, active-motion delta, and list-aware adjustment
+helpers are byte-identical C; their shared scene-object layout now names the
+intrusive next pointer and the three stored target coordinates.
 The common per-frame updater snapshots each object's coordinates, advances its
 four callbacks, clamps timed channels, transfers deferred deltas between
 overlapping channels, removes idle objects, and updates a smoothed travel
