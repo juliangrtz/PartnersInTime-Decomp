@@ -8,6 +8,7 @@ typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleModel BattleModel;
 typedef struct BattleModelVTable BattleModelVTable;
+struct BattleSpriteTransform;
 typedef void (*BattleMotionCallback)(BattleSceneObject *object,
                                      BattleMotionChannel *channel);
 
@@ -58,7 +59,11 @@ struct BattleMotionChannel {
 };
 
 struct BattleModelVTable {
-    u8 unknown_000[0x24];
+    void (*prepare_render)(BattleModel *model);
+    void (*unknown_004)(BattleModel *model);
+    void (*draw)(BattleModel *model, int argument_1,
+                 int argument_2, int argument_3);
+    u8 unknown_00c[0x18];
     void (*start)(BattleModel *model);
     void (*stop)(BattleModel *model);
     u8 unknown_02c[8];
@@ -69,13 +74,15 @@ struct BattleModelVTable {
     u8 unknown_06c[0x1C];
     int (*configure_animation_layer)(BattleModel *model, s8 layer,
                                      int animation_id, int enabled);
+    u8 unknown_08c[0x3C];
+    struct BattleSpriteTransform *(*get_sprite_transform)(BattleModel *model);
 };
 
 #ifdef __cplusplus
 struct BattleModel {
-    virtual void unknown_00();
+    virtual void prepare_render();
     virtual void unknown_04();
-    virtual void unknown_08();
+    virtual void draw(int argument_1, int argument_2, int argument_3);
     virtual void unknown_0c();
     virtual void unknown_10();
     virtual void unknown_14();
@@ -110,6 +117,22 @@ struct BattleModel {
     virtual void unknown_84();
     virtual int configure_animation_layer(s8 layer, int animation_id,
                                            int enabled);
+    virtual void unknown_8c();
+    virtual void unknown_90();
+    virtual void unknown_94();
+    virtual void unknown_98();
+    virtual void unknown_9c();
+    virtual void unknown_a0();
+    virtual void unknown_a4();
+    virtual void unknown_a8();
+    virtual void unknown_ac();
+    virtual void unknown_b0();
+    virtual void unknown_b4();
+    virtual void unknown_b8();
+    virtual void unknown_bc();
+    virtual void unknown_c0();
+    virtual void unknown_c4();
+    virtual struct BattleSpriteTransform *get_sprite_transform();
     u8 unk_004[8];
     BattleSceneObject *owner;
     u8 unk_010[0x44];
