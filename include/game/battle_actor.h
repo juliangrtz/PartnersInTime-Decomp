@@ -62,9 +62,15 @@ typedef char BattlePartyActor_SizeCheck[
     sizeof(BattlePartyActor) == 0x84 ? 1 : -1
 ];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int BattleActor_IsHpAtMostQuarter(BattleActor *actor);
 int BattleActor_ApplyDamage(struct BattleSceneObject *object, int damage);
 int BattleActor_CanReceiveStatus(BattleActor *actor);
+int BattleActor_IsAnyHitLocked(void);
+int BattleEnemy_Remove(int actor_id, int show_damage);
 int BattleParty_ShowHealingEffect(BattleActor *actor, int amount);
 u32 BattleParty_AddExperience(u32 member_id, u32 amount);
 int BattleParty_StartFormationTransition(int next_state, u16 mario_target_x,
@@ -72,5 +78,9 @@ int BattleParty_StartFormationTransition(int next_state, u16 mario_target_x,
 BattleActor *BattleActor_GetEnemySlot(int actor_id);
 BattleActor *BattleActor_GetPartySlot(u16 actor_id);
 BattleActor *BattleActor_GetById(int actor_id);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
