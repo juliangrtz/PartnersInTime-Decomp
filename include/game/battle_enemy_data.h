@@ -12,7 +12,13 @@ typedef struct BattleEnemyStatRecord {
     u16 power;
     u16 defense;
     u16 speed;
-    u16 traits;
+    union {
+        u16 traits;
+        struct {
+            u16 trait_class : 2;
+            u16 unknown_traits_02_15 : 14;
+        } trait_bits;
+    };
     u16 unknown_10;
     u8 unknown_12[14];
     u16 experience;
@@ -45,6 +51,6 @@ typedef char BattleEnemyDataRequest_SizeCheck[
     sizeof(BattleEnemyDataRequest) == 0x200C ? 1 : -1];
 
 BattleQueuedTask *BattleEnemyData_RequestLoad(BattleEnemyDataRequest *request,
-                                              u16 stat_index);
+                                              s32 stat_index);
 
 #endif

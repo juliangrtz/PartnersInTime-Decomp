@@ -36,12 +36,7 @@ typedef struct BattleEnemyActorCommandView {
     s16 removal_animation_id;
 } BattleEnemyActorCommandView;
 
-typedef struct BattleEnemySceneObjectCommandView {
-    BattleSceneObject object;
-    u8 unknown_0f8[0x0A];
-    u8 removal_state_102;
-    u8 removal_state_103;
-} BattleEnemySceneObjectCommandView;
+typedef BattleSceneObject BattleEnemySceneObjectCommandView;
 
 typedef char BattleEnemyPositionRecord_SizeCheck[
     sizeof(BattleEnemyPositionRecord) == 0x14 ? 1 : -1];

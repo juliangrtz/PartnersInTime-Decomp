@@ -12,7 +12,7 @@ void BattleEnemyData_LoadObjectData(BattleQueuedTask *task);
 void BattleEnemyData_LoadStatRecord(BattleQueuedTask *task);
 
 BattleQueuedTask *BattleEnemyData_RequestLoad(BattleEnemyDataRequest *request,
-                                              u16 stat_index) {
+                                              s32 stat_index) {
     request->stats = 0;
     request->stat_index = stat_index;
     return BattleTaskQueue_Enqueue(BattleEnemyData_LoadStatRecord, request);

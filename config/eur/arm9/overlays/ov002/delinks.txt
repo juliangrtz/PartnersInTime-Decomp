@@ -107,6 +107,12 @@ src/battle/battle_scene_animation.cpp:
 src/battle/battle_scene_movement_dispatch.c:
     .text       start:0x02091a90 end:0x02091c20
 
+src/battle/battle_entity_resources.c:
+    .text       start:0x02091c20 end:0x02091edc
+
+src/battle/battle_object_load_control.c:
+    .text       start:0x02091edc end:0x020922dc
+
 src/battle/battle_damage_base.c:
     .text       start:0x0209bf38 end:0x0209bfa0
 

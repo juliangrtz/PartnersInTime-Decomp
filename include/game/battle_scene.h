@@ -201,7 +201,8 @@ struct BattleSceneObject {
     BattleSceneResource *resource;
     BattleModel *primary_model;
     BattleModel *alternate_model;
-    u8 unk_0c8[0x18];
+    u32 unk_0c8;
+    u8 unk_0cc[0x14];
     s32 loaded_resource_id;
     s16 animation_id;
     s16 previous_base_animation_id;
@@ -211,12 +212,28 @@ struct BattleSceneObject {
     u16 linked_actor_id;
     u8 unk_0f0[4];
     BattleSceneFlags flags;
+    s16 property_0f8;
+    s16 property_0fa;
+    s8 property_0fc;
+    s8 property_0fd;
+    s8 property_0fe;
+    s8 property_0ff;
+    s8 property_100;
+    s8 property_101;
+    union {
+        s8 property_102;
+        u8 removal_state_102;
+    };
+    union {
+        s8 property_103;
+        u8 removal_state_103;
+    };
 };
 
 typedef char BattleMotionChannel_SizeCheck[
     sizeof(BattleMotionChannel) == 0x28 ? 1 : -1];
 typedef char BattleSceneObject_SizeCheck[
-    sizeof(BattleSceneObject) == 0xF8 ? 1 : -1];
+    sizeof(BattleSceneObject) == 0x104 ? 1 : -1];
 typedef char BattleModel_SizeCheck[sizeof(BattleModel) == 0x1B8 ? 1 : -1];
 
 extern BattleSceneObject *gBattleMotionObjectList;
