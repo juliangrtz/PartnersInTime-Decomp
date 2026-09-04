@@ -117,6 +117,10 @@ void BattleSceneObject_UnlinkMotion(BattleSceneObject *object);
 void BattleSceneObject_StopMotionChannel(BattleSceneObject *object,
                                          int channel_index,
                                          int apply_deferred_delta);
+int BattleSceneObject_IsAnimationChannelActive(BattleSceneObject *object,
+                                               int channel_index);
+int BattleSceneObject_IsAnimationActiveById(u32 object_id,
+                                            int channel_index);
 BattleSceneObject *BattleSceneObject_GetById(u32 object_id);
 
 #endif

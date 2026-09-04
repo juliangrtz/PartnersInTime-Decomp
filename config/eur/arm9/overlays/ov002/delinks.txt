@@ -22,6 +22,9 @@ src/battle/battle_ai_init_state.c:
 src/battle/battle_script_state.c:
     .text       start:0x020922dc end:0x0209234c
 
+src/battle/battle_scene_animation.c:
+    .text       start:0x02091a18 end:0x02091a90
+
 src/battle/battle_damage_base.c:
     .text       start:0x0209bf38 end:0x0209bfa0
 
