@@ -249,5 +249,59 @@ class ShopStockTests(unittest.TestCase):
         self.assertEqual(differences, [first_pool])
 
 
+class ItemMasterTests(unittest.TestCase):
+    def test_round_trips_records_and_patches_price_at_runtime_address(self) -> None:
+        arm9 = bytearray(0x4D000)
+        categories = []
+        for tag, class_name, address, count, stride, _ in data_mod.ITEM_MASTER_LAYOUT:
+            offset = address - data_mod.ARM9_LOAD_ADDRESS
+            records = []
+            for index in range(count):
+                record = struct.pack("<6HH", *(range(6)), 10 + index)
+                record += bytes([index & 0xFF]) * (stride - 0x0E)
+                arm9[offset + index * stride : offset + (index + 1) * stride] = record
+                records.append(
+                    {
+                        "index": index,
+                        "item_id": f"0x{tag | index:04X}",
+                        "name_hint": "",
+                        "unknown_words_00_0A": [
+                            f"0x{value:04X}" for value in range(6)
+                        ],
+                        "price": 10 + index,
+                        "unknown_0E_hex": (
+                            bytes([index & 0xFF]) * (stride - 0x0E)
+                        ).hex(" "),
+                    }
+                )
+            table = bytes(arm9[offset : offset + count * stride])
+            categories.append(
+                {
+                    "class": class_name,
+                    "item_tag": f"0x{tag:04X}",
+                    "runtime_address": f"0x{address:08X}",
+                    "record_count": count,
+                    "record_size": stride,
+                    "source_region_sha1": data_mod.sha1(table),
+                    "records": records,
+                }
+            )
+        document = {
+            "schema": data_mod.ITEM_MASTER_SCHEMA,
+            "binary": "arm9_main",
+            "load_address": f"0x{data_mod.ARM9_LOAD_ADDRESS:08X}",
+            "source_sha1": data_mod.sha1(bytes(arm9)),
+            "categories": categories,
+        }
+        self.assertEqual(data_mod.build_item_master(document, bytes(arm9)), bytes(arm9))
+
+        document["categories"][0]["records"][0]["price"] = 1234
+        rebuilt = data_mod.build_item_master(document, bytes(arm9))
+        first_price = (
+            data_mod.ITEM_MASTER_LAYOUT[0][2] - data_mod.ARM9_LOAD_ADDRESS + 0x0C
+        )
+        self.assertEqual(struct.unpack_from("<H", rebuilt, first_price)[0], 1234)
+
+
 if __name__ == "__main__":
     unittest.main()
