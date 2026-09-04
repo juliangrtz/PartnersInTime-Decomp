@@ -36,6 +36,23 @@ For a quick batch decompiler check:
   'build/ida/PiT_eur_ov002_battle.i64'
 ```
 
+The resident ARM9 image can be imported in the same way. This database is the
+useful companion for the generic script VM, save logic, item tables, and engine
+code outside overlays:
+
+```powershell
+& $ida '-A' '-c' '-TBinary file' '-pARM' '-b200400' '-i02004000' `
+  '-Stools/ida/import_arm9.py' '-Lbuild/ida/arm9.log' `
+  '-obuild/ida/PiT_eur_arm9.i64' 'build/eur/build/arm9.bin'
+
+& $ida '-A' '-Stools/ida/decompile_function.py VM_ExecuteCommand' `
+  'build/ida/PiT_eur_arm9.i64'
+```
+
+`import_arm9.py` splits text, init, read-only data, constructors, data, and BSS;
+imports every maintained resident symbol/function boundary; and applies the
+reconstructed script-VM types before Hex-Rays runs.
+
 IDA may print warnings from optional third-party plugins whose Python packages
 are absent. They do not affect the ARM processor module, the database import,
 or Hex-Rays.
