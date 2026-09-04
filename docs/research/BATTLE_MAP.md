@@ -63,6 +63,9 @@ and runtime overlay 2.
 | `020940E0` | `BattleLevelUpBonus_UpdateRisingObject` | Moves the selected-bonus object toward its result position and retires its callback |
 | `02094174` | `BattleLevelUpBonus_UpdateAppliedStats` | Counts the selected bonus into HP, POW, DEF, SPEED, or STACHE and commits the active stats |
 | `02094408` | `BattleLevelUpBonus_StartApplying` | Transitions the stopped wheel into its delayed point-application task |
+| `02095928` | `BattleLevelUpGrowth_UpdateStatRow` | Animates one level-up stat row and draws its old value plus growth delta |
+| `02095C34` | `BattleLevelUpGrowth_UpdateRowSpawner` | Starts the five stat rows at three-frame intervals |
+| `02095CE0` | `BattleLevelUpGrowth_StartDisplay` | Computes cumulative-table growth deltas and starts the row sequence |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -246,6 +249,14 @@ the low seven bits of the wheel's selector as HP, POW, DEF, SPEED, and STACHE
 indices `0` through `4`. `BattleLevelUpBonus_StartApplying` is semantically
 named but remains on the reference object because its otherwise equivalent C
 translation differs by one compiler-generated address instruction.
+
+The matching growth-display pair at `0x02095C34`-`0x02095E00` reads the current
+level from the low byte of the save member's packed experience word. It selects
+the character-specific cumulative growth table, subtracts the preceding two
+level rows to obtain HP/POW/DEF/SPEED gains, sets the STACHE gain to zero, and
+spawns all five result rows three frames apart. The row callback at
+`0x02095928` is semantically named from its confirmed callers and rendering
+behavior but remains reference code.
 
 The neighboring formation pair at
 `0x0207F5A0`-`0x0207FC78` has a readable semantic C translation: it selects one
