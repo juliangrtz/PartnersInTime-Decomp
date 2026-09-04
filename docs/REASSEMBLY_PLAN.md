@@ -167,9 +167,12 @@ Object scripts use fixed 192-byte states and may save a continuation pointer
 plus inherited ordering fields; VM result 2 activates that continuation in the
 same frame.
 Enemy auxiliary scripts use the actor-embedded state at `+0x1E0`. Both task
-families are initialized, linked, updated, and completed in maintained source.
+families are initialized, linked, updated, and completed in byte-matching C.
 The action and reaction callbacks are matching C too, as is the common helper
 that finds an existing actor task or inserts a new node in actor-ID order.
+Their common starter now selects the enemy's action or reaction state, clears
+its 184-byte VM state, binds the resource script, and attaches the sorted task
+in matching C.
 The resident `VM_WriteVariable`, `VM_ReadVariable`, `VM_Run`,
 `VM_CheckJumpCondition`, `VM_ExecuteCommand`, and `VM_ReadCommand` functions at
 `0x020055F8`, `0x02005938`, `0x020063A4`, `0x02006414`, `0x02006508`, and

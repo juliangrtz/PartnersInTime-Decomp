@@ -435,9 +435,11 @@ the found task's state script pointer, and releases the task node.
 The `0x4000` family uses one fixed 192-byte state per battle object. Starting
 over can instead queue a continuation at state `+0xB8`, with its order and
 tie-break fields at `+0xBC/+0xBE`; VM completion code 2 promotes those values
-and immediately runs the continuation. The `0x3000` family uses the same VM
+and immediately runs the continuation. Its start and continuation setup are
+now byte-identical C. The `0x3000` family uses the same VM
 header embedded at enemy-actor offset `+0x1E0`, but completes without the
-continuation loop. `BattleScriptState_GetByObjectId` maps valid object IDs into
+continuation loop; its start path is matching C too.
+`BattleScriptState_GetByObjectId` maps valid object IDs into
 the table at context offset `+0x6D44` with a `0xC0`-byte stride.
 The same namespace is now closed at the resident/overlay boundary:
 `BattleVM_ReadVariable` and `BattleVM_WriteVariable` are byte-identical C for
