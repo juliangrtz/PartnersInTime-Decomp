@@ -403,6 +403,10 @@ C. Their shared header records the confirmed `BattleAITask` size (`0x14`) and
 the relevant fields of the `0xC0`-byte VM state. DSD delinks the functions as
 independent source modules and verifies the rebuilt overlay against the
 original.
+The generic battle-task pool is matching C as well. It covers free-list
+initialization/allocation/return, active-list insertion, owner-slot binding, and
+safe task release. `BattleAITask` is its 12-byte generic header followed by the
+eight-byte AI-specific payload already described above.
 `BattleAI_StartScriptById` is the common public router. IDs 1-4 select four
 fixed party VM states, while typed IDs currently route `0x1000` and `0x2000`
 to enemy action and reaction starters. The fixed-state initializer clears

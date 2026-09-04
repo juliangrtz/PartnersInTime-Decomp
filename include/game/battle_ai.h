@@ -5,6 +5,7 @@
 
 typedef struct BattleAIState BattleAIState;
 typedef struct BattleAITask BattleAITask;
+typedef struct BattleTaskPool BattleTaskPool;
 
 struct BattleAIState {
     const void *script;
@@ -30,11 +31,26 @@ struct BattleAITask {
     u16 padding_12;
 };
 
+struct BattleTaskPool {
+    BattleAITask *active;
+    BattleAITask *free;
+};
+
 typedef char BattleAIState_SizeCheck[sizeof(BattleAIState) == 0xC0 ? 1 : -1];
 typedef char BattleAITask_SizeCheck[sizeof(BattleAITask) == 0x14 ? 1 : -1];
+typedef char BattleTaskPool_SizeCheck[sizeof(BattleTaskPool) == 8 ? 1 : -1];
 
 int BattleAI_HandleVmResult(BattleAITask *task, int result, BattleAIState *state);
 void BattleAI_StartPartyVmSlot2(void);
 BattleAIState *BattleScriptState_GetByObjectId(u16 object_id);
+
+void BattlePool_ReturnNode(BattleTaskPool *pool, BattleAITask *task);
+BattleAITask *BattlePool_TakeNode(BattleTaskPool *pool);
+BattleAITask *BattleTask_BindOwnerSlot(BattleAITask *task,
+                                      BattleAITask **owner_slot);
+void BattleTask_Release(BattleAITask *task);
+BattleAITask *BattleTaskList_Insert(BattleTaskPool *pool, BattleAITask *task);
+BattleAITask *BattleTaskPool_Allocate(BattleTaskPool *pool);
+void BattleTaskPool_Init(BattleTaskPool *pool, int count, u32 payload_size);
 
 #endif
