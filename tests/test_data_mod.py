@@ -182,5 +182,72 @@ class TreasureTableTests(unittest.TestCase):
         self.assertEqual(data_mod.build_treasure(document, source), source)
 
 
+class ShopStockTests(unittest.TestCase):
+    def test_patches_only_validated_overlay_item_pools(self) -> None:
+        overlay = bytearray(0x14000)
+        shops = []
+        for shop_id, descriptor_address, pool_address, pool_count in data_mod.SHOP_LAYOUT:
+            counts = [pool_count // 24 + (index < pool_count % 24) for index in range(24)]
+            descriptor_offset = descriptor_address - data_mod.OV009_LOAD_ADDRESS
+            pool_offset = pool_address - data_mod.OV009_LOAD_ADDRESS
+            classes = []
+            cursor = 0
+            for class_id, expected_tag, class_name, _ in data_mod.SHOP_CLASSES:
+                tiers = []
+                for tier in range(6):
+                    count = counts[class_id * 6 + tier]
+                    struct.pack_into(
+                        "<I",
+                        overlay,
+                        descriptor_offset + 4 * (class_id * 6 + tier),
+                        cursor | (count << 16),
+                    )
+                    items = []
+                    for index in range(count):
+                        item_id = expected_tag | (index & 0x0FFF)
+                        struct.pack_into("<H", overlay, pool_offset + 2 * cursor, item_id)
+                        items.append({"item_id": f"0x{item_id:04X}", "name_hint": ""})
+                        cursor += 1
+                    tiers.append({"tier": tier, "pool_start": cursor - count, "items": items})
+                classes.append(
+                    {
+                        "class_id": class_id,
+                        "class": class_name,
+                        "item_tag": f"0x{expected_tag:04X}",
+                        "tiers": tiers,
+                    }
+                )
+            descriptor_data = bytes(overlay[descriptor_offset : descriptor_offset + 96])
+            pool_data = bytes(overlay[pool_offset : pool_offset + pool_count * 2])
+            shops.append(
+                {
+                    "shop_id": shop_id,
+                    "descriptor_address": f"0x{descriptor_address:08X}",
+                    "item_pool_address": f"0x{pool_address:08X}",
+                    "descriptor_sha1": data_mod.sha1(descriptor_data),
+                    "item_pool_sha1": data_mod.sha1(pool_data),
+                    "classes": classes,
+                }
+            )
+        document = {
+            "schema": data_mod.SHOP_SCHEMA,
+            "binary": "arm9_overlay_9",
+            "load_address": f"0x{data_mod.OV009_LOAD_ADDRESS:08X}",
+            "source_sha1": data_mod.sha1(bytes(overlay)),
+            "shops": shops,
+        }
+        self.assertEqual(data_mod.build_shop_stock(document, bytes(overlay)), bytes(overlay))
+
+        first_item = document["shops"][0]["classes"][0]["tiers"][0]["items"][0]
+        first_item["item_id"] = "0x200A"
+        rebuilt = data_mod.build_shop_stock(document, bytes(overlay))
+        first_pool = data_mod.SHOP_LAYOUT[0][2] - data_mod.OV009_LOAD_ADDRESS
+        self.assertEqual(struct.unpack_from("<H", rebuilt, first_pool)[0], 0x200A)
+        differences = [
+            index for index, (before, after) in enumerate(zip(overlay, rebuilt)) if before != after
+        ]
+        self.assertEqual(differences, [first_pool])
+
+
 if __name__ == "__main__":
     unittest.main()

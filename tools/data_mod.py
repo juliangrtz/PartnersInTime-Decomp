@@ -25,6 +25,7 @@ MFSET_SCHEMA = "pit-mfset-v1"
 ENEMY_SCHEMA = "pit-enemy-stats-v1"
 DIALOGUE_SCHEMA = "pit-localized-dialogue-v1"
 TREASURE_SCHEMA = "pit-treasure-v1"
+SHOP_SCHEMA = "pit-shop-stock-v1"
 LANGUAGES = ("japanese", "english", "french", "german", "italian", "spanish")
 
 CONTROL_CODES = {
@@ -41,6 +42,20 @@ CONTROL_CODES = {
 CONTROL_VALUES = {name: code for code, name in CONTROL_CODES.items()}
 CONTROL_ARGUMENT_BYTES = {0x01: 1, 0x0B: 1, 0x0C: 1, 0x11: 1}
 TOKEN_RE = re.compile(r"<\$([^>]+)>")
+
+OV009_LOAD_ADDRESS = 0x0206AB80
+SHOP_LAYOUT = (
+    (0, 0x0207E3C4, 0x0207E88C, 199),
+    (1, 0x0207E364, 0x0207E5F8, 143),
+    (2, 0x0207E484, 0x0207E4E4, 137),
+    (3, 0x0207E424, 0x0207E718, 186),
+)
+SHOP_CLASSES = (
+    (0, 0x2000, "usable_items", "BData/mfset_UItmN.dat"),
+    (1, 0x1000, "action_items", "BData/mfset_AItmN.dat"),
+    (2, 0x4000, "wear", "BData/mfset_WearN.dat"),
+    (3, 0x3000, "badges", "BData/mfset_BadgeN.dat"),
+)
 
 
 class DataModError(ValueError):
@@ -857,6 +872,187 @@ def build_treasure(document: dict[str, Any], source_data: bytes) -> bytes:
     return build_offset_archive(rebuilt_entries)
 
 
+def item_name_tables(files_root: Path) -> dict[int, list[str]]:
+    result = {}
+    for _, tag, _, relative_source in SHOP_CLASSES:
+        entries = parse_offset_archive((files_root / relative_source).read_bytes())
+        rows = parse_mfset_entry(entries[1], "english")
+        # Each item has singular, plural, and inventory-full strings.  The
+        # singular form is the useful source annotation for stock editing.
+        result[tag] = [
+            re.sub(r"<\$[^>]+>", "", rows[index]["text"]).strip()
+            for index in range(0, len(rows), 3)
+        ]
+    return result
+
+
+def _shop_region(binary: bytes, address: int, size: int) -> bytes:
+    offset = address - OV009_LOAD_ADDRESS
+    if offset < 0 or offset + size > len(binary):
+        raise DataModError(f"shop region at 0x{address:08X} is outside overlay 9")
+    return binary[offset : offset + size]
+
+
+def export_shop_stock(files_root: Path, overlay: bytes) -> dict[str, Any]:
+    names = item_name_tables(files_root)
+    shops = []
+    for shop_id, descriptor_address, pool_address, pool_count in SHOP_LAYOUT:
+        descriptor_data = _shop_region(overlay, descriptor_address, 24 * 4)
+        descriptors = struct.unpack("<24I", descriptor_data)
+        greatest_end = max(
+            (descriptor & 0xFFFF) + (descriptor >> 16)
+            for descriptor in descriptors
+        )
+        if greatest_end != pool_count:
+            raise DataModError(
+                f"shop {shop_id} descriptors use {greatest_end}, expected {pool_count} items"
+            )
+        pool_data = _shop_region(overlay, pool_address, pool_count * 2)
+        pool = struct.unpack(f"<{pool_count}H", pool_data)
+        classes = []
+        for class_id, expected_tag, class_name, _ in SHOP_CLASSES:
+            tiers = []
+            for tier in range(6):
+                descriptor = descriptors[class_id * 6 + tier]
+                start = descriptor & 0xFFFF
+                count = descriptor >> 16
+                items = []
+                for item_id in pool[start : start + count]:
+                    tag = item_id & 0xF000
+                    index = item_id & 0x0FFF
+                    if tag != expected_tag:
+                        raise DataModError(
+                            f"shop {shop_id} class {class_id} contains item 0x{item_id:04X}"
+                        )
+                    name_rows = names.get(tag, [])
+                    items.append(
+                        {
+                            "item_id": f"0x{item_id:04X}",
+                            "name_hint": name_rows[index]
+                            if index < len(name_rows)
+                            else "",
+                        }
+                    )
+                tiers.append(
+                    {
+                        "tier": tier,
+                        "pool_start": start,
+                        "items": items,
+                    }
+                )
+            classes.append(
+                {
+                    "class_id": class_id,
+                    "class": class_name,
+                    "item_tag": f"0x{expected_tag:04X}",
+                    "tiers": tiers,
+                }
+            )
+        shops.append(
+            {
+                "shop_id": shop_id,
+                "descriptor_address": f"0x{descriptor_address:08X}",
+                "item_pool_address": f"0x{pool_address:08X}",
+                "descriptor_sha1": sha1(descriptor_data),
+                "item_pool_sha1": sha1(pool_data),
+                "classes": classes,
+            }
+        )
+    return {
+        "schema": SHOP_SCHEMA,
+        "binary": "arm9_overlay_9",
+        "load_address": f"0x{OV009_LOAD_ADDRESS:08X}",
+        "source_sha1": sha1(overlay),
+        "shops": shops,
+    }
+
+
+def build_shop_stock(document: dict[str, Any], overlay: bytes) -> bytes:
+    if document.get("schema") != SHOP_SCHEMA:
+        raise DataModError(f"expected schema {SHOP_SCHEMA!r}")
+    if document.get("binary") != "arm9_overlay_9":
+        raise DataModError("shop stock must target arm9_overlay_9")
+    shops = _require_list(document.get("shops"), "shops")
+    if len(shops) != len(SHOP_LAYOUT):
+        raise DataModError(f"shop stock must retain all {len(SHOP_LAYOUT)} shops")
+    rebuilt = bytearray(overlay)
+
+    for expected_layout, shop in zip(SHOP_LAYOUT, shops):
+        shop_id, descriptor_address, pool_address, pool_count = expected_layout
+        if not isinstance(shop, dict) or shop.get("shop_id") != shop_id:
+            raise DataModError("shops must remain in contiguous shop_id order")
+        descriptor_data = _shop_region(overlay, descriptor_address, 24 * 4)
+        pool_data = _shop_region(overlay, pool_address, pool_count * 2)
+        if shop.get("descriptor_sha1") != sha1(descriptor_data):
+            raise DataModError(f"shop {shop_id} descriptor source bytes changed")
+        if shop.get("item_pool_sha1") != sha1(pool_data):
+            raise DataModError(f"shop {shop_id} item-pool source bytes changed")
+        descriptors = struct.unpack("<24I", descriptor_data)
+        classes = _require_list(shop.get("classes"), f"shop {shop_id} classes")
+        if len(classes) != len(SHOP_CLASSES):
+            raise DataModError(f"shop {shop_id} must retain four item classes")
+        new_pool = bytearray(pool_data)
+
+        for class_layout, class_row in zip(SHOP_CLASSES, classes):
+            class_id, expected_tag, class_name, _ = class_layout
+            if not isinstance(class_row, dict) or class_row.get("class_id") != class_id:
+                raise DataModError(
+                    f"shop {shop_id} classes must remain in class_id order"
+                )
+            if class_row.get("class") != class_name:
+                raise DataModError(
+                    f"shop {shop_id} class {class_id} must be named {class_name}"
+                )
+            if parse_integer(
+                class_row.get("item_tag"), 16, f"shop {shop_id} class {class_id} tag"
+            ) != expected_tag:
+                raise DataModError(f"shop {shop_id} class {class_id} tag changed")
+            tiers = _require_list(
+                class_row.get("tiers"), f"shop {shop_id} class {class_id} tiers"
+            )
+            if len(tiers) != 6:
+                raise DataModError(
+                    f"shop {shop_id} class {class_id} must retain six tiers"
+                )
+            for tier, tier_row in enumerate(tiers):
+                if not isinstance(tier_row, dict) or tier_row.get("tier") != tier:
+                    raise DataModError(
+                        f"shop {shop_id} class {class_id} tiers must remain ordered"
+                    )
+                descriptor = descriptors[class_id * 6 + tier]
+                start = descriptor & 0xFFFF
+                count = descriptor >> 16
+                if tier_row.get("pool_start") != start:
+                    raise DataModError(
+                        f"shop {shop_id} class {class_id} tier {tier} pool_start changed"
+                    )
+                items = _require_list(
+                    tier_row.get("items"),
+                    f"shop {shop_id} class {class_id} tier {tier} items",
+                )
+                if len(items) != count:
+                    raise DataModError(
+                        f"shop {shop_id} class {class_id} tier {tier} needs {count} items"
+                    )
+                for index, item in enumerate(items):
+                    if not isinstance(item, dict):
+                        raise DataModError("shop item must be an object")
+                    item_id = parse_integer(
+                        item.get("item_id"),
+                        16,
+                        f"shop {shop_id} class {class_id} tier {tier} item {index}",
+                    )
+                    if item_id & 0xF000 != expected_tag:
+                        raise DataModError(
+                            f"shop {shop_id} class {class_id} requires tag 0x{expected_tag:04X}"
+                        )
+                    struct.pack_into("<H", new_pool, 2 * (start + index), item_id)
+
+        pool_offset = pool_address - OV009_LOAD_ADDRESS
+        rebuilt[pool_offset : pool_offset + len(new_pool)] = new_pool
+    return bytes(rebuilt)
+
+
 def discover_mfsets(files_root: Path) -> list[Path]:
     return sorted(
         path
@@ -884,6 +1080,14 @@ def command_export(args: argparse.Namespace) -> None:
     write_json(project_root / enemy_relative, export_enemy_stats(files_root))
     treasure_relative = "stats/treasure.json"
     write_json(project_root / treasure_relative, export_treasure(files_root))
+    overlay_9_path = files_root.parent / "arm9_overlays" / "ov009.bin"
+    if not overlay_9_path.is_file():
+        raise DataModError(f"private overlay 9 is missing: {overlay_9_path}")
+    shop_relative = "shops/stock.json"
+    write_json(
+        project_root / shop_relative,
+        export_shop_stock(files_root, overlay_9_path.read_bytes()),
+    )
     dialogue_documents = []
     for relative_source in ("BAI/BMes.dat", "FEvent/FEvData.dat"):
         source_path = files_root / relative_source
@@ -903,11 +1107,12 @@ def command_export(args: argparse.Namespace) -> None:
             "text_documents": text_documents,
             "dialogue_documents": dialogue_documents,
             "stat_documents": [enemy_relative, treasure_relative],
+            "binary_documents": [shop_relative],
         },
     )
     print(
         f"Exported {len(text_documents)} MFsets, {len(dialogue_documents)} dialogue archives, "
-        f"an enemy table, and a treasure table to {project_root}"
+        f"an enemy table, a treasure table, and shop stock to {project_root}"
     )
 
 
@@ -974,8 +1179,51 @@ def compile_project(
     return replacements, report
 
 
+def compile_binary_project(
+    project_root: Path, binaries: dict[str, bytes]
+) -> tuple[dict[str, bytes], list[dict[str, Any]]]:
+    project = read_json(project_root / "project.json")
+    documents = _require_list(project.get("binary_documents"), "binary_documents")
+    rebuilt_binaries = dict(binaries)
+    report = []
+    seen_targets: set[str] = set()
+    for relative_document in documents:
+        if not isinstance(relative_document, str):
+            raise DataModError("every binary_documents item must be a path string")
+        document = read_json(project_root / relative_document)
+        if not isinstance(document, dict) or document.get("schema") != SHOP_SCHEMA:
+            raise DataModError(
+                f"{relative_document} must use schema {SHOP_SCHEMA!r}"
+            )
+        target = document.get("binary")
+        if not isinstance(target, str) or target not in rebuilt_binaries:
+            raise DataModError(f"binary input is missing for {target!r}")
+        if target in seen_targets:
+            raise DataModError(f"more than one document rebuilds binary {target}")
+        seen_targets.add(target)
+        original = rebuilt_binaries[target]
+        rebuilt = build_shop_stock(document, original)
+        rebuilt_binaries[target] = rebuilt
+        report.append(
+            {
+                "source": target,
+                "document": relative_document,
+                "original_size": len(original),
+                "rebuilt_size": len(rebuilt),
+                "original_sha1": sha1(original),
+                "rebuilt_sha1": sha1(rebuilt),
+                "changed": rebuilt != original,
+            }
+        )
+    return rebuilt_binaries, report
+
+
 def write_modded_rom_config(
-    input_path: Path, output_path: Path, staged_files: Path
+    input_path: Path,
+    output_path: Path,
+    staged_files: Path,
+    output_code: Path | None = None,
+    patched_binaries: set[str] | None = None,
 ) -> None:
     config = input_path.read_text(encoding="utf-8")
     relative = os.path.relpath(staged_files, output_path.parent).replace("\\", "/")
@@ -983,6 +1231,37 @@ def write_modded_rom_config(
     config, count = re.subn(r"(?m)^files_dir:\s*.*$", replacement, config)
     if count != 1:
         raise DataModError(f"expected exactly one files_dir in {input_path}")
+    patched_binaries = patched_binaries or set()
+    if "arm9_overlay_9" in patched_binaries:
+        if output_code is None:
+            raise DataModError("output code directory is required for overlay patches")
+        overlay_match = re.search(r"(?m)^arm9_overlays:\s*'?([^'\r\n]+)'?\s*$", config)
+        if overlay_match is None:
+            raise DataModError(f"could not locate arm9_overlays in {input_path}")
+        input_overlay_config = input_path.parent / overlay_match.group(1)
+        overlays = input_overlay_config.read_text(encoding="utf-8")
+        overlay_binary_relative = os.path.relpath(
+            output_code / "arm9_ov009.bin", output_path.parent
+        ).replace("\\", "/")
+        overlays, overlay_count = re.subn(
+            r"(?m)^  file_name: arm9_ov009\.bin$",
+            f"  file_name: '{overlay_binary_relative}'",
+            overlays,
+        )
+        if overlay_count != 1:
+            raise DataModError(
+                f"expected one overlay-9 file_name in {input_overlay_config}"
+            )
+        output_overlay_config = output_path.parent / "arm9_overlays_data_mod.yaml"
+        output_overlay_config.write_text(overlays, encoding="utf-8")
+        config, overlay_ref_count = re.subn(
+            r"(?m)^arm9_overlays:\s*.*$",
+            f"arm9_overlays: '{output_overlay_config.name}'",
+            config,
+        )
+        if overlay_ref_count != 1:
+            raise DataModError("could not redirect the ARM9 overlay configuration")
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(config, encoding="utf-8")
 
@@ -992,6 +1271,11 @@ def command_check(args: argparse.Namespace) -> None:
         args.files_root.resolve(), args.project_root.resolve()
     )
     del replacements
+    overlay_9 = args.files_root.resolve().parent / "arm9_overlays" / "ov009.bin"
+    _, binary_report = compile_binary_project(
+        args.project_root.resolve(), {"arm9_overlay_9": overlay_9.read_bytes()}
+    )
+    report.extend(binary_report)
     changed = sum(row["changed"] for row in report)
     print(f"Validated {len(report)} editable data files; {changed} contain modifications.")
     for row in report:
@@ -1007,12 +1291,37 @@ def command_build(args: argparse.Namespace) -> None:
     staged_files = args.output_files.resolve()
     replacements, report = compile_project(files_root, project_root)
 
+    project = read_json(project_root / "project.json")
+    binary_documents = _require_list(
+        project.get("binary_documents"), "binary_documents"
+    )
+    rebuilt_binaries: dict[str, bytes] = {}
+    output_code: Path | None = None
+    if binary_documents:
+        if args.overlay_9_bin is None or args.output_code is None:
+            raise DataModError(
+                "binary data documents require --overlay-9-bin and --output-code"
+            )
+        output_code = args.output_code.resolve()
+        rebuilt_binaries, binary_report = compile_binary_project(
+            project_root,
+            {"arm9_overlay_9": args.overlay_9_bin.resolve().read_bytes()},
+        )
+        report.extend(binary_report)
+
     staged_files.mkdir(parents=True, exist_ok=True)
     shutil.copytree(files_root, staged_files, dirs_exist_ok=True)
     for source, rebuilt in replacements.items():
         output = staged_files / Path(source)
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_bytes(rebuilt)
+
+    if rebuilt_binaries:
+        assert output_code is not None
+        output_code.mkdir(parents=True, exist_ok=True)
+        (output_code / "arm9_ov009.bin").write_bytes(
+            rebuilt_binaries["arm9_overlay_9"]
+        )
 
     if args.rom_config_input is not None or args.rom_config_output is not None:
         if args.rom_config_input is None or args.rom_config_output is None:
@@ -1023,6 +1332,8 @@ def command_build(args: argparse.Namespace) -> None:
             args.rom_config_input.resolve(),
             args.rom_config_output.resolve(),
             staged_files,
+            output_code,
+            set(rebuilt_binaries),
         )
 
     report_path = args.report.resolve() if args.report else staged_files.parent / "data_mod_report.json"
@@ -1058,6 +1369,8 @@ def create_parser() -> argparse.ArgumentParser:
     build_parser.add_argument("--files-root", type=Path, required=True)
     build_parser.add_argument("--project-root", type=Path, required=True)
     build_parser.add_argument("--output-files", type=Path, required=True)
+    build_parser.add_argument("--overlay-9-bin", type=Path)
+    build_parser.add_argument("--output-code", type=Path)
     build_parser.add_argument("--rom-config-input", type=Path)
     build_parser.add_argument("--rom-config-output", type=Path)
     build_parser.add_argument("--report", type=Path)

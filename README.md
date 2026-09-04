@@ -80,7 +80,8 @@ outputs stay below `build/`, which is ignored by Git.
 - The European editable-data project covers 21 multilingual MFset archives,
   10,510 battle/field dialogue strings, and all 98 enemy-stat records. Its
   inverse encoders also cover all 765 treasure records, reproduce every covered
-  binary byte for byte before edits, and support length-changing text.
+  binary byte for byte before edits, and support length-changing text. Four
+  shop datasets are editable through validated copies of their overlay-9 pools.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.

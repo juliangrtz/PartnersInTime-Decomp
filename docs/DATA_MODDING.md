@@ -20,6 +20,8 @@ copied unchanged when the modded NitroFS tree is staged.
   HP, POW, DEF, speed, experience, coins, drops, traits, and unknown bytes;
 - all 765 twelve-byte treasure records from `Treasure/TreasureInfo.dat`, grouped
   by their 283 original file/room entries;
+- all four overlay-9 shop-stock datasets, each split into four item classes and
+  six progression tiers with resolved English item-name hints;
 - length-changing MFset edits: string pointers, language-entry sizes, and outer
   archive offsets are regenerated instead of patched in place.
 
@@ -142,9 +144,34 @@ mapping of `contents` is not named yet, so values remain numeric rather than
 being assigned speculative labels.  Schema v1 keeps the original file and
 record counts fixed while allowing every record field to be changed.
 
+## Shop stock
+
+`data/eur/shops/stock.json` exposes the four shops' 24 stock descriptors as
+four item classes by six progression tiers.  Unlike the NitroFS formats, these
+tables reside in ARM9 overlay 9.  The build wrapper copies the freshly linked
+overlay, validates the original descriptor and pool bytes, patches the copy,
+and redirects only overlay 9 in a derived ROM configuration.  C changes to
+other parts of the same overlay are therefore preserved.
+
+Each `item_id` has a high-nibble class tag:
+
+| Tag | JSON class | Name source |
+| --- | --- | --- |
+| `0x1000` | `action_items` | `mfset_AItmN.dat` |
+| `0x2000` | `usable_items` | `mfset_UItmN.dat` |
+| `0x3000` | `badges` | `mfset_BadgeN.dat` |
+| `0x4000` | `wear` | `mfset_WearN.dat` |
+
+`name_hint` is generated from the English singular-name string and is not
+compiled.  Schema v1 intentionally keeps descriptor starts/counts fixed:
+replace IDs inside a tier, do not add/remove rows, and keep the required class
+tag.  These constraints make malformed stock fail validation before packaging.
+
 ## Generated build artifacts
 
 `build/eur/data_mod_report.json` lists each rebuilt source, old/new size and
 SHA-1, and whether it changed.  `build/eur/build/rom_config_data_mod.yaml` is a
-derived `dsd` configuration pointing at the staged NitroFS.  Both are ignored
-and may be deleted at any time; original extracted files are never modified.
+derived `dsd` configuration pointing at the staged NitroFS and, when needed,
+the copied/patched overlay under `build/eur/data_mod_code/`.  These outputs are
+ignored and may be deleted at any time; original extracted or linked files are
+never modified.
