@@ -102,6 +102,10 @@ and runtime overlay 2.
 | `0209AD50` | `BattleItemList_RebuildUsableItems` | Rebuilds the battle consumable list from the fourteen save inventory counts |
 | `0209ADD8` | `BattleItemList_RebuildActionItems` | Rebuilds the battle Bros. Item list from the eleven save inventory counts |
 | `0209AE60` | `BattleTarget_ComputeDirectionalScore` | Scores a candidate target by its distance and alignment with directional input (semantic C) |
+| `0209AF40` | `BattleTargetSelection_UpdateEnemyTarget` | Initializes and updates single-enemy versus uniform enemy targeting (semantic C) |
+| `0209B450` | `BattleItemCursor_MoveToSelection` | Places the cursor beside the selected visible item row or the command wheel (semantic C; 83.33% matching) |
+| `0209B540` | `BattleTargetCursor_MoveToActor` | Moves the target cursor toward an actor's configured sprite anchor |
+| `0209B5CC` | `BattleTargetCursor_MoveToGroup` | Moves the target cursor to an absolute interface position |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -553,6 +557,16 @@ previous item across menu rebuilds and falls back to list entry zero if that
 item is no longer available. Selection by index also caches the corresponding
 20-byte `UsableItemRecord` or 28-byte `ActionItemRecord` for the command and
 target-selection state machines.
+
+Enemy target selection now has a semantic high-level reconstruction as well.
+It filters unloaded, defeated, and explicitly excluded enemy slots; scores
+directional candidates from their configured sprite anchors; switches between
+one enemy and the uniform/all-target mode; and keeps the target cursor and
+name label synchronized. Action-item record byte `+0x10`, bit 0 controls
+whether that uniform-target mode is available. The two cursor movement
+primitives are exact C and use the active party member's resource-relative
+animation base together with either an actor anchor or an absolute menu
+position.
 
 `BattleItemEffect_Apply` decodes the effect type from each 20-byte resident
 item record. Types 0-1 add a fixed HP amount, type 2 restores a percentage of

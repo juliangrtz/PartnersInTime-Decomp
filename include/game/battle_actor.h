@@ -88,7 +88,9 @@ struct BattleActorAnimationState {
 typedef union BattlePartyStateFlags {
     u16 raw;
     struct {
-        u16 unknown_00_11 : 12;
+        u16 uniform_target_selection : 1;
+        u16 target_selection_locked : 1;
+        u16 unknown_02_11 : 10;
         u16 flag_12 : 1;
         u16 unknown_13_15 : 3;
     } bits;

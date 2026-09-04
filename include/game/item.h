@@ -18,10 +18,20 @@ typedef struct UsableItemRecord {
     u8 unknown_08[12];
 } UsableItemRecord;
 
+typedef union ActionItemTargetFlags {
+    u8 raw;
+    struct {
+        u8 allows_uniform_targeting : 1;
+        u8 unknown_01_07 : 7;
+    } bits;
+} ActionItemTargetFlags;
+
 typedef struct ActionItemRecord {
     u8 unknown_00[6];
     u16 interface_resource_id;
-    u8 unknown_08[20];
+    u8 unknown_08[8];
+    ActionItemTargetFlags target_flags;
+    u8 unknown_11[11];
 } ActionItemRecord;
 
 typedef char UsableItemRecord_SizeCheck[

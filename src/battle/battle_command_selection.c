@@ -116,7 +116,7 @@ int BattleCommandWheel_UpdateSelection(void) {
                      BATTLE_COMMAND_WHEEL_INPUT_STATE_OFFSET) & 1) {
             return 0;
         }
-        if (actor->state_flags.raw & 2) {
+        if (actor->state_flags.bits.target_selection_locked) {
             return 0;
         }
     }
