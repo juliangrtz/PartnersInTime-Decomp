@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 0.30 percent is matching C and 2.23 percent has matching C or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 0.32 percent is matching C and 2.25 percent has matching C or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -13,15 +13,15 @@
 <rect class="bg" width="1200" height="760" rx="12"/>
 <text x="28.0" y="34.0" class="eyebrow">DECOMPILATION PROGRESS · EUROPEAN ROM</text>
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
-<text x="28.0" y="113.0" class="percent">0.30%</text>
+<text x="28.0" y="113.0" class="percent">0.32%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C</text>
-<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">2.23% source-understood</text>
+<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">2.25% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="3.415" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="31.415" y="130" width="22.094" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="3.676" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="31.676" y="130" width="22.094" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C  4.6 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C  4.9 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
 <text x="267.0" y="181.0" class="legend">Symbolic ASM  29.5 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
@@ -1870,7 +1870,7 @@
 <rect class="cell" x="799.06" y="336.82" width="8.99" height="9.32" fill="#263244"><title>ARM9 resident · func_02029a7c · 248 B · remaining</title></rect>
 <rect class="cell" x="808.05" y="336.82" width="8.99" height="9.32" fill="#263244"><title>ARM9 resident · func_0202a1d0 · 248 B · remaining</title></rect>
 <rect class="cell" x="817.04" y="336.82" width="8.99" height="9.32" fill="#263244"><title>ARM9 resident · func_02033f50 · 248 B · remaining</title></rect>
-<rect class="cell" x="826.03" y="336.82" width="8.84" height="9.32" fill="#263244"><title>ARM9 resident · VM_CheckJumpCondition · 244 B · remaining</title></rect>
+<rect class="cell" x="826.03" y="336.82" width="8.84" height="9.32" fill="#2dd4a0"><title>ARM9 resident · script_vm_control · 244 B · matching C</title></rect>
 <rect class="cell" x="834.88" y="336.82" width="8.84" height="9.32" fill="#263244"><title>ARM9 resident · func_02022258 · 244 B · remaining</title></rect>
 <rect class="cell" x="843.72" y="336.82" width="8.84" height="9.32" fill="#263244"><title>ARM9 resident · func_02031424 · 244 B · remaining</title></rect>
 <rect class="cell" x="852.56" y="336.82" width="8.84" height="9.32" fill="#263244"><title>ARM9 resident · func_02035b0c · 244 B · remaining</title></rect>
@@ -2239,7 +2239,7 @@
 <rect class="cell" x="737.73" y="481.51" width="6.15" height="6.26" fill="#263244"><title>ARM9 resident · Unmapped code · 114 B · remaining</title></rect>
 <rect class="cell" x="737.73" y="487.77" width="6.15" height="6.26" fill="#263244"><title>ARM9 resident · Unmapped code · 114 B · remaining</title></rect>
 <rect class="cell" x="737.73" y="494.03" width="6.15" height="6.26" fill="#263244"><title>ARM9 resident · Unmapped code · 114 B · remaining</title></rect>
-<rect class="cell" x="737.73" y="500.29" width="6.15" height="6.15" fill="#263244"><title>ARM9 resident · VM_Run · 112 B · remaining</title></rect>
+<rect class="cell" x="737.73" y="500.29" width="6.15" height="6.15" fill="#2dd4a0"><title>ARM9 resident · script_vm_control · 112 B · matching C</title></rect>
 <rect class="cell" x="737.73" y="506.45" width="6.15" height="6.15" fill="#263244"><title>ARM9 resident · func_0200e4bc · 112 B · remaining</title></rect>
 <rect class="cell" x="737.73" y="512.60" width="6.15" height="6.15" fill="#263244"><title>ARM9 resident · func_02010634 · 112 B · remaining</title></rect>
 <rect class="cell" x="737.73" y="518.75" width="6.15" height="6.15" fill="#263244"><title>ARM9 resident · func_020108f0 · 112 B · remaining</title></rect>

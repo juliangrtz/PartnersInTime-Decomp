@@ -78,10 +78,11 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   Extended-channel allocation, ADSR progression, PCM/PSG/noise voice startup,
   mixer calculations, and staged register updates are symbolic too.
 - Maintained high-level source now includes the original Nitro math unit and
-  the byte-matching resident `VM_ReadCommand` decoder used by battle and field
-  script runtimes. It exposes the descriptor flags, result-variable field,
-  signed literals, and variable-resolved arguments behind the editable BAI
-  command format. High-level source also includes
+  three byte-matching resident VM functions used by battle and field script
+  runtimes: the run loop, all eleven jump conditions, and the command decoder.
+  They expose yielding, descriptor flags, result variables, signed literals,
+  and variable-resolved arguments behind the editable BAI command format.
+  High-level source also includes
   thirty-six byte-matching overlay-2 battle functions: nine battle-AI/state
   helpers, the seven-function generic task-pool unit, and four actor HP/lookup
   helpers plus status eligibility, base damage, and the central HP/KO primitive.
