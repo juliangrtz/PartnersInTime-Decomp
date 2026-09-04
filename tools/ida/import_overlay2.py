@@ -51,6 +51,7 @@ typedef struct BattleTaskPool BattleTaskPool;
 typedef struct BattleActor BattleActor;
 typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
+typedef struct BattleHitDescriptor BattleHitDescriptor;
 typedef union BattleSceneFlags BattleSceneFlags;
 
 struct BattleActor {
@@ -131,6 +132,16 @@ struct BattleTaskPool {
     BattleAITask *active;
     BattleAITask *free;
 };
+
+struct BattleHitDescriptor {
+    BattleHitDescriptor *next;
+    void (*callback)(BattleHitDescriptor *descriptor);
+    u16 source_id;
+    u16 target_id;
+    u16 flags;
+    signed char status_chance;
+    signed char status_magnitude;
+};
 """
 
 FUNCTION_TYPES = {
@@ -153,6 +164,14 @@ FUNCTION_TYPES = {
         "BattleMotionChannel *BattleSceneObject_GetMotionChannel(BattleSceneObject *, int);",
     "BattleSceneObject_SnapshotPosition":
         "void BattleSceneObject_SnapshotPosition(BattleSceneObject *);",
+    "BattleHitDescriptor_Disable":
+        "void BattleHitDescriptor_Disable(BattleHitDescriptor *);",
+    "BattleHitDescriptor_DisableByActor":
+        "void BattleHitDescriptor_DisableByActor(int);",
+    "BattleHitDescriptor_SetStatus":
+        "void BattleHitDescriptor_SetStatus(BattleHitDescriptor *, int, signed char, signed char);",
+    "BattleHitDescriptor_GetByActorId":
+        "BattleHitDescriptor *BattleHitDescriptor_GetByActorId(u16);",
     "BattleAI_HandleVmResult":
         "int BattleAI_HandleVmResult(BattleAITask *, int, BattleAIState *);",
     "BattleAI_StartReactionScript": "void BattleAI_StartReactionScript(int);",
