@@ -12,6 +12,9 @@ typedef void (*BattleMotionCallback)(BattleSceneObject *object,
                                      BattleMotionChannel *channel);
 
 enum BattleModelFlag {
+    BATTLE_MODEL_FLAG_02 = 1 << 2,
+    BATTLE_MODEL_FLAG_ANIMATION_ACTIVE = 1 << 8,
+    BATTLE_MODEL_FLAG_09 = 1 << 9,
     BATTLE_MODEL_FLAG_10_SHIFT = 10,
     BATTLE_MODEL_FLAG_11_SHIFT = 11,
     BATTLE_MODEL_FLAG_10 = 1 << BATTLE_MODEL_FLAG_10_SHIFT,
@@ -55,7 +58,15 @@ struct BattleMotionChannel {
 };
 
 struct BattleModelVTable {
-    u8 unknown_000[0x88];
+    u8 unknown_000[0x24];
+    void (*start)(BattleModel *model);
+    void (*stop)(BattleModel *model);
+    u8 unknown_02c[8];
+    int (*set_animation)(BattleModel *model, u8 animation_id, int argument_2);
+    u8 unknown_038[0x30];
+    int (*set_primary_animation)(BattleModel *model, u8 animation_id,
+                                 int argument_2, int enabled);
+    u8 unknown_06c[0x1C];
     int (*configure_animation_layer)(BattleModel *model, s8 layer,
                                      int animation_id, int enabled);
 };
@@ -71,11 +82,11 @@ struct BattleModel {
     virtual void unknown_18();
     virtual void unknown_1c();
     virtual void unknown_20();
-    virtual void unknown_24();
-    virtual void unknown_28();
+    virtual void start();
+    virtual void stop();
     virtual void unknown_2c();
     virtual void unknown_30();
-    virtual void unknown_34();
+    virtual int set_animation(u8 animation_id, int argument_2);
     virtual void unknown_38();
     virtual void unknown_3c();
     virtual void unknown_40();
@@ -88,7 +99,8 @@ struct BattleModel {
     virtual void unknown_5c();
     virtual void unknown_60();
     virtual void unknown_64();
-    virtual void unknown_68();
+    virtual int set_primary_animation(u8 animation_id, int argument_2,
+                                      int enabled);
     virtual void unknown_6c();
     virtual void unknown_70();
     virtual void unknown_74();
@@ -98,18 +110,76 @@ struct BattleModel {
     virtual void unknown_84();
     virtual int configure_animation_layer(s8 layer, int animation_id,
                                            int enabled);
-    u8 unk_004[0x50];
+    u8 unk_004[8];
+    BattleSceneObject *owner;
+    u8 unk_010[0x44];
     s16 animation_id;
-    u8 unk_056[0x26];
-    u32 flags;
+    u8 unk_056[4];
+    u16 enemy_idle_frame;
+    s16 animation_offset_x;
+    s16 animation_offset_y;
+    u8 unk_060[0x14];
+    s16 scale_x;
+    s16 scale_y;
+    u8 unk_078[4];
+    union {
+        u32 flags;
+        struct {
+            u32 unknown_00_07 : 8;
+            u32 animation_active : 1;
+            u32 unknown_09_31 : 23;
+        } flag_bits;
+    };
+    u8 unk_080[0xC4];
+    u8 render_flags;
+    u8 unk_145[0x19];
+    u8 transform_flags;
+    u8 unk_15f[3];
+    union {
+        u16 animation_state;
+        struct {
+            u16 state : 5;
+            u16 unknown_05_15 : 11;
+        } animation_state_bits;
+    };
+    u8 unk_164[0x54];
 };
 #else
 struct BattleModel {
     BattleModelVTable *vtable;
-    u8 unk_004[0x50];
+    u8 unk_004[8];
+    BattleSceneObject *owner;
+    u8 unk_010[0x44];
     s16 animation_id;
-    u8 unk_056[0x26];
-    u32 flags;
+    u8 unk_056[4];
+    u16 enemy_idle_frame;
+    s16 animation_offset_x;
+    s16 animation_offset_y;
+    u8 unk_060[0x14];
+    s16 scale_x;
+    s16 scale_y;
+    u8 unk_078[4];
+    union {
+        u32 flags;
+        struct {
+            u32 unknown_00_07 : 8;
+            u32 animation_active : 1;
+            u32 unknown_09_31 : 23;
+        } flag_bits;
+    };
+    u8 unk_080[0xC4];
+    u8 render_flags;
+    u8 unk_145[0x19];
+    u8 transform_flags;
+    u8 unk_15f[3];
+    union {
+        u16 animation_state;
+        struct {
+            u16 state : 5;
+            u16 unknown_05_15 : 11;
+        } animation_state_bits;
+    };
+    u8 unk_164[0x54];
 };
 #endif
 
@@ -132,8 +202,10 @@ struct BattleSceneObject {
     BattleModel *primary_model;
     BattleModel *alternate_model;
     u8 unk_0c8[0x18];
-    u32 transition_flags;
-    u8 unk_0e4[6];
+    s32 loaded_resource_id;
+    s16 animation_id;
+    s16 previous_base_animation_id;
+    s16 animation_variant_offset;
     s16 effect_anchor_z;
     u16 actor_id;
     u16 linked_actor_id;
@@ -145,7 +217,7 @@ typedef char BattleMotionChannel_SizeCheck[
     sizeof(BattleMotionChannel) == 0x28 ? 1 : -1];
 typedef char BattleSceneObject_SizeCheck[
     sizeof(BattleSceneObject) == 0xF8 ? 1 : -1];
-typedef char BattleModel_SizeCheck[sizeof(BattleModel) == 0x80 ? 1 : -1];
+typedef char BattleModel_SizeCheck[sizeof(BattleModel) == 0x1B8 ? 1 : -1];
 
 extern BattleSceneObject *gBattleMotionObjectList;
 
@@ -186,6 +258,10 @@ void BattleSceneObject_UpdateMoveBy(BattleSceneObject *object,
 void BattleSceneObject_UpdateTravelDistance(BattleSceneObject *object);
 void BattleSceneObject_SetAnimation(BattleSceneObject *object,
                                     int animation_id, int argument_2);
+u32 BattleSceneObject_SetAnimationFromComponent(BattleSceneObject *object,
+                                                int animation_id,
+                                                int argument_2,
+                                                int component_index);
 u32 BattleSceneObject_SetBattleAnimation(BattleSceneObject *object,
                                          int animation_id, int model_flag);
 u32 BattleSceneObject_SetBattleAnimationById(u32 object_id,

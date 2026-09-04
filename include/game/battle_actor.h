@@ -4,7 +4,9 @@
 #include <nitro.h>
 
 typedef struct BattleActor BattleActor;
+typedef struct BattleActorAnimationState BattleActorAnimationState;
 struct BattleSceneObject;
+struct BattleModel;
 
 enum BattleActorIdRange {
     BATTLE_ACTOR_PARTY_FIRST = 56,
@@ -44,10 +46,19 @@ struct BattleActor {
             u16 unknown_flags_10_15 : 6;
         } flag_bits;
     };
-    u8 unk_026[0x12];
+    u8 unk_026[0x0A];
+    BattleActorAnimationState *animation_state;
+    u8 unk_034[4];
     s8 transition_state;
-    u8 unk_039[0x33];
+    u8 unk_039[0x0B];
+    s8 force_low_hp_animation;
+    u8 unk_045[0x27];
     void *resource_slot;
+};
+
+struct BattleActorAnimationState {
+    u8 unknown_00[0x0C];
+    struct BattleModel *model;
 };
 
 typedef struct BattlePartyActor {
