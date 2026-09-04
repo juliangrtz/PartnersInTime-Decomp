@@ -22,6 +22,118 @@ extern int BattleInterfaceLayer_SetResource(
     BattleInterfaceLayer *layer, void *resource, int unknown_2, int unknown_3,
     int unknown_4, int unknown_5);
 
+typedef struct BattleTargetSelectionEntry {
+    s16 packed_command;
+    u8 unknown_02[6];
+} BattleTargetSelectionEntry;
+
+typedef char BattleTargetSelectionEntry_SizeCheck[
+    sizeof(BattleTargetSelectionEntry) == 8 ? 1 : -1
+];
+
+int BattleInterface_LoadTargetName(u32 actor_id) {
+    int result;
+    int resource_id;
+    void *resource;
+    u8 *context;
+
+    if (actor_id == 0) {
+        int selection_index = *(s16 *)(gBattleContext + 0x11A);
+        BattleTargetSelectionEntry *entry =
+            (BattleTargetSelectionEntry *)(gBattleContext + 0x653E) +
+            selection_index;
+        int command = entry->packed_command << 17 >> 17;
+
+        switch (command) {
+        case 0:
+            return 0;
+        case 1:
+            resource_id = 9;
+            break;
+        case 2:
+            resource_id = 9;
+            break;
+        case 3:
+            resource_id = 10;
+            break;
+        case 4:
+            resource_id = 10;
+            break;
+        case 5:
+            resource_id = 11;
+            break;
+        case 6:
+            resource_id = 11;
+            break;
+        case 7:
+            resource_id = 13;
+            break;
+        case 8:
+            resource_id = 13;
+            break;
+        case 9:
+            resource_id = 12;
+            break;
+        case 10:
+            resource_id = 12;
+            break;
+        case 11:
+            resource_id = 8;
+            break;
+        case 12:
+            return 0;
+        case 13:
+        case 14:
+            resource_id = 14;
+            break;
+        case 15:
+        case 16:
+            resource_id = 15;
+            break;
+        case 17:
+        case 18:
+            resource_id = 16;
+            break;
+        case 19:
+        case 20:
+            resource_id = 17;
+            break;
+        case 21:
+        case 22:
+            resource_id = 20;
+            break;
+        }
+        resource = func_ov002_02076b00(0, resource_id);
+    } else {
+        if (actor_id < BATTLE_ACTOR_PARTY_FIRST) {
+            resource_id = -1;
+        } else if (actor_id < BATTLE_ACTOR_ENEMY_FIRST) {
+            resource_id = -1;
+        } else if (actor_id < BATTLE_ACTOR_ENEMY_FIRST) {
+            /* Preserved from the original actor-range dispatch. */
+            resource_id = -1;
+        } else if (actor_id <
+                   BATTLE_ACTOR_ENEMY_FIRST + BATTLE_ACTOR_ENEMY_COUNT) {
+            resource_id = BattleEnemy_GetStats(actor_id)->name_id;
+        }
+        resource = func_ov002_02076b00(1, resource_id);
+    }
+
+    result = 0;
+    if (resource != 0) {
+        *(u32 *)(gBattleContext + BATTLE_TARGET_LABEL_STATE_OFFSET) = 0;
+        context = gBattleContext;
+        result = BattleInterfaceLayer_SetResource(
+            (BattleInterfaceLayer *)(context +
+                                     BATTLE_TARGET_LABEL_LAYER_OFFSET),
+            resource, 3, 3,
+            *(s16 *)(context + BATTLE_TARGET_CURSOR_LEFT_OFFSET) ==
+                *(s16 *)(context + BATTLE_TARGET_CURSOR_RIGHT_OFFSET),
+            1);
+    }
+    return result;
+}
+
 int BattleInterface_LoadTargetLabelResource(int resource_id) {
     int result = 0;
     void *resource = func_ov002_02076b00(0, resource_id);

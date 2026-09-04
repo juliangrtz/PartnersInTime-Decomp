@@ -23,7 +23,7 @@ src/battle/battle_actor_state.c:
     .text       start:0x02076bac end:0x02076c38
 
 src/battle/battle_object_lookup.c:
-    .text       start:0x02076f24 end:0x0207707c
+    .text       start:0x02076ee8 end:0x0207707c
 
 src/battle/battle_ai_start.c:
     .text       start:0x0207eb14 end:0x0207ee54
@@ -117,7 +117,7 @@ src/battle/battle_texture_dimensions.c:
     .text       start:0x020927a0 end:0x02092918
 
 src/battle/battle_interface_resources.c:
-    .text       start:0x02092918 end:0x02092b8c
+    .text       start:0x02092918 end:0x02092d94
 
 src/battle/battle_damage_base.c:
     .text       start:0x0209bf38 end:0x0209bfa0
