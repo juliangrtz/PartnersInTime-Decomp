@@ -158,6 +158,7 @@ u32 BattleMath_WaitForSqrtResult(void);
 
 void BattleSceneObject_SetStateFlags(BattleSceneObject *object, int state,
                                      int independent_flag);
+void BattleSceneObject_SwapSlots(u32 first_id, u32 second_id);
 void BattleSceneObject_SetModelFlag11ById(int object_id, int enabled);
 void BattleSceneObject_SetModelFlag10(BattleSceneObject *object, int enabled);
 void BattleSceneObject_SetModelFlag10ById(int object_id, int enabled);

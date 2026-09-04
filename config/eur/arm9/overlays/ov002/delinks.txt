@@ -95,6 +95,9 @@ src/battle/battle_script_properties.c:
 src/battle/battle_script_property_set.c:
     .text       start:0x0208fb6c end:0x02090c18
 
+src/battle/battle_scene_slots.c:
+    .text       start:0x02090c18 end:0x02091118
+
 src/battle/battle_script_state.c:
     .text       start:0x020922dc end:0x0209234c
 

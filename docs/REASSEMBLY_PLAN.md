@@ -279,6 +279,9 @@ stats, HP, positions, model/animation state, hit and formation flags, and scene
 operation channels. The checked-in BAI corpus contains 6,042 calls to this
 writer. Both directions share the same property enum, while setter-only calls
 remain conservatively numbered until their downstream behavior is named.
+The adjacent `BattleSceneObject_SwapSlots` is matching and linked C. It makes
+the opcode `0x41` object-binding exchange explicit across field, party, and
+enemy slot banks, including ID repair and the slot-specific actor flag.
 `tools/analyze_battle_ai_dispatch.py` validates the user-supplied ROM and
 extracts the dispatcher's complete 182-entry jump table into JSON or Markdown.
 The report also groups shared case entries, observes direct command-record
