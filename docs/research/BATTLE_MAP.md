@@ -154,9 +154,8 @@ model helper then selects scene-object pointer `+0xC0` or `+0xC4` from flag bit
 14 at `+0xF4`. `BattlePosition_StoreViewRelative` accepts a raw-coordinate
 bypass flag and otherwise subtracts either context offset pair
 `+0xCB9C/+0xCB9E` or `+0xCBA0/+0xCBA2`; its stored depth is clamped at zero.
-All actor resolvers and the damage/KO updater are now maintained byte-identical
-C; the compact base-damage calculation remains exact symbolic assembly in
-`reasm/eur/battle/`.
+All actor resolvers, the compact base-damage calculation, and the damage/KO
+updater are now maintained byte-identical C.
 
 `BattleSceneObject_SetAnimation` is the common animation path used by damage
 and reaction code. It validates the bound resource, classifies scene-object
@@ -201,7 +200,7 @@ damage = ((level * power * scale_q8) / defense + 128) / 256;
 damage = min(damage, 999);
 ```
 
-The maintained function resolves both actor IDs, extracts the attacker's level
+The matching C function resolves both actor IDs, extracts the attacker's level
 from the low seven flag bits, reads signed POW/DEF fields, calls the signed
 division helper, reproduces the original rounding, and caps the result at 999.
 

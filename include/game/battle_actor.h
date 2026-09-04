@@ -9,13 +9,17 @@ struct BattleActor {
     const void *resource;
     s16 max_hp;
     s16 current_hp;
-    u8 unk_008[0x16];
+    s16 speed;
+    s16 power;
+    s16 defense;
+    u8 unk_00e[0x10];
     s16 hit_state;
     u8 unk_020[4];
     u16 flags;
 };
 
 int BattleActor_IsHpAtMostQuarter(BattleActor *actor);
+int BattleDamage_CalculateBase(int attacker_id, int defender_id, int scale_q8);
 struct BattleSceneObject;
 int BattleActor_ApplyDamage(struct BattleSceneObject *object, int damage);
 BattleActor *BattleActor_GetEnemySlot(int actor_id);

@@ -55,7 +55,10 @@ struct BattleActor {
     const void *resource;
     s16 max_hp;
     s16 current_hp;
-    u8 unk_008[0x16];
+    s16 speed;
+    s16 power;
+    s16 defense;
+    u8 unk_00e[0x10];
     s16 hit_state;
     u8 unk_020[4];
     u16 flags;
@@ -104,6 +107,8 @@ FUNCTION_TYPES = {
     "BattleActor_GetEnemySlot": "BattleActor *BattleActor_GetEnemySlot(int);",
     "BattleActor_GetPartySlot": "BattleActor *BattleActor_GetPartySlot(int);",
     "BattleActor_GetById": "BattleActor *BattleActor_GetById(int);",
+    "BattleDamage_CalculateBase":
+        "int BattleDamage_CalculateBase(int, int, int);",
     "BattleAI_HandleVmResult":
         "int BattleAI_HandleVmResult(BattleAITask *, int, BattleAIState *);",
     "BattleAI_StartReactionScript": "void BattleAI_StartReactionScript(int);",
