@@ -16,7 +16,11 @@ enum BattleAIVmResult {
 
 enum BattleAIScriptTaskType {
     BATTLE_AI_TASK_ACTION = 0x1000,
-    BATTLE_AI_TASK_REACTION = 0x2000
+    BATTLE_AI_TASK_REACTION = 0x2000,
+    BATTLE_AI_TASK_AUXILIARY = 0x3000,
+    BATTLE_AI_TASK_OBJECT = 0x4000,
+    BATTLE_AI_TASK_TYPE_MASK = 0xF000,
+    BATTLE_AI_TASK_ACTOR_ID_MASK = 0x0FFF
 };
 
 enum BattleVmVariable {
@@ -79,6 +83,12 @@ void BattleAI_StartPartyVmSlot1(void);
 void BattleAI_InitStateFromScriptBlock(BattleAIState *state,
                                        const u16 *script_block, int owner_id);
 BattleAIState *BattleScriptState_GetByObjectId(u16 object_id);
+BattleAIState *BattleAI_GetStateById(int state_id);
+
+int BattleActor_SelectRandomStatusTarget(u16 first_actor_id, u32 actor_count);
+int BattleActor_FindMostDamagedEnemy(int minimum_current_hp);
+int BattleActor_FindLowestHpEnemy(int maximum_current_hp);
+int BattleActor_FindHighestHpEnemy(int minimum_current_hp);
 
 s32 BattleVM_ReadVariable(
     u16 variable, ScriptVm *vm, ScriptVmState *state, u32 index

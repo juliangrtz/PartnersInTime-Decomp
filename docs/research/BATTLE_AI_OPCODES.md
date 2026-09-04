@@ -35,7 +35,7 @@ word loads observed from the command-record register (`r5`).
 | `0x45` | `0x0207A148` | — | — | — |
 | `0x46` | `0x0207A164` | — | `0x8` | `func_ov002_0208e494`, `VM_WriteVariable` |
 | `0x47` | `0x0207A198` | — | `0x8`, `0xC` | `func_ov002_0208e878` |
-| `0x48` | `0x0207A1BC` | — | `0x8`, `0xC` | `func_ov002_02079740`, `func_ov002_020796bc`, `func_ov002_02079624`, `VM_WriteVariable` |
+| `0x48` | `0x0207A1BC` | — | `0x8`, `0xC` | `BattleActor_FindHighestHpEnemy`, `BattleActor_FindLowestHpEnemy`, `BattleActor_FindMostDamagedEnemy`, `VM_WriteVariable` |
 | `0x49` | `0x0207A234` | — | — | — |
 | `0x4A` | `0x0207A244` | — | — | `VM_WriteVariable` |
 | `0x4B` | `0x0207A274` | — | `0x8` | `func_ov002_0208bd88`, `VM_WriteVariable` |
@@ -78,7 +78,7 @@ word loads observed from the command-record register (`r5`).
 | `0x70` | `0x0207B9FC` | — | `0x8` | `BattleSceneObject_GetById` |
 | `0x71` | `0x0207B1E0` | — | `0x8`, `0xC`, `0x14`, `0x18`, `0x1C`, `0x20` | `BattleSceneObject_GetById`, `BattleSceneObject_BeginMotionChannel`, `.L_020724b0` |
 | `0x72` | `0x0207B288` | — | `0x8`, `0xC` | `BattleSceneObject_GetById`, `VM_WriteVariable` |
-| `0x73` | `0x0207BA34` | — | `0x8`, `0xC`, `0x10` | `func_ov002_0207959c`, `BattleAI_StartActorAuxScript` |
+| `0x73` | `0x0207BA34` | — | `0x8`, `0xC`, `0x10` | `BattleActor_SelectRandomStatusTarget`, `BattleAI_StartActorAuxScript` |
 | `0x74` | `0x0207BAC4` | — | `0x8`, `0xC` | — |
 | `0x75` | `0x0207BBC8` | — | `0x8` | `BattleActor_GetById`, `BattleSceneObject_GetById`, `BattleSceneObject_GetActiveModel` |
 | `0x76` | `0x0207BC30` | — | `0x8` | `BattleActor_GetById`, `BattleSceneObject_GetById`, `BattleSceneObject_GetActiveModel` |
@@ -188,7 +188,7 @@ word loads observed from the command-record register (`r5`).
 | `0xDE` | `0x0207E0CC` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleScript_GetProperty` |
 | `0xDF` | `0x0207E11C` | — | `0x8`, `0xC`, `0x10` | `func_ov002_0208e098` |
 | `0xE0` | `0x0207E15C` | — | — | — |
-| `0xE1` | `0x0207E16C` | — | `0x8`, `0xC`, `0x10` | `func_ov002_020797c4` |
+| `0xE1` | `0x0207E16C` | — | `0x8`, `0xC`, `0x10` | `BattleAI_GetStateById` |
 | `0xE2` | `0x0207E1BC` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleSceneObject_IsAnimationActiveById` |
 | `0xE3` | `0x0207E208` | — | `0x8`, `0xC`, `0x10` | `BattleSound_Play`, `VM_WriteVariable` |
 | `0xE4` | `0x0207E264` | — | `0x8`, `0xC` | `BattleSound_Play` |

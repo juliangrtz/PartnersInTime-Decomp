@@ -183,6 +183,10 @@ matching C too. It resolves the current battle owner and target actor IDs,
 reads three filtered context masks, and provides the 32 shared signed script
 variables at battle-context offset `+0x69E4`. Unproven context fields remain
 named by offset until script analysis or runtime traces establish semantics.
+The adjacent matching helper unit resolves all fixed and typed Battle-AI state
+IDs and exposes four target selectors used by dispatcher opcodes `0x48`,
+`0x73`, and `0xE1`: three thresholded enemy-HP scans and uniform reservoir
+sampling across eligible status targets.
 The common script-ID router, four fixed party-VM starters, script-block state
 initializer, all-family per-frame updater, and task-pool initializer are now
 maintained as well. This closes the scheduler around the large opcode

@@ -18,7 +18,7 @@ s32 BattleVM_ReadVariable(
 
     switch (variable) {
     case BATTLE_VM_VAR_OWNER_ACTOR_ID:
-        return battle_state->owner_id & 0xFFF;
+        return battle_state->owner_id & BATTLE_AI_TASK_ACTOR_ID_MASK;
     case BATTLE_VM_VAR_OWNER_TASK_TYPE:
         return battle_state->owner_id >> 12;
     case BATTLE_VM_VAR_CONSTANT_ZERO_2:
@@ -29,7 +29,8 @@ s32 BattleVM_ReadVariable(
         return *(s32 *)(gBattleContext + BATTLE_CONTEXT_VARIABLE_18_OFFSET);
     case BATTLE_VM_VAR_TARGET_ACTOR_ID:
         return (u16)BattleActor_GetById(
-                   (u16)(battle_state->owner_id & 0xFFF)
+                   (u16)(battle_state->owner_id
+                         & BATTLE_AI_TASK_ACTOR_ID_MASK)
                )
             ->target_actor_id;
     case BATTLE_VM_VAR_CONTEXT_MASK_102:
@@ -62,7 +63,9 @@ void BattleVM_WriteVariable(
 
     switch (variable) {
     case BATTLE_VM_VAR_TARGET_ACTOR_ID:
-        BattleActor_GetById((u16)(battle_state->owner_id & 0xFFF))
+        BattleActor_GetById(
+            (u16)(battle_state->owner_id & BATTLE_AI_TASK_ACTOR_ID_MASK)
+        )
             ->target_actor_id = value;
         break;
     case BATTLE_VM_VAR_CONTEXT_18:
