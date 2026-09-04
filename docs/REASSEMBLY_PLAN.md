@@ -267,6 +267,12 @@ and runtime flags. The corresponding opcode `0x47` setter is retained as a
 readable, size-matching C translation but is not linked yet: only its final
 fade toggle differs, where MWCC chooses three caller-saved registers instead
 of the original caller/callee-saved allocation.
+The following `0xDDC`-byte `BattleScript_GetProperty` switch is matching C as
+well. It provides the battle VM's typed read access to actor stats, scene and
+view-relative coordinates, animation/model state, loaded object resources,
+hit descriptors, party formation data, and enemy-private state. Its 134-case
+numeric ABI is declared once in `battle_script_properties.h`; unknown fields
+remain offset-named pending evidence from BAI control flow and runtime traces.
 `tools/analyze_battle_ai_dispatch.py` validates the user-supplied ROM and
 extracts the dispatcher's complete 182-entry jump table into JSON or Markdown.
 The report also groups shared case entries, observes direct command-record
@@ -553,7 +559,7 @@ behavior that permissive emulators may hide.
 ## Immediate execution order
 
 1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the seventy-five
+2. Continue promoting small overlay-2 battle leaf functions using the seventy-six
    exact symbolic actor/damage units as the template.
 3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
    recover further ARM/Thumb boundaries and relocations without blocking the

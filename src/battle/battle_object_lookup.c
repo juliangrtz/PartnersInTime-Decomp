@@ -63,7 +63,7 @@ BattleActor *BattleActor_GetById(int actor_id) {
                              (u16)(actor_id - BATTLE_ACTOR_ENEMY_FIRST) * 4);
 }
 
-BattleActor *BattleActor_GetPartySlot(u16 actor_id) {
+BattleActor *BattleActor_GetPartySlot(int actor_id) {
     return *(BattleActor **)(gBattleContext + BATTLE_PARTY_ACTOR_TABLE_OFFSET +
                              (actor_id - BATTLE_ACTOR_PARTY_FIRST) * 4);
 }

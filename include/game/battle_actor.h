@@ -76,7 +76,7 @@ u32 BattleParty_AddExperience(u32 member_id, u32 amount);
 int BattleParty_StartFormationTransition(int next_state, u16 mario_target_x,
                                          u16 luigi_target_x);
 BattleActor *BattleActor_GetEnemySlot(int actor_id);
-BattleActor *BattleActor_GetPartySlot(u16 actor_id);
+BattleActor *BattleActor_GetPartySlot(int actor_id);
 BattleActor *BattleActor_GetById(int actor_id);
 
 #ifdef __cplusplus

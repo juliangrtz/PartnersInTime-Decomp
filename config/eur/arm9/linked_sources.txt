@@ -10,6 +10,7 @@ src/battle/battle_ai_runtime.c
 src/battle/battle_ai_system.c
 src/battle/battle_actor_commands.cpp
 src/battle/battle_global_properties.c
+src/battle/battle_script_properties.c
 src/battle/battle_reward_effects.c
 src/battle/battle_party_progression.c
 src/battle/battle_scene_util.c
