@@ -3,6 +3,10 @@
 
 #include <game/battle_task_queue.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 BattleQueuedTask *BattleInterface_RequestLoad(void);
 BattleQueuedTask *BattleInterface_RequestScreenLoad(int screen_index);
 int BattleInterface_LoadItemName(int item_id);
@@ -13,5 +17,9 @@ int BattleInterfaceLayer_SetResource(
     BattleInterfaceLayer *layer, const void *resource, int horizontal_mode,
     int vertical_mode, int notify_on_complete, int clear_before_upload
 );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

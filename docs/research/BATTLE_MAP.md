@@ -77,6 +77,8 @@ and runtime overlay 2.
 | `02097458` | `BattleTargetMarker_Update` | Fades a target marker and switches its active model animation |
 | `02097544` | `BattleTargetLabel_Draw` | Draws the animated target-name label and its directional frame |
 | `02097720` | `BattleTargetLabel_Update` | Fades and slides the target-name label while applying queued texture changes |
+| `02097808` | `BattleCommandMenu_Draw` | Draws the command-menu texture and its sine-animated directional frame |
+| `0209793C` | `BattleCommandMenu_Update` | Slides command-menu variants through resource changes and hides them during blocked paired-party states |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -282,6 +284,12 @@ renders the localized interface texture next to a directional frame. A
 sine-table-driven transition rotates the label through a quarter turn while
 the queued replacement texture is uploaded; side 2 mirrors and offsets the
 frame to the opposite edge.
+
+The matching command-menu pair at `0x02097808`-`0x02097A74` reuses the same
+64-byte transform and quarter-turn animation. When a new nonzero menu side is
+fully hidden it loads resource `side - 1` into the embedded interface layer;
+the paired-party formation also suppresses the menu while any of four related
+interface states is in mode 2.
 
 The neighboring formation pair at
 `0x0207F5A0`-`0x0207FC78` has a readable semantic C translation: it selects one
