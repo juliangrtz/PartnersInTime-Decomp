@@ -118,11 +118,11 @@ now exposes the field, party, enemy, and auxiliary visual-object pools, while
 alternate bound model. `BattlePosition_StoreViewRelative` at `0x02076B0C`
 stores raw coordinates or subtracts either battle-view offset pair while
 clamping depth to zero. The task-list and task-pool functions at
-`0x020A50D4`-`0x020A5294` now expose callback iteration, owner-slot invalidation,
-deferred recycling, explicit free-list access, task insertion, allocation, and
-fixed-payload pool initialization. The model- and sprite-effect constructors
-at `0x020ACB44`-`0x020ACD18` are
-symbolic too, including resource-table lookup, coordinates and scale,
+`0x020A50D4`-`0x020A5294` are byte-matching C and expose callback iteration,
+owner-slot invalidation, deferred recycling, explicit free-list access, task
+insertion, allocation, and fixed-payload pool initialization. The model- and
+sprite-effect constructors at `0x020ACB44`-`0x020ACD18` are symbolic too,
+including resource-table lookup, coordinates and scale,
 owner-slot binding, and the 64-entry tracked sprite-effect table.
 The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
 `0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
