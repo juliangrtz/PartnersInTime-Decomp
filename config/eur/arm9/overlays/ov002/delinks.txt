@@ -34,6 +34,18 @@ src/battle/battle_damage_base.c:
 src/battle/battle_actor_damage.c:
     .text       start:0x0209d694 end:0x0209d718
 
+src/battle/battle_scene_state.c:
+    .text       start:0x020a32f4 end:0x020a3310
+
+src/battle/battle_scene_model.c:
+    .text       start:0x020a3370 end:0x020a3388
+
+src/battle/battle_scene_snapshot.c:
+    .text       start:0x020a4adc end:0x020a4af8
+
+src/battle/battle_scene_motion_channel.c:
+    .text       start:0x020a50c4 end:0x020a50d4
+
 src/battle/battle_task.c:
     .text       start:0x020a5178 end:0x020a5294
 

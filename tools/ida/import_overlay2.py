@@ -50,6 +50,8 @@ typedef struct BattleAITask BattleAITask;
 typedef struct BattleTaskPool BattleTaskPool;
 typedef struct BattleActor BattleActor;
 typedef struct BattleSceneObject BattleSceneObject;
+typedef struct BattleMotionChannel BattleMotionChannel;
+typedef union BattleSceneFlags BattleSceneFlags;
 
 struct BattleActor {
     BattleSceneObject *scene_object;
@@ -66,9 +68,39 @@ struct BattleActor {
     void *resource_slot;
 };
 
+union BattleSceneFlags {
+    u32 raw;
+    struct {
+        u32 state : 8;
+        u32 unk_08_13 : 6;
+        u32 use_alternate_model : 1;
+        u32 unk_15_17 : 3;
+        u32 independent_flag : 1;
+        u32 unk_19_31 : 13;
+    } bits;
+};
+
+struct BattleMotionChannel {
+    u8 data[0x28];
+};
+
 struct BattleSceneObject {
-    u8 unk_000[0xEC];
+    u8 unk_000[4];
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 motion_origin_x;
+    s16 motion_origin_y;
+    s16 motion_origin_z;
+    u8 unk_010[0x0C];
+    BattleMotionChannel motion_channels[4];
+    void *resource;
+    void *primary_model;
+    void *alternate_model;
+    u8 unk_0c8[0x24];
     u16 actor_id;
+    u8 unk_0ee[6];
+    BattleSceneFlags flags;
 };
 
 struct BattleAIState {
@@ -113,6 +145,14 @@ FUNCTION_TYPES = {
     "BattleActor_GetById": "BattleActor *BattleActor_GetById(int);",
     "BattleDamage_CalculateBase":
         "int BattleDamage_CalculateBase(int, int, int);",
+    "BattleSceneObject_SetStateFlags":
+        "void BattleSceneObject_SetStateFlags(BattleSceneObject *, u8, int);",
+    "BattleSceneObject_GetActiveModel":
+        "void *BattleSceneObject_GetActiveModel(BattleSceneObject *);",
+    "BattleSceneObject_GetMotionChannel":
+        "BattleMotionChannel *BattleSceneObject_GetMotionChannel(BattleSceneObject *, int);",
+    "BattleSceneObject_SnapshotPosition":
+        "void BattleSceneObject_SnapshotPosition(BattleSceneObject *);",
     "BattleAI_HandleVmResult":
         "int BattleAI_HandleVmResult(BattleAITask *, int, BattleAIState *);",
     "BattleAI_StartReactionScript": "void BattleAI_StartReactionScript(int);",
