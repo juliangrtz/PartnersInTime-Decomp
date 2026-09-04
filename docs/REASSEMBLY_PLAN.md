@@ -392,6 +392,13 @@ unchanged.
 Native-code completion alone does not expose the game. PiT stores much of its
 behavior in proprietary archives and bytecode.
 
+The first data-source milestone is implemented for EUR.  Versioned JSON plus
+`tools/data_mod.py` now round-trips all 21 MFset archives, every localized
+battle and field-dialogue chunk (including field event labels), the 98 enemy
+records, and all 765 treasure records.  The normal CLion/PowerShell build
+stages these sources into a derived NitroFS and still produces the verified ROM
+hash when the JSON is unchanged.  See `docs/DATA_MODDING.md`.
+
 Priority formats:
 
 1. `BAI_scn_*` battle scenarios and `BAI_mon_*` enemy AI;
@@ -404,7 +411,9 @@ Priority formats:
 
 Each format needs a lossless `extract -> source representation -> rebuild`
 roundtrip, schemas with preserved unknown fields, and synthetic fixtures. Tools
-may consume the user’s ROM but generated game content stays ignored.
+may consume the user's ROM. Understood non-graphical text/stat data may be
+versioned as reviewable source; opaque binaries and graphical/audio assets stay
+private and ignored.
 
 Exit criterion: a mod can add or replace an encounter, enemy script, field
 event, item, and associated resources through documented source files.
