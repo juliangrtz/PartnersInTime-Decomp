@@ -426,9 +426,9 @@ func_ov002_02094b10 kind:function(arm,size=0x4a0) addr:0x02094b10
 func_ov002_02094fb0 kind:function(arm,size=0x18c) addr:0x02094fb0
 func_ov002_0209513c kind:function(arm,size=0x50c) addr:0x0209513c
 func_ov002_02095648 kind:function(arm,size=0x2e0) addr:0x02095648
-func_ov002_02095928 kind:function(arm,size=0x30c) addr:0x02095928
-func_ov002_02095c34 kind:function(arm,size=0xac) addr:0x02095c34
-func_ov002_02095ce0 kind:function(arm,size=0x120) addr:0x02095ce0
+BattleLevelUpGrowth_UpdateStatRow kind:function(arm,size=0x30c) addr:0x02095928
+BattleLevelUpGrowth_UpdateRowSpawner kind:function(arm,size=0xac) addr:0x02095c34
+BattleLevelUpGrowth_StartDisplay kind:function(arm,size=0x120) addr:0x02095ce0
 func_ov002_02095e00 kind:function(arm,size=0x16c) addr:0x02095e00
 func_ov002_02095f6c kind:function(arm,size=0x140) addr:0x02095f6c
 func_ov002_020960ac kind:function(arm,size=0x7cc) addr:0x020960ac
@@ -955,7 +955,7 @@ data_ov002_020bf718 kind:data(any) addr:0x020bf718
 data_ov002_020bf724 kind:data(any) addr:0x020bf724
 data_ov002_020bf73c kind:data(any) addr:0x020bf73c
 data_ov002_020bf74c kind:data(any) addr:0x020bf74c
-data_ov002_020bf75c kind:data(any) addr:0x020bf75c
+gBattleLevelUpGrowthTables kind:data(any) addr:0x020bf75c
 data_ov002_020bf77c kind:data(any) addr:0x020bf77c
 data_ov002_020bf7bc kind:data(any) addr:0x020bf7bc
 data_ov002_020bf7c0 kind:data(any) addr:0x020bf7c0

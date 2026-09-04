@@ -399,7 +399,13 @@ increments the selected HP/POW/DEF/SPEED/STACHE base stat at eight-tick
 intervals before synchronizing all active stats. This also types the previously
 opaque `SavePartyMember` stat prefix. The adjacent transition into the apply
 task is semantically named but remains reference code pending one MWCC
-address-materialization difference. `BattleParty_StartFormationTransition` and
+address-materialization difference. The matching
+`BattleLevelUpGrowth_StartDisplay` and `BattleLevelUpGrowth_UpdateRowSpawner`
+pair then derives HP/POW/DEF/SPEED gains from adjacent cumulative growth rows,
+records a zero automatic STACHE gain, and launches the five result rows three
+frames apart. The save experience word's low byte is now identified as the
+current level, and `PartyLevelGrowth` exposes its four stat fields directly.
+`BattleParty_StartFormationTransition` and
 `BattleParty_UpdateFormationTransition` are grouped in a readable formation
 source unit with equivalent control flow and exact function sizes. Until their
 remaining compiler register-allocation differences are eliminated, the linker

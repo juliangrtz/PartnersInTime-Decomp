@@ -13,7 +13,7 @@ enum PartyMemberId {
 
 typedef union SavePartyExperience {
     struct {
-        u32 unknown : 8;
+        u32 level : 8;
         u32 value : 24;
     } fields;
     u32 packed;
@@ -28,8 +28,7 @@ typedef union SavePartyExperienceToNextLevel {
 } SavePartyExperienceToNextLevel;
 
 typedef struct SavePartyMember {
-    u8 level;
-    u8 unknown_001;
+    u8 unknown_000[2];
     u16 base_max_hp;
     u16 base_power;
     u16 base_defense;
@@ -51,7 +50,10 @@ typedef char SavePartyMember_SizeCheck[
 ];
 
 typedef struct PartyLevelGrowth {
-    u8 unknown_000[8];
+    u16 max_hp;
+    u16 power;
+    u16 defense;
+    u16 speed;
     u16 experience_to_next_level;
     u8 unknown_00a[2];
 } PartyLevelGrowth;

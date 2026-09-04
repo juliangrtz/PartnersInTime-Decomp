@@ -125,6 +125,9 @@ src/battle/battle_interface_layer.c:
 src/battle/battle_level_up_bonus.c:
     .text       start:0x0209401c end:0x02094408
 
+src/battle/battle_level_up_growth.c:
+    .text       start:0x02095c34 end:0x02095e00
+
 src/battle/battle_damage_base.c:
     .text       start:0x0209bf38 end:0x0209bfa0
 
