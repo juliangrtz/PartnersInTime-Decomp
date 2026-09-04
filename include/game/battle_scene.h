@@ -6,6 +6,8 @@
 typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleModel BattleModel;
+typedef void (*BattleMotionCallback)(BattleSceneObject *object,
+                                     BattleMotionChannel *channel);
 
 enum BattleModelFlag {
     BATTLE_MODEL_FLAG_10_SHIFT = 10,
@@ -27,7 +29,17 @@ typedef union BattleSceneFlags {
 } BattleSceneFlags;
 
 struct BattleMotionChannel {
-    u8 data[0x28];
+    BattleMotionCallback callback;
+    s32 elapsed_q8;
+    s16 duration;
+    u16 has_deferred_delta;
+    s16 deferred_delta_x;
+    s16 deferred_delta_y;
+    s16 deferred_delta_z;
+    s16 previous_x;
+    s16 previous_y;
+    s16 previous_z;
+    s16 parameters[8];
 };
 
 struct BattleModel {
@@ -46,7 +58,9 @@ struct BattleSceneObject {
     s16 motion_target_x;
     s16 motion_target_y;
     s16 motion_target_z;
-    u8 unk_016[6];
+    s16 unk_016;
+    s16 smoothed_travel_distance;
+    u16 unk_01a;
     BattleMotionChannel motion_channels[4];
     void *resource;
     BattleModel *primary_model;
@@ -81,6 +95,20 @@ void BattleSceneObject_AddPositionDelta(BattleSceneObject *object,
                                         int delta_x, int delta_y, int delta_z);
 void BattleSceneObject_AdjustPosition(BattleSceneObject *object,
                                       int delta_x, int delta_y, int delta_z);
+void BattleSceneObject_MoveTo(BattleSceneObject *object, int channel_index,
+                              int target_x, int target_y, int target_z,
+                              int duration);
+void BattleSceneObject_UpdateMoveTo(BattleSceneObject *object,
+                                    BattleMotionChannel *channel);
+void BattleSceneObject_MoveBy(BattleSceneObject *object, int channel_index,
+                              int delta_x, int delta_y, int delta_z,
+                              int duration);
+void BattleSceneObject_UpdateMoveBy(BattleSceneObject *object,
+                                    BattleMotionChannel *channel);
+void BattleSceneObject_UpdateTravelDistance(BattleSceneObject *object);
+s16 *BattleSceneObject_BeginMotionChannel(BattleSceneObject *object,
+                                          int channel_index, int duration,
+                                          BattleMotionCallback callback);
 BattleSceneObject *BattleSceneObject_GetById(int object_id);
 
 #endif
