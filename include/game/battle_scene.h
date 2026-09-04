@@ -70,6 +70,6 @@ BattleModel *BattleSceneObject_GetActiveModelById(int object_id);
 BattleMotionChannel *BattleSceneObject_GetMotionChannel(
     BattleSceneObject *object, int channel_index);
 void BattleSceneObject_SnapshotPosition(BattleSceneObject *object);
-BattleSceneObject *BattleSceneObject_GetById(u16 object_id);
+BattleSceneObject *BattleSceneObject_GetById(int object_id);
 
 #endif

@@ -4,9 +4,13 @@ src/battle/battle_actor_state.c
 src/battle/battle_actor_lookup.c
 src/battle/battle_ai_start.c
 src/battle/battle_ai_init_state.c
+src/battle/battle_ai_result.c
 src/battle/battle_script_state.c
+src/battle/battle_damage_base.c
 src/battle/battle_actor_damage.c
+src/battle/battle_hit.c
 src/battle/battle_hit_lookup.c
+src/battle/battle_scene_object.c
 src/battle/battle_scene_snapshot.c
 src/battle/battle_scene_motion_channel.c
 src/battle/battle_task.c

@@ -4,24 +4,6 @@
 
 extern void BattleDamage_DispatchHit(BattleHitDescriptor *descriptor);
 
-void BattleHitDescriptor_Disable(BattleHitDescriptor *descriptor) {
-    descriptor->callback = 0;
-}
-
-void BattleHitDescriptor_DisableByActor(int actor_id) {
-    BattleHitDescriptor_Disable(
-        BattleHitDescriptor_GetByActorId((u16)actor_id));
-}
-
-void BattleHitDescriptor_SetStatus(BattleHitDescriptor *descriptor,
-                                   int status_id, s8 chance, s8 magnitude) {
-    descriptor->flags =
-        (descriptor->flags & ~BATTLE_HIT_STATUS_MASK) |
-        (((u16)status_id << BATTLE_HIT_STATUS_SHIFT) & BATTLE_HIT_STATUS_MASK);
-    descriptor->status_chance = chance;
-    descriptor->status_magnitude = magnitude;
-}
-
 BattleHitDescriptor *BattleHitDescriptor_Configure(
     u16 source_id, u16 target_id, BattleHitCallback callback,
     u16 linked_actor_id, int hit_kind) {
@@ -29,12 +11,12 @@ BattleHitDescriptor *BattleHitDescriptor_Configure(
         BattleHitDescriptor_GetByActorId(source_id);
 
     descriptor->flags &= ~BATTLE_HIT_STATUS_MASK;
-    if (target_id == 0xFFFF) {
+    if (target_id >= 0xFFFF) {
         descriptor->callback = 0;
         return descriptor;
     }
 
-    if ((descriptor->flags & BATTLE_HIT_FLAG_ACTIVE) == 0) {
+    if (((u32)(descriptor->flags << 25) >> 31) == 0) {
         u8 *volatile *context_slot = &gBattleContext;
 
         descriptor->flags |= BATTLE_HIT_FLAG_ACTIVE;
@@ -69,4 +51,25 @@ BattleHitDescriptor *BattleHitDescriptor_Configure(
     }
     BattleSceneObject_GetById(source_id)->linked_actor_id = linked_actor_id;
     return descriptor;
+}
+
+void BattleHitDescriptor_SetStatus(BattleHitDescriptor *descriptor,
+                                   int status_id, s8 chance, s8 magnitude) {
+    u16 status = (u16)status_id;
+
+    descriptor->flags =
+        (descriptor->flags & ~BATTLE_HIT_STATUS_MASK) |
+        ((status & (BATTLE_HIT_STATUS_MASK >> BATTLE_HIT_STATUS_SHIFT))
+         << BATTLE_HIT_STATUS_SHIFT);
+    descriptor->status_chance = chance;
+    descriptor->status_magnitude = magnitude;
+}
+
+void BattleHitDescriptor_DisableByActor(int actor_id) {
+    BattleHitDescriptor_Disable(
+        BattleHitDescriptor_GetByActorId((u16)actor_id));
+}
+
+void BattleHitDescriptor_Disable(BattleHitDescriptor *descriptor) {
+    descriptor->callback = 0;
 }
