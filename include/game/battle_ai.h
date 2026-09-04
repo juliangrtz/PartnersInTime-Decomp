@@ -9,7 +9,8 @@ typedef struct BattleTaskPool BattleTaskPool;
 
 enum BattleAIVmResult {
     BATTLE_AI_VM_FINISHED = 1,
-    BATTLE_AI_VM_CHAIN_SCRIPT = 2
+    BATTLE_AI_VM_CHAIN_SCRIPT = 2,
+    BATTLE_AI_VM_YIELD = 3
 };
 
 enum BattleAIScriptTaskType {
