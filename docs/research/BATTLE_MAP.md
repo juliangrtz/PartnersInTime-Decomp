@@ -590,6 +590,14 @@ script analysis or runtime observation. The paired 1,304-byte
 opcode and side effect, including hit-descriptor invalidation and background
 reloads; it remains on the reference object because MWCC selects different
 registers for eleven instructions in the final fade-toggle case.
+`BattleScript_GetProperty` at `0x0208ED90` is also byte-identical C. Its
+134-entry switch is the actor/object counterpart used by opcodes `0x4D` and
+`0xDE`: it exposes the core HP/POW/DEF/SPD fields, world and view-relative
+positions, animation/model flags, object-data IDs, hit availability, enemy
+resource state, party formation state, and several transition channels. The
+checked-in BAI corpus calls this reader 7,548 times. Properties whose precise
+gameplay meaning is still ambiguous retain field-offset names; this keeps the
+ABI editable without turning guesses into permanent structure names.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds
