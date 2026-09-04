@@ -396,6 +396,12 @@ and immediately runs the continuation. The `0x3000` family uses the same VM
 header embedded at enemy-actor offset `+0x1E0`, but completes without the
 continuation loop. `BattleScriptState_GetByObjectId` maps valid object IDs into
 the table at context offset `+0x6D44` with a `0xC0`-byte stride.
+`BattleAI_HandleVmResult` and the deliberately empty
+`BattleAI_StartPartyVmSlot2` are the first overlay-2 battle functions promoted
+from matching assembly into byte-identical C. Their shared header records the
+confirmed `BattleAITask` size (`0x14`) and the relevant fields of the `0xC0`-byte
+VM state. DSD delinks both functions as independent source modules and verifies
+the rebuilt overlay against the original.
 `BattleAI_StartScriptById` is the common public router. IDs 1-4 select four
 fixed party VM states, while typed IDs currently route `0x1000` and `0x2000`
 to enemy action and reaction starters. The fixed-state initializer clears

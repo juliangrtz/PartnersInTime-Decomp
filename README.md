@@ -68,7 +68,10 @@ ignored by Git.
   maintained as well.
   Extended-channel allocation, ADSR progression, PCM/PSG/noise voice startup,
   mixer calculations, and staged register updates are symbolic too.
-- Only the existing `src/` files are presently maintained high-level source.
+- Maintained high-level source now includes the original Nitro math unit and
+  the first two byte-matching battle-AI functions from overlay 2. The remaining
+  game functions stay in symbolic assembly until an equivalent C translation
+  reproduces their original code and layout.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.
