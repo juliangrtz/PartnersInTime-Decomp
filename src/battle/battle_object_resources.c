@@ -44,9 +44,9 @@ void BattleObjectData_CopyResource(BattleSceneResource *resource,
         ? 0
         : (void *)((u32)load_state->data + (u32)resource->component_14 -
                    (u32)resource->data);
-    load_state->unknown_18 = resource->unknown_18;
+    load_state->texture_set = resource->texture_set;
     load_state->stream_state = 0;
-    load_state->unknown_22 = resource->unknown_22;
+    load_state->texture_variant = resource->texture_variant;
     load_state->resource_id = resource->resource_id;
     load_state->flags.bits.copy_flag = resource->flags.bits.copy_flag;
     load_state->flags.bits.upload_complete =

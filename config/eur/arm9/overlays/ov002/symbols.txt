@@ -345,7 +345,7 @@ BattleObjectData_PrepareBodyDecodeTask kind:function(arm,size=0x250) addr:0x0208
 BattleObjectData_SetupOptionalTextureTask kind:function(arm,size=0xe0) addr:0x020899f0
 BattleObjectData_SetupTailTextureTask kind:function(arm,size=0x108) addr:0x02089ad0
 BattleObjectData_BeginTextureSetupTask kind:function(arm,size=0xa0) addr:0x02089bd8
-func_ov002_02089c78 kind:function(arm,size=0x274) addr:0x02089c78
+BattleObjectData_ResolveTextureMetadataTask kind:function(arm,size=0x274) addr:0x02089c78
 BattleObjectData_QueueLoad kind:function(arm,size=0x40) addr:0x02089eec
 func_ov002_02089f2c kind:function(arm,size=0x83c) addr:0x02089f2c
 func_ov002_0208a768 kind:function(arm,size=0x48) addr:0x0208a768
@@ -370,12 +370,12 @@ func_ov002_0208db18 kind:function(arm,size=0x13c) addr:0x0208db18
 func_ov002_0208dc54 kind:function(arm,size=0x17c) addr:0x0208dc54
 func_ov002_0208ddd0 kind:function(arm,size=0xf0) addr:0x0208ddd0
 BattleAIArchives_Load kind:function(arm,size=0x110) addr:0x0208dec0
-func_ov002_0208dfd0 kind:function(arm,size=0x64) addr:0x0208dfd0
-func_ov002_0208e034 kind:function(arm,size=0x14) addr:0x0208e034
-func_ov002_0208e048 kind:function(arm,size=0x38) addr:0x0208e048
-func_ov002_0208e080 kind:function(arm,size=0x18) addr:0x0208e080
-func_ov002_0208e098 kind:function(arm,size=0x2c) addr:0x0208e098
-func_ov002_0208e0c4 kind:function(arm,size=0x48) addr:0x0208e0c4
+BattleAI_Initialize kind:function(arm,size=0x64) addr:0x0208dfd0
+BattleSpecialHandle_ClearTask kind:function(arm,size=0x14) addr:0x0208e034
+BattleSpecialHandle_ReloadTask kind:function(arm,size=0x38) addr:0x0208e048
+BattleSpecialHandle_QueueReload kind:function(arm,size=0x18) addr:0x0208e080
+BattleActor_IsHitLocked kind:function(arm,size=0x2c) addr:0x0208e098
+BattleAI_UpdateControlMask kind:function(arm,size=0x48) addr:0x0208e0c4
 func_ov002_0208e10c kind:function(arm,size=0x12c) addr:0x0208e10c
 func_ov002_0208e238 kind:function(arm,size=0x184) addr:0x0208e238
 func_ov002_0208e3bc kind:function(arm,size=0x34) addr:0x0208e3bc
@@ -941,7 +941,7 @@ gBattleEnemyAIGroup2Path kind:data(any) addr:0x020beef8
 gBattleEnemyAIGroup3Path kind:data(any) addr:0x020bef10
 gBattleEnemyAIGroup4Path kind:data(any) addr:0x020bef28
 gBattleAIArchivePaths kind:data(any) addr:0x020bef40
-data_ov002_020bef78 kind:data(any) addr:0x020bef78
+@208 kind:data(any) addr:0x020bef78 local
 data_ov002_020befb0 kind:data(any) addr:0x020befb0
 data_ov002_020bf2c8 kind:data(any) addr:0x020bf2c8
 data_ov002_020bf6d8 kind:data(any) addr:0x020bf6d8

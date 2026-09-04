@@ -31,7 +31,7 @@ extern BattleSpecialState *data_ov002_020c0660;
 
 int func_0202b6fc(void *system);
 void func_0202b6e4(void *handle, int argument);
-void func_ov002_0208e080(void *handle_slot);
+void BattleSpecialHandle_QueueReload(void *handle_slot);
 
 void BattlePartyScript_FinishLoadTask(BattleQueuedTask *task);
 void BattlePartyScript_LoadTask(BattleQueuedTask *task);
@@ -60,7 +60,7 @@ BattleQueuedTask *BattleActionScript_RequestLoad(BattleActionState *action) {
             str r3, [r0, #0x348]
             ldr r0, [r2]
             add r0, r0, r1
-            bl func_ov002_0208e080
+            bl BattleSpecialHandle_QueueReload
         }
     }
     return BattleTaskQueue_Enqueue(BattleActionScript_LoadTask, action);
