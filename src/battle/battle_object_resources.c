@@ -1,4 +1,5 @@
 #include <game/battle_object.h>
+#include <game/battle_task_queue.h>
 
 extern u8 *gBattleSystem;
 
@@ -59,4 +60,13 @@ void BattleObjectData_CopyResource(BattleSceneResource *resource,
     func_ov002_020725a4(func_ov002_020894e0, load_state, 0, 0);
     *(u16 *)(gBattleSystem + 3574) =
         (*(u16 *)(gBattleSystem + 3574) & ~1) | 1;
+}
+
+BattleQueuedTask *BattleObjectData_QueueLoadAndMarkPending(
+        BattleObjectDataLoadState *load_state, s32 resource_id) {
+    BattleQueuedTask *task =
+        BattleObjectData_QueueLoad(load_state, resource_id);
+
+    load_state->flags.raw |= 1 << 29;
+    return task;
 }

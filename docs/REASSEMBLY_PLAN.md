@@ -170,6 +170,9 @@ the original overlap-safe forward/backward copy helpers, adjusts the copied
 length around an active stream writer, rebases five internal component
 pointers, and carries only the two appropriate source flags into the existing
 destination slot before scheduling its resource upload.
+The adjacent `BattleObjectData_QueueLoadAndMarkPending` wrapper at `0x02089300`
+also matches; it forwards the destination and resource ID to the common loader
+and sets resource flag 29 while preserving the returned queue-task handle.
 The party knockout task pair at `0x020A90F4` and `0x020A9280` now exposes
 status clearing, animation completion, actor/global locks, form-specific sound
 pairs, linked-character movement and the follow-up character-load callbacks.

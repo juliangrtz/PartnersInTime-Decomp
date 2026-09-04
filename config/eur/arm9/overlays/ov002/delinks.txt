@@ -59,7 +59,7 @@ src/battle/battle_enemy_data.c:
     .text       start:0x02088ef4 end:0x020890b4
 
 src/battle/battle_object_resources.c:
-    .text       start:0x02089320 end:0x020894d0
+    .text       start:0x02089300 end:0x020894d0
 
 src/battle/battle_script_state.c:
     .text       start:0x020922dc end:0x0209234c
