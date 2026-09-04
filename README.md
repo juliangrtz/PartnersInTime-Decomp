@@ -69,14 +69,17 @@ ignored by Git.
   Extended-channel allocation, ADSR progression, PCM/PSG/noise voice startup,
   mixer calculations, and staged register updates are symbolic too.
 - Maintained high-level source now includes the original Nitro math unit and
-  the first two byte-matching battle-AI functions from overlay 2. The remaining
-  game functions stay in symbolic assembly until an equivalent C translation
-  reproduces their original code and layout.
+  ten byte-matching overlay-2 battle functions: three battle-AI/state helpers
+  and the seven-function generic task-pool unit. The remaining game functions
+  stay in symbolic assembly until an equivalent C translation reproduces their
+  original code and layout.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.
 The generated [`docs/research/BATTLE_AI_OPCODES.md`](docs/research/BATTLE_AI_OPCODES.md)
 provides a compact navigation index for the large enemy-script dispatcher.
+[`tools/ida/README.md`](tools/ida/README.md) documents the reproducible IDA
+9.1/9.2 ARM32 database import and batch Hex-Rays helper for overlay 2.
 
 ## Verified European ROM
 
