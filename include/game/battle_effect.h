@@ -34,6 +34,10 @@ typedef char BattleEffect_SizeCheck[sizeof(BattleEffect) == 0x30 ? 1 : -1];
 void BattlePosition_StoreViewRelative(BattlePosition *position,
                                       int x, int y, int z,
                                       int use_raw_position, int view_index);
+void BattlePosition_StoreBattleRelative(BattlePosition *position,
+                                        int x, s16 anchor_y,
+                                        s16 offset_y, s16 offset_z,
+                                        int use_raw_position, int view_index);
 BattleEffect *BattleSpriteEffect_Spawn(int effect_id, int x, int y, int z,
                                        int scale);
 BattleEffect *BattleModelEffect_Spawn(int effect_id,

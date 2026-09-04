@@ -14,7 +14,9 @@ enum BattleModelFlag {
     BATTLE_MODEL_FLAG_10_SHIFT = 10,
     BATTLE_MODEL_FLAG_11_SHIFT = 11,
     BATTLE_MODEL_FLAG_10 = 1 << BATTLE_MODEL_FLAG_10_SHIFT,
-    BATTLE_MODEL_FLAG_11 = 1 << BATTLE_MODEL_FLAG_11_SHIFT
+    BATTLE_MODEL_FLAG_11 = 1 << BATTLE_MODEL_FLAG_11_SHIFT,
+    BATTLE_MODEL_ANIMATION_MODE_MASK = 0xF000,
+    BATTLE_MODEL_ANIMATION_MODE_BATTLE = 0x3000
 };
 
 enum {
@@ -98,6 +100,9 @@ typedef char BattleSceneObject_SizeCheck[
 
 extern BattleSceneObject *gBattleMotionObjectList;
 
+u32 BattleMath_StartSqrt(u32 value);
+u32 BattleMath_WaitForSqrtResult(void);
+
 void BattleSceneObject_SetStateFlags(BattleSceneObject *object, u8 state,
                                      int independent_flag);
 void BattleSceneObject_SetModelFlag11ById(int object_id, int enabled);
@@ -125,8 +130,13 @@ void BattleSceneObject_MoveBy(BattleSceneObject *object, int channel_index,
 void BattleSceneObject_UpdateMoveBy(BattleSceneObject *object,
                                     BattleMotionChannel *channel);
 void BattleSceneObject_UpdateTravelDistance(BattleSceneObject *object);
+void BattleSceneObject_SetAnimation(BattleSceneObject *object,
+                                    int animation_id, int argument_2);
 u32 BattleSceneObject_SetBattleAnimation(BattleSceneObject *object,
                                          int animation_id, int model_flag);
+u32 BattleSceneObject_SetBattleAnimationById(u32 object_id,
+                                             int animation_id,
+                                             int model_flag);
 int BattleSceneObject_StartAcceleratedMotionForDuration(
     BattleSceneObject *object, int channel_index,
     int direction_x, int direction_y, int direction_z,
