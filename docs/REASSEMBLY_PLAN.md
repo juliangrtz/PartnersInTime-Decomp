@@ -196,7 +196,7 @@ IDs and exposes four target selectors used by dispatcher opcodes `0x48`,
 sampling across eligible status targets.
 The common script-ID router, four fixed party-VM starters, script-block state
 initializer, all-family per-frame updater, and task-pool initializer are now
-maintained as well. This closes the scheduler around the large opcode
+byte-matching C as well. This closes the scheduler around the large opcode
 dispatcher: all four typed families and all four party slots have named start,
 update, continuation, cancellation, and allocation paths.
 `tools/analyze_battle_ai_dispatch.py` validates the user-supplied ROM and

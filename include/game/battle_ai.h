@@ -122,6 +122,9 @@ void BattleAI_StartPartyVmSlot4(void);
 void BattleAI_StartPartyVmSlot3(void);
 void BattleAI_StartPartyVmSlot2(void);
 void BattleAI_StartPartyVmSlot1(void);
+void BattleAI_StartScriptById(int script_id);
+void BattleAI_UpdateAll(void);
+void BattleAI_TaskPoolsInit(void);
 void BattleAI_InitStateFromScriptBlock(BattleAIState *state,
                                        const u16 *script_block, int owner_id);
 BattleAIState *BattleScriptState_GetByObjectId(u16 object_id);
@@ -147,5 +150,6 @@ void BattleTask_Release(BattleAITask *task);
 BattleAITask *BattleTaskList_Insert(BattleTaskPool *pool, BattleAITask *task);
 BattleAITask *BattleTaskPool_Allocate(BattleTaskPool *pool);
 void BattleTaskPool_Init(BattleTaskPool *pool, int count, u32 payload_size);
+int BattleTaskList_Update(BattleTaskPool *pool);
 
 #endif

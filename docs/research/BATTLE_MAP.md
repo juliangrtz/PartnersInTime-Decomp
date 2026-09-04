@@ -466,15 +466,17 @@ The generic battle-task pool is matching C as well. It covers free-list
 initialization/allocation/return, active-list insertion, owner-slot binding, and
 safe task release. `BattleAITask` is its 12-byte generic header followed by the
 eight-byte AI-specific payload already described above.
-`BattleAI_StartScriptById` is the common public router. IDs 1-4 select four
+`BattleAI_StartScriptById` is now byte-identical C for the common public router.
+IDs 1-4 select four
 fixed party VM states, while typed IDs currently route `0x1000` and `0x2000`
 to enemy action and reaction starters. The fixed-state initializer clears
 184 bytes, derives the executable stream from the first script-block halfword,
 and records the slot ID at `+0xB0`; slot 2 deliberately has a no-op starter and
-is serviced by its dedicated update helper. `BattleAI_UpdateAll` runs all four
-fixed states, then action, reaction, auxiliary, and object task lists. Pool
-initialization reserves eight action, eight reaction, eight auxiliary, and 40
-object-script task nodes, each with an eight-byte payload.
+is serviced by its dedicated update helper. The matching C
+`BattleAI_UpdateAll` runs all four fixed states, then action, reaction,
+auxiliary, and object task lists. Matching pool initialization reserves eight
+action, eight reaction, eight auxiliary, and 40 object-script task nodes, each
+with an eight-byte payload.
 `BattleCollision_GetBounds` supplies the queue compiler with six signed
 halfwords. It contains explicit body-size presets for the six party-member
 forms and object IDs 8-9, while ordinary battle objects obtain their bounds
