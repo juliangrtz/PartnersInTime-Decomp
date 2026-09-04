@@ -374,7 +374,7 @@ void BattlePartyHpPanel_Draw(BattlePartyHpPanelState *state) {
             (int)state->scene_object, 8, 3, 0x7FFF);
         transform.value.x += 3072;
         transform.value.y -= 1024;
-        transform.value.scale -= 2;
+        transform.value.z -= 2;
         if (state->hp_counter_effect == 0) {
             BattleNumber_DrawDecimal(
                 state->displayed_hp, intensity, &transform.value,

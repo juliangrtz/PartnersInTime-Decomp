@@ -93,7 +93,7 @@ void BattleLevelUpGrowth_UpdateStatRow(BattleAITask *base_task) {
 
         gBattleLevelUpStatRowTransform.x = x << 8;
         gBattleLevelUpStatRowTransform.y = y << 8;
-        gBattleLevelUpStatRowTransform.scale = 64;
+        gBattleLevelUpStatRowTransform.z = 64;
         BattleSprite_DrawFrame(
             (*(s16 *)(gBattleContext + BATTLE_LEVEL_UP_MEMBER_ID_OFFSET) & 1)
                     != 0

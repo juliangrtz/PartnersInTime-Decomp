@@ -31,7 +31,7 @@ struct BattleSpriteTransform {
     s32 matrix[12];
     s32 x;
     s32 y;
-    s32 scale;
+    s32 z;
     u8 unknown_3c[4];
 };
 
@@ -69,10 +69,10 @@ int BattleSound_Play(int sound_id, int argument_1, int argument_2,
                      int argument_3);
 int BattleNumber_DrawDecimal(int value, int palette,
                              BattleSpriteTransform *transform, int object,
-                             u16 priority, int first_digit, int spacing);
+                             u16 render_flags, int first_digit, int spacing);
 void *BattleSprite_DrawFrame(int frame, int palette,
                              BattleSpriteTransform *transform, int object,
-                             u16 priority, u16 resource_id, u16 flags);
+                             u16 z, u16 resource_id, u16 render_flags);
 int BattleRender_UpdateIntensity(int direction, s16 *intensity);
 void BattleReward_ClearCounterEffects(void);
 BattleEffect *BattleReward_AdvanceCounterEffect(BattleEffect *effect);

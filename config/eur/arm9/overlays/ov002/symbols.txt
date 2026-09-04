@@ -448,8 +448,8 @@ BattleTargetCursor_Draw kind:function(arm,size=0x258) addr:0x020988b0
 BattleTargetCursor_Update kind:function(arm,size=0x3c) addr:0x02098b08
 BattleTargetCursor_TriggerBounce kind:function(arm,size=0x4c) addr:0x02098b44
 func_ov002_02098b90 kind:function(arm,size=0x5fc) addr:0x02098b90
-func_ov002_0209918c kind:function(arm,size=0x37c) addr:0x0209918c
-func_ov002_02099508 kind:function(arm,size=0x90) addr:0x02099508
+BattleCommandWheel_Update kind:function(arm,size=0x37c) addr:0x0209918c
+BattleCommandWheel_TriggerEntryBounce kind:function(arm,size=0x90) addr:0x02099508
 BattleNumber_DrawDecimal kind:function(arm,size=0x200) addr:0x02099598
 BattleRender_UpdateIntensity kind:function(arm,size=0x2c) addr:0x02099798
 BattleSprite_DrawFrame kind:function(arm,size=0x214) addr:0x020997c4
@@ -1034,7 +1034,7 @@ gBattleAIObjectTaskPool kind:bss addr:0x020c0918
 data_ov002_020c0c40 kind:bss addr:0x020c0c40
 data_ov002_020c0c44 kind:bss addr:0x020c0c44
 data_ov002_020c0c4c kind:bss addr:0x020c0c4c
-data_ov002_020c0c8c kind:bss addr:0x020c0c8c
+gBattleSpriteFallbackTransform kind:bss addr:0x020c0c8c
 gBattleMotionObjectList kind:bss addr:0x020c0ccc
 data_ov002_020c0cd0 kind:bss addr:0x020c0cd0
 data_ov002_020c0cd8 kind:bss addr:0x020c0cd8

@@ -136,7 +136,7 @@ void BattleLevelUpBonus_UpdateAppliedStats(BattleAITask *task) {
 
     gBattleLevelUpBonusApplyTransform.x = state->display_x << 8;
     gBattleLevelUpBonusApplyTransform.y = state->display_y << 8;
-    gBattleLevelUpBonusApplyTransform.scale = 32;
+    gBattleLevelUpBonusApplyTransform.z = 32;
     BattleNumber_DrawDecimal(state->total_bonus, 31,
                              &gBattleLevelUpBonusApplyTransform, 0, 0x7FFF,
                              0, 0);
