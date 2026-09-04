@@ -70,9 +70,20 @@ struct BattleActorAnimationState {
     struct BattleModel *model;
 };
 
+typedef union BattlePartyStateFlags {
+    u16 raw;
+    struct {
+        u16 unknown_00_11 : 12;
+        u16 flag_12 : 1;
+        u16 unknown_13_15 : 3;
+    } bits;
+} BattlePartyStateFlags;
+
 typedef struct BattlePartyActor {
     BattleActor actor;
-    u8 unknown_070[0x0E];
+    u8 unknown_070[4];
+    BattlePartyStateFlags state_flags;
+    u8 unknown_076[8];
     u16 formation_index;
     u16 linked_object_id;
 } BattlePartyActor;

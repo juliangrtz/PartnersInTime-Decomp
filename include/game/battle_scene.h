@@ -307,6 +307,7 @@ int BattleSceneObject_IsAnimationActiveById(u32 object_id,
                                             int channel_index);
 int BattleSceneObject_ConfigureAnimationLayer(int object_id, int layer);
 BattleSceneObject *BattleSceneObject_GetById(u32 object_id);
+int BattleModel_SetAlpha(BattleModel *model, u8 alpha, u8 mode);
 
 #ifdef __cplusplus
 }
