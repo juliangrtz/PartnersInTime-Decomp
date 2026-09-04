@@ -59,6 +59,10 @@ and runtime overlay 2.
 | `02093D30` | `BattleInterface_ApplyResourceTask` | Returns the pooled request, configures the layer, and advances to row processing |
 | `02093EA8` | `BattleInterfaceLayer_SetResource` | Suppresses duplicate resources and resets the layer transition state |
 | `02093F30` | `BattleInterfaceLayer_QueueResource` | Packs layout/render flags into a pooled asynchronous layer request |
+| `0209401C` | `BattleLevelUpBonus_MapPhaseToValue` | Maps the eight-position bonus wheel to a clamped 1-6 stat increase |
+| `020940E0` | `BattleLevelUpBonus_UpdateRisingObject` | Moves the selected-bonus object toward its result position and retires its callback |
+| `02094174` | `BattleLevelUpBonus_UpdateAppliedStats` | Counts the selected bonus into HP, POW, DEF, SPEED, or STACHE and commits the active stats |
+| `02094408` | `BattleLevelUpBonus_StartApplying` | Transitions the stopped wheel into its delayed point-application task |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -228,7 +232,22 @@ offset `+0xEA` is its signed effect-height anchor, distinct from `actor_id` at
 `BattleParty_AddExperience` at `0x0207FC78` is matching C. It exposes the four
 36-byte save-party records, their packed 24-bit total/remaining-experience
 fields, the four 12-byte level-growth tables, the 999,999 experience cap, and
-the level-100 cap. The neighboring formation pair at
+the level-100 cap. The save record's now-typed prefix contains the character's
+base HP, POW, DEF, SPEED, and STACHE at `+0x02` through `+0x0A`, followed by the
+active max-HP/current-HP and four active combat stats at `+0x0C` through
+`+0x16`.
+
+The byte-matching level-up bonus unit at `0x0209401C` maps the eight animated
+wheel phases to the displayed 1-6 reward, moves the stopped result object, and
+applies one selected stat point every eight ticks. It increments the selected
+base stat in the current 36-byte save-party record, then copies all five base
+stats into their active counterparts after the result delay. This identifies
+the low seven bits of the wheel's selector as HP, POW, DEF, SPEED, and STACHE
+indices `0` through `4`. `BattleLevelUpBonus_StartApplying` is semantically
+named but remains on the reference object because its otherwise equivalent C
+translation differs by one compiler-generated address instruction.
+
+The neighboring formation pair at
 `0x0207F5A0`-`0x0207FC78` has a readable semantic C translation: it selects one
 of twelve adult-party resources, stages object-data slot 52, coordinates the
 adult/baby animation pair, and schedules the movement callback. Its functions
