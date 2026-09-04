@@ -73,7 +73,10 @@ struct BattleAIState {
             u16 unknown_flags : 14;
         };
     };
-    s16 order;
+    union {
+        s16 order;
+        u16 order_value;
+    };
     u16 order_tie_break;
     const void *continuation_script;
     u16 continuation_order;
@@ -107,6 +110,12 @@ BattleAITask *BattleAITask_GetOrInsert(BattleTaskPool *pool, int actor_id);
 void BattleAITask_StopById(BattleAITask **head, int actor_id);
 void BattleAI_StopScriptById(int script_id);
 int BattleAI_TryClearOrderWait(BattleAIState *state);
+void BattleAI_StartObjectScript(int object_id, const void *script,
+                                BattleAIState *source_state,
+                                int queue_continuation);
+void BattleAI_StartActorAuxScript(u16 actor_id, u16 target_actor_id,
+                                  const void *script);
+void BattleAI_StartScriptTask(u16 actor_id, int task_type);
 void BattleAI_StartReactionScript(int actor_id);
 void BattleAI_StartActionScript(int actor_id);
 void BattleAI_StartPartyVmSlot4(void);
