@@ -84,9 +84,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   They expose yielding, call and loop stacks, control flow, integer and
   fixed-point arithmetic, descriptor flags, signed literals, VM-local state,
   save-data words/bytes/flags, and overlay extension hooks behind the editable
-  BAI command format.
+  BAI command format. Overlay 2's matching extension now exposes battle-script
+  owner/target actor IDs and its 32 shared integer variables as editable C.
   High-level source also includes
-  thirty-six byte-matching overlay-2 battle functions: nine battle-AI/state
+  thirty-eight byte-matching overlay-2 battle functions: eleven battle-AI/VM/state
   helpers, the seven-function generic task-pool unit, and four actor HP/lookup
   helpers plus status eligibility, base damage, and the central HP/KO primitive.
   Eight scene-object state/model/motion helpers and the complete five-function

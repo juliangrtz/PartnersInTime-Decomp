@@ -178,6 +178,11 @@ save-data word/byte/bit regions, and runtime-overlay extension hooks. The
 decoder implements the 260-entry command descriptor format used by the BAI
 JSON assembler: optional result variables, optional argument-mode masks,
 signed literals, and variable-resolved arguments.
+Overlay 2's `BattleVM_ReadVariable` and `BattleVM_WriteVariable` extension is
+matching C too. It resolves the current battle owner and target actor IDs,
+reads three filtered context masks, and provides the 32 shared signed script
+variables at battle-context offset `+0x69E4`. Unproven context fields remain
+named by offset until script analysis or runtime traces establish semantics.
 The common script-ID router, four fixed party-VM starters, script-block state
 initializer, all-family per-frame updater, and task-pool initializer are now
 maintained as well. This closes the scheduler around the large opcode
