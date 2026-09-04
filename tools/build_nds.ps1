@@ -59,6 +59,7 @@ function Restore-FixedLayoutHeaderChecksums {
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $baseRom = Join-Path $repoRoot "extract\baserom_PiT_$Version.nds"
 $outputRom = Join-Path $repoRoot "PiT_$Version.nds"
+$linkedSources = Join-Path $repoRoot "config\$Version\arm9\linked_sources.txt"
 
 if (-not (Test-Path -LiteralPath $baseRom -PathType Leaf)) {
     throw "Missing private base ROM: $baseRom`nCopy your matching ROM there before building."
@@ -124,6 +125,13 @@ $sha1 = (Get-FileHash -LiteralPath $outputRom -Algorithm SHA1).Hash.ToLowerInvar
 Write-Host ''
 Write-Host "Built ROM: $outputRom"
 Write-Host "SHA-1:    $sha1"
+if (Test-Path -LiteralPath $linkedSources -PathType Leaf) {
+    Write-Host 'Linked C sources:'
+    Get-Content -LiteralPath $linkedSources |
+        ForEach-Object { $_.Split('#', 2)[0].Trim() } |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        ForEach-Object { Write-Host "  $_" }
+}
 
 if (-not [string]::IsNullOrWhiteSpace($EmulatorPath)) {
     if (-not (Test-Path -LiteralPath $EmulatorPath -PathType Leaf)) {

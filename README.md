@@ -175,6 +175,13 @@ The two pipelines have different purposes: `dsd` supplies delinked objects,
 relocations, linker layout, and `objdiff`; `tools/reassembly.py` supplies a
 complete local assembly representation from day one.
 
+The final `dsd` link substitutes compiled C only for translation units listed
+in `config/eur/arm9/linked_sources.txt`. Every other C file remains available
+to `objdiff`, while its original delinked object is kept in the ROM. Add a unit
+to this list only after its code, size, and function order match. Experimental
+edits to an already listed unit are intentionally linked even when they no
+longer match; this is what makes source-level test mods possible.
+
 ## Build and run from CLion
 
 The shared `Build and Run EUR NDS` run configuration regenerates `build.ninja`,
@@ -187,7 +194,8 @@ Select `Build and Run EUR NDS` in CLion's run-configuration menu and press Run.
 Its configured emulator is
 `D:\NDS\DeSmuME\DeSmuME_0.9.13_x64.exe`. The configuration deliberately builds
 the `rom` target without enforcing a match, so experimental code changes still
-produce a testable image. Use `ninja check` when you want to verify
+produce a testable image when their translation unit is listed as described
+above. Use `ninja check` when you want to verify
 byte-identical reconstruction separately. The wrapper also restores the
 fixed-layout secure-area and header CRC fields that `dsd` does not preserve; it
 refuses any unexpected header difference. A build without launching an

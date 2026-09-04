@@ -150,11 +150,31 @@ class Project:
             for source_file in get_c_cpp_files([src_path, libs_path])
         ]
 
+    def linked_sources_manifest(self) -> Path:
+        return self.game_config / "arm9" / "linked_sources.txt"
+
+    def linked_source_files(self) -> list[Path]:
+        source_files = []
+        for raw_line in self.linked_sources_manifest().read_text().splitlines():
+            line = raw_line.split("#", maxsplit=1)[0].strip()
+            if line:
+                source_files.append(Path(line))
+        return source_files
+
+    def linked_source_object_files(self) -> list[str]:
+        return [
+            str(self.game_build / source_file.with_suffix(".o"))
+            for source_file in self.linked_source_files()
+        ]
+
     def arm9_lcf(self) -> Path:
         return self.game_build / "linker_script.lcf"
 
     def arm9_objects_txt(self) -> Path:
         return self.game_build / "objects.txt"
+
+    def arm9_dsd_objects_txt(self) -> Path:
+        return self.game_build / "objects.dsd.txt"
 
     def arm9_delink_yaml(self) -> Path:
         return self.game_build / "delinks" / "delink.yaml"
@@ -216,6 +236,16 @@ def main():
         n.rule(
             name="lcf",
             command=f"{DSD} lcf -c $config_path --lcf-file $lcf_file --objects-file $objects_file"
+        )
+        n.newline()
+
+        n.rule(
+            name="prepare_link_objects",
+            command=(
+                f"{PYTHON} tools/prepare_link_objects.py --input $in --output $out "
+                "--build-root $build_root --delinks-root $delinks_root "
+                "--linked-sources $linked_sources"
+            ),
         )
         n.newline()
 
@@ -351,7 +381,7 @@ def add_mwld_and_rom_builds(n: ninja_syntax.Writer, project: Project):
     delink_file = str(project.arm9_delink_yaml())
     elf_file = str(project.arm9_o())
     n.build(
-        inputs=project.source_object_files() + [lcf_file, objects_file, delink_file],
+        inputs=project.linked_source_object_files() + [lcf_file, objects_file, delink_file],
         implicit=LD,
         rule="mwld",
         outputs=elf_file,
@@ -479,17 +509,31 @@ def add_delink_and_lcf_builds(n: ninja_syntax.Writer, project: Project):
     n.newline()
 
     lcf_file = project.arm9_lcf()
+    dsd_objects_file = project.arm9_dsd_objects_txt()
     objects_file = project.arm9_objects_txt()
     n.build(
         inputs=project.delinks_files + [str(rom_config)],
         implicit=DSD,
         rule="lcf",
-        outputs=[str(lcf_file), str(objects_file)],
+        outputs=[str(lcf_file), str(dsd_objects_file)],
         variables={
             "config_path": project.arm9_config_yaml(),
             "lcf_file": lcf_file,
-            "objects_file": objects_file,
+            "objects_file": dsd_objects_file,
         }
+    )
+    n.newline()
+
+    n.build(
+        inputs=str(dsd_objects_file),
+        implicit=["tools/prepare_link_objects.py", str(project.linked_sources_manifest())],
+        rule="prepare_link_objects",
+        outputs=str(objects_file),
+        variables={
+            "build_root": project.game_build,
+            "delinks_root": project.arm9_delinks(),
+            "linked_sources": project.linked_sources_manifest(),
+        },
     )
     n.newline()
 
