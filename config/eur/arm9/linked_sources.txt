@@ -17,6 +17,8 @@ src/battle/battle_action_scripts.c
 src/battle/battle_enemy_data.c
 src/battle/battle_object_rebuild.cpp
 src/battle/battle_object_resources.c
+src/battle/battle_object_upload.c
+src/battle/battle_object_texture_setup.c
 src/battle/battle_vm_variables.c
 src/battle/battle_vm_helpers.c
 src/battle/battle_scene_animation.c

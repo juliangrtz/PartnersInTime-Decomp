@@ -182,6 +182,13 @@ component-pointer table, clear both processing flags, and initialize the
 remaining 100-byte stream workspace. This unit is intentionally C++: expressing
 the three original virtual calls as actual member calls reproduces Metrowerks'
 implicit-`this` register scheduling without inline assembly.
+The next ten callbacks are linked matching C as well. They build aligned body,
+tail, and optional texture-read requests, wait for the two decode stages,
+submit the completed payload to the renderer, and choose the sprite/texture
+upload paths from the resource flags. The adjacent 592-byte body-layout
+callback is already structured C and documents the allocation fallback and
+temporary stream workspace, but remains on its reference object until two
+compiler-scheduled conditional moves reproduce the original order.
 The party knockout task pair at `0x020A90F4` and `0x020A9280` now exposes
 status clearing, animation completion, actor/global locks, form-specific sound
 pairs, linked-character movement and the follow-up character-load callbacks.

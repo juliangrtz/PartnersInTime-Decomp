@@ -620,6 +620,24 @@ leading pointer table in the destination buffer. The update callback writes one
 component per task tick through the shared stream state at context `+0x68B4`.
 After the final component it clears flag 30 on both descriptors and, when at
 least 101 bytes remain, clears a 100-byte tail workspace and seeds its cursor.
+The following object-texture pipeline is now linked matching C from
+`0x020894D0` through `0x020897A0` and from `0x020899F0` through `0x02089C78`.
+Its setup callbacks initialize up to three 64-byte archive requests for the
+body, tail, and optional texture IDs, align every measured transfer to four
+bytes, and place the later payloads directly after the preceding result. The
+decode callbacks process 48 body units followed by 16 tail units and then
+queue the final transfer into component `+0x14`. Completion schedules the
+sprite-side upload for unshared resources and the texture-side upload for
+nonzero resource slots that have not completed; either path raises the battle
+system's pending-transfer bit. The texture uploader maps the resource index to
+the context's bank table in 64-byte units, while the sprite uploader delegates
+to the renderer path that ultimately targets DS OBJ VRAM.
+
+`BattleObjectData_PrepareBodyDecodeTask` at `0x020897A0` is maintained as a
+structured C draft beside this unit. Its component layout, allocation bounds,
+100-byte stream workspace, and pending-load behavior are recovered; it remains
+on the reference object because MWCC orders two equivalent conditional moves
+differently. This localized compiler match is the only known code difference.
 `BattleEntity_BindResource` is maintained too: its enemy branch
 copies max/current HP, base/current POW, DEF, and SPD, installs level/trait
 bits, and clears transient actor flags; its party branch binds the corresponding

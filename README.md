@@ -87,7 +87,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
   High-level source also includes
-  one hundred and three byte-matching overlay-2 battle functions: twenty-nine
+  one hundred and thirteen byte-matching overlay-2 battle functions: twenty-nine
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
   and four actor HP/lookup
   helpers plus status eligibility, base damage, the central HP/KO primitive,
@@ -118,6 +118,11 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   component per task tick, expose the original C++ model interface and stream
   writer, build its component-offset table, and finalize the spare stream
   workspace after the last component.
+  Ten following matching callbacks set up the resource's body, tail, and
+  optional texture requests, drive both staged decode waits, queue the final
+  transfer, and select sprite and texture uploads. The completion callback
+  either clears the processing state or returns to the rebuild pipeline when
+  a newer load is pending.
   The remaining game
   functions stay in symbolic assembly until an equivalent C translation
   reproduces their original code and layout. The adjacent two-function party
