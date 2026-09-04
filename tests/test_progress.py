@@ -25,12 +25,14 @@ class ProgressTrackerTests(unittest.TestCase):
             + summary[progress.STATUS_REMAINING],
         )
 
-    def test_matching_c_is_derived_from_present_source_units(self) -> None:
+    def test_matching_c_is_derived_from_linked_source_units(self) -> None:
+        linked_sources = progress.parse_linked_sources("eur")
         c_ranges = [
             item for component in self.components for item in component.c_ranges
         ]
         self.assertTrue(c_ranges)
         self.assertTrue(all((ROOT / item.source).is_file() for item in c_ranges))
+        self.assertTrue(all(item.source in linked_sources for item in c_ranges))
         self.assertEqual(
             sum(item.size for item in c_ranges),
             progress.totals(self.components)[progress.STATUS_C],

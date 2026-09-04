@@ -131,7 +131,19 @@ def module_configs(version: str) -> list[tuple[str, str, Path]]:
     return configs
 
 
-def parse_delinks(path: Path) -> tuple[list[Range], list[CoverageRange]]:
+def parse_linked_sources(version: str) -> set[str]:
+    manifest = ROOT / "config" / version / "arm9" / "linked_sources.txt"
+    sources: set[str] = set()
+    for raw_line in manifest.read_text(encoding="utf-8").splitlines():
+        source = raw_line.split("#", maxsplit=1)[0].strip()
+        if source:
+            sources.add(source.replace("\\", "/"))
+    return sources
+
+
+def parse_delinks(
+    path: Path, matching_sources: set[str]
+) -> tuple[list[Range], list[CoverageRange]]:
     code_ranges: list[Range] = []
     source_ranges: list[CoverageRange] = []
     source: str | None = None
@@ -155,6 +167,7 @@ def parse_delinks(path: Path) -> tuple[list[Range], list[CoverageRange]]:
         if (
             section.group("section") == ".text"
             and source.endswith(".c")
+            and source.replace("\\", "/") in matching_sources
             and source_path.is_file()
         ):
             source_ranges.append(
@@ -309,6 +322,7 @@ def load_patch_ranges(version: str) -> tuple[dict[str, list[CoverageRange]], int
 
 def collect_progress(version: str = "eur") -> tuple[list[Component], int]:
     patch_ranges, arm7_bytes = load_patch_ranges(version)
+    matching_sources = parse_linked_sources(version)
     components: list[Component] = []
     for key, label, config_dir in module_configs(version):
         delinks = config_dir / "delinks.txt"
@@ -316,7 +330,7 @@ def collect_progress(version: str = "eur") -> tuple[list[Component], int]:
         missing = delinks if not delinks.is_file() else symbols
         if not delinks.is_file() or not symbols.is_file():
             raise FileNotFoundError(f"missing progress input: {missing}")
-        code_ranges, c_ranges = parse_delinks(delinks)
+        code_ranges, c_ranges = parse_delinks(delinks, matching_sources)
         if not code_ranges:
             continue
         c_ranges = clip_coverage(c_ranges, code_ranges)

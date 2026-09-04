@@ -87,15 +87,19 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
   High-level source also includes
-  sixty-one byte-matching overlay-2 battle functions: twenty-nine
+  sixty-two byte-matching overlay-2 battle functions: twenty-nine
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
   and four actor HP/lookup
   helpers plus status eligibility, base damage, the central HP/KO primitive,
-  and party-healing feedback. Three reward-counter effect functions, eight
+  and party-healing feedback, plus the save-backed experience and level-
+  threshold update. Three reward-counter effect functions, eight
   scene-object state/model/motion helpers, and the complete five-function
   hit-descriptor setup layer are high-level source too. The remaining game
   functions stay in symbolic assembly until an equivalent C translation
-  reproduces their original code and layout.
+  reproduces their original code and layout. The adjacent two-function party
+  formation/resource transition is also readable C; it remains on its original
+  reference object until the last Metrowerks register-allocation differences
+  are resolved.
 - The European editable-data project covers 21 multilingual MFset archives,
   10,510 battle/field dialogue strings, and all 98 enemy-stat records. Its
   inverse encoders also cover all 765 treasure records, reproduce every covered

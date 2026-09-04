@@ -56,6 +56,9 @@ and runtime overlay 2.
 | `0207F100` | `BattleReward_AdvanceCounterEffect` | Replaces a completed counter sprite while preserving its owner slot |
 | `0207F17C` | `BattleReward_EnsureCounterEffect` | Creates the positioned coin or experience tally effect when absent |
 | `0207F3A0` | `BattleParty_ShowHealingEffect` | Shows the party healing sprite, model, number, and sound feedback |
+| `0207F5A0` | `BattleParty_UpdateFormationTransition` | Advances the paired-party animation, resource swap, and return motion task |
+| `0207F920` | `BattleParty_StartFormationTransition` | Selects and loads an adult party formation resource and starts its transition |
+| `0207FC78` | `BattleParty_AddExperience` | Adds capped experience, crosses level thresholds, and updates the remaining requirement |
 | `0208ED90` | `BattleScript_GetProperty` | Reads actor, object, and global properties |
 | `0208FB6C` | `BattleScript_SetProperty` | Writes properties; cases 16-20 are actor stats |
 | `02071C84` | `BattleDamage_CalculateAttack` | General POW/DEF/level damage calculation |
@@ -81,6 +84,7 @@ and runtime overlay 2.
 | `020A3338` | `BattleSceneObject_SetModelFlag10` | Object-pointer wrapper for the active model's currently unknown bit 10 |
 | `020A3348` | `BattleSceneObject_SetModelFlag10ById` | Resolves the active model and updates its currently unknown bit 10 |
 | `020A3388` | `BattleSceneObject_GetActiveModelById` | Resolves an object ID and returns its primary or alternate model |
+| `020A3C5C` | `BattleSceneObject_StartAcceleratedMotionForDuration` | Starts normalized acceleration over an explicit duration and speed range |
 | `020A3F9C` | `BattleMotion_StartBallistic` | Derives launch velocity with the DS square-root unit and starts motion |
 | `020A411C` | `BattleSceneObject_StartAcceleratedMotion` | Normalizes a path and solves constant or accelerated duration |
 | `020A43D8` | `BattleSceneObject_UpdateAcceleratedMotion` | Advances normalized acceleration and applies the terminal correction |
@@ -153,7 +157,8 @@ and runtime overlay 2.
 | `+54` | `defense_change` | Signed percentage for status 7 |
 | `+60` | `speed_change` | Signed percentage for status 8 |
 | `+6C` | `resource_slot` | Leads to the loaded enemy stat record |
-| `+7E` | `party_member` | Identifies linked party members during revival handling |
+| `+7E` | `formation_index` | Selects party-form effects and one of six adult visual resources |
+| `+80` | `linked_object_id` | Resolves the paired adult/baby scene object during transitions |
 
 `BattleActor_IsHpAtMostQuarter` and the contiguous actor, scene-object, and
 object-load-state lookup layer are maintained as byte-identical C. The shared
@@ -170,6 +175,15 @@ attaches the positive-heal sparkle to the appropriate adult, and plays sound
 333. The reconstructed `BattlePosition` record is eight bytes; scene-object
 offset `+0xEA` is its signed effect-height anchor, distinct from `actor_id` at
 `+0xEC`.
+`BattleParty_AddExperience` at `0x0207FC78` is matching C. It exposes the four
+36-byte save-party records, their packed 24-bit total/remaining-experience
+fields, the four 12-byte level-growth tables, the 999,999 experience cap, and
+the level-100 cap. The neighboring formation pair at
+`0x0207F5A0`-`0x0207FC78` has a readable semantic C translation: it selects one
+of twelve adult-party resources, stages object-data slot 52, coordinates the
+adult/baby animation pair, and schedules the movement callback. Its functions
+currently match 88.84 and 87.38 percent respectively, so exact builds continue
+to link their original delinked reference object.
 
 Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are
