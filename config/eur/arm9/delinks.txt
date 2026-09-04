@@ -16,3 +16,6 @@ src/game/script_vm_control.c:
 
 src/game/script_vm_execute.c:
     .text       start:0x02006508 end:0x020071b0
+
+src/game/script_vm_variables.c:
+    .text       start:0x020055f8 end:0x02005ba8
