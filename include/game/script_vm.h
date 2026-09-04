@@ -4,7 +4,11 @@
 #include <nitro.h>
 
 typedef struct ScriptVm ScriptVm;
+typedef struct ScriptVmState ScriptVmState;
 typedef struct ScriptVmCommand ScriptVmCommand;
+typedef int (*ScriptVmCommandHandler)(
+    ScriptVm *vm, ScriptVmState *state, ScriptVmCommand *command
+);
 
 enum ScriptVmCommandDescriptor {
     SCRIPT_VM_ARGUMENT_COUNT_MASK = 0x1F,
@@ -34,7 +38,8 @@ enum ScriptVmJumpCondition {
 };
 
 struct ScriptVm {
-    u8 unknown_00[0x0C];
+    u8 unknown_00[8];
+    ScriptVmCommandHandler command_handler;
     const u32 *command_descriptors;
 };
 
@@ -46,13 +51,19 @@ struct ScriptVmCommand {
     s32 arguments[16];
 };
 
-typedef struct ScriptVmState {
+struct ScriptVmState {
     const u16 *script;
     u8 unknown_04[0x60];
-    s32 stack[17];
+    union {
+        s32 loop_stack[17];
+        struct {
+            s32 loop_stack_base;
+            s32 call_stack[16];
+        };
+    };
     u16 stack_depth;
     u16 delay;
-} ScriptVmState;
+};
 
 typedef char ScriptVmCommand_SizeCheck[
     sizeof(ScriptVmCommand) == 0x48 ? 1 : -1
