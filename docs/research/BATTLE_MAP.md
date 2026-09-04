@@ -63,6 +63,9 @@ and runtime overlay 2.
 | `020940E0` | `BattleLevelUpBonus_UpdateRisingObject` | Moves the selected-bonus object toward its result position and retires its callback |
 | `02094174` | `BattleLevelUpBonus_UpdateAppliedStats` | Counts the selected bonus into HP, POW, DEF, SPEED, or STACHE and commits the active stats |
 | `02094408` | `BattleLevelUpBonus_StartApplying` | Transitions the stopped wheel into its delayed point-application task |
+| `02094FB0` | `BattleLevelUpScreen_UpdateEntrance` | Moves the level-up panel toward its initial screen position and hands off to the next phase |
+| `0209513C` | `BattleLevelUpScreen_UpdateController` | Drives the level-up screen's main presentation task |
+| `02095648` | `BattleLevelUpScreen_Start` | Creates the level-up screen tasks, binds its six visual objects, and initializes layout coordinates |
 | `02095928` | `BattleLevelUpGrowth_UpdateStatRow` | Animates one level-up stat row and draws its old value plus growth delta |
 | `02095C34` | `BattleLevelUpGrowth_UpdateRowSpawner` | Starts the five stat rows at three-frame intervals |
 | `02095CE0` | `BattleLevelUpGrowth_StartDisplay` | Computes cumulative-table growth deltas and starts the row sequence |

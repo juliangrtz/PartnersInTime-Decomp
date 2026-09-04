@@ -1,5 +1,7 @@
 #include <game/battle_ai.h>
 #include <game/battle_effect.h>
+#include <game/battle_object.h>
+#include <game/battle_scene.h>
 #include <game/save_data.h>
 
 enum BattleLevelUpStatRowOffset {
@@ -7,6 +9,14 @@ enum BattleLevelUpStatRowOffset {
     BATTLE_LEVEL_UP_GROWTH_ACTIVE_OFFSET = 0xE4,
     BATTLE_LEVEL_UP_GROWTH_VALUES_OFFSET = 0xE6,
     BATTLE_LEVEL_UP_DISPLAY_VALUES_OFFSET = 0xF0,
+    BATTLE_LEVEL_UP_SCREEN_X_OFFSET = 0xFA,
+    BATTLE_LEVEL_UP_SCREEN_TARGET_X_OFFSET = 0xFC,
+    BATTLE_LEVEL_UP_SCREEN_TARGET_Y_OFFSET = 0xFE,
+    BATTLE_LEVEL_UP_SCREEN_STATE_OFFSET = 0x100,
+    BATTLE_LEVEL_UP_PRIMARY_OBJECT_OFFSET = 0x6784,
+    BATTLE_LEVEL_UP_SECONDARY_OBJECT_OFFSET = 0x6788,
+    BATTLE_LEVEL_UP_TERTIARY_OBJECT_OFFSET = 0x678C,
+    BATTLE_LEVEL_UP_TASK_POOL_OFFSET = 0x8B44,
     BATTLE_LEVEL_UP_VIEW_X_OFFSET = 0xCB9C,
     BATTLE_LEVEL_UP_VIEW_Y_OFFSET = 0xCB9E,
     SAVE_PARTY_MEMBERS_OFFSET = 0x3F8,
@@ -21,7 +31,17 @@ typedef struct BattleLevelUpStatRowState {
     s16 x;
 } BattleLevelUpStatRowState;
 
+typedef struct BattleLevelUpScreenState {
+    s16 x;
+    s16 y;
+    s16 z;
+    u8 unknown_06[4];
+    u8 flags;
+} BattleLevelUpScreenState;
+
 extern BattleSpriteTransform gBattleLevelUpStatRowTransform;
+void BattleLevelUpScreen_UpdateController(BattleAITask *task);
+void BattleLevelUpScreen_UpdateEntrance(BattleAITask *task);
 
 void BattleLevelUpGrowth_UpdateStatRow(BattleAITask *base_task) {
     BattleLevelUpStatRowState *state =
@@ -163,4 +183,85 @@ void BattleLevelUpGrowth_UpdateStatRow(BattleAITask *base_task) {
                                      0x7FFF, 0, 0);
         }
     }
+}
+
+BattleAITask *BattleLevelUpScreen_Start(void) {
+    BattleAITask *controller = BattleTaskList_Insert(
+        (BattleTaskPool *)(gBattleContext + BATTLE_LEVEL_UP_TASK_POOL_OFFSET),
+        0);
+    BattleAITask *entrance;
+    BattleLevelUpScreenState *entrance_state;
+    BattleSceneObject *object;
+
+    controller->callback = BattleLevelUpScreen_UpdateController;
+    entrance = BattleTaskList_Insert(
+        (BattleTaskPool *)(gBattleContext + BATTLE_LEVEL_UP_TASK_POOL_OFFSET),
+        0);
+    entrance->callback = BattleLevelUpScreen_UpdateEntrance;
+    entrance_state = (BattleLevelUpScreenState *)&entrance->state;
+
+    object = *(BattleSceneObject **)(
+        gBattleContext + BATTLE_LEVEL_UP_PRIMARY_OBJECT_OFFSET);
+    BattleEntity_BindResource(object->actor_id, 54);
+    object = *(BattleSceneObject **)(
+        gBattleContext + BATTLE_LEVEL_UP_PRIMARY_OBJECT_OFFSET);
+    BattleSceneObject_SetAnimation(object, 2, -1);
+    (*(BattleSceneObject **)(
+         gBattleContext + BATTLE_LEVEL_UP_PRIMARY_OBJECT_OFFSET))
+        ->primary_model->animation_state_bits.state = 31;
+    *(u16 *)&(*(BattleSceneObject **)(
+                  gBattleContext + BATTLE_LEVEL_UP_PRIMARY_OBJECT_OFFSET))
+                  ->unk_0f0 = 0x7FFF;
+
+    object = *(BattleSceneObject **)(
+        gBattleContext + BATTLE_LEVEL_UP_SECONDARY_OBJECT_OFFSET);
+    BattleEntity_BindResource(object->actor_id, 54);
+    object = *(BattleSceneObject **)(
+        gBattleContext + BATTLE_LEVEL_UP_SECONDARY_OBJECT_OFFSET);
+    BattleSceneObject_SetAnimation(object, 3, -1);
+    (*(BattleSceneObject **)(
+         gBattleContext + BATTLE_LEVEL_UP_SECONDARY_OBJECT_OFFSET))
+        ->primary_model->animation_state_bits.state = 31;
+    *(u16 *)&(*(BattleSceneObject **)(
+                  gBattleContext + BATTLE_LEVEL_UP_SECONDARY_OBJECT_OFFSET))
+                  ->unk_0f0 = 0x7FFF;
+
+    object = *(BattleSceneObject **)(
+        gBattleContext + BATTLE_LEVEL_UP_TERTIARY_OBJECT_OFFSET);
+    BattleEntity_BindResource(object->actor_id, 54);
+    object = *(BattleSceneObject **)(
+        gBattleContext + BATTLE_LEVEL_UP_TERTIARY_OBJECT_OFFSET);
+    BattleSceneObject_SetAnimation(object, 4, -1);
+    (*(BattleSceneObject **)(
+         gBattleContext + BATTLE_LEVEL_UP_TERTIARY_OBJECT_OFFSET))
+        ->primary_model->animation_state_bits.state = 31;
+    *(u16 *)&(*(BattleSceneObject **)(
+                  gBattleContext + BATTLE_LEVEL_UP_TERTIARY_OBJECT_OFFSET))
+                  ->unk_0f0 = 0x7FFF;
+
+    BattleEntity_BindResource(40, 62);
+    BattleSceneObject_SetAnimation(BattleSceneObject_GetById(40), -1, -1);
+    *(u16 *)&BattleSceneObject_GetById(40)->unk_0f0 = 0x7FFF;
+
+    BattleEntity_BindResource(41, 54);
+    BattleSceneObject_SetAnimation(BattleSceneObject_GetById(41), -1, -1);
+    *(u16 *)&BattleSceneObject_GetById(41)->unk_0f0 = 0x7FFF;
+
+    BattleEntity_BindResource(42, 54);
+    BattleSceneObject_SetAnimation(BattleSceneObject_GetById(42), -1, -1);
+    *(u16 *)&BattleSceneObject_GetById(42)->unk_0f0 = 0x7FFF;
+
+    entrance_state->flags &= ~0x7F;
+    entrance_state->x = 4480;
+    entrance_state->y = 1024;
+    entrance_state->flags &= ~0x80;
+    *(s16 *)&controller->state = -1;
+    *(u16 *)(gBattleContext + BATTLE_LEVEL_UP_SCREEN_X_OFFSET) = 48;
+    *(u16 *)(gBattleContext + BATTLE_LEVEL_UP_SCREEN_TARGET_X_OFFSET) =
+        entrance_state->x / 16;
+    *(u16 *)(gBattleContext + BATTLE_LEVEL_UP_SCREEN_TARGET_Y_OFFSET) =
+        entrance_state->y / 16 - 28 +
+        *(s16 *)(gBattleContext + BATTLE_LEVEL_UP_SCREEN_X_OFFSET);
+    *(u16 *)(gBattleContext + BATTLE_LEVEL_UP_SCREEN_STATE_OFFSET) = 0;
+    return entrance;
 }
