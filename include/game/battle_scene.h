@@ -148,7 +148,9 @@ struct BattleModel {
     union {
         u32 flags;
         struct {
-            u32 unknown_00_07 : 8;
+            u32 unknown_00_01 : 2;
+            u32 panel_animation_trigger : 1;
+            u32 unknown_03_07 : 5;
             u32 animation_active : 1;
             u32 unknown_09_31 : 23;
         } flag_bits;
@@ -185,7 +187,9 @@ struct BattleModel {
     union {
         u32 flags;
         struct {
-            u32 unknown_00_07 : 8;
+            u32 unknown_00_01 : 2;
+            u32 panel_animation_trigger : 1;
+            u32 unknown_03_07 : 5;
             u32 animation_active : 1;
             u32 unknown_09_31 : 23;
         } flag_bits;
