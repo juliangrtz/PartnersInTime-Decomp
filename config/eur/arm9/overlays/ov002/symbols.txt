@@ -431,7 +431,7 @@ BattleLevelUpGrowth_UpdateRowSpawner kind:function(arm,size=0xac) addr:0x02095c3
 BattleLevelUpGrowth_StartDisplay kind:function(arm,size=0x120) addr:0x02095ce0
 func_ov002_02095e00 kind:function(arm,size=0x16c) addr:0x02095e00
 BattleResults_DrawPartyExperienceRow kind:function(arm,size=0x140) addr:0x02095f6c
-func_ov002_020960ac kind:function(arm,size=0x7cc) addr:0x020960ac
+BattleResults_DrawScreen kind:function(arm,size=0x7cc) addr:0x020960ac
 func_ov002_02096878 kind:function(arm,size=0x118) addr:0x02096878
 func_ov002_02096990 kind:function(arm,size=0x244) addr:0x02096990
 func_ov002_02096bd4 kind:function(arm,size=0x884) addr:0x02096bd4
@@ -961,7 +961,7 @@ data_ov002_020bf7bc kind:data(any) addr:0x020bf7bc
 data_ov002_020bf7c0 kind:data(any) addr:0x020bf7c0
 data_ov002_020bf7c4 kind:data(any) addr:0x020bf7c4
 data_ov002_020bf7fc kind:data(any) addr:0x020bf7fc
-data_ov002_020bf83c kind:data(any) addr:0x020bf83c
+gBattleResultsSummaryTransformTemplate kind:data(any) addr:0x020bf83c
 gBattleResultsRowTransform kind:data(any) addr:0x020bf87c
 gBattleLevelUpBonusPreviewTransform kind:data(any) addr:0x020bf8bc
 data_ov002_020bf8fc kind:data(any) addr:0x020bf8fc
