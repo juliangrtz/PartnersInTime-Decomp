@@ -29,6 +29,7 @@ enum BattleAIStateFlag {
 };
 
 enum BattleAIContextOffset {
+    BATTLE_AI_VM_OFFSET = 0x6954,
     BATTLE_AI_PARTY_STATE_1_OFFSET = 0x6A64,
     BATTLE_AI_PARTY_STATE_2_OFFSET = 0x6B1C,
     BATTLE_AI_PARTY_STATE_3_OFFSET = 0x6BD4,
@@ -98,6 +99,11 @@ typedef char BattleAITask_SizeCheck[sizeof(BattleAITask) == 0x14 ? 1 : -1];
 typedef char BattleTaskPool_SizeCheck[sizeof(BattleTaskPool) == 8 ? 1 : -1];
 
 int BattleAI_HandleVmResult(BattleAITask *task, int result, BattleAIState *state);
+void BattleAI_UpdateChainedTask(BattleAITask *task);
+void BattleAI_UpdateAuxTask(BattleAITask *task);
+void BattleAI_UpdateReactionTask(BattleAITask *task);
+void BattleAI_UpdateActionTask(BattleAITask *task);
+BattleAITask *BattleAITask_GetOrInsert(BattleTaskPool *pool, int actor_id);
 void BattleAITask_StopById(BattleAITask **head, int actor_id);
 void BattleAI_StopScriptById(int script_id);
 int BattleAI_TryClearOrderWait(BattleAIState *state);
