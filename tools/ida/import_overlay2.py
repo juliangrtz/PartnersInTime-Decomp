@@ -82,7 +82,11 @@ struct BattleTaskPool {
 FUNCTION_TYPES = {
     "BattleAI_HandleVmResult":
         "int BattleAI_HandleVmResult(BattleAITask *, int, BattleAIState *);",
+    "BattleAI_StartReactionScript": "void BattleAI_StartReactionScript(int);",
+    "BattleAI_StartActionScript": "void BattleAI_StartActionScript(int);",
     "BattleAI_StartPartyVmSlot2": "void BattleAI_StartPartyVmSlot2(void);",
+    "BattleAI_InitStateFromScriptBlock":
+        "void BattleAI_InitStateFromScriptBlock(BattleAIState *, const u16 *, int);",
     "BattleScriptState_GetByObjectId":
         "BattleAIState *BattleScriptState_GetByObjectId(u16);",
     "BattlePool_ReturnNode":

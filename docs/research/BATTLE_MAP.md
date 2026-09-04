@@ -397,10 +397,11 @@ header embedded at enemy-actor offset `+0x1E0`, but completes without the
 continuation loop. `BattleScriptState_GetByObjectId` maps valid object IDs into
 the table at context offset `+0x6D44` with a `0xC0`-byte stride.
 `BattleAI_HandleVmResult`, the deliberately empty
-`BattleAI_StartPartyVmSlot2`, and `BattleScriptState_GetByObjectId` are the first
-overlay-2 battle functions promoted from matching assembly into byte-identical
-C. Their shared header records the confirmed `BattleAITask` size (`0x14`) and
-the relevant fields of the `0xC0`-byte VM state. DSD delinks the functions as
+`BattleAI_StartPartyVmSlot2`, both enemy action/reaction start wrappers, the VM
+state initializer, and `BattleScriptState_GetByObjectId` are the first overlay-2
+battle functions promoted from matching assembly into byte-identical C. Their
+shared header records the confirmed `BattleAITask` size (`0x14`) and the
+relevant fields of the `0xC0`-byte VM state. DSD delinks the functions as
 independent source modules and verifies the rebuilt overlay against the
 original.
 The generic battle-task pool is matching C as well. It covers free-list
