@@ -141,11 +141,15 @@ try {
         $baseRomConfig = Join-Path $repoRoot "build\$Version\build\rom_config.yaml"
         $dataRomConfig = Join-Path $repoRoot "build\$Version\build\rom_config_data_mod.yaml"
         $stagedFiles = Join-Path $repoRoot "build\$Version\data_mod_files"
+        $stagedCode = Join-Path $repoRoot "build\$Version\data_mod_code"
+        $overlay9 = Join-Path $repoRoot "build\$Version\build\arm9_ov009.bin"
         $dataReport = Join-Path $repoRoot "build\$Version\data_mod_report.json"
         & $python.Source tools\data_mod.py build `
             --files-root $filesRoot `
             --project-root $resolvedDataProject `
             --output-files $stagedFiles `
+            --overlay-9-bin $overlay9 `
+            --output-code $stagedCode `
             --rom-config-input $baseRomConfig `
             --rom-config-output $dataRomConfig `
             --report $dataReport
