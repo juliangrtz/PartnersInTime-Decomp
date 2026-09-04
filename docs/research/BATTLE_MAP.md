@@ -144,8 +144,9 @@ and runtime overlay 2.
 | `+6C` | `resource_slot` | Leads to the loaded enemy stat record |
 | `+7E` | `party_member` | Identifies linked party members during revival handling |
 
-`BattleActor_IsHpAtMostQuarter` and the party/enemy/general actor lookup helpers
-are maintained as byte-identical C. The shared `BattleActor` declaration now
+`BattleActor_IsHpAtMostQuarter` and the contiguous actor, scene-object, and
+object-load-state lookup layer are maintained as byte-identical C. The shared
+`BattleActor` declaration now
 types the confirmed `max_hp` and `current_hp` fields at `+0x04/+0x06`, giving
 later damage, healing, and KO translations a common high-level representation.
 `BattleActor_CanReceiveStatus` is matching C too: defeated actors are rejected,
@@ -156,7 +157,9 @@ Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are
 coordinates rather than HP or stats. `BattleSceneObject_GetById` resolves IDs
 below 56 through the field-object table, 56-59 through party slots, 60-67
-through enemy slots, and IDs from 68 through the auxiliary table. The active
+through enemy slots, and IDs from 68 through the auxiliary table. The
+object-data load-state resolver indexes opaque 48-byte records at battle-context
+offset `+0xD3C8`. The active
 model helper then selects scene-object pointer `+0xC0` or `+0xC4` from flag bit
 14 at `+0xF4`. `BattlePosition_StoreViewRelative` accepts a raw-coordinate
 bypass flag and otherwise subtracts either context offset pair
