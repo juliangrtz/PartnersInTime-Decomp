@@ -121,6 +121,12 @@ clamping depth to zero. Its `BattlePosition_StoreBattleRelative` caller at
 `0x02087BCC` converts the battle anchor and vertical/depth offsets used by turn
 effects. The adjacent matching helpers expose the asynchronous DS square-root
 unit and the object/pool-ID forms of the standard battle-animation setup.
+The matching `0x02087C84`-`0x02087EC4` task group makes the scene transition
+boundary explicit as well: it loads a new background into the inactive buffer,
+toggles the active buffer, drives the resident background fade API, and reloads
+the current map's field assets after battle. A typed partial `BattleContext`
+now anchors the background ID at `+0x3A`, runtime state at `+0xD000`, and its
+flags at `+0x3A0`.
 The task-list and task-pool functions at
 `0x020A50D4`-`0x020A5294` are byte-matching C and expose callback iteration,
 owner-slot invalidation, deferred recycling, explicit free-list access, task
