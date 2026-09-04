@@ -47,7 +47,7 @@ typedef struct BattleTargetOverlayState {
     s16 intensity;
     s16 target_group;
     BattleSceneObject *secondary_marker;
-    s16 enabled;
+    s16 animation_id;
 } BattleTargetOverlayState;
 
 typedef struct BattlePartyIndicatorState {
@@ -59,6 +59,44 @@ typedef struct BattlePartyIndicatorState {
 } BattlePartyIndicatorState;
 
 extern "C" {
+
+void BattleTargetMarker_Update(BattleTargetOverlayState *state) {
+    BattleSceneObject *object = state->primary_marker;
+    BattleModel *model;
+    int animation_id;
+
+    if (object == 0) {
+        return;
+    }
+
+    animation_id = state->animation_id;
+    model = object->primary_model;
+    if (animation_id < 0) {
+        state->intensity -= 2;
+    } else {
+        if (state->intensity < 31) {
+            state->intensity += 4;
+        }
+        if (animation_id != model->animation_id) {
+            model->set_primary_animation((u8)animation_id, 0, 1);
+        }
+    }
+
+    if (state->intensity <= 0) {
+        state->intensity = 0;
+        return;
+    }
+    if (state->intensity < 31) {
+        BattleModel_SetAlpha(model, (u8)state->intensity, 0);
+        return;
+    }
+    if (state->intensity <= 31) {
+        return;
+    }
+
+    state->intensity = 31;
+    BattleModel_SetAlpha(model, (u8)state->intensity, 0);
+}
 
 void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
     BattleSceneObject *primary_object;
@@ -75,7 +113,7 @@ void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
 
     primary_object = state->primary_marker;
     if (*(s16 *)(gBattleContext + BATTLE_GLOBAL_01_OFFSET) == 3 &&
-        state->enabled >= 0 &&
+        state->animation_id >= 0 &&
         state->target_group == BATTLE_TARGET_GROUP_ENEMIES &&
         ((BattleTargetInterfaceFlags *)(gBattleContext +
           BATTLE_TARGET_INTERFACE_FLAGS_OFFSET))->bits.uniform_markers == 0 &&
@@ -163,7 +201,7 @@ void BattleTargetOverlay_Draw(BattleTargetOverlayState *state) {
         transform->matrix[0] = 4096;
     }
 
-    if (state->enabled < 0) {
+    if (state->animation_id < 0) {
         return;
     }
 
