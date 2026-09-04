@@ -8,10 +8,6 @@ enum {
     PARTY_FORM_ADULTS_AND_BABIES = 2
 };
 
-int BattleActor_IsHpAtMostQuarter(BattleActor *actor) {
-    return actor->current_hp * 100 <= actor->max_hp * 25;
-}
-
 int BattleActor_CanReceiveStatus(BattleActor *actor) {
     u16 actor_id;
 
@@ -28,4 +24,8 @@ int BattleActor_CanReceiveStatus(BattleActor *actor) {
     }
     return *(s16 *)(gSaveData + SAVE_PARTY_FORM_OFFSET) ==
            PARTY_FORM_ADULTS_AND_BABIES;
+}
+
+int BattleActor_IsHpAtMostQuarter(BattleActor *actor) {
+    return actor->current_hp * 100 <= actor->max_hp * 25;
 }

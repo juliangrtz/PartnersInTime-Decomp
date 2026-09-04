@@ -1,27 +1,44 @@
 #include <game/battle_ai.h>
 
-void BattlePool_ReturnNode(BattleTaskPool *pool, BattleAITask *task) {
-    task->next = pool->free;
+void BattleTaskPool_Init(BattleTaskPool *pool, int count, u32 payload_size) {
+    BattleAITask *task = (BattleAITask *)(pool + 1);
+    u32 aligned_payload_size = (payload_size + 3) & ~3;
+
     pool->free = task;
+    pool->active = 0;
+    for (;;) {
+        --count;
+        if (count <= 0) {
+            break;
+        }
+        task->next =
+            (BattleAITask *)((u8 *)task + 0x0C + aligned_payload_size);
+        task = task->next;
+    }
+    task->next = 0;
 }
 
-BattleAITask *BattlePool_TakeNode(BattleTaskPool *pool) {
+BattleAITask *BattleTaskPool_Allocate(BattleTaskPool *pool) {
     BattleAITask *task = pool->free;
+
     pool->free = task->next;
+    task->owner_slot = 0;
+    task->callback = 0;
+    task->next = (BattleAITask *)pool;
     return task;
 }
 
-BattleAITask *BattleTask_BindOwnerSlot(BattleAITask *task,
-                                      BattleAITask **owner_slot) {
-    BattleAITask *displaced;
-
-    task->owner_slot = owner_slot;
-    displaced = *owner_slot;
-    if (displaced == task) {
-        displaced = 0;
+BattleAITask *BattleTaskList_Insert(BattleTaskPool *pool, BattleAITask *task) {
+    if (task == 0) {
+        task = BattleTaskPool_Allocate(pool);
     }
-    *owner_slot = task;
-    return displaced;
+
+    if (task == 0) {
+        return 0;
+    }
+    task->next = pool->active;
+    pool->active = task;
+    return task;
 }
 
 void BattleTask_Release(BattleAITask *task) {
@@ -43,43 +60,26 @@ void BattleTask_Release(BattleAITask *task) {
     }
 }
 
-BattleAITask *BattleTaskList_Insert(BattleTaskPool *pool, BattleAITask *task) {
-    if (task == 0) {
-        task = BattleTaskPool_Allocate(pool);
-    }
+BattleAITask *BattleTask_BindOwnerSlot(BattleAITask *task,
+                                      BattleAITask **owner_slot) {
+    BattleAITask *displaced;
 
-    if (task == 0) {
-        return 0;
+    task->owner_slot = owner_slot;
+    displaced = *owner_slot;
+    if (displaced == task) {
+        displaced = 0;
     }
-    task->next = pool->active;
-    pool->active = task;
-    return task;
+    *owner_slot = task;
+    return displaced;
 }
 
-BattleAITask *BattleTaskPool_Allocate(BattleTaskPool *pool) {
+BattleAITask *BattlePool_TakeNode(BattleTaskPool *pool) {
     BattleAITask *task = pool->free;
-
     pool->free = task->next;
-    task->owner_slot = 0;
-    task->callback = 0;
-    task->next = (BattleAITask *)pool;
     return task;
 }
 
-void BattleTaskPool_Init(BattleTaskPool *pool, int count, u32 payload_size) {
-    BattleAITask *task = (BattleAITask *)(pool + 1);
-    u32 aligned_payload_size = (payload_size + 3) & ~3;
-
+void BattlePool_ReturnNode(BattleTaskPool *pool, BattleAITask *task) {
+    task->next = pool->free;
     pool->free = task;
-    pool->active = 0;
-    for (;;) {
-        --count;
-        if (count <= 0) {
-            break;
-        }
-        task->next =
-            (BattleAITask *)((u8 *)task + 0x0C + aligned_payload_size);
-        task = task->next;
-    }
-    task->next = 0;
 }

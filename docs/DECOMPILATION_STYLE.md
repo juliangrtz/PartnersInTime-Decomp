@@ -11,8 +11,11 @@ European ROM exactly. Neither requirement is optional.
   or symbolic assembly gap. Merge it into the subsystem module when the gap is
   translated; do not introduce linker tricks solely to make unrelated address
   ranges appear to be one compilation unit.
-- Order functions as they occur in the original object whenever that order is
-  known. Headers own shared structures, enums, flags, and public declarations.
+- Arrange function definitions so that the linked object preserves the original
+  runtime order. MWCC 1.2 emits the separate function sections used here in
+  reverse declaration order, so multi-function source units generally list
+  their functions in descending runtime-address order. Headers own shared
+  structures, enums, flags, and public declarations.
 
 ## Readability and matching
 
