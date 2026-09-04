@@ -166,6 +166,10 @@ use fixed 192-byte states and may save a continuation pointer plus inherited
 ordering fields; VM result 2 activates that continuation in the same frame.
 Enemy auxiliary scripts use the actor-embedded state at `+0x1E0`. Both task
 families are initialized, linked, updated, and completed in maintained source.
+The resident `VM_ReadCommand` at `0x020071B0` is byte-matching C as well. Its
+typed decoder confirms the 260-entry command descriptor format used by the BAI
+JSON assembler: optional result variables, optional argument-mode masks,
+signed literals, and arguments resolved through `VM_ReadVariable`.
 The common script-ID router, four fixed party-VM starters, script-block state
 initializer, all-family per-frame updater, and task-pool initializer are now
 maintained as well. This closes the scheduler around the large opcode
