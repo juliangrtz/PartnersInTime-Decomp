@@ -94,6 +94,12 @@ typedef union BattlePartyStateFlags {
         u16 flag_12 : 1;
         u16 unknown_13_15 : 3;
     } bits;
+    struct {
+        u16 jump_input_enabled : 1;
+        u16 airborne : 1;
+        u16 carried_baby_phase : 2;
+        u16 unknown_04_15 : 12;
+    } command_bits;
 } BattlePartyStateFlags;
 
 typedef struct BattlePartyActor {

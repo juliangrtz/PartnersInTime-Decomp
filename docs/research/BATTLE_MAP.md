@@ -106,6 +106,7 @@ and runtime overlay 2.
 | `0209B450` | `BattleItemCursor_MoveToSelection` | Places the cursor beside the selected visible item row or the command wheel (semantic C; 83.33% matching) |
 | `0209B540` | `BattleTargetCursor_MoveToActor` | Moves the target cursor toward an actor's configured sprite anchor |
 | `0209B5CC` | `BattleTargetCursor_MoveToGroup` | Moves the target cursor to an absolute interface position |
+| `0209B664` | `BattlePartyActor_UpdateCommandMovement` | Processes party jump input and carried-baby separation/rebinding phases (semantic C) |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -567,6 +568,16 @@ whether that uniform-target mode is available. The two cursor movement
 primitives are exact C and use the active party member's resource-relative
 animation base together with either an actor anchor or an absolute menu
 position.
+
+The per-frame party command-movement controller is also reconstructed in C.
+It maps A/B/X/Y to the active formation, starts the defensive jump arc, clamps
+an active actor back toward the ground, and selects the adult/baby landing
+sounds. For the two carrying formations it also exposes the four-phase state
+machine that detaches actor 58 or 59, binds the appropriate standalone object
+resource, launches it from the adult's position, and restores the adult's
+idle animation after the paired animation completes. The state lives in party
+flags `+0x74` bits 0-3; its semantic source is still an objdiff work in
+progress and is not enabled in the exact build.
 
 `BattleItemEffect_Apply` decodes the effect type from each 20-byte resident
 item record. Types 0-1 add a fixed HP amount, type 2 restores a percentage of
