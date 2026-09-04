@@ -73,6 +73,7 @@ and runtime overlay 2.
 | `020960AC` | `BattleResults_DrawScreen` | Draws the post-battle party experience, earned experience, earned coins, and coin total |
 | `02096878` | `BattleResults_UpdateCounters` | Updates result-screen fade intensity and synchronizes its animated EXP/coin counters with save data |
 | `02096990` | `BattlePartyIndicator_Update` | Fades and animates a party indicator as the active adult/baby group or actor availability changes |
+| `02096BD4` | `BattleTargetOverlay_Draw` | Draws the focused target cursor and the additional eligible-target markers for enemy or party selection |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
 | `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
 | `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
@@ -257,13 +258,21 @@ indices `0` through `4`. `BattleLevelUpBonus_StartApplying` is semantically
 named but remains on the reference object because its otherwise equivalent C
 translation differs by one compiler-generated address instruction.
 
-The matching growth-display pair at `0x02095C34`-`0x02095E00` reads the current
-level from the low byte of the save member's packed experience word. It selects
-the character-specific cumulative growth table, subtracts the preceding two
-level rows to obtain HP/POW/DEF/SPEED gains, sets the STACHE gain to zero, and
-spawns all five result rows three frames apart. The row callback at
-`0x02095928` is semantically named from its confirmed callers and rendering
-behavior but remains reference code.
+The matching level-up display unit at `0x02095648`-`0x02095E00` reads the
+current level from the low byte of the save member's packed experience word.
+It selects the character-specific cumulative growth table, subtracts the
+preceding two level rows to obtain HP/POW/DEF/SPEED gains, sets the STACHE gain
+to zero, and spawns all five result rows three frames apart. Its matching row
+callback at `0x02095928` animates and draws each old stat value and growth
+delta.
+
+The byte-identical target-interface renderer at `0x02096BD4` uses the model's
+virtual render methods, explaining why this source unit is C++ while its
+neighboring state callback remains ordinary C-style code. It positions a
+focus cursor on the selected actor, draws secondary markers over the other
+eligible enemies or party members, and supports a uniform-marker mode that
+includes the active actor. Actor flag bit 13 excludes an actor from these
+target markers.
 
 The neighboring formation pair at
 `0x0207F5A0`-`0x0207FC78` has a readable semantic C translation: it selects one
