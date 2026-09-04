@@ -168,7 +168,8 @@ All actor resolvers, the compact base-damage calculation, and the damage/KO
 updater are now maintained byte-identical C.
 The state-bit setter, active-model selectors, model-bit setters, position
 snapshot, and fixed-stride motion-channel accessor are byte-identical C as
-well. Their common scene-object
+well. The guarded direct and object-ID animation-channel activity queries also
+match. Their common scene-object
 type records positions at `+0x04..+0x0E`, four `0x28`-byte motion channels at
 `+0x1C`, models at `+0xC0/+0xC4`, actor ID `+0xEC`, and flags at `+0xF4`.
 
