@@ -48,6 +48,13 @@ typedef unsigned int u32;
 typedef struct BattleAIState BattleAIState;
 typedef struct BattleAITask BattleAITask;
 typedef struct BattleTaskPool BattleTaskPool;
+typedef struct BattleActor BattleActor;
+
+struct BattleActor {
+    const void *resource;
+    s16 max_hp;
+    s16 current_hp;
+};
 
 struct BattleAIState {
     const void *script;
@@ -80,6 +87,11 @@ struct BattleTaskPool {
 """
 
 FUNCTION_TYPES = {
+    "BattleActor_IsHpAtMostQuarter":
+        "int BattleActor_IsHpAtMostQuarter(BattleActor *);",
+    "BattleActor_GetEnemySlot": "BattleActor *BattleActor_GetEnemySlot(int);",
+    "BattleActor_GetPartySlot": "BattleActor *BattleActor_GetPartySlot(int);",
+    "BattleActor_GetById": "BattleActor *BattleActor_GetById(int);",
     "BattleAI_HandleVmResult":
         "int BattleAI_HandleVmResult(BattleAITask *, int, BattleAIState *);",
     "BattleAI_StartReactionScript": "void BattleAI_StartReactionScript(int);",

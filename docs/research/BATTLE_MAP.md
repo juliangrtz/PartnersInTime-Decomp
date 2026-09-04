@@ -140,6 +140,11 @@ and runtime overlay 2.
 | `+6C` | `resource_slot` | Leads to the loaded enemy stat record |
 | `+7E` | `party_member` | Identifies linked party members during revival handling |
 
+`BattleActor_IsHpAtMostQuarter` and the party/enemy/general actor lookup helpers
+are maintained as byte-identical C. The shared `BattleActor` declaration now
+types the confirmed `max_hp` and `current_hp` fields at `+0x04/+0x06`, giving
+later damage, healing, and KO translations a common high-level representation.
+
 Actor IDs 56-59 are party slots. IDs 60-67 are enemy slots. Do not confuse
 battle actors with visual scene objects, whose offsets `+04/+06/+08` are
 coordinates rather than HP or stats. `BattleSceneObject_GetById` resolves IDs

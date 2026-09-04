@@ -7,6 +7,12 @@
 src/battle/battle_ai_result.c:
     .text       start:0x0207e7a0 end:0x0207e820
 
+src/battle/battle_actor_hp.c:
+    .text       start:0x02076bac end:0x02076bd4
+
+src/battle/battle_actor_lookup.c:
+    .text       start:0x02076f24 end:0x02076fb4
+
 src/battle/battle_ai_enemy_start.c:
     .text       start:0x0207eca8 end:0x0207ecd8
 
