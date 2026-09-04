@@ -26,6 +26,8 @@ and runtime overlay 2.
 | `02091A58` | `BattleSceneObject_IsAnimationActiveById` | Resolves an object ID and tests its requested animation slot |
 | `02091EDC` | `BattleObjectData_IsLoadPending` | Tests pending state for ordinary and large enemy data slots |
 | `0207FE2C` | `BattleTurnState_Update` | Turn selection, actions, reactions, victory, and exit |
+| `02079320` | `BattleVM_WriteVariable` | Writes target IDs and battle-wide script variables in namespace `0x4000` |
+| `020793D8` | `BattleVM_ReadVariable` | Reads battle owner/target IDs, masks, and shared script variables |
 | `02079950` | `BattleAI_DispatchOpcode` | Executes loaded `BAI_*.dat` battle bytecode |
 | `0207E928` | `BattleAI_UpdateReactionTask` | Runs one enemy reaction VM task to completion |
 | `0207E9C0` | `BattleAI_UpdateActionTask` | Runs one enemy action VM task to completion |
@@ -427,6 +429,13 @@ and immediately runs the continuation. The `0x3000` family uses the same VM
 header embedded at enemy-actor offset `+0x1E0`, but completes without the
 continuation loop. `BattleScriptState_GetByObjectId` maps valid object IDs into
 the table at context offset `+0x6D44` with a `0xC0`-byte stride.
+The same namespace is now closed at the resident/overlay boundary:
+`BattleVM_ReadVariable` and `BattleVM_WriteVariable` are byte-identical C for
+variables `0x4000` through `0x402F`. They expose the current state's low
+12-bit owner actor ID, its high-nibble task family, the owner's target actor,
+three battle-context masks, and 32 shared signed integers at context offset
+`+0x69E4`. Context fields whose gameplay meaning is not yet proven retain
+offset-based names rather than speculative labels.
 `BattleAI_HandleVmResult`, all four fixed party VM starters, both enemy
 action/reaction start wrappers, the VM state initializer, and
 `BattleScriptState_GetByObjectId` are the first overlay-2 battle functions
