@@ -163,6 +163,10 @@ linked party formations, preserves animation state across resource changes,
 and notifies the scene renderer when its active model changes. The two guarded
 activity helpers expose the four per-object animation channels used by reaction
 state machines. C++ is retained for the original `BattleModel` virtual calls.
+The adjacent `BattleSceneObject_ApplyMovement` dispatcher at `0x02091A90`
+is byte-matching C too. It validates the object ID and maps seven script-facing
+movement modes onto immediate positioning, relative and absolute interpolation,
+two ballistic solvers, target-relative motion, and configurable acceleration.
 The remaining general battle object-data path is symbolic: its 48-byte state
 lookup, asynchronous queue setup, duplicate-resource guard, ordinary-slot
 routing, and selection of eight large enemy-load slots are exposed by the
