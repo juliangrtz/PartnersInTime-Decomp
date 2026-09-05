@@ -13,8 +13,8 @@ enum BattleGridCaptureOffset {
 
 enum BattleGridCaptureConstant {
     BATTLE_GRID_CAPTURE_REQUIRED_SCENE_STATE = 0x1002,
-    BATTLE_GRID_CAPTURE_ALTERNATE_DIRECTION = 1 << 3,
-    BATTLE_GRID_CAPTURE_BUSY = 1 << 5,
+    BATTLE_GRID_CAPTURE_ALTERNATE_DIRECTION_BIT = 3,
+    BATTLE_GRID_CAPTURE_BUSY_BIT = 5,
     BATTLE_GRID_CAPTURE_ACTIVE = 1 << 6,
     BATTLE_GRID_CAPTURE_CONFIGURED = 1 << 11
 };
@@ -57,7 +57,7 @@ void BattleGridCapture_BeginTask(BattleGridCaptureTask *task) {
     state->started = 1;
     /* Preserve MWCC's single-bit extraction while keeping the save flag named. */
     if (((u32)*(u16 *)(gSaveData + BATTLE_GRID_CAPTURE_SAVE_FLAGS_OFFSET) <<
-         28) >> 31 != 0) {
+         (31 - BATTLE_GRID_CAPTURE_ALTERNATE_DIRECTION_BIT)) >> 31 != 0) {
         state->angle = 0xC00;
     } else {
         state->angle = source->angle;
@@ -77,7 +77,7 @@ void BattleGridCapture_UpdateTask(BattleGridCaptureTask *task) {
     u32 flags =
         *(u32 *)(gBattleContext + BATTLE_GRID_CAPTURE_RUNTIME_FLAGS_OFFSET);
 
-    if (((flags << 26) >> 31) == 0) {
+    if (((flags << (31 - BATTLE_GRID_CAPTURE_BUSY_BIT)) >> 31) == 0) {
         *(u16 *)(gBattleContext + BATTLE_GRID_CAPTURE_INTENSITY_OFFSET) = 32;
         if (BattleGridTransition_DrawPhaseB(&task->state) == 0) {
             task->callback = BattleGridCapture_ResetTask;
@@ -96,7 +96,7 @@ void BattleGridCapture_WaitForResetTask(BattleGridCaptureTask *task) {
     u32 flags =
         *(u32 *)(gBattleContext + BATTLE_GRID_CAPTURE_RUNTIME_FLAGS_OFFSET);
 
-    if (((flags << 26) >> 31) == 0) {
+    if (((flags << (31 - BATTLE_GRID_CAPTURE_BUSY_BIT)) >> 31) == 0) {
         *(u32 *)(gBattleContext + BATTLE_GRID_CAPTURE_RUNTIME_FLAGS_OFFSET) =
             flags & ~BATTLE_GRID_CAPTURE_ACTIVE;
         task->callback = 0;

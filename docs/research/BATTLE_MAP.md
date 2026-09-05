@@ -295,6 +295,17 @@ and runtime overlay 2.
 | `020B3410` | `BattleLineTransition_DrawPhaseB` | Identified complementary 32-strip transition renderer; high-level reconstruction pending |
 | `020B3714` | `BattleLineTransitionPhaseB_UpdateTask` | Byte-identical phase-B frame and completion callback |
 | `020B374C` | `BattleLineTransitionPhaseB_InitializeTask` | Byte-identical phase-B position/velocity-array initializer |
+| `020B37CC` | `BattleCylinderTransition_Draw` | Identified segmented cylindrical screen-warp renderer; high-level reconstruction pending |
+| `020B3F58` | `BattleCylinderTransition_UpdateStandardTask` | Byte-identical ordinary cylinder-transition progress and fade callback |
+| `020B4004` | `BattleCylinderTransition_UpdateAlternateFadeTask` | Byte-identical alternate cylinder-transition fade callback |
+| `020B40B0` | `BattleCylinderTransition_OnVCountInterrupt` | Byte-identical VCount IRQ display-swap handler using NitroSDK's IRQ-check buffer |
+| `020B410C` | `BattleCylinderTransition_RestoreDisplayTask` | Byte-identical deferred VCount/display-swap restoration callback |
+| `020B4158` | `BattleCylinderTransition_UpdateAlternateRotationTask` | Byte-identical dual-screen cylinder rotation and split-line scheduler |
+| `020B4210` | `BattleCylinderTransition_UpdateAlternateRevealTask` | Byte-identical alternate cylinder reveal callback |
+| `020B4254` | `BattleCylinderTransition_InitializeTask` | Byte-identical save-selected cylinder-transition initializer |
+| `020B42E0` | `BattleCurtainTransition_Draw` | Identified 50-column curtain geometry renderer; high-level reconstruction pending |
+| `020B44D0` | `BattleCurtainTransition_UpdateTask` | Byte-identical curtain progress and active-flag cleanup callback |
+| `020B452C` | `BattleCurtainTransition_InitializeTask` | Byte-identical curtain-transition initializer |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `020A56EC` | `BattleStatus_UpdatePartyStatVisuals` | Reconstructed POW/DEF/SPD effect rotation and model callback (73.00% code match) |
@@ -678,6 +689,19 @@ resets display capture asynchronously, and owns runtime flags `0x20`, `0x40`,
 and `0x800`. The final pair runs the complementary wipe and hands completion to
 the following display-mode task. Four direct-geometry renderers between these
 controllers are semantically mapped but remain raw code.
+
+The seven-function cylinder controller at `0x020B3F58`-`0x020B42E0` is also
+byte-identical C around its raw renderer. Its four-byte state holds signed
+progress and angle values. The ordinary path advances 32 geometry steps and
+then fades the capture intensity over another 32 frames. Save flag
+`+0x560:0x8` selects a dual-screen path which installs a VCount interrupt,
+rotates the segmented cylinder across the display boundary, schedules the
+swap-back at a computed scanline, then performs the same clamped fade. The IRQ
+handler sets NitroSDK's DTCM-backed interrupt-check flag through the recovered
+`SDK_AUTOLOAD_DTCM_START` linker symbol. The following two-function curtain
+controller at `0x020B44D0`-`0x020B4544` is matching C too; it doubles a 32-frame
+counter for the raw 50-column geometry wipe and clears active flag `0x40` on
+completion.
 
 ## Damage and status behavior
 

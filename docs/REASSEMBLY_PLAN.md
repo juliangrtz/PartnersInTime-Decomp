@@ -188,6 +188,14 @@ initialize velocities `-10`/`-13`, advance the active strips, coordinate the
 display-capture configure/reset chain, and hand off completion. The four larger
 direct-geometry strip renderers separating these controller blocks are named
 and behaviorally mapped but are not yet high-level source.
+The next seven cylinder-transition callbacks at `0x020B3F58`-`0x020B42E0` are
+linked matching C. They expose both save-selected execution paths, signed
+progress/angle state, clamped capture intensity, the VCount split-line
+scheduler, display swapping, and IRQ restoration. Reconstructing the
+NitroSDK-style `OS_SetIrqCheckFlag` expression also promoted the DTCM base from
+`data_027e0000` to its SDK linker name `SDK_AUTOLOAD_DTCM_START`. Two adjacent
+curtain-transition callbacks at `0x020B44D0`-`0x020B4544` are matching C and
+own the 32-frame lifetime around the still-raw 50-column renderer.
 The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
 `0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
 slot allocation, countdown and primary/secondary routing used by damage and KO.
