@@ -508,6 +508,7 @@
     "184": "set_party_member_switching_enabled",
     "185": "legacy_noop_0b9",
     "186": "set_field_party_hud_layout",
+    "187": "set_party_attached_sprite_visible",
     "188": "set_party_field_mode",
     "189": "cancel_party_actions",
     "190": "wait_party_actions_idle",
@@ -523,6 +524,7 @@
     "200": "complete_airborne_baby_transfers",
     "201": "get_party_controller_property",
     "202": "switch_active_party",
+    "203": "wait_active_party_switch",
     "204": "set_party_piggyback_state",
     "205": "release_room_transition_control_lock",
     "206": "set_party_leader_animation_override",
@@ -580,12 +582,15 @@
     "269": "wait_paired_field_ready",
     "270": "enable_field_trigger_area",
     "271": "disable_field_trigger_area",
+    "272": "apply_saved_party_configuration",
     "273": "set_field_input_disable_mask",
     "274": "set_field_event_input_disable_mask",
     "278": "set_field_party_control_enabled",
     "279": "set_camera_focus_entity",
     "280": "remove_all_entity_effect_sprites",
     "281": "wait_all_entity_effect_sprites",
+    "282": "legacy_noop_11a",
+    "283": "legacy_noop_11b",
     "284": "start_scripted_battle",
     "285": "start_scripted_battle_extended",
     "286": "open_pause_menu",
@@ -1421,6 +1426,14 @@
       "effect": "changes the party status HUD layout and visibility on the field context that owns the HUD; instant applies the target positions directly, otherwise the icons animate toward them in four-pixel steps",
       "evidence": "func_ov000_020823f8 case 0x0BA, func_ov000_02071a38, func_ov000_02071ce8, and func_ov000_02071654"
     },
+    "187": {
+      "arguments": ["visible"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "shows or hides the auxiliary sprite attached to the current field party. Enabling is ignored when the party controller has no configured animation/resource ID. On enable, the command borrows the room-designated special entity's render object, hides that entity's ordinary presentation, binds the controller's configured animation, positions the sprite from the party aggregate, and sets party-controller flag +0x74 bit 13. Disabling hides the borrowed render object, restores its render priority, releases the controller's pointer, and clears the flag",
+      "evidence": "func_ov000_020823f8 case 0x0BB, func_ov000_02089da8, automatic mode setup in func_ov000_02079d74 and func_ov000_0208a9dc, and 29 reachable script uses around special party staging"
+    },
     "188": {
       "arguments": ["party_side", "field_mode"],
       "result": null,
@@ -1539,6 +1552,14 @@
       "yield": "never",
       "effect": "makes the selected adult/baby party the manager's active party and transfers input, leader animation, camera/entry-anchor state, HUD state, and field ownership as required. Party side -1 selects the other party. instant suppresses the normal brightness fade for an accompanying room handoff and uses the one-frame camera-anchor path instead of the profiled path",
       "evidence": "func_ov000_020823f8 case 0x0CA and active-party transfer func_ov000_020a0c30"
+    },
+    "203": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the party manager's active-party-switch flag remains set",
+      "yield": "while an asynchronous active-party switch is in progress",
+      "effect": "synchronization barrier for opcode 0x0CA; it completes immediately when party-manager flag +0x04 bit 1 is clear",
+      "evidence": "func_ov000_020823f8 case 0x0CB tests party-manager flag +0x04 bit 1 and rewinds the VM program counter"
     },
     "204": {
       "arguments": ["piggybacked"],
@@ -1994,6 +2015,14 @@
       "effect": "sets the runtime-disabled flag of the indexed 44-byte field trigger-area record; active and newly detected overlaps with that area are rejected before its script can run",
       "evidence": "func_ov000_020823f8 case 0x10F, point-in-area selector func_ov000_020b7b68, and disabled-area checks in func_ov000_02088978"
     },
+    "272": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "rebuilds both field-party controllers from the saved party-composition flags. Save flag 0x2005 or 0x2006 has priority and selects the adult pair (Mario/Luigi, entity mask 0x3 and composition mode 1); otherwise flag 0x2007 selects the baby pair (Baby Mario/Baby Luigi, mask 0xC and mode 2); when none is set all four are enabled (mask 0xF and mode 3). The command updates the field ownership masks, applies the same composition to the paired party controller, and refreshes both controllers' members and render resources",
+      "evidence": "func_ov000_020823f8 case 0x110, save-variable reader calls for IDs 0x2005..0x2007, paired-controller helper func_ov000_020a23f8, party refresh func_ov000_02079d74, and 27 reachable script uses"
+    },
     "273": {
       "arguments": ["field_side_or_minus_one", "disabled_button_mask"],
       "result": "previous disabled-button mask",
@@ -2040,6 +2069,22 @@
       "control_flow": "retries the same command while any of the eight field effect sprites still reports an active animation",
       "yield": "while any field effect sprite is active",
       "evidence": "func_ov000_020823f8 case 0x119 and func_ov000_020714a8"
+    },
+    "282": {
+      "arguments": ["unused_zero"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "intentional legacy no-op; its encoded argument is ignored. Every shipped use supplies zero and is immediately followed by opcode 0x11B and a scripted battle start",
+      "evidence": "func_ov000_020823f8 ARM jump-table index 231 for opcode 0x11A targets the shared default return at 0x02082438, plus all 27 reachable script uses"
+    },
+    "283": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "intentional legacy no-op. Every shipped use follows opcode 0x11A and immediately precedes a scripted battle start",
+      "evidence": "func_ov000_020823f8 ARM jump-table index 232 for opcode 0x11B targets the shared default return at 0x02082438, plus all 27 reachable script uses"
     },
     "284": {
       "arguments": ["battle_encounter_id", "reserved_transition_argument", "unused_minus_one", "contact_mode", "encounter_entity_selector", "party_context"],

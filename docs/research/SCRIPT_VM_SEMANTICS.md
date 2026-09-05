@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 266 | 215 | `config/eur/field_vm.json` |
+| Field/world | 341 | 271 | 220 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -204,6 +204,7 @@ field context (the other DS screen/field instance).
 | `0x0B8` | `set_party_member_switching_enabled` | party_side, enabled | sets party-controller flag +0x74 bit 2, which gates X/Y-triggered switching of the selected party's active member and the corresponding character-ID refresh |
 | `0x0B9` | `legacy_noop_0b9` | unused_0, unused_1 | intentional legacy no-op; both encoded arguments are ignored |
 | `0x0BA` | `set_field_party_hud_layout` | layout_mode, instant | changes the party status HUD layout and visibility on the field context that owns the HUD; instant applies the target positions directly, otherwise the icons animate toward them in four-pixel steps |
+| `0x0BB` | `set_party_attached_sprite_visible` | visible | shows or hides the auxiliary sprite attached to the current field party. Enabling is ignored when the party controller has no configured animation/resource ID. On enable, the command borrows the room-designated special entity's render object, hides that entity's ordinary presentation, binds the controller's configured animation, positions the sprite from the party aggregate, and sets party-controller flag +0x74 bit 13. Disabling hides the borrowed render object, restores its render priority, releases the controller's pointer, and clears the flag |
 | `0x0BC` | `set_party_field_mode` | party_side, field_mode | changes the selected party's field-action/formation mode through the common mode dispatcher. Modes 0 through 8 select the normal, special movement, split-action, and character-specific controller implementations; shipped field scripts use mode 0 here to normalize either party |
 | `0x0BD` | `cancel_party_actions` | party_side_or_minus_one, action_type_mask | requests normalization/cancellation of the current field action when its action-type bit is present in action_type_mask; party side -1 applies the request to both active parties |
 | `0x0BE` | `wait_party_actions_idle` | party_side | retries the same command while the selected party's leader, follower, or attached action entities have not returned to an idle field state |
@@ -219,6 +220,7 @@ field context (the other DS screen/field instance).
 | `0x0C8` | `complete_airborne_baby_transfers` | 0 literal args | immediately completes either baby-party member's pending airborne transfer onto the corresponding adult when its controller is in ascent state 57 or descent state 58. Completion returns that baby entity to state 0, hides and suspends its standalone field model, and refreshes party attachment state; scripts invoke this before changing party-member resources or formations so no transfer animation survives the reconfiguration |
 | `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
 | `0x0CA` | `switch_active_party` | party_side_or_other, instant | makes the selected adult/baby party the manager's active party and transfers input, leader animation, camera/entry-anchor state, HUD state, and field ownership as required. Party side -1 selects the other party. instant suppresses the normal brightness fade for an accompanying room handoff and uses the one-frame camera-anchor path instead of the profiled path |
+| `0x0CB` | `wait_active_party_switch` | 0 literal args | synchronization barrier for opcode 0x0CA; it completes immediately when party-manager flag +0x04 bit 1 is clear |
 | `0x0CC` | `set_party_piggyback_state` | piggybacked | sets the party manager's persistent adult/baby piggyback-state marker. The marker is serialized into the field-party snapshot and restored when the next field reconstructs the party; it does not itself move or attach actors. Shipped cutscenes clear it before controlling all four members independently and set it again immediately before or after reuniting them with opcode 0x0B1 |
 | `0x0CD` | `release_room_transition_control_lock` | 0 literal args | releases the post-load party-control lock requested by change_field_room_for_party's lock_party_control_until_released argument; until released, the party manager suppresses ordinary field input |
 | `0x0CE` | `set_party_leader_animation_override` | party_side, enabled | enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30 |
@@ -276,12 +278,15 @@ field context (the other DS screen/field instance).
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
 | `0x10E` | `enable_field_trigger_area` | trigger_area_index | clears the runtime-disabled flag of the indexed 44-byte field trigger-area record, allowing party or entity overlap with its triangle, quadrilateral, or rectangle to select and launch the area's script again |
 | `0x10F` | `disable_field_trigger_area` | trigger_area_index | sets the runtime-disabled flag of the indexed 44-byte field trigger-area record; active and newly detected overlaps with that area are rejected before its script can run |
+| `0x110` | `apply_saved_party_configuration` | 0 literal args | rebuilds both field-party controllers from the saved party-composition flags. Save flag 0x2005 or 0x2006 has priority and selects the adult pair (Mario/Luigi, entity mask 0x3 and composition mode 1); otherwise flag 0x2007 selects the baby pair (Baby Mario/Baby Luigi, mask 0xC and mode 2); when none is set all four are enabled (mask 0xF and mode 3). The command updates the field ownership masks, applies the same composition to the paired party controller, and refreshes both controllers' members and render resources |
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
 | `0x112` | `set_field_event_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented event-owned input mask at field context +0x24C6; input processing ANDs this mask with the independent mask controlled by opcode 0x111 |
 | `0x116` | `set_field_party_control_enabled` | enabled, lead_character_selector_or_minus_one | sets whether this field context owns an actively player-controlled party. Disabled contexts suppress direct party input and make field variable 0x3000 report -1 instead of the active character selector. When the second argument is not -1 and the character pair encoded by selector bits 1.. is present on this field screen, its low bit is also copied to party-controller 0's active-member flag |
 | `0x117` | `set_camera_focus_entity` | enabled, entity_selector_or_minus_one | toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection |
 | `0x118` | `remove_all_entity_effect_sprites` | 0 literal args | hides and releases all eight field effect-sprite slots |
 | `0x119` | `wait_all_entity_effect_sprites` | 0 literal args | retries the same command while any of the eight field effect sprites still reports an active animation |
+| `0x11A` | `legacy_noop_11a` | unused_zero | intentional legacy no-op; its encoded argument is ignored. Every shipped use supplies zero and is immediately followed by opcode 0x11B and a scripted battle start |
+| `0x11B` | `legacy_noop_11b` | 0 literal args | intentional legacy no-op. Every shipped use follows opcode 0x11A and immediately precedes a scripted battle start |
 | `0x11C` | `start_scripted_battle` | battle_encounter_id, reserved_transition_argument, unused_minus_one, contact_mode, encounter_entity_selector, party_context | prepares the 36-byte battle-transfer block at save data +0x558. It records party_context, battle_encounter_id, the current room ID, contact_mode, the active field side, the selected encounter entity's ID, and the lead field entity's side. It also derives the encounter transition from entity class, collision direction, relative position, and field state, snapshots both parties' field coordinates, and releases the field scene. reserved_transition_argument is forwarded into the helper but not read there; unused_minus_one is not read by the dispatcher and is -1 in every shipped command |
 | `0x11D` | `start_scripted_battle_extended` | battle_encounter_id, reserved_transition_argument, unused_minus_one, contact_mode, encounter_entity_selector, party_context, transition_variant | performs the same battle-transfer setup as opcode 0x11C and additionally stores transition_variant in bits 4..7 of the battle flags. The sole shipped invocation supplies transition_variant 1; opcode 0x11C supplies the helper with its internal default value 3. reserved_transition_argument is forwarded but unused and unused_minus_one is not read by the dispatcher |
 | `0x11E` | `open_pause_menu` | party_context_or_minus_one, initial_section, fade_to_black, return_screen_flag | clears and fills the ten-byte scene-transfer header at save data +0x558. -1 resolves party_context_or_minus_one from the active field party; initial_section 0 opens the normal menu root while nonzero values directly select zero-based section initial_section - 1; return_screen_flag becomes transfer bit 15. Field resources are released and both screens optionally fade from white to black over 16 frames |
@@ -319,17 +324,12 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-241/289 used opcodes and
-386,855/387,272 reachable commands
+246/289 used opcodes and
+386,991/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x0BB` | 29 |
-| `0x11B` | 27 |
-| `0x11A` | 27 |
-| `0x110` | 27 |
-| `0x0CB` | 26 |
 | `0x07C` | 24 |
 | `0x137` | 22 |
 | `0x080` | 21 |
@@ -345,6 +345,11 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x13D` | 8 |
 | `0x145` | 7 |
 | `0x075` | 7 |
+| `0x04C` | 7 |
+| `0x146` | 6 |
+| `0x114` | 6 |
+| `0x148` | 5 |
+| `0x138` | 5 |
 
 ## Menu/UI scene scripts
 
