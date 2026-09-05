@@ -454,6 +454,14 @@
     "111": "set_entity_animation",
     "113": "set_entity_behavior_mode",
     "114": "restore_entity_behavior_state",
+    "123": "start_entity_scaling",
+    "124": "start_entity_timed_scaling",
+    "125": "wait_entity_scaling",
+    "126": "stop_entity_scaling",
+    "127": "start_entity_rotation",
+    "128": "start_entity_timed_rotation",
+    "129": "wait_entity_rotation",
+    "130": "stop_entity_rotation",
     "131": "start_entity_movement",
     "132": "start_entity_timed_movement",
     "133": "start_entity_movement_relative_to_entity",
@@ -997,6 +1005,70 @@
       "yield": "never",
       "effect": "restores the behavior mode saved by opcode 0x071, then clears the bound model's temporary behavior/effect state",
       "evidence": "func_ov000_020823f8 case 0x072 and func_ov000_020a4df8"
+    },
+    "123": {
+      "arguments": ["entity_selector", "scale_mode", "target_scale_x_fx32", "target_scale_y_fx32", "step_x_fx32", "step_y_fx32"],
+      "result": null,
+      "control_flow": "fallthrough after starting the scale controller; opcode 0x07D is its synchronization barrier",
+      "yield": "never",
+      "effect": "starts independent constant-step scaling of the entity sprite's X and Y axes. Script Q12 scale and step values are converted to the renderer's signed Q8 representation by division by 16, where 4096 is normal 1.0 scale. scale_mode 1 treats both target scales as offsets from the current values; every other mode treats them as absolute targets. Each nonzero-distance axis has the supplied step's sign corrected toward its target, advances once per frame, then snaps exactly to its target and becomes inactive when the next step would cross it. A zero step on an active axis never completes",
+      "evidence": "func_ov000_020823f8 case 0x07B; initializer func_ov000_020a4468; per-frame updater func_ov000_020a401c; completion func_ov000_020a3e38; renderer scale fields +0x74/+0x76; and the two shipped grow/shrink uses in room 12"
+    },
+    "124": {
+      "arguments": ["entity_selector", "scale_mode", "target_scale_x_fx32", "target_scale_y_fx32", "duration_x_frames", "duration_y_frames"],
+      "result": null,
+      "control_flow": "fallthrough after starting the scale controller; opcode 0x07D is its synchronization barrier",
+      "yield": "never",
+      "effect": "starts independent duration-based linear scaling of the entity sprite's X and Y axes. Q12 targets are converted to renderer Q8 and scale_mode 1 makes them relative to the current scales. Each axis receives its own duration and per-frame quotient; when that axis's elapsed counter reaches its duration, the exact target is written and the axis becomes inactive. Both nonzero duration denominators are required",
+      "evidence": "func_ov000_020823f8 case 0x07C; initializer func_ov000_020a439c; per-frame updater func_ov000_020a401c; completion func_ov000_020a3e38; and all 24 shipped uses"
+    },
+    "125": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "retries the same command while either scale axis remains active",
+      "yield": "while entity scaling is active",
+      "effect": "synchronization barrier shared by the speed- and duration-based scale commands",
+      "evidence": "func_ov000_020823f8 case 0x07D tests scale-controller flags 0 and 1, plus all 20 shipped uses"
+    },
+    "126": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "cancels both active scale axes at their current values without snapping to either planned target",
+      "evidence": "func_ov000_020823f8 case 0x07E invokes func_ov000_020a4360 with snap_to_target false"
+    },
+    "127": {
+      "arguments": ["entity_selector", "angle_mode", "angle_degrees", "angular_step_turn16", "signed_angle_multiplier", "stop_at_target"],
+      "result": null,
+      "control_flow": "fallthrough after starting the rotation controller; opcode 0x081 is its synchronization barrier",
+      "yield": "never",
+      "effect": "starts constant-step rotation of the entity sprite. angle_degrees is converted to a signed turn16 value where 65536 is one full revolution. angle_mode 1 describes a relative sweep and multiplies it by signed_angle_multiplier; every other mode selects an absolute target and uses the multiplier's sign to choose increasing or decreasing rotation while retaining any complete revolutions encoded in angle_degrees. Each frame adds angular_step_turn16 times signed_angle_multiplier. With stop_at_target set, the controller snaps to the target and becomes inactive once the requested angular distance is exhausted; when clear it continues indefinitely until opcode 0x082 cancels it. A zero angular step cannot finish a finite nonzero rotation",
+      "evidence": "func_ov000_020823f8 case 0x07F and degrees-to-turn16 conversion; initializer func_ov000_020a4214; per-frame updater func_ov000_020a401c; completion func_ov000_020a3e38; renderer angle field +0x78; this opcode is unused by shipped reachable scripts"
+    },
+    "128": {
+      "arguments": ["entity_selector", "angle_mode", "angle_degrees", "duration_frames", "signed_angle_multiplier", "stop_at_target"],
+      "result": null,
+      "control_flow": "fallthrough after starting the rotation controller; opcode 0x081 is its synchronization barrier",
+      "yield": "never",
+      "effect": "starts duration-derived linear rotation of the entity sprite. Angle mode, degree conversion, signed multiplier, and complete-revolution handling match opcode 0x07F. The per-frame turn16 increment is the selected signed angular distance divided by duration_frames, so a nonzero duration is required. With stop_at_target set, elapsed duration snaps the angle to the exact target and ends the controller; when clear, the same increment continues indefinitely after the nominal duration until opcode 0x082 cancels it. Shipped scripts use the continuous form for spinning objects and the finite form for turns and orientation resets",
+      "evidence": "func_ov000_020823f8 case 0x080; initializer func_ov000_020a412c; per-frame updater func_ov000_020a401c; completion func_ov000_020a3e38; and all 21 shipped uses"
+    },
+    "129": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "retries the same command while the rotation controller remains active",
+      "yield": "while entity rotation is active",
+      "effect": "synchronization barrier shared by the speed- and duration-derived rotation commands; a continuous rotation must first be stopped explicitly",
+      "evidence": "func_ov000_020823f8 case 0x081 tests rotation-controller flag 2; this opcode is unused by shipped reachable scripts"
+    },
+    "130": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "cancels an active entity rotation at its current angle without snapping to the planned target",
+      "evidence": "func_ov000_020823f8 case 0x082 invokes func_ov000_020a40f8 with snap_to_target false; the sole shipped use stops a continuous 360-degree spin in room 523"
     },
     "131": {
       "arguments": ["entity_selector", "coordinate_mode", "x", "y", "z_or_special", "motion_5", "motion_6", "motion_7", "motion_8", "motion_9", "motion_10", "motion_11"],

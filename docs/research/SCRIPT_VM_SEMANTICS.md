@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 271 | 220 | `config/eur/field_vm.json` |
+| Field/world | 341 | 279 | 228 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -150,6 +150,14 @@ field context (the other DS screen/field instance).
 | `0x06F` | `set_entity_animation` | entity_selector, animation_id, preserve_previous | selects an entity model animation and optionally saves the old animation for opcode 0x070 |
 | `0x071` | `set_entity_behavior_mode` | entity_selector, behavior_mode, preserve_previous | sets entity state bits 7..9 and optionally preserves the previous mode for opcode 0x072 |
 | `0x072` | `restore_entity_behavior_state` | entity_selector | restores the behavior mode saved by opcode 0x071, then clears the bound model's temporary behavior/effect state |
+| `0x07B` | `start_entity_scaling` | entity_selector, scale_mode, target_scale_x_fx32, target_scale_y_fx32, step_x_fx32, step_y_fx32 | starts independent constant-step scaling of the entity sprite's X and Y axes. Script Q12 scale and step values are converted to the renderer's signed Q8 representation by division by 16, where 4096 is normal 1.0 scale. scale_mode 1 treats both target scales as offsets from the current values; every other mode treats them as absolute targets. Each nonzero-distance axis has the supplied step's sign corrected toward its target, advances once per frame, then snaps exactly to its target and becomes inactive when the next step would cross it. A zero step on an active axis never completes |
+| `0x07C` | `start_entity_timed_scaling` | entity_selector, scale_mode, target_scale_x_fx32, target_scale_y_fx32, duration_x_frames, duration_y_frames | starts independent duration-based linear scaling of the entity sprite's X and Y axes. Q12 targets are converted to renderer Q8 and scale_mode 1 makes them relative to the current scales. Each axis receives its own duration and per-frame quotient; when that axis's elapsed counter reaches its duration, the exact target is written and the axis becomes inactive. Both nonzero duration denominators are required |
+| `0x07D` | `wait_entity_scaling` | entity_selector | synchronization barrier shared by the speed- and duration-based scale commands |
+| `0x07E` | `stop_entity_scaling` | entity_selector | cancels both active scale axes at their current values without snapping to either planned target |
+| `0x07F` | `start_entity_rotation` | entity_selector, angle_mode, angle_degrees, angular_step_turn16, signed_angle_multiplier, stop_at_target | starts constant-step rotation of the entity sprite. angle_degrees is converted to a signed turn16 value where 65536 is one full revolution. angle_mode 1 describes a relative sweep and multiplies it by signed_angle_multiplier; every other mode selects an absolute target and uses the multiplier's sign to choose increasing or decreasing rotation while retaining any complete revolutions encoded in angle_degrees. Each frame adds angular_step_turn16 times signed_angle_multiplier. With stop_at_target set, the controller snaps to the target and becomes inactive once the requested angular distance is exhausted; when clear it continues indefinitely until opcode 0x082 cancels it. A zero angular step cannot finish a finite nonzero rotation |
+| `0x080` | `start_entity_timed_rotation` | entity_selector, angle_mode, angle_degrees, duration_frames, signed_angle_multiplier, stop_at_target | starts duration-derived linear rotation of the entity sprite. Angle mode, degree conversion, signed multiplier, and complete-revolution handling match opcode 0x07F. The per-frame turn16 increment is the selected signed angular distance divided by duration_frames, so a nonzero duration is required. With stop_at_target set, elapsed duration snaps the angle to the exact target and ends the controller; when clear, the same increment continues indefinitely after the nominal duration until opcode 0x082 cancels it. Shipped scripts use the continuous form for spinning objects and the finite form for turns and orientation resets |
+| `0x081` | `wait_entity_rotation` | entity_selector | synchronization barrier shared by the speed- and duration-derived rotation commands; a continuous rotation must first be stopped explicitly |
+| `0x082` | `stop_entity_rotation` | entity_selector | cancels an active entity rotation at its current angle without snapping to the planned target |
 | `0x083` | `start_entity_movement` | entity_selector, coordinate_mode, x, y, z_or_special, motion_5, motion_6, motion_7, motion_8, motion_9, motion_10, motion_11 | starts interpolated 2D or 3D entity movement; coordinate arguments are converted to fx32 |
 | `0x084` | `start_entity_timed_movement` | entity_selector, coordinate_mode, x, y, z, duration_frames, motion_parameter_6, motion_parameter_7, motion_flag | starts constant-rate entity movement toward fx32 coordinates over duration_frames; coordinate_mode 1 makes the target relative. Normal entities can move on x, y, and z, while subtype 8 uses x and y only |
 | `0x085` | `start_entity_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, motion_5, motion_6, motion_7, motion_flag | starts profiled movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
@@ -324,16 +332,13 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-246/289 used opcodes and
-386,991/387,272 reachable commands
+251/289 used opcodes and
+387,059/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x07C` | 24 |
 | `0x137` | 22 |
-| `0x080` | 21 |
-| `0x07D` | 20 |
 | `0x130` | 16 |
 | `0x0E7` | 14 |
 | `0x073` | 14 |
@@ -350,6 +355,9 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x114` | 6 |
 | `0x148` | 5 |
 | `0x138` | 5 |
+| `0x079` | 5 |
+| `0x05E` | 5 |
+| `0x13E` | 4 |
 
 ## Menu/UI scene scripts
 
