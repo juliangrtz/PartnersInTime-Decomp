@@ -8,5 +8,5 @@ src/overlay005/resource_owner.c:
     .text       start:0x02066224 end:0x02066358
 
 src/overlay005/display_bg.c:
-    .text       start:0x02067c70 end:0x0206824c
+    .text       start:0x02067aac end:0x02068594
 
