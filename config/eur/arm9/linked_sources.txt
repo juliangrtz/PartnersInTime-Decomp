@@ -87,6 +87,7 @@ src/battle/battle_impact_emitters.c
 src/battle/battle_impact_particle_setup.c
 src/battle/battle_effect_spawning.c
 src/battle/battle_display_capture.c
+src/battle/battle_raster_effects.c
 src/game/script_vm.c
 src/game/script_vm_control.c
 src/game/script_vm_execute.c

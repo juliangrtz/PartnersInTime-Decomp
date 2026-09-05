@@ -156,8 +156,8 @@ word loads observed from the command-record register (`r5`).
 | `0xBE` | `0x0207D590` | — | — | `func_ov002_02078bb4` |
 | `0xBF` | `0x0207D5A8` | — | — | `func_ov002_02078bb4` |
 | `0xC0` | `0x0207D5C0` | — | — | `func_ov002_02078bb4` |
-| `0xC1` | `0x0207D5D8` | — | `0x8`, `0xC`, `0x10`, `0x14` | `func_ov002_020b1138`, `BattleTask_BindOwnerSlot`, `VM_WriteVariable` |
-| `0xC2` | `0x0207D648` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18` | `func_ov002_020b1430` |
+| `0xC1` | `0x0207D5D8` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleRasterResourceTransition_Start`, `BattleTask_BindOwnerSlot`, `VM_WriteVariable` |
+| `0xC2` | `0x0207D648` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18` | `BattleRasterEffect_StartFinite` |
 | `0xC3` | `0x0207D690` | — | — | — |
 | `0xC4` | `0x0207D6A0` | — | — | — |
 | `0xC5` | `0x0207D6B0` | — | `0x8`, `0xC` | — |
@@ -195,4 +195,4 @@ word loads observed from the command-record register (`r5`).
 | `0xE5` | `0x0207E298` | — | `0x8` | `func_ov002_02076178` |
 | `0xE6` | `0x0207E2C4` | — | — | `func_ov002_02076178` |
 | `0xE7` | `0x0207E308` | — | `0x8` | — |
-| `0xE8` | `0x0207E394` | — | `0x8`, `0xC`, `0x10`, `0x14` | `func_ov002_020b0fc0`, `func_ov002_020698d4` |
+| `0xE8` | `0x0207E394` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleEffectParticle_Spawn`, `func_ov002_020698d4` |
