@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 309 | 258 | `config/eur/field_vm.json` |
+| Field/world | 341 | 310 | 259 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -332,6 +332,7 @@ field context (the other DS screen/field instance).
 | `0x131` | `set_extended_save_flags_1024_2047` | 0 literal args | sets every bit in the 128-byte extended save-flag bank at save-data offsets 0x270 through 0x2EF, corresponding exactly to VM variables save_flags_1f0[1024] through save_flags_1f0[2047] |
 | `0x136` | `play_rumble_pattern` | pattern_id_1_based, duration_frames | starts one of the resident rumble patterns, converting the one-based script ID to the zero-based 60-byte pattern table, and stops it after duration_frames; zero leaves the general 600-frame safety limit in force. The request is ignored when no rumble device is present or the save option disables rumble |
 | `0x137` | `stop_rumble_pattern` | 0 literal args | stops the active Rumble Pak pattern when rumble hardware support is enabled. It cancels the pattern alarm, writes the off value to the Rumble Pak register at 0x08001000, and clears the resident active flag |
+| `0x138` | `set_single_pass_entity_collision_enabled` | enabled | selects the field entity-to-entity collision traversal. Enabled mode passes each non-category-8/9 entity only the remainder of the linked entity list, so every unordered pair is tested once. Disabled mode passes the full list to every non-category-8/9 entity, then repeats collision resolution for up to four category-0/1 party entities. Room metadata mode 2 enables the single-pass policy automatically |
 | `0x139` | `set_field_timer_value` | minutes, seconds, frame_subcounter | sets the field timer's signed-byte minute, second, and 60-Hz frame components, recomputes displayed hundredths as floor(100 * frame_subcounter / 60), stops its count rate, and clears pause. The timer displays two-digit minutes, seconds, and hundredths; field[28], field[29], field[30], and field[31] expose minutes, seconds, hundredths, and the raw frame component |
 | `0x13A` | `set_field_timer_display_position` | screen_side_or_current, x, y | selects the DS display engine and pixel position for the field timer. screen_side_or_current -1 resolves to the calling field's screen side. The sentinel -32768 selects the built-in coordinate 87 for X or 88 for Y |
 | `0x13B` | `set_field_timer_visible` | visible | shows or hides the field timer and acquires or releases its display resources on the screen selected by opcode 0x13A; counting state is unchanged |
@@ -362,13 +363,12 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-277/289 used opcodes and
-387,250/387,272 reachable commands
+278/289 used opcodes and
+387,255/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x138` | 5 |
 | `0x05E` | 5 |
 | `0x06B` | 3 |
 | `0x135` | 1 |
