@@ -616,7 +616,17 @@
     "299": "get_room_companion_id",
     "302": "set_game_over_retry_checkpoint",
     "303": "set_game_over_retry_progress",
+    "304": "clear_extended_save_flags_1024_2047",
+    "305": "set_extended_save_flags_1024_2047",
     "310": "play_rumble_pattern",
+    "311": "stop_rumble_pattern",
+    "313": "set_field_timer_value",
+    "314": "set_field_timer_display_position",
+    "315": "set_field_timer_visible",
+    "316": "set_field_timer_count_rate",
+    "317": "pause_field_timer",
+    "318": "resume_field_timer",
+    "319": "stop_field_timer",
     "320": "open_screen_message",
     "321": "open_entity_message",
     "322": "wait_message_finished",
@@ -2294,6 +2304,22 @@
       "effect": "stores the checkpoint's script-progress byte in save data and exposes it as field variable 0x3025. Shipped room scripts compare proposed milestones against this value before updating it, so a game-over retry can reconstruct the selected room without replaying events completed before the checkpoint",
       "evidence": "func_ov000_020823f8 case 0x12F, field-variable reader func_ov000_02081c00 case 0x3025, game-over transfer snapshot func_ov008_02073d54, and all 71 shipped calls"
     },
+    "304": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the 128-byte extended save-flag bank at save-data offsets 0x270 through 0x2EF, corresponding exactly to VM variables save_flags_1f0[1024] through save_flags_1f0[2047]",
+      "evidence": "func_ov000_020823f8 case 0x130, func_ov000_02081bd4 with fill value 0, and the extended-save-flag mapping in VM_ReadVariable and VM_WriteVariable"
+    },
+    "305": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets every bit in the 128-byte extended save-flag bank at save-data offsets 0x270 through 0x2EF, corresponding exactly to VM variables save_flags_1f0[1024] through save_flags_1f0[2047]",
+      "evidence": "func_ov000_020823f8 case 0x131, func_ov000_02081bd4 with fill value -1, and the extended-save-flag mapping in VM_ReadVariable and VM_WriteVariable"
+    },
     "310": {
       "arguments": ["pattern_id_1_based", "duration_frames"],
       "result": null,
@@ -2301,6 +2327,70 @@
       "yield": "never",
       "effect": "starts one of the resident rumble patterns, converting the one-based script ID to the zero-based 60-byte pattern table, and stops it after duration_frames; zero leaves the general 600-frame safety limit in force. The request is ignored when no rumble device is present or the save option disables rumble",
       "evidence": "func_ov000_020823f8 case 0x136, resident func_02007408 and func_02007568, per-frame limiter func_0200730c, and save option bit 6 at +0x514"
+    },
+    "311": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops the active Rumble Pak pattern when rumble hardware support is enabled. It cancels the pattern alarm, writes the off value to the Rumble Pak register at 0x08001000, and clears the resident active flag",
+      "evidence": "func_ov000_020823f8 case 0x137 gated by byte 0x0205A00C; resident stop function func_0202e04c; alarm cancellation func_0203aa14; and Rumble Pak register writer func_0202e2e8"
+    },
+    "313": {
+      "arguments": ["minutes", "seconds", "frame_subcounter"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the field timer's signed-byte minute, second, and 60-Hz frame components, recomputes displayed hundredths as floor(100 * frame_subcounter / 60), stops its count rate, and clears pause. The timer displays two-digit minutes, seconds, and hundredths; field[28], field[29], field[30], and field[31] expose minutes, seconds, hundredths, and the raw frame component",
+      "evidence": "func_ov000_020823f8 case 0x139; initializer func_ov000_020beda0; formatter func_ov000_020be950; updater func_ov000_020beb24; and field-variable cases 0x301C..0x301F in func_ov000_02081c00"
+    },
+    "314": {
+      "arguments": ["screen_side_or_current", "x", "y"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects the DS display engine and pixel position for the field timer. screen_side_or_current -1 resolves to the calling field's screen side. The sentinel -32768 selects the built-in coordinate 87 for X or 88 for Y",
+      "evidence": "func_ov000_020823f8 case 0x13A and func_ov000_020beca4; all four shipped configurations select the current screen at position 88,160"
+    },
+    "315": {
+      "arguments": ["visible"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "shows or hides the field timer and acquires or releases its display resources on the screen selected by opcode 0x13A; counting state is unchanged",
+      "evidence": "func_ov000_020823f8 case 0x13B, resource/display toggle func_ov000_020becc8, and OAM formatter func_ov000_020be950"
+    },
+    "316": {
+      "arguments": ["ticks_per_frame", "persist_across_field_changes"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the timer's signed-byte change applied to its 60-Hz frame component on every field update. Positive values count upward, negative values count downward, and zero stops counting without hiding the display. The timer saturates and stops at 99:59.99 upward or 00:00.00 downward. persist_across_field_changes prevents normal field teardown from hiding and stopping the timer",
+      "evidence": "func_ov000_020823f8 case 0x13C; update and saturation logic func_ov000_020beb24; transition cleanup func_ov000_0207f4d0 tests timer flag bit 3; all four shipped countdowns use -1 and nonpersistent mode"
+    },
+    "317": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "pauses the field timer by setting its update-inhibit flag while preserving its count rate, value, visibility, and display resources",
+      "evidence": "func_ov000_020823f8 case 0x13D sets timer flag bit 2; func_ov000_020beb24 updates only while that bit is clear"
+    },
+    "318": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resumes the field timer by clearing its update-inhibit flag; a zero count rate remains stopped",
+      "evidence": "func_ov000_020823f8 case 0x13E clears timer flag bit 2; func_ov000_020beb24"
+    },
+    "319": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops the field timer by setting its count rate to zero, hides it, and releases its display resources. The current minute, second, frame, and hundredth values remain available to field variables",
+      "evidence": "func_ov000_020823f8 case 0x13F calls func_ov000_020becc8 with visible false and clears timer byte +1"
     },
     "320": {
       "arguments": ["x_or_center", "y", "width_tiles_or_auto", "height_tiles_or_auto", "window_mode", "tail_style", "tail_size_or_auto", "vertical_placement_or_auto", "tail_x_or_auto", "text_control_mode", "message_slot", "text_archive_id", "message_id"],
