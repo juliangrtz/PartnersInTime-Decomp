@@ -366,6 +366,11 @@ the four character inputs to a decaying run-speed boost, follows the actor with
 the helper object, debits and emits lost coins, applies the equipped-badge
 modifier, launches paired actors, computes return duration with the DS square-
 root unit, and commits the flee result after the scene transition finishes.
+The following `0x020A1EF8`-`0x020A2658` orchestration block is exact linked C++.
+It chooses formation-specific run resources, waits for asynchronous loading,
+initializes the helper, cancel prompt, and phase-offset particle models, owns
+the two actor tasks, restores normal resources when fleeing is cancelled, and
+dispatches the final return or battle-exit transition.
 The party/enemy reaction-task lifecycle at `0x0209CE98`-`0x0209D694` is now a
 byte-identical linked C unit. Its starters expose task allocation/reuse, actor
 hit-lock flag `0x200`, and attached hit effects. The adjacent party first-hit
