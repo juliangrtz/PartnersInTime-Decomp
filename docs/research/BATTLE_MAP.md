@@ -274,6 +274,12 @@ and runtime overlay 2.
 | `020B1590` | `BattleGridTransition_DrawPhaseA` | Identified 8-by-6 direct-geometry transition renderer; high-level reconstruction pending |
 | `020B1BBC` | `BattleGridTransition_UpdateTask` | Byte-identical task callback around transition phase A |
 | `020B1C24` | `BattleGridTransition_InitializeTask` | Byte-identical six-byte transition-state initializer |
+| `020B1C4C` | `BattleGridTransition_DrawPhaseB` | Identified complementary 8-by-6 direct-geometry transition renderer; high-level reconstruction pending |
+| `020B2270` | `BattleGridCapture_WaitForResetTask` | Byte-identical capture-reset completion callback and transition flag cleanup |
+| `020B22AC` | `BattleGridCapture_ResetTask` | Byte-identical asynchronous display-capture reset starter |
+| `020B22E8` | `BattleGridCapture_UpdateTask` | Byte-identical phase-B renderer callback gated by capture-busy state |
+| `020B233C` | `BattleGridCapture_BeginTask` | Byte-identical background-toggle and capture-configuration transition callback |
+| `020B2428` | `BattleGridCapture_InitializeTask` | Byte-identical phase-B controller initializer |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `020A56EC` | `BattleStatus_UpdatePartyStatVisuals` | Reconstructed POW/DEF/SPD effect rotation and model callback (73.00% code match) |
@@ -631,14 +637,18 @@ particle task. The low-level table wrapper maintains independent cursors at
 context offsets `+0xCBCC` and `+0xCBD0` for the tables at `+0x61808` and
 `+0x61C08`.
 
-The following transition task wrapper at `0x020B1BBC`-`0x020B1C4C` is also
-byte-identical C. It initializes an angle and velocity to zero with a 128-frame
-counter, clears the battle view offsets at `+0x6760/+0x6762` on each update,
-and releases both its callback and runtime flag `+0xD3A0:0x40` when the phase-A
-renderer completes. That renderer is already identified as a direct DS
-geometry path: it submits an 8-by-6 grid through the matrix, vertex, polygon,
-texture, color, and begin/end command registers. Its larger high-level source
-is the next reconstruction boundary.
+The following transition controllers at `0x020B1BBC`-`0x020B1C4C` and
+`0x020B2270`-`0x020B2440` are also byte-identical C. Phase A initializes an
+angle and velocity to zero with a 128-frame counter, clears the battle view
+offsets at `+0x6760/+0x6762` on each update, and releases both its callback and
+runtime flag `+0xD3A0:0x40` when rendering finishes. Phase B waits for the
+source transition's frame counter, requests a battle-background toggle, derives
+its direction from save flag `+0x560:0x8`, configures display capture, renders
+until complete, then asynchronously resets capture and clears the same active
+flag. Both renderers are identified as direct DS geometry paths which submit an
+8-by-6 grid through the matrix, vertex, polygon, texture, color, and begin/end
+command registers. Their larger high-level source is the next reconstruction
+boundary.
 
 ## Damage and status behavior
 
