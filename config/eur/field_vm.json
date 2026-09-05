@@ -433,6 +433,7 @@
     "75": "set_entity_enabled",
     "76": "set_entity_turn_to_interactor_enabled",
     "77": "set_entity_ground_tracking",
+    "78": "set_entity_alternate_collision_faces_enabled",
     "80": "set_entity_offscreen_contact_retention_enabled",
     "81": "set_entity_reserved_state_flag",
     "83": "set_entity_contact_direction_filter",
@@ -522,6 +523,8 @@
     "176": "detach_party_follower",
     "177": "reunite_split_parties",
     "178": "wait_split_party_reunion",
+    "179": "start_baby_piggyback_mount",
+    "180": "wait_baby_piggyback_mount",
     "181": "set_party_member_character_id",
     "182": "reset_party_member_characters",
     "183": "set_party_facing_direction",
@@ -877,6 +880,14 @@
       "yield": "never",
       "effect": "sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty",
       "evidence": "func_ov000_020823f8 case 0x04D, func_ov000_020b3cb0, and field entity update consumers of state +0x38C bit 12"
+    },
+    "78": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects the entity's alternate field-map collision-face set. When enabled, map and entity collision tests use the second four-bit face mask packed into each geometry record and compensate the entity's lower and upper collision heights by their current vertical offsets; when disabled, they use the primary face mask and unadjusted heights. Party action transitions preserve this setting while temporarily forcing the alternate set",
+      "evidence": "func_ov000_020823f8 case 0x04E sets entity state +0x3CC bit 3; collision predicates func_ov000_020a87a4 and func_ov000_020acc7c select the packed face masks and vertical bounds from that bit; action entry/exit helpers func_ov000_0208d934, func_ov000_0208dffc, and func_ov000_0208dc5c save, force, and restore it; and the sole reachable use in room 457"
     },
     "80": {
       "arguments": ["entity_selector", "enabled"],
@@ -1574,7 +1585,7 @@
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "reunites the separated adult and baby parties into normal piggyback formation. moving_party_side_or_current selects which party approaches the other, with -1 resolving to the currently active side; instant teleports each selected member to its counterpart, while the animated form moves the party leader to the midpoint of the destination pair and marks both party controllers as reuniting",
+      "effect": "brings the separated adult and baby parties back together. moving_party_side_or_current selects which party approaches the other, with -1 resolving to the currently active side; instant teleports each selected member to its counterpart and immediately restores the linked formation, while the animated form moves the party leader to the midpoint of the destination pair and marks both party controllers as reuniting. The separate opcodes 0x0B3 and 0x0B4 perform and wait for the visible baby-to-adult piggyback mount when that animation is required",
       "evidence": "func_ov000_020823f8 case 0x0B1, func_ov000_0209e720, piggyback finalizer func_ov000_0209e224, and 124 reachable script uses"
     },
     "178": {
@@ -1584,6 +1595,22 @@
       "yield": "while the animated split-party reunion is active",
       "effect": "synchronization barrier for the non-instant form of opcode 0x0B1",
       "evidence": "func_ov000_020823f8 case 0x0B2 and func_ov000_0209e6f4 test party-controller flag +0x50 bit 16"
+    },
+    "179": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the baby-to-adult piggyback mount for each eligible reunited pair, changes the adult and baby entity action states to the paired 49/51 animation sequence, and makes the adult party active. A pair is skipped unless its adult actor is in normal field form and idle and its corresponding baby is available",
+      "evidence": "func_ov000_020823f8 case 0x0B3, initializer func_ov000_0209dfd4, per-pair mount initializer func_ov000_0208ce50, active-party switch func_ov000_020a0c30, state 49 through 56 consumers in func_ov000_0209418c, and the sole reachable room-0 reunion sequence"
+    },
+    "180": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while either baby entity remains in mount states 51 through 54",
+      "yield": "while the baby-to-adult piggyback mount is active",
+      "effect": "synchronization barrier for opcode 0x0B3; execution resumes after both baby entities have passed the launch, movement, and attachment phases of the mount animation",
+      "evidence": "func_ov000_020823f8 case 0x0B4, predicate func_ov000_0209df70, and state 51 through 54 transitions in func_ov000_0209418c"
     },
     "181": {
       "arguments": ["flat_member_selector", "character_id_or_default"],
