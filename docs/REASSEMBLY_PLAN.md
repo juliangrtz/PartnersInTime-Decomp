@@ -163,6 +163,11 @@ The nine display-capture helpers at `0x020AD3C4`-`0x020AD5D0` are also
 byte-matching grouped C. They make the reset/configuration task chains, the
 battle display-phase changes, the capture-busy flag, the `DISPCAPCNT` write,
 and AI opcode `0x36`'s capture-surface upload wrapper directly editable.
+The preceding three-function capture-surface decoder is structured, named C
+but remains outside the exact link: its copy callback matches completely,
+while the row decoder and region constructor match 80.17 and 73.03 percent.
+Their remaining diffs are dominated by MWCC's R0/R11 allocation and signed
+tile-division scheduling rather than unknown behavior.
 The eleven-function raster-effect unit at `0x020B0ECC`-`0x020B1590` is linked
 matching C too. It exposes AI opcodes `0xC1`, `0xC2`, and `0xE8`, finite and
 persistent raster interpolation, the object-data-51 fade/load/fade sequence,
