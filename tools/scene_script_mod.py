@@ -17,6 +17,9 @@ import field_event_mod as vm_codec
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "pit-scene-scripts-v1"
 VM_SCHEMA = "pit-script-vm-descriptors-v1"
+OV007_LOAD_ADDRESS = 0x0206AB80
+SCENE_VM_DESCRIPTOR_ADDRESS = 0x0208DCA4
+SCENE_VM_DESCRIPTOR_COUNT = 0x0D2
 SOURCES = (
     "MenuAI/BAI_iwasaki.dat",
     "MenuAI/MAI_fujioka.dat",
@@ -52,12 +55,20 @@ def load_vm_schema(version: str) -> tuple[tuple[int, ...], dict[int, str]]:
     document = data_mod.read_json(path)
     if not isinstance(document, dict) or document.get("schema") != VM_SCHEMA:
         raise data_mod.DataModError(f"{path} must use schema {VM_SCHEMA!r}")
+    if document.get("overlay_id") != 7 or document.get(
+        "descriptor_table_address"
+    ) != f"0x{SCENE_VM_DESCRIPTOR_ADDRESS:08X}":
+        raise data_mod.DataModError(f"{path} has the wrong scene VM location")
     descriptors = tuple(
         data_mod.parse_integer(value, 7, f"scene VM descriptor {index}")
         for index, value in enumerate(
             data_mod._require_list(document.get("descriptors"), "scene descriptors")
         )
     )
+    if len(descriptors) != SCENE_VM_DESCRIPTOR_COUNT:
+        raise data_mod.DataModError(
+            f"scene VM schema needs {SCENE_VM_DESCRIPTOR_COUNT} descriptors"
+        )
     names_value = document.get("known_names")
     if not isinstance(names_value, dict):
         raise data_mod.DataModError("scene VM known_names must be an object")
@@ -116,6 +127,20 @@ def load_vm_schema(version: str) -> tuple[tuple[int, ...], dict[int, str]]:
                     f"scene semantic opcode 0x{opcode:X} needs {key} evidence"
                 )
     return descriptors, names
+
+
+def verify_vm_descriptors(overlay: bytes, descriptors: tuple[int, ...]) -> None:
+    offset = SCENE_VM_DESCRIPTOR_ADDRESS - OV007_LOAD_ADDRESS
+    size = SCENE_VM_DESCRIPTOR_COUNT * 4
+    if offset < 0 or offset + size > len(overlay):
+        raise data_mod.DataModError("scene VM descriptor table is outside overlay 7")
+    source_descriptors = struct.unpack_from(
+        f"<{SCENE_VM_DESCRIPTOR_COUNT}I", overlay, offset
+    )
+    if source_descriptors != descriptors:
+        raise data_mod.DataModError(
+            "scene VM schema does not match the private overlay-7 descriptor table"
+        )
 
 
 def format_variable(variable: int) -> str:

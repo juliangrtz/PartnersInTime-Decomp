@@ -27,6 +27,9 @@ copied unchanged when the modded NitroFS tree is staged.
 - all 14 battle-scenario, enemy-AI, and related `BAI_*.dat` VM archives: 230
   archive entries, 243 non-null entry points, and 81,854 control-flow-reachable
   commands using 189 distinct opcodes;
+- all three Menu/UI scene-VM archives: 18 entries and 6,585 reachable commands
+  using 60 distinct opcodes, with unreachable data retained from the private
+  extraction;
 - length-changing MFset edits: string pointers, language-entry sizes, and outer
   archive offsets are regenerated instead of patched in place.
 
@@ -55,10 +58,11 @@ until relocation rules for all field control-flow and embedded-data opcodes are
 complete.
 
 The Menu/UI scene VM in overlay 7 uses three smaller `MenuAI` archives. Its
-standalone exporter covers all 18 entries, 6,585 reachable commands, and 60
-actually used opcodes while retaining 26,076 non-code bytes privately. It also
-round-trips all three archives byte-identically and currently enforces fixed
-command boundaries:
+editable document is `data/eur/scripts/MenuAI__scene_scripts.json`; the normal
+data build compiles all three archives from that one document. It covers all 18
+entries, 6,585 reachable commands, and 60 actually used opcodes while retaining
+26,076 non-code bytes privately. It round-trips byte-identically and currently
+enforces fixed command boundaries. The standalone commands are:
 
 ```powershell
 python .\tools\scene_script_mod.py export

@@ -20,7 +20,16 @@ class SceneScriptModTests(unittest.TestCase):
     def test_checked_in_semantics_match_descriptor_contracts(self) -> None:
         descriptors, names = scene_script_mod.load_vm_schema("eur")
         self.assertEqual(len(descriptors), 0xD2)
+        self.assertEqual(names[0x59], "start_object_axis2_kinematic_motion")
+        self.assertEqual(names[0xA1], "set_scene_input_disable_mask")
         self.assertEqual(names[0xA8], "start_object_script")
+        offset = (
+            scene_script_mod.SCENE_VM_DESCRIPTOR_ADDRESS
+            - scene_script_mod.OV007_LOAD_ADDRESS
+        )
+        overlay = bytearray(offset + len(descriptors) * 4)
+        struct.pack_into(f"<{len(descriptors)}I", overlay, offset, *descriptors)
+        scene_script_mod.verify_vm_descriptors(bytes(overlay), descriptors)
 
     def setUp(self) -> None:
         descriptors = [0] * 0xD2
@@ -91,6 +100,45 @@ class SceneScriptModTests(unittest.TestCase):
                 scene_script_mod.build_document(
                     document, root, self.descriptors, self.names
                 )
+
+    def test_data_project_compiles_all_scene_archives(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            files_root = root / "extract" / "files"
+            document = self._project(files_root)
+            project_root = root / "project"
+            document_relative = "scripts/MenuAI__scene_scripts.json"
+            data_mod.write_battle_script_json(
+                project_root / document_relative, document
+            )
+            data_mod.write_json(
+                project_root / "project.json",
+                {
+                    "schema": data_mod.PROJECT_SCHEMA,
+                    "version": "eur",
+                    "text_documents": [],
+                    "dialogue_documents": [],
+                    "script_documents": [],
+                    "scene_script_documents": [document_relative],
+                    "stat_documents": [],
+                    "binary_documents": [],
+                },
+            )
+            descriptors, _ = scene_script_mod.load_vm_schema("eur")
+            offset = (
+                scene_script_mod.SCENE_VM_DESCRIPTOR_ADDRESS
+                - scene_script_mod.OV007_LOAD_ADDRESS
+            )
+            overlay = bytearray(offset + len(descriptors) * 4)
+            struct.pack_into(f"<{len(descriptors)}I", overlay, offset, *descriptors)
+            overlay_path = files_root.parent / "arm9_overlays" / "ov007.bin"
+            overlay_path.parent.mkdir(parents=True, exist_ok=True)
+            overlay_path.write_bytes(overlay)
+
+            rebuilt, report = data_mod.compile_project(files_root, project_root)
+            self.assertEqual(set(rebuilt), set(scene_script_mod.SOURCES))
+            self.assertEqual(len(report), 3)
+            self.assertFalse(any(row["changed"] for row in report))
 
 
 if __name__ == "__main__":
