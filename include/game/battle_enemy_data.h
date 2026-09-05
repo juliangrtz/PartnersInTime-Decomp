@@ -18,6 +18,13 @@ typedef struct BattleEnemyStatRecord {
             u16 trait_class : 2;
             u16 unknown_traits_02_15 : 14;
         } trait_bits;
+        struct {
+            u16 unknown_resistance_00_07 : 8;
+            u16 status_3_resistance : 2;
+            u16 status_2_resistance : 2;
+            u16 status_4_5_resistance : 2;
+            u16 status_6_8_resistance : 2;
+        } resistance_bits;
     };
     u16 unknown_10;
     u8 unknown_12[14];

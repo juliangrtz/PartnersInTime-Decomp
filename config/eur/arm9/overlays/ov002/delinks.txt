@@ -176,6 +176,9 @@ src/battle/battle_damage_by_object.c:
 src/battle/battle_status_clear.c:
     .text       start:0x0209c278 end:0x0209c464
 
+src/battle/battle_status_apply.c:
+    .text       start:0x0209c464 end:0x0209cb3c
+
 src/battle/battle_actor_damage.c:
     .text       start:0x0209d694 end:0x0209d718
 

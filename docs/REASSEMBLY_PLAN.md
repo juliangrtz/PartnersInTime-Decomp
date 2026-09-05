@@ -325,9 +325,10 @@ sets the KO flag, and byte-matches overlay 2. The byte-identical C functions
 cancellation, base-stat restoration, and the unrolled eight-effect reset path.
 The shared cancellation dispatcher at
 `0x020A8320` covers all eight status IDs for party and enemy actors.
-The adjacent `BattleStatus_TryApply` is maintained in full, including enemy
-resistance fields, RNG chance scaling, equipment guards, ailment-state setup,
-temporary stat calculation and clamping, sound cues, and effect spawning.
+The adjacent `BattleStatus_TryApply` is now byte-identical C, including typed
+enemy resistance fields, RNG chance scaling, equipment guards, ailment-state
+setup, temporary stat calculation and clamping, sound cues, and effect
+spawning.
 `BattleDamage_ApplyToEnemy` at `0x0209D718` is maintained in full: it resolves
 the enemy slot, clamps and applies damage, sets the hit reaction, computes the
 popup position, emits the number, and selects the two special impact effects.

@@ -218,7 +218,7 @@ and runtime overlay 2.
 | `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
 | `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Creates a sprite effect in the first free tracked slot |
 | `020ACCB8` | `BattleSpriteEffect_Spawn` | Creates a sprite effect at view-adjusted coordinates |
-| `0209C464` | `BattleStatus_TryApply` | Ailments and POW/DEF/SPD percentage changes |
+| `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `020A8320` | `BattleStatus_StopActorEffect` | Stops the actor-local timer or stat delta for one status ID |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
@@ -524,13 +524,13 @@ are resolved. Its recovered effect table is:
 The HP-at-most-quarter predicate is maintained separately and compares
 `current_hp * 100 <= max_hp * 25` without division.
 
-The maintained `BattleStatus_TryApply(actor, status_id, duration,
-magnitude_percent, chance_percent)` handles both ailments and temporary stat
-changes. For enemy IDs 60-67 it reads four two-bit resistance fields from
-enemy-record offset `+0E`; their values leave chance unchanged, double it,
-halve it, or reject the effect. A random value in `[0, 99]` then decides the
-application. Party targets additionally pass through two equipment-effect
-special cases.
+The byte-identical C function `BattleStatus_TryApply(actor, status_id,
+duration, magnitude_percent, chance_percent)` handles both ailments and
+temporary stat changes. For enemy IDs 60-67 it reads four named two-bit
+resistance fields from enemy-record offset `+0E`; their values leave chance
+unchanged, double it, halve it, or reject the effect. A random value in
+`[0, 99]` then decides the application. Party targets additionally pass through
+two equipment-effect special cases.
 
 The caller-side `BattleActor_CanReceiveStatus` gate additionally requires
 positive HP. Enemy targets must have a loaded resource slot; the two adult
