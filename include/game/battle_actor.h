@@ -5,6 +5,7 @@
 
 typedef struct BattleActor BattleActor;
 typedef struct BattleActorAnimationState BattleActorAnimationState;
+typedef struct BattleStatusState BattleStatusState;
 struct BattleSceneObject;
 struct BattleModel;
 
@@ -44,6 +45,16 @@ enum BattleActorFlag {
     BATTLE_ACTOR_FLAG_14 = 0x4000
 };
 
+struct BattleStatusState {
+    void *effect;
+    s16 duration;
+    s16 counter;
+    s8 kind;
+    u8 parameter_1;
+    u8 parameter_2;
+    u8 unknown_0b;
+};
+
 struct BattleActor {
     struct BattleSceneObject *scene_object;
     s16 max_hp;
@@ -80,18 +91,29 @@ struct BattleActor {
         } damage_flag_bits;
     };
     u8 unk_026[0x0A];
-    BattleActorAnimationState *animation_state;
-    u8 unk_034[4];
-    s8 transition_state;
-    u8 unk_039[0x0B];
-    s8 force_low_hp_animation;
-    u8 unk_045[0x0B];
-    s8 status_channel_50;
-    u8 unk_051[0x0B];
-    s8 status_channel_5c;
-    u8 unk_05d[0x0B];
-    s8 status_channel_68;
-    u8 unk_069[3];
+    union {
+        struct {
+            BattleStatusState ailment_group_1;
+            BattleStatusState ailment_group_2;
+            BattleStatusState power_change;
+            BattleStatusState defense_change;
+            BattleStatusState speed_change;
+        };
+        struct {
+            BattleActorAnimationState *animation_state;
+            u8 unk_034[4];
+            s8 transition_state;
+            u8 unk_039[0x0B];
+            s8 force_low_hp_animation;
+            u8 unk_045[0x0B];
+            s8 status_channel_50;
+            u8 unk_051[0x0B];
+            s8 status_channel_5c;
+            u8 unk_05d[0x0B];
+            s8 status_channel_68;
+            u8 unk_069[3];
+        };
+    };
     void *resource_slot;
 };
 
@@ -146,6 +168,9 @@ typedef struct BattleEnemyActor {
 } BattleEnemyActor;
 
 typedef char BattleActor_SizeCheck[sizeof(BattleActor) == 0x70 ? 1 : -1];
+typedef char BattleStatusState_SizeCheck[
+    sizeof(BattleStatusState) == 0x0C ? 1 : -1
+];
 typedef char BattlePartyActor_SizeCheck[
     sizeof(BattlePartyActor) == 0x84 ? 1 : -1
 ];

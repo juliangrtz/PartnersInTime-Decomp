@@ -319,10 +319,11 @@ and `BattleDamage_CalculateAttack` at `0x02071C84` expose the compact and full
 level/POW/DEF calculations, including Q8 modifier tables, category minima,
 global battle scaling, and clamps. `BattleActor_ApplyDamage` at `0x0209D694`
 resolves actors symbolically, subtracts positive damage, clamps HP to zero,
-sets the KO flag, and byte-matches overlay 2. `BattleStatus_ClearEffect` at `0x0209C278` and
-`BattleStatus_ClearAll` at `0x0209C3F8` now expose individual ailment/stat
-removal, actor-local timer/delta cancellation, base-stat restoration, and the
-unrolled eight-effect reset path. The shared cancellation dispatcher at
+sets the KO flag, and byte-matches overlay 2. The byte-identical C functions
+`BattleStatus_ClearEffect` at `0x0209C278` and `BattleStatus_ClearAll` at
+`0x0209C3F8` expose individual ailment/stat removal, actor-local timer/delta
+cancellation, base-stat restoration, and the unrolled eight-effect reset path.
+The shared cancellation dispatcher at
 `0x020A8320` covers all eight status IDs for party and enemy actors.
 The adjacent `BattleStatus_TryApply` is maintained in full, including enemy
 resistance fields, RNG chance scaling, equipment guards, ailment-state setup,
