@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 178 | 127 | `config/eur/field_vm.json` |
+| Field/world | 341 | 179 | 128 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -129,6 +129,7 @@ field context (the other DS screen/field instance).
 | `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
 | `0x04D` | `set_entity_ground_tracking` | entity_selector, ground_tracking_enabled | sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty |
 | `0x050` | `set_entity_offscreen_contact_retention_enabled` | entity_selector, enabled | when enabled, permits another entity to retain its linked contact with this entity while this entity is outside the visible screen bounds; the normal disabled behavior drops that link after the off-screen state is observed |
+| `0x055` | `configure_entity_shadow` | entity_selector, enabled, shadow_style_or_minus_one | enables or disables the entity's projected field shadow and optionally selects one of eight shadow styles. -1 preserves the current style, except that enabling an unconfigured style zero selects style one. Styles one and two choose among three animation variants at 10- and 20-pixel height thresholds; the other styles map directly through the shadow-animation table. Collision support can also make the shadow inherit the supporting entity's render depth |
 | `0x056` | `set_entity_map_sync_axes` | entity_selector, horizontal_map_sync_or_minus_one, vertical_map_sync_or_minus_one | each argument other than -1 updates one persistent map-synchronization axis; enabling an axis immediately marks it dirty, and a later field-geometry refresh marks every enabled axis dirty again |
 | `0x059` | `set_entity_collision_response_channels` | entity_selector, channel_0_or_minus_one, channel_1_or_minus_one, channel_2_or_minus_one, channel_3_or_minus_one, channel_4_or_minus_one | updates five logical collision-response channels independently; -1 preserves a channel. Field-monster entities map the arguments to collision-state bits 0, {2,3}, 1, 6, and 4 respectively. Field-block entities additionally mirror channels 3 and 4 into bits 7 and 5. The collision solver consumes these flags when choosing solid displacement versus overlap/contact reporting |
 | `0x05A` | `set_entity_collision_response_channels_masked` | entity_selector, channel_mask, enabled | sets or clears selected logical collision-response channels; channel_mask bits 0 through 4 select the same five channels and class-specific physical-bit mapping used by opcode 0x059 |
@@ -231,14 +232,13 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-154/289 used opcodes and
-382,279/387,272 reachable commands
+155/289 used opcodes and
+382,596/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x0CC` | 320 |
-| `0x055` | 317 |
 | `0x0D1` | 221 |
 | `0x116` | 216 |
 | `0x0CF` | 213 |
@@ -257,6 +257,7 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x087` | 79 |
 | `0x12B` | 77 |
 | `0x11F` | 74 |
+| `0x12F` | 71 |
 
 ## Menu/UI scene scripts
 
