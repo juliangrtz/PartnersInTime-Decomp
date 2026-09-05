@@ -23,8 +23,9 @@ void *func_ov002_02072508(
 void *func_ov002_020725a4(
     int (*callback)(BattleObjectUploadTask *task),
     BattleSceneResource *argument, int unknown_2, int unknown_3);
-int func_ov002_020ad260(
-    u32 source, int resource_id, int x, int y, int width, int height);
+BattleQueuedTask *BattleCaptureSurface_QueueUpload(
+    u32 vram_address, int object_data_id,
+    int x, int y, int width, int height);
 
 void BattleDisplayCapture_FinishResetTask(BattleObjectUploadTask *task);
 int BattleDisplayCapture_QueueFinishResetTask(BattleObjectUploadTask *task);
@@ -100,6 +101,6 @@ void BattleDisplayCapture_FinishResetTask(BattleObjectUploadTask *task) {
 
 int BattleObjectData_QueueCaptureSurfaceUpload(
     BattleObjectDataLoadState *load_state) {
-    return func_ov002_020ad260(
+    return (int)BattleCaptureSurface_QueueUpload(
         0x38000, load_state->object_data_id, 0, 80, 256, 128);
 }
