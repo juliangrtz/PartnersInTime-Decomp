@@ -1,6 +1,6 @@
 #include <game/battle_actor.h>
-#include <game/battle_ai.h>
 #include <game/battle_effect.h>
+#include <game/battle_flee.h>
 #include <game/battle_scene.h>
 
 enum BattleFleeConstant {
@@ -9,39 +9,6 @@ enum BattleFleeConstant {
     BATTLE_FLEE_RUN_ANIMATION = 2,
     BATTLE_FLEE_RUN_SOUND_ID = 61
 };
-
-typedef union BattleFleeFlags {
-    u16 raw;
-    struct {
-        u16 unknown_00_13 : 14;
-        u16 ready_for_partner : 1;
-        u16 unknown_15 : 1;
-    } bits;
-} BattleFleeFlags;
-
-typedef struct BattleFleeTask BattleFleeTask;
-
-typedef struct BattleFleeState {
-    BattleFleeTask *partner_task;
-    u16 object_id;
-    u8 unknown_06[8];
-    BattleFleeFlags flags;
-} BattleFleeState;
-
-struct BattleFleeTask {
-    BattleAITask *next;
-    void (*callback)(BattleAITask *task);
-    BattleAITask **owner_slot;
-    BattleFleeState data;
-};
-
-typedef char BattleFleeState_SizeCheck[
-    sizeof(BattleFleeState) == 0x10 ? 1 : -1];
-
-void BattleFlee_BeginRun(BattleAITask *task);
-void BattleFlee_WaitForExitAnimation(BattleAITask *task);
-void BattleFlee_MoveActorOffscreen(BattleAITask *task);
-void BattleFlee_WaitForPartnerExit(BattleAITask *task);
 
 /* Functions in this translation unit are ordered for MWCC's reverse emission. */
 void BattleFlee_PreparePartnerExit(BattleAITask *base_task) {

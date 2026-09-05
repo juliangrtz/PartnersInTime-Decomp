@@ -1,4 +1,5 @@
 #include <game/battle_ai.h>
+#include <game/battle_coin_loss.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 #include <game/battle_scene.h>
@@ -31,24 +32,24 @@ typedef struct BattleCoinParticleState {
     u16 scene_object_id;
 } BattleCoinParticleState;
 
-typedef struct BattleCoinParticleTask {
+struct BattleCoinParticleTask {
     BattleAITask *next;
     void (*callback)(BattleAITask *task);
     BattleAITask **owner_slot;
     BattleCoinParticleState data;
-} BattleCoinParticleTask;
+};
 
 typedef struct BattleCoinEmitterState {
     s16 remaining_coins;
     u16 source_object_id;
 } BattleCoinEmitterState;
 
-typedef struct BattleCoinEmitterTask {
+struct BattleCoinEmitterTask {
     BattleAITask *next;
     void (*callback)(BattleAITask *task);
     BattleAITask **owner_slot;
     BattleCoinEmitterState data;
-} BattleCoinEmitterTask;
+};
 
 typedef char BattleCoinParticleTask_SizeCheck[
     sizeof(BattleCoinParticleTask) == 0x1C ? 1 : -1];
@@ -61,16 +62,12 @@ extern void func_ov002_020a2fd8(int resource_id, int intensity,
                                 int x, int y, int z, int render_flags);
 
 void BattleCoinLoss_UpdateParticle(BattleAITask *base_task);
-BattleCoinParticleTask *BattleCoinLoss_SpawnParticle(
-    BattleSceneObject *source_object);
 void BattleCoinLoss_UpdateEmitter(BattleAITask *base_task);
-BattleCoinEmitterTask *BattleCoinLoss_Start(s16 source_object_id,
-                                            s16 coin_count);
 }
 
 /* Functions in this translation unit are ordered for MWCC's reverse emission. */
-BattleCoinEmitterTask *BattleCoinLoss_Start(s16 source_object_id,
-                                            s16 coin_count) {
+BattleCoinEmitterTask *BattleCoinLoss_Start(u16 source_object_id,
+                                            int coin_count) {
     BattleCoinEmitterTask *task =
         (BattleCoinEmitterTask *)BattleTaskList_Insert(
             (BattleTaskPool *)(gBattleContext + BATTLE_COIN_TASK_POOL_OFFSET),
