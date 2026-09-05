@@ -241,6 +241,8 @@ and runtime overlay 2.
 | `020A7114` | `BattleStatus_UpdatePartyAilment1Visual` | Byte-identical status-1 hold/cleanup callback |
 | `020A722C` | `BattleStatus_BeginPartyAilment1Visual` | Byte-identical status-1 sound, animation, and delayed-effect transition |
 | `020A7374` | `BattleStatus_StartPartyAilment1Visual` | Byte-identical party status-1 task starter |
+| `020A73D4` | `BattleStatus_UpdateEnemyStatVisuals` | Reconstructed enemy POW/DEF/SPD effect rotation and model callback (73.52% code match) |
+| `020A7960` | `BattleStatus_StartEnemyStatVisual` | Reconstructed enemy stat-effect starter (71.88% code match) |
 | `020A8320` | `BattleStatus_StopActorEffect` | Stops the actor-local timer or stat delta for one status ID |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
@@ -595,6 +597,15 @@ effect, cycles every still-active stat change through model layers 3-8, and
 releases both model and task when no stat delta remains. The functions are not
 linked yet: their current code matches are 73.00% and 75.68%, so the original
 assembly remains authoritative for byte-identical builds.
+
+The corresponding enemy POW/DEF/SPD visual pipeline is now represented by a
+second cohesive C++ unit. It shares the six initial up/down effects and six
+rotating model layers, but has no party badge-suppression rule. Its task reuses
+the actor's existing stat-visual owner, keeps the initial sprite effect alive
+while global status visuals are suppressed, and cycles every remaining stat
+delta before releasing its model and callback. This unit also remains on the
+reference object: the callback currently matches 73.52% of the original code,
+while the equal-sized starter matches 71.88%.
 
 Party status ID 3 now also has an exact linked C++ implementation. The starter
 loads object-data slot 9, chooses a model animation from the six party
