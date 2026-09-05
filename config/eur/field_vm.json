@@ -433,7 +433,9 @@
     "75": "set_entity_enabled",
     "77": "set_entity_ground_tracking",
     "80": "set_entity_offscreen_contact_retention_enabled",
+    "81": "set_entity_reserved_state_flag",
     "83": "set_entity_contact_direction_filter",
+    "84": "set_entity_semitransparent",
     "85": "configure_entity_shadow",
     "86": "set_entity_map_sync_axes",
     "89": "set_entity_collision_response_channels",
@@ -456,6 +458,7 @@
     "132": "start_entity_timed_movement",
     "133": "start_entity_movement_relative_to_entity",
     "134": "start_entity_timed_movement_relative_to_entity",
+    "135": "start_entity_orbit_around_point",
     "139": "wait_entity_movement",
     "140": "cancel_entity_movement",
     "141": "start_entity_vertical_motion",
@@ -820,6 +823,14 @@
       "effect": "when enabled, permits another entity to retain its linked contact with this entity while this entity is outside the visible screen bounds; the normal disabled behavior drops that link after the off-screen state is observed",
       "evidence": "func_ov000_020823f8 case 0x050, off-screen predicate func_ov000_020a79dc and state history func_ov000_020a695c, and linked-contact cleanup in func_ov000_020ae6c0"
     },
+    "81": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets entity base-state bit +0x184 bit 12. The flag is copied when the base entity state is cloned, but an exhaustive instruction-level scan of overlay 0 and the resident ARM9 found no behavioral reader, and the field entity serializer does not preserve it. All 71 shipped commands enable it, so it is currently classified as a reserved or vestigial state flag rather than assigning an unsupported gameplay meaning",
+      "evidence": "func_ov000_020823f8 case 0x051, clone path func_ov000_020a3068, serializers func_ov000_020bb69c and func_ov000_020bbcdc, and instruction-level +0x184/bit-12 scans of overlay 0 and resident ARM9"
+    },
     "83": {
       "arguments": ["entity_selector", "script_direction_mask"],
       "result": null,
@@ -827,6 +838,14 @@
       "yield": "never",
       "effect": "replaces the entity's six-bit linked-contact direction filter. Script bits 0 through 5 map to internal contact bits 2, 3, 0, 1, 5, and 4 respectively. The collision solver intersects this filter with both entities' active contact-side masks; a zero intersection releases their persistent contact link",
       "evidence": "func_ov000_020823f8 case 0x053, linked-contact filtering in func_ov000_020ae6c0, and all 57 shipped calls"
+    },
+    "84": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects normal or semitransparent OBJ rendering for the entity's bound sprite model. When enabled, model-state bit +0x7C bit 3 is emitted as Nintendo DS OAM attribute-0 bit 10, selecting OBJ mode 1 so the sprite participates in the configured alpha blend. The state is retained across the entity's render-resource save and restore path",
+      "evidence": "func_ov000_020823f8 case 0x054, render-state save/restore in func_ov000_020a3b90 and func_ov000_020a3928, and OAM emission in resident renderer func_0200a4cc"
     },
     "85": {
       "arguments": ["entity_selector", "enabled", "shadow_style_or_minus_one"],
@@ -1002,6 +1021,14 @@
       "yield": "never",
       "effect": "starts timed movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only",
       "evidence": "func_ov000_020823f8 case 0x086, func_ov000_020a61b8, func_ov000_020b39a8, and func_ov000_020b3634"
+    },
+    "135": {
+      "arguments": ["entity_selector", "orbit_flags", "center_x", "center_y", "center_z", "arc_degrees", "initial_speed_fx32", "acceleration_fx32", "maximum_speed_fx32", "deceleration_fx32", "direction", "secondary_axis_scale_fx32", "first_collision_mask", "second_collision_mask", "snap_to_final_angle"],
+      "result": null,
+      "control_flow": "fallthrough after starting the movement; opcode 0x08B is the shared movement synchronization barrier",
+      "yield": "never",
+      "effect": "starts speed-profiled orbital movement around a fixed center. orbit_flags bits 0..1 select the rotation plane (0 yz, 1 xz, 2 xy), bit 2 makes arc_degrees a relative sweep instead of an absolute target angle, and bit 3 makes the center relative to the entity's current position. Center coordinates are converted from pixels to fx32; direction supplies the signed angular direction, secondary_axis_scale_fx32 controls the ellipse aspect with 4096 as the neutral scale, and a zero initial speed selects the entity's default acceleration profile. The two six-bit collision masks and final-angle snap flag are retained by the motion controller. Subtype-8 entities use the same operation in two dimensions and ignore center_z, the plane selector, and both collision masks. No movement starts when the entity is at the center or the requested angular distance is zero",
+      "evidence": "func_ov000_020823f8 case 0x087; initializers func_ov000_020b2e9c and func_ov000_020a59c4; ellipse helper func_ov000_020a4f88; coordinate/update/completion paths func_ov000_020a5008, func_ov000_020a52a8, and func_ov000_020a5170; and all 79 shipped calls"
     },
     "139": {
       "arguments": ["entity_selector"],

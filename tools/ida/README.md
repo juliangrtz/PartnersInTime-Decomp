@@ -52,6 +52,21 @@ one or more runtime addresses:
   'build/ida/PiT_eur_ov002_battle.i64'
 ```
 
+For exhaustive static checks of structure-field accesses, the standalone
+Capstone scanner uses an extracted binary and its maintained symbol map. It
+prints every ARM/Thumb instruction that addresses the requested byte offset,
+with enough neighboring instructions to identify masks and consumers:
+
+```powershell
+python tools/ida/find_struct_access.py `
+  build/eur/build/arm9_ov000.bin `
+  config/eur/arm9/overlays/ov000/symbols.txt 0x184 `
+  --contains 0x1000
+```
+
+Pass `--image-base 0x02004000` when scanning the resident ARM9 because its
+first mapped function does not begin at the binary's load address.
+
 To find every function whose Hex-Rays pseudocode contains any of several
 case-sensitive strings, use the batch search helper. Quote search terms that
 contain spaces so the IDA command line passes each one as a single argument:
