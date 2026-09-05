@@ -249,6 +249,9 @@ provides a compact navigation index for the large enemy-script dispatcher.
 and every overlay.
 [`docs/DATA_MODDING.md`](docs/DATA_MODDING.md) documents editable text/stats,
 control tokens, validation, and ROM packaging.
+[`docs/research/RUNTIME_ANALYSIS.md`](docs/research/RUNTIME_ANALYSIS.md)
+documents the py-desmume capture workflow, compatible-state creation, overlay
+identification, memory hooks, and domain-specific battle snapshots.
 
 ## Verified European ROM
 
