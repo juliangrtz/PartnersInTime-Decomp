@@ -17,7 +17,7 @@ int Overlay16Attack_IsObjectMotionComplete(
 }
 
 int Overlay16Attack_IsObjectIdle(Overlay16AttackObjectState *state) {
-    return state->flag_bits.state == 0;
+    return state->control_flag_bits.state == 0;
 }
 
 void *Overlay16Attack_GetMotionRecord(u32 packed_index) {
