@@ -116,6 +116,7 @@
     "60": "reset_object_data",
     "61": "set_object_animation",
     "62": "start_script_by_id",
+    "63": "control_script_execution_legacy",
     "64": "assign_script_owner_group",
     "65": "swap_object_slots",
     "66": "set_battle_runtime_flag_03",
@@ -124,6 +125,7 @@
     "69": "clear_battle_next_state",
     "70": "get_global_property",
     "71": "set_global_property",
+    "72": "find_most_damaged_player",
     "73": "legacy_noop_049",
     "74": "get_battle_encounter_id",
     "75": "get_encounter_resource_index",
@@ -141,6 +143,7 @@
     "87": "set_active_model_animation",
     "88": "configure_animation_layer",
     "89": "set_animation_layer_state",
+    "90": "invoke_model_relation_test",
     "91": "move_object",
     "92": "start_sinusoidal_direction_motion",
     "93": "move_object_at_speed",
@@ -214,6 +217,26 @@
     "161": "stretch_object_between_anchors",
     "162": "start_impact_trail_emitter",
     "163": "stop_impact_trail_emitter",
+    "164": "start_interpolated_object_link_effect",
+    "165": "stop_interpolated_object_link_effect",
+    "166": "cancel_interpolated_object_link_effect",
+    "167": "start_screen_particle_sweep",
+    "168": "start_screen_particle_sweep_handle",
+    "169": "start_actor_ground_ripple",
+    "170": "start_actor_ground_ripple_handle",
+    "171": "draw_procedural_ground_ripples",
+    "172": "scatter_model_parts",
+    "173": "start_model_crush_sequence",
+    "174": "get_model_part_effect_state",
+    "175": "transform_model_effect_basis",
+    "176": "start_flexible_object_link",
+    "177": "get_flexible_link_heading",
+    "178": "start_segmented_object_link",
+    "179": "initialize_sprite_grid_capture",
+    "180": "start_sprite_grid_capture_transition",
+    "181": "finish_sprite_grid_capture_transition",
+    "182": "destroy_sprite_grid_capture_transition",
+    "183": "is_sprite_grid_capture_active",
     "184": "spawn_object_data_effect_at_world_position",
     "185": "spawn_object_data_effect_at_object_position",
     "186": "spawn_object_data_effect_at_world_position_handle",
@@ -1706,6 +1729,190 @@
       "yield": "never",
       "effect": "sets the object's stop_impact_particles flag. Its active trail emitter consumes and clears the flag on the next update, then terminates itself",
       "evidence": "BattleAI_DispatchOpcode case 0x0A3; BattleImpactTrailEmitter_Update; BattleSceneObject.flags bit 19"
+    },
+    "63": {
+      "arguments": ["script_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "legacy script-control command with a malformed one-argument descriptor. The handler also reads the undeclared following command word as mode: 1 stops the selected script, 2 resumes it by clearing pause bit 0, and 3 pauses it; tagged script IDs with mode 1 use the normal stop-by-ID path. No shipped script reaches this opcode, so an editor must not emit it until the encoding mismatch is resolved",
+      "evidence": "BattleAI_DispatchOpcode case 0x03F and descriptor 0x41; no occurrences in the shipped EUR battle-script corpus"
+    },
+    "72": {
+      "arguments": ["legacy_selector", "minimum_current_hp"],
+      "result": "player_actor_id_or_minus_one",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns the active player actor in slots 60 through 65 with the greatest missing HP, restricted to current HP greater than or equal to minimum_current_hp; ties select the later slot and no match returns -1. Selectors 0 and 1 make discarded highest-/lowest-HP probes before falling through, while selectors 0, 1, and 2 all return the same most-damaged-player result. Other selector values leave the result register undefined",
+      "evidence": "BattleAI_DispatchOpcode case 0x048 and ARM fallthrough at 0x0207A1BC-0x0207A220; func_ov002_02079740, func_ov002_020796bc, and func_ov002_02079624; both shipped calls use selector 2"
+    },
+    "90": {
+      "arguments": ["first_object_id", "second_object_id", "first_model_selector", "second_model_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects each object's primary model for selector 0, alternate model for selector 1, or active model otherwise, then invokes the second model's virtual relation test against the first model. The virtual method's return value is discarded by the VM command; no shipped script uses this opcode",
+      "evidence": "BattleAI_DispatchOpcode case 0x05A; BattleScene_TestModelRelation; descriptor 0x44; no occurrences in the shipped EUR battle-script corpus"
+    },
+    "164": {
+      "arguments": ["source_object_id", "target_object_id", "relaxation_period", "link_length", "flipped_y_adjustment", "source_x_offset", "source_y_offset", "target_x_offset", "target_y_offset", "render_mode", "color_rgb555"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the single global interpolated link effect between two scene objects. It builds at most 64 evenly spaced screen-space control points, follows both endpoints with per-end offsets, advances the points through a relaxation helper every frame, and installs the dedicated geometry render callback. A second start is ignored while the global task slot is occupied",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A4; func_ov002_020bccc4; update callback func_ov002_020bcaa8; render callback func_ov002_020bca8c; sole shipped use in BAI_mon_ji entry 1"
+    },
+    "165": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "requests an orderly stop of the global interpolated object-link effect by clearing its target object ID. The update callback then detaches the far endpoint and continues retracting the control-point chain",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A5; func_ov002_020bca68; func_ov002_020bcaa8; two shipped stop sites in BAI_mon_ji entry 1"
+    },
+    "166": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "immediately cancels the global interpolated object-link effect by clearing its task callback when the task exists",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A6; func_ov002_020bca44; sole shipped cancel site in BAI_mon_ji entry 1"
+    },
+    "167": {
+      "arguments": ["origin_x", "origin_y", "initial_sweep_step", "sweep_acceleration", "base_color_rgb555", "color_random_range", "anchor_object_id_or_zero"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a screen-space particle sweep. A 26-bit sweep accumulator advances by a signed 14-bit step, the step changes by the signed acceleration field, and particles are emitted with randomized angle, lifetime, and RGB555 channel offsets after the sweep reaches the camera-relative threshold. A nonzero anchor object narrows the emission angles around that object; zero uses a fixed angular fan",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A7; func_ov002_020af97c; update callback func_ov002_020af5f8; sole shipped untracked use in BAI_mon_4_hn entry 3"
+    },
+    "168": {
+      "arguments": ["origin_x", "origin_y", "initial_sweep_step", "sweep_acceleration", "base_color_rgb555", "color_random_range", "anchor_object_id_or_zero"],
+      "result": "tagged_task_handle",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the same screen-space particle sweep as opcode 0x0A7 and returns its task pointer tagged with 0x4000 for the generic handle wait/test commands",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A8; func_ov002_020af97c; two shipped tracked uses in BAI_mon_ji entry 8"
+    },
+    "169": {
+      "arguments": ["object_id", "radius", "growth_frames", "hold_frames"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a procedural ground-ripple task at the object's position. It grows and reshapes a 13-sample radial profile over growth_frames, holds and eases it according to hold_frames, renders the profile through the battle geometry path, then removes itself after a final 30-frame flat phase",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A9; func_ov002_020ae940; update callback func_ov002_020ae37c; sole shipped use in BAI_mon_ji entry 18"
+    },
+    "170": {
+      "arguments": ["object_id", "radius", "growth_frames", "hold_frames"],
+      "result": "tagged_task_handle",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the same procedural ground-ripple task as opcode 0x0A9 and returns its task pointer tagged with 0x4000. The shipped EUR scripts do not use this tracked form",
+      "evidence": "BattleAI_DispatchOpcode case 0x0AA; func_ov002_020ae940; descriptor 0x64; no occurrences in the shipped EUR battle-script corpus"
+    },
+    "171": {
+      "arguments": ["center_x", "center_y", "radius", "band_width", "phase", "cutoff"],
+      "result": "completion_flag",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "draws one frame of a three-band procedural radial ripple directly through the DS geometry FIFO. It returns zero before the battle geometry warm-up reaches 31 frames, for radius below 10, and while any generated band remains; it returns one only when the optional randomized cutoff has passed all bands",
+      "evidence": "BattleAI_DispatchOpcode case 0x0AB; func_ov002_020ae9c0; two shipped frame-loop uses in BAI_mon_3_hn entry 8"
+    },
+    "172": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a 90-frame scatter animation on every model part of object_id. Each part receives randomized angular speed and rotation plane, the object enters model-part effect state 3, and the controller clears the effect flag and restores automatic animation when the active model reports completion",
+      "evidence": "BattleAI_DispatchOpcode case 0x0AC; func_ov002_020bba60; part callback func_ov002_020bb7bc; task callback func_ov002_020bb98c"
+    },
+    "173": {
+      "arguments": ["object_id", "target_party_actor_id", "impact_count"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a falling-model crush sequence against target_party_actor_id. While the target remains alive and beneath the model, each contact triggers the party hit animation, adds rebound velocity and random rotation, fades the model's RGB555 channels, and decrements impact_count; after the last impact or an invalid target it transitions to the model-part scatter effect",
+      "evidence": "BattleAI_DispatchOpcode case 0x0AD; func_ov002_020bb644; update callback func_ov002_020bb2d4; three shipped uses in BAI_mon_ji entries 11 and 16/17"
+    },
+    "174": {
+      "arguments": ["object_id"],
+      "result": "model_part_effect_state",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns 0 when the object is not in the required model-part render mode, 1 when that mode has no controller task, 2 during the falling crush sequence, 3 during model-part scatter, and 4 for any other controller callback",
+      "evidence": "BattleAI_DispatchOpcode case 0x0AE; func_ov002_020bb274; 22 shipped state checks in BAI_mon_ji"
+    },
+    "175": {
+      "arguments": ["object_id", "axis", "angle"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "rotates the object's model-effect basis by the 16-bit angle around axis 0, 1, or 2, reapplies unit scale 4096, and concatenates the three basis matrices. Unsupported axis values skip rotation but still normalize and concatenate the basis",
+      "evidence": "BattleAI_DispatchOpcode case 0x0AF; func_ov002_020bbb5c; 22 shipped uses in BAI_mon_ji"
+    },
+    "176": {
+      "arguments": ["primary_object_id", "secondary_object_id", "solver_parameter", "link_parameter", "target_vector_x", "target_vector_y", "vertical_bias"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "allocates a flexible link controller owned by the primary object, creates distance/16+1 interpolated 3D samples between both objects, snapshots both endpoints, and updates the samples and endpoint positions through the flexible-link solver on later object update/render phases",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B0; func_ov002_020bb00c; update/render callback func_ov002_020ba3b4; sole shipped use in BAI_mon_3_hn entry 8"
+    },
+    "177": {
+      "arguments": ["object_id", "remaining_segment_offset"],
+      "result": "heading_angle",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sums the remaining flexible-link segment deltas beginning at point_count minus remaining_segment_offset and returns their atan2 heading. It requires an object initialized by opcode 0x0B0; the shipped EUR scripts do not call it",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B1; func_ov002_020badd8; no occurrences in the shipped EUR battle-script corpus"
+    },
+    "178": {
+      "arguments": ["primary_object_id", "secondary_object_id", "step_denominator", "path_numerator", "render_parameter", "primary_x_offset", "primary_y_offset", "base_z"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "allocates a segmented link controller between two objects. Its point count is path_numerator*256/step_denominator+2, initial points are evenly interpolated between the endpoints, and later object update/render phases simulate the link while optionally moving either endpoint according to the controller flags",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B2; func_ov002_020ba210; update/render callback func_ov002_020b99bc; two equivalent shipped uses in BAI_mon_ji entries 16 and 17"
+    },
+    "179": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "allocates and clears the 1028-byte sprite-grid capture controller bound to object_id and installs it as the single global controller used by opcodes 0x0B4 through 0x0B7. It does not begin a visible transition by itself",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B3; func_ov002_020b9978; two shipped initializations in BAI_mon_3_hn entry 4"
+    },
+    "180": {
+      "arguments": ["object_id", "cell_delay_range", "quarter_delay_range", "selected_cell_count", "use_scanline_reveal"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the object's 40-sprite grid-capture transition when its controller is idle. Exactly selected_cell_count of 16 cells are chosen without replacement; cell_delay_range and quarter_delay_range randomize their activation. use_scanline_reveal starts the lower-engine scanline reveal before capturing the object, while zero begins the grid phase directly from a retained capture",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B4; func_ov002_020b9854; grid callback func_ov002_020b8ca4; VBlank callbacks func_ov002_020b9630 and func_ov002_020b9424"
+    },
+    "181": {
+      "arguments": ["object_id", "cell_delay_range", "quarter_delay_range"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "advances an initialized sprite-grid capture toward its finish state using the supplied random delay ranges. Scanline-reveal captures enter the scanline exit state immediately; ordinary captures run their reverse grid phase and may retain the completed capture when the controller's retain flag is set",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B5; func_ov002_020b9818; grid callback func_ov002_020b8ca4; sole shipped use in BAI_mon_3_hn entry 4"
+    },
+    "182": {
+      "arguments": ["object_id", "cell_delay_range", "quarter_delay_range"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "finishes the sprite-grid capture like opcode 0x0B5 but first clears the retain flag, forcing an ordinary reverse grid phase to proceed through destruction of all 40 captured sprite objects",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B6; func_ov002_020b97d0; grid callback func_ov002_020b8ca4; two shipped uses in BAI_mon_3_hn entry 4"
+    },
+    "183": {
+      "arguments": ["object_id"],
+      "result": "active",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns one while the object's sprite-grid capture controller is in any state other than 0 (inactive) or 5 (stable retained capture), and zero otherwise",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B7; func_ov002_020b97a8; three shipped polling loops in BAI_mon_3_hn entry 4"
     },
     "188": {
       "arguments": ["source_0", "source_1_or_minus_one", "source_2_or_minus_one", "source_3_or_minus_one"],

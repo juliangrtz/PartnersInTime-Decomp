@@ -956,6 +956,11 @@ def _battle_opcode_name(opcode: int, names: dict[int, str]) -> str:
     return names.get(opcode, f"op_{opcode:03X}")
 
 
+BATTLE_VM_UNSAFE_EMIT_OPCODES = {
+    0x3F: "its original descriptor declares one argument but its handler reads two",
+}
+
+
 def _parse_battle_opcode(
     value: Any, descriptors: tuple[int, ...], names: dict[int, str], context: str
 ) -> int:
@@ -975,6 +980,11 @@ def _parse_battle_opcode(
         opcode = parse_integer(value, 16, f"{context} opcode")
     if not 0 <= opcode < len(descriptors):
         raise DataModError(f"{context} opcode 0x{opcode:X} is outside the VM table")
+    unsafe_reason = BATTLE_VM_UNSAFE_EMIT_OPCODES.get(opcode)
+    if unsafe_reason is not None:
+        raise DataModError(
+            f"{context} cannot safely emit opcode 0x{opcode:03X}: {unsafe_reason}"
+        )
     return opcode
 
 

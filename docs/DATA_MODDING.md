@@ -276,11 +276,14 @@ preventing them from being mistaken for code. All 14 unchanged schema-v2
 documents currently rebuild byte for byte.
 
 The compact command layouts come from the validated 260-entry descriptor table
-in `config/eur/battle_ai_vm.json`. Confirmed and evidence-backed opcode names are
-used in source; unresolved instructions retain neutral `op_000` through
-`op_103` names. The generated [semantic coverage report](research/SCRIPT_VM_SEMANTICS.md)
-lists every descriptor, real usage counts, variable namespaces, evidence level,
-and the highest-value unresolved opcodes.
+in `config/eur/battle_ai_vm.json`. All 260 opcodes now have unique names and all
+209 battle-specific opcodes have evidence-backed argument, result, control-flow,
+yield, and behavior contracts. The checked-in script sources therefore contain
+no neutral `op_000`-style battle instructions. One unused legacy command,
+`control_script_execution_legacy`, has a malformed original descriptor and is
+documented for analysis but must not be added to a mod. The generated
+[semantic coverage report](research/SCRIPT_VM_SEMANTICS.md) lists every
+descriptor, real usage count, variable namespace, contract, and evidence trail.
 
 ## Generated build artifacts
 

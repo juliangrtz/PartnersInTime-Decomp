@@ -9,8 +9,8 @@ no original private data bytes.
 - 260 descriptor entries (`0x000..0x103`)
 - 230 archive entries and 81,854 reachable commands
 - 189 opcodes occur in reachable code
-- 170/189 used opcodes have semantic names
-- 81,769/81,854 reachable commands have semantic names
+- 189/189 used opcodes have semantic names
+- 81,854/81,854 reachable commands have semantic names
 - 618,920 non-code bytes stay private and are copied from the user's extraction
 
 `reconstructed C` means the generic VM implementation is represented in the
@@ -82,7 +82,7 @@ the same shape.
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
 | Field/world | 341 | 341 | 290 | `config/eur/field_vm.json` |
-| Battle | 260 | 237 | 186 | `config/eur/battle_ai_vm.json` |
+| Battle | 260 | 260 | 209 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 210 | 159 | `config/eur/scene_vm.json` |
 
 The field and scene tables are reproducibly extracted and checked against a private
@@ -468,25 +468,6 @@ the largest immediate improvement to editable script coverage.
 
 | Opcode | Uses |
 |---:|---:|
-| `0xAF` | 22 |
-| `0xAE` | 22 |
-| `0xAC` | 12 |
-| `0xB7` | 3 |
-| `0xB4` | 3 |
-| `0xAD` | 3 |
-| `0xB6` | 2 |
-| `0xB3` | 2 |
-| `0xB2` | 2 |
-| `0xAB` | 2 |
-| `0xA8` | 2 |
-| `0xA5` | 2 |
-| `0x48` | 2 |
-| `0xB5` | 1 |
-| `0xB0` | 1 |
-| `0xA9` | 1 |
-| `0xA7` | 1 |
-| `0xA6` | 1 |
-| `0xA4` | 1 |
 
 ## Complete opcode table
 
@@ -555,7 +536,7 @@ the largest immediate improvement to editable script coverage.
 | `0x03C` | `reset_object_data` | 0 literal args (`0x00`) | 53 | static semantics |
 | `0x03D` | `set_object_animation` | 3 typed args (`0x43`) | 5,046 | static semantics |
 | `0x03E` | `start_script_by_id` | 1 typed args (`0x41`) | 0 | static semantics |
-| `0x03F` | `op_03F` | 1 typed args (`0x41`) | 0 | unknown |
+| `0x03F` | `control_script_execution_legacy` | 1 typed args (`0x41`) | 0 | static semantics |
 | `0x040` | `assign_script_owner_group` | 1 typed args (`0x41`) | 3 | static semantics |
 | `0x041` | `swap_object_slots` | 2 typed args (`0x42`) | 0 | static semantics |
 | `0x042` | `set_battle_runtime_flag_03` | 1 typed args (`0x41`) | 0 | static semantics |
@@ -564,7 +545,7 @@ the largest immediate improvement to editable script coverage.
 | `0x045` | `clear_battle_next_state` | 0 literal args (`0x00`) | 0 | static semantics |
 | `0x046` | `get_global_property` | result + 1 typed args (`0x61`) | 511 | static semantics |
 | `0x047` | `set_global_property` | 2 typed args (`0x42`) | 404 | static semantics |
-| `0x048` | `op_048` | result + 2 typed args (`0x62`) | 2 | unknown |
+| `0x048` | `find_most_damaged_player` | result + 2 typed args (`0x62`) | 2 | static semantics |
 | `0x049` | `legacy_noop_049` | 1 typed args (`0x41`) | 0 | static semantics |
 | `0x04A` | `get_battle_encounter_id` | result + 1 typed args (`0x61`) | 135 | static semantics |
 | `0x04B` | `get_encounter_resource_index` | result + 1 typed args (`0x61`) | 135 | static semantics |
@@ -582,7 +563,7 @@ the largest immediate improvement to editable script coverage.
 | `0x057` | `set_active_model_animation` | 2 typed args (`0x42`) | 59 | static semantics |
 | `0x058` | `configure_animation_layer` | 2 typed args (`0x42`) | 9 | static semantics |
 | `0x059` | `set_animation_layer_state` | 4 typed args (`0x44`) | 33 | static semantics |
-| `0x05A` | `op_05A` | 4 typed args (`0x44`) | 0 | unknown |
+| `0x05A` | `invoke_model_relation_test` | 4 typed args (`0x44`) | 0 | static semantics |
 | `0x05B` | `move_object` | 8 typed args (`0x48`) | 1,463 | static semantics |
 | `0x05C` | `start_sinusoidal_direction_motion` | 10 typed args (`0x4A`) | 15 | static semantics |
 | `0x05D` | `move_object_at_speed` | 8 typed args (`0x48`) | 769 | static semantics |
@@ -656,26 +637,26 @@ the largest immediate improvement to editable script coverage.
 | `0x0A1` | `stretch_object_between_anchors` | 14 typed args (`0x4E`) | 12 | static semantics |
 | `0x0A2` | `start_impact_trail_emitter` | 8 typed args (`0x48`) | 176 | static semantics |
 | `0x0A3` | `stop_impact_trail_emitter` | 1 typed args (`0x41`) | 262 | static semantics |
-| `0x0A4` | `op_0A4` | 11 typed args (`0x4B`) | 1 | unknown |
-| `0x0A5` | `op_0A5` | 0 literal args (`0x00`) | 2 | unknown |
-| `0x0A6` | `op_0A6` | 0 literal args (`0x00`) | 1 | unknown |
-| `0x0A7` | `op_0A7` | 7 typed args (`0x47`) | 1 | unknown |
-| `0x0A8` | `op_0A8` | result + 7 typed args (`0x67`) | 2 | unknown |
-| `0x0A9` | `op_0A9` | 4 typed args (`0x44`) | 1 | unknown |
-| `0x0AA` | `op_0AA` | result + 4 typed args (`0x64`) | 0 | unknown |
-| `0x0AB` | `op_0AB` | result + 6 typed args (`0x66`) | 2 | unknown |
-| `0x0AC` | `op_0AC` | 1 typed args (`0x41`) | 12 | unknown |
-| `0x0AD` | `op_0AD` | 3 typed args (`0x43`) | 3 | unknown |
-| `0x0AE` | `op_0AE` | result + 1 typed args (`0x61`) | 22 | unknown |
-| `0x0AF` | `op_0AF` | 3 typed args (`0x43`) | 22 | unknown |
-| `0x0B0` | `op_0B0` | 7 typed args (`0x47`) | 1 | unknown |
-| `0x0B1` | `op_0B1` | result + 2 typed args (`0x62`) | 0 | unknown |
-| `0x0B2` | `op_0B2` | 8 typed args (`0x48`) | 2 | unknown |
-| `0x0B3` | `op_0B3` | 1 typed args (`0x41`) | 2 | unknown |
-| `0x0B4` | `op_0B4` | 5 typed args (`0x45`) | 3 | unknown |
-| `0x0B5` | `op_0B5` | 3 typed args (`0x43`) | 1 | unknown |
-| `0x0B6` | `op_0B6` | 3 typed args (`0x43`) | 2 | unknown |
-| `0x0B7` | `op_0B7` | result + 1 typed args (`0x61`) | 3 | unknown |
+| `0x0A4` | `start_interpolated_object_link_effect` | 11 typed args (`0x4B`) | 1 | static semantics |
+| `0x0A5` | `stop_interpolated_object_link_effect` | 0 literal args (`0x00`) | 2 | static semantics |
+| `0x0A6` | `cancel_interpolated_object_link_effect` | 0 literal args (`0x00`) | 1 | static semantics |
+| `0x0A7` | `start_screen_particle_sweep` | 7 typed args (`0x47`) | 1 | static semantics |
+| `0x0A8` | `start_screen_particle_sweep_handle` | result + 7 typed args (`0x67`) | 2 | static semantics |
+| `0x0A9` | `start_actor_ground_ripple` | 4 typed args (`0x44`) | 1 | static semantics |
+| `0x0AA` | `start_actor_ground_ripple_handle` | result + 4 typed args (`0x64`) | 0 | static semantics |
+| `0x0AB` | `draw_procedural_ground_ripples` | result + 6 typed args (`0x66`) | 2 | static semantics |
+| `0x0AC` | `scatter_model_parts` | 1 typed args (`0x41`) | 12 | static semantics |
+| `0x0AD` | `start_model_crush_sequence` | 3 typed args (`0x43`) | 3 | static semantics |
+| `0x0AE` | `get_model_part_effect_state` | result + 1 typed args (`0x61`) | 22 | static semantics |
+| `0x0AF` | `transform_model_effect_basis` | 3 typed args (`0x43`) | 22 | static semantics |
+| `0x0B0` | `start_flexible_object_link` | 7 typed args (`0x47`) | 1 | static semantics |
+| `0x0B1` | `get_flexible_link_heading` | result + 2 typed args (`0x62`) | 0 | static semantics |
+| `0x0B2` | `start_segmented_object_link` | 8 typed args (`0x48`) | 2 | static semantics |
+| `0x0B3` | `initialize_sprite_grid_capture` | 1 typed args (`0x41`) | 2 | static semantics |
+| `0x0B4` | `start_sprite_grid_capture_transition` | 5 typed args (`0x45`) | 3 | static semantics |
+| `0x0B5` | `finish_sprite_grid_capture_transition` | 3 typed args (`0x43`) | 1 | static semantics |
+| `0x0B6` | `destroy_sprite_grid_capture_transition` | 3 typed args (`0x43`) | 2 | static semantics |
+| `0x0B7` | `is_sprite_grid_capture_active` | result + 1 typed args (`0x61`) | 3 | static semantics |
 | `0x0B8` | `spawn_object_data_effect_at_world_position` | 7 typed args (`0x47`) | 0 | static semantics |
 | `0x0B9` | `spawn_object_data_effect_at_object_position` | 7 typed args (`0x47`) | 0 | static semantics |
 | `0x0BA` | `spawn_object_data_effect_at_world_position_handle` | result + 7 typed args (`0x67`) | 0 | static semantics |
