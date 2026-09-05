@@ -164,14 +164,16 @@ def _write_document(path: Path, document: dict[str, Any]) -> None:
     )
 
 
-def _preserve_instance_names(path: Path, document: dict[str, Any]) -> None:
-    """Keep reviewed, instance-specific names across descriptor regeneration."""
+def _preserve_instance_metadata(path: Path, document: dict[str, Any]) -> None:
+    """Keep reviewed instance semantics across descriptor regeneration."""
     if not path.is_file():
         return
     existing = json.loads(path.read_text(encoding="utf-8"))
     for key, value in existing.get("known_names", {}).items():
         if int(key, 0) >= GENERIC_OPCODE_COUNT:
             document["known_names"][key] = value
+    if "opcode_semantics" in existing:
+        document["opcode_semantics"] = existing["opcode_semantics"]
 
 
 def main() -> int:
@@ -190,7 +192,7 @@ def main() -> int:
     documents = build_documents(args.version, args.overlays_root)
     for name, document in documents.items():
         path = ROOT / "config" / args.version / f"{name}_vm.json"
-        _preserve_instance_names(path, document)
+        _preserve_instance_metadata(path, document)
         if args.write:
             _write_document(path, document)
             print(f"Wrote {path}")

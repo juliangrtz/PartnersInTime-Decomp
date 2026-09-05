@@ -17,6 +17,11 @@ import field_event_mod
 
 
 class FieldEventScriptTests(unittest.TestCase):
+    def test_checked_in_semantics_match_descriptor_contracts(self) -> None:
+        descriptors, names = field_event_mod.load_vm_schema("eur")
+        self.assertEqual(len(descriptors), 0x155)
+        self.assertEqual(names[0x08D], "start_entity_vertical_motion")
+
     def setUp(self) -> None:
         descriptors = [0] * 0x10C
         descriptors[0x34] = 0x41
@@ -44,6 +49,13 @@ class FieldEventScriptTests(unittest.TestCase):
                 path, "eur", self.descriptors, self.names
             )
         return document, source
+
+    def test_formats_confirmed_field_variables_symbolically(self) -> None:
+        self.assertEqual(field_event_mod.format_variable(0x3004), "field.owner_subtype")
+        self.assertEqual(
+            field_event_mod.parse_variable("field.paired_room_id", "test"), 0x300A
+        )
+        self.assertEqual(field_event_mod.format_variable(0x300B), "field[11]")
 
     def test_classifies_code_and_private_slot_targets(self) -> None:
         document, source = self._document()

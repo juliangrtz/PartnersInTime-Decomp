@@ -51,6 +51,14 @@ NAMESPACES = {
 }
 NAMESPACE_VALUES = {name: value for value, name in NAMESPACES.items()}
 VARIABLE_RE = re.compile(r"([a-z][a-z0-9_]*)\[(0|[1-9][0-9]*)\]")
+FIELD_VARIABLE_NAMES = {
+    0x3004: "field.owner_subtype",
+    0x3006: "field.owner_entity_id",
+    0x3008: "field.current_side",
+    0x3009: "field.current_room_id",
+    0x300A: "field.paired_room_id",
+}
+FIELD_VARIABLE_VALUES = {name: value for value, name in FIELD_VARIABLE_NAMES.items()}
 
 
 def load_vm_schema(version: str) -> tuple[tuple[int, ...], dict[int, str]]:
@@ -86,10 +94,49 @@ def load_vm_schema(version: str) -> tuple[tuple[int, ...], dict[int, str]]:
         names[opcode] = name
     if len(set(names.values())) != len(names):
         raise data_mod.DataModError("field VM opcode names must be unique")
+    semantics = document.get("opcode_semantics", {})
+    if not isinstance(semantics, dict):
+        raise data_mod.DataModError("field VM opcode_semantics must be an object")
+    for raw_opcode, row in semantics.items():
+        try:
+            opcode = int(raw_opcode, 0)
+        except (TypeError, ValueError) as exc:
+            raise data_mod.DataModError(
+                f"invalid field semantic opcode {raw_opcode!r}"
+            ) from exc
+        if opcode not in names or not 0 <= opcode < len(descriptors):
+            raise data_mod.DataModError(
+                f"field semantic opcode 0x{opcode:X} must have a known name"
+            )
+        if not isinstance(row, dict):
+            raise data_mod.DataModError(
+                f"field semantic opcode 0x{opcode:X} must be an object"
+            )
+        arguments = data_mod._require_list(
+            row.get("arguments"), f"field semantic opcode 0x{opcode:X} arguments"
+        )
+        if len(arguments) != descriptors[opcode] & 0x1F or not all(
+            isinstance(argument, str) and argument for argument in arguments
+        ):
+            raise data_mod.DataModError(
+                f"field semantic opcode 0x{opcode:X} has the wrong argument contract"
+            )
+        has_result = bool(descriptors[opcode] & 0x20)
+        if has_result != (row.get("result") is not None):
+            raise data_mod.DataModError(
+                f"field semantic opcode 0x{opcode:X} has the wrong result contract"
+            )
+        for key in ("control_flow", "yield", "evidence"):
+            if not isinstance(row.get(key), str) or not row[key]:
+                raise data_mod.DataModError(
+                    f"field semantic opcode 0x{opcode:X} needs {key} evidence"
+                )
     return descriptors, names
 
 
 def format_variable(variable: int) -> str:
+    if variable in FIELD_VARIABLE_NAMES:
+        return FIELD_VARIABLE_NAMES[variable]
     if variable & 0xE000 == 0xE000:
         return f"save_flags_1f0[{variable & 0x1FFF}]"
     namespace = variable & 0xF000
@@ -102,6 +149,8 @@ def format_variable(variable: int) -> str:
 def parse_variable(value: Any, context: str) -> int:
     if not isinstance(value, str):
         return data_mod.parse_integer(value, 16, context)
+    if value in FIELD_VARIABLE_VALUES:
+        return FIELD_VARIABLE_VALUES[value]
     match = VARIABLE_RE.fullmatch(value)
     if match:
         namespace_name, raw_index = match.groups()
