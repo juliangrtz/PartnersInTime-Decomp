@@ -646,6 +646,10 @@
     "322": "wait_message_finished",
     "323": "wait_message_closed",
     "324": "close_message",
+    "325": "set_message_window_slide_mask_enabled",
+    "326": "start_message_window_slide_by_speed",
+    "327": "start_message_window_slide_over_frames",
+    "328": "wait_message_window_slide",
     "329": "play_field_sound",
     "330": "stop_field_sound",
     "331": "play_background_music",
@@ -2557,6 +2561,38 @@
       "yield": "never",
       "effect": "requests closure for one or more selected message slots using the same selector rules as opcodes 0x142 and 0x143",
       "evidence": "func_ov000_020823f8 case 0x144, func_ov000_0206facc, and resident func_0201d0d4"
+    },
+    "325": {
+      "arguments": ["message_slot", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "enables or disables hardware Window 0 on the current field screen. Enabling derives a clipping rectangle from the selected message slot, applies the current slide offset, exposes all display planes inside it, and masks effects outside it",
+      "evidence": "func_ov000_020823f8 case 0x145, func_ov000_0206f6c0, and func_ov000_0206f4f0 writing DISPCNT, WIN0H, WIN0V, WININ, and WINOUT"
+    },
+    "326": {
+      "arguments": ["message_slot", "target_x_offset_pixels", "target_y_offset_pixels", "speed_q12"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts sliding the current screen's message background and the selected slot's Window 0 rectangle from their current offset toward the signed target pixel offset. The Q12 speed is resolved into X/Y increments along the target vector, and Window 0 is enabled immediately",
+      "evidence": "func_ov000_020823f8 case 0x146, func_ov000_0206f448, func_ov000_020be654, func_ov000_0206f288, func_ov000_0206f110, resident func_02020038, and six shipped message-dismissal sequences"
+    },
+    "327": {
+      "arguments": ["message_slot", "target_x_offset_pixels", "target_y_offset_pixels", "duration_frames"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the same synchronized message-background and Window 0 slide as opcode 0x146, dividing each target offset by the requested duration and snapping exactly to the target when its ten-bit frame counter reaches the ten-bit duration. No reachable shipped field script uses this duration-based variant",
+      "evidence": "func_ov000_020823f8 case 0x147, func_ov000_0206f378, func_ov000_0206f288, and func_ov000_0206f110"
+    },
+    "328": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while a message-window slide is active",
+      "yield": "until the current message-window slide reaches its target",
+      "effect": "waits on the shared field slide-active flag used by opcodes 0x146 and 0x147",
+      "evidence": "func_ov000_020823f8 case 0x148 and the active flag maintained by func_ov000_0206f110"
     },
     "329": {
       "arguments": ["sound_id", "mode", "track_for_field_cleanup"],

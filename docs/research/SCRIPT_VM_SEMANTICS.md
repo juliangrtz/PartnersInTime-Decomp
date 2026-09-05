@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 303 | 252 | `config/eur/field_vm.json` |
+| Field/world | 341 | 307 | 256 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -342,6 +342,10 @@ field context (the other DS screen/field instance).
 | `0x142` | `wait_message_finished` | message_slot_selector | selectors at least zero address one of eight slots; -2 matches both screens and other negative values match the current field screen |
 | `0x143` | `wait_message_closed` | message_slot_selector | uses the same single-slot, both-screen, and current-screen selector rules as opcode 0x142 |
 | `0x144` | `close_message` | message_slot_selector | requests closure for one or more selected message slots using the same selector rules as opcodes 0x142 and 0x143 |
+| `0x145` | `set_message_window_slide_mask_enabled` | message_slot, enabled | enables or disables hardware Window 0 on the current field screen. Enabling derives a clipping rectangle from the selected message slot, applies the current slide offset, exposes all display planes inside it, and masks effects outside it |
+| `0x146` | `start_message_window_slide_by_speed` | message_slot, target_x_offset_pixels, target_y_offset_pixels, speed_q12 | starts sliding the current screen's message background and the selected slot's Window 0 rectangle from their current offset toward the signed target pixel offset. The Q12 speed is resolved into X/Y increments along the target vector, and Window 0 is enabled immediately |
+| `0x147` | `start_message_window_slide_over_frames` | message_slot, target_x_offset_pixels, target_y_offset_pixels, duration_frames | starts the same synchronized message-background and Window 0 slide as opcode 0x146, dividing each target offset by the requested duration and snapping exactly to the target when its ten-bit frame counter reaches the ten-bit duration. No reachable shipped field script uses this duration-based variant |
+| `0x148` | `wait_message_window_slide` | 0 literal args | waits on the shared field slide-active flag used by opcodes 0x146 and 0x147 |
 | `0x149` | `play_field_sound` | sound_id, mode, track_for_field_cleanup | plays a sound and optionally records its ID in one of four per-field cleanup slots |
 | `0x14A` | `stop_field_sound` | sound_id | stops the sound and removes it from the four per-field cleanup slots |
 | `0x14B` | `play_background_music` | sequence_id | stops the active background sequence, alternates between the two field BGM players, loads sequence_id, and starts playback without an explicit fade duration |
@@ -356,16 +360,13 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-272/289 used opcodes and
-387,223/387,272 reachable commands
+275/289 used opcodes and
+387,241/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x145` | 7 |
 | `0x04C` | 7 |
-| `0x146` | 6 |
-| `0x148` | 5 |
 | `0x138` | 5 |
 | `0x05E` | 5 |
 | `0x06B` | 3 |
