@@ -274,3 +274,6 @@ src/battle/battle_status_party_ailment3.cpp:
 
 src/battle/battle_status_party_ailment2.cpp:
     .text       start:0x020a6ce4 end:0x020a7114
+
+src/battle/battle_status_party_ailment1.cpp:
+    .text       start:0x020a7114 end:0x020a73d4
