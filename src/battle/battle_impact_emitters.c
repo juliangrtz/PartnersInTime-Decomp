@@ -5,9 +5,6 @@ enum BattleImpactEmitterOffset {
     BATTLE_IMPACT_EMITTER_TASK_POOL_OFFSET = 0x8B44
 };
 
-extern BattleImpactParticleTask *func_ov002_020aa904(
-    BattleSceneObject *object, void (*callback)(BattleAITask *task));
-
 BattleAITask *BattleImpactEmitter_Start(
     u16 object_id, int mode, s16 target_scale_q4, u16 lifetime_multiplier,
     int spawn_interval, int size_multiplier, int target_size,
@@ -81,7 +78,8 @@ void BattleImpactTrailEmitter_Update(BattleAITask *base_task) {
     particle_callback = object->flags.bits.use_alternate_model
                             ? BattleImpactParticle_UpdateModelFrame
                             : BattleImpactParticle_UpdateResourceFrame;
-    particle = func_ov002_020aa904(object, particle_callback);
+    particle = BattleImpactParticle_CreateFromObject(object,
+                                                     particle_callback);
     particle_data = &particle->data;
     particle_data->controller = emitter;
     particle_data->frame =
