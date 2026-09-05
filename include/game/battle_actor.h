@@ -88,7 +88,9 @@ struct BattleActor {
             u16 unknown_flag_07 : 1;
             u16 knocked_out : 1;
             u16 hit_locked : 1;
-            u16 unknown_flags_10_12 : 3;
+            u16 unknown_flag_10 : 1;
+            u16 resource_bound : 1;
+            u16 unknown_flag_12 : 1;
             u16 excluded_from_targeting : 1;
             u16 unknown_flags_14_15 : 2;
         } flag_bits;

@@ -42,6 +42,10 @@ void BattleStatus_UpdatePartyStatVisuals(struct BattleAITask *task);
 struct BattleAITask *BattleStatus_StartEnemyStatVisual(int actor_id,
                                                        int status_id);
 u32 BattleStatus_UpdateEnemyStatVisuals(struct BattleAITask *task);
+struct BattleAITask *BattleStatus_StartEnemyAilment4Visual(int actor_id);
+u32 BattleStatus_UpdateEnemyAilment4Visual(struct BattleAITask *task);
+struct BattleAITask *BattleStatus_StartEnemyAilment5Visual(int actor_id);
+u32 BattleStatus_UpdateEnemyAilment5Visual(struct BattleAITask *task);
 
 #ifdef __cplusplus
 }
