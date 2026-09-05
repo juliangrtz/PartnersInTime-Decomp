@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 318 | 267 | `config/eur/field_vm.json` |
+| Field/world | 341 | 321 | 270 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -129,6 +129,7 @@ field context (the other DS screen/field instance).
 | `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
 | `0x04C` | `set_entity_turn_to_interactor_enabled` | entity_selector, enabled | controls whether the entity temporarily turns to face the actor that starts an interaction. The interaction setup preserves the entity's prior three-bit facing direction and derives a new direction from the angle between both positions; interaction teardown restores the saved direction |
 | `0x04D` | `set_entity_ground_tracking` | entity_selector, ground_tracking_enabled | sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty |
+| `0x04E` | `set_entity_alternate_collision_faces_enabled` | entity_selector, enabled | selects the entity's alternate field-map collision-face set. When enabled, map and entity collision tests use the second four-bit face mask packed into each geometry record and compensate the entity's lower and upper collision heights by their current vertical offsets; when disabled, they use the primary face mask and unadjusted heights. Party action transitions preserve this setting while temporarily forcing the alternate set |
 | `0x050` | `set_entity_offscreen_contact_retention_enabled` | entity_selector, enabled | when enabled, permits another entity to retain its linked contact with this entity while this entity is outside the visible screen bounds; the normal disabled behavior drops that link after the off-screen state is observed |
 | `0x051` | `set_entity_reserved_state_flag` | entity_selector, enabled | sets entity base-state bit +0x184 bit 12. The flag is copied when the base entity state is cloned, but an exhaustive instruction-level scan of overlay 0 and the resident ARM9 found no behavioral reader, and the field entity serializer does not preserve it. All 71 shipped commands enable it, so it is currently classified as a reserved or vestigial state flag rather than assigning an unsupported gameplay meaning |
 | `0x053` | `set_entity_contact_direction_filter` | entity_selector, script_direction_mask | replaces the entity's six-bit linked-contact direction filter. Script bits 0 through 5 map to internal contact bits 2, 3, 0, 1, 5, and 4 respectively. The collision solver intersects this filter with both entities' active contact-side masks; a zero intersection releases their persistent contact link |
@@ -216,8 +217,10 @@ field context (the other DS screen/field instance).
 | `0x0AE` | `rejoin_party_follower` | party_side, instant | moves the selected party's detached follower back to its formation offset behind the leader, either immediately or through entity movement, then restores the normal follower tether |
 | `0x0AF` | `wait_party_follower_rejoined` | party_side | retries the same command while the selected party follower is still moving back into formation |
 | `0x0B0` | `detach_party_follower` | party_side | disables the normal leader/follower tether for the selected party and resets the follower's formation offsets and occupancy state so scripts can position both members independently |
-| `0x0B1` | `reunite_split_parties` | moving_party_side_or_current, instant | reunites the separated adult and baby parties into normal piggyback formation. moving_party_side_or_current selects which party approaches the other, with -1 resolving to the currently active side; instant teleports each selected member to its counterpart, while the animated form moves the party leader to the midpoint of the destination pair and marks both party controllers as reuniting |
+| `0x0B1` | `reunite_split_parties` | moving_party_side_or_current, instant | brings the separated adult and baby parties back together. moving_party_side_or_current selects which party approaches the other, with -1 resolving to the currently active side; instant teleports each selected member to its counterpart and immediately restores the linked formation, while the animated form moves the party leader to the midpoint of the destination pair and marks both party controllers as reuniting. The separate opcodes 0x0B3 and 0x0B4 perform and wait for the visible baby-to-adult piggyback mount when that animation is required |
 | `0x0B2` | `wait_split_party_reunion` | 0 literal args | synchronization barrier for the non-instant form of opcode 0x0B1 |
+| `0x0B3` | `start_baby_piggyback_mount` | 0 literal args | starts the baby-to-adult piggyback mount for each eligible reunited pair, changes the adult and baby entity action states to the paired 49/51 animation sequence, and makes the adult party active. A pair is skipped unless its adult actor is in normal field form and idle and its corresponding baby is available |
+| `0x0B4` | `wait_baby_piggyback_mount` | 0 literal args | synchronization barrier for opcode 0x0B3; execution resumes after both baby entities have passed the launch, movement, and attachment phases of the mount animation |
 | `0x0B5` | `set_party_member_character_id` | flat_member_selector, character_id_or_default | selects party_side as flat_member_selector / 2 and member index as flat_member_selector & 1, then stores its field character ID; -1 derives the current default from party/form state and ID 9 resolves through the saved dynamic character choice |
 | `0x0B6` | `reset_party_member_characters` | party_side | clears the selected party's temporary character-selection flags and recomputes both member character IDs from current party/form state |
 | `0x0B7` | `set_party_facing_direction` | party_side, facing_direction, instant | changes the selected party controller's left/right facing and sprite flip, either directly or through its guarded turn path |
@@ -371,15 +374,12 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-286/289 used opcodes and
-387,269/387,272 reachable commands
+289/289 used opcodes and
+387,272/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x0B4` | 1 |
-| `0x0B3` | 1 |
-| `0x04E` | 1 |
 
 ## Menu/UI scene scripts
 
