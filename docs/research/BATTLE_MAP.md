@@ -761,7 +761,9 @@ form-specific sound pairs, and installs `BattleParty_UpdateKnockout`. The
 update callback waits for the model flags, releases ordinary party actors, or
 for linked forms moves the paired scene object and chains into the appropriate
 Mario/Luigi follow-up load callback.
-Those follow-ups now expose the whole asynchronous boundary explicitly. They
+The five Luigi follow-up callbacks from `0x020A8990` through `0x020A8C74` are
+now byte-identical linked C. Together with the mirrored Mario path, the
+follow-ups expose the whole asynchronous boundary explicitly. They
 wait for resource slots 5 or 6, bind them to scene objects 56 or 57, play the
 rebound animation, interpolate an off-screen retreat on motion channel 3,
 transfer the actor lock to Baby Mario or Baby Luigi, and wait for battle state
