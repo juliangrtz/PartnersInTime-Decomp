@@ -431,6 +431,8 @@
     "73": "get_entity_property",
     "74": "set_entity_visible",
     "75": "set_entity_enabled",
+    "77": "set_entity_ground_tracking",
+    "86": "set_entity_map_sync_axes",
     "96": "set_entity_render_layer",
     "102": "set_entity_animation_speed",
     "108": "bind_entity_resource",
@@ -440,6 +442,7 @@
     "113": "set_entity_behavior_mode",
     "114": "restore_entity_behavior_state",
     "131": "start_entity_movement",
+    "132": "start_entity_timed_movement",
     "139": "wait_entity_movement",
     "141": "start_entity_vertical_motion",
     "143": "wait_entity_vertical_motion",
@@ -447,19 +450,24 @@
     "160": "set_entity_facing_direction",
     "183": "set_party_facing_direction",
     "185": "legacy_noop_0b9",
+    "186": "set_field_party_hud_layout",
     "201": "get_party_controller_property",
+    "221": "start_camera_timed_entity_tracking",
     "222": "wait_camera_movement",
     "237": "start_master_brightness_transition",
     "238": "wait_master_brightness_transition",
     "269": "wait_paired_field_ready",
     "273": "set_field_input_disable_mask",
+    "279": "set_camera_focus_entity",
     "320": "open_screen_message",
     "321": "open_entity_message",
     "322": "wait_message_finished",
     "323": "wait_message_closed",
     "324": "close_message",
     "329": "play_field_sound",
-    "330": "stop_field_sound"
+    "330": "stop_field_sound",
+    "331": "play_background_music",
+    "332": "stop_background_music"
   },
   "opcode_semantics": {
     "51": {
@@ -649,6 +657,22 @@
       "effect": "sets entity state bit 0, which gates the normal entity update path",
       "evidence": "func_ov000_020823f8 case 0x04B and entity update consumers of state +0x0A bit 0"
     },
+    "77": {
+      "arguments": ["entity_selector", "ground_tracking_enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty",
+      "evidence": "func_ov000_020823f8 case 0x04D, func_ov000_020b3cb0, and field entity update consumers of state +0x38C bit 12"
+    },
+    "86": {
+      "arguments": ["entity_selector", "horizontal_map_sync_or_minus_one", "vertical_map_sync_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "each argument other than -1 updates one persistent map-synchronization axis; enabling an axis immediately marks it dirty, and a later field-geometry refresh marks every enabled axis dirty again",
+      "evidence": "func_ov000_020823f8 case 0x056 and func_ov000_0207af94 consumers of entity state +0x3CC bits 0, 1, 4, and 5"
+    },
     "96": {
       "arguments": ["entity_selector", "render_layer"],
       "result": null,
@@ -720,6 +744,14 @@
       "effect": "starts interpolated 2D or 3D entity movement; coordinate arguments are converted to fx32",
       "evidence": "func_ov000_020823f8 case 0x083, func_ov000_020a64a0, and func_ov000_020b3f00"
     },
+    "132": {
+      "arguments": ["entity_selector", "coordinate_mode", "x", "y", "z", "duration_frames", "motion_parameter_6", "motion_parameter_7", "motion_flag"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts constant-rate entity movement toward fx32 coordinates over duration_frames; coordinate_mode 1 makes the target relative. Normal entities can move on x, y, and z, while subtype 8 uses x and y only",
+      "evidence": "func_ov000_020823f8 case 0x084, func_ov000_020a6394, and func_ov000_020b3cb0"
+    },
     "139": {
       "arguments": ["entity_selector"],
       "result": null,
@@ -774,6 +806,14 @@
       "effect": "intentional legacy no-op; both encoded arguments are ignored",
       "evidence": "func_ov000_020823f8 ARM jump-table entry 0x0B9 targets the shared default return at 0x02082438"
     },
+    "186": {
+      "arguments": ["layout_mode", "instant"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "changes the party status HUD layout and visibility on the field context that owns the HUD; instant applies the target positions directly, otherwise the icons animate toward them in four-pixel steps",
+      "evidence": "func_ov000_020823f8 case 0x0BA, func_ov000_02071a38, func_ov000_02071ce8, and func_ov000_02071654"
+    },
     "201": {
       "arguments": ["party_side", "property_id"],
       "result": "selected party-controller property value, or zero for unsupported selectors",
@@ -781,6 +821,14 @@
       "yield": "never",
       "effect": "queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4",
       "evidence": "func_ov000_020823f8 case 0x0C9 property switch"
+    },
+    "221": {
+      "arguments": ["entity_selector", "x_offset", "y_offset", "duration_frames", "x_motion_flag", "y_motion_flag"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a timed camera interpolation whose target is recomputed from the selected entity position plus fx32 x/y offsets on every frame; the two flags are stored as per-axis camera-motion options",
+      "evidence": "func_ov000_020823f8 case 0x0DD, func_ov000_02073110, and func_ov000_02072e84"
     },
     "222": {
       "arguments": [],
@@ -821,6 +869,14 @@
       "yield": "never",
       "effect": "selects the current or paired field side and stores the complemented input mask at field context +0x24C4",
       "evidence": "func_ov000_020823f8 case 0x111"
+    },
+    "279": {
+      "arguments": ["enabled", "entity_selector_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection",
+      "evidence": "func_ov000_020823f8 case 0x117, func_ov000_02073880, func_ov000_02073740, and func_ov000_020737cc"
     },
     "320": {
       "arguments": ["x_or_center", "y", "width_tiles_or_auto", "height_tiles_or_auto", "window_mode", "tail_style", "tail_size_or_auto", "vertical_placement_or_auto", "tail_x_or_auto", "text_control_mode", "message_slot", "text_archive_id", "message_id"],
@@ -877,6 +933,22 @@
       "yield": "never",
       "effect": "stops the sound and removes it from the four per-field cleanup slots",
       "evidence": "func_ov000_020823f8 case 0x14A"
+    },
+    "331": {
+      "arguments": ["sequence_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops the active background sequence, alternates between the two field BGM players, loads sequence_id, and starts playback without an explicit fade duration",
+      "evidence": "func_ov000_020823f8 case 0x14B and resident func_02027a2c"
+    },
+    "332": {
+      "arguments": ["sequence_id_or_negative_for_all"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player",
+      "evidence": "func_ov000_020823f8 case 0x14C and resident func_02027818"
     }
   }
 }
