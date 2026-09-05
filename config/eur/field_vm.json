@@ -442,6 +442,7 @@
     "90": "set_entity_collision_response_channels_masked",
     "91": "restore_entity_collision_response_channels",
     "96": "set_entity_render_layer",
+    "97": "set_entity_body_collision_enabled",
     "98": "set_entity_render_order_priorities",
     "102": "set_entity_animation_speed",
     "103": "set_entity_locomotion_parameters",
@@ -925,6 +926,14 @@
       "yield": "never",
       "effect": "stores the low four bits of render_layer in the high nibble of the entity's bound render-object sort key",
       "evidence": "func_ov000_020823f8 case 0x060 and render-order consumer func_ov000_020a9180"
+    },
+    "97": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the entity's solid-body participation flag. When enabled, ordinary field entities resolve overlapping body rectangles against other enabled entities whose category is permitted by the entity's 11-bit collision mask, and their sprite sort key is derived from the feet/bottom Y coordinate so overlaps draw in depth order. The same flag also lets attached or related sprites constrain one another's automatic order. Disabling it leaves scripted trigger-region tests and the separate special collision path intact; all nine shipped calls disable the current script-owning entity, primarily to let cutscene actors pass through ordinary bodies",
+      "evidence": "func_ov000_020823f8 case 0x061; body-overlap and response logic in func_ov000_020a9180; automatic sort-key update in func_ov000_020a9778; related-sprite ordering in func_ov000_020917f0; and all nine shipped calls"
     },
     "98": {
       "arguments": ["entity_selector", "priority_0_or_auto", "priority_1_or_auto", "priority_2_or_auto", "priority_3_or_auto", "auxiliary_priority_or_auto"],
