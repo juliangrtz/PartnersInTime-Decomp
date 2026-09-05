@@ -248,6 +248,9 @@ and runtime overlay 2.
 | `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Byte-identical first-free-slot sprite-effect allocator |
 | `020ACC7C` | `BattleSpriteEffect_SpawnAttached` | Byte-identical sprite-effect constructor and owner-slot binder |
 | `020ACCB8` | `BattleSpriteEffect_Spawn` | Byte-identical view-adjusted sprite-effect constructor |
+| `020AD058` | `BattleCaptureSurface_CopyTask` | Byte-identical overlap-aware capture-buffer copy callback |
+| `020AD094` | `BattleCaptureSurface_DecodeRowTask` | Structured capture-tile decoder and chunked upload callback (80.17% matching) |
+| `020AD260` | `BattleCaptureSurface_QueueUpload` | Structured capture-region normalizer and upload constructor (73.03% matching) |
 | `020AD3C4` | `BattleObjectData_QueueCaptureSurfaceUpload` | Byte-identical object-data capture-surface upload wrapper |
 | `020AD3FC` | `BattleDisplayCapture_FinishResetTask` | Byte-identical reset-chain completion callback |
 | `020AD430` | `BattleDisplayCapture_QueueFinishResetTask` | Byte-identical reset completion scheduler |
@@ -594,6 +597,16 @@ coordinates back into the current view, clamps negative Z to zero, draws the
 model, and retires the task when model flag bit 2 is set. Its logic and size are
 reconstructed, but the linked build retains the original callback for now
 because MWCC exchanges the long-lived task and X-coordinate registers.
+
+The capture-surface code immediately before the display-control helpers is
+maintained as structured C but remains unlinked. Its 60-byte overlap-aware copy
+callback is byte-identical. The row decoder matches 80.17 percent and exposes
+wrapped 32-by-32 tile-map addressing, 8-KiB chunk submission, converter calls,
+and transfer completion. Its constructor matches 73.03 percent and exposes
+signed coordinate wrapping, tile bounds, power-of-two destination stride, VRAM
+bank addressing, and the object-data busy flag. Both larger routines retain
+the original sizes or differ by one instruction; the remaining differences are
+primarily MWCC register allocation across their long-lived row/tile variables.
 
 The display-capture helpers at `0x020AD3C4`-`0x020AD5D0` are byte-identical
 grouped C. They expose two asynchronous workflows over the battle upload

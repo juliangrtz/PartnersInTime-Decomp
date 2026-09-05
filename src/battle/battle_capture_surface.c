@@ -58,8 +58,9 @@ BattleQueuedTask *BattleCaptureSurface_QueueUpload(
     BattleQueuedTask *task;
     BattleObjectDataLoadState *load_state;
     u32 destination_stride;
+    u32 vram_offset;
+    u32 vram_base;
     int leading_zeros;
-    int end_tile;
 
     x = (x + 128) % 512;
     if (x < 0) {
@@ -70,15 +71,13 @@ BattleQueuedTask *BattleCaptureSurface_QueueUpload(
         y += 256;
     }
 
-    end_tile = x + 7 + width;
-    width = end_tile / BATTLE_CAPTURE_TILE_SIZE -
+    width = (width + (x + 7)) / BATTLE_CAPTURE_TILE_SIZE -
             x / BATTLE_CAPTURE_TILE_SIZE;
     x /= BATTLE_CAPTURE_TILE_SIZE;
     if (width > BATTLE_CAPTURE_TILE_LIMIT) {
         width = BATTLE_CAPTURE_TILE_LIMIT;
     }
-    end_tile = y + 7 + height;
-    height = end_tile / BATTLE_CAPTURE_TILE_SIZE -
+    height = (height + (y + 7)) / BATTLE_CAPTURE_TILE_SIZE -
              y / BATTLE_CAPTURE_TILE_SIZE;
     y /= BATTLE_CAPTURE_TILE_SIZE;
     if (height > BATTLE_CAPTURE_TILE_LIMIT) {
@@ -99,10 +98,11 @@ BattleQueuedTask *BattleCaptureSurface_QueueUpload(
     task->state = object_data_id;
     load_state = BattleObjectData_GetLoadState(object_data_id);
     load_state->flags.raw |= BATTLE_CAPTURE_BUSY_FLAG;
-    load_state->data =
-        *(u8 **)(gBattleContext + BATTLE_CAPTURE_VRAM_BASE_TABLE_OFFSET +
-                 (vram_address >> 17) * 4) +
-        (vram_address & BATTLE_CAPTURE_VRAM_ADDRESS_MASK);
+    vram_offset = vram_address & BATTLE_CAPTURE_VRAM_ADDRESS_MASK;
+    vram_base =
+        *(u32 *)(gBattleContext + BATTLE_CAPTURE_VRAM_BASE_TABLE_OFFSET +
+                 (vram_address >> 17) * 4);
+    load_state->data = (u8 *)(vram_offset + vram_base);
     load_state->component_04 =
         gBattleContext + BATTLE_CAPTURE_BUFFER_OFFSET;
     load_state->component_14 = load_state->component_04;
@@ -133,8 +133,8 @@ void BattleCaptureSurface_DecodeRowTask(BattleQueuedTask *task) {
 
     load_state = BattleObjectData_GetLoadState(task->state);
     capture = (BattleCaptureSurfaceState *)&load_state->allocation_size;
-    tile_width = capture->tile_width;
     row = load_state->texture_variant;
+    tile_width = capture->tile_width;
     destination = (u32 *)load_state->component_04;
     tile_x = capture->tile_x;
     tile_y = capture->tile_y;
