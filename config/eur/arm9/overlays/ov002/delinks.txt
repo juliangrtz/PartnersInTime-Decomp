@@ -209,6 +209,9 @@ src/battle/battle_collision_volumes.c:
 src/battle/battle_coin_loss.cpp:
     .text       start:0x020a0c64 end:0x020a1064
 
+src/battle/battle_flee_transition.c:
+    .text       start:0x020a1064 end:0x020a1284
+
 src/battle/battle_scene_object.c:
     .text       start:0x020a32f4 end:0x020a33a4
 

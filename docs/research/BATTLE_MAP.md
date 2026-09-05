@@ -733,6 +733,11 @@ byte-identical linked C++. A typed emitter removes one coin per frame from the
 save counter and launches randomized coin-model particles from the affected
 actor. Typed particle state exposes Q4 position, velocity, gravity, bounce,
 fade/fast-forward behavior, shadow placement, model transform, and cleanup.
+The following `0x020A1064`-`0x020A1284` range is the exact linked transition
+half of battle fleeing. Four callbacks coordinate paired party members, wait
+for model state, start the run animation, move an actor to X=-32, clear partner
+links, and finish the task after the exit animation. This identification also
+explains why the preceding effect subtracts real coins from the save data.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets
