@@ -632,10 +632,16 @@
     "297": "adjust_beans",
     "298": "adjust_item_count",
     "299": "get_room_companion_id",
+    "300": "enable_touchscreen_input_tracking",
+    "301": "disable_touchscreen_input_tracking",
     "302": "set_game_over_retry_checkpoint",
     "303": "set_game_over_retry_progress",
     "304": "clear_extended_save_flags_1024_2047",
     "305": "set_extended_save_flags_1024_2047",
+    "306": "prepare_touchscreen_mask_erase_effect",
+    "307": "wait_touchscreen_mask_erase_effect_ready",
+    "308": "start_touchscreen_mask_erase_effect",
+    "309": "wait_touchscreen_mask_erase_effect_complete",
     "310": "play_rumble_pattern",
     "311": "stop_rumble_pattern",
     "312": "set_single_pass_entity_collision_enabled",
@@ -2455,6 +2461,22 @@
       "effect": "reads the second halfword of the selected room's four-byte resident metadata record. Room-transition synchronization uses this value as the room to load into the paired field context; zero suppresses that automatic companion load",
       "evidence": "func_ov000_020823f8 case 0x12B, room metadata table at 0x02048F18, and paired-field reload paths func_ov000_0207fd54 and func_ov000_0209f644"
     },
+    "300": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "enables the shared field engine's per-frame touchscreen sampler. While enabled, the sampler records a three-bit pen-contact phase plus calibrated nine-bit X and Y coordinates in the field-system input word for consumers such as the mask-erase effect",
+      "evidence": "func_ov000_020823f8 case 0x12C sets field-system +0x268 bit 0; touchscreen poller func_ov000_0206e078; sole shipped call in room 558"
+    },
+    "301": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "disables the shared field engine's per-frame touchscreen sampler, clears its contact phase, and resets both packed nine-bit coordinates to 0x1FF (-1)",
+      "evidence": "func_ov000_020823f8 case 0x12D clears field-system +0x268 bit 0 and bits 1..3, then sets bits 4..12 and 13..21; touchscreen poller func_ov000_0206e078; sole shipped call in room 558"
+    },
     "302": {
       "arguments": ["checkpoint_index"],
       "result": null,
@@ -2486,6 +2508,36 @@
       "yield": "never",
       "effect": "sets every bit in the 128-byte extended save-flag bank at save-data offsets 0x270 through 0x2EF, corresponding exactly to VM variables save_flags_1f0[1024] through save_flags_1f0[2047]",
       "evidence": "func_ov000_020823f8 case 0x131, func_ov000_02081bd4 with fill value -1, and the extended-save-flag mapping in VM_ReadVariable and VM_WriteVariable"
+    },
+    "306": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "allocates and initializes the fixed touchscreen mask-erase effect. It requests FieldFxData entries 16 and 18 for a 256x256 A3I5 burn-hole mask and its palette, plus entries 17 and 19 for a 32x32 gloved-hand cursor and its palette. The per-frame field update completes the texture/palette VRAM setup asynchronously and advances the effect from preparation state 0 to ready state 1",
+      "evidence": "func_ov000_020823f8 case 0x132; allocator/loader func_ov000_02066b34 and resource table data_ov000_020bf630; effect update func_ov000_02066124; FieldFxData entries 16..19; sole shipped call in room 558"
+    },
+    "307": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the mask-erase effect remains in preparation state 0",
+      "yield": "until the effect's resources have been prepared and uploaded",
+      "evidence": "func_ov000_020823f8 case 0x133, state predicate func_ov000_02066b0c, and state-0 setup in func_ov000_02066124"
+    },
+    "308": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "enables touchscreen sampling and advances the prepared mask-erase effect to active state 2. Pen-down and drag samples are joined into continuous line segments; a 7x7 falloff kernel subtracts from the A3I5 texture's three alpha bits while retaining its five-bit palette indices, and only the changed texture rectangle is uploaded. A gloved-hand cursor follows the pen. The effect enters completed state 3 once at least 3238 of the 3520 pixels in the lower-right test region (x 216..255, y 104..191) have alpha at most 2",
+      "evidence": "func_ov000_020823f8 case 0x134, starter func_ov000_02066ae4, touchscreen poller func_ov000_0206e078, active-state implementation func_ov000_02066124, 7x7 kernel data_ov000_020bf734, and sole shipped call in room 558"
+    },
+    "309": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the mask-erase effect remains in active state 2",
+      "yield": "until the lower-right alpha threshold advances the effect to completed state 3",
+      "evidence": "func_ov000_020823f8 case 0x135, state predicate func_ov000_020660f8, and completion test in func_ov000_02066124"
     },
     "310": {
       "arguments": ["pattern_id_1_based", "duration_frames"],

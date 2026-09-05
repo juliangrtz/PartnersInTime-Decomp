@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 312 | 261 | `config/eur/field_vm.json` |
+| Field/world | 341 | 318 | 267 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -328,10 +328,16 @@ field context (the other DS screen/field instance).
 | `0x129` | `adjust_beans` | bean_delta | adds the signed delta to the save's bean total and clamps it to 0 through 999; whenever a positive number of beans is actually added, save flag 0x201F is also set |
 | `0x12A` | `adjust_item_count` | tagged_item_id, item_delta | adds the signed delta to one of the four save inventory tables selected by the item ID's high nibble: action items 0x1000, usable items 0x2000, badges 0x3000, or clothing 0x4000. Counts clamp to 0..99 for action/usable items and 0..9 for badges/clothing. The defective result comparison is preserved as original behavior |
 | `0x12B` | `get_room_companion_id` | room_id | reads the second halfword of the selected room's four-byte resident metadata record. Room-transition synchronization uses this value as the room to load into the paired field context; zero suppresses that automatic companion load |
+| `0x12C` | `enable_touchscreen_input_tracking` | 0 literal args | enables the shared field engine's per-frame touchscreen sampler. While enabled, the sampler records a three-bit pen-contact phase plus calibrated nine-bit X and Y coordinates in the field-system input word for consumers such as the mask-erase effect |
+| `0x12D` | `disable_touchscreen_input_tracking` | 0 literal args | disables the shared field engine's per-frame touchscreen sampler, clears its contact phase, and resets both packed nine-bit coordinates to 0x1FF (-1) |
 | `0x12E` | `set_game_over_retry_checkpoint` | checkpoint_index | stores the game-over retry checkpoint selector in save data and exposes it as field variable 0x3024. Zero disables the Retry choice; indices 1 through 9 select one of nine 18-byte records containing a destination room and four placement halfwords for each field party. Accepting Retry rebuilds that room from the record and reduces each available party member's current HP to approximately 30 percent |
 | `0x12F` | `set_game_over_retry_progress` | retry_progress | stores the checkpoint's script-progress byte in save data and exposes it as field variable 0x3025. Shipped room scripts compare proposed milestones against this value before updating it, so a game-over retry can reconstruct the selected room without replaying events completed before the checkpoint |
 | `0x130` | `clear_extended_save_flags_1024_2047` | 0 literal args | clears the 128-byte extended save-flag bank at save-data offsets 0x270 through 0x2EF, corresponding exactly to VM variables save_flags_1f0[1024] through save_flags_1f0[2047] |
 | `0x131` | `set_extended_save_flags_1024_2047` | 0 literal args | sets every bit in the 128-byte extended save-flag bank at save-data offsets 0x270 through 0x2EF, corresponding exactly to VM variables save_flags_1f0[1024] through save_flags_1f0[2047] |
+| `0x132` | `prepare_touchscreen_mask_erase_effect` | 0 literal args | allocates and initializes the fixed touchscreen mask-erase effect. It requests FieldFxData entries 16 and 18 for a 256x256 A3I5 burn-hole mask and its palette, plus entries 17 and 19 for a 32x32 gloved-hand cursor and its palette. The per-frame field update completes the texture/palette VRAM setup asynchronously and advances the effect from preparation state 0 to ready state 1 |
+| `0x133` | `wait_touchscreen_mask_erase_effect_ready` | 0 literal args | retries the same command while the mask-erase effect remains in preparation state 0 |
+| `0x134` | `start_touchscreen_mask_erase_effect` | 0 literal args | enables touchscreen sampling and advances the prepared mask-erase effect to active state 2. Pen-down and drag samples are joined into continuous line segments; a 7x7 falloff kernel subtracts from the A3I5 texture's three alpha bits while retaining its five-bit palette indices, and only the changed texture rectangle is uploaded. A gloved-hand cursor follows the pen. The effect enters completed state 3 once at least 3238 of the 3520 pixels in the lower-right test region (x 216..255, y 104..191) have alpha at most 2 |
+| `0x135` | `wait_touchscreen_mask_erase_effect_complete` | 0 literal args | retries the same command while the mask-erase effect remains in active state 2 |
 | `0x136` | `play_rumble_pattern` | pattern_id_1_based, duration_frames | starts one of the resident rumble patterns, converting the one-based script ID to the zero-based 60-byte pattern table, and stops it after duration_frames; zero leaves the general 600-frame safety limit in force. The request is ignored when no rumble device is present or the save option disables rumble |
 | `0x137` | `stop_rumble_pattern` | 0 literal args | stops the active Rumble Pak pattern when rumble hardware support is enabled. It cancels the pattern alarm, writes the off value to the Rumble Pak register at 0x08001000, and clears the resident active flag |
 | `0x138` | `set_single_pass_entity_collision_enabled` | enabled | selects the field entity-to-entity collision traversal. Enabled mode passes each non-category-8/9 entity only the remainder of the linked entity list, so every unordered pair is tested once. Disabled mode passes the full list to every non-category-8/9 entity, then repeats collision resolution for up to four category-0/1 party entities. Room metadata mode 2 enables the single-pass policy automatically |
@@ -365,18 +371,12 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-280/289 used opcodes and
-387,263/387,272 reachable commands
+286/289 used opcodes and
+387,269/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x135` | 1 |
-| `0x134` | 1 |
-| `0x133` | 1 |
-| `0x132` | 1 |
-| `0x12D` | 1 |
-| `0x12C` | 1 |
 | `0x0B4` | 1 |
 | `0x0B3` | 1 |
 | `0x04E` | 1 |
