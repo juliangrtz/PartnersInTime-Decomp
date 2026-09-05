@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 174 | 123 | `config/eur/field_vm.json` |
+| Field/world | 341 | 176 | 125 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -179,6 +179,8 @@ field context (the other DS screen/field instance).
 | `0x0AE` | `rejoin_party_follower` | party_side, instant | moves the selected party's detached follower back to its formation offset behind the leader, either immediately or through entity movement, then restores the normal follower tether |
 | `0x0AF` | `wait_party_follower_rejoined` | party_side | retries the same command while the selected party follower is still moving back into formation |
 | `0x0B0` | `detach_party_follower` | party_side | disables the normal leader/follower tether for the selected party and resets the follower's formation offsets and occupancy state so scripts can position both members independently |
+| `0x0B1` | `reunite_split_parties` | moving_party_side_or_current, instant | reunites the separated adult and baby parties into normal piggyback formation. moving_party_side_or_current selects which party approaches the other, with -1 resolving to the currently active side; instant teleports each selected member to its counterpart, while the animated form moves the party leader to the midpoint of the destination pair and marks both party controllers as reuniting |
+| `0x0B2` | `wait_split_party_reunion` | 0 literal args | synchronization barrier for the non-instant form of opcode 0x0B1 |
 | `0x0B5` | `set_party_member_character_id` | flat_member_selector, character_id_or_default | selects party_side as flat_member_selector / 2 and member index as flat_member_selector & 1, then stores its field character ID; -1 derives the current default from party/form state and ID 9 resolves through the saved dynamic character choice |
 | `0x0B6` | `reset_party_member_characters` | party_side | clears the selected party's temporary character-selection flags and recomputes both member character IDs from current party/form state |
 | `0x0B7` | `set_party_facing_direction` | party_side, facing_direction, instant | changes the selected party controller's left/right facing and sprite flip, either directly or through its guarded turn path |
@@ -227,8 +229,8 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-150/289 used opcodes and
-381,513/387,272 reachable commands
+152/289 used opcodes and
+381,756/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
@@ -244,15 +246,15 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x0D3` | 182 |
 | `0x0BC` | 180 |
 | `0x136` | 176 |
-| `0x0B1` | 124 |
 | `0x150` | 123 |
 | `0x14F` | 119 |
-| `0x0B2` | 119 |
 | `0x0CA` | 117 |
 | `0x106` | 111 |
 | `0x0D0` | 104 |
 | `0x14D` | 101 |
 | `0x125` | 100 |
+| `0x0F2` | 80 |
+| `0x087` | 79 |
 
 ## Menu/UI scene scripts
 
