@@ -225,7 +225,7 @@ and runtime overlay 2.
 | `020A9478` | `BattleEnemy_UpdateDelayedDefeatRemoval` | Byte-identical delayed enemy-removal callback for effect kind 4 |
 | `020A94F0` | `BattleEnemy_UpdateDefeatRemoval` | Byte-identical enemy-removal callback that retires its model and animation |
 | `020A95CC` | `BattleEnemy_StartDefeat` | Reconstructed enemy reward, item-drop, and defeat-effect controller (96.53% matching) |
-| `020A9C18` | `BattleParty_SpawnLaunchImpact` | Emits the form-specific launch impact effect and sound |
+| `020A9C18` | `BattleParty_SpawnLaunchImpact` | Byte-identical form-specific launch impact effect and sound helper |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
 | `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
 | `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Creates a sprite effect in the first free tracked slot |
@@ -796,6 +796,8 @@ displacement and acceleration with the DS square-root registers at
 `0x040002B0`-`0x040002B8`. The final impact helper chooses effect variant
 `0x10` or `0x11` from the party form, converts through the maintained view
 offset helper, creates effect family `0x13`, and plays sound `0x39`.
+It is now byte-identical linked C in the grouped impact-effects unit shared by
+the damage-reaction, carried-baby, formation-transition, and flee paths.
 Scene objects with active motion are kept in the intrusive list rooted at
 `gBattleMotionObjectList`. Each object owns fixed-size `0x28`-byte motion
 channels beginning at offset `+0x1C`; starting a channel replaces an existing

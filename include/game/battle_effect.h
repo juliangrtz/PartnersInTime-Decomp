@@ -80,6 +80,7 @@ BattleEffect *BattleModelEffect_SpawnAttached(BattleEffect **owner_slot,
                                               int x, int y, int z, int scale);
 struct BattleAITask *BattleModelEffect_SpawnFromResource(
     int resource_id, int animation_id, int x, int y, int z, int scale);
+int BattleParty_SpawnLaunchImpact(struct BattleActor *actor);
 void BattleObjectEffect_SpawnDelayed(int animation_id, int delay,
                                      BattleSceneObject *object);
 BattleEffect *BattleDamage_SpawnNumber(int value, int x, int y,

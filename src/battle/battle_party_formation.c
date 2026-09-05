@@ -1,6 +1,7 @@
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>
+#include <game/battle_effect.h>
 #include <game/battle_object.h>
 #include <game/battle_scene.h>
 #include <hardware.h>
@@ -28,8 +29,6 @@ typedef struct BattlePartyFormationTask {
 
 typedef char BattlePartyFormationTask_SizeCheck
     [sizeof(BattlePartyFormationTask) == 0x14 ? 1 : -1];
-
-int BattleParty_SpawnLaunchImpact(BattleActor *actor);
 
 int BattleParty_UpdateFormationTransition(BattleAITask *task);
 

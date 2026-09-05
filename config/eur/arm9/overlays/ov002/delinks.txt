@@ -310,3 +310,6 @@ src/battle/battle_party_knockout.c:
 
 src/battle/battle_enemy_defeat.c:
     .text       start:0x020a9478 end:0x020a9c18
+
+src/battle/battle_impact_effects.c:
+    .text       start:0x020a9c18 end:0x020a9ce0

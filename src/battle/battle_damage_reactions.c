@@ -2,6 +2,7 @@
 #include <game/battle_ai.h>
 #include <game/battle_context.h>
 #include <game/battle_damage_reaction.h>
+#include <game/battle_effect.h>
 #include <game/battle_object.h>
 #include <game/battle_scene.h>
 
@@ -28,7 +29,6 @@ enum BattleDamageReactionResource {
 extern const u16 data_ov002_020bfa3c[];
 
 int BattleParty_StartKnockout(BattleSceneObject *object);
-int BattleParty_SpawnLaunchImpact(BattleActor *actor);
 
 void BattleDamage_StartEnemyReaction(BattleSceneObject *object, int effect_id) {
     BattleActor *actor = BattleActor_GetById(object->actor_id);
