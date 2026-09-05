@@ -131,6 +131,9 @@
     "84": "get_enemy_stat",
     "85": "set_enemy_stat",
     "86": "wait_object_pending_state",
+    "87": "set_active_model_animation",
+    "88": "configure_animation_layer",
+    "89": "set_animation_layer_state",
     "91": "move_object",
     "93": "move_object_at_speed",
     "94": "start_axis_kinematic_motion",
@@ -185,6 +188,10 @@
     "148": "spawn_sprite_effect_handle",
     "149": "spawn_attached_sprite_effect_handle",
     "150": "set_attached_effect_user_value",
+    "151": "spawn_model_effect_at_world_position",
+    "152": "spawn_model_effect_at_object_position",
+    "153": "spawn_model_effect_at_world_position_handle",
+    "154": "spawn_model_effect_at_object_position_handle",
     "155": "legacy_noop_09b",
     "156": "legacy_noop_09c",
     "157": "set_tagged_effect_flag",
@@ -192,6 +199,14 @@
     "159": "wait_script_handle",
     "160": "is_script_handle_active",
     "161": "stretch_object_between_anchors",
+    "184": "spawn_object_data_effect_at_world_position",
+    "185": "spawn_object_data_effect_at_object_position",
+    "186": "spawn_object_data_effect_at_world_position_handle",
+    "187": "spawn_object_data_effect_at_object_position_handle",
+    "189": "spawn_archive_effect_at_world_position",
+    "190": "spawn_archive_effect_at_object_position",
+    "191": "spawn_archive_effect_at_world_position_handle",
+    "192": "spawn_archive_effect_at_object_position_handle",
     "193": "start_raster_resource_transition",
     "194": "start_finite_raster_effect",
     "195": "legacy_noop_0c3",
@@ -225,21 +240,30 @@
     "230": "stop_all_sound_tasks",
     "231": "wait_sound_task",
     "232": "spawn_particle",
+    "233": "prepare_object_data_animation_catalog",
     "234": "legacy_noop_0ea",
     "235": "legacy_noop_0eb",
+    "236": "configure_object_attachment",
     "237": "legacy_noop_0ed",
-    "238": "legacy_noop_0ee",
-    "239": "legacy_noop_0ef",
+    "238": "set_attached_model_property",
+    "239": "get_attached_model_property",
     "240": "legacy_noop_0f0",
     "241": "legacy_noop_0f1",
+    "242": "control_object_data_auxiliary_model",
+    "243": "set_active_model_aux_property",
+    "244": "get_active_model_aux_property",
     "245": "request_common_assets",
     "246": "wait_common_assets",
+    "247": "create_battle_ui_element",
+    "248": "create_object_anchored_battle_ui_element",
     "249": "wait_effect_pair",
     "250": "wait_effect",
     "251": "stop_effect",
     "252": "legacy_noop_0fc",
+    "253": "move_attached_object_at_speed",
     "254": "wait_attached_animation",
     "255": "get_attached_effect_property",
+    "256": "align_attached_object_view_baseline",
     "257": "start_primary_screen_effect",
     "258": "start_secondary_screen_effect",
     "259": "reset_screen_effects"
@@ -1305,20 +1329,22 @@
       "evidence": "absent from func_ov002_020698d4; descriptor 0x43"
     },
     "238": {
-      "arguments": ["unused_0", "unused_1", "unused_2", "unused_3", "unused_4"],
+      "arguments": ["object_id", "property_id", "element_index", "value", "unused_4"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
-      "evidence": "absent from func_ov002_020698d4; descriptor 0x45"
+      "effect": "writes a selector-based property on the object's attached model; selectors 0x100 through 0x105 address one or every 12-byte element record, while selectors below 0x100 configure fields of attached-model modes 2 and 5",
+      "property_values": {"0x100": "element_s16_04", "0x101": "element_s16_06", "0x102": "element_u16_08", "0x103": "element_s8_0a", "0x104": "element_s8_0b", "0x105": "element_flags_0_1"},
+      "evidence": "func_ov002_020698d4 case 0x0EE; func_ov002_02068b50"
     },
     "239": {
-      "arguments": ["unused_0", "unused_1", "unused_2"],
-      "result": "destination unchanged",
+      "arguments": ["object_id", "property_id", "element_index"],
+      "result": "attached_model_property",
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
-      "evidence": "absent from func_ov002_020698d4; descriptor 0x63"
+      "effect": "returns a selector-based property from the object's attached model; selectors 0x100 through 0x105 read one 12-byte element record, while selectors below 0x100 expose common mode-2 or mode-5 properties and return -1 when unsupported",
+      "property_values": {"0x100": "element_s16_04", "0x101": "element_s16_06", "0x102": "element_u16_08", "0x103": "element_s8_0a", "0x104": "element_s8_0b", "0x105": "element_flags_0_1"},
+      "evidence": "func_ov002_020698d4 case 0x0EF; func_ov002_02068970"
     },
     "240": {
       "arguments": ["unused_0", "unused_1"],
@@ -1343,6 +1369,200 @@
       "yield": "never",
       "effect": "the extended dispatcher has no case for this opcode and performs no operation",
       "evidence": "absent from func_ov002_020698d4; descriptor 0x42"
+    },
+    "87": {
+      "arguments": ["object_id", "animation_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects the active model's current animation channel and starts animation_id on that channel with the enable parameter set",
+      "evidence": "BattleAI_DispatchOpcode case 0x057; active-model virtual methods +0x3C and +0x68"
+    },
+    "88": {
+      "arguments": ["object_id", "animation_layer_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "configures the active model's animation layer; -1 additionally restores the model's default active layer when its secondary model state exists",
+      "evidence": "BattleAI_DispatchOpcode case 0x058; BattleSceneObject_ConfigureAnimationLayer"
+    },
+    "89": {
+      "arguments": ["object_id", "animation_id_or_minus_one", "animation_layer", "layer_value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the selected animation on one active-model layer and stores layer_value in that layer's state byte; animation -1 restores the default active layer",
+      "evidence": "BattleAI_DispatchOpcode case 0x059; active-model virtual methods +0x88, +0xA0, and +0xA4"
+    },
+    "151": {
+      "arguments": ["owner_object_id_or_nonpositive", "effect_id", "world_x", "world_y", "world_z", "world_depth", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "converts the supplied world position into the battle effect coordinate convention and spawns effect_id, optionally associated with a positive owner object",
+      "evidence": "BattleAI_DispatchOpcode case 0x097 passes mode 0x11 to func_ov002_02079090; BattleModelEffect_Spawn"
+    },
+    "152": {
+      "arguments": ["owner_object_id_or_nonpositive", "effect_id", "anchor_object_id_or_x", "offset_x_or_y", "offset_y_or_z", "offset_z_or_depth", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "spawns effect_id in object-relative coordinates; a positive owner supplies the effect owner and direct local coordinates, while a nonpositive owner resolves anchor_object_id and transforms its position plus offsets",
+      "evidence": "BattleAI_DispatchOpcode case 0x098 passes mode 0x12 to func_ov002_02079090; BattlePosition_StoreViewRelative; BattleModelEffect_Spawn"
+    },
+    "153": {
+      "arguments": ["owner_object_id_or_nonpositive", "effect_id", "world_x", "world_y", "world_z", "world_depth", "scale_fixed"],
+      "result": "effect_handle_tagged_0xc000",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "spawns the same world-position model effect as opcode 0x097 in a free tracked slot and returns its index tagged with 0xC000",
+      "evidence": "BattleAI_DispatchOpcode case 0x099 passes mode 0x21 to func_ov002_02079090; func_ov002_020acab0"
+    },
+    "154": {
+      "arguments": ["owner_object_id_or_nonpositive", "effect_id", "anchor_object_id_or_x", "offset_x_or_y", "offset_y_or_z", "offset_z_or_depth", "scale_fixed"],
+      "result": "effect_handle_tagged_0xc000",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "spawns the same object-relative model effect as opcode 0x098 in a free tracked slot and returns its index tagged with 0xC000",
+      "evidence": "BattleAI_DispatchOpcode case 0x09A passes mode 0x22 to func_ov002_02079090; func_ov002_020acab0"
+    },
+    "184": {
+      "arguments": ["object_data_slot", "animation_id", "world_x", "world_y", "world_z", "world_depth", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "creates an animated effect task from object_data_slot, positions it from supplied world coordinates, and starts animation_id",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B8 passes mode 0x11 to func_ov002_02078e38; func_ov002_0206c400"
+    },
+    "185": {
+      "arguments": ["object_data_slot", "animation_id", "anchor_object_id", "offset_x", "offset_y", "offset_z", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "creates an animated effect task from object_data_slot and positions it from the anchor object's view-relative position plus offsets",
+      "evidence": "BattleAI_DispatchOpcode case 0x0B9 passes mode 0x12 to func_ov002_02078e38; BattlePosition_StoreViewRelative; func_ov002_0206c400"
+    },
+    "186": {
+      "arguments": ["object_data_slot", "animation_id", "world_x", "world_y", "world_z", "world_depth", "scale_fixed"],
+      "result": "task_handle_tagged_0x4000",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the same world-position object-data effect as opcode 0x0B8 in one of 64 tracked task slots and returns its slot tagged with 0x4000",
+      "evidence": "BattleAI_DispatchOpcode case 0x0BA passes mode 0x21 to func_ov002_02078e38; func_ov002_0206c240"
+    },
+    "187": {
+      "arguments": ["object_data_slot", "animation_id", "anchor_object_id", "offset_x", "offset_y", "offset_z", "scale_fixed"],
+      "result": "task_handle_tagged_0x4000",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the same anchored object-data effect as opcode 0x0B9 in one of 64 tracked task slots and returns its slot tagged with 0x4000",
+      "evidence": "BattleAI_DispatchOpcode case 0x0BB passes mode 0x22 to func_ov002_02078e38; func_ov002_0206c240"
+    },
+    "189": {
+      "arguments": ["owner_object_id_or_nonpositive", "archive_effect_id", "world_x", "world_y", "world_z", "world_depth", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "creates an archive-backed effect at the supplied world position and optionally associates it with the positive owner's attached model",
+      "evidence": "BattleAI_DispatchOpcode case 0x0BD passes mode 0x11 to func_ov002_02078bb4; func_ov002_0206c148"
+    },
+    "190": {
+      "arguments": ["owner_object_id_or_nonpositive", "archive_effect_id", "anchor_object_id_or_x", "offset_x_or_y", "offset_y_or_z", "offset_z_or_depth", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "creates an archive-backed effect in owner-local coordinates, or at an anchor object's transformed position plus offsets when the owner is nonpositive",
+      "evidence": "BattleAI_DispatchOpcode case 0x0BE passes mode 0x12 to func_ov002_02078bb4; func_ov002_0206c148"
+    },
+    "191": {
+      "arguments": ["owner_object_id_or_nonpositive", "archive_effect_id", "world_x", "world_y", "world_z", "world_depth", "scale_fixed"],
+      "result": "effect_handle_tagged_0xc000",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "creates the same world-position archive effect as opcode 0x0BD in one of 64 tracked slots and returns its slot tagged with 0xC000",
+      "evidence": "BattleAI_DispatchOpcode case 0x0BF passes mode 0x21 to func_ov002_02078bb4; func_ov002_0206c070"
+    },
+    "192": {
+      "arguments": ["owner_object_id_or_nonpositive", "archive_effect_id", "anchor_object_id_or_x", "offset_x_or_y", "offset_y_or_z", "offset_z_or_depth", "scale_fixed"],
+      "result": "effect_handle_tagged_0xc000",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "creates the same owner-local or anchored archive effect as opcode 0x0BE in one of 64 tracked slots and returns its slot tagged with 0xC000",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C0 passes mode 0x22 to func_ov002_02078bb4; func_ov002_0206c070"
+    },
+    "233": {
+      "arguments": ["object_data_slot", "catalog_slot"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "decodes the loaded object's animation/model catalog into catalog_slot, records per-entry boundaries, normalizes the generated coordinate data, and releases the temporary model wrapper",
+      "evidence": "func_ov002_020698d4 case 0x0E9; func_ov002_02069530"
+    },
+    "236": {
+      "arguments": ["object_id", "attachment_mode", "catalog_or_value", "element_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "replaces the object's existing attached component, constructs attachment mode 2, 3, 4, or 5, initializes its mode-specific resource data, and marks object flag 0x20000",
+      "evidence": "func_ov002_020698d4 case 0x0EC; func_ov002_020691b8"
+    },
+    "242": {
+      "arguments": ["object_data_slot", "control_mode", "value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "controls auxiliary model state for an object-data slot: mode 0 writes load-state flag bit 27, mode 1 constructs and starts a temporary model from the loaded resource, and mode 2 invokes the shared auxiliary reset path",
+      "evidence": "func_ov002_020698d4 case 0x0F2; func_ov002_02068878"
+    },
+    "243": {
+      "arguments": ["object_id", "property_id", "value", "unused_3"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets an active-model auxiliary property: property 0 copies model state from the object selected by value, property 2 replaces flag bits 12 through 15, and other selectors do nothing",
+      "property_values": {"0": "copy_model_state_from_object", "2": "flags_12_15"},
+      "evidence": "func_ov002_020698d4 case 0x0F3; func_ov002_020687ec"
+    },
+    "244": {
+      "arguments": ["object_id", "property_id", "element_index", "unused_3"],
+      "result": "active_model_aux_property",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns zero for property 0, the span between two halfwords of the indexed eight-byte model record for property 1, or active-model flag bits 12 through 15 for property 2",
+      "property_values": {"0": "zero", "1": "element_span", "2": "flags_12_15"},
+      "evidence": "func_ov002_020698d4 case 0x0F4; func_ov002_02068770"
+    },
+    "247": {
+      "arguments": ["horizontal_flip", "content_id", "x", "y", "style_id", "variant", "auto_vertical", "auto_horizontal", "priority_flag", "alignment", "content_width", "content_height", "invert_flag", "task_parameter", "resource_parameter"],
+      "result": "ui_element_handle",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "packs the supplied geometry and style fields, derives missing content dimensions and automatic placement flags, creates a battle UI element, and returns its handle",
+      "evidence": "func_ov002_020698d4 case 0x0F7; func_ov002_02066314"
+    },
+    "248": {
+      "arguments": ["content_id", "anchor_object_id", "style_id", "placement_mode", "auto_vertical", "auto_horizontal", "x_offset_or_auto", "content_width", "content_height", "invert_flag", "task_parameter", "resource_parameter"],
+      "result": "ui_element_handle",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "measures the requested content, derives a screen-clamped placement from the anchor object's view position and sprite bounds, creates the battle UI element, and returns its handle",
+      "evidence": "func_ov002_020698d4 case 0x0F8; func_ov002_020665cc; func_ov002_02066314"
+    },
+    "253": {
+      "arguments": ["owner_object_id", "motion_slot", "motion_mode", "x", "y", "z", "speed_fixed", "unused_7"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resolves the owner's attached scene object; when speed_fixed is nonzero converts three-dimensional distance to duration, then motion mode 1 moves the attachment by the supplied vector",
+      "evidence": "func_ov002_020698d4 case 0x0FD; BattleSceneObject_MoveBy"
+    },
+    "256": {
+      "arguments": ["owner_object_id", "alignment_mode", "reference_object_id", "view_offset", "unused_4", "unused_5"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "for alignment mode 1, adjusts the owner's attached scene-object baseline so its view-relative baseline equals the reference object's baseline plus view_offset; mode 0 and other modes do nothing",
+      "evidence": "func_ov002_020698d4 case 0x100; func_ov002_02066004; BattlePosition_StoreViewRelative"
     }
   }
 }

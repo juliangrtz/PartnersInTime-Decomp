@@ -9,8 +9,8 @@ no original private data bytes.
 - 260 descriptor entries (`0x000..0x103`)
 - 230 archive entries and 81,854 reachable commands
 - 189 opcodes occur in reachable code
-- 135/189 used opcodes have semantic names
-- 78,966/81,854 reachable commands have semantic names
+- 151/189 used opcodes have semantic names
+- 80,713/81,854 reachable commands have semantic names
 - 618,920 non-code bytes stay private and are copied from the user's extraction
 
 `reconstructed C` means the generic VM implementation is represented in the
@@ -82,7 +82,7 @@ the same shape.
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
 | Field/world | 341 | 341 | 290 | `config/eur/field_vm.json` |
-| Battle | 260 | 190 | 139 | `config/eur/battle_ai_vm.json` |
+| Battle | 260 | 214 | 163 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 210 | 159 | `config/eur/scene_vm.json` |
 
 The field and scene tables are reproducibly extracted and checked against a private
@@ -468,39 +468,25 @@ the largest immediate improvement to editable script coverage.
 
 | Opcode | Uses |
 |---:|---:|
-| `0x98` | 722 |
-| `0x97` | 286 |
 | `0xA3` | 262 |
-| `0x9A` | 242 |
 | `0xA2` | 176 |
-| `0xF8` | 172 |
 | `0x4B` | 135 |
 | `0x4A` | 135 |
-| `0xF3` | 117 |
 | `0xCD` | 71 |
-| `0x57` | 59 |
 | `0x6B` | 48 |
-| `0xBE` | 43 |
 | `0x43` | 39 |
 | `0x83` | 36 |
 | `0xC5` | 34 |
-| `0x59` | 33 |
 | `0xC6` | 30 |
 | `0x6D` | 25 |
-| `0xC0` | 24 |
 | `0xAF` | 22 |
 | `0xAE` | 22 |
 | `0xC7` | 18 |
-| `0xBD` | 17 |
 | `0x5C` | 15 |
 | `0xAC` | 12 |
-| `0x99` | 11 |
 | `0x6C` | 10 |
-| `0x58` | 9 |
 | `0x8C` | 8 |
-| `0xF2` | 6 |
 | `0xC8` | 6 |
-| `0xF4` | 4 |
 | `0xBC` | 4 |
 | `0xB7` | 3 |
 | `0xB4` | 3 |
@@ -513,8 +499,6 @@ the largest immediate improvement to editable script coverage.
 | `0xA8` | 2 |
 | `0xA5` | 2 |
 | `0x48` | 2 |
-| `0xEC` | 1 |
-| `0xE9` | 1 |
 | `0xC9` | 1 |
 | `0xB5` | 1 |
 | `0xB0` | 1 |
@@ -614,9 +598,9 @@ the largest immediate improvement to editable script coverage.
 | `0x054` | `get_enemy_stat` | result + 2 typed args (`0x62`) | 81 | static semantics |
 | `0x055` | `set_enemy_stat` | 3 typed args (`0x43`) | 50 | static semantics |
 | `0x056` | `wait_object_pending_state` | 1 typed args (`0x41`) | 727 | static semantics |
-| `0x057` | `op_057` | 2 typed args (`0x42`) | 59 | unknown |
-| `0x058` | `op_058` | 2 typed args (`0x42`) | 9 | unknown |
-| `0x059` | `op_059` | 4 typed args (`0x44`) | 33 | unknown |
+| `0x057` | `set_active_model_animation` | 2 typed args (`0x42`) | 59 | static semantics |
+| `0x058` | `configure_animation_layer` | 2 typed args (`0x42`) | 9 | static semantics |
+| `0x059` | `set_animation_layer_state` | 4 typed args (`0x44`) | 33 | static semantics |
 | `0x05A` | `op_05A` | 4 typed args (`0x44`) | 0 | unknown |
 | `0x05B` | `move_object` | 8 typed args (`0x48`) | 1,463 | static semantics |
 | `0x05C` | `op_05C` | 10 typed args (`0x4A`) | 15 | unknown |
@@ -678,10 +662,10 @@ the largest immediate improvement to editable script coverage.
 | `0x094` | `spawn_sprite_effect_handle` | result + 6 typed args (`0x66`) | 7 | static semantics |
 | `0x095` | `spawn_attached_sprite_effect_handle` | result + 6 typed args (`0x66`) | 42 | static semantics |
 | `0x096` | `set_attached_effect_user_value` | 2 typed args (`0x42`) | 97 | static semantics |
-| `0x097` | `op_097` | 7 typed args (`0x47`) | 286 | unknown |
-| `0x098` | `op_098` | 7 typed args (`0x47`) | 722 | unknown |
-| `0x099` | `op_099` | result + 7 typed args (`0x67`) | 11 | unknown |
-| `0x09A` | `op_09A` | result + 7 typed args (`0x67`) | 242 | unknown |
+| `0x097` | `spawn_model_effect_at_world_position` | 7 typed args (`0x47`) | 286 | static semantics |
+| `0x098` | `spawn_model_effect_at_object_position` | 7 typed args (`0x47`) | 722 | static semantics |
+| `0x099` | `spawn_model_effect_at_world_position_handle` | result + 7 typed args (`0x67`) | 11 | static semantics |
+| `0x09A` | `spawn_model_effect_at_object_position_handle` | result + 7 typed args (`0x67`) | 242 | static semantics |
 | `0x09B` | `legacy_noop_09b` | 1 typed args (`0x41`) | 0 | static semantics |
 | `0x09C` | `legacy_noop_09c` | 1 typed args (`0x41`) | 0 | static semantics |
 | `0x09D` | `set_tagged_effect_flag` | 2 typed args (`0x42`) | 16 | static semantics |
@@ -711,15 +695,15 @@ the largest immediate improvement to editable script coverage.
 | `0x0B5` | `op_0B5` | 3 typed args (`0x43`) | 1 | unknown |
 | `0x0B6` | `op_0B6` | 3 typed args (`0x43`) | 2 | unknown |
 | `0x0B7` | `op_0B7` | result + 1 typed args (`0x61`) | 3 | unknown |
-| `0x0B8` | `op_0B8` | 7 typed args (`0x47`) | 0 | unknown |
-| `0x0B9` | `op_0B9` | 7 typed args (`0x47`) | 0 | unknown |
-| `0x0BA` | `op_0BA` | result + 7 typed args (`0x67`) | 0 | unknown |
-| `0x0BB` | `op_0BB` | result + 7 typed args (`0x67`) | 0 | unknown |
+| `0x0B8` | `spawn_object_data_effect_at_world_position` | 7 typed args (`0x47`) | 0 | static semantics |
+| `0x0B9` | `spawn_object_data_effect_at_object_position` | 7 typed args (`0x47`) | 0 | static semantics |
+| `0x0BA` | `spawn_object_data_effect_at_world_position_handle` | result + 7 typed args (`0x67`) | 0 | static semantics |
+| `0x0BB` | `spawn_object_data_effect_at_object_position_handle` | result + 7 typed args (`0x67`) | 0 | static semantics |
 | `0x0BC` | `op_0BC` | 4 typed args (`0x44`) | 4 | unknown |
-| `0x0BD` | `op_0BD` | 7 typed args (`0x47`) | 17 | unknown |
-| `0x0BE` | `op_0BE` | 7 typed args (`0x47`) | 43 | unknown |
-| `0x0BF` | `op_0BF` | result + 7 typed args (`0x67`) | 0 | unknown |
-| `0x0C0` | `op_0C0` | result + 7 typed args (`0x67`) | 24 | unknown |
+| `0x0BD` | `spawn_archive_effect_at_world_position` | 7 typed args (`0x47`) | 17 | static semantics |
+| `0x0BE` | `spawn_archive_effect_at_object_position` | 7 typed args (`0x47`) | 43 | static semantics |
+| `0x0BF` | `spawn_archive_effect_at_world_position_handle` | result + 7 typed args (`0x67`) | 0 | static semantics |
+| `0x0C0` | `spawn_archive_effect_at_object_position_handle` | result + 7 typed args (`0x67`) | 24 | static semantics |
 | `0x0C1` | `start_raster_resource_transition` | result + 4 typed args (`0x64`) | 1 | static semantics |
 | `0x0C2` | `start_finite_raster_effect` | 5 typed args (`0x45`) | 0 | static semantics |
 | `0x0C3` | `legacy_noop_0c3` | 3 typed args (`0x43`) | 0 | static semantics |
@@ -760,30 +744,30 @@ the largest immediate improvement to editable script coverage.
 | `0x0E6` | `stop_all_sound_tasks` | 0 literal args (`0x00`) | 0 | static semantics |
 | `0x0E7` | `wait_sound_task` | 1 typed args (`0x41`) | 0 | static semantics |
 | `0x0E8` | `spawn_particle` | 4 typed args (`0x44`) | 2 | static semantics |
-| `0x0E9` | `op_0E9` | 2 literal args (`0x02`) | 1 | unknown |
+| `0x0E9` | `prepare_object_data_animation_catalog` | 2 literal args (`0x02`) | 1 | static semantics |
 | `0x0EA` | `legacy_noop_0ea` | result + 2 typed args (`0x62`) | 0 | static semantics |
 | `0x0EB` | `legacy_noop_0eb` | 3 typed args (`0x43`) | 0 | static semantics |
-| `0x0EC` | `op_0EC` | 4 typed args (`0x44`) | 1 | unknown |
+| `0x0EC` | `configure_object_attachment` | 4 typed args (`0x44`) | 1 | static semantics |
 | `0x0ED` | `legacy_noop_0ed` | 3 typed args (`0x43`) | 0 | static semantics |
-| `0x0EE` | `legacy_noop_0ee` | 5 typed args (`0x45`) | 26 | static semantics |
-| `0x0EF` | `legacy_noop_0ef` | result + 3 typed args (`0x63`) | 0 | static semantics |
+| `0x0EE` | `set_attached_model_property` | 5 typed args (`0x45`) | 26 | static semantics |
+| `0x0EF` | `get_attached_model_property` | result + 3 typed args (`0x63`) | 0 | static semantics |
 | `0x0F0` | `legacy_noop_0f0` | 2 literal args (`0x02`) | 11 | static semantics |
 | `0x0F1` | `legacy_noop_0f1` | result + 3 typed args (`0x63`) | 0 | static semantics |
-| `0x0F2` | `op_0F2` | 3 typed args (`0x43`) | 6 | unknown |
-| `0x0F3` | `op_0F3` | 4 typed args (`0x44`) | 117 | unknown |
-| `0x0F4` | `op_0F4` | result + 4 typed args (`0x64`) | 4 | unknown |
+| `0x0F2` | `control_object_data_auxiliary_model` | 3 typed args (`0x43`) | 6 | static semantics |
+| `0x0F3` | `set_active_model_aux_property` | 4 typed args (`0x44`) | 117 | static semantics |
+| `0x0F4` | `get_active_model_aux_property` | result + 4 typed args (`0x64`) | 4 | static semantics |
 | `0x0F5` | `request_common_assets` | 1 typed args (`0x41`) | 11 | static semantics |
 | `0x0F6` | `wait_common_assets` | 0 literal args (`0x00`) | 11 | static semantics |
-| `0x0F7` | `op_0F7` | result + 15 typed args (`0x6F`) | 0 | unknown |
-| `0x0F8` | `op_0F8` | result + 12 typed args (`0x6C`) | 172 | unknown |
+| `0x0F7` | `create_battle_ui_element` | result + 15 typed args (`0x6F`) | 0 | static semantics |
+| `0x0F8` | `create_object_anchored_battle_ui_element` | result + 12 typed args (`0x6C`) | 172 | static semantics |
 | `0x0F9` | `wait_effect_pair` | 1 typed args (`0x41`) | 171 | static semantics |
 | `0x0FA` | `wait_effect` | 1 typed args (`0x41`) | 0 | static semantics |
 | `0x0FB` | `stop_effect` | 1 typed args (`0x41`) | 149 | static semantics |
 | `0x0FC` | `legacy_noop_0fc` | 2 typed args (`0x42`) | 0 | static semantics |
-| `0x0FD` | `op_0FD` | 8 typed args (`0x48`) | 0 | unknown |
+| `0x0FD` | `move_attached_object_at_speed` | 8 typed args (`0x48`) | 0 | static semantics |
 | `0x0FE` | `wait_attached_animation` | 2 typed args (`0x42`) | 0 | static semantics |
 | `0x0FF` | `get_attached_effect_property` | result + 2 typed args (`0x62`) | 0 | static semantics |
-| `0x100` | `op_100` | 6 typed args (`0x46`) | 0 | unknown |
+| `0x100` | `align_attached_object_view_baseline` | 6 typed args (`0x46`) | 0 | static semantics |
 | `0x101` | `start_primary_screen_effect` | 3 typed args (`0x43`) | 114 | static semantics |
 | `0x102` | `start_secondary_screen_effect` | 3 typed args (`0x43`) | 0 | static semantics |
 | `0x103` | `reset_screen_effects` | 0 literal args (`0x00`) | 7 | static semantics |
