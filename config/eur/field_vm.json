@@ -455,6 +455,20 @@
     "143": "wait_entity_vertical_motion",
     "144": "stop_entity_vertical_motion",
     "145": "set_entity_position",
+    "146": "set_entity_roaming_bounds",
+    "147": "add_entity_roaming_profile",
+    "148": "set_entity_roaming_boundary_clamp_enabled",
+    "149": "start_entity_random_roaming",
+    "150": "stop_entity_random_roaming",
+    "151": "pause_entity_random_roaming",
+    "152": "resume_entity_random_roaming",
+    "153": "clear_entity_roaming_profiles",
+    "154": "load_entity_waypoint_path",
+    "155": "start_entity_waypoint_path",
+    "156": "stop_entity_waypoint_path",
+    "157": "pause_entity_waypoint_path",
+    "158": "resume_entity_waypoint_path",
+    "159": "clear_entity_waypoint_path",
     "160": "set_entity_facing_direction",
     "162": "spawn_entity_effect_sprite",
     "163": "remove_entity_effect_sprite",
@@ -888,6 +902,118 @@
       "yield": "never",
       "effect": "converts coordinates to fx32, optionally adds the current position, and synchronizes current/previous entity position; subtype 8 uses only x/y while other entities also store z",
       "evidence": "func_ov000_020823f8 case 0x091, func_ov000_020a6710, and func_ov000_020b42c8"
+    },
+    "146": {
+      "arguments": ["entity_selector", "minimum_x", "minimum_y", "maximum_x", "maximum_y"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stores the integer-map-unit rectangle used to constrain random roaming and marks roaming bounds as configured; the roaming controller converts each boundary to Q12 before comparing it with the entity's collision extents",
+      "evidence": "func_ov000_020823f8 case 0x092, func_ov000_020b2020, and boundary consumers in func_ov000_020b1b88"
+    },
+    "147": {
+      "arguments": ["entity_selector", "profile_relative_halfwords"],
+      "result": null,
+      "control_flow": "fallthrough; profile_relative_halfwords addresses an embedded profile record relative to the already-advanced PC, with a four-byte record header immediately before the profile",
+      "yield": "never",
+      "effect": "copies the referenced profile into the first free one of four roaming-profile slots. The record contains five u32 values: a legacy parameter preserved as u16 but not consumed by the controller, Q12 movement speed, integer-map-unit step distance, post-step delay in frames, and direction count. Direction count 4 restricts choices to cardinal directions; the shipped alternative 8 permits all eight directions",
+      "evidence": "func_ov000_020823f8 case 0x093, func_ov000_020b1efc, func_ov000_020b1b88, func_ov000_020b1530, and all 567 statically resolved FEvent profile records"
+    },
+    "148": {
+      "arguments": ["entity_selector", "clamp_to_bounds"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "when enabled, a randomly selected step that crosses the roaming rectangle is shortened to its boundary; when disabled, the controller rejects it and tries another random direction, up to eight attempts",
+      "evidence": "func_ov000_020823f8 case 0x094 and func_ov000_020b1b88"
+    },
+    "149": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects a loaded profile and direction at random, starts one constrained movement step, and arms the entity update loop to continue choosing steps after each profile delay",
+      "evidence": "func_ov000_020823f8 case 0x095, func_ov000_020b1b88, and continuation func_ov000_020b1530"
+    },
+    "150": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "disarms the roaming controller and stops its currently owned entity movement, if any; loaded profiles and bounds remain available",
+      "evidence": "func_ov000_020823f8 case 0x096 and func_ov000_020b172c"
+    },
+    "151": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the roaming-controller pause flag and pauses a currently owned entity movement",
+      "evidence": "func_ov000_020823f8 case 0x097, func_ov000_020b16d4, and func_ov000_020a5c14"
+    },
+    "152": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the roaming-controller pause flag and resumes a currently owned entity movement",
+      "evidence": "func_ov000_020823f8 case 0x098, func_ov000_020b167c, and func_ov000_020a5bf4"
+    },
+    "153": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears every loaded roaming-profile slot and stops the controller once its profile count reaches zero",
+      "evidence": "func_ov000_020823f8 case 0x099 and func_ov000_020b1e5c with slot selector -1"
+    },
+    "154": {
+      "arguments": ["entity_selector", "path_relative_halfwords"],
+      "result": null,
+      "control_flow": "fallthrough; path_relative_halfwords addresses an embedded path record relative to the already-advanced PC, with its u32 record-size header immediately before the payload",
+      "yield": "never",
+      "effect": "loads an explicit waypoint path without starting it. The payload has four u32 controls followed by signed x/y waypoint pairs: ping-pong traversal, relative-coordinate mode, random next-direction selection, and post-segment delay in frames. Absolute points are converted to Q12; relative points are accumulated from the entity's current position, which is prepended as the first point",
+      "evidence": "func_ov000_020823f8 case 0x09A, func_ov000_020b1a24, func_ov000_020b1794, and all 35 statically resolved FEvent path records"
+    },
+    "155": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the loaded waypoint path at its first point distinct from the entity's current position; later entity updates traverse, wrap, reverse, or randomly choose direction according to the loaded controls",
+      "evidence": "func_ov000_020823f8 case 0x09B, func_ov000_020b18e4, func_ov000_020b1794, and func_ov000_020b1530"
+    },
+    "156": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "disarms waypoint traversal and stops its currently owned entity movement, if any; the loaded path remains available",
+      "evidence": "func_ov000_020823f8 case 0x09C and func_ov000_020b172c"
+    },
+    "157": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the waypoint-controller pause flag and pauses a currently owned entity movement",
+      "evidence": "func_ov000_020823f8 case 0x09D, func_ov000_020b16d4, and func_ov000_020a5c14"
+    },
+    "158": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the waypoint-controller pause flag and resumes a currently owned entity movement",
+      "evidence": "func_ov000_020823f8 case 0x09E, func_ov000_020b167c, and func_ov000_020a5bf4"
+    },
+    "159": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "marks the loaded waypoint path inactive and stops the shared roaming/path controller",
+      "evidence": "func_ov000_020823f8 case 0x09F and func_ov000_020b1a08"
     },
     "160": {
       "arguments": ["entity_selector", "direction_mode", "direction"],

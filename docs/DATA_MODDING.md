@@ -30,6 +30,8 @@ copied unchanged when the modded NitroFS tree is staged.
 - all three Menu/UI scene-VM archives: 18 entries and 6,585 reachable commands
   using 60 distinct opcodes, with unreachable data retained from the private
   extraction;
+- all 569 statically referenced field-entity movement records: 534 random
+  roaming profiles and 35 waypoint paths, exported as typed editable data;
 - length-changing MFset edits: string pointers, language-entry sizes, and outer
   archive offsets are regenerated instead of patched in place.
 
@@ -51,11 +53,18 @@ python .\tools\field_event_mod.py build --output build\FEvData.modded.dat
 
 The exporter covers the 778 nonempty script-bearing room members and separates
 valid VM entry points from private/sentinel pointer aliases by decoding the
-complete reachable control-flow graph. Schema v1 permits opcode/argument edits
-only when the encoded command size stays unchanged; branch targets are
-revalidated during every build. Size-changing field-script edits remain locked
-until relocation rules for all field control-flow and embedded-data opcodes are
-complete.
+complete reachable control-flow graph. It follows opcodes `0x093` and `0x09A`
+into their embedded data and emits `entity_roaming_profile` and
+`entity_waypoint_path` records. Their movement speed, step distance, delays,
+direction mode, traversal controls, and signed x/y waypoints are editable; the
+builder validates and rewrites them at their original fixed size. Shared data
+records are emitted only once and commands name the record they reference.
+
+Schema v1 permits opcode/argument edits only when the encoded command size stays
+unchanged; branch and embedded-data targets are revalidated during every build.
+The number of profiles or waypoints cannot yet change. General size-changing
+field-script edits remain locked until relocation rules for all field
+control-flow and embedded-data opcodes are complete.
 
 The Menu/UI scene VM in overlay 7 uses three smaller `MenuAI` archives. Its
 editable document is `data/eur/scripts/MenuAI__scene_scripts.json`; the normal
