@@ -355,7 +355,87 @@
     "202": "create_object_ui_element",
     "203": "wait_ui_element_ready",
     "204": "wait_ui_element",
-    "205": "destroy_ui_element"
+    "205": "destroy_ui_element",
+    "52": "noop_scene_034",
+    "54": "noop_scene_036",
+    "55": "noop_scene_037",
+    "56": "noop_scene_038",
+    "60": "noop_scene_03c",
+    "61": "noop_scene_03d",
+    "62": "yield_once_scene_03e",
+    "64": "noop_scene_040",
+    "65": "noop_scene_041",
+    "66": "yield_once_scene_042",
+    "67": "noop_scene_043",
+    "68": "noop_scene_044",
+    "69": "yield_once_scene_045",
+    "72": "noop_scene_048",
+    "73": "noop_scene_049",
+    "74": "noop_scene_04a",
+    "79": "noop_scene_04f",
+    "82": "noop_scene_052",
+    "83": "noop_scene_053",
+    "102": "noop_scene_066",
+    "103": "noop_scene_067",
+    "104": "noop_scene_068",
+    "116": "noop_scene_074",
+    "117": "noop_scene_075",
+    "118": "noop_scene_076",
+    "119": "noop_scene_077",
+    "120": "noop_scene_078",
+    "121": "yield_once_scene_079",
+    "122": "noop_scene_07a",
+    "123": "noop_scene_07b",
+    "124": "noop_scene_07c",
+    "125": "noop_scene_07d",
+    "126": "noop_scene_07e",
+    "127": "noop_scene_07f",
+    "128": "noop_scene_080",
+    "129": "noop_scene_081",
+    "130": "noop_scene_082",
+    "131": "noop_scene_083",
+    "132": "noop_scene_084",
+    "133": "noop_scene_085",
+    "134": "noop_scene_086",
+    "135": "noop_scene_087",
+    "136": "noop_scene_088",
+    "137": "noop_scene_089",
+    "138": "noop_scene_08a",
+    "139": "noop_scene_08b",
+    "140": "noop_scene_08c",
+    "141": "yield_once_scene_08d",
+    "142": "yield_once_scene_08e",
+    "143": "noop_scene_08f",
+    "144": "noop_scene_090",
+    "145": "noop_scene_091",
+    "146": "noop_scene_092",
+    "147": "noop_scene_093",
+    "148": "noop_scene_094",
+    "149": "noop_scene_095",
+    "150": "noop_scene_096",
+    "151": "noop_scene_097",
+    "152": "noop_scene_098",
+    "153": "yield_once_scene_099",
+    "154": "noop_scene_09a",
+    "155": "noop_scene_09b",
+    "156": "noop_scene_09c",
+    "157": "noop_scene_09d",
+    "158": "noop_scene_09e",
+    "179": "noop_scene_0b3",
+    "180": "noop_scene_0b4",
+    "188": "noop_scene_0bc",
+    "189": "noop_scene_0bd",
+    "190": "noop_scene_0be",
+    "191": "noop_scene_0bf",
+    "192": "noop_scene_0c0",
+    "193": "noop_scene_0c1",
+    "196": "noop_scene_0c4",
+    "197": "noop_scene_0c5",
+    "198": "noop_scene_0c6",
+    "206": "noop_scene_0ce",
+    "207": "noop_scene_0cf",
+    "208": "noop_scene_0d0",
+    "209": "noop_scene_0d1"
   },
   "opcode_semantics": {
     "51": {
@@ -984,6 +1064,1007 @@
       "yield": "never",
       "effect": "destroys the selected UI element through the UI manager; a negative handle destroys all four standard UI element slots",
       "evidence": "func_ov007_02081730 case 0x0CD; func_ov007_0208953c"
+    },
+    "52": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "54": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "55": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x03"
+    },
+    "56": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x03"
+    },
+    "60": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "61": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "62": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "falls through to the next command after returning the yielded status",
+      "yield": "once",
+      "effect": "the scene dispatcher ignores every decoded operand and yields execution for one scheduler step",
+      "evidence": "func_ov007_02081730 explicit case 0x03E returns SCRIPT_VM_YIELDED without rewinding the PC"
+    },
+    "64": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "65": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "66": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "falls through to the next command after returning the yielded status",
+      "yield": "once",
+      "effect": "the scene dispatcher ignores every decoded operand and yields execution for one scheduler step",
+      "evidence": "func_ov007_02081730 explicit case 0x042 returns SCRIPT_VM_YIELDED without rewinding the PC"
+    },
+    "67": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "68": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 0 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x00"
+    },
+    "69": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "falls through to the next command after returning the yielded status",
+      "yield": "once",
+      "effect": "the scene dispatcher ignores every decoded operand and yields execution for one scheduler step",
+      "evidence": "func_ov007_02081730 explicit case 0x045 returns SCRIPT_VM_YIELDED without rewinding the PC"
+    },
+    "72": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x62"
+    },
+    "73": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "74": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 0 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x00"
+    },
+    "79": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "82": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x62"
+    },
+    "83": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "102": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6",
+        "unused_7",
+        "unused_8"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 9 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x49"
+    },
+    "103": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6",
+        "unused_7",
+        "unused_8",
+        "unused_9",
+        "unused_10"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 11 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x4B"
+    },
+    "104": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6",
+        "unused_7",
+        "unused_8",
+        "unused_9"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 10 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x4A"
+    },
+    "116": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "117": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x42"
+    },
+    "118": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "119": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 5 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x45"
+    },
+    "120": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 5 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x45"
+    },
+    "121": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "falls through to the next command after returning the yielded status",
+      "yield": "once",
+      "effect": "the scene dispatcher ignores every decoded operand and yields execution for one scheduler step",
+      "evidence": "func_ov007_02081730 explicit case 0x079 returns SCRIPT_VM_YIELDED without rewinding the PC"
+    },
+    "122": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x42"
+    },
+    "123": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "124": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "125": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "126": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x62"
+    },
+    "127": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x47"
+    },
+    "128": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x47"
+    },
+    "129": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x67"
+    },
+    "130": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x67"
+    },
+    "131": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 6 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x46"
+    },
+    "132": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 6 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x46"
+    },
+    "133": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 6 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x66"
+    },
+    "134": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 6 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x66"
+    },
+    "135": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x47"
+    },
+    "136": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x47"
+    },
+    "137": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x67"
+    },
+    "138": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x67"
+    },
+    "139": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "140": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "141": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "falls through to the next command after returning the yielded status",
+      "yield": "once",
+      "effect": "the scene dispatcher ignores every decoded operand and yields execution for one scheduler step",
+      "evidence": "func_ov007_02081730 explicit case 0x08D returns SCRIPT_VM_YIELDED without rewinding the PC"
+    },
+    "142": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "falls through to the next command after returning the yielded status",
+      "yield": "once",
+      "effect": "the scene dispatcher ignores every decoded operand and yields execution for one scheduler step",
+      "evidence": "func_ov007_02081730 explicit case 0x08E returns SCRIPT_VM_YIELDED without rewinding the PC"
+    },
+    "143": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x47"
+    },
+    "144": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x47"
+    },
+    "145": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x67"
+    },
+    "146": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x67"
+    },
+    "147": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x47"
+    },
+    "148": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x47"
+    },
+    "149": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x67"
+    },
+    "150": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 7 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x67"
+    },
+    "151": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 5 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x45"
+    },
+    "152": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "153": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "falls through to the next command after returning the yielded status",
+      "yield": "once",
+      "effect": "the scene dispatcher ignores every decoded operand and yields execution for one scheduler step",
+      "evidence": "func_ov007_02081730 explicit case 0x099 returns SCRIPT_VM_YIELDED without rewinding the PC"
+    },
+    "154": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x42"
+    },
+    "155": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x42"
+    },
+    "156": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x63"
+    },
+    "157": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x62"
+    },
+    "158": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x61"
+    },
+    "179": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "180": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "188": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 4 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x44"
+    },
+    "189": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x02"
+    },
+    "190": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x62"
+    },
+    "191": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "192": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 4 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x44"
+    },
+    "193": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "196": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x02"
+    },
+    "197": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x63"
+    },
+    "198": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 3 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x43"
+    },
+    "206": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x42"
+    },
+    "207": {
+      "arguments": [
+        "unused_0",
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "unused_6",
+        "unused_7"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 8 operands, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x48"
+    },
+    "208": {
+      "arguments": [
+        "unused_0"
+      ],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 1 operand, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x41"
+    },
+    "209": {
+      "arguments": [
+        "unused_0",
+        "unused_1"
+      ],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the descriptor decodes 2 operands and a result destination, but the scene dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x62"
     }
   }
 }
