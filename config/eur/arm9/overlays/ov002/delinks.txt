@@ -292,3 +292,6 @@ src/battle/battle_status_enemy_ailment2.cpp:
 
 src/battle/battle_status_visual_routing.c:
     .text       start:0x020a8320 end:0x020a87f4
+
+src/battle/battle_party_luigi_reload.c:
+    .text       start:0x020a8990 end:0x020a8c74
