@@ -30,7 +30,7 @@ typedef struct BattleEnemyScriptPropertyView {
             u32 flag_01 : 1;
             u32 bit_02 : 1;
             u32 flag_03 : 1;
-            u32 flag_04 : 1;
+            u32 damage_immune : 1;
             u32 flag_05 : 1;
             u32 bits_06_31 : 26;
         } bits;
@@ -441,10 +441,10 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
     case BATTLE_PROPERTY_SCENE_F0:
         FIELD_U16(BattleSceneObject_GetById(actor_id), 0xF0) = value;
         break;
-    case BATTLE_PROPERTY_ENEMY_FLAG_04: {
+    case BATTLE_PROPERTY_ENEMY_DAMAGE_IMMUNE: {
         BattleEnemyScriptPropertyView *enemy =
             (BattleEnemyScriptPropertyView *)BattleActor_GetEnemySlot(actor_id);
-        enemy->flags_29c.bits.flag_04 = value != 0;
+        enemy->flags_29c.bits.damage_immune = value != 0;
         break;
     }
     case BATTLE_PROPERTY_SCENE_OPERATION_77:

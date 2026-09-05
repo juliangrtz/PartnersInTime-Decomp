@@ -241,10 +241,10 @@ void BattleDamage_ApplyToEnemy(BattleSceneObject *object, int popup_offset_x,
         damage = BATTLE_DAMAGE_MAX;
     }
 
-    if (!enemy->state_flag_bits.flag_04) {
+    if (!enemy->state_flag_bits.damage_immune) {
         BattleActor_ApplyDamage(object, damage);
     }
-    if (!enemy->state_flag_bits.flag_04) {
+    if (!enemy->state_flag_bits.damage_immune) {
         s16 saved_animation = object->previous_base_animation_id;
 
         if (object->resource->resource_id != BATTLE_DAMAGE_SPECIAL_RESOURCE_1 &&
@@ -261,7 +261,7 @@ void BattleDamage_ApplyToEnemy(BattleSceneObject *object, int popup_offset_x,
     }
 
     BattleDamage_StartEnemyReaction(object, reaction_effect);
-    if (enemy->state_flag_bits.flag_04) {
+    if (enemy->state_flag_bits.damage_immune) {
         return;
     }
 
