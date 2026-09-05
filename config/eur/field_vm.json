@@ -434,6 +434,7 @@
     "77": "set_entity_ground_tracking",
     "86": "set_entity_map_sync_axes",
     "96": "set_entity_render_layer",
+    "98": "set_entity_render_order_priorities",
     "102": "set_entity_animation_speed",
     "108": "bind_entity_resource",
     "109": "restore_entity_resource_state",
@@ -443,15 +444,28 @@
     "114": "restore_entity_behavior_state",
     "131": "start_entity_movement",
     "132": "start_entity_timed_movement",
+    "133": "start_entity_movement_relative_to_entity",
+    "134": "start_entity_timed_movement_relative_to_entity",
     "139": "wait_entity_movement",
     "141": "start_entity_vertical_motion",
     "143": "wait_entity_vertical_motion",
     "145": "set_entity_position",
     "160": "set_entity_facing_direction",
+    "174": "rejoin_party_follower",
+    "175": "wait_party_follower_rejoined",
+    "176": "detach_party_follower",
+    "181": "set_party_member_character_id",
+    "182": "reset_party_member_characters",
     "183": "set_party_facing_direction",
+    "184": "set_party_member_switching_enabled",
     "185": "legacy_noop_0b9",
     "186": "set_field_party_hud_layout",
+    "189": "cancel_party_actions",
+    "190": "wait_party_actions_idle",
     "201": "get_party_controller_property",
+    "206": "set_party_leader_animation_override",
+    "212": "activate_field_map_event",
+    "217": "set_field_bg_layers_enabled",
     "221": "start_camera_timed_entity_tracking",
     "222": "wait_camera_movement",
     "237": "start_master_brightness_transition",
@@ -681,6 +695,14 @@
       "effect": "stores the low four bits of render_layer in the high nibble of the entity's bound render-object sort key",
       "evidence": "func_ov000_020823f8 case 0x060 and render-order consumer func_ov000_020a9180"
     },
+    "98": {
+      "arguments": ["entity_selector", "priority_0_or_auto", "priority_1_or_auto", "priority_2_or_auto", "priority_3_or_auto", "auxiliary_priority_or_auto"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the per-component sprite overlap priorities stored at render-object bytes +0x134 through +0x137; -1 preserves automatic priority calculation. Normal entities also configure an optional auxiliary render object, while subtype 8 ignores the final argument",
+      "evidence": "func_ov000_020823f8 case 0x062 and overlap-order consumers func_ov000_020a9180 and func_ov000_020a8e58"
+    },
     "102": {
       "arguments": ["entity_selector", "animation_speed_q8"],
       "result": null,
@@ -752,6 +774,22 @@
       "effect": "starts constant-rate entity movement toward fx32 coordinates over duration_frames; coordinate_mode 1 makes the target relative. Normal entities can move on x, y, and z, while subtype 8 uses x and y only",
       "evidence": "func_ov000_020823f8 case 0x084, func_ov000_020a6394, and func_ov000_020b3cb0"
     },
+    "133": {
+      "arguments": ["entity_selector", "target_entity_selector", "x_offset", "y_offset", "z_offset", "motion_5", "motion_6", "motion_7", "motion_flag"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts profiled movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only",
+      "evidence": "func_ov000_020823f8 case 0x085, func_ov000_020a6260, func_ov000_020b3b00, and func_ov000_020b3634"
+    },
+    "134": {
+      "arguments": ["entity_selector", "target_entity_selector", "x_offset", "y_offset", "z_offset", "duration_frames", "motion_parameter_6", "motion_parameter_7", "motion_flag"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts timed movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only",
+      "evidence": "func_ov000_020823f8 case 0x086, func_ov000_020a61b8, func_ov000_020b39a8, and func_ov000_020b3634"
+    },
     "139": {
       "arguments": ["entity_selector"],
       "result": null,
@@ -790,6 +828,45 @@
       "effect": "stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately",
       "evidence": "func_ov000_020823f8 case 0x0A0 and func_ov000_020a6690"
     },
+    "174": {
+      "arguments": ["party_side", "instant"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "moves the selected party's detached follower back to its formation offset behind the leader, either immediately or through entity movement, then restores the normal follower tether",
+      "evidence": "func_ov000_020823f8 case 0x0AE, func_ov000_0209b53c, func_ov000_0209b414, and func_ov000_0209b2f0"
+    },
+    "175": {
+      "arguments": ["party_side"],
+      "result": null,
+      "control_flow": "retries the same command while the selected party follower is still moving back into formation",
+      "yield": "while follower rejoin movement is active",
+      "evidence": "func_ov000_020823f8 case 0x0AF and party-controller movement flag +0x50 bit 15"
+    },
+    "176": {
+      "arguments": ["party_side"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "disables the normal leader/follower tether for the selected party and resets the follower's formation offsets and occupancy state so scripts can position both members independently",
+      "evidence": "func_ov000_020823f8 case 0x0B0 and func_ov000_0209b0b8"
+    },
+    "181": {
+      "arguments": ["flat_member_selector", "character_id_or_default"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects party_side as flat_member_selector / 2 and member index as flat_member_selector & 1, then stores its field character ID; -1 derives the current default from party/form state and ID 9 resolves through the saved dynamic character choice",
+      "evidence": "func_ov000_020823f8 case 0x0B5 and func_ov000_0209ce44"
+    },
+    "182": {
+      "arguments": ["party_side"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the selected party's temporary character-selection flags and recomputes both member character IDs from current party/form state",
+      "evidence": "func_ov000_020823f8 case 0x0B6, func_ov000_0209ce00, func_ov000_0209ce18, and func_ov000_0209ce44"
+    },
     "183": {
       "arguments": ["party_side", "facing_direction", "instant"],
       "result": null,
@@ -797,6 +874,14 @@
       "yield": "never",
       "effect": "changes the selected party controller's left/right facing and sprite flip, either directly or through its guarded turn path",
       "evidence": "func_ov000_020823f8 case 0x0B7 and func_ov000_0209bc84"
+    },
+    "184": {
+      "arguments": ["party_side", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets party-controller flag +0x74 bit 2, which gates X/Y-triggered switching of the selected party's active member and the corresponding character-ID refresh",
+      "evidence": "func_ov000_020823f8 case 0x0B8 and input consumer func_ov000_0209ceec"
     },
     "185": {
       "arguments": ["unused_0", "unused_1"],
@@ -814,6 +899,21 @@
       "effect": "changes the party status HUD layout and visibility on the field context that owns the HUD; instant applies the target positions directly, otherwise the icons animate toward them in four-pixel steps",
       "evidence": "func_ov000_020823f8 case 0x0BA, func_ov000_02071a38, func_ov000_02071ce8, and func_ov000_02071654"
     },
+    "189": {
+      "arguments": ["party_side_or_minus_one", "action_type_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "requests normalization/cancellation of the current field action when its action-type bit is present in action_type_mask; party side -1 applies the request to both active parties",
+      "evidence": "func_ov000_020823f8 case 0x0BD and action-type dispatcher func_ov000_0209e8cc"
+    },
+    "190": {
+      "arguments": ["party_side"],
+      "result": null,
+      "control_flow": "retries the same command while the selected party's leader, follower, or attached action entities have not returned to an idle field state",
+      "yield": "while a party action entity remains active",
+      "evidence": "func_ov000_020823f8 case 0x0BE, func_ov000_0209ebdc, and func_ov000_020b780c"
+    },
     "201": {
       "arguments": ["party_side", "property_id"],
       "result": "selected party-controller property value, or zero for unsupported selectors",
@@ -821,6 +921,30 @@
       "yield": "never",
       "effect": "queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4",
       "evidence": "func_ov000_020823f8 case 0x0C9 property switch"
+    },
+    "206": {
+      "arguments": ["party_side", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30",
+      "evidence": "func_ov000_020823f8 case 0x0CE, func_ov000_0209cbfc, and func_ov000_0209cb90"
+    },
+    "212": {
+      "arguments": ["map_event_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "activates the indexed 20-byte field-map event record, applies its persistent enable/disable save flags, reloads referenced map layers when present, applies the returned map state, and dirties map-synchronized entities",
+      "evidence": "func_ov000_020823f8 case 0x0D4, func_ov000_0207af94, func_ov000_0207ad4c, and resident map-manager virtual method +0x38 func_020132a0"
+    },
+    "217": {
+      "arguments": ["bg0_enabled_or_minus_one", "bg1_enabled_or_minus_one", "bg2_enabled_or_minus_one", "bg3_enabled_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "updates the active field screen's DISPCNT BG0 through BG3 enable bits; -1 preserves an individual layer, and the OBJ display-enable bit remains forced on",
+      "evidence": "func_ov000_020823f8 case 0x0D9 and DS main/sub DISPCNT registers 0x04000000/0x04001000"
     },
     "221": {
       "arguments": ["entity_selector", "x_offset", "y_offset", "duration_frames", "x_motion_flag", "y_motion_flag"],
