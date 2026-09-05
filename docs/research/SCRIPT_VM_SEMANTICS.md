@@ -79,7 +79,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 84 | 33 | `config/eur/field_vm.json` |
+| Field/world | 341 | 89 | 38 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -123,6 +123,8 @@ field context (the other DS screen/field instance).
 | `0x047` | `get_entity_script_state` | entity_selector | fallthrough |
 | `0x048` | `start_paired_field_script` | paired_room_id, script_slot_or_minus_one, chain_if_active | starts a script entry in the paired field context when its room ID matches |
 | `0x049` | `get_entity_property` | entity_selector, property_id | fallthrough |
+| `0x04A` | `set_entity_visible` | entity_selector, visible | sets the entity render-enabled bit and forwards the state to its bound render object |
+| `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
 | `0x06C` | `bind_entity_resource` | entity_selector, resource_index, animation_id, render_parameter, preserve_previous | binds a 24-byte record from FEvent fixed section 2 to the entity; -1 retains selected subresources |
 | `0x06F` | `set_entity_animation` | entity_selector, animation_id, preserve_previous | selects an entity model animation and optionally saves the old animation for opcode 0x070 |
 | `0x071` | `set_entity_behavior_mode` | entity_selector, behavior_mode, preserve_previous | sets entity state bits 7..9 and optionally preserves the previous mode for opcode 0x072 |
@@ -130,9 +132,40 @@ field context (the other DS screen/field instance).
 | `0x08B` | `wait_entity_movement` | entity_selector | retries while either of the entity movement-state flags is active |
 | `0x08D` | `start_entity_vertical_motion` | entity_selector, initial_velocity_low_or_value, initial_velocity_high, gravity_low_or_value, gravity_high | starts vertical ballistic motion; literal word pairs form signed fx32 values and -1 selects entity defaults |
 | `0x08F` | `wait_entity_vertical_motion` | entity_selector | retries while entity vertical-motion flag 0x10 is set |
+| `0x0A0` | `set_entity_facing_direction` | entity_selector, direction_mode, direction | stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately |
+| `0x0B7` | `set_party_facing_direction` | party_side, facing_direction, instant | changes the selected party controller's left/right facing and sprite flip, either directly or through its guarded turn path |
+| `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
 | `0x149` | `play_field_sound` | sound_id, mode, track_for_field_cleanup | plays a sound and optionally records its ID in one of four per-field cleanup slots |
 | `0x14A` | `stop_field_sound` | sound_id | stops the sound and removes it from the four per-field cleanup slots |
+
+The checked-in field usage index records
+67/289 used opcodes and
+317,841/387,377 reachable commands
+with static semantic names. The highest-use unresolved commands are:
+
+| Opcode | Uses |
+|---:|---:|
+| `0x10D` | 3,686 |
+| `0x091` | 3,350 |
+| `0x06E` | 2,992 |
+| `0x04D` | 2,921 |
+| `0x0B9` | 2,591 |
+| `0x072` | 2,570 |
+| `0x117` | 2,077 |
+| `0x066` | 2,010 |
+| `0x060` | 2,006 |
+| `0x06D` | 1,748 |
+| `0x142` | 1,715 |
+| `0x0ED` | 1,686 |
+| `0x056` | 1,676 |
+| `0x0EE` | 1,665 |
+| `0x062` | 1,606 |
+| `0x0BA` | 1,603 |
+| `0x141` | 1,548 |
+| `0x0DE` | 1,412 |
+| `0x0B8` | 1,371 |
+| `0x084` | 1,291 |
 
 ## Menu/UI scene scripts
 

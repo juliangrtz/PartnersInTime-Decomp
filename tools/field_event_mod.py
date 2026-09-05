@@ -10,7 +10,7 @@ being recovered.
 from __future__ import annotations
 
 import argparse
-from collections import deque
+from collections import Counter, deque
 import json
 import re
 import struct
@@ -22,6 +22,7 @@ import data_mod
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "pit-field-event-scripts-v1"
+USAGE_SCHEMA = "pit-script-vm-usage-v1"
 VM_SCHEMA = "pit-script-vm-descriptors-v1"
 SOURCE = "FEvent/FEvData.dat"
 FIXED_POINTER_COUNT = 9
@@ -695,9 +696,72 @@ def build_document(
     return data_mod.build_offset_archive(rebuilt_entries)
 
 
+def summarize_document(
+    document: dict[str, Any],
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+) -> dict[str, Any]:
+    if document.get("schema") != SCHEMA:
+        raise data_mod.DataModError(
+            f"field script document must use schema {SCHEMA!r}"
+        )
+    members = data_mod._require_list(document.get("members"), "field members")
+    usage: Counter[int] = Counter()
+    valid_script_count = 0
+    private_target_count = 0
+    for member_index, member in enumerate(members):
+        if not isinstance(member, dict):
+            raise data_mod.DataModError(
+                f"field member {member_index} must be an object"
+            )
+        valid_script_count += data_mod.parse_integer(
+            member.get("valid_script_count"),
+            32,
+            f"field member {member_index} valid_script_count",
+        )
+        private_target_count += data_mod.parse_integer(
+            member.get("private_target_count"),
+            32,
+            f"field member {member_index} private_target_count",
+        )
+        commands = data_mod._require_list(
+            member.get("commands"), f"field member {member_index} commands"
+        )
+        for command_index, command in enumerate(commands):
+            if not isinstance(command, dict):
+                raise data_mod.DataModError(
+                    f"field member {member_index} command {command_index} must be an object"
+                )
+            opcode = parse_opcode(
+                command.get("opcode"),
+                descriptors,
+                names,
+                f"field member {member_index} command {command_index}",
+            )
+            usage[opcode] += 1
+    return {
+        "schema": USAGE_SCHEMA,
+        "version": document.get("version"),
+        "instance": "field",
+        "source": document.get("source"),
+        "source_sha1": document.get("source_sha1"),
+        "descriptor_count": len(descriptors),
+        "member_count": len(members),
+        "valid_script_count": valid_script_count,
+        "private_target_count": private_target_count,
+        "reachable_command_count": sum(usage.values()),
+        "used_opcode_count": len(usage),
+        "opcode_counts": {
+            f"0x{opcode:03X}": usage[opcode] for opcode in sorted(usage)
+        },
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("export", "check", "build"))
+    parser.add_argument(
+        "command", choices=("export", "summarize", "check", "build")
+    )
     parser.add_argument("--version", default="eur")
     parser.add_argument(
         "--source", type=Path, default=ROOT / "extract" / "eur" / "files" / SOURCE
@@ -708,6 +772,11 @@ def main() -> int:
         default=ROOT / "data" / "eur" / "scripts" / "FEvent__FEvData.dat.json",
     )
     parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--summary-output",
+        type=Path,
+        default=ROOT / "config" / "eur" / "field_vm_usage.json",
+    )
     args = parser.parse_args()
     descriptors, names = load_vm_schema(args.version)
     if args.command == "export":
@@ -720,6 +789,14 @@ def main() -> int:
     document = data_mod.read_json(args.document)
     if not isinstance(document, dict):
         raise data_mod.DataModError("field script document must be an object")
+    if args.command == "summarize":
+        summary = summarize_document(document, descriptors, names)
+        data_mod.write_json(args.summary_output, summary)
+        print(
+            f"Summarized {summary['reachable_command_count']} field commands "
+            f"to {args.summary_output}"
+        )
+        return 0
     rebuilt = build_document(document, args.source.read_bytes(), descriptors, names)
     if args.command == "check":
         if rebuilt != args.source.read_bytes():

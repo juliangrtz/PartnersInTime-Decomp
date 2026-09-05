@@ -429,6 +429,8 @@
     "71": "get_entity_script_state",
     "72": "start_paired_field_script",
     "73": "get_entity_property",
+    "74": "set_entity_visible",
+    "75": "set_entity_enabled",
     "108": "bind_entity_resource",
     "111": "set_entity_animation",
     "113": "set_entity_behavior_mode",
@@ -436,6 +438,9 @@
     "139": "wait_entity_movement",
     "141": "start_entity_vertical_motion",
     "143": "wait_entity_vertical_motion",
+    "160": "set_entity_facing_direction",
+    "183": "set_party_facing_direction",
+    "201": "get_party_controller_property",
     "273": "set_field_input_disable_mask",
     "329": "play_field_sound",
     "330": "stop_field_sound"
@@ -612,6 +617,22 @@
       "yield": "never",
       "evidence": "func_ov000_020823f8 case 0x049 and func_ov000_0208221c"
     },
+    "74": {
+      "arguments": ["entity_selector", "visible"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the entity render-enabled bit and forwards the state to its bound render object",
+      "evidence": "func_ov000_020823f8 case 0x04A; virtual method +0x60 resolves to func_ov000_02087fc8"
+    },
+    "75": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets entity state bit 0, which gates the normal entity update path",
+      "evidence": "func_ov000_020823f8 case 0x04B and entity update consumers of state +0x0A bit 0"
+    },
     "108": {
       "arguments": ["entity_selector", "resource_index", "animation_id", "render_parameter", "preserve_previous"],
       "result": null,
@@ -665,6 +686,30 @@
       "control_flow": "retries while entity vertical-motion flag 0x10 is set",
       "yield": "while vertical motion is active",
       "evidence": "func_ov000_020823f8 case 0x08F and func_ov000_020b4330"
+    },
+    "160": {
+      "arguments": ["entity_selector", "direction_mode", "direction"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately",
+      "evidence": "func_ov000_020823f8 case 0x0A0 and func_ov000_020a6690"
+    },
+    "183": {
+      "arguments": ["party_side", "facing_direction", "instant"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "changes the selected party controller's left/right facing and sprite flip, either directly or through its guarded turn path",
+      "evidence": "func_ov000_020823f8 case 0x0B7 and func_ov000_0209bc84"
+    },
+    "201": {
+      "arguments": ["party_side", "property_id"],
+      "result": "selected party-controller property value, or zero for unsupported selectors",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4",
+      "evidence": "func_ov000_020823f8 case 0x0C9 property switch"
     },
     "273": {
       "arguments": ["field_side_or_minus_one", "disabled_button_mask"],
