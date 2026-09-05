@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 187 | 136 | `config/eur/field_vm.json` |
+| Field/world | 341 | 197 | 146 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -190,9 +190,11 @@ field context (the other DS screen/field instance).
 | `0x0B8` | `set_party_member_switching_enabled` | party_side, enabled | sets party-controller flag +0x74 bit 2, which gates X/Y-triggered switching of the selected party's active member and the corresponding character-ID refresh |
 | `0x0B9` | `legacy_noop_0b9` | unused_0, unused_1 | intentional legacy no-op; both encoded arguments are ignored |
 | `0x0BA` | `set_field_party_hud_layout` | layout_mode, instant | changes the party status HUD layout and visibility on the field context that owns the HUD; instant applies the target positions directly, otherwise the icons animate toward them in four-pixel steps |
+| `0x0BC` | `set_party_field_mode` | party_side, field_mode | changes the selected party's field-action/formation mode through the common mode dispatcher. Modes 0 through 8 select the normal, special movement, split-action, and character-specific controller implementations; shipped field scripts use mode 0 here to normalize either party |
 | `0x0BD` | `cancel_party_actions` | party_side_or_minus_one, action_type_mask | requests normalization/cancellation of the current field action when its action-type bit is present in action_type_mask; party side -1 applies the request to both active parties |
 | `0x0BE` | `wait_party_actions_idle` | party_side | retries the same command while the selected party's leader, follower, or attached action entities have not returned to an idle field state |
 | `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
+| `0x0CA` | `switch_active_party` | party_side_or_other, instant | makes the selected adult/baby party the manager's active party and transfers input, leader animation, camera/entry-anchor state, HUD state, and field ownership as required. Party side -1 selects the other party. instant suppresses the normal brightness fade for an accompanying room handoff and uses the one-frame camera-anchor path instead of the profiled path |
 | `0x0CC` | `set_party_piggyback_state` | piggybacked | sets the party manager's persistent adult/baby piggyback-state marker. The marker is serialized into the field-party snapshot and restored when the next field reconstructs the party; it does not itself move or attach actors. Shipped cutscenes clear it before controlling all four members independently and set it again immediately before or after reuniting them with opcode 0x0B1 |
 | `0x0CD` | `release_room_transition_control_lock` | 0 literal args | releases the post-load party-control lock requested by change_field_room_for_party's lock_party_control_until_released argument; until released, the party manager suppresses ordinary field input |
 | `0x0CE` | `set_party_leader_animation_override` | party_side, enabled | enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30 |
@@ -222,6 +224,7 @@ field context (the other DS screen/field instance).
 | `0x0E6` | `stop_camera_shake` | 0 literal args | stops an active camera shake, restores the saved camera-axis offset, and stops any selected rumble pattern |
 | `0x0ED` | `start_master_brightness_transition` | start_brightness_or_255, target_brightness, duration_frames | writes the target immediately when duration is zero; otherwise interpolates the active screen's signed DS master-brightness value once per frame. A start value of 255 preserves the current brightness |
 | `0x0EE` | `wait_master_brightness_transition` | 0 literal args | synchronization barrier for opcode 0x0ED |
+| `0x106` | `wait_field_scene_transition` | 0 literal args | common synchronization barrier for the scripted field-scene transition effects driven by the renderer state at +0x274 |
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
 | `0x112` | `set_field_event_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented event-owned input mask at field context +0x24C6; input processing ANDs this mask with the independent mask controlled by opcode 0x111 |
@@ -229,6 +232,9 @@ field context (the other DS screen/field instance).
 | `0x117` | `set_camera_focus_entity` | enabled, entity_selector_or_minus_one | toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection |
 | `0x118` | `remove_all_entity_effect_sprites` | 0 literal args | hides and releases all eight field effect-sprite slots |
 | `0x119` | `wait_all_entity_effect_sprites` | 0 literal args | retries the same command while any of the eight field effect sprites still reports an active animation |
+| `0x125` | `restore_party_member_hp` | character_index | copies the selected character's maximum HP into current HP and refreshes the paired field status HUD when it is active; character indices 0 through 3 select Mario, Luigi, Baby Mario, and Baby Luigi |
+| `0x126` | `adjust_party_member_hp` | character_index, hp_delta | adds the signed delta to the selected character's current HP, clamps the result to zero through maximum HP, and refreshes the paired field status HUD when active |
+| `0x136` | `play_rumble_pattern` | pattern_id_1_based, duration_frames | starts one of the resident rumble patterns, converting the one-based script ID to the zero-based 60-byte pattern table, and stops it after duration_frames; zero leaves the general 600-frame safety limit in force. The request is ignored when no rumble device is present or the save option disables rumble |
 | `0x140` | `open_screen_message` | x_or_center, y, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window at screen coordinates, deriving zero dimensions from the selected message and accepting -32768 as horizontally centered; configurable tail-placement fields are packed into the resident eight-slot message manager |
 | `0x141` | `open_entity_message` | entity_selector, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window anchored to an entity, automatically placing and clamping the box and its tail within the 256 by 192 screen; when invoked by an entity-owned VM it also avoids overlap with the linked owner |
 | `0x142` | `wait_message_finished` | message_slot_selector | selectors at least zero address one of eight slots; -2 matches both screens and other negative values match the current field screen |
@@ -238,22 +244,18 @@ field context (the other DS screen/field instance).
 | `0x14A` | `stop_field_sound` | sound_id | stops the sound and removes it from the four per-field cleanup slots |
 | `0x14B` | `play_background_music` | sequence_id | stops the active background sequence, alternates between the two field BGM players, loads sequence_id, and starts playback without an explicit fade duration |
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
+| `0x14D` | `load_background_music_resource` | background_music_id, buffer_index | asynchronously loads the selected scene background-music sequence, bank, and wave archives into buffer 0 or 1 with the field load duration 0xC00; no reload is requested when that buffer already holds the same ID |
+| `0x14E` | `wait_background_music_resource` | 0 literal args | synchronization barrier for opcode 0x14D |
+| `0x14F` | `activate_background_music` | background_music_id | activates the requested scene background-music resource, reusing it when already resident or loading and starting it through the alternate-buffer path otherwise; the request is ignored when the save-state background-change disable bit is set. The party manager records the requested ID for later room-transition policy decisions |
+| `0x150` | `fade_out_background_music` | duration_frames_or_zero_for_default | fades out the active scene background-music player over the requested duration, using eight frames when zero is supplied, and clears the party manager's remembered background-music selectors |
 
 The checked-in field usage index records
-163/289 used opcodes and
-384,049/387,272 reachable commands
+173/289 used opcodes and
+385,143/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x0BC` | 180 |
-| `0x136` | 176 |
-| `0x150` | 123 |
-| `0x14F` | 119 |
-| `0x0CA` | 117 |
-| `0x106` | 111 |
-| `0x14D` | 101 |
-| `0x125` | 100 |
 | `0x0F2` | 80 |
 | `0x087` | 79 |
 | `0x12B` | 77 |
@@ -262,10 +264,18 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x051` | 71 |
 | `0x120` | 65 |
 | `0x128` | 64 |
-| `0x14E` | 63 |
 | `0x0F3` | 57 |
 | `0x053` | 57 |
 | `0x069` | 51 |
+| `0x0AB` | 50 |
+| `0x0AA` | 50 |
+| `0x0A8` | 50 |
+| `0x10F` | 48 |
+| `0x0FF` | 46 |
+| `0x0FC` | 46 |
+| `0x0F9` | 43 |
+| `0x152` | 41 |
+| `0x100` | 38 |
 
 ## Menu/UI scene scripts
 
