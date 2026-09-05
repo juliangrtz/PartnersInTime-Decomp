@@ -14,6 +14,7 @@ typedef union BattleFleeFlags {
 } BattleFleeFlags;
 
 typedef struct BattleFleeTask BattleFleeTask;
+typedef struct BattleFleeControllerTask BattleFleeControllerTask;
 
 typedef struct BattleFleeState {
     BattleFleeTask *partner_task;
@@ -32,10 +33,19 @@ struct BattleFleeTask {
     BattleFleeState data;
 };
 
+struct BattleFleeControllerTask {
+    BattleAITask *next;
+    void (*callback)(BattleAITask *task);
+    BattleAITask **owner_slot;
+    BattleAITask *actor_tasks[2];
+};
+
 typedef char BattleFleeState_SizeCheck[
     sizeof(BattleFleeState) == 0x10 ? 1 : -1];
 typedef char BattleFleeTask_SizeCheck[
     sizeof(BattleFleeTask) == 0x1C ? 1 : -1];
+typedef char BattleFleeControllerTask_SizeCheck[
+    sizeof(BattleFleeControllerTask) == 0x14 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,6 +59,10 @@ void BattleFlee_WaitToLaunchPartner(BattleAITask *task);
 void BattleFlee_FinishSceneTransition(BattleAITask *task);
 void BattleFlee_UpdateSceneTransition(BattleAITask *task);
 void BattleFlee_CommitBattleExit(BattleAITask *task);
+BattleFleeControllerTask *BattleFlee_Start(void);
+void BattleFlee_LoadResources(BattleAITask *task);
+void BattleFlee_InitializeScene(BattleAITask *task);
+void BattleFlee_UpdateController(BattleAITask *task);
 void BattleFlee_WaitForExitAnimation(BattleAITask *task);
 void BattleFlee_MoveActorOffscreen(BattleAITask *task);
 void BattleFlee_WaitForPartnerExit(BattleAITask *task);

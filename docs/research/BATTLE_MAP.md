@@ -747,6 +747,13 @@ and voice effects before both actors leave the battle. The following callbacks
 coordinate the delayed partner launch, reload run resources, move the active
 party object back into formation with a hardware-square-root duration, and set
 the save battle result to 2 once coin rendering and exit animations are done.
+The adjacent `0x020A1EF8`-`0x020A2658` controller is exact linked C++ as well.
+It selects Mario/Luigi run resources for all six party formations, waits for
+four asynchronous resource states, binds the helper, cancel indicator, and
+three phase-staggered particle models, then creates and owns the paired actor
+tasks. Its update resets the particle transforms, handles cancel input and
+resource restoration, and selects either the return transition or completed
+battle exit when the owned tasks retire.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets

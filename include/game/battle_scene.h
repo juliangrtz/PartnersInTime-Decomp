@@ -8,6 +8,7 @@ typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleModel BattleModel;
 typedef struct BattleModelVTable BattleModelVTable;
+typedef struct BattleModelAnimationData BattleModelAnimationData;
 struct BattleSpriteTransform;
 typedef void (*BattleMotionCallback)(BattleSceneObject *object,
                                      BattleMotionChannel *channel);
@@ -26,6 +27,12 @@ enum BattleModelFlag {
 
 enum {
     BATTLE_MOTION_CHANNEL_COUNT = 4
+};
+
+struct BattleModelAnimationData {
+    u8 unknown_000[0xC8];
+    u16 start_frame;
+    u16 end_frame;
 };
 
 typedef union BattleSceneFlags {
@@ -135,7 +142,9 @@ struct BattleModel {
     virtual struct BattleSpriteTransform *get_sprite_transform();
     u8 unk_004[8];
     BattleSceneObject *owner;
-    u8 unk_010[0x44];
+    u8 unk_010[0x38];
+    BattleModelAnimationData *animation_data;
+    u8 unk_04c[8];
     s16 animation_id;
     u8 unk_056[4];
     u16 enemy_idle_frame;
@@ -176,7 +185,9 @@ struct BattleModel {
     BattleModelVTable *vtable;
     u8 unk_004[8];
     BattleSceneObject *owner;
-    u8 unk_010[0x44];
+    u8 unk_010[0x38];
+    BattleModelAnimationData *animation_data;
+    u8 unk_04c[8];
     s16 animation_id;
     u8 unk_056[4];
     u16 enemy_idle_frame;
