@@ -116,6 +116,7 @@ src/overlay014/attack_object_state.c
 src/overlay015/pair_attack_helpers.c
 src/overlay015/actor_setup.c
 src/overlay017/attack_tuning.c
+src/overlay017/object_setup.cpp
 src/overlay020/target_arc_state.c
 src/overlay021/attack_phase_state.c
 src/field/field_entity_state.c
