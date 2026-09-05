@@ -238,6 +238,9 @@ and runtime overlay 2.
 | `020A6AE0` | `BattleStatus_StartPartyAilment3Visual` | Byte-identical party status-3 model and transition starter |
 | `020A6CE4` | `BattleStatus_UpdatePartyAilment2Visual` | Byte-identical status-2 effect attachment and animation callback |
 | `020A6F80` | `BattleStatus_StartPartyAilment2Visual` | Byte-identical party status-2 effect and transition starter |
+| `020A7114` | `BattleStatus_UpdatePartyAilment1Visual` | Byte-identical status-1 hold/cleanup callback |
+| `020A722C` | `BattleStatus_BeginPartyAilment1Visual` | Byte-identical status-1 sound, animation, and delayed-effect transition |
+| `020A7374` | `BattleStatus_StartPartyAilment1Visual` | Byte-identical party status-1 task starter |
 | `020A8320` | `BattleStatus_StopActorEffect` | Stops the actor-local timer or stat delta for one status ID |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
@@ -608,6 +611,13 @@ object's animation-dependent vertical offset, removes it while status models
 are suppressed, and recreates it when rendering resumes. As with status 3, the
 callback arbitrates ownership through the actor's group-1 status record and
 holds the hit lock only for the active character animation.
+
+Party status ID 1 is reconstructed as an exact three-stage task. It waits for
+ownership of the actor's group-1 status slot, plays the form-specific sound,
+starts animation 24, and schedules delayed object effect 16 or 17 for adult or
+baby formations. The final callback either advances into hold animation 25 or
+cleans up the hit lock and returns the actor to animation 0 when ownership or
+the task's stop flag changes.
 
 The exact battle item-selection helpers rebuild two compact tagged-ID lists
 directly from the save inventory: fourteen ordinary consumables at save offset

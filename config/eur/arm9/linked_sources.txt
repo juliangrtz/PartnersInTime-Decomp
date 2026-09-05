@@ -72,6 +72,7 @@ src/battle/battle_effect_transform.c
 src/battle/battle_status_party_visual.cpp
 src/battle/battle_status_party_ailment3.cpp
 src/battle/battle_status_party_ailment2.cpp
+src/battle/battle_status_party_ailment1.cpp
 src/game/script_vm.c
 src/game/script_vm_control.c
 src/game/script_vm_execute.c
