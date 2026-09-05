@@ -454,6 +454,8 @@
     "111": "set_entity_animation",
     "113": "set_entity_behavior_mode",
     "114": "restore_entity_behavior_state",
+    "115": "set_entity_palette_profile",
+    "116": "restore_entity_palette_profile",
     "123": "start_entity_scaling",
     "124": "start_entity_timed_scaling",
     "125": "wait_entity_scaling",
@@ -1018,6 +1020,22 @@
       "yield": "never",
       "effect": "restores the behavior mode saved by opcode 0x071, then clears the bound model's temporary behavior/effect state",
       "evidence": "func_ov000_020823f8 case 0x072 and func_ov000_020a4df8"
+    },
+    "115": {
+      "arguments": ["entity_selector", "palette_selector", "preserve_previous"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "switches the entity sprite to a palette profile without replacing its main graphics/cell resource. Selectors 0..15 search the two current-room palette-profile tables for a record whose base slot and span contain the selector. Selectors 16 and above select the alternate/shared table entry whose explicit slot equals the selector's low nibble. The renderer receives that low nibble as its OBJ palette base, the matched 24-byte palette metadata record, and the associated bank pointer from the parallel 20-byte resource record; its eight auxiliary animation channels are then reset while the current main animation is rebound. When preserve_previous is nonzero, the entity's current canonical selector is saved for opcode 0x074; every shipped call enables this",
+      "evidence": "func_ov000_020823f8 case 0x073; func_ov000_02076f40; entity resource selection in func_ov000_020768f8/func_ov000_02076c24; renderer methods func_0200cd68, func_0200c7a4, and func_0200c5d8; and all 14 shipped calls"
+    },
+    "116": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "if opcode 0x073 saved a palette selector for this entity, clears the saved-state flag and switches back to that selector through the same palette-profile lookup and renderer reset path. Alternate/shared selectors are restored canonically as 16 plus their saved low nibble",
+      "evidence": "func_ov000_020823f8 case 0x074 and func_ov000_02076f40; the sole shipped call restores a temporary event palette"
     },
     "123": {
       "arguments": ["entity_selector", "scale_mode", "target_scale_x_fx32", "target_scale_y_fx32", "step_x_fx32", "step_y_fx32"],

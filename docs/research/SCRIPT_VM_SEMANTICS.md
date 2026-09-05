@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 292 | 241 | `config/eur/field_vm.json` |
+| Field/world | 341 | 294 | 243 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -150,6 +150,8 @@ field context (the other DS screen/field instance).
 | `0x06F` | `set_entity_animation` | entity_selector, animation_id, preserve_previous | selects an entity model animation and optionally saves the old animation for opcode 0x070 |
 | `0x071` | `set_entity_behavior_mode` | entity_selector, behavior_mode, preserve_previous | sets entity state bits 7..9 and optionally preserves the previous mode for opcode 0x072 |
 | `0x072` | `restore_entity_behavior_state` | entity_selector | restores the behavior mode saved by opcode 0x071, then clears the bound model's temporary behavior/effect state |
+| `0x073` | `set_entity_palette_profile` | entity_selector, palette_selector, preserve_previous | switches the entity sprite to a palette profile without replacing its main graphics/cell resource. Selectors 0..15 search the two current-room palette-profile tables for a record whose base slot and span contain the selector. Selectors 16 and above select the alternate/shared table entry whose explicit slot equals the selector's low nibble. The renderer receives that low nibble as its OBJ palette base, the matched 24-byte palette metadata record, and the associated bank pointer from the parallel 20-byte resource record; its eight auxiliary animation channels are then reset while the current main animation is rebound. When preserve_previous is nonzero, the entity's current canonical selector is saved for opcode 0x074; every shipped call enables this |
+| `0x074` | `restore_entity_palette_profile` | entity_selector | if opcode 0x073 saved a palette selector for this entity, clears the saved-state flag and switches back to that selector through the same palette-profile lookup and renderer reset path. Alternate/shared selectors are restored canonically as 16 plus their saved low nibble |
 | `0x07B` | `start_entity_scaling` | entity_selector, scale_mode, target_scale_x_fx32, target_scale_y_fx32, step_x_fx32, step_y_fx32 | starts independent constant-step scaling of the entity sprite's X and Y axes. Script Q12 scale and step values are converted to the renderer's signed Q8 representation by division by 16, where 4096 is normal 1.0 scale. scale_mode 1 treats both target scales as offsets from the current values; every other mode treats them as absolute targets. Each nonzero-distance axis has the supplied step's sign corrected toward its target, advances once per frame, then snaps exactly to its target and becomes inactive when the next step would cross it. A zero step on an active axis never completes |
 | `0x07C` | `start_entity_timed_scaling` | entity_selector, scale_mode, target_scale_x_fx32, target_scale_y_fx32, duration_x_frames, duration_y_frames | starts independent duration-based linear scaling of the entity sprite's X and Y axes. Q12 targets are converted to renderer Q8 and scale_mode 1 makes them relative to the current scales. Each axis receives its own duration and per-frame quotient; when that axis's elapsed counter reaches its duration, the exact target is written and the axis becomes inactive. Both nonzero duration denominators are required |
 | `0x07D` | `wait_entity_scaling` | entity_selector | synchronization barrier shared by the speed- and duration-based scale commands |
@@ -345,13 +347,12 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-264/289 used opcodes and
-387,170/387,272 reachable commands
+266/289 used opcodes and
+387,185/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x073` | 14 |
 | `0x113` | 9 |
 | `0x061` | 9 |
 | `0x145` | 7 |
@@ -371,6 +372,7 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x133` | 1 |
 | `0x132` | 1 |
 | `0x12D` | 1 |
+| `0x12C` | 1 |
 
 ## Menu/UI scene scripts
 
