@@ -286,3 +286,6 @@ src/battle/battle_status_enemy_ailment45.cpp:
 
 src/battle/battle_status_enemy_ailment3.cpp:
     .text       start:0x020a7edc end:0x020a81b4
+
+src/battle/battle_status_enemy_ailment2.cpp:
+    .text       start:0x020a81b4 end:0x020a8320
