@@ -483,6 +483,8 @@
     "174": "rejoin_party_follower",
     "175": "wait_party_follower_rejoined",
     "176": "detach_party_follower",
+    "177": "reunite_split_parties",
+    "178": "wait_split_party_reunion",
     "181": "set_party_member_character_id",
     "182": "reset_party_member_characters",
     "183": "set_party_facing_direction",
@@ -1128,6 +1130,22 @@
       "yield": "never",
       "effect": "disables the normal leader/follower tether for the selected party and resets the follower's formation offsets and occupancy state so scripts can position both members independently",
       "evidence": "func_ov000_020823f8 case 0x0B0 and func_ov000_0209b0b8"
+    },
+    "177": {
+      "arguments": ["moving_party_side_or_current", "instant"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reunites the separated adult and baby parties into normal piggyback formation. moving_party_side_or_current selects which party approaches the other, with -1 resolving to the currently active side; instant teleports each selected member to its counterpart, while the animated form moves the party leader to the midpoint of the destination pair and marks both party controllers as reuniting",
+      "evidence": "func_ov000_020823f8 case 0x0B1, func_ov000_0209e720, piggyback finalizer func_ov000_0209e224, and 124 reachable script uses"
+    },
+    "178": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while either party controller retains its reunion-in-progress flag",
+      "yield": "while the animated split-party reunion is active",
+      "effect": "synchronization barrier for the non-instant form of opcode 0x0B1",
+      "evidence": "func_ov000_020823f8 case 0x0B2 and func_ov000_0209e6f4 test party-controller flag +0x50 bit 16"
     },
     "181": {
       "arguments": ["flat_member_selector", "character_id_or_default"],
