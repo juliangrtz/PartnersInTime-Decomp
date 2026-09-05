@@ -96,6 +96,20 @@ def load_instance_config(version: str, name: str) -> dict:
     return document
 
 
+def load_usage_config(version: str, name: str) -> dict:
+    path = ROOT / "config" / version / f"{name}_vm_usage.json"
+    document = json.loads(path.read_text(encoding="utf-8"))
+    if (
+        document.get("schema") != "pit-script-vm-usage-v1"
+        or document.get("instance") != name
+    ):
+        raise ValueError(f"{path} has an unsupported VM-usage schema")
+    document["counts"] = Counter(
+        {int(opcode, 0): count for opcode, count in document["opcode_counts"].items()}
+    )
+    return document
+
+
 def render_markdown(
     descriptors: tuple[int, ...],
     names: dict[int, str],
@@ -103,6 +117,7 @@ def render_markdown(
     entry_count: int,
     private_bytes: int,
     field: dict,
+    field_usage_document: dict,
     scene: dict,
     scene_usage: Counter[int],
     scene_entry_count: int,
@@ -137,6 +152,22 @@ def render_markdown(
             (count, opcode)
             for opcode, count in scene_usage.items()
             if opcode not in scene_names
+        ),
+        reverse=True,
+    )
+    field_names = {
+        int(opcode, 0): name for opcode, name in field["known_names"].items()
+    }
+    field_usage = field_usage_document["counts"]
+    field_named_used = sum(opcode in field_names for opcode in field_usage)
+    field_named_commands = sum(
+        count for opcode, count in field_usage.items() if opcode in field_names
+    )
+    field_unresolved = sorted(
+        (
+            (count, opcode)
+            for opcode, count in field_usage.items()
+            if opcode not in field_names
         ),
         reverse=True,
     )
@@ -253,6 +284,22 @@ def render_markdown(
             for raw_opcode, name in field["known_names"].items()
             if int(raw_opcode, 0) >= 0x33
         )
+    )
+    lines.extend(
+        [
+            "",
+            "The checked-in field usage index records",
+            f"{field_named_used}/{len(field_usage)} used opcodes and",
+            f"{field_named_commands:,}/{sum(field_usage.values()):,} reachable commands",
+            "with static semantic names. The highest-use unresolved commands are:",
+            "",
+            "| Opcode | Uses |",
+            "|---:|---:|",
+            *[
+                f"| `0x{opcode:03X}` | {count:,} |"
+                for count, opcode in field_unresolved[:20]
+            ],
+        ]
     )
     lines.extend(
         [
@@ -382,6 +429,7 @@ def main() -> int:
     args = parser.parse_args()
     descriptors, names = data_mod.load_battle_vm_schema(args.version)
     field = load_instance_config(args.version, "field")
+    field_usage_document = load_usage_config(args.version, "field")
     scene = load_instance_config(args.version, "scene")
     usage, entry_count, private_bytes = scan_scripts(args.scripts_root, names)
     scene_names = {
@@ -397,6 +445,7 @@ def main() -> int:
         entry_count,
         private_bytes,
         field,
+        field_usage_document,
         scene,
         scene_usage,
         scene_entry_count,

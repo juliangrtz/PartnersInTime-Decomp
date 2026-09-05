@@ -73,6 +73,18 @@ class FieldEventScriptTests(unittest.TestCase):
             source,
         )
 
+    def test_summarizes_opcode_usage_without_script_bytes(self) -> None:
+        document, _ = self._document()
+        summary = field_event_mod.summarize_document(
+            document, self.descriptors, self.names
+        )
+        self.assertEqual(summary["schema"], field_event_mod.USAGE_SCHEMA)
+        self.assertEqual(summary["member_count"], 1)
+        self.assertEqual(summary["valid_script_count"], 1)
+        self.assertEqual(summary["private_target_count"], 1)
+        self.assertEqual(summary["reachable_command_count"], 2)
+        self.assertEqual(summary["opcode_counts"], {"0x000": 1, "0x035": 1})
+
     def test_rebuilds_a_fixed_size_argument_edit(self) -> None:
         document, source = self._document()
         document["members"][0]["commands"][0]["args"][1] = 7
