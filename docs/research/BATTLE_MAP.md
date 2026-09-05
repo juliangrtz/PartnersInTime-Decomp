@@ -234,6 +234,10 @@ and runtime overlay 2.
 | `020AA114` | `BattleImpactParticle_UpdateResourceFrame` | Reconstructed resource-frame particle interpolation (80.00% matching) |
 | `020AA22C` | `BattleImpactTrailEmitter_Update` | Byte-identical object-bound particle trail emitter |
 | `020AA38C` | `BattleImpactEmitter_Start` | Byte-identical trail and burst emitter task starter |
+| `020AA4C8` | `BattleImpactParticle_Render` | Reconstructed transient model-matrix particle renderer (48.65% matching) |
+| `020AA8D4` | `BattleImpactParticle_RenderPrimary` | Byte-identical primary-model particle render wrapper |
+| `020AA904` | `BattleImpactParticle_CreateFromObject` | Byte-identical scene-object particle snapshot and task constructor |
+| `020AAA8C` | `BattleImpactCopy_Execute` | Byte-identical overlap-aware particle-state copy callback |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
 | `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
 | `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Creates a sprite effect in the first free tracked slot |
@@ -536,6 +540,15 @@ only while the active model animation is running, selects the model- or
 resource-frame particle path from the object's active-model flag, and folds the
 object's live impact offsets into every child. Both the constructor and trail
 callback are byte-identical C.
+
+Particle construction snapshots the active model's scale, rotation, animation
+fields, orientation flags, and view-relative position into a compact 24-byte
+payload. The constructor, its primary-model render wrapper, and the adjacent
+overlap-aware copy callback are byte-identical C. The renderer itself is now
+represented by readable C++ that preserves the model matrix, applies particle
+flip, scale, rotation, position, and animation-frame overrides for one draw,
+then restores the original state. Its behavior is recovered, but compiler
+schedule and register differences still keep it outside the exact link.
 
 The two effect families share the same ownership pattern but use separate
 resource tables and constructors. Model effects store signed X/Y/Z halfwords,

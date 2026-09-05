@@ -29,9 +29,6 @@ typedef char BattleObjectPropertyCurvePayload_SizeCheck
 typedef char BattleObjectPropertyCurveTask_SizeCheck
     [sizeof(BattleObjectPropertyCurveTask) == 0x18 ? 1 : -1];
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
-extern void func_ov002_020aa8d4(BattleImpactParticlePayload *particle);
-extern BattleImpactParticleTask *func_ov002_020aa904(
-    BattleSceneObject *object, void (*callback)(BattleAITask *task));
 
 void BattleObjectBurstEmitter_Update(BattleAITask *base_task) {
     BattleObjectBurstEmitterTask *task =
@@ -46,8 +43,8 @@ void BattleObjectBurstEmitter_Update(BattleAITask *base_task) {
         task->callback = 0;
         return;
     }
-    particle = func_ov002_020aa904(object,
-                                  BattleObjectBurstParticle_Update);
+    particle = BattleImpactParticle_CreateFromObject(
+        object, BattleObjectBurstParticle_Update);
     particle_data = &particle->data;
     particle_data->controller = data;
     particle_data->frame = 0;
@@ -65,7 +62,7 @@ void BattleObjectBurstParticle_Update(BattleAITask *base_task) {
     }
     size = _s32_div_f(60, particle->frame + 2);
     particle->render_bits.size = size;
-    func_ov002_020aa8d4(particle);
+    BattleImpactParticle_RenderPrimary(particle);
     particle->frame++;
 }
 

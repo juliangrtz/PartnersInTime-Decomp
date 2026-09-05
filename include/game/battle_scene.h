@@ -160,7 +160,8 @@ struct BattleModel {
     BattleModelAnimationData *animation_data;
     u8 unk_04c[8];
     s16 animation_id;
-    u8 unk_056[4];
+    s16 property_056;
+    u8 unk_058[2];
     u16 enemy_idle_frame;
     s16 animation_offset_x;
     s16 animation_offset_y;
@@ -209,7 +210,8 @@ struct BattleModel {
     BattleModelAnimationData *animation_data;
     u8 unk_04c[8];
     s16 animation_id;
-    u8 unk_056[4];
+    s16 property_056;
+    u8 unk_058[2];
     u16 enemy_idle_frame;
     s16 animation_offset_x;
     s16 animation_offset_y;

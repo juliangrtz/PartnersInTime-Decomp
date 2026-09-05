@@ -319,3 +319,9 @@ src/battle/battle_impact_particle_motion.c:
 
 src/battle/battle_impact_emitters.c:
     .text       start:0x020aa22c end:0x020aa4c8
+
+src/battle/battle_impact_particle_render.cpp:
+    .text       start:0x020aa4c8 end:0x020aa8d4
+
+src/battle/battle_impact_particle_setup.c:
+    .text       start:0x020aa8d4 end:0x020aaac8

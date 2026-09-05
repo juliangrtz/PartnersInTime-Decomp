@@ -7,14 +7,20 @@
 typedef struct BattleImpactParticlePayload {
     s16 scale_x;
     s16 scale_y;
-    u8 rotation_z;
-    s8 animation_offset_x;
+    u8 rotation_z_high;
+    u8 animation_id;
     union {
         u16 render_state;
         struct {
+            u8 model_property_056;
+            u8 render_state_high;
+        };
+        struct {
             u16 unknown_00_07 : 8;
             u16 size : 5;
-            u16 unknown_13_15 : 3;
+            u16 flip_x : 1;
+            u16 flip_y : 1;
+            u16 unknown_15 : 1;
         } render_bits;
     };
     BattleSceneObject *object;
@@ -88,6 +94,12 @@ void BattleObjectBurstEmitter_Update(BattleAITask *task);
 void BattleObjectBurstParticle_Update(BattleAITask *task);
 void BattleImpactParticle_UpdateModelFrame(BattleAITask *task);
 void BattleImpactParticle_UpdateResourceFrame(BattleAITask *task);
+void BattleImpactParticle_Render(BattleImpactParticlePayload *particle,
+                                 BattleModel *model,
+                                 s16 x, s16 y, s16 z);
+void BattleImpactParticle_RenderPrimary(BattleImpactParticlePayload *particle);
+BattleImpactParticleTask *BattleImpactParticle_CreateFromObject(
+    BattleSceneObject *object, void (*callback)(BattleAITask *task));
 void BattleImpactTrailEmitter_Update(BattleAITask *task);
 BattleAITask *BattleImpactEmitter_Start(
     u16 object_id, int mode, s16 target_scale_q4, u16 lifetime_multiplier,
