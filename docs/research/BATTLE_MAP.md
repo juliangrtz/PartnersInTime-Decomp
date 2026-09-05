@@ -1351,6 +1351,16 @@ enemy pending-state checks, guarded queue entry points, duplicate suppression,
 packed load configuration, four heap groups, the slot-51 allocation override,
 and initialization of the 100-byte streaming workspace.
 
+The supplied Princess Shroob runtime snapshot connects this layout to the
+editable scripts. Enemy slot 60 uses stat record 84 (configured max HP 1,700)
+but holds 11,700 current/max HP. `BAI__BAI_mon_4_hn.dat` entry 4 reads actor
+properties 16/17 (current/max HP), adds 10,000, and writes both back at command
+offsets `0x0094-0x00C6`; at `0x0B1A-0x0B38` it subtracts 10,000 from max HP and
+restores the saved current HP. `BAI__BAI_scn_4_hn.dat` entry 22 contains the
+corresponding actor-60 setup at `0x0228-0x025A`. This proves the source of the
+large live-HP delta while leaving the temporary buffer's exact gameplay purpose
+open until a compatible frame trace crosses the removal path.
+
 ## Large native dispatchers
 
 `BattleAI_DispatchOpcode` is one real `0x4AE0`-byte function.

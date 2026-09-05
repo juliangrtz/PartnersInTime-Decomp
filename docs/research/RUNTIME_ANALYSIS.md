@@ -101,10 +101,14 @@ The zero-frame capture already confirms several static reconstruction results:
   HP 1,700 / POW 180 / DEF 130 / SPEED 120;
 - the live actor has HP 11,700/11,700, POW 180, DEF 130, SPEED 120, pending
   damage 30, target actor 56 (Mario), and Q8 damage scale 332;
-- the exact 10,000 difference between configured and live maximum HP is a
-  runtime observation, not yet a named mechanic. It must be observed before
-  and after the relevant script transition in a compatible state before the C
-  code treats it as a proven phase or protection rule.
+- the exact 10,000 difference is explained by the decoded battle scripts:
+  `BAI__BAI_mon_4_hn.dat`, entry 4, reads current/max HP through properties
+  16/17, adds 10,000, and writes both values back at command offsets
+  `0x0094-0x00C6`; later it subtracts 10,000 from max HP and restores the saved
+  current HP at `0x0B1A-0x0B38`. Scenario archive
+  `BAI__BAI_scn_4_hn.dat`, entry 22, contains the corresponding explicit setup
+  for actor 60 at `0x0228-0x025A`. The temporary buffer's gameplay purpose is
+  still left neutrally named until its transition is observed.
 
 The JSON also records each party member's HP/stats, actor flags, formation,
 scene-object position, animation, target, and resource pointers. Empty enemy
