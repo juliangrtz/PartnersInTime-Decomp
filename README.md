@@ -50,6 +50,12 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   actor-contact testing, bounded motion, finish animation, and actor-resource
   restoration. Its shell-like behavior is documented without assigning an
   unverified Bros. item name.
+- Overlay 13 contributes seven matching special-attack helpers (948 bytes).
+  They advance motion tuning, prepare and align a paired scene-object setup,
+  start its retreat and vertical-entry paths, classify a vertical angle into
+  animation bands, and keep the active model animation synchronized. The
+  original C++ virtual dispatch is represented directly instead of hidden in
+  hand-written assembly.
 - One hundred and thirty-four named overlay-2 battle functions are maintained symbolic ARM source,
   together with the resident item-value calculator they call.
   They cover task enqueueing, intrusive task lists and pools, actor lookup,
