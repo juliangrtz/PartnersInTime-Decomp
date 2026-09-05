@@ -636,6 +636,7 @@
     "305": "set_extended_save_flags_1024_2047",
     "310": "play_rumble_pattern",
     "311": "stop_rumble_pattern",
+    "312": "set_single_pass_entity_collision_enabled",
     "313": "set_field_timer_value",
     "314": "set_field_timer_display_position",
     "315": "set_field_timer_visible",
@@ -2483,6 +2484,14 @@
       "yield": "never",
       "effect": "stops the active Rumble Pak pattern when rumble hardware support is enabled. It cancels the pattern alarm, writes the off value to the Rumble Pak register at 0x08001000, and clears the resident active flag",
       "evidence": "func_ov000_020823f8 case 0x137 gated by byte 0x0205A00C; resident stop function func_0202e04c; alarm cancellation func_0203aa14; and Rumble Pak register writer func_0202e2e8"
+    },
+    "312": {
+      "arguments": ["enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects the field entity-to-entity collision traversal. Enabled mode passes each non-category-8/9 entity only the remainder of the linked entity list, so every unordered pair is tested once. Disabled mode passes the full list to every non-category-8/9 entity, then repeats collision resolution for up to four category-0/1 party entities. Room metadata mode 2 enables the single-pass policy automatically",
+      "evidence": "func_ov000_020823f8 case 0x138; field update func_ov000_02070e18 and its virtual callback at vtable offset 0xA4; collision-pair implementation func_ov000_020a9180; room initializer func_ov000_0207c170; and five reachable shipped enable calls"
     },
     "313": {
       "arguments": ["minutes", "seconds", "frame_subcounter"],
