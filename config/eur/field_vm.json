@@ -468,6 +468,10 @@
     "201": "get_party_controller_property",
     "206": "set_party_leader_animation_override",
     "212": "activate_field_map_event",
+    "213": "start_map_tile_animation",
+    "214": "wait_map_tile_animation",
+    "215": "pause_map_tile_animation",
+    "216": "resume_map_tile_animation",
     "217": "set_field_bg_layers_enabled",
     "218": "start_camera_profiled_movement",
     "219": "start_camera_timed_movement",
@@ -486,6 +490,7 @@
     "238": "wait_master_brightness_transition",
     "269": "wait_paired_field_ready",
     "273": "set_field_input_disable_mask",
+    "274": "set_field_event_input_disable_mask",
     "279": "set_camera_focus_entity",
     "280": "remove_all_entity_effect_sprites",
     "281": "wait_all_entity_effect_sprites",
@@ -977,6 +982,38 @@
       "effect": "activates the indexed 20-byte field-map event record, applies its persistent enable/disable save flags, reloads referenced map layers when present, applies the returned map state, and dirties map-synchronized entities",
       "evidence": "func_ov000_020823f8 case 0x0D4, func_ov000_0207af94, func_ov000_0207ad4c, and resident map-manager virtual method +0x38 func_020132a0"
     },
+    "213": {
+      "arguments": ["animation_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the indexed room tilemap animation when its descriptor supports animation and the slot is idle; the first frame is copied immediately and the descriptor's frame timer and frame index are initialized",
+      "evidence": "func_ov000_020823f8 case 0x0D5 and resident map-manager virtual method +0x44 func_02013064"
+    },
+    "214": {
+      "arguments": ["animation_index"],
+      "result": null,
+      "control_flow": "retries the same command while the indexed tilemap-animation slot has state 1",
+      "yield": "while the selected map tile animation is active",
+      "effect": "synchronization barrier for finite room tilemap animations",
+      "evidence": "func_ov000_020823f8 case 0x0D6 and animation-slot state at map manager +0x670 + 12 * animation_index"
+    },
+    "215": {
+      "arguments": ["animation_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "pauses the indexed room tilemap animation by clearing its active state while retaining its frame index and timer",
+      "evidence": "func_ov000_020823f8 case 0x0D7 and resident map-manager virtual method +0x4C func_02012e78"
+    },
+    "216": {
+      "arguments": ["animation_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resumes the indexed room tilemap animation by restoring its active state without reinitializing its frame index or timer",
+      "evidence": "func_ov000_020823f8 case 0x0D8 and resident map-manager virtual method +0x50 func_02012e50"
+    },
     "217": {
       "arguments": ["bg0_enabled_or_minus_one", "bg1_enabled_or_minus_one", "bg2_enabled_or_minus_one", "bg3_enabled_or_minus_one"],
       "result": null,
@@ -1117,7 +1154,15 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "selects the current or paired field side and stores the complemented input mask at field context +0x24C4",
-      "evidence": "func_ov000_020823f8 case 0x111"
+      "evidence": "func_ov000_020823f8 case 0x111 and func_ov000_0207ec3c"
+    },
+    "274": {
+      "arguments": ["field_side_or_minus_one", "disabled_button_mask"],
+      "result": "previous event-owned disabled-button mask",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects the current or paired field side and stores the complemented event-owned input mask at field context +0x24C6; input processing ANDs this mask with the independent mask controlled by opcode 0x111",
+      "evidence": "func_ov000_020823f8 case 0x112 and input-mask combiner func_ov000_0207ec3c"
     },
     "279": {
       "arguments": ["enabled", "entity_selector_or_minus_one"],
