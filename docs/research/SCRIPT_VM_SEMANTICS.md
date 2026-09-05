@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 310 | 259 | `config/eur/field_vm.json` |
+| Field/world | 341 | 311 | 260 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -147,6 +147,7 @@ field context (the other DS screen/field instance).
 | `0x068` | `set_entity_default_vertical_launch_velocity` | entity_selector, velocity_fx32_or_low_half, velocity_high_half | sets the entity's default positive vertical launch velocity. A literal is assembled from the low and high 16-bit arguments; when the low argument is a VM variable, its full 32-bit value is used and the high argument is ignored. Opcode 0x08D selects this default by passing -1 as its initial velocity |
 | `0x069` | `set_entity_default_gravity` | entity_selector, gravity_fx32_or_low_half, gravity_high_half | sets the entity's default positive per-frame gravity. Literal halves and full VM variables are decoded as in opcode 0x068. Opcode 0x08D uses this value as gravity when its gravity argument is -1, and negates it for an automatic launch when its initial-velocity argument is zero |
 | `0x06A` | `set_entity_terminal_fall_velocity` | entity_selector, terminal_velocity_fx32_or_low_half, terminal_velocity_high_half | sets the vertical controller's default terminal-fall velocity floor. Literal halves and full VM variables are decoded as in opcode 0x068. When opcode 0x08D passes -1 for its terminal value, the controller uses this default and clamps only negative values; the shipped explicit value +4096 therefore leaves falling velocity unclamped |
+| `0x06B` | `set_entity_shadow_support_enabled` | entity_selector, enabled | sets whether this entity may serve as a support surface for another entity's projected shadow. Entity collision resolution records the highest eligible supporting entity; the supported entity then clamps its shadow height to that surface and makes the shadow inherit the support's render depth and palette. All three reachable shipped calls disable support on scripted actors |
 | `0x06C` | `bind_entity_resource` | entity_selector, resource_index, animation_id, render_parameter, preserve_previous | binds a 24-byte record from FEvent fixed section 2 to the entity; -1 retains selected subresources |
 | `0x06D` | `restore_entity_resource_state` | entity_selector | restores the resource binding or animation state saved by opcode 0x06C and clears the corresponding saved-state flag |
 | `0x06E` | `wait_entity_animation` | entity_selector | retries the same command while the visible entity's bound model reports an active, non-suppressed animation |
@@ -363,14 +364,13 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-278/289 used opcodes and
-387,255/387,272 reachable commands
+279/289 used opcodes and
+387,258/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x05E` | 5 |
-| `0x06B` | 3 |
 | `0x135` | 1 |
 | `0x134` | 1 |
 | `0x133` | 1 |
