@@ -3,3 +3,6 @@
     .data       start:0x020c6c80 end:0x020c7000 kind:data align:32
     .bss        start:0x020c7000 end:0x020c7000 kind:bss align:32
 
+src/overlay017/attack_tuning.c:
+    .text       start:0x020c2c94 end:0x020c2e54
+
