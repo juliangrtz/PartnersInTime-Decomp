@@ -22,6 +22,16 @@ enum BattlePartyActorId {
     BATTLE_ACTOR_BABY_LUIGI
 };
 
+enum BattlePartyFormationIndex {
+    BATTLE_FORMATION_MARIO = 0,
+    BATTLE_FORMATION_LUIGI = 1,
+    BATTLE_FORMATION_BABY_MARIO = 2,
+    BATTLE_FORMATION_BABY_LUIGI = 3,
+    BATTLE_FORMATION_MARIO_CARRYING = 4,
+    BATTLE_FORMATION_LUIGI_CARRYING = 5,
+    BATTLE_FORMATION_COUNT = 6
+};
+
 enum BattleActorFlag {
     BATTLE_ACTOR_LEVEL_MASK = 0x007F,
     BATTLE_ACTOR_FLAG_07 = 0x0080,
@@ -51,7 +61,7 @@ struct BattleActor {
     s16 unk_01c;
     s16 pending_damage;
     s16 target_actor_id;
-    u8 unk_022[2];
+    s16 damage_scale_q8;
     union {
         u16 flags;
         struct {
@@ -63,6 +73,11 @@ struct BattleActor {
             u16 excluded_from_targeting : 1;
             u16 unknown_flags_14_15 : 2;
         } flag_bits;
+        struct {
+            u16 unknown_flags_00_13 : 14;
+            u16 force_one_damage : 1;
+            u16 unknown_flag_15 : 1;
+        } damage_flag_bits;
     };
     u8 unk_026[0x0A];
     BattleActorAnimationState *animation_state;
