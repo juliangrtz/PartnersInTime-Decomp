@@ -431,16 +431,23 @@
     "73": "get_entity_property",
     "74": "set_entity_visible",
     "75": "set_entity_enabled",
+    "102": "set_entity_animation_speed",
     "108": "bind_entity_resource",
+    "109": "restore_entity_resource_state",
+    "110": "wait_entity_animation",
     "111": "set_entity_animation",
     "113": "set_entity_behavior_mode",
+    "114": "restore_entity_behavior_state",
     "131": "start_entity_movement",
     "139": "wait_entity_movement",
     "141": "start_entity_vertical_motion",
     "143": "wait_entity_vertical_motion",
+    "145": "set_entity_position",
     "160": "set_entity_facing_direction",
     "183": "set_party_facing_direction",
+    "185": "legacy_noop_0b9",
     "201": "get_party_controller_property",
+    "269": "wait_paired_field_ready",
     "273": "set_field_input_disable_mask",
     "329": "play_field_sound",
     "330": "stop_field_sound"
@@ -633,6 +640,14 @@
       "effect": "sets entity state bit 0, which gates the normal entity update path",
       "evidence": "func_ov000_020823f8 case 0x04B and entity update consumers of state +0x0A bit 0"
     },
+    "102": {
+      "arguments": ["entity_selector", "animation_speed_q8"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stores the signed 16-bit Q8 animation rate on the entity and updates the bound model while preserving its current animation position",
+      "evidence": "func_ov000_020823f8 case 0x066 and resident func_0200940c"
+    },
     "108": {
       "arguments": ["entity_selector", "resource_index", "animation_id", "render_parameter", "preserve_previous"],
       "result": null,
@@ -640,6 +655,21 @@
       "yield": "never",
       "effect": "binds a 24-byte record from FEvent fixed section 2 to the entity; -1 retains selected subresources",
       "evidence": "func_ov000_020823f8 case 0x06C and func_ov000_020a6d68"
+    },
+    "109": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "restores the resource binding or animation state saved by opcode 0x06C and clears the corresponding saved-state flag",
+      "evidence": "func_ov000_020823f8 case 0x06D, func_ov000_020a6d68, and func_ov000_020a6c7c"
+    },
+    "110": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "retries the same command while the visible entity's bound model reports an active, non-suppressed animation",
+      "yield": "while animation flags +0x7C bits 8 and not 9 are set",
+      "evidence": "func_ov000_020823f8 case 0x06E"
     },
     "111": {
       "arguments": ["entity_selector", "animation_id", "preserve_previous"],
@@ -656,6 +686,14 @@
       "yield": "never",
       "effect": "sets entity state bits 7..9 and optionally preserves the previous mode for opcode 0x072",
       "evidence": "func_ov000_020823f8 cases 0x071/0x072 and func_ov000_020a4df8"
+    },
+    "114": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "restores the behavior mode saved by opcode 0x071, then clears the bound model's temporary behavior/effect state",
+      "evidence": "func_ov000_020823f8 case 0x072 and func_ov000_020a4df8"
     },
     "131": {
       "arguments": ["entity_selector", "coordinate_mode", "x", "y", "z_or_special", "motion_5", "motion_6", "motion_7", "motion_8", "motion_9", "motion_10", "motion_11"],
@@ -687,6 +725,14 @@
       "yield": "while vertical motion is active",
       "evidence": "func_ov000_020823f8 case 0x08F and func_ov000_020b4330"
     },
+    "145": {
+      "arguments": ["entity_selector", "relative", "x", "y", "z"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "converts coordinates to fx32, optionally adds the current position, and synchronizes current/previous entity position; subtype 8 uses only x/y while other entities also store z",
+      "evidence": "func_ov000_020823f8 case 0x091, func_ov000_020a6710, and func_ov000_020b42c8"
+    },
     "160": {
       "arguments": ["entity_selector", "direction_mode", "direction"],
       "result": null,
@@ -703,6 +749,14 @@
       "effect": "changes the selected party controller's left/right facing and sprite flip, either directly or through its guarded turn path",
       "evidence": "func_ov000_020823f8 case 0x0B7 and func_ov000_0209bc84"
     },
+    "185": {
+      "arguments": ["unused_0", "unused_1"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "intentional legacy no-op; both encoded arguments are ignored",
+      "evidence": "func_ov000_020823f8 ARM jump-table entry 0x0B9 targets the shared default return at 0x02082438"
+    },
     "201": {
       "arguments": ["party_side", "property_id"],
       "result": "selected party-controller property value, or zero for unsupported selectors",
@@ -710,6 +764,14 @@
       "yield": "never",
       "effect": "queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4",
       "evidence": "func_ov000_020823f8 case 0x0C9 property switch"
+    },
+    "269": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command until the paired field context exists and reaches active state 71",
+      "yield": "while the paired field is absent or not active",
+      "effect": "synchronization barrier between the two simultaneous field instances",
+      "evidence": "func_ov000_020823f8 case 0x10D and field-context state machine active state 0x47"
     },
     "273": {
       "arguments": ["field_side_or_minus_one", "disabled_button_mask"],
