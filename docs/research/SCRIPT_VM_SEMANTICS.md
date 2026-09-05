@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 311 | 260 | `config/eur/field_vm.json` |
+| Field/world | 341 | 312 | 261 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -138,6 +138,7 @@ field context (the other DS screen/field instance).
 | `0x059` | `set_entity_collision_response_channels` | entity_selector, channel_0_or_minus_one, channel_1_or_minus_one, channel_2_or_minus_one, channel_3_or_minus_one, channel_4_or_minus_one | updates five logical collision-response channels independently; -1 preserves a channel. Field-monster entities map the arguments to collision-state bits 0, {2,3}, 1, 6, and 4 respectively. Field-block entities additionally mirror channels 3 and 4 into bits 7 and 5. The collision solver consumes these flags when choosing solid displacement versus overlap/contact reporting |
 | `0x05A` | `set_entity_collision_response_channels_masked` | entity_selector, channel_mask, enabled | sets or clears selected logical collision-response channels; channel_mask bits 0 through 4 select the same five channels and class-specific physical-bit mapping used by opcode 0x059 |
 | `0x05B` | `restore_entity_collision_response_channels` | entity_selector | restores the entity's default low collision-response byte. Field-block entities additionally suppress its lower four response bits while their attached-party state is active |
+| `0x05E` | `set_entity_reserved_collision_flag` | entity_selector, flag_index, enabled | sets entity collision-state bit 16 + flag_index, where the implemented indices are 0 and 1. Both bits default to enabled for ordinary field entities and are copied together when entity state is cloned. An exhaustive instruction-level scan of overlay 0 found no behavioral reader for either bit, so they are currently classified as reserved or vestigial collision flags rather than assigning an unsupported gameplay meaning. All five reachable shipped commands address flag 0; no shipped command addresses flag 1 |
 | `0x05F` | `set_entity_category_collision_policy` | entity_selector, other_entity_category, solid_response_enabled, can_be_displaced, can_displace_other | replaces one three-bit entry in the entity's 16-category collision-policy table. Both entities need a nonzero policy for each other's category before body collision is considered. Matching bit 0 enables ordinary solid/contact resolution; this entity's bit 1 combined with the other's bit 2 permits one-way displacement of this entity by the other |
 | `0x060` | `set_entity_render_layer` | entity_selector, render_layer | stores the low four bits of render_layer in the high nibble of the entity's bound render-object sort key |
 | `0x061` | `set_entity_body_collision_enabled` | entity_selector, enabled | sets the entity's solid-body participation flag. When enabled, ordinary field entities resolve overlapping body rectangles against other enabled entities whose category is permitted by the entity's 11-bit collision mask, and their sprite sort key is derived from the feet/bottom Y coordinate so overlaps draw in depth order. The same flag also lets attached or related sprites constrain one another's automatic order. Disabling it leaves scripted trigger-region tests and the separate special collision path intact; all nine shipped calls disable the current script-owning entity, primarily to let cutscene actors pass through ordinary bodies |
@@ -364,13 +365,12 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-279/289 used opcodes and
-387,258/387,272 reachable commands
+280/289 used opcodes and
+387,263/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x05E` | 5 |
 | `0x135` | 1 |
 | `0x134` | 1 |
 | `0x133` | 1 |

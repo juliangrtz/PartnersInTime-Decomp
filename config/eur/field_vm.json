@@ -442,6 +442,7 @@
     "89": "set_entity_collision_response_channels",
     "90": "set_entity_collision_response_channels_masked",
     "91": "restore_entity_collision_response_channels",
+    "94": "set_entity_reserved_collision_flag",
     "95": "set_entity_category_collision_policy",
     "96": "set_entity_render_layer",
     "97": "set_entity_body_collision_enabled",
@@ -942,6 +943,14 @@
       "yield": "never",
       "effect": "restores the entity's default low collision-response byte. Field-block entities additionally suppress its lower four response bits while their attached-party state is active",
       "evidence": "func_ov000_020823f8 case 0x05B; virtual method +0x94 resolves to func_ov000_02087fbc for clFieldMon and func_ov000_020b64e8 for clFieldBlock"
+    },
+    "94": {
+      "arguments": ["entity_selector", "flag_index", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets entity collision-state bit 16 + flag_index, where the implemented indices are 0 and 1. Both bits default to enabled for ordinary field entities and are copied together when entity state is cloned. An exhaustive instruction-level scan of overlay 0 found no behavioral reader for either bit, so they are currently classified as reserved or vestigial collision flags rather than assigning an unsupported gameplay meaning. All five reachable shipped commands address flag 0; no shipped command addresses flag 1",
+      "evidence": "func_ov000_020823f8 case 0x05E; default initialization in func_ov000_020b5820 and func_ov000_020b5e84; paired clone in func_ov000_020a7a80; paired clear in func_ov000_020bc3e8; all shipped field-script call sites; exhaustive overlay-0 access scan for entity +0x39C bits 16 and 17"
     },
     "95": {
       "arguments": ["entity_selector", "other_entity_category", "solid_response_enabled", "can_be_displaced", "can_displace_other"],
