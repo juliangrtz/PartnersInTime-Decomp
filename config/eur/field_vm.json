@@ -442,6 +442,7 @@
     "89": "set_entity_collision_response_channels",
     "90": "set_entity_collision_response_channels_masked",
     "91": "restore_entity_collision_response_channels",
+    "95": "set_entity_category_collision_policy",
     "96": "set_entity_render_layer",
     "97": "set_entity_body_collision_enabled",
     "98": "set_entity_render_order_priorities",
@@ -939,6 +940,14 @@
       "yield": "never",
       "effect": "restores the entity's default low collision-response byte. Field-block entities additionally suppress its lower four response bits while their attached-party state is active",
       "evidence": "func_ov000_020823f8 case 0x05B; virtual method +0x94 resolves to func_ov000_02087fbc for clFieldMon and func_ov000_020b64e8 for clFieldBlock"
+    },
+    "95": {
+      "arguments": ["entity_selector", "other_entity_category", "solid_response_enabled", "can_be_displaced", "can_displace_other"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "replaces one three-bit entry in the entity's 16-category collision-policy table. Both entities need a nonzero policy for each other's category before body collision is considered. Matching bit 0 enables ordinary solid/contact resolution; this entity's bit 1 combined with the other's bit 2 permits one-way displacement of this entity by the other",
+      "evidence": "func_ov000_020823f8 case 0x05F stores a three-bit entry in the 64-bit table at entity +0x394; func_ov000_020ae6c0 indexes both entities' tables by the opposite four-bit category and consumes the three policy bits; and both shipped calls"
     },
     "96": {
       "arguments": ["entity_selector", "render_layer"],

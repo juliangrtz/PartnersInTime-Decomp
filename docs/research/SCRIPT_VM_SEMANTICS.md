@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 308 | 257 | `config/eur/field_vm.json` |
+| Field/world | 341 | 309 | 258 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -138,6 +138,7 @@ field context (the other DS screen/field instance).
 | `0x059` | `set_entity_collision_response_channels` | entity_selector, channel_0_or_minus_one, channel_1_or_minus_one, channel_2_or_minus_one, channel_3_or_minus_one, channel_4_or_minus_one | updates five logical collision-response channels independently; -1 preserves a channel. Field-monster entities map the arguments to collision-state bits 0, {2,3}, 1, 6, and 4 respectively. Field-block entities additionally mirror channels 3 and 4 into bits 7 and 5. The collision solver consumes these flags when choosing solid displacement versus overlap/contact reporting |
 | `0x05A` | `set_entity_collision_response_channels_masked` | entity_selector, channel_mask, enabled | sets or clears selected logical collision-response channels; channel_mask bits 0 through 4 select the same five channels and class-specific physical-bit mapping used by opcode 0x059 |
 | `0x05B` | `restore_entity_collision_response_channels` | entity_selector | restores the entity's default low collision-response byte. Field-block entities additionally suppress its lower four response bits while their attached-party state is active |
+| `0x05F` | `set_entity_category_collision_policy` | entity_selector, other_entity_category, solid_response_enabled, can_be_displaced, can_displace_other | replaces one three-bit entry in the entity's 16-category collision-policy table. Both entities need a nonzero policy for each other's category before body collision is considered. Matching bit 0 enables ordinary solid/contact resolution; this entity's bit 1 combined with the other's bit 2 permits one-way displacement of this entity by the other |
 | `0x060` | `set_entity_render_layer` | entity_selector, render_layer | stores the low four bits of render_layer in the high nibble of the entity's bound render-object sort key |
 | `0x061` | `set_entity_body_collision_enabled` | entity_selector, enabled | sets the entity's solid-body participation flag. When enabled, ordinary field entities resolve overlapping body rectangles against other enabled entities whose category is permitted by the entity's 11-bit collision mask, and their sprite sort key is derived from the feet/bottom Y coordinate so overlaps draw in depth order. The same flag also lets attached or related sprites constrain one another's automatic order. Disabling it leaves scripted trigger-region tests and the separate special collision path intact; all nine shipped calls disable the current script-owning entity, primarily to let cutscene actors pass through ordinary bodies |
 | `0x062` | `set_entity_render_order_priorities` | entity_selector, priority_0_or_auto, priority_1_or_auto, priority_2_or_auto, priority_3_or_auto, auxiliary_priority_or_auto | sets the per-component sprite overlap priorities stored at render-object bytes +0x134 through +0x137; -1 preserves automatic priority calculation. Normal entities also configure an optional auxiliary render object, while subtype 8 ignores the final argument |
@@ -361,8 +362,8 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-276/289 used opcodes and
-387,248/387,272 reachable commands
+277/289 used opcodes and
+387,250/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
@@ -370,7 +371,6 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x138` | 5 |
 | `0x05E` | 5 |
 | `0x06B` | 3 |
-| `0x05F` | 2 |
 | `0x135` | 1 |
 | `0x134` | 1 |
 | `0x133` | 1 |
