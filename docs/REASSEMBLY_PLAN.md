@@ -378,6 +378,8 @@ coordinates and returns the collision result plus hit position.
 The complete `BattleHitQueue_Update` compiler at `0x0209E20C` dispatches the
 old queue, expands active descriptors and wildcard targets, filters collisions
 and duplicates, calculates pending damage, and prepares the next eight records.
+The full 1,804-byte compiler and adjacent 660-byte collision-bounds resolver
+are now byte-identical, linked C in one cohesive source unit.
 The adjacent signed effect-variant setter at `0x0209DFDC` is maintained too.
 The collision chain now reaches the maintained swept-volume solver at
 `0x0209EF3C`, including fixed-point entry/exit time and impact interpolation.

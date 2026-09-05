@@ -717,6 +717,10 @@ then walks and unlinks active descriptors, expands party and enemy wildcard
 targets, collision-tests candidates, copies status/callback payloads, removes
 conflicting chains and duplicate targets, calculates pending damage, handles
 negative/reversed damage, and leaves at most eight records for the next pass.
+It and `BattleCollision_GetBounds` are now byte-identical linked C, totaling
+2,464 bytes in the grouped hit-queue source unit. The bounds resolver supplies
+formation-specific party boxes and transforms animation-frame bounds for other
+scene objects.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets
