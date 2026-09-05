@@ -38,13 +38,16 @@ typedef union BattleRuntimeFlags {
         u32 unknown_11 : 1;
         u32 global_property_20 : 1;
         u32 damage_number_merge_pending : 1;
-        u32 unknown_14_15 : 2;
+        u32 coin_particle_render_pending : 1;
+        u32 unknown_15 : 1;
         u32 alternate_formation : 1;
         u32 global_property_28 : 1;
         u32 unknown_18 : 1;
         u32 background_buffer : 1;
         u32 background_faded_out : 1;
-        u32 unknown_21_31 : 11;
+        u32 unknown_21 : 1;
+        u32 fast_forward_effects : 1;
+        u32 unknown_23_31 : 9;
     } bits;
 } BattleRuntimeFlags;
 

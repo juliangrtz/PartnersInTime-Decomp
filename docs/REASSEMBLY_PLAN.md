@@ -353,6 +353,10 @@ solves fixed-point entry/exit times, returns the impact-face bit, and writes an
 interpolated hit position when requested. The outer animation-pair traversal is
 already represented as readable semantic C but remains unlinked until its old
 CodeWarrior register schedule also matches exactly.
+The adjacent coin-loss visual at `0x020A0C64`-`0x020A1064` is reconstructed as
+one exact linked C++ unit. It names the save coin decrement and emitter task,
+the three reusable coin scene objects, fixed-point particle movement, bounce,
+fast-forward fade, shadow draw, and virtual model render calls.
 The party/enemy reaction-task lifecycle at `0x0209CE98`-`0x0209D694` is now a
 byte-identical linked C unit. Its starters expose task allocation/reuse, actor
 hit-lock flag `0x200`, and attached hit effects. The adjacent party first-hit
