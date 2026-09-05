@@ -90,6 +90,10 @@ src/battle/battle_display_capture.c
 src/battle/battle_raster_effects.c
 src/battle/battle_grid_transition.c
 src/battle/battle_grid_transition_capture.c
+src/battle/battle_grid_capture_source.c
+src/battle/battle_line_transition_phase_a.c
+src/battle/battle_line_capture.c
+src/battle/battle_line_transition_phase_b.c
 src/game/script_vm.c
 src/game/script_vm_control.c
 src/game/script_vm_execute.c
