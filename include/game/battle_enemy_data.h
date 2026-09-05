@@ -24,7 +24,8 @@ typedef struct BattleEnemyStatRecord {
         u16 traits;
         struct {
             u16 trait_class : 2;
-            u16 unknown_traits_02_15 : 14;
+            u16 unknown_trait_02 : 1;
+            u16 unknown_traits_03_15 : 13;
         } trait_bits;
         struct {
             u16 unknown_resistance_00_07 : 8;

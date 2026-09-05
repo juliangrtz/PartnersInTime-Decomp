@@ -74,6 +74,32 @@ The current `dsd` symbol maps list roughly 4,967 functions across about 1.49 MiB
 of ARM9/overlay text. This includes SDK routines, thunks, and tiny helpers; it is
 not a count of unique gameplay systems.
 
+## Current decompilation strategy
+
+High-level reconstruction is no longer serialized behind completion of the
+battle overlay. All 20 real ARM9 overlays are in scope concurrently; the 17
+remaining overlay-table entries are verified 32-byte placeholders and contain
+no mapped code to decompile. `tools/ida/import_overlay.py` creates an ARMv5TE
+IDA 9.1/9.2 database for any real overlay from its maintained section and symbol
+maps.
+
+The default pass favors independently verifiable quick wins:
+
+1. leaf accessors, flag operations, hardware-register helpers, small state
+   machines, and resource-owner lifecycles;
+2. adjacent functions that share one structure, callback table, or domain,
+   grouped into a human-editable translation unit;
+3. exact `objdiff` matching before the unit enters `linked_sources.txt`;
+4. conservative field/function names until call sites, data tables, SDK
+   documentation, or runtime probes prove stronger semantics;
+5. regular rotation among overlays so the project map improves even while the
+   large field, battle, and UI dispatchers remain long-running work.
+
+This is a prioritization rule, not a lowering of the quality bar. Every linked
+C function must still reproduce the original instructions and layout, and a
+full build must still reproduce the verified ROM hash. See
+`docs/research/OVERLAY_MAP.md` for the live coverage and evidence map.
+
 ## Stage 0 — lossless fixed-layout bootstrap
 
 Status: **implemented and byte-identical for EUR**.
