@@ -5,12 +5,12 @@ Overlay16Attack_IsObjectMotionComplete kind:function(arm,size=0x2c) addr:0x020c2
 func_ov016_020c2bbc kind:function(arm,size=0x164) addr:0x020c2bbc
 func_ov016_020c2d20 kind:function(arm,size=0x14c) addr:0x020c2d20
 func_ov016_020c2e6c kind:function(arm,size=0xb0) addr:0x020c2e6c
-func_ov016_020c2f1c kind:function(arm,size=0x38) addr:0x020c2f1c
-func_ov016_020c2f54 kind:function(arm,size=0x60) addr:0x020c2f54
-func_ov016_020c2fb4 kind:function(arm,size=0x58) addr:0x020c2fb4
-func_ov016_020c300c kind:function(arm,size=0x48) addr:0x020c300c
-func_ov016_020c3054 kind:function(arm,size=0x48) addr:0x020c3054
-func_ov016_020c309c kind:function(arm,size=0xcc) addr:0x020c309c
+Overlay16Attack_ResetObjectState kind:function(arm,size=0x38) addr:0x020c2f1c
+Overlay16Attack_InitializeObjectState kind:function(arm,size=0x60) addr:0x020c2f54
+Overlay16Attack_LaunchObjectAtReference kind:function(arm,size=0x58) addr:0x020c2fb4
+Overlay16Attack_BeginObjectPhaseThree kind:function(arm,size=0x48) addr:0x020c300c
+Overlay16Attack_BeginObjectPhaseTwo kind:function(arm,size=0x48) addr:0x020c3054
+Overlay16Attack_BeginObjectTargetMotion kind:function(arm,size=0xcc) addr:0x020c309c
 func_ov016_020c3168 kind:function(arm,size=0xf0) addr:0x020c3168
 func_ov016_020c3258 kind:function(arm,size=0x2c) addr:0x020c3258
 func_ov016_020c3284 kind:function(arm,size=0x28) addr:0x020c3284
@@ -80,7 +80,7 @@ data_ov016_020c7326 kind:data(any) addr:0x020c7326
 data_ov016_020c7328 kind:data(any) addr:0x020c7328
 data_ov016_020c733c kind:data(any) addr:0x020c733c
 data_ov016_020c7340 kind:data(any) addr:0x020c7340
-data_ov016_020c735c kind:data(any) addr:0x020c735c
+gOverlay16AttackTargetOffsets kind:data(any) addr:0x020c735c
 data_ov016_020c7384 kind:data(any) addr:0x020c7384
 data_ov016_020c7386 kind:data(any) addr:0x020c7386
 data_ov016_020c7388 kind:data(any) addr:0x020c7388
