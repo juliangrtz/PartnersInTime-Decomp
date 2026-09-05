@@ -60,6 +60,7 @@ FIELD_VARIABLE_NAMES = {
     0x3009: "field.current_room_id",
     0x300A: "field.paired_room_id",
     0x300B: "field.current_room_companion_id",
+    0x3023: "field.save_location_id",
 }
 FIELD_VARIABLE_VALUES = {name: value for value, name in FIELD_VARIABLE_NAMES.items()}
 

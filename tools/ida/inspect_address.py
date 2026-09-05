@@ -45,6 +45,20 @@ def main() -> None:
         for reference in references:
             print(f"  {format_function(reference)}")
 
+        print("data references from:")
+        references = list(idautils.DataRefsTo(address))
+        if not references:
+            print("  none")
+        for reference in references:
+            print(f"  {format_function(reference)}")
+
+        print("data references to:")
+        references = list(idautils.DataRefsFrom(address))
+        if not references:
+            print("  none")
+        for reference in references:
+            print(f"  {format_function(reference)}")
+
     ida_pro.qexit(0)
 
 

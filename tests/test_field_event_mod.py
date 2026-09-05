@@ -71,6 +71,14 @@ class FieldEventScriptTests(unittest.TestCase):
             field_event_mod.format_variable(0x300B),
             "field.current_room_companion_id",
         )
+        self.assertEqual(
+            field_event_mod.parse_variable("field.save_location_id", "test"),
+            0x3023,
+        )
+        self.assertEqual(
+            field_event_mod.format_variable(0x3023),
+            "field.save_location_id",
+        )
 
     def test_classifies_code_and_private_slot_targets(self) -> None:
         document, source = self._document()
