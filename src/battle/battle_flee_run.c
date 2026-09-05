@@ -54,7 +54,6 @@ enum BattleFleeRunConstant {
 };
 
 extern int Random_NextModulo(int modulus);
-extern int BattleParty_SpawnLaunchImpact(BattleActor *actor);
 
 static inline int BattleFlee_HasReducedCoinLoss(int actor_id) {
     BattleActor *actor = BattleActor_GetById(actor_id);

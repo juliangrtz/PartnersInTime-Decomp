@@ -43,8 +43,6 @@ enum BattlePartyCommandConstant {
     BATTLE_LUIGI_CARRY_RESOURCE_ID = (int)0xC000000D
 };
 
-extern int BattleParty_SpawnLaunchImpact(BattleActor *actor);
-
 static inline int
 BattlePartyActor_SelectIdleAnimation(BattlePartyActor *actor) {
     int command_state_available = 1;
