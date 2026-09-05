@@ -83,7 +83,7 @@ the same shape.
 |---|---:|---:|---:|---|
 | Field/world | 341 | 341 | 290 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
-| Scene/object | 210 | 130 | 79 | `config/eur/scene_vm.json` |
+| Scene/object | 210 | 210 | 159 | `config/eur/scene_vm.json` |
 
 The field and scene tables are reproducibly extracted and checked against a private
 ROM with `tools/extract_script_vm_descriptors.py`; the committed JSON contains only
