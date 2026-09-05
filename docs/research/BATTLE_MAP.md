@@ -721,6 +721,13 @@ It and `BattleCollision_GetBounds` are now byte-identical linked C, totaling
 2,464 bytes in the grouped hit-queue source unit. The bounds resolver supplies
 formation-specific party boxes and transforms animation-frame bounds for other
 scene objects.
+`BattleCollision_TestVolumes` at `0x0209EF3C` is byte-identical linked C for
+the full swept-volume test. It rejects axes that stay separated, derives Q12
+entry and exit times for all six directed box faces, identifies the impact
+face, and optionally interpolates an overlap-center hit position in battle
+coordinates. The adjacent object/animation traversal is maintained as clean
+semantic C while its remaining CodeWarrior register-allocation mismatch is
+resolved; it is deliberately not linked into the ROM yet.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets

@@ -347,6 +347,12 @@ target IDs, derives hit offsets from the queued record and scene object, then
 routes the pending damage and status payload to the appropriate enemy/party
 path. Together with the equipment hook, the entire 2,244-byte range through
 `0x0209DFDC` is now reconstructed exactly.
+The collision core at `0x0209EF3C` is byte-identical linked C. Its swept-AABB
+test calculates six directed separations at the previous and current frame,
+solves fixed-point entry/exit times, returns the impact-face bit, and writes an
+interpolated hit position when requested. The outer animation-pair traversal is
+already represented as readable semantic C but remains unlinked until its old
+CodeWarrior register schedule also matches exactly.
 The party/enemy reaction-task lifecycle at `0x0209CE98`-`0x0209D694` is now a
 byte-identical linked C unit. Its starters expose task allocation/reuse, actor
 hit-lock flag `0x200`, and attached hit effects. The adjacent party first-hit
