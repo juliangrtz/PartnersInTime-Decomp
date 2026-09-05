@@ -26,6 +26,9 @@ void BattleStatus_StopActorEffect(int actor_id, int status_id);
 int BattleStatus_TryApply(BattleActor *actor, int status_id, s16 duration,
                           int magnitude_percent, int chance_percent);
 void BattleStatus_SpawnEffect(int actor_id, int status_id);
+struct BattleAITask *BattleStatus_StartPartyAilment4Visual(int actor_id);
+struct BattleAITask *BattleStatus_StartPartyAilment5Visual(int actor_id);
+void BattleStatus_UpdatePartyAilmentVisual(struct BattleAITask *task);
 
 #ifdef __cplusplus
 }

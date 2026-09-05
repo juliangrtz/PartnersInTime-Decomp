@@ -262,3 +262,6 @@ src/battle/battle_effect_transform.c:
 
 src/battle/battle_effect_anchor_transform.c:
     .text       start:0x020a53e0 end:0x020a56ec
+
+src/battle/battle_status_party_visual.cpp:
+    .text       start:0x020a5f7c end:0x020a6624
