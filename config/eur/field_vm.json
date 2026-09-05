@@ -538,8 +538,15 @@
     "279": "set_camera_focus_entity",
     "280": "remove_all_entity_effect_sprites",
     "281": "wait_all_entity_effect_sprites",
+    "284": "start_scripted_battle",
+    "285": "start_scripted_battle_extended",
+    "286": "open_pause_menu",
     "287": "set_save_location_id",
     "288": "open_save_menu",
+    "289": "open_shop",
+    "290": "start_staff_credits",
+    "291": "open_game_over_menu",
+    "292": "initialize_new_game_preset",
     "293": "restore_party_member_hp",
     "294": "adjust_party_member_hp",
     "296": "adjust_coins",
@@ -1600,6 +1607,30 @@
       "yield": "while any field effect sprite is active",
       "evidence": "func_ov000_020823f8 case 0x119 and func_ov000_020714a8"
     },
+    "284": {
+      "arguments": ["battle_encounter_id", "reserved_transition_argument", "unused_minus_one", "contact_mode", "encounter_entity_selector", "party_context"],
+      "result": null,
+      "control_flow": "hands the field task back to the resident scene manager with result 1, which loads the overlay-2 battle scene; the field resumes after battle completion",
+      "yield": "until the battle scene returns to the field scene",
+      "effect": "prepares the 36-byte battle-transfer block at save data +0x558. It records party_context, battle_encounter_id, the current room ID, contact_mode, the active field side, the selected encounter entity's ID, and the lead field entity's side. It also derives the encounter transition from entity class, collision direction, relative position, and field state, snapshots both parties' field coordinates, and releases the field scene. reserved_transition_argument is forwarded into the helper but not read there; unused_minus_one is not read by the dispatcher and is -1 in every shipped command",
+      "evidence": "func_ov000_020823f8 case 0x11C and ARM instructions 0x02087314..0x02087384, battle-transfer initializer func_ov000_0206ba2c, field teardown func_ov000_0206b1fc, field transition update func_ov000_02069eb0 states 1/2, resident scene dispatcher func_02005da4 result 1, and overlay-2 battle entry func_ov002_02077bb0"
+    },
+    "285": {
+      "arguments": ["battle_encounter_id", "reserved_transition_argument", "unused_minus_one", "contact_mode", "encounter_entity_selector", "party_context", "transition_variant"],
+      "result": null,
+      "control_flow": "the same overlay-2 battle handoff and field suspension as opcode 0x11C",
+      "yield": "until the battle scene returns to the field scene",
+      "effect": "performs the same battle-transfer setup as opcode 0x11C and additionally stores transition_variant in bits 4..7 of the battle flags. The sole shipped invocation supplies transition_variant 1; opcode 0x11C supplies the helper with its internal default value 3. reserved_transition_argument is forwarded but unused and unused_minus_one is not read by the dispatcher",
+      "evidence": "func_ov000_020823f8 case 0x11D and ARM instructions 0x02087388..0x020873FC, func_ov000_0206ba2c, func_ov000_0206b1fc, func_ov000_02069eb0 states 1/2, func_02005da4 result 1, and func_ov002_02077bb0"
+    },
+    "286": {
+      "arguments": ["party_context_or_minus_one", "initial_section", "fade_to_black", "return_screen_flag"],
+      "result": null,
+      "control_flow": "hands the field task back to the resident scene manager with result 4, which loads the overlay-7 pause-menu scene",
+      "yield": "until the pause menu returns to the field scene",
+      "effect": "clears and fills the ten-byte scene-transfer header at save data +0x558. -1 resolves party_context_or_minus_one from the active field party; initial_section 0 opens the normal menu root while nonzero values directly select zero-based section initial_section - 1; return_screen_flag becomes transfer bit 15. Field resources are released and both screens optionally fade from white to black over 16 frames",
+      "evidence": "func_ov000_020823f8 case 0x11E, handoff initializer func_ov000_0206b0a0, field transition update func_ov000_02069eb0 states 3/4, resident scene dispatcher func_02005da4 result 4, and overlay-7 entry/transfer consumers func_ov007_02072a80 and func_ov007_02070b50"
+    },
     "287": {
       "arguments": ["save_location_id"],
       "result": null,
@@ -1615,6 +1646,38 @@
       "yield": "until the save menu returns to the field scene",
       "effect": "clears and fills the ten-byte scene-transfer header at save data +0x558: party_context_or_minus_one is resolved to the active field party configuration when -1, the saved location byte comes from opcode 0x11F, and return_screen_flag becomes transfer bit 15. Both field resource owners are released, both screens optionally fade from white to black over 16 frames, and the field scene is suspended for the save menu. Every shipped invocation uses arguments -1, 1, 1",
       "evidence": "func_ov000_020823f8 case 0x120, handoff initializer func_ov000_0206aeb0, field transition update func_ov000_02069eb0 states 5/6, resident scene dispatcher func_02005da4 result 5, overlay-8 entry func_ov008_0206ca4c, and save-menu data/save paths func_ov008_02073d54, func_ov008_0206b598, and func_02028ca0"
+    },
+    "289": {
+      "arguments": ["shop_scene_id", "fade_to_black", "return_screen_flag"],
+      "result": null,
+      "control_flow": "hands the field task back to the resident scene manager with result 6, which loads the overlay-9 shop scene",
+      "yield": "until the shop returns to the field scene",
+      "effect": "clears and fills the ten-byte scene-transfer header at save data +0x558, releases both field resource owners, and optionally fades both screens from white to black over 16 frames. shop_scene_id bits 2.. select one of four shop-stock datasets, bit 1 selects the ordinary shop inventory family within datasets 0..2, and bit 0 selects the initial buy/sell mode; dataset 3 forces inventory family 2. Shipped field scripts use the even IDs 0, 2, 4, 6, 8, 10, and 14",
+      "evidence": "func_ov000_020823f8 case 0x121, handoff initializer func_ov000_0206acf8, field transition update func_ov000_02069eb0 states 7/8, resident scene dispatcher func_02005da4 result 6, overlay-9 entry func_ov009_0206f440, shop-scene decoder func_ov009_0206e8ac, and stock selectors func_ov009_0207df1c, func_ov009_0207df30, and func_ov009_0207df84"
+    },
+    "290": {
+      "arguments": ["fade_to_black"],
+      "result": null,
+      "control_flow": "hands the field task back to the resident scene manager with result 10, which loads overlay 6's title/staff-roll scene family",
+      "yield": "the shipped ending does not resume normal field play",
+      "effect": "optionally fades both screens from white to black over 16 frames before leaving the field. The only shipped invocation occurs after the final farewell sequence in room 594 and enters overlay 6, whose embedded resources and class names identify the staff credits",
+      "evidence": "func_ov000_020823f8 case 0x122, handoff initializer func_ov000_0206abd8, field transition update func_ov000_02069eb0 states 9/10, resident scene dispatcher func_02005da4 result 10, overlay-6 entry func_ov006_0207ab08, overlay-6 clStaffRoll resources, and room-594 FEvent sequence Last_end"
+    },
+    "291": {
+      "arguments": ["fade_to_black"],
+      "result": null,
+      "control_flow": "hands the field task back to the resident scene manager with result 7, which loads overlay 8's game-over scene",
+      "yield": "until the game-over menu chooses its next scene",
+      "effect": "clears the ten-byte scene-transfer header and optionally fades both field screens from white to black over 16 frames before entering overlay 8's clOverMenu controller",
+      "evidence": "func_ov000_020823f8 case 0x123, handoff initializer func_ov000_0206a9a4, field transition update func_ov000_02069eb0 states 11/12, resident scene dispatcher func_02005da4 result 7, overlay-8 entry func_ov008_02070e14, and embedded class name clOverMenu"
+    },
+    "292": {
+      "arguments": ["new_game_preset"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "destructively initializes a new-game party from one of the resident preset columns: clears the complete 284-byte party-stat and core-inventory region, builds all four 36-byte character records with preset levels and derived HP/POW/DEF/SPEED/STACHE values, grants and equips each character's preset two items, clears coins and beans, and seeds initial usable/action-item counts. Shipped scripts use presets 1, 2, and 3",
+      "evidence": "func_ov000_020823f8 case 0x124 and resident initializer func_02019330 with preset tables data_02054fbc..data_02055044"
     },
     "293": {
       "arguments": ["character_index"],

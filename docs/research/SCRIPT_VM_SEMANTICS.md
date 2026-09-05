@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 209 | 158 | `config/eur/field_vm.json` |
+| Field/world | 341 | 216 | 165 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -234,8 +234,15 @@ field context (the other DS screen/field instance).
 | `0x117` | `set_camera_focus_entity` | enabled, entity_selector_or_minus_one | toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection |
 | `0x118` | `remove_all_entity_effect_sprites` | 0 literal args | hides and releases all eight field effect-sprite slots |
 | `0x119` | `wait_all_entity_effect_sprites` | 0 literal args | retries the same command while any of the eight field effect sprites still reports an active animation |
+| `0x11C` | `start_scripted_battle` | battle_encounter_id, reserved_transition_argument, unused_minus_one, contact_mode, encounter_entity_selector, party_context | prepares the 36-byte battle-transfer block at save data +0x558. It records party_context, battle_encounter_id, the current room ID, contact_mode, the active field side, the selected encounter entity's ID, and the lead field entity's side. It also derives the encounter transition from entity class, collision direction, relative position, and field state, snapshots both parties' field coordinates, and releases the field scene. reserved_transition_argument is forwarded into the helper but not read there; unused_minus_one is not read by the dispatcher and is -1 in every shipped command |
+| `0x11D` | `start_scripted_battle_extended` | battle_encounter_id, reserved_transition_argument, unused_minus_one, contact_mode, encounter_entity_selector, party_context, transition_variant | performs the same battle-transfer setup as opcode 0x11C and additionally stores transition_variant in bits 4..7 of the battle flags. The sole shipped invocation supplies transition_variant 1; opcode 0x11C supplies the helper with its internal default value 3. reserved_transition_argument is forwarded but unused and unused_minus_one is not read by the dispatcher |
+| `0x11E` | `open_pause_menu` | party_context_or_minus_one, initial_section, fade_to_black, return_screen_flag | clears and fills the ten-byte scene-transfer header at save data +0x558. -1 resolves party_context_or_minus_one from the active field party; initial_section 0 opens the normal menu root while nonzero values directly select zero-based section initial_section - 1; return_screen_flag becomes transfer bit 15. Field resources are released and both screens optionally fade from white to black over 16 frames |
 | `0x11F` | `set_save_location_id` | save_location_id | stores the unsigned 16-bit location selector used by the next save-menu handoff. Field variable 0x3023 reads the stored value, and opcode 0x120 copies its low byte into the save-menu transfer block |
 | `0x120` | `open_save_menu` | party_context_or_minus_one, fade_to_black, return_screen_flag | clears and fills the ten-byte scene-transfer header at save data +0x558: party_context_or_minus_one is resolved to the active field party configuration when -1, the saved location byte comes from opcode 0x11F, and return_screen_flag becomes transfer bit 15. Both field resource owners are released, both screens optionally fade from white to black over 16 frames, and the field scene is suspended for the save menu. Every shipped invocation uses arguments -1, 1, 1 |
+| `0x121` | `open_shop` | shop_scene_id, fade_to_black, return_screen_flag | clears and fills the ten-byte scene-transfer header at save data +0x558, releases both field resource owners, and optionally fades both screens from white to black over 16 frames. shop_scene_id bits 2.. select one of four shop-stock datasets, bit 1 selects the ordinary shop inventory family within datasets 0..2, and bit 0 selects the initial buy/sell mode; dataset 3 forces inventory family 2. Shipped field scripts use the even IDs 0, 2, 4, 6, 8, 10, and 14 |
+| `0x122` | `start_staff_credits` | fade_to_black | optionally fades both screens from white to black over 16 frames before leaving the field. The only shipped invocation occurs after the final farewell sequence in room 594 and enters overlay 6, whose embedded resources and class names identify the staff credits |
+| `0x123` | `open_game_over_menu` | fade_to_black | clears the ten-byte scene-transfer header and optionally fades both field screens from white to black over 16 frames before entering overlay 8's clOverMenu controller |
+| `0x124` | `initialize_new_game_preset` | new_game_preset | destructively initializes a new-game party from one of the resident preset columns: clears the complete 284-byte party-stat and core-inventory region, builds all four 36-byte character records with preset levels and derived HP/POW/DEF/SPEED/STACHE values, grants and equips each character's preset two items, clears coins and beans, and seeds initial usable/action-item counts. Shipped scripts use presets 1, 2, and 3 |
 | `0x125` | `restore_party_member_hp` | character_index | copies the selected character's maximum HP into current HP and refreshes the paired field status HUD when it is active; character indices 0 through 3 select Mario, Luigi, Baby Mario, and Baby Luigi |
 | `0x126` | `adjust_party_member_hp` | character_index, hp_delta | adds the signed delta to the selected character's current HP, clamps the result to zero through maximum HP, and refreshes the paired field status HUD when active |
 | `0x128` | `adjust_coins` | coin_delta | adds the signed delta to the save's coin total and clamps it to 0 through 999999; supplying 32767 is used by shipped scripts as a saturating fill operation |
@@ -262,8 +269,8 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-185/289 used opcodes and
-385,615/387,272 reachable commands
+192/289 used opcodes and
+385,662/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
