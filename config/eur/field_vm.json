@@ -431,6 +431,7 @@
     "73": "get_entity_property",
     "74": "set_entity_visible",
     "75": "set_entity_enabled",
+    "96": "set_entity_render_layer",
     "102": "set_entity_animation_speed",
     "108": "bind_entity_resource",
     "109": "restore_entity_resource_state",
@@ -447,8 +448,16 @@
     "183": "set_party_facing_direction",
     "185": "legacy_noop_0b9",
     "201": "get_party_controller_property",
+    "222": "wait_camera_movement",
+    "237": "start_master_brightness_transition",
+    "238": "wait_master_brightness_transition",
     "269": "wait_paired_field_ready",
     "273": "set_field_input_disable_mask",
+    "320": "open_screen_message",
+    "321": "open_entity_message",
+    "322": "wait_message_finished",
+    "323": "wait_message_closed",
+    "324": "close_message",
     "329": "play_field_sound",
     "330": "stop_field_sound"
   },
@@ -640,6 +649,14 @@
       "effect": "sets entity state bit 0, which gates the normal entity update path",
       "evidence": "func_ov000_020823f8 case 0x04B and entity update consumers of state +0x0A bit 0"
     },
+    "96": {
+      "arguments": ["entity_selector", "render_layer"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stores the low four bits of render_layer in the high nibble of the entity's bound render-object sort key",
+      "evidence": "func_ov000_020823f8 case 0x060 and render-order consumer func_ov000_020a9180"
+    },
     "102": {
       "arguments": ["entity_selector", "animation_speed_q8"],
       "result": null,
@@ -765,6 +782,30 @@
       "effect": "queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4",
       "evidence": "func_ov000_020823f8 case 0x0C9 property switch"
     },
+    "222": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while either camera-motion axis remains active",
+      "yield": "while field camera-motion state bits 0 or 1 are set",
+      "effect": "synchronization barrier shared by the camera motion commands 0x0DB through 0x0DD",
+      "evidence": "func_ov000_020823f8 case 0x0DE and camera state at field context +0x2B90"
+    },
+    "237": {
+      "arguments": ["start_brightness_or_255", "target_brightness", "duration_frames"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "writes the target immediately when duration is zero; otherwise interpolates the active screen's signed DS master-brightness value once per frame. A start value of 255 preserves the current brightness",
+      "evidence": "func_ov000_020823f8 case 0x0ED, func_ov000_02075c34, func_ov000_02075a80, and registers 0x0400006C/0x0400106C"
+    },
+    "238": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command until the master-brightness countdown reaches zero",
+      "yield": "while the transition is active",
+      "effect": "synchronization barrier for opcode 0x0ED",
+      "evidence": "func_ov000_020823f8 case 0x0EE and field brightness countdown at context +0x2406"
+    },
     "269": {
       "arguments": [],
       "result": null,
@@ -780,6 +821,46 @@
       "yield": "never",
       "effect": "selects the current or paired field side and stores the complemented input mask at field context +0x24C4",
       "evidence": "func_ov000_020823f8 case 0x111"
+    },
+    "320": {
+      "arguments": ["x_or_center", "y", "width_tiles_or_auto", "height_tiles_or_auto", "window_mode", "tail_style", "tail_size_or_auto", "vertical_placement_or_auto", "tail_x_or_auto", "text_control_mode", "message_slot", "text_archive_id", "message_id"],
+      "result": "allocated message slot, or -1 on allocation failure",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "opens a text window at screen coordinates, deriving zero dimensions from the selected message and accepting -32768 as horizontally centered; configurable tail-placement fields are packed into the resident eight-slot message manager",
+      "evidence": "func_ov000_020823f8 case 0x140, func_ov000_02070930, resident func_0201d320, and resident message-manager slot size 204"
+    },
+    "321": {
+      "arguments": ["entity_selector", "width_tiles_or_auto", "height_tiles_or_auto", "window_mode", "tail_style", "tail_size_or_auto", "vertical_placement_or_auto", "tail_x_or_auto", "text_control_mode", "message_slot", "text_archive_id", "message_id"],
+      "result": "allocated message slot, or -1 on allocation failure",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "opens a text window anchored to an entity, automatically placing and clamping the box and its tail within the 256 by 192 screen; when invoked by an entity-owned VM it also avoids overlap with the linked owner",
+      "evidence": "func_ov000_020823f8 case 0x141, func_ov000_020700ec, func_ov000_02070930, and resident func_0201d320"
+    },
+    "322": {
+      "arguments": ["message_slot_selector"],
+      "result": null,
+      "control_flow": "retries while a selected message slot is active and has not entered its finished/closing state",
+      "yield": "until message processing finishes or closing begins",
+      "effect": "selectors at least zero address one of eight slots; -2 matches both screens and other negative values match the current field screen",
+      "evidence": "func_ov000_020823f8 case 0x142, func_ov000_0206fb74, func_ov000_0206fc50, and resident func_0201d0d4 setting message-state bit 31"
+    },
+    "323": {
+      "arguments": ["message_slot_selector"],
+      "result": null,
+      "control_flow": "retries while any selected message slot still owns an active message object",
+      "yield": "until the message is fully closed",
+      "effect": "uses the same single-slot, both-screen, and current-screen selector rules as opcode 0x142",
+      "evidence": "func_ov000_020823f8 case 0x143 and func_ov000_0206fb74"
+    },
+    "324": {
+      "arguments": ["message_slot_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "requests closure for one or more selected message slots using the same selector rules as opcodes 0x142 and 0x143",
+      "evidence": "func_ov000_020823f8 case 0x144, func_ov000_0206facc, and resident func_0201d0d4"
     },
     "329": {
       "arguments": ["sound_id", "mode", "track_for_field_cleanup"],
