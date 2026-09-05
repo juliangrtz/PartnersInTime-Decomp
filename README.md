@@ -39,6 +39,12 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   and value-scaling helpers in overlay 10, and attack-phase state helpers in
   overlay 21. The maintained [overlay map](docs/research/OVERLAY_MAP.md) records
   proven roles and the next triage targets without guessing at unknown modules.
+- The next overlay pass adds fourteen more matching C functions (1,460 bytes)
+  from special-attack overlays 12 and 20. They expose party-formation and
+  animation state, the original four-member action-order shuffle, paired
+  scene-object setup/cleanup, finish and mode transitions, actor-position
+  restoration, and target-relative vertical-arc startup. The exact Bros. item
+  identities remain conservatively unnamed until confirmed at runtime.
 - One hundred and thirty-four named overlay-2 battle functions are maintained symbolic ARM source,
   together with the resident item-value calculator they call.
   They cover task enqueueing, intrusive task lists and pools, actor lookup,

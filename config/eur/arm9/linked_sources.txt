@@ -107,5 +107,8 @@ src/game/script_vm_variables.c
 src/overlay005/resource_owner.c
 src/overlay005/display_bg.c
 src/overlay010/enemy_state.c
-src/overlay021/attack_state.c
+src/overlay012/attack_sequence_state.c
+src/overlay012/attack_controller.c
+src/overlay020/target_arc_state.c
+src/overlay021/attack_phase_state.c
 src/field/field_entity_state.c
