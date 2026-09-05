@@ -11,24 +11,6 @@ enum BattleGridTransitionFlag {
     BATTLE_GRID_TRANSITION_ACTIVE = 1 << 6
 };
 
-typedef struct BattleGridTransitionState {
-    u16 angle;
-    u16 velocity;
-    u16 remaining_frames;
-} BattleGridTransitionState;
-
-struct BattleGridTransitionTask {
-    struct BattleGridTransitionTask *next;
-    void (*callback)(struct BattleGridTransitionTask *task);
-    struct BattleGridTransitionTask **owner_slot;
-    BattleGridTransitionState state;
-};
-
-typedef char BattleGridTransitionState_SizeCheck[
-    sizeof(BattleGridTransitionState) == 6 ? 1 : -1];
-typedef char BattleGridTransitionTask_SizeCheck[
-    sizeof(BattleGridTransitionTask) == 0x14 ? 1 : -1];
-
 extern int BattleGridTransition_DrawPhaseA(
     BattleGridTransitionState *state);
 
