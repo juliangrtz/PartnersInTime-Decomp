@@ -789,7 +789,7 @@
 <rect class="cell" x="346.97" y="390.48" width="24.34" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_020b2440 · 1.6 KiB · remaining</title></rect>
 <rect class="cell" x="371.31" y="390.48" width="24.22" height="22.82" fill="#2dd4a0"><title>Overlay 02 · battle_collision_volumes · 1.6 KiB · matching C/C++</title></rect>
 <rect class="cell" x="395.53" y="390.48" width="23.93" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_020a95cc · 1.6 KiB · remaining</title></rect>
-<rect class="cell" x="419.45" y="390.48" width="23.75" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_020a56ec · 1.6 KiB · remaining</title></rect>
+<rect class="cell" x="419.45" y="390.48" width="23.75" height="22.82" fill="#263244"><title>Overlay 02 · BattleStatus_UpdatePartyStatVisuals · 1.6 KiB · remaining</title></rect>
 <rect class="cell" x="443.20" y="390.48" width="23.69" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_020add40 · 1.6 KiB · remaining</title></rect>
 <rect class="cell" x="466.89" y="390.48" width="23.45" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_020b1590 · 1.5 KiB · remaining</title></rect>
 <rect class="cell" x="490.34" y="390.48" width="23.33" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_020b1c4c · 1.5 KiB · remaining</title></rect>
@@ -902,7 +902,7 @@
 <rect class="cell" x="351.49" y="653.88" width="14.31" height="14.10" fill="#2dd4a0"><title>Overlay 02 · battle_coin_loss · 596 B · matching C/C++</title></rect>
 <rect class="cell" x="351.49" y="667.98" width="14.31" height="14.01" fill="#263244"><title>Overlay 02 · BattleObjectData_PrepareBodyDecodeTask · 592 B · remaining</title></rect>
 <rect class="cell" x="351.49" y="681.99" width="14.31" height="14.01" fill="#263244"><title>Overlay 02 · BattleCommandWheel_UpdateSelection · 592 B · remaining</title></rect>
-<rect class="cell" x="365.80" y="489.09" width="14.73" height="13.61" fill="#263244"><title>Overlay 02 · func_ov002_020a5d2c · 592 B · remaining</title></rect>
+<rect class="cell" x="365.80" y="489.09" width="14.73" height="13.61" fill="#263244"><title>Overlay 02 · BattleStatus_StartPartyStatVisual · 592 B · remaining</title></rect>
 <rect class="cell" x="380.54" y="489.09" width="14.54" height="13.61" fill="#2dd4a0"><title>Overlay 02 · battle_status_party_visual · 584 B · matching C/C++</title></rect>
 <rect class="cell" x="395.07" y="489.09" width="14.44" height="13.61" fill="#2dd4a0"><title>Overlay 02 · battle_target_interface · 580 B · matching C/C++</title></rect>
 <rect class="cell" x="409.51" y="489.09" width="14.24" height="13.61" fill="#38bdf8"><title>Overlay 02 · BattleStatus_StopActorEffect · 572 B · symbolic ASM</title></rect>
