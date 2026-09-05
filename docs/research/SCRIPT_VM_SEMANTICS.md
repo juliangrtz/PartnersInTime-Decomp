@@ -79,7 +79,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 127 | 76 | `config/eur/field_vm.json` |
+| Field/world | 341 | 143 | 92 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -145,6 +145,9 @@ field context (the other DS screen/field instance).
 | `0x08F` | `wait_entity_vertical_motion` | entity_selector | retries while entity vertical-motion flag 0x10 is set |
 | `0x091` | `set_entity_position` | entity_selector, relative, x, y, z | converts coordinates to fx32, optionally adds the current position, and synchronizes current/previous entity position; subtype 8 uses only x/y while other entities also store z |
 | `0x0A0` | `set_entity_facing_direction` | entity_selector, direction_mode, direction | stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately |
+| `0x0A2` | `spawn_entity_effect_sprite` | entity_selector, sprite_animation_id, position_mode, x, y, lifetime_or_minus_one, follow_entity | allocates one of eight field effect-sprite slots, starts sprite_animation_id, and records the owning entity; position_mode 1 offsets x/y from the entity, lifetime -1 selects animation-controlled lifetime, and follow_entity controls whether the sprite remains entity-bound |
+| `0x0A3` | `remove_entity_effect_sprite` | entity_selector | finds the field effect-sprite slot owned by the selected entity, hides its render object, and releases the slot |
+| `0x0A4` | `wait_entity_effect_sprite` | entity_selector | retries the same command while the field effect sprite owned by the selected entity still reports an active animation |
 | `0x0AE` | `rejoin_party_follower` | party_side, instant | moves the selected party's detached follower back to its formation offset behind the leader, either immediately or through entity movement, then restores the normal follower tether |
 | `0x0AF` | `wait_party_follower_rejoined` | party_side | retries the same command while the selected party follower is still moving back into formation |
 | `0x0B0` | `detach_party_follower` | party_side | disables the normal leader/follower tether for the selected party and resets the follower's formation offsets and occupancy state so scripts can position both members independently |
@@ -160,13 +163,26 @@ field context (the other DS screen/field instance).
 | `0x0CE` | `set_party_leader_animation_override` | party_side, enabled | enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30 |
 | `0x0D4` | `activate_field_map_event` | map_event_index | activates the indexed 20-byte field-map event record, applies its persistent enable/disable save flags, reloads referenced map layers when present, applies the returned map state, and dirties map-synchronized entities |
 | `0x0D9` | `set_field_bg_layers_enabled` | bg0_enabled_or_minus_one, bg1_enabled_or_minus_one, bg2_enabled_or_minus_one, bg3_enabled_or_minus_one | updates the active field screen's DISPCNT BG0 through BG3 enable bits; -1 preserves an individual layer, and the OBJ display-enable bit remains forced on |
+| `0x0DA` | `start_camera_profiled_movement` | coordinate_mode, x, y, motion_3, motion_4, motion_5, motion_6, x_motion_flag, y_motion_flag | starts profiled camera movement to clamped fx32 coordinates; coordinate_mode 1 treats x/y as relative to the current camera position, and the final two flags are stored as per-axis motion options |
+| `0x0DB` | `start_camera_timed_movement` | coordinate_mode, x, y, duration_frames, x_motion_flag, y_motion_flag | starts timed camera interpolation to clamped fx32 coordinates; coordinate_mode 1 treats x/y as relative to the current camera position |
+| `0x0DC` | `start_camera_profiled_entity_tracking` | entity_selector, x_offset, y_offset, motion_3, x_motion_flag, y_motion_flag | starts profiled camera tracking whose target is recomputed each frame from the selected entity position plus fx32 x/y offsets |
 | `0x0DD` | `start_camera_timed_entity_tracking` | entity_selector, x_offset, y_offset, duration_frames, x_motion_flag, y_motion_flag | starts a timed camera interpolation whose target is recomputed from the selected entity position plus fx32 x/y offsets on every frame; the two flags are stored as per-axis camera-motion options |
 | `0x0DE` | `wait_camera_movement` | 0 literal args | synchronization barrier shared by the camera motion commands 0x0DB through 0x0DD |
+| `0x0DF` | `stop_camera_movement` | 0 literal args | clears both active camera-motion axes without snapping the camera to the pending target |
+| `0x0E0` | `start_bg_layer_profiled_scroll` | bg_layer, x_delta, y_delta, motion_3, motion_4, motion_5, motion_6, motion_flag | starts profiled scrolling for one of three field background layers; x/y deltas are converted to fx32 and applied through the field map manager's per-layer offset method |
+| `0x0E1` | `start_bg_layer_timed_scroll` | bg_layer, x_delta, y_delta, duration_frames, motion_flag | starts timed scrolling for one of three field background layers; x/y deltas are converted to fx32 and applied over duration_frames |
+| `0x0E2` | `wait_bg_layer_scroll` | bg_layer | retries the same command while either scroll axis for the selected background layer remains active |
+| `0x0E3` | `stop_bg_layer_scroll` | bg_layer | clears both active scroll axes for the selected background layer |
+| `0x0E4` | `start_camera_shake` | axis, amplitude_pixels, step_fx32, half_cycle_count, rumble_pattern_or_auto | starts a field-camera shake on the selected axis, alternating step_fx32 until the pixel amplitude is reached for the requested number of half-cycles; a negative rumble pattern is selected automatically from shake speed |
+| `0x0E5` | `wait_camera_shake` | 0 literal args | retries the same command while the field-camera shake active bit remains set |
+| `0x0E6` | `stop_camera_shake` | 0 literal args | stops an active camera shake, restores the saved camera-axis offset, and stops any selected rumble pattern |
 | `0x0ED` | `start_master_brightness_transition` | start_brightness_or_255, target_brightness, duration_frames | writes the target immediately when duration is zero; otherwise interpolates the active screen's signed DS master-brightness value once per frame. A start value of 255 preserves the current brightness |
 | `0x0EE` | `wait_master_brightness_transition` | 0 literal args | synchronization barrier for opcode 0x0ED |
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
 | `0x117` | `set_camera_focus_entity` | enabled, entity_selector_or_minus_one | toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection |
+| `0x118` | `remove_all_entity_effect_sprites` | 0 literal args | hides and releases all eight field effect-sprite slots |
+| `0x119` | `wait_all_entity_effect_sprites` | 0 literal args | retries the same command while any of the eight field effect sprites still reports an active animation |
 | `0x140` | `open_screen_message` | x_or_center, y, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window at screen coordinates, deriving zero dimensions from the selected message and accepting -32768 as horizontally centered; configurable tail-placement fields are packed into the resident eight-slot message manager |
 | `0x141` | `open_entity_message` | entity_selector, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window anchored to an entity, automatically placing and clamping the box and its tail within the 256 by 192 screen; when invoked by an entity-owned VM it also avoids overlap with the linked owner |
 | `0x142` | `wait_message_finished` | message_slot_selector | selectors at least zero address one of eight slots; -2 matches both screens and other negative values match the current field screen |
@@ -178,8 +194,8 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-104/289 used opcodes and
-369,842/387,377 reachable commands
+120/289 used opcodes and
+372,721/387,377 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
@@ -187,23 +203,23 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x059` | 1,045 |
 | `0x0A5` | 776 |
 | `0x050` | 631 |
-| `0x0E4` | 601 |
 | `0x05B` | 570 |
 | `0x093` | 567 |
-| `0x0A2` | 566 |
 | `0x0A6` | 554 |
 | `0x08E` | 534 |
-| `0x0E5` | 449 |
 | `0x067` | 437 |
 | `0x0A7` | 428 |
 | `0x112` | 395 |
-| `0x0DA` | 383 |
 | `0x0AC` | 380 |
 | `0x0D5` | 372 |
 | `0x090` | 362 |
 | `0x0CC` | 320 |
 | `0x055` | 317 |
 | `0x095` | 310 |
+| `0x094` | 310 |
+| `0x08C` | 289 |
+| `0x0A1` | 234 |
+| `0x05A` | 230 |
 
 ## Menu/UI scene scripts
 

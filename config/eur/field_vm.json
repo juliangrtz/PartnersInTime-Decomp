@@ -451,6 +451,9 @@
     "143": "wait_entity_vertical_motion",
     "145": "set_entity_position",
     "160": "set_entity_facing_direction",
+    "162": "spawn_entity_effect_sprite",
+    "163": "remove_entity_effect_sprite",
+    "164": "wait_entity_effect_sprite",
     "174": "rejoin_party_follower",
     "175": "wait_party_follower_rejoined",
     "176": "detach_party_follower",
@@ -466,13 +469,26 @@
     "206": "set_party_leader_animation_override",
     "212": "activate_field_map_event",
     "217": "set_field_bg_layers_enabled",
+    "218": "start_camera_profiled_movement",
+    "219": "start_camera_timed_movement",
+    "220": "start_camera_profiled_entity_tracking",
     "221": "start_camera_timed_entity_tracking",
     "222": "wait_camera_movement",
+    "223": "stop_camera_movement",
+    "224": "start_bg_layer_profiled_scroll",
+    "225": "start_bg_layer_timed_scroll",
+    "226": "wait_bg_layer_scroll",
+    "227": "stop_bg_layer_scroll",
+    "228": "start_camera_shake",
+    "229": "wait_camera_shake",
+    "230": "stop_camera_shake",
     "237": "start_master_brightness_transition",
     "238": "wait_master_brightness_transition",
     "269": "wait_paired_field_ready",
     "273": "set_field_input_disable_mask",
     "279": "set_camera_focus_entity",
+    "280": "remove_all_entity_effect_sprites",
+    "281": "wait_all_entity_effect_sprites",
     "320": "open_screen_message",
     "321": "open_entity_message",
     "322": "wait_message_finished",
@@ -828,6 +844,29 @@
       "effect": "stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately",
       "evidence": "func_ov000_020823f8 case 0x0A0 and func_ov000_020a6690"
     },
+    "162": {
+      "arguments": ["entity_selector", "sprite_animation_id", "position_mode", "x", "y", "lifetime_or_minus_one", "follow_entity"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "allocates one of eight field effect-sprite slots, starts sprite_animation_id, and records the owning entity; position_mode 1 offsets x/y from the entity, lifetime -1 selects animation-controlled lifetime, and follow_entity controls whether the sprite remains entity-bound",
+      "evidence": "func_ov000_020823f8 case 0x0A2, func_ov000_020713bc, func_ov000_0207155c, and func_ov000_020712fc"
+    },
+    "163": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "finds the field effect-sprite slot owned by the selected entity, hides its render object, and releases the slot",
+      "evidence": "func_ov000_020823f8 case 0x0A3, func_ov000_0207138c, func_ov000_020712fc, and func_ov000_02071518"
+    },
+    "164": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "retries the same command while the field effect sprite owned by the selected entity still reports an active animation",
+      "yield": "while the matching effect sprite is active",
+      "evidence": "func_ov000_020823f8 case 0x0A4 and func_ov000_0207133c"
+    },
     "174": {
       "arguments": ["party_side", "instant"],
       "result": null,
@@ -946,6 +985,30 @@
       "effect": "updates the active field screen's DISPCNT BG0 through BG3 enable bits; -1 preserves an individual layer, and the OBJ display-enable bit remains forced on",
       "evidence": "func_ov000_020823f8 case 0x0D9 and DS main/sub DISPCNT registers 0x04000000/0x04001000"
     },
+    "218": {
+      "arguments": ["coordinate_mode", "x", "y", "motion_3", "motion_4", "motion_5", "motion_6", "x_motion_flag", "y_motion_flag"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts profiled camera movement to clamped fx32 coordinates; coordinate_mode 1 treats x/y as relative to the current camera position, and the final two flags are stored as per-axis motion options",
+      "evidence": "func_ov000_020823f8 case 0x0DA and func_ov000_02073498"
+    },
+    "219": {
+      "arguments": ["coordinate_mode", "x", "y", "duration_frames", "x_motion_flag", "y_motion_flag"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts timed camera interpolation to clamped fx32 coordinates; coordinate_mode 1 treats x/y as relative to the current camera position",
+      "evidence": "func_ov000_020823f8 case 0x0DB and func_ov000_020732f4"
+    },
+    "220": {
+      "arguments": ["entity_selector", "x_offset", "y_offset", "motion_3", "x_motion_flag", "y_motion_flag"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts profiled camera tracking whose target is recomputed each frame from the selected entity position plus fx32 x/y offsets",
+      "evidence": "func_ov000_020823f8 case 0x0DC, func_ov000_020731bc, and func_ov000_02072e84"
+    },
     "221": {
       "arguments": ["entity_selector", "x_offset", "y_offset", "duration_frames", "x_motion_flag", "y_motion_flag"],
       "result": null,
@@ -961,6 +1024,68 @@
       "yield": "while field camera-motion state bits 0 or 1 are set",
       "effect": "synchronization barrier shared by the camera motion commands 0x0DB through 0x0DD",
       "evidence": "func_ov000_020823f8 case 0x0DE and camera state at field context +0x2B90"
+    },
+    "223": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears both active camera-motion axes without snapping the camera to the pending target",
+      "evidence": "func_ov000_020823f8 case 0x0DF and func_ov000_02072a58"
+    },
+    "224": {
+      "arguments": ["bg_layer", "x_delta", "y_delta", "motion_3", "motion_4", "motion_5", "motion_6", "motion_flag"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts profiled scrolling for one of three field background layers; x/y deltas are converted to fx32 and applied through the field map manager's per-layer offset method",
+      "evidence": "func_ov000_020823f8 case 0x0E0, func_ov000_020727fc, and func_ov000_020721ec"
+    },
+    "225": {
+      "arguments": ["bg_layer", "x_delta", "y_delta", "duration_frames", "motion_flag"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts timed scrolling for one of three field background layers; x/y deltas are converted to fx32 and applied over duration_frames",
+      "evidence": "func_ov000_020823f8 case 0x0E1, func_ov000_02072660, and func_ov000_020721ec"
+    },
+    "226": {
+      "arguments": ["bg_layer"],
+      "result": null,
+      "control_flow": "retries the same command while either scroll axis for the selected background layer remains active",
+      "yield": "while background scrolling is active",
+      "evidence": "func_ov000_020823f8 case 0x0E2 and the three 56-byte scroll states at field context +0x2BC4"
+    },
+    "227": {
+      "arguments": ["bg_layer"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears both active scroll axes for the selected background layer",
+      "evidence": "func_ov000_020823f8 case 0x0E3 and func_ov000_020721c0"
+    },
+    "228": {
+      "arguments": ["axis", "amplitude_pixels", "step_fx32", "half_cycle_count", "rumble_pattern_or_auto"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a field-camera shake on the selected axis, alternating step_fx32 until the pixel amplitude is reached for the requested number of half-cycles; a negative rumble pattern is selected automatically from shake speed",
+      "evidence": "func_ov000_020823f8 case 0x0E4, func_ov000_02072074, and update func_ov000_02071ebc"
+    },
+    "229": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the field-camera shake active bit remains set",
+      "yield": "while camera shake is active",
+      "evidence": "func_ov000_020823f8 case 0x0E5 and field shake state +0x2488 bit 0"
+    },
+    "230": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops an active camera shake, restores the saved camera-axis offset, and stops any selected rumble pattern",
+      "evidence": "func_ov000_020823f8 case 0x0E6 and func_ov000_02071fec"
     },
     "237": {
       "arguments": ["start_brightness_or_255", "target_brightness", "duration_frames"],
@@ -1001,6 +1126,21 @@
       "yield": "never",
       "effect": "toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection",
       "evidence": "func_ov000_020823f8 case 0x117, func_ov000_02073880, func_ov000_02073740, and func_ov000_020737cc"
+    },
+    "280": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "hides and releases all eight field effect-sprite slots",
+      "evidence": "func_ov000_020823f8 case 0x118, func_ov000_020714e4, func_ov000_02071518, and eight render objects at field context +0x2AF8"
+    },
+    "281": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while any of the eight field effect sprites still reports an active animation",
+      "yield": "while any field effect sprite is active",
+      "evidence": "func_ov000_020823f8 case 0x119 and func_ov000_020714a8"
     },
     "320": {
       "arguments": ["x_or_center", "y", "width_tiles_or_auto", "height_tiles_or_auto", "window_mode", "tail_style", "tail_size_or_auto", "vertical_placement_or_auto", "tail_x_or_auto", "text_control_mode", "message_slot", "text_archive_id", "message_id"],
