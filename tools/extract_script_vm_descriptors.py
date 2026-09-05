@@ -112,7 +112,9 @@ def _document(
         "descriptor_encoding": DESCRIPTOR_ENCODING,
         "generic_opcode_count": GENERIC_OPCODE_COUNT,
         "descriptors": [f"0x{value:02X}" for value in descriptors],
-        "known_names": generic_names,
+        # Every instance is enriched independently with reviewed names below.
+        # Do not let one config's names leak into another instance document.
+        "known_names": dict(generic_names),
     }
 
 

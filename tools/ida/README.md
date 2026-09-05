@@ -52,6 +52,15 @@ one or more runtime addresses:
   'build/ida/PiT_eur_ov002_battle.i64'
 ```
 
+To find every function whose Hex-Rays pseudocode contains any of several
+case-sensitive strings, use the batch search helper. Quote search terms that
+contain spaces so the IDA command line passes each one as a single argument:
+
+```powershell
+& $ida '-A' '-Stools/ida/search_pseudocode.py 9440 8952 " + 18"' `
+  'build/ida/PiT_eur_ov000_vm.i64'
+```
+
 The resident ARM9 image can be imported in the same way. This database is the
 useful companion for the generic script VM, save logic, item tables, and engine
 code outside overlays:
