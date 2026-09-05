@@ -79,7 +79,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 153 | 102 | `config/eur/field_vm.json` |
+| Field/world | 341 | 156 | 105 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -127,6 +127,9 @@ field context (the other DS screen/field instance).
 | `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
 | `0x04D` | `set_entity_ground_tracking` | entity_selector, ground_tracking_enabled | sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty |
 | `0x056` | `set_entity_map_sync_axes` | entity_selector, horizontal_map_sync_or_minus_one, vertical_map_sync_or_minus_one | each argument other than -1 updates one persistent map-synchronization axis; enabling an axis immediately marks it dirty, and a later field-geometry refresh marks every enabled axis dirty again |
+| `0x059` | `set_entity_collision_response_channels` | entity_selector, channel_0_or_minus_one, channel_1_or_minus_one, channel_2_or_minus_one, channel_3_or_minus_one, channel_4_or_minus_one | updates five logical collision-response channels independently; -1 preserves a channel. Field-monster entities map the arguments to collision-state bits 0, {2,3}, 1, 6, and 4 respectively. Field-block entities additionally mirror channels 3 and 4 into bits 7 and 5. The collision solver consumes these flags when choosing solid displacement versus overlap/contact reporting |
+| `0x05A` | `set_entity_collision_response_channels_masked` | entity_selector, channel_mask, enabled | sets or clears selected logical collision-response channels; channel_mask bits 0 through 4 select the same five channels and class-specific physical-bit mapping used by opcode 0x059 |
+| `0x05B` | `restore_entity_collision_response_channels` | entity_selector | restores the entity's default low collision-response byte. Field-block entities additionally suppress its lower four response bits while their attached-party state is active |
 | `0x060` | `set_entity_render_layer` | entity_selector, render_layer | stores the low four bits of render_layer in the high nibble of the entity's bound render-object sort key |
 | `0x062` | `set_entity_render_order_priorities` | entity_selector, priority_0_or_auto, priority_1_or_auto, priority_2_or_auto, priority_3_or_auto, auxiliary_priority_or_auto | sets the per-component sprite overlap priorities stored at render-object bytes +0x134 through +0x137; -1 preserves automatic priority calculation. Normal entities also configure an optional auxiliary render object, while subtype 8 ignores the final argument |
 | `0x066` | `set_entity_animation_speed` | entity_selector, animation_speed_q8 | stores the signed 16-bit Q8 animation rate on the entity and updates the bound model while preserving its current animation position |
@@ -204,15 +207,13 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-130/289 used opcodes and
-376,382/387,377 reachable commands
+133/289 used opcodes and
+378,227/387,377 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x059` | 1,045 |
 | `0x050` | 631 |
-| `0x05B` | 570 |
 | `0x093` | 567 |
 | `0x067` | 437 |
 | `0x0AC` | 380 |
@@ -222,7 +223,6 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x094` | 310 |
 | `0x08C` | 289 |
 | `0x0A1` | 234 |
-| `0x05A` | 230 |
 | `0x0D1` | 221 |
 | `0x116` | 216 |
 | `0x092` | 215 |
@@ -230,6 +230,9 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x0D2` | 194 |
 | `0x0AD` | 189 |
 | `0x0D3` | 182 |
+| `0x0BC` | 180 |
+| `0x136` | 176 |
+| `0x096` | 140 |
 
 ## Menu/UI scene scripts
 
