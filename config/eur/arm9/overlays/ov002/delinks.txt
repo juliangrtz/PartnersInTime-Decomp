@@ -295,3 +295,6 @@ src/battle/battle_status_visual_routing.c:
 
 src/battle/battle_party_luigi_reload.c:
     .text       start:0x020a8990 end:0x020a8c74
+
+src/battle/battle_party_mario_reload.c:
+    .text       start:0x020a8e10 end:0x020a90f4
