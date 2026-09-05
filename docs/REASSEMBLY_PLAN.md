@@ -180,6 +180,14 @@ state, view-offset reset, battle-background toggle, save-selected direction,
 asynchronous display-capture configure/reset chains, active flag, and task
 retirement. The two large direct-geometry render phases remain the next
 semantic target.
+The eleven adjacent controller functions at `0x020B2AA8`-`0x020B37CC` are now
+linked matching C as well. Their shared 24-byte task exposes two 32-entry signed
+position/velocity arrays and a stagger counter. The source controller creates
+and synchronizes a child grid-capture task; the three line-wipe controllers
+initialize velocities `-10`/`-13`, advance the active strips, coordinate the
+display-capture configure/reset chain, and hand off completion. The four larger
+direct-geometry strip renderers separating these controller blocks are named
+and behaviorally mapped but are not yet high-level source.
 The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
 `0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
 slot allocation, countdown and primary/secondary routing used by damage and KO.

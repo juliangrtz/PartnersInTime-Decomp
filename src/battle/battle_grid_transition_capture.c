@@ -19,44 +19,6 @@ enum BattleGridCaptureConstant {
     BATTLE_GRID_CAPTURE_CONFIGURED = 1 << 11
 };
 
-typedef struct BattleGridCaptureState {
-    struct BattleGridCaptureSourceTask *source_task;
-    u16 angle;
-    u16 velocity;
-    u16 started;
-    u16 padding_0A;
-} BattleGridCaptureState;
-
-typedef struct BattleGridCaptureTask {
-    struct BattleGridCaptureTask *next;
-    void (*callback)(struct BattleGridCaptureTask *task);
-    struct BattleGridCaptureTask **owner_slot;
-    BattleGridCaptureState state;
-} BattleGridCaptureTask;
-
-typedef struct BattleGridCaptureSourceState {
-    u32 unknown_00;
-    u16 angle;
-    u16 velocity;
-    u16 remaining_frames;
-} BattleGridCaptureSourceState;
-
-typedef struct BattleGridCaptureSourceTask {
-    struct BattleGridCaptureSourceTask *next;
-    void (*callback)(struct BattleGridCaptureSourceTask *task);
-    struct BattleGridCaptureSourceTask **owner_slot;
-    BattleGridCaptureSourceState state;
-} BattleGridCaptureSourceTask;
-
-typedef char BattleGridCaptureState_SizeCheck[
-    sizeof(BattleGridCaptureState) == 0x0C ? 1 : -1];
-typedef char BattleGridCaptureTask_SizeCheck[
-    sizeof(BattleGridCaptureTask) == 0x18 ? 1 : -1];
-typedef char BattleGridCaptureSourceState_SizeCheck[
-    sizeof(BattleGridCaptureSourceState) == 0x0C ? 1 : -1];
-typedef char BattleGridCaptureSourceTask_SizeCheck[
-    sizeof(BattleGridCaptureSourceTask) == 0x18 ? 1 : -1];
-
 extern int BattleGridTransition_DrawPhaseB(BattleGridCaptureState *state);
 extern void func_ov002_020b5d58(void *task);
 extern void *func_ov002_02072508(
@@ -67,8 +29,6 @@ void BattleGridCapture_WaitForResetTask(BattleGridCaptureTask *task);
 void BattleGridCapture_ResetTask(BattleGridCaptureTask *task);
 void BattleGridCapture_UpdateTask(BattleGridCaptureTask *task);
 void BattleGridCapture_BeginTask(BattleGridCaptureTask *task);
-BattleGridCaptureTask *BattleGridCapture_InitializeTask(
-    BattleGridCaptureTask *task);
 
 /* Metrowerks emits C functions in reverse source order. */
 BattleGridCaptureTask *BattleGridCapture_InitializeTask(

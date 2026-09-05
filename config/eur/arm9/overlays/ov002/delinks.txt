@@ -340,3 +340,15 @@ src/battle/battle_grid_transition.c:
 
 src/battle/battle_grid_transition_capture.c:
     .text       start:0x020b2270 end:0x020b2440
+
+src/battle/battle_grid_capture_source.c:
+    .text       start:0x020b2aa8 end:0x020b2b48
+
+src/battle/battle_line_transition_phase_a.c:
+    .text       start:0x020b2e50 end:0x020b2f44
+
+src/battle/battle_line_capture.c:
+    .text       start:0x020b3264 end:0x020b3410
+
+src/battle/battle_line_transition_phase_b.c:
+    .text       start:0x020b3714 end:0x020b37cc

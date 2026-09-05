@@ -280,6 +280,21 @@ and runtime overlay 2.
 | `020B22E8` | `BattleGridCapture_UpdateTask` | Byte-identical phase-B renderer callback gated by capture-busy state |
 | `020B233C` | `BattleGridCapture_BeginTask` | Byte-identical background-toggle and capture-configuration transition callback |
 | `020B2428` | `BattleGridCapture_InitializeTask` | Byte-identical phase-B controller initializer |
+| `020B2440` | `BattleGridTransition_DrawCaptureSource` | Identified 8-by-6 capture-source geometry renderer; high-level reconstruction pending |
+| `020B2AA8` | `BattleGridCaptureSource_UpdateTask` | Byte-identical source renderer callback synchronized to the child capture task |
+| `020B2AE8` | `BattleGridCaptureSource_InitializeTask` | Byte-identical source/child grid-capture task constructor |
+| `020B2B48` | `BattleLineTransition_DrawPhaseA` | Identified 32-strip accelerated line-transition renderer; high-level reconstruction pending |
+| `020B2E50` | `BattleLineTransitionPhaseA_UpdateTask` | Byte-identical phase-A frame and renderer callback |
+| `020B2EC4` | `BattleLineTransitionPhaseA_InitializeTask` | Byte-identical phase-A position/velocity-array initializer |
+| `020B2F44` | `BattleLineCapture_Draw` | Identified captured 32-strip transition renderer; high-level reconstruction pending |
+| `020B3264` | `BattleLineCapture_WaitForResetTask` | Byte-identical line-capture reset completion and active-flag cleanup |
+| `020B32A0` | `BattleLineCapture_ResetTask` | Byte-identical line-capture asynchronous reset starter |
+| `020B32DC` | `BattleLineCapture_UpdateTask` | Byte-identical captured line-transition frame callback |
+| `020B333C` | `BattleLineCapture_BeginTask` | Byte-identical line-capture configuration callback |
+| `020B3370` | `BattleLineCapture_InitializeTask` | Byte-identical captured phase array and controller initializer |
+| `020B3410` | `BattleLineTransition_DrawPhaseB` | Identified complementary 32-strip transition renderer; high-level reconstruction pending |
+| `020B3714` | `BattleLineTransitionPhaseB_UpdateTask` | Byte-identical phase-B frame and completion callback |
+| `020B374C` | `BattleLineTransitionPhaseB_InitializeTask` | Byte-identical phase-B position/velocity-array initializer |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `020A56EC` | `BattleStatus_UpdatePartyStatVisuals` | Reconstructed POW/DEF/SPD effect rotation and model callback (73.00% code match) |
@@ -649,6 +664,20 @@ flag. Both renderers are identified as direct DS geometry paths which submit an
 8-by-6 grid through the matrix, vertex, polygon, texture, color, and begin/end
 command registers. Their larger high-level source is the next reconstruction
 boundary.
+
+The immediately following line-transition controllers at `0x020B2AA8`-
+`0x020B2B48`, `0x020B2E50`-`0x020B2F44`, `0x020B3264`-`0x020B3410`, and
+`0x020B3714`-`0x020B37CC` add eleven more byte-identical functions. A typed
+24-byte task points at two shared arrays of 32 signed halfwords at context
+offsets `+0x5F688` and `+0x5F6C8`; these hold each strip's position and
+velocity, while a signed frame counter staggers strip activation. One pair
+creates the child grid-capture task and keeps drawing its source until capture
+starts. The next pair initializes the first line wipe with velocity `-10`.
+The five-function middle controller initializes velocity `-13`, configures and
+resets display capture asynchronously, and owns runtime flags `0x20`, `0x40`,
+and `0x800`. The final pair runs the complementary wipe and hands completion to
+the following display-mode task. Four direct-geometry renderers between these
+controllers are semantically mapped but remain raw code.
 
 ## Damage and status behavior
 
