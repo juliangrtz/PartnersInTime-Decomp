@@ -89,7 +89,10 @@ struct BattleModelVTable {
                                      int animation_id, int enabled);
     u8 unknown_08c[4];
     int (*test_relation)(BattleModel *model, BattleModel *other);
-    u8 unknown_094[0x34];
+    u8 unknown_094[0x0C];
+    void (*unknown_0a0)(BattleModel *model, int value);
+    int (*unknown_0a4)(BattleModel *model);
+    u8 unknown_0a8[0x20];
     struct BattleSpriteTransform *(*get_sprite_transform)(BattleModel *model);
 };
 
@@ -137,8 +140,8 @@ struct BattleModel {
     virtual void unknown_94();
     virtual void unknown_98();
     virtual void unknown_9c();
-    virtual void unknown_a0();
-    virtual void unknown_a4();
+    virtual void unknown_a0(int value);
+    virtual int unknown_a4();
     virtual void unknown_a8();
     virtual void unknown_ac();
     virtual void unknown_b0();

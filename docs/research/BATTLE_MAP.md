@@ -229,6 +229,9 @@ and runtime overlay 2.
 | `020ACCB8` | `BattleSpriteEffect_Spawn` | Creates a sprite effect at view-adjusted coordinates |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
+| `020A5F7C` | `BattleStatus_StartPartyAilment5Visual` | Starts the party animation and model layer used by status 5 |
+| `020A61B0` | `BattleStatus_UpdatePartyAilmentVisual` | Synchronizes and completes the shared party visual for statuses 4 and 5 |
+| `020A63F8` | `BattleStatus_StartPartyAilment4Visual` | Starts the party animation and model layer used by status 4 |
 | `020A8320` | `BattleStatus_StopActorEffect` | Stops the actor-local timer or stat delta for one status ID |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
@@ -566,6 +569,14 @@ state, and restores base POW, DEF, or SPD for status IDs 6-8. Its companion
 `BattleStatus_ClearAll` explicitly invokes it for IDs 1 through 8 and is also
 linked as exact C. The actor layout exposes the five overlapping 12-byte state
 records while retaining the established transition/animation field view.
+
+The party-side visuals for status IDs 4 and 5 are now exact linked C++ as one
+cohesive unit. Their two starters select a model-animation layer from the six
+party formation states and differ only in the layer animation they activate.
+The shared callback synchronizes the actor and battle animation observer,
+arbitrates against the actor's existing `ailment_group_2` effect, holds the
+actor's hit-lock flag during animation 32, and restores animation 0 when the
+model signals completion.
 
 The exact battle item-selection helpers rebuild two compact tagged-ID lists
 directly from the save inventory: fourteen ordinary consumables at save offset
