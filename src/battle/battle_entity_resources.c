@@ -33,8 +33,8 @@ void BattleEntity_BindResource(u32 actor_id, u16 object_data_id) {
 
         object->resource = resource;
         object->animation_variant_offset = 0;
-        object->flags.bits.script_mode = 0;
-        object->unk_0c8 = 0;
+        object->flags.bits.render_mode = 0;
+        object->render_override = 0;
 
         if (resource->texture_set != 0) {
             object->property_0fc = resource->texture_set->scene_property_0fc;

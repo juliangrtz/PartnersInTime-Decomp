@@ -303,7 +303,7 @@ func_02015b58 kind:function(arm,size=0x118) addr:0x02015b58
 func_02015c70 kind:function(arm,size=0x16c) addr:0x02015c70
 func_02015ddc kind:function(arm,size=0x118) addr:0x02015ddc
 func_02015ef4 kind:function(arm,size=0x138) addr:0x02015ef4
-func_0201602c kind:function(arm,size=0xdc) addr:0x0201602c
+MTX_ApplyRotZ44 kind:function(arm,size=0xdc) addr:0x0201602c
 func_02016108 kind:function(arm,size=0xa8) addr:0x02016108
 func_020161b0 kind:function(arm,size=0xdc) addr:0x020161b0
 func_0201628c kind:function(arm,size=0xa8) addr:0x0201628c
@@ -1958,7 +1958,7 @@ data_0205a094 kind:bss addr:0x0205a094
 data_0205a09c kind:bss addr:0x0205a09c
 data_0205a740 kind:bss addr:0x0205a740
 data_0205a758 kind:bss addr:0x0205a758
-data_0205a89c kind:bss addr:0x0205a89c
+gModelRenderList kind:bss addr:0x0205a89c
 data_0205a8a4 kind:bss addr:0x0205a8a4
 data_0205a8ac kind:bss addr:0x0205a8ac
 data_0205a8b0 kind:bss addr:0x0205a8b0

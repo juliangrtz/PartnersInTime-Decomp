@@ -221,6 +221,9 @@ src/battle/battle_flee_controller.cpp:
 src/battle/battle_object_effect_delay.c:
     .text       start:0x020a2658 end:0x020a2814
 
+src/battle/battle_scene_render.cpp:
+    .text       start:0x020a2814 end:0x020a2cb8
+
 src/battle/battle_scene_object.c:
     .text       start:0x020a32f4 end:0x020a33a4
 
