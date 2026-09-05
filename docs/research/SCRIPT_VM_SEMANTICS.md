@@ -53,6 +53,21 @@ rebuilds the source while enforcing fixed command boundaries and valid branch
 targets. Private targets and all nine not-yet-fully-typed data sections remain copied
 from the user's own extraction.
 
+The nine fixed pointer roles currently recovered from
+`func_ov000_020791e8` and their consumers are:
+
+| Slot | Parsed shape | Current role |
+|---:|---|---|
+| 0 | direct pointer | default event-entry selector table |
+| 1 | `u32 count` + 24-byte records | trigger/region records, expanded to 44-byte runtime objects |
+| 2 | `u32 count` + `u32` IDs | field resource definitions, expanded to 24-byte runtime entries |
+| 3 | `u32 count` + `u32` IDs | resource list, expanded to 20-byte runtime entries |
+| 4 | `u32 count` + `u32` IDs | second resource list, expanded to 20-byte runtime entries |
+| 5 | direct pointer | not yet typed |
+| 6 | count + payload | not yet typed |
+| 7 | count + 28-byte records | field entity descriptors |
+| 8 | direct pointer | not yet typed; frequently aliases the first script region |
+
 ## Descriptor ABI coverage
 
 The three tables have an identical `0x000..0x032` prefix:
@@ -64,7 +79,7 @@ the same shape.
 
 | Instance | Descriptor entries | Semantically named | Source |
 |---|---:|---:|---|
-| Field/world | 341 | 73 | `config/eur/field_vm.json` |
+| Field/world | 341 | 84 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 109 | `config/eur/scene_vm.json` |
 
@@ -78,34 +93,46 @@ Overlay 0's first instance-specific family is statically complete enough to driv
 the field CFG exporter. Opcode `0x033` conditionally branches on the current VM
 owner subtype and `0x034` branches unconditionally. Opcodes `0x035..0x03B` manage
 indexed auxiliary script states. Opcodes `0x03C..0x03F` start, wait for, and skip
-inline/global scripts; `0x040..0x047` stop, pause, resume, query, or wait for the
-global or matching entity scripts. Opcode `0x048` starts an entry from the paired
+inline scripts owned by a selected entity; `0x040..0x047` stop, pause, resume,
+query, or wait for selected/matching entity scripts. Opcode `0x048` starts an entry
+from the paired
 field context (the other DS screen/field instance).
 
-| Opcode | Name | Descriptor |
-|---:|---|---|
-| `0x033` | `branch_if_owner_subtype` | 2 typed args (`0x42`) |
-| `0x034` | `branch_relative` | 1 typed args (`0x41`) |
-| `0x035` | `set_aux_script_enabled` | 2 typed args (`0x42`) |
-| `0x036` | `start_aux_script` | 3 typed args (`0x43`) |
-| `0x037` | `wait_aux_script` | 1 typed args (`0x41`) |
-| `0x038` | `stop_aux_script` | 1 typed args (`0x41`) |
-| `0x039` | `pause_aux_script` | 1 typed args (`0x41`) |
-| `0x03A` | `resume_aux_script` | 1 typed args (`0x41`) |
-| `0x03B` | `get_aux_script_state` | result + 1 typed args (`0x61`) |
-| `0x03C` | `start_inline_global_script` | 3 typed args (`0x43`) |
-| `0x03D` | `start_inline_global_script_and_wait` | 3 typed args (`0x43`) |
-| `0x03E` | `start_relative_global_script` | 3 typed args (`0x43`) |
-| `0x03F` | `wait_global_script` | 1 typed args (`0x41`) |
-| `0x040` | `wait_matching_entity_scripts` | 1 typed args (`0x41`) |
-| `0x041` | `stop_global_script` | 1 typed args (`0x41`) |
-| `0x042` | `stop_matching_entity_scripts` | 1 typed args (`0x41`) |
-| `0x043` | `pause_global_script` | 1 typed args (`0x41`) |
-| `0x044` | `pause_matching_entity_scripts` | 1 typed args (`0x41`) |
-| `0x045` | `resume_global_script` | 1 typed args (`0x41`) |
-| `0x046` | `resume_matching_entity_scripts` | 1 typed args (`0x41`) |
-| `0x047` | `get_global_script_state` | result + 1 typed args (`0x61`) |
-| `0x048` | `start_paired_field_script` | 3 typed args (`0x43`) |
+| Opcode | Name | Arguments | Behavior |
+|---:|---|---|---|
+| `0x033` | `branch_if_owner_subtype` | owner_subtype, relative_halfwords | branch to PC + 2 * relative_halfwords when the current VM owner category is 1 or 2 and its subtype equals owner_subtype; otherwise fall through |
+| `0x034` | `branch_relative` | relative_halfwords | unconditional branch to PC + 2 * relative_halfwords |
+| `0x035` | `set_aux_script_enabled` | aux_slot, enabled | sets bit 0 of the selected 204-byte auxiliary VM state |
+| `0x036` | `start_aux_script` | aux_slot, relative_halfwords, chain_if_active | spawns or chains an auxiliary script at PC + 2 * relative_halfwords, then falls through |
+| `0x037` | `wait_aux_script` | aux_slot | retries the same command while the auxiliary VM is active |
+| `0x038` | `stop_aux_script` | aux_slot | clears the auxiliary VM active bit and pending continuation |
+| `0x039` | `pause_aux_script` | aux_slot | sets the auxiliary VM paused bit |
+| `0x03A` | `resume_aux_script` | aux_slot | clears the auxiliary VM paused bit |
+| `0x03B` | `get_aux_script_state` | aux_slot | fallthrough |
+| `0x03C` | `start_inline_entity_script` | entity_selector, chain_if_active, inline_size_halfwords | starts the inline script at the current PC, then resumes after inline_size_halfwords |
+| `0x03D` | `start_inline_entity_script_and_wait` | entity_selector, chain_if_active, inline_size_halfwords | starts the inline entity script, retries while it is active, then resumes after inline_size_halfwords |
+| `0x03E` | `start_relative_entity_script` | entity_selector, relative_halfwords, chain_if_active | starts an entity script at PC + 2 * relative_halfwords and falls through |
+| `0x03F` | `wait_entity_script` | entity_selector | retries the same command while the selected entity script is active |
+| `0x040` | `wait_matching_entity_scripts` | entity_selector_or_minus_one | retries while any matching entity script is active |
+| `0x041` | `stop_entity_script` | entity_selector | invokes the selected entity's script-stop method |
+| `0x042` | `stop_matching_entity_scripts` | entity_selector_or_minus_one | stops every matching active entity script |
+| `0x043` | `pause_entity_script` | entity_selector | invokes the selected entity's script-pause method |
+| `0x044` | `pause_matching_entity_scripts` | entity_selector_or_minus_one | pauses every matching active entity script |
+| `0x045` | `resume_entity_script` | entity_selector | invokes the selected entity's script-resume method |
+| `0x046` | `resume_matching_entity_scripts` | entity_selector_or_minus_one | resumes every matching active entity script |
+| `0x047` | `get_entity_script_state` | entity_selector | fallthrough |
+| `0x048` | `start_paired_field_script` | paired_room_id, script_slot_or_minus_one, chain_if_active | starts a script entry in the paired field context when its room ID matches |
+| `0x049` | `get_entity_property` | entity_selector, property_id | fallthrough |
+| `0x06C` | `bind_entity_resource` | entity_selector, resource_index, animation_id, render_parameter, preserve_previous | binds a 24-byte record from FEvent fixed section 2 to the entity; -1 retains selected subresources |
+| `0x06F` | `set_entity_animation` | entity_selector, animation_id, preserve_previous | selects an entity model animation and optionally saves the old animation for opcode 0x070 |
+| `0x071` | `set_entity_behavior_mode` | entity_selector, behavior_mode, preserve_previous | sets entity state bits 7..9 and optionally preserves the previous mode for opcode 0x072 |
+| `0x083` | `start_entity_movement` | entity_selector, coordinate_mode, x, y, z_or_special, motion_5, motion_6, motion_7, motion_8, motion_9, motion_10, motion_11 | starts interpolated 2D or 3D entity movement; coordinate arguments are converted to fx32 |
+| `0x08B` | `wait_entity_movement` | entity_selector | retries while either of the entity movement-state flags is active |
+| `0x08D` | `start_entity_vertical_motion` | entity_selector, initial_velocity_low_or_value, initial_velocity_high, gravity_low_or_value, gravity_high | starts vertical ballistic motion; literal word pairs form signed fx32 values and -1 selects entity defaults |
+| `0x08F` | `wait_entity_vertical_motion` | entity_selector | retries while entity vertical-motion flag 0x10 is set |
+| `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
+| `0x149` | `play_field_sound` | sound_id, mode, track_for_field_cleanup | plays a sound and optionally records its ID in one of four per-field cleanup slots |
+| `0x14A` | `stop_field_sound` | sound_id | stops the sound and removes it from the four per-field cleanup slots |
 
 ## VM ABI
 

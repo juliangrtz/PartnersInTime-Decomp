@@ -415,18 +415,280 @@
     "57": "pause_aux_script",
     "58": "resume_aux_script",
     "59": "get_aux_script_state",
-    "60": "start_inline_global_script",
-    "61": "start_inline_global_script_and_wait",
-    "62": "start_relative_global_script",
-    "63": "wait_global_script",
+    "60": "start_inline_entity_script",
+    "61": "start_inline_entity_script_and_wait",
+    "62": "start_relative_entity_script",
+    "63": "wait_entity_script",
     "64": "wait_matching_entity_scripts",
-    "65": "stop_global_script",
+    "65": "stop_entity_script",
     "66": "stop_matching_entity_scripts",
-    "67": "pause_global_script",
+    "67": "pause_entity_script",
     "68": "pause_matching_entity_scripts",
-    "69": "resume_global_script",
+    "69": "resume_entity_script",
     "70": "resume_matching_entity_scripts",
-    "71": "get_global_script_state",
-    "72": "start_paired_field_script"
+    "71": "get_entity_script_state",
+    "72": "start_paired_field_script",
+    "73": "get_entity_property",
+    "108": "bind_entity_resource",
+    "111": "set_entity_animation",
+    "113": "set_entity_behavior_mode",
+    "131": "start_entity_movement",
+    "139": "wait_entity_movement",
+    "141": "start_entity_vertical_motion",
+    "143": "wait_entity_vertical_motion",
+    "273": "set_field_input_disable_mask",
+    "329": "play_field_sound",
+    "330": "stop_field_sound"
+  },
+  "opcode_semantics": {
+    "51": {
+      "arguments": ["owner_subtype", "relative_halfwords"],
+      "result": null,
+      "control_flow": "branch to PC + 2 * relative_halfwords when the current VM owner category is 1 or 2 and its subtype equals owner_subtype; otherwise fall through",
+      "yield": "never",
+      "evidence": "func_ov000_020823f8 case 0x033"
+    },
+    "52": {
+      "arguments": ["relative_halfwords"],
+      "result": null,
+      "control_flow": "unconditional branch to PC + 2 * relative_halfwords",
+      "yield": "never",
+      "evidence": "func_ov000_020823f8 case 0x034"
+    },
+    "53": {
+      "arguments": ["aux_slot", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets bit 0 of the selected 204-byte auxiliary VM state",
+      "evidence": "func_ov000_020823f8 case 0x035"
+    },
+    "54": {
+      "arguments": ["aux_slot", "relative_halfwords", "chain_if_active"],
+      "result": null,
+      "control_flow": "spawns or chains an auxiliary script at PC + 2 * relative_halfwords, then falls through",
+      "yield": "never",
+      "evidence": "func_ov000_020823f8 case 0x036"
+    },
+    "55": {
+      "arguments": ["aux_slot"],
+      "result": null,
+      "control_flow": "retries the same command while the auxiliary VM is active",
+      "yield": "while active",
+      "evidence": "func_ov000_020823f8 case 0x037"
+    },
+    "56": {
+      "arguments": ["aux_slot"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the auxiliary VM active bit and pending continuation",
+      "evidence": "func_ov000_020823f8 case 0x038"
+    },
+    "57": {
+      "arguments": ["aux_slot"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the auxiliary VM paused bit",
+      "evidence": "func_ov000_020823f8 case 0x039"
+    },
+    "58": {
+      "arguments": ["aux_slot"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the auxiliary VM paused bit",
+      "evidence": "func_ov000_020823f8 case 0x03A"
+    },
+    "59": {
+      "arguments": ["aux_slot"],
+      "result": "state: 0 inactive, 1 running, 2 returned, 3 paused",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "evidence": "func_ov000_020823f8 case 0x03B"
+    },
+    "60": {
+      "arguments": ["entity_selector", "chain_if_active", "inline_size_halfwords"],
+      "result": null,
+      "control_flow": "starts the inline script at the current PC, then resumes after inline_size_halfwords",
+      "yield": "never",
+      "evidence": "func_ov000_020823f8 case 0x03C and func_ov000_0208221c"
+    },
+    "61": {
+      "arguments": ["entity_selector", "chain_if_active", "inline_size_halfwords"],
+      "result": null,
+      "control_flow": "starts the inline entity script, retries while it is active, then resumes after inline_size_halfwords",
+      "yield": "while the child entity script is active",
+      "evidence": "func_ov000_020823f8 case 0x03D and func_ov000_0208221c"
+    },
+    "62": {
+      "arguments": ["entity_selector", "relative_halfwords", "chain_if_active"],
+      "result": null,
+      "control_flow": "starts an entity script at PC + 2 * relative_halfwords and falls through",
+      "yield": "never",
+      "evidence": "func_ov000_020823f8 case 0x03E and func_ov000_0208221c"
+    },
+    "63": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "retries the same command while the selected entity script is active",
+      "yield": "while active",
+      "evidence": "func_ov000_020823f8 case 0x03F"
+    },
+    "64": {
+      "arguments": ["entity_selector_or_minus_one"],
+      "result": null,
+      "control_flow": "retries while any matching entity script is active",
+      "yield": "while a match is active",
+      "evidence": "func_ov000_020823f8 case 0x040"
+    },
+    "65": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "invokes the selected entity's script-stop method",
+      "evidence": "func_ov000_020823f8 case 0x041"
+    },
+    "66": {
+      "arguments": ["entity_selector_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops every matching active entity script",
+      "evidence": "func_ov000_020823f8 case 0x042"
+    },
+    "67": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "invokes the selected entity's script-pause method",
+      "evidence": "func_ov000_020823f8 case 0x043"
+    },
+    "68": {
+      "arguments": ["entity_selector_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "pauses every matching active entity script",
+      "evidence": "func_ov000_020823f8 case 0x044"
+    },
+    "69": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "invokes the selected entity's script-resume method",
+      "evidence": "func_ov000_020823f8 case 0x045"
+    },
+    "70": {
+      "arguments": ["entity_selector_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resumes every matching active entity script",
+      "evidence": "func_ov000_020823f8 case 0x046"
+    },
+    "71": {
+      "arguments": ["entity_selector"],
+      "result": "state: 0 inactive, 1 running, 2 returned, 3 paused",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "evidence": "func_ov000_020823f8 case 0x047"
+    },
+    "72": {
+      "arguments": ["paired_room_id", "script_slot_or_minus_one", "chain_if_active"],
+      "result": null,
+      "control_flow": "starts a script entry in the paired field context when its room ID matches",
+      "yield": "never",
+      "evidence": "func_ov000_020823f8 case 0x048"
+    },
+    "73": {
+      "arguments": ["entity_selector", "property_id"],
+      "result": "value returned by the entity's property-query virtual method",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "evidence": "func_ov000_020823f8 case 0x049 and func_ov000_0208221c"
+    },
+    "108": {
+      "arguments": ["entity_selector", "resource_index", "animation_id", "render_parameter", "preserve_previous"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "binds a 24-byte record from FEvent fixed section 2 to the entity; -1 retains selected subresources",
+      "evidence": "func_ov000_020823f8 case 0x06C and func_ov000_020a6d68"
+    },
+    "111": {
+      "arguments": ["entity_selector", "animation_id", "preserve_previous"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects an entity model animation and optionally saves the old animation for opcode 0x070",
+      "evidence": "func_ov000_020823f8 cases 0x06F/0x070 and model virtual method +0x68"
+    },
+    "113": {
+      "arguments": ["entity_selector", "behavior_mode", "preserve_previous"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets entity state bits 7..9 and optionally preserves the previous mode for opcode 0x072",
+      "evidence": "func_ov000_020823f8 cases 0x071/0x072 and func_ov000_020a4df8"
+    },
+    "131": {
+      "arguments": ["entity_selector", "coordinate_mode", "x", "y", "z_or_special", "motion_5", "motion_6", "motion_7", "motion_8", "motion_9", "motion_10", "motion_11"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts interpolated 2D or 3D entity movement; coordinate arguments are converted to fx32",
+      "evidence": "func_ov000_020823f8 case 0x083, func_ov000_020a64a0, and func_ov000_020b3f00"
+    },
+    "139": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "retries while either of the entity movement-state flags is active",
+      "yield": "while movement is active",
+      "evidence": "func_ov000_020823f8 case 0x08B"
+    },
+    "141": {
+      "arguments": ["entity_selector", "initial_velocity_low_or_value", "initial_velocity_high", "gravity_low_or_value", "gravity_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts vertical ballistic motion; literal word pairs form signed fx32 values and -1 selects entity defaults",
+      "evidence": "func_ov000_020823f8 case 0x08D, func_ov000_020b44ac, and func_ov000_020b4330"
+    },
+    "143": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "retries while entity vertical-motion flag 0x10 is set",
+      "yield": "while vertical motion is active",
+      "evidence": "func_ov000_020823f8 case 0x08F and func_ov000_020b4330"
+    },
+    "273": {
+      "arguments": ["field_side_or_minus_one", "disabled_button_mask"],
+      "result": "previous disabled-button mask",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "selects the current or paired field side and stores the complemented input mask at field context +0x24C4",
+      "evidence": "func_ov000_020823f8 case 0x111"
+    },
+    "329": {
+      "arguments": ["sound_id", "mode", "track_for_field_cleanup"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "plays a sound and optionally records its ID in one of four per-field cleanup slots",
+      "evidence": "func_ov000_020823f8 case 0x149 and func_02027cb8"
+    },
+    "330": {
+      "arguments": ["sound_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops the sound and removes it from the four per-field cleanup slots",
+      "evidence": "func_ov000_020823f8 case 0x14A"
+    }
   }
 }

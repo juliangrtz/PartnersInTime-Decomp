@@ -162,6 +162,21 @@ def render_markdown(
         "targets. Private targets and all nine not-yet-fully-typed data sections remain copied",
         "from the user's own extraction.",
         "",
+        "The nine fixed pointer roles currently recovered from",
+        "`func_ov000_020791e8` and their consumers are:",
+        "",
+        "| Slot | Parsed shape | Current role |",
+        "|---:|---|---|",
+        "| 0 | direct pointer | default event-entry selector table |",
+        "| 1 | `u32 count` + 24-byte records | trigger/region records, expanded to 44-byte runtime objects |",
+        "| 2 | `u32 count` + `u32` IDs | field resource definitions, expanded to 24-byte runtime entries |",
+        "| 3 | `u32 count` + `u32` IDs | resource list, expanded to 20-byte runtime entries |",
+        "| 4 | `u32 count` + `u32` IDs | second resource list, expanded to 20-byte runtime entries |",
+        "| 5 | direct pointer | not yet typed |",
+        "| 6 | count + payload | not yet typed |",
+        "| 7 | count + 28-byte records | field entity descriptors |",
+        "| 8 | direct pointer | not yet typed; frequently aliases the first script region |",
+        "",
         "## Descriptor ABI coverage",
         "",
         f"The three tables have an identical `0x000..0x{common_prefix - 1:03X}` prefix:",
@@ -187,16 +202,18 @@ def render_markdown(
         "the field CFG exporter. Opcode `0x033` conditionally branches on the current VM",
         "owner subtype and `0x034` branches unconditionally. Opcodes `0x035..0x03B` manage",
         "indexed auxiliary script states. Opcodes `0x03C..0x03F` start, wait for, and skip",
-        "inline/global scripts; `0x040..0x047` stop, pause, resume, query, or wait for the",
-        "global or matching entity scripts. Opcode `0x048` starts an entry from the paired",
+        "inline scripts owned by a selected entity; `0x040..0x047` stop, pause, resume,",
+        "query, or wait for selected/matching entity scripts. Opcode `0x048` starts an entry",
+        "from the paired",
         "field context (the other DS screen/field instance).",
         "",
-        "| Opcode | Name | Descriptor |",
-        "|---:|---|---|",
+        "| Opcode | Name | Arguments | Behavior |",
+        "|---:|---|---|---|",
     ]
     lines.extend(
-        f"| `0x{opcode:03X}` | `{name}` | {descriptor_summary(field['descriptor_values'][opcode])} "
-        f"(`0x{field['descriptor_values'][opcode]:02X}`) |"
+        f"| `0x{opcode:03X}` | `{name}` | "
+        f"{', '.join(field.get('opcode_semantics', {}).get(str(opcode), {}).get('arguments', [])) or descriptor_summary(field['descriptor_values'][opcode])} | "
+        f"{field.get('opcode_semantics', {}).get(str(opcode), {}).get('effect', field.get('opcode_semantics', {}).get(str(opcode), {}).get('control_flow', 'named; detailed contract pending'))} |"
         for opcode, name in sorted(
             (int(raw_opcode, 0), name)
             for raw_opcode, name in field["known_names"].items()
