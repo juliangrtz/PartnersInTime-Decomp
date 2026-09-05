@@ -1,7 +1,22 @@
 {
   "schema": "pit-battle-vm-v1",
+  "version": "eur",
+  "instance": "battle",
+  "role": "battle scenarios and enemy AI",
+  "overlay_id": 2,
   "descriptor_table_address": "0x020BF2C8",
+  "command_handler_address": "0x02079950",
+  "vm_run_call_sites": [
+    "0x0207E894",
+    "0x0207E8F8",
+    "0x0207E988",
+    "0x0207EA20",
+    "0x0207EF50",
+    "0x0207EF98",
+    "0x0207EFC4"
+  ],
   "descriptor_encoding": "bits 0-4: argument count; bit 5: result variable; bit 6: argument-mode mask",
+  "generic_opcode_count": 51,
   "descriptors": [
     "0x00", "0x00", "0x02", "0x41", "0x45", "0x01", "0x01", "0x41",
     "0x41", "0x41", "0x41", "0x00", "0x44", "0x62", "0x61", "0x61",
@@ -175,5 +190,682 @@
     "257": "start_primary_screen_effect",
     "258": "start_secondary_screen_effect",
     "259": "reset_screen_effects"
+  },
+  "opcode_semantics": {
+    "51": {
+      "arguments": ["object_data_slot", "size_words"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "allocates a four-byte-aligned object-data buffer of size_words * 4 bytes for the selected battle resource slot",
+      "evidence": "BattleAI_DispatchOpcode case 0x033; BattleObjectData_AllocateLoadBuffer"
+    },
+    "52": {
+      "arguments": ["object_data_slot", "resource_group", "resource_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "configures the selected object-data slot with a packed resource group and resource index for the battle resource loader",
+      "evidence": "BattleAI_DispatchOpcode case 0x034; BattleObjectData_ConfigureLoad"
+    },
+    "53": {
+      "arguments": ["object_data_slot", "resource_id_low", "resource_id_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "combines the final two literal operands into a typed 32-bit resource ID and ensures that resource is loaded in object_data_slot",
+      "evidence": "BattleAI_DispatchOpcode case 0x035; BattleObjectData_EnsureLoaded"
+    },
+    "54": {
+      "arguments": ["capture_slot", "surface_id", "upload_parameter"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "queues a capture-surface upload against the selected one of the battle context's 48-byte capture descriptors",
+      "evidence": "BattleAI_DispatchOpcode case 0x036; BattleObjectData_QueueCaptureSurfaceUpload"
+    },
+    "57": {
+      "arguments": ["object_data_slot"],
+      "result": null,
+      "control_flow": "retries the same command while the selected object-data slot has a pending load",
+      "yield": "while loading",
+      "evidence": "BattleAI_DispatchOpcode case 0x039; BattleObjectData_IsLoadPending"
+    },
+    "58": {
+      "arguments": ["object_data_slot"],
+      "result": "loaded_resource_pointer",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns field +0x24 from the selected 44-byte object-data load-state record",
+      "evidence": "BattleAI_DispatchOpcode case 0x03A; BattleObjectData_GetLoadState"
+    },
+    "59": {
+      "arguments": ["actor_or_object_id", "object_data_slot"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "binds the loaded resource slot to a battle entity; enemy actors receive max/current HP, POW, DEF, SPD, level, and trait data from the associated enemy stat record, while party objects bind their scene resource",
+      "evidence": "BattleAI_DispatchOpcode case 0x03B; BattleEntity_BindResource"
+    },
+    "60": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resets all battle object-data load slots and their pending resource state",
+      "evidence": "BattleAI_DispatchOpcode case 0x03C; BattleObjectData_ResetAll"
+    },
+    "61": {
+      "arguments": ["object_id", "animation_id", "animation_parameter"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the active model's render-suppression bit and selects the requested animation and parameter on the battle scene object",
+      "evidence": "BattleAI_DispatchOpcode case 0x03D; BattleSceneObject_SetAnimation"
+    },
+    "62": {
+      "arguments": ["script_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the battle AI script selected by its packed script ID",
+      "evidence": "BattleAI_DispatchOpcode case 0x03E; BattleAI_StartScriptById"
+    },
+    "65": {
+      "arguments": ["object_id_a", "object_id_b"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "swaps two battle scene-object slots and repairs their slot-relative identity state",
+      "evidence": "BattleAI_DispatchOpcode case 0x041; BattleSceneObject_SwapSlots"
+    },
+    "70": {
+      "arguments": ["property_id"],
+      "result": "global_property_value",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reads a selector-based value from the battle-global context",
+      "evidence": "BattleAI_DispatchOpcode case 0x046; BattleGlobalProperty_Get"
+    },
+    "71": {
+      "arguments": ["property_id", "value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "writes a selector-based value into the battle-global context",
+      "evidence": "BattleAI_DispatchOpcode case 0x047; BattleGlobalProperty_Set"
+    },
+    "77": {
+      "arguments": ["actor_or_object_id", "property_id"],
+      "result": "actor_property_value",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reads a selector-based logical, render, combat, script, or coordinate property from a battle actor or scene object",
+      "evidence": "BattleAI_DispatchOpcode case 0x04D; BattleScript_GetProperty"
+    },
+    "78": {
+      "arguments": ["actor_or_object_id", "property_id", "value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "writes a selector-based logical, render, combat, script, or coordinate property on a battle actor or scene object",
+      "evidence": "BattleAI_DispatchOpcode case 0x04E; BattleScript_SetProperty"
+    },
+    "79": {
+      "arguments": ["actor_or_object_id", "property_id", "fixed_low_or_variable", "fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reconstructs a 32-bit fixed-point value from the final operands when literal, then performs set_actor_property",
+      "evidence": "BattleAI_DispatchOpcode case 0x04F"
+    },
+    "82": {
+      "arguments": ["object_id", "x", "y", "z"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "applies battle scene-object movement mode 1 with the supplied coordinates and mirrors those coordinates into the enemy actor's movement fields for enemy object IDs 56 through 67",
+      "evidence": "BattleAI_DispatchOpcode case 0x052; BattleSceneObject_ApplyMovement"
+    },
+    "83": {
+      "arguments": ["object_id", "coordinate_id"],
+      "result": "view_relative_coordinate",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "transforms the object's position into battle-view coordinates and returns X for coordinate_id 0, Y for 1, or the baseline/depth coordinate for 2",
+      "coordinate_values": {"0": "view_x", "1": "view_y", "2": "view_depth_or_baseline"},
+      "evidence": "BattleAI_DispatchOpcode case 0x053; BattlePosition_StoreViewRelative"
+    },
+    "84": {
+      "arguments": ["enemy_object_id", "stat_id"],
+      "result": "enemy_stat_value",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reads one field or packed trait from the enemy's 44-byte stat record; a missing enemy or stat record returns zero",
+      "stat_values": {"0": "localized_name_id", "1": "packed_object_data_ai_id", "2": "trait_flag_0", "3": "trait_flag_1", "4": "trait_flag_2", "5": "level", "6": "max_hp", "7": "pow", "8": "def", "9": "speed", "10": "actor_resource_variant", "11": "trait_flag_2_at_0x0E", "12": "trait_bits_3_4_at_0x0E", "13": "trait_bits_8_9_at_0x0E", "14": "trait_bits_10_11_at_0x0E", "15": "trait_bits_12_13_at_0x0E", "16": "trait_bits_14_15_at_0x0E", "17": "experience", "18": "coins", "19": "item_drop_1_low", "20": "item_drop_1_high", "21": "item_drop_2_low", "22": "item_drop_2_high"},
+      "evidence": "BattleAI_DispatchOpcode case 0x054; BattleEnemy_GetStats; BData/BDataMon.dat record layout"
+    },
+    "85": {
+      "arguments": ["enemy_object_id", "stat_id", "value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "writes the same enemy stat fields and packed traits exposed by get_enemy_stat; stat_id 10 writes the enemy actor's two-bit resource variant",
+      "evidence": "BattleAI_DispatchOpcode case 0x055; BattleEnemy_GetStats"
+    },
+    "91": {
+      "arguments": ["object_id", "motion_slot", "motion_mode", "x", "y", "z", "duration", "reference_or_relative"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts object motion in modes 0, 1, 2, or 5: mode 0 applies an immediate absolute position, or a relative delta when reference_or_relative is nonzero; modes 1 and 2 schedule vector or absolute interpolation; mode 5 schedules motion relative to another object",
+      "motion_modes": {"0": "immediate_position", "1": "vector_interpolation", "2": "absolute_interpolation", "5": "reference_object_interpolation"},
+      "evidence": "BattleAI_DispatchOpcode case 0x05B; BattleSceneObject_AdjustPosition; BattleSceneObject_MoveBy; BattleSceneObject_MoveTo; func_ov002_020a3b2c"
+    },
+    "93": {
+      "arguments": ["object_id", "motion_slot", "motion_mode", "x", "y", "z", "speed_fixed", "reference_object"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "derives duration from three-dimensional distance and speed_fixed, then starts mode 1 vector, mode 2 absolute, or mode 5 reference-object interpolation; a nonpositive speed uses the object's default movement value",
+      "motion_modes": {"1": "vector_interpolation", "2": "absolute_interpolation", "5": "reference_object_interpolation"},
+      "evidence": "BattleAI_DispatchOpcode case 0x05D; BattleSceneObject_MoveBy; BattleSceneObject_MoveTo; func_ov002_020a3b2c"
+    },
+    "104": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_frames", "terminal_velocity_fixed_low_or_variable", "terminal_velocity_fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts normalized directional motion for duration_frames, deriving acceleration from distance and terminal velocity",
+      "evidence": "BattleAI_DispatchOpcode case 0x068; BattleSceneObject_StartMotionWithVelocityForDuration"
+    },
+    "105": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_frames", "acceleration_fixed_low_or_variable", "acceleration_fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts normalized directional motion for duration_frames, deriving initial velocity from distance and acceleration",
+      "evidence": "BattleAI_DispatchOpcode case 0x069; BattleSceneObject_StartMotionWithAccelerationForDuration"
+    },
+    "106": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_frames", "endpoint_speed", "root_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts normalized accelerated directional motion using the selected solution root for the distance, duration, and endpoint-speed constraints",
+      "evidence": "BattleAI_DispatchOpcode case 0x06A; BattleSceneObject_StartAcceleratedMotionForDuration"
+    },
+    "110": {
+      "arguments": ["object_id", "animation_channel"],
+      "result": null,
+      "control_flow": "retries the same command while the requested animation channel is active",
+      "yield": "while animation is active",
+      "evidence": "BattleAI_DispatchOpcode case 0x06E; BattleSceneObject_IsAnimationActiveById"
+    },
+    "111": {
+      "arguments": ["object_id", "motion_slot"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops the selected motion channel without immediately applying its pending displacement",
+      "evidence": "BattleAI_DispatchOpcode case 0x06F; BattleSceneObject_StopMotionChannel"
+    },
+    "112": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "copies the object's current X, Y, and Z coordinates into its three-position snapshot at fields +0x0A through +0x0E",
+      "evidence": "BattleAI_DispatchOpcode case 0x070"
+    },
+    "113": {
+      "arguments": ["object_id", "motion_slot", "unused_0", "keyframe_relative_halfwords", "keyframe_extent", "step_fixed_low_or_variable", "step_fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough; reads aligned keyframe data at PC + 2 * keyframe_relative_halfwords",
+      "yield": "never",
+      "effect": "starts a table-driven keyframed motion channel using the relative record, keyframe_extent minus one, and fixed-point step",
+      "evidence": "BattleAI_DispatchOpcode case 0x071; BattleSceneObject_BeginMotionChannel; func_ov002_020724b0"
+    },
+    "114": {
+      "arguments": ["object_id", "motion_slot"],
+      "result": "motion_progress_plus_one",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns the selected motion channel's signed 16.16 progress word shifted to an integer, plus one",
+      "evidence": "BattleAI_DispatchOpcode case 0x072"
+    },
+    "115": {
+      "arguments": ["actor_object_id", "script_selector", "relative_halfwords"],
+      "result": null,
+      "control_flow": "starts an auxiliary actor script at PC + 2 * relative_halfwords, then falls through",
+      "yield": "never",
+      "effect": "script selectors 0x4000, 0x8000, and 0xC000 first choose a random valid actor from three predefined target groups; other values select the target directly",
+      "evidence": "BattleAI_DispatchOpcode case 0x073; BattleActor_SelectRandomStatusTarget; BattleAI_StartActorAuxScript"
+    },
+    "116": {
+      "arguments": ["enemy_object_id", "unused_mode"],
+      "result": null,
+      "control_flow": "retries the same command while the enemy actor's auxiliary script pointer is nonzero",
+      "yield": "while auxiliary script is active",
+      "effect": "unused_mode is decoded but both branches perform the identical wait",
+      "evidence": "BattleAI_DispatchOpcode case 0x074"
+    },
+    "120": {
+      "arguments": ["enemy_object_id", "removal_mode"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "removes the selected enemy from battle using the requested removal mode",
+      "evidence": "BattleAI_DispatchOpcode case 0x078; BattleEnemy_Remove"
+    },
+    "125": {
+      "arguments": ["actor_object_id", "damage", "number_offset_x", "number_offset_y", "unused"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "damages party IDs 56-59 through the party hit path; enemy IDs 60-65 lose HP directly and receive a damage number at the object's view-relative position plus the supplied offsets; the fifth operand is unused",
+      "evidence": "BattleAI_DispatchOpcode case 0x07D; BattleDamage_ApplyToParty; BattleActor_ApplyDamage; BattleDamage_SpawnNumber"
+    },
+    "126": {
+      "arguments": ["actor_object_id", "heal_amount", "effect_offset_x", "effect_offset_y", "unused"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clamps heal_amount to max_hp minus current_hp, increases current HP, and spawns model effect 10 carrying the actual healed amount at the actor-relative offset; the fifth operand is unused",
+      "evidence": "BattleAI_DispatchOpcode case 0x07E; BattleModelEffect_Spawn"
+    },
+    "127": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while any actor hit descriptor is locked",
+      "yield": "while any hit is locked",
+      "evidence": "BattleAI_DispatchOpcode case 0x07F; BattleActor_IsAnyHitLocked"
+    },
+    "128": {
+      "arguments": ["source_actor_id", "target_actor_id", "percentage", "modifier_mode"],
+      "result": "modified_damage",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "converts percentage to an 8.8 multiplier and applies equipment and badge damage modifiers for the source, target, and modifier mode",
+      "evidence": "BattleAI_DispatchOpcode case 0x080; BattleDamage_ApplyEquipmentModifiers"
+    },
+    "129": {
+      "arguments": ["actor_object_id", "status_id", "strength_or_chance", "duration_or_mode"],
+      "result": "application_result",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "attempts to apply status_id to the actor using the supplied strength/chance and duration/mode plus the battle-global status parameter, and returns the status subsystem result",
+      "evidence": "BattleAI_DispatchOpcode case 0x081; BattleStatus_TryApply"
+    },
+    "130": {
+      "arguments": ["actor_object_id", "status_id_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears every status when the second operand is -1; otherwise clears the actor's active status effect",
+      "evidence": "BattleAI_DispatchOpcode case 0x082; BattleStatus_ClearAll; BattleStatus_ClearEffect"
+    },
+    "132": {
+      "arguments": ["source_actor_id", "target_actor_id", "hit_value", "status_id", "status_strength", "status_duration"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "configures a battle hit descriptor for source and target with hit_value and hit kind 63, then attaches the supplied status payload",
+      "evidence": "BattleAI_DispatchOpcode case 0x084; BattleHitDescriptor_Configure; BattleHitDescriptor_SetStatus"
+    },
+    "133": {
+      "arguments": ["actor_object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reflects queued hits associated with the selected actor back through the battle damage dispatcher",
+      "evidence": "BattleAI_DispatchOpcode case 0x085; BattleDamage_ReflectQueuedHits"
+    },
+    "134": {
+      "arguments": ["source_actor_id", "target_actor_id"],
+      "result": "hit_descriptor_index_plus_one_or_zero",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "scans the ordered hit-descriptor queue until its first inactive record, normalizes aliases 8 and 9 to party IDs 56 and 57, and returns the matching one-based descriptor index or zero",
+      "evidence": "BattleAI_DispatchOpcode case 0x086"
+    },
+    "139": {
+      "arguments": ["party_slot", "reaction_animation_or_minus_one", "damage_mode", "damage_source_or_value", "effect_offset_x", "effect_offset_y"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "damages the selected party member: damage_mode 0 uses one damage, 1 calculates from damage_source_or_value, and 2 uses it directly; animation -1 uses the launch reaction, otherwise the selected reaction animation is started, and damage_mode bit 15 suppresses the standard hit effects",
+      "evidence": "BattleAI_DispatchOpcode case 0x08B; BattleDamage_CalculateByObject; BattleDamage_ApplyToParty; BattleDamage_StartPartyLaunchReaction"
+    },
+    "141": {
+      "arguments": ["source_actor_id", "target_actor_id"],
+      "result": "calculated_damage",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "calculates battle damage for the selected source and target objects without applying it",
+      "evidence": "BattleAI_DispatchOpcode case 0x08D; BattleDamage_CalculateByObject"
+    },
+    "142": {
+      "arguments": ["resource_id", "effect_id", "view_x", "world_y", "world_z", "vertical_offset", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "converts the supplied absolute coordinates into battle-view space, clamps the derived baseline to zero, and spawns a model effect from the selected resource with scale_fixed / 16",
+      "evidence": "BattleAI_DispatchOpcode case 0x08E; BattleModelEffect_SpawnFromResource"
+    },
+    "143": {
+      "arguments": ["resource_id", "effect_id", "anchor_object_id", "offset_x", "offset_y", "offset_z", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "transforms an anchor object's position plus the supplied offsets into view space and spawns a model effect from the selected resource",
+      "evidence": "BattleAI_DispatchOpcode case 0x08F; BattlePosition_StoreViewRelative; BattleModelEffect_SpawnFromResource"
+    },
+    "144": {
+      "arguments": ["resource_id", "effect_id", "anchor_object_id", "offset_x", "offset_y", "offset_z", "scale_fixed"],
+      "result": "model_effect_handle_with_0x4000_tag",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "spawns the anchored model effect in a free slot and returns its handle tagged with 0x4000",
+      "evidence": "BattleAI_DispatchOpcode case 0x090; BattleModelEffect_SpawnFromResourceInFreeSlot"
+    },
+    "145": {
+      "arguments": ["resource_id", "effect_id", "anchor_object_id", "offset_x", "offset_y", "offset_z", "scale_fixed"],
+      "result": "model_effect_handle_with_0x4000_tag",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "spawns the alternate-orientation anchored model effect in a free slot and returns its handle tagged with 0x4000",
+      "evidence": "BattleAI_DispatchOpcode case 0x091; BattleModelEffect_SpawnFromResourceInFreeSlot"
+    },
+    "146": {
+      "arguments": ["effect_id", "view_x", "world_y", "world_z", "vertical_offset", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "converts the supplied absolute coordinates to battle-view space and spawns a sprite effect with scale_fixed / 16",
+      "evidence": "BattleAI_DispatchOpcode case 0x092; BattleSpriteEffect_Spawn"
+    },
+    "147": {
+      "arguments": ["effect_id", "anchor_object_id", "offset_x", "offset_y", "offset_z", "scale_fixed"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "transforms an anchor object's position plus offsets into battle-view space and spawns a sprite effect",
+      "evidence": "BattleAI_DispatchOpcode case 0x093; BattlePosition_StoreViewRelative; BattleSpriteEffect_Spawn"
+    },
+    "148": {
+      "arguments": ["effect_id", "view_x", "world_y", "world_z", "vertical_offset", "scale_fixed"],
+      "result": "sprite_effect_handle_with_0x8000_tag",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "spawns the absolute sprite effect in a free slot and returns its handle tagged with 0x8000",
+      "evidence": "BattleAI_DispatchOpcode case 0x094; BattleSpriteEffect_SpawnInFreeSlot"
+    },
+    "149": {
+      "arguments": ["effect_id", "anchor_object_id", "offset_x", "offset_y", "offset_z", "scale_fixed"],
+      "result": "sprite_effect_handle_with_0x8000_tag",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "spawns the anchored sprite effect in a free slot and returns its handle tagged with 0x8000",
+      "evidence": "BattleAI_DispatchOpcode case 0x095; BattleSpriteEffect_SpawnInFreeSlot"
+    },
+    "159": {
+      "arguments": ["script_or_task_handle"],
+      "result": null,
+      "control_flow": "retries the same command while the packed battle script/task handle is active",
+      "yield": "while active",
+      "evidence": "BattleAI_DispatchOpcode case 0x09F; BattleScriptHandle_IsActive"
+    },
+    "160": {
+      "arguments": ["script_or_task_handle"],
+      "result": "active_boolean",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns whether the packed battle script/task handle is active",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A0; BattleScriptHandle_IsActive"
+    },
+    "161": {
+      "arguments": ["object_id", "anchor_a", "anchor_b", "offset_a_x", "offset_a_y", "offset_a_z", "offset_b_x", "offset_b_y", "offset_b_z", "scale_or_width", "rotation", "mode_a", "mode_b", "flags"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "positions, rotates, and scales a battle scene object so that it spans two configured anchor points with the supplied endpoint offsets and mode flags",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A1; BattleSceneObject_StretchBetweenAnchors"
+    },
+    "193": {
+      "arguments": ["resource_id", "transition_mode", "duration", "parameter"],
+      "result": "task_handle_with_0x4000_tag",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a raster-resource transition, binds it into the first free battle task-owner slot, and returns the slot tagged with 0x4000",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C1; BattleRasterResourceTransition_Start; BattleTask_BindOwnerSlot"
+    },
+    "194": {
+      "arguments": ["direction", "raster_id", "duration", "amplitude", "parameter"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a finite raster effect; direction 0 maps to +4 and direction 1 maps to -4 before construction",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C2; BattleRasterEffect_StartFinite"
+    },
+    "203": {
+      "arguments": ["control_selector", "value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "control_selector 0 enables the selected control-mask bits through BattleAI_UpdateControlMask; selector 1 writes the battle control-state word at context +0x10E; other selectors are ignored",
+      "evidence": "BattleAI_DispatchOpcode case 0x0CB"
+    },
+    "204": {
+      "arguments": ["control_mask", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets or clears the selected battle control bits",
+      "evidence": "BattleAI_DispatchOpcode case 0x0CC; BattleAI_UpdateControlMask"
+    },
+    "209": {
+      "arguments": ["object_id", "owner_id", "inline_size_halfwords"],
+      "result": null,
+      "control_flow": "starts an object script at the current PC and resumes after inline_size_halfwords",
+      "yield": "never",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D1; BattleAI_StartObjectScript"
+    },
+    "210": {
+      "arguments": ["object_id", "owner_id", "relative_halfwords"],
+      "result": null,
+      "control_flow": "starts an object script at PC + 2 * relative_halfwords, then falls through",
+      "yield": "once after spawning",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D2; BattleAI_StartObjectScript"
+    },
+    "211": {
+      "arguments": ["object_id", "skip_halfwords"],
+      "result": null,
+      "control_flow": "retries while the object script is active, then advances PC by 2 * skip_halfwords",
+      "yield": "while the object script is active",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D3"
+    },
+    "212": {
+      "arguments": ["object_id", "owner_id", "relative_halfwords"],
+      "result": null,
+      "control_flow": "starts an object script at PC + 2 * relative_halfwords, then falls through",
+      "yield": "never",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D4; BattleAI_StartObjectScript"
+    },
+    "213": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "retries the same command while the selected object script is active",
+      "yield": "while active",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D5; BattleScriptState_GetByObjectId"
+    },
+    "214": {
+      "arguments": ["owner_selector"],
+      "result": null,
+      "control_flow": "retries the same command while any matching object script is active",
+      "yield": "while a matching script is active",
+      "effect": "owner_selector below one defaults to the current script owner; values below 0x4000 match primary owner IDs, while values at or above 0x4000 match the low 12 bits against secondary owner IDs",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D6 scans 40 battle object-script records"
+    },
+    "215": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the selected battle object's script pointer",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D7"
+    },
+    "217": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "falls through after marking the selected object script paused",
+      "yield": "once",
+      "effect": "sets bit 0 of the selected object script's pause flags",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D9"
+    },
+    "219": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears bit 0 of the selected object script's pause flags",
+      "evidence": "BattleAI_DispatchOpcode case 0x0DB"
+    },
+    "221": {
+      "arguments": ["condition", "left", "right", "expected_result", "branch_sense", "relative_halfwords"],
+      "result": null,
+      "control_flow": "conditionally branches to PC + 2 * relative_halfwords; otherwise falls through",
+      "yield": "never",
+      "effect": "condition IDs 0-5 compare, 6-8 apply bitwise AND/OR/XOR, 9 tests logical-not, and 10 applies bitwise-not before matching expected_result and branch_sense",
+      "evidence": "BattleAI_DispatchOpcode case 0x0DD"
+    },
+    "222": {
+      "arguments": ["actor_or_object_id", "property_id", "expected_positive", "relative_halfwords"],
+      "result": null,
+      "control_flow": "branches when the selected property-positive test matches expected_positive; otherwise falls through",
+      "yield": "never",
+      "evidence": "BattleAI_DispatchOpcode case 0x0DE; BattleScript_GetProperty"
+    },
+    "223": {
+      "arguments": ["actor_object_id", "expected_locked", "relative_halfwords"],
+      "result": null,
+      "control_flow": "branches when the actor's hit-lock state matches expected_locked; otherwise falls through",
+      "yield": "never",
+      "evidence": "BattleAI_DispatchOpcode case 0x0DF; BattleActor_IsHitLocked"
+    },
+    "225": {
+      "arguments": ["script_id", "expected_active", "relative_halfwords"],
+      "result": null,
+      "control_flow": "branches when the selected battle AI script's active state matches expected_active; otherwise falls through",
+      "yield": "never",
+      "evidence": "BattleAI_DispatchOpcode case 0x0E1; BattleAI_GetStateById"
+    },
+    "226": {
+      "arguments": ["object_id", "animation_channel", "expected_active", "relative_halfwords"],
+      "result": null,
+      "control_flow": "branches when the requested animation channel's active state matches expected_active; otherwise falls through",
+      "yield": "never",
+      "evidence": "BattleAI_DispatchOpcode case 0x0E2; BattleSceneObject_IsAnimationActiveById"
+    },
+    "227": {
+      "arguments": ["sound_id", "task_parameter", "mode_parameter"],
+      "result": "sound_handle_when_allocated",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a battle sound task and writes its handle when allocation succeeds; immediate playback can return -1 and leaves the destination unchanged",
+      "evidence": "BattleAI_DispatchOpcode case 0x0E3; BattleSound_Play"
+    },
+    "228": {
+      "arguments": ["sound_id", "task_parameter"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts or immediately plays the selected battle sound with mode parameter zero and discards any handle",
+      "evidence": "BattleAI_DispatchOpcode case 0x0E4; BattleSound_Play"
+    },
+    "232": {
+      "arguments": ["particle_id", "particle_parameter", "fixed_low_or_variable", "fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reconstructs the final fixed-point operand when literal, scales it by 1/16, and spawns the selected battle particle effect",
+      "evidence": "BattleAI_DispatchOpcode case 0x0E8; BattleEffectParticle_Spawn"
+    },
+    "245": {
+      "arguments": ["asset_mask_or_group"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "requests the selected common battle asset group",
+      "evidence": "func_ov002_020698d4 case 0x0F5; BattleCommonAssets_RequestLoad"
+    },
+    "246": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command until battle context flag 0x80 becomes clear",
+      "yield": "while common asset loading is pending",
+      "evidence": "func_ov002_020698d4 case 0x0F6"
+    },
+    "249": {
+      "arguments": ["effect_handle"],
+      "result": null,
+      "control_flow": "retries while both the effect and its secondary phase are active",
+      "yield": "while both effect predicates are true",
+      "evidence": "func_ov002_020698d4 case 0x0F9; func_ov002_020661d8; func_ov002_02066290"
+    },
+    "250": {
+      "arguments": ["effect_handle"],
+      "result": null,
+      "control_flow": "retries the same command while the selected effect exists",
+      "yield": "while active",
+      "evidence": "func_ov002_020698d4 case 0x0FA; func_ov002_020661d8"
+    },
+    "251": {
+      "arguments": ["effect_handle"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops and releases the selected battle effect handle",
+      "evidence": "func_ov002_020698d4 case 0x0FB; func_ov002_0206615c"
+    },
+    "254": {
+      "arguments": ["party_slot", "animation_channel"],
+      "result": null,
+      "control_flow": "retries while the party slot has an attached effect object and that animation channel remains active",
+      "yield": "while attached animation is active",
+      "evidence": "func_ov002_020698d4 case 0x0FE; BattleSceneObject_IsAnimationChannelActive"
+    },
+    "255": {
+      "arguments": ["attached_effect_id", "property_id"],
+      "result": "attached_effect_property",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns a selector-based property from the selected attached battle effect",
+      "evidence": "func_ov002_020698d4 case 0x0FF; func_ov002_020660fc"
+    },
+    "257": {
+      "arguments": ["effect_id", "duration", "parameter"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the primary battle screen-effect channel",
+      "evidence": "func_ov002_020698d4 case 0x101; BattleScreenEffect_StartPrimary"
+    },
+    "258": {
+      "arguments": ["effect_id", "duration", "parameter"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the secondary battle screen-effect channel",
+      "evidence": "func_ov002_020698d4 case 0x102; BattleScreenEffect_StartSecondary"
+    },
+    "259": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resets both battle screen-effect channels and their shared state",
+      "evidence": "func_ov002_020698d4 case 0x103; func_ov002_02065dfc"
+    }
   }
 }
