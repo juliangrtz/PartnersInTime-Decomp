@@ -11,6 +11,21 @@ import extract_script_vm_descriptors as descriptor_tool
 
 
 class ScriptVmDescriptorTests(unittest.TestCase):
+    def test_generated_instances_do_not_share_name_dictionaries(self) -> None:
+        instance = {
+            "role": "test",
+            "overlay_id": 0,
+            "descriptor_table_address": 0,
+            "command_handler_address": 0,
+            "vm_run_call_sites": [],
+        }
+        names = {"0": "end"}
+        first = descriptor_tool._document("eur", "first", instance, [0], names)
+        second = descriptor_tool._document("eur", "second", instance, [0], names)
+        first["known_names"]["1"] = "instance_only"
+        self.assertNotIn("1", second["known_names"])
+        self.assertNotIn("1", names)
+
     def test_checked_in_instance_tables_share_the_resident_prefix(self) -> None:
         battle = json.loads(
             (ROOT / "config/eur/battle_ai_vm.json").read_text(encoding="utf-8")

@@ -34,6 +34,26 @@ Player growth/base stats are not present in this DAT corpus.  They are created
 by executable and save-data logic and therefore remain part of the C
 reconstruction.
 
+Field-event bytecode now has a standalone lossless exporter and fixed-layout
+builder. It is intentionally not yet part of `project.json`: field dialogue and
+field scripts occupy different members of the same `FEvent/FEvData.dat` outer
+archive, so their two independently editable views must be merged by one
+container-aware build step before both can safely target the normal ROM build.
+
+```powershell
+python .\tools\field_event_mod.py export
+python .\tools\field_event_mod.py check
+python .\tools\field_event_mod.py build --output build\FEvData.modded.dat
+```
+
+The exporter covers the 778 nonempty script-bearing room members and separates
+valid VM entry points from private/sentinel pointer aliases by decoding the
+complete reachable control-flow graph. Schema v1 permits opcode/argument edits
+only when the encoded command size stays unchanged; branch targets are
+revalidated during every build. Size-changing field-script edits remain locked
+until relocation rules for all field control-flow and embedded-data opcodes are
+complete.
+
 ## Building a data mod
 
 Edit JSON below `data/eur/`, then use the existing CLion **Build and Run EUR

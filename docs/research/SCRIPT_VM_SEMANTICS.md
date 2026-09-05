@@ -39,11 +39,19 @@ Overlay 7's matching `SceneScriptVM_ReadVariable` and
 instance-specific even though the resident variable switch recognizes all three
 namespace numbers.
 
-`FEvent/FEvData.dat` is an outer room archive. Its localized room member contains
-91 slots (including dialogue), while the neighboring room members begin with
-16-bit pointer structures consumed by field logic. Those structures mix script
-entry points with non-code records; they therefore need typed loader recovery before
-the battle CFG decoder can be generalized safely.
+The European `FEvent/FEvData.dat` contains 1,914 outer entries arranged as 638
+room triplets. Part 1 is the localized 91-slot resource/dialogue container; parts
+0 and 2 are field-data members. Their first `u16` is both the first section offset
+and the complete `u16` pointer-table size. Pointer slots 0..8 select fixed typed
+sections; event-script slots begin at byte `0x12`.
+
+A complete static pass over the 778 nonempty field-data members classifies 18,651
+unique slot targets as valid VM entry points and 704 as deliberately opaque/private
+targets. The valid graphs contain 387,377 unique reachable commands using 289
+opcodes. `tools/field_event_mod.py` exports this classification and byte-identically
+rebuilds the source while enforcing fixed command boundaries and valid branch
+targets. Private targets and all nine not-yet-fully-typed data sections remain copied
+from the user's own extraction.
 
 ## Descriptor ABI coverage
 
@@ -56,13 +64,48 @@ the same shape.
 
 | Instance | Descriptor entries | Semantically named | Source |
 |---|---:|---:|---|
-| Field/world | 341 | 51 | `config/eur/field_vm.json` |
+| Field/world | 341 | 73 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 109 | `config/eur/scene_vm.json` |
 
 The field and scene tables are reproducibly extracted and checked against a private
 ROM with `tools/extract_script_vm_descriptors.py`; the committed JSON contains only
 the compact ABI metadata, never overlay bytes.
+
+## Recovered field control-flow family
+
+Overlay 0's first instance-specific family is statically complete enough to drive
+the field CFG exporter. Opcode `0x033` conditionally branches on the current VM
+owner subtype and `0x034` branches unconditionally. Opcodes `0x035..0x03B` manage
+indexed auxiliary script states. Opcodes `0x03C..0x03F` start, wait for, and skip
+inline/global scripts; `0x040..0x047` stop, pause, resume, query, or wait for the
+global or matching entity scripts. Opcode `0x048` starts an entry from the paired
+field context (the other DS screen/field instance).
+
+| Opcode | Name | Descriptor |
+|---:|---|---|
+| `0x033` | `branch_if_owner_subtype` | 2 typed args (`0x42`) |
+| `0x034` | `branch_relative` | 1 typed args (`0x41`) |
+| `0x035` | `set_aux_script_enabled` | 2 typed args (`0x42`) |
+| `0x036` | `start_aux_script` | 3 typed args (`0x43`) |
+| `0x037` | `wait_aux_script` | 1 typed args (`0x41`) |
+| `0x038` | `stop_aux_script` | 1 typed args (`0x41`) |
+| `0x039` | `pause_aux_script` | 1 typed args (`0x41`) |
+| `0x03A` | `resume_aux_script` | 1 typed args (`0x41`) |
+| `0x03B` | `get_aux_script_state` | result + 1 typed args (`0x61`) |
+| `0x03C` | `start_inline_global_script` | 3 typed args (`0x43`) |
+| `0x03D` | `start_inline_global_script_and_wait` | 3 typed args (`0x43`) |
+| `0x03E` | `start_relative_global_script` | 3 typed args (`0x43`) |
+| `0x03F` | `wait_global_script` | 1 typed args (`0x41`) |
+| `0x040` | `wait_matching_entity_scripts` | 1 typed args (`0x41`) |
+| `0x041` | `stop_global_script` | 1 typed args (`0x41`) |
+| `0x042` | `stop_matching_entity_scripts` | 1 typed args (`0x41`) |
+| `0x043` | `pause_global_script` | 1 typed args (`0x41`) |
+| `0x044` | `pause_matching_entity_scripts` | 1 typed args (`0x41`) |
+| `0x045` | `resume_global_script` | 1 typed args (`0x41`) |
+| `0x046` | `resume_matching_entity_scripts` | 1 typed args (`0x41`) |
+| `0x047` | `get_global_script_state` | result + 1 typed args (`0x61`) |
+| `0x048` | `start_paired_field_script` | 3 typed args (`0x43`) |
 
 ## VM ABI
 
@@ -459,8 +502,8 @@ state changes. Full event modding additionally requires completing overlay 0's
 `0x3000` extension, typing the scene structures behind overlay 7's recovered
 `0x7000` extension, and identifying every non-battle script archive.
 
-The implementation order is: recover the Overlay-0/7 descriptor schemas; type the
-`FEvent` room pointer consumers; identify every control-flow, spawn, wait, and
-terminal opcode; add lossless field/scene CFG exporters; then validate ambiguous
-arguments with emulator traces before assigning stable names. Only after all five
-steps should field scripts support size-changing edits.
+The descriptor schemas, FEvent pointer grammar, first field control-flow family,
+and lossless fixed-layout field exporter are now recovered. The remaining order is
+to name high-use field commands and type sections 0..8; finish the scene container
+and CFG exporter; validate ambiguous arguments with emulator traces; then enable
+relocation and merge field script/dialogue rebuilding into the normal data project.
