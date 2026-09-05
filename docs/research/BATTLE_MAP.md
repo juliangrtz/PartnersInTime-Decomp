@@ -178,8 +178,12 @@ and runtime overlay 2.
 | `020A3338` | `BattleSceneObject_SetModelFlag10` | Object-pointer wrapper for the active model's currently unknown bit 10 |
 | `020A3348` | `BattleSceneObject_SetModelFlag10ById` | Resolves the active model and updates its currently unknown bit 10 |
 | `020A3388` | `BattleSceneObject_GetActiveModelById` | Resolves an object ID and returns its primary or alternate model |
-| `020A3C5C` | `BattleSceneObject_StartAcceleratedMotionForDuration` | Starts normalized acceleration over an explicit duration and speed range |
+| `020A3C5C` | `BattleSceneObject_StartAcceleratedMotionForDuration` | Solves normalized acceleration from distance, duration, and terminal velocity |
+| `020A3DD8` | `BattleSceneObject_StartMotionWithAccelerationForDuration` | Solves initial velocity for a fixed-duration motion with known acceleration |
+| `020A3EBC` | `BattleSceneObject_StartMotionWithVelocityForDuration` | Solves acceleration for a fixed-duration motion with known initial velocity |
 | `020A3F9C` | `BattleMotion_StartBallistic` | Derives launch velocity with the DS square-root unit and starts motion |
+| `020A404C` | `BattleSceneObject_StartMotionWithPeakDistance` | Derives acceleration from initial velocity and a requested peak distance |
+| `020A40D4` | `BattleSceneObject_StartScaledAcceleratedMotion` | Converts integer velocity and acceleration inputs to the solver's Q8 scale |
 | `020A411C` | `BattleSceneObject_StartAcceleratedMotion` | Normalizes a path and solves constant or accelerated duration |
 | `020A43D8` | `BattleSceneObject_UpdateAcceleratedMotion` | Advances normalized acceleration and applies the terminal correction |
 | `020A483C` | `BattleSceneObject_MoveTo` | Moves immediately or interpolates toward absolute coordinates |
@@ -774,6 +778,15 @@ the renderer. A second expanding layer softens elevated shadows. The same unit
 also exposes the alternate-model anchor update, the model relation virtual,
 and the short delayed-hide queue used when an independently owned scene object
 finishes its visibility transition.
+The seven-function motion-construction block at
+`0x020A3C5C`-`0x020A43D8` is exact linked C. All constructors normalize a
+three-axis direction with the DS square-root unit and populate the same typed
+16-byte channel payload. The general solver handles constant velocity or both
+quadratic roots for accelerated travel; the wrappers instead solve one missing
+quantity from duration, terminal velocity, acceleration, or peak distance.
+The following 320-byte update callback is maintained as readable C and has the
+correct instruction count and control flow, but remains unlinked while its
+accelerated-path register allocation is brought to an exact match.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets

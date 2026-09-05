@@ -365,9 +365,40 @@ u32 BattleSceneObject_SetBattleAnimationById(u32 object_id,
 int BattleSceneObject_StartAcceleratedMotionForDuration(
     BattleSceneObject *object, int channel_index,
     int direction_x, int direction_y, int direction_z,
-    int initial_speed, int duration, int target_speed,
+    int distance, int duration, int terminal_velocity,
     int positive_acceleration
 );
+int BattleSceneObject_StartMotionWithAccelerationForDuration(
+    BattleSceneObject *object, int channel_index,
+    int direction_x, int direction_y, int direction_z,
+    int distance, int duration, int acceleration);
+int BattleSceneObject_StartMotionWithVelocityForDuration(
+    BattleSceneObject *object, int channel_index,
+    int direction_x, int direction_y, int direction_z,
+    int distance, int duration, int velocity);
+int BattleMotion_StartBallistic(
+    BattleSceneObject *object, int channel_index,
+    int direction_x, int direction_y, int direction_z,
+    int distance, int acceleration, int signed_extent,
+    int prefer_longer_duration);
+int BattleSceneObject_StartMotionWithPeakDistance(
+    BattleSceneObject *object, int channel_index,
+    int direction_x, int direction_y, int direction_z,
+    int distance, int peak_distance, int velocity,
+    int prefer_longer_duration);
+int BattleSceneObject_StartScaledAcceleratedMotion(
+    BattleSceneObject *object, int channel_index,
+    int direction_x, int direction_y, int direction_z,
+    int distance, int initial_velocity, int acceleration,
+    int prefer_longer_duration);
+int BattleSceneObject_StartAcceleratedMotion(
+    BattleSceneObject *object, int channel_index,
+    int direction_x, int direction_y, int direction_z,
+    int distance, int initial_velocity, int acceleration,
+    int prefer_longer_duration
+);
+void BattleSceneObject_UpdateAcceleratedMotion(
+    BattleSceneObject *object, BattleMotionChannel *channel);
 s16 *BattleSceneObject_BeginMotionChannel(BattleSceneObject *object,
                                           int channel_index, int duration,
                                           BattleMotionCallback callback);

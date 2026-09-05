@@ -27,10 +27,6 @@ enum BattleDamageReactionResource {
 
 extern const u16 data_ov002_020bfa3c[];
 
-int BattleMotion_StartBallistic(BattleSceneObject *object, int channel_index,
-                                int direction_x, int direction_y,
-                                int direction_z, int initial_speed,
-                                int terminal_speed, int duration, int enabled);
 int BattleParty_StartKnockout(BattleSceneObject *object);
 int BattleParty_SpawnLaunchImpact(BattleActor *actor);
 
