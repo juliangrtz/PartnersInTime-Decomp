@@ -96,7 +96,7 @@ void BattleImpactParticle_UpdateModelFrame(BattleAITask *task);
 void BattleImpactParticle_UpdateResourceFrame(BattleAITask *task);
 void BattleImpactParticle_Render(BattleImpactParticlePayload *particle,
                                  BattleModel *model,
-                                 s16 x, s16 y, s16 z);
+                                 int x, int y, int z);
 void BattleImpactParticle_RenderPrimary(BattleImpactParticlePayload *particle);
 BattleImpactParticleTask *BattleImpactParticle_CreateFromObject(
     BattleSceneObject *object, void (*callback)(BattleAITask *task));
