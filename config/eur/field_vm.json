@@ -599,6 +599,9 @@
     "272": "apply_saved_party_configuration",
     "273": "set_field_input_disable_mask",
     "274": "set_field_event_input_disable_mask",
+    "275": "set_field_input_channel_override",
+    "276": "reset_field_input_channel_overrides",
+    "277": "set_field_input_direction_rotation",
     "278": "set_field_party_control_enabled",
     "279": "set_camera_focus_entity",
     "280": "remove_all_entity_effect_sprites",
@@ -2174,6 +2177,30 @@
       "yield": "never",
       "effect": "selects the current or paired field side and stores the complemented event-owned input mask at field context +0x24C6; input processing ANDs this mask with the independent mask controlled by opcode 0x111",
       "evidence": "func_ov000_020823f8 case 0x112 and input-mask combiner func_ov000_0207ec3c"
+    },
+    "275": {
+      "arguments": ["input_state_channel", "injected_button_mask", "inactive_side_exclusion_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stores a scripted button injection in one of the field context's four input-state channels: 0 held, 1 newly pressed, 2 newly released, or 3 initial/repeat press. The active field side ORs the injection into the filtered and direction-remapped physical input. When the same context is sampled as the inactive opposite side, bits selected by inactive_side_exclusion_mask are omitted. Shipped scripts use channel 0 to hold Left or Right while excluding the entire D-pad from the inactive side",
+      "evidence": "func_ov000_020823f8 case 0x113, input-state update func_02029628, field input reader func_ov000_0207ec6c, direction remapper func_ov000_0207ebc4, and nine reachable script uses"
+    },
+    "276": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears all four scripted input injections and restores their inactive-side allow masks to 0xFFFF, returning field input to its neutral physical-input-only state",
+      "evidence": "func_ov000_020823f8 case 0x114 and field input reader func_ov000_0207ec6c"
+    },
+    "277": {
+      "arguments": ["direction_quarter_turns"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the low two bits of the field input direction rotation. Physical D-pad bits 0x10, 0x20, 0x40, and 0x80 are cyclically remapped by this many quarter turns before scripted injections are ORed in; non-directional buttons are preserved. No reachable shipped field script uses this command",
+      "evidence": "func_ov000_020823f8 case 0x115 and direction remapper func_ov000_0207ebc4"
     },
     "278": {
       "arguments": ["enabled", "lead_character_selector_or_minus_one"],

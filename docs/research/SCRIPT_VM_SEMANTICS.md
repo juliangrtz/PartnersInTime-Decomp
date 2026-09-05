@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 295 | 244 | `config/eur/field_vm.json` |
+| Field/world | 341 | 298 | 247 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -295,6 +295,9 @@ field context (the other DS screen/field instance).
 | `0x110` | `apply_saved_party_configuration` | 0 literal args | rebuilds both field-party controllers from the saved party-composition flags. Save flag 0x2005 or 0x2006 has priority and selects the adult pair (Mario/Luigi, entity mask 0x3 and composition mode 1); otherwise flag 0x2007 selects the baby pair (Baby Mario/Baby Luigi, mask 0xC and mode 2); when none is set all four are enabled (mask 0xF and mode 3). The command updates the field ownership masks, applies the same composition to the paired party controller, and refreshes both controllers' members and render resources |
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
 | `0x112` | `set_field_event_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented event-owned input mask at field context +0x24C6; input processing ANDs this mask with the independent mask controlled by opcode 0x111 |
+| `0x113` | `set_field_input_channel_override` | input_state_channel, injected_button_mask, inactive_side_exclusion_mask | stores a scripted button injection in one of the field context's four input-state channels: 0 held, 1 newly pressed, 2 newly released, or 3 initial/repeat press. The active field side ORs the injection into the filtered and direction-remapped physical input. When the same context is sampled as the inactive opposite side, bits selected by inactive_side_exclusion_mask are omitted. Shipped scripts use channel 0 to hold Left or Right while excluding the entire D-pad from the inactive side |
+| `0x114` | `reset_field_input_channel_overrides` | 0 literal args | clears all four scripted input injections and restores their inactive-side allow masks to 0xFFFF, returning field input to its neutral physical-input-only state |
+| `0x115` | `set_field_input_direction_rotation` | direction_quarter_turns | sets the low two bits of the field input direction rotation. Physical D-pad bits 0x10, 0x20, 0x40, and 0x80 are cyclically remapped by this many quarter turns before scripted injections are ORed in; non-directional buttons are preserved. No reachable shipped field script uses this command |
 | `0x116` | `set_field_party_control_enabled` | enabled, lead_character_selector_or_minus_one | sets whether this field context owns an actively player-controlled party. Disabled contexts suppress direct party input and make field variable 0x3000 report -1 instead of the active character selector. When the second argument is not -1 and the character pair encoded by selector bits 1.. is present on this field screen, its low bit is also copied to party-controller 0's active-member flag |
 | `0x117` | `set_camera_focus_entity` | enabled, entity_selector_or_minus_one | toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection |
 | `0x118` | `remove_all_entity_effect_sprites` | 0 literal args | hides and releases all eight field effect-sprite slots |
@@ -348,18 +351,16 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-267/289 used opcodes and
-387,194/387,272 reachable commands
+269/289 used opcodes and
+387,209/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x113` | 9 |
 | `0x145` | 7 |
 | `0x075` | 7 |
 | `0x04C` | 7 |
 | `0x146` | 6 |
-| `0x114` | 6 |
 | `0x148` | 5 |
 | `0x138` | 5 |
 | `0x079` | 5 |
@@ -374,6 +375,8 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x12D` | 1 |
 | `0x12C` | 1 |
 | `0x0B4` | 1 |
+| `0x0B3` | 1 |
+| `0x04E` | 1 |
 
 ## Menu/UI scene scripts
 
