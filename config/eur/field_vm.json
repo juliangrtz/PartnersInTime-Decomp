@@ -448,12 +448,17 @@
     "134": "start_entity_timed_movement_relative_to_entity",
     "139": "wait_entity_movement",
     "141": "start_entity_vertical_motion",
+    "142": "start_entity_vertical_motion_to_height",
     "143": "wait_entity_vertical_motion",
+    "144": "stop_entity_vertical_motion",
     "145": "set_entity_position",
     "160": "set_entity_facing_direction",
     "162": "spawn_entity_effect_sprite",
     "163": "remove_entity_effect_sprite",
     "164": "wait_entity_effect_sprite",
+    "165": "set_field_block_idle_bobbing_enabled",
+    "166": "set_field_block_bounce_controller_enabled",
+    "167": "wait_field_block_bounce",
     "174": "rejoin_party_follower",
     "175": "wait_party_follower_rejoined",
     "176": "detach_party_follower",
@@ -826,12 +831,28 @@
       "effect": "starts vertical ballistic motion; literal word pairs form signed fx32 values and -1 selects entity defaults",
       "evidence": "func_ov000_020823f8 case 0x08D, func_ov000_020b44ac, and func_ov000_020b4330"
     },
+    "142": {
+      "arguments": ["entity_selector", "height_pixels", "gravity_low_or_value", "gravity_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "derives an upward fx32 velocity that reaches approximately height_pixels under the supplied acceleration, then starts the same ballistic-motion controller as opcode 0x08D; gravity -1 selects the entity default",
+      "evidence": "func_ov000_020823f8 case 0x08E and func_ov000_020b4414"
+    },
     "143": {
       "arguments": ["entity_selector"],
       "result": null,
       "control_flow": "retries while entity vertical-motion flag 0x10 is set",
       "yield": "while vertical motion is active",
       "evidence": "func_ov000_020823f8 case 0x08F and func_ov000_020b4330"
+    },
+    "144": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "cancels the selected entity's ballistic vertical motion, clears its three vertical-motion state flags, and discards the saved starting height",
+      "evidence": "func_ov000_020823f8 case 0x090 and func_ov000_020b4300"
     },
     "145": {
       "arguments": ["entity_selector", "relative", "x", "y", "z"],
@@ -871,6 +892,30 @@
       "control_flow": "retries the same command while the field effect sprite owned by the selected entity still reports an active animation",
       "yield": "while the matching effect sprite is active",
       "evidence": "func_ov000_020823f8 case 0x0A4 and func_ov000_0207133c"
+    },
+    "165": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "toggles the repeating vertical idle-bob curve used by clFieldBlock entities; disabling it immediately clears the sprite y offset and resets both bob and one-shot bounce phase fields",
+      "evidence": "func_ov000_020823f8 case 0x0A5, func_ov000_020bc8e4, update func_ov000_020bc9b4, and signed y-offset curve data_ov000_020c0c68"
+    },
+    "166": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "toggles the clFieldBlock sprite-bounce controller and remembers the current model animation; disabling it clears the sprite y offset, phase and interaction state, restores the model animation, and reports the state change to an attached script when configured",
+      "evidence": "func_ov000_020823f8 case 0x0A6, func_ov000_020bc7d0, and clFieldBlock update func_ov000_020bc9b4"
+    },
+    "167": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "retries the same command until the selected clFieldBlock one-shot bounce phase returns to -1",
+      "yield": "while the 17-frame block-hit bounce is active",
+      "effect": "synchronization barrier for the block interaction bounce triggered by func_ov000_020bc930",
+      "evidence": "func_ov000_020823f8 case 0x0A7, func_ov000_020bc930, func_ov000_020bc9b4, and signed 17-frame y-offset curve data_ov000_020c0c6c"
     },
     "174": {
       "arguments": ["party_side", "instant"],
