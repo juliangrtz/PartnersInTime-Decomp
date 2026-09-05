@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 207 | 156 | `config/eur/field_vm.json` |
+| Field/world | 341 | 209 | 158 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -234,6 +234,8 @@ field context (the other DS screen/field instance).
 | `0x117` | `set_camera_focus_entity` | enabled, entity_selector_or_minus_one | toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection |
 | `0x118` | `remove_all_entity_effect_sprites` | 0 literal args | hides and releases all eight field effect-sprite slots |
 | `0x119` | `wait_all_entity_effect_sprites` | 0 literal args | retries the same command while any of the eight field effect sprites still reports an active animation |
+| `0x11F` | `set_save_location_id` | save_location_id | stores the unsigned 16-bit location selector used by the next save-menu handoff. Field variable 0x3023 reads the stored value, and opcode 0x120 copies its low byte into the save-menu transfer block |
+| `0x120` | `open_save_menu` | party_context_or_minus_one, fade_to_black, return_screen_flag | clears and fills the ten-byte scene-transfer header at save data +0x558: party_context_or_minus_one is resolved to the active field party configuration when -1, the saved location byte comes from opcode 0x11F, and return_screen_flag becomes transfer bit 15. Both field resource owners are released, both screens optionally fade from white to black over 16 frames, and the field scene is suspended for the save menu. Every shipped invocation uses arguments -1, 1, 1 |
 | `0x125` | `restore_party_member_hp` | character_index | copies the selected character's maximum HP into current HP and refreshes the paired field status HUD when it is active; character indices 0 through 3 select Mario, Luigi, Baby Mario, and Baby Luigi |
 | `0x126` | `adjust_party_member_hp` | character_index, hp_delta | adds the signed delta to the selected character's current HP, clamps the result to zero through maximum HP, and refreshes the paired field status HUD when active |
 | `0x128` | `adjust_coins` | coin_delta | adds the signed delta to the save's coin total and clamps it to 0 through 999999; supplying 32767 is used by shipped scripts as a saturating fill operation |
@@ -260,18 +262,16 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-183/289 used opcodes and
-385,476/387,272 reachable commands
+185/289 used opcodes and
+385,615/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x0F2` | 80 |
 | `0x087` | 79 |
-| `0x11F` | 74 |
 | `0x12F` | 71 |
 | `0x051` | 71 |
-| `0x120` | 65 |
 | `0x0F3` | 57 |
 | `0x053` | 57 |
 | `0x069` | 51 |
@@ -286,6 +286,8 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x12E` | 34 |
 | `0x054` | 33 |
 | `0x0C6` | 32 |
+| `0x0FE` | 29 |
+| `0x0C8` | 29 |
 
 ## Menu/UI scene scripts
 
