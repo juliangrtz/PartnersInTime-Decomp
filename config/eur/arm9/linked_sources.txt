@@ -53,6 +53,7 @@ src/battle/battle_damage_application.c
 src/battle/battle_hit.c
 src/battle/battle_hit_queue.c
 src/battle/battle_hit_lookup.c
+src/battle/battle_collision_volumes.c
 src/battle/battle_scene_object.c
 src/battle/battle_scene_movement.c
 src/battle/battle_scene_motion_list.c

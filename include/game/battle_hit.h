@@ -64,6 +64,16 @@ typedef struct BattleCollisionBounds {
     s16 axis[6];
 } BattleCollisionBounds;
 
+enum BattleCollisionAxis {
+    BATTLE_COLLISION_X_MIN = 0,
+    BATTLE_COLLISION_X_MAX = 1,
+    BATTLE_COLLISION_Y_MIN = 2,
+    BATTLE_COLLISION_Y_MAX = 3,
+    BATTLE_COLLISION_Z_MIN = 4,
+    BATTLE_COLLISION_Z_MAX = 5,
+    BATTLE_COLLISION_AXIS_COUNT = 6
+};
+
 typedef char BattleHitDescriptor_SizeCheck[
     sizeof(BattleHitDescriptor) == 0x10 ? 1 : -1];
 typedef char BattleHitRecord_SizeCheck[
@@ -77,6 +87,11 @@ void BattleHitQueue_Update(void);
 int BattleCollision_GetBounds(BattleCollisionBounds *bounds, u32 actor_id,
                               int animation_index, int frame_index);
 int BattleCollision_TestObjects(u32 source_id, u32 target_id,
+                                BattlePosition *hit_position);
+int BattleCollision_TestVolumes(BattleCollisionBounds *source_previous,
+                                BattleCollisionBounds *source_current,
+                                BattleCollisionBounds *target_previous,
+                                BattleCollisionBounds *target_current,
                                 BattlePosition *hit_position);
 void BattleHitDescriptor_DisableByActor(int actor_id);
 void BattleHitDescriptor_SetStatus(BattleHitDescriptor *descriptor,
