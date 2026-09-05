@@ -271,6 +271,9 @@ and runtime overlay 2.
 | `020B1430` | `BattleRasterEffect_StartFinite` | Byte-identical finite raster-effect constructor used by battle-AI opcode `0xC2` |
 | `020B14A4` | `BattleRasterEffect_ApplyToTable` | Byte-identical scanline-table interpolation wrapper |
 | `020B1500` | `BattleRasterEffect_ApplyToBothTables` | Byte-identical dual raster-table update wrapper |
+| `020B1590` | `BattleGridTransition_DrawPhaseA` | Identified 8-by-6 direct-geometry transition renderer; high-level reconstruction pending |
+| `020B1BBC` | `BattleGridTransition_UpdateTask` | Byte-identical task callback around transition phase A |
+| `020B1C24` | `BattleGridTransition_InitializeTask` | Byte-identical six-byte transition-state initializer |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `020A56EC` | `BattleStatus_UpdatePartyStatVisuals` | Reconstructed POW/DEF/SPD effect rotation and model callback (73.00% code match) |
@@ -627,6 +630,15 @@ callback alive. Opcode `0xE8` uses the neighboring accelerating, view-relative
 particle task. The low-level table wrapper maintains independent cursors at
 context offsets `+0xCBCC` and `+0xCBD0` for the tables at `+0x61808` and
 `+0x61C08`.
+
+The following transition task wrapper at `0x020B1BBC`-`0x020B1C4C` is also
+byte-identical C. It initializes an angle and velocity to zero with a 128-frame
+counter, clears the battle view offsets at `+0x6760/+0x6762` on each update,
+and releases both its callback and runtime flag `+0xD3A0:0x40` when the phase-A
+renderer completes. That renderer is already identified as a direct DS
+geometry path: it submits an 8-by-6 grid through the matrix, vertex, polygon,
+texture, color, and begin/end command registers. Its larger high-level source
+is the next reconstruction boundary.
 
 ## Damage and status behavior
 

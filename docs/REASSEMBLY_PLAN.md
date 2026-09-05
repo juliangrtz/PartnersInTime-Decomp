@@ -173,6 +173,11 @@ matching C too. It exposes AI opcodes `0xC1`, `0xC2`, and `0xE8`, finite and
 persistent raster interpolation, the object-data-51 fade/load/fade sequence,
 both context-backed 256-entry raster tables and their independent cursors, and
 the accelerating view-relative particle callback through typed task state.
+The two task functions at `0x020B1BBC`-`0x020B1C4C` are linked matching C as
+the entry wrapper for the next 8-by-6 geometry transition. They expose its
+six-byte angle/velocity/frame state, view-offset reset, active flag, and task
+retirement while the two large direct-geometry render phases remain the next
+semantic target.
 The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
 `0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
 slot allocation, countdown and primary/secondary routing used by damage and KO.
