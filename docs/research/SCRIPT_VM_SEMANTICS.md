@@ -79,7 +79,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 143 | 92 | `config/eur/field_vm.json` |
+| Field/world | 341 | 148 | 97 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -162,6 +162,10 @@ field context (the other DS screen/field instance).
 | `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
 | `0x0CE` | `set_party_leader_animation_override` | party_side, enabled | enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30 |
 | `0x0D4` | `activate_field_map_event` | map_event_index | activates the indexed 20-byte field-map event record, applies its persistent enable/disable save flags, reloads referenced map layers when present, applies the returned map state, and dirties map-synchronized entities |
+| `0x0D5` | `start_map_tile_animation` | animation_index | starts the indexed room tilemap animation when its descriptor supports animation and the slot is idle; the first frame is copied immediately and the descriptor's frame timer and frame index are initialized |
+| `0x0D6` | `wait_map_tile_animation` | animation_index | synchronization barrier for finite room tilemap animations |
+| `0x0D7` | `pause_map_tile_animation` | animation_index | pauses the indexed room tilemap animation by clearing its active state while retaining its frame index and timer |
+| `0x0D8` | `resume_map_tile_animation` | animation_index | resumes the indexed room tilemap animation by restoring its active state without reinitializing its frame index or timer |
 | `0x0D9` | `set_field_bg_layers_enabled` | bg0_enabled_or_minus_one, bg1_enabled_or_minus_one, bg2_enabled_or_minus_one, bg3_enabled_or_minus_one | updates the active field screen's DISPCNT BG0 through BG3 enable bits; -1 preserves an individual layer, and the OBJ display-enable bit remains forced on |
 | `0x0DA` | `start_camera_profiled_movement` | coordinate_mode, x, y, motion_3, motion_4, motion_5, motion_6, x_motion_flag, y_motion_flag | starts profiled camera movement to clamped fx32 coordinates; coordinate_mode 1 treats x/y as relative to the current camera position, and the final two flags are stored as per-axis motion options |
 | `0x0DB` | `start_camera_timed_movement` | coordinate_mode, x, y, duration_frames, x_motion_flag, y_motion_flag | starts timed camera interpolation to clamped fx32 coordinates; coordinate_mode 1 treats x/y as relative to the current camera position |
@@ -180,6 +184,7 @@ field context (the other DS screen/field instance).
 | `0x0EE` | `wait_master_brightness_transition` | 0 literal args | synchronization barrier for opcode 0x0ED |
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
+| `0x112` | `set_field_event_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented event-owned input mask at field context +0x24C6; input processing ANDs this mask with the independent mask controlled by opcode 0x111 |
 | `0x117` | `set_camera_focus_entity` | enabled, entity_selector_or_minus_one | toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection |
 | `0x118` | `remove_all_entity_effect_sprites` | 0 literal args | hides and releases all eight field effect-sprite slots |
 | `0x119` | `wait_all_entity_effect_sprites` | 0 literal args | retries the same command while any of the eight field effect sprites still reports an active animation |
@@ -194,8 +199,8 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-120/289 used opcodes and
-372,721/387,377 reachable commands
+125/289 used opcodes and
+373,728/387,377 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
@@ -209,9 +214,7 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x08E` | 534 |
 | `0x067` | 437 |
 | `0x0A7` | 428 |
-| `0x112` | 395 |
 | `0x0AC` | 380 |
-| `0x0D5` | 372 |
 | `0x090` | 362 |
 | `0x0CC` | 320 |
 | `0x055` | 317 |
@@ -220,6 +223,8 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x08C` | 289 |
 | `0x0A1` | 234 |
 | `0x05A` | 230 |
+| `0x0D1` | 221 |
+| `0x116` | 216 |
 
 ## Menu/UI scene scripts
 
