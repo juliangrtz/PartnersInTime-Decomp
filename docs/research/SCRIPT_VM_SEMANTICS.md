@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 197 | 146 | `config/eur/field_vm.json` |
+| Field/world | 341 | 207 | 156 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -226,6 +226,8 @@ field context (the other DS screen/field instance).
 | `0x0EE` | `wait_master_brightness_transition` | 0 literal args | synchronization barrier for opcode 0x0ED |
 | `0x106` | `wait_field_scene_transition` | 0 literal args | common synchronization barrier for the scripted field-scene transition effects driven by the renderer state at +0x274 |
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
+| `0x10E` | `enable_field_trigger_area` | trigger_area_index | clears the runtime-disabled flag of the indexed 44-byte field trigger-area record, allowing party or entity overlap with its triangle, quadrilateral, or rectangle to select and launch the area's script again |
+| `0x10F` | `disable_field_trigger_area` | trigger_area_index | sets the runtime-disabled flag of the indexed 44-byte field trigger-area record; active and newly detected overlaps with that area are rejected before its script can run |
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
 | `0x112` | `set_field_event_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented event-owned input mask at field context +0x24C6; input processing ANDs this mask with the independent mask controlled by opcode 0x111 |
 | `0x116` | `set_field_party_control_enabled` | enabled, lead_character_selector_or_minus_one | sets whether this field context owns an actively player-controlled party. Disabled contexts suppress direct party input and make field variable 0x3000 report -1 instead of the active character selector. When the second argument is not -1 and the character pair encoded by selector bits 1.. is present on this field screen, its low bit is also copied to party-controller 0's active-member flag |
@@ -234,6 +236,10 @@ field context (the other DS screen/field instance).
 | `0x119` | `wait_all_entity_effect_sprites` | 0 literal args | retries the same command while any of the eight field effect sprites still reports an active animation |
 | `0x125` | `restore_party_member_hp` | character_index | copies the selected character's maximum HP into current HP and refreshes the paired field status HUD when it is active; character indices 0 through 3 select Mario, Luigi, Baby Mario, and Baby Luigi |
 | `0x126` | `adjust_party_member_hp` | character_index, hp_delta | adds the signed delta to the selected character's current HP, clamps the result to zero through maximum HP, and refreshes the paired field status HUD when active |
+| `0x128` | `adjust_coins` | coin_delta | adds the signed delta to the save's coin total and clamps it to 0 through 999999; supplying 32767 is used by shipped scripts as a saturating fill operation |
+| `0x129` | `adjust_beans` | bean_delta | adds the signed delta to the save's bean total and clamps it to 0 through 999; whenever a positive number of beans is actually added, save flag 0x201F is also set |
+| `0x12A` | `adjust_item_count` | tagged_item_id, item_delta | adds the signed delta to one of the four save inventory tables selected by the item ID's high nibble: action items 0x1000, usable items 0x2000, badges 0x3000, or clothing 0x4000. Counts clamp to 0..99 for action/usable items and 0..9 for badges/clothing. The defective result comparison is preserved as original behavior |
+| `0x12B` | `get_room_companion_id` | room_id | reads the second halfword of the selected room's four-byte resident metadata record. Room-transition synchronization uses this value as the room to load into the paired field context; zero suppresses that automatic companion load |
 | `0x136` | `play_rumble_pattern` | pattern_id_1_based, duration_frames | starts one of the resident rumble patterns, converting the one-based script ID to the zero-based 60-byte pattern table, and stops it after duration_frames; zero leaves the general 600-frame safety limit in force. The request is ignored when no rumble device is present or the save option disables rumble |
 | `0x140` | `open_screen_message` | x_or_center, y, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window at screen coordinates, deriving zero dimensions from the selected message and accepting -32768 as horizontally centered; configurable tail-placement fields are packed into the resident eight-slot message manager |
 | `0x141` | `open_entity_message` | entity_selector, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window anchored to an entity, automatically placing and clamping the box and its tail within the 256 by 192 screen; when invoked by an entity-owned VM it also avoids overlap with the linked owner |
@@ -248,34 +254,38 @@ field context (the other DS screen/field instance).
 | `0x14E` | `wait_background_music_resource` | 0 literal args | synchronization barrier for opcode 0x14D |
 | `0x14F` | `activate_background_music` | background_music_id | activates the requested scene background-music resource, reusing it when already resident or loading and starting it through the alternate-buffer path otherwise; the request is ignored when the save-state background-change disable bit is set. The party manager records the requested ID for later room-transition policy decisions |
 | `0x150` | `fade_out_background_music` | duration_frames_or_zero_for_default | fades out the active scene background-music player over the requested duration, using eight frames when zero is supplied, and clears the party manager's remembered background-music selectors |
+| `0x151` | `set_global_sound_muted` | muted | starts a global sound-output fade: nonzero fades the master volume from its configured level to silence over the resident default of 20 frames, while zero fades from silence back to the configured level over 60 frames |
+| `0x152` | `load_sound_group_async` | sound_group_id | starts asynchronous loading of the selected group from the Nitro sound archive into the resident sound heap; only one field-requested group-load handle is retained |
+| `0x153` | `wait_sound_group_load` | 0 literal args | synchronization barrier for opcode 0x152 |
+| `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-173/289 used opcodes and
-385,143/387,272 reachable commands
+183/289 used opcodes and
+385,476/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x0F2` | 80 |
 | `0x087` | 79 |
-| `0x12B` | 77 |
 | `0x11F` | 74 |
 | `0x12F` | 71 |
 | `0x051` | 71 |
 | `0x120` | 65 |
-| `0x128` | 64 |
 | `0x0F3` | 57 |
 | `0x053` | 57 |
 | `0x069` | 51 |
 | `0x0AB` | 50 |
 | `0x0AA` | 50 |
 | `0x0A8` | 50 |
-| `0x10F` | 48 |
 | `0x0FF` | 46 |
 | `0x0FC` | 46 |
 | `0x0F9` | 43 |
-| `0x152` | 41 |
 | `0x100` | 38 |
+| `0x0FD` | 36 |
+| `0x12E` | 34 |
+| `0x054` | 33 |
+| `0x0C6` | 32 |
 
 ## Menu/UI scene scripts
 

@@ -530,6 +530,8 @@
     "238": "wait_master_brightness_transition",
     "262": "wait_field_scene_transition",
     "269": "wait_paired_field_ready",
+    "270": "enable_field_trigger_area",
+    "271": "disable_field_trigger_area",
     "273": "set_field_input_disable_mask",
     "274": "set_field_event_input_disable_mask",
     "278": "set_field_party_control_enabled",
@@ -538,6 +540,10 @@
     "281": "wait_all_entity_effect_sprites",
     "293": "restore_party_member_hp",
     "294": "adjust_party_member_hp",
+    "296": "adjust_coins",
+    "297": "adjust_beans",
+    "298": "adjust_item_count",
+    "299": "get_room_companion_id",
     "310": "play_rumble_pattern",
     "320": "open_screen_message",
     "321": "open_entity_message",
@@ -551,7 +557,11 @@
     "333": "load_background_music_resource",
     "334": "wait_background_music_resource",
     "335": "activate_background_music",
-    "336": "fade_out_background_music"
+    "336": "fade_out_background_music",
+    "337": "set_global_sound_muted",
+    "338": "load_sound_group_async",
+    "339": "wait_sound_group_load",
+    "340": "release_sound_group"
   },
   "opcode_semantics": {
     "51": {
@@ -1525,6 +1535,22 @@
       "effect": "synchronization barrier between the two simultaneous field instances",
       "evidence": "func_ov000_020823f8 case 0x10D and field-context state machine active state 0x47"
     },
+    "270": {
+      "arguments": ["trigger_area_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the runtime-disabled flag of the indexed 44-byte field trigger-area record, allowing party or entity overlap with its triangle, quadrilateral, or rectangle to select and launch the area's script again",
+      "evidence": "func_ov000_020823f8 case 0x10E, trigger-area builder func_ov000_0207a890, point-in-area selector func_ov000_020b7b68, and trigger-script dispatcher func_ov000_02088978"
+    },
+    "271": {
+      "arguments": ["trigger_area_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the runtime-disabled flag of the indexed 44-byte field trigger-area record; active and newly detected overlaps with that area are rejected before its script can run",
+      "evidence": "func_ov000_020823f8 case 0x10F, point-in-area selector func_ov000_020b7b68, and disabled-area checks in func_ov000_02088978"
+    },
     "273": {
       "arguments": ["field_side_or_minus_one", "disabled_button_mask"],
       "result": "previous disabled-button mask",
@@ -1587,6 +1613,38 @@
       "yield": "never",
       "effect": "adds the signed delta to the selected character's current HP, clamps the result to zero through maximum HP, and refreshes the paired field status HUD when active",
       "evidence": "func_ov000_020823f8 case 0x126 and clamped HP helper func_ov000_0206d1dc"
+    },
+    "296": {
+      "arguments": ["coin_delta"],
+      "result": "1 when the complete requested delta was applied, otherwise 0",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "adds the signed delta to the save's coin total and clamps it to 0 through 999999; supplying 32767 is used by shipped scripts as a saturating fill operation",
+      "evidence": "func_ov000_020823f8 case 0x128 and save inventory accessor func_02019174 with item selector 0xFFFF"
+    },
+    "297": {
+      "arguments": ["bean_delta"],
+      "result": "1 when the complete requested delta was applied, otherwise 0",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "adds the signed delta to the save's bean total and clamps it to 0 through 999; whenever a positive number of beans is actually added, save flag 0x201F is also set",
+      "evidence": "func_ov000_020823f8 case 0x129 and save inventory accessor func_02019174 with item selector 0xFFFE"
+    },
+    "298": {
+      "arguments": ["tagged_item_id", "item_delta"],
+      "result": "original executable compares tagged_item_id with the applied delta, so valid tagged item IDs practically always return 0",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "adds the signed delta to one of the four save inventory tables selected by the item ID's high nibble: action items 0x1000, usable items 0x2000, badges 0x3000, or clothing 0x4000. Counts clamp to 0..99 for action/usable items and 0..9 for badges/clothing. The defective result comparison is preserved as original behavior",
+      "evidence": "func_ov000_020823f8 case 0x12A, ARM instructions 0x02087668 through 0x02087698, and save inventory accessor func_02019174"
+    },
+    "299": {
+      "arguments": ["room_id"],
+      "result": "metadata-linked companion room ID",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reads the second halfword of the selected room's four-byte resident metadata record. Room-transition synchronization uses this value as the room to load into the paired field context; zero suppresses that automatic companion load",
+      "evidence": "func_ov000_020823f8 case 0x12B, room metadata table at 0x02048F18, and paired-field reload paths func_ov000_0207fd54 and func_ov000_0209f644"
     },
     "310": {
       "arguments": ["pattern_id_1_based", "duration_frames"],
@@ -1699,6 +1757,38 @@
       "yield": "never",
       "effect": "fades out the active scene background-music player over the requested duration, using eight frames when zero is supplied, and clears the party manager's remembered background-music selectors",
       "evidence": "func_ov000_020823f8 case 0x150, resident func_02027e20, and sound-player fade helper func_0202f650"
+    },
+    "337": {
+      "arguments": ["muted"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a global sound-output fade: nonzero fades the master volume from its configured level to silence over the resident default of 20 frames, while zero fades from silence back to the configured level over 60 frames",
+      "evidence": "func_ov000_020823f8 case 0x151, resident func_02027db8, per-frame volume controller func_020274d8, and player-mask volume helper func_0202f418"
+    },
+    "338": {
+      "arguments": ["sound_group_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts asynchronous loading of the selected group from the Nitro sound archive into the resident sound heap; only one field-requested group-load handle is retained",
+      "evidence": "func_ov000_020823f8 case 0x152, resident func_0202775c and func_02033834, and sound-archive group lookup func_02030a98"
+    },
+    "339": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the field-requested sound-group handle exists",
+      "yield": "while the asynchronous sound-group operation is active",
+      "effect": "synchronization barrier for opcode 0x152",
+      "evidence": "func_ov000_020823f8 case 0x153 and resident handle query func_02027728"
+    },
+    "340": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active",
+      "evidence": "func_ov000_020823f8 case 0x154, resident func_02027744, and asynchronous resource release helper func_02033808"
     }
   }
 }
