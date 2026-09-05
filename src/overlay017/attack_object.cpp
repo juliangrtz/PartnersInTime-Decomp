@@ -18,7 +18,7 @@ int func_02009224(BattleModel *model, int animation_id);
 
 /* Metrowerks emits C++ functions in reverse source order. */
 void Overlay17Attack_ConfigureObjectModel(
-    Overlay17AttackObject *object, s16 animation_command,
+    Overlay17AttackObject *object, int animation_command,
     int model_value, int render_state,
     int synchronize_animation_layer, int flag_10) {
     BattleSceneObject *scene_object = &object->object;
