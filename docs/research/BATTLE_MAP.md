@@ -226,6 +226,12 @@ and runtime overlay 2.
 | `020A94F0` | `BattleEnemy_UpdateDefeatRemoval` | Byte-identical enemy-removal callback that retires its model and animation |
 | `020A95CC` | `BattleEnemy_StartDefeat` | Reconstructed enemy reward, item-drop, and defeat-effect controller (96.53% matching) |
 | `020A9C18` | `BattleParty_SpawnLaunchImpact` | Byte-identical form-specific launch impact effect and sound helper |
+| `020A9CE0` | `BattleObjectPropertyCurve_Update` | Byte-identical quadratic scene-object offset callback |
+| `020A9E70` | `BattleObjectPropertyCurve_Start` | Byte-identical scene-object offset task starter |
+| `020A9F24` | `BattleObjectBurstParticle_Update` | Byte-identical eight-frame rising burst-particle callback |
+| `020A9F94` | `BattleObjectBurstEmitter_Update` | Byte-identical object-bound burst emitter callback |
+| `020A9FFC` | `BattleImpactParticle_UpdateModelFrame` | Reconstructed model-frame particle interpolation (80.00% matching) |
+| `020AA114` | `BattleImpactParticle_UpdateResourceFrame` | Reconstructed resource-frame particle interpolation (80.00% matching) |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
 | `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
 | `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Creates a sprite effect in the first free tracked slot |
@@ -503,6 +509,23 @@ stores both sides of the owner relationship and returns any displaced task.
 immediately return a newly allocated, not-yet-inserted node to its pool. The
 separate raw-node take/return pair serves callers that use the same free-list
 layout without task callbacks.
+
+The object-offset curve task applies a quadratic envelope to `property_103` on
+one direct scene object and an optional second object resolved by actor ID. It
+updates the offset in deltas, so unrelated contributors to the same render
+property remain intact, and retires either target when its active animation
+ends. Its starter, callback, and the adjacent party launch-impact helper are
+all byte-identical C.
+
+The adjacent burst emitter creates one object-derived particle per update until
+scene-object flag 19 requests shutdown. Each child rises by 64 units, renders
+with size `60 / (frame + 2)`, and retires after eight frames. Both callbacks are
+also linked as byte-identical C. The two following interpolation callbacks now
+share a single readable implementation: they converge particle scale and size
+toward the emitter settings, add the configured vertical velocity, and differ
+only in the resource used to render the frame. Their instruction sequence is
+exact; only the compiler's interchangeable `r5`/`r6` allocation remains, so
+that pair stays outside the exact link for now.
 
 The two effect families share the same ownership pattern but use separate
 resource tables and constructors. Model effects store signed X/Y/Z halfwords,

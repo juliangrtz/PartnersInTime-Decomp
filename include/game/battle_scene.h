@@ -52,7 +52,8 @@ typedef union BattleSceneFlags {
         u32 suppress_shadow : 1;
         u32 use_raw_position : 1;
         u32 independent_flag : 1;
-        u32 unk_19_23 : 5;
+        u32 stop_impact_particles : 1;
+        u32 unk_20_23 : 4;
         u32 render_mode : 3;
         u32 unk_27_31 : 5;
     } bits;
