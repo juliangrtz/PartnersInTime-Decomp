@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 263 | 212 | `config/eur/field_vm.json` |
+| Field/world | 341 | 266 | 215 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -154,7 +154,10 @@ field context (the other DS screen/field instance).
 | `0x084` | `start_entity_timed_movement` | entity_selector, coordinate_mode, x, y, z, duration_frames, motion_parameter_6, motion_parameter_7, motion_flag | starts constant-rate entity movement toward fx32 coordinates over duration_frames; coordinate_mode 1 makes the target relative. Normal entities can move on x, y, and z, while subtype 8 uses x and y only |
 | `0x085` | `start_entity_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, motion_5, motion_6, motion_7, motion_flag | starts profiled movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
 | `0x086` | `start_entity_timed_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, duration_frames, motion_parameter_6, motion_parameter_7, motion_flag | starts timed movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
-| `0x087` | `start_entity_orbit_around_point` | entity_selector, orbit_flags, center_x, center_y, center_z, arc_degrees, initial_speed_fx32, acceleration_fx32, maximum_speed_fx32, deceleration_fx32, direction, secondary_axis_scale_fx32, first_collision_mask, second_collision_mask, snap_to_final_angle | starts speed-profiled orbital movement around a fixed center. orbit_flags bits 0..1 select the rotation plane (0 yz, 1 xz, 2 xy), bit 2 makes arc_degrees a relative sweep instead of an absolute target angle, and bit 3 makes the center relative to the entity's current position. Center coordinates are converted from pixels to fx32; direction supplies the signed angular direction, secondary_axis_scale_fx32 controls the ellipse aspect with 4096 as the neutral scale, and a zero initial speed selects the entity's default acceleration profile. The two six-bit collision masks and final-angle snap flag are retained by the motion controller. Subtype-8 entities use the same operation in two dimensions and ignore center_z, the plane selector, and both collision masks. No movement starts when the entity is at the center or the requested angular distance is zero |
+| `0x087` | `start_entity_orbit_around_point` | entity_selector, orbit_flags, center_x, center_y, center_z, arc_degrees, initial_speed_fx32, acceleration_fx32, maximum_speed_fx32, deceleration_fx32, direction, secondary_axis_scale_fx32, stop_on_contact_mask, stop_on_state_mask, snap_to_final_angle | starts speed-profiled orbital movement around a fixed center. orbit_flags bits 0..1 select the rotation plane (0 yz, 1 xz, 2 xy), bit 2 makes arc_degrees a relative sweep instead of an absolute target angle, and bit 3 makes the center relative to the entity's current position. Center coordinates are converted from pixels to fx32; direction supplies the signed angular direction, secondary_axis_scale_fx32 controls the ellipse aspect with 4096 as the neutral scale, and a zero initial speed selects the entity's default acceleration profile. For normal entities, either six-bit stop mask intersecting its corresponding live contact/state mask cancels the movement. snap_to_final_angle places the entity at the exact requested angle on ordinary completion. Subtype-8 entities use the same operation in two dimensions and ignore center_z, the plane selector, and both stop masks. No movement starts when the entity is at the center or the requested angular distance is zero |
+| `0x088` | `start_entity_timed_orbit_around_point` | entity_selector, orbit_flags, center_x, center_y, center_z, arc_degrees, duration_frames, direction, secondary_axis_scale_fx32, stop_on_contact_mask, stop_on_state_mask, snap_to_final_angle | starts the fixed-center orbit described by opcode 0x087 but derives its angular increment from the ellipse radii, angular distance, and duration_frames, then completes when the elapsed frame counter reaches that duration. orbit_flags and the two normal-entity stop masks have the same meanings as in opcode 0x087. A nonzero duration is required because it is used as the fixed-point division denominator. Subtype-8 entities ignore center_z, the plane selector, and both stop masks |
+| `0x089` | `start_entity_orbit_around_entity` | entity_selector, center_entity_selector, center_x_offset, center_y_offset, center_z_offset, orbit_flags, arc_degrees, speed_fx32, direction, secondary_axis_scale_fx32, stop_on_contact_mask, stop_on_state_mask, snap_to_final_angle | starts an orbit whose center is recomputed every frame from center_entity_selector plus the supplied fx32-converted pixel offsets, so the orbit is carried along when that entity moves. orbit_flags bits 0..1 select the rotation plane and bit 2 selects a relative sweep versus an absolute target angle; unlike the fixed-point variants there is no center-relative flag. speed_fx32 becomes both current and maximum speed with zero acceleration and deceleration. The ellipse scale, normal-entity stop masks, final-angle snap, subtype-8 restrictions, and zero-distance behavior match opcode 0x087 |
+| `0x08A` | `start_entity_timed_orbit_around_entity` | entity_selector, center_entity_selector, center_x_offset, center_y_offset, center_z_offset, orbit_flags, arc_degrees, duration_frames, direction, secondary_axis_scale_fx32, stop_on_contact_mask, stop_on_state_mask, snap_to_final_angle | combines the moving center of opcode 0x089 with the duration-derived angular increment and frame-count completion of opcode 0x088. The center follows center_entity_selector plus the supplied offsets each frame; orbit_flags bits 0..1 select the plane and bit 2 selects relative or absolute angle semantics. A nonzero duration is required. The normal-entity stop masks, final-angle snap, and subtype-8 restrictions match the other orbit commands |
 | `0x08B` | `wait_entity_movement` | entity_selector | retries while either of the entity movement-state flags is active |
 | `0x08C` | `cancel_entity_movement` | entity_selector | cancels both the selected entity's planar destination/path controller and its independent vertical-motion controller without snapping either axis to its planned destination. This is the cancellation counterpart to the combined wait in opcode 0x08B |
 | `0x08D` | `start_entity_vertical_motion` | entity_selector, initial_velocity_low_or_value, initial_velocity_high, gravity_low_or_value, gravity_high | starts vertical ballistic motion; literal word pairs form signed fx32 values and -1 selects entity defaults |
@@ -316,8 +319,8 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-238/289 used opcodes and
-386,834/387,272 reachable commands
+241/289 used opcodes and
+386,855/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
@@ -336,12 +339,12 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x073` | 14 |
 | `0x0E9` | 11 |
 | `0x0E8` | 11 |
-| `0x08A` | 11 |
 | `0x113` | 9 |
 | `0x061` | 9 |
 | `0x13F` | 8 |
 | `0x13D` | 8 |
 | `0x145` | 7 |
+| `0x075` | 7 |
 
 ## Menu/UI scene scripts
 
