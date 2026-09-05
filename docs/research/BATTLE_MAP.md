@@ -238,10 +238,12 @@ and runtime overlay 2.
 | `020AA8D4` | `BattleImpactParticle_RenderPrimary` | Byte-identical primary-model particle render wrapper |
 | `020AA904` | `BattleImpactParticle_CreateFromObject` | Byte-identical scene-object particle snapshot and task constructor |
 | `020AAA8C` | `BattleImpactCopy_Execute` | Byte-identical overlap-aware particle-state copy callback |
-| `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
-| `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
-| `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Creates a sprite effect in the first free tracked slot |
-| `020ACCB8` | `BattleSpriteEffect_Spawn` | Creates a sprite effect at view-adjusted coordinates |
+| `020ACAB0` | `BattleModelEffect_SpawnInFreeSlot` | Byte-identical first-free-slot model-effect allocator |
+| `020ACB44` | `BattleModelEffect_SpawnAttached` | Byte-identical model-effect constructor and owner-slot binder |
+| `020ACB88` | `BattleModelEffect_Spawn` | Byte-identical positioned model-effect constructor |
+| `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Byte-identical first-free-slot sprite-effect allocator |
+| `020ACC7C` | `BattleSpriteEffect_SpawnAttached` | Byte-identical sprite-effect constructor and owner-slot binder |
+| `020ACCB8` | `BattleSpriteEffect_Spawn` | Byte-identical view-adjusted sprite-effect constructor |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `020A56EC` | `BattleStatus_UpdatePartyStatVisuals` | Reconstructed POW/DEF/SPD effect rotation and model callback (73.00% code match) |
@@ -554,9 +556,12 @@ The two effect families share the same ownership pattern but use separate
 resource tables and constructors. Model effects store signed X/Y/Z halfwords,
 a Q8-scale argument shifted into their internal fixed-point field, an optional
 object pointer, and an owner slot at `+0x34`. Sprite effects add the current
-view origin to X/Y before construction and use owner slot `+0x2C`. A convenience
-allocator scans the 64 pointers at context offset `+0xCBF8`, binds the first
-free slot, and returns its index or `-1` when all slots are occupied.
+view origin to X/Y before construction and use owner slot `+0x2C`. Both
+constructor/wrapper/allocator families are byte-identical grouped C. Their
+first-free-slot allocators scan the 64 pointers at context offsets `+0xCBF8`
+(sprites) and `+0xCCF8` (models), bind the first free slot, and return its index
+or `-1` when all slots are occupied. The parallel `+0xCDF8` table tracks the
+resource-backed model tasks immediately preceding this block.
 
 ## Damage and status behavior
 

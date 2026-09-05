@@ -71,13 +71,22 @@ BattleSceneObject *BattleSceneObject_StretchBetweenAnchors(
     u16 flatten);
 BattleEffect *BattleSpriteEffect_Spawn(int effect_id, int x, int y, int z,
                                        int scale);
+BattleEffect *BattleSpriteEffect_SpawnAttached(BattleEffect **owner_slot,
+                                               int effect_id,
+                                               int x, int y, s16 z,
+                                               int scale);
+int BattleSpriteEffect_SpawnInFreeSlot(int effect_id,
+                                       int x, int y, int z, int scale);
 BattleEffect *BattleModelEffect_Spawn(int effect_id,
                                       BattleSceneObject *parent,
-                                      int x, int y, int z, int scale);
+                                      s16 x, s16 y, s16 z, int scale);
 BattleEffect *BattleModelEffect_SpawnAttached(BattleEffect **owner_slot,
                                               int effect_id,
                                               BattleSceneObject *parent,
-                                              int x, int y, int z, int scale);
+                                              s16 x, s16 y, s16 z, int scale);
+int BattleModelEffect_SpawnInFreeSlot(int effect_id,
+                                      BattleSceneObject *parent,
+                                      s16 x, s16 y, s16 z, int scale);
 struct BattleAITask *BattleModelEffect_SpawnFromResource(
     int resource_id, int animation_id, int x, int y, int z, int scale);
 int BattleParty_SpawnLaunchImpact(struct BattleActor *actor);

@@ -148,9 +148,11 @@ The task-list and task-pool functions at
 `0x020A50D4`-`0x020A5294` are byte-matching C and expose callback iteration,
 owner-slot invalidation, deferred recycling, explicit free-list access, task
 insertion, allocation, and fixed-payload pool initialization. The model- and
-sprite-effect constructors at `0x020ACB44`-`0x020ACD18` are symbolic too,
-including resource-table lookup, coordinates and scale,
-owner-slot binding, and the 64-entry tracked sprite-effect table.
+sprite-effect constructor families at `0x020ACAB0`-`0x020ACD18` are
+byte-matching grouped C, including resource-table lookup, coordinates and
+scale, owner-slot binding, and both 64-entry tracked effect tables. Their
+first-free-slot wrappers also preserve the original full- and halfword
+argument boundary used by the sprite family.
 The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
 `0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
 slot allocation, countdown and primary/secondary routing used by damage and KO.
