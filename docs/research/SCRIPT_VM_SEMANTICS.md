@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 240 | 189 | `config/eur/field_vm.json` |
+| Field/world | 341 | 246 | 195 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -129,6 +129,7 @@ field context (the other DS screen/field instance).
 | `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
 | `0x04D` | `set_entity_ground_tracking` | entity_selector, ground_tracking_enabled | sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty |
 | `0x050` | `set_entity_offscreen_contact_retention_enabled` | entity_selector, enabled | when enabled, permits another entity to retain its linked contact with this entity while this entity is outside the visible screen bounds; the normal disabled behavior drops that link after the off-screen state is observed |
+| `0x053` | `set_entity_contact_direction_filter` | entity_selector, script_direction_mask | replaces the entity's six-bit linked-contact direction filter. Script bits 0 through 5 map to internal contact bits 2, 3, 0, 1, 5, and 4 respectively. The collision solver intersects this filter with both entities' active contact-side masks; a zero intersection releases their persistent contact link |
 | `0x055` | `configure_entity_shadow` | entity_selector, enabled, shadow_style_or_minus_one | enables or disables the entity's projected field shadow and optionally selects one of eight shadow styles. -1 preserves the current style, except that enabling an unconfigured style zero selects style one. Styles one and two choose among three animation variants at 10- and 20-pixel height thresholds; the other styles map directly through the shadow-animation table. Collision support can also make the shadow inherit the supporting entity's render depth |
 | `0x056` | `set_entity_map_sync_axes` | entity_selector, horizontal_map_sync_or_minus_one, vertical_map_sync_or_minus_one | each argument other than -1 updates one persistent map-synchronization axis; enabling an axis immediately marks it dirty, and a later field-geometry refresh marks every enabled axis dirty again |
 | `0x059` | `set_entity_collision_response_channels` | entity_selector, channel_0_or_minus_one, channel_1_or_minus_one, channel_2_or_minus_one, channel_3_or_minus_one, channel_4_or_minus_one | updates five logical collision-response channels independently; -1 preserves a channel. Field-monster entities map the arguments to collision-state bits 0, {2,3}, 1, 6, and 4 respectively. Field-block entities additionally mirror channels 3 and 4 into bits 7 and 5. The collision solver consumes these flags when choosing solid displacement versus overlap/contact reporting |
@@ -138,6 +139,9 @@ field context (the other DS screen/field instance).
 | `0x062` | `set_entity_render_order_priorities` | entity_selector, priority_0_or_auto, priority_1_or_auto, priority_2_or_auto, priority_3_or_auto, auxiliary_priority_or_auto | sets the per-component sprite overlap priorities stored at render-object bytes +0x134 through +0x137; -1 preserves automatic priority calculation. Normal entities also configure an optional auxiliary render object, while subtype 8 ignores the final argument |
 | `0x066` | `set_entity_animation_speed` | entity_selector, animation_speed_q8 | stores the signed 16-bit Q8 animation rate on the entity and updates the bound model while preserving its current animation position |
 | `0x067` | `set_entity_locomotion_parameters` | entity_selector, starting_speed_q12, acceleration_q12, maximum_speed_q12, idle_deceleration_q12, reverse_deceleration_q12, turn_speed_limit_q12 | sets the entity's default locomotion curve and resets its current speed and velocity accumulators. The script supplies positive idle and reverse deceleration magnitudes, which the dispatcher stores as negative Q12 rates. A non-opposite direction change above turn_speed_limit_q12 snaps the current speed down to that limit before normal acceleration resumes |
+| `0x068` | `set_entity_default_vertical_launch_velocity` | entity_selector, velocity_fx32_or_low_half, velocity_high_half | sets the entity's default positive vertical launch velocity. A literal is assembled from the low and high 16-bit arguments; when the low argument is a VM variable, its full 32-bit value is used and the high argument is ignored. Opcode 0x08D selects this default by passing -1 as its initial velocity |
+| `0x069` | `set_entity_default_gravity` | entity_selector, gravity_fx32_or_low_half, gravity_high_half | sets the entity's default positive per-frame gravity. Literal halves and full VM variables are decoded as in opcode 0x068. Opcode 0x08D uses this value as gravity when its gravity argument is -1, and negates it for an automatic launch when its initial-velocity argument is zero |
+| `0x06A` | `set_entity_terminal_fall_velocity` | entity_selector, terminal_velocity_fx32_or_low_half, terminal_velocity_high_half | sets the vertical controller's default terminal-fall velocity floor. Literal halves and full VM variables are decoded as in opcode 0x068. When opcode 0x08D passes -1 for its terminal value, the controller uses this default and clamps only negative values; the shipped explicit value +4096 therefore leaves falling velocity unclamped |
 | `0x06C` | `bind_entity_resource` | entity_selector, resource_index, animation_id, render_parameter, preserve_previous | binds a 24-byte record from FEvent fixed section 2 to the entity; -1 retains selected subresources |
 | `0x06D` | `restore_entity_resource_state` | entity_selector | restores the resource binding or animation state saved by opcode 0x06C and clears the corresponding saved-state flag |
 | `0x06E` | `wait_entity_animation` | entity_selector | retries the same command while the visible entity's bound model reports an active, non-suppressed animation |
@@ -273,6 +277,8 @@ field context (the other DS screen/field instance).
 | `0x129` | `adjust_beans` | bean_delta | adds the signed delta to the save's bean total and clamps it to 0 through 999; whenever a positive number of beans is actually added, save flag 0x201F is also set |
 | `0x12A` | `adjust_item_count` | tagged_item_id, item_delta | adds the signed delta to one of the four save inventory tables selected by the item ID's high nibble: action items 0x1000, usable items 0x2000, badges 0x3000, or clothing 0x4000. Counts clamp to 0..99 for action/usable items and 0..9 for badges/clothing. The defective result comparison is preserved as original behavior |
 | `0x12B` | `get_room_companion_id` | room_id | reads the second halfword of the selected room's four-byte resident metadata record. Room-transition synchronization uses this value as the room to load into the paired field context; zero suppresses that automatic companion load |
+| `0x12E` | `set_game_over_retry_checkpoint` | checkpoint_index | stores the game-over retry checkpoint selector in save data and exposes it as field variable 0x3024. Zero disables the Retry choice; indices 1 through 9 select one of nine 18-byte records containing a destination room and four placement halfwords for each field party. Accepting Retry rebuilds that room from the record and reduces each available party member's current HP to approximately 30 percent |
+| `0x12F` | `set_game_over_retry_progress` | retry_progress | stores the checkpoint's script-progress byte in save data and exposes it as field variable 0x3025. Shipped room scripts compare proposed milestones against this value before updating it, so a game-over retry can reconstruct the selected room without replaying events completed before the checkpoint |
 | `0x136` | `play_rumble_pattern` | pattern_id_1_based, duration_frames | starts one of the resident rumble patterns, converting the one-based script ID to the zero-based 60-byte pattern table, and stops it after duration_frames; zero leaves the general 600-frame safety limit in force. The request is ignored when no rumble device is present or the save option disables rumble |
 | `0x140` | `open_screen_message` | x_or_center, y, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window at screen coordinates, deriving zero dimensions from the selected message and accepting -32768 as horizontally centered; configurable tail-placement fields are packed into the resident eight-slot message manager |
 | `0x141` | `open_entity_message` | entity_selector, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window anchored to an entity, automatically placing and clamping the box and its tail within the 256 by 192 screen; when invoked by an entity-owned VM it also avoids overlap with the linked owner |
@@ -293,21 +299,17 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-215/289 used opcodes and
-386,123/387,272 reachable commands
+221/289 used opcodes and
+386,353/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x087` | 79 |
-| `0x12F` | 71 |
 | `0x051` | 71 |
-| `0x053` | 57 |
-| `0x069` | 51 |
 | `0x0AB` | 50 |
 | `0x0AA` | 50 |
 | `0x0A8` | 50 |
-| `0x12E` | 34 |
 | `0x054` | 33 |
 | `0x0C6` | 32 |
 | `0x0C8` | 29 |
@@ -319,6 +321,10 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x0A9` | 24 |
 | `0x07C` | 24 |
 | `0x137` | 22 |
+| `0x080` | 21 |
+| `0x07D` | 20 |
+| `0x0C3` | 18 |
+| `0x0C7` | 17 |
 
 ## Menu/UI scene scripts
 
