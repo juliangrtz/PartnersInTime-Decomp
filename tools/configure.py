@@ -192,6 +192,16 @@ class Project:
 def main():
     project = Project(args.version)
 
+    missing_compiler_files = [path for path in (CC, LD) if not Path(path).is_file()]
+    if missing_compiler_files:
+        print(
+            "A compatible Metrowerks ARM compiler is required but is not "
+            "distributed by this project. Place your lawfully obtained "
+            f"toolchain below {mwcc_root} or pass --compiler PATH.",
+            file=sys.stderr,
+        )
+        return 1
+
     with build_ninja_path.open("w") as file:
         n = ninja_syntax.Writer(file)
 
@@ -335,18 +345,6 @@ def add_download_tool_builds(n: ninja_syntax.Writer):
         }
     )
     n.newline()
-
-    if args.compiler is None:
-        n.build(
-            rule="download_tool",
-            outputs=[CC, LD],
-            variables={
-                "tool": "mwccarm",
-                "tag": "latest",
-                "path": tools_path,
-            },
-        )
-        n.newline()
 
     if platform.system != "windows" and WINE == DEFAULT_WIBO_PATH:
         n.build(
@@ -612,4 +610,5 @@ def get_config_files(game_config: Path, name: str) -> list[str]:
     ]
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    raise SystemExit(main())

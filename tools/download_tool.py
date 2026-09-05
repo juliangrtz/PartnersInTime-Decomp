@@ -1,8 +1,6 @@
 import argparse
 from pathlib import Path
 from get_platform import get_platform
-import zipfile
-import io
 import requests
 import stat
 
@@ -14,7 +12,7 @@ if platform is None:
     exit(1)
 
 parser = argparse.ArgumentParser()
-parser.add_argument("tool")
+parser.add_argument("tool", choices=("dsd", "wibo", "objdiff"))
 parser.add_argument("tag")
 parser.add_argument("--path", type=Path, required=True)
 args = parser.parse_args()
@@ -22,9 +20,6 @@ args = parser.parse_args()
 
 def dsd_url(tag: str) -> str:
     return f'https://github.com/AetiasHax/ds-decomp/releases/download/{tag}/dsd-{platform.system}-{platform.machine}{platform.exe}'
-
-def mwccarm_url(tag: str) -> str:
-    return 'http://decomp.aetias.com/files/mwccarm.zip'
 
 def wibo_url(tag: str) -> str:
     return f'https://github.com/decompals/wibo/releases/download/{tag}/wibo'
@@ -34,7 +29,6 @@ def objdiff_url(tag: str) -> str:
 
 TOOLS = {
     "dsd": dsd_url,
-    "mwccarm": mwccarm_url,
     "wibo": wibo_url,
     "objdiff": objdiff_url,
 }
@@ -43,11 +37,8 @@ TOOLS = {
 download_url = TOOLS[args.tool](args.tag)
 print(f'\nDownloading {args.tool} {args.tag}...')
 response = requests.get(download_url)
-if download_url.endswith('.zip'):
-    zip_file = zipfile.ZipFile(io.BytesIO(response.content))
-    zip_file.extractall(args.path)
-else:
-    out_path: Path = args.path
-    with out_path.open('wb') as f:
-        f.write(response.content)
-    out_path.chmod(out_path.stat().st_mode | stat.S_IEXEC)
+response.raise_for_status()
+out_path: Path = args.path
+with out_path.open('wb') as f:
+    f.write(response.content)
+out_path.chmod(out_path.stat().st_mode | stat.S_IEXEC)

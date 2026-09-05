@@ -1,10 +1,12 @@
 # Editable game data
 
 The European data project under `data/eur/` turns understood NitroFS formats
-into reviewable JSON.  It is rebuilt during the normal ROM build, so a data mod
-does not need an ad-hoc binary patch or fixed-length replacement text.
+into reviewable JSON. This directory is generated from the user's own ROM and
+is deliberately ignored by Git; do not commit its contents. It is rebuilt
+during the normal ROM build, so a data mod does not need an ad-hoc binary patch
+or fixed-length replacement text.
 
-Only formats with a validated inverse encoder belong here.  The exporter and
+Only formats with a validated inverse encoder belong here. The exporter and
 builder currently round-trip all covered files byte for byte before edits.
 Unknown files remain in the user's private `extract/eur/files/` tree and are
 copied unchanged when the modded NitroFS tree is staged.
@@ -92,8 +94,18 @@ python .\tools\scene_script_mod.py build --output-root build\scene_mod
 
 ## Building a data mod
 
-Edit JSON below `data/eur/`, then use the existing CLion **Build and Run EUR
-NDS** configuration.  `tools/build_nds.ps1` automatically detects
+Populate the private project from your own matching extraction if it does not
+already exist:
+
+```powershell
+python .\tools\data_mod.py export `
+  --version eur `
+  --files-root .\extract\eur\files `
+  --project-root .\data\eur
+```
+
+Edit JSON below the ignored `data/eur/`, then use the existing CLion **Build
+and Run EUR NDS** configuration. `tools/build_nds.ps1` automatically detects
 `data/eur/project.json`, validates the files, stages a complete derived NitroFS
 tree below ignored `build/eur/data_mod_files/`, packages the ROM, and launches
 the configured emulator.
@@ -113,10 +125,9 @@ python .\tools\data_mod.py check `
   --project-root .\data\eur
 
 # Re-export the currently supported formats from your private extraction.
-python .\tools\data_mod.py export `
-  --version eur `
-  --files-root .\extract\eur\files `
-  --project-root .\data\eur
+# This overwrites the ignored local data project.
+python .\tools\data_mod.py export --version eur `
+  --files-root .\extract\eur\files --project-root .\data\eur
 ```
 
 Re-exporting overwrites the editable documents with data from the private base
