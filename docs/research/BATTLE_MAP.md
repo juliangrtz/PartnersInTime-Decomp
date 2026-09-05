@@ -249,6 +249,8 @@ and runtime overlay 2.
 | `020A7E48` | `BattleStatus_StartEnemyAilment4Visual` | Byte-identical enemy status-4 model-effect starter |
 | `020A7EDC` | `BattleStatus_UpdateEnemyAilment3Visual` | Byte-identical enemy status-3 model rendering and cleanup callback |
 | `020A80A8` | `BattleStatus_StartEnemyAilment3Visual` | Byte-identical enemy status-3 model starter |
+| `020A81B4` | `BattleStatus_UpdateEnemyAilment2Visual` | Byte-identical enemy status-2 effect and animation cleanup callback |
+| `020A8254` | `BattleStatus_StartEnemyAilment2Visual` | Byte-identical enemy status-2 effect starter |
 | `020A8320` | `BattleStatus_StopActorEffect` | Stops the actor-local timer or stat delta for one status ID |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
@@ -626,6 +628,13 @@ model from object-data slot 8, changes the owning enemy model's idle-frame
 selector from 512 to 256 when the status task becomes active, and renders the
 status model every frame at the enemy's signed resource offsets. Model flag
 bit 2 ends the standalone effect and releases the task.
+
+Enemy status ID 2 is exact linked C++ in its adjacent unit. Its starter attaches
+model effect 133 using the enemy resource's signed X, height, and depth offsets,
+then starts the stat record's configured hit animation. The callback keeps the
+effect's vertical animation offset synchronized until the group-1 status slot
+changes owner; cleanup either restores animation 0 or defers to a live damage
+reaction task.
 
 Party status ID 3 now also has an exact linked C++ implementation. The starter
 loads object-data slot 9, chooses a model animation from the six party
