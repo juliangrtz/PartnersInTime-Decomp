@@ -549,6 +549,10 @@
     "260": "wait_field_vertical_scroll",
     "261": "begin_time_hole_tunnel_whiteout",
     "262": "wait_time_hole_transition",
+    "265": "start_field_effect_animation",
+    "266": "wait_field_effect_animation",
+    "267": "return_to_title_screen",
+    "268": "legacy_noop_10c",
     "269": "wait_paired_field_ready",
     "270": "enable_field_trigger_area",
     "271": "disable_field_trigger_area",
@@ -1715,6 +1719,38 @@
       "yield": "until the prepared arrival, departure, or 3D tunnel phase completes",
       "effect": "common synchronization barrier for opcodes 0x0FE through 0x101, including transitions coordinated across the two field screens",
       "evidence": "func_ov000_020823f8 case 0x106, active/run predicate func_ov000_02066c50, and all three mode branches in func_ov000_02066fcc"
+    },
+    "265": {
+      "arguments": ["effect_slot", "resource_index", "x_pixels", "y_pixels", "playback_speed_8_8"],
+      "result": null,
+      "control_flow": "fallthrough after starting the animation",
+      "yield": "never",
+      "effect": "resolves a standalone 2D cell-animation resource from the current field screen, creates it at the signed pixel coordinates, applies the unsigned 8.8 fixed-point playback speed, and stores its live object in effect_slot. Shipped scripts use 256 for normal speed and 128 for half speed",
+      "evidence": "func_ov000_020823f8 case 0x109, field wrapper func_ov000_02074d8c, effect allocator func_ov000_020bf2e0, main animation constructor func_02017d38, and all 15 shipped calls"
+    },
+    "266": {
+      "arguments": ["effect_slot"],
+      "result": null,
+      "control_flow": "retries the same command while the selected standalone field-effect animation remains active",
+      "yield": "until the selected effect slot becomes inactive",
+      "effect": "slot-specific synchronization barrier for the animation started by opcode 0x109",
+      "evidence": "func_ov000_020823f8 case 0x10A, field wrapper func_ov000_02074d50, and the effect-slot objects stored by func_ov000_020bf2e0"
+    },
+    "267": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "returns SCRIPT_VM_FINISHED after requesting the global scene transition",
+      "yield": "terminal for the current field VM update",
+      "effect": "requests the global application teardown/return-to-title path with a 16-frame transition and mode 1. The only shipped call is the final event after background music 110 in room 635",
+      "evidence": "func_ov000_020823f8 case 0x10B, global transition requester func_020052b0, SCRIPT_VM_FINISHED in include/game/script_vm.h, and the sole shipped call in room 635"
+    },
+    "268": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "intentional legacy no-op: the opcode has a descriptor and two shipped calls, but no case in the field VM dispatcher",
+      "evidence": "descriptor table entry 0x10C, absence between cases 0x10B and 0x10D in func_ov000_020823f8, and the two shipped calls in room 634"
     },
     "269": {
       "arguments": [],
