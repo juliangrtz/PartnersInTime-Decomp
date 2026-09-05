@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 183 | 132 | `config/eur/field_vm.json` |
+| Field/world | 341 | 184 | 133 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -222,6 +222,7 @@ field context (the other DS screen/field instance).
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
 | `0x112` | `set_field_event_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented event-owned input mask at field context +0x24C6; input processing ANDs this mask with the independent mask controlled by opcode 0x111 |
+| `0x116` | `set_field_party_control_enabled` | enabled, lead_character_selector_or_minus_one | sets whether this field context owns an actively player-controlled party. Disabled contexts suppress direct party input and make field variable 0x3000 report -1 instead of the active character selector. When the second argument is not -1 and the character pair encoded by selector bits 1.. is present on this field screen, its low bit is also copied to party-controller 0's active-member flag |
 | `0x117` | `set_camera_focus_entity` | enabled, entity_selector_or_minus_one | toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection |
 | `0x118` | `remove_all_entity_effect_sprites` | 0 literal args | hides and releases all eight field effect-sprite slots |
 | `0x119` | `wait_all_entity_effect_sprites` | 0 literal args | retries the same command while any of the eight field effect sprites still reports an active animation |
@@ -236,13 +237,12 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-159/289 used opcodes and
-383,513/387,272 reachable commands
+160/289 used opcodes and
+383,729/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x116` | 216 |
 | `0x0CF` | 213 |
 | `0x0BC` | 180 |
 | `0x136` | 176 |
@@ -262,6 +262,7 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x120` | 65 |
 | `0x128` | 64 |
 | `0x14E` | 63 |
+| `0x0F3` | 57 |
 
 ## Menu/UI scene scripts
 
