@@ -45,6 +45,11 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   scene-object setup/cleanup, finish and mode transitions, actor-position
   restoration, and target-relative vertical-arc startup. The exact Bros. item
   identities remain conservatively unnamed until confirmed at runtime.
+- Overlay 11 now contributes another seven matching projectile-attack helpers
+  (708 bytes): level-scaled setup for scene object 40, animation timing,
+  actor-contact testing, bounded motion, finish animation, and actor-resource
+  restoration. Its shell-like behavior is documented without assigning an
+  unverified Bros. item name.
 - One hundred and thirty-four named overlay-2 battle functions are maintained symbolic ARM source,
   together with the resident item-value calculator they call.
   They cover task enqueueing, intrusive task lists and pools, actor lookup,
