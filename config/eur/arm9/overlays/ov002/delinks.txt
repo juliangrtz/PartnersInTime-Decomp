@@ -236,8 +236,14 @@ src/battle/battle_scene_accelerated_motion.c:
 src/battle/battle_scene_accelerated_motion_update.c:
     .text       start:0x020a43d8 end:0x020a4518
 
+src/battle/battle_scene_vertical_motion.c:
+    .text       start:0x020a4518 end:0x020a483c
+
 src/battle/battle_scene_movement.c:
     .text       start:0x020a483c end:0x020a4bf4
+
+src/battle/battle_scene_motion_update.c:
+    .text       start:0x020a4bf4 end:0x020a4e08
 
 src/battle/battle_scene_motion_list.c:
     .text       start:0x020a4e08 end:0x020a4f18

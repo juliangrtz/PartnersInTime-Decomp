@@ -309,7 +309,7 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
     case BATTLE_PROPERTY_SCENE_1A: {
         BattleSceneObject *object = BattleSceneObject_GetById(actor_id);
         int enabled = value != 0;
-        object->unk_01a = enabled;
+        object->time_paused = enabled;
         if (object->primary_model != 0) {
             object->primary_model->flags =
                 (object->primary_model->flags & ~0x200) | ((enabled & 1) << 9);
@@ -497,11 +497,11 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
         int enabled;
         if (value != 0) enabled = 1;
         else enabled = 0;
-        BattleSceneObject_GetById(actor_id)->unk_01a = enabled;
+        BattleSceneObject_GetById(actor_id)->time_paused = enabled;
         break;
     }
     case BATTLE_PROPERTY_SCENE_16:
-        BattleSceneObject_GetById(actor_id)->unk_016 = value;
+        BattleSceneObject_GetById(actor_id)->time_step_adjustment_q8 = value;
         break;
     case BATTLE_PROPERTY_REPLACE_PRIMARY_MODEL: {
         BattleSceneObject *object = BattleSceneObject_GetById(actor_id);

@@ -8,12 +8,6 @@ extern void func_ov002_020a3928(BattleSceneObject *object, int channel_index,
 extern void func_ov002_020a3b2c(BattleSceneObject *object, int channel_index,
                                 int x, int y, int z, int duration,
                                 BattleSceneObject *target);
-extern void func_ov002_020a4518(BattleSceneObject *object, int channel_index,
-                                int duration, int argument_3, int z,
-                                int enabled);
-extern void func_ov002_020a46a0(BattleSceneObject *object, int channel_index,
-                                int duration, int argument_3, int z);
-
 enum BattleSceneMovementKind {
     BATTLE_SCENE_MOVEMENT_SET_POSITION,
     BATTLE_SCENE_MOVEMENT_MOVE_BY,
@@ -51,11 +45,11 @@ void BattleSceneObject_ApplyMovement(u32 object_id, int channel_index,
                 object, channel_index, x, y, z, duration);
             return;
         case BATTLE_SCENE_MOVEMENT_ARC_A:
-            func_ov002_020a46a0(
+            BattleSceneObject_StartVerticalArc(
                 object, channel_index, duration, target_object_id, z);
             return;
         case BATTLE_SCENE_MOVEMENT_ARC_B:
-            func_ov002_020a4518(
+            BattleSceneObject_StartVerticalMotionTo(
                 object, channel_index, duration, target_object_id, z, 1);
             return;
         case BATTLE_SCENE_MOVEMENT_TOWARD_OBJECT:
