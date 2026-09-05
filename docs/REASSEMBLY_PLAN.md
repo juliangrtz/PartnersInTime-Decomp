@@ -361,6 +361,10 @@ The contiguous `0x020A1064`-`0x020A1284` flee-transition block is exact linked
 C as well. Its typed task state exposes paired flee tasks and their handshake
 flag; the callbacks coordinate party formations, start run animations, move
 actors offscreen, detach partners, and retire completed tasks.
+The core `0x020A1284`-`0x020A19B8` flee run is also exact linked C. It maps the
+four character inputs to a decaying run-speed boost, follows the actor with the
+helper object, debits and emits lost coins, applies the equipped-badge modifier,
+and drives the impact, voice, animation, and paired exit transitions.
 The party/enemy reaction-task lifecycle at `0x0209CE98`-`0x0209D694` is now a
 byte-identical linked C unit. Its starters expose task allocation/reuse, actor
 hit-lock flag `0x200`, and attached hit effects. The adjacent party first-hit
