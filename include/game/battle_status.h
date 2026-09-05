@@ -1,0 +1,31 @@
+#ifndef PIT_GAME_BATTLE_STATUS_H
+#define PIT_GAME_BATTLE_STATUS_H
+
+#include <game/battle_actor.h>
+
+enum BattleStatusId {
+    BATTLE_STATUS_NONE = 0,
+    BATTLE_STATUS_AILMENT_1 = 1,
+    BATTLE_STATUS_AILMENT_2 = 2,
+    BATTLE_STATUS_AILMENT_3 = 3,
+    BATTLE_STATUS_AILMENT_4 = 4,
+    BATTLE_STATUS_AILMENT_5 = 5,
+    BATTLE_STATUS_POWER_CHANGE = 6,
+    BATTLE_STATUS_DEFENSE_CHANGE = 7,
+    BATTLE_STATUS_SPEED_CHANGE = 8,
+    BATTLE_STATUS_COUNT = 9
+};
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int BattleStatus_ClearEffect(BattleActor *actor, int status_id);
+void BattleStatus_ClearAll(BattleActor *actor);
+void BattleStatus_StopActorEffect(int actor_id, int status_id);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

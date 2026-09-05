@@ -551,10 +551,12 @@ The stat IDs are:
 - status 7 changes defense from `base_defense`;
 - status 8 changes speed from `base_speed`.
 
-`BattleStatus_ClearEffect` is maintained symbolic assembly: it verifies the
+The byte-identical C implementation of `BattleStatus_ClearEffect` verifies the
 requested status is active, removes the associated battle effect, clears its
-state, and restores base POW, DEF, or SPD for status IDs 6-8. The maintained
-`BattleStatus_ClearAll` wrapper explicitly invokes it for IDs 1 through 8.
+state, and restores base POW, DEF, or SPD for status IDs 6-8. Its companion
+`BattleStatus_ClearAll` explicitly invokes it for IDs 1 through 8 and is also
+linked as exact C. The actor layout exposes the five overlapping 12-byte state
+records while retaining the established transition/animation field view.
 
 The exact battle item-selection helpers rebuild two compact tagged-ID lists
 directly from the save inventory: fourteen ordinary consumables at save offset
