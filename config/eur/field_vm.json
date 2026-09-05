@@ -498,7 +498,10 @@
     "190": "wait_party_actions_idle",
     "201": "get_party_controller_property",
     "204": "set_party_piggyback_state",
+    "205": "release_room_transition_control_lock",
     "206": "set_party_leader_animation_override",
+    "207": "change_field_room_for_party",
+    "208": "change_field_room_for_both_parties",
     "209": "change_field_room",
     "210": "transfer_party_between_field_screens",
     "211": "ensure_party_in_current_field",
@@ -1258,6 +1261,14 @@
       "effect": "sets the party manager's persistent adult/baby piggyback-state marker. The marker is serialized into the field-party snapshot and restored when the next field reconstructs the party; it does not itself move or attach actors. Shipped cutscenes clear it before controlling all four members independently and set it again immediately before or after reuniting them with opcode 0x0B1",
       "evidence": "func_ov000_020823f8 case 0x0CC stores party-manager +0x04 bit 7; serializer func_ov000_020a28b4 maps it to snapshot bit 1 and constructor func_ov000_020a260c restores it; 320 reachable uses consistently bracket split-party staging and reunion"
     },
+    "205": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "releases the post-load party-control lock requested by change_field_room_for_party's lock_party_control_until_released argument; until released, the party manager suppresses ordinary field input",
+      "evidence": "func_ov000_020823f8 case 0x0CD clears field-context +0x2B30 bit 3; func_ov000_0207c170 sets that bit from transition-request bit 10; input update func_ov000_020a146c tests it"
+    },
     "206": {
       "arguments": ["party_side", "enabled"],
       "result": null,
@@ -1265,6 +1276,22 @@
       "yield": "never",
       "effect": "enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30",
       "evidence": "func_ov000_020823f8 case 0x0CE, func_ov000_0209cbfc, and func_ov000_0209cb90"
+    },
+    "207": {
+      "arguments": ["party_side_or_current", "destination_room_id", "x_pixels", "y_pixels", "z_pixels", "facing_direction", "lock_party_control_until_released", "arrival_script_id", "bgm_policy_or_sequence_id", "synchronize_paired_field"],
+      "result": null,
+      "control_flow": "returns VM result 2 after scheduling the field-room change",
+      "yield": "terminal for the current field VM update",
+      "effect": "reloads the calling field context into destination_room_id and explicitly places only the selected party at the supplied integer-pixel coordinates and facing direction. Party side -1 resolves to the manager's current party when that party is on the calling screen. The optional control lock survives the reload until opcode 0x0CD clears it; arrival_script_id becomes the new room's startup script. When requested, the linked room from the destination metadata is also scheduled on the paired field context",
+      "evidence": "func_ov000_020823f8 case 0x0CF, transition builder func_ov000_0207fd54, transition state machine func_ov000_0207c170, and control-lock consumer func_ov000_020a146c"
+    },
+    "208": {
+      "arguments": ["destination_room_id", "party_0_x_pixels", "party_0_y_pixels", "party_0_z_pixels", "party_0_facing_direction", "party_1_x_pixels", "party_1_y_pixels", "party_1_z_pixels", "party_1_facing_direction", "arrival_script_id", "bgm_policy_or_sequence_id", "synchronize_paired_field"],
+      "result": null,
+      "control_flow": "returns VM result 2 after scheduling the field-room change",
+      "yield": "terminal for the current field VM update",
+      "effect": "reloads the calling field context into destination_room_id and records independent integer-pixel positions and facing directions for both parties. Their current formation modes are preserved in the transition record, arrival_script_id becomes the new room's startup script, and synchronize_paired_field optionally schedules the destination room's metadata-linked companion room on the other field context",
+      "evidence": "func_ov000_020823f8 case 0x0D0, transition builder func_ov000_0207fac8, transition state machine func_ov000_0207c170, and teardown func_ov000_0207f4d0"
     },
     "209": {
       "arguments": ["destination_room_id", "arrival_script_id", "bgm_policy_or_sequence_id"],

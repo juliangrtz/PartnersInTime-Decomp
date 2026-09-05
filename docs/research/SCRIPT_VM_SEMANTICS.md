@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 184 | 133 | `config/eur/field_vm.json` |
+| Field/world | 341 | 187 | 136 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -194,7 +194,10 @@ field context (the other DS screen/field instance).
 | `0x0BE` | `wait_party_actions_idle` | party_side | retries the same command while the selected party's leader, follower, or attached action entities have not returned to an idle field state |
 | `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
 | `0x0CC` | `set_party_piggyback_state` | piggybacked | sets the party manager's persistent adult/baby piggyback-state marker. The marker is serialized into the field-party snapshot and restored when the next field reconstructs the party; it does not itself move or attach actors. Shipped cutscenes clear it before controlling all four members independently and set it again immediately before or after reuniting them with opcode 0x0B1 |
+| `0x0CD` | `release_room_transition_control_lock` | 0 literal args | releases the post-load party-control lock requested by change_field_room_for_party's lock_party_control_until_released argument; until released, the party manager suppresses ordinary field input |
 | `0x0CE` | `set_party_leader_animation_override` | party_side, enabled | enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30 |
+| `0x0CF` | `change_field_room_for_party` | party_side_or_current, destination_room_id, x_pixels, y_pixels, z_pixels, facing_direction, lock_party_control_until_released, arrival_script_id, bgm_policy_or_sequence_id, synchronize_paired_field | reloads the calling field context into destination_room_id and explicitly places only the selected party at the supplied integer-pixel coordinates and facing direction. Party side -1 resolves to the manager's current party when that party is on the calling screen. The optional control lock survives the reload until opcode 0x0CD clears it; arrival_script_id becomes the new room's startup script. When requested, the linked room from the destination metadata is also scheduled on the paired field context |
+| `0x0D0` | `change_field_room_for_both_parties` | destination_room_id, party_0_x_pixels, party_0_y_pixels, party_0_z_pixels, party_0_facing_direction, party_1_x_pixels, party_1_y_pixels, party_1_z_pixels, party_1_facing_direction, arrival_script_id, bgm_policy_or_sequence_id, synchronize_paired_field | reloads the calling field context into destination_room_id and records independent integer-pixel positions and facing directions for both parties. Their current formation modes are preserved in the transition record, arrival_script_id becomes the new room's startup script, and synchronize_paired_field optionally schedules the destination room's metadata-linked companion room on the other field context |
 | `0x0D1` | `change_field_room` | destination_room_id, arrival_script_id, bgm_policy_or_sequence_id | marks the current field context for teardown and reload in destination_room_id, records arrival_script_id for the newly loaded room, and applies the signed BGM policy byte during reload; the compact command does not request a brightness fade |
 | `0x0D2` | `transfer_party_between_field_screens` | party_side_or_current, destination_room_id_or_loaded, x_pixels, y_pixels, z_pixels, facing_direction, animate_entry, arrival_script_id, bgm_policy_or_sequence_id, preserve_field_0_entry_anchor, preserve_field_1_entry_anchor | moves the selected party from its present field screen to the other resident field screen, places and faces both members there, and optionally starts an arrival script. A destination room of -1 keeps the room already loaded on that screen; another room schedules that field context for reload. animate_entry applies the directional entrance movement and may defer a lower-to-upper-screen transfer behind a brightness fade. The final two flags independently retain the entry-anchor state for resident field contexts 0 and 1 |
 | `0x0D3` | `ensure_party_in_current_field` | party_side_or_other, x_pixels, y_pixels, z_pixels, facing_direction | ensures the selected party is active in the calling field context and, when it was absent or assigned to another room, enables both members, places the leader at the supplied integer-pixel coordinates, applies the facing direction, rejoins the follower immediately, and binds both actors to the current map collision data. Party side -1 selects the party opposite the manager's current side; an already present party in this room is left unchanged |
@@ -237,20 +240,18 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-160/289 used opcodes and
-383,729/387,272 reachable commands
+163/289 used opcodes and
+384,049/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x0CF` | 213 |
 | `0x0BC` | 180 |
 | `0x136` | 176 |
 | `0x150` | 123 |
 | `0x14F` | 119 |
 | `0x0CA` | 117 |
 | `0x106` | 111 |
-| `0x0D0` | 104 |
 | `0x14D` | 101 |
 | `0x125` | 100 |
 | `0x0F2` | 80 |
@@ -263,6 +264,8 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x128` | 64 |
 | `0x14E` | 63 |
 | `0x0F3` | 57 |
+| `0x053` | 57 |
+| `0x069` | 51 |
 
 ## Menu/UI scene scripts
 
