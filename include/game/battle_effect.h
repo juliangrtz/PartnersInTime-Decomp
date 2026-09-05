@@ -88,7 +88,12 @@ int BattleModelEffect_SpawnInFreeSlot(int effect_id,
                                       BattleSceneObject *parent,
                                       s16 x, s16 y, s16 z, int scale);
 struct BattleAITask *BattleModelEffect_SpawnFromResource(
-    int resource_id, int animation_id, int x, int y, int z, int scale);
+    int resource_id, int animation_id, int x, int y, s16 z, int scale);
+struct BattleAITask *BattleModelEffect_SpawnFromResourceAttached(
+    struct BattleAITask **owner_slot, int resource_id, int animation_id,
+    int x, s16 y, s16 z, int scale);
+int BattleModelEffect_SpawnFromResourceInFreeSlot(
+    int resource_id, int animation_id, int x, int y, s16 z, int scale);
 int BattleParty_SpawnLaunchImpact(struct BattleActor *actor);
 void BattleObjectEffect_SpawnDelayed(int animation_id, int delay,
                                      BattleSceneObject *object);

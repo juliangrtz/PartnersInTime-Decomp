@@ -238,6 +238,10 @@ and runtime overlay 2.
 | `020AA8D4` | `BattleImpactParticle_RenderPrimary` | Byte-identical primary-model particle render wrapper |
 | `020AA904` | `BattleImpactParticle_CreateFromObject` | Byte-identical scene-object particle snapshot and task constructor |
 | `020AAA8C` | `BattleImpactCopy_Execute` | Byte-identical overlap-aware particle-state copy callback |
+| `020AC740` | `BattleModelEffect_SpawnFromResourceInFreeSlot` | Identified first-free-slot allocator for resource-backed model tasks; linked C pending with the adjacent callback |
+| `020AC7D4` | `BattleModelEffect_SpawnFromResourceAttached` | Identified resource-model task constructor and owner-slot binder; linked C pending with the adjacent callback |
+| `020AC820` | `BattleModelEffectTask_Update` | Reconstructed view-relative render-and-retire callback; one MWCC register-allocation difference remains |
+| `020AC904` | `BattleModelEffect_SpawnFromResource` | Byte-identical resource-backed model task and animation constructor |
 | `020ACAB0` | `BattleModelEffect_SpawnInFreeSlot` | Byte-identical first-free-slot model-effect allocator |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Byte-identical model-effect constructor and owner-slot binder |
 | `020ACB88` | `BattleModelEffect_Spawn` | Byte-identical positioned model-effect constructor |
@@ -561,7 +565,15 @@ constructor/wrapper/allocator families are byte-identical grouped C. Their
 first-free-slot allocators scan the 64 pointers at context offsets `+0xCBF8`
 (sprites) and `+0xCCF8` (models), bind the first free slot, and return its index
 or `-1` when all slots are occupied. The parallel `+0xCDF8` table tracks the
-resource-backed model tasks immediately preceding this block.
+resource-backed model tasks immediately preceding this block. Their exact
+constructor allocates a `0x1B8`-byte model, binds the selected battle resource,
+selects its low-byte animation ID, and stores view-adjusted X/Y coordinates for
+the per-frame callback. Resource 18 additionally cycles a six-bit animation
+frame from 18 through 52 before rendering. The callback transforms those stored
+coordinates back into the current view, clamps negative Z to zero, draws the
+model, and retires the task when model flag bit 2 is set. Its logic and size are
+reconstructed, but the linked build retains the original callback for now
+because MWCC exchanges the long-lived task and X-coordinate registers.
 
 ## Damage and status behavior
 

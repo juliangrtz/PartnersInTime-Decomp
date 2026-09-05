@@ -327,4 +327,4 @@ src/battle/battle_impact_particle_setup.c:
     .text       start:0x020aa8d4 end:0x020aaac8
 
 src/battle/battle_effect_spawning.c:
-    .text       start:0x020acab0 end:0x020acd18
+    .text       start:0x020ac904 end:0x020acd18
