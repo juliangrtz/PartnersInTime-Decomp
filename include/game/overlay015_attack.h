@@ -18,6 +18,14 @@ typedef union Overlay15AttackPhaseFlags {
     } bits;
 } Overlay15AttackPhaseFlags;
 
+typedef union Overlay15AttackControllerFlags {
+    u8 raw;
+    struct {
+        u8 phase : 5;
+        u8 unknown_5_7 : 3;
+    } bits;
+} Overlay15AttackControllerFlags;
+
 typedef struct Overlay15AttackHitMotion {
     BattleSceneObject *object;
     u8 unknown_04[0xC];
@@ -33,8 +41,10 @@ typedef struct Overlay15AttackModelController {
     s16 hit_timer;
     u8 unknown_0e[2];
     s8 hit_active;
-    Overlay15AttackPhaseFlags phase_flags;
-    u8 unknown_12[0xA];
+    Overlay15AttackControllerFlags phase_flags;
+    u8 unknown_12[2];
+    s16 animation_scale;
+    u8 unknown_16[6];
     Overlay15AttackHitMotion hit_motion;
 } Overlay15AttackModelController;
 
@@ -62,6 +72,10 @@ typedef char Overlay15AttackHitMotion_SizeCheck[
 typedef char Overlay15AttackObjectPairState_SizeCheck[
     sizeof(Overlay15AttackObjectPairState) == 0x1C ? 1 : -1];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void Overlay15Attack_ConfigureModelFlags(
     Overlay15AttackModelController *state);
 int Overlay15Attack_ClampContextIndex(int offset);
@@ -74,5 +88,8 @@ void Overlay15Attack_PreparePrimaryActor(
     Overlay15AttackModelController *state);
 void Overlay15Attack_PrepareSecondaryActor(
     Overlay15AttackModelController *state);
+#ifdef __cplusplus
+}
+#endif
 
 #endif
