@@ -528,6 +528,17 @@
     "230": "stop_camera_shake",
     "237": "start_master_brightness_transition",
     "238": "wait_master_brightness_transition",
+    "242": "start_field_palette_animation",
+    "243": "wait_field_palette_animation",
+    "244": "pause_field_palette_animation",
+    "245": "resume_field_palette_animation",
+    "246": "reverse_field_palette_animation",
+    "247": "start_palette_bank_crossfade",
+    "248": "wait_palette_bank_crossfade",
+    "249": "start_pattern_screen_wipe",
+    "250": "start_circular_screen_wipe",
+    "251": "start_rectangular_screen_wipe",
+    "252": "wait_screen_wipe",
     "262": "wait_field_scene_transition",
     "269": "wait_paired_field_ready",
     "270": "enable_field_trigger_area",
@@ -1527,6 +1538,94 @@
       "yield": "while the transition is active",
       "effect": "synchronization barrier for opcode 0x0ED",
       "evidence": "func_ov000_020823f8 case 0x0EE and field brightness countdown at context +0x2406"
+    },
+    "242": {
+      "arguments": ["animation_slot", "direction_profile", "object_palette_mask_high", "object_palette_mask_low", "standard_bg_palette_mask", "extended_bg_palette_mask_0", "extended_bg_palette_mask_1", "extended_bg_palette_mask_2", "duration_frames", "color_red", "color_green", "color_blue"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts field palette-animation slot 0 or 1 on every selected object/texture and map background palette. direction_profile indexes the signed effect sequence 4, -4, 5, -5, 6, -6, 7, -7, 8, -8; the two object mask halves are joined into one 32-bit mask, the four background masks select standard and extended map palettes, and the last three values are packed into a 15-bit RGB color. Progress advances by one frame until duration_frames and zero masks leave that palette family untouched",
+      "evidence": "func_ov000_020823f8 case 0x0F2, func_ov000_02075814, signed profile table data_ov000_020c0e38, clCellAnimeTX virtual method func_0200d0a4, FMap virtual method func_0201211c, and palette interpolator func_0202da0c"
+    },
+    "243": {
+      "arguments": ["animation_slot_or_minus_one"],
+      "result": null,
+      "control_flow": "retries the same command while any selected palette-animation slot is active",
+      "yield": "until the selected palette animation finishes",
+      "effect": "waits for one slot, or for both slots when -1 is supplied, across both the object/texture and map background palette controllers",
+      "evidence": "func_ov000_020823f8 case 0x0F3 and func_ov000_02075790"
+    },
+    "244": {
+      "arguments": ["animation_slot_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "pauses one palette-animation slot, or both slots when -1 is supplied, without changing its accumulated progress",
+      "evidence": "func_ov000_020823f8 case 0x0F4, func_ov000_02075730, and the per-slot update guards in func_0200d100 and func_02011c8c"
+    },
+    "245": {
+      "arguments": ["animation_slot_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resumes one paused palette-animation slot, or both slots when -1 is supplied. No shipped field command invokes this opcode",
+      "evidence": "func_ov000_020823f8 case 0x0F5 and func_ov000_02075730"
+    },
+    "246": {
+      "arguments": ["animation_slot_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resumes and reverses one palette-animation slot, or both slots when -1 is supplied, by negating the signed effect profile and replacing elapsed progress with duration minus progress",
+      "evidence": "func_ov000_020823f8 case 0x0F6, func_ov000_020756ac, clCellAnimeTX helper func_0200d02c, and FMap virtual method func_02011c58"
+    },
+    "247": {
+      "arguments": ["palette_region", "source_bank", "target_bank", "duration_frames"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "captures two hardware palette banks and progressively overwrites source_bank with a color-by-color interpolation toward target_bank. palette_region 0 selects standard OBJ palettes, 1 OBJ extended palettes, 2 standard BG palettes, and 3 through 6 the four BG extended-palette regions for the current field screen; standard regions use 32-byte banks and extended regions use 512-byte banks",
+      "evidence": "func_ov000_020823f8 case 0x0F7, func_ov000_02075600, palette address table data_ov000_020bfc5c, capture/upload routine func_ov000_020751d8, and interpolation routine func_ov000_02075450"
+    },
+    "248": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the palette-bank crossfade is active",
+      "yield": "until the palette-bank crossfade reaches duration_frames",
+      "effect": "synchronization barrier for opcode 0x0F7",
+      "evidence": "func_ov000_020823f8 case 0x0F8 and palette-crossfade active bit at field context +0x2BCC"
+    },
+    "249": {
+      "arguments": ["wipe_mode"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts one of four built-in 32-step tile-pattern screen wipes on the current field screen. Modes 0 through 3 select one of four embedded mask patterns; odd modes retain an opaque black end state while even modes clean up to a revealed field. On the primary field screen, reveal modes 0 and 2 also apply the pending scene-background audio transition",
+      "evidence": "func_ov000_020823f8 case 0x0F9, func_ov000_02074810 modes 0 through 3, pattern pointers data_ov000_020c0e28, per-frame updater func_ov000_02074000, and cleanup func_ov000_020744dc"
+    },
+    "250": {
+      "arguments": ["duration_frames", "center_x", "center_y", "start_radius_or_minus_one", "end_radius_or_minus_one", "retain_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a hardware-window circular iris wipe centered at the supplied screen coordinates and interpolates its radius for duration_frames. A radius of -1 expands to the farthest screen corner; retain_mask leaves the final window mask installed instead of tearing it down. On the primary field screen, a zero start radius also applies the pending scene-background audio transition",
+      "evidence": "func_ov000_020823f8 case 0x0FA, func_ov000_02074810 mode 4, circle-table builder func_ov000_02074400, window uploader func_ov000_02073c54, and completion helper func_ov000_02074798"
+    },
+    "251": {
+      "arguments": ["duration_frames", "center_x", "center_y", "start_left", "start_right", "start_top", "start_bottom", "end_left", "end_right", "end_top", "end_bottom", "retain_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a hardware-window rectangular wipe centered at the supplied screen coordinates. Four start extents interpolate to four end extents over duration_frames; -1 extents are expanded to their corresponding screen edge, and retain_mask leaves the final window mask installed. On the primary field screen, all-zero start extents also apply the pending scene-background audio transition",
+      "evidence": "func_ov000_020823f8 case 0x0FB, func_ov000_02074810 mode 5, rectangle uploader func_ov000_0207431c, window uploader func_ov000_02073c54, and completion helper func_ov000_02074798"
+    },
+    "252": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while a pattern, circular, or rectangular screen wipe is active",
+      "yield": "until the current screen wipe completes",
+      "effect": "shared synchronization barrier for opcodes 0x0F9 through 0x0FB; a retained final window mask is not considered active",
+      "evidence": "func_ov000_020823f8 case 0x0FC and screen-wipe active bit at field context +0x2BC8"
     },
     "262": {
       "arguments": [],

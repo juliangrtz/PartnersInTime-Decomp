@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 216 | 165 | `config/eur/field_vm.json` |
+| Field/world | 341 | 227 | 176 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -224,6 +224,17 @@ field context (the other DS screen/field instance).
 | `0x0E6` | `stop_camera_shake` | 0 literal args | stops an active camera shake, restores the saved camera-axis offset, and stops any selected rumble pattern |
 | `0x0ED` | `start_master_brightness_transition` | start_brightness_or_255, target_brightness, duration_frames | writes the target immediately when duration is zero; otherwise interpolates the active screen's signed DS master-brightness value once per frame. A start value of 255 preserves the current brightness |
 | `0x0EE` | `wait_master_brightness_transition` | 0 literal args | synchronization barrier for opcode 0x0ED |
+| `0x0F2` | `start_field_palette_animation` | animation_slot, direction_profile, object_palette_mask_high, object_palette_mask_low, standard_bg_palette_mask, extended_bg_palette_mask_0, extended_bg_palette_mask_1, extended_bg_palette_mask_2, duration_frames, color_red, color_green, color_blue | starts field palette-animation slot 0 or 1 on every selected object/texture and map background palette. direction_profile indexes the signed effect sequence 4, -4, 5, -5, 6, -6, 7, -7, 8, -8; the two object mask halves are joined into one 32-bit mask, the four background masks select standard and extended map palettes, and the last three values are packed into a 15-bit RGB color. Progress advances by one frame until duration_frames and zero masks leave that palette family untouched |
+| `0x0F3` | `wait_field_palette_animation` | animation_slot_or_minus_one | waits for one slot, or for both slots when -1 is supplied, across both the object/texture and map background palette controllers |
+| `0x0F4` | `pause_field_palette_animation` | animation_slot_or_minus_one | pauses one palette-animation slot, or both slots when -1 is supplied, without changing its accumulated progress |
+| `0x0F5` | `resume_field_palette_animation` | animation_slot_or_minus_one | resumes one paused palette-animation slot, or both slots when -1 is supplied. No shipped field command invokes this opcode |
+| `0x0F6` | `reverse_field_palette_animation` | animation_slot_or_minus_one | resumes and reverses one palette-animation slot, or both slots when -1 is supplied, by negating the signed effect profile and replacing elapsed progress with duration minus progress |
+| `0x0F7` | `start_palette_bank_crossfade` | palette_region, source_bank, target_bank, duration_frames | captures two hardware palette banks and progressively overwrites source_bank with a color-by-color interpolation toward target_bank. palette_region 0 selects standard OBJ palettes, 1 OBJ extended palettes, 2 standard BG palettes, and 3 through 6 the four BG extended-palette regions for the current field screen; standard regions use 32-byte banks and extended regions use 512-byte banks |
+| `0x0F8` | `wait_palette_bank_crossfade` | 0 literal args | synchronization barrier for opcode 0x0F7 |
+| `0x0F9` | `start_pattern_screen_wipe` | wipe_mode | starts one of four built-in 32-step tile-pattern screen wipes on the current field screen. Modes 0 through 3 select one of four embedded mask patterns; odd modes retain an opaque black end state while even modes clean up to a revealed field. On the primary field screen, reveal modes 0 and 2 also apply the pending scene-background audio transition |
+| `0x0FA` | `start_circular_screen_wipe` | duration_frames, center_x, center_y, start_radius_or_minus_one, end_radius_or_minus_one, retain_mask | starts a hardware-window circular iris wipe centered at the supplied screen coordinates and interpolates its radius for duration_frames. A radius of -1 expands to the farthest screen corner; retain_mask leaves the final window mask installed instead of tearing it down. On the primary field screen, a zero start radius also applies the pending scene-background audio transition |
+| `0x0FB` | `start_rectangular_screen_wipe` | duration_frames, center_x, center_y, start_left, start_right, start_top, start_bottom, end_left, end_right, end_top, end_bottom, retain_mask | starts a hardware-window rectangular wipe centered at the supplied screen coordinates. Four start extents interpolate to four end extents over duration_frames; -1 extents are expanded to their corresponding screen edge, and retain_mask leaves the final window mask installed. On the primary field screen, all-zero start extents also apply the pending scene-background audio transition |
+| `0x0FC` | `wait_screen_wipe` | 0 literal args | shared synchronization barrier for opcodes 0x0F9 through 0x0FB; a retained final window mask is not considered active |
 | `0x106` | `wait_field_scene_transition` | 0 literal args | common synchronization barrier for the scripted field-scene transition effects driven by the renderer state at +0x274 |
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
 | `0x10E` | `enable_field_trigger_area` | trigger_area_index | clears the runtime-disabled flag of the indexed 44-byte field trigger-area record, allowing party or entity overlap with its triangle, quadrilateral, or rectangle to select and launch the area's script again |
@@ -269,25 +280,21 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-192/289 used opcodes and
-385,662/387,272 reachable commands
+202/289 used opcodes and
+385,912/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x0F2` | 80 |
 | `0x087` | 79 |
 | `0x12F` | 71 |
 | `0x051` | 71 |
-| `0x0F3` | 57 |
 | `0x053` | 57 |
 | `0x069` | 51 |
 | `0x0AB` | 50 |
 | `0x0AA` | 50 |
 | `0x0A8` | 50 |
 | `0x0FF` | 46 |
-| `0x0FC` | 46 |
-| `0x0F9` | 43 |
 | `0x100` | 38 |
 | `0x0FD` | 36 |
 | `0x12E` | 34 |
@@ -295,6 +302,10 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x0C6` | 32 |
 | `0x0FE` | 29 |
 | `0x0C8` | 29 |
+| `0x0BB` | 29 |
+| `0x11B` | 27 |
+| `0x11A` | 27 |
+| `0x110` | 27 |
 
 ## Menu/UI scene scripts
 
