@@ -497,6 +497,7 @@
     "189": "cancel_party_actions",
     "190": "wait_party_actions_idle",
     "201": "get_party_controller_property",
+    "204": "set_party_piggyback_state",
     "206": "set_party_leader_animation_override",
     "212": "activate_field_map_event",
     "213": "start_map_tile_animation",
@@ -1244,6 +1245,14 @@
       "yield": "never",
       "effect": "queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4",
       "evidence": "func_ov000_020823f8 case 0x0C9 property switch"
+    },
+    "204": {
+      "arguments": ["piggybacked"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the party manager's persistent adult/baby piggyback-state marker. The marker is serialized into the field-party snapshot and restored when the next field reconstructs the party; it does not itself move or attach actors. Shipped cutscenes clear it before controlling all four members independently and set it again immediately before or after reuniting them with opcode 0x0B1",
+      "evidence": "func_ov000_020823f8 case 0x0CC stores party-manager +0x04 bit 7; serializer func_ov000_020a28b4 maps it to snapshot bit 1 and constructor func_ov000_020a260c restores it; 320 reachable uses consistently bracket split-party staging and reunion"
     },
     "206": {
       "arguments": ["party_side", "enabled"],
