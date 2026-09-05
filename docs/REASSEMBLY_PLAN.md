@@ -159,6 +159,10 @@ original code
 with `BattleModelEffectTask_Update` at `0x020AC820`: the callback is
 semantically reconstructed at the correct `0xE4` size, while MWCC still swaps
 two callee-saved registers.
+The nine display-capture helpers at `0x020AD3C4`-`0x020AD5D0` are also
+byte-matching grouped C. They make the reset/configuration task chains, the
+battle display-phase changes, the capture-busy flag, the `DISPCAPCNT` write,
+and AI opcode `0x36`'s capture-surface upload wrapper directly editable.
 The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
 `0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
 slot allocation, countdown and primary/secondary routing used by damage and KO.

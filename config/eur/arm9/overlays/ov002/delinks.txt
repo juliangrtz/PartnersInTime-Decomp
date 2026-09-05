@@ -328,3 +328,6 @@ src/battle/battle_impact_particle_setup.c:
 
 src/battle/battle_effect_spawning.c:
     .text       start:0x020ac904 end:0x020acd18
+
+src/battle/battle_display_capture.c:
+    .text       start:0x020ad3c4 end:0x020ad5d0

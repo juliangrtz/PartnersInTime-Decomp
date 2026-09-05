@@ -17,7 +17,7 @@ word loads observed from the command-record register (`r5`).
 | `0x33` | `0x02079C50` | — | `0x8`, `0xC` | `BattleObjectData_AllocateLoadBuffer` |
 | `0x34` | `0x02079C7C` | — | `0x8`, `0xC`, `0x10` | `BattleObjectData_ConfigureLoad` |
 | `0x35` | `0x02079CB4` | — | `0x8`, `0xC`, `0x10` | `BattleObjectData_EnsureLoaded` |
-| `0x36` | `0x02079CE8` | — | `0x8`, `0xC`, `0x10` | `func_ov002_020ad3c4` |
+| `0x36` | `0x02079CE8` | — | `0x8`, `0xC`, `0x10` | `BattleObjectData_QueueCaptureSurfaceUpload` |
 | `0x37` | `0x02079D38` | — | `0x8`, `0xC`, `0x10` | `func_ov002_02091fd8` |
 | `0x38` | `0x02079D6C` | — | `0x8`, `0xC` | `func_ov002_02091f68` |
 | `0x39` | `0x02079D90` | — | `0x8` | `BattleObjectData_IsLoadPending` |
