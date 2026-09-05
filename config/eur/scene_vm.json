@@ -289,7 +289,7 @@
     "76": "set_object_property",
     "77": "set_object_property_fixed",
     "78": "align_object_to_object",
-    "80": "move_object_mode_1",
+    "80": "set_object_position",
     "81": "get_object_coordinate",
     "84": "wait_object_pending_state",
     "85": "set_object_animation",
@@ -310,6 +310,7 @@
     "100": "start_object_directional_ballistic_motion_b",
     "101": "start_object_directional_ballistic_motion_c",
     "105": "wait_object_motion",
+    "106": "cancel_object_motion",
     "107": "start_object_path_motion",
     "108": "get_object_motion_property",
     "109": "set_scene_screen_effect",
@@ -364,6 +365,157 @@
       "yield": "never",
       "effect": "the scene dispatcher has no case for this opcode",
       "evidence": "absent from func_ov007_02081730; descriptor 0x02"
+    },
+    "53": {
+      "arguments": ["resource_slot", "resource_id_low", "resource_id_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "combines resource_id_low and resource_id_high into a 32-bit typed resource ID, stores it in one of 72 scene resource slots, starts the corresponding asynchronous object-resource load, and binds the returned handle to that slot",
+      "evidence": "func_ov007_02081730 case 0x035; func_ov007_020891dc"
+    },
+    "57": {
+      "arguments": ["resource_slot_ignored"],
+      "result": null,
+      "control_flow": "retries the same command while the scene object-resource request remains pending",
+      "yield": "while the global object-resource request is pending",
+      "effect": "the encoded resource slot is not consumed by the implementation; completion is tested through the scene's current resource request handle",
+      "evidence": "func_ov007_02081730 case 0x039; func_ov007_020891a4 ignores its incoming register"
+    },
+    "58": {
+      "arguments": ["object_id", "resource_slot"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "assigns resource_slot to the object's resource selector, and resets the object's visual-state offset to zero",
+      "evidence": "func_ov007_02081730 case 0x03A; func_ov007_02089178 writes object fields +0xC0 and +0xD4"
+    },
+    "59": {
+      "arguments": ["object_id", "visual_state", "activation_mode"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the object's render-suppression bit, selects or advances to visual_state, and activates the resource-backed render object; a negative visual_state releases the render object, while activation_mode selects the alternate activation path",
+      "evidence": "func_ov007_02081730 case 0x03B; func_ov007_02088e10; func_ov007_02088c50"
+    },
+    "63": {
+      "arguments": ["object_id_a", "object_id_b"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "swaps the two scene-object pointers, then rewrites both objects' current and original slot IDs to match their new slots",
+      "evidence": "func_ov007_02081730 case 0x03F; func_ov007_02088b90"
+    },
+    "70": {
+      "arguments": ["property_id"],
+      "result": "property_value",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reads a scene-global property; IDs 3 and 4 return the shared scene-state query, ID 5 returns the writable 16-bit scene value, ID 9 returns constant 56, and other IDs return zero",
+      "property_values": {"3": "shared_scene_state", "4": "shared_scene_state", "5": "writable_scene_value", "9": "constant_56"},
+      "evidence": "func_ov007_02081730 case 0x046; func_ov007_020883d0"
+    },
+    "71": {
+      "arguments": ["property_id", "value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "writes the 16-bit scene-global property only when property_id is 5; all other property IDs are ignored",
+      "property_values": {"5": "writable_scene_value"},
+      "evidence": "func_ov007_02081730 case 0x047; func_ov007_02088454"
+    },
+    "75": {
+      "arguments": ["object_id", "property_id"],
+      "result": "property_value",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reads a selector-based property from the scene object's logical or render state; unsupported selectors return zero",
+      "property_values": {"0": "render_flag_8", "2": "logical_field_0xD8", "3": "render_mode_0_3", "4": "logical_field_0xDA", "5": "render_field_0x5A_as_fixed", "9": "render_flag_3", "10": "logical_x", "11": "logical_y", "12": "logical_z", "22": "constant_zero", "23": "render_field_0x54", "24": "render_field_0x56", "25": "render_flag_10", "26": "render_flag_11", "27": "render_flag_9", "28": "resource_slot", "29": "logical_pending_state", "30": "logical_field_0xD2", "33": "render_field_0x78", "35": "render_field_0x74_times_16", "36": "render_field_0x76_times_16", "39": "visual_state_offset", "41": "render_flag_2", "42": "scene_object_class_byte", "55": "logical_x", "56": "logical_y_minus_z", "57": "logical_screen_y", "69": "logical_field_0xD0_minus_visual_state_offset"},
+      "evidence": "func_ov007_02081730 case 0x04B; func_ov007_02088468"
+    },
+    "76": {
+      "arguments": ["object_id", "property_id", "value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "writes a selector-based property in the scene object's logical or render state; unsupported selectors are ignored",
+      "property_values": {"0": "render_flag_8", "2": "logical_field_0xD8", "3": "render_mode_0_3", "4": "logical_field_0xDA", "5": "render_field_0x5A_from_fixed", "9": "render_flag_3", "10": "logical_byte_0xE2", "11": "logical_byte_0xE3", "12": "logical_z_and_field_0x14", "23": "render_field_0x54", "24": "render_virtual_property", "25": "render_property_helper_a", "26": "render_property_helper_b", "27": "render_flag_9", "29": "logical_pending_state_update", "30": "logical_field_0xD2", "33": "render_field_0x78", "35": "render_field_0x74_from_fixed", "36": "render_field_0x76_from_fixed", "39": "visual_state_offset"},
+      "evidence": "func_ov007_02081730 case 0x04C; func_ov007_02088894"
+    },
+    "77": {
+      "arguments": ["object_id", "property_id", "fixed_low_or_variable", "fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reconstructs a 32-bit fixed-point value from the last two operands when they are literal, then performs set_object_property",
+      "evidence": "func_ov007_02081730 case 0x04D"
+    },
+    "78": {
+      "arguments": ["object_id", "reference_object_id", "screen_y_offset"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "aligns the object's logical screen-Y coordinate to the reference object's baseline plus screen_y_offset, compensating for both objects' logical Y values, and copies the reference render mode bits",
+      "evidence": "func_ov007_02081730 case 0x04E"
+    },
+    "80": {
+      "arguments": ["object_id", "x", "y", "z"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "cancels the object's active movement scheduler and immediately moves it by the delta from its current logical position to the supplied absolute coordinates",
+      "evidence": "func_ov007_02081730 case 0x050; func_ov007_02089000 mode 0; func_ov007_02086d08"
+    },
+    "81": {
+      "arguments": ["object_id", "coordinate_id"],
+      "result": "coordinate_value",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns logical X for coordinate_id 0, logical Y minus Z for 1, or screen Y for 2; unsupported coordinate IDs leave the result destination unchanged",
+      "coordinate_values": {"0": "logical_x", "1": "logical_y_minus_z", "2": "screen_y"},
+      "evidence": "func_ov007_02081730 case 0x051"
+    },
+    "84": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "retries the same command while the object's signed pending-state field is nonnegative, then normalizes the completed negative state to zero",
+      "yield": "while object pending-state is nonnegative",
+      "effect": "changes a zero pending-state value to one before yielding, so the asynchronous object update observes a requested state",
+      "evidence": "func_ov007_02081730 case 0x054; object field +0xD6"
+    },
+    "85": {
+      "arguments": ["object_id", "animation_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "invokes the object's render-instance animation method with animation_id, default sub-animation -1, and immediate-enable flag 1",
+      "evidence": "func_ov007_02081730 case 0x055; func_ov007_020883a0"
+    },
+    "86": {
+      "arguments": ["object_id", "motion_slot", "motion_mode", "x", "y", "z", "duration_or_parameter", "reference_or_relative"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts object motion in modes 0, 1, 2, or 5: mode 0 applies an immediate absolute position, or a relative delta when reference_or_relative is nonzero; modes 1 and 2 schedule vector or absolute interpolation; mode 5 schedules motion relative to the referenced object",
+      "motion_modes": {"0": "immediate_position", "1": "vector_interpolation", "2": "absolute_interpolation", "5": "reference_object_interpolation"},
+      "evidence": "func_ov007_02081730 case 0x056; func_ov007_02086d08; func_ov007_02086abc; func_ov007_020869c4; func_ov007_02085cb4"
+    },
+    "87": {
+      "arguments": ["object_id", "motion_slot", "unused_mode", "x", "y", "z", "start_value", "end_value", "step_fixed", "terminal_value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the complex position scheduler, optionally deriving its duration from the signed start/end range and fixed-point step; unused_mode is decoded but not consumed",
+      "evidence": "func_ov007_02081730 case 0x057; func_ov007_02085ab0"
+    },
+    "88": {
+      "arguments": ["object_id", "motion_slot", "motion_mode", "x", "y", "z", "speed_fixed", "reference_object"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "converts vector length to a duration from speed_fixed, then starts mode 1 vector, mode 2 absolute, or mode 5 reference-object interpolation; a nonpositive speed falls back to the object's field +0xDA",
+      "motion_modes": {"1": "vector_interpolation", "2": "absolute_interpolation", "5": "reference_object_interpolation"},
+      "evidence": "func_ov007_02081730 case 0x058; func_ov007_02086abc; func_ov007_020869c4; func_ov007_02085cb4"
     },
     "89": {
       "arguments": ["object_id", "motion_slot", "axis2_profile", "axis2_target", "speed_fixed_low_or_variable", "speed_fixed_high", "acceleration", "unused"],
@@ -469,6 +621,94 @@
       "effect": "starts normalized directional ballistic motion using a root selected from distance and endpoint-speed constraints; impossible constraints cancel motion",
       "evidence": "func_ov007_02081730 case 0x065; func_ov007_02085de4; func_ov007_02086560"
     },
+    "105": {
+      "arguments": ["object_id", "motion_slot"],
+      "result": null,
+      "control_flow": "retries the same command while the selected object motion is active",
+      "yield": "while active",
+      "effect": "tests the scheduler callback stored in the selected one of four 40-byte object motion slots",
+      "evidence": "func_ov007_02081730 case 0x069; func_ov007_02088fe4; func_ov007_02088fc8"
+    },
+    "106": {
+      "arguments": ["object_id", "motion_slot"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "cancels the selected object motion slot, applies its accumulated terminal displacement to the object's deferred position, clears scheduler state, and preserves any following active slot",
+      "evidence": "func_ov007_02081730 case 0x06A; func_ov007_02087084 with apply_to_position false"
+    },
+    "107": {
+      "arguments": ["object_id", "motion_slot", "unused_0", "path_relative_halfwords", "path_extent", "step_fixed_low_or_variable", "step_fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough; reads path data at aligned PC + 2 * path_relative_halfwords",
+      "yield": "never",
+      "effect": "starts the object's table-driven path scheduler in the selected motion slot, using the path header and points at the relative target, path_extent minus one, and the supplied fixed-point step",
+      "evidence": "func_ov007_02081730 case 0x06B; scheduler callback func_ov007_02087bf4"
+    },
+    "108": {
+      "arguments": ["object_id", "motion_slot"],
+      "result": "motion_progress_plus_one",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns the selected motion slot's signed 16.16 progress word shifted to an integer, plus one",
+      "evidence": "func_ov007_02081730 case 0x06C reads object + 0x3C + 40 * motion_slot"
+    },
+    "109": {
+      "arguments": ["enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts three coordinated screen-object transition tasks; enabled is inverted into their direction, selecting positions 176 or 16 and the corresponding render animation",
+      "evidence": "func_ov007_02081730 case 0x06D; func_ov007_0207e770"
+    },
+    "110": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the scene screen-transition state byte to -1",
+      "evidence": "func_ov007_02081730 case 0x06E writes byte_2090700"
+    },
+    "111": {
+      "arguments": ["state_id"],
+      "result": "scene_state_value",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "queries one of three scene state providers for state_id 0, 1, or 2; unsupported IDs return zero",
+      "state_values": {"0": "scene_state_a", "1": "shared_scene_state", "2": "scene_state_c"},
+      "evidence": "func_ov007_02081730 case 0x06F; func_ov007_0208792c"
+    },
+    "112": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command until the scene busy byte becomes zero",
+      "yield": "while scene busy",
+      "evidence": "func_ov007_02081730 case 0x070 tests byte_2090674"
+    },
+    "113": {
+      "arguments": ["mode"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets scene controller state 5 and schedules one of two mode-transition callbacks selected by mode zero versus nonzero",
+      "evidence": "func_ov007_02081730 case 0x071; func_ov007_02070ae8"
+    },
+    "114": {
+      "arguments": ["flag_id", "value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "writes one of four scene flag bytes; flag_id 4 broadcasts value to all four flags",
+      "evidence": "func_ov007_02081730 case 0x072; func_ov007_02077110"
+    },
+    "115": {
+      "arguments": ["property_id", "record_id"],
+      "result": "record_property_value",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reads a property from a 36-byte global scene record: property IDs 0-10 select consecutive 16-bit fields, 11 selects the low byte of the following word, 12 and 13 select its upper 24 bits and the next low 24 bits, 14 and 15 select two trailing bytes, and 16-17 select global values outside the indexed records",
+      "evidence": "func_ov007_02081730 case 0x073; func_ov007_020876e8"
+    },
     "159": {
       "arguments": [],
       "result": null,
@@ -552,12 +792,60 @@
       "yield": "while the object script is active",
       "evidence": "func_ov007_02081730 case 0x0A9"
     },
+    "170": {
+      "arguments": ["owner_selector"],
+      "result": null,
+      "control_flow": "retries the same command while any matching object script is active",
+      "yield": "while a matching object script is active",
+      "effect": "owner_selector below one defaults to the current script owner; values below 0x4000 match the object's primary owner ID, while values at or above 0x4000 match the low 12 bits against its secondary owner ID",
+      "evidence": "func_ov007_02081730 case 0x0AA scans 40 object-script records"
+    },
     "171": {
       "arguments": ["object_id"],
       "result": null,
       "control_flow": "clears the selected object's script pointer and terminates the current script",
       "yield": "never",
       "evidence": "func_ov007_02081730 case 0x0AB returns SCRIPT_VM_FINISHED"
+    },
+    "172": {
+      "arguments": ["owner_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops every matching object script and clears its per-script state field; owner_selector uses the same current-owner, primary-owner, and 0x4000 secondary-owner rules as opcode 0x0AA",
+      "evidence": "func_ov007_02081730 case 0x0AC"
+    },
+    "173": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "falls through after marking the selected object script paused",
+      "yield": "once",
+      "effect": "sets bit 0 of the selected object script's pause flags",
+      "evidence": "func_ov007_02081730 case 0x0AD returns SCRIPT_VM_YIELDED"
+    },
+    "174": {
+      "arguments": ["owner_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the paused bit on every matching active object script; owner_selector follows opcode 0x0AA matching rules",
+      "evidence": "func_ov007_02081730 case 0x0AE"
+    },
+    "175": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears bit 0 of the selected object script's pause flags",
+      "evidence": "func_ov007_02081730 case 0x0AF"
+    },
+    "176": {
+      "arguments": ["owner_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the paused bit on every matching active object script; owner_selector follows opcode 0x0AA matching rules",
+      "evidence": "func_ov007_02081730 case 0x0B0"
     },
     "177": {
       "arguments": ["condition", "left", "right", "expected_result", "branch_sense", "relative_halfwords"],
@@ -586,6 +874,116 @@
       "control_flow": "branches when the selected object motion has expected_state; otherwise falls through",
       "yield": "never",
       "evidence": "func_ov007_02081730 case 0x0B6"
+    },
+    "183": {
+      "arguments": ["sound_id", "task_parameter", "mode_parameter"],
+      "result": "sound_task_handle_or_minus_one",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a sound task in the first free one of 16 slots and returns its handle; when task_parameter is nonpositive and mode_parameter is zero, plays sound_id immediately and returns -1",
+      "evidence": "func_ov007_02081730 case 0x0B7; func_ov007_020875a0"
+    },
+    "184": {
+      "arguments": ["sound_id", "task_parameter"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the same sound operation as opcode 0x0B7 with mode_parameter zero and discards the task handle",
+      "evidence": "func_ov007_02081730 case 0x0B8; func_ov007_020875a0"
+    },
+    "185": {
+      "arguments": ["sound_task_handle"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "cancels and frees the selected sound task when the handle is not -1 and is an active slot from 0 through 15",
+      "evidence": "func_ov007_02081730 case 0x0B9; func_ov007_02087240"
+    },
+    "186": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "cancels every active sound task in the 16-slot scene sound-task table",
+      "evidence": "func_ov007_02081730 case 0x0BA; func_ov007_02087240"
+    },
+    "187": {
+      "arguments": ["sound_task_handle"],
+      "result": null,
+      "control_flow": "retries the same command while the selected sound task exists",
+      "yield": "while sound_task_handle is active; -1 completes immediately",
+      "evidence": "func_ov007_02081730 case 0x0BB"
+    },
+    "194": {
+      "arguments": ["object_id", "render_mode", "text_id", "text_page", "unused"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "when render_mode is zero, resolves text_id and text_page from the loaded scene text archive and renders up to two tile rows into the object's text tile area; nonzero render_mode does nothing, and the fifth decoded operand is unused",
+      "evidence": "func_ov007_02081730 case 0x0C2; func_ov007_02083c20"
+    },
+    "195": {
+      "arguments": ["object_id_ignored", "property_ignored", "value_ignored"],
+      "result": "constant_one",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns one unconditionally; all three decoded operands are ignored",
+      "evidence": "func_ov007_02081730 case 0x0C3; func_ov007_02083c18"
+    },
+    "199": {
+      "arguments": ["resource_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "releases the previous pair of UI resource handles, starts an asynchronous load for resource_id into the first handle, and schedules its scene loader task",
+      "evidence": "func_ov007_02081730 case 0x0C7; func_ov007_0208a368"
+    },
+    "200": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the primary UI resource handle is nonzero",
+      "yield": "while UI resource loading is active",
+      "evidence": "func_ov007_02081730 case 0x0C8; func_ov007_0208a348"
+    },
+    "201": {
+      "arguments": ["engine_flag", "resource_entry", "x", "y", "style", "palette", "auto_shape", "auto_vertical_placement", "secondary_flag", "pointer_offset", "width_cells_or_zero", "height_cells_or_zero", "position_flag", "configuration_high_bits", "callback_id"],
+      "result": "ui_element_handle",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "creates a standalone UI element from the loaded resource table; zero dimensions are inferred from the resource entry, x 0x8000 centers the inferred width, -1 placement fields select screen-aware defaults, and the packed flags configure shape, palette, engine, position, and callback behavior",
+      "evidence": "func_ov007_02081730 case 0x0C9; func_ov007_020896f4"
+    },
+    "202": {
+      "arguments": ["resource_entry", "object_id", "style", "pointer_mode", "auto_shape", "auto_vertical_placement", "pointer_offset", "width_cells_or_zero", "height_cells_or_zero", "secondary_flag", "configuration_high_bits", "callback_id"],
+      "result": "ui_element_handle",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "creates a UI element anchored to a scene object, deriving its screen position and object-resource class before delegating to the standalone UI creator; zero dimensions and -1 placement operands request automatic values",
+      "evidence": "func_ov007_02081730 case 0x0CA; func_ov007_02089980; func_ov007_020896f4"
+    },
+    "203": {
+      "arguments": ["ui_element_handle_or_minus_one"],
+      "result": null,
+      "control_flow": "retries the same command while the selected element exists and its signed readiness field is nonnegative",
+      "yield": "while the element exists and remains in its pending/visible phase",
+      "effect": "a negative handle applies the test to the four standard UI element slots",
+      "evidence": "func_ov007_02081730 case 0x0CB; func_ov007_020895b8; func_ov007_02089670"
+    },
+    "204": {
+      "arguments": ["ui_element_handle_or_minus_one"],
+      "result": null,
+      "control_flow": "retries the same command while the selected UI element exists",
+      "yield": "while the element exists",
+      "effect": "a negative handle applies the existence test to the four standard UI element slots",
+      "evidence": "func_ov007_02081730 case 0x0CC; func_ov007_020895b8"
+    },
+    "205": {
+      "arguments": ["ui_element_handle_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "destroys the selected UI element through the UI manager; a negative handle destroys all four standard UI element slots",
+      "evidence": "func_ov007_02081730 case 0x0CD; func_ov007_0208953c"
     }
   }
 }
