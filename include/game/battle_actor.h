@@ -7,6 +7,7 @@ typedef struct BattleActor BattleActor;
 typedef struct BattleActorAnimationState BattleActorAnimationState;
 typedef struct BattleStatusState BattleStatusState;
 typedef struct BattleDamageNumberTask BattleDamageNumberTask;
+typedef struct BattleDamageReactionTask BattleDamageReactionTask;
 struct BattleSceneObject;
 struct BattleModel;
 
@@ -103,7 +104,8 @@ struct BattleActor {
             u16 unknown_damage_number_12_15 : 4;
         } damage_number_flag_bits;
     };
-    u8 unk_026[6];
+    u8 unk_026[2];
+    BattleDamageReactionTask *damage_reaction_task;
     BattleDamageNumberTask *damage_number_task;
     union {
         struct {
@@ -170,7 +172,10 @@ typedef struct BattlePartyActor {
 typedef struct BattleEnemyActor {
     BattleActor actor;
     u8 unknown_070[0x22A];
-    u16 resource_initialized;
+    union {
+        u16 resource_initialized;
+        s16 hit_animation_id;
+    };
     union {
         u32 state_flags;
         struct {
@@ -183,6 +188,12 @@ typedef struct BattleEnemyActor {
             u32 traits : 2;
             u32 unknown_08_31 : 24;
         } state_flag_bits;
+        struct {
+            u8 state_flag_byte;
+            s8 impact_offset_x;
+            s8 impact_offset_y;
+            u8 unknown_29f;
+        } reaction_state;
     };
 } BattleEnemyActor;
 

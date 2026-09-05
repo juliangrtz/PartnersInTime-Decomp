@@ -344,16 +344,18 @@ Mario/Luigi popup metadata, and optional post-hit status application.
 `BattleDamage_DispatchHit` at `0x0209DE8C` validates target IDs, derives hit
 offsets from the queued record and scene object, then routes the pending damage
 and status payload to the appropriate maintained enemy/party path.
-The party/enemy reaction-task starters and the party first-hit equipment hook
-are symbolic too, exposing task allocation/reuse, actor hit-lock flag `0x200`,
-attached hit effects, and equipment effect `0x3024` consuming POW status 6.
-Both reaction-task callbacks are maintained too: they wait for the scene
+The party/enemy reaction-task lifecycle at `0x0209CE98`-`0x0209D694` is now a
+byte-identical linked C unit. Its starters expose task allocation/reuse, actor
+hit-lock flag `0x200`, and attached hit effects. The adjacent party first-hit
+equipment hook remains symbolic and consumes POW status 6 for equipment effect
+`0x3024`. Both reaction-task callbacks wait for the scene
 animation, handle the party KO/alive split, restore enemy impact offsets where
 applicable, clear task callbacks, and release actor hit-lock flag `0x200`.
-The alternate attached-effect reaction pair is maintained as well, including
+The alternate attached-effect reaction pair is included, including
 task reuse, effect replacement, resource validity, and hit-lock release.
-The party launch/impact task pair is now maintained too, including off-screen
-phase changes, the three-effect burst, HP-dependent restore, and task cleanup.
+The party launch/impact task pair is included too, with off-screen phase
+changes, the three-effect burst, HP-dependent restore, and task cleanup. All
+eight functions match the original 2,044-byte region.
 `BattleDamage_ReflectQueuedHits` walks the packed eight-entry hit queue,
 recalculates reflected damage, swaps source/target IDs, and refreshes the
 status ID, chance, and magnitude bytes from the reflected attack descriptor.

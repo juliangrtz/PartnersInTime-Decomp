@@ -626,21 +626,23 @@ paths. Its 20-byte hit record supplies target ID, hit coordinates, pending hit
 kind, and the optional party status payload. It accepts party IDs 56-59 and
 enemy IDs 60-67, resolves the corresponding scene object and actor, computes
 relative offsets, then dispatches to the exact target-specific implementation.
-The adjacent maintained party/enemy reaction starters allocate or reuse the
-per-actor task at `actor + 0x28`, set actor flag `0x200` while the reaction is
-active, and install their original update callbacks. The party pre-hit hook
+The adjacent party/enemy reaction code is now a byte-identical, linked C unit.
+Its starters allocate or reuse the per-actor task at `actor + 0x28`, set actor
+flag `0x200` while the reaction is active, and install their original update
+callbacks. The party pre-hit hook
 also consumes its one-shot flag and clears POW status 6 when equipment effect
 `0x3024` is active.
-Their two maintained per-frame callbacks now close the lifecycle: wait for the
+Their two per-frame callbacks close the lifecycle: wait for the
 animation completion flags, choose party KO or idle behavior, restore ordinary
 enemy impact offsets, clear the task callback, and release actor flag `0x200`.
-The alternate maintained effect-reaction pair uses the same `actor + 0x28`
+The alternate effect-reaction pair uses the same `actor + 0x28`
 ownership and hit-lock flag, but waits for an attached effect or invalidated
 resource rather than selecting a full party/enemy animation sequence.
-The maintained party launch-reaction pair owns the remaining state machine in
-this region: it moves a party object through the screen boundary, switches its
-resource animation, emits the three-stage impact burst, restores or retires
-the actor according to HP, and finally releases the same hit-lock flag.
+The party launch-reaction pair owns the remaining state machine in this region:
+it moves a party object through the screen boundary, switches its resource
+animation, emits the three-stage impact burst, restores or retires the actor
+according to HP, and finally releases the same hit-lock flag. All eight
+functions from `0x0209CE98` through `0x0209D694` match the original 2,044 bytes.
 
 If HP reached zero, `BattleParty_StartKnockout` clears all eight statuses,
 starts animation 13, sets actor and battle-global locks, selects one of six

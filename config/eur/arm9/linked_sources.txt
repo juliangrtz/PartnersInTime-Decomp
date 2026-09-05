@@ -47,6 +47,7 @@ src/battle/battle_script_state.c
 src/battle/battle_damage_base.c
 src/battle/battle_status_clear.c
 src/battle/battle_status_apply.c
+src/battle/battle_damage_reactions.c
 src/battle/battle_actor_damage.c
 src/battle/battle_hit.c
 src/battle/battle_hit_lookup.c
