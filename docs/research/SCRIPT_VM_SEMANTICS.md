@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 279 | 228 | `config/eur/field_vm.json` |
+| Field/world | 341 | 289 | 238 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -312,7 +312,17 @@ field context (the other DS screen/field instance).
 | `0x12B` | `get_room_companion_id` | room_id | reads the second halfword of the selected room's four-byte resident metadata record. Room-transition synchronization uses this value as the room to load into the paired field context; zero suppresses that automatic companion load |
 | `0x12E` | `set_game_over_retry_checkpoint` | checkpoint_index | stores the game-over retry checkpoint selector in save data and exposes it as field variable 0x3024. Zero disables the Retry choice; indices 1 through 9 select one of nine 18-byte records containing a destination room and four placement halfwords for each field party. Accepting Retry rebuilds that room from the record and reduces each available party member's current HP to approximately 30 percent |
 | `0x12F` | `set_game_over_retry_progress` | retry_progress | stores the checkpoint's script-progress byte in save data and exposes it as field variable 0x3025. Shipped room scripts compare proposed milestones against this value before updating it, so a game-over retry can reconstruct the selected room without replaying events completed before the checkpoint |
+| `0x130` | `clear_extended_save_flags_1024_2047` | 0 literal args | clears the 128-byte extended save-flag bank at save-data offsets 0x270 through 0x2EF, corresponding exactly to VM variables save_flags_1f0[1024] through save_flags_1f0[2047] |
+| `0x131` | `set_extended_save_flags_1024_2047` | 0 literal args | sets every bit in the 128-byte extended save-flag bank at save-data offsets 0x270 through 0x2EF, corresponding exactly to VM variables save_flags_1f0[1024] through save_flags_1f0[2047] |
 | `0x136` | `play_rumble_pattern` | pattern_id_1_based, duration_frames | starts one of the resident rumble patterns, converting the one-based script ID to the zero-based 60-byte pattern table, and stops it after duration_frames; zero leaves the general 600-frame safety limit in force. The request is ignored when no rumble device is present or the save option disables rumble |
+| `0x137` | `stop_rumble_pattern` | 0 literal args | stops the active Rumble Pak pattern when rumble hardware support is enabled. It cancels the pattern alarm, writes the off value to the Rumble Pak register at 0x08001000, and clears the resident active flag |
+| `0x139` | `set_field_timer_value` | minutes, seconds, frame_subcounter | sets the field timer's signed-byte minute, second, and 60-Hz frame components, recomputes displayed hundredths as floor(100 * frame_subcounter / 60), stops its count rate, and clears pause. The timer displays two-digit minutes, seconds, and hundredths; field[28], field[29], field[30], and field[31] expose minutes, seconds, hundredths, and the raw frame component |
+| `0x13A` | `set_field_timer_display_position` | screen_side_or_current, x, y | selects the DS display engine and pixel position for the field timer. screen_side_or_current -1 resolves to the calling field's screen side. The sentinel -32768 selects the built-in coordinate 87 for X or 88 for Y |
+| `0x13B` | `set_field_timer_visible` | visible | shows or hides the field timer and acquires or releases its display resources on the screen selected by opcode 0x13A; counting state is unchanged |
+| `0x13C` | `set_field_timer_count_rate` | ticks_per_frame, persist_across_field_changes | sets the timer's signed-byte change applied to its 60-Hz frame component on every field update. Positive values count upward, negative values count downward, and zero stops counting without hiding the display. The timer saturates and stops at 99:59.99 upward or 00:00.00 downward. persist_across_field_changes prevents normal field teardown from hiding and stopping the timer |
+| `0x13D` | `pause_field_timer` | 0 literal args | pauses the field timer by setting its update-inhibit flag while preserving its count rate, value, visibility, and display resources |
+| `0x13E` | `resume_field_timer` | 0 literal args | resumes the field timer by clearing its update-inhibit flag; a zero count rate remains stopped |
+| `0x13F` | `stop_field_timer` | 0 literal args | stops the field timer by setting its count rate to zero, hides it, and releases its display resources. The current minute, second, frame, and hundredth values remain available to field variables |
 | `0x140` | `open_screen_message` | x_or_center, y, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window at screen coordinates, deriving zero dimensions from the selected message and accepting -32768 as horizontally centered; configurable tail-placement fields are packed into the resident eight-slot message manager |
 | `0x141` | `open_entity_message` | entity_selector, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window anchored to an entity, automatically placing and clamping the box and its tail within the 256 by 192 screen; when invoked by an entity-owned VM it also avoids overlap with the linked owner |
 | `0x142` | `wait_message_finished` | message_slot_selector | selectors at least zero address one of eight slots; -2 matches both screens and other negative values match the current field screen |
@@ -332,22 +342,18 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-251/289 used opcodes and
-387,059/387,272 reachable commands
+261/289 used opcodes and
+387,134/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x137` | 22 |
-| `0x130` | 16 |
 | `0x0E7` | 14 |
 | `0x073` | 14 |
 | `0x0E9` | 11 |
 | `0x0E8` | 11 |
 | `0x113` | 9 |
 | `0x061` | 9 |
-| `0x13F` | 8 |
-| `0x13D` | 8 |
 | `0x145` | 7 |
 | `0x075` | 7 |
 | `0x04C` | 7 |
@@ -357,7 +363,11 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x138` | 5 |
 | `0x079` | 5 |
 | `0x05E` | 5 |
-| `0x13E` | 4 |
+| `0x06B` | 3 |
+| `0x076` | 2 |
+| `0x05F` | 2 |
+| `0x135` | 1 |
+| `0x134` | 1 |
 
 ## Menu/UI scene scripts
 
