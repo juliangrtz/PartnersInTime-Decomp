@@ -4,6 +4,7 @@
 #include <nitro.h>
 
 struct BattleActor;
+struct BattleHitRecord;
 struct BattleSceneObject;
 
 int BattleDamage_CalculateBase(int attacker_id, int defender_id, int scale_q8);
@@ -20,5 +21,14 @@ void BattleDamage_StartEffectReaction(struct BattleSceneObject *object,
                                       int effect_id);
 void BattleDamage_StartEnemyReaction(struct BattleSceneObject *object,
                                      int effect_id);
+void BattleDamage_ApplyToParty(struct BattleSceneObject *object,
+                               int popup_offset_x, int popup_offset_y,
+                               int damage, int hit_kind,
+                               struct BattleHitRecord *status_record);
+void BattleDamage_ApplyToEnemy(struct BattleSceneObject *object,
+                               int popup_offset_x, int popup_offset_y,
+                               int damage, int reaction_effect,
+                               int popup_effect, u16 attach_number);
+void BattleActor_HandleHitEquipmentEffect(int actor_id);
 
 #endif

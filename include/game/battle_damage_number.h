@@ -13,7 +13,7 @@ struct BattleDamageNumberEffect {
     u8 unknown_08[0x0C];
     s16 x;
     s16 y;
-    u8 unknown_18[2];
+    u16 digit_offset;
     union {
         u16 flags;
         struct {
@@ -24,6 +24,8 @@ struct BattleDamageNumberEffect {
         } flag_bits;
     };
     int value;
+    u8 unknown_20[4];
+    int party_style;
 };
 
 struct BattleDamageNumberPayload {
@@ -47,7 +49,7 @@ struct BattleDamageNumberTask {
 };
 
 typedef char BattleDamageNumberEffect_KnownSizeCheck
-    [sizeof(BattleDamageNumberEffect) == 0x20 ? 1 : -1];
+    [sizeof(BattleDamageNumberEffect) == 0x28 ? 1 : -1];
 typedef char BattleDamageNumberTask_SizeCheck
     [sizeof(BattleDamageNumberTask) == 0x14 ? 1 : -1];
 typedef char BattleDamageNumberPayload_SizeCheck

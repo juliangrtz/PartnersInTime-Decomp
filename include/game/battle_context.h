@@ -164,7 +164,9 @@ typedef struct BattleContext {
     void *screen_assets[2];
     u8 unknown_004c[0xC0];
     u16 ai_control_mask;
-    u8 unknown_010e[0x32];
+    u8 unknown_010e[0x1E];
+    s16 status_duration;
+    u8 unknown_012e[0x12];
     BattleArchiveReadRequest asset_read;
     u8 unknown_0168[0x18];
     BattleTextureUploadRequest texture_upload_requests[4];

@@ -67,6 +67,7 @@ BattleEffect *BattleDamage_SpawnNumber(int value, int x, int y,
                                        int effect_id, u16 attached_actor_id);
 int BattleSound_Play(int sound_id, int argument_1, int argument_2,
                      int argument_3);
+int BattleScreenEffect_StartPrimary(int kind, int duration, int delay);
 int BattleNumber_DrawDecimal(int value, int palette,
                              BattleSpriteTransform *transform, int object,
                              u16 render_flags, int first_digit, int spacing);

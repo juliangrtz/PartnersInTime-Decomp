@@ -4,8 +4,6 @@
 #include <game/battle_hit.h>
 #include <game/battle_scene.h>
 
-extern void BattleDamage_DispatchHit(BattleHitDescriptor *descriptor);
-
 enum {
     BATTLE_HIT_QUEUE_OFFSET = 0xCAD8,
     BATTLE_HIT_QUEUE_CAPACITY = 8,

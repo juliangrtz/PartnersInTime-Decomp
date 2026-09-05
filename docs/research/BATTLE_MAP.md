@@ -596,7 +596,7 @@ maximum HP. These two overlay functions and the resident
 
 Property IDs 16-20 directly expose current HP, max HP, POW, DEF, and SPD.
 
-`BattleDamage_ApplyToEnemy` is maintained end to end. It rejects already
+`BattleDamage_ApplyToEnemy` is byte-identical linked C. It rejects already
 defeated targets, clamps incoming damage to 1-999, calls the HP/KO primitive,
 selects the enemy hit reaction, preserves special-object state, computes the
 world/screen position for the damage number, honors the enemy record's popup
@@ -615,17 +615,19 @@ through effects `0x36A` and `0x36B`, selects final actor-state variants `0x36C`
 or `0x36D`, and releases the task pointer at actor offset `+0x2C` only after the
 last effect has disappeared.
 
-`BattleDamage_ApplyToParty` is maintained too. It clamps damage, clears status
-1, handles the special nonlethal hit kind, selects one of six party reaction
-paths, generates Mario/Luigi-specific popup metadata, and optionally decodes a
-post-hit status record into status ID, chance, magnitude, and the battle-wide
-duration before calling `BattleStatus_TryApply`.
+`BattleDamage_ApplyToParty` is byte-identical linked C too. It clamps damage,
+clears status 1, handles the special nonlethal hit kind, selects one of six
+party reaction paths, generates Mario/Luigi-specific popup metadata, and
+optionally decodes a post-hit status record into status ID, chance, magnitude,
+and the battle-wide duration before calling `BattleStatus_TryApply`.
 
-The maintained `BattleDamage_DispatchHit` is the common entry above those two
-paths. Its 20-byte hit record supplies target ID, hit coordinates, pending hit
-kind, and the optional party status payload. It accepts party IDs 56-59 and
-enemy IDs 60-67, resolves the corresponding scene object and actor, computes
-relative offsets, then dispatches to the exact target-specific implementation.
+The byte-identical linked `BattleDamage_DispatchHit` is the common entry above
+those two paths. Its 20-byte hit record supplies target ID, hit coordinates,
+pending hit kind, and the optional party status payload. It accepts party IDs
+56-59 and enemy IDs 60-67, resolves the corresponding scene object and actor,
+computes relative offsets, then dispatches to the target-specific
+implementation. Together with the equipment hook, these four functions cover
+the complete 2,244-byte region at `0x0209D718`-`0x0209DFDC`.
 The adjacent party/enemy reaction code is now a byte-identical, linked C unit.
 Its starters allocate or reuse the per-actor task at `actor + 0x28`, set actor
 flag `0x200` while the reaction is active, and install their original update
