@@ -4,11 +4,13 @@ This repository is a work in progress. Its long-term goal is a fully
 source-buildable, mod-friendly reconstruction of the Nintendo DS game, not a
 collection of binary patches.
 
-No ROM, generated machine-code dump, graphical/audio asset, or opaque extracted
-game binary belongs in this repository. Reconstructed source plus understood,
-editable non-graphical text and data tables are versioned. You must supply your
-own matching ROM for verification and packaging. Generated sources and build
-outputs stay below `build/`, which is ignored by Git.
+No ROM, generated machine-code dump, in-game text, event-script dump, data-table
+export, graphical/audio asset, opaque extracted game binary, or proprietary
+compiler belongs in this repository. Reconstructed source, reverse-engineering
+metadata, original tooling, and documentation are versioned. You must supply
+your own matching ROM and a lawfully obtained compatible compiler for
+verification and packaging. Extracted data, local tools, generated sources, and
+build outputs stay in paths ignored by Git.
 
 ## Decompilation progress
 
@@ -229,7 +231,8 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   formation/resource transition is also readable C; it remains on its original
   reference object until the last Metrowerks register-allocation differences
   are resolved.
-- The European editable-data project covers 21 multilingual MFset archives,
+- The local European editable-data exporter covers 21 multilingual MFset
+  archives,
   10,510 battle/field dialogue strings, and all 98 enemy-stat records. Its
   inverse encoders also cover all 765 treasure records, reproduce every covered
   binary byte for byte before edits, and support length-changing text. Four
@@ -242,9 +245,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   into Git. The field, battle, and scene VM descriptor tables are now completely
   named, and every instance-specific opcode has an evidence-backed semantic
   contract. In particular, all 260 battle opcodes and all 189 opcodes reached by
-  the original battle scripts are human-readable in the checked-in data source;
+  the original battle scripts are human-readable in the locally exported data
+  source;
   no neutral `op_000`-style battle instructions remain. The 387,272 reachable
-  field-event commands are checked in as 638 room-level source files and compile
+  field-event commands are exported as 638 room-level source files and compile
   through the normal data-mod/ROM build. Field dialogue and event changes are
   merged conflict-safely into their shared `FEvent/FEvData.dat` archive.
 
@@ -284,6 +288,8 @@ Requirements:
 
 - Python 3.11 or newer;
 - LLVM tools `llvm-mc`, `ld.lld`, and `llvm-objcopy` on `PATH`;
+- a lawfully obtained compatible Metrowerks ARM toolchain for matching C/C++
+  builds, placed below ignored `tools/mwccarm/` or passed with `--compiler`;
 - your own matching NDS ROM.
 
 Check the environment:
@@ -373,10 +379,12 @@ root, and launches it in DeSmuME. Put your own matching ROM at
 `extract/baserom_PiT_eur.nds` first; neither the private input nor the built ROM
 is tracked by Git.
 
-The same run configuration also detects `data/eur/project.json` and rebuilds
-the editable text and enemy-stat documents into a staged NitroFS before final
-packaging. It never changes the private extraction. Use `-DisableDataMods` with
-`tools/build_nds.ps1` when an unmodified data tree is desired.
+The same run configuration also detects the ignored local
+`data/eur/project.json` and rebuilds editable documents into a staged NitroFS
+before final packaging. It never changes the private extraction. Use
+`-DisableDataMods` with `tools/build_nds.ps1` when an unmodified data tree is
+desired. See [`docs/LOCAL_PRIVATE_CONTENT.md`](docs/LOCAL_PRIVATE_CONTENT.md)
+before exporting or copying game-derived files.
 
 Select `Build and Run EUR NDS` in CLion's run-configuration menu and press Run.
 Its configured emulator is
