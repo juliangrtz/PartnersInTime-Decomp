@@ -251,7 +251,8 @@ and runtime overlay 2.
 | `020A80A8` | `BattleStatus_StartEnemyAilment3Visual` | Byte-identical enemy status-3 model starter |
 | `020A81B4` | `BattleStatus_UpdateEnemyAilment2Visual` | Byte-identical enemy status-2 effect and animation cleanup callback |
 | `020A8254` | `BattleStatus_StartEnemyAilment2Visual` | Byte-identical enemy status-2 effect starter |
-| `020A8320` | `BattleStatus_StopActorEffect` | Stops the actor-local timer or stat delta for one status ID |
+| `020A8320` | `BattleStatus_StopActorEffect` | Byte-identical router that releases one actor-local status visual |
+| `020A855C` | `BattleStatus_SpawnEffect` | Byte-identical party/enemy status-visual constructor router |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
 | `02018F48` | `ItemEffect_CalculateValue` | Resident item-record value calculation and HP clamps |
@@ -635,6 +636,13 @@ then starts the stat record's configured hit animation. The callback keeps the
 effect's vertical animation offset synchronized until the group-1 status slot
 changes owner; cleanup either restores animation 0 or defers to a live damage
 reaction task.
+
+The adjacent visual routing unit is byte-identical C. It dispatches status IDs
+1-8 to separate party and enemy constructors, stores each returned task in the
+matching 12-byte actor status record, and confirms that enemy status 1 has no
+visual task. Its paired stop router clears a visual owner only when the shared
+ailment record still contains the requested subtype; POW, DEF, and SPD task
+pointers are released directly.
 
 Party status ID 3 now also has an exact linked C++ implementation. The starter
 loads object-data slot 9, chooses a model animation from the six party
