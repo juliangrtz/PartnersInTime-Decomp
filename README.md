@@ -269,7 +269,8 @@ against a private extraction with `tools/extract_script_vm_descriptors.py`.
 9.1/9.2 ARM32 database imports and batch Hex-Rays helpers for the resident ARM9
 and every overlay.
 [`docs/DATA_MODDING.md`](docs/DATA_MODDING.md) documents editable text/stats,
-control tokens, validation, and ROM packaging.
+control tokens, validation, ROM packaging, and the lossless high-level
+field-event language in [`tools/pit_language_compiler.py`](tools/pit_language_compiler.py).
 [`docs/research/RUNTIME_ANALYSIS.md`](docs/research/RUNTIME_ANALYSIS.md)
 documents the py-desmume capture workflow, compatible-state creation, overlay
 identification, memory hooks, and domain-specific battle snapshots.

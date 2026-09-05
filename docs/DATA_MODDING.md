@@ -79,6 +79,74 @@ The number of profiles or waypoints cannot yet change. General size-changing
 field-script edits remain locked until relocation rules for all field
 control-flow and embedded-data opcodes are complete.
 
+## High-level field-event language
+
+`tools/pit_language_compiler.py` is a strict, lossless source frontend for one
+`pit-field-event-room-v1` shard at a time. It replaces the flat JSON command
+list with object-oriented calls, scoped inline actor scripts, symbolic VM
+variables, relocatable labels, and structured forms for the canonical shipped
+counted loop:
+
+```text
+room 0 {
+  metadata { "schema": "pit-field-event-room-v1", "source": "FEvent/FEvData.dat" }
+
+  member 0 {
+    section 0x038C {
+      script_000:
+      state_24[0] = Actor.OpenMessage(7, 0, 0, 1, 1, -1, 0, -1, 0, -1, 0, 2);
+
+      async Actor.Run(7, 0) {
+        Actor.SetPosition(7, 0, 158, 300, 96);
+        Flow.Return();
+      }
+
+      for (loop_counter = 18; loop_counter != 0; loop_counter--) {
+        VM.Wait(1);
+      }
+    }
+
+    metadata { "source_entry_size": 3864, "pointer_table_size": 376 }
+  }
+}
+```
+
+The real generated metadata block contains the complete private-source layout
+contract and appears after the executable code so it does not obstruct normal
+editing. Embedded roaming profiles and waypoint paths use typed `data` blocks.
+Opaque halfwords inside an otherwise structured inline range are represented
+as `padding N;`; their original bytes remain in the user's private source.
+
+Decompiler and compiler usage:
+
+```powershell
+python .\tools\pit_language_compiler.py decompile `
+  .\data\eur\scripts\FEvent__FEvData.dat\room_000.json `
+  .\build\room_000.pit
+
+python .\tools\pit_language_compiler.py compile `
+  .\build\room_000.pit `
+  .\data\eur\scripts\FEvent__FEvData.dat\room_000.json
+```
+
+The Python API exposes the same operations as
+`decompile_json_to_script(json_data)` and `compile_script_to_json(script_text)`.
+The compiler derives every command boundary, local label, signed relative
+halfword displacement, `code_targets` entry, and `inline_size_halfwords` value
+from its AST. A variable expression such as `context[2]` remains distinct from
+the literal `2`; descriptor bit 6 is checked before a variable argument is
+accepted. The decompiler adds non-semantic `//` comments for verified room
+contexts and for dialogue, camera, party, battle, and actor choreography.
+
+The complete European corpus test currently covers all 638 room shards and 778
+script-bearing members, including 2,739 inline actor scripts and all 434 shipped
+counted loops. Decompile/compile followed by the existing field-event builder
+reproduces `FEvData.dat` byte-for-byte. The current binary builder still enforces
+the original command boundaries, so use same-size source edits for ROM mods
+today. The language compiler already relocates size-changing edits in its output
+JSON; making those JSON layouts buildable requires the later full-member
+relocator described in `REASSEMBLY_PLAN.md`.
+
 The Menu/UI scene VM in overlay 7 uses three smaller `MenuAI` archives. Its
 editable document is `data/eur/scripts/MenuAI__scene_scripts.json`; the normal
 data build compiles all three archives from that one document. It covers all 18
