@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 179 | 128 | `config/eur/field_vm.json` |
+| Field/world | 341 | 180 | 129 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -193,6 +193,7 @@ field context (the other DS screen/field instance).
 | `0x0BD` | `cancel_party_actions` | party_side_or_minus_one, action_type_mask | requests normalization/cancellation of the current field action when its action-type bit is present in action_type_mask; party side -1 applies the request to both active parties |
 | `0x0BE` | `wait_party_actions_idle` | party_side | retries the same command while the selected party's leader, follower, or attached action entities have not returned to an idle field state |
 | `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
+| `0x0CC` | `set_party_piggyback_state` | piggybacked | sets the party manager's persistent adult/baby piggyback-state marker. The marker is serialized into the field-party snapshot and restored when the next field reconstructs the party; it does not itself move or attach actors. Shipped cutscenes clear it before controlling all four members independently and set it again immediately before or after reuniting them with opcode 0x0B1 |
 | `0x0CE` | `set_party_leader_animation_override` | party_side, enabled | enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30 |
 | `0x0D4` | `activate_field_map_event` | map_event_index | activates the indexed 20-byte field-map event record, applies its persistent enable/disable save flags, reloads referenced map layers when present, applies the returned map state, and dirties map-synchronized entities |
 | `0x0D5` | `start_map_tile_animation` | animation_index | starts the indexed room tilemap animation when its descriptor supports animation and the slot is idle; the first frame is copied immediately and the descriptor's frame timer and frame index are initialized |
@@ -232,13 +233,12 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-155/289 used opcodes and
-382,596/387,272 reachable commands
+156/289 used opcodes and
+382,916/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x0CC` | 320 |
 | `0x0D1` | 221 |
 | `0x116` | 216 |
 | `0x0CF` | 213 |
@@ -258,6 +258,7 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x12B` | 77 |
 | `0x11F` | 74 |
 | `0x12F` | 71 |
+| `0x051` | 71 |
 
 ## Menu/UI scene scripts
 
