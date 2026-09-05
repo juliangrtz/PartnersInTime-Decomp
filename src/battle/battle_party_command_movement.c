@@ -43,14 +43,6 @@ enum BattlePartyCommandConstant {
     BATTLE_LUIGI_CARRY_RESOURCE_ID = (int)0xC000000D
 };
 
-extern void func_ov002_020a404c(BattleSceneObject *object, int channel_index,
-                                int argument_2, int argument_3, int argument_4,
-                                int initial_z, int peak_z, int speed,
-                                int enabled);
-extern void func_ov002_020a40d4(BattleSceneObject *object, int channel_index,
-                                int argument_2, int argument_3, int argument_4,
-                                int initial_z, int target_z, int speed,
-                                int enabled);
 extern int BattleParty_SpawnLaunchImpact(BattleActor *actor);
 
 static inline int
@@ -105,7 +97,8 @@ u32 BattlePartyActor_UpdateCommandMovement(BattlePartyActor *actor) {
                     *(u16 *)(gBattleContext + BATTLE_ACTIVE_ACTOR_ID_OFFSET) &&
                 object->z > 16) {
                 BattleSceneObject_AdjustPosition(object, 0, 0, 16 - object->z);
-                func_ov002_020a40d4(object, 3, 0, 0, 1, -object->z, 0, -256, 1);
+                BattleSceneObject_StartScaledAcceleratedMotion(
+                    object, 3, 0, 0, 1, -object->z, 0, -256, 1);
                 *(u16 *)(gBattleContext + BATTLE_PARTY_LANDING_STATE_OFFSET) =
                     1;
             }
@@ -159,7 +152,8 @@ u32 BattlePartyActor_UpdateCommandMovement(BattlePartyActor *actor) {
             input_mask) {
             BattleSceneObject_SetAnimation(object, BATTLE_ANIMATION_JUMP, 0);
             BattleSceneObject_SetStateFlags(object, 1, 0);
-            func_ov002_020a404c(object, 3, 0, 0, 1, 0, 24, 1536, 1);
+            BattleSceneObject_StartMotionWithPeakDistance(
+                object, 3, 0, 0, 1, 0, 24, 1536, 1);
             actor->state_flags.command_bits.airborne = 1;
 
             switch (actor->formation_index) {
@@ -228,7 +222,8 @@ u32 BattlePartyActor_UpdateCommandMovement(BattlePartyActor *actor) {
             BattleSceneObject_SetAnimation(object, BATTLE_ANIMATION_LAUNCH_BABY,
                                            0);
             BattleSceneObject_SetStateFlags(object, 1, 0);
-            func_ov002_020a404c(object, 3, 0, 0, 1, 0, 24, 1536, 1);
+            BattleSceneObject_StartMotionWithPeakDistance(
+                object, 3, 0, 0, 1, 0, 24, 1536, 1);
             actor->state_flags.command_bits.carried_baby_phase =
                 BATTLE_CARRIED_BABY_LAUNCHING;
             BattleSound_Play(41, 0, 0, 0);

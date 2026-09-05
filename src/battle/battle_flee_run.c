@@ -54,10 +54,6 @@ enum BattleFleeRunConstant {
 };
 
 extern int Random_NextModulo(int modulus);
-extern int BattleMotion_StartBallistic(
-    BattleSceneObject *object, int channel_index,
-    int direction_x, int direction_y, int direction_z,
-    int initial_speed, int terminal_speed, int duration, int enabled);
 extern int BattleParty_SpawnLaunchImpact(BattleActor *actor);
 
 static inline int BattleFlee_HasReducedCoinLoss(int actor_id) {

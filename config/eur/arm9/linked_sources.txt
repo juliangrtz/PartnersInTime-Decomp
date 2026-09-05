@@ -62,6 +62,7 @@ src/battle/battle_object_effect_delay.c
 src/battle/battle_scene_render.cpp
 src/battle/battle_scene_shadows.cpp
 src/battle/battle_scene_object.c
+src/battle/battle_scene_accelerated_motion.c
 src/battle/battle_scene_movement.c
 src/battle/battle_scene_motion_list.c
 src/battle/battle_scene_motion_channel.c
