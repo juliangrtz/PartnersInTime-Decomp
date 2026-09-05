@@ -5,9 +5,12 @@
 #include <game/battle_flee.h>
 #include <game/battle_scene.h>
 #include <game/save_data.h>
+#include <hardware.h>
 
 enum BattleFleeRunConstant {
     BATTLE_FLEE_INPUT_OFFSET = 0x104,
+    BATTLE_FLEE_NEXT_STATE_OFFSET = 0x18,
+    BATTLE_FLEE_ACTIVE_OBJECT_ID_OFFSET = 0x20,
     BATTLE_FLEE_HELPER_OBJECT_ID = 40,
     BATTLE_FLEE_SAVE_COIN_COUNT_OFFSET = 0x488,
     BATTLE_FLEE_SAVE_ESCAPE_MODIFIER_OFFSET = 0x418,
@@ -29,12 +32,35 @@ enum BattleFleeRunConstant {
     BATTLE_FLEE_MARIO_VOICE_ID = 16388,
     BATTLE_FLEE_LUIGI_VOICE_ID = 16450,
     BATTLE_FLEE_BABY_MARIO_VOICE_ID = 16478,
-    BATTLE_FLEE_BABY_LUIGI_VOICE_ID = 16499
+    BATTLE_FLEE_BABY_LUIGI_VOICE_ID = 16499,
+    BATTLE_FLEE_MARIO_OBJECT_ID = 56,
+    BATTLE_FLEE_LUIGI_OBJECT_ID = 57,
+    BATTLE_FLEE_MARIO_RUN_RESOURCE_ID = 5,
+    BATTLE_FLEE_LUIGI_RUN_RESOURCE_ID = 6,
+    BATTLE_FLEE_MARIO_LAUNCH_X = 78,
+    BATTLE_FLEE_LUIGI_LAUNCH_X = 70,
+    BATTLE_FLEE_MARIO_RETURN_X = 46,
+    BATTLE_FLEE_MARIO_RETURN_Y = 152,
+    BATTLE_FLEE_LUIGI_RETURN_X = 56,
+    BATTLE_FLEE_LUIGI_RETURN_Y = 112,
+    BATTLE_FLEE_BALLISTIC_CHANNEL = 2,
+    BATTLE_FLEE_RUN_MOTION_CHANNEL = 1,
+    BATTLE_FLEE_LAUNCH_SOUND_ID = 214,
+    BATTLE_FLEE_BABY_LAUNCH_SOUND_ID = 218,
+    BATTLE_FLEE_BATTLE_EXIT_STATE = 0x500D,
+    BATTLE_FLEE_SCENE_RETURN_STATE = 0x2006,
+    BATTLE_FLEE_SAVE_RESULT_OFFSET = 0x55E,
+    BATTLE_FLEE_SAVE_RESULT_FLED = 2
 };
 
 extern int Random_NextModulo(int modulus);
 extern void func_ov002_020a2728(int effect_id, int duration,
                                 BattleSceneObject *object);
+extern int BattleMotion_StartBallistic(
+    BattleSceneObject *object, int channel_index,
+    int direction_x, int direction_y, int direction_z,
+    int initial_speed, int terminal_speed, int duration, int enabled);
+extern int BattleParty_SpawnLaunchImpact(BattleActor *actor);
 
 static inline int BattleFlee_HasReducedCoinLoss(int actor_id) {
     BattleActor *actor = BattleActor_GetById(actor_id);
@@ -46,6 +72,175 @@ static inline int BattleFlee_HasReducedCoinLoss(int actor_id) {
 }
 
 /* Functions in this translation unit are ordered for MWCC's reverse emission. */
+void BattleFlee_CommitBattleExit(BattleAITask *base_task) {
+    u32 runtime_flags =
+        *(u32 *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET);
+
+    if ((runtime_flags << 17) >> 31) {
+        *(u32 *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET) =
+            runtime_flags & ~(1 << 14);
+        return;
+    }
+
+    *(u16 *)(gSaveData + BATTLE_FLEE_SAVE_RESULT_OFFSET) =
+        BATTLE_FLEE_SAVE_RESULT_FLED;
+    *(u32 *)(gBattleContext + BATTLE_FLEE_NEXT_STATE_OFFSET) =
+        BATTLE_FLEE_BATTLE_EXIT_STATE;
+    base_task->callback = 0;
+}
+
+void BattleFlee_UpdateSceneTransition(BattleAITask *base_task) {
+    BattleSceneObject *object;
+    int delta_x;
+    int delta_y;
+
+    if (((*(u32 *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET) << 17) >>
+         31)) {
+        *(u32 *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET) &= ~(1 << 14);
+        return;
+    }
+    if (BattleSceneObject_IsAnimationActiveById(
+            BATTLE_FLEE_MARIO_OBJECT_ID, BATTLE_FLEE_BALLISTIC_CHANNEL)) {
+        return;
+    }
+    if (BattleSceneObject_IsAnimationActiveById(
+            BATTLE_FLEE_LUIGI_OBJECT_ID, BATTLE_FLEE_BALLISTIC_CHANNEL)) {
+        return;
+    }
+    if (!((*(u32 *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET) << 15) >>
+          31)) {
+        BattleFlee_FinishSceneTransition(base_task);
+        return;
+    }
+
+    object = BattleSceneObject_GetById(
+        *(u16 *)(gBattleContext + BATTLE_FLEE_ACTIVE_OBJECT_ID_OFFSET));
+    if (*(u16 *)(gBattleContext + BATTLE_FLEE_ACTIVE_OBJECT_ID_OFFSET) ==
+        BATTLE_FLEE_MARIO_OBJECT_ID) {
+        delta_x = BATTLE_FLEE_MARIO_RETURN_X - object->x;
+        delta_y = BATTLE_FLEE_MARIO_RETURN_Y - object->y;
+    } else {
+        delta_x = BATTLE_FLEE_LUIGI_RETURN_X - object->x;
+        delta_y = BATTLE_FLEE_LUIGI_RETURN_Y - object->y;
+    }
+
+    *rSQRTCNT = SQRTCNT_MODE_32;
+    *rSQRT_PARAM_L = delta_x * delta_x + delta_y * delta_y;
+    while ((*rSQRTCNT & SQRTCNTF_BUSY) != 0) {
+    }
+    BattleSceneObject_MoveBy(
+        object, BATTLE_FLEE_BALLISTIC_CHANNEL,
+        delta_x, delta_y, 0, (s32)*rSQRT_RESULT / 3);
+    BattleSceneObject_SetAnimation(object, 4, -1);
+    object->primary_model->flag_bits.facing_left = delta_x < 0;
+    base_task->callback = BattleFlee_FinishSceneTransition;
+}
+
+void BattleFlee_FinishSceneTransition(BattleAITask *base_task) {
+    BattleSceneObject *object;
+
+    if (BattleSceneObject_IsAnimationActiveById(
+            *(u16 *)(gBattleContext + BATTLE_FLEE_ACTIVE_OBJECT_ID_OFFSET),
+            BATTLE_FLEE_BALLISTIC_CHANNEL)) {
+        return;
+    }
+
+    object = BattleSceneObject_GetById(
+        *(u16 *)(gBattleContext + BATTLE_FLEE_ACTIVE_OBJECT_ID_OFFSET));
+    BattleSceneObject_SetAnimation(object, 0, -1);
+    object->primary_model->flags &= ~BATTLE_MODEL_FLAG_10;
+    *(u32 *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET) &= ~(1 << 22);
+    *(u32 *)(gBattleContext + BATTLE_FLEE_NEXT_STATE_OFFSET) =
+        BATTLE_FLEE_SCENE_RETURN_STATE;
+    base_task->callback = 0;
+}
+
+void BattleFlee_WaitToLaunchPartner(BattleAITask *base_task) {
+    BattleFleeTask *task = (BattleFleeTask *)base_task;
+    BattleFleeState *state = &task->data;
+    BattleFleeState *partner_state =
+        state->partner_task != 0 ? &state->partner_task->data : 0;
+
+    if (partner_state == 0 || !partner_state->flags.bits.ready_for_partner) {
+        state->flags.bits.launch_delay = 0;
+        task->callback = BattleFlee_LaunchActor;
+    }
+}
+
+void BattleFlee_LaunchActor(BattleAITask *base_task) {
+    BattleFleeTask *task = (BattleFleeTask *)base_task;
+    BattleFleeState *state = &task->data;
+    BattleSceneObject *object;
+    int duration;
+    int target_x;
+
+    u16 launch_delay = state->flags.bits.launch_delay;
+
+    if (launch_delay != 0) {
+        state->flags.bits.launch_delay =
+            (u16)(launch_delay + 0xFFFF);
+    }
+    if (state->flags.bits.launch_delay != 0) {
+        return;
+    }
+
+    object = BattleSceneObject_GetById(state->object_id);
+    if (state->object_id == BATTLE_FLEE_MARIO_OBJECT_ID) {
+        BattleEntity_BindResource(BATTLE_FLEE_MARIO_OBJECT_ID,
+                                  BATTLE_FLEE_MARIO_RUN_RESOURCE_ID);
+    } else {
+        BattleEntity_BindResource(BATTLE_FLEE_LUIGI_OBJECT_ID,
+                                  BATTLE_FLEE_LUIGI_RUN_RESOURCE_ID);
+    }
+    if (BattleContext_GetRuntimeState()->flags.bits.alternate_formation) {
+        object->animation_variant_offset = 3;
+    }
+    BattleSceneObject_SetAnimation(object, 0, -1);
+    object->primary_model->flags &= ~BATTLE_MODEL_ANIMATION_MODE_MASK;
+    object->primary_model->flags &= ~BATTLE_MODEL_FLAG_09;
+    duration = BattleMotion_StartBallistic(
+        object, BATTLE_FLEE_BALLISTIC_CHANNEL, 0, 0, 1,
+        0, -128, 32, 1);
+    target_x = object->actor_id == BATTLE_FLEE_MARIO_OBJECT_ID
+                   ? BATTLE_FLEE_MARIO_LAUNCH_X
+                   : BATTLE_FLEE_LUIGI_LAUNCH_X;
+    BattleSceneObject_MoveBy(
+        object, BATTLE_FLEE_RUN_MOTION_CHANNEL,
+        target_x - object->x, 0, 0, duration);
+
+    switch (((BattlePartyActor *)BattleActor_GetPartySlot(object->actor_id))
+                ->formation_index) {
+        case BATTLE_FORMATION_MARIO:
+        case BATTLE_FORMATION_MARIO_CARRYING:
+            BattleSound_Play(BATTLE_FLEE_LAUNCH_SOUND_ID, 0, 0, 0);
+            break;
+        case BATTLE_FORMATION_LUIGI:
+        case BATTLE_FORMATION_LUIGI_CARRYING:
+            BattleSound_Play(BATTLE_FLEE_LAUNCH_SOUND_ID, 0, 0, 0);
+            break;
+        case BATTLE_FORMATION_BABY_MARIO:
+            BattleSound_Play(BATTLE_FLEE_BABY_LAUNCH_SOUND_ID, 0, 0, 0);
+            break;
+        case BATTLE_FORMATION_BABY_LUIGI:
+            BattleSound_Play(BATTLE_FLEE_BABY_LAUNCH_SOUND_ID, 0, 0, 0);
+            break;
+        default:
+            break;
+    }
+    task->callback = BattleFlee_WaitForLaunchAnimation;
+}
+
+void BattleFlee_WaitForLaunchAnimation(BattleAITask *base_task) {
+    BattleFleeTask *task = (BattleFleeTask *)base_task;
+    BattleFleeState *state = &task->data;
+
+    if (!BattleSceneObject_IsAnimationActiveById(state->object_id, 1)) {
+        BattleParty_SpawnLaunchImpact(
+            BattleActor_GetPartySlot(state->object_id));
+        task->callback = BattleFlee_BeginRun;
+    }
+}
+
 void BattleFlee_BeginRun(BattleAITask *base_task) {
     BattleFleeTask *task = (BattleFleeTask *)base_task;
     BattleFleeState *state = &task->data;

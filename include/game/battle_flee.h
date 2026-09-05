@@ -7,7 +7,7 @@
 typedef union BattleFleeFlags {
     u16 raw;
     struct {
-        u16 unknown_00_13 : 14;
+        u16 launch_delay : 14;
         u16 ready_for_partner : 1;
         u16 unknown_15 : 1;
     } bits;
@@ -43,6 +43,12 @@ extern "C" {
 
 void BattleFlee_BeginRun(BattleAITask *task);
 void BattleFlee_UpdateRun(BattleAITask *task);
+void BattleFlee_WaitForLaunchAnimation(BattleAITask *task);
+void BattleFlee_LaunchActor(BattleAITask *task);
+void BattleFlee_WaitToLaunchPartner(BattleAITask *task);
+void BattleFlee_FinishSceneTransition(BattleAITask *task);
+void BattleFlee_UpdateSceneTransition(BattleAITask *task);
+void BattleFlee_CommitBattleExit(BattleAITask *task);
 void BattleFlee_WaitForExitAnimation(BattleAITask *task);
 void BattleFlee_MoveActorOffscreen(BattleAITask *task);
 void BattleFlee_WaitForPartnerExit(BattleAITask *task);
