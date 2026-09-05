@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 5.69 percent is matching C/C++ and 6.29 percent has matching C/C++ or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 5.71 percent is matching C/C++ and 6.29 percent has matching C/C++ or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -13,17 +13,17 @@
 <rect class="bg" width="1200" height="760" rx="12"/>
 <text x="28.0" y="34.0" class="eyebrow">DECOMPILATION PROGRESS · EUROPEAN ROM</text>
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
-<text x="28.0" y="113.0" class="percent">5.69%</text>
+<text x="28.0" y="113.0" class="percent">5.71%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C/C++</text>
 <text x="1172.0" y="63.0" class="subtitle" text-anchor="end">6.29% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="65.042" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="93.042" y="130" width="6.871" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="65.343" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="93.343" y="130" width="6.570" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C/C++  86.8 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C/C++  87.2 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
-<text x="267.0" y="181.0" class="legend">Symbolic ASM  9.2 KiB</text>
+<text x="267.0" y="181.0" class="legend">Symbolic ASM  8.8 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
 <text x="487.0" y="181.0" class="legend">Remaining  1.40 MiB</text>
 <text x="1172.0" y="181.0" class="legend" text-anchor="end">Rectangle area = code bytes</text>
@@ -964,7 +964,7 @@
 <rect class="cell" x="379.27" y="539.88" width="11.42" height="12.34" fill="#263244"><title>Overlay 02 · func_ov002_020705e0 · 416 B · remaining</title></rect>
 <rect class="cell" x="379.27" y="552.22" width="11.42" height="12.34" fill="#2dd4a0"><title>Overlay 02 · battle_flee_run · 416 B · matching C/C++</title></rect>
 <rect class="cell" x="379.27" y="564.55" width="11.42" height="12.22" fill="#2dd4a0"><title>Overlay 02 · battle_party_luigi_reload_finish · 412 B · matching C/C++</title></rect>
-<rect class="cell" x="379.27" y="576.77" width="11.42" height="12.22" fill="#38bdf8"><title>Overlay 02 · BattleParty_UpdateMarioReloadFinish · 412 B · symbolic ASM</title></rect>
+<rect class="cell" x="379.27" y="576.77" width="11.42" height="12.22" fill="#2dd4a0"><title>Overlay 02 · battle_party_mario_reload_finish · 412 B · matching C/C++</title></rect>
 <rect class="cell" x="379.27" y="588.99" width="11.42" height="12.10" fill="#263244"><title>Overlay 02 · func_ov002_0206f3cc · 408 B · remaining</title></rect>
 <rect class="cell" x="379.27" y="601.09" width="11.42" height="11.98" fill="#2dd4a0"><title>Overlay 02 · battle_status_party_ailment2 · 404 B · matching C/C++</title></rect>
 <rect class="cell" x="379.27" y="613.08" width="11.42" height="11.98" fill="#263244"><title>Overlay 02 · func_ov002_020b8874 · 404 B · remaining</title></rect>

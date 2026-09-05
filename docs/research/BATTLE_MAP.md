@@ -215,7 +215,7 @@ and runtime overlay 2.
 | `020A8AA4` | `BattleParty_UpdateLuigiReloadStartRetreat` | Starts Luigi's timed off-screen retreat |
 | `020A8B80` | `BattleParty_UpdateLuigiReloadWaitAnimation` | Advances Luigi's KO recovery after the rebound animation is ready |
 | `020A8BEC` | `BattleParty_UpdateLuigiReloadWaitResource` | Waits for and binds Luigi's rebound resource |
-| `020A8C74` | `BattleParty_UpdateMarioReloadFinish` | Rebinds Mario/Baby Mario and completes linked KO recovery |
+| `020A8C74` | `BattleParty_UpdateMarioReloadFinish` | Byte-identical Mario/Baby Mario KO-recovery finalizer |
 | `020A8E10` | `BattleParty_UpdateMarioReloadRequestBaby` | Requests Baby Mario after the battle transition state |
 | `020A8E6C` | `BattleParty_UpdateMarioReloadWaitRetreat` | Transfers locks after Mario leaves the battle view |
 | `020A8F24` | `BattleParty_UpdateMarioReloadStartRetreat` | Starts Mario's timed off-screen retreat |
@@ -761,10 +761,9 @@ form-specific sound pairs, and installs `BattleParty_UpdateKnockout`. The
 update callback waits for the model flags, releases ordinary party actors, or
 for linked forms moves the paired scene object and chains into the appropriate
 Mario/Luigi follow-up load callback.
-The Luigi finalizer at `0x020A87F4` and the ten Mario and Luigi follow-up
-callbacks from `0x020A8990` through `0x020A90F4`, excluding the Mario finalizer,
-are now byte-identical linked C. The mirrored paths expose the whole
-asynchronous boundary explicitly. They
+Both finalizers and all ten Mario and Luigi follow-up callbacks from
+`0x020A87F4` through `0x020A90F4` are now byte-identical linked C. The mirrored
+paths expose the whole asynchronous boundary explicitly. They
 wait for resource slots 5 or 6, bind them to scene objects 56 or 57, play the
 rebound animation, interpolate an off-screen retreat on motion channel 3,
 transfer the actor lock to Baby Mario or Baby Luigi, and wait for battle state
