@@ -82,7 +82,7 @@ the same shape.
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
 | Field/world | 341 | 341 | 290 | `config/eur/field_vm.json` |
-| Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
+| Battle | 260 | 137 | 86 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 210 | 159 | `config/eur/scene_vm.json` |
 
 The field and scene tables are reproducibly extracted and checked against a private

@@ -113,6 +113,7 @@ def load_usage_config(version: str, name: str) -> dict:
 def render_markdown(
     descriptors: tuple[int, ...],
     names: dict[int, str],
+    battle_semantics_count: int,
     usage: Counter[int],
     entry_count: int,
     private_bytes: int,
@@ -256,7 +257,7 @@ def render_markdown(
         "| Instance | Descriptor entries | Named | Detailed contracts | Source |",
         "|---|---:|---:|---:|---|",
         f"| Field/world | {len(field['descriptor_values'])} | {len(field['known_names'])} | {len(field.get('opcode_semantics', {}))} | `config/eur/field_vm.json` |",
-        f"| Battle | {len(descriptors)} | {len(names)} | 0 | `config/eur/battle_ai_vm.json` |",
+        f"| Battle | {len(descriptors)} | {len(names)} | {battle_semantics_count} | `config/eur/battle_ai_vm.json` |",
         f"| Scene/object | {len(scene['descriptor_values'])} | {len(scene['known_names'])} | {len(scene.get('opcode_semantics', {}))} | `config/eur/scene_vm.json` |",
         "",
         "The field and scene tables are reproducibly extracted and checked against a private",
@@ -430,6 +431,9 @@ def main() -> int:
     )
     args = parser.parse_args()
     descriptors, names = data_mod.load_battle_vm_schema(args.version)
+    battle_config_path = ROOT / "config" / args.version / "battle_ai_vm.json"
+    battle_config = json.loads(battle_config_path.read_text(encoding="utf-8"))
+    battle_semantics_count = len(battle_config.get("opcode_semantics", {}))
     field = load_instance_config(args.version, "field")
     field_usage_document = load_usage_config(args.version, "field")
     scene = load_instance_config(args.version, "scene")
@@ -443,6 +447,7 @@ def main() -> int:
     report = render_markdown(
         descriptors,
         names,
+        battle_semantics_count,
         usage,
         entry_count,
         private_bytes,
