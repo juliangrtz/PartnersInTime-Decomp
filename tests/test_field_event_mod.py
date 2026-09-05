@@ -26,8 +26,16 @@ class FieldEventScriptTests(unittest.TestCase):
         descriptors = [0] * 0x10C
         descriptors[0x34] = 0x41
         descriptors[0x35] = 0x42
+        descriptors[0x93] = 0x42
+        descriptors[0x9A] = 0x42
         self.descriptors = tuple(descriptors)
-        self.names = {0: "end", 0x34: "branch_relative", 0x35: "set_aux_script_enabled"}
+        self.names = {
+            0: "end",
+            0x34: "branch_relative",
+            0x35: "set_aux_script_enabled",
+            0x93: "add_entity_roaming_profile",
+            0x9A: "load_entity_waypoint_path",
+        }
 
     @staticmethod
     def _member_with_private_alias() -> bytes:
@@ -110,6 +118,52 @@ class FieldEventScriptTests(unittest.TestCase):
             field_event_mod.build_document(
                 document, source, self.descriptors, self.names
             )
+
+    def test_exports_and_rebuilds_embedded_entity_motion_data(self) -> None:
+        header = struct.pack("<10H", *([20] * 10))
+        commands = b"".join(
+            (
+                struct.pack("<4H", 0x93, 0, 0xFFFF, 6),
+                struct.pack("<4H", 0x9A, 0, 0xFFFF, 14),
+                struct.pack("<H", 0),
+                b"\0\0",
+            )
+        )
+        roaming_profile = struct.pack("<6I", 5, 0x100, 4096, 30, 20, 4)
+        waypoint_path = struct.pack(
+            "<5I4i", 8, 1, 0, 1, 20, 10, 20, -5, 30
+        )
+        member = header + commands + roaming_profile + waypoint_path
+        source = data_mod.build_offset_archive([member, b"localized", b""])
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "FEvData.dat"
+            path.write_bytes(source)
+            document = field_event_mod.export_document(
+                path, "eur", self.descriptors, self.names
+            )
+
+        exported_member = document["members"][0]
+        self.assertEqual(exported_member["embedded_data_record_count"], 2)
+        self.assertEqual(
+            exported_member["commands"][0]["data_record"],
+            "roaming_profile_0028",
+        )
+        self.assertEqual(
+            exported_member["commands"][1]["data_record"],
+            "waypoint_path_0040",
+        )
+        records = exported_member["embedded_data_records"]
+        self.assertEqual(records[0]["step_distance"], 30)
+        self.assertEqual(records[1]["waypoints"][1], {"x": -5, "y": 30})
+
+        records[0]["speed_q12"] = 6144
+        records[1]["waypoints"][1]["x"] = -12
+        rebuilt = field_event_mod.build_document(
+            document, source, self.descriptors, self.names
+        )
+        rebuilt_member = data_mod.parse_offset_archive(rebuilt)[0]
+        self.assertEqual(struct.unpack_from("<I", rebuilt_member, 48)[0], 6144)
+        self.assertEqual(struct.unpack_from("<i", rebuilt_member, 92)[0], -12)
 
 
 if __name__ == "__main__":

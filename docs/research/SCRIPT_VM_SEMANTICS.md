@@ -45,12 +45,14 @@ room triplets. Part 1 is the localized 91-slot resource/dialogue container; part
 and the complete `u16` pointer-table size. Pointer slots 0..8 select fixed typed
 sections; event-script slots begin at byte `0x12`.
 
-A complete static pass over the 778 nonempty field-data members classifies 18,651
-unique slot targets as valid VM entry points and 704 as deliberately opaque/private
-targets. The valid graphs contain 387,377 unique reachable commands using 289
+A complete static pass over the 778 nonempty field-data members classifies 18,615
+unique slot targets as valid VM entry points and 698 as deliberately opaque/private
+targets. The valid graphs contain 387,272 unique reachable commands using 289
 opcodes. `tools/field_event_mod.py` exports this classification and byte-identically
 rebuilds the source while enforcing fixed command boundaries and valid branch
-targets. Private targets and all nine not-yet-fully-typed data sections remain copied
+targets. It also exposes 569 referenced movement records as editable
+roaming profiles and waypoint paths.
+Remaining private targets and all nine not-yet-fully-typed data sections are copied
 from the user's own extraction.
 
 The nine fixed pointer roles currently recovered from
@@ -79,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 156 | 105 | `config/eur/field_vm.json` |
+| Field/world | 341 | 170 | 119 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -149,6 +151,20 @@ field context (the other DS screen/field instance).
 | `0x08F` | `wait_entity_vertical_motion` | entity_selector | retries while entity vertical-motion flag 0x10 is set |
 | `0x090` | `stop_entity_vertical_motion` | entity_selector | cancels the selected entity's ballistic vertical motion, clears its three vertical-motion state flags, and discards the saved starting height |
 | `0x091` | `set_entity_position` | entity_selector, relative, x, y, z | converts coordinates to fx32, optionally adds the current position, and synchronizes current/previous entity position; subtype 8 uses only x/y while other entities also store z |
+| `0x092` | `set_entity_roaming_bounds` | entity_selector, minimum_x, minimum_y, maximum_x, maximum_y | stores the integer-map-unit rectangle used to constrain random roaming and marks roaming bounds as configured; the roaming controller converts each boundary to Q12 before comparing it with the entity's collision extents |
+| `0x093` | `add_entity_roaming_profile` | entity_selector, profile_relative_halfwords | copies the referenced profile into the first free one of four roaming-profile slots. The record contains five u32 values: a legacy parameter preserved as u16 but not consumed by the controller, Q12 movement speed, integer-map-unit step distance, post-step delay in frames, and direction count. Direction count 4 restricts choices to cardinal directions; the shipped alternative 8 permits all eight directions |
+| `0x094` | `set_entity_roaming_boundary_clamp_enabled` | entity_selector, clamp_to_bounds | when enabled, a randomly selected step that crosses the roaming rectangle is shortened to its boundary; when disabled, the controller rejects it and tries another random direction, up to eight attempts |
+| `0x095` | `start_entity_random_roaming` | entity_selector | selects a loaded profile and direction at random, starts one constrained movement step, and arms the entity update loop to continue choosing steps after each profile delay |
+| `0x096` | `stop_entity_random_roaming` | entity_selector | disarms the roaming controller and stops its currently owned entity movement, if any; loaded profiles and bounds remain available |
+| `0x097` | `pause_entity_random_roaming` | entity_selector | sets the roaming-controller pause flag and pauses a currently owned entity movement |
+| `0x098` | `resume_entity_random_roaming` | entity_selector | clears the roaming-controller pause flag and resumes a currently owned entity movement |
+| `0x099` | `clear_entity_roaming_profiles` | entity_selector | clears every loaded roaming-profile slot and stops the controller once its profile count reaches zero |
+| `0x09A` | `load_entity_waypoint_path` | entity_selector, path_relative_halfwords | loads an explicit waypoint path without starting it. The payload has four u32 controls followed by signed x/y waypoint pairs: ping-pong traversal, relative-coordinate mode, random next-direction selection, and post-segment delay in frames. Absolute points are converted to Q12; relative points are accumulated from the entity's current position, which is prepended as the first point |
+| `0x09B` | `start_entity_waypoint_path` | entity_selector | starts the loaded waypoint path at its first point distinct from the entity's current position; later entity updates traverse, wrap, reverse, or randomly choose direction according to the loaded controls |
+| `0x09C` | `stop_entity_waypoint_path` | entity_selector | disarms waypoint traversal and stops its currently owned entity movement, if any; the loaded path remains available |
+| `0x09D` | `pause_entity_waypoint_path` | entity_selector | sets the waypoint-controller pause flag and pauses a currently owned entity movement |
+| `0x09E` | `resume_entity_waypoint_path` | entity_selector | clears the waypoint-controller pause flag and resumes a currently owned entity movement |
+| `0x09F` | `clear_entity_waypoint_path` | entity_selector | marks the loaded waypoint path inactive and stops the shared roaming/path controller |
 | `0x0A0` | `set_entity_facing_direction` | entity_selector, direction_mode, direction | stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately |
 | `0x0A2` | `spawn_entity_effect_sprite` | entity_selector, sprite_animation_id, position_mode, x, y, lifetime_or_minus_one, follow_entity | allocates one of eight field effect-sprite slots, starts sprite_animation_id, and records the owning entity; position_mode 1 offsets x/y from the entity, lifetime -1 selects animation-controlled lifetime, and follow_entity controls whether the sprite remains entity-bound |
 | `0x0A3` | `remove_entity_effect_sprite` | entity_selector | finds the field effect-sprite slot owned by the selected entity, hides its render object, and releases the slot |
@@ -207,32 +223,32 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-133/289 used opcodes and
-378,227/387,377 reachable commands
+146/289 used opcodes and
+379,876/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x050` | 631 |
-| `0x093` | 567 |
 | `0x067` | 437 |
 | `0x0AC` | 380 |
 | `0x0CC` | 320 |
 | `0x055` | 317 |
-| `0x095` | 310 |
-| `0x094` | 310 |
 | `0x08C` | 289 |
 | `0x0A1` | 234 |
 | `0x0D1` | 221 |
 | `0x116` | 216 |
-| `0x092` | 215 |
 | `0x0CF` | 213 |
 | `0x0D2` | 194 |
 | `0x0AD` | 189 |
 | `0x0D3` | 182 |
 | `0x0BC` | 180 |
 | `0x136` | 176 |
-| `0x096` | 140 |
+| `0x0B1` | 124 |
+| `0x150` | 123 |
+| `0x14F` | 119 |
+| `0x0B2` | 119 |
+| `0x0CA` | 117 |
 
 ## Menu/UI scene scripts
 

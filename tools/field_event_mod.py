@@ -35,6 +35,7 @@ BRANCH_WITH_FALLTHROUGH = {0x04, 0x0C, 0x33}
 SPAWN_WITH_FALLTHROUGH = {0x36, 0x3E}
 INLINE_SCRIPT_OPCODES = {0x3C, 0x3D}
 TERMINAL_OPCODES = {0x00, 0x01, 0x10B}
+EMBEDDED_DATA_REFERENCE_ARGUMENTS = {0x93: 1, 0x9A: 1}
 
 NAMESPACES = {
     0x1000: "state",
@@ -266,6 +267,178 @@ def literal_argument(command: dict[str, Any], index: int) -> int | None:
     return value if isinstance(value, int) and not isinstance(value, bool) else None
 
 
+def embedded_data_target(
+    command: dict[str, Any], command_end: int, opcode: int
+) -> int | None:
+    reference_index = EMBEDDED_DATA_REFERENCE_ARGUMENTS.get(opcode)
+    if reference_index is None:
+        return None
+    displacement = literal_argument(command, reference_index)
+    if displacement is None:
+        return None
+    return command_end + displacement * 2
+
+
+def decode_embedded_data_record(
+    member: bytes, target: int, opcode: int, context: str
+) -> tuple[dict[str, Any], int]:
+    if target < 0 or target + 4 > len(member) or target % 2:
+        raise data_mod.DataModError(
+            f"{context}: embedded data target 0x{target:X} is invalid"
+        )
+    size_words = struct.unpack_from("<I", member, target)[0]
+    end = target + 4 + size_words * 4
+    if end > len(member):
+        raise data_mod.DataModError(
+            f"{context}: embedded data at 0x{target:X} is truncated"
+        )
+    if opcode == 0x93:
+        if size_words != 5:
+            raise data_mod.DataModError(
+                f"{context}: roaming profile at 0x{target:X} has {size_words} words"
+            )
+        legacy_parameter, speed, distance, delay, direction_count = struct.unpack_from(
+            "<IIiII", member, target + 4
+        )
+        return (
+            {
+                "label": f"roaming_profile_{target:04X}",
+                "source_offset": f"0x{target:04X}",
+                "type": "entity_roaming_profile",
+                "size_words": size_words,
+                "legacy_parameter": legacy_parameter,
+                "speed_q12": speed,
+                "step_distance": distance,
+                "post_step_delay_frames": delay,
+                "direction_count": direction_count,
+            },
+            end,
+        )
+    if opcode == 0x9A:
+        if size_words < 4 or (size_words - 4) % 2:
+            raise data_mod.DataModError(
+                f"{context}: waypoint path at 0x{target:X} has invalid size {size_words}"
+            )
+        ping_pong, relative, random_direction, delay = struct.unpack_from(
+            "<IIII", member, target + 4
+        )
+        waypoint_count = (size_words - 4) // 2
+        waypoints = [
+            {"x": x, "y": y}
+            for x, y in struct.iter_unpack(
+                "<ii", member[target + 20 : target + 20 + waypoint_count * 8]
+            )
+        ]
+        return (
+            {
+                "label": f"waypoint_path_{target:04X}",
+                "source_offset": f"0x{target:04X}",
+                "type": "entity_waypoint_path",
+                "size_words": size_words,
+                "ping_pong": ping_pong,
+                "relative_coordinates": relative,
+                "random_direction": random_direction,
+                "post_segment_delay_frames": delay,
+                "waypoints": waypoints,
+            },
+            end,
+        )
+    raise AssertionError(f"unsupported embedded-data opcode 0x{opcode:X}")
+
+
+def compile_embedded_data_record(
+    row: Any, expected: dict[str, Any], context: str
+) -> bytes:
+    if not isinstance(row, dict):
+        raise data_mod.DataModError(f"{context} must be an object")
+    for key in ("label", "source_offset", "type", "size_words"):
+        if row.get(key) != expected[key]:
+            raise data_mod.DataModError(f"{context} has modified structural field {key}")
+    size_words = expected["size_words"]
+    encoded = bytearray(struct.pack("<I", size_words))
+    if expected["type"] == "entity_roaming_profile":
+        direction_count = data_mod.parse_integer(
+            row.get("direction_count"), 32, f"{context} direction_count"
+        )
+        if direction_count not in (4, 8):
+            raise data_mod.DataModError(
+                f"{context} direction_count must be 4 or 8"
+            )
+        encoded.extend(
+            struct.pack(
+                "<IIiII",
+                data_mod.parse_integer(
+                    row.get("legacy_parameter"),
+                    16,
+                    f"{context} legacy_parameter",
+                ),
+                data_mod.parse_integer(
+                    row.get("speed_q12"), 32, f"{context} speed_q12"
+                ),
+                data_mod.parse_signed_integer(
+                    row.get("step_distance"),
+                    32,
+                    f"{context} step_distance",
+                ),
+                data_mod.parse_integer(
+                    row.get("post_step_delay_frames"),
+                    12,
+                    f"{context} post_step_delay_frames",
+                ),
+                direction_count,
+            )
+        )
+    elif expected["type"] == "entity_waypoint_path":
+        for key in ("ping_pong", "relative_coordinates", "random_direction"):
+            encoded.extend(
+                struct.pack(
+                    "<I", data_mod.parse_integer(row.get(key), 1, f"{context} {key}")
+                )
+            )
+        encoded.extend(
+            struct.pack(
+                "<I",
+                data_mod.parse_integer(
+                    row.get("post_segment_delay_frames"),
+                    13,
+                    f"{context} post_segment_delay_frames",
+                ),
+            )
+        )
+        waypoints = data_mod._require_list(
+            row.get("waypoints"), f"{context} waypoints"
+        )
+        expected_count = (size_words - 4) // 2
+        if len(waypoints) != expected_count:
+            raise data_mod.DataModError(
+                f"{context} must retain {expected_count} waypoints"
+            )
+        for waypoint_index, waypoint in enumerate(waypoints):
+            waypoint_context = f"{context} waypoint {waypoint_index}"
+            if not isinstance(waypoint, dict) or set(waypoint) != {"x", "y"}:
+                raise data_mod.DataModError(
+                    f"{waypoint_context} must contain exactly x and y"
+                )
+            encoded.extend(
+                struct.pack(
+                    "<ii",
+                    data_mod.parse_signed_integer(
+                        waypoint["x"], 32, f"{waypoint_context} x"
+                    ),
+                    data_mod.parse_signed_integer(
+                        waypoint["y"], 32, f"{waypoint_context} y"
+                    ),
+                )
+            )
+    else:
+        raise data_mod.DataModError(
+            f"{context} has unsupported type {expected['type']!r}"
+        )
+    if len(encoded) != 4 + size_words * 4:
+        raise data_mod.DataModError(f"{context} changes encoded size")
+    return bytes(encoded)
+
+
 def successors(
     command: dict[str, Any], command_end: int, opcode: int
 ) -> list[int]:
@@ -405,28 +578,52 @@ def analyze_member(
         except data_mod.DataModError:
             invalid_candidates.add(root)
 
+    def merge_graphs() -> dict[int, tuple[dict[str, Any], int, int]]:
+        result: dict[int, tuple[dict[str, Any], int, int]] = {}
+        for graph in valid_graphs.values():
+            for position, decoded in graph.items():
+                previous = result.get(position)
+                if previous is not None and previous[1:] != decoded[1:]:
+                    raise data_mod.DataModError(
+                        f"{context}: inconsistent decode at 0x{position:X}"
+                    )
+                result[position] = decoded
+        return result
+
+    # Some pointer-table slots point at private records. Before their formats
+    # were known, a record whose first u16 happened to be a valid opcode could
+    # be mistaken for a script root. Resolve typed data references from genuine
+    # scripts and remove those false-positive graphs before reporting coverage.
+    while True:
+        preliminary = merge_graphs()
+        record_ranges: list[tuple[int, int]] = []
+        for command, end, opcode in preliminary.values():
+            target = embedded_data_target(command, end, opcode)
+            if target is None:
+                continue
+            try:
+                _, record_end = decode_embedded_data_record(
+                    member, target, opcode, context
+                )
+            except data_mod.DataModError:
+                continue
+            record_ranges.append((target, record_end))
+        false_roots = {
+            root
+            for root in valid_graphs
+            if any(start <= root < end for start, end in record_ranges)
+        }
+        if not false_roots:
+            break
+        for root in false_roots:
+            del valid_graphs[root]
+            invalid_candidates.add(root)
+
     root_names = {
         root: f"script_{min(index for index, value in enumerate(script_pointers) if value == root):03d}"
         for root in valid_graphs
     }
-    slots: list[Any] = []
-    for pointer in script_pointers:
-        if pointer == 0:
-            slots.append(None)
-        elif pointer in root_names:
-            slots.append(root_names[pointer])
-        else:
-            slots.append({"private_target": f"0x{pointer:04X}"})
-
-    merged: dict[int, tuple[dict[str, Any], int, int]] = {}
-    for root, graph in valid_graphs.items():
-        for position, decoded in graph.items():
-            previous = merged.get(position)
-            if previous is not None and previous[1:] != decoded[1:]:
-                raise data_mod.DataModError(
-                    f"{context}: inconsistent decode at 0x{position:X}"
-            )
-            merged[position] = decoded
+    merged = merge_graphs()
 
     occupied: dict[int, int] = {}
     for position, (_, end, _) in merged.items():
@@ -438,6 +635,48 @@ def analyze_member(
                     f"0x{other:X} and 0x{position:X}"
                 )
             occupied[byte_offset] = position
+
+    embedded_data: dict[int, tuple[dict[str, Any], int]] = {}
+    embedded_occupied: dict[int, int] = {}
+    for command, end, opcode in merged.values():
+        target = embedded_data_target(command, end, opcode)
+        if target is None:
+            continue
+        record, record_end = decode_embedded_data_record(
+            member, target, opcode, context
+        )
+        previous = embedded_data.get(target)
+        if previous is not None and previous != (record, record_end):
+            raise data_mod.DataModError(
+                f"{context}: embedded data at 0x{target:X} has conflicting types"
+            )
+        for byte_offset in range(target, record_end):
+            command_owner = occupied.get(byte_offset)
+            if command_owner is not None:
+                raise data_mod.DataModError(
+                    f"{context}: embedded data at 0x{target:X} overlaps command "
+                    f"0x{command_owner:X}"
+                )
+            other = embedded_occupied.get(byte_offset)
+            if other is not None and other != target:
+                raise data_mod.DataModError(
+                    f"{context}: embedded data at 0x{target:X} overlaps record "
+                    f"0x{other:X}"
+                )
+            embedded_occupied[byte_offset] = target
+        embedded_data[target] = (record, record_end)
+        command["data_record"] = record["label"]
+
+    slots: list[Any] = []
+    for pointer in script_pointers:
+        if pointer == 0:
+            slots.append(None)
+        elif pointer in root_names:
+            slots.append(root_names[pointer])
+        elif pointer in embedded_data:
+            slots.append({"data_record": embedded_data[pointer][0]["label"]})
+        else:
+            slots.append({"private_target": f"0x{pointer:04X}"})
 
     labels: dict[int, list[str]] = {}
     for root, name in root_names.items():
@@ -484,8 +723,15 @@ def analyze_member(
         "fixed_sections": fixed_sections,
         "script_slots": slots,
         "valid_script_count": len(valid_graphs),
-        "private_target_count": len(invalid_candidates),
+        "private_target_count": len(invalid_candidates - set(embedded_data)),
         "reachable_command_count": len(merged),
+        "embedded_data_record_count": len(embedded_data),
+        "embedded_data_records": [
+            record
+            for record, _ in (
+                embedded_data[target] for target in sorted(embedded_data)
+            )
+        ],
         "commands": commands,
     }
 
@@ -629,6 +875,7 @@ def build_document(
             "valid_script_count",
             "private_target_count",
             "reachable_command_count",
+            "embedded_data_record_count",
         ):
             if row.get(key) != expected[key]:
                 raise data_mod.DataModError(f"{context} has modified structural field {key}")
@@ -636,9 +883,53 @@ def build_document(
             int(command["source_offset"], 0): command
             for command in expected["commands"]
         }
-        command_rows = data_mod._require_list(row.get("commands"), f"{context} commands")
+        command_rows = data_mod._require_list(
+            row.get("commands"), f"{context} commands"
+        )
         actual_offsets: list[int] = []
         rebuilt = bytearray(source_member)
+        expected_data_records = {
+            int(record["source_offset"], 0): record
+            for record in expected["embedded_data_records"]
+        }
+        data_rows = data_mod._require_list(
+            row.get("embedded_data_records"), f"{context} embedded_data_records"
+        )
+        actual_data_offsets: list[int] = []
+        for record_index, record_row in enumerate(data_rows):
+            if not isinstance(record_row, dict):
+                raise data_mod.DataModError(
+                    f"{context} embedded data record {record_index} must be an object"
+                )
+            raw_offset = record_row.get("source_offset")
+            try:
+                offset = (
+                    int(raw_offset, 0)
+                    if isinstance(raw_offset, str)
+                    else int(raw_offset)
+                )
+            except (TypeError, ValueError) as exc:
+                raise data_mod.DataModError(
+                    f"{context} embedded data record {record_index} has invalid "
+                    "source_offset"
+                ) from exc
+            actual_data_offsets.append(offset)
+            expected_record = expected_data_records.get(offset)
+            if expected_record is None:
+                raise data_mod.DataModError(
+                    f"{context} embedded data record {record_index} is not original"
+                )
+            encoded = compile_embedded_data_record(
+                record_row,
+                expected_record,
+                f"{context} embedded data record {record_index}",
+            )
+            rebuilt[offset : offset + len(encoded)] = encoded
+        if actual_data_offsets != sorted(expected_data_records):
+            raise data_mod.DataModError(
+                f"{context} must retain every embedded data record once in "
+                "source-offset order"
+            )
         for command_index, command_row in enumerate(command_rows):
             if not isinstance(command_row, dict):
                 raise data_mod.DataModError(f"{context} command {command_index} must be an object")
@@ -655,10 +946,25 @@ def build_document(
                 raise data_mod.DataModError(
                     f"{context} command {command_index} is not at an original boundary"
                 )
-            original, end, _ = decode_command(
+            original, end, opcode = decode_command(
                 source_member, offset, descriptors, names, context
             )
-            encoded = _compile_command(command_row, descriptors, names, f"{context} command {command_index}")
+            if command_row.get("data_record") != expected_command.get("data_record"):
+                raise data_mod.DataModError(
+                    f"{context} command {command_index} has modified data_record"
+                )
+            original_data_target = embedded_data_target(original, end, opcode)
+            edited_data_target = embedded_data_target(command_row, end, opcode)
+            if edited_data_target != original_data_target:
+                raise data_mod.DataModError(
+                    f"{context} command {command_index} cannot retarget embedded data"
+                )
+            encoded = _compile_command(
+                command_row,
+                descriptors,
+                names,
+                f"{context} command {command_index}",
+            )
             if len(encoded) != end - offset:
                 raise data_mod.DataModError(
                     f"{context} command {command_index} changes encoded size"
@@ -709,6 +1015,7 @@ def summarize_document(
     usage: Counter[int] = Counter()
     valid_script_count = 0
     private_target_count = 0
+    embedded_data_types: Counter[str] = Counter()
     for member_index, member in enumerate(members):
         if not isinstance(member, dict):
             raise data_mod.DataModError(
@@ -724,6 +1031,19 @@ def summarize_document(
             32,
             f"field member {member_index} private_target_count",
         )
+        records = data_mod._require_list(
+            member.get("embedded_data_records"),
+            f"field member {member_index} embedded_data_records",
+        )
+        for record_index, record in enumerate(records):
+            if not isinstance(record, dict) or not isinstance(
+                record.get("type"), str
+            ):
+                raise data_mod.DataModError(
+                    f"field member {member_index} embedded data record {record_index} "
+                    "must have a type"
+                )
+            embedded_data_types[record["type"]] += 1
         commands = data_mod._require_list(
             member.get("commands"), f"field member {member_index} commands"
         )
@@ -749,6 +1069,8 @@ def summarize_document(
         "member_count": len(members),
         "valid_script_count": valid_script_count,
         "private_target_count": private_target_count,
+        "embedded_data_record_count": sum(embedded_data_types.values()),
+        "embedded_data_record_types": dict(sorted(embedded_data_types.items())),
         "reachable_command_count": sum(usage.values()),
         "used_opcode_count": len(usage),
         "opcode_counts": {
