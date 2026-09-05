@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 236 | 185 | `config/eur/field_vm.json` |
+| Field/world | 341 | 240 | 189 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -245,6 +245,10 @@ field context (the other DS screen/field instance).
 | `0x104` | `wait_field_vertical_scroll` | 0 literal args | synchronization barrier for the scroll started by opcode 0x102 and stopped by opcode 0x103 |
 | `0x105` | `begin_time_hole_tunnel_whiteout` | 0 literal args | begins the tunnel's whiteout phase by latching its fade bit. While the 3D time-hole renderer remains active, the clear color brightens over the 190-frame tunnel lifetime and the tunnel palette is driven toward white after frame 90 |
 | `0x106` | `wait_time_hole_transition` | 0 literal args | common synchronization barrier for opcodes 0x0FE through 0x101, including transitions coordinated across the two field screens |
+| `0x109` | `start_field_effect_animation` | effect_slot, resource_index, x_pixels, y_pixels, playback_speed_8_8 | resolves a standalone 2D cell-animation resource from the current field screen, creates it at the signed pixel coordinates, applies the unsigned 8.8 fixed-point playback speed, and stores its live object in effect_slot. Shipped scripts use 256 for normal speed and 128 for half speed |
+| `0x10A` | `wait_field_effect_animation` | effect_slot | slot-specific synchronization barrier for the animation started by opcode 0x109 |
+| `0x10B` | `return_to_title_screen` | 0 literal args | requests the global application teardown/return-to-title path with a 16-frame transition and mode 1. The only shipped call is the final event after background music 110 in room 635 |
+| `0x10C` | `legacy_noop_10c` | 0 literal args | intentional legacy no-op: the opcode has a descriptor and two shipped calls, but no case in the field VM dispatcher |
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
 | `0x10E` | `enable_field_trigger_area` | trigger_area_index | clears the runtime-disabled flag of the indexed 44-byte field trigger-area record, allowing party or entity overlap with its triangle, quadrilateral, or rectangle to select and launch the area's script again |
 | `0x10F` | `disable_field_trigger_area` | trigger_area_index | sets the runtime-disabled flag of the indexed 44-byte field trigger-area record; active and newly detected overlaps with that area are rejected before its script can run |
@@ -289,8 +293,8 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-211/289 used opcodes and
-386,090/387,272 reachable commands
+215/289 used opcodes and
+386,123/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
