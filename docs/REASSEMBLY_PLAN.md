@@ -357,6 +357,10 @@ The adjacent coin-loss visual at `0x020A0C64`-`0x020A1064` is reconstructed as
 one exact linked C++ unit. It names the save coin decrement and emitter task,
 the three reusable coin scene objects, fixed-point particle movement, bounce,
 fast-forward fade, shadow draw, and virtual model render calls.
+The contiguous `0x020A1064`-`0x020A1284` flee-transition block is exact linked
+C as well. Its typed task state exposes paired flee tasks and their handshake
+flag; the callbacks coordinate party formations, start run animations, move
+actors offscreen, detach partners, and retire completed tasks.
 The party/enemy reaction-task lifecycle at `0x0209CE98`-`0x0209D694` is now a
 byte-identical linked C unit. Its starters expose task allocation/reuse, actor
 hit-lock flag `0x200`, and attached hit effects. The adjacent party first-hit

@@ -55,6 +55,7 @@ src/battle/battle_hit_queue.c
 src/battle/battle_hit_lookup.c
 src/battle/battle_collision_volumes.c
 src/battle/battle_coin_loss.cpp
+src/battle/battle_flee_transition.c
 src/battle/battle_scene_object.c
 src/battle/battle_scene_movement.c
 src/battle/battle_scene_motion_list.c
