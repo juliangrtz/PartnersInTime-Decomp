@@ -56,7 +56,7 @@ def scan_scripts(scripts_root: Path, names: dict[int, str]) -> tuple[Counter, in
 
 
 def status_for(opcode: int, names: dict[int, str]) -> str:
-    if opcode <= 0x32 and opcode not in range(0x05, 0x0A):
+    if opcode <= 0x32:
         return "reconstructed C"
     if opcode in names:
         return "static semantics"
@@ -70,18 +70,41 @@ def descriptor_summary(descriptor: int) -> str:
     return f"{result}{count} {modes}"
 
 
+def load_instance_config(version: str, name: str) -> dict:
+    path = ROOT / "config" / version / f"{name}_vm.json"
+    document = json.loads(path.read_text(encoding="utf-8"))
+    if document.get("schema") != "pit-script-vm-descriptors-v1":
+        raise ValueError(f"{path} has an unsupported schema")
+    descriptors = [int(value, 0) for value in document["descriptors"]]
+    document["descriptor_values"] = descriptors
+    return document
+
+
 def render_markdown(
     descriptors: tuple[int, ...],
     names: dict[int, str],
     usage: Counter[int],
     entry_count: int,
     private_bytes: int,
+    field: dict,
+    scene: dict,
 ) -> str:
     named_used = sum(opcode in names for opcode in usage)
     named_commands = sum(count for opcode, count in usage.items() if opcode in names)
     unresolved = sorted(
         ((count, opcode) for opcode, count in usage.items() if opcode not in names),
         reverse=True,
+    )
+    all_descriptor_sets = [
+        field["descriptor_values"], list(descriptors), scene["descriptor_values"]
+    ]
+    common_prefix = 0
+    for values in zip(*all_descriptor_sets):
+        if len(set(values)) != 1:
+            break
+        common_prefix += 1
+    shared_shapes = sum(
+        len(set(values)) == 1 for values in zip(*all_descriptor_sets)
     )
     lines = [
         "# Script VM semantics",
@@ -130,6 +153,25 @@ def render_markdown(
         "16-bit pointer structures consumed by field logic. Those structures mix script",
         "entry points with non-code records; they therefore need typed loader recovery before",
         "the battle CFG decoder can be generalized safely.",
+        "",
+        "## Descriptor ABI coverage",
+        "",
+        f"The three tables have an identical `0x000..0x{common_prefix - 1:03X}` prefix:",
+        "the 51 commands implemented by the resident interpreter. The first",
+        "instance-specific descriptor is opcode `0x033`. Matching descriptor bytes beyond",
+        "that boundary mean only the same encoded argument shape, not the same side effect.",
+        f"Across the 210 indices present in every instance, {shared_shapes} happen to share",
+        "the same shape.",
+        "",
+        "| Instance | Descriptor entries | Semantically named | Source |",
+        "|---|---:|---:|---|",
+        f"| Field/world | {len(field['descriptor_values'])} | {len(field['known_names'])} | `config/eur/field_vm.json` |",
+        f"| Battle | {len(descriptors)} | {len(names)} | `config/eur/battle_ai_vm.json` |",
+        f"| Scene/object | {len(scene['descriptor_values'])} | {len(scene['known_names'])} | `config/eur/scene_vm.json` |",
+        "",
+        "The field and scene tables are reproducibly extracted and checked against a private",
+        "ROM with `tools/extract_script_vm_descriptors.py`; the committed JSON contains only",
+        "the compact ABI metadata, never overlay bytes.",
         "",
         "## VM ABI",
         "",
@@ -223,9 +265,11 @@ def main() -> int:
     )
     args = parser.parse_args()
     descriptors, names = data_mod.load_battle_vm_schema(args.version)
+    field = load_instance_config(args.version, "field")
+    scene = load_instance_config(args.version, "scene")
     usage, entry_count, private_bytes = scan_scripts(args.scripts_root, names)
     report = render_markdown(
-        descriptors, names, usage, entry_count, private_bytes
+        descriptors, names, usage, entry_count, private_bytes, field, scene
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report, encoding="utf-8", newline="\n")
