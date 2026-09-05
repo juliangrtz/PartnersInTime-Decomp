@@ -34,7 +34,7 @@ The raw-loader base and input image differ by overlay; see
 | 11 | 13,372 B | Battle projectile/special-attack code; recovered helpers configure object 40 from level-scaled tables, calculate animation timing, test actor contact, clamp motion, and restore the actor resource | `0x020C4968-0x020C4C2C` (7 functions, 708 B) | Active; shell-like behavior is strongly indicated, but retain neutral item naming pending runtime confirmation |
 | 12 | 12,032 B | Battle special-attack code; recovered state tracks party formation, animation timing, a shuffled four-member action order, and paired scene-object cleanup | `0x020C2FCC-0x020C31E8` and `0x020C4FA8-0x020C50C0` (8 functions, 820 B) | Active; exact item identity still requires runtime confirmation |
 | 13 | 12,316 B | Battle special-attack code; recovered helpers prepare and align a paired scene-object setup, advance motion tuning, classify vertical angles, synchronize model animation, and start entry/retreat motion | `0x020C2AE0-0x020C2CD4` and `0x020C3620-0x020C37E0` (7 functions, 948 B) | Active; exact Bros. item identity still requires runtime confirmation |
-| 14 | 13,860 B | Unknown | None | Priority quick-win target |
+| 14 | 13,860 B | Battle special-attack code; a recovered attack-object state machine controls approach and target motion, animation waits, hide/finish transitions, effects, sound, and cleanup | `0x020C3700-0x020C3AA4` (9 functions, 932 B) | Active; continue around callers while retaining neutral item naming |
 | 15 | 13,164 B | Unknown | None | Priority quick-win target |
 | 16 | 18,324 B | Unknown | None | Untriaged |
 | 17 | 16,784 B | Unknown | None | Untriaged |

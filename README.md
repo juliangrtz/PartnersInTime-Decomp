@@ -56,6 +56,9 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   animation bands, and keep the active model animation synchronized. The
   original C++ virtual dispatch is represented directly instead of hidden in
   hand-written assembly.
+- Overlay 14 contributes a complete nine-function attack-object state-machine
+  block (932 bytes), covering approach and target motion, animation waits,
+  hide/finish transitions, effects, sound, cleanup, and initialization.
 - One hundred and thirty-four named overlay-2 battle functions are maintained symbolic ARM source,
   together with the resident item-value calculator they call.
   They cover task enqueueing, intrusive task lists and pools, actor lookup,
