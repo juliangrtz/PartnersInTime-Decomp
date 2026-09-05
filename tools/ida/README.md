@@ -72,3 +72,18 @@ reconstructed script-VM types before Hex-Rays runs.
 IDA may print warnings from optional third-party plugins whose Python packages
 are absent. They do not affect the ARM processor module, the database import,
 or Hex-Rays.
+
+For overlays other than the battle overlay, the generic importer derives all
+section bounds and function names from the selected overlay's DSD files. For
+example, overlay 5 can be prepared with:
+
+```powershell
+$ida = 'C:\Program Files\IDA Essential 9.2\idat.exe'
+& $ida '-A' '-c' '-TBinary file' '-pARM' '-b2065D4' '-i2065D40' `
+  '-Stools/ida/import_overlay.py 5' '-Lbuild/ida/ov005.log' `
+  '-obuild/ida/PiT_eur_ov005.i64' 'build/eur/build/arm9_ov005.bin'
+```
+
+The raw-loader base and input filename still come from that overlay's first
+mapped section and generated binary; the importer handles its section splits,
+BSS, exact function extents, and maintained symbols.

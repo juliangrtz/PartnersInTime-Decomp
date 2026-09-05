@@ -4,3 +4,6 @@
     .data       start:0x020c2aa0 end:0x020c2ae0 kind:data align:32
     .bss        start:0x020c2ae0 end:0x020c2ae0 kind:bss align:32
 
+src/overlay010/enemy_state.c:
+    .text       start:0x020c2340 end:0x020c259c
+

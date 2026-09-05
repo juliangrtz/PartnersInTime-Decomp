@@ -31,6 +31,14 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   lossless starting representation, not a claim of semantic decompilation.
 - Every ARM9 and ARM7 runtime image now relinks as 43 components and 420
   independent, fixed-address ELF units.
+- Decompilation is now proceeding across every real ARM9 overlay, with small,
+  self-contained leaf routines taken first instead of waiting for one gameplay
+  subsystem to be complete. The first cross-overlay pass adds 49 byte-matching
+  C functions (2,264 bytes): field-entity lifecycle helpers in overlay 0,
+  resource ownership and DS 2D-display helpers in overlay 5, enemy selection
+  and value-scaling helpers in overlay 10, and attack-phase state helpers in
+  overlay 21. The maintained [overlay map](docs/research/OVERLAY_MAP.md) records
+  proven roles and the next triage targets without guessing at unknown modules.
 - One hundred and thirty-four named overlay-2 battle functions are maintained symbolic ARM source,
   together with the resident item-value calculator they call.
   They cover task enqueueing, intrusive task lists and pools, actor lookup,
@@ -217,7 +225,8 @@ high-level code.
 The generated [`docs/research/BATTLE_AI_OPCODES.md`](docs/research/BATTLE_AI_OPCODES.md)
 provides a compact navigation index for the large enemy-script dispatcher.
 [`tools/ida/README.md`](tools/ida/README.md) documents the reproducible IDA
-9.1/9.2 ARM32 database import and batch Hex-Rays helper for overlay 2.
+9.1/9.2 ARM32 database imports and batch Hex-Rays helpers for the resident ARM9
+and every overlay.
 [`docs/DATA_MODDING.md`](docs/DATA_MODDING.md) documents editable text/stats,
 control tokens, validation, and ROM packaging.
 

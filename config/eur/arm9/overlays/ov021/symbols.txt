@@ -1,8 +1,8 @@
-func_ov021_020c2ae0 kind:function(arm,size=0x60) addr:0x020c2ae0
-func_ov021_020c2b40 kind:function(arm,size=0x10) addr:0x020c2b40
-func_ov021_020c2b50 kind:function(arm,size=0x48) addr:0x020c2b50
-func_ov021_020c2b98 kind:function(arm,size=0x18) addr:0x020c2b98
-func_ov021_020c2bb0 kind:function(arm,size=0x1c) addr:0x020c2bb0
+Overlay21Attack_ConfigureAnimation kind:function(arm,size=0x60) addr:0x020c2ae0
+Overlay21Attack_ClearSecondaryPhase kind:function(arm,size=0x10) addr:0x020c2b40
+Overlay21Attack_StartSecondaryPhase kind:function(arm,size=0x48) addr:0x020c2b50
+Overlay21Attack_ClearPrimaryPhase kind:function(arm,size=0x18) addr:0x020c2b98
+Overlay21Attack_SetPrimaryPhase kind:function(arm,size=0x1c) addr:0x020c2bb0
 func_ov021_020c2bcc kind:function(arm,size=0x2bc) addr:0x020c2bcc
 func_ov021_020c2e88 kind:function(arm,size=0x3dc) addr:0x020c2e88
 func_ov021_020c3264 kind:function(arm,size=0x11c) addr:0x020c3264
