@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 246 | 195 | `config/eur/field_vm.json` |
+| Field/world | 341 | 250 | 199 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -181,6 +181,10 @@ field context (the other DS screen/field instance).
 | `0x0A5` | `set_field_block_idle_bobbing_enabled` | entity_selector, enabled | toggles the repeating vertical idle-bob curve used by clFieldBlock entities; disabling it immediately clears the sprite y offset and resets both bob and one-shot bounce phase fields |
 | `0x0A6` | `set_field_block_bounce_controller_enabled` | entity_selector, enabled | toggles the clFieldBlock sprite-bounce controller and remembers the current model animation; disabling it clears the sprite y offset, phase and interaction state, restores the model animation, and reports the state change to an attached script when configured |
 | `0x0A7` | `wait_field_block_bounce` | entity_selector | synchronization barrier for the block interaction bounce triggered by func_ov000_020bc930 |
+| `0x0A8` | `set_enemy_jump_first_strike_enabled` | entity_selector, enabled | toggles field-enemy interaction bit 0. Type-4 enemies initialize it enabled; when enabled, landing on the enemy with the party contact-direction bit 0x20 starts the airborne pre-battle reaction and selects a jump First Strike. The positive response launches the initiating party member in the field and damages every eligible enemy during battle entry. All 50 shipped script writes temporarily clear the flag during scripted enemy movement or appearance sequences |
+| `0x0A9` | `set_enemy_spiked_jump_response` | entity_selector, enabled | toggles the adverse response for an enabled enemy jump contact. Disabled selects battle-entry mode +1, whose First Strike damages all eligible enemies; enabled selects mode -1, whose entry reaction instead removes exactly one HP from the initiating party member without reducing HP below one. All 24 shipped writes enable this behavior in enemy-owned movement and roaming scripts |
+| `0x0AA` | `set_enemy_special_contact_removal_enabled` | entity_selector, enabled | toggles field-enemy interaction bit 2 without the animation and notification side effects of opcode 0x0A6. For the special contact path where a type-10 party entity is linked to a parent in animation 24, a clear flag permits the encounter and selects battle-entry mode 2; a set flag invokes the enemy's reset and disable methods, unlinks it from the contacting parent, and suppresses the battle. All 50 shipped writes enable the removal path while scripted enemies are introduced or moved |
+| `0x0AB` | `set_enemy_immediate_battle_removal_enabled` | entity_selector, enabled | toggles field-enemy interaction bit 3. On a valid type-4 enemy encounter, disabled starts the dedicated 34-frame removal animation before battle while enabled immediately resets and disables the field entity. The same flag selects the immediate cleanup path when reconstructing the field after battle. All 50 shipped writes enable immediate removal for enemies controlled by scripted appearance or movement sequences |
 | `0x0AC` | `set_entity_script_value` | entity_selector, slot, value | stores value as a signed 16-bit word in one of the selected entity's two script-visible value slots; shipped scripts use slots 0 and 1 to exchange state and coordinates between entity-owned scripts |
 | `0x0AD` | `get_entity_script_value` | entity_selector, slot | loads one of the selected entity's two script-visible value slots through the normal VM result-variable writer |
 | `0x0AE` | `rejoin_party_follower` | party_side, instant | moves the selected party's detached follower back to its formation offset behind the leader, either immediately or through entity movement, then restores the normal follower tether |
@@ -299,17 +303,14 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-221/289 used opcodes and
-386,353/387,272 reachable commands
+225/289 used opcodes and
+386,527/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x087` | 79 |
 | `0x051` | 71 |
-| `0x0AB` | 50 |
-| `0x0AA` | 50 |
-| `0x0A8` | 50 |
 | `0x054` | 33 |
 | `0x0C6` | 32 |
 | `0x0C8` | 29 |
@@ -318,13 +319,16 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x11A` | 27 |
 | `0x110` | 27 |
 | `0x0CB` | 26 |
-| `0x0A9` | 24 |
 | `0x07C` | 24 |
 | `0x137` | 22 |
 | `0x080` | 21 |
 | `0x07D` | 20 |
 | `0x0C3` | 18 |
 | `0x0C7` | 17 |
+| `0x130` | 16 |
+| `0x0C2` | 15 |
+| `0x0E7` | 14 |
+| `0x073` | 14 |
 
 ## Menu/UI scene scripts
 

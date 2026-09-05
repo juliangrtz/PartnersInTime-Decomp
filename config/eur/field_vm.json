@@ -485,6 +485,10 @@
     "165": "set_field_block_idle_bobbing_enabled",
     "166": "set_field_block_bounce_controller_enabled",
     "167": "wait_field_block_bounce",
+    "168": "set_enemy_jump_first_strike_enabled",
+    "169": "set_enemy_spiked_jump_response",
+    "170": "set_enemy_special_contact_removal_enabled",
+    "171": "set_enemy_immediate_battle_removal_enabled",
     "172": "set_entity_script_value",
     "173": "get_entity_script_value",
     "174": "rejoin_party_follower",
@@ -1217,6 +1221,38 @@
       "yield": "while the 17-frame block-hit bounce is active",
       "effect": "synchronization barrier for the block interaction bounce triggered by func_ov000_020bc930",
       "evidence": "func_ov000_020823f8 case 0x0A7, func_ov000_020bc930, func_ov000_020bc9b4, and signed 17-frame y-offset curve data_ov000_020c0c6c"
+    },
+    "168": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "toggles field-enemy interaction bit 0. Type-4 enemies initialize it enabled; when enabled, landing on the enemy with the party contact-direction bit 0x20 starts the airborne pre-battle reaction and selects a jump First Strike. The positive response launches the initiating party member in the field and damages every eligible enemy during battle entry. All 50 shipped script writes temporarily clear the flag during scripted enemy movement or appearance sequences",
+      "evidence": "func_ov000_020823f8 case 0x0A8, type-4 constructor func_ov000_020bd680, field battle launcher func_ov000_0206ba2c, battle-entry consumer BattleTurnState_Update states 0x1000 and 0x1008..0x100A, and 50 reachable calls with arguments -1, 0"
+    },
+    "169": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "toggles the adverse response for an enabled enemy jump contact. Disabled selects battle-entry mode +1, whose First Strike damages all eligible enemies; enabled selects mode -1, whose entry reaction instead removes exactly one HP from the initiating party member without reducing HP below one. All 24 shipped writes enable this behavior in enemy-owned movement and roaming scripts",
+      "evidence": "func_ov000_020823f8 case 0x0A9, type-4 constructor func_ov000_020bd680, contact-mode selection in func_ov000_0206ba2c, BattleTurnState_Update entry states 0x1004 and 0x101C, and 24 reachable calls with arguments -1, 1"
+    },
+    "170": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "toggles field-enemy interaction bit 2 without the animation and notification side effects of opcode 0x0A6. For the special contact path where a type-10 party entity is linked to a parent in animation 24, a clear flag permits the encounter and selects battle-entry mode 2; a set flag invokes the enemy's reset and disable methods, unlinks it from the contacting parent, and suppresses the battle. All 50 shipped writes enable the removal path while scripted enemies are introduced or moved",
+      "evidence": "func_ov000_020823f8 case 0x0AA, type-4 constructor func_ov000_020bd680, special-contact predicate func_ov000_0206c42c, battle launcher func_ov000_0206ba2c, and 50 reachable calls with arguments -1, 1"
+    },
+    "171": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "toggles field-enemy interaction bit 3. On a valid type-4 enemy encounter, disabled starts the dedicated 34-frame removal animation before battle while enabled immediately resets and disables the field entity. The same flag selects the immediate cleanup path when reconstructing the field after battle. All 50 shipped writes enable immediate removal for enemies controlled by scripted appearance or movement sequences",
+      "evidence": "func_ov000_020823f8 case 0x0AB, encounter contact handler func_ov000_0208834c, field restoration state machine func_ov000_0207c170, removal helpers func_ov000_020bd400 and func_ov000_020bd4f4, and 50 reachable calls with arguments -1, 1"
     },
     "172": {
       "arguments": ["entity_selector", "slot", "value"],
