@@ -85,7 +85,9 @@ struct BattleModelVTable {
     void (*stop)(BattleModel *model);
     u8 unknown_02c[8];
     int (*set_animation)(BattleModel *model, u8 animation_id, int argument_2);
-    u8 unknown_038[0x30];
+    u8 unknown_038[4];
+    int (*get_animation_id)(BattleModel *model);
+    u8 unknown_040[0x28];
     int (*set_primary_animation)(BattleModel *model, u8 animation_id,
                                  int argument_2, int enabled);
     u8 unknown_06c[0x1C];
@@ -117,7 +119,7 @@ struct BattleModel {
     virtual void unknown_30();
     virtual int set_animation(u8 animation_id, int argument_2);
     virtual void unknown_38();
-    virtual void unknown_3c();
+    virtual int get_animation_id();
     virtual void unknown_40();
     virtual void unknown_44();
     virtual void unknown_48();

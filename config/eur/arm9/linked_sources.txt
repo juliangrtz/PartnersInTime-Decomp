@@ -110,6 +110,8 @@ src/overlay010/enemy_state.c
 src/overlay011/projectile_attack_helpers.c
 src/overlay012/attack_sequence_state.c
 src/overlay012/attack_controller.c
+src/overlay013/object_pair_setup.c
+src/overlay013/object_pair_motion.cpp
 src/overlay020/target_arc_state.c
 src/overlay021/attack_phase_state.c
 src/field/field_entity_state.c
