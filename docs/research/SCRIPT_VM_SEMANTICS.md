@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 177 | 126 | `config/eur/field_vm.json` |
+| Field/world | 341 | 178 | 127 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -169,6 +169,7 @@ field context (the other DS screen/field instance).
 | `0x09E` | `resume_entity_waypoint_path` | entity_selector | clears the waypoint-controller pause flag and resumes a currently owned entity movement |
 | `0x09F` | `clear_entity_waypoint_path` | entity_selector | marks the loaded waypoint path inactive and stops the shared roaming/path controller |
 | `0x0A0` | `set_entity_facing_direction` | entity_selector, direction_mode, direction | stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately |
+| `0x0A1` | `face_entity_toward_entity` | entity_selector, target_entity_selector | computes the angle from the selected entity to the target entity, quantizes it to the engine's eight-way direction, and immediately applies that facing in absolute direction mode |
 | `0x0A2` | `spawn_entity_effect_sprite` | entity_selector, sprite_animation_id, position_mode, x, y, lifetime_or_minus_one, follow_entity | allocates one of eight field effect-sprite slots, starts sprite_animation_id, and records the owning entity; position_mode 1 offsets x/y from the entity, lifetime -1 selects animation-controlled lifetime, and follow_entity controls whether the sprite remains entity-bound |
 | `0x0A3` | `remove_entity_effect_sprite` | entity_selector | finds the field effect-sprite slot owned by the selected entity, hides its render object, and releases the slot |
 | `0x0A4` | `wait_entity_effect_sprite` | entity_selector | retries the same command while the field effect sprite owned by the selected entity still reports an active animation |
@@ -230,15 +231,14 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-153/289 used opcodes and
-382,045/387,272 reachable commands
+154/289 used opcodes and
+382,279/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x0CC` | 320 |
 | `0x055` | 317 |
-| `0x0A1` | 234 |
 | `0x0D1` | 221 |
 | `0x116` | 216 |
 | `0x0CF` | 213 |
@@ -256,6 +256,7 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x0F2` | 80 |
 | `0x087` | 79 |
 | `0x12B` | 77 |
+| `0x11F` | 74 |
 
 ## Menu/UI scene scripts
 

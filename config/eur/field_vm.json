@@ -473,6 +473,7 @@
     "158": "resume_entity_waypoint_path",
     "159": "clear_entity_waypoint_path",
     "160": "set_entity_facing_direction",
+    "161": "face_entity_toward_entity",
     "162": "spawn_entity_effect_sprite",
     "163": "remove_entity_effect_sprite",
     "164": "wait_entity_effect_sprite",
@@ -1053,6 +1054,14 @@
       "yield": "never",
       "effect": "stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately",
       "evidence": "func_ov000_020823f8 case 0x0A0 and func_ov000_020a6690"
+    },
+    "161": {
+      "arguments": ["entity_selector", "target_entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "computes the angle from the selected entity to the target entity, quantizes it to the engine's eight-way direction, and immediately applies that facing in absolute direction mode",
+      "evidence": "func_ov000_020823f8 case 0x0A1 and func_ov000_020b426c use the entities' fx32 x/y positions, resident FX_Atan2Idx, and func_ov000_020a6690"
     },
     "162": {
       "arguments": ["entity_selector", "sprite_animation_id", "position_mode", "x", "y", "lifetime_or_minus_one", "follow_entity"],
