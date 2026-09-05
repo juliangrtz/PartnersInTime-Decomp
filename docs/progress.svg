@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 6.91 percent is matching C/C++ and 7.38 percent has matching C/C++ or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 6.94 percent is matching C/C++ and 7.41 percent has matching C/C++ or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -13,15 +13,15 @@
 <rect class="bg" width="1200" height="760" rx="12"/>
 <text x="28.0" y="34.0" class="eyebrow">DECOMPILATION PROGRESS · EUROPEAN ROM</text>
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
-<text x="28.0" y="113.0" class="percent">6.91%</text>
+<text x="28.0" y="113.0" class="percent">6.94%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C/C++</text>
-<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">7.38% source-understood</text>
+<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">7.41% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="79.001" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="107.001" y="130" width="5.423" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="79.337" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="107.337" y="130" width="5.423" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C/C++  105.5 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C/C++  105.9 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
 <text x="267.0" y="181.0" class="legend">Symbolic ASM  7.2 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
@@ -4496,7 +4496,7 @@
 <rect class="cell" x="950.58" y="637.06" width="12.00" height="13.05" fill="#263244"><title>Overlay 17 · func_ov017_020c5434 · 504 B · remaining</title></rect>
 <rect class="cell" x="916.39" y="650.11" width="11.29" height="13.10" fill="#263244"><title>Overlay 17 · func_ov017_020c60bc · 476 B · remaining</title></rect>
 <rect class="cell" x="916.39" y="663.20" width="11.29" height="11.34" fill="#263244"><title>Overlay 17 · func_ov017_020c30e4 · 412 B · remaining</title></rect>
-<rect class="cell" x="916.39" y="674.54" width="11.29" height="11.12" fill="#263244"><title>Overlay 17 · func_ov017_020c33dc · 404 B · remaining</title></rect>
+<rect class="cell" x="916.39" y="674.54" width="11.29" height="11.12" fill="#2dd4a0"><title>Overlay 17 · attack_object · 404 B · matching C/C++</title></rect>
 <rect class="cell" x="916.39" y="685.65" width="11.29" height="10.35" fill="#263244"><title>Overlay 17 · func_ov017_020c562c · 376 B · remaining</title></rect>
 <rect class="cell" x="927.68" y="650.11" width="12.05" height="8.97" fill="#263244"><title>Overlay 17 · func_ov017_020c35ec · 348 B · remaining</title></rect>
 <rect class="cell" x="939.73" y="650.11" width="11.77" height="8.97" fill="#263244"><title>Overlay 17 · func_ov017_020c47d0 · 340 B · remaining</title></rect>
@@ -4530,7 +4530,7 @@
 <rect class="cell" x="947.28" y="688.35" width="5.53" height="3.82" fill="#263244"><title>Overlay 17 · func_ov017_020c5f90 · 68 B · remaining</title></rect>
 <rect class="cell" x="947.28" y="692.18" width="5.53" height="3.82" fill="#263244"><title>Overlay 17 · func_ov017_020c5fd4 · 68 B · remaining</title></rect>
 <rect class="cell" x="952.81" y="684.31" width="5.06" height="3.69" fill="#263244"><title>Overlay 17 · func_ov017_020c4794 · 60 B · remaining</title></rect>
-<rect class="cell" x="957.86" y="684.31" width="4.72" height="3.69" fill="#263244"><title>Overlay 17 · func_ov017_020c33a4 · 56 B · remaining</title></rect>
+<rect class="cell" x="957.86" y="684.31" width="4.72" height="3.69" fill="#2dd4a0"><title>Overlay 17 · attack_object · 56 B · matching C/C++</title></rect>
 <rect class="cell" x="952.81" y="687.99" width="3.41" height="5.10" fill="#263244"><title>Overlay 17 · func_ov017_020c45a0 · 56 B · remaining</title></rect>
 <rect class="cell" x="952.81" y="693.09" width="3.41" height="2.91" fill="#2dd4a0"><title>Overlay 17 · startup_display · 32 B · matching C/C++</title></rect>
 <rect class="cell" x="956.22" y="687.99" width="3.92" height="2.54" fill="#263244"><title>Overlay 17 · func_ov017_020c374c · 32 B · remaining</title></rect>

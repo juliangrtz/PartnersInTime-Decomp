@@ -11,3 +11,6 @@ src/overlay017/object_setup.cpp:
 
 src/overlay017/startup_display.c:
     .text       start:0x020c3280 end:0x020c33a4
+
+src/overlay017/attack_object.cpp:
+    .text       start:0x020c33a4 end:0x020c3570
