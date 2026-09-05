@@ -526,6 +526,7 @@
     "269": "wait_paired_field_ready",
     "273": "set_field_input_disable_mask",
     "274": "set_field_event_input_disable_mask",
+    "278": "set_field_party_control_enabled",
     "279": "set_camera_focus_entity",
     "280": "remove_all_entity_effect_sprites",
     "281": "wait_all_entity_effect_sprites",
@@ -1478,6 +1479,14 @@
       "yield": "never",
       "effect": "selects the current or paired field side and stores the complemented event-owned input mask at field context +0x24C6; input processing ANDs this mask with the independent mask controlled by opcode 0x111",
       "evidence": "func_ov000_020823f8 case 0x112 and input-mask combiner func_ov000_0207ec3c"
+    },
+    "278": {
+      "arguments": ["enabled", "lead_character_selector_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets whether this field context owns an actively player-controlled party. Disabled contexts suppress direct party input and make field variable 0x3000 report -1 instead of the active character selector. When the second argument is not -1 and the character pair encoded by selector bits 1.. is present on this field screen, its low bit is also copied to party-controller 0's active-member flag",
+      "evidence": "func_ov000_020823f8 case 0x116, field-variable reader func_ov000_02081c00 case 0x3000, and party-input consumer func_ov000_0209d12c"
     },
     "279": {
       "arguments": ["enabled", "entity_selector_or_minus_one"],
