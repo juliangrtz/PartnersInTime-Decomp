@@ -31,6 +31,8 @@ struct BattleAITask *BattleStatus_StartPartyAilment5Visual(int actor_id);
 void BattleStatus_UpdatePartyAilmentVisual(struct BattleAITask *task);
 struct BattleAITask *BattleStatus_StartPartyAilment3Visual(int actor_id);
 void BattleStatus_UpdatePartyAilment3Visual(struct BattleAITask *task);
+struct BattleAITask *BattleStatus_StartPartyAilment2Visual(int actor_id);
+u32 BattleStatus_UpdatePartyAilment2Visual(struct BattleAITask *task);
 struct BattleAITask *BattleStatus_StartPartyStatVisual(int actor_id,
                                                        int status_id);
 void BattleStatus_UpdatePartyStatVisuals(struct BattleAITask *task);
