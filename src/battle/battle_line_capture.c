@@ -12,7 +12,7 @@ enum BattleLineCaptureOffset {
 enum BattleLineCaptureConstant {
     BATTLE_LINE_CAPTURE_LINE_COUNT = 32,
     BATTLE_LINE_CAPTURE_INITIAL_VELOCITY = -13,
-    BATTLE_LINE_CAPTURE_BUSY = 1 << 5,
+    BATTLE_LINE_CAPTURE_BUSY_BIT = 5,
     BATTLE_LINE_CAPTURE_ACTIVE = 1 << 6,
     BATTLE_LINE_CAPTURE_CONFIGURED = 1 << 11
 };
@@ -58,7 +58,7 @@ void BattleLineCapture_UpdateTask(BattleLineTransitionTask *task) {
         *(u32 *)(gBattleContext + BATTLE_LINE_CAPTURE_RUNTIME_FLAGS_OFFSET);
     BattleLineTransitionState *state;
 
-    if (((flags << 26) >> 31) == 0) {
+    if (((flags << (31 - BATTLE_LINE_CAPTURE_BUSY_BIT)) >> 31) == 0) {
         *(u16 *)(gBattleContext + BATTLE_LINE_CAPTURE_INTENSITY_OFFSET) = 32;
         state = &task->state;
         ++state->frame;
@@ -79,7 +79,7 @@ void BattleLineCapture_WaitForResetTask(BattleLineTransitionTask *task) {
     u32 flags =
         *(u32 *)(gBattleContext + BATTLE_LINE_CAPTURE_RUNTIME_FLAGS_OFFSET);
 
-    if (((flags << 26) >> 31) == 0) {
+    if (((flags << (31 - BATTLE_LINE_CAPTURE_BUSY_BIT)) >> 31) == 0) {
         *(u32 *)(gBattleContext + BATTLE_LINE_CAPTURE_RUNTIME_FLAGS_OFFSET) =
             flags & ~BATTLE_LINE_CAPTURE_ACTIVE;
         task->callback = 0;

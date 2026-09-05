@@ -352,3 +352,9 @@ src/battle/battle_line_capture.c:
 
 src/battle/battle_line_transition_phase_b.c:
     .text       start:0x020b3714 end:0x020b37cc
+
+src/battle/battle_cylinder_transition.c:
+    .text       start:0x020b3f58 end:0x020b42e0
+
+src/battle/battle_curtain_transition.c:
+    .text       start:0x020b44d0 end:0x020b4544
