@@ -505,9 +505,16 @@
     "188": "set_party_field_mode",
     "189": "cancel_party_actions",
     "190": "wait_party_actions_idle",
-    "198": "launch_active_party_to_elevation",
-    "199": "drop_active_party_from_elevation",
-    "200": "complete_airborne_party_member_transfers",
+    "191": "start_baby_hammer_swing",
+    "192": "wait_baby_hammer_swing",
+    "193": "finish_baby_hammer_swing",
+    "194": "prepare_baby_drill_marker",
+    "195": "move_party_to_gimmick_anchor",
+    "196": "prepare_bros_ball_cannon_launch",
+    "197": "launch_bros_ball_from_cannon",
+    "198": "launch_baby_party_to_elevation",
+    "199": "drop_baby_party_from_elevation",
+    "200": "complete_airborne_baby_transfers",
     "201": "get_party_controller_property",
     "202": "switch_active_party",
     "204": "set_party_piggyback_state",
@@ -1383,12 +1390,68 @@
       "yield": "while a party action entity remains active",
       "evidence": "func_ov000_020823f8 case 0x0BE, func_ov000_0209ebdc, and func_ov000_020b780c"
     },
+    "191": {
+      "arguments": ["baby_character_id_or_member_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a scripted overworld hammer swing for Baby Mario or Baby Luigi, selected by the low bit of the argument. The baby enters controller state 24, its attached hammer entity is enabled with the matching character resource, and the normal hammer collision/state sequence continues through states 25 to 27",
+      "evidence": "func_ov000_020823f8 case 0x0BF, hammer initializer func_ov000_0208f1e0, state 24-to-27 consumers in func_ov000_0209418c, and the two shipped scripted swings in rooms 204 and 209"
+    },
+    "192": {
+      "arguments": ["baby_character_id_or_member_index"],
+      "result": null,
+      "control_flow": "retries the same command while the selected baby's controller state is 24, 25, 26, or 27",
+      "yield": "while the selected scripted hammer swing remains active",
+      "effect": "waits for the scripted overworld hammer swing selected by the argument's low bit to finish",
+      "evidence": "func_ov000_020823f8 case 0x0C0, state predicate func_ov000_0208efc4, and the shipped room-209 start/wait sequence"
+    },
+    "193": {
+      "arguments": ["baby_character_id_or_member_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "immediately finishes and cleans up the selected baby's overworld hammer action: the controller returns to state 0, the attached hammer entity is disabled, temporary collision/render flags are cleared, and any action-owned room value is restored. Selection uses only the argument's low bit",
+      "evidence": "func_ov000_020823f8 case 0x0C1, shared hammer finalizer func_ov000_0208efec, natural state 25-to-27 completion in func_ov000_0209418c, and four reachable script uses"
+    },
+    "194": {
+      "arguments": ["marker_animation_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resets the baby-party controller into its field mode 5 configuration used by the drill/underground room gimmick, restores its two action-icon assignments, and stores marker_animation_id in the controller. Opcode 0x0BB can then attach the room-designated marker model and select this stored animation; field variable field[23] reads the same value",
+      "evidence": "func_ov000_020823f8 case 0x0C2, func_ov000_0209de24, mode-5 initializer func_ov000_0208a9dc, marker-model toggle func_ov000_02089da8, field-variable reader func_ov000_02081c00 case 0x3017, and 15 reachable script uses"
+    },
+    "195": {
+      "arguments": ["party_side", "anchor_entity_slot"],
+      "result": null,
+      "control_flow": "fallthrough; becomes a no-op unless the selected party is in one of the compatible airborne or special-action states and is vertically aligned with the anchor",
+      "yield": "never",
+      "effect": "starts the selected adult or baby party moving into a room-gimmick entity anchor. The adult-side path links its leader to the anchor and enters state 16; the baby-side path links both members at opposite eight-pixel offsets and enters state 73. The controller records anchor_entity_slot and temporarily suppresses ordinary party input while the linked movement resolves",
+      "evidence": "func_ov000_020823f8 case 0x0C3, wrapper func_ov000_0209dddc, adult path func_ov000_020905e8, baby path func_ov000_0208bef4, linked-motion helper func_ov000_020b3b00, and 18 reachable room-gimmick uses"
+    },
+    "196": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "prepares the adult party for a Bros. Ball cannon launch: it normalizes movement state, switches both adult controller entities to the cannon-compatible form, starts the entry animation in state 20, and applies the temporary render and input flags used by the cannon sequence",
+      "evidence": "func_ov000_020823f8 case 0x0C4, wrapper func_ov000_0209ddcc, initializer func_ov000_0208ffd0, state 20 continuation in func_ov000_0209418c, four shipped cannon sequences, and the room-264 ball-cannon instructions"
+    },
+    "197": {
+      "arguments": ["unused_legacy_parameter"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "launches the prepared Bros. Ball from its cannon with the fixed original movement profile and enters controller state 23. The encoded argument is passed to the wrapper but ignored by the implementation",
+      "evidence": "func_ov000_020823f8 case 0x0C5, wrapper func_ov000_0209ddbc, launch initializer func_ov000_0208f5e4, state 23 consumer in func_ov000_0209418c, and the two shipped cannon launches in rooms 264 and 529"
+    },
     "198": {
       "arguments": ["target_elevation_pixels"],
       "result": null,
-      "control_flow": "fallthrough; becomes a no-op unless both active-party entities are in the compatible field mode and can move upward to the requested elevation",
+      "control_flow": "fallthrough; becomes a no-op unless both baby-party entities are in the compatible field mode and can move upward to the requested elevation",
       "yield": "never",
-      "effect": "starts a profiled vertical launch for both members of the active party toward the absolute target elevation, expressed by the script in integer pixels and converted to Q12 by the dispatcher. The controller enters state 91 and clears its grounded-control bits; shipped room triggers pair the command with trigger-volume handoffs at ledges and raised platforms",
+      "effect": "starts a profiled vertical launch for both baby-party members toward the absolute target elevation, expressed by the script in integer pixels and converted to Q12 by the dispatcher. The baby controller enters state 91 and clears its grounded-control bits; shipped room triggers pair the command with trigger-volume handoffs at ledges and raised platforms",
       "evidence": "func_ov000_020823f8 case 0x0C6, wrappers func_ov000_0209dda4 and func_ov000_0208addc, vertical-motion initializer func_ov000_020b3f00, controller state 91 consumers in func_ov000_0209418c, and 32 reachable script uses"
     },
     "199": {
@@ -1396,7 +1459,7 @@
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "starts the matching downward movement for both members of the active party, marks their controller entities as airborne, enters state 93, and enables the party controller's elevation-transition flag. Shipped scripts use it on the reverse side of trigger pairs whose forward side uses opcode 0x0C6",
+      "effect": "starts the matching downward movement for both baby-party members, marks their controller entities as airborne, enters state 93, and enables the baby controller's elevation-transition flag. Shipped scripts use it on the reverse side of trigger pairs whose forward side uses opcode 0x0C6",
       "evidence": "func_ov000_020823f8 case 0x0C7, wrappers func_ov000_0209dd8c and func_ov000_0208ad18, vertical-motion initializer func_ov000_020b44ac, controller state 93 consumers in func_ov000_0209418c, and 17 reachable script uses"
     },
     "200": {
@@ -1404,7 +1467,7 @@
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "immediately completes either active-party member's pending cross-party airborne transfer when its controller is in ascent state 57 or descent state 58. Completion returns that entity to state 0, hides and suspends its standalone field model, and refreshes party attachment state; scripts invoke this before changing party-member resources or formations so no transfer animation survives the reconfiguration",
+      "effect": "immediately completes either baby-party member's pending airborne transfer onto the corresponding adult when its controller is in ascent state 57 or descent state 58. Completion returns that baby entity to state 0, hides and suspends its standalone field model, and refreshes party attachment state; scripts invoke this before changing party-member resources or formations so no transfer animation survives the reconfiguration",
       "evidence": "func_ov000_020823f8 case 0x0C8, func_ov000_0209e1a8, transfer launcher func_ov000_0208d17c, natural state 57-to-58 transition in func_ov000_020bb0c4, completion helper func_ov000_0208d0dc, and 29 reachable script uses"
     },
     "201": {

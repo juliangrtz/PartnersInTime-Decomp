@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 253 | 202 | `config/eur/field_vm.json` |
+| Field/world | 341 | 260 | 209 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -201,9 +201,16 @@ field context (the other DS screen/field instance).
 | `0x0BC` | `set_party_field_mode` | party_side, field_mode | changes the selected party's field-action/formation mode through the common mode dispatcher. Modes 0 through 8 select the normal, special movement, split-action, and character-specific controller implementations; shipped field scripts use mode 0 here to normalize either party |
 | `0x0BD` | `cancel_party_actions` | party_side_or_minus_one, action_type_mask | requests normalization/cancellation of the current field action when its action-type bit is present in action_type_mask; party side -1 applies the request to both active parties |
 | `0x0BE` | `wait_party_actions_idle` | party_side | retries the same command while the selected party's leader, follower, or attached action entities have not returned to an idle field state |
-| `0x0C6` | `launch_active_party_to_elevation` | target_elevation_pixels | starts a profiled vertical launch for both members of the active party toward the absolute target elevation, expressed by the script in integer pixels and converted to Q12 by the dispatcher. The controller enters state 91 and clears its grounded-control bits; shipped room triggers pair the command with trigger-volume handoffs at ledges and raised platforms |
-| `0x0C7` | `drop_active_party_from_elevation` | 0 literal args | starts the matching downward movement for both members of the active party, marks their controller entities as airborne, enters state 93, and enables the party controller's elevation-transition flag. Shipped scripts use it on the reverse side of trigger pairs whose forward side uses opcode 0x0C6 |
-| `0x0C8` | `complete_airborne_party_member_transfers` | 0 literal args | immediately completes either active-party member's pending cross-party airborne transfer when its controller is in ascent state 57 or descent state 58. Completion returns that entity to state 0, hides and suspends its standalone field model, and refreshes party attachment state; scripts invoke this before changing party-member resources or formations so no transfer animation survives the reconfiguration |
+| `0x0BF` | `start_baby_hammer_swing` | baby_character_id_or_member_index | starts a scripted overworld hammer swing for Baby Mario or Baby Luigi, selected by the low bit of the argument. The baby enters controller state 24, its attached hammer entity is enabled with the matching character resource, and the normal hammer collision/state sequence continues through states 25 to 27 |
+| `0x0C0` | `wait_baby_hammer_swing` | baby_character_id_or_member_index | waits for the scripted overworld hammer swing selected by the argument's low bit to finish |
+| `0x0C1` | `finish_baby_hammer_swing` | baby_character_id_or_member_index | immediately finishes and cleans up the selected baby's overworld hammer action: the controller returns to state 0, the attached hammer entity is disabled, temporary collision/render flags are cleared, and any action-owned room value is restored. Selection uses only the argument's low bit |
+| `0x0C2` | `prepare_baby_drill_marker` | marker_animation_id | resets the baby-party controller into its field mode 5 configuration used by the drill/underground room gimmick, restores its two action-icon assignments, and stores marker_animation_id in the controller. Opcode 0x0BB can then attach the room-designated marker model and select this stored animation; field variable field[23] reads the same value |
+| `0x0C3` | `move_party_to_gimmick_anchor` | party_side, anchor_entity_slot | starts the selected adult or baby party moving into a room-gimmick entity anchor. The adult-side path links its leader to the anchor and enters state 16; the baby-side path links both members at opposite eight-pixel offsets and enters state 73. The controller records anchor_entity_slot and temporarily suppresses ordinary party input while the linked movement resolves |
+| `0x0C4` | `prepare_bros_ball_cannon_launch` | 0 literal args | prepares the adult party for a Bros. Ball cannon launch: it normalizes movement state, switches both adult controller entities to the cannon-compatible form, starts the entry animation in state 20, and applies the temporary render and input flags used by the cannon sequence |
+| `0x0C5` | `launch_bros_ball_from_cannon` | unused_legacy_parameter | launches the prepared Bros. Ball from its cannon with the fixed original movement profile and enters controller state 23. The encoded argument is passed to the wrapper but ignored by the implementation |
+| `0x0C6` | `launch_baby_party_to_elevation` | target_elevation_pixels | starts a profiled vertical launch for both baby-party members toward the absolute target elevation, expressed by the script in integer pixels and converted to Q12 by the dispatcher. The baby controller enters state 91 and clears its grounded-control bits; shipped room triggers pair the command with trigger-volume handoffs at ledges and raised platforms |
+| `0x0C7` | `drop_baby_party_from_elevation` | 0 literal args | starts the matching downward movement for both baby-party members, marks their controller entities as airborne, enters state 93, and enables the baby controller's elevation-transition flag. Shipped scripts use it on the reverse side of trigger pairs whose forward side uses opcode 0x0C6 |
+| `0x0C8` | `complete_airborne_baby_transfers` | 0 literal args | immediately completes either baby-party member's pending airborne transfer onto the corresponding adult when its controller is in ascent state 57 or descent state 58. Completion returns that baby entity to state 0, hides and suspends its standalone field model, and refreshes party attachment state; scripts invoke this before changing party-member resources or formations so no transfer animation survives the reconfiguration |
 | `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
 | `0x0CA` | `switch_active_party` | party_side_or_other, instant | makes the selected adult/baby party the manager's active party and transfers input, leader animation, camera/entry-anchor state, HUD state, and field ownership as required. Party side -1 selects the other party. instant suppresses the normal brightness fade for an accompanying room handoff and uses the one-frame camera-anchor path instead of the profiled path |
 | `0x0CC` | `set_party_piggyback_state` | piggybacked | sets the party manager's persistent adult/baby piggyback-state marker. The marker is serialized into the field-party snapshot and restored when the next field reconstructs the party; it does not itself move or attach actors. Shipped cutscenes clear it before controlling all four members independently and set it again immediately before or after reuniting them with opcode 0x0B1 |
@@ -306,8 +313,8 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-228/289 used opcodes and
-386,605/387,272 reachable commands
+235/289 used opcodes and
+386,651/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
@@ -324,14 +331,14 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x137` | 22 |
 | `0x080` | 21 |
 | `0x07D` | 20 |
-| `0x0C3` | 18 |
 | `0x130` | 16 |
-| `0x0C2` | 15 |
 | `0x0E7` | 14 |
 | `0x073` | 14 |
 | `0x0E9` | 11 |
 | `0x0E8` | 11 |
 | `0x08A` | 11 |
+| `0x113` | 9 |
+| `0x061` | 9 |
 
 ## Menu/UI scene scripts
 
