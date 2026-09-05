@@ -22,6 +22,22 @@ def linked_sources(manifest: Path):
             yield Path(line)
 
 
+def validate_unique_object_basenames(source_files: list[Path]) -> None:
+    """Reject source objects that the MW linker script cannot distinguish."""
+    owners: dict[str, Path] = {}
+    for source_file in source_files:
+        object_name = normalized(Path(object_path(source_file).name))
+        previous = owners.get(object_name)
+        if previous is not None:
+            raise ValueError(
+                "Linked source objects must have unique basenames because "
+                "the generated MW linker script selects them without their "
+                f"directories: {previous} and {source_file} both produce "
+                f"{object_path(source_file).name}"
+            )
+        owners[object_name] = source_file
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Prepare the object list used for the final ARM9 link"
@@ -33,8 +49,11 @@ def main() -> None:
     parser.add_argument("--linked-sources", type=Path, required=True)
     args = parser.parse_args()
 
+    source_files = list(linked_sources(args.linked_sources))
+    validate_unique_object_basenames(source_files)
+
     replacements: dict[str, Path] = {}
-    for source_file in linked_sources(args.linked_sources):
+    for source_file in source_files:
         if source_file.suffix not in {".c", ".cpp"}:
             raise ValueError(f"Unsupported linked source file: {source_file}")
         if not source_file.is_file():

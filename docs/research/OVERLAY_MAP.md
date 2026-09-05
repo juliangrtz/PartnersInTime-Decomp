@@ -32,14 +32,14 @@ The raw-loader base and input image differ by overlay; see
 | 9 | 78,984 B | Contains four shop datasets used by the editable-data project | None | Data mapped; code triage pending |
 | 10 | 6,820 B | Six-slot enemy selection/snapshot logic, enemy-stat trait filtering, Q8 scaling, and threshold selection | `0x020C2340-0x020C259C` (6 functions, 604 B) | Active; high-value small overlay |
 | 11 | 13,372 B | Unknown | None | Priority quick-win target |
-| 12 | 12,032 B | Unknown | None | Priority quick-win target |
+| 12 | 12,032 B | Battle special-attack code; recovered state tracks party formation, animation timing, a shuffled four-member action order, and paired scene-object cleanup | `0x020C2FCC-0x020C31E8` and `0x020C4FA8-0x020C50C0` (8 functions, 820 B) | Active; exact item identity still requires runtime confirmation |
 | 13 | 12,316 B | Unknown | None | Priority quick-win target |
 | 14 | 13,860 B | Unknown | None | Priority quick-win target |
 | 15 | 13,164 B | Unknown | None | Priority quick-win target |
 | 16 | 18,324 B | Unknown | None | Untriaged |
 | 17 | 16,784 B | Unknown | None | Untriaged |
 | 18 | 18,036 B | Unknown | None | Untriaged |
-| 20 | 9,204 B | Unknown | None | Priority quick-win target |
+| 20 | 9,204 B | Battle special-attack code; recovered state initializes object 40, resets the acting party member, controls finish/mode transitions, and launches a target-relative vertical arc | `0x020C34A4-0x020C3724` (6 functions, 640 B) | Active; continue around the central animation dispatcher |
 | 21 | 5,280 B | Recovered code configures a battle scene-object animation/model and maintains two packed attack phases/timers | `0x020C2AE0-0x020C2BCC` (5 functions, 236 B) | Active; smallest real overlay |
 | 25 | 38,024 B | Unknown | None | Untriaged |
 | 26 | 14,452 B | Unknown | None | Priority quick-win target |
