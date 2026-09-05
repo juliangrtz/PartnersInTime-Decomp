@@ -505,6 +505,9 @@
     "188": "set_party_field_mode",
     "189": "cancel_party_actions",
     "190": "wait_party_actions_idle",
+    "198": "launch_active_party_to_elevation",
+    "199": "drop_active_party_from_elevation",
+    "200": "complete_airborne_party_member_transfers",
     "201": "get_party_controller_property",
     "202": "switch_active_party",
     "204": "set_party_piggyback_state",
@@ -1379,6 +1382,30 @@
       "control_flow": "retries the same command while the selected party's leader, follower, or attached action entities have not returned to an idle field state",
       "yield": "while a party action entity remains active",
       "evidence": "func_ov000_020823f8 case 0x0BE, func_ov000_0209ebdc, and func_ov000_020b780c"
+    },
+    "198": {
+      "arguments": ["target_elevation_pixels"],
+      "result": null,
+      "control_flow": "fallthrough; becomes a no-op unless both active-party entities are in the compatible field mode and can move upward to the requested elevation",
+      "yield": "never",
+      "effect": "starts a profiled vertical launch for both members of the active party toward the absolute target elevation, expressed by the script in integer pixels and converted to Q12 by the dispatcher. The controller enters state 91 and clears its grounded-control bits; shipped room triggers pair the command with trigger-volume handoffs at ledges and raised platforms",
+      "evidence": "func_ov000_020823f8 case 0x0C6, wrappers func_ov000_0209dda4 and func_ov000_0208addc, vertical-motion initializer func_ov000_020b3f00, controller state 91 consumers in func_ov000_0209418c, and 32 reachable script uses"
+    },
+    "199": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the matching downward movement for both members of the active party, marks their controller entities as airborne, enters state 93, and enables the party controller's elevation-transition flag. Shipped scripts use it on the reverse side of trigger pairs whose forward side uses opcode 0x0C6",
+      "evidence": "func_ov000_020823f8 case 0x0C7, wrappers func_ov000_0209dd8c and func_ov000_0208ad18, vertical-motion initializer func_ov000_020b44ac, controller state 93 consumers in func_ov000_0209418c, and 17 reachable script uses"
+    },
+    "200": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "immediately completes either active-party member's pending cross-party airborne transfer when its controller is in ascent state 57 or descent state 58. Completion returns that entity to state 0, hides and suspends its standalone field model, and refreshes party attachment state; scripts invoke this before changing party-member resources or formations so no transfer animation survives the reconfiguration",
+      "evidence": "func_ov000_020823f8 case 0x0C8, func_ov000_0209e1a8, transfer launcher func_ov000_0208d17c, natural state 57-to-58 transition in func_ov000_020bb0c4, completion helper func_ov000_0208d0dc, and 29 reachable script uses"
     },
     "201": {
       "arguments": ["party_side", "property_id"],
