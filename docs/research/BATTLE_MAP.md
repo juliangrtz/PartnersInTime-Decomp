@@ -186,6 +186,9 @@ and runtime overlay 2.
 | `020A40D4` | `BattleSceneObject_StartScaledAcceleratedMotion` | Converts integer velocity and acceleration inputs to the solver's Q8 scale |
 | `020A411C` | `BattleSceneObject_StartAcceleratedMotion` | Normalizes a path and solves constant or accelerated duration |
 | `020A43D8` | `BattleSceneObject_UpdateAcceleratedMotion` | Advances normalized acceleration and applies the terminal correction |
+| `020A4518` | `BattleSceneObject_StartVerticalMotionTo` | Solves one of two vertical-motion durations from velocity and acceleration |
+| `020A46A0` | `BattleSceneObject_StartVerticalArc` | Builds a duration-based or parameterized vertical arc toward a target height |
+| `020A47EC` | `BattleSceneObject_UpdateVerticalMotion` | Evaluates the vertical motion's quadratic position and exact terminal height |
 | `020A483C` | `BattleSceneObject_MoveTo` | Moves immediately or interpolates toward absolute coordinates |
 | `020A48AC` | `BattleSceneObject_UpdateMoveTo` | Advances absolute-target interpolation by one frame |
 | `020A4934` | `BattleSceneObject_MoveBy` | Applies a position delta immediately or over a duration |
@@ -787,6 +790,13 @@ quantity from duration, terminal velocity, acceleration, or peak distance.
 The following 320-byte update callback is maintained as readable C and has the
 correct instruction count and control flow, but remains unlinked while its
 accelerated-path register allocation is brought to an exact match.
+The adjacent 804-byte vertical-motion block is also readable C. Its shared
+quadratic update callback is byte-identical, while the two constructors remain
+unlinked because MWCC assigns different callee-saved registers despite emitting
+the same instruction sequences and sizes. The global 532-byte motion scheduler
+at `0x020A4BF4` is exact linked C: it snapshots each object, composes as many as
+four channels, advances and clamps Q8 time, records per-channel displacement,
+stops completed channels, and unlinks idle objects from the active list.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets

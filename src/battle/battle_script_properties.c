@@ -273,7 +273,7 @@ int BattleScript_GetProperty(u16 actor_id, int property) {
         return (((BattleEnemyScriptPropertyView *)
                  BattleActor_GetEnemySlot(actor_id))->flags_29c << 30) >> 31;
     case BATTLE_PROPERTY_SCENE_1A:
-        return BattleSceneObject_GetById(actor_id)->unk_01a;
+        return BattleSceneObject_GetById(actor_id)->time_paused;
     case BATTLE_PROPERTY_SCENE_FLAGS_20_23:
         return (BattleSceneObject_GetById(actor_id)->flags.raw << 8) >> 28;
     case BATTLE_PROPERTY_ENEMY_RESOURCE_0A: {
@@ -412,9 +412,9 @@ int BattleScript_GetProperty(u16 actor_id, int property) {
     case BATTLE_PROPERTY_ACTOR_68:
         return FIELD_S8(BattleActor_GetById(actor_id), 0x68);
     case BATTLE_PROPERTY_SCENE_1A_ALIAS:
-        return BattleSceneObject_GetById(actor_id)->unk_01a;
+        return BattleSceneObject_GetById(actor_id)->time_paused;
     case BATTLE_PROPERTY_SCENE_16:
-        return BattleSceneObject_GetById(actor_id)->unk_016;
+        return BattleSceneObject_GetById(actor_id)->time_step_adjustment_q8;
     case BATTLE_PROPERTY_MOTION_ORIGIN_X:
         return BattleSceneObject_GetById(actor_id)->motion_origin_x;
     case BATTLE_PROPERTY_MOTION_ORIGIN_Y:

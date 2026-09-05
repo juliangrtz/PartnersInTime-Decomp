@@ -64,6 +64,7 @@ src/battle/battle_scene_shadows.cpp
 src/battle/battle_scene_object.c
 src/battle/battle_scene_accelerated_motion.c
 src/battle/battle_scene_movement.c
+src/battle/battle_scene_motion_update.c
 src/battle/battle_scene_motion_list.c
 src/battle/battle_scene_motion_channel.c
 src/battle/battle_task.c

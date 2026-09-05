@@ -256,9 +256,9 @@ struct BattleSceneObject {
     s16 motion_target_x;
     s16 motion_target_y;
     s16 motion_target_z;
-    s16 unk_016;
+    s16 time_step_adjustment_q8;
     s16 smoothed_travel_distance;
-    u16 unk_01a;
+    u16 time_paused;
     BattleMotionChannel motion_channels[BATTLE_MOTION_CHANNEL_COUNT];
     BattleSceneResource *resource;
     BattleModel *primary_model;
@@ -347,6 +347,7 @@ void BattleSceneObject_MoveBy(BattleSceneObject *object, int channel_index,
 void BattleSceneObject_UpdateMoveBy(BattleSceneObject *object,
                                     BattleMotionChannel *channel);
 void BattleSceneObject_UpdateTravelDistance(BattleSceneObject *object);
+void BattleSceneMotion_UpdateAll(void);
 void BattleSceneObject_ApplyMovement(u32 object_id, int channel_index,
                                      int movement_kind, int x, int y, int z,
                                      int duration, int target_object_id,
@@ -398,6 +399,15 @@ int BattleSceneObject_StartAcceleratedMotion(
     int prefer_longer_duration
 );
 void BattleSceneObject_UpdateAcceleratedMotion(
+    BattleSceneObject *object, BattleMotionChannel *channel);
+int BattleSceneObject_StartVerticalMotionTo(
+    BattleSceneObject *object, int channel_index,
+    int initial_velocity, int acceleration, int target_z,
+    int prefer_longer_duration);
+int BattleSceneObject_StartVerticalArc(
+    BattleSceneObject *object, int channel_index,
+    int duration_or_velocity, int curve_parameter, int target_z);
+void BattleSceneObject_UpdateVerticalMotion(
     BattleSceneObject *object, BattleMotionChannel *channel);
 s16 *BattleSceneObject_BeginMotionChannel(BattleSceneObject *object,
                                           int channel_index, int duration,
