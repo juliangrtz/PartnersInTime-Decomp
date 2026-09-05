@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 307 | 256 | `config/eur/field_vm.json` |
+| Field/world | 341 | 308 | 257 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -127,6 +127,7 @@ field context (the other DS screen/field instance).
 | `0x049` | `get_entity_property` | entity_selector, property_id | fallthrough |
 | `0x04A` | `set_entity_visible` | entity_selector, visible | sets the entity render-enabled bit and forwards the state to its bound render object |
 | `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
+| `0x04C` | `set_entity_turn_to_interactor_enabled` | entity_selector, enabled | controls whether the entity temporarily turns to face the actor that starts an interaction. The interaction setup preserves the entity's prior three-bit facing direction and derives a new direction from the angle between both positions; interaction teardown restores the saved direction |
 | `0x04D` | `set_entity_ground_tracking` | entity_selector, ground_tracking_enabled | sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty |
 | `0x050` | `set_entity_offscreen_contact_retention_enabled` | entity_selector, enabled | when enabled, permits another entity to retain its linked contact with this entity while this entity is outside the visible screen bounds; the normal disabled behavior drops that link after the off-screen state is observed |
 | `0x051` | `set_entity_reserved_state_flag` | entity_selector, enabled | sets entity base-state bit +0x184 bit 12. The flag is copied when the base entity state is cloned, but an exhaustive instruction-level scan of overlay 0 and the resident ARM9 found no behavioral reader, and the field entity serializer does not preserve it. All 71 shipped commands enable it, so it is currently classified as a reserved or vestigial state flag rather than assigning an unsupported gameplay meaning |
@@ -360,13 +361,12 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-275/289 used opcodes and
-387,241/387,272 reachable commands
+276/289 used opcodes and
+387,248/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x04C` | 7 |
 | `0x138` | 5 |
 | `0x05E` | 5 |
 | `0x06B` | 3 |

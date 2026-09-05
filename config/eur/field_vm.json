@@ -431,6 +431,7 @@
     "73": "get_entity_property",
     "74": "set_entity_visible",
     "75": "set_entity_enabled",
+    "76": "set_entity_turn_to_interactor_enabled",
     "77": "set_entity_ground_tracking",
     "80": "set_entity_offscreen_contact_retention_enabled",
     "81": "set_entity_reserved_state_flag",
@@ -850,6 +851,14 @@
       "yield": "never",
       "effect": "sets entity state bit 0, which gates the normal entity update path",
       "evidence": "func_ov000_020823f8 case 0x04B and entity update consumers of state +0x0A bit 0"
+    },
+    "76": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "controls whether the entity temporarily turns to face the actor that starts an interaction. The interaction setup preserves the entity's prior three-bit facing direction and derives a new direction from the angle between both positions; interaction teardown restores the saved direction",
+      "evidence": "func_ov000_020823f8 case 0x04C sets entity state +0x38C bit 11; interaction setup func_ov000_02088214 and angle helper func_ov000_020b426c; restore path func_ov000_0208815c; and all seven shipped calls"
     },
     "77": {
       "arguments": ["entity_selector", "ground_tracking_enabled"],
