@@ -289,3 +289,6 @@ src/battle/battle_status_enemy_ailment3.cpp:
 
 src/battle/battle_status_enemy_ailment2.cpp:
     .text       start:0x020a81b4 end:0x020a8320
+
+src/battle/battle_status_visual_routing.c:
+    .text       start:0x020a8320 end:0x020a87f4
