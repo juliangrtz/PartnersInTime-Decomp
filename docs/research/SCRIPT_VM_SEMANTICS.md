@@ -77,11 +77,11 @@ that boundary mean only the same encoded argument shape, not the same side effec
 Across the 210 indices present in every instance, 58 happen to share
 the same shape.
 
-| Instance | Descriptor entries | Semantically named | Source |
-|---|---:|---:|---|
-| Field/world | 341 | 84 | `config/eur/field_vm.json` |
-| Battle | 260 | 137 | `config/eur/battle_ai_vm.json` |
-| Scene/object | 210 | 110 | `config/eur/scene_vm.json` |
+| Instance | Descriptor entries | Named | Detailed contracts | Source |
+|---|---:|---:|---:|---|
+| Field/world | 341 | 84 | 33 | `config/eur/field_vm.json` |
+| Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
+| Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
 The field and scene tables are reproducibly extracted and checked against a private
 ROM with `tools/extract_script_vm_descriptors.py`; the committed JSON contains only
@@ -141,12 +141,26 @@ Overlay 7 is the MenuAI scene/object VM. Its three script archives are
 archive entries contain 6,585 reachable commands using 60 opcodes; 26,076 bytes
 are not reachable code and remain private. `tools/scene_script_mod.py` exports
 and fixed-layout rebuilds all three archives byte-identically.
+The checked-in document covers 18 entries and
+6,585 commands; 60/60
+used opcodes and 6,585/6,585
+commands now have static semantic names.
 
 The recovered scene-specific control flow comprises inline/spawn/wait object
 scripts (`0x0A5..0x0A9`), the terminal targeted stop at `0x0AB`, and four
 conditional branch forms (`0x0B1`, `0x0B2`, `0x0B5`, `0x0B6`). Opcode `0x033`
 is also proven to be an intentional two-argument no-op: it occurs 103 times but
 has no dispatcher case.
+Opcodes `0x09F..0x0A4` control persistent/one-frame synthetic input,
+real-input rejection, and rejection feedback. Opcodes `0x059..0x065`
+form paired coordinate/directional kinematic motion families; their result
+forms return the statically solved duration.
+
+The remaining used scene opcodes are:
+
+| Opcode | Uses |
+|---:|---:|
+| none | 0 |
 
 ## VM ABI
 

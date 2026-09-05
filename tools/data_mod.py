@@ -21,6 +21,12 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
+# Scene-script tooling imports this module for the shared archive/VM codec.  Keep
+# one module identity when this file is also the command-line entry point.
+if __name__ == "__main__":
+    sys.modules.setdefault("data_mod", sys.modules[__name__])
+
+
 PROJECT_SCHEMA = "pit-data-project-v1"
 MFSET_SCHEMA = "pit-mfset-v1"
 ENEMY_SCHEMA = "pit-enemy-stats-v1"
@@ -2304,6 +2310,24 @@ def command_export(args: argparse.Namespace) -> None:
             ),
         )
         script_documents.append(output_relative)
+    import scene_script_mod
+
+    scene_descriptors, scene_opcode_names = scene_script_mod.load_vm_schema(
+        args.version
+    )
+    overlay_7_path = files_root.parent / "arm9_overlays" / "ov007.bin"
+    if not overlay_7_path.is_file():
+        raise DataModError(f"private overlay 7 is missing: {overlay_7_path}")
+    scene_script_mod.verify_vm_descriptors(
+        overlay_7_path.read_bytes(), scene_descriptors
+    )
+    scene_relative = "scripts/MenuAI__scene_scripts.json"
+    write_battle_script_json(
+        project_root / scene_relative,
+        scene_script_mod.export_document(
+            files_root, args.version, scene_descriptors, scene_opcode_names
+        ),
+    )
     write_json(
         project_root / "project.json",
         {
@@ -2312,13 +2336,15 @@ def command_export(args: argparse.Namespace) -> None:
             "text_documents": text_documents,
             "dialogue_documents": dialogue_documents,
             "script_documents": script_documents,
+            "scene_script_documents": [scene_relative],
             "stat_documents": [enemy_relative, treasure_relative],
             "binary_documents": [shop_relative, item_master_relative],
         },
     )
     print(
         f"Exported {len(text_documents)} MFsets, {len(dialogue_documents)} dialogue archives, "
-        f"{len(script_documents)} battle-script archives, an enemy table, a treasure table, "
+        f"{len(script_documents)} battle-script archives, three scene-script archives, "
+        "an enemy table, a treasure table, "
         f"shop stock, and item masters to {project_root}"
     )
 
@@ -2345,6 +2371,9 @@ def compile_project(
     script_documents = _require_list(
         project.get("script_documents", []), "script_documents"
     )
+    scene_script_documents = _require_list(
+        project.get("scene_script_documents", []), "scene_script_documents"
+    )
     descriptors: tuple[int, ...] = ()
     opcode_names: dict[int, str] = {}
     if script_documents:
@@ -2356,6 +2385,24 @@ def compile_project(
         if not overlay_2_path.is_file():
             raise DataModError(f"private overlay 2 is missing: {overlay_2_path}")
         verify_battle_vm_descriptors(overlay_2_path.read_bytes(), descriptors)
+
+    scene_script_mod = None
+    scene_descriptors: tuple[int, ...] = ()
+    scene_opcode_names: dict[int, str] = {}
+    if scene_script_documents:
+        version = project.get("version")
+        if not isinstance(version, str):
+            raise DataModError("project version must be a string")
+        import scene_script_mod as loaded_scene_script_mod
+
+        scene_script_mod = loaded_scene_script_mod
+        scene_descriptors, scene_opcode_names = scene_script_mod.load_vm_schema(version)
+        overlay_7_path = files_root.parent / "arm9_overlays" / "ov007.bin"
+        if not overlay_7_path.is_file():
+            raise DataModError(f"private overlay 7 is missing: {overlay_7_path}")
+        scene_script_mod.verify_vm_descriptors(
+            overlay_7_path.read_bytes(), scene_descriptors
+        )
 
     document_groups = (
         ("text_documents", {MFSET_SCHEMA}),
@@ -2406,6 +2453,40 @@ def compile_project(
                     "changed": rebuilt != source_data,
                 }
             )
+    if scene_script_mod is not None:
+        for relative_document in scene_script_documents:
+            if not isinstance(relative_document, str):
+                raise DataModError(
+                    "every scene_script_documents item must be a path string"
+                )
+            document = read_json(project_root / relative_document)
+            if not isinstance(document, dict) or document.get(
+                "schema"
+            ) != scene_script_mod.SCHEMA:
+                raise DataModError(
+                    f"{relative_document} must use schema {scene_script_mod.SCHEMA!r}"
+                )
+            rebuilt_archives = scene_script_mod.build_document(
+                document,
+                files_root,
+                scene_descriptors,
+                scene_opcode_names,
+            )
+            for source, rebuilt in rebuilt_archives.items():
+                if source in replacements:
+                    raise DataModError(f"more than one document rebuilds {source}")
+                source_data = (files_root / Path(source)).read_bytes()
+                replacements[source] = rebuilt
+                report.append(
+                    {
+                        "source": source,
+                        "original_size": len(source_data),
+                        "rebuilt_size": len(rebuilt),
+                        "original_sha1": sha1(source_data),
+                        "rebuilt_sha1": sha1(rebuilt),
+                        "changed": rebuilt != source_data,
+                    }
+                )
     return replacements, report
 
 

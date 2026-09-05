@@ -55,6 +55,22 @@ def scan_scripts(scripts_root: Path, names: dict[int, str]) -> tuple[Counter, in
     return usage, entry_count, private_bytes
 
 
+def scan_scene_scripts(path: Path, names: dict[int, str]) -> tuple[Counter, int, int]:
+    document = json.loads(path.read_text(encoding="utf-8"))
+    if document.get("schema") != "pit-scene-scripts-v1":
+        raise ValueError(f"{path} has an unsupported scene-script schema")
+    usage: Counter[int] = Counter()
+    entry_count = 0
+    private_bytes = 0
+    for archive in document["archives"]:
+        entry_count += len(archive["entries"])
+        for entry in archive["entries"]:
+            private_bytes += entry["private_byte_count"]
+            for command in entry["commands"]:
+                usage[opcode_number(command["opcode"], names)] += 1
+    return usage, entry_count, private_bytes
+
+
 def status_for(opcode: int, names: dict[int, str]) -> str:
     if opcode <= 0x32:
         return "reconstructed C"
@@ -88,6 +104,9 @@ def render_markdown(
     private_bytes: int,
     field: dict,
     scene: dict,
+    scene_usage: Counter[int],
+    scene_entry_count: int,
+    scene_private_bytes: int,
 ) -> str:
     named_used = sum(opcode in names for opcode in usage)
     named_commands = sum(count for opcode, count in usage.items() if opcode in names)
@@ -105,6 +124,21 @@ def render_markdown(
         common_prefix += 1
     shared_shapes = sum(
         len(set(values)) == 1 for values in zip(*all_descriptor_sets)
+    )
+    scene_names = {
+        int(opcode, 0): name for opcode, name in scene["known_names"].items()
+    }
+    scene_named_used = sum(opcode in scene_names for opcode in scene_usage)
+    scene_named_commands = sum(
+        count for opcode, count in scene_usage.items() if opcode in scene_names
+    )
+    scene_unresolved = sorted(
+        (
+            (count, opcode)
+            for opcode, count in scene_usage.items()
+            if opcode not in scene_names
+        ),
+        reverse=True,
     )
     lines = [
         "# Script VM semantics",
@@ -186,11 +220,11 @@ def render_markdown(
         f"Across the 210 indices present in every instance, {shared_shapes} happen to share",
         "the same shape.",
         "",
-        "| Instance | Descriptor entries | Semantically named | Source |",
-        "|---|---:|---:|---|",
-        f"| Field/world | {len(field['descriptor_values'])} | {len(field['known_names'])} | `config/eur/field_vm.json` |",
-        f"| Battle | {len(descriptors)} | {len(names)} | `config/eur/battle_ai_vm.json` |",
-        f"| Scene/object | {len(scene['descriptor_values'])} | {len(scene['known_names'])} | `config/eur/scene_vm.json` |",
+        "| Instance | Descriptor entries | Named | Detailed contracts | Source |",
+        "|---|---:|---:|---:|---|",
+        f"| Field/world | {len(field['descriptor_values'])} | {len(field['known_names'])} | {len(field.get('opcode_semantics', {}))} | `config/eur/field_vm.json` |",
+        f"| Battle | {len(descriptors)} | {len(names)} | 0 | `config/eur/battle_ai_vm.json` |",
+        f"| Scene/object | {len(scene['descriptor_values'])} | {len(scene['known_names'])} | {len(scene.get('opcode_semantics', {}))} | `config/eur/scene_vm.json` |",
         "",
         "The field and scene tables are reproducibly extracted and checked against a private",
         "ROM with `tools/extract_script_vm_descriptors.py`; the committed JSON contains only",
@@ -227,15 +261,32 @@ def render_markdown(
             "",
             "Overlay 7 is the MenuAI scene/object VM. Its three script archives are",
             "`MenuAI/BAI_iwasaki.dat`, `MAI_fujioka.dat`, and `MAI_uchida.dat`. Their 18",
-            "archive entries contain 6,585 reachable commands using 60 opcodes; 26,076 bytes",
+            f"archive entries contain 6,585 reachable commands using 60 opcodes; {scene_private_bytes:,} bytes",
             "are not reachable code and remain private. `tools/scene_script_mod.py` exports",
             "and fixed-layout rebuilds all three archives byte-identically.",
+            f"The checked-in document covers {scene_entry_count} entries and",
+            f"{sum(scene_usage.values()):,} commands; {scene_named_used}/{len(scene_usage)}",
+            f"used opcodes and {scene_named_commands:,}/{sum(scene_usage.values()):,}",
+            "commands now have static semantic names.",
             "",
             "The recovered scene-specific control flow comprises inline/spawn/wait object",
             "scripts (`0x0A5..0x0A9`), the terminal targeted stop at `0x0AB`, and four",
             "conditional branch forms (`0x0B1`, `0x0B2`, `0x0B5`, `0x0B6`). Opcode `0x033`",
             "is also proven to be an intentional two-argument no-op: it occurs 103 times but",
             "has no dispatcher case.",
+            "Opcodes `0x09F..0x0A4` control persistent/one-frame synthetic input,",
+            "real-input rejection, and rejection feedback. Opcodes `0x059..0x065`",
+            "form paired coordinate/directional kinematic motion families; their result",
+            "forms return the statically solved duration.",
+            "",
+            "The remaining used scene opcodes are:",
+            "",
+            "| Opcode | Uses |",
+            "|---:|---:|",
+            *(
+                [f"| `0x{opcode:03X}` | {count:,} |" for count, opcode in scene_unresolved]
+                or ["| none | 0 |"]
+            ),
             "",
             "## VM ABI",
             "",
@@ -333,8 +384,23 @@ def main() -> int:
     field = load_instance_config(args.version, "field")
     scene = load_instance_config(args.version, "scene")
     usage, entry_count, private_bytes = scan_scripts(args.scripts_root, names)
+    scene_names = {
+        int(opcode, 0): name for opcode, name in scene["known_names"].items()
+    }
+    scene_usage, scene_entry_count, scene_private_bytes = scan_scene_scripts(
+        args.scripts_root / "MenuAI__scene_scripts.json", scene_names
+    )
     report = render_markdown(
-        descriptors, names, usage, entry_count, private_bytes, field, scene
+        descriptors,
+        names,
+        usage,
+        entry_count,
+        private_bytes,
+        field,
+        scene,
+        scene_usage,
+        scene_entry_count,
+        scene_private_bytes,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report, encoding="utf-8", newline="\n")

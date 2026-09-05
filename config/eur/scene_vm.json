@@ -296,6 +296,19 @@
     "86": "move_object",
     "87": "move_object_complex",
     "88": "move_object_at_speed",
+    "89": "start_object_axis2_kinematic_motion",
+    "90": "start_object_target_kinematic_motion",
+    "91": "start_object_axis2_kinematic_motion_get_duration",
+    "92": "start_object_target_kinematic_motion_get_duration",
+    "93": "start_object_directional_kinematic_motion_a",
+    "94": "start_object_directional_kinematic_motion_b",
+    "95": "start_object_directional_kinematic_motion_c",
+    "96": "start_object_directional_kinematic_motion_a_get_duration",
+    "97": "start_object_directional_kinematic_motion_b_get_duration",
+    "98": "start_object_directional_kinematic_motion_c_get_duration",
+    "99": "start_object_directional_ballistic_motion_a",
+    "100": "start_object_directional_ballistic_motion_b",
+    "101": "start_object_directional_ballistic_motion_c",
     "105": "wait_object_motion",
     "107": "start_object_path_motion",
     "108": "get_object_motion_property",
@@ -306,6 +319,12 @@
     "113": "set_scene_mode",
     "114": "set_scene_flag",
     "115": "get_scene_record_property",
+    "159": "clear_persistent_scene_input",
+    "160": "inject_scene_input_mask",
+    "161": "set_scene_input_disable_mask",
+    "162": "set_scene_input_aux_mask",
+    "163": "set_scene_rejected_input_mask",
+    "164": "clear_scene_rejected_input_mask",
     "165": "start_inline_object_script",
     "166": "start_object_script_and_yield",
     "167": "wait_object_script_and_skip",
@@ -345,6 +364,158 @@
       "yield": "never",
       "effect": "the scene dispatcher has no case for this opcode",
       "evidence": "absent from func_ov007_02081730; descriptor 0x02"
+    },
+    "89": {
+      "arguments": ["object_id", "motion_slot", "axis2_profile", "axis2_target", "speed_fixed_low_or_variable", "speed_fixed_high", "acceleration", "unused"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a kinematic motion of object coordinate 2 toward axis2_target; profile 4 selects the alternate root solver",
+      "evidence": "func_ov007_02081730 cases 0x059/0x05B; func_ov007_020881d8; func_ov007_020866a0; func_ov007_02086828"
+    },
+    "90": {
+      "arguments": ["object_id", "target_motion_slot", "axis2_motion_slot", "axis2_profile", "target_x", "target_y", "target_axis2", "speed_fixed_low_or_variable", "speed_fixed_high", "acceleration_fixed_low_or_variable", "acceleration_fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "solves duration from coordinate-2 motion, then interpolates all three object coordinates to the supplied absolute target over that duration",
+      "evidence": "func_ov007_02081730 cases 0x05A/0x05C; func_ov007_02087fdc"
+    },
+    "91": {
+      "arguments": ["object_id", "motion_slot", "axis2_profile", "axis2_target", "speed_fixed_low_or_variable", "speed_fixed_high", "acceleration", "unused"],
+      "result": "duration_frames",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs opcode 0x059 and writes the solved duration",
+      "evidence": "func_ov007_02081730 case 0x05B passes result-enabled flag to func_ov007_020881d8"
+    },
+    "92": {
+      "arguments": ["object_id", "target_motion_slot", "axis2_motion_slot", "axis2_profile", "target_x", "target_y", "target_axis2", "speed_fixed_low_or_variable", "speed_fixed_high", "acceleration_fixed_low_or_variable", "acceleration_fixed_high"],
+      "result": "duration_frames",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs opcode 0x05A and writes the solved duration",
+      "evidence": "func_ov007_02081730 case 0x05C passes result-enabled flag to func_ov007_02087fdc"
+    },
+    "93": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "profile_parameter", "kinematic_fixed_low_or_variable", "kinematic_fixed_high", "root_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "normalizes the direction vector and starts fixed-distance motion through kinematic profile A; nonpositive solved duration cancels the slot and applies the displacement immediately",
+      "evidence": "func_ov007_02081730 cases 0x05D/0x060; func_ov007_02087ebc; func_ov007_020861d4; func_ov007_020862a4"
+    },
+    "94": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "acceleration_fixed_low_or_variable", "acceleration_fixed_high", "root_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "normalizes the direction vector and starts fixed-distance motion using explicit fixed-point velocity and acceleration",
+      "evidence": "func_ov007_02081730 cases 0x05E/0x061; func_ov007_02087d6c; func_ov007_0208625c; func_ov007_020862a4"
+    },
+    "95": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "kinematic_parameter", "root_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "normalizes the direction vector and starts fixed-distance motion through kinematic profile C, deriving a scheduler parameter before solving duration",
+      "evidence": "func_ov007_02081730 cases 0x05F/0x062; func_ov007_02087c4c; func_ov007_02086124; func_ov007_020862a4"
+    },
+    "96": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "profile_parameter", "kinematic_fixed_low_or_variable", "kinematic_fixed_high", "root_selector"],
+      "result": "duration_frames",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs opcode 0x05D and writes the solved duration",
+      "evidence": "func_ov007_02081730 case 0x060 passes result-enabled flag to func_ov007_02087ebc"
+    },
+    "97": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "acceleration_fixed_low_or_variable", "acceleration_fixed_high", "root_selector"],
+      "result": "duration_frames",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs opcode 0x05E and writes the solved duration",
+      "evidence": "func_ov007_02081730 case 0x061 passes result-enabled flag to func_ov007_02087d6c"
+    },
+    "98": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "kinematic_parameter", "root_selector"],
+      "result": "duration_frames",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs opcode 0x05F and writes the solved duration",
+      "evidence": "func_ov007_02081730 case 0x062 passes result-enabled flag to func_ov007_02087c4c"
+    },
+    "99": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_frames", "terminal_speed_fixed_low_or_variable", "terminal_speed_fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts normalized directional ballistic motion, deriving acceleration from distance, duration, and terminal speed",
+      "evidence": "func_ov007_02081730 case 0x063; func_ov007_02086044; func_ov007_02086560"
+    },
+    "100": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_frames", "acceleration_fixed_low_or_variable", "acceleration_fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts normalized directional ballistic motion, deriving initial speed from distance, duration, and acceleration",
+      "evidence": "func_ov007_02081730 case 0x064; func_ov007_02085f60; func_ov007_02086560"
+    },
+    "101": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_frames", "endpoint_speed", "root_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts normalized directional ballistic motion using a root selected from distance and endpoint-speed constraints; impossible constraints cancel motion",
+      "evidence": "func_ov007_02081730 case 0x065; func_ov007_02085de4; func_ov007_02086560"
+    },
+    "159": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the persistent synthetic scene-input mask; the one-frame mask is cleared automatically after each merge",
+      "evidence": "func_ov007_02081730 case 0x09F; func_ov007_02087be0; func_ov007_02071f80"
+    },
+    "160": {
+      "arguments": ["latch_mode", "key_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "ORs key_mask into persistent synthetic input for latch_mode 0, into one-frame synthetic input for latch_mode 1, and does nothing for other modes",
+      "evidence": "func_ov007_02081730 case 0x0A0; func_ov007_02087ba8; merge and one-frame clear in func_ov007_02071f80"
+    },
+    "161": {
+      "arguments": ["key_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the mask removed from all three real-input states before synthetic input is merged",
+      "evidence": "func_ov007_02081730 case 0x0A1; func_ov007_02087b98; func_ov007_02071f80"
+    },
+    "162": {
+      "arguments": ["key_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stores an auxiliary scene-input mask; overlay 7 contains no reader of this word",
+      "evidence": "func_ov007_02081730 case 0x0A2; func_ov007_02087b88; exhaustive overlay-7 pseudocode search"
+    },
+    "163": {
+      "arguments": ["key_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets a second real-input rejection mask and plays sound 208 when newly pressed real keys intersect it",
+      "evidence": "func_ov007_02081730 case 0x0A3; func_ov007_02087b78; func_ov007_02071f80"
+    },
+    "164": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the real-input rejection-and-feedback mask",
+      "evidence": "func_ov007_02081730 case 0x0A4; func_ov007_02087b68"
     },
     "165": {
       "arguments": ["object_id", "owner_id", "inline_size_halfwords"],
