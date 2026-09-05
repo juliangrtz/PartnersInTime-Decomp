@@ -434,20 +434,29 @@
     "76": "set_entity_turn_to_interactor_enabled",
     "77": "set_entity_ground_tracking",
     "78": "set_entity_alternate_collision_faces_enabled",
+    "79": "set_entity_navigation_obstacle_ignored",
     "80": "set_entity_offscreen_contact_retention_enabled",
     "81": "set_entity_reserved_state_flag",
+    "82": "set_entity_linked_contact_mode",
     "83": "set_entity_contact_direction_filter",
     "84": "set_entity_semitransparent",
     "85": "configure_entity_shadow",
     "86": "set_entity_map_sync_axes",
+    "87": "set_entity_navigation_collision_bounds",
+    "88": "restore_entity_navigation_collision_bounds",
     "89": "set_entity_collision_response_channels",
     "90": "set_entity_collision_response_channels_masked",
     "91": "restore_entity_collision_response_channels",
+    "92": "set_entity_body_collision_bounds",
+    "93": "restore_entity_body_collision_bounds",
     "94": "set_entity_reserved_collision_flag",
     "95": "set_entity_category_collision_policy",
     "96": "set_entity_render_layer",
     "97": "set_entity_body_collision_enabled",
     "98": "set_entity_render_order_priorities",
+    "99": "set_entity_interaction_bounds",
+    "100": "set_entity_interaction_height",
+    "101": "restore_entity_interaction_bounds",
     "102": "set_entity_animation_speed",
     "103": "set_entity_locomotion_parameters",
     "104": "set_entity_default_vertical_launch_velocity",
@@ -458,6 +467,7 @@
     "109": "restore_entity_resource_state",
     "110": "wait_entity_animation",
     "111": "set_entity_animation",
+    "112": "restore_entity_animation",
     "113": "set_entity_behavior_mode",
     "114": "restore_entity_behavior_state",
     "115": "set_entity_palette_profile",
@@ -467,6 +477,7 @@
     "119": "pause_entity_palette_animation",
     "120": "resume_entity_palette_animation",
     "121": "request_entity_base_palette_reload",
+    "122": "wait_entity_base_palette_reload",
     "123": "start_entity_scaling",
     "124": "start_entity_timed_scaling",
     "125": "wait_entity_scaling",
@@ -578,8 +589,14 @@
     "231": "start_map_palette_animation",
     "232": "reset_all_map_palette_animations",
     "233": "stop_map_palette_animation",
+    "234": "resume_map_palette_animation",
+    "235": "restore_map_base_palettes",
+    "236": "wait_map_palette_animations",
     "237": "start_master_brightness_transition",
     "238": "wait_master_brightness_transition",
+    "239": "pause_master_brightness_transition",
+    "240": "resume_master_brightness_transition",
+    "241": "reverse_master_brightness_transition",
     "242": "start_field_palette_animation",
     "243": "wait_field_palette_animation",
     "244": "pause_field_palette_animation",
@@ -601,6 +618,8 @@
     "260": "wait_field_vertical_scroll",
     "261": "begin_time_hole_tunnel_whiteout",
     "262": "wait_time_hole_transition",
+    "263": "start_anchored_field_effect_animation",
+    "264": "wait_anchored_field_effect_animation",
     "265": "start_field_effect_animation",
     "266": "wait_field_effect_animation",
     "267": "return_to_title_screen",
@@ -631,6 +650,7 @@
     "292": "initialize_new_game_preset",
     "293": "restore_party_member_hp",
     "294": "adjust_party_member_hp",
+    "295": "set_coins",
     "296": "adjust_coins",
     "297": "adjust_beans",
     "298": "adjust_item_count",
@@ -889,6 +909,14 @@
       "effect": "selects the entity's alternate field-map collision-face set. When enabled, map and entity collision tests use the second four-bit face mask packed into each geometry record and compensate the entity's lower and upper collision heights by their current vertical offsets; when disabled, they use the primary face mask and unadjusted heights. Party action transitions preserve this setting while temporarily forcing the alternate set",
       "evidence": "func_ov000_020823f8 case 0x04E sets entity state +0x3CC bit 3; collision predicates func_ov000_020a87a4 and func_ov000_020acc7c select the packed face masks and vertical bounds from that bit; action entry/exit helpers func_ov000_0208d934, func_ov000_0208dffc, and func_ov000_0208dc5c save, force, and restore it; and the sole reachable use in room 457"
     },
+    "79": {
+      "arguments": ["entity_selector", "ignored"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets whether the entity is ignored as a blocking obstacle by the navigation-space availability test. When clear, active entity categories 2 through 4 whose navigation collision box overlaps the proposed mover reject that position; when set, that entity is skipped while field-map geometry is still tested",
+      "evidence": "func_ov000_020823f8 case 0x04F sets entity state +0x38C bit 13; navigation-space predicate func_ov000_020b8a90 tests that bit after func_ov000_020ae5fc reports overlap"
+    },
     "80": {
       "arguments": ["entity_selector", "enabled"],
       "result": null,
@@ -904,6 +932,14 @@
       "yield": "never",
       "effect": "sets entity base-state bit +0x184 bit 12. The flag is copied when the base entity state is cloned, but an exhaustive instruction-level scan of overlay 0 and the resident ARM9 found no behavioral reader, and the field entity serializer does not preserve it. All 71 shipped commands enable it, so it is currently classified as a reserved or vestigial state flag rather than assigning an unsupported gameplay meaning",
       "evidence": "func_ov000_020823f8 case 0x051, clone path func_ov000_020a3068, serializers func_ov000_020bb69c and func_ov000_020bbcdc, and instruction-level +0x184/bit-12 scans of overlay 0 and resident ARM9"
+    },
+    "82": {
+      "arguments": ["entity_selector", "contact_mode"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "replaces the entity's three-bit linked-contact mode. The contact callback consumes modes 0 through 4 to decide whether a linked party/entity contact is conditional on the current parent, always accepted, gated by the active adult or baby party and held input, or accepted when parent/member state differs",
+      "evidence": "func_ov000_020823f8 case 0x052 stores entity state +0x38C bits 0..2; mode switch in func_ov000_0208834c; initial value copied from field entity descriptor byte +0x18"
     },
     "83": {
       "arguments": ["entity_selector", "script_direction_mask"],
@@ -937,6 +973,22 @@
       "effect": "each argument other than -1 updates one persistent map-synchronization axis; enabling an axis immediately marks it dirty, and a later field-geometry refresh marks every enabled axis dirty again",
       "evidence": "func_ov000_020823f8 case 0x056 and func_ov000_0207af94 consumers of entity state +0x3CC bits 0, 1, 4, and 5"
     },
+    "87": {
+      "arguments": ["entity_selector", "minimum_x", "maximum_y", "width", "height", "vertical_extent"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "replaces the entity's Q12 navigation collision bounds. The stored rectangle is minimum_x through minimum_x + width and maximum_y - height through maximum_y, with a separate vertical extent; path-space and terrain-contact tests use these values when deciding whether an entity can occupy a proposed position",
+      "evidence": "func_ov000_020823f8 case 0x057 writes entity +0x320..+0x330; navigation-space predicate func_ov000_020b8a90 and field collision consumers of those bounds"
+    },
+    "88": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "restores the navigation collision bounds selected by the entity's current animation resource. An entity without a bound resource receives the default rectangle -8..8 by -8..0 and vertical extent 32 pixels",
+      "evidence": "func_ov000_020823f8 case 0x058 and func_ov000_020ae520, which selects the animation's second five-byte bounds profile through entity resource tables +0x10C and +0x2D8"
+    },
     "89": {
       "arguments": ["entity_selector", "channel_0_or_minus_one", "channel_1_or_minus_one", "channel_2_or_minus_one", "channel_3_or_minus_one", "channel_4_or_minus_one"],
       "result": null,
@@ -960,6 +1012,22 @@
       "yield": "never",
       "effect": "restores the entity's default low collision-response byte. Field-block entities additionally suppress its lower four response bits while their attached-party state is active",
       "evidence": "func_ov000_020823f8 case 0x05B; virtual method +0x94 resolves to func_ov000_02087fbc for clFieldMon and func_ov000_020b64e8 for clFieldBlock"
+    },
+    "92": {
+      "arguments": ["entity_selector", "minimum_x", "maximum_y", "width", "height", "vertical_extent"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "replaces the entity's Q12 body-collision bounds and recomputes the four fixed-point angular corner thresholds used by the solid entity-to-entity collision solver. The rectangle is minimum_x through minimum_x + width and maximum_y - height through maximum_y, with a separate vertical extent",
+      "evidence": "func_ov000_020823f8 case 0x05C writes entity +0x2F8..+0x308 and derives +0x2E8..+0x2F4; body collision solver func_ov000_020ae6c0 consumes those fields"
+    },
+    "93": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "restores the body-collision bounds and derived angular corner thresholds selected by the entity's current animation resource. An entity without a bound resource receives the default rectangle -8..8 by -8..0 and vertical extent 32 pixels",
+      "evidence": "func_ov000_020823f8 case 0x05D and func_ov000_020b1394, including its resource-profile selection and default fallback"
     },
     "94": {
       "arguments": ["entity_selector", "flag_index", "enabled"],
@@ -1000,6 +1068,30 @@
       "yield": "never",
       "effect": "sets the per-component sprite overlap priorities stored at render-object bytes +0x134 through +0x137; -1 preserves automatic priority calculation. Normal entities also configure an optional auxiliary render object, while subtype 8 ignores the final argument",
       "evidence": "func_ov000_020823f8 case 0x062 and overlap-order consumers func_ov000_020a9180 and func_ov000_020a8e58"
+    },
+    "99": {
+      "arguments": ["entity_selector", "minimum_x", "maximum_y", "width", "height", "vertical_extent"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "replaces the entity's primary Q12 interaction bounds. These bounds provide the broad overlap rectangle and vertical span used for entity interaction/contact tests, sprite overlap ordering, effect attachment, and off-screen culling",
+      "evidence": "func_ov000_020823f8 case 0x063 calls func_ov000_020a4f4c, which writes entity +0x114..+0x124; consumers func_ov000_020a9180, func_ov000_020a79dc, and func_ov000_02071434"
+    },
+    "100": {
+      "arguments": ["entity_selector", "vertical_extent"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "replaces only the Q12 vertical extent of the entity's primary interaction bounds, retaining its horizontal and vertical rectangle offsets",
+      "evidence": "func_ov000_020823f8 case 0x064 writes entity +0x124; interaction, effect-placement, and culling consumers of that field"
+    },
+    "101": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "restores the primary interaction bounds selected by the entity's current animation resource. An entity without a bound resource receives the default rectangle -8..8 by -8..0 and vertical extent 32 pixels",
+      "evidence": "func_ov000_020823f8 case 0x065 and func_ov000_020a4e84, which selects the animation's third five-byte bounds profile through entity resource tables +0x108 and +0x10C"
     },
     "102": {
       "arguments": ["entity_selector", "animation_speed_q8"],
@@ -1080,6 +1172,14 @@
       "effect": "selects an entity model animation and optionally saves the old animation for opcode 0x070",
       "evidence": "func_ov000_020823f8 cases 0x06F/0x070 and model virtual method +0x68"
     },
+    "112": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "restores the entity animation saved by opcode 0x06F and clears its saved-animation flag; it has no effect when no previous animation was preserved",
+      "evidence": "func_ov000_020823f8 case 0x070 tests and clears entity +0x194 bit 19, then calls model virtual method +0x68 with saved animation +0x1A2"
+    },
     "113": {
       "arguments": ["entity_selector", "behavior_mode", "preserve_previous"],
       "result": null,
@@ -1151,6 +1251,14 @@
       "yield": "never",
       "effect": "marks the entity's base palette resource dirty and selects that resource as the transfer source, causing the next palette-transfer pass to restore it to OBJ palette VRAM instead of uploading the current alternate working buffer. Shipped scripts use this immediately after rebinding one of five reused entity resources",
       "evidence": "func_ov000_020823f8 case 0x079, clCellAnimePA virtual method func_0200c5a4, dirty-flag setter func_02009518, palette-transfer walker func_02007b94, and five reachable script uses"
+    },
+    "122": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the current script owner's model has a pending base-palette transfer",
+      "yield": "until the palette-transfer object reports ready",
+      "effect": "synchronization barrier for an entity base-palette reload such as opcode 0x079; unlike the request command it implicitly targets the entity that owns the current script",
+      "evidence": "func_ov000_020823f8 case 0x07A tests owner entity model fields +0xB8 and +0xBC and rewinds the VM PC while the transfer remains pending"
     },
     "123": {
       "arguments": ["entity_selector", "scale_mode", "target_scale_x_fx32", "target_scale_y_fx32", "step_x_fx32", "step_y_fx32"],
@@ -2033,6 +2141,30 @@
       "effect": "stops the indexed map palette animation by clearing its active low nibble while retaining its loop-mode high nibble and current generated palette. The global palette-animation updater is disabled when no slots remain active",
       "evidence": "func_ov000_020823f8 case 0x0E9, resident FMap virtual methods +0x70 func_02012b7c and +0x5C func_02012c98, and all 11 shipped calls"
     },
+    "234": {
+      "arguments": ["animation_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resumes the indexed map palette animation from its retained time by setting its active low nibble to one while preserving its loop-mode high nibble; the global palette-animation updater is re-enabled when necessary",
+      "evidence": "func_ov000_020823f8 case 0x0EA and resident FMap virtual method +0x74 func_02012b48"
+    },
+    "235": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "restores every map base-palette buffer from its original resource data, then marks the map palette resource dirty so the restored colors are transferred to background palette VRAM",
+      "evidence": "func_ov000_020823f8 case 0x0EB and resident FMap virtual methods +0x78 func_02012b1c and +0x7C func_02012a64"
+    },
+    "236": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while any map palette animation remains active",
+      "yield": "until every map palette-animation control byte has a zero low nibble",
+      "effect": "global synchronization barrier for the map palette animations started or resumed by opcodes 0x0E7 and 0x0EA",
+      "evidence": "func_ov000_020823f8 case 0x0EC and resident FMap virtual method +0x5C func_02012c98"
+    },
     "237": {
       "arguments": ["start_brightness_or_255", "target_brightness", "duration_frames"],
       "result": null,
@@ -2048,6 +2180,30 @@
       "yield": "while the transition is active",
       "effect": "synchronization barrier for opcode 0x0ED",
       "evidence": "func_ov000_020823f8 case 0x0EE and field brightness countdown at context +0x2406"
+    },
+    "239": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "pauses an active master-brightness transition without changing its current brightness, remaining-frame countdown, or target; it has no effect when no transition is active",
+      "evidence": "func_ov000_020823f8 case 0x0EF sets field brightness-controller flag bit 1; func_ov000_02075a80 advances only while that bit is clear"
+    },
+    "240": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resumes a paused active master-brightness transition from its retained countdown and brightness; it has no effect when no transition is active",
+      "evidence": "func_ov000_020823f8 case 0x0F0 clears field brightness-controller flag bit 1; func_ov000_02075a80"
+    },
+    "241": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "reverses an active master-brightness transition in place: it clears pause, negates the per-frame step, swaps the effective start and target brightness values, and replaces elapsed progress with the complementary remaining duration",
+      "evidence": "func_ov000_020823f8 case 0x0F1 and reversal helper func_ov000_02075bc8"
     },
     "242": {
       "arguments": ["animation_slot", "direction_profile", "object_palette_mask_high", "object_palette_mask_low", "standard_bg_palette_mask", "extended_bg_palette_mask_0", "extended_bg_palette_mask_1", "extended_bg_palette_mask_2", "duration_frames", "color_red", "color_green", "color_blue"],
@@ -2216,6 +2372,22 @@
       "yield": "until the prepared arrival, departure, or 3D tunnel phase completes",
       "effect": "common synchronization barrier for opcodes 0x0FE through 0x101, including transitions coordinated across the two field screens",
       "evidence": "func_ov000_020823f8 case 0x106, active/run predicate func_ov000_02066c50, and all three mode branches in func_ov000_02066fcc"
+    },
+    "263": {
+      "arguments": ["resource_index", "anchor_entity_0_or_minus_one", "anchor_entity_1_or_minus_one", "anchor_entity_2_or_minus_one", "anchor_entity_3_or_minus_one", "x_offset", "y_offset", "z_offset", "attachment_mode", "render_priority"],
+      "result": null,
+      "control_flow": "fallthrough after starting the animation",
+      "yield": "never",
+      "effect": "creates a composite field cell-animation resource for the current screen and optionally anchors its four component model slots to four selected entities. -1 leaves a component unanchored; the three signed offsets, attachment mode, and render priority configure the shared attached-animation task, whose live handle is retained per field screen",
+      "evidence": "func_ov000_020823f8 case 0x107, field wrapper func_ov000_02074e14, task allocator func_ov000_020bef50, and resident attached-animation callback func_02010e38"
+    },
+    "264": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the current screen's anchored field-effect task has not completed",
+      "yield": "until the retained task sets its completion flag",
+      "effect": "screen-local synchronization barrier for opcode 0x107",
+      "evidence": "func_ov000_020823f8 case 0x108 and func_ov000_02074dd0, which tests task flag +0x1A bit 4 through the per-screen handle at manager +0x4108"
     },
     "265": {
       "arguments": ["effect_slot", "resource_index", "x_pixels", "y_pixels", "playback_speed_8_8"],
@@ -2455,6 +2627,14 @@
       "yield": "never",
       "effect": "adds the signed delta to the selected character's current HP, clamps the result to zero through maximum HP, and refreshes the paired field status HUD when active",
       "evidence": "func_ov000_020823f8 case 0x126 and clamped HP helper func_ov000_0206d1dc"
+    },
+    "295": {
+      "arguments": ["coin_total"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "replaces the save's 32-bit coin total directly. Unlike opcode 0x128, this legacy setter performs no 0 through 999999 range clamp and returns no success result",
+      "evidence": "func_ov000_020823f8 case 0x127 writes save data +0x488; field variable 0x3018 reads the same word; battle reward processing treats it as the coin total and clamps additions to 999999"
     },
     "296": {
       "arguments": ["coin_delta"],
