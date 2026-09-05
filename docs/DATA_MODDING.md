@@ -54,6 +54,18 @@ revalidated during every build. Size-changing field-script edits remain locked
 until relocation rules for all field control-flow and embedded-data opcodes are
 complete.
 
+The Menu/UI scene VM in overlay 7 uses three smaller `MenuAI` archives. Its
+standalone exporter covers all 18 entries, 6,585 reachable commands, and 60
+actually used opcodes while retaining 26,076 non-code bytes privately. It also
+round-trips all three archives byte-identically and currently enforces fixed
+command boundaries:
+
+```powershell
+python .\tools\scene_script_mod.py export
+python .\tools\scene_script_mod.py check
+python .\tools\scene_script_mod.py build --output-root build\scene_mod
+```
+
 ## Building a data mod
 
 Edit JSON below `data/eur/`, then use the existing CLion **Build and Run EUR

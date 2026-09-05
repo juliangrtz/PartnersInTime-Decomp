@@ -81,7 +81,7 @@ the same shape.
 |---|---:|---:|---|
 | Field/world | 341 | 84 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | `config/eur/battle_ai_vm.json` |
-| Scene/object | 210 | 109 | `config/eur/scene_vm.json` |
+| Scene/object | 210 | 110 | `config/eur/scene_vm.json` |
 
 The field and scene tables are reproducibly extracted and checked against a private
 ROM with `tools/extract_script_vm_descriptors.py`; the committed JSON contains only
@@ -133,6 +133,20 @@ field context (the other DS screen/field instance).
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
 | `0x149` | `play_field_sound` | sound_id, mode, track_for_field_cleanup | plays a sound and optionally records its ID in one of four per-field cleanup slots |
 | `0x14A` | `stop_field_sound` | sound_id | stops the sound and removes it from the four per-field cleanup slots |
+
+## Menu/UI scene scripts
+
+Overlay 7 is the MenuAI scene/object VM. Its three script archives are
+`MenuAI/BAI_iwasaki.dat`, `MAI_fujioka.dat`, and `MAI_uchida.dat`. Their 18
+archive entries contain 6,585 reachable commands using 60 opcodes; 26,076 bytes
+are not reachable code and remain private. `tools/scene_script_mod.py` exports
+and fixed-layout rebuilds all three archives byte-identically.
+
+The recovered scene-specific control flow comprises inline/spawn/wait object
+scripts (`0x0A5..0x0A9`), the terminal targeted stop at `0x0AB`, and four
+conditional branch forms (`0x0B1`, `0x0B2`, `0x0B5`, `0x0B6`). Opcode `0x033`
+is also proven to be an intentional two-argument no-op: it occurs 103 times but
+has no dispatcher case.
 
 ## VM ABI
 
@@ -531,6 +545,6 @@ state changes. Full event modding additionally requires completing overlay 0's
 
 The descriptor schemas, FEvent pointer grammar, first field control-flow family,
 and lossless fixed-layout field exporter are now recovered. The remaining order is
-to name high-use field commands and type sections 0..8; finish the scene container
-and CFG exporter; validate ambiguous arguments with emulator traces; then enable
+to name high-use field/scene commands and type field sections 0..8; validate
+ambiguous arguments with emulator traces; then enable
 relocation and merge field script/dialogue rebuilding into the normal data project.
