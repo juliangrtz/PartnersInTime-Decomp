@@ -208,7 +208,7 @@ and runtime overlay 2.
 | `020A519C` | `BattleTask_BindOwnerSlot` | Binds a task handle to its owning object and returns the displaced task |
 | `020A51F8` | `BattleTaskList_Insert` | Allocates if needed and prepends a task to an active list |
 | `020A5254` | `BattleTaskPool_Init` | Builds an aligned fixed-payload task free list |
-| `020A90F4` | `BattleParty_UpdateKnockout` | Completes party knockout and linked-character transitions |
+| `020A90F4` | `BattleParty_UpdateKnockout` | Byte-identical party knockout and linked-character transition callback |
 | `020A87F4` | `BattleParty_UpdateLuigiReloadFinish` | Byte-identical Luigi/Baby Luigi KO-recovery finalizer |
 | `020A8990` | `BattleParty_UpdateLuigiReloadRequestBaby` | Requests Baby Luigi after the battle transition state |
 | `020A89EC` | `BattleParty_UpdateLuigiReloadWaitRetreat` | Transfers locks after Luigi leaves the battle view |
@@ -221,7 +221,7 @@ and runtime overlay 2.
 | `020A8F24` | `BattleParty_UpdateMarioReloadStartRetreat` | Starts Mario's timed off-screen retreat |
 | `020A8FEC` | `BattleParty_UpdateMarioReloadWaitAnimation` | Advances Mario's KO recovery after the rebound animation is ready |
 | `020A906C` | `BattleParty_UpdateMarioReloadWaitResource` | Waits for and binds Mario's rebound resource |
-| `020A9280` | `BattleParty_StartKnockout` | Starts party knockout state, animation, sounds, and task |
+| `020A9280` | `BattleParty_StartKnockout` | Byte-identical party knockout task, animation, lock, and sound starter |
 | `020A9C18` | `BattleParty_SpawnLaunchImpact` | Emits the form-specific launch impact effect and sound |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
 | `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
@@ -755,15 +755,15 @@ animation, emits the three-stage impact burst, restores or retires the actor
 according to HP, and finally releases the same hit-lock flag. All eight
 functions from `0x0209CE98` through `0x0209D694` match the original 2,044 bytes.
 
-If HP reached zero, `BattleParty_StartKnockout` clears all eight statuses,
-starts animation 13, sets actor and battle-global locks, selects one of six
-form-specific sound pairs, and installs `BattleParty_UpdateKnockout`. The
-update callback waits for the model flags, releases ordinary party actors, or
-for linked forms moves the paired scene object and chains into the appropriate
-Mario/Luigi follow-up load callback.
-Both finalizers and all ten Mario and Luigi follow-up callbacks from
-`0x020A87F4` through `0x020A90F4` are now byte-identical linked C. The mirrored
-paths expose the whole asynchronous boundary explicitly. They
+If HP reached zero, the byte-identical `BattleParty_StartKnockout` C clears all
+eight statuses, starts animation 13, sets actor and battle-global locks,
+selects one of six form-specific sound pairs, and installs
+`BattleParty_UpdateKnockout`. That exact callback waits for the model flags,
+releases ordinary party actors, or for linked forms moves the paired scene
+object and chains into the appropriate Mario/Luigi follow-up load callback.
+The two entry callbacks, both finalizers, and all ten Mario and Luigi follow-up
+callbacks from `0x020A87F4` through `0x020A9478` are now byte-identical linked
+C. The mirrored paths expose the whole asynchronous boundary explicitly. They
 wait for resource slots 5 or 6, bind them to scene objects 56 or 57, play the
 rebound animation, interpolate an off-screen retreat on motion channel 3,
 transfer the actor lock to Baby Mario or Baby Luigi, and wait for battle state

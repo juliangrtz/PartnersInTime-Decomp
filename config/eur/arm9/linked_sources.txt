@@ -81,6 +81,7 @@ src/battle/battle_party_luigi_reload_finish.c
 src/battle/battle_party_luigi_reload.c
 src/battle/battle_party_mario_reload_finish.c
 src/battle/battle_party_mario_reload.c
+src/battle/battle_party_knockout.c
 src/game/script_vm.c
 src/game/script_vm_control.c
 src/game/script_vm_execute.c
