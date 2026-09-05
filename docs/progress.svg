@@ -785,7 +785,7 @@
 <rect class="cell" x="509.49" y="366.72" width="24.98" height="23.76" fill="#263244"><title>Overlay 02 · func_ov002_02070cdc · 1.7 KiB · remaining</title></rect>
 <rect class="cell" x="534.47" y="366.72" width="24.98" height="23.76" fill="#38bdf8"><title>Overlay 02 · BattleStatus_TryApply · 1.7 KiB · symbolic ASM</title></rect>
 <rect class="cell" x="298.29" y="390.48" width="24.34" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_02068b50 · 1.6 KiB · remaining</title></rect>
-<rect class="cell" x="322.63" y="390.48" width="24.34" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_0209b664 · 1.6 KiB · remaining</title></rect>
+<rect class="cell" x="322.63" y="390.48" width="24.34" height="22.82" fill="#263244"><title>Overlay 02 · BattlePartyActor_UpdateCommandMovement · 1.6 KiB · remaining</title></rect>
 <rect class="cell" x="346.97" y="390.48" width="24.34" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_020b2440 · 1.6 KiB · remaining</title></rect>
 <rect class="cell" x="371.31" y="390.48" width="24.22" height="22.82" fill="#38bdf8"><title>Overlay 02 · BattleCollision_TestVolumes · 1.6 KiB · symbolic ASM</title></rect>
 <rect class="cell" x="395.53" y="390.48" width="23.93" height="22.82" fill="#263244"><title>Overlay 02 · func_ov002_020a95cc · 1.6 KiB · remaining</title></rect>
