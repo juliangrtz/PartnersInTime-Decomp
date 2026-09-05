@@ -114,6 +114,8 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   save-data words/bytes/flags, and overlay extension hooks behind the editable
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
+  Overlay 7's matching scene-script extension likewise names its packed owner
+  ID/type, latched input values, and 32 shared variables.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
@@ -233,9 +235,11 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   binary byte for byte before edits, and support length-changing text. Four
   shop datasets and 99 item-master records are editable through validated
   copies of their overlay-9 and resident-ARM9 tables. All 14 battle-scenario
-  and enemy-AI archives are decoded into 242 scripts and 129,127 editable VM
-  commands; their assembler preserves private, not-yet-understood tail data
-  without checking opaque bytes into Git.
+  and enemy-AI archives are control-flow decoded from 243 entry points into
+  81,854 reachable VM commands. Schema v2 gives known opcodes and variables
+  semantic names, relocates labels after size-changing edits, rebuilds archive
+  offsets, and preserves verified private data without checking opaque bytes
+  into Git.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.
@@ -244,6 +248,8 @@ matching, source-organization, naming, and runtime-evidence rules for readable
 high-level code.
 The generated [`docs/research/BATTLE_AI_OPCODES.md`](docs/research/BATTLE_AI_OPCODES.md)
 provides a compact navigation index for the large enemy-script dispatcher.
+[`docs/research/SCRIPT_VM_SEMANTICS.md`](docs/research/SCRIPT_VM_SEMANTICS.md)
+tracks semantic coverage and prioritizes the remaining used opcodes.
 [`tools/ida/README.md`](tools/ida/README.md) documents the reproducible IDA
 9.1/9.2 ARM32 database imports and batch Hex-Rays helpers for the resident ARM9
 and every overlay.

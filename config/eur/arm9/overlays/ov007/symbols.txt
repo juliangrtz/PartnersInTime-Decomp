@@ -48,6 +48,7 @@ func_ov007_02070b40 kind:function(arm,size=0x10) addr:0x02070b40
 func_ov007_02070b50 kind:function(arm,size=0x1430) addr:0x02070b50
 func_ov007_02071f80 kind:function(arm,size=0x2f0) addr:0x02071f80
 func_ov007_02072270 kind:function(arm,size=0x40c) addr:0x02072270
+func_ov007_020722d8 kind:label(arm) addr:0x020722d8
 .L_020724b0 kind:label(arm) addr:0x020724b0
 func_ov007_0207267c kind:function(arm,size=0x404) addr:0x0207267c
 func_ov007_02072a80 kind:function(arm,size=0x738) addr:0x02072a80
@@ -239,8 +240,8 @@ func_ov007_02083f88 kind:function(arm,size=0xa8) addr:0x02083f88
 func_ov007_02084030 kind:function(arm,size=0x108) addr:0x02084030
 func_ov007_02084138 kind:function(arm,size=0x98) addr:0x02084138
 func_ov007_020841d0 kind:function(arm,size=0x28) addr:0x020841d0
-func_ov007_020841f8 kind:function(arm,size=0x48) addr:0x020841f8
-func_ov007_02084240 kind:function(arm,size=0x11c) addr:0x02084240
+SceneScriptVM_WriteVariable kind:function(arm,size=0x48) addr:0x020841f8
+SceneScriptVM_ReadVariable kind:function(arm,size=0x11c) addr:0x02084240
 func_ov007_0208435c kind:function(arm,size=0x184) addr:0x0208435c
 func_ov007_020844e0 kind:function(arm,size=0x68) addr:0x020844e0
 func_ov007_02084548 kind:function(arm,size=0xe4) addr:0x02084548

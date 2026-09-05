@@ -309,6 +309,7 @@ class BattleScriptTests(unittest.TestCase):
         descriptors = [0] * data_mod.BATTLE_VM_DESCRIPTOR_COUNT
         descriptors[2] = 0x02
         descriptors[3] = 0x41
+        descriptors[4] = 0x45
         descriptors[5] = 0x01
         descriptors[13] = 0x62
         self.descriptors = tuple(descriptors)
@@ -321,6 +322,15 @@ class BattleScriptTests(unittest.TestCase):
         entry.extend(b"TAIL")
         self.source = data_mod.build_offset_archive([bytes(entry)])
 
+    @staticmethod
+    def _commands(entry: dict) -> list[dict]:
+        return [
+            command
+            for segment in entry["segments"]
+            if segment["kind"] == "code"
+            for command in segment["commands"]
+        ]
+
     def _document(self) -> dict:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "test_battle_scripts.dat"
@@ -332,12 +342,18 @@ class BattleScriptTests(unittest.TestCase):
     def test_round_trips_commands_duplicate_entry_points_and_private_tail(self) -> None:
         document = self._document()
         entry = document["entries"][0]
-        self.assertEqual(entry["entry_points"], [0, 0, None])
-        self.assertEqual(entry["private_tail"]["size"], 4)
-        self.assertNotIn("data", entry["private_tail"])
-        command = entry["scripts"][0]["commands"][1]
-        self.assertEqual(command["result"], "0x4010")
-        self.assertEqual(command["args"], [{"variable": "0x4002"}, -3])
+        self.assertEqual(entry["entry_points"], ["entry_000", "entry_001", None])
+        private = [
+            segment for segment in entry["segments"]
+            if segment["kind"] == "private_data"
+        ]
+        self.assertEqual(private[0]["size"], 4)
+        self.assertNotIn("data", private[0])
+        command = self._commands(entry)[1]
+        self.assertEqual(command["result"], "battle.shared[0]")
+        self.assertEqual(
+            command["args"], [{"variable": "battle.constant_zero_2"}, -3]
+        )
         self.assertEqual(command["unused_mode_bits"], "0x0010")
         self.assertEqual(
             data_mod.build_battle_scripts(
@@ -348,7 +364,11 @@ class BattleScriptTests(unittest.TestCase):
 
     def test_edit_changes_only_the_selected_argument(self) -> None:
         document = self._document()
-        commands = document["entries"][0]["scripts"][0]["commands"]
+        code_segment = next(
+            segment for segment in document["entries"][0]["segments"]
+            if segment["kind"] == "code"
+        )
+        commands = code_segment["commands"]
         commands[1]["args"][1] = 7
         rebuilt = data_mod.build_battle_scripts(
             document, self.source, self.descriptors, self.names
@@ -361,15 +381,35 @@ class BattleScriptTests(unittest.TestCase):
         self.assertEqual(differences, [28, 29])
         self.assertEqual(rebuilt[-4:], b"TAIL")
 
-    def test_rejects_an_opcode_that_changes_a_command_boundary(self) -> None:
-        document = self._document()
-        command = document["entries"][0]["scripts"][0]["commands"][-1]
-        command["opcode"] = "op_005"
-        command["args"] = [0]
-        with self.assertRaisesRegex(data_mod.DataModError, "boundary"):
-            data_mod.build_battle_scripts(
-                document, self.source, self.descriptors, self.names
+    def test_relocates_branch_labels_after_command_insertion(self) -> None:
+        entry = bytearray(struct.pack("<H", 2))
+        entry.extend(struct.pack("<7H", 4, 0, 0, 0, 2, 0, 3))
+        entry.extend(struct.pack("<3H", 3, 0, 1))
+        entry.extend(struct.pack("<H", 1))
+        source = data_mod.build_offset_archive([bytes(entry)])
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "branch.dat"
+            path.write_bytes(source)
+            document = data_mod.export_battle_scripts(
+                path, "BAI/branch.dat", self.descriptors, self.names
             )
+        code_segment = next(
+            segment for segment in document["entries"][0]["segments"]
+            if segment["kind"] == "code"
+        )
+        commands = code_segment["commands"]
+        target = commands[-1]["labels"][0]
+        self.assertEqual(commands[0]["args"][4], {"label": target})
+        commands.insert(
+            -1,
+            {"opcode": "op_005", "args": [123]},
+        )
+        rebuilt = data_mod.build_battle_scripts(
+            document, source, self.descriptors, self.names
+        )
+        rebuilt_entry = data_mod.parse_offset_archive(rebuilt)[0]
+        self.assertEqual(struct.unpack_from("<h", rebuilt_entry, 14)[0], 5)
+        self.assertEqual(len(rebuilt_entry), len(entry) + 4)
 
 
 if __name__ == "__main__":

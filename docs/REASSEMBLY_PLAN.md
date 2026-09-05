@@ -685,18 +685,29 @@ The first data-source milestone is implemented for EUR.  Versioned JSON plus
 battle and field-dialogue chunk (including field event labels), the 98 enemy
 records, all 765 treasure records, four tiered shop-stock datasets, and the 99
 resident item-master records. It also decodes all 14 `BAI_scn_*`/`BAI_mon_*`
-and related battle-VM archives: 230 blocks, 242 entry-point scripts, and
-129,127 commands. The fixed-boundary assembler recompiles those commands while
-splicing in verified private tails that have not yet been decoded. The normal
-CLion/PowerShell build stages these sources into a derived NitroFS plus copies
+and related battle-VM archives: 230 blocks, 243 non-null entry points, and
+81,854 control-flow-reachable commands. The relocatable schema-v2 assembler
+recomputes symbolic branch labels after commands are inserted, removed, or
+resized, while copying verified private data regions from the user's source.
+The normal CLion/PowerShell build stages these sources into a derived NitroFS
+plus copies
 of patched ARM9/overlay data and still produces the verified ROM hash when the
 JSON is unchanged. See `docs/DATA_MODDING.md`.
 
+The resident VM core is shared by three confirmed clients. Overlay 0 supplies a
+341-entry field/world command ABI (`0x000..0x154`), overlay 2 supplies the
+260-entry battle ABI (`0x000..0x103`), and overlay 7 supplies a 210-entry
+scene/object ABI (`0x000..0x0D1`). `FEvent/FEvData.dat` mixes localized data,
+script pointers, and non-code room records, so its loader grammar and
+instance-specific control-flow opcodes must be typed before it can safely use
+the battle assembler infrastructure. See `docs/research/SCRIPT_VM_SEMANTICS.md`.
+
 Priority formats:
 
-1. label control flow and name semantics in the implemented `BAI_scn_*` battle
-   scenario and `BAI_mon_*` enemy-AI command assembler;
-2. `FEvent/FEvData.dat` field events, flags, warps, and story progression;
+1. finish argument contracts and semantic names in the implemented
+   `BAI_scn_*` battle-scenario and `BAI_mon_*` enemy-AI assembler;
+2. type the `FEvent/FEvData.dat` room pointer consumers, then expose field
+   events, flags, warps, and story progression through a relocatable assembler;
 3. add/remove support for the implemented enemy, treasure, shop, and item
    tables after their executable count references are understood;
 4. field maps, object placement, sprites, palettes, animation banks, text, and
