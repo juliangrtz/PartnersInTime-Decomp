@@ -1,7 +1,7 @@
-func_ov016_020c2ae0 kind:function(arm,size=0x70) addr:0x020c2ae0
-func_ov016_020c2b50 kind:function(arm,size=0x28) addr:0x020c2b50
-func_ov016_020c2b78 kind:function(arm,size=0x18) addr:0x020c2b78
-func_ov016_020c2b90 kind:function(arm,size=0x2c) addr:0x020c2b90
+Overlay16Attack_AdvanceMotionTable kind:function(arm,size=0x70) addr:0x020c2ae0
+Overlay16Attack_GetMotionRecord kind:function(arm,size=0x28) addr:0x020c2b50
+Overlay16Attack_IsObjectIdle kind:function(arm,size=0x18) addr:0x020c2b78
+Overlay16Attack_IsObjectMotionComplete kind:function(arm,size=0x2c) addr:0x020c2b90
 func_ov016_020c2bbc kind:function(arm,size=0x164) addr:0x020c2bbc
 func_ov016_020c2d20 kind:function(arm,size=0x14c) addr:0x020c2d20
 func_ov016_020c2e6c kind:function(arm,size=0xb0) addr:0x020c2e6c
@@ -61,7 +61,7 @@ data_ov016_020c7274 kind:data(any) addr:0x020c7274
 data_ov016_020c7278 kind:data(any) addr:0x020c7278
 data_ov016_020c72a0 kind:data(any) addr:0x020c72a0
 data_ov016_020c72a4 kind:data(any) addr:0x020c72a4
-data_ov016_020c72a8 kind:data(any) addr:0x020c72a8
+gOverlay16MotionTableOffset kind:data(any) addr:0x020c72a8
 data_ov016_020c72ac kind:data(any) addr:0x020c72ac
 data_ov016_020c72b4 kind:data(any) addr:0x020c72b4
 data_ov016_020c72bc kind:data(any) addr:0x020c72bc
@@ -84,6 +84,6 @@ data_ov016_020c735c kind:data(any) addr:0x020c735c
 data_ov016_020c7384 kind:data(any) addr:0x020c7384
 data_ov016_020c7386 kind:data(any) addr:0x020c7386
 data_ov016_020c7388 kind:data(any) addr:0x020c7388
-data_ov016_020c73fc kind:data(any) addr:0x020c73fc
+gOverlay16MotionTable kind:data(any) addr:0x020c73fc
 data_ov016_020c7400 kind:data(any) addr:0x020c7400
-data_ov016_020c749c kind:data(any) addr:0x020c749c
+gOverlay16MotionDeltas kind:data(any) addr:0x020c749c
