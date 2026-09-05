@@ -280,3 +280,6 @@ src/battle/battle_status_party_ailment1.cpp:
 
 src/battle/battle_status_enemy_stat.cpp:
     .text       start:0x020a73d4 end:0x020a7b60
+
+src/battle/battle_status_enemy_ailment45.cpp:
+    .text       start:0x020a7b60 end:0x020a7edc

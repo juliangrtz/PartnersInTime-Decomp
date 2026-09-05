@@ -243,6 +243,10 @@ and runtime overlay 2.
 | `020A7374` | `BattleStatus_StartPartyAilment1Visual` | Byte-identical party status-1 task starter |
 | `020A73D4` | `BattleStatus_UpdateEnemyStatVisuals` | Reconstructed enemy POW/DEF/SPD effect rotation and model callback (73.52% code match) |
 | `020A7960` | `BattleStatus_StartEnemyStatVisual` | Reconstructed enemy stat-effect starter (71.88% code match) |
+| `020A7B60` | `BattleStatus_UpdateEnemyAilment5Visual` | Byte-identical enemy status-5 completion and cleanup callback |
+| `020A7C88` | `BattleStatus_StartEnemyAilment5Visual` | Byte-identical enemy status-5 model-effect starter |
+| `020A7D20` | `BattleStatus_UpdateEnemyAilment4Visual` | Byte-identical enemy status-4 completion and cleanup callback |
+| `020A7E48` | `BattleStatus_StartEnemyAilment4Visual` | Byte-identical enemy status-4 model-effect starter |
 | `020A8320` | `BattleStatus_StopActorEffect` | Stops the actor-local timer or stat delta for one status ID |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
@@ -606,6 +610,14 @@ while global status visuals are suppressed, and cycles every remaining stat
 delta before releasing its model and callback. This unit also remains on the
 reference object: the callback currently matches 73.52% of the original code,
 while the equal-sized starter matches 71.88%.
+
+Enemy status IDs 4 and 5 are now exact linked C++ in one grouped unit. Their
+starters attach model effects 524 and 758 to the enemy scene object. The two
+otherwise-identical callbacks wait until the task no longer owns the actor's
+group-2 status slot, then either wait for the active model animation or finish
+the transition when the actor's resource-bound flag is set. That completion
+emits sprite effect 359 and model effect 526 before stopping the original
+effect and task.
 
 Party status ID 3 now also has an exact linked C++ implementation. The starter
 loads object-data slot 9, chooses a model animation from the six party
