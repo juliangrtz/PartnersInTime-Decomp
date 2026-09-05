@@ -232,6 +232,8 @@ and runtime overlay 2.
 | `020A9F94` | `BattleObjectBurstEmitter_Update` | Byte-identical object-bound burst emitter callback |
 | `020A9FFC` | `BattleImpactParticle_UpdateModelFrame` | Reconstructed model-frame particle interpolation (80.00% matching) |
 | `020AA114` | `BattleImpactParticle_UpdateResourceFrame` | Reconstructed resource-frame particle interpolation (80.00% matching) |
+| `020AA22C` | `BattleImpactTrailEmitter_Update` | Byte-identical object-bound particle trail emitter |
+| `020AA38C` | `BattleImpactEmitter_Start` | Byte-identical trail and burst emitter task starter |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
 | `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
 | `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Creates a sprite effect in the first free tracked slot |
@@ -526,6 +528,14 @@ toward the emitter settings, add the configured vertical velocity, and differ
 only in the resource used to render the frame. Their instruction sequence is
 exact; only the compiler's interchangeable `r5`/`r6` allocation remains, so
 that pair stays outside the exact link for now.
+
+The shared emitter constructor supports two modes. Trail mode packs the spawn
+interval, size multiplier, and target size into one halfword, while burst mode
+initializes the simpler object-bound callback above. Its trail callback emits
+only while the active model animation is running, selects the model- or
+resource-frame particle path from the object's active-model flag, and folds the
+object's live impact offsets into every child. Both the constructor and trail
+callback are byte-identical C.
 
 The two effect families share the same ownership pattern but use separate
 resource tables and constructors. Model effects store signed X/Y/Z halfwords,

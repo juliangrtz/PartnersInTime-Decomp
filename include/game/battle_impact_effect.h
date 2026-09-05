@@ -33,7 +33,10 @@ typedef struct BattleImpactParticleTask {
 } BattleImpactParticleTask;
 
 typedef struct BattleImpactTrailEmitterPayload {
-    s16 target_scale_q4;
+    union {
+        s16 target_scale_q4;
+        u16 target_scale_bits;
+    };
     u16 lifetime_multiplier;
     union {
         u16 settings;
@@ -48,6 +51,25 @@ typedef struct BattleImpactTrailEmitterPayload {
     u16 spawn_delay;
     u16 object_id;
 } BattleImpactTrailEmitterPayload;
+
+typedef struct BattleImpactTrailEmitterTask {
+    BattleAITask *next;
+    void (*callback)(BattleAITask *task);
+    BattleAITask **owner_slot;
+    BattleImpactTrailEmitterPayload data;
+} BattleImpactTrailEmitterTask;
+
+typedef struct BattleObjectBurstEmitterPayload {
+    u8 unknown_00[4];
+    u16 object_id;
+} BattleObjectBurstEmitterPayload;
+
+typedef struct BattleObjectBurstEmitterTask {
+    BattleAITask *next;
+    void (*callback)(BattleAITask *task);
+    BattleAITask **owner_slot;
+    BattleObjectBurstEmitterPayload data;
+} BattleObjectBurstEmitterTask;
 
 typedef char BattleImpactParticlePayload_SizeCheck
     [sizeof(BattleImpactParticlePayload) == 0x18 ? 1 : -1];
@@ -66,6 +88,11 @@ void BattleObjectBurstEmitter_Update(BattleAITask *task);
 void BattleObjectBurstParticle_Update(BattleAITask *task);
 void BattleImpactParticle_UpdateModelFrame(BattleAITask *task);
 void BattleImpactParticle_UpdateResourceFrame(BattleAITask *task);
+void BattleImpactTrailEmitter_Update(BattleAITask *task);
+BattleAITask *BattleImpactEmitter_Start(
+    u16 object_id, int mode, s16 target_scale_q4, u16 lifetime_multiplier,
+    int spawn_interval, int size_multiplier, int target_size,
+    int initial_z_offset, int z_velocity);
 
 #ifdef __cplusplus
 }
