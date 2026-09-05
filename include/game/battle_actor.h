@@ -51,8 +51,13 @@ struct BattleStatusState {
     s16 counter;
     s8 kind;
     u8 parameter_1;
-    u8 parameter_2;
-    u8 unknown_0b;
+    union {
+        struct {
+            u8 parameter_2;
+            u8 unknown_0b;
+        };
+        u16 visual_flags;
+    };
 };
 
 struct BattleActor {
@@ -137,6 +142,11 @@ typedef union BattlePartyStateFlags {
         u16 carried_baby_phase : 2;
         u16 unknown_04_15 : 12;
     } command_bits;
+    struct {
+        u16 unknown_00_03 : 4;
+        u16 power_special_disabled : 1;
+        u16 unknown_05_15 : 11;
+    } status_bits;
 } BattlePartyStateFlags;
 
 typedef struct BattlePartyActor {

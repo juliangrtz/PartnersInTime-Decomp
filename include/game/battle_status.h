@@ -23,6 +23,9 @@ extern "C" {
 int BattleStatus_ClearEffect(BattleActor *actor, int status_id);
 void BattleStatus_ClearAll(BattleActor *actor);
 void BattleStatus_StopActorEffect(int actor_id, int status_id);
+int BattleStatus_TryApply(BattleActor *actor, int status_id, s16 duration,
+                          int magnitude_percent, int chance_percent);
+void BattleStatus_SpawnEffect(int actor_id, int status_id);
 
 #ifdef __cplusplus
 }
