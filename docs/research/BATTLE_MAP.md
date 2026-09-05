@@ -248,6 +248,15 @@ and runtime overlay 2.
 | `020ACBF0` | `BattleSpriteEffect_SpawnInFreeSlot` | Byte-identical first-free-slot sprite-effect allocator |
 | `020ACC7C` | `BattleSpriteEffect_SpawnAttached` | Byte-identical sprite-effect constructor and owner-slot binder |
 | `020ACCB8` | `BattleSpriteEffect_Spawn` | Byte-identical view-adjusted sprite-effect constructor |
+| `020AD3C4` | `BattleObjectData_QueueCaptureSurfaceUpload` | Byte-identical object-data capture-surface upload wrapper |
+| `020AD3FC` | `BattleDisplayCapture_FinishResetTask` | Byte-identical reset-chain completion callback |
+| `020AD430` | `BattleDisplayCapture_QueueFinishResetTask` | Byte-identical reset completion scheduler |
+| `020AD450` | `BattleDisplayCapture_RestoreResetModeTask` | Byte-identical reset-chain display-mode callback |
+| `020AD490` | `BattleDisplayCapture_QueueReset` | Byte-identical asynchronous display-capture reset entry point |
+| `020AD4D8` | `BattleDisplayCapture_FinishConfigureTask` | Byte-identical configure-chain completion callback |
+| `020AD50C` | `BattleDisplayCapture_WriteControlTask` | Byte-identical `DISPCAPCNT` writer |
+| `020AD554` | `BattleDisplayCapture_RestoreConfigureModeTask` | Byte-identical configure-chain display-mode callback |
+| `020AD588` | `BattleDisplayCapture_QueueConfigure` | Byte-identical asynchronous display-capture configuration entry point |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `020A56EC` | `BattleStatus_UpdatePartyStatVisuals` | Reconstructed POW/DEF/SPD effect rotation and model callback (73.00% code match) |
@@ -574,6 +583,14 @@ coordinates back into the current view, clamps negative Z to zero, draws the
 model, and retires the task when model flag bit 2 is set. Its logic and size are
 reconstructed, but the linked build retains the original callback for now
 because MWCC exchanges the long-lived task and X-coordinate registers.
+
+The display-capture helpers at `0x020AD3C4`-`0x020AD5D0` are byte-identical
+grouped C. They expose two asynchronous workflows over the battle upload
+queues. Both mark context flag `+0xD3A0:0x20`, switch the battle display phase
+at system offset `+0x454`, and clear the flag after restoring phase 3. The
+configured path additionally writes `0x80351010 | (capture_source << 24)` to
+the DS `DISPCAPCNT` register at `0x04000064`. AI opcode `0x36` uses the adjacent
+wrapper to queue a 256-by-128 capture-surface upload for an object-data slot.
 
 ## Damage and status behavior
 
