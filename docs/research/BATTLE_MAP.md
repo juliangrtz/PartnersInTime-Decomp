@@ -765,6 +765,15 @@ mirroring, Q8 scale, Z rotation, object-relative placement and animation-frame
 state, then dispatches an object render override or one of three render modes.
 After drawing, it restores the model's 4x4 transform to identity and advances
 the shared render buffer before the secondary scene pass.
+The complete secondary pass at `0x020A2CB8`-`0x020A32F4` is exact linked C++.
+It projects each eligible object's shadow into view-relative coordinates,
+selects the resource-defined or script-overridden shadow shape, fades the
+shadow according to height, and patches scale, position, opacity, texture
+frame, and polygon ID into the resource-2 display list before flushing it to
+the renderer. A second expanding layer softens elevated shadows. The same unit
+also exposes the alternate-model anchor update, the model relation virtual,
+and the short delayed-hide queue used when an independently owned scene object
+finishes its visibility transition.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets

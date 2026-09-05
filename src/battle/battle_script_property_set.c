@@ -117,7 +117,7 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
     }
     case BATTLE_PROPERTY_SCENE_FLAG_16_INVERTED: {
         BattleSceneObject *object = BattleSceneObject_GetById(actor_id);
-        object->flags.bits.flag_16 = value == 0;
+        object->flags.bits.suppress_shadow = value == 0;
         break;
     }
     case BATTLE_PROPERTY_SCENE_EA:

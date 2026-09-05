@@ -132,7 +132,7 @@ struct BattleObjectTextureSet {
             u8 unknown_01_07 : 7;
         } bits;
     } flags;
-    u8 unknown_08;
+    u8 shadow_variant;
     s8 scene_property_0fc;
     s8 scene_property_0fd;
     s8 scene_property_0f8;
