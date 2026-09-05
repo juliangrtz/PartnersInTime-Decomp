@@ -451,6 +451,7 @@
     "104": "set_entity_default_vertical_launch_velocity",
     "105": "set_entity_default_gravity",
     "106": "set_entity_terminal_fall_velocity",
+    "107": "set_entity_shadow_support_enabled",
     "108": "bind_entity_resource",
     "109": "restore_entity_resource_state",
     "110": "wait_entity_animation",
@@ -1013,6 +1014,14 @@
       "yield": "never",
       "effect": "sets the vertical controller's default terminal-fall velocity floor. Literal halves and full VM variables are decoded as in opcode 0x068. When opcode 0x08D passes -1 for its terminal value, the controller uses this default and clamps only negative values; the shipped explicit value +4096 therefore leaves falling velocity unclamped",
       "evidence": "func_ov000_020823f8 case 0x06A, default selection in func_ov000_020b44ac, clamp in func_ov000_020b4330, and all 15 shipped calls"
+    },
+    "107": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets whether this entity may serve as a support surface for another entity's projected shadow. Entity collision resolution records the highest eligible supporting entity; the supported entity then clamps its shadow height to that surface and makes the shadow inherit the support's render depth and palette. All three reachable shipped calls disable support on scripted actors",
+      "evidence": "func_ov000_020823f8 case 0x06B; entity collision solver func_ov000_020ae6c0; shadow-height updater func_ov000_020b4220; entity render updater func_ov000_020a9778; and entity state bit +0x38C bit 17"
     },
     "108": {
       "arguments": ["entity_selector", "resource_index", "animation_id", "render_parameter", "preserve_previous"],
