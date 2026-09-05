@@ -24,18 +24,6 @@ typedef struct BattleObjectPropertyCurveTask {
     BattleObjectPropertyCurvePayload data;
 } BattleObjectPropertyCurveTask;
 
-typedef struct BattleObjectBurstEmitterPayload {
-    u8 unknown_00[4];
-    u16 object_id;
-} BattleObjectBurstEmitterPayload;
-
-typedef struct BattleObjectBurstEmitterTask {
-    BattleAITask *next;
-    void (*callback)(BattleAITask *task);
-    BattleAITask **owner_slot;
-    BattleObjectBurstEmitterPayload data;
-} BattleObjectBurstEmitterTask;
-
 typedef char BattleObjectPropertyCurvePayload_SizeCheck
     [sizeof(BattleObjectPropertyCurvePayload) == 0x0C ? 1 : -1];
 typedef char BattleObjectPropertyCurveTask_SizeCheck
