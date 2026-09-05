@@ -42,12 +42,13 @@ struct BattleSceneRenderOverride {
 
 typedef union BattleSceneFlags {
     u32 raw;
+    s8 shadow_delay;
     struct {
         u32 state : 8;
-        u32 unk_08_13 : 6;
+        u32 shadow_alpha : 6;
         u32 use_alternate_model : 1;
         u32 unk_15 : 1;
-        u32 flag_16 : 1;
+        u32 suppress_shadow : 1;
         u32 use_raw_position : 1;
         u32 independent_flag : 1;
         u32 unk_19_23 : 5;
@@ -86,7 +87,9 @@ struct BattleModelVTable {
     u8 unknown_06c[0x1C];
     int (*configure_animation_layer)(BattleModel *model, s8 layer,
                                      int animation_id, int enabled);
-    u8 unknown_08c[0x3C];
+    u8 unknown_08c[4];
+    int (*test_relation)(BattleModel *model, BattleModel *other);
+    u8 unknown_094[0x34];
     struct BattleSpriteTransform *(*get_sprite_transform)(BattleModel *model);
 };
 
@@ -130,7 +133,7 @@ struct BattleModel {
     virtual int configure_animation_layer(s8 layer, int animation_id,
                                            int enabled);
     virtual void unknown_8c();
-    virtual void unknown_90();
+    virtual int test_relation(BattleModel *other);
     virtual void unknown_94();
     virtual void unknown_98();
     virtual void unknown_9c();
@@ -156,7 +159,9 @@ struct BattleModel {
     u16 enemy_idle_frame;
     s16 animation_offset_x;
     s16 animation_offset_y;
-    u8 unk_060[0x14];
+    u8 unk_060[8];
+    s32 render_anchor_z;
+    u8 unk_06c[8];
     s16 scale_x;
     s16 scale_y;
     u16 rotation_z;
@@ -203,7 +208,9 @@ struct BattleModel {
     u16 enemy_idle_frame;
     s16 animation_offset_x;
     s16 animation_offset_y;
-    u8 unk_060[0x14];
+    u8 unk_060[8];
+    s32 render_anchor_z;
+    u8 unk_06c[8];
     s16 scale_x;
     s16 scale_y;
     u16 rotation_z;
@@ -305,6 +312,15 @@ u32 BattleMath_WaitForSqrtResult(void);
 void BattleSceneObject_SetStateFlags(BattleSceneObject *object, int state,
                                      int independent_flag);
 int BattleScene_RenderModels(void);
+void BattleScene_RenderShadows(void);
+void BattleScene_UpdateAlternateModelAnchor(BattleModel *model);
+int BattleScene_TestModelRelation(BattleSceneObject *first,
+                                  BattleSceneObject *second,
+                                  int first_model, int second_model);
+void BattleScene_DrawShadow(int variant, int animation_state,
+                            int x, int y, int height, int alpha);
+void BattleScene_HideQueuedObjects(void);
+int BattleScene_UpdateShadowVisibility(BattleSceneObject *object);
 void BattleSceneObject_SwapSlots(u32 first_id, u32 second_id);
 void BattleSceneObject_SetModelFlag11ById(int object_id, int enabled);
 void BattleSceneObject_SetModelFlag10(BattleSceneObject *object, int enabled);

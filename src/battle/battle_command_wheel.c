@@ -71,9 +71,6 @@ extern s16 FX_SinCosTable_[8192];
 extern const BattleCommandWheelTransform
     gBattleCommandWheelTransformTemplate;
 extern const s8 gBattleCommandWheelFrames[];
-extern void func_ov002_020a2fd8(int resource_id, int intensity,
-                                int x, int y, int z,
-                                int render_flags);
 
 int BattleCommandWheel_TriggerEntryBounce(int dismiss_after_bounce) {
     BattleCommandWheelEntry *entry =
@@ -391,7 +388,7 @@ int BattleCommandWheel_Draw(BattleCommandWheelState *state) {
                           16 * (256 - anchor_y)),
                     object->flags.bits.use_raw_position,
                     object->flags.bits.use_alternate_model);
-                func_ov002_020a2fd8(
+                BattleScene_DrawShadow(
                     BATTLE_COMMAND_WHEEL_RENDER_RESOURCE_ID,
                     intensity, position.x, position.y,
                     object->z, 0);

@@ -58,8 +58,6 @@ typedef char BattleCoinEmitterTask_SizeCheck[
 
 extern "C" {
 extern u32 Random_NextModulo(u32 modulus);
-extern void func_ov002_020a2fd8(int resource_id, int intensity,
-                                int x, int y, int z, int render_flags);
 
 void BattleCoinLoss_UpdateParticle(BattleAITask *base_task);
 void BattleCoinLoss_UpdateEmitter(BattleAITask *base_task);
@@ -175,7 +173,7 @@ void BattleCoinLoss_UpdateParticle(BattleAITask *base_task) {
         state->velocity_height_q4 = -state->velocity_height_q4 / 2;
     }
 
-    func_ov002_020a2fd8(
+    BattleScene_DrawShadow(
         BATTLE_COIN_PARTICLE_SHADOW_RESOURCE, 7 * intensity / 8,
         state->x_q4 / 16, state->y_q4 / 16, state->height_q4 / 16, 0);
     transform = model->get_sprite_transform();
