@@ -158,7 +158,7 @@ and runtime overlay 2.
 | `02071C84` | `BattleDamage_CalculateAttack` | General POW/DEF/level damage calculation |
 | `0209BF38` | `BattleDamage_CalculateBase` | Compact actor-ID-based damage calculation |
 | `0209BFA0` | `BattleDamage_CalculateByObject` | Resolves scene objects and selects damage modes/equipment |
-| `0209BCCC` | `BattleDamage_ApplyEquipmentModifiers` | Applies attacker/defender equipment multipliers |
+| `0209BCCC` | `BattleDamage_ApplyEquipmentModifiers` | Applies attacker/defender equipment multipliers (semantic C; 84.52% matching) |
 | `0209D694` | `BattleActor_ApplyDamage` | Subtracts HP, clamps at zero, and marks knockout |
 | `0209CD9C` | `BattleDamage_SpawnNumber` | Creates free or actor-attached damage-number effects |
 | `0209D718` | `BattleDamage_ApplyToEnemy` | Enemy damage, animation, popup, sound, effects |
@@ -504,7 +504,9 @@ battle mode, calls the appropriate maintained damage path, applies a
 
 `BattleDamage_ApplyEquipmentModifiers` first calculates base damage, then
 rounds each equipment stage as `(damage * percent + 50) / 100`. Its recovered
-effect table is:
+high-level implementation matches 84.52% of the original instructions and is
+kept out of the exact link until the remaining register-allocation differences
+are resolved. Its recovered effect table is:
 
 | Effect | Side | Rule |
 |---:|---|---|

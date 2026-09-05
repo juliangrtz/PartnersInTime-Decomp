@@ -15,7 +15,9 @@ enum ItemIdTag {
 typedef struct UsableItemRecord {
     u8 unknown_00[6];
     u16 interface_resource_id;
-    u8 unknown_08[12];
+    u8 unknown_08[4];
+    u32 effect_flags;
+    u8 unknown_10[4];
 } UsableItemRecord;
 
 typedef union ActionItemTargetFlags {
