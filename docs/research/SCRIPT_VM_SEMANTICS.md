@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 227 | 176 | `config/eur/field_vm.json` |
+| Field/world | 341 | 236 | 185 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -235,7 +235,16 @@ field context (the other DS screen/field instance).
 | `0x0FA` | `start_circular_screen_wipe` | duration_frames, center_x, center_y, start_radius_or_minus_one, end_radius_or_minus_one, retain_mask | starts a hardware-window circular iris wipe centered at the supplied screen coordinates and interpolates its radius for duration_frames. A radius of -1 expands to the farthest screen corner; retain_mask leaves the final window mask installed instead of tearing it down. On the primary field screen, a zero start radius also applies the pending scene-background audio transition |
 | `0x0FB` | `start_rectangular_screen_wipe` | duration_frames, center_x, center_y, start_left, start_right, start_top, start_bottom, end_left, end_right, end_top, end_bottom, retain_mask | starts a hardware-window rectangular wipe centered at the supplied screen coordinates. Four start extents interpolate to four end extents over duration_frames; -1 extents are expanded to their corresponding screen edge, and retain_mask leaves the final window mask installed. On the primary field screen, all-zero start extents also apply the pending scene-background audio transition |
 | `0x0FC` | `wait_screen_wipe` | 0 literal args | shared synchronization barrier for opcodes 0x0F9 through 0x0FB; a retained final window mask is not considered active |
-| `0x106` | `wait_field_scene_transition` | 0 literal args | common synchronization barrier for the scripted field-scene transition effects driven by the renderer state at +0x274 |
+| `0x0FD` | `set_field_screen_alpha_blend` | first_target_plane_mask, second_target_plane_mask, first_coefficient, second_coefficient | configures DS alpha blending on the current field screen. The two masks select the first and second blend-target planes and the two coefficients are written as EVA and EVB through the Nitro G2 blend helper |
+| `0x0FE` | `start_time_hole_departure` | entity_0_or_minus_one, entity_1_or_minus_one, entity_2_or_minus_one, entity_3_or_minus_one, anchor_entity, destination_room_id_or_minus_one, arrival_script_id, paired_arrival_script_id, unused_legacy_parameter, travel_direction, transit_room_id | starts the time-hole departure phase around anchor_entity for up to four participants. The controller captures the anchor position, spins and shrinks the selected entities for 190 frames, and fades the field. With destination_room_id -1 it finishes without a room reload; otherwise it chains into the 3D tunnel, loads transit_room_id, and finally schedules destination_room_id with arrival_script_id, paired_arrival_script_id, the fixed BGM policy -3, and paired-field synchronization. travel_direction selects the retained tunnel side/theme bit; the ninth parameter is stored but never read |
+| `0x0FF` | `prepare_time_hole_arrival` | entity_0_or_minus_one, entity_1_or_minus_one, entity_2_or_minus_one, entity_3_or_minus_one, anchor_entity, entity_0_arrival_direction, entity_1_arrival_direction, entity_2_arrival_direction, entity_3_arrival_direction | prepares the time-hole arrival phase for up to four participants at anchor_entity, temporarily changes their render/animation state, and records a separate eight-way direction 0..7 for each entity. Once started, participants reappear on staggered frame thresholds from points 64 pixels away in those directions and their ordinary field state is restored as each arrival finishes. The primary screen also applies its pending scene BGM transition |
+| `0x100` | `start_prepared_time_hole_arrival` | 0 literal args | sets the run bit of the prepared time-hole controller, starting an arrival configured by opcode 0x0FF. Calling it without an active prepared transition leaves the shared busy predicate set, so shipped scripts synchronize preparation across the paired field before issuing this command |
+| `0x101` | `start_time_hole_tunnel` | entity_0_or_minus_one, entity_1_or_minus_one, entity_2_or_minus_one, entity_3_or_minus_one, anchor_entity_or_minus_one, destination_room_id_or_minus_one, orbit_entities, center_x_offset, center_y_offset | starts the standalone 190-frame 3D time-hole tunnel, replacing normal field rendering with resources loaded from FieldFx/FieldFxData.dat and scheduling destination_room_id when it is not -1. The render center is screen center (128,96) plus the signed offsets; orbit_entities makes the selected participants spiral around it. anchor_entity parity selects one of the two tunnel themes, while -1 retains the controller's prior theme bit. At completion the normal field renderer and participant state are restored |
+| `0x102` | `start_field_vertical_accelerating_scroll` | initial_speed_fx32_or_low_half, initial_speed_high_half, acceleration_fx32_or_low_half, acceleration_high_half, maximum_speed_fx32_or_low_half, maximum_speed_high_half, reverse_direction_or_minus_one | starts the FieldFx-owned vertical map-scroll controller. Each logical fx32 value uses a low/high 16-bit literal pair; when the low slot is a VM variable its full 32-bit value is used and the paired high slot is ignored. The current speed begins at initial_speed, acceleration is added each frame up to maximum_speed, and the resulting signed delta advances the field's vertical offset with map-height wrapping. reverse_direction 0 selects forward, 1 reverse, and -1 preserves the previous direction |
+| `0x103` | `decelerate_field_vertical_scroll` | deceleration_fx32_or_low_half, deceleration_high_half | requests a loop-aligned stop of the vertical map scroll. The logical positive fx32 deceleration uses a low/high literal pair, or a full 32-bit VM variable in the low slot; the handler negates it, waits until the wrapped scroll crosses the computed seam, then subtracts it from the current speed each frame until zero and clears the active bit |
+| `0x104` | `wait_field_vertical_scroll` | 0 literal args | synchronization barrier for the scroll started by opcode 0x102 and stopped by opcode 0x103 |
+| `0x105` | `begin_time_hole_tunnel_whiteout` | 0 literal args | begins the tunnel's whiteout phase by latching its fade bit. While the 3D time-hole renderer remains active, the clear color brightens over the 190-frame tunnel lifetime and the tunnel palette is driven toward white after frame 90 |
+| `0x106` | `wait_time_hole_transition` | 0 literal args | common synchronization barrier for opcodes 0x0FE through 0x101, including transitions coordinated across the two field screens |
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
 | `0x10E` | `enable_field_trigger_area` | trigger_area_index | clears the runtime-disabled flag of the indexed 44-byte field trigger-area record, allowing party or entity overlap with its triangle, quadrilateral, or rectangle to select and launch the area's script again |
 | `0x10F` | `disable_field_trigger_area` | trigger_area_index | sets the runtime-disabled flag of the indexed 44-byte field trigger-area record; active and newly detected overlaps with that area are rejected before its script can run |
@@ -280,8 +289,8 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-202/289 used opcodes and
-385,912/387,272 reachable commands
+211/289 used opcodes and
+386,090/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
@@ -294,18 +303,18 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x0AB` | 50 |
 | `0x0AA` | 50 |
 | `0x0A8` | 50 |
-| `0x0FF` | 46 |
-| `0x100` | 38 |
-| `0x0FD` | 36 |
 | `0x12E` | 34 |
 | `0x054` | 33 |
 | `0x0C6` | 32 |
-| `0x0FE` | 29 |
 | `0x0C8` | 29 |
 | `0x0BB` | 29 |
 | `0x11B` | 27 |
 | `0x11A` | 27 |
 | `0x110` | 27 |
+| `0x0CB` | 26 |
+| `0x0A9` | 24 |
+| `0x07C` | 24 |
+| `0x137` | 22 |
 
 ## Menu/UI scene scripts
 

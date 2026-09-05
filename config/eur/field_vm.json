@@ -539,7 +539,16 @@
     "250": "start_circular_screen_wipe",
     "251": "start_rectangular_screen_wipe",
     "252": "wait_screen_wipe",
-    "262": "wait_field_scene_transition",
+    "253": "set_field_screen_alpha_blend",
+    "254": "start_time_hole_departure",
+    "255": "prepare_time_hole_arrival",
+    "256": "start_prepared_time_hole_arrival",
+    "257": "start_time_hole_tunnel",
+    "258": "start_field_vertical_accelerating_scroll",
+    "259": "decelerate_field_vertical_scroll",
+    "260": "wait_field_vertical_scroll",
+    "261": "begin_time_hole_tunnel_whiteout",
+    "262": "wait_time_hole_transition",
     "269": "wait_paired_field_ready",
     "270": "enable_field_trigger_area",
     "271": "disable_field_trigger_area",
@@ -1627,13 +1636,85 @@
       "effect": "shared synchronization barrier for opcodes 0x0F9 through 0x0FB; a retained final window mask is not considered active",
       "evidence": "func_ov000_020823f8 case 0x0FC and screen-wipe active bit at field context +0x2BC8"
     },
+    "253": {
+      "arguments": ["first_target_plane_mask", "second_target_plane_mask", "first_coefficient", "second_coefficient"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "configures DS alpha blending on the current field screen. The two masks select the first and second blend-target planes and the two coefficients are written as EVA and EVB through the Nitro G2 blend helper",
+      "evidence": "func_ov000_020823f8 case 0x0FD, Nitro helper G2x_SetBlendAlpha at 0x02036988, and BLDCNT registers 0x04000050/0x04001050"
+    },
+    "254": {
+      "arguments": ["entity_0_or_minus_one", "entity_1_or_minus_one", "entity_2_or_minus_one", "entity_3_or_minus_one", "anchor_entity", "destination_room_id_or_minus_one", "arrival_script_id", "paired_arrival_script_id", "unused_legacy_parameter", "travel_direction", "transit_room_id"],
+      "result": null,
+      "control_flow": "fallthrough after starting the transition; use opcode 0x106 as its synchronization barrier",
+      "yield": "never",
+      "effect": "starts the time-hole departure phase around anchor_entity for up to four participants. The controller captures the anchor position, spins and shrinks the selected entities for 190 frames, and fades the field. With destination_room_id -1 it finishes without a room reload; otherwise it chains into the 3D tunnel, loads transit_room_id, and finally schedules destination_room_id with arrival_script_id, paired_arrival_script_id, the fixed BGM policy -3, and paired-field synchronization. travel_direction selects the retained tunnel side/theme bit; the ninth parameter is stored but never read",
+      "evidence": "func_ov000_020823f8 case 0x0FE, initializer func_ov000_02069d38, anchor capture func_ov000_02069abc, three-phase update func_ov000_02066fcc, tunnel initializer func_ov000_02069284, room transition builders func_ov000_0207fa18/func_ov000_0207fac8, and reciprocal shipped room pairs through transit room 596"
+    },
+    "255": {
+      "arguments": ["entity_0_or_minus_one", "entity_1_or_minus_one", "entity_2_or_minus_one", "entity_3_or_minus_one", "anchor_entity", "entity_0_arrival_direction", "entity_1_arrival_direction", "entity_2_arrival_direction", "entity_3_arrival_direction"],
+      "result": null,
+      "control_flow": "fallthrough after preparing but not advancing the transition; opcode 0x100 starts it and opcode 0x106 waits for it",
+      "yield": "never",
+      "effect": "prepares the time-hole arrival phase for up to four participants at anchor_entity, temporarily changes their render/animation state, and records a separate eight-way direction 0..7 for each entity. Once started, participants reappear on staggered frame thresholds from points 64 pixels away in those directions and their ordinary field state is restored as each arrival finishes. The primary screen also applies its pending scene BGM transition",
+      "evidence": "func_ov000_020823f8 case 0x0FF, initializer func_ov000_02069b24, direction-vector helper func_ov000_020be758, arrival-mode branch of func_ov000_02066fcc, and BGM helper func_ov000_0207c098"
+    },
+    "256": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the run bit of the prepared time-hole controller, starting an arrival configured by opcode 0x0FF. Calling it without an active prepared transition leaves the shared busy predicate set, so shipped scripts synchronize preparation across the paired field before issuing this command",
+      "evidence": "func_ov000_020823f8 case 0x100, run-bit setter func_ov000_02069aac, active/run predicate func_ov000_02066c50, and the mode-1 gate in func_ov000_02066fcc"
+    },
+    "257": {
+      "arguments": ["entity_0_or_minus_one", "entity_1_or_minus_one", "entity_2_or_minus_one", "entity_3_or_minus_one", "anchor_entity_or_minus_one", "destination_room_id_or_minus_one", "orbit_entities", "center_x_offset", "center_y_offset"],
+      "result": null,
+      "control_flow": "fallthrough after starting the transition; use opcode 0x106 as its synchronization barrier",
+      "yield": "never",
+      "effect": "starts the standalone 190-frame 3D time-hole tunnel, replacing normal field rendering with resources loaded from FieldFx/FieldFxData.dat and scheduling destination_room_id when it is not -1. The render center is screen center (128,96) plus the signed offsets; orbit_entities makes the selected participants spiral around it. anchor_entity parity selects one of the two tunnel themes, while -1 retains the controller's prior theme bit. At completion the normal field renderer and participant state are restored",
+      "evidence": "func_ov000_020823f8 case 0x101, tunnel initializer func_ov000_02069284, 3D renderer func_ov000_0206836c, controller func_ov000_02066fcc, FieldFx/FieldFxData.dat archive references, and shipped destination room 596"
+    },
+    "258": {
+      "arguments": ["initial_speed_fx32_or_low_half", "initial_speed_high_half", "acceleration_fx32_or_low_half", "acceleration_high_half", "maximum_speed_fx32_or_low_half", "maximum_speed_high_half", "reverse_direction_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the FieldFx-owned vertical map-scroll controller. Each logical fx32 value uses a low/high 16-bit literal pair; when the low slot is a VM variable its full 32-bit value is used and the paired high slot is ignored. The current speed begins at initial_speed, acceleration is added each frame up to maximum_speed, and the resulting signed delta advances the field's vertical offset with map-height wrapping. reverse_direction 0 selects forward, 1 reverse, and -1 preserves the previous direction",
+      "evidence": "func_ov000_020823f8 case 0x102, initializer func_ov000_0206900c, per-frame update func_ov000_02068e04, vertical offset helper func_ov000_02073860, and shipped world-map scripts in room 596"
+    },
+    "259": {
+      "arguments": ["deceleration_fx32_or_low_half", "deceleration_high_half"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "requests a loop-aligned stop of the vertical map scroll. The logical positive fx32 deceleration uses a low/high literal pair, or a full 32-bit VM variable in the low slot; the handler negates it, waits until the wrapped scroll crosses the computed seam, then subtracts it from the current speed each frame until zero and clears the active bit",
+      "evidence": "func_ov000_020823f8 case 0x103, stop initializer func_ov000_02068fc4, and stop/seam branches in func_ov000_02068e04"
+    },
+    "260": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the FieldFx vertical-scroll active bit is set",
+      "yield": "until the scroll has decelerated to zero",
+      "effect": "synchronization barrier for the scroll started by opcode 0x102 and stopped by opcode 0x103",
+      "evidence": "func_ov000_020823f8 case 0x104, active predicate func_ov000_02068fac, and completion path in func_ov000_02068e04"
+    },
+    "261": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "begins the tunnel's whiteout phase by latching its fade bit. While the 3D time-hole renderer remains active, the clear color brightens over the 190-frame tunnel lifetime and the tunnel palette is driven toward white after frame 90",
+      "evidence": "func_ov000_020823f8 case 0x105 and fade-bit branches in 3D tunnel renderer func_ov000_0206836c"
+    },
     "262": {
       "arguments": [],
       "result": null,
-      "control_flow": "retries the same command while either of the field scene-transition controller's two active bits is set",
-      "yield": "while a field scene transition is active",
-      "effect": "common synchronization barrier for the scripted field-scene transition effects driven by the renderer state at +0x274",
-      "evidence": "func_ov000_020823f8 case 0x106 and active-state predicate func_ov000_02066c50"
+      "control_flow": "retries the same command while either the active or run bit of the time-hole transition controller is set",
+      "yield": "until the prepared arrival, departure, or 3D tunnel phase completes",
+      "effect": "common synchronization barrier for opcodes 0x0FE through 0x101, including transitions coordinated across the two field screens",
+      "evidence": "func_ov000_020823f8 case 0x106, active/run predicate func_ov000_02066c50, and all three mode branches in func_ov000_02066fcc"
     },
     "269": {
       "arguments": [],
