@@ -457,6 +457,11 @@
     "114": "restore_entity_behavior_state",
     "115": "set_entity_palette_profile",
     "116": "restore_entity_palette_profile",
+    "117": "start_entity_palette_animation",
+    "118": "stop_entity_palette_animation",
+    "119": "pause_entity_palette_animation",
+    "120": "resume_entity_palette_animation",
+    "121": "request_entity_base_palette_reload",
     "123": "start_entity_scaling",
     "124": "start_entity_timed_scaling",
     "125": "wait_entity_scaling",
@@ -1048,6 +1053,46 @@
       "yield": "never",
       "effect": "if opcode 0x073 saved a palette selector for this entity, clears the saved-state flag and switches back to that selector through the same palette-profile lookup and renderer reset path. Alternate/shared selectors are restored canonically as 16 plus their saved low nibble",
       "evidence": "func_ov000_020823f8 case 0x074 and func_ov000_02076f40; the sole shipped call restores a temporary event palette"
+    },
+    "117": {
+      "arguments": ["entity_selector", "palette_animation_slot_or_minus_one", "palette_animation_id", "loop"],
+      "result": "selected palette-animation slot",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "binds an animation from the entity renderer's palette-animation bank to one of its eight independent palette tracks, resets that track's time, and selects one-shot playback when loop is zero or looping playback otherwise. Slot -1 searches all tracks and chooses the highest-numbered unused slot; if all tracks are occupied the remaining -1 sentinel broadcasts the binding to all eight tracks. The selected slot is written to the result variable so a script can later stop or pause that exact track",
+      "evidence": "func_ov000_020823f8 case 0x075, entity renderer clCellAnimePA virtual methods func_0200c5d8 and func_0200c73c, per-frame palette-track evaluator func_0200c9c8, VM_WriteVariable, and seven reachable script uses"
+    },
+    "118": {
+      "arguments": ["entity_selector", "palette_animation_slot_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "unbinds the selected entity palette-animation track. Slot -1 clears the animation pointers and remembered animation IDs for all eight tracks",
+      "evidence": "func_ov000_020823f8 case 0x076 and clCellAnimePA virtual method func_0200c5d8; both shipped calls clear all tracks"
+    },
+    "119": {
+      "arguments": ["entity_selector", "palette_animation_slot_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "pauses the selected palette-animation track without changing its current time or binding. Slot -1 pauses all eight tracks. No reachable shipped field script uses this command",
+      "evidence": "func_ov000_020823f8 case 0x077, clCellAnimePA virtual method func_0200c770, and pause check in func_0200c9c8"
+    },
+    "120": {
+      "arguments": ["entity_selector", "palette_animation_slot_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resumes the selected palette-animation track at its retained time. Slot -1 resumes all eight tracks. No reachable shipped field script uses this command",
+      "evidence": "func_ov000_020823f8 case 0x078, clCellAnimePA virtual method func_0200c770, and pause check in func_0200c9c8"
+    },
+    "121": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "marks the entity's base palette resource dirty and selects that resource as the transfer source, causing the next palette-transfer pass to restore it to OBJ palette VRAM instead of uploading the current alternate working buffer. Shipped scripts use this immediately after rebinding one of five reused entity resources",
+      "evidence": "func_ov000_020823f8 case 0x079, clCellAnimePA virtual method func_0200c5a4, dirty-flag setter func_02009518, palette-transfer walker func_02007b94, and five reachable script uses"
     },
     "123": {
       "arguments": ["entity_selector", "scale_mode", "target_scale_x_fx32", "target_scale_y_fx32", "step_x_fx32", "step_y_fx32"],
