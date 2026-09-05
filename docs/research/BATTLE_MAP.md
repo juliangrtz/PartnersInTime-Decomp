@@ -229,6 +229,8 @@ and runtime overlay 2.
 | `020ACCB8` | `BattleSpriteEffect_Spawn` | Creates a sprite effect at view-adjusted coordinates |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
+| `020A56EC` | `BattleStatus_UpdatePartyStatVisuals` | Reconstructed POW/DEF/SPD effect rotation and model callback (73.00% code match) |
+| `020A5D2C` | `BattleStatus_StartPartyStatVisual` | Reconstructed party stat-effect starter (75.68% code match) |
 | `020A5F7C` | `BattleStatus_StartPartyAilment5Visual` | Starts the party animation and model layer used by status 5 |
 | `020A61B0` | `BattleStatus_UpdatePartyAilmentVisual` | Synchronizes and completes the shared party visual for statuses 4 and 5 |
 | `020A63F8` | `BattleStatus_StartPartyAilment4Visual` | Starts the party animation and model layer used by status 4 |
@@ -577,6 +579,15 @@ The shared callback synchronizes the actor and battle animation observer,
 arbitrates against the actor's existing `ailment_group_2` effect, holds the
 actor's hit-lock flag during animation 32, and restores animation 0 when the
 model signals completion.
+
+The preceding party POW/DEF/SPD visual unit now has a complete semantic C++
+reconstruction. Its starter maps status IDs 6-8 and signed stat deltas to the
+six up/down sprite effects, including the equipment-specific suppression of
+the initial power effect. The shared callback follows the actor with the
+effect, cycles every still-active stat change through model layers 3-8, and
+releases both model and task when no stat delta remains. The functions are not
+linked yet: their current code matches are 73.00% and 75.68%, so the original
+assembly remains authoritative for byte-identical builds.
 
 The exact battle item-selection helpers rebuild two compact tagged-ID lists
 directly from the save inventory: fourteen ordinary consumables at save offset

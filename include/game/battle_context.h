@@ -39,7 +39,7 @@ typedef union BattleRuntimeFlags {
         u32 global_property_20 : 1;
         u32 damage_number_merge_pending : 1;
         u32 coin_particle_render_pending : 1;
-        u32 unknown_15 : 1;
+        u32 status_visuals_active : 1;
         u32 alternate_formation : 1;
         u32 global_property_28 : 1;
         u32 unknown_18 : 1;

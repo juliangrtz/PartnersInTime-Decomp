@@ -29,6 +29,9 @@ void BattleStatus_SpawnEffect(int actor_id, int status_id);
 struct BattleAITask *BattleStatus_StartPartyAilment4Visual(int actor_id);
 struct BattleAITask *BattleStatus_StartPartyAilment5Visual(int actor_id);
 void BattleStatus_UpdatePartyAilmentVisual(struct BattleAITask *task);
+struct BattleAITask *BattleStatus_StartPartyStatVisual(int actor_id,
+                                                       int status_id);
+void BattleStatus_UpdatePartyStatVisuals(struct BattleAITask *task);
 
 #ifdef __cplusplus
 }
