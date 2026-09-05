@@ -392,9 +392,9 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
     }
     case BATTLE_PROPERTY_SCENE_FLAGS_24_26: {
         BattleSceneObject *object = BattleSceneObject_GetById(actor_id);
-        if (object->flags.bits.script_mode != value) {
+        if (object->flags.bits.render_mode != value) {
             BattleSceneObject_SetAnimation(object, -1, -1);
-            object->flags.bits.script_mode = value;
+            object->flags.bits.render_mode = value;
             switch (value) {
             case 0:
             case 1:

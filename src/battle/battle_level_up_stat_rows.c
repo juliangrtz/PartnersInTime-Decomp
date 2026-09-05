@@ -209,9 +209,9 @@ BattleAITask *BattleLevelUpScreen_Start(void) {
     (*(BattleSceneObject **)(
          gBattleContext + BATTLE_LEVEL_UP_PRIMARY_OBJECT_OFFSET))
         ->primary_model->animation_state_bits.state = 31;
-    *(u16 *)&(*(BattleSceneObject **)(
-                  gBattleContext + BATTLE_LEVEL_UP_PRIMARY_OBJECT_OFFSET))
-                  ->unk_0f0 = 0x7FFF;
+    (*(BattleSceneObject **)(
+         gBattleContext + BATTLE_LEVEL_UP_PRIMARY_OBJECT_OFFSET))
+        ->render_state = 0x7FFF;
 
     object = *(BattleSceneObject **)(
         gBattleContext + BATTLE_LEVEL_UP_SECONDARY_OBJECT_OFFSET);
@@ -222,9 +222,9 @@ BattleAITask *BattleLevelUpScreen_Start(void) {
     (*(BattleSceneObject **)(
          gBattleContext + BATTLE_LEVEL_UP_SECONDARY_OBJECT_OFFSET))
         ->primary_model->animation_state_bits.state = 31;
-    *(u16 *)&(*(BattleSceneObject **)(
-                  gBattleContext + BATTLE_LEVEL_UP_SECONDARY_OBJECT_OFFSET))
-                  ->unk_0f0 = 0x7FFF;
+    (*(BattleSceneObject **)(
+         gBattleContext + BATTLE_LEVEL_UP_SECONDARY_OBJECT_OFFSET))
+        ->render_state = 0x7FFF;
 
     object = *(BattleSceneObject **)(
         gBattleContext + BATTLE_LEVEL_UP_TERTIARY_OBJECT_OFFSET);
@@ -235,21 +235,21 @@ BattleAITask *BattleLevelUpScreen_Start(void) {
     (*(BattleSceneObject **)(
          gBattleContext + BATTLE_LEVEL_UP_TERTIARY_OBJECT_OFFSET))
         ->primary_model->animation_state_bits.state = 31;
-    *(u16 *)&(*(BattleSceneObject **)(
-                  gBattleContext + BATTLE_LEVEL_UP_TERTIARY_OBJECT_OFFSET))
-                  ->unk_0f0 = 0x7FFF;
+    (*(BattleSceneObject **)(
+         gBattleContext + BATTLE_LEVEL_UP_TERTIARY_OBJECT_OFFSET))
+        ->render_state = 0x7FFF;
 
     BattleEntity_BindResource(40, 62);
     BattleSceneObject_SetAnimation(BattleSceneObject_GetById(40), -1, -1);
-    *(u16 *)&BattleSceneObject_GetById(40)->unk_0f0 = 0x7FFF;
+    BattleSceneObject_GetById(40)->render_state = 0x7FFF;
 
     BattleEntity_BindResource(41, 54);
     BattleSceneObject_SetAnimation(BattleSceneObject_GetById(41), -1, -1);
-    *(u16 *)&BattleSceneObject_GetById(41)->unk_0f0 = 0x7FFF;
+    BattleSceneObject_GetById(41)->render_state = 0x7FFF;
 
     BattleEntity_BindResource(42, 54);
     BattleSceneObject_SetAnimation(BattleSceneObject_GetById(42), -1, -1);
-    *(u16 *)&BattleSceneObject_GetById(42)->unk_0f0 = 0x7FFF;
+    BattleSceneObject_GetById(42)->render_state = 0x7FFF;
 
     entrance_state->flags &= ~0x7F;
     entrance_state->x = 4480;

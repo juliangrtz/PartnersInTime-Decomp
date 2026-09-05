@@ -9,6 +9,7 @@ typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleModel BattleModel;
 typedef struct BattleModelVTable BattleModelVTable;
 typedef struct BattleModelAnimationData BattleModelAnimationData;
+typedef struct BattleSceneRenderOverride BattleSceneRenderOverride;
 struct BattleSpriteTransform;
 typedef void (*BattleMotionCallback)(BattleSceneObject *object,
                                      BattleMotionChannel *channel);
@@ -35,6 +36,10 @@ struct BattleModelAnimationData {
     u16 end_frame;
 };
 
+struct BattleSceneRenderOverride {
+    int (*render)(BattleSceneObject *object, int pass);
+};
+
 typedef union BattleSceneFlags {
     u32 raw;
     struct {
@@ -46,7 +51,7 @@ typedef union BattleSceneFlags {
         u32 use_raw_position : 1;
         u32 independent_flag : 1;
         u32 unk_19_23 : 5;
-        u32 script_mode : 3;
+        u32 render_mode : 3;
         u32 unk_27_31 : 5;
     } bits;
 } BattleSceneFlags;
@@ -140,7 +145,8 @@ struct BattleModel {
     virtual void unknown_c0();
     virtual void unknown_c4();
     virtual struct BattleSpriteTransform *get_sprite_transform();
-    u8 unk_004[8];
+    u8 unk_004[4];
+    BattleModel *render_next;
     BattleSceneObject *owner;
     u8 unk_010[0x38];
     BattleModelAnimationData *animation_data;
@@ -153,7 +159,8 @@ struct BattleModel {
     u8 unk_060[0x14];
     s16 scale_x;
     s16 scale_y;
-    u8 unk_078[4];
+    u16 rotation_z;
+    u16 unk_07a;
     union {
         u32 flags;
         struct {
@@ -163,7 +170,8 @@ struct BattleModel {
             u32 animation_active : 1;
             u32 unknown_09 : 1;
             u32 facing_left : 1;
-            u32 unknown_11_31 : 21;
+            u32 flip_y : 1;
+            u32 unknown_12_31 : 20;
         } flag_bits;
     };
     u8 unk_080[0xC4];
@@ -178,12 +186,14 @@ struct BattleModel {
             u16 unknown_05_15 : 11;
         } animation_state_bits;
     };
-    u8 unk_164[0x54];
+    u16 owner_render_state;
+    u8 unk_166[0x52];
 };
 #else
 struct BattleModel {
     BattleModelVTable *vtable;
-    u8 unk_004[8];
+    u8 unk_004[4];
+    BattleModel *render_next;
     BattleSceneObject *owner;
     u8 unk_010[0x38];
     BattleModelAnimationData *animation_data;
@@ -196,7 +206,8 @@ struct BattleModel {
     u8 unk_060[0x14];
     s16 scale_x;
     s16 scale_y;
-    u8 unk_078[4];
+    u16 rotation_z;
+    u16 unk_07a;
     union {
         u32 flags;
         struct {
@@ -206,7 +217,8 @@ struct BattleModel {
             u32 animation_active : 1;
             u32 unknown_09 : 1;
             u32 facing_left : 1;
-            u32 unknown_11_31 : 21;
+            u32 flip_y : 1;
+            u32 unknown_12_31 : 20;
         } flag_bits;
     };
     u8 unk_080[0xC4];
@@ -221,7 +233,8 @@ struct BattleModel {
             u16 unknown_05_15 : 11;
         } animation_state_bits;
     };
-    u8 unk_164[0x54];
+    u16 owner_render_state;
+    u8 unk_166[0x52];
 };
 #endif
 
@@ -243,7 +256,7 @@ struct BattleSceneObject {
     BattleSceneResource *resource;
     BattleModel *primary_model;
     BattleModel *alternate_model;
-    u32 unk_0c8;
+    BattleSceneRenderOverride *render_override;
     u8 unk_0cc[0x14];
     s32 loaded_resource_id;
     s16 animation_id;
@@ -252,7 +265,8 @@ struct BattleSceneObject {
     s16 effect_anchor_z;
     u16 actor_id;
     u16 linked_actor_id;
-    u8 unk_0f0[4];
+    u16 render_state;
+    u8 unk_0f2[2];
     BattleSceneFlags flags;
     s16 property_0f8;
     s16 property_0fa;
@@ -279,6 +293,7 @@ typedef char BattleSceneObject_SizeCheck[
 typedef char BattleModel_SizeCheck[sizeof(BattleModel) == 0x1B8 ? 1 : -1];
 
 extern BattleSceneObject *gBattleMotionObjectList;
+extern BattleModel *gModelRenderList;
 
 #ifdef __cplusplus
 extern "C" {
@@ -289,6 +304,7 @@ u32 BattleMath_WaitForSqrtResult(void);
 
 void BattleSceneObject_SetStateFlags(BattleSceneObject *object, int state,
                                      int independent_flag);
+int BattleScene_RenderModels(void);
 void BattleSceneObject_SwapSlots(u32 first_id, u32 second_id);
 void BattleSceneObject_SetModelFlag11ById(int object_id, int enabled);
 void BattleSceneObject_SetModelFlag10(BattleSceneObject *object, int enabled);

@@ -759,6 +759,12 @@ linked C. They transform a scene object's effect anchor into view-relative
 coordinates and spawn an animation from battle resource 19 immediately or
 through a small typed delay task. The delayed path applies the observed
 12-unit Z adjustment before emitting the model effect.
+`BattleScene_RenderModels` at `0x020A2814` is exact linked C++ for the main
+battle-model render pass. It traverses the engine's model list, applies X/Y
+mirroring, Q8 scale, Z rotation, object-relative placement and animation-frame
+state, then dispatches an object render override or one of three render modes.
+After drawing, it restores the model's 4x4 transform to identity and advances
+the shared render buffer before the secondary scene pass.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets

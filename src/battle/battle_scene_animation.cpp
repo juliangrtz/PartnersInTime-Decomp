@@ -100,7 +100,7 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
         actor_kind = BATTLE_SCENE_ACTOR_ENEMY;
     }
 
-    if (object->flags.bits.script_mode != 0) {
+    if (object->flags.bits.render_mode != 0) {
         if (model == 0) {
             model = (BattleModel *)func_02029be0(
                 sizeof(BattleModel),

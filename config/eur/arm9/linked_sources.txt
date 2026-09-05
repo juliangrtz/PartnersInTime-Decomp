@@ -59,6 +59,7 @@ src/battle/battle_flee_transition.c
 src/battle/battle_flee_run.c
 src/battle/battle_flee_controller.cpp
 src/battle/battle_object_effect_delay.c
+src/battle/battle_scene_render.cpp
 src/battle/battle_scene_object.c
 src/battle/battle_scene_movement.c
 src/battle/battle_scene_motion_list.c
