@@ -78,7 +78,9 @@ struct BattleModelVTable {
     void (*unknown_004)(BattleModel *model);
     void (*draw)(BattleModel *model, int argument_1,
                  int argument_2, int argument_3);
-    u8 unknown_00c[0x18];
+    u8 unknown_00c[8];
+    void (*unknown_014)(BattleModel *model);
+    u8 unknown_018[0x0C];
     void (*start)(BattleModel *model);
     void (*stop)(BattleModel *model);
     u8 unknown_02c[8];
@@ -162,7 +164,10 @@ struct BattleModel {
     s16 animation_id;
     s16 property_056;
     u8 unk_058[2];
-    u16 enemy_idle_frame;
+    union {
+        u16 enemy_idle_frame;
+        s16 effect_scale;
+    };
     s16 animation_offset_x;
     s16 animation_offset_y;
     u8 unk_060[8];
@@ -212,7 +217,10 @@ struct BattleModel {
     s16 animation_id;
     s16 property_056;
     u8 unk_058[2];
-    u16 enemy_idle_frame;
+    union {
+        u16 enemy_idle_frame;
+        s16 effect_scale;
+    };
     s16 animation_offset_x;
     s16 animation_offset_y;
     u8 unk_060[8];

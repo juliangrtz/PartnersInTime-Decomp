@@ -107,8 +107,8 @@ word loads observed from the command-record register (`r5`).
 | `0x8D` | `0x0207C38C` | — | `0x8`, `0xC` | `BattleDamage_CalculateByObject`, `VM_WriteVariable` |
 | `0x8E` | `0x0207C3CC` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20` | `BattleModelEffect_SpawnFromResource` |
 | `0x8F` | `0x0207C490` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20` | `BattleSceneObject_GetById`, `BattlePosition_StoreViewRelative`, `BattleModelEffect_SpawnFromResource` |
-| `0x90` | `0x0207C580` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20` | `BattleSceneObject_GetById`, `BattlePosition_StoreViewRelative`, `func_ov002_020ac740`, `VM_WriteVariable` |
-| `0x91` | `0x0207C688` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20` | `BattleSceneObject_GetById`, `BattlePosition_StoreViewRelative`, `func_ov002_020ac740`, `VM_WriteVariable` |
+| `0x90` | `0x0207C580` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20` | `BattleSceneObject_GetById`, `BattlePosition_StoreViewRelative`, `BattleModelEffect_SpawnFromResourceInFreeSlot`, `VM_WriteVariable` |
+| `0x91` | `0x0207C688` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20` | `BattleSceneObject_GetById`, `BattlePosition_StoreViewRelative`, `BattleModelEffect_SpawnFromResourceInFreeSlot`, `VM_WriteVariable` |
 | `0x92` | `0x0207C794` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C` | `BattleSpriteEffect_Spawn` |
 | `0x93` | `0x0207C848` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C` | `BattleSceneObject_GetById`, `BattlePosition_StoreViewRelative`, `BattleSpriteEffect_Spawn` |
 | `0x94` | `0x0207C928` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C` | `BattleSpriteEffect_SpawnInFreeSlot`, `VM_WriteVariable` |
