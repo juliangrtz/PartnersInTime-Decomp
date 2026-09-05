@@ -5,3 +5,6 @@
 
 src/overlay015/pair_attack_helpers.c:
     .text       start:0x020c30ac end:0x020c31dc
+
+src/overlay015/actor_setup.c:
+    .text       start:0x020c4028 end:0x020c4194
