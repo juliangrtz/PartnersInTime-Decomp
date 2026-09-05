@@ -54,8 +54,6 @@ enum BattleFleeRunConstant {
 };
 
 extern int Random_NextModulo(int modulus);
-extern void func_ov002_020a2728(int effect_id, int duration,
-                                BattleSceneObject *object);
 extern int BattleMotion_StartBallistic(
     BattleSceneObject *object, int channel_index,
     int direction_x, int direction_y, int direction_z,
@@ -460,27 +458,27 @@ void BattleFlee_UpdateRun(BattleAITask *base_task) {
             switch (actor->formation_index) {
                 case BATTLE_FORMATION_MARIO:
                     BattleSound_Play(BATTLE_FLEE_IMPACT_SOUND_ID, 12, 0, 0);
-                    func_ov002_020a2728(16, 12, object);
+                    BattleObjectEffect_SpawnDelayed(16, 12, object);
                     break;
                 case BATTLE_FORMATION_LUIGI:
                     BattleSound_Play(BATTLE_FLEE_IMPACT_SOUND_ID, 12, 0, 0);
-                    func_ov002_020a2728(16, 12, object);
+                    BattleObjectEffect_SpawnDelayed(16, 12, object);
                     break;
                 case BATTLE_FORMATION_BABY_MARIO:
                     BattleSound_Play(BATTLE_FLEE_IMPACT_SOUND_ID, 12, 0, 0);
-                    func_ov002_020a2728(17, 12, object);
+                    BattleObjectEffect_SpawnDelayed(17, 12, object);
                     break;
                 case BATTLE_FORMATION_BABY_LUIGI:
                     BattleSound_Play(BATTLE_FLEE_IMPACT_SOUND_ID, 12, 0, 0);
-                    func_ov002_020a2728(17, 12, object);
+                    BattleObjectEffect_SpawnDelayed(17, 12, object);
                     break;
                 case BATTLE_FORMATION_MARIO_CARRYING:
                     BattleSound_Play(BATTLE_FLEE_IMPACT_SOUND_ID, 12, 0, 0);
-                    func_ov002_020a2728(16, 12, object);
+                    BattleObjectEffect_SpawnDelayed(16, 12, object);
                     break;
                 case BATTLE_FORMATION_LUIGI_CARRYING:
                     BattleSound_Play(BATTLE_FLEE_IMPACT_SOUND_ID, 12, 0, 0);
-                    func_ov002_020a2728(16, 12, object);
+                    BattleObjectEffect_SpawnDelayed(16, 12, object);
                     break;
                 default:
                     break;

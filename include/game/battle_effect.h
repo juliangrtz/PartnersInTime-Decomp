@@ -63,6 +63,10 @@ BattleEffect *BattleModelEffect_SpawnAttached(BattleEffect **owner_slot,
                                               int effect_id,
                                               BattleSceneObject *parent,
                                               int x, int y, int z, int scale);
+struct BattleAITask *BattleModelEffect_SpawnFromResource(
+    int resource_id, int animation_id, int x, int y, int z, int scale);
+void BattleObjectEffect_SpawnDelayed(int animation_id, int delay,
+                                     BattleSceneObject *object);
 BattleEffect *BattleDamage_SpawnNumber(int value, int x, int y,
                                        int effect_id, u16 attached_actor_id);
 int BattleSound_Play(int sound_id, int argument_1, int argument_2,
