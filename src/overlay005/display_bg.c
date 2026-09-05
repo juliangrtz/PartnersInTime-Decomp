@@ -1,5 +1,21 @@
 #include <game/overlay005_display.h>
 
+extern void GX_EndLoadOBJExtPltt(void);
+extern void GX_LoadOBJExtPltt(const void *source, u32 offset, u32 size);
+extern void GX_BeginLoadOBJExtPltt(void);
+extern void GX_EndLoadBGExtPltt(void);
+extern void GX_LoadBGExtPltt(const void *source, u32 offset, u32 size);
+extern void GX_BeginLoadBGExtPltt(void);
+extern void GXS_EndLoadOBJExtPltt(void);
+extern void GXS_LoadOBJExtPltt(const void *source, u32 offset, u32 size);
+extern void GXS_BeginLoadOBJExtPltt(void);
+extern void GXS_EndLoadBGExtPltt(void);
+extern void GXS_LoadBGExtPltt(const void *source, u32 offset, u32 size);
+extern void GXS_BeginLoadBGExtPltt(void);
+extern void MI_UncompressLZ16(const void *source, void *destination);
+extern void MIi_CpuCopy16(const void *source, void *destination, u32 size);
+extern void MI_CpuCopy8(const void *source, void *destination, u32 size);
+
 enum {
     REG_DISPCNT = 0x04000000,
     REG_BG_CONTROL = 0x04000008,
@@ -25,6 +41,120 @@ enum {
 };
 
 /* Metrowerks emits C functions in reverse source order. */
+void Overlay5Display_LoadObjTiles(
+    DisplayEngine engine, const void *source, u32 offset, u32 size
+) {
+    void *destination = Overlay5Display_GetObjVram(engine);
+    destination = (void *)(offset + (u32)destination);
+    MIi_CpuCopy16(source, destination, size);
+}
+
+void Overlay5Display_LoadObjTilesLZ(DisplayEngine engine, const void *source, u32 offset) {
+    MI_UncompressLZ16(source, (void *)(offset + (u32)Overlay5Display_GetObjVram(engine)));
+}
+
+void Overlay5Display_LoadObjPalette(
+    DisplayEngine engine, const void *source, u32 offset, u32 size
+) {
+    void *destination = Overlay5Display_GetObjPalette(engine);
+    destination = (void *)(offset + (u32)destination);
+    MIi_CpuCopy16(source, destination, size);
+}
+
+void Overlay5Display_LoadBgPalette(
+    DisplayEngine engine, const void *source, u32 offset, u32 size
+) {
+    void *destination = Overlay5Display_GetBgPalette(engine);
+    destination = (void *)(offset + (u32)destination);
+    MIi_CpuCopy16(source, destination, size);
+}
+
+void Overlay5DisplayBg_LoadScreen(
+    DisplayEngine engine, int background, const void *source, u32 offset, u32 size
+) {
+    MI_CpuCopy8(
+        source,
+        (void *)(offset + (u32)Overlay5DisplayBg_GetScreenVram2K(engine, background)),
+        size
+    );
+}
+
+void Overlay5DisplayBg_LoadScreenLZ(
+    DisplayEngine engine, int background, const void *source, u32 offset
+) {
+    MI_UncompressLZ16(
+        source, (void *)(offset + (u32)Overlay5DisplayBg_GetScreenVram2K(engine, background))
+    );
+}
+
+void Overlay5DisplayBg_LoadCharacters(
+    DisplayEngine engine, int background, const void *source, u32 offset, u32 size
+) {
+    void *destination = Overlay5DisplayBg_GetCharacterVram(engine, background);
+    destination = (void *)(offset + (u32)destination);
+    MIi_CpuCopy16(source, destination, size);
+}
+
+void Overlay5DisplayBg_LoadCharactersLZ(
+    DisplayEngine engine, int background, const void *source, u32 offset
+) {
+    MI_UncompressLZ16(
+        source, (void *)(offset + (u32)Overlay5DisplayBg_GetCharacterVram(engine, background))
+    );
+}
+
+void Overlay5Display_BeginLoadBgExtPalette(DisplayEngine engine) {
+    if (engine == DISPLAY_ENGINE_MAIN) {
+        GX_BeginLoadBGExtPltt();
+    } else {
+        GXS_BeginLoadBGExtPltt();
+    }
+}
+
+void Overlay5Display_LoadBgExtPalette(
+    DisplayEngine engine, const void *source, u32 offset, u32 size
+) {
+    if (engine == DISPLAY_ENGINE_MAIN) {
+        GX_LoadBGExtPltt(source, offset, size);
+    } else {
+        GXS_LoadBGExtPltt(source, offset, size);
+    }
+}
+
+void Overlay5Display_EndLoadBgExtPalette(DisplayEngine engine) {
+    if (engine == DISPLAY_ENGINE_MAIN) {
+        GX_EndLoadBGExtPltt();
+    } else {
+        GXS_EndLoadBGExtPltt();
+    }
+}
+
+void Overlay5Display_BeginLoadObjExtPalette(DisplayEngine engine) {
+    if (engine == DISPLAY_ENGINE_MAIN) {
+        GX_BeginLoadOBJExtPltt();
+    } else {
+        GXS_BeginLoadOBJExtPltt();
+    }
+}
+
+void Overlay5Display_LoadObjExtPalette(
+    DisplayEngine engine, const void *source, u32 offset, u32 size
+) {
+    if (engine == DISPLAY_ENGINE_MAIN) {
+        GX_LoadOBJExtPltt(source, offset, size);
+    } else {
+        GXS_LoadOBJExtPltt(source, offset, size);
+    }
+}
+
+void Overlay5Display_EndLoadObjExtPalette(DisplayEngine engine) {
+    if (engine == DISPLAY_ENGINE_MAIN) {
+        GX_EndLoadOBJExtPltt();
+    } else {
+        GXS_EndLoadOBJExtPltt();
+    }
+}
+
 void *Overlay5DisplayBg_GetScreenVram2K(DisplayEngine engine, int background) {
     vu16 *control = Overlay5DisplayBg_GetControl(engine, background);
     int base_block = 0x800 * ((*control & BG_CONTROL_SCREEN_BASE_MASK) >> 8);
