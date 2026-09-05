@@ -754,6 +754,11 @@ three phase-staggered particle models, then creates and owns the paired actor
 tasks. Its update resets the particle transforms, handles cancel input and
 resource restoration, and selects either the return transition or completed
 battle exit when the owned tasks retire.
+The two adjacent object-effect helpers at `0x020A2658`-`0x020A2814` are exact
+linked C. They transform a scene object's effect anchor into view-relative
+coordinates and spawn an animation from battle resource 19 immediately or
+through a small typed delay task. The delayed path applies the observed
+12-unit Z adjustment before emitting the model effect.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets
