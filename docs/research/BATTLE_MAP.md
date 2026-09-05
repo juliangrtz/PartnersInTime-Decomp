@@ -157,7 +157,7 @@ and runtime overlay 2.
 | `02090C18` | `BattleSceneObject_SwapSlots` | Exchanges field/actor scene bindings and repairs their object IDs |
 | `02071C84` | `BattleDamage_CalculateAttack` | General POW/DEF/level damage calculation |
 | `0209BF38` | `BattleDamage_CalculateBase` | Compact actor-ID-based damage calculation |
-| `0209BFA0` | `BattleDamage_CalculateByObject` | Resolves scene objects and selects damage modes/equipment |
+| `0209BFA0` | `BattleDamage_CalculateByObject` | Resolves scene objects and selects damage modes/equipment (semantic C; 98.90% matching) |
 | `0209BCCC` | `BattleDamage_ApplyEquipmentModifiers` | Applies attacker/defender equipment multipliers (semantic C; 84.52% matching) |
 | `0209D694` | `BattleActor_ApplyDamage` | Subtracts HP, clamps at zero, and marks knockout |
 | `0209CD9C` | `BattleDamage_SpawnNumber` | Creates free or actor-attached damage-number effects |
@@ -496,11 +496,14 @@ maps attack categories to Q8 multiplier columns, optionally applies a second
 multiplier table, clamps the intermediate and final values, scales by the
 battle-wide percentage, and honors the defender's forced-one-damage flag.
 
-`BattleDamage_CalculateByObject` is now maintained in full. It maps both scene
-objects through their linked actor IDs, rejects invalid IDs and the defender
-immunity flag, selects Q8 scales `0x126`, `0x10C`, or `0x100` from the active
-battle mode, calls the appropriate maintained damage path, applies a
-140-percent equipment bonus for effect `0x301B`, and caps the result at 999.
+`BattleDamage_CalculateByObject` is now also reconstructed as readable C. It
+maps both scene objects through their linked actor IDs, rejects invalid IDs and
+honors the defender's force-one-damage flag, selects Q8 scales `0x126`,
+`0x10C`, or `0x100` from the active battle mode, calls the appropriate
+maintained damage path, applies the Rough Badge's 140-percent bonus, and caps
+the result at 999. Its 728-byte candidate matches 98.90 percent; the only two
+differences are the compiler's initial choice of `r4` instead of `r5`, so the
+exact assembly remains linked for now.
 
 `BattleDamage_ApplyEquipmentModifiers` first calculates base damage, then
 rounds each equipment stage as `(damage * percent + 50) / 100`. Its recovered

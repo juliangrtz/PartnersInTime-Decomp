@@ -170,6 +170,9 @@ src/battle/battle_damage_modifiers.c:
 src/battle/battle_damage_base.c:
     .text       start:0x0209bf38 end:0x0209bfa0
 
+src/battle/battle_damage_by_object.c:
+    .text       start:0x0209bfa0 end:0x0209c278
+
 src/battle/battle_actor_damage.c:
     .text       start:0x0209d694 end:0x0209d718
 
