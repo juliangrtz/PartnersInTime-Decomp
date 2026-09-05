@@ -25,7 +25,7 @@ The raw-loader base and input image differ by overlay; see
 |---:|---:|---|---|---|
 | 0 | 366,712 B | Field/world code; the recovered entity object has two lifecycle variants and action/interaction state | `0x020A2BBC-0x020A2D04` (10 functions, 328 B) | Active; large dispatcher-heavy overlay, take isolated object helpers first |
 | 2 | 362,436 B | Battle engine, battle BAI extension, combat UI, effects, transitions, and results | Many maintained units; see `BATTLE_MAP.md` | Active; continue coherent clusters alongside other overlays |
-| 5 | 16,760 B | Shared resource owners and Nintendo DS 2D display/BG address helpers are proven; whole-overlay role remains open | `0x02066224-0x02066358` and `0x02067C70-0x02067F84` (28 functions, 1,096 B) | Active quick-win target |
+| 5 | 16,760 B | Shared resource owners plus Nintendo DS 2D display addressing, palette transfer, tile, and tilemap loading helpers are proven; whole-overlay role remains open | `0x02066224-0x02066358` and `0x02067C70-0x0206824C` (42 functions, 1,808 B) | Active quick-win target |
 | 6 | 66,492 B | Unknown | None | Untriaged |
 | 7 | 142,264 B | Unknown | None | Untriaged; split into call-graph clusters before choosing source units |
 | 8 | 54,068 B | Unknown | None | Untriaged |
