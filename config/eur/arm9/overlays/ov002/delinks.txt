@@ -304,3 +304,6 @@ src/battle/battle_party_mario_reload_finish.c:
 
 src/battle/battle_party_mario_reload.c:
     .text       start:0x020a8e10 end:0x020a90f4
+
+src/battle/battle_party_knockout.c:
+    .text       start:0x020a90f4 end:0x020a9478

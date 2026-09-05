@@ -3,6 +3,8 @@
 
 #include <game/battle_ai.h>
 
+struct BattleSceneObject;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,6 +21,8 @@ void BattleParty_UpdateMarioReloadWaitRetreat(BattleAITask *task);
 void BattleParty_UpdateMarioReloadStartRetreat(BattleAITask *task);
 void BattleParty_UpdateMarioReloadWaitAnimation(BattleAITask *task);
 void BattleParty_UpdateMarioReloadWaitResource(BattleAITask *task);
+BattleAITask *BattleParty_StartKnockout(struct BattleSceneObject *object);
+void BattleParty_UpdateKnockout(BattleAITask *task);
 
 #ifdef __cplusplus
 }
