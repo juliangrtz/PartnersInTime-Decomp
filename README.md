@@ -134,6 +134,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   save-selected dual-screen paths, including VCount IRQ display swapping and
   clamped capture intensity. Two matching curtain-transition functions then
   advance and retire the following 50-column geometry wipe.
+  Six matching cylinder-wipe callbacks implement the adjacent reveal,
+  optional dual-screen rotation, display restoration, and captured finish
+  sequence. Eight matching iris-transition callbacks then drive both radial
+  phases and their asynchronous display-capture bridge over 64-frame passes.
   The adjacent six-function common-asset loader is matching C as well: it
   opens the battle archive, reads and relocates its offset table, selects the
   localized entries, and fills the twenty-one-slot runtime pointer table.

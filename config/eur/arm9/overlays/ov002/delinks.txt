@@ -358,3 +358,15 @@ src/battle/battle_cylinder_transition.c:
 
 src/battle/battle_curtain_transition.c:
     .text       start:0x020b44d0 end:0x020b4544
+
+src/battle/battle_cylinder_wipe.c:
+    .text       start:0x020b4d28 end:0x020b5048
+
+src/battle/battle_iris_transition_phase_a.c:
+    .text       start:0x020b53f8 end:0x020b5468
+
+src/battle/battle_iris_capture.c:
+    .text       start:0x020b581c end:0x020b5950
+
+src/battle/battle_iris_transition_phase_b.c:
+    .text       start:0x020b5d04 end:0x020b5d58

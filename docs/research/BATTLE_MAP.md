@@ -306,6 +306,24 @@ and runtime overlay 2.
 | `020B42E0` | `BattleCurtainTransition_Draw` | Identified 50-column curtain geometry renderer; high-level reconstruction pending |
 | `020B44D0` | `BattleCurtainTransition_UpdateTask` | Byte-identical curtain progress and active-flag cleanup callback |
 | `020B452C` | `BattleCurtainTransition_InitializeTask` | Byte-identical curtain-transition initializer |
+| `020B4544` | `BattleCylinderWipe_Draw` | Identified segmented cylinder-wipe renderer; high-level reconstruction pending |
+| `020B4D28` | `BattleCylinderWipe_UpdateFinishTask` | Byte-identical accelerating finish, capture trigger, and task retirement callback |
+| `020B4DB8` | `BattleCylinderWipe_OnVCountInterrupt` | Byte-identical VCount IRQ display-swap handler using NitroSDK's IRQ-check buffer |
+| `020B4E14` | `BattleCylinderWipe_RestoreDisplayTask` | Byte-identical deferred IRQ and display restoration callback |
+| `020B4E6C` | `BattleCylinderWipe_UpdateRotationTask` | Byte-identical optional dual-screen cylinder rotation and split-line scheduler |
+| `020B4F50` | `BattleCylinderWipe_UpdateRevealTask` | Byte-identical 32-frame reveal and save-selected path callback |
+| `020B5014` | `BattleCylinderWipe_InitializeTask` | Byte-identical cylinder-wipe state initializer |
+| `020B5048` | `BattleIrisTransition_DrawPhaseA` | Identified 12-ring by 33-segment radial transition renderer; high-level reconstruction pending |
+| `020B53F8` | `BattleIrisTransitionPhaseA_UpdateTask` | Byte-identical 64-frame radial-transition update and cleanup callback |
+| `020B5450` | `BattleIrisTransitionPhaseA_InitializeTask` | Byte-identical phase-A task initializer |
+| `020B5468` | `BattleIrisCapture_Draw` | Identified captured radial-transition renderer; high-level reconstruction pending |
+| `020B581C` | `BattleIrisCapture_WaitForResetTask` | Byte-identical capture-reset completion and active-flag cleanup callback |
+| `020B5858` | `BattleIrisCapture_UpdateTask` | Byte-identical reverse-progress iris draw and asynchronous reset callback |
+| `020B58DC` | `BattleIrisCapture_BeginTask` | Byte-identical display-capture configuration callback |
+| `020B5910` | `BattleIrisCapture_InitializeTask` | Byte-identical captured iris task and intensity initializer |
+| `020B5950` | `BattleIrisTransition_DrawPhaseB` | Identified complementary radial-transition renderer; high-level reconstruction pending |
+| `020B5D04` | `BattleIrisTransitionPhaseB_UpdateTask` | Byte-identical 64-frame complementary iris callback and capture handoff |
+| `020B5D40` | `BattleIrisTransitionPhaseB_InitializeTask` | Byte-identical phase-B task initializer |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `020A56EC` | `BattleStatus_UpdatePartyStatVisuals` | Reconstructed POW/DEF/SPD effect rotation and model callback (73.00% code match) |
@@ -702,6 +720,15 @@ handler sets NitroSDK's DTCM-backed interrupt-check flag through the recovered
 controller at `0x020B44D0`-`0x020B4544` is matching C too; it doubles a 32-frame
 counter for the raw 50-column geometry wipe and clears active flag `0x40` on
 completion.
+
+The adjacent cylinder-wipe controller at `0x020B4D28`-`0x020B5048` contributes
+six more byte-identical callbacks. It reveals the segmented geometry over 32
+frames, selects the optional dual-screen path from save flag `+0x560:0x8`,
+schedules the VCount split and display restoration, then accelerates through
+the final rotation while marking the captured half. The three following raw
+renderers draw 12 radial rings with 33 angular segments. Eight matching
+callbacks at `0x020B53F8`-`0x020B5D58` drive their two 64-frame phases and the
+asynchronous display-capture configure/reset sequence between them.
 
 ## Damage and status behavior
 
