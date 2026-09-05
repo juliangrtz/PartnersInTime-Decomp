@@ -108,6 +108,8 @@
     "52": "configure_object_data_load",
     "53": "ensure_object_data_loaded",
     "54": "queue_capture_surface_upload",
+    "55": "queue_object_data_load_and_mark_pending",
+    "56": "queue_object_data_alternate_load",
     "57": "wait_object_data_load",
     "58": "get_object_data_resource",
     "59": "bind_entity_resource",
@@ -117,15 +119,30 @@
     "65": "swap_object_slots",
     "70": "get_global_property",
     "71": "set_global_property",
+    "73": "legacy_noop_049",
+    "76": "legacy_noop_04c",
     "77": "get_actor_property",
     "78": "set_actor_property",
     "79": "set_actor_property_fixed",
+    "80": "align_object_view_baseline",
+    "81": "legacy_noop_051",
     "82": "apply_object_movement",
     "83": "get_object_view_coordinate",
     "84": "get_enemy_stat",
     "85": "set_enemy_stat",
+    "86": "wait_object_pending_state",
     "91": "move_object",
     "93": "move_object_at_speed",
+    "94": "start_axis_kinematic_motion",
+    "95": "move_object_with_kinematic_duration",
+    "96": "start_axis_kinematic_motion_get_duration",
+    "97": "move_object_with_kinematic_duration_get_duration",
+    "98": "start_directional_kinematic_motion_a",
+    "99": "start_directional_kinematic_motion_b",
+    "100": "start_directional_ballistic_motion",
+    "101": "start_directional_kinematic_motion_a_get_duration",
+    "102": "start_directional_kinematic_motion_b_get_duration",
+    "103": "start_directional_ballistic_motion_get_duration",
     "104": "start_velocity_motion",
     "105": "start_acceleration_motion",
     "106": "start_accelerated_motion",
@@ -136,7 +153,14 @@
     "114": "get_motion_frame",
     "115": "start_aux_script",
     "116": "wait_aux_script",
+    "117": "suppress_actor_rendering",
+    "118": "restore_actor_rendering",
+    "119": "legacy_noop_077",
     "120": "remove_enemy",
+    "121": "legacy_noop_079",
+    "122": "legacy_noop_07a",
+    "123": "legacy_noop_07b",
+    "124": "legacy_noop_07c",
     "125": "damage_actor",
     "126": "heal_actor",
     "127": "wait_hit_queue",
@@ -146,6 +170,10 @@
     "132": "configure_hit",
     "133": "reflect_queued_hits",
     "134": "find_hit_descriptor",
+    "135": "get_queued_hit_x",
+    "136": "get_queued_hit_y",
+    "137": "get_queued_hit_z",
+    "138": "get_queued_hit_kind",
     "139": "damage_party",
     "141": "calculate_damage",
     "142": "spawn_model_effect",
@@ -156,13 +184,23 @@
     "147": "spawn_attached_sprite_effect",
     "148": "spawn_sprite_effect_handle",
     "149": "spawn_attached_sprite_effect_handle",
+    "150": "set_attached_effect_user_value",
+    "155": "legacy_noop_09b",
+    "156": "legacy_noop_09c",
+    "157": "set_tagged_effect_flag",
+    "158": "clear_tagged_effect_state",
     "159": "wait_script_handle",
     "160": "is_script_handle_active",
     "161": "stretch_object_between_anchors",
     "193": "start_raster_resource_transition",
     "194": "start_finite_raster_effect",
+    "195": "legacy_noop_0c3",
+    "196": "yield_one_frame",
+    "202": "legacy_noop_0ca",
     "203": "set_control_state",
     "204": "update_control_mask",
+    "207": "legacy_noop_0cf",
+    "208": "legacy_noop_0d0",
     "209": "start_inline_object_script",
     "210": "start_object_script_and_yield",
     "211": "wait_object_script_and_skip",
@@ -170,21 +208,36 @@
     "213": "wait_object_script",
     "214": "wait_object_scripts_by_owner",
     "215": "stop_object_script",
+    "216": "stop_object_scripts_by_owner",
     "217": "pause_object_script",
+    "218": "pause_object_scripts_by_owner",
     "219": "resume_object_script",
+    "220": "resume_object_scripts_by_owner",
     "221": "branch_if",
     "222": "branch_if_actor_property",
     "223": "branch_if_hit_locked",
+    "224": "legacy_noop_0e0",
     "225": "branch_if_script_active",
     "226": "branch_if_animation_active",
     "227": "play_sound_with_handle",
     "228": "play_sound",
+    "229": "stop_sound_task",
+    "230": "stop_all_sound_tasks",
+    "231": "wait_sound_task",
     "232": "spawn_particle",
+    "234": "legacy_noop_0ea",
+    "235": "legacy_noop_0eb",
+    "237": "legacy_noop_0ed",
+    "238": "legacy_noop_0ee",
+    "239": "legacy_noop_0ef",
+    "240": "legacy_noop_0f0",
+    "241": "legacy_noop_0f1",
     "245": "request_common_assets",
     "246": "wait_common_assets",
     "249": "wait_effect_pair",
     "250": "wait_effect",
     "251": "stop_effect",
+    "252": "legacy_noop_0fc",
     "254": "wait_attached_animation",
     "255": "get_attached_effect_property",
     "257": "start_primary_screen_effect",
@@ -866,6 +919,430 @@
       "yield": "never",
       "effect": "resets both battle screen-effect channels and their shared state",
       "evidence": "func_ov002_020698d4 case 0x103; func_ov002_02065dfc"
+    },
+    "55": {
+      "arguments": ["object_data_slot", "resource_id_low", "resource_id_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "combines the final two literal operands into a 32-bit resource ID, queues the selected ordinary object-data slot through the pending-marking load path, and records the slot on the queued task",
+      "evidence": "BattleAI_DispatchOpcode case 0x037; func_ov002_02091fd8; BattleObjectData_QueueLoadAndMarkPending"
+    },
+    "56": {
+      "arguments": ["object_data_slot", "resource_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "queues the selected ordinary object-data slot through its alternate archive-load path and records the slot on the queued task",
+      "evidence": "BattleAI_DispatchOpcode case 0x038; func_ov002_02091f68; func_ov002_0208bd38"
+    },
+    "73": {
+      "arguments": ["unused_0"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores the decoded operand",
+      "evidence": "BattleAI_DispatchOpcode case 0x049; descriptor 0x41"
+    },
+    "76": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts this command and performs no operation",
+      "evidence": "BattleAI_DispatchOpcode case 0x04C; descriptor 0x00"
+    },
+    "80": {
+      "arguments": ["object_id", "reference_object_id", "view_offset"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "transforms both objects into battle-view coordinates and adjusts the first object's baseline field so its view-relative baseline equals the reference object's baseline plus view_offset",
+      "evidence": "BattleAI_DispatchOpcode case 0x050; BattlePosition_StoreViewRelative"
+    },
+    "81": {
+      "arguments": ["unused_0"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores the decoded operand",
+      "evidence": "BattleAI_DispatchOpcode case 0x051; descriptor 0x41"
+    },
+    "86": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "retries the same command while the signed low state byte at object field +0xF4 is nonnegative",
+      "yield": "until the object state byte becomes negative",
+      "effect": "changes state zero to one when waiting begins; when the producer signals completion with a negative state, resets it to zero and falls through",
+      "evidence": "BattleAI_DispatchOpcode case 0x056; BattleSceneObject field +0xF4"
+    },
+    "94": {
+      "arguments": ["object_id", "motion_slot", "solver_profile", "distance", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts an axis-oriented kinematic motion; solver profile 4 uses the alternate fixed-point solver and other profiles use the standard solver",
+      "evidence": "BattleAI_DispatchOpcode case 0x05E; func_ov002_020789ec; func_ov002_020a4518; func_ov002_020a46a0"
+    },
+    "95": {
+      "arguments": ["object_id", "motion_slot", "solver_axis", "solver_profile", "target_x", "target_y", "target_z", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "solves a kinematic duration using the selected profile, then moves the object to the supplied target on the selected motion slot",
+      "evidence": "BattleAI_DispatchOpcode case 0x05F; func_ov002_020787f0; BattleSceneObject_MoveTo"
+    },
+    "96": {
+      "arguments": ["object_id", "motion_slot", "solver_profile", "distance", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high"],
+      "result": "solved_duration",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs the same axis-oriented kinematic setup as opcode 0x05E and returns the duration selected by the solver",
+      "evidence": "BattleAI_DispatchOpcode case 0x060; func_ov002_020789ec"
+    },
+    "97": {
+      "arguments": ["object_id", "motion_slot", "solver_axis", "solver_profile", "target_x", "target_y", "target_z", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high"],
+      "result": "solved_duration",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs the same target motion as opcode 0x05F and returns the duration selected by the kinematic solver",
+      "evidence": "BattleAI_DispatchOpcode case 0x061; func_ov002_020787f0; BattleSceneObject_MoveTo"
+    },
+    "98": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_or_speed", "parameter_fixed_low_or_variable", "parameter_fixed_high", "unused_9"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts directional kinematic motion using the first solver family and discards its computed duration",
+      "evidence": "BattleAI_DispatchOpcode case 0x062; func_ov002_020786d0; func_ov002_020a404c"
+    },
+    "99": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "parameter_5", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high", "unused_10"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts directional kinematic motion using the second solver family and discards its computed duration",
+      "evidence": "BattleAI_DispatchOpcode case 0x063; func_ov002_02078580; func_ov002_020a40d4"
+    },
+    "100": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "parameter_fixed_low_or_variable", "parameter_fixed_high", "duration_or_mode", "unused_9"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts a directional ballistic motion and discards its computed duration",
+      "evidence": "BattleAI_DispatchOpcode case 0x064; func_ov002_02078460; BattleMotion_StartBallistic"
+    },
+    "101": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_or_speed", "parameter_fixed_low_or_variable", "parameter_fixed_high", "unused_9"],
+      "result": "solved_duration",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs the same directional kinematic setup as opcode 0x062 and returns its computed duration",
+      "evidence": "BattleAI_DispatchOpcode case 0x065; func_ov002_020786d0; func_ov002_020a404c"
+    },
+    "102": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "parameter_5", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high", "unused_10"],
+      "result": "solved_duration",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs the same directional kinematic setup as opcode 0x063 and returns its computed duration",
+      "evidence": "BattleAI_DispatchOpcode case 0x066; func_ov002_02078580; func_ov002_020a40d4"
+    },
+    "103": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "parameter_fixed_low_or_variable", "parameter_fixed_high", "duration_or_mode", "unused_9"],
+      "result": "solved_duration",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "performs the same directional ballistic setup as opcode 0x064 and returns its computed duration",
+      "evidence": "BattleAI_DispatchOpcode case 0x067; func_ov002_02078460; BattleMotion_StartBallistic"
+    },
+    "117": {
+      "arguments": ["actor_object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets actor flag 0x1000 and the actor scene-state halfword to one, then sets active-model flag 0x200 to suppress rendering when the corresponding records exist",
+      "evidence": "BattleAI_DispatchOpcode case 0x075; BattleActor_GetById; BattleSceneObject_GetActiveModel"
+    },
+    "118": {
+      "arguments": ["actor_object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears actor flag 0x1000 and the actor scene-state halfword, then clears active-model flag 0x200 to restore rendering when the corresponding records exist",
+      "evidence": "BattleAI_DispatchOpcode case 0x076; BattleActor_GetById; BattleSceneObject_GetActiveModel"
+    },
+    "119": {
+      "arguments": ["unused_0"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores the decoded operand",
+      "evidence": "BattleAI_DispatchOpcode case 0x077; descriptor 0x41"
+    },
+    "121": {
+      "arguments": ["unused_0", "unused_1"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores both decoded operands",
+      "evidence": "BattleAI_DispatchOpcode case 0x079; descriptor 0x42"
+    },
+    "122": {
+      "arguments": ["unused_0", "unused_1", "unused_2"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores all three decoded operands",
+      "evidence": "BattleAI_DispatchOpcode case 0x07A; descriptor 0x43"
+    },
+    "123": {
+      "arguments": ["unused_0", "unused_1"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores both decoded operands",
+      "evidence": "BattleAI_DispatchOpcode case 0x07B; descriptor 0x42"
+    },
+    "124": {
+      "arguments": ["unused_0"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores the decoded operand",
+      "evidence": "BattleAI_DispatchOpcode case 0x07C; descriptor 0x41"
+    },
+    "135": {
+      "arguments": ["one_based_hit_index"],
+      "result": "hit_x",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns the X coordinate from the selected 20-byte queued hit record",
+      "evidence": "BattleAI_DispatchOpcode case 0x087; BattleHitRecord.x"
+    },
+    "136": {
+      "arguments": ["one_based_hit_index"],
+      "result": "hit_y",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns the Y coordinate from the selected 20-byte queued hit record",
+      "evidence": "BattleAI_DispatchOpcode case 0x088; BattleHitRecord.y"
+    },
+    "137": {
+      "arguments": ["one_based_hit_index"],
+      "result": "hit_z",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns the Z coordinate from the selected 20-byte queued hit record",
+      "evidence": "BattleAI_DispatchOpcode case 0x089; BattleHitRecord.z"
+    },
+    "138": {
+      "arguments": ["one_based_hit_index"],
+      "result": "hit_kind",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns the hit-kind halfword from the selected 20-byte queued hit record",
+      "evidence": "BattleAI_DispatchOpcode case 0x08A; BattleHitRecord.kind"
+    },
+    "150": {
+      "arguments": ["attached_effect_handle", "user_value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "uses the handle's low 14 bits to select an attached-effect record and replaces the low halfword of its user-value word at +0x20",
+      "evidence": "BattleAI_DispatchOpcode case 0x096; attached-effect handle table at battle context +0xCCF8"
+    },
+    "155": {
+      "arguments": ["unused_0"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores the decoded operand",
+      "evidence": "BattleAI_DispatchOpcode case 0x09B; descriptor 0x41"
+    },
+    "156": {
+      "arguments": ["unused_0"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores the decoded operand",
+      "evidence": "BattleAI_DispatchOpcode case 0x09C; descriptor 0x41"
+    },
+    "157": {
+      "arguments": ["effect_handle", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets sprite-effect record flag 0x4000 for 0x8000-tagged handles or attached-effect record flag 0x0001 for 0xC000-tagged handles; 0x4000-tagged handles are ignored",
+      "evidence": "BattleAI_DispatchOpcode case 0x09D; handle tag mask 0xC000"
+    },
+    "158": {
+      "arguments": ["effect_handle"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears field +0x04 on sprite-effect records selected by 0x8000-tagged handles or attached-effect records selected by 0xC000-tagged handles; 0x4000-tagged handles are ignored",
+      "evidence": "BattleAI_DispatchOpcode case 0x09E; handle tag mask 0xC000"
+    },
+    "195": {
+      "arguments": ["unused_0", "unused_1", "unused_2"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores all three decoded operands",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C3; descriptor 0x43"
+    },
+    "196": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "advances past the command and yields without rewinding its program counter",
+      "yield": "exactly once",
+      "effect": "pauses the current script for one VM update",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C4 returns 3 without changing the script PC"
+    },
+    "202": {
+      "arguments": ["unused_0", "unused_1"],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts the command but neither uses its operands nor writes its result destination",
+      "evidence": "BattleAI_DispatchOpcode case 0x0CA; descriptor 0x62"
+    },
+    "207": {
+      "arguments": ["unused_0"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores the decoded operand",
+      "evidence": "BattleAI_DispatchOpcode case 0x0CF; descriptor 0x41"
+    },
+    "208": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts this command and performs no operation",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D0; descriptor 0x00"
+    },
+    "216": {
+      "arguments": ["owner_selector_or_zero"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "defaults nonpositive selectors to the current script owner, then stops active object scripts whose primary owner matches a value below 0x4000 or whose secondary owner matches the low 12 bits of a tagged selector",
+      "evidence": "BattleAI_DispatchOpcode case 0x0D8; 40 BattleAIState records at battle context +0x6D44"
+    },
+    "218": {
+      "arguments": ["owner_selector_or_zero"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "defaults nonpositive selectors to the current script owner, then sets pause flag bit 0 on active object scripts with the matching primary or tagged secondary owner",
+      "evidence": "BattleAI_DispatchOpcode case 0x0DA; BattleAIState.flags"
+    },
+    "220": {
+      "arguments": ["owner_selector_or_zero"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "defaults nonpositive selectors to the current script owner, then clears pause flag bit 0 on active object scripts with the matching primary or tagged secondary owner",
+      "evidence": "BattleAI_DispatchOpcode case 0x0DC; BattleAIState.flags"
+    },
+    "224": {
+      "arguments": ["unused_0", "unused_1", "unused_2"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the dispatcher explicitly accepts and ignores all three decoded operands",
+      "evidence": "BattleAI_DispatchOpcode case 0x0E0; descriptor 0x43"
+    },
+    "229": {
+      "arguments": ["sound_task_handle_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops the selected battle sound task unless the handle is -1",
+      "evidence": "BattleAI_DispatchOpcode case 0x0E5; func_ov002_02076178"
+    },
+    "230": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "walks all 16 battle sound-task slots and stops every occupied task",
+      "evidence": "BattleAI_DispatchOpcode case 0x0E6; sound-task table at battle context +0xC8B4; func_ov002_02076178"
+    },
+    "231": {
+      "arguments": ["sound_task_handle_or_minus_one"],
+      "result": null,
+      "control_flow": "retries the same command while the selected sound-task slot is occupied",
+      "yield": "while the handle is active; -1 falls through immediately",
+      "effect": "waits for completion of one battle sound task",
+      "evidence": "BattleAI_DispatchOpcode case 0x0E7; sound-task table at battle context +0xC8B4"
+    },
+    "234": {
+      "arguments": ["unused_0", "unused_1"],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov002_020698d4; descriptor 0x62"
+    },
+    "235": {
+      "arguments": ["unused_0", "unused_1", "unused_2"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov002_020698d4; descriptor 0x43"
+    },
+    "237": {
+      "arguments": ["unused_0", "unused_1", "unused_2"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov002_020698d4; descriptor 0x43"
+    },
+    "238": {
+      "arguments": ["unused_0", "unused_1", "unused_2", "unused_3", "unused_4"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov002_020698d4; descriptor 0x45"
+    },
+    "239": {
+      "arguments": ["unused_0", "unused_1", "unused_2"],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov002_020698d4; descriptor 0x63"
+    },
+    "240": {
+      "arguments": ["unused_0", "unused_1"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov002_020698d4; descriptor 0x02"
+    },
+    "241": {
+      "arguments": ["unused_0", "unused_1", "unused_2"],
+      "result": "destination unchanged",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov002_020698d4; descriptor 0x63"
+    },
+    "252": {
+      "arguments": ["unused_0", "unused_1"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the extended dispatcher has no case for this opcode and performs no operation",
+      "evidence": "absent from func_ov002_020698d4; descriptor 0x42"
     }
   }
 }
