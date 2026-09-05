@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 289 | 238 | `config/eur/field_vm.json` |
+| Field/world | 341 | 292 | 241 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -256,6 +256,9 @@ field context (the other DS screen/field instance).
 | `0x0E4` | `start_camera_shake` | axis, amplitude_pixels, step_fx32, half_cycle_count, rumble_pattern_or_auto | starts a field-camera shake on the selected axis, alternating step_fx32 until the pixel amplitude is reached for the requested number of half-cycles; a negative rumble pattern is selected automatically from shake speed |
 | `0x0E5` | `wait_camera_shake` | 0 literal args | retries the same command while the field-camera shake active bit remains set |
 | `0x0E6` | `stop_camera_shake` | 0 literal args | stops an active camera shake, restores the saved camera-axis offset, and stops any selected rumble pattern |
+| `0x0E7` | `start_map_palette_animation` | animation_index, loop | starts the indexed palette animation embedded in the current map resource and resets its fixed-point frame timer. A nonzero loop flag sets control bit 4 so the animation restarts at its end; otherwise the slot clears itself after one pass. The map controller updates as many as three palette regions and uploads the generated colors to the active screen |
+| `0x0E8` | `reset_all_map_palette_animations` | 0 literal args | clears every map palette-animation control byte and frame timer, disables the palette-animation updater, restores the unanimated map palette buffers, and marks the map palette for hardware upload |
+| `0x0E9` | `stop_map_palette_animation` | animation_index | stops the indexed map palette animation by clearing its active low nibble while retaining its loop-mode high nibble and current generated palette. The global palette-animation updater is disabled when no slots remain active |
 | `0x0ED` | `start_master_brightness_transition` | start_brightness_or_255, target_brightness, duration_frames | writes the target immediately when duration is zero; otherwise interpolates the active screen's signed DS master-brightness value once per frame. A start value of 255 preserves the current brightness |
 | `0x0EE` | `wait_master_brightness_transition` | 0 literal args | synchronization barrier for opcode 0x0ED |
 | `0x0F2` | `start_field_palette_animation` | animation_slot, direction_profile, object_palette_mask_high, object_palette_mask_low, standard_bg_palette_mask, extended_bg_palette_mask_0, extended_bg_palette_mask_1, extended_bg_palette_mask_2, duration_frames, color_red, color_green, color_blue | starts field palette-animation slot 0 or 1 on every selected object/texture and map background palette. direction_profile indexes the signed effect sequence 4, -4, 5, -5, 6, -6, 7, -7, 8, -8; the two object mask halves are joined into one 32-bit mask, the four background masks select standard and extended map palettes, and the last three values are packed into a 15-bit RGB color. Progress advances by one frame until duration_frames and zero masks leave that palette family untouched |
@@ -342,16 +345,13 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-261/289 used opcodes and
-387,134/387,272 reachable commands
+264/289 used opcodes and
+387,170/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x0E7` | 14 |
 | `0x073` | 14 |
-| `0x0E9` | 11 |
-| `0x0E8` | 11 |
 | `0x113` | 9 |
 | `0x061` | 9 |
 | `0x145` | 7 |
@@ -368,6 +368,9 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x05F` | 2 |
 | `0x135` | 1 |
 | `0x134` | 1 |
+| `0x133` | 1 |
+| `0x132` | 1 |
+| `0x12D` | 1 |
 
 ## Menu/UI scene scripts
 

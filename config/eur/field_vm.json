@@ -560,6 +560,9 @@
     "228": "start_camera_shake",
     "229": "wait_camera_shake",
     "230": "stop_camera_shake",
+    "231": "start_map_palette_animation",
+    "232": "reset_all_map_palette_animations",
+    "233": "stop_map_palette_animation",
     "237": "start_master_brightness_transition",
     "238": "wait_master_brightness_transition",
     "242": "start_field_palette_animation",
@@ -1856,6 +1859,30 @@
       "yield": "never",
       "effect": "stops an active camera shake, restores the saved camera-axis offset, and stops any selected rumble pattern",
       "evidence": "func_ov000_020823f8 case 0x0E6 and func_ov000_02071fec"
+    },
+    "231": {
+      "arguments": ["animation_index", "loop"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts the indexed palette animation embedded in the current map resource and resets its fixed-point frame timer. A nonzero loop flag sets control bit 4 so the animation restarts at its end; otherwise the slot clears itself after one pass. The map controller updates as many as three palette regions and uploads the generated colors to the active screen",
+      "evidence": "func_ov000_020823f8 case 0x0E7, resident FMap virtual method +0x64 func_02012c68, per-frame updater func_020128bc, palette animation decoder func_0202dca8, and all 14 shipped calls"
+    },
+    "232": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears every map palette-animation control byte and frame timer, disables the palette-animation updater, restores the unanimated map palette buffers, and marks the map palette for hardware upload",
+      "evidence": "func_ov000_020823f8 case 0x0E8, resident FMap virtual method +0x6C func_02012bbc, base-palette restoration methods func_02012b1c and func_02012a64, and all 11 shipped calls"
+    },
+    "233": {
+      "arguments": ["animation_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stops the indexed map palette animation by clearing its active low nibble while retaining its loop-mode high nibble and current generated palette. The global palette-animation updater is disabled when no slots remain active",
+      "evidence": "func_ov000_020823f8 case 0x0E9, resident FMap virtual methods +0x70 func_02012b7c and +0x5C func_02012c98, and all 11 shipped calls"
     },
     "237": {
       "arguments": ["start_brightness_or_255", "target_brightness", "duration_frames"],
