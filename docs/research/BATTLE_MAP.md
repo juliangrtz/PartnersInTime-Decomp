@@ -234,7 +234,7 @@ and runtime overlay 2.
 | `020AA114` | `BattleImpactParticle_UpdateResourceFrame` | Reconstructed resource-frame particle interpolation (80.00% matching) |
 | `020AA22C` | `BattleImpactTrailEmitter_Update` | Byte-identical object-bound particle trail emitter |
 | `020AA38C` | `BattleImpactEmitter_Start` | Byte-identical trail and burst emitter task starter |
-| `020AA4C8` | `BattleImpactParticle_Render` | Reconstructed transient model-matrix particle renderer (48.65% matching) |
+| `020AA4C8` | `BattleImpactParticle_Render` | Reconstructed transient model-matrix particle renderer (83.01% matching; transform, animation, draw, and restore paths match, while coordinate scheduling remains WIP) |
 | `020AA8D4` | `BattleImpactParticle_RenderPrimary` | Byte-identical primary-model particle render wrapper |
 | `020AA904` | `BattleImpactParticle_CreateFromObject` | Byte-identical scene-object particle snapshot and task constructor |
 | `020AAA8C` | `BattleImpactCopy_Execute` | Byte-identical overlap-aware particle-state copy callback |
