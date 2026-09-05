@@ -728,6 +728,11 @@ face, and optionally interpolates an overlap-center hit position in battle
 coordinates. The adjacent object/animation traversal is maintained as clean
 semantic C while its remaining CodeWarrior register-allocation mismatch is
 resolved; it is deliberately not linked into the ROM yet.
+The four-function coin-loss effect at `0x020A0C64`-`0x020A1064` is also
+byte-identical linked C++. A typed emitter removes one coin per frame from the
+save counter and launches randomized coin-model particles from the affected
+actor. Typed particle state exposes Q4 position, velocity, gravity, bounce,
+fade/fast-forward behavior, shadow placement, model transform, and cleanup.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets
