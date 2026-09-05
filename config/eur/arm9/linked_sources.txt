@@ -68,6 +68,7 @@ src/battle/battle_scene_motion_update.c
 src/battle/battle_scene_motion_list.c
 src/battle/battle_scene_motion_channel.c
 src/battle/battle_task.c
+src/battle/battle_effect_transform.c
 src/game/script_vm.c
 src/game/script_vm_control.c
 src/game/script_vm_execute.c

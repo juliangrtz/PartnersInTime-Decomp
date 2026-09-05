@@ -54,6 +54,11 @@ void BattlePosition_StoreBattleRelative(BattlePosition *position,
                                         int x, s16 anchor_y,
                                         s16 offset_y, s16 offset_z,
                                         int use_raw_position, int view_index);
+void BattleTransform_BuildBetweenPoints(
+    BattleSpriteTransform *transform,
+    s16 start_x, s16 start_y, s16 start_z,
+    s16 end_x, s16 end_y, s16 end_z,
+    u16 longitudinal_scale, u16 lateral_scale);
 BattleEffect *BattleSpriteEffect_Spawn(int effect_id, int x, int y, int z,
                                        int scale);
 BattleEffect *BattleModelEffect_Spawn(int effect_id,
