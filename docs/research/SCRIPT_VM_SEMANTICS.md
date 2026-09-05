@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 170 | 119 | `config/eur/field_vm.json` |
+| Field/world | 341 | 173 | 122 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -128,6 +128,7 @@ field context (the other DS screen/field instance).
 | `0x04A` | `set_entity_visible` | entity_selector, visible | sets the entity render-enabled bit and forwards the state to its bound render object |
 | `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
 | `0x04D` | `set_entity_ground_tracking` | entity_selector, ground_tracking_enabled | sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty |
+| `0x050` | `set_entity_offscreen_contact_retention_enabled` | entity_selector, enabled | when enabled, permits another entity to retain its linked contact with this entity while this entity is outside the visible screen bounds; the normal disabled behavior drops that link after the off-screen state is observed |
 | `0x056` | `set_entity_map_sync_axes` | entity_selector, horizontal_map_sync_or_minus_one, vertical_map_sync_or_minus_one | each argument other than -1 updates one persistent map-synchronization axis; enabling an axis immediately marks it dirty, and a later field-geometry refresh marks every enabled axis dirty again |
 | `0x059` | `set_entity_collision_response_channels` | entity_selector, channel_0_or_minus_one, channel_1_or_minus_one, channel_2_or_minus_one, channel_3_or_minus_one, channel_4_or_minus_one | updates five logical collision-response channels independently; -1 preserves a channel. Field-monster entities map the arguments to collision-state bits 0, {2,3}, 1, 6, and 4 respectively. Field-block entities additionally mirror channels 3 and 4 into bits 7 and 5. The collision solver consumes these flags when choosing solid displacement versus overlap/contact reporting |
 | `0x05A` | `set_entity_collision_response_channels_masked` | entity_selector, channel_mask, enabled | sets or clears selected logical collision-response channels; channel_mask bits 0 through 4 select the same five channels and class-specific physical-bit mapping used by opcode 0x059 |
@@ -172,6 +173,8 @@ field context (the other DS screen/field instance).
 | `0x0A5` | `set_field_block_idle_bobbing_enabled` | entity_selector, enabled | toggles the repeating vertical idle-bob curve used by clFieldBlock entities; disabling it immediately clears the sprite y offset and resets both bob and one-shot bounce phase fields |
 | `0x0A6` | `set_field_block_bounce_controller_enabled` | entity_selector, enabled | toggles the clFieldBlock sprite-bounce controller and remembers the current model animation; disabling it clears the sprite y offset, phase and interaction state, restores the model animation, and reports the state change to an attached script when configured |
 | `0x0A7` | `wait_field_block_bounce` | entity_selector | synchronization barrier for the block interaction bounce triggered by func_ov000_020bc930 |
+| `0x0AC` | `set_entity_script_value` | entity_selector, slot, value | stores value as a signed 16-bit word in one of the selected entity's two script-visible value slots; shipped scripts use slots 0 and 1 to exchange state and coordinates between entity-owned scripts |
+| `0x0AD` | `get_entity_script_value` | entity_selector, slot | loads one of the selected entity's two script-visible value slots through the normal VM result-variable writer |
 | `0x0AE` | `rejoin_party_follower` | party_side, instant | moves the selected party's detached follower back to its formation offset behind the leader, either immediately or through entity movement, then restores the normal follower tether |
 | `0x0AF` | `wait_party_follower_rejoined` | party_side | retries the same command while the selected party follower is still moving back into formation |
 | `0x0B0` | `detach_party_follower` | party_side | disables the normal leader/follower tether for the selected party and resets the follower's formation offsets and occupancy state so scripts can position both members independently |
@@ -223,15 +226,13 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-146/289 used opcodes and
-379,876/387,272 reachable commands
+149/289 used opcodes and
+381,076/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x050` | 631 |
 | `0x067` | 437 |
-| `0x0AC` | 380 |
 | `0x0CC` | 320 |
 | `0x055` | 317 |
 | `0x08C` | 289 |
@@ -240,7 +241,6 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x116` | 216 |
 | `0x0CF` | 213 |
 | `0x0D2` | 194 |
-| `0x0AD` | 189 |
 | `0x0D3` | 182 |
 | `0x0BC` | 180 |
 | `0x136` | 176 |
@@ -249,6 +249,9 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x14F` | 119 |
 | `0x0B2` | 119 |
 | `0x0CA` | 117 |
+| `0x106` | 111 |
+| `0x0D0` | 104 |
+| `0x14D` | 101 |
 
 ## Menu/UI scene scripts
 

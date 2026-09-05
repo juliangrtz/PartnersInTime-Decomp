@@ -432,6 +432,7 @@
     "74": "set_entity_visible",
     "75": "set_entity_enabled",
     "77": "set_entity_ground_tracking",
+    "80": "set_entity_offscreen_contact_retention_enabled",
     "86": "set_entity_map_sync_axes",
     "89": "set_entity_collision_response_channels",
     "90": "set_entity_collision_response_channels_masked",
@@ -476,6 +477,8 @@
     "165": "set_field_block_idle_bobbing_enabled",
     "166": "set_field_block_bounce_controller_enabled",
     "167": "wait_field_block_bounce",
+    "172": "set_entity_script_value",
+    "173": "get_entity_script_value",
     "174": "rejoin_party_follower",
     "175": "wait_party_follower_rejoined",
     "176": "detach_party_follower",
@@ -721,6 +724,14 @@
       "yield": "never",
       "effect": "sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty",
       "evidence": "func_ov000_020823f8 case 0x04D, func_ov000_020b3cb0, and field entity update consumers of state +0x38C bit 12"
+    },
+    "80": {
+      "arguments": ["entity_selector", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "when enabled, permits another entity to retain its linked contact with this entity while this entity is outside the visible screen bounds; the normal disabled behavior drops that link after the off-screen state is observed",
+      "evidence": "func_ov000_020823f8 case 0x050, off-screen predicate func_ov000_020a79dc and state history func_ov000_020a695c, and linked-contact cleanup in func_ov000_020ae6c0"
     },
     "86": {
       "arguments": ["entity_selector", "horizontal_map_sync_or_minus_one", "vertical_map_sync_or_minus_one"],
@@ -1069,6 +1080,22 @@
       "yield": "while the 17-frame block-hit bounce is active",
       "effect": "synchronization barrier for the block interaction bounce triggered by func_ov000_020bc930",
       "evidence": "func_ov000_020823f8 case 0x0A7, func_ov000_020bc930, func_ov000_020bc9b4, and signed 17-frame y-offset curve data_ov000_020c0c6c"
+    },
+    "172": {
+      "arguments": ["entity_selector", "slot", "value"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stores value as a signed 16-bit word in one of the selected entity's two script-visible value slots; shipped scripts use slots 0 and 1 to exchange state and coordinates between entity-owned scripts",
+      "evidence": "func_ov000_020823f8 case 0x0AC writes entity offsets +0xDA and +0xDC; all 380 reachable call sites use slot 0 or 1"
+    },
+    "173": {
+      "arguments": ["entity_selector", "slot"],
+      "result": "signed 16-bit value from the selected entity script slot",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "loads one of the selected entity's two script-visible value slots through the normal VM result-variable writer",
+      "evidence": "func_ov000_020823f8 case 0x0AD reads entity offsets +0xDA and +0xDC then calls VM_WriteVariable; all 189 reachable call sites use slot 0 or 1"
     },
     "174": {
       "arguments": ["party_side", "instant"],
