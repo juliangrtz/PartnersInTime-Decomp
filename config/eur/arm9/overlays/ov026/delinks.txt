@@ -3,3 +3,6 @@
     .data       start:0x020c6360 end:0x020c6580 kind:data align:32
     .bss        start:0x020c6580 end:0x020c65a0 kind:bss align:32
 
+src/overlay026/attack_control.c:
+    .text       start:0x020c2ae0 end:0x020c2d38
+
