@@ -15,11 +15,11 @@ enum ScriptVmCoreOpcode {
     SCRIPT_VM_OP_JUMP = 2,
     SCRIPT_VM_OP_WAIT = 3,
     SCRIPT_VM_OP_JUMP_IF = 4,
-    SCRIPT_VM_OP_UNKNOWN_05 = 5,
-    SCRIPT_VM_OP_UNKNOWN_06 = 6,
-    SCRIPT_VM_OP_UNKNOWN_07 = 7,
-    SCRIPT_VM_OP_UNKNOWN_08 = 8,
-    SCRIPT_VM_OP_UNKNOWN_09 = 9,
+    SCRIPT_VM_OP_NOOP_LITERAL_05 = 5,
+    SCRIPT_VM_OP_NOOP_LITERAL_06 = 6,
+    SCRIPT_VM_OP_NOOP_TYPED_07 = 7,
+    SCRIPT_VM_OP_NOOP_TYPED_08 = 8,
+    SCRIPT_VM_OP_PROFILE_ARGUMENT_BITS = 9,
     SCRIPT_VM_OP_PUSH = 10,
     SCRIPT_VM_OP_POP = 11,
     SCRIPT_VM_OP_LOOP = 12,
@@ -108,15 +108,15 @@ int VM_ExecuteCommand(
             state->script += command->arguments[4];
         }
         return SCRIPT_VM_CONTINUE;
-    case SCRIPT_VM_OP_UNKNOWN_05:
+    case SCRIPT_VM_OP_NOOP_LITERAL_05:
         return SCRIPT_VM_CONTINUE;
-    case SCRIPT_VM_OP_UNKNOWN_06:
+    case SCRIPT_VM_OP_NOOP_LITERAL_06:
         return SCRIPT_VM_CONTINUE;
-    case SCRIPT_VM_OP_UNKNOWN_07:
+    case SCRIPT_VM_OP_NOOP_TYPED_07:
         return SCRIPT_VM_CONTINUE;
-    case SCRIPT_VM_OP_UNKNOWN_08:
+    case SCRIPT_VM_OP_NOOP_TYPED_08:
         return SCRIPT_VM_CONTINUE;
-    case SCRIPT_VM_OP_UNKNOWN_09: {
+    case SCRIPT_VM_OP_PROFILE_ARGUMENT_BITS: {
         s16 byte_index;
         int shift;
         s32 source;

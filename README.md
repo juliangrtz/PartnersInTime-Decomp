@@ -249,7 +249,10 @@ high-level code.
 The generated [`docs/research/BATTLE_AI_OPCODES.md`](docs/research/BATTLE_AI_OPCODES.md)
 provides a compact navigation index for the large enemy-script dispatcher.
 [`docs/research/SCRIPT_VM_SEMANTICS.md`](docs/research/SCRIPT_VM_SEMANTICS.md)
-tracks semantic coverage and prioritizes the remaining used opcodes.
+tracks semantic coverage, compares the field/battle/scene descriptor ABIs, and
+prioritizes the remaining used opcodes. The field and scene tables live in
+`config/eur/field_vm.json` and `config/eur/scene_vm.json` and can be verified
+against a private extraction with `tools/extract_script_vm_descriptors.py`.
 [`tools/ida/README.md`](tools/ida/README.md) documents the reproducible IDA
 9.1/9.2 ARM32 database imports and batch Hex-Rays helpers for the resident ARM9
 and every overlay.

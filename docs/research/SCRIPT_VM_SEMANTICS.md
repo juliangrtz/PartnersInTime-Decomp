@@ -9,8 +9,8 @@ no original private data bytes.
 - 260 descriptor entries (`0x000..0x103`)
 - 230 archive entries and 81,854 reachable commands
 - 189 opcodes occur in reachable code
-- 104/189 used opcodes have semantic names
-- 76,103/81,854 reachable commands have semantic names
+- 108/189 used opcodes have semantic names
+- 76,313/81,854 reachable commands have semantic names
 - 618,920 non-code bytes stay private and are copied from the user's extraction
 
 `reconstructed C` means the generic VM implementation is represented in the
@@ -44,6 +44,25 @@ namespace numbers.
 16-bit pointer structures consumed by field logic. Those structures mix script
 entry points with non-code records; they therefore need typed loader recovery before
 the battle CFG decoder can be generalized safely.
+
+## Descriptor ABI coverage
+
+The three tables have an identical `0x000..0x032` prefix:
+the 51 commands implemented by the resident interpreter. The first
+instance-specific descriptor is opcode `0x033`. Matching descriptor bytes beyond
+that boundary mean only the same encoded argument shape, not the same side effect.
+Across the 210 indices present in every instance, 58 happen to share
+the same shape.
+
+| Instance | Descriptor entries | Semantically named | Source |
+|---|---:|---:|---|
+| Field/world | 341 | 51 | `config/eur/field_vm.json` |
+| Battle | 260 | 137 | `config/eur/battle_ai_vm.json` |
+| Scene/object | 210 | 109 | `config/eur/scene_vm.json` |
+
+The field and scene tables are reproducibly extracted and checked against a private
+ROM with `tools/extract_script_vm_descriptors.py`; the committed JSON contains only
+the compact ABI metadata, never overlay bytes.
 
 ## VM ABI
 
@@ -99,11 +118,9 @@ the largest immediate improvement to editable script coverage.
 | `0x4B` | 135 |
 | `0x4A` | 135 |
 | `0xF3` | 117 |
-| `0x05` | 113 |
 | `0x5F` | 106 |
 | `0x96` | 97 |
 | `0x63` | 95 |
-| `0x07` | 94 |
 | `0xCD` | 71 |
 | `0x57` | 59 |
 | `0x5E` | 56 |
@@ -156,7 +173,6 @@ the largest immediate improvement to editable script coverage.
 | `0xA8` | 2 |
 | `0xA5` | 2 |
 | `0x48` | 2 |
-| `0x06` | 2 |
 | `0xEC` | 1 |
 | `0xE9` | 1 |
 | `0xD0` | 1 |
@@ -168,7 +184,6 @@ the largest immediate improvement to editable script coverage.
 | `0xA7` | 1 |
 | `0xA6` | 1 |
 | `0xA4` | 1 |
-| `0x09` | 1 |
 
 ## Complete opcode table
 
@@ -179,11 +194,11 @@ the largest immediate improvement to editable script coverage.
 | `0x002` | `jump` | 2 literal args (`0x02`) | 5,477 | reconstructed C |
 | `0x003` | `wait` | 1 typed args (`0x41`) | 3,261 | reconstructed C |
 | `0x004` | `jump_if` | 5 typed args (`0x45`) | 7,740 | reconstructed C |
-| `0x005` | `op_005` | 1 literal args (`0x01`) | 113 | unknown |
-| `0x006` | `op_006` | 1 literal args (`0x01`) | 2 | unknown |
-| `0x007` | `op_007` | 1 typed args (`0x41`) | 94 | unknown |
-| `0x008` | `op_008` | 1 typed args (`0x41`) | 0 | unknown |
-| `0x009` | `op_009` | 1 typed args (`0x41`) | 1 | unknown |
+| `0x005` | `noop_literal_05` | 1 literal args (`0x01`) | 113 | reconstructed C |
+| `0x006` | `noop_literal_06` | 1 literal args (`0x01`) | 2 | reconstructed C |
+| `0x007` | `noop_typed_07` | 1 typed args (`0x41`) | 94 | reconstructed C |
+| `0x008` | `noop_typed_08` | 1 typed args (`0x41`) | 0 | reconstructed C |
+| `0x009` | `profile_argument_bits` | 1 typed args (`0x41`) | 1 | reconstructed C |
 | `0x00A` | `push` | 1 typed args (`0x41`) | 106 | reconstructed C |
 | `0x00B` | `pop` | 0 literal args (`0x00`) | 0 | reconstructed C |
 | `0x00C` | `loop` | 4 typed args (`0x44`) | 106 | reconstructed C |
