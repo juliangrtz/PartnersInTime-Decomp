@@ -129,6 +129,32 @@ python .\tools\pit_language_compiler.py compile `
   .\data\eur\scripts\FEvent__FEvData.dat\room_000.json
 ```
 
+Generate the complete private editing corpus with searchable German dialogue
+comments:
+
+```powershell
+python .\tools\pit_language_compiler.py decompile-corpus `
+  .\data\eur\scripts\FEvent__FEvData.dat `
+  .\data\eur\text\FEvent__FEvData.dat.json `
+  .\private\modding\field_events_de `
+  --language german
+```
+
+Compile every edited source back into the normal local data project:
+
+```powershell
+python .\tools\pit_language_compiler.py compile-corpus `
+  .\private\modding\field_events_de `
+  .\data\eur\scripts\FEvent__FEvData.dat
+```
+
+The generated `private/` tree is ignored by Git. Each `OpenMessage` call is
+preceded by the corresponding localized text and internal event label as `//`
+comments, making a repository search for a remembered German phrase lead to the
+responsible script. Comments are non-semantic and do not rewrite dialogue.
+Rooms without a German localization entry use a visibly labelled English or
+Japanese fallback rather than silently attributing a translation to the ROM.
+
 The Python API exposes the same operations as
 `decompile_json_to_script(json_data)` and `compile_script_to_json(script_text)`.
 The compiler derives every command boundary, local label, signed relative

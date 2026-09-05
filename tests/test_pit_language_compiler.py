@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -205,6 +207,77 @@ class PitLanguageCompilerTests(unittest.TestCase):
         self.assertEqual(
             pit_language_compiler.compile_script_to_json(source), original
         )
+
+    @staticmethod
+    def dialogue_catalog() -> dict:
+        return {
+            "schema": "pit-localized-dialogue-v1",
+            "containers": [
+                {
+                    "room_id": 0,
+                    "languages": [
+                        {
+                            "language": "german",
+                            "strings": [
+                                {
+                                    "id": 0,
+                                    "event_label": "Test_00",
+                                    "text": "Nicht verwendet.<$END>",
+                                },
+                                {
+                                    "id": 1,
+                                    "event_label": "Test_01",
+                                    "text": "Ebenfalls nicht verwendet.<$END>",
+                                },
+                                {
+                                    "id": 2,
+                                    "event_label": "Test_02",
+                                    "text": "Die Zeitmaschine startet!<$WAIT:00>Alle festhalten.<$END>",
+                                },
+                            ],
+                        }
+                    ],
+                }
+            ],
+        }
+
+    def test_private_german_dialogue_is_searchable_but_non_semantic(self) -> None:
+        original = self.synthetic_room()
+        source = pit_language_compiler.decompile_json_to_script_with_messages(
+            original, self.dialogue_catalog(), "german"
+        )
+        self.assertIn("// [Nachricht DE · Test_02]", source)
+        self.assertIn("// Die Zeitmaschine startet!", source)
+        self.assertIn("// Alle festhalten.", source)
+        self.assertEqual(
+            pit_language_compiler.compile_script_to_json(source), original
+        )
+
+    def test_private_corpus_generation_and_compilation(self) -> None:
+        original = self.synthetic_room()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            rooms = root / "rooms"
+            corpus = root / "corpus"
+            rebuilt = root / "rebuilt"
+            rooms.mkdir()
+            (rooms / "room_000.json").write_text(
+                json.dumps(original), encoding="utf-8"
+            )
+            manifest = pit_language_compiler.decompile_room_corpus(
+                rooms, self.dialogue_catalog(), corpus, "german"
+            )
+            self.assertEqual(manifest["room_count"], 1)
+            self.assertEqual(manifest["message_reference_count"], 1)
+            self.assertTrue((corpus / "README.md").is_file())
+            result = pit_language_compiler.compile_room_corpus(corpus, rebuilt)
+            self.assertEqual(result["room_count"], 1)
+            self.assertEqual(
+                json.loads(
+                    (rebuilt / "room_000.json").read_text(encoding="utf-8")
+                ),
+                original,
+            )
 
 
 if __name__ == "__main__":

@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import copy
 from dataclasses import dataclass, field
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -86,6 +87,102 @@ ROOM_CONTEXT = {
         "[Ending] The final field event returns the application to the title screen.",
     ),
 }
+
+CORPUS_SCHEMA = "pit-field-event-source-corpus-v1"
+DIALOGUE_SCHEMA = "pit-localized-dialogue-v1"
+
+
+@dataclass(frozen=True)
+class MessageComment:
+    language: str
+    event_label: str | None
+    text: str
+
+
+class DialogueCatalog:
+    """Read-only room/message lookup used only for private source comments."""
+
+    def __init__(
+        self,
+        messages: dict[tuple[int, int], MessageComment],
+        requested_language: str,
+    ) -> None:
+        self.messages = messages
+        self.requested_language = requested_language
+
+    @classmethod
+    def from_json(
+        cls, document: dict[str, Any], language: str = "german"
+    ) -> "DialogueCatalog":
+        if not isinstance(document, dict) or document.get("schema") != DIALOGUE_SCHEMA:
+            raise PitLanguageError(
+                f"dialogue catalog must use schema {DIALOGUE_SCHEMA!r}"
+            )
+        containers = document.get("containers")
+        if not isinstance(containers, list):
+            raise PitLanguageError("dialogue catalog containers must be an array")
+        messages: dict[tuple[int, int], MessageComment] = {}
+        for container_index, container in enumerate(containers):
+            if not isinstance(container, dict):
+                raise PitLanguageError(
+                    f"dialogue container {container_index} must be an object"
+                )
+            room_id = container.get("room_id")
+            languages = container.get("languages")
+            if (
+                isinstance(room_id, bool)
+                or not isinstance(room_id, int)
+                or not isinstance(languages, list)
+            ):
+                raise PitLanguageError(
+                    f"dialogue container {container_index} has invalid room/languages"
+                )
+            by_language = {
+                row.get("language"): row
+                for row in languages
+                if isinstance(row, dict) and isinstance(row.get("language"), str)
+            }
+            selected_language = next(
+                (
+                    candidate
+                    for candidate in (language, "english", "japanese")
+                    if candidate in by_language
+                ),
+                None,
+            )
+            if selected_language is None:
+                continue
+            strings = by_language[selected_language].get("strings")
+            if not isinstance(strings, list):
+                raise PitLanguageError(
+                    f"dialogue room {room_id} {selected_language} strings must be an array"
+                )
+            for expected_id, row in enumerate(strings):
+                if not isinstance(row, dict) or row.get("id") != expected_id:
+                    raise PitLanguageError(
+                        f"dialogue room {room_id} {selected_language} message IDs "
+                        "must be contiguous"
+                    )
+                text = row.get("text")
+                event_label = row.get("event_label")
+                if not isinstance(text, str) or not (
+                    event_label is None or isinstance(event_label, str)
+                ):
+                    raise PitLanguageError(
+                        f"dialogue room {room_id} message {expected_id} is invalid"
+                    )
+                key = (room_id, expected_id)
+                if key in messages:
+                    raise PitLanguageError(
+                        f"dialogue catalog repeats room {room_id} message {expected_id}"
+                    )
+                messages[key] = MessageComment(
+                    selected_language, event_label, text
+                )
+        return cls(messages, language)
+
+    def get(self, room_id: int, message_id: int) -> MessageComment | None:
+        return self.messages.get((room_id, message_id))
 
 
 class PitLanguageError(ValueError):
@@ -781,9 +878,31 @@ def _instruction_comment(name: str, arguments: list[Value]) -> str | None:
     return None
 
 
+_MESSAGE_CONTROL_RE = re.compile(r"<\$[^>]+>")
+_MESSAGE_BREAK_RE = re.compile(
+    r"<\$(?:WAIT|TEXTBOX|CTRL:01)(?::[^>]*)?>", re.IGNORECASE
+)
+
+
+def _message_comment_lines(message: MessageComment) -> list[str]:
+    """Turn editable control-token text into searchable one-line comments."""
+    text = _MESSAGE_BREAK_RE.sub("\n", message.text)
+    text = _MESSAGE_CONTROL_RE.sub("", text)
+    text = text.replace(r"\<", "<").replace(r"\\", "\\")
+    lines = [re.sub(r"[ \t]+", " ", line).strip() for line in text.splitlines()]
+    lines = [line for line in lines if line]
+    return lines or ["(leere Nachricht)"]
+
+
 class Decompiler:
-    def __init__(self, json_data: dict[str, Any]) -> None:
+    def __init__(
+        self,
+        json_data: dict[str, Any],
+        dialogue_catalog: DialogueCatalog | None = None,
+    ) -> None:
         self.document = json_data
+        self.dialogue_catalog = dialogue_catalog
+        self.room_id = -1
         self.descriptors, self.names, self.semantics = _load_schema()
         self.api_names, _ = _api_maps(self.names)
 
@@ -795,6 +914,7 @@ class Decompiler:
         room_id = self.document.get("room_id")
         if isinstance(room_id, bool) or not isinstance(room_id, int) or room_id < 0:
             raise PitLanguageError("room_id must be a non-negative integer")
+        self.room_id = room_id
         members = self.document.get("members")
         if not isinstance(members, list):
             raise PitLanguageError("members must be an array")
@@ -1159,8 +1279,38 @@ class Decompiler:
 
             name = self.names.get(command.opcode, f"op_{command.opcode:03X}")
             comment = _instruction_comment(name, command.arguments)
-            if comment:
+            localized_message = (
+                self.dialogue_catalog is not None
+                and name in {"open_entity_message", "open_screen_message"}
+            )
+            if comment and not localized_message:
                 lines.append(f"{prefix}// {comment}")
+            if (
+                localized_message
+                and command.arguments
+                and command.arguments[-1].kind == "literal"
+            ):
+                message_id = int(command.arguments[-1].value)
+                message = self.dialogue_catalog.get(self.room_id, message_id)
+                if message is None:
+                    lines.append(
+                        f"{prefix}// [Nachricht] Keine Katalogzeile für Raum "
+                        f"{self.room_id}, ID {message_id}."
+                    )
+                else:
+                    language_label = {
+                        "german": "DE",
+                        "english": "EN – keine deutsche Fassung im ROM",
+                        "japanese": "JP – keine deutsche Fassung im ROM",
+                    }.get(message.language, message.language)
+                    event_label = (
+                        f" · {message.event_label}" if message.event_label else ""
+                    )
+                    lines.append(
+                        f"{prefix}// [Nachricht {language_label}{event_label}]"
+                    )
+                    for message_line in _message_comment_lines(message):
+                        lines.append(f"{prefix}// {message_line}")
             semantics = self.semantics.get(command.opcode, {})
             parameter_names = semantics.get("arguments", [])
             rendered_arguments = []
@@ -1256,6 +1406,17 @@ class Decompiler:
 def decompile_json_to_script(json_data: dict) -> str:
     """Translate one ``pit-field-event-room-v1`` document into PiT source."""
     return Decompiler(json_data).run()
+
+
+def decompile_json_to_script_with_messages(
+    json_data: dict,
+    dialogue_data: dict,
+    language: str = "german",
+) -> str:
+    """Translate a room and embed private localized dialogue as comments."""
+    return Decompiler(
+        json_data, DialogueCatalog.from_json(dialogue_data, language)
+    ).run()
 
 
 @dataclass
@@ -1786,6 +1947,155 @@ def compile_script_to_json(script_text: str) -> dict:
     return Compiler(script_text).run()
 
 
+def _write_text_atomic(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(text, encoding="utf-8", newline="\n")
+    temporary.replace(path)
+
+
+def decompile_room_corpus(
+    rooms_directory: Path,
+    dialogue_data: dict,
+    output_directory: Path,
+    language: str = "german",
+) -> dict[str, Any]:
+    """Generate a private editable source tree from every room JSON shard."""
+    if not rooms_directory.is_dir():
+        raise PitLanguageError(f"room directory does not exist: {rooms_directory}")
+    catalog = DialogueCatalog.from_json(dialogue_data, language)
+    room_paths = sorted(rooms_directory.glob("room_*.json"))
+    if not room_paths:
+        raise PitLanguageError(f"no room_*.json files found in {rooms_directory}")
+    manifest_rows: list[dict[str, Any]] = []
+    seen_room_ids: set[int] = set()
+    message_reference_count = 0
+    for path in room_paths:
+        try:
+            document = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise PitLanguageError(f"cannot read {path}: {exc}") from exc
+        room_id = document.get("room_id") if isinstance(document, dict) else None
+        match = re.fullmatch(r"room_([0-9]+)\.json", path.name)
+        if (
+            match is None
+            or isinstance(room_id, bool)
+            or not isinstance(room_id, int)
+            or int(match.group(1)) != room_id
+        ):
+            raise PitLanguageError(f"room filename/room_id mismatch: {path}")
+        if room_id in seen_room_ids:
+            raise PitLanguageError(f"duplicate room ID {room_id} in corpus")
+        seen_room_ids.add(room_id)
+        source = Decompiler(document, catalog).run()
+        message_reference_count += source.count("// [Nachricht ")
+        output_name = f"room_{room_id:03d}.pit"
+        output_path = output_directory / output_name
+        _write_text_atomic(output_path, source)
+        manifest_rows.append(
+            {
+                "room_id": room_id,
+                "source_json": path.name,
+                "script": output_name,
+                "source_json_sha256": hashlib.sha256(
+                    path.read_bytes()
+                ).hexdigest(),
+            }
+        )
+    manifest = {
+        "schema": CORPUS_SCHEMA,
+        "version": DEFAULT_VERSION,
+        "language": language,
+        "room_count": len(manifest_rows),
+        "message_reference_count": message_reference_count,
+        "rooms": manifest_rows,
+    }
+    _write_text_atomic(
+        output_directory / "corpus.json",
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+    )
+    _write_text_atomic(
+        output_directory / "README.md",
+        "# Privater PiT-Feldskriptkorpus\n\n"
+        "Die `.pit`-Dateien sind die bearbeitbare Hochsprachendarstellung der "
+        "lokalen `pit-field-event-room-v1`-Quellen. Dialogzeilen stehen nur als "
+        "Kommentare im Quelltext und verändern beim Kompilieren keine Nachricht.\n\n"
+        "Kompilieren in den lokalen Daten-Mod-Baum:\n\n"
+        "```powershell\n"
+        "python .\\tools\\pit_language_compiler.py compile-corpus `\n"
+        f"  {output_directory} `\n"
+        "  .\\data\\eur\\scripts\\FEvent__FEvData.dat\n"
+        "```\n",
+    )
+    return manifest
+
+
+def compile_room_corpus(
+    input_directory: Path, output_directory: Path
+) -> dict[str, Any]:
+    """Compile every source named by a private corpus manifest."""
+    manifest_path = input_directory / "corpus.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise PitLanguageError(f"cannot read {manifest_path}: {exc}") from exc
+    if not isinstance(manifest, dict) or manifest.get("schema") != CORPUS_SCHEMA:
+        raise PitLanguageError(
+            f"corpus manifest must use schema {CORPUS_SCHEMA!r}"
+        )
+    rooms = manifest.get("rooms")
+    if not isinstance(rooms, list) or manifest.get("room_count") != len(rooms):
+        raise PitLanguageError("corpus manifest has an invalid room list/count")
+    seen: set[int] = set()
+    output_rows: list[dict[str, Any]] = []
+    for index, row in enumerate(rooms):
+        if not isinstance(row, dict):
+            raise PitLanguageError(f"corpus room {index} must be an object")
+        room_id = row.get("room_id")
+        script_name = row.get("script")
+        source_json = row.get("source_json")
+        if (
+            isinstance(room_id, bool)
+            or not isinstance(room_id, int)
+            or room_id in seen
+            or not isinstance(script_name, str)
+            or Path(script_name).name != script_name
+            or not re.fullmatch(r"room_[0-9]+\.pit", script_name)
+            or not isinstance(source_json, str)
+            or Path(source_json).name != source_json
+            or not re.fullmatch(r"room_[0-9]+\.json", source_json)
+        ):
+            raise PitLanguageError(f"corpus room {index} has invalid paths/ID")
+        seen.add(room_id)
+        script_path = input_directory / script_name
+        try:
+            source = script_path.read_text(encoding="utf-8")
+        except OSError as exc:
+            raise PitLanguageError(f"cannot read {script_path}: {exc}") from exc
+        document = compile_script_to_json(source)
+        if document.get("room_id") != room_id:
+            raise PitLanguageError(
+                f"{script_path} compiles as room {document.get('room_id')}, expected {room_id}"
+            )
+        output_path = output_directory / source_json
+        _write_text_atomic(
+            output_path,
+            json.dumps(document, ensure_ascii=False, indent=2) + "\n",
+        )
+        output_rows.append(
+            {
+                "room_id": room_id,
+                "script": script_name,
+                "output_json": source_json,
+            }
+        )
+    return {
+        "schema": CORPUS_SCHEMA,
+        "room_count": len(output_rows),
+        "rooms": output_rows,
+    }
+
+
 def _build_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Compile or decompile PiT field-event room scripts"
@@ -1801,6 +2111,19 @@ def _build_argument_parser() -> argparse.ArgumentParser:
     )
     compile_parser.add_argument("input", type=Path)
     compile_parser.add_argument("output", type=Path)
+    corpus_decompile = subparsers.add_parser(
+        "decompile-corpus",
+        help="generate private .pit sources for every room with localized comments",
+    )
+    corpus_decompile.add_argument("rooms", type=Path)
+    corpus_decompile.add_argument("dialogue", type=Path)
+    corpus_decompile.add_argument("output", type=Path)
+    corpus_decompile.add_argument("--language", default="german")
+    corpus_compile = subparsers.add_parser(
+        "compile-corpus", help="compile a private .pit corpus back to room JSON"
+    )
+    corpus_compile.add_argument("input", type=Path)
+    corpus_compile.add_argument("output", type=Path)
     return parser
 
 
@@ -1810,7 +2133,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         if arguments.action == "decompile":
             source = json.loads(arguments.input.read_text(encoding="utf-8"))
             output = decompile_json_to_script(source)
-        else:
+            arguments.output.parent.mkdir(parents=True, exist_ok=True)
+            arguments.output.write_text(output, encoding="utf-8", newline="\n")
+        elif arguments.action == "compile":
             output = json.dumps(
                 compile_script_to_json(
                     arguments.input.read_text(encoding="utf-8")
@@ -1818,8 +2143,26 @@ def main(argv: Sequence[str] | None = None) -> int:
                 ensure_ascii=False,
                 indent=2,
             ) + "\n"
-        arguments.output.parent.mkdir(parents=True, exist_ok=True)
-        arguments.output.write_text(output, encoding="utf-8", newline="\n")
+            _write_text_atomic(arguments.output, output)
+        elif arguments.action == "decompile-corpus":
+            dialogue = json.loads(arguments.dialogue.read_text(encoding="utf-8"))
+            manifest = decompile_room_corpus(
+                arguments.rooms,
+                dialogue,
+                arguments.output,
+                arguments.language,
+            )
+            print(
+                f"Generated {manifest['room_count']} private room sources with "
+                f"{manifest['message_reference_count']} localized message references "
+                f"in {arguments.output}"
+            )
+        else:
+            result = compile_room_corpus(arguments.input, arguments.output)
+            print(
+                f"Compiled {result['room_count']} private room sources into "
+                f"{arguments.output}"
+            )
     except (OSError, json.JSONDecodeError, PitLanguageError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
