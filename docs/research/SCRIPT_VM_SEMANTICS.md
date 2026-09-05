@@ -79,7 +79,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 113 | 62 | `config/eur/field_vm.json` |
+| Field/world | 341 | 127 | 76 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -128,6 +128,7 @@ field context (the other DS screen/field instance).
 | `0x04D` | `set_entity_ground_tracking` | entity_selector, ground_tracking_enabled | sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty |
 | `0x056` | `set_entity_map_sync_axes` | entity_selector, horizontal_map_sync_or_minus_one, vertical_map_sync_or_minus_one | each argument other than -1 updates one persistent map-synchronization axis; enabling an axis immediately marks it dirty, and a later field-geometry refresh marks every enabled axis dirty again |
 | `0x060` | `set_entity_render_layer` | entity_selector, render_layer | stores the low four bits of render_layer in the high nibble of the entity's bound render-object sort key |
+| `0x062` | `set_entity_render_order_priorities` | entity_selector, priority_0_or_auto, priority_1_or_auto, priority_2_or_auto, priority_3_or_auto, auxiliary_priority_or_auto | sets the per-component sprite overlap priorities stored at render-object bytes +0x134 through +0x137; -1 preserves automatic priority calculation. Normal entities also configure an optional auxiliary render object, while subtype 8 ignores the final argument |
 | `0x066` | `set_entity_animation_speed` | entity_selector, animation_speed_q8 | stores the signed 16-bit Q8 animation rate on the entity and updates the bound model while preserving its current animation position |
 | `0x06C` | `bind_entity_resource` | entity_selector, resource_index, animation_id, render_parameter, preserve_previous | binds a 24-byte record from FEvent fixed section 2 to the entity; -1 retains selected subresources |
 | `0x06D` | `restore_entity_resource_state` | entity_selector | restores the resource binding or animation state saved by opcode 0x06C and clears the corresponding saved-state flag |
@@ -137,15 +138,28 @@ field context (the other DS screen/field instance).
 | `0x072` | `restore_entity_behavior_state` | entity_selector | restores the behavior mode saved by opcode 0x071, then clears the bound model's temporary behavior/effect state |
 | `0x083` | `start_entity_movement` | entity_selector, coordinate_mode, x, y, z_or_special, motion_5, motion_6, motion_7, motion_8, motion_9, motion_10, motion_11 | starts interpolated 2D or 3D entity movement; coordinate arguments are converted to fx32 |
 | `0x084` | `start_entity_timed_movement` | entity_selector, coordinate_mode, x, y, z, duration_frames, motion_parameter_6, motion_parameter_7, motion_flag | starts constant-rate entity movement toward fx32 coordinates over duration_frames; coordinate_mode 1 makes the target relative. Normal entities can move on x, y, and z, while subtype 8 uses x and y only |
+| `0x085` | `start_entity_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, motion_5, motion_6, motion_7, motion_flag | starts profiled movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
+| `0x086` | `start_entity_timed_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, duration_frames, motion_parameter_6, motion_parameter_7, motion_flag | starts timed movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
 | `0x08B` | `wait_entity_movement` | entity_selector | retries while either of the entity movement-state flags is active |
 | `0x08D` | `start_entity_vertical_motion` | entity_selector, initial_velocity_low_or_value, initial_velocity_high, gravity_low_or_value, gravity_high | starts vertical ballistic motion; literal word pairs form signed fx32 values and -1 selects entity defaults |
 | `0x08F` | `wait_entity_vertical_motion` | entity_selector | retries while entity vertical-motion flag 0x10 is set |
 | `0x091` | `set_entity_position` | entity_selector, relative, x, y, z | converts coordinates to fx32, optionally adds the current position, and synchronizes current/previous entity position; subtype 8 uses only x/y while other entities also store z |
 | `0x0A0` | `set_entity_facing_direction` | entity_selector, direction_mode, direction | stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately |
+| `0x0AE` | `rejoin_party_follower` | party_side, instant | moves the selected party's detached follower back to its formation offset behind the leader, either immediately or through entity movement, then restores the normal follower tether |
+| `0x0AF` | `wait_party_follower_rejoined` | party_side | retries the same command while the selected party follower is still moving back into formation |
+| `0x0B0` | `detach_party_follower` | party_side | disables the normal leader/follower tether for the selected party and resets the follower's formation offsets and occupancy state so scripts can position both members independently |
+| `0x0B5` | `set_party_member_character_id` | flat_member_selector, character_id_or_default | selects party_side as flat_member_selector / 2 and member index as flat_member_selector & 1, then stores its field character ID; -1 derives the current default from party/form state and ID 9 resolves through the saved dynamic character choice |
+| `0x0B6` | `reset_party_member_characters` | party_side | clears the selected party's temporary character-selection flags and recomputes both member character IDs from current party/form state |
 | `0x0B7` | `set_party_facing_direction` | party_side, facing_direction, instant | changes the selected party controller's left/right facing and sprite flip, either directly or through its guarded turn path |
+| `0x0B8` | `set_party_member_switching_enabled` | party_side, enabled | sets party-controller flag +0x74 bit 2, which gates X/Y-triggered switching of the selected party's active member and the corresponding character-ID refresh |
 | `0x0B9` | `legacy_noop_0b9` | unused_0, unused_1 | intentional legacy no-op; both encoded arguments are ignored |
 | `0x0BA` | `set_field_party_hud_layout` | layout_mode, instant | changes the party status HUD layout and visibility on the field context that owns the HUD; instant applies the target positions directly, otherwise the icons animate toward them in four-pixel steps |
+| `0x0BD` | `cancel_party_actions` | party_side_or_minus_one, action_type_mask | requests normalization/cancellation of the current field action when its action-type bit is present in action_type_mask; party side -1 applies the request to both active parties |
+| `0x0BE` | `wait_party_actions_idle` | party_side | retries the same command while the selected party's leader, follower, or attached action entities have not returned to an idle field state |
 | `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
+| `0x0CE` | `set_party_leader_animation_override` | party_side, enabled | enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30 |
+| `0x0D4` | `activate_field_map_event` | map_event_index | activates the indexed 20-byte field-map event record, applies its persistent enable/disable save flags, reloads referenced map layers when present, applies the returned map state, and dirties map-synchronized entities |
+| `0x0D9` | `set_field_bg_layers_enabled` | bg0_enabled_or_minus_one, bg1_enabled_or_minus_one, bg2_enabled_or_minus_one, bg3_enabled_or_minus_one | updates the active field screen's DISPCNT BG0 through BG3 enable bits; -1 preserves an individual layer, and the OBJ display-enable bit remains forced on |
 | `0x0DD` | `start_camera_timed_entity_tracking` | entity_selector, x_offset, y_offset, duration_frames, x_motion_flag, y_motion_flag | starts a timed camera interpolation whose target is recomputed from the selected entity position plus fx32 x/y offsets on every frame; the two flags are stored as per-axis camera-motion options |
 | `0x0DE` | `wait_camera_movement` | 0 literal args | synchronization barrier shared by the camera motion commands 0x0DB through 0x0DD |
 | `0x0ED` | `start_master_brightness_transition` | start_brightness_or_255, target_brightness, duration_frames | writes the target immediately when duration is zero; otherwise interpolates the active screen's signed DS master-brightness value once per frame. A start value of 255 preserves the current brightness |
@@ -164,24 +178,14 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-90/289 used opcodes and
-358,770/387,377 reachable commands
+104/289 used opcodes and
+369,842/387,377 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x062` | 1,606 |
-| `0x0B8` | 1,371 |
-| `0x0B5` | 1,288 |
-| `0x0CE` | 1,146 |
-| `0x0D4` | 1,085 |
 | `0x059` | 1,045 |
-| `0x0B0` | 1,002 |
-| `0x0BE` | 844 |
-| `0x085` | 825 |
 | `0x0A5` | 776 |
-| `0x0AE` | 763 |
-| `0x0BD` | 683 |
 | `0x050` | 631 |
 | `0x0E4` | 601 |
 | `0x05B` | 570 |
@@ -190,6 +194,16 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x0A6` | 554 |
 | `0x08E` | 534 |
 | `0x0E5` | 449 |
+| `0x067` | 437 |
+| `0x0A7` | 428 |
+| `0x112` | 395 |
+| `0x0DA` | 383 |
+| `0x0AC` | 380 |
+| `0x0D5` | 372 |
+| `0x090` | 362 |
+| `0x0CC` | 320 |
+| `0x055` | 317 |
+| `0x095` | 310 |
 
 ## Menu/UI scene scripts
 
