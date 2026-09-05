@@ -329,26 +329,30 @@ The adjacent `BattleStatus_TryApply` is now byte-identical C, including typed
 enemy resistance fields, RNG chance scaling, equipment guards, ailment-state
 setup, temporary stat calculation and clamping, sound cues, and effect
 spawning.
-`BattleDamage_ApplyToEnemy` at `0x0209D718` is maintained in full: it resolves
-the enemy slot, clamps and applies damage, sets the hit reaction, computes the
-popup position, emits the number, and selects the two special impact effects.
+`BattleDamage_ApplyToEnemy` at `0x0209D718` is byte-identical linked C: it
+resolves the enemy slot, clamps and applies damage, sets the hit reaction,
+computes the popup position, emits the number, and selects the two special
+impact effects.
 The shared `BattleDamage_SpawnNumber` constructor at `0x0209CD9C` applies the
 battle-wide popup offsets and creates either a free or actor-attached number.
 Its cohesive C unit has exact spawn, merge, and update functions; only the
 48-byte cleanup helper retains one compiler-folding mismatch. Together they
 merge overlapping values, transition the popup according to actor flags, and
 release the actor's `+0x2C` task pointer.
-`BattleDamage_ApplyToParty` at `0x0209D9DC` now covers the parallel party path,
-including the nonlethal hit type, status-1 clearing, six reaction variants,
-Mario/Luigi popup metadata, and optional post-hit status application.
-`BattleDamage_DispatchHit` at `0x0209DE8C` validates target IDs, derives hit
-offsets from the queued record and scene object, then routes the pending damage
-and status payload to the appropriate maintained enemy/party path.
+`BattleDamage_ApplyToParty` at `0x0209D9DC` is byte-identical linked C for the
+parallel party path, including the nonlethal hit type, status-1 clearing, six
+reaction variants, Mario/Luigi popup metadata, and optional post-hit status
+application. The linked `BattleDamage_DispatchHit` at `0x0209DE8C` validates
+target IDs, derives hit offsets from the queued record and scene object, then
+routes the pending damage and status payload to the appropriate enemy/party
+path. Together with the equipment hook, the entire 2,244-byte range through
+`0x0209DFDC` is now reconstructed exactly.
 The party/enemy reaction-task lifecycle at `0x0209CE98`-`0x0209D694` is now a
 byte-identical linked C unit. Its starters expose task allocation/reuse, actor
 hit-lock flag `0x200`, and attached hit effects. The adjacent party first-hit
-equipment hook remains symbolic and consumes POW status 6 for equipment effect
-`0x3024`. Both reaction-task callbacks wait for the scene
+equipment hook is part of the exact damage-application C unit and consumes POW
+status 6 for equipment effect `0x3024`. Both reaction-task callbacks wait for
+the scene
 animation, handle the party KO/alive split, restore enemy impact offsets where
 applicable, clear task callbacks, and release actor hit-lock flag `0x200`.
 The alternate attached-effect reaction pair is included, including

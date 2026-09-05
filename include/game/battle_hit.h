@@ -5,8 +5,8 @@
 
 typedef struct BattleHitDescriptor BattleHitDescriptor;
 typedef struct BattleHitRecord BattleHitRecord;
-typedef void (*BattleHitCallback)(BattleHitDescriptor *descriptor);
 typedef void (*BattleHitRecordCallback)(BattleHitRecord *record);
+typedef BattleHitRecordCallback BattleHitCallback;
 
 enum BattleHitDescriptorFlag {
     BATTLE_HIT_KIND_MASK = 0x003F,
@@ -38,7 +38,7 @@ struct BattleHitRecord {
     s16 y;
     s16 z;
     s16 kind;
-    u8 status_id;
+    s8 status_id;
     s8 status_chance;
     s8 status_magnitude;
     u8 padding_0f;
@@ -51,6 +51,7 @@ typedef char BattleHitRecord_SizeCheck[
     sizeof(BattleHitRecord) == 0x14 ? 1 : -1];
 
 void BattleHitDescriptor_Disable(BattleHitDescriptor *descriptor);
+void BattleDamage_DispatchHit(BattleHitRecord *record);
 void BattleHitDescriptor_DisableByActor(int actor_id);
 void BattleHitDescriptor_SetStatus(BattleHitDescriptor *descriptor,
                                    int status_id, s8 chance, s8 magnitude);
