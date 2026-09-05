@@ -116,10 +116,17 @@
     "60": "reset_object_data",
     "61": "set_object_animation",
     "62": "start_script_by_id",
+    "64": "assign_script_owner_group",
     "65": "swap_object_slots",
+    "66": "set_battle_runtime_flag_03",
+    "67": "set_battle_state_override",
+    "68": "set_battle_result_code",
+    "69": "clear_battle_next_state",
     "70": "get_global_property",
     "71": "set_global_property",
     "73": "legacy_noop_049",
+    "74": "get_battle_encounter_id",
+    "75": "get_encounter_resource_index",
     "76": "legacy_noop_04c",
     "77": "get_actor_property",
     "78": "set_actor_property",
@@ -135,6 +142,7 @@
     "88": "configure_animation_layer",
     "89": "set_animation_layer_state",
     "91": "move_object",
+    "92": "start_sinusoidal_direction_motion",
     "93": "move_object_at_speed",
     "94": "start_axis_kinematic_motion",
     "95": "move_object_with_kinematic_duration",
@@ -149,6 +157,9 @@
     "104": "start_velocity_motion",
     "105": "start_acceleration_motion",
     "106": "start_accelerated_motion",
+    "107": "start_accelerated_motion_with_velocity_ratio",
+    "108": "start_accelerated_motion_between_velocities",
+    "109": "rotate_object_around_axis",
     "110": "wait_animation",
     "111": "stop_motion",
     "112": "snapshot_position",
@@ -170,6 +181,7 @@
     "128": "calculate_equipment_damage",
     "129": "apply_status",
     "130": "clear_status",
+    "131": "set_actor_targeting_enabled",
     "132": "configure_hit",
     "133": "reflect_queued_hits",
     "134": "find_hit_descriptor",
@@ -178,6 +190,7 @@
     "137": "get_queued_hit_z",
     "138": "get_queued_hit_kind",
     "139": "damage_party",
+    "140": "set_auxiliary_objects_paused",
     "141": "calculate_damage",
     "142": "spawn_model_effect",
     "143": "spawn_attached_model_effect",
@@ -199,10 +212,13 @@
     "159": "wait_script_handle",
     "160": "is_script_handle_active",
     "161": "stretch_object_between_anchors",
+    "162": "start_impact_trail_emitter",
+    "163": "stop_impact_trail_emitter",
     "184": "spawn_object_data_effect_at_world_position",
     "185": "spawn_object_data_effect_at_object_position",
     "186": "spawn_object_data_effect_at_world_position_handle",
     "187": "spawn_object_data_effect_at_object_position_handle",
+    "188": "configure_global_object_resource_slots",
     "189": "spawn_archive_effect_at_world_position",
     "190": "spawn_archive_effect_at_object_position",
     "191": "spawn_archive_effect_at_world_position_handle",
@@ -211,9 +227,16 @@
     "194": "start_finite_raster_effect",
     "195": "legacy_noop_0c3",
     "196": "yield_one_frame",
+    "197": "set_sub_screen_blend_coefficients",
+    "198": "set_sub_screen_blend_plane_masks",
+    "199": "adjust_inventory_count",
+    "200": "get_inventory_count",
+    "201": "get_item_animation_id",
     "202": "legacy_noop_0ca",
     "203": "set_control_state",
     "204": "update_control_mask",
+    "205": "set_battle_input_disable_mask",
+    "206": "set_battle_input_direction_rotation",
     "207": "legacy_noop_0cf",
     "208": "legacy_noop_0d0",
     "209": "start_inline_object_script",
@@ -1563,6 +1586,190 @@
       "yield": "never",
       "effect": "for alignment mode 1, adjusts the owner's attached scene-object baseline so its view-relative baseline equals the reference object's baseline plus view_offset; mode 0 and other modes do nothing",
       "evidence": "func_ov002_020698d4 case 0x100; func_ov002_02066004; BattlePosition_StoreViewRelative"
+    },
+    "64": {
+      "arguments": ["encoded_owner_group"],
+      "result": null,
+      "control_flow": "advances normally and ends the current VM update",
+      "yield": "one update",
+      "effect": "stores encoded_owner_group - 3 in the current script state's owner-group field, marks that field as explicitly assigned, and yields after the command; the shipped scripts pass 3, selecting group 0",
+      "evidence": "BattleAI_DispatchOpcode case 0x040; owner-group comparisons in cases 0x0D6 through 0x0DC"
+    },
+    "66": {
+      "arguments": ["enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "replaces battle-runtime flag bit 3 with enabled & 1",
+      "evidence": "BattleAI_DispatchOpcode case 0x042; battle context runtime flags at +0xD3A0"
+    },
+    "67": {
+      "arguments": ["state_override"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "stores the unsigned 16-bit battle state override at battle context +0x1C; BattleMain_Update suppresses the normal turn-state transition while this nonzero value equals the current state and resumes normal updating after it is cleared",
+      "evidence": "BattleAI_DispatchOpcode case 0x043; BattleMain_Update"
+    },
+    "68": {
+      "arguments": ["result_code"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "writes the battle result code to save-transfer field +0x55E, adjacent to the encounter ID; the flee path writes result code 2 to the same field",
+      "evidence": "BattleAI_DispatchOpcode case 0x044; BattleFlee_UpdateRun; save battle-transfer block at +0x558"
+    },
+    "69": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "clears the current battle turn-state value at battle context +0x18 so BattleMain_Update restarts state dispatch from zero",
+      "evidence": "BattleAI_DispatchOpcode case 0x045; BattleMain_Update; BattleTurnState_Update"
+    },
+    "74": {
+      "arguments": ["unused_0"],
+      "result": "battle_encounter_id",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns the signed encounter ID stored in the save battle-transfer block at +0x55C; the encoded argument is ignored",
+      "evidence": "BattleAI_DispatchOpcode case 0x04A; save battle-transfer block at +0x558"
+    },
+    "75": {
+      "arguments": ["encounter_id_or_minus_one"],
+      "result": "encounter_resource_index",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "maps an encounter ID to the shared object-data resource index used by scenario setup; -1 selects the current encounter ID from save +0x55C, and unsupported encounters follow the lookup's default entry",
+      "evidence": "BattleAI_DispatchOpcode case 0x04B; func_ov002_0208bd88; shipped scenario scripts pass the result to opcode 0x038"
+    },
+    "92": {
+      "arguments": ["object_id", "motion_slot", "unused_2", "direction_x", "direction_y", "direction_z", "initial_phase", "phase_step", "revolution_count", "terminal_amplitude"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts motion along the normalized direction vector whose per-frame displacement follows the sine table. A nonzero revolution_count derives the duration needed to advance from initial_phase through that many 16-bit angle revolutions at phase_step; over that duration the direction-vector magnitude is interpolated toward terminal_amplitude",
+      "evidence": "BattleAI_DispatchOpcode case 0x05C; func_ov002_020a3928; func_ov002_020a39d0"
+    },
+    "107": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_frames", "terminal_to_initial_velocity_ratio_q8", "prefer_longer_duration"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "derives initial velocity and constant acceleration so the object covers distance in duration_frames and its terminal velocity is terminal_to_initial_velocity_ratio_q8 / 256 times its initial velocity, then starts normalized directional accelerated motion using the selected quadratic root",
+      "evidence": "BattleAI_DispatchOpcode case 0x06B; func_ov002_020be478; BattleSceneObject_StartAcceleratedMotion"
+    },
+    "108": {
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "initial_velocity_fixed_low_or_variable", "initial_velocity_fixed_high", "terminal_velocity_fixed_low_or_variable", "terminal_velocity_fixed_high", "prefer_longer_duration"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "decodes the two fixed-point velocity operands, derives duration from distance and their average and acceleration from their difference, then starts normalized directional accelerated motion using the selected quadratic root",
+      "evidence": "BattleAI_DispatchOpcode case 0x06C; func_ov002_020be3e8; BattleSceneObject_StartAcceleratedMotion"
+    },
+    "109": {
+      "arguments": ["object_id", "motion_slot", "axis_start_x", "axis_start_y", "axis_start_z", "axis_end_x", "axis_end_y", "axis_end_z", "angle_step", "total_angle"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "rotates the object's position around the three-dimensional axis from axis_start to axis_end. Duration is total_angle * 256 / angle_step, and each update applies the corresponding accumulated 16-bit angle to the original position",
+      "evidence": "BattleAI_DispatchOpcode case 0x06D; func_ov002_020a3810; func_ov002_020a3894; func_ov002_020a33a4"
+    },
+    "131": {
+      "arguments": ["actor_id", "enabled"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the actor's excluded_from_targeting flag to the inverse of enabled, making the actor eligible when enabled is nonzero and ineligible when it is zero",
+      "evidence": "BattleAI_DispatchOpcode case 0x083; BattleActor.flags bit 13"
+    },
+    "140": {
+      "arguments": ["paused"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "normalizes paused to a Boolean and applies scene property 46 to auxiliary object IDs 40 through 55, updating their time-paused/render-suppression state as a group",
+      "evidence": "BattleAI_DispatchOpcode case 0x08C; func_ov002_02076c38; BattleScript_SetProperty property 46"
+    },
+    "162": {
+      "arguments": ["object_id", "target_scale_q4", "lifetime_multiplier", "spawn_interval", "size_multiplier", "target_size", "initial_z_offset", "z_velocity"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts an impact-particle trail emitter attached to object_id. It emits while the object's active model is animating, using the packed six-bit spawn interval and five-bit size fields; lifetime_multiplier zero leaves the allocated emitter inactive",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A2 and its ARM call sequence; BattleImpactEmitter_Start mode 0; BattleImpactTrailEmitter_Update"
+    },
+    "163": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the object's stop_impact_particles flag. Its active trail emitter consumes and clears the flag on the next update, then terminates itself",
+      "evidence": "BattleAI_DispatchOpcode case 0x0A3; BattleImpactTrailEmitter_Update; BattleSceneObject.flags bit 19"
+    },
+    "188": {
+      "arguments": ["source_0", "source_1_or_minus_one", "source_2_or_minus_one", "source_3_or_minus_one"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "configures four global object-resource source slots. Positive operands resolve to the selected scene object's attached resource pointer, nonpositive values remain literal, source_0 value -1 clears slot 0 to zero, and -1 in slots 1 through 3 preserves the previous value",
+      "evidence": "BattleAI_DispatchOpcode case 0x0BC; func_ov002_0207905c; func_ov002_0206c1e4"
+    },
+    "197": {
+      "arguments": ["eva", "evb"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the lower screen's alpha-blend EVA and EVB coefficients. Battle rendering packs them with the plane masks from opcode 0x0C6 into the sub-engine BLDCNT and BLDALPHA registers every frame",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C5; BattleMain_Update; func_02036988 writes the packed value at 0x04001050"
+    },
+    "198": {
+      "arguments": ["first_target_plane_mask", "second_target_plane_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the lower screen's first- and second-target alpha-blend plane masks. Battle rendering combines them with EVA and EVB from opcode 0x0C5, forces alpha-blend mode, and writes sub-engine BLDCNT and BLDALPHA every frame",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C6; BattleMain_Update; func_02036988"
+    },
+    "199": {
+      "arguments": ["tagged_item_id", "count_delta"],
+      "result": "applied_delta",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "adds count_delta to the selected save inventory and returns the actual clamped change: 0xFFFF selects coins clamped to 0..999999, 0xFFFE selects beans clamped to 0..999, and high-nibble tags 0x1000, 0x2000, 0x3000, and 0x4000 select action items, usable items, badges, and wear with limits 99, 99, 9, and 9. The battle action and usable-item lists are rebuilt afterward",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C7; resident inventory adjuster func_02019174; func_ov002_0209add8; func_ov002_0209ad50"
+    },
+    "200": {
+      "arguments": ["tagged_item_id"],
+      "result": "inventory_count",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "returns the current count selected by the same 0xFFFF coins, 0xFFFE beans, and 0x1000 through 0x4000 item-class tags as opcode 0x0C7; invalid IDs return zero",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C8; resident inventory getter func_0201904c"
+    },
+    "201": {
+      "arguments": ["tagged_item_id"],
+      "result": "battle_animation_id_or_minus_one",
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "resolves the tagged item into its resident master record and returns byte +0x09, the battle animation ID used to animate the helper object for that item; invalid IDs return -1",
+      "evidence": "BattleAI_DispatchOpcode case 0x0C9; resident item-master tables at 0x02050044 through 0x020505C4; shipped item script uses the result as an object animation"
+    },
+    "205": {
+      "arguments": ["disabled_button_mask"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the battle input-disable mask. Each frame this mask is cleared from the held, newly pressed, and repeat/input-transition button words before scripted input injection and D-pad rotation",
+      "evidence": "BattleAI_DispatchOpcode case 0x0CD; func_ov002_0207707c"
+    },
+    "206": {
+      "arguments": ["direction_quarter_turns"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the battle input direction rotation. When nonzero, physical D-pad bits 0x10, 0x20, 0x40, and 0x80 in all three input words are cyclically remapped by the low two bits of direction_quarter_turns; other buttons are preserved",
+      "evidence": "BattleAI_DispatchOpcode case 0x0CE; func_ov002_0207707c; direction mask table data_ov002_020be710"
     }
   }
 }
