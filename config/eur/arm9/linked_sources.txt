@@ -77,6 +77,7 @@ src/battle/battle_status_enemy_ailment45.cpp
 src/battle/battle_status_enemy_ailment3.cpp
 src/battle/battle_status_enemy_ailment2.cpp
 src/battle/battle_status_visual_routing.c
+src/battle/battle_party_luigi_reload_finish.c
 src/battle/battle_party_luigi_reload.c
 src/battle/battle_party_mario_reload.c
 src/game/script_vm.c
