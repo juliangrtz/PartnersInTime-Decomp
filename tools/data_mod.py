@@ -2320,6 +2320,21 @@ def command_export(args: argparse.Namespace) -> None:
             ),
         )
         script_documents.append(output_relative)
+    import field_event_mod
+
+    field_descriptors, field_opcode_names = field_event_mod.load_vm_schema(
+        args.version
+    )
+    field_relative = "scripts/FEvent__FEvData.dat.json"
+    field_event_mod.write_sharded_document(
+        field_event_mod.export_document(
+            files_root / field_event_mod.SOURCE,
+            args.version,
+            field_descriptors,
+            field_opcode_names,
+        ),
+        project_root / field_relative,
+    )
     import scene_script_mod
 
     scene_descriptors, scene_opcode_names = scene_script_mod.load_vm_schema(
@@ -2346,6 +2361,7 @@ def command_export(args: argparse.Namespace) -> None:
             "text_documents": text_documents,
             "dialogue_documents": dialogue_documents,
             "script_documents": script_documents,
+            "field_script_documents": [field_relative],
             "scene_script_documents": [scene_relative],
             "stat_documents": [enemy_relative, treasure_relative],
             "binary_documents": [shop_relative, item_master_relative],
@@ -2353,7 +2369,8 @@ def command_export(args: argparse.Namespace) -> None:
     )
     print(
         f"Exported {len(text_documents)} MFsets, {len(dialogue_documents)} dialogue archives, "
-        f"{len(script_documents)} battle-script archives, three scene-script archives, "
+        f"{len(script_documents)} battle-script archives, {field_event_mod.SOURCE}, "
+        "three scene-script archives, "
         "an enemy table, a treasure table, "
         f"shop stock, and item masters to {project_root}"
     )
@@ -2369,6 +2386,31 @@ def _validated_source(project_root: Path, document: dict[str, Any]) -> str:
     return source
 
 
+def merge_disjoint_offset_archive_edits(
+    source_data: bytes, first: bytes, second: bytes, context: str
+) -> bytes:
+    """Merge two independently rebuilt views of the same offset archive."""
+    source_entries = parse_offset_archive(source_data)
+    first_entries = parse_offset_archive(first)
+    second_entries = parse_offset_archive(second)
+    if not (
+        len(source_entries) == len(first_entries) == len(second_entries)
+    ):
+        raise DataModError(f"{context} rebuilds changed the outer entry count")
+    merged = []
+    for entry_id, (source, first_entry, second_entry) in enumerate(
+        zip(source_entries, first_entries, second_entries)
+    ):
+        first_changed = first_entry != source
+        second_changed = second_entry != source
+        if first_changed and second_changed and first_entry != second_entry:
+            raise DataModError(
+                f"{context} has conflicting edits in outer entry {entry_id}"
+            )
+        merged.append(second_entry if second_changed else first_entry)
+    return build_offset_archive(merged)
+
+
 def compile_project(
     files_root: Path, project_root: Path
 ) -> tuple[dict[str, bytes], list[dict[str, Any]]]:
@@ -2380,6 +2422,9 @@ def compile_project(
 
     script_documents = _require_list(
         project.get("script_documents", []), "script_documents"
+    )
+    field_script_documents = _require_list(
+        project.get("field_script_documents", []), "field_script_documents"
     )
     scene_script_documents = _require_list(
         project.get("scene_script_documents", []), "scene_script_documents"
@@ -2395,6 +2440,18 @@ def compile_project(
         if not overlay_2_path.is_file():
             raise DataModError(f"private overlay 2 is missing: {overlay_2_path}")
         verify_battle_vm_descriptors(overlay_2_path.read_bytes(), descriptors)
+
+    field_event_mod = None
+    field_descriptors: tuple[int, ...] = ()
+    field_opcode_names: dict[int, str] = {}
+    if field_script_documents:
+        version = project.get("version")
+        if not isinstance(version, str):
+            raise DataModError("project version must be a string")
+        import field_event_mod as loaded_field_event_mod
+
+        field_event_mod = loaded_field_event_mod
+        field_descriptors, field_opcode_names = field_event_mod.load_vm_schema(version)
 
     scene_script_mod = None
     scene_descriptors: tuple[int, ...] = ()
@@ -2463,6 +2520,52 @@ def compile_project(
                     "changed": rebuilt != source_data,
                 }
             )
+    if field_event_mod is not None:
+        for relative_document in field_script_documents:
+            if not isinstance(relative_document, str):
+                raise DataModError(
+                    "every field_script_documents item must be a path string"
+                )
+            document = field_event_mod.load_document(
+                project_root / relative_document
+            )
+            source = _validated_source(project_root, document)
+            source_path = files_root / Path(source)
+            if not source_path.is_file():
+                raise DataModError(f"private source file is missing: {source_path}")
+            source_data = source_path.read_bytes()
+            rebuilt = field_event_mod.build_document(
+                document,
+                source_data,
+                field_descriptors,
+                field_opcode_names,
+            )
+            if source in replacements:
+                rebuilt = merge_disjoint_offset_archive_edits(
+                    source_data,
+                    replacements[source],
+                    rebuilt,
+                    source,
+                )
+                replacements[source] = rebuilt
+                report_row = next(
+                    row for row in report if row["source"] == source
+                )
+                report_row["rebuilt_size"] = len(rebuilt)
+                report_row["rebuilt_sha1"] = sha1(rebuilt)
+                report_row["changed"] = rebuilt != source_data
+            else:
+                replacements[source] = rebuilt
+                report.append(
+                    {
+                        "source": source,
+                        "original_size": len(source_data),
+                        "rebuilt_size": len(rebuilt),
+                        "original_sha1": sha1(source_data),
+                        "rebuilt_sha1": sha1(rebuilt),
+                        "changed": rebuilt != source_data,
+                    }
+                )
     if scene_script_mod is not None:
         for relative_document in scene_script_documents:
             if not isinstance(relative_document, str):

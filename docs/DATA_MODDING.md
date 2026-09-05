@@ -30,6 +30,9 @@ copied unchanged when the modded NitroFS tree is staged.
 - all three Menu/UI scene-VM archives: 18 entries and 6,585 reachable commands
   using 60 distinct opcodes, with unreachable data retained from the private
   extraction;
+- all 778 nonempty field-event members, sharded into one source file for each
+  of the 638 rooms: 18,615 valid script roots and 387,272 reachable commands
+  using 289 distinct opcodes;
 - all 569 statically referenced field-entity movement records: 534 random
   roaming profiles and 35 waypoint paths, exported as typed editable data;
 - length-changing MFset edits: string pointers, language-entry sizes, and outer
@@ -39,11 +42,18 @@ Player growth/base stats are not present in this DAT corpus.  They are created
 by executable and save-data logic and therefore remain part of the C
 reconstruction.
 
-Field-event bytecode now has a standalone lossless exporter and fixed-layout
-builder. It is intentionally not yet part of `project.json`: field dialogue and
-field scripts occupy different members of the same `FEvent/FEvData.dat` outer
-archive, so their two independently editable views must be merged by one
-container-aware build step before both can safely target the normal ROM build.
+Field-event bytecode is part of `project.json` and therefore of the normal ROM
+build. Its compact manifest is
+`scripts/FEvent__FEvData.dat.json`; the actual sources live in
+`scripts/FEvent__FEvData.dat/room_NNN.json`, with both script-bearing members of
+a room kept together. Field dialogue and field scripts occupy different members
+of the same `FEvent/FEvData.dat` outer archive. The builder compiles both views
+against the private original, verifies that they do not touch the same member,
+and merges their changes while regenerating the outer offsets. A simultaneous
+length-changing dialogue edit and fixed-size event-command edit is therefore
+safe.
+
+The same exporter and builder remain available as standalone diagnostics:
 
 ```powershell
 python .\tools\field_event_mod.py export
@@ -51,7 +61,7 @@ python .\tools\field_event_mod.py check
 python .\tools\field_event_mod.py build --output build\FEvData.modded.dat
 ```
 
-The exporter covers the 778 nonempty script-bearing room members and separates
+The exporter separates
 valid VM entry points from private/sentinel pointer aliases by decoding the
 complete reachable control-flow graph. It follows opcodes `0x093` and `0x09A`
 into their embedded data and emits `entity_roaming_profile` and
@@ -60,7 +70,8 @@ direction mode, traversal controls, and signed x/y waypoints are editable; the
 builder validates and rewrites them at their original fixed size. Shared data
 records are emitted only once and commands name the record they reference.
 
-Schema v1 permits opcode/argument edits only when the encoded command size stays
+The current fixed-layout room schema permits opcode/argument edits only when the
+encoded command size stays
 unchanged; branch and embedded-data targets are revalidated during every build.
 The number of profiles or waypoints cannot yet change. General size-changing
 field-script edits remain locked until relocation rules for all field
