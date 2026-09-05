@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 176 | 125 | `config/eur/field_vm.json` |
+| Field/world | 341 | 177 | 126 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -148,6 +148,7 @@ field context (the other DS screen/field instance).
 | `0x085` | `start_entity_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, motion_5, motion_6, motion_7, motion_flag | starts profiled movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
 | `0x086` | `start_entity_timed_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, duration_frames, motion_parameter_6, motion_parameter_7, motion_flag | starts timed movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
 | `0x08B` | `wait_entity_movement` | entity_selector | retries while either of the entity movement-state flags is active |
+| `0x08C` | `cancel_entity_movement` | entity_selector | cancels both the selected entity's planar destination/path controller and its independent vertical-motion controller without snapping either axis to its planned destination. This is the cancellation counterpart to the combined wait in opcode 0x08B |
 | `0x08D` | `start_entity_vertical_motion` | entity_selector, initial_velocity_low_or_value, initial_velocity_high, gravity_low_or_value, gravity_high | starts vertical ballistic motion; literal word pairs form signed fx32 values and -1 selects entity defaults |
 | `0x08E` | `start_entity_vertical_motion_to_height` | entity_selector, height_pixels, gravity_low_or_value, gravity_high | derives an upward fx32 velocity that reaches approximately height_pixels under the supplied acceleration, then starts the same ballistic-motion controller as opcode 0x08D; gravity -1 selects the entity default |
 | `0x08F` | `wait_entity_vertical_motion` | entity_selector | retries while entity vertical-motion flag 0x10 is set |
@@ -229,15 +230,14 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-152/289 used opcodes and
-381,756/387,272 reachable commands
+153/289 used opcodes and
+382,045/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x0CC` | 320 |
 | `0x055` | 317 |
-| `0x08C` | 289 |
 | `0x0A1` | 234 |
 | `0x0D1` | 221 |
 | `0x116` | 216 |
@@ -255,6 +255,7 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x125` | 100 |
 | `0x0F2` | 80 |
 | `0x087` | 79 |
+| `0x12B` | 77 |
 
 ## Menu/UI scene scripts
 
