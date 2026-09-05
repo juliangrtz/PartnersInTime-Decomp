@@ -87,7 +87,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
   High-level source also includes
-  one hundred and seventy-nine byte-matching overlay-2 battle functions: forty-four
+  one hundred and eighty-one byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
   and four actor HP/lookup
   helpers plus status eligibility, base damage, the central HP/KO primitive,
@@ -122,6 +122,9 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   scanline interpolation, the object-data-51 fade/load/fade transition, and
   the accelerating view-relative particle task used by battle-AI opcodes
   `0xC1`, `0xC2`, and `0xE8`.
+  Two matching grid-transition task functions initialize the six-byte animation
+  state, clear the battle view offsets during rendering, and retire the task
+  together with runtime flag `0x40` when its 8-by-6 DS-geometry pass finishes.
   The adjacent six-function common-asset loader is matching C as well: it
   opens the battle archive, reads and relocates its offset table, selects the
   localized entries, and fills the twenty-one-slot runtime pointer table.
