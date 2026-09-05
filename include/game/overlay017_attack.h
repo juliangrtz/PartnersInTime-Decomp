@@ -18,6 +18,10 @@ u16 Overlay17Attack_GetGroupTuningParameter1(int value);
 int Overlay17Attack_UpdatePartyObjectReadiness(void);
 int Overlay17Attack_ConfigurePartyObjects(void);
 int Overlay17Attack_UpdateObjectAnimations(void);
+void *Overlay17Attack_QueueDisplayInitialization(void);
+void Overlay17Attack_InitializeDisplayPattern(void);
+void Overlay17Attack_FinalizeDisplay(void);
+int Overlay17Attack_ConfigureDisplay(int argument);
 
 #ifdef __cplusplus
 }
