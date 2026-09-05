@@ -201,6 +201,7 @@ and runtime overlay 2.
 | `020A4E08` | `BattleSceneObject_BeginMotionChannel` | Links an object and initializes one motion callback channel |
 | `020A4EB0` | `BattleSceneObject_UnlinkMotion` | Preserves the final target and removes an object from the motion list |
 | `020A4F18` | `BattleSceneObject_StopMotionChannel` | Stops a channel and reconciles accumulated coordinate deltas |
+| `020A5294` | `BattleTransform_BuildBetweenPoints` | Builds a fixed-point 4x4 transform spanning two battle-space points |
 | `020A50C4` | `BattleSceneObject_GetMotionChannel` | Resolves one of the fixed-size per-object motion channels |
 | `020A50D4` | `BattleTaskList_Update` | Runs live callbacks and recycles stopped tasks |
 | `020A519C` | `BattleTask_BindOwnerSlot` | Binds a task handle to its owning object and returns the displaced task |
@@ -797,6 +798,15 @@ the same instruction sequences and sizes. The global 532-byte motion scheduler
 at `0x020A4BF4` is exact linked C: it snapshots each object, composes as many as
 four channels, advances and clamps Q8 time, records per-channel displacement,
 stops completed channels, and unlinks idle objects from the active list.
+The channel-stop routine is also maintained as readable C and exposes how a
+later channel's displacement is deferred when an earlier channel still owns
+the object. Its corrected `0x020A4F18`-`0x020A50C4` extent absorbs a spurious
+8-byte function boundary that was really the routine's unreachable compiler
+epilogue. It remains unlinked for two initial callback-test register choices.
+The following `BattleTransform_BuildBetweenPoints` is exact linked C. It uses
+the DS square-root and division units to build a fixed-point 4x4 transform with
+a normalized longitudinal axis, perpendicular lateral axis, and midpoint
+translation between two battle-space positions.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets

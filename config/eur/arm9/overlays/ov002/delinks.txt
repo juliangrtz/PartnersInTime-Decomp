@@ -248,8 +248,14 @@ src/battle/battle_scene_motion_update.c:
 src/battle/battle_scene_motion_list.c:
     .text       start:0x020a4e08 end:0x020a4f18
 
+src/battle/battle_scene_motion_stop.c:
+    .text       start:0x020a4f18 end:0x020a50c4
+
 src/battle/battle_scene_motion_channel.c:
     .text       start:0x020a50c4 end:0x020a50d4
 
 src/battle/battle_task.c:
     .text       start:0x020a50d4 end:0x020a5294
+
+src/battle/battle_effect_transform.c:
+    .text       start:0x020a5294 end:0x020a53e0
