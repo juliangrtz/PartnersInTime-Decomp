@@ -459,6 +459,9 @@
     "133": "start_entity_movement_relative_to_entity",
     "134": "start_entity_timed_movement_relative_to_entity",
     "135": "start_entity_orbit_around_point",
+    "136": "start_entity_timed_orbit_around_point",
+    "137": "start_entity_orbit_around_entity",
+    "138": "start_entity_timed_orbit_around_entity",
     "139": "wait_entity_movement",
     "140": "cancel_entity_movement",
     "141": "start_entity_vertical_motion",
@@ -1023,12 +1026,36 @@
       "evidence": "func_ov000_020823f8 case 0x086, func_ov000_020a61b8, func_ov000_020b39a8, and func_ov000_020b3634"
     },
     "135": {
-      "arguments": ["entity_selector", "orbit_flags", "center_x", "center_y", "center_z", "arc_degrees", "initial_speed_fx32", "acceleration_fx32", "maximum_speed_fx32", "deceleration_fx32", "direction", "secondary_axis_scale_fx32", "first_collision_mask", "second_collision_mask", "snap_to_final_angle"],
+      "arguments": ["entity_selector", "orbit_flags", "center_x", "center_y", "center_z", "arc_degrees", "initial_speed_fx32", "acceleration_fx32", "maximum_speed_fx32", "deceleration_fx32", "direction", "secondary_axis_scale_fx32", "stop_on_contact_mask", "stop_on_state_mask", "snap_to_final_angle"],
       "result": null,
       "control_flow": "fallthrough after starting the movement; opcode 0x08B is the shared movement synchronization barrier",
       "yield": "never",
-      "effect": "starts speed-profiled orbital movement around a fixed center. orbit_flags bits 0..1 select the rotation plane (0 yz, 1 xz, 2 xy), bit 2 makes arc_degrees a relative sweep instead of an absolute target angle, and bit 3 makes the center relative to the entity's current position. Center coordinates are converted from pixels to fx32; direction supplies the signed angular direction, secondary_axis_scale_fx32 controls the ellipse aspect with 4096 as the neutral scale, and a zero initial speed selects the entity's default acceleration profile. The two six-bit collision masks and final-angle snap flag are retained by the motion controller. Subtype-8 entities use the same operation in two dimensions and ignore center_z, the plane selector, and both collision masks. No movement starts when the entity is at the center or the requested angular distance is zero",
-      "evidence": "func_ov000_020823f8 case 0x087; initializers func_ov000_020b2e9c and func_ov000_020a59c4; ellipse helper func_ov000_020a4f88; coordinate/update/completion paths func_ov000_020a5008, func_ov000_020a52a8, and func_ov000_020a5170; and all 79 shipped calls"
+      "effect": "starts speed-profiled orbital movement around a fixed center. orbit_flags bits 0..1 select the rotation plane (0 yz, 1 xz, 2 xy), bit 2 makes arc_degrees a relative sweep instead of an absolute target angle, and bit 3 makes the center relative to the entity's current position. Center coordinates are converted from pixels to fx32; direction supplies the signed angular direction, secondary_axis_scale_fx32 controls the ellipse aspect with 4096 as the neutral scale, and a zero initial speed selects the entity's default acceleration profile. For normal entities, either six-bit stop mask intersecting its corresponding live contact/state mask cancels the movement. snap_to_final_angle places the entity at the exact requested angle on ordinary completion. Subtype-8 entities use the same operation in two dimensions and ignore center_z, the plane selector, and both stop masks. No movement starts when the entity is at the center or the requested angular distance is zero",
+      "evidence": "func_ov000_020823f8 case 0x087; initializers func_ov000_020b2e9c and func_ov000_020a59c4; ellipse helper func_ov000_020a4f88; 3D coordinate, update, completion, and stop-mask paths func_ov000_020b2044, func_ov000_020b252c, func_ov000_020b2390, and func_ov000_020b2330; 2D counterparts func_ov000_020a5008, func_ov000_020a52a8, and func_ov000_020a5170; and all 79 shipped calls"
+    },
+    "136": {
+      "arguments": ["entity_selector", "orbit_flags", "center_x", "center_y", "center_z", "arc_degrees", "duration_frames", "direction", "secondary_axis_scale_fx32", "stop_on_contact_mask", "stop_on_state_mask", "snap_to_final_angle"],
+      "result": null,
+      "control_flow": "fallthrough after starting the movement; opcode 0x08B is the shared movement synchronization barrier",
+      "yield": "never",
+      "effect": "starts the fixed-center orbit described by opcode 0x087 but derives its angular increment from the ellipse radii, angular distance, and duration_frames, then completes when the elapsed frame counter reaches that duration. orbit_flags and the two normal-entity stop masks have the same meanings as in opcode 0x087. A nonzero duration is required because it is used as the fixed-point division denominator. Subtype-8 entities ignore center_z, the plane selector, and both stop masks",
+      "evidence": "func_ov000_020823f8 case 0x088; timed initializers func_ov000_020b2c08 and func_ov000_020a57e4; shared orbit controller func_ov000_020b2044, func_ov000_020b252c, func_ov000_020b2390, func_ov000_020a5008, func_ov000_020a52a8, and func_ov000_020a5170; and all 7 shipped calls"
+    },
+    "137": {
+      "arguments": ["entity_selector", "center_entity_selector", "center_x_offset", "center_y_offset", "center_z_offset", "orbit_flags", "arc_degrees", "speed_fx32", "direction", "secondary_axis_scale_fx32", "stop_on_contact_mask", "stop_on_state_mask", "snap_to_final_angle"],
+      "result": null,
+      "control_flow": "fallthrough after starting the movement; opcode 0x08B is the shared movement synchronization barrier",
+      "yield": "never",
+      "effect": "starts an orbit whose center is recomputed every frame from center_entity_selector plus the supplied fx32-converted pixel offsets, so the orbit is carried along when that entity moves. orbit_flags bits 0..1 select the rotation plane and bit 2 selects a relative sweep versus an absolute target angle; unlike the fixed-point variants there is no center-relative flag. speed_fx32 becomes both current and maximum speed with zero acceleration and deceleration. The ellipse scale, normal-entity stop masks, final-angle snap, subtype-8 restrictions, and zero-distance behavior match opcode 0x087",
+      "evidence": "func_ov000_020823f8 case 0x089; linked-center initializers func_ov000_020b295c and func_ov000_020a55f0; per-frame center resolution in func_ov000_020b2044 and func_ov000_020a5008; shared orbit update/completion paths; and all 3 shipped calls"
+    },
+    "138": {
+      "arguments": ["entity_selector", "center_entity_selector", "center_x_offset", "center_y_offset", "center_z_offset", "orbit_flags", "arc_degrees", "duration_frames", "direction", "secondary_axis_scale_fx32", "stop_on_contact_mask", "stop_on_state_mask", "snap_to_final_angle"],
+      "result": null,
+      "control_flow": "fallthrough after starting the movement; opcode 0x08B is the shared movement synchronization barrier",
+      "yield": "never",
+      "effect": "combines the moving center of opcode 0x089 with the duration-derived angular increment and frame-count completion of opcode 0x088. The center follows center_entity_selector plus the supplied offsets each frame; orbit_flags bits 0..1 select the plane and bit 2 selects relative or absolute angle semantics. A nonzero duration is required. The normal-entity stop masks, final-angle snap, and subtype-8 restrictions match the other orbit commands",
+      "evidence": "func_ov000_020823f8 case 0x08A; timed linked-center initializers func_ov000_020b26ac and func_ov000_020a5408; per-frame center resolution and shared orbit controller paths; and all 11 shipped calls"
     },
     "139": {
       "arguments": ["entity_selector"],
