@@ -452,6 +452,7 @@
     "133": "start_entity_movement_relative_to_entity",
     "134": "start_entity_timed_movement_relative_to_entity",
     "139": "wait_entity_movement",
+    "140": "cancel_entity_movement",
     "141": "start_entity_vertical_motion",
     "142": "start_entity_vertical_motion_to_height",
     "143": "wait_entity_vertical_motion",
@@ -885,6 +886,14 @@
       "control_flow": "retries while either of the entity movement-state flags is active",
       "yield": "while movement is active",
       "evidence": "func_ov000_020823f8 case 0x08B"
+    },
+    "140": {
+      "arguments": ["entity_selector"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "cancels both the selected entity's planar destination/path controller and its independent vertical-motion controller without snapping either axis to its planned destination. This is the cancellation counterpart to the combined wait in opcode 0x08B",
+      "evidence": "func_ov000_020823f8 case 0x08C invokes entity virtual methods +0x50 and +0x5C with null controller pointers and snap_to_destination false; base implementations func_ov000_020a5c34 and func_ov000_020a5110 clear movement flags at entity offsets +0x1F4 and +0x238"
     },
     "141": {
       "arguments": ["entity_selector", "initial_velocity_low_or_value", "initial_velocity_high", "gravity_low_or_value", "gravity_high"],
