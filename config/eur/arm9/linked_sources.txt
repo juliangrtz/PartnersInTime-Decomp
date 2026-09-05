@@ -123,6 +123,7 @@ src/overlay017/startup_display.c
 src/overlay017/attack_object.cpp
 src/overlay017/attack_object_motion.cpp
 src/overlay018/threshold_tables.c
+src/overlay018/object_controller.c
 src/overlay020/target_arc_state.c
 src/overlay021/attack_phase_state.c
 src/overlay026/attack_control.c

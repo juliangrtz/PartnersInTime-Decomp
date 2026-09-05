@@ -5,3 +5,6 @@
 
 src/overlay018/threshold_tables.c:
     .text       start:0x020c30f0 end:0x020c3298
+
+src/overlay018/object_controller.c:
+    .text       start:0x020c6918 end:0x020c6a20
