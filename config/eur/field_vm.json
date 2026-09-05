@@ -494,9 +494,11 @@
     "184": "set_party_member_switching_enabled",
     "185": "legacy_noop_0b9",
     "186": "set_field_party_hud_layout",
+    "188": "set_party_field_mode",
     "189": "cancel_party_actions",
     "190": "wait_party_actions_idle",
     "201": "get_party_controller_property",
+    "202": "switch_active_party",
     "204": "set_party_piggyback_state",
     "205": "release_room_transition_control_lock",
     "206": "set_party_leader_animation_override",
@@ -526,6 +528,7 @@
     "230": "stop_camera_shake",
     "237": "start_master_brightness_transition",
     "238": "wait_master_brightness_transition",
+    "262": "wait_field_scene_transition",
     "269": "wait_paired_field_ready",
     "273": "set_field_input_disable_mask",
     "274": "set_field_event_input_disable_mask",
@@ -533,6 +536,9 @@
     "279": "set_camera_focus_entity",
     "280": "remove_all_entity_effect_sprites",
     "281": "wait_all_entity_effect_sprites",
+    "293": "restore_party_member_hp",
+    "294": "adjust_party_member_hp",
+    "310": "play_rumble_pattern",
     "320": "open_screen_message",
     "321": "open_entity_message",
     "322": "wait_message_finished",
@@ -541,7 +547,11 @@
     "329": "play_field_sound",
     "330": "stop_field_sound",
     "331": "play_background_music",
-    "332": "stop_background_music"
+    "332": "stop_background_music",
+    "333": "load_background_music_resource",
+    "334": "wait_background_music_resource",
+    "335": "activate_background_music",
+    "336": "fade_out_background_music"
   },
   "opcode_semantics": {
     "51": {
@@ -1230,6 +1240,14 @@
       "effect": "changes the party status HUD layout and visibility on the field context that owns the HUD; instant applies the target positions directly, otherwise the icons animate toward them in four-pixel steps",
       "evidence": "func_ov000_020823f8 case 0x0BA, func_ov000_02071a38, func_ov000_02071ce8, and func_ov000_02071654"
     },
+    "188": {
+      "arguments": ["party_side", "field_mode"],
+      "result": null,
+      "control_flow": "fallthrough; ignored when the selected party is not assigned to the calling field context",
+      "yield": "never",
+      "effect": "changes the selected party's field-action/formation mode through the common mode dispatcher. Modes 0 through 8 select the normal, special movement, split-action, and character-specific controller implementations; shipped field scripts use mode 0 here to normalize either party",
+      "evidence": "func_ov000_020823f8 case 0x0BC and mode dispatcher func_ov000_0209ec48"
+    },
     "189": {
       "arguments": ["party_side_or_minus_one", "action_type_mask"],
       "result": null,
@@ -1252,6 +1270,14 @@
       "yield": "never",
       "effect": "queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4",
       "evidence": "func_ov000_020823f8 case 0x0C9 property switch"
+    },
+    "202": {
+      "arguments": ["party_side_or_other", "instant"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "makes the selected adult/baby party the manager's active party and transfers input, leader animation, camera/entry-anchor state, HUD state, and field ownership as required. Party side -1 selects the other party. instant suppresses the normal brightness fade for an accompanying room handoff and uses the one-frame camera-anchor path instead of the profiled path",
+      "evidence": "func_ov000_020823f8 case 0x0CA and active-party transfer func_ov000_020a0c30"
     },
     "204": {
       "arguments": ["piggybacked"],
@@ -1483,6 +1509,14 @@
       "effect": "synchronization barrier for opcode 0x0ED",
       "evidence": "func_ov000_020823f8 case 0x0EE and field brightness countdown at context +0x2406"
     },
+    "262": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while either of the field scene-transition controller's two active bits is set",
+      "yield": "while a field scene transition is active",
+      "effect": "common synchronization barrier for the scripted field-scene transition effects driven by the renderer state at +0x274",
+      "evidence": "func_ov000_020823f8 case 0x106 and active-state predicate func_ov000_02066c50"
+    },
     "269": {
       "arguments": [],
       "result": null,
@@ -1537,6 +1571,30 @@
       "control_flow": "retries the same command while any of the eight field effect sprites still reports an active animation",
       "yield": "while any field effect sprite is active",
       "evidence": "func_ov000_020823f8 case 0x119 and func_ov000_020714a8"
+    },
+    "293": {
+      "arguments": ["character_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "copies the selected character's maximum HP into current HP and refreshes the paired field status HUD when it is active; character indices 0 through 3 select Mario, Luigi, Baby Mario, and Baby Luigi",
+      "evidence": "func_ov000_020823f8 case 0x125, HP restore helper func_ov000_0206d274, and the four 36-byte character stat records initialized by func_02019330"
+    },
+    "294": {
+      "arguments": ["character_index", "hp_delta"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "adds the signed delta to the selected character's current HP, clamps the result to zero through maximum HP, and refreshes the paired field status HUD when active",
+      "evidence": "func_ov000_020823f8 case 0x126 and clamped HP helper func_ov000_0206d1dc"
+    },
+    "310": {
+      "arguments": ["pattern_id_1_based", "duration_frames"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "starts one of the resident rumble patterns, converting the one-based script ID to the zero-based 60-byte pattern table, and stops it after duration_frames; zero leaves the general 600-frame safety limit in force. The request is ignored when no rumble device is present or the save option disables rumble",
+      "evidence": "func_ov000_020823f8 case 0x136, resident func_02007408 and func_02007568, per-frame limiter func_0200730c, and save option bit 6 at +0x514"
     },
     "320": {
       "arguments": ["x_or_center", "y", "width_tiles_or_auto", "height_tiles_or_auto", "window_mode", "tail_style", "tail_size_or_auto", "vertical_placement_or_auto", "tail_x_or_auto", "text_control_mode", "message_slot", "text_archive_id", "message_id"],
@@ -1609,6 +1667,38 @@
       "yield": "never",
       "effect": "stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player",
       "evidence": "func_ov000_020823f8 case 0x14C and resident func_02027818"
+    },
+    "333": {
+      "arguments": ["background_music_id", "buffer_index"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "asynchronously loads the selected scene background-music sequence, bank, and wave archives into buffer 0 or 1 with the field load duration 0xC00; no reload is requested when that buffer already holds the same ID",
+      "evidence": "func_ov000_020823f8 case 0x14D, SceneBackground_Load at 0x02027EA4, and resident loader func_020273c8"
+    },
+    "334": {
+      "arguments": [],
+      "result": null,
+      "control_flow": "retries the same command while the asynchronous scene background-music loader is active",
+      "yield": "while the background-music resource load is pending",
+      "effect": "synchronization barrier for opcode 0x14D",
+      "evidence": "func_ov000_020823f8 case 0x14E and resident load-state query func_02027718"
+    },
+    "335": {
+      "arguments": ["background_music_id"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "activates the requested scene background-music resource, reusing it when already resident or loading and starting it through the alternate-buffer path otherwise; the request is ignored when the save-state background-change disable bit is set. The party manager records the requested ID for later room-transition policy decisions",
+      "evidence": "func_ov000_020823f8 case 0x14F, SceneBackground_Set at 0x02027E3C, and resident func_02027f28"
+    },
+    "336": {
+      "arguments": ["duration_frames_or_zero_for_default"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "fades out the active scene background-music player over the requested duration, using eight frames when zero is supplied, and clears the party manager's remembered background-music selectors",
+      "evidence": "func_ov000_020823f8 case 0x150, resident func_02027e20, and sound-player fade helper func_0202f650"
     }
   }
 }
