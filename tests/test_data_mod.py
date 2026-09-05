@@ -21,6 +21,27 @@ class OffsetArchiveTests(unittest.TestCase):
         archive = data_mod.build_offset_archive(entries)
         self.assertEqual(data_mod.parse_offset_archive(archive), entries)
 
+    def test_merges_disjoint_views_of_the_same_archive(self) -> None:
+        source = data_mod.build_offset_archive([b"first", b"second", b"third"])
+        first = data_mod.build_offset_archive([b"FIRST-LONGER", b"second", b"third"])
+        second = data_mod.build_offset_archive([b"first", b"second", b"THIRD"])
+        merged = data_mod.merge_disjoint_offset_archive_edits(
+            source, first, second, "test archive"
+        )
+        self.assertEqual(
+            data_mod.parse_offset_archive(merged),
+            [b"FIRST-LONGER", b"second", b"THIRD"],
+        )
+
+    def test_rejects_conflicting_archive_member_edits(self) -> None:
+        source = data_mod.build_offset_archive([b"original"])
+        first = data_mod.build_offset_archive([b"first edit"])
+        second = data_mod.build_offset_archive([b"second edit"])
+        with self.assertRaisesRegex(data_mod.DataModError, "conflicting edits"):
+            data_mod.merge_disjoint_offset_archive_edits(
+                source, first, second, "test archive"
+            )
+
 
 class TextCodecTests(unittest.TestCase):
     def test_round_trips_controls_raw_bytes_and_escaped_literals(self) -> None:

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Export, validate, and rebuild the script-bearing members of FEvData.dat.
 
-The current schema deliberately keeps the original container and command
-boundaries.  It makes opcode and argument edits safe while the nine typed
-field-data sections and every size-changing control-flow operation are still
-being recovered.
+The checked-in form is sharded by room and deliberately keeps the original
+member and command boundaries. It makes opcode, argument, roaming-profile, and
+waypoint edits safe while relocatable field members are still being recovered.
 """
 
 from __future__ import annotations
@@ -22,6 +21,8 @@ import data_mod
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "pit-field-event-scripts-v1"
+SHARDED_SCHEMA = "pit-field-event-scripts-v2"
+ROOM_SCHEMA = "pit-field-event-room-v1"
 USAGE_SCHEMA = "pit-script-vm-usage-v1"
 VM_SCHEMA = "pit-script-vm-descriptors-v1"
 SOURCE = "FEvent/FEvData.dat"
@@ -772,6 +773,116 @@ def export_document(
     }
 
 
+def write_sharded_document(document: dict[str, Any], manifest_path: Path) -> None:
+    """Write one reviewable source file per room plus a compact manifest."""
+    if document.get("schema") != SCHEMA:
+        raise data_mod.DataModError(
+            f"field script document must use schema {SCHEMA!r}"
+        )
+    room_count = document.get("room_count")
+    if not isinstance(room_count, int) or room_count < 0:
+        raise data_mod.DataModError("field script document has an invalid room_count")
+    members = data_mod._require_list(document.get("members"), "field members")
+    by_room: dict[int, list[dict[str, Any]]] = {room_id: [] for room_id in range(room_count)}
+    for member in members:
+        if not isinstance(member, dict):
+            raise data_mod.DataModError("every field member must be an object")
+        room_id = member.get("room_id")
+        if not isinstance(room_id, int) or room_id not in by_room:
+            raise data_mod.DataModError(f"invalid field member room_id {room_id!r}")
+        by_room[room_id].append(member)
+
+    shard_directory_name = manifest_path.stem
+    shard_directory = manifest_path.parent / shard_directory_name
+    room_documents = []
+    for room_id in range(room_count):
+        relative = f"{shard_directory_name}/room_{room_id:03d}.json"
+        room_documents.append(relative)
+        data_mod.write_battle_script_json(
+            manifest_path.parent / relative,
+            {
+                "schema": ROOM_SCHEMA,
+                "source": document.get("source"),
+                "room_id": room_id,
+                "members": by_room[room_id],
+            },
+        )
+
+    manifest = {
+        key: value for key, value in document.items() if key != "members"
+    }
+    manifest["schema"] = SHARDED_SCHEMA
+    manifest["room_documents"] = room_documents
+    data_mod.write_json(manifest_path, manifest)
+
+
+def load_document(document_path: Path) -> dict[str, Any]:
+    """Load either the original monolithic schema or the room-sharded schema."""
+    document = data_mod.read_json(document_path)
+    if not isinstance(document, dict):
+        raise data_mod.DataModError("field script document must be an object")
+    if document.get("schema") == SCHEMA:
+        return document
+    if document.get("schema") != SHARDED_SCHEMA:
+        raise data_mod.DataModError(
+            f"field script document must use schema {SCHEMA!r} or {SHARDED_SCHEMA!r}"
+        )
+
+    room_count = document.get("room_count")
+    if not isinstance(room_count, int) or room_count < 0:
+        raise data_mod.DataModError("field script manifest has an invalid room_count")
+    room_documents = data_mod._require_list(
+        document.get("room_documents"), "field room_documents"
+    )
+    if len(room_documents) != room_count:
+        raise data_mod.DataModError(
+            f"field script manifest needs {room_count} room documents"
+        )
+
+    members: list[dict[str, Any]] = []
+    for expected_room_id, relative in enumerate(room_documents):
+        if not isinstance(relative, str) or not relative or "\\" in relative:
+            raise data_mod.DataModError(
+                f"field room document {expected_room_id} must be a POSIX relative path"
+            )
+        relative_path = Path(relative)
+        if relative_path.is_absolute() or ".." in relative_path.parts:
+            raise data_mod.DataModError(
+                f"field room document {expected_room_id} escapes the manifest directory"
+            )
+        room = data_mod.read_json(document_path.parent / relative_path)
+        if not isinstance(room, dict) or room.get("schema") != ROOM_SCHEMA:
+            raise data_mod.DataModError(
+                f"field room document {relative!r} must use schema {ROOM_SCHEMA!r}"
+            )
+        if room.get("source") != document.get("source"):
+            raise data_mod.DataModError(
+                f"field room document {relative!r} has the wrong source"
+            )
+        if room.get("room_id") != expected_room_id:
+            raise data_mod.DataModError(
+                f"field room document {relative!r} must describe room {expected_room_id}"
+            )
+        room_members = data_mod._require_list(
+            room.get("members"), f"field room {expected_room_id} members"
+        )
+        for member in room_members:
+            if not isinstance(member, dict) or member.get("room_id") != expected_room_id:
+                raise data_mod.DataModError(
+                    f"field room document {relative!r} contains a foreign member"
+                )
+            members.append(member)
+
+    combined = {
+        key: value
+        for key, value in document.items()
+        if key not in {"room_documents"}
+    }
+    combined["schema"] = SCHEMA
+    combined["members"] = members
+    return combined
+
+
 def _compile_command(
     row: Any,
     descriptors: tuple[int, ...],
@@ -1105,14 +1216,13 @@ def main() -> int:
     descriptors, names = load_vm_schema(args.version)
     if args.command == "export":
         document = export_document(args.source, args.version, descriptors, names)
-        data_mod.write_battle_script_json(args.document, document)
+        write_sharded_document(document, args.document)
         print(
-            f"Exported {len(document['members'])} field members to {args.document}"
+            f"Exported {len(document['members'])} field members in "
+            f"{document['room_count']} room files below {args.document.parent}"
         )
         return 0
-    document = data_mod.read_json(args.document)
-    if not isinstance(document, dict):
-        raise data_mod.DataModError("field script document must be an object")
+    document = load_document(args.document)
     if args.command == "summarize":
         summary = summarize_document(document, descriptors, names)
         data_mod.write_json(args.summary_output, summary)

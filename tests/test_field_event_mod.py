@@ -108,6 +108,26 @@ class FieldEventScriptTests(unittest.TestCase):
         self.assertEqual(summary["reachable_command_count"], 2)
         self.assertEqual(summary["opcode_counts"], {"0x000": 1, "0x035": 1})
 
+    def test_shards_and_loads_one_source_file_per_room(self) -> None:
+        document, source = self._document()
+        with tempfile.TemporaryDirectory() as directory:
+            manifest = Path(directory) / "FEvent__FEvData.dat.json"
+            field_event_mod.write_sharded_document(document, manifest)
+            loaded = field_event_mod.load_document(manifest)
+            room_path = (
+                manifest.parent
+                / "FEvent__FEvData.dat"
+                / "room_000.json"
+            )
+            self.assertTrue(room_path.is_file())
+            self.assertEqual(loaded, document)
+            self.assertEqual(
+                field_event_mod.build_document(
+                    loaded, source, self.descriptors, self.names
+                ),
+                source,
+            )
+
     def test_rebuilds_a_fixed_size_argument_edit(self) -> None:
         document, source = self._document()
         document["members"][0]["commands"][0]["args"][1] = 7

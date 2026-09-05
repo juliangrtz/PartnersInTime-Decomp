@@ -243,7 +243,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   named, and every instance-specific opcode has an evidence-backed semantic
   contract. In particular, all 260 battle opcodes and all 189 opcodes reached by
   the original battle scripts are human-readable in the checked-in data source;
-  no neutral `op_000`-style battle instructions remain.
+  no neutral `op_000`-style battle instructions remain. The 387,272 reachable
+  field-event commands are checked in as 638 room-level source files and compile
+  through the normal data-mod/ROM build. Field dialogue and event changes are
+  merged conflict-safely into their shared `FEvent/FEvData.dat` archive.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.
