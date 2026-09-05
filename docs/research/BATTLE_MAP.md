@@ -222,6 +222,9 @@ and runtime overlay 2.
 | `020A8FEC` | `BattleParty_UpdateMarioReloadWaitAnimation` | Advances Mario's KO recovery after the rebound animation is ready |
 | `020A906C` | `BattleParty_UpdateMarioReloadWaitResource` | Waits for and binds Mario's rebound resource |
 | `020A9280` | `BattleParty_StartKnockout` | Byte-identical party knockout task, animation, lock, and sound starter |
+| `020A9478` | `BattleEnemy_UpdateDelayedDefeatRemoval` | Byte-identical delayed enemy-removal callback for effect kind 4 |
+| `020A94F0` | `BattleEnemy_UpdateDefeatRemoval` | Byte-identical enemy-removal callback that retires its model and animation |
+| `020A95CC` | `BattleEnemy_StartDefeat` | Reconstructed enemy reward, item-drop, and defeat-effect controller (96.53% matching) |
 | `020A9C18` | `BattleParty_SpawnLaunchImpact` | Emits the form-specific launch impact effect and sound |
 | `020ACB44` | `BattleModelEffect_SpawnAttached` | Creates a model effect bound to an owner slot |
 | `020ACB88` | `BattleModelEffect_Spawn` | Creates a positioned model effect from its resource table |
@@ -771,6 +774,18 @@ transfer the actor lock to Baby Mario or Baby Luigi, and wait for battle state
 position to the baby scene object, rebinds both actors, and clears the task.
 If the adult's equipped-effect byte resolves to `0x3024`, it also reapplies
 status 6 at magnitude 40 and clears the actor's one-shot byte at `+0x51`.
+
+Enemy defeat processing is now represented as one cohesive C unit rather than
+an opaque dispatcher. `BattleEnemy_StartDefeat` removes the enemy from pending
+hit records, clears its statuses, accumulates capped coin and experience
+rewards, applies the Double/Triple Coin and 120/140% EXP badge bonuses, and
+implements the guaranteed-drop badge. It then selects between two configured
+item drops, merges counts into eight reward slots with a combined cap of 99,
+and starts the appropriate standard, alternate, immediate, or delayed removal
+effect. Both removal callbacks are byte-identical. The 1,612-byte controller is
+semantically complete and has the correct size, but remains unlinked at 96.53%
+because one 20-instruction reward-accumulator region receives an equivalent
+three-register allocation from MWCC.
 
 The launch reaction's movement helper either updates both live and base
 coordinates immediately or installs a fixed-point per-frame interpolation

@@ -177,15 +177,17 @@ typedef struct BattlePartyActor {
 
 typedef struct BattleEnemyActor {
     BattleActor actor;
-    u8 unknown_070[0x22A];
+    u8 unknown_070[0x228];
+    s16 defeat_effect_kind;
     union {
         u16 resource_initialized;
         s16 hit_animation_id;
+        s16 defeat_animation_id;
     };
     union {
         u32 state_flags;
         struct {
-            u32 flag_00 : 1;
+            u32 item_drop_processed : 1;
             u32 flag_01 : 1;
             u32 flag_02 : 1;
             u32 flag_03 : 1;
