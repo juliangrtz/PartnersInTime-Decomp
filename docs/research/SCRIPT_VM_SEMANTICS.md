@@ -79,7 +79,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 148 | 97 | `config/eur/field_vm.json` |
+| Field/world | 341 | 153 | 102 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -142,12 +142,17 @@ field context (the other DS screen/field instance).
 | `0x086` | `start_entity_timed_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, duration_frames, motion_parameter_6, motion_parameter_7, motion_flag | starts timed movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
 | `0x08B` | `wait_entity_movement` | entity_selector | retries while either of the entity movement-state flags is active |
 | `0x08D` | `start_entity_vertical_motion` | entity_selector, initial_velocity_low_or_value, initial_velocity_high, gravity_low_or_value, gravity_high | starts vertical ballistic motion; literal word pairs form signed fx32 values and -1 selects entity defaults |
+| `0x08E` | `start_entity_vertical_motion_to_height` | entity_selector, height_pixels, gravity_low_or_value, gravity_high | derives an upward fx32 velocity that reaches approximately height_pixels under the supplied acceleration, then starts the same ballistic-motion controller as opcode 0x08D; gravity -1 selects the entity default |
 | `0x08F` | `wait_entity_vertical_motion` | entity_selector | retries while entity vertical-motion flag 0x10 is set |
+| `0x090` | `stop_entity_vertical_motion` | entity_selector | cancels the selected entity's ballistic vertical motion, clears its three vertical-motion state flags, and discards the saved starting height |
 | `0x091` | `set_entity_position` | entity_selector, relative, x, y, z | converts coordinates to fx32, optionally adds the current position, and synchronizes current/previous entity position; subtype 8 uses only x/y while other entities also store z |
 | `0x0A0` | `set_entity_facing_direction` | entity_selector, direction_mode, direction | stores the three-bit entity facing direction; direction_mode 1 makes direction relative to the current facing and the visual is refreshed immediately |
 | `0x0A2` | `spawn_entity_effect_sprite` | entity_selector, sprite_animation_id, position_mode, x, y, lifetime_or_minus_one, follow_entity | allocates one of eight field effect-sprite slots, starts sprite_animation_id, and records the owning entity; position_mode 1 offsets x/y from the entity, lifetime -1 selects animation-controlled lifetime, and follow_entity controls whether the sprite remains entity-bound |
 | `0x0A3` | `remove_entity_effect_sprite` | entity_selector | finds the field effect-sprite slot owned by the selected entity, hides its render object, and releases the slot |
 | `0x0A4` | `wait_entity_effect_sprite` | entity_selector | retries the same command while the field effect sprite owned by the selected entity still reports an active animation |
+| `0x0A5` | `set_field_block_idle_bobbing_enabled` | entity_selector, enabled | toggles the repeating vertical idle-bob curve used by clFieldBlock entities; disabling it immediately clears the sprite y offset and resets both bob and one-shot bounce phase fields |
+| `0x0A6` | `set_field_block_bounce_controller_enabled` | entity_selector, enabled | toggles the clFieldBlock sprite-bounce controller and remembers the current model animation; disabling it clears the sprite y offset, phase and interaction state, restores the model animation, and reports the state change to an attached script when configured |
+| `0x0A7` | `wait_field_block_bounce` | entity_selector | synchronization barrier for the block interaction bounce triggered by func_ov000_020bc930 |
 | `0x0AE` | `rejoin_party_follower` | party_side, instant | moves the selected party's detached follower back to its formation offset behind the leader, either immediately or through entity movement, then restores the normal follower tether |
 | `0x0AF` | `wait_party_follower_rejoined` | party_side | retries the same command while the selected party follower is still moving back into formation |
 | `0x0B0` | `detach_party_follower` | party_side | disables the normal leader/follower tether for the selected party and resets the follower's formation offsets and occupancy state so scripts can position both members independently |
@@ -199,23 +204,18 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-125/289 used opcodes and
-373,728/387,377 reachable commands
+130/289 used opcodes and
+376,382/387,377 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x059` | 1,045 |
-| `0x0A5` | 776 |
 | `0x050` | 631 |
 | `0x05B` | 570 |
 | `0x093` | 567 |
-| `0x0A6` | 554 |
-| `0x08E` | 534 |
 | `0x067` | 437 |
-| `0x0A7` | 428 |
 | `0x0AC` | 380 |
-| `0x090` | 362 |
 | `0x0CC` | 320 |
 | `0x055` | 317 |
 | `0x095` | 310 |
@@ -225,6 +225,11 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x05A` | 230 |
 | `0x0D1` | 221 |
 | `0x116` | 216 |
+| `0x092` | 215 |
+| `0x0CF` | 213 |
+| `0x0D2` | 194 |
+| `0x0AD` | 189 |
+| `0x0D3` | 182 |
 
 ## Menu/UI scene scripts
 
