@@ -277,6 +277,7 @@
     "48": "cos_fixed",
     "49": "atan_fixed",
     "50": "atan2_fixed",
+    "51": "noop_scene_033",
     "53": "load_object_resource",
     "57": "wait_object_resource",
     "58": "bind_object_resource",
@@ -335,5 +336,85 @@
     "203": "wait_ui_element_ready",
     "204": "wait_ui_element",
     "205": "destroy_ui_element"
+  },
+  "opcode_semantics": {
+    "51": {
+      "arguments": ["unused_0", "unused_1"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "the scene dispatcher has no case for this opcode",
+      "evidence": "absent from func_ov007_02081730; descriptor 0x02"
+    },
+    "165": {
+      "arguments": ["object_id", "owner_id", "inline_size_halfwords"],
+      "result": null,
+      "control_flow": "starts an object script at the current PC and resumes after inline_size_halfwords",
+      "yield": "never",
+      "evidence": "func_ov007_02081730 case 0x0A5"
+    },
+    "166": {
+      "arguments": ["object_id", "owner_id", "relative_halfwords"],
+      "result": null,
+      "control_flow": "starts an object script at PC + 2 * relative_halfwords, then falls through",
+      "yield": "once after spawning",
+      "evidence": "func_ov007_02081730 case 0x0A6"
+    },
+    "167": {
+      "arguments": ["object_id", "skip_halfwords"],
+      "result": null,
+      "control_flow": "retries while the object script is active, then advances PC by 2 * skip_halfwords",
+      "yield": "while the object script is active",
+      "evidence": "func_ov007_02081730 case 0x0A7"
+    },
+    "168": {
+      "arguments": ["object_id", "owner_id", "relative_halfwords"],
+      "result": null,
+      "control_flow": "starts an object script at PC + 2 * relative_halfwords, then falls through",
+      "yield": "never",
+      "evidence": "func_ov007_02081730 case 0x0A8"
+    },
+    "169": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "retries while the selected object script is active, then falls through",
+      "yield": "while the object script is active",
+      "evidence": "func_ov007_02081730 case 0x0A9"
+    },
+    "171": {
+      "arguments": ["object_id"],
+      "result": null,
+      "control_flow": "clears the selected object's script pointer and terminates the current script",
+      "yield": "never",
+      "evidence": "func_ov007_02081730 case 0x0AB returns SCRIPT_VM_FINISHED"
+    },
+    "177": {
+      "arguments": ["condition", "left", "right", "expected_result", "branch_sense", "relative_halfwords"],
+      "result": null,
+      "control_flow": "conditionally branches to PC + 2 * relative_halfwords; otherwise falls through",
+      "yield": "never",
+      "evidence": "func_ov007_02081730 case 0x0B1"
+    },
+    "178": {
+      "arguments": ["object_id", "property_id", "expected_positive", "relative_halfwords"],
+      "result": null,
+      "control_flow": "branches when the object's property-positive test matches expected_positive; otherwise falls through",
+      "yield": "never",
+      "evidence": "func_ov007_02081730 case 0x0B2"
+    },
+    "181": {
+      "arguments": ["object_id", "expected_active", "relative_halfwords"],
+      "result": null,
+      "control_flow": "branches when the object's script-active state matches expected_active; otherwise falls through",
+      "yield": "never",
+      "evidence": "func_ov007_02081730 case 0x0B5"
+    },
+    "182": {
+      "arguments": ["object_id", "motion_id", "expected_state", "relative_halfwords"],
+      "result": null,
+      "control_flow": "branches when the selected object motion has expected_state; otherwise falls through",
+      "yield": "never",
+      "evidence": "func_ov007_02081730 case 0x0B6"
+    }
   }
 }

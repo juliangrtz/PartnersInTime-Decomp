@@ -208,7 +208,10 @@ def decode_command(
     descriptors: tuple[int, ...],
     names: dict[int, str],
     context: str,
+    variable_formatter: Any = None,
 ) -> tuple[dict[str, Any], int, int]:
+    if variable_formatter is None:
+        variable_formatter = format_variable
     if position + 2 > len(member):
         raise data_mod.DataModError(f"{context}: truncated opcode at 0x{position:X}")
     opcode = struct.unpack_from("<H", member, position)[0]
@@ -228,7 +231,7 @@ def decode_command(
             raise data_mod.DataModError(
                 f"{context}: truncated result variable at 0x{position:X}"
             )
-        command["result"] = format_variable(struct.unpack_from("<H", member, cursor)[0])
+        command["result"] = variable_formatter(struct.unpack_from("<H", member, cursor)[0])
         cursor += 2
     mode_mask = 0
     if descriptor & 0x40 and argument_count:
@@ -247,7 +250,7 @@ def decode_command(
     for index in range(argument_count):
         raw = struct.unpack_from("<H", member, cursor + index * 2)[0]
         if mode_mask & (1 << index):
-            arguments.append({"variable": format_variable(raw)})
+            arguments.append({"variable": variable_formatter(raw)})
         else:
             arguments.append(raw if raw < 0x8000 else raw - 0x10000)
     command["args"] = arguments
@@ -297,7 +300,11 @@ def decode_graph(
     descriptors: tuple[int, ...],
     names: dict[int, str],
     context: str,
+    successor_resolver: Any = None,
+    variable_formatter: Any = None,
 ) -> dict[int, tuple[dict[str, Any], int, int]]:
+    if successor_resolver is None:
+        successor_resolver = successors
     pending = deque([root])
     decoded: dict[int, tuple[dict[str, Any], int, int]] = {}
     occupied: dict[int, int] = {}
@@ -310,7 +317,12 @@ def decode_graph(
                 f"{context}: control flow reaches invalid offset 0x{position:X}"
             )
         command, end, opcode = decode_command(
-            member, position, descriptors, names, context
+            member,
+            position,
+            descriptors,
+            names,
+            context,
+            variable_formatter,
         )
         for byte_offset in range(position, end):
             other = occupied.get(byte_offset)
@@ -320,7 +332,7 @@ def decode_graph(
                 )
             occupied[byte_offset] = position
         decoded[position] = (command, end, opcode)
-        pending.extend(successors(command, end, opcode))
+        pending.extend(successor_resolver(command, end, opcode))
     return decoded
 
 
@@ -516,7 +528,10 @@ def _compile_command(
     descriptors: tuple[int, ...],
     names: dict[int, str],
     context: str,
+    variable_parser: Any = None,
 ) -> bytes:
+    if variable_parser is None:
+        variable_parser = parse_variable
     if not isinstance(row, dict):
         raise data_mod.DataModError(f"{context} must be an object")
     opcode = parse_opcode(row.get("opcode"), descriptors, names, context)
@@ -527,7 +542,9 @@ def _compile_command(
         requirement = "requires" if has_result else "does not use"
         raise data_mod.DataModError(f"{context} opcode {requirement} a result variable")
     if has_result:
-        encoded.extend(struct.pack("<H", parse_variable(row["result"], f"{context} result")))
+        encoded.extend(
+            struct.pack("<H", variable_parser(row["result"], f"{context} result"))
+        )
     arguments = data_mod._require_list(row.get("args"), f"{context} args")
     argument_count = descriptor & 0x1F
     if len(arguments) != argument_count:
@@ -543,7 +560,7 @@ def _compile_command(
                 raise data_mod.DataModError(
                     f"{argument_context} must be a supported variable reference"
                 )
-            value = parse_variable(argument["variable"], argument_context)
+            value = variable_parser(argument["variable"], argument_context)
             mode_mask |= 1 << index
         else:
             value = data_mod.parse_signed_integer(argument, 16, argument_context) & 0xFFFF
