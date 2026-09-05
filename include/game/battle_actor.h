@@ -191,7 +191,7 @@ typedef struct BattleEnemyActor {
             u32 flag_01 : 1;
             u32 flag_02 : 1;
             u32 flag_03 : 1;
-            u32 flag_04 : 1;
+            u32 damage_immune : 1;
             u32 flag_05 : 1;
             u32 traits : 2;
             u32 unknown_08_31 : 24;

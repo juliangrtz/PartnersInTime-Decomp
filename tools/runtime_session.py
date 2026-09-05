@@ -4,9 +4,50 @@
 from __future__ import annotations
 
 import argparse
+import ctypes
+import os
+import sys
 from pathlib import Path
 
+from desmume.controls import Keys, keymask
 from desmume.emulator import DeSmuME
+
+
+WINDOWS_KEY_BINDINGS = {
+    0x58: Keys.KEY_A,       # X
+    0x5A: Keys.KEY_B,       # Z
+    0xA1: Keys.KEY_SELECT,  # right Shift
+    0x0D: Keys.KEY_START,   # Enter
+    0x27: Keys.KEY_RIGHT,
+    0x25: Keys.KEY_LEFT,
+    0x26: Keys.KEY_UP,
+    0x28: Keys.KEY_DOWN,
+    0x57: Keys.KEY_R,       # W
+    0x51: Keys.KEY_L,       # Q
+    0x53: Keys.KEY_X,       # S
+    0x41: Keys.KEY_Y,       # A
+}
+
+
+def windows_keypad_mask() -> int:
+    """Read physical Windows keys, bypassing py-desmume's broken SDL key table."""
+    user32 = ctypes.windll.user32
+    user32.GetForegroundWindow.restype = ctypes.c_void_p
+    user32.GetWindowThreadProcessId.argtypes = [
+        ctypes.c_void_p,
+        ctypes.POINTER(ctypes.c_ulong),
+    ]
+    foreground_process = ctypes.c_ulong()
+    user32.GetWindowThreadProcessId(
+        user32.GetForegroundWindow(), ctypes.byref(foreground_process)
+    )
+    if foreground_process.value != os.getpid():
+        return 0
+    return sum(
+        keymask(ds_key)
+        for virtual_key, ds_key in WINDOWS_KEY_BINDINGS.items()
+        if user32.GetAsyncKeyState(virtual_key) & 0x8000
+    )
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -43,7 +84,10 @@ def main() -> int:
     try:
         emulator.open(str(args.rom.resolve()), auto_resume=False)
         if args.battery_save is not None:
-            if not emulator.backup.import_file(str(args.battery_save.resolve())):
+            if not emulator.backup.import_file(
+                str(args.battery_save.resolve()),
+                force_size=args.battery_save.stat().st_size,
+            ):
                 raise RuntimeError(f"failed to import battery save: {args.battery_save}")
         if args.state is not None:
             emulator.savestate.load_file(str(args.state.resolve()))
@@ -54,9 +98,16 @@ def main() -> int:
         )
         emulator.resume()
         print("py-desmume session running; close the emulator window to capture the state")
+        print("controls: arrows=D-pad, X=A, Z=B, Enter=Start, Right Shift=Select")
+        print("          Q=L, W=R, S=DS X, A=DS Y")
         while not window.has_quit():
             window.process_input()
-            emulator.cycle(with_joystick=True)
+            if sys.platform == "win32":
+                # py-desmume 0.0.9 copies its u32 SDL key table into a u16
+                # buffer. Overwrite the resulting bogus mask with a direct
+                # physical-key poll until that upstream bug is fixed.
+                emulator.input.keypad_update(windows_keypad_mask())
+            emulator.cycle(with_joystick=sys.platform != "win32")
             window.draw()
 
         emulator.pause()

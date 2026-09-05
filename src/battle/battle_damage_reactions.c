@@ -74,7 +74,7 @@ void BattleDamage_UpdateEnemyReaction(BattleAITask *base_task) {
 
     task->callback = 0;
     if (model != 0 && model->flag_bits.animation_active &&
-        !enemy->state_flag_bits.flag_04) {
+        !enemy->state_flag_bits.damage_immune) {
         s16 animation_id = object->previous_base_animation_id;
 
         if (animation_id < 0) {

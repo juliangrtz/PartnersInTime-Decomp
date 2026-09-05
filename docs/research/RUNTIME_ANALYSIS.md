@@ -35,7 +35,24 @@ python tools/runtime_session.py `
 
 The interactive runner deliberately does not write anything under `data/`.
 Generated states and screenshots remain under the ignored `build/runtime/`
-tree.
+tree. Its controls are the arrow keys for the D-pad, `X` for DS A, `Z` for DS
+B, `Enter` for Start, right Shift for Select, `Q`/`W` for L/R, and `S`/`A` for
+DS X/Y. On Windows the runner polls those keys itself and writes the DS keypad
+mask after SDL event handling. This works around py-desmume 0.0.9's SDL input
+bug: its `u32` key table is copied into a `u16` buffer, corrupting the mapping
+and making D-pad Down unreachable through the bundled SDL window.
+
+For deterministic input without the SDL window, use `runtime_drive.py`. Actions
+are applied in their command-line order and use actual DS keypad masks:
+
+```powershell
+python tools/runtime_drive.py `
+  --rom path/to/pit.nds `
+  --state build/runtime/before.dst `
+  --action down:60 --action wait:30 --action a:1 `
+  --save-state build/runtime/after.dst `
+  --screenshot build/runtime/after.png
+```
 
 ## Capture a savestate
 
@@ -80,6 +97,18 @@ python tools/runtime_probe.py `
   --exec BattleDamage_ApplyToEnemy
 ```
 
+The probe also accepts repeatable deterministic `--action KEY[:FRAMES]`
+arguments. Use `wait` as the key for unpressed frames. `--action` can be
+combined with execution hooks and memory watches, which makes an input path
+replayable without relying on host keyboard timing.
+
+Party table slots are not permanent character identities. KO/reload logic can
+swap actor pointers between slots while `formation_index` continues to identify
+the current occupant. The probe therefore reports both `actor_id`/`slot_label`
+and the member name decoded from `formation_index`. In the captured fight,
+slot 56 contains Baby Mario at 32/32 HP and slot 58 contains the unconscious
+Mario at 0/67 HP.
+
 Only use `--allow-state-advance` for a state created by
 `tools/runtime_session.py` or otherwise verified with py-desmume 0.0.9. Each
 callback records the ARM9 registers, making arguments and object pointers
@@ -100,7 +129,8 @@ The zero-frame capture already confirms several static reconstruction results:
   record 84, name ID 42, `Princess Shroob`, level 29, with configured stats
   HP 1,700 / POW 180 / DEF 130 / SPEED 120;
 - the live actor has HP 11,700/11,700, POW 180, DEF 130, SPEED 120, pending
-  damage 30, target actor 56 (Mario), and Q8 damage scale 332;
+  damage 30, target actor slot 56 (occupied by Baby Mario in this formation),
+  and Q8 damage scale 332;
 - the exact 10,000 difference is explained by the decoded battle scripts:
   `BAI__BAI_mon_4_hn.dat`, entry 4, reads current/max HP through properties
   16/17, adds 10,000, and writes both values back at command offsets
@@ -108,12 +138,46 @@ The zero-frame capture already confirms several static reconstruction results:
   current HP at `0x0B1A-0x0B38`. Scenario archive
   `BAI__BAI_scn_4_hn.dat`, entry 22, contains the corresponding explicit setup
   for actor 60 at `0x0228-0x025A`. The temporary buffer's gameplay purpose is
-  still left neutrally named until its transition is observed.
+  shield-phase buffer. Entry 4 sets damage immunity at `0x0076`, then clears it
+  at `0x0AFC`/`0x0B48` around the HP restoration when the shield breaks.
 
 The JSON also records each party member's HP/stats, actor flags, formation,
 scene-object position, animation, target, and resource pointers. Empty enemy
 slots remain present as allocated actor/scene-object storage but are marked
 inactive when their resource slot is null.
+
+### Deterministic live battle replay
+
+A py-desmume-compatible capture made after entering the Princess Shroob fight
+confirmed overlay 2 as the battle core. Selecting Baby Mario's Jump command
+with `x:3, wait:180, x:3, wait:360` loaded overlays 10 and 20 and produced two
+stable hook events at frame 246:
+
+- overlay 20 called `BattleDamage_CalculateAttack` from `0x020C2E04`;
+- it then called `BattleDamage_ApplyToEnemy` from `0x020C2E68` with Princess
+  Shroob's scene object, popup offsets `(2, -54)`, and calculated damage `4`;
+- `BattleActor_ApplyDamage` was not entered and her HP remained 11,700;
+- her enemy state was `0x18`, whose bit 4 is checked by
+  `BattleDamage_ApplyToEnemy` around the HP update, animation, and popup paths.
+
+This behavior identifies enemy state bit 4 and script property 76 as
+`damage_immune`, replacing the previous placeholder name `flag_04`. In this
+fight it is the protection supplied by Princess Shroob's color-changing shield;
+the shield absorbs the hit and her HP stays unchanged until the shield-break
+sequence clears the flag. The capture is also direct runtime evidence that
+overlay 20 implements this Jump attack path while overlays 2 and 10 remain
+resident.
+
+The shield progression itself is script-driven. Entry 4 initializes context VM
+variable `0x8001` to 3 and `0x8004` to 5. The live replay observed `0x8001`
+decrease from 3 to 2 on Baby Mario's hit and from 2 to 1 on Luigi's hit while
+the calculated damage values differed (4 and 6). Commands at `0x07B8`-`0x07E6`
+decrement `0x8001` for each reaction, reset it to 3 at zero, and then decrement
+`0x8004`. The `0x08B2` condition enters the shield-break path when `0x8004` is
+at most zero. This establishes five color stages of three hits each, or 15
+accepted shield hits, rather than a damage-total threshold. The later script
+path clears `damage_immune`, restores the saved 1,700-HP phase, and plays the
+shield break/Princess Shroob crash sequence.
 
 The supplied `.dst` was created from a ROM reported by DeSmuME as CRC
 `CC780583`; the repository's canonical European image reports a different ROM

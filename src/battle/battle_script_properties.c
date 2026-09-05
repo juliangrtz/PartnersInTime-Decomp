@@ -388,7 +388,7 @@ int BattleScript_GetProperty(u16 actor_id, int property) {
         return FIELD_U16(BattleActor_GetPartySlot(actor_id), 0x82);
     case BATTLE_PROPERTY_SCENE_F0:
         return FIELD_U16(BattleSceneObject_GetById(actor_id), 0xF0);
-    case BATTLE_PROPERTY_ENEMY_FLAG_04:
+    case BATTLE_PROPERTY_ENEMY_DAMAGE_IMMUNE:
         return (((BattleEnemyScriptPropertyView *)
                  BattleActor_GetEnemySlot(actor_id))->flags_29c << 27) >> 31;
     case BATTLE_PROPERTY_ACTOR_FLAG_14:

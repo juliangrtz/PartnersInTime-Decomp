@@ -16,6 +16,8 @@ from typing import Any, Callable
 import yaml
 from desmume.emulator import DeSmuME
 
+from runtime_inputs import action_mask, parse_action
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OVERLAY_CONFIG = PROJECT_ROOT / "extract/eur/arm9_overlays/overlays.yaml"
@@ -35,7 +37,15 @@ BATTLE_ENEMY_ACTOR_TABLE_OFFSET = 0x6508
 BATTLE_BACKGROUND_ID_OFFSET = 0x3A
 BATTLE_AI_CONTROL_MASK_OFFSET = 0x10C
 BATTLE_RUNTIME_FLAGS_OFFSET = 0xD3A0
-BATTLE_PARTY_NAMES = ("Mario", "Luigi", "Baby Mario", "Baby Luigi")
+BATTLE_PARTY_SLOT_NAMES = ("Mario slot", "Luigi slot", "Baby Mario slot", "Baby Luigi slot")
+BATTLE_PARTY_FORMATIONS = {
+    0: ("Mario", "Mario"),
+    1: ("Luigi", "Luigi"),
+    2: ("Baby Mario", "Baby Mario"),
+    3: ("Baby Luigi", "Baby Luigi"),
+    4: ("Mario", "Mario carrying"),
+    5: ("Luigi", "Luigi carrying"),
+}
 
 
 @dataclass(frozen=True)
@@ -109,6 +119,11 @@ def read_u32(emulator: DeSmuME, address: int) -> int:
 
 def read_s32(emulator: DeSmuME, address: int) -> int:
     return int(emulator.memory.signed.read_long(address))
+
+
+def to_s32(value: int) -> int:
+    value &= 0xFFFFFFFF
+    return value if value < 0x80000000 else value - 0x100000000
 
 
 def is_main_ram_pointer(address: int, size: int = 1) -> bool:
@@ -232,11 +247,28 @@ def capture_battle_actor(
     }
     if slot_kind == "party":
         actor["party_state_flags"] = f"{read_u16(emulator, address + 0x74):#06x}"
-        actor["formation_index"] = read_u16(emulator, address + 0x7E)
+        formation_index = read_u16(emulator, address + 0x7E)
+        member_name, formation_name = BATTLE_PARTY_FORMATIONS.get(
+            formation_index, (label, f"unknown {formation_index}")
+        )
+        actor["slot_label"] = label
+        actor["label"] = member_name
+        actor["formation_index"] = formation_index
+        actor["formation_name"] = formation_name
         actor["linked_object_id"] = read_u16(emulator, address + 0x80)
     else:
         actor["defeat_effect_kind"] = read_s16(emulator, address + 0x298)
-        actor["enemy_state_flags"] = f"{read_u32(emulator, address + 0x29C):#010x}"
+        enemy_state_flags = read_u32(emulator, address + 0x29C)
+        actor["enemy_state_flags"] = f"{enemy_state_flags:#010x}"
+        actor["decoded_enemy_state_flags"] = {
+            "item_drop_processed": bool(enemy_state_flags & 0x01),
+            "flag_01": bool(enemy_state_flags & 0x02),
+            "flag_02": bool(enemy_state_flags & 0x04),
+            "flag_03": bool(enemy_state_flags & 0x08),
+            "damage_immune": bool(enemy_state_flags & 0x10),
+            "flag_05": bool(enemy_state_flags & 0x20),
+            "traits": (enemy_state_flags >> 6) & 0x03,
+        }
         stats = capture_enemy_stats(emulator, resource_slot, name_hints)
         actor["configured_stats"] = stats
         if stats is not None:
@@ -259,7 +291,7 @@ def capture_battle_state(emulator: DeSmuME, enemy_stats_path: Path) -> dict[str,
 
     name_hints = load_enemy_name_hints(enemy_stats_path)
     actors = []
-    for slot_index, name in enumerate(BATTLE_PARTY_NAMES):
+    for slot_index, name in enumerate(BATTLE_PARTY_SLOT_NAMES):
         actor_id = 56 + slot_index
         address = read_u32(
             emulator, context + BATTLE_PARTY_ACTOR_TABLE_OFFSET + slot_index * 4
@@ -295,6 +327,48 @@ def capture_battle_state(emulator: DeSmuME, enemy_stats_path: Path) -> dict[str,
         }
     )
     return result
+
+
+def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | None:
+    registers = emulator.memory.register_arm9
+    r0 = registers.r0 & 0xFFFFFFFF
+    r1 = registers.r1 & 0xFFFFFFFF
+    r2 = registers.r2 & 0xFFFFFFFF
+    r3 = registers.r3 & 0xFFFFFFFF
+
+    if label == "VM_WriteVariable":
+        return {
+            "variable": f"{r0 & 0xFFFF:#06x}",
+            "value": to_s32(r1),
+            "vm": f"{r2:#010x}",
+            "state": f"{r3:#010x}",
+            "state_script": f"{read_u32(emulator, r3):#010x}"
+            if is_main_ram_pointer(r3, 4)
+            else None,
+        }
+    if label == "BattleScript_SetProperty":
+        return {"actor_id": r0 & 0xFFFF, "property": to_s32(r1), "value": to_s32(r2)}
+    if label == "BattleAI_StartReactionScript":
+        return {"actor_id": r0 & 0xFFFF}
+    if label == "BattleActor_ApplyDamage":
+        return {
+            "scene_object": f"{r0:#010x}",
+            "actor_id": read_u16(emulator, r0 + 0xEC)
+            if is_main_ram_pointer(r0, 0xEE)
+            else None,
+            "damage": to_s32(r1),
+        }
+    if label == "BattleDamage_ApplyToEnemy":
+        return {
+            "scene_object": f"{r0:#010x}",
+            "actor_id": read_u16(emulator, r0 + 0xEC)
+            if is_main_ram_pointer(r0, 0xEE)
+            else None,
+            "popup_offset_x": to_s32(r1),
+            "popup_offset_y": to_s32(r2),
+            "damage": to_s32(r3),
+        }
+    return None
 
 
 def read_registers(emulator: DeSmuME, processor: str) -> dict[str, str]:
@@ -454,6 +528,14 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", type=Path, required=True, help="ignored output directory for evidence")
     parser.add_argument("--frames", type=int, default=0, help="frames to execute after loading the state")
     parser.add_argument(
+        "--action",
+        type=parse_action,
+        action="append",
+        default=[],
+        metavar="KEY[:FRAMES]",
+        help="ordered DS input or wait action (repeatable; cannot be combined with --frames)",
+    )
+    parser.add_argument(
         "--allow-state-advance",
         action="store_true",
         help="confirm that a loaded state is compatible before advancing it",
@@ -477,7 +559,9 @@ def main() -> int:
     args = build_argument_parser().parse_args()
     if args.frames < 0:
         raise SystemExit("--frames must not be negative")
-    if args.frames and args.state is not None and not args.allow_state_advance:
+    if args.frames and args.action:
+        raise SystemExit("--frames and --action cannot be combined; use --action wait:FRAMES")
+    if (args.frames or args.action) and args.state is not None and not args.allow_state_advance:
         raise SystemExit(
             "refusing to advance a loaded savestate without --allow-state-advance; "
             "cross-version DeSmuME states can hang inside one frame"
@@ -514,16 +598,18 @@ def main() -> int:
 
         def make_callback(kind: str, label: str) -> Callable[[int, int], None]:
             def callback(address: int, size: int) -> None:
-                events.append(
-                    {
-                        "frame": current_frame[0],
-                        "kind": kind,
-                        "label": label,
-                        "address": f"{address:#010x}",
-                        "size": size,
-                        "arm9": read_registers(emulator, "arm9"),
-                    }
-                )
+                event = {
+                    "frame": current_frame[0],
+                    "kind": kind,
+                    "label": label,
+                    "address": f"{address:#010x}",
+                    "size": size,
+                    "arm9": read_registers(emulator, "arm9"),
+                }
+                decoded_arguments = decode_hook_arguments(emulator, label)
+                if decoded_arguments is not None:
+                    event["decoded_arguments"] = decoded_arguments
+                events.append(event)
 
             return callback
 
@@ -553,11 +639,25 @@ def main() -> int:
         )
 
         current_frame = [0]
-        if args.frames:
+        executed_frames = 0
+        if args.frames or args.action:
             emulator.resume()
-            for frame in range(args.frames):
-                current_frame[0] = frame
-                emulator.cycle(with_joystick=False)
+            if args.action:
+                for name, frames in args.action:
+                    emulator.input.keypad_update(action_mask(name))
+                    for _ in range(frames):
+                        current_frame[0] = executed_frames
+                        emulator.cycle(with_joystick=False)
+                        executed_frames += 1
+                    emulator.input.keypad_update(0)
+                    current_frame[0] = executed_frames
+                    emulator.cycle(with_joystick=False)
+                    executed_frames += 1
+            else:
+                for frame in range(args.frames):
+                    current_frame[0] = frame
+                    emulator.cycle(with_joystick=False)
+                    executed_frames += 1
             emulator.pause()
 
         range_diffs = []
@@ -601,7 +701,10 @@ def main() -> int:
             "savestate": None
             if args.state is None
             else {"path": str(args.state.resolve()), "sha1": sha1_file(args.state)},
-            "frames_executed": args.frames,
+            "frames_executed": executed_frames,
+            "input_actions": [
+                {"input": name, "frames": frames} for name, frames in args.action
+            ],
             "initial_registers": initial_registers,
             "final_registers": {
                 "arm9": read_registers(emulator, "arm9"),
@@ -623,7 +726,7 @@ def main() -> int:
             json.dumps(evidence, indent=2) + "\n", encoding="utf-8"
         )
         print(f"wrote {args.output / 'evidence.json'}")
-        print(f"captured {len(events)} hook events across {args.frames} frames")
+        print(f"captured {len(events)} hook events across {executed_frames} frames")
         for group in evidence["final_overlay_matches"]:
             best = group["candidates"][0]
             if group["active"]:
