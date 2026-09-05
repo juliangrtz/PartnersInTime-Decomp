@@ -163,6 +163,11 @@ The nine display-capture helpers at `0x020AD3C4`-`0x020AD5D0` are also
 byte-matching grouped C. They make the reset/configuration task chains, the
 battle display-phase changes, the capture-busy flag, the `DISPCAPCNT` write,
 and AI opcode `0x36`'s capture-surface upload wrapper directly editable.
+The eleven-function raster-effect unit at `0x020B0ECC`-`0x020B1590` is linked
+matching C too. It exposes AI opcodes `0xC1`, `0xC2`, and `0xE8`, finite and
+persistent raster interpolation, the object-data-51 fade/load/fade sequence,
+both context-backed 256-entry raster tables and their independent cursors, and
+the accelerating view-relative particle callback through typed task state.
 The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
 `0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
 slot allocation, countdown and primary/secondary routing used by damage and KO.

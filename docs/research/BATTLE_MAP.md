@@ -257,6 +257,17 @@ and runtime overlay 2.
 | `020AD50C` | `BattleDisplayCapture_WriteControlTask` | Byte-identical `DISPCAPCNT` writer |
 | `020AD554` | `BattleDisplayCapture_RestoreConfigureModeTask` | Byte-identical configure-chain display-mode callback |
 | `020AD588` | `BattleDisplayCapture_QueueConfigure` | Byte-identical asynchronous display-capture configuration entry point |
+| `020B0ECC` | `BattleEffectParticle_Update` | Byte-identical accelerating view-relative effect callback |
+| `020B0FC0` | `BattleEffectParticle_Spawn` | Byte-identical particle task constructor used by battle-AI opcode `0xE8` |
+| `020B1024` | `BattleRasterResourceTransition_UpdateIn` | Byte-identical post-load raster-transition callback |
+| `020B10B8` | `BattleRasterResourceTransition_UpdateOut` | Byte-identical pre-load raster-transition callback for object-data slot 51 |
+| `020B1138` | `BattleRasterResourceTransition_Start` | Byte-identical two-stage resource-transition constructor used by battle-AI opcode `0xC1` |
+| `020B11A4` | `BattleRasterEffect_UpdatePersistent` | Byte-identical clamped raster-effect callback that remains active |
+| `020B12AC` | `BattleRasterEffect_StartPersistent` | Byte-identical persistent raster-effect constructor |
+| `020B1320` | `BattleRasterEffect_UpdateFinite` | Byte-identical clamped raster-effect callback that retires at its limit |
+| `020B1430` | `BattleRasterEffect_StartFinite` | Byte-identical finite raster-effect constructor used by battle-AI opcode `0xC2` |
+| `020B14A4` | `BattleRasterEffect_ApplyToTable` | Byte-identical scanline-table interpolation wrapper |
+| `020B1500` | `BattleRasterEffect_ApplyToBothTables` | Byte-identical dual raster-table update wrapper |
 | `0209C464` | `BattleStatus_TryApply` | Byte-identical C for ailments, resistance, and POW/DEF/SPD changes |
 | `0209C278` | `BattleStatus_ClearEffect` | Clears an effect and restores a base stat |
 | `020A56EC` | `BattleStatus_UpdatePartyStatVisuals` | Reconstructed POW/DEF/SPD effect rotation and model callback (73.00% code match) |
@@ -591,6 +602,18 @@ at system offset `+0x454`, and clear the flag after restoring phase 3. The
 configured path additionally writes `0x80351010 | (capture_source << 24)` to
 the DS `DISPCAPCNT` register at `0x04000064`. AI opcode `0x36` uses the adjacent
 wrapper to queue a 256-by-128 capture-surface upload for an object-data slot.
+
+The adjacent raster-effect unit at `0x020B0ECC`-`0x020B1590` is byte-identical
+grouped C as well. Its typed 24-byte tasks separate the generic intrusive-task
+header from a 12-byte effect state. Battle-AI opcode `0xC1` starts a two-stage
+transition: the first callback ramps both 256-entry raster tables out, switches
+object-data slot 51, waits for its asynchronous load, and ramps the tables back
+in. Opcode `0xC2` starts the finite form of the generic raster interpolator;
+the parallel persistent form clamps at its requested progress but keeps its
+callback alive. Opcode `0xE8` uses the neighboring accelerating, view-relative
+particle task. The low-level table wrapper maintains independent cursors at
+context offsets `+0xCBCC` and `+0xCBD0` for the tables at `+0x61808` and
+`+0x61C08`.
 
 ## Damage and status behavior
 

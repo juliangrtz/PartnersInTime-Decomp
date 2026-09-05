@@ -331,3 +331,6 @@ src/battle/battle_effect_spawning.c:
 
 src/battle/battle_display_capture.c:
     .text       start:0x020ad3c4 end:0x020ad5d0
+
+src/battle/battle_raster_effects.c:
+    .text       start:0x020b0ecc end:0x020b1590
