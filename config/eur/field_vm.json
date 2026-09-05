@@ -499,6 +499,9 @@
     "201": "get_party_controller_property",
     "204": "set_party_piggyback_state",
     "206": "set_party_leader_animation_override",
+    "209": "change_field_room",
+    "210": "transfer_party_between_field_screens",
+    "211": "ensure_party_in_current_field",
     "212": "activate_field_map_event",
     "213": "start_map_tile_animation",
     "214": "wait_map_tile_animation",
@@ -1261,6 +1264,30 @@
       "yield": "never",
       "effect": "enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30",
       "evidence": "func_ov000_020823f8 case 0x0CE, func_ov000_0209cbfc, and func_ov000_0209cb90"
+    },
+    "209": {
+      "arguments": ["destination_room_id", "arrival_script_id", "bgm_policy_or_sequence_id"],
+      "result": null,
+      "control_flow": "returns VM result 2 after scheduling the field-room change",
+      "yield": "terminal for the current field VM update",
+      "effect": "marks the current field context for teardown and reload in destination_room_id, records arrival_script_id for the newly loaded room, and applies the signed BGM policy byte during reload; the compact command does not request a brightness fade",
+      "evidence": "func_ov000_020823f8 case 0x0D1, transition request helper func_ov000_0207fa18, transition state machine func_ov000_0207c170, and teardown func_ov000_0207f4d0"
+    },
+    "210": {
+      "arguments": ["party_side_or_current", "destination_room_id_or_loaded", "x_pixels", "y_pixels", "z_pixels", "facing_direction", "animate_entry", "arrival_script_id", "bgm_policy_or_sequence_id", "preserve_field_0_entry_anchor", "preserve_field_1_entry_anchor"],
+      "result": null,
+      "control_flow": "fallthrough; the transfer is ignored unless the command runs on the field screen currently containing the selected party",
+      "yield": "never",
+      "effect": "moves the selected party from its present field screen to the other resident field screen, places and faces both members there, and optionally starts an arrival script. A destination room of -1 keeps the room already loaded on that screen; another room schedules that field context for reload. animate_entry applies the directional entrance movement and may defer a lower-to-upper-screen transfer behind a brightness fade. The final two flags independently retain the entry-anchor state for resident field contexts 0 and 1",
+      "evidence": "func_ov000_020823f8 case 0x0D2, transfer helper func_ov000_0209f644, deferred-transfer consumer func_ov000_0209f3a8, arrival-script launcher func_ov000_0208911c, and entrance-motion helper func_ov000_02093c98"
+    },
+    "211": {
+      "arguments": ["party_side_or_other", "x_pixels", "y_pixels", "z_pixels", "facing_direction"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "ensures the selected party is active in the calling field context and, when it was absent or assigned to another room, enables both members, places the leader at the supplied integer-pixel coordinates, applies the facing direction, rejoins the follower immediately, and binds both actors to the current map collision data. Party side -1 selects the party opposite the manager's current side; an already present party in this room is left unchanged",
+      "evidence": "func_ov000_020823f8 case 0x0D3 and party placement helper func_ov000_0207f288"
     },
     "212": {
       "arguments": ["map_event_index"],

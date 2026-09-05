@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 180 | 129 | `config/eur/field_vm.json` |
+| Field/world | 341 | 183 | 132 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -195,6 +195,9 @@ field context (the other DS screen/field instance).
 | `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
 | `0x0CC` | `set_party_piggyback_state` | piggybacked | sets the party manager's persistent adult/baby piggyback-state marker. The marker is serialized into the field-party snapshot and restored when the next field reconstructs the party; it does not itself move or attach actors. Shipped cutscenes clear it before controlling all four members independently and set it again immediately before or after reuniting them with opcode 0x0B1 |
 | `0x0CE` | `set_party_leader_animation_override` | party_side, enabled | enables or clears the selected party leader's controller-owned animation override; enabling chooses animation 2 or 3 from party state, restarts model channel 0, and records override flag +0x50 bit 30 |
+| `0x0D1` | `change_field_room` | destination_room_id, arrival_script_id, bgm_policy_or_sequence_id | marks the current field context for teardown and reload in destination_room_id, records arrival_script_id for the newly loaded room, and applies the signed BGM policy byte during reload; the compact command does not request a brightness fade |
+| `0x0D2` | `transfer_party_between_field_screens` | party_side_or_current, destination_room_id_or_loaded, x_pixels, y_pixels, z_pixels, facing_direction, animate_entry, arrival_script_id, bgm_policy_or_sequence_id, preserve_field_0_entry_anchor, preserve_field_1_entry_anchor | moves the selected party from its present field screen to the other resident field screen, places and faces both members there, and optionally starts an arrival script. A destination room of -1 keeps the room already loaded on that screen; another room schedules that field context for reload. animate_entry applies the directional entrance movement and may defer a lower-to-upper-screen transfer behind a brightness fade. The final two flags independently retain the entry-anchor state for resident field contexts 0 and 1 |
+| `0x0D3` | `ensure_party_in_current_field` | party_side_or_other, x_pixels, y_pixels, z_pixels, facing_direction | ensures the selected party is active in the calling field context and, when it was absent or assigned to another room, enables both members, places the leader at the supplied integer-pixel coordinates, applies the facing direction, rejoins the follower immediately, and binds both actors to the current map collision data. Party side -1 selects the party opposite the manager's current side; an already present party in this room is left unchanged |
 | `0x0D4` | `activate_field_map_event` | map_event_index | activates the indexed 20-byte field-map event record, applies its persistent enable/disable save flags, reloads referenced map layers when present, applies the returned map state, and dirties map-synchronized entities |
 | `0x0D5` | `start_map_tile_animation` | animation_index | starts the indexed room tilemap animation when its descriptor supports animation and the slot is idle; the first frame is copied immediately and the descriptor's frame timer and frame index are initialized |
 | `0x0D6` | `wait_map_tile_animation` | animation_index | synchronization barrier for finite room tilemap animations |
@@ -233,17 +236,14 @@ field context (the other DS screen/field instance).
 | `0x14C` | `stop_background_music` | sequence_id_or_negative_for_all | stops the matching active background sequence with the resident default fade; a negative sequence ID stops every active field BGM player |
 
 The checked-in field usage index records
-156/289 used opcodes and
-382,916/387,272 reachable commands
+159/289 used opcodes and
+383,513/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x0D1` | 221 |
 | `0x116` | 216 |
 | `0x0CF` | 213 |
-| `0x0D2` | 194 |
-| `0x0D3` | 182 |
 | `0x0BC` | 180 |
 | `0x136` | 176 |
 | `0x150` | 123 |
@@ -259,6 +259,9 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x11F` | 74 |
 | `0x12F` | 71 |
 | `0x051` | 71 |
+| `0x120` | 65 |
+| `0x128` | 64 |
+| `0x14E` | 63 |
 
 ## Menu/UI scene scripts
 
