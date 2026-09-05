@@ -1,6 +1,7 @@
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
+#include <game/battle_enemy_defeat.h>
 #include <game/battle_scene.h>
 
 enum BattleScriptHandleType {
@@ -30,18 +31,8 @@ typedef struct BattleEnemyPositionRecord {
     u8 unknown_0c[8];
 } BattleEnemyPositionRecord;
 
-typedef struct BattleEnemyActorCommandView {
-    BattleActor actor;
-    u8 unknown_070[0x22A];
-    s16 removal_animation_id;
-} BattleEnemyActorCommandView;
-
-typedef BattleSceneObject BattleEnemySceneObjectCommandView;
-
 typedef char BattleEnemyPositionRecord_SizeCheck[
     sizeof(BattleEnemyPositionRecord) == 0x14 ? 1 : -1];
-
-extern "C" int func_ov002_020a95cc(BattleSceneObject *object);
 
 /* Metrowerks emits C++ functions in reverse source order. */
 int BattleScriptHandle_IsActive(int handle) {
@@ -70,8 +61,8 @@ int BattleSceneObject_ConfigureAnimationLayer(int object_id, int layer) {
 }
 
 int BattleEnemy_Remove(int actor_id, int show_damage) {
-    BattleEnemyActorCommandView *enemy =
-        (BattleEnemyActorCommandView *)BattleActor_GetEnemySlot(actor_id);
+    BattleEnemyActor *enemy =
+        (BattleEnemyActor *)BattleActor_GetEnemySlot(actor_id);
 
     if (show_damage == 1 && enemy->actor.current_hp > 0) {
         BattlePosition position;
@@ -113,19 +104,17 @@ int BattleEnemy_Remove(int actor_id, int show_damage) {
             } while (record->active != 0);
         }
 
-        ((BattleEnemySceneObjectCommandView *)enemy->actor.scene_object)
-            ->removal_state_102 = 0;
-        ((BattleEnemySceneObjectCommandView *)enemy->actor.scene_object)
-            ->removal_state_103 = 0;
+        enemy->actor.scene_object->removal_state_102 = 0;
+        enemy->actor.scene_object->removal_state_103 = 0;
         BattleSceneObject_SetAnimation(
-            enemy->actor.scene_object, enemy->removal_animation_id, -1);
+            enemy->actor.scene_object, enemy->defeat_animation_id, -1);
         BattleDamage_SpawnNumber(
             enemy->actor.pending_damage, position.x, position.y, 7, 0);
     }
 
     enemy->actor.current_hp = 0;
     enemy->actor.flags &= ~BATTLE_ACTOR_FLAG_KO;
-    return func_ov002_020a95cc(enemy->actor.scene_object);
+    return (int)BattleEnemy_StartDefeat(enemy->actor.scene_object);
 }
 
 int BattleActor_IsAnyHitLocked(void) {

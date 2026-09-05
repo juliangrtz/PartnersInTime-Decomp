@@ -12,20 +12,21 @@ import idc
 
 
 def main() -> None:
-    function_name = idc.ARGV[1] if len(idc.ARGV) > 1 else "Entry"
-    address = ida_name.get_name_ea(ida_idaapi.BADADDR, function_name)
-    if address == ida_idaapi.BADADDR:
-        raise RuntimeError(f"unknown IDA function: {function_name}")
-    function = ida_funcs.get_func(address)
-    if function is None:
-        raise RuntimeError(f"IDA has no function at {function_name}")
+    function_names = idc.ARGV[1:] or ["Entry"]
+    for function_name in function_names:
+        address = ida_name.get_name_ea(ida_idaapi.BADADDR, function_name)
+        if address == ida_idaapi.BADADDR:
+            raise RuntimeError(f"unknown IDA function: {function_name}")
+        function = ida_funcs.get_func(address)
+        if function is None:
+            raise RuntimeError(f"IDA has no function at {function_name}")
 
-    ida_kernwin.msg(f"\n===== {function_name} =====\n")
-    cursor = function.start_ea
-    while cursor < function.end_ea:
-        instruction = ida_lines.tag_remove(idc.generate_disasm_line(cursor, 0))
-        ida_kernwin.msg(f"{cursor:08X}  {instruction}\n")
-        cursor = idc.next_head(cursor, function.end_ea)
+        ida_kernwin.msg(f"\n===== {function_name} =====\n")
+        cursor = function.start_ea
+        while cursor < function.end_ea:
+            instruction = ida_lines.tag_remove(idc.generate_disasm_line(cursor, 0))
+            ida_kernwin.msg(f"{cursor:08X}  {instruction}\n")
+            cursor = idc.next_head(cursor, function.end_ea)
     ida_pro.qexit(0)
 
 

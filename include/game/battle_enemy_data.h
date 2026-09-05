@@ -3,6 +3,14 @@
 
 #include <game/battle_task_queue.h>
 
+typedef union BattleEnemyItemDrop {
+    u32 packed;
+    struct {
+        u16 item_id;
+        u16 chance_percent;
+    } fields;
+} BattleEnemyItemDrop;
+
 typedef struct BattleEnemyStatRecord {
     u16 name_id;
     u16 packed_object_data_id;
@@ -30,8 +38,8 @@ typedef struct BattleEnemyStatRecord {
     u8 unknown_12[14];
     u16 experience;
     u16 coins;
-    u32 item_drop_1;
-    u32 item_drop_2;
+    BattleEnemyItemDrop item_drop_1;
+    BattleEnemyItemDrop item_drop_2;
 } BattleEnemyStatRecord;
 
 typedef union BattleEnemyDataPayload {
@@ -52,6 +60,8 @@ typedef struct BattleEnemyDataRequest {
 
 typedef char BattleEnemyStatRecord_SizeCheck[
     sizeof(BattleEnemyStatRecord) == 0x2C ? 1 : -1];
+typedef char BattleEnemyItemDrop_SizeCheck[
+    sizeof(BattleEnemyItemDrop) == 4 ? 1 : -1];
 typedef char BattleEnemyDataPayload_SizeCheck[
     sizeof(BattleEnemyDataPayload) == 0x2000 ? 1 : -1];
 typedef char BattleEnemyDataRequest_SizeCheck[

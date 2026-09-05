@@ -166,7 +166,15 @@ typedef struct BattleContext {
     u16 background_id;
     u8 unknown_003c[8];
     void *screen_assets[2];
-    u8 unknown_004c[0xC0];
+    u8 unknown_004c[0x38];
+    s16 earned_coins;
+    s16 earned_experience;
+    s16 bonus_coins;
+    s16 bonus_experience;
+    u16 reward_item_ids[8];
+    u16 reward_item_counts[8];
+    u16 guaranteed_reward_item_counts[8];
+    u8 unknown_00bc[0x50];
     u16 ai_control_mask;
     u8 unknown_010e[0x1E];
     s16 status_duration;
