@@ -3,3 +3,5 @@
     .data       start:0x0207e020 end:0x0207ea20 kind:data align:32
     .bss        start:0x0207ea20 end:0x0207f400 kind:bss align:32
 
+src/overlay009/shop_stock.c:
+    .text       start:0x0207df1c end:0x0207e008

@@ -29,7 +29,7 @@ The raw-loader base and input image differ by overlay; see
 | 6 | 66,492 B | Unknown | None | Untriaged |
 | 7 | 142,264 B | Unknown | None | Untriaged; split into call-graph clusters before choosing source units |
 | 8 | 54,068 B | Unknown | None | Untriaged |
-| 9 | 78,984 B | Contains four shop datasets used by the editable-data project | None | Data mapped; code triage pending |
+| 9 | 78,984 B | Shop/menu overlay; recovered code maps menu categories to the four item classes and selects the item pool or 4-by-6 tier descriptor table for each of four shops | `0x0207DF1C-0x0207E008` (3 functions, 236 B) | Active quick-win target; shop-stock access is reconstructed and agrees with the editable-data layout |
 | 10 | 6,820 B | Six-slot enemy selection/snapshot logic, enemy-stat trait filtering, Q8 scaling, and threshold selection | `0x020C2340-0x020C259C` (6 functions, 604 B) | Active; high-value small overlay |
 | 11 | 13,372 B | Battle projectile/special-attack code; recovered helpers configure object 40 from level-scaled tables, calculate animation timing, test actor contact, clamp motion, and restore the actor resource | `0x020C4968-0x020C4C2C` (7 functions, 708 B) | Active; shell-like behavior is strongly indicated, but retain neutral item naming pending runtime confirmation |
 | 12 | 12,032 B | Battle special-attack code; recovered state tracks party formation, animation timing, a shuffled four-member action order, and paired scene-object cleanup | `0x020C2FCC-0x020C31E8` and `0x020C4FA8-0x020C50C0` (8 functions, 820 B) | Active; exact item identity still requires runtime confirmation |
