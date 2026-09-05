@@ -236,6 +236,8 @@ and runtime overlay 2.
 | `020A63F8` | `BattleStatus_StartPartyAilment4Visual` | Starts the party animation and model layer used by status 4 |
 | `020A6624` | `BattleStatus_UpdatePartyAilment3Visual` | Byte-identical status-3 transition, impact, and attached model update |
 | `020A6AE0` | `BattleStatus_StartPartyAilment3Visual` | Byte-identical party status-3 model and transition starter |
+| `020A6CE4` | `BattleStatus_UpdatePartyAilment2Visual` | Byte-identical status-2 effect attachment and animation callback |
+| `020A6F80` | `BattleStatus_StartPartyAilment2Visual` | Byte-identical party status-2 effect and transition starter |
 | `020A8320` | `BattleStatus_StopActorEffect` | Stops the actor-local timer or stat delta for one status ID |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
@@ -599,6 +601,13 @@ to animation 30 under the hit lock, spawns model effect 740 at the
 formation-specific impact offset, and renders the accompanying model until the
 actor animation completes. Runtime formation bit 16 selects the alternate
 offsets for the separated four-character layout.
+
+The exact party status-ID-2 unit manages model effect 741 alongside actor
+animations 27 and 28. It continually compensates the effect for the scene
+object's animation-dependent vertical offset, removes it while status models
+are suppressed, and recreates it when rendering resumes. As with status 3, the
+callback arbitrates ownership through the actor's group-1 status record and
+holds the hit lock only for the active character animation.
 
 The exact battle item-selection helpers rebuild two compact tagged-ID lists
 directly from the save inventory: fourteen ordinary consumables at save offset
