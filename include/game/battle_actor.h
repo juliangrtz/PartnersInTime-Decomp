@@ -103,6 +103,10 @@ struct BattleActor {
             u16 damage_number_alternate : 1;
             u16 unknown_damage_number_12_15 : 4;
         } damage_number_flag_bits;
+        struct {
+            u16 unknown_status_visual_00_14 : 15;
+            u16 suppress_status_model : 1;
+        } status_visual_flag_bits;
     };
     u8 unk_026[2];
     BattleDamageReactionTask *damage_reaction_task;

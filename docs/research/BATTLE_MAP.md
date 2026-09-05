@@ -234,6 +234,8 @@ and runtime overlay 2.
 | `020A5F7C` | `BattleStatus_StartPartyAilment5Visual` | Starts the party animation and model layer used by status 5 |
 | `020A61B0` | `BattleStatus_UpdatePartyAilmentVisual` | Synchronizes and completes the shared party visual for statuses 4 and 5 |
 | `020A63F8` | `BattleStatus_StartPartyAilment4Visual` | Starts the party animation and model layer used by status 4 |
+| `020A6624` | `BattleStatus_UpdatePartyAilment3Visual` | Byte-identical status-3 transition, impact, and attached model update |
+| `020A6AE0` | `BattleStatus_StartPartyAilment3Visual` | Byte-identical party status-3 model and transition starter |
 | `020A8320` | `BattleStatus_StopActorEffect` | Stops the actor-local timer or stat delta for one status ID |
 | `02076584` | `BattleItemEffect_Apply` | Healing, revival-style HP updates, status items |
 | `020768A4` | `BattleItemEffect_ApplyBadgeBoost` | Applies equipped 150/200-percent healing multipliers |
@@ -588,6 +590,15 @@ effect, cycles every still-active stat change through model layers 3-8, and
 releases both model and task when no stat delta remains. The functions are not
 linked yet: their current code matches are 73.00% and 75.68%, so the original
 assembly remains authoritative for byte-identical builds.
+
+Party status ID 3 now also has an exact linked C++ implementation. The starter
+loads object-data slot 9, chooses a model animation from the six party
+formations, starts actor animation 29, and plays the matching character sound.
+Its callback waits until no older group-1 status task owns the actor, advances
+to animation 30 under the hit lock, spawns model effect 740 at the
+formation-specific impact offset, and renders the accompanying model until the
+actor animation completes. Runtime formation bit 16 selects the alternate
+offsets for the separated four-character layout.
 
 The exact battle item-selection helpers rebuild two compact tagged-ID lists
 directly from the save inventory: fourteen ordinary consumables at save offset
