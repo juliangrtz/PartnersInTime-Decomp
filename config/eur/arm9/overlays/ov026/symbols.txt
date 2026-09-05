@@ -1,9 +1,9 @@
-func_ov026_020c2ae0 kind:function(arm,size=0xf8) addr:0x020c2ae0
-func_ov026_020c2bd8 kind:function(arm,size=0x64) addr:0x020c2bd8
-func_ov026_020c2c3c kind:function(arm,size=0x60) addr:0x020c2c3c
-func_ov026_020c2c9c kind:function(arm,size=0x3c) addr:0x020c2c9c
-func_ov026_020c2cd8 kind:function(arm,size=0x24) addr:0x020c2cd8
-func_ov026_020c2cfc kind:function(arm,size=0x3c) addr:0x020c2cfc
+Overlay26Attack_DestroyState kind:function(arm,size=0xf8) addr:0x020c2ae0
+Overlay26Attack_IsStateIdle kind:function(arm,size=0x64) addr:0x020c2bd8
+Overlay26Attack_TrySetObjectAnimation kind:function(arm,size=0x60) addr:0x020c2c3c
+Overlay26Attack_GetTrackedObjectState kind:function(arm,size=0x3c) addr:0x020c2c9c
+Overlay26Attack_GetActionState kind:function(arm,size=0x24) addr:0x020c2cd8
+Overlay26Attack_IsResourceLoadPending kind:function(arm,size=0x3c) addr:0x020c2cfc
 func_ov026_020c2d38 kind:function(arm,size=0x240) addr:0x020c2d38
 func_ov026_020c2f78 kind:function(arm,size=0x38) addr:0x020c2f78
 func_ov026_020c2fb0 kind:function(arm,size=0xa4) addr:0x020c2fb0
@@ -50,6 +50,6 @@ data_ov026_020c64c8 kind:data(any) addr:0x020c64c8
 data_ov026_020c64e0 kind:data(any) addr:0x020c64e0
 data_ov026_020c6500 kind:data(any) addr:0x020c6500
 data_ov026_020c6520 kind:data(any) addr:0x020c6520
-data_ov026_020c6580 kind:bss addr:0x020c6580
+gOverlay26AttackState kind:bss addr:0x020c6580
 data_ov026_020c6584 kind:bss addr:0x020c6584
 data_ov026_020c6586 kind:bss addr:0x020c6586
