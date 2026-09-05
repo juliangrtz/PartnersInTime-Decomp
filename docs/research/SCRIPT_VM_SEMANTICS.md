@@ -81,7 +81,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 260 | 209 | `config/eur/field_vm.json` |
+| Field/world | 341 | 263 | 212 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -129,7 +129,9 @@ field context (the other DS screen/field instance).
 | `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
 | `0x04D` | `set_entity_ground_tracking` | entity_selector, ground_tracking_enabled | sets entity state bit +0x38C bit 12; while enabled, timed 3D movement suppresses explicit z interpolation and the entity update path keeps its base/terrain height synchronized. Enabling also marks vertical map synchronization dirty |
 | `0x050` | `set_entity_offscreen_contact_retention_enabled` | entity_selector, enabled | when enabled, permits another entity to retain its linked contact with this entity while this entity is outside the visible screen bounds; the normal disabled behavior drops that link after the off-screen state is observed |
+| `0x051` | `set_entity_reserved_state_flag` | entity_selector, enabled | sets entity base-state bit +0x184 bit 12. The flag is copied when the base entity state is cloned, but an exhaustive instruction-level scan of overlay 0 and the resident ARM9 found no behavioral reader, and the field entity serializer does not preserve it. All 71 shipped commands enable it, so it is currently classified as a reserved or vestigial state flag rather than assigning an unsupported gameplay meaning |
 | `0x053` | `set_entity_contact_direction_filter` | entity_selector, script_direction_mask | replaces the entity's six-bit linked-contact direction filter. Script bits 0 through 5 map to internal contact bits 2, 3, 0, 1, 5, and 4 respectively. The collision solver intersects this filter with both entities' active contact-side masks; a zero intersection releases their persistent contact link |
+| `0x054` | `set_entity_semitransparent` | entity_selector, enabled | selects normal or semitransparent OBJ rendering for the entity's bound sprite model. When enabled, model-state bit +0x7C bit 3 is emitted as Nintendo DS OAM attribute-0 bit 10, selecting OBJ mode 1 so the sprite participates in the configured alpha blend. The state is retained across the entity's render-resource save and restore path |
 | `0x055` | `configure_entity_shadow` | entity_selector, enabled, shadow_style_or_minus_one | enables or disables the entity's projected field shadow and optionally selects one of eight shadow styles. -1 preserves the current style, except that enabling an unconfigured style zero selects style one. Styles one and two choose among three animation variants at 10- and 20-pixel height thresholds; the other styles map directly through the shadow-animation table. Collision support can also make the shadow inherit the supporting entity's render depth |
 | `0x056` | `set_entity_map_sync_axes` | entity_selector, horizontal_map_sync_or_minus_one, vertical_map_sync_or_minus_one | each argument other than -1 updates one persistent map-synchronization axis; enabling an axis immediately marks it dirty, and a later field-geometry refresh marks every enabled axis dirty again |
 | `0x059` | `set_entity_collision_response_channels` | entity_selector, channel_0_or_minus_one, channel_1_or_minus_one, channel_2_or_minus_one, channel_3_or_minus_one, channel_4_or_minus_one | updates five logical collision-response channels independently; -1 preserves a channel. Field-monster entities map the arguments to collision-state bits 0, {2,3}, 1, 6, and 4 respectively. Field-block entities additionally mirror channels 3 and 4 into bits 7 and 5. The collision solver consumes these flags when choosing solid displacement versus overlap/contact reporting |
@@ -152,6 +154,7 @@ field context (the other DS screen/field instance).
 | `0x084` | `start_entity_timed_movement` | entity_selector, coordinate_mode, x, y, z, duration_frames, motion_parameter_6, motion_parameter_7, motion_flag | starts constant-rate entity movement toward fx32 coordinates over duration_frames; coordinate_mode 1 makes the target relative. Normal entities can move on x, y, and z, while subtype 8 uses x and y only |
 | `0x085` | `start_entity_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, motion_5, motion_6, motion_7, motion_flag | starts profiled movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
 | `0x086` | `start_entity_timed_movement_relative_to_entity` | entity_selector, target_entity_selector, x_offset, y_offset, z_offset, duration_frames, motion_parameter_6, motion_parameter_7, motion_flag | starts timed movement toward a target that is recomputed each frame from another entity plus fx32 offsets; subtype 8 uses x/y only |
+| `0x087` | `start_entity_orbit_around_point` | entity_selector, orbit_flags, center_x, center_y, center_z, arc_degrees, initial_speed_fx32, acceleration_fx32, maximum_speed_fx32, deceleration_fx32, direction, secondary_axis_scale_fx32, first_collision_mask, second_collision_mask, snap_to_final_angle | starts speed-profiled orbital movement around a fixed center. orbit_flags bits 0..1 select the rotation plane (0 yz, 1 xz, 2 xy), bit 2 makes arc_degrees a relative sweep instead of an absolute target angle, and bit 3 makes the center relative to the entity's current position. Center coordinates are converted from pixels to fx32; direction supplies the signed angular direction, secondary_axis_scale_fx32 controls the ellipse aspect with 4096 as the neutral scale, and a zero initial speed selects the entity's default acceleration profile. The two six-bit collision masks and final-angle snap flag are retained by the motion controller. Subtype-8 entities use the same operation in two dimensions and ignore center_z, the plane selector, and both collision masks. No movement starts when the entity is at the center or the requested angular distance is zero |
 | `0x08B` | `wait_entity_movement` | entity_selector | retries while either of the entity movement-state flags is active |
 | `0x08C` | `cancel_entity_movement` | entity_selector | cancels both the selected entity's planar destination/path controller and its independent vertical-motion controller without snapping either axis to its planned destination. This is the cancellation counterpart to the combined wait in opcode 0x08B |
 | `0x08D` | `start_entity_vertical_motion` | entity_selector, initial_velocity_low_or_value, initial_velocity_high, gravity_low_or_value, gravity_high | starts vertical ballistic motion; literal word pairs form signed fx32 values and -1 selects entity defaults |
@@ -313,15 +316,12 @@ field context (the other DS screen/field instance).
 | `0x154` | `release_sound_group` | 0 literal args | requests release or cancellation of the field-requested sound-group load handle, using the resident 16-frame release parameter when the handle is active |
 
 The checked-in field usage index records
-235/289 used opcodes and
-386,651/387,272 reachable commands
+238/289 used opcodes and
+386,834/387,272 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
-| `0x087` | 79 |
-| `0x051` | 71 |
-| `0x054` | 33 |
 | `0x0BB` | 29 |
 | `0x11B` | 27 |
 | `0x11A` | 27 |
@@ -339,6 +339,9 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x08A` | 11 |
 | `0x113` | 9 |
 | `0x061` | 9 |
+| `0x13F` | 8 |
+| `0x13D` | 8 |
+| `0x145` | 7 |
 
 ## Menu/UI scene scripts
 
