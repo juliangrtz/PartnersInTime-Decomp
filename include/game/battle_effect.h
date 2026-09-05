@@ -59,6 +59,16 @@ void BattleTransform_BuildBetweenPoints(
     s16 start_x, s16 start_y, s16 start_z,
     s16 end_x, s16 end_y, s16 end_z,
     u16 longitudinal_scale, u16 lateral_scale);
+BattleSceneObject *BattleSceneObject_StretchBetweenAnchors(
+    int object_id,
+    int first_object_id,
+    s16 first_offset_x, s16 first_offset_y, int first_offset_z,
+    int first_anchor_z,
+    u16 second_object_id,
+    s16 second_offset_x, int second_offset_y, int second_offset_z,
+    int second_anchor_z,
+    u16 longitudinal_scale, u16 lateral_scale,
+    u16 flatten);
 BattleEffect *BattleSpriteEffect_Spawn(int effect_id, int x, int y, int z,
                                        int scale);
 BattleEffect *BattleModelEffect_Spawn(int effect_id,

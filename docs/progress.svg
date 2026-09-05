@@ -862,7 +862,7 @@
 <rect class="cell" x="319.07" y="679.46" width="16.30" height="16.54" fill="#263244"><title>Overlay 02 · func_ov002_0206ba58 · 796 B · remaining</title></rect>
 <rect class="cell" x="335.37" y="473.31" width="16.12" height="16.39" fill="#263244"><title>Overlay 02 · func_ov002_02066d08 · 780 B · remaining</title></rect>
 <rect class="cell" x="335.37" y="489.70" width="16.12" height="16.39" fill="#2dd4a0"><title>Overlay 02 · battle_level_up_stat_rows · 780 B · matching C/C++</title></rect>
-<rect class="cell" x="335.37" y="506.09" width="16.12" height="16.39" fill="#263244"><title>Overlay 02 · func_ov002_020a53e0 · 780 B · remaining</title></rect>
+<rect class="cell" x="335.37" y="506.09" width="16.12" height="16.39" fill="#263244"><title>Overlay 02 · BattleSceneObject_StretchBetweenAnchors · 780 B · remaining</title></rect>
 <rect class="cell" x="335.37" y="522.47" width="16.12" height="16.30" fill="#263244"><title>Overlay 02 · func_ov002_020b2b48 · 776 B · remaining</title></rect>
 <rect class="cell" x="335.37" y="538.78" width="16.12" height="16.30" fill="#263244"><title>Overlay 02 · func_ov002_020bc73c · 776 B · remaining</title></rect>
 <rect class="cell" x="335.37" y="555.08" width="16.12" height="16.22" fill="#263244"><title>Overlay 02 · func_ov002_020b3410 · 772 B · remaining</title></rect>

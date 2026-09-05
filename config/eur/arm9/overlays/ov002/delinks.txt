@@ -259,3 +259,6 @@ src/battle/battle_task.c:
 
 src/battle/battle_effect_transform.c:
     .text       start:0x020a5294 end:0x020a53e0
+
+src/battle/battle_effect_anchor_transform.c:
+    .text       start:0x020a53e0 end:0x020a56ec
