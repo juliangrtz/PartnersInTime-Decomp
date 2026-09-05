@@ -2,11 +2,75 @@
 #define GAME_OVERLAY005_DISPLAY_H
 
 #include <nitro.h>
+#include <nitro/fx.h>
 
 typedef enum DisplayEngine {
     DISPLAY_ENGINE_MAIN = 0,
     DISPLAY_ENGINE_SUB = 1,
 } DisplayEngine;
+
+typedef enum DisplayObjTileMappingMode {
+    DISPLAY_OBJ_TILE_MAPPING_2D = 0x000000,
+    DISPLAY_OBJ_TILE_MAPPING_1D_32K = 0x000010,
+    DISPLAY_OBJ_TILE_MAPPING_1D_64K = 0x100010,
+    DISPLAY_OBJ_TILE_MAPPING_1D_128K = 0x200010,
+    DISPLAY_OBJ_TILE_MAPPING_1D_256K = 0x300010,
+} DisplayObjTileMappingMode;
+
+typedef enum DisplayPlaneMask {
+    DISPLAY_PLANE_NONE = 0,
+    DISPLAY_PLANE_BG0 = 1 << 0,
+    DISPLAY_PLANE_BG1 = 1 << 1,
+    DISPLAY_PLANE_BG2 = 1 << 2,
+    DISPLAY_PLANE_BG3 = 1 << 3,
+    DISPLAY_PLANE_OBJ = 1 << 4,
+} DisplayPlaneMask;
+
+typedef enum DisplayWindowMask {
+    DISPLAY_WINDOW_NONE = 0,
+    DISPLAY_WINDOW_0 = 1 << 0,
+    DISPLAY_WINDOW_1 = 1 << 1,
+    DISPLAY_WINDOW_OBJ = 1 << 2,
+} DisplayWindowMask;
+
+typedef struct DisplayAffineMatrix {
+    fx32 m00;
+    fx32 m01;
+    fx32 m10;
+    fx32 m11;
+} DisplayAffineMatrix;
+
+void Overlay5DisplayBg_SetAffine(
+    DisplayEngine engine,
+    int background,
+    fx32 horizontal_scale,
+    fx32 vertical_scale,
+    int rotation,
+    int center_x,
+    int center_y,
+    int origin_x,
+    int origin_y
+);
+void Overlay5DisplayBg_SetAffineMatrix(
+    DisplayEngine engine,
+    int background,
+    const DisplayAffineMatrix *matrix,
+    int center_x,
+    int center_y,
+    int origin_x,
+    int origin_y
+);
+
+void Overlay5Display_SetObjTileMappingMode(
+    DisplayEngine engine, DisplayObjTileMappingMode mode
+);
+void Overlay5Display_SetHBlankObjProcessing(DisplayEngine engine, int enabled);
+void Overlay5Display_DisableWindows(DisplayEngine engine, u32 windows);
+void Overlay5Display_SetVisibleWindows(DisplayEngine engine, u32 windows);
+void Overlay5Display_DisablePlanes(DisplayEngine engine, u32 planes);
+void Overlay5Display_EnablePlanes(DisplayEngine engine, u32 planes);
+void Overlay5Display_SetVisiblePlanes(DisplayEngine engine, u32 planes);
+void Overlay5Display_ResetEngine(DisplayEngine engine);
 
 void Overlay5Display_EndLoadObjExtPalette(DisplayEngine engine);
 void Overlay5Display_LoadObjExtPalette(
