@@ -440,6 +440,7 @@
     "96": "set_entity_render_layer",
     "98": "set_entity_render_order_priorities",
     "102": "set_entity_animation_speed",
+    "103": "set_entity_locomotion_parameters",
     "108": "bind_entity_resource",
     "109": "restore_entity_resource_state",
     "110": "wait_entity_animation",
@@ -788,6 +789,14 @@
       "yield": "never",
       "effect": "stores the signed 16-bit Q8 animation rate on the entity and updates the bound model while preserving its current animation position",
       "evidence": "func_ov000_020823f8 case 0x066 and resident func_0200940c"
+    },
+    "103": {
+      "arguments": ["entity_selector", "starting_speed_q12", "acceleration_q12", "maximum_speed_q12", "idle_deceleration_q12", "reverse_deceleration_q12", "turn_speed_limit_q12"],
+      "result": null,
+      "control_flow": "fallthrough",
+      "yield": "never",
+      "effect": "sets the entity's default locomotion curve and resets its current speed and velocity accumulators. The script supplies positive idle and reverse deceleration magnitudes, which the dispatcher stores as negative Q12 rates. A non-opposite direction change above turn_speed_limit_q12 snaps the current speed down to that limit before normal acceleration resumes",
+      "evidence": "func_ov000_020823f8 case 0x067, setter func_ov000_020a7410, locomotion update func_ov000_02093e38, and movement fallback func_ov000_020b3f00"
     },
     "108": {
       "arguments": ["entity_selector", "resource_index", "animation_id", "render_parameter", "preserve_previous"],
