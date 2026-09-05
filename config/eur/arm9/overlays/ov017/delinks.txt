@@ -6,3 +6,5 @@
 src/overlay017/attack_tuning.c:
     .text       start:0x020c2c94 end:0x020c2e54
 
+src/overlay017/object_setup.cpp:
+    .text       start:0x020c2e54 end:0x020c30d0
