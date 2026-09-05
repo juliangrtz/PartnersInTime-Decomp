@@ -2,28 +2,17 @@
 #include <game/battle_scene.h>
 #include <game/overlay017_attack.h>
 
+#include "attack_state.h"
+
 enum Overlay17AttackObjectConstant {
     OVERLAY17_PARTY_OBJECT_COUNT = 2,
     OVERLAY17_ATTACK_OBJECT_COUNT = 4,
     OVERLAY17_ANIMATION_CHANNEL = 2,
     OVERLAY17_REPLACEMENT_RESOURCE_FIRST = 57,
-    OVERLAY17_ATTACK_STATE_COUNT = 8,
-    OVERLAY17_ATTACK_STATE_SIZE = 0x128,
 };
-
-typedef struct Overlay17BattleStateView {
-    u8 unknown_000[0x130];
-    u8 attack_states[OVERLAY17_ATTACK_STATE_COUNT]
-                    [OVERLAY17_ATTACK_STATE_SIZE];
-    u8 unknown_a70[0x16];
-    s8 active_attack_slot;
-    u8 unknown_a87;
-    int party_animation_components[OVERLAY17_PARTY_OBJECT_COUNT];
-} Overlay17BattleStateView;
 
 extern "C" {
 extern u16 data_ov017_020c6c90[];
-extern Overlay17BattleStateView *data_ov002_020c0710;
 void func_ov002_0207179c(BattlePartyActor *actor,
                          BattleSceneObject *object);
 void func_ov002_02071750(BattleSceneObject *object, int value);
