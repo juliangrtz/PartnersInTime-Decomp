@@ -6,6 +6,7 @@
 typedef struct BattleActor BattleActor;
 typedef struct BattleActorAnimationState BattleActorAnimationState;
 typedef struct BattleStatusState BattleStatusState;
+typedef struct BattleDamageNumberTask BattleDamageNumberTask;
 struct BattleSceneObject;
 struct BattleModel;
 
@@ -39,6 +40,7 @@ enum BattleActorFlag {
     BATTLE_ACTOR_FLAG_KO = 0x0100,
     BATTLE_ACTOR_FLAG_HIT_LOCK = 0x0200,
     BATTLE_ACTOR_FLAG_10 = 0x0400,
+    BATTLE_ACTOR_FLAG_DAMAGE_NUMBER_PENDING = BATTLE_ACTOR_FLAG_10,
     BATTLE_ACTOR_FLAG_RESOURCE_BOUND = 0x0800,
     BATTLE_ACTOR_FLAG_12 = 0x1000,
     BATTLE_ACTOR_FLAG_13 = 0x2000,
@@ -94,8 +96,15 @@ struct BattleActor {
             u16 force_one_damage : 1;
             u16 unknown_flag_15 : 1;
         } damage_flag_bits;
+        struct {
+            u16 unknown_damage_number_00_09 : 10;
+            u16 damage_number_pending : 1;
+            u16 damage_number_alternate : 1;
+            u16 unknown_damage_number_12_15 : 4;
+        } damage_number_flag_bits;
     };
-    u8 unk_026[0x0A];
+    u8 unk_026[6];
+    BattleDamageNumberTask *damage_number_task;
     union {
         struct {
             BattleStatusState ailment_group_1;

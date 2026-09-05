@@ -334,8 +334,10 @@ the enemy slot, clamps and applies damage, sets the hit reaction, computes the
 popup position, emits the number, and selects the two special impact effects.
 The shared `BattleDamage_SpawnNumber` constructor at `0x0209CD9C` applies the
 battle-wide popup offsets and creates either a free or actor-attached number.
-Its three maintained callbacks merge overlapping values, transition the popup
-according to actor flags, and release the actor's `+0x2C` task pointer.
+Its cohesive C unit has exact spawn, merge, and update functions; only the
+48-byte cleanup helper retains one compiler-folding mismatch. Together they
+merge overlapping values, transition the popup according to actor flags, and
+release the actor's `+0x2C` task pointer.
 `BattleDamage_ApplyToParty` at `0x0209D9DC` now covers the parallel party path,
 including the nonlethal hit type, status-1 clearing, six reaction variants,
 Mario/Luigi popup metadata, and optional post-hit status application.

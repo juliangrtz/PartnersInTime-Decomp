@@ -64,7 +64,7 @@ BattleEffect *BattleModelEffect_SpawnAttached(BattleEffect **owner_slot,
                                               BattleSceneObject *parent,
                                               int x, int y, int z, int scale);
 BattleEffect *BattleDamage_SpawnNumber(int value, int x, int y,
-                                       int effect_id, int attach_to_actor);
+                                       int effect_id, u16 attached_actor_id);
 int BattleSound_Play(int sound_id, int argument_1, int argument_2,
                      int argument_3);
 int BattleNumber_DrawDecimal(int value, int palette,
