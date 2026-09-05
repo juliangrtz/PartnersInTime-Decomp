@@ -85,14 +85,14 @@ void Overlay15Attack_ConfigureModelFlags(
     model->flags |= BATTLE_MODEL_FLAG_10;
     model->flags &= ~BATTLE_MODEL_FLAG_11;
 
-    if (state->secondary == 0) {
+    if (state->hit_motion.object == 0) {
         return;
     }
-    if (BattleSceneObject_GetActiveModel(state->secondary) == 0) {
+    if (BattleSceneObject_GetActiveModel(state->hit_motion.object) == 0) {
         return;
     }
 
-    model = BattleSceneObject_GetActiveModel(state->secondary);
+    model = BattleSceneObject_GetActiveModel(state->hit_motion.object);
     model->flags |= BATTLE_MODEL_FLAG_10;
     model->flags &= ~BATTLE_MODEL_FLAG_11;
 }
