@@ -196,6 +196,13 @@ NitroSDK-style `OS_SetIrqCheckFlag` expression also promoted the DTCM base from
 `data_027e0000` to its SDK linker name `SDK_AUTOLOAD_DTCM_START`. Two adjacent
 curtain-transition callbacks at `0x020B44D0`-`0x020B4544` are matching C and
 own the 32-frame lifetime around the still-raw 50-column renderer.
+Six cylinder-wipe callbacks at `0x020B4D28`-`0x020B5048` are matching C too.
+They expose the 32-frame reveal, save-selected dual-screen rotation, VCount
+split scheduling, display restoration, capture trigger, and accelerating
+finish around the still-raw segmented renderer. Eight adjacent iris callbacks
+at `0x020B53F8`-`0x020B5D58` now maintain both 64-frame radial phases and their
+display-capture bridge. Their three 12-ring by 33-segment renderers remain raw
+code, but the lifecycle and shared task state are editable high-level source.
 The four-slot delayed battle screen-effect scheduler at `0x02065E30`-
 `0x02066004` is symbolic too. It exposes immediate/deferred preset dispatch,
 slot allocation, countdown and primary/secondary routing used by damage and KO.
