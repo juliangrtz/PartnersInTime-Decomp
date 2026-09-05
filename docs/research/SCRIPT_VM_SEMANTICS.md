@@ -79,7 +79,7 @@ the same shape.
 
 | Instance | Descriptor entries | Named | Detailed contracts | Source |
 |---|---:|---:|---:|---|
-| Field/world | 341 | 96 | 45 | `config/eur/field_vm.json` |
+| Field/world | 341 | 105 | 54 | `config/eur/field_vm.json` |
 | Battle | 260 | 137 | 0 | `config/eur/battle_ai_vm.json` |
 | Scene/object | 210 | 129 | 30 | `config/eur/scene_vm.json` |
 
@@ -125,6 +125,7 @@ field context (the other DS screen/field instance).
 | `0x049` | `get_entity_property` | entity_selector, property_id | fallthrough |
 | `0x04A` | `set_entity_visible` | entity_selector, visible | sets the entity render-enabled bit and forwards the state to its bound render object |
 | `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
+| `0x060` | `set_entity_render_layer` | entity_selector, render_layer | stores the low four bits of render_layer in the high nibble of the entity's bound render-object sort key |
 | `0x066` | `set_entity_animation_speed` | entity_selector, animation_speed_q8 | stores the signed 16-bit Q8 animation rate on the entity and updates the bound model while preserving its current animation position |
 | `0x06C` | `bind_entity_resource` | entity_selector, resource_index, animation_id, render_parameter, preserve_previous | binds a 24-byte record from FEvent fixed section 2 to the entity; -1 retains selected subresources |
 | `0x06D` | `restore_entity_resource_state` | entity_selector | restores the resource binding or animation state saved by opcode 0x06C and clears the corresponding saved-state flag |
@@ -141,29 +142,31 @@ field context (the other DS screen/field instance).
 | `0x0B7` | `set_party_facing_direction` | party_side, facing_direction, instant | changes the selected party controller's left/right facing and sprite flip, either directly or through its guarded turn path |
 | `0x0B9` | `legacy_noop_0b9` | unused_0, unused_1 | intentional legacy no-op; both encoded arguments are ignored |
 | `0x0C9` | `get_party_controller_property` | party_side, property_id | queries controller flags, lead-character state, mapped character type, or a movement-state bit selected by property_id 0 through 4 |
+| `0x0DE` | `wait_camera_movement` | 0 literal args | synchronization barrier shared by the camera motion commands 0x0DB through 0x0DD |
+| `0x0ED` | `start_master_brightness_transition` | start_brightness_or_255, target_brightness, duration_frames | writes the target immediately when duration is zero; otherwise interpolates the active screen's signed DS master-brightness value once per frame. A start value of 255 preserves the current brightness |
+| `0x0EE` | `wait_master_brightness_transition` | 0 literal args | synchronization barrier for opcode 0x0ED |
 | `0x10D` | `wait_paired_field_ready` | 0 literal args | synchronization barrier between the two simultaneous field instances |
 | `0x111` | `set_field_input_disable_mask` | field_side_or_minus_one, disabled_button_mask | selects the current or paired field side and stores the complemented input mask at field context +0x24C4 |
+| `0x140` | `open_screen_message` | x_or_center, y, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window at screen coordinates, deriving zero dimensions from the selected message and accepting -32768 as horizontally centered; configurable tail-placement fields are packed into the resident eight-slot message manager |
+| `0x141` | `open_entity_message` | entity_selector, width_tiles_or_auto, height_tiles_or_auto, window_mode, tail_style, tail_size_or_auto, vertical_placement_or_auto, tail_x_or_auto, text_control_mode, message_slot, text_archive_id, message_id | opens a text window anchored to an entity, automatically placing and clamping the box and its tail within the 256 by 192 screen; when invoked by an entity-owned VM it also avoids overlap with the linked owner |
+| `0x142` | `wait_message_finished` | message_slot_selector | selectors at least zero address one of eight slots; -2 matches both screens and other negative values match the current field screen |
+| `0x143` | `wait_message_closed` | message_slot_selector | uses the same single-slot, both-screen, and current-screen selector rules as opcode 0x142 |
+| `0x144` | `close_message` | message_slot_selector | requests closure for one or more selected message slots using the same selector rules as opcodes 0x142 and 0x143 |
 | `0x149` | `play_field_sound` | sound_id, mode, track_for_field_cleanup | plays a sound and optionally records its ID in one of four per-field cleanup slots |
 | `0x14A` | `stop_field_sound` | sound_id | stops the sound and removes it from the four per-field cleanup slots |
 
 The checked-in field usage index records
-74/289 used opcodes and
-336,788/387,377 reachable commands
+82/289 used opcodes and
+347,209/387,377 reachable commands
 with static semantic names. The highest-use unresolved commands are:
 
 | Opcode | Uses |
 |---:|---:|
 | `0x04D` | 2,921 |
 | `0x117` | 2,077 |
-| `0x060` | 2,006 |
-| `0x142` | 1,715 |
-| `0x0ED` | 1,686 |
 | `0x056` | 1,676 |
-| `0x0EE` | 1,665 |
 | `0x062` | 1,606 |
 | `0x0BA` | 1,603 |
-| `0x141` | 1,548 |
-| `0x0DE` | 1,412 |
 | `0x0B8` | 1,371 |
 | `0x084` | 1,291 |
 | `0x0B5` | 1,288 |
@@ -173,6 +176,12 @@ with static semantic names. The highest-use unresolved commands are:
 | `0x0B0` | 1,002 |
 | `0x14B` | 1,000 |
 | `0x0DD` | 975 |
+| `0x0BE` | 844 |
+| `0x085` | 825 |
+| `0x0A5` | 776 |
+| `0x0AE` | 763 |
+| `0x0BD` | 683 |
+| `0x050` | 631 |
 
 ## Menu/UI scene scripts
 
