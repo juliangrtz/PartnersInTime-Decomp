@@ -42,7 +42,7 @@ The raw-loader base and input image differ by overlay; see
 | 20 | 9,204 B | Battle special-attack code; recovered state initializes object 40, resets the acting party member, controls finish/mode transitions, and launches a target-relative vertical arc | `0x020C34A4-0x020C3724` (6 functions, 640 B) | Active; continue around the central animation dispatcher |
 | 21 | 5,280 B | Recovered code configures a battle scene-object animation/model and maintains two packed attack phases/timers | `0x020C2AE0-0x020C2BCC` (5 functions, 236 B) | Active; smallest real overlay |
 | 25 | 38,024 B | Unknown | None | Untriaged |
-| 26 | 14,452 B | Battle attack code; its shared state tracks all four party objects, async work, one resource load, and cleanup/restoration | `0x020C2AE0-0x020C2D38` (6 functions, 600 B) | Active quick-win target; state teardown, readiness gates, tracked-object phases, and guarded resource/animation setup reconstructed |
+| 26 | 14,452 B | Battle attack code; its shared state tracks all four party objects, async work, one resource load, cleanup/restoration, and adult/baby pairing | `0x020C2AE0-0x020C2D38`, `0x020C34A8-0x020C3570` (8 functions, 800 B) | Active quick-win target; state teardown, readiness gates, tracked-object phases, guarded resource/animation setup, and partner-target validation reconstructed |
 
 ## Placeholder entries
 

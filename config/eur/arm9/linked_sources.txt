@@ -123,4 +123,5 @@ src/overlay017/attack_object_motion.cpp
 src/overlay020/target_arc_state.c
 src/overlay021/attack_phase_state.c
 src/overlay026/attack_control.c
+src/overlay026/party_pairing.c
 src/field/field_entity_state.c
