@@ -239,7 +239,11 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   81,854 reachable VM commands. Schema v2 gives known opcodes and variables
   semantic names, relocates labels after size-changing edits, rebuilds archive
   offsets, and preserves verified private data without checking opaque bytes
-  into Git.
+  into Git. The field, battle, and scene VM descriptor tables are now completely
+  named, and every instance-specific opcode has an evidence-backed semantic
+  contract. In particular, all 260 battle opcodes and all 189 opcodes reached by
+  the original battle scripts are human-readable in the checked-in data source;
+  no neutral `op_000`-style battle instructions remain.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.
@@ -249,8 +253,9 @@ high-level code.
 The generated [`docs/research/BATTLE_AI_OPCODES.md`](docs/research/BATTLE_AI_OPCODES.md)
 provides a compact navigation index for the large enemy-script dispatcher.
 [`docs/research/SCRIPT_VM_SEMANTICS.md`](docs/research/SCRIPT_VM_SEMANTICS.md)
-tracks semantic coverage, compares the field/battle/scene descriptor ABIs, and
-prioritizes the remaining used opcodes. The field and scene tables live in
+records the complete semantic coverage, compares the field/battle/scene
+descriptor ABIs, and preserves the evidence and usage counts for each command.
+The field and scene tables live in
 `config/eur/field_vm.json` and `config/eur/scene_vm.json` and can be verified
 against a private extraction with `tools/extract_script_vm_descriptors.py`.
 [`tools/ida/README.md`](tools/ida/README.md) documents the reproducible IDA

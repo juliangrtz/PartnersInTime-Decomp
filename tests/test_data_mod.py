@@ -381,6 +381,14 @@ class BattleScriptTests(unittest.TestCase):
         self.assertEqual(differences, [28, 29])
         self.assertEqual(rebuilt[-4:], b"TAIL")
 
+    def test_rejects_legacy_opcode_with_malformed_descriptor(self) -> None:
+        with self.assertRaisesRegex(
+            data_mod.DataModError, "cannot safely emit opcode 0x03F"
+        ):
+            data_mod._parse_battle_opcode(
+                "op_03F", self.descriptors, self.names, "test command"
+            )
+
     def test_relocates_branch_labels_after_command_insertion(self) -> None:
         entry = bytearray(struct.pack("<H", 2))
         entry.extend(struct.pack("<7H", 4, 0, 0, 0, 2, 0, 3))

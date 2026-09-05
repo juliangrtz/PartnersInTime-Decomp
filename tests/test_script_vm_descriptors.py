@@ -45,6 +45,33 @@ class ScriptVmDescriptorTests(unittest.TestCase):
         for opcode in range(descriptor_tool.GENERIC_OPCODE_COUNT):
             self.assertEqual(len({table[opcode] for table in tables}), 1)
 
+    def test_battle_vm_has_complete_names_and_instance_contracts(self) -> None:
+        battle = json.loads(
+            (ROOT / "config/eur/battle_ai_vm.json").read_text(encoding="utf-8")
+        )
+        descriptors = [int(value, 0) for value in battle["descriptors"]]
+        names = {int(opcode, 0): name for opcode, name in battle["known_names"].items()}
+        semantics = {
+            int(opcode, 0): contract
+            for opcode, contract in battle["opcode_semantics"].items()
+        }
+
+        self.assertEqual(set(names), set(range(len(descriptors))))
+        self.assertEqual(
+            set(semantics),
+            set(range(descriptor_tool.GENERIC_OPCODE_COUNT, len(descriptors))),
+        )
+        self.assertEqual(len(set(names.values())), len(names))
+
+        for opcode, contract in semantics.items():
+            descriptor = descriptors[opcode]
+            self.assertEqual(len(contract["arguments"]), descriptor & 0x1F)
+            self.assertEqual(contract["result"] is not None, bool(descriptor & 0x20))
+            self.assertTrue(contract["control_flow"])
+            self.assertTrue(contract["yield"])
+            self.assertTrue(contract.get("effect") or contract["control_flow"])
+            self.assertTrue(contract["evidence"])
+
 
 if __name__ == "__main__":
     unittest.main()
