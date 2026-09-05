@@ -9,6 +9,7 @@ unchanged from the user's private extraction when a modded file tree is staged.
 from __future__ import annotations
 
 import argparse
+from collections import deque
 import hashlib
 import json
 import os
@@ -27,7 +28,8 @@ DIALOGUE_SCHEMA = "pit-localized-dialogue-v1"
 TREASURE_SCHEMA = "pit-treasure-v1"
 SHOP_SCHEMA = "pit-shop-stock-v1"
 ITEM_MASTER_SCHEMA = "pit-item-master-v1"
-BATTLE_SCRIPT_SCHEMA = "pit-battle-script-v1"
+BATTLE_SCRIPT_SCHEMA_V1 = "pit-battle-script-v1"
+BATTLE_SCRIPT_SCHEMA = "pit-battle-script-v2"
 BATTLE_VM_SCHEMA = "pit-battle-vm-v1"
 LANGUAGES = ("japanese", "english", "french", "german", "italian", "spanish")
 
@@ -117,9 +119,7 @@ def write_battle_script_json(path: Path, value: Any) -> None:
         return item is None or isinstance(item, (str, int, float, bool))
 
     def write_value(stream: Any, item: Any, level: int) -> None:
-        is_command = isinstance(item, dict) and {"offset", "opcode", "args"} <= set(
-            item
-        )
+        is_command = isinstance(item, dict) and {"opcode", "args"} <= set(item)
         if is_command:
             stream.write(json.dumps(item, ensure_ascii=False, separators=(", ", ": ")))
         elif isinstance(item, dict):
@@ -768,6 +768,124 @@ def parse_signed_integer(value: Any, bits: int, context: str) -> int:
     return value
 
 
+BATTLE_VM_VARIABLE_NAMES = {
+    0x4000: "battle.owner_actor_id",
+    0x4001: "battle.owner_task_type",
+    0x4002: "battle.constant_zero_2",
+    0x4003: "battle.constant_zero_3",
+    0x4005: "battle.context_18",
+    0x4006: "battle.target_actor_id",
+    0x4007: "battle.context_mask_102",
+    0x4008: "battle.context_mask_104",
+    0x4009: "battle.context_mask_106",
+    0x400A: "battle.context_20",
+}
+BATTLE_VM_VARIABLE_VALUES = {
+    name: value for value, name in BATTLE_VM_VARIABLE_NAMES.items()
+}
+VM_VARIABLE_NAMESPACES = {
+    0x1000: "state",
+    0x2000: "save_flags_48",
+    0x3000: "extension_3",
+    0x5000: "save_words",
+    0x6000: "save_bytes_d0",
+    0x7000: "extension_7",
+    0x8000: "context",
+    0xA000: "state_24",
+    0xB000: "state_flags_64",
+    0xC000: "save_words_40",
+    0xD000: "save_flags_50",
+}
+VM_VARIABLE_NAMESPACE_VALUES = {
+    name: value for value, name in VM_VARIABLE_NAMESPACES.items()
+}
+VM_VARIABLE_RE = re.compile(r"([a-z][a-z0-9_]*)\[(0|[1-9][0-9]*)\]")
+
+
+def format_vm_variable(variable: int) -> str:
+    """Render a VM variable ID without losing its encoded namespace."""
+    if variable in BATTLE_VM_VARIABLE_NAMES:
+        return BATTLE_VM_VARIABLE_NAMES[variable]
+    if 0x4010 <= variable <= 0x402F:
+        return f"battle.shared[{variable - 0x4010}]"
+    if variable & 0xE000 == 0xE000:
+        return f"save_flags_1f0[{variable & 0x1FFF}]"
+    namespace = variable & 0xF000
+    if namespace in VM_VARIABLE_NAMESPACES:
+        return f"{VM_VARIABLE_NAMESPACES[namespace]}[{variable & 0x0FFF}]"
+    return f"0x{variable:04X}"
+
+
+def parse_vm_variable(value: Any, context: str) -> int:
+    """Accept both schema-v1 hexadecimal IDs and schema-v2 symbolic IDs."""
+    if not isinstance(value, str):
+        return parse_integer(value, 16, context)
+    if value in BATTLE_VM_VARIABLE_VALUES:
+        return BATTLE_VM_VARIABLE_VALUES[value]
+    match = re.fullmatch(r"battle\.shared\[(0|[1-9][0-9]*)\]", value)
+    if match:
+        index = int(match.group(1))
+        if index >= 32:
+            raise DataModError(f"{context} battle.shared index must be below 32")
+        return 0x4010 + index
+    match = VM_VARIABLE_RE.fullmatch(value)
+    if match:
+        namespace_name, raw_index = match.groups()
+        index = int(raw_index)
+        if namespace_name == "save_flags_1f0":
+            if index >= 0x2000:
+                raise DataModError(
+                    f"{context} save_flags_1f0 index must be below 8192"
+                )
+            return 0xE000 | index
+        namespace = VM_VARIABLE_NAMESPACE_VALUES.get(namespace_name)
+        if namespace is None:
+            raise DataModError(
+                f"{context} has unknown VM namespace {namespace_name!r}"
+            )
+        if index >= 0x1000:
+            raise DataModError(f"{context} namespace index must be below 4096")
+        return namespace | index
+    return parse_integer(value, 16, context)
+
+
+# Every relative operand is measured in signed 16-bit words from the decoded
+# command end. read_table adds two words before indexing its embedded s32 table.
+VM_CODE_REFERENCE_ARGUMENTS = {
+    0x02: 1,
+    0x04: 4,
+    0x0C: 3,
+    0x73: 2,
+    0xD1: 2,
+    0xD2: 2,
+    0xD3: 1,
+    0xD4: 2,
+    0xDD: 5,
+    0xDE: 3,
+    0xDF: 2,
+    0xE1: 2,
+    0xE2: 3,
+}
+VM_DATA_REFERENCE_ARGUMENTS = {
+    0x0D: (0, 4),
+    0x0E: (0, 0),
+    0x71: (2, 0),
+}
+VM_BRANCH_WITH_FALLTHROUGH = {
+    0x04,
+    0x0C,
+    0x73,
+    0xD1,
+    0xD2,
+    0xD4,
+    0xDD,
+    0xDE,
+    0xDF,
+    0xE1,
+    0xE2,
+}
+
+
 def load_battle_vm_schema(version: str) -> tuple[tuple[int, ...], dict[int, str]]:
     if not re.fullmatch(r"[a-z0-9_-]+", version):
         raise DataModError(f"invalid data-project version {version!r}")
@@ -877,7 +995,9 @@ def _decode_battle_command(
     if descriptor & 0x20:
         if cursor + 2 > limit:
             raise DataModError(f"{context}: truncated result at 0x{position:X}")
-        command["result"] = f"0x{struct.unpack_from('<H', data, cursor)[0]:04X}"
+        command["result"] = format_vm_variable(
+            struct.unpack_from("<H", data, cursor)[0]
+        )
         cursor += 2
     mode_mask = 0
     if descriptor & 0x40:
@@ -892,7 +1012,7 @@ def _decode_battle_command(
     for argument_index in range(argument_count):
         raw = struct.unpack_from("<H", data, cursor + argument_index * 2)[0]
         if mode_mask & (1 << argument_index):
-            arguments.append({"variable": f"0x{raw:04X}"})
+            arguments.append({"variable": format_vm_variable(raw)})
         else:
             arguments.append(raw if raw < 0x8000 else raw - 0x10000)
     command["args"] = arguments
@@ -900,6 +1020,194 @@ def _decode_battle_command(
     if unused_mode_bits:
         command["unused_mode_bits"] = f"0x{unused_mode_bits:04X}"
     return command, arguments_end, opcode
+
+
+def _literal_argument(command: dict[str, Any], index: int) -> int | None:
+    argument = command["args"][index]
+    return argument if isinstance(argument, int) and not isinstance(argument, bool) else None
+
+
+def _battle_command_successors(
+    command: dict[str, Any], command_end: int, opcode: int
+) -> list[int]:
+    """Return all statically reachable instruction addresses."""
+    if opcode in (0, 1):
+        return []
+    reference_index = VM_CODE_REFERENCE_ARGUMENTS.get(opcode)
+    if reference_index is None:
+        return [command_end]
+    displacement = _literal_argument(command, reference_index)
+    if displacement is None:
+        # No original PiT battle script uses a variable branch displacement.
+        # Retain fallthrough so malformed or experimental input stays inspectable.
+        return [command_end]
+    target = command_end + displacement * 2
+    successors = [target]
+    if opcode in VM_BRANCH_WITH_FALLTHROUGH or (
+        opcode == 0x02 and _literal_argument(command, 0) == 1
+    ):
+        successors.append(command_end)
+    return successors
+
+
+def _label_name(offset: int, kind: str) -> str:
+    return f"{kind}_{offset:04X}"
+
+
+def _analyze_battle_script_entry(
+    entry: bytes,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+    context: str,
+) -> dict[str, Any]:
+    """Disassemble only code reachable from the entry table and VM branches."""
+    if len(entry) < 2:
+        raise DataModError(f"{context}: script block is shorter than its header")
+    header_size = struct.unpack_from("<H", entry)[0]
+    if header_size < 2 or header_size > len(entry) or header_size % 2:
+        raise DataModError(f"{context}: invalid script header size 0x{header_size:X}")
+    raw_entry_points = list(struct.unpack_from(f"<{header_size // 2}H", entry))
+    if raw_entry_points[0] != header_size:
+        raise DataModError(f"{context}: first script does not follow its header")
+    if any(
+        offset and (offset < header_size or offset >= len(entry) or offset % 2)
+        for offset in raw_entry_points
+    ):
+        raise DataModError(f"{context}: script entry point is invalid")
+
+    labels: dict[int, list[str]] = {}
+    entry_points: list[str | None] = []
+    for slot, offset in enumerate(raw_entry_points):
+        if offset == 0:
+            entry_points.append(None)
+            continue
+        label = f"entry_{slot:03d}"
+        labels.setdefault(offset, []).append(label)
+        entry_points.append(label)
+
+    pending = deque(offset for offset in raw_entry_points if offset)
+    decoded: dict[int, tuple[dict[str, Any], int, int]] = {}
+    occupied_by: dict[int, int] = {}
+    while pending:
+        position = pending.popleft()
+        if position in decoded:
+            continue
+        if position < header_size or position >= len(entry) or position % 2:
+            raise DataModError(
+                f"{context}: control flow reaches invalid offset 0x{position:X}"
+            )
+        command, command_end, opcode = _decode_battle_command(
+            entry, position, len(entry), descriptors, names, context
+        )
+        for byte_offset in range(position, command_end):
+            other = occupied_by.get(byte_offset)
+            if other is not None and other != position:
+                raise DataModError(
+                    f"{context}: commands at 0x{other:X} and 0x{position:X} overlap"
+                )
+            occupied_by[byte_offset] = position
+        decoded[position] = (command, command_end, opcode)
+        for successor in _battle_command_successors(command, command_end, opcode):
+            pending.append(successor)
+
+    for position, (command, command_end, opcode) in decoded.items():
+        reference_index = VM_CODE_REFERENCE_ARGUMENTS.get(opcode)
+        if reference_index is not None:
+            displacement = _literal_argument(command, reference_index)
+            if displacement is not None:
+                target = command_end + displacement * 2
+                labels.setdefault(target, []).append(_label_name(target, "loc"))
+        data_reference = VM_DATA_REFERENCE_ARGUMENTS.get(opcode)
+        if data_reference is not None:
+            argument_index, bias = data_reference
+            displacement = _literal_argument(command, argument_index)
+            if displacement is not None:
+                target = command_end + bias + displacement * 2
+                if not header_size <= target < len(entry) or target % 2:
+                    raise DataModError(
+                        f"{context}: data reference reaches invalid offset 0x{target:X}"
+                    )
+                labels.setdefault(target, []).append(_label_name(target, "data"))
+
+    # Entry labels take precedence when a branch targets an exported entry point.
+    for offset, values in labels.items():
+        labels[offset] = list(dict.fromkeys(values))
+
+    def preferred_label(offset: int) -> str:
+        values = labels[offset]
+        return next((value for value in values if value.startswith("entry_")), values[0])
+
+    commands_by_offset: dict[int, dict[str, Any]] = {}
+    for position, (raw_command, command_end, opcode) in decoded.items():
+        command = dict(raw_command)
+        command["source_offset"] = command.pop("offset")
+        if position in labels:
+            command["labels"] = labels[position]
+        arguments = list(command["args"])
+        reference_index = VM_CODE_REFERENCE_ARGUMENTS.get(opcode)
+        if reference_index is not None:
+            displacement = _literal_argument(command, reference_index)
+            if displacement is not None:
+                target = command_end + displacement * 2
+                arguments[reference_index] = {"label": preferred_label(target)}
+        data_reference = VM_DATA_REFERENCE_ARGUMENTS.get(opcode)
+        if data_reference is not None:
+            argument_index, bias = data_reference
+            displacement = _literal_argument(command, argument_index)
+            if displacement is not None:
+                target = command_end + bias + displacement * 2
+                arguments[argument_index] = {"label": preferred_label(target)}
+        command["args"] = arguments
+        commands_by_offset[position] = command
+
+    segments: list[dict[str, Any]] = []
+    command_offsets = sorted(decoded)
+    cursor = header_size
+    command_index = 0
+    while cursor < len(entry):
+        if command_index < len(command_offsets) and command_offsets[command_index] == cursor:
+            commands = []
+            while (
+                command_index < len(command_offsets)
+                and command_offsets[command_index] == cursor
+            ):
+                position = command_offsets[command_index]
+                commands.append(commands_by_offset[position])
+                cursor = decoded[position][1]
+                command_index += 1
+            segments.append({"kind": "code", "commands": commands})
+            continue
+
+        next_command = (
+            command_offsets[command_index]
+            if command_index < len(command_offsets)
+            else len(entry)
+        )
+        data_boundaries = sorted(
+            offset for offset in labels if cursor < offset < next_command
+        )
+        end = data_boundaries[0] if data_boundaries else next_command
+        if end <= cursor:
+            raise DataModError(f"{context}: could not partition data at 0x{cursor:X}")
+        payload = entry[cursor:end]
+        segment: dict[str, Any] = {
+            "kind": "private_data",
+            "source_offset": f"0x{cursor:04X}",
+            "size": len(payload),
+            "sha1": sha1(payload),
+        }
+        if cursor in labels:
+            segment["labels"] = labels[cursor]
+        segments.append(segment)
+        cursor = end
+
+    return {
+        "source_entry_size": len(entry),
+        "header_size": header_size,
+        "entry_points": entry_points,
+        "reachable_command_count": len(decoded),
+        "segments": segments,
+    }
 
 
 def _parse_battle_script_entry(
@@ -998,16 +1306,16 @@ def export_battle_scripts(
     entries = []
     command_count = 0
     for entry_id, entry in enumerate(parse_offset_archive(source_data)):
-        parsed = _parse_battle_script_entry(
+        parsed = _analyze_battle_script_entry(
             entry, descriptors, names, f"{relative_source} entry {entry_id}"
         )
-        command_count += sum(len(script["commands"]) for script in parsed["scripts"])
+        command_count += parsed["reachable_command_count"]
         entries.append({"entry_id": entry_id, **parsed})
     return {
         "schema": BATTLE_SCRIPT_SCHEMA,
         "source": relative_source,
         "source_sha1": sha1(source_data),
-        "layout": "fixed-command-boundaries",
+        "layout": "relocatable-control-flow",
         "command_count": command_count,
         "entries": entries,
     }
@@ -1018,6 +1326,8 @@ def _compile_battle_command(
     descriptors: tuple[int, ...],
     names: dict[int, str],
     context: str,
+    label_offsets: dict[str, int] | None = None,
+    command_offset: int | None = None,
 ) -> tuple[bytes, int]:
     if not isinstance(row, dict):
         raise DataModError(f"{context} must be an object")
@@ -1031,7 +1341,7 @@ def _compile_battle_command(
     if has_result:
         result.extend(
             struct.pack(
-                "<H", parse_integer(row["result"], 16, f"{context} result")
+                "<H", parse_vm_variable(row["result"], f"{context} result")
             )
         )
     arguments = _require_list(row.get("args"), f"{context} args")
@@ -1041,23 +1351,56 @@ def _compile_battle_command(
             f"{context} opcode needs {argument_count} arguments, got {len(arguments)}"
         )
     has_modes = bool(descriptor & 0x40)
+    encoded_size = 2 * (
+        1 + int(has_result) + int(has_modes and argument_count != 0) + argument_count
+    )
     mode_mask = 0
     encoded_arguments = bytearray()
     for argument_index, argument in enumerate(arguments):
         argument_context = f"{context} argument {argument_index}"
         if isinstance(argument, dict):
-            if not has_modes:
-                raise DataModError(f"{argument_context} cannot be a variable")
-            if set(argument) != {"variable"}:
-                raise DataModError(
-                    f"{argument_context} variable must contain only 'variable'"
+            if set(argument) == {"variable"}:
+                if not has_modes:
+                    raise DataModError(f"{argument_context} cannot be a variable")
+                value = parse_vm_variable(argument["variable"], argument_context)
+                mode_mask |= 1 << argument_index
+            elif set(argument) == {"label"}:
+                if label_offsets is None or command_offset is None:
+                    raise DataModError(
+                        f"{argument_context} cannot use a label in fixed-layout schema v1"
+                    )
+                label = argument["label"]
+                if not isinstance(label, str) or label not in label_offsets:
+                    raise DataModError(
+                        f"{argument_context} references unknown label {label!r}"
+                    )
+                bias = 0
+                expected_index = VM_CODE_REFERENCE_ARGUMENTS.get(opcode)
+                data_reference = VM_DATA_REFERENCE_ARGUMENTS.get(opcode)
+                if data_reference is not None:
+                    expected_index, bias = data_reference
+                if expected_index != argument_index:
+                    raise DataModError(
+                        f"{argument_context} is not a relative-address operand"
+                    )
+                distance = label_offsets[label] - (
+                    command_offset + encoded_size + bias
                 )
-            value = parse_integer(argument["variable"], 16, argument_context)
-            mode_mask |= 1 << argument_index
+                if distance % 2:
+                    raise DataModError(
+                        f"{argument_context} label is not halfword aligned"
+                    )
+                value = parse_signed_integer(
+                    distance // 2, 16, argument_context
+                ) & 0xFFFF
+            else:
+                raise DataModError(
+                    f"{argument_context} object must contain only 'variable' or 'label'"
+                )
         else:
             value = parse_signed_integer(argument, 16, argument_context) & 0xFFFF
         encoded_arguments.extend(struct.pack("<H", value))
-    if has_modes:
+    if has_modes and argument_count != 0:
         unused_mode_bits = parse_integer(
             row.get("unused_mode_bits", 0), 16, f"{context} unused_mode_bits"
         )
@@ -1072,14 +1415,14 @@ def _compile_battle_command(
     return bytes(result), opcode
 
 
-def build_battle_scripts(
+def _build_battle_scripts_v1(
     document: dict[str, Any],
     source_data: bytes,
     descriptors: tuple[int, ...],
     names: dict[int, str],
 ) -> bytes:
-    if document.get("schema") != BATTLE_SCRIPT_SCHEMA:
-        raise DataModError(f"expected schema {BATTLE_SCRIPT_SCHEMA!r}")
+    if document.get("schema") != BATTLE_SCRIPT_SCHEMA_V1:
+        raise DataModError(f"expected schema {BATTLE_SCRIPT_SCHEMA_V1!r}")
     source = document.get("source")
     if document.get("source_sha1") != sha1(source_data):
         raise DataModError(f"private source {source} does not match source_sha1")
@@ -1092,7 +1435,6 @@ def build_battle_scripts(
             f"battle script archive must retain its {len(source_entries)} entries"
         )
     rebuilt_entries = []
-    total_commands = 0
     for entry_id, (row, source_entry) in enumerate(zip(rows, source_entries)):
         context = f"{source} entry {entry_id}"
         if not isinstance(row, dict) or row.get("entry_id") != entry_id:
@@ -1167,6 +1509,222 @@ def build_battle_scripts(
     if document.get("command_count") != total_commands:
         raise DataModError(f"{source} command_count does not match its entries")
     return build_offset_archive(rebuilt_entries)
+
+
+def _battle_command_encoded_size(
+    row: Any,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+    context: str,
+) -> int:
+    if not isinstance(row, dict):
+        raise DataModError(f"{context} must be an object")
+    opcode = _parse_battle_opcode(row.get("opcode"), descriptors, names, context)
+    descriptor = descriptors[opcode]
+    has_result = bool(descriptor & 0x20)
+    if has_result != ("result" in row):
+        requirement = "requires" if has_result else "does not use"
+        raise DataModError(f"{context} opcode {requirement} a result variable")
+    argument_count = descriptor & 0x1F
+    arguments = _require_list(row.get("args"), f"{context} args")
+    if len(arguments) != argument_count:
+        raise DataModError(
+            f"{context} opcode needs {argument_count} arguments, got {len(arguments)}"
+        )
+    return 2 * (
+        1
+        + int(has_result)
+        + int(bool(descriptor & 0x40) and argument_count != 0)
+        + argument_count
+    )
+
+
+def _read_labels(value: Any, context: str) -> list[str]:
+    if value is None:
+        return []
+    labels = _require_list(value, context)
+    result = []
+    for label in labels:
+        if not isinstance(label, str) or not re.fullmatch(
+            r"[A-Za-z_][A-Za-z0-9_]*", label
+        ):
+            raise DataModError(f"{context} contains invalid label {label!r}")
+        result.append(label)
+    if len(result) != len(set(result)):
+        raise DataModError(f"{context} contains duplicate labels")
+    return result
+
+
+def _build_battle_script_entry_v2(
+    row: Any,
+    source_entry: bytes,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+    context: str,
+) -> tuple[bytes, int]:
+    if not isinstance(row, dict):
+        raise DataModError(f"{context} must be an object")
+    expected = _analyze_battle_script_entry(
+        source_entry, descriptors, names, context
+    )
+    header_size = row.get("header_size")
+    if header_size != expected["header_size"]:
+        raise DataModError(f"{context} header_size changed")
+    if row.get("source_entry_size") != expected["source_entry_size"]:
+        raise DataModError(f"{context} source_entry_size changed")
+    entry_points = _require_list(row.get("entry_points"), f"{context} entry_points")
+    if len(entry_points) * 2 != header_size:
+        raise DataModError(
+            f"{context} must retain {header_size // 2} entry-point slots"
+        )
+    if any(value is not None and not isinstance(value, str) for value in entry_points):
+        raise DataModError(f"{context} entry points must be labels or null")
+
+    expected_private = [
+        (segment["source_offset"], segment["size"], segment["sha1"])
+        for segment in expected["segments"]
+        if segment["kind"] == "private_data"
+    ]
+    segments = _require_list(row.get("segments"), f"{context} segments")
+    document_private = []
+    label_offsets: dict[str, int] = {}
+    command_context_by_id: dict[int, str] = {}
+    planned_segments: list[tuple[str, Any, int]] = []
+    cursor = header_size
+    command_count = 0
+
+    def bind_labels(raw_labels: Any, label_context: str, offset: int) -> None:
+        for label in _read_labels(raw_labels, label_context):
+            if label in label_offsets:
+                raise DataModError(f"{context} defines label {label!r} more than once")
+            label_offsets[label] = offset
+
+    for segment_index, segment in enumerate(segments):
+        segment_context = f"{context} segment {segment_index}"
+        if not isinstance(segment, dict):
+            raise DataModError(f"{segment_context} must be an object")
+        kind = segment.get("kind")
+        if kind == "code":
+            bind_labels(segment.get("labels"), f"{segment_context} labels", cursor)
+            commands = _require_list(
+                segment.get("commands"), f"{segment_context} commands"
+            )
+            planned_segments.append((kind, commands, cursor))
+            for command_index, command in enumerate(commands):
+                command_context = f"{segment_context} command {command_index}"
+                if not isinstance(command, dict):
+                    raise DataModError(f"{command_context} must be an object")
+                bind_labels(command.get("labels"), f"{command_context} labels", cursor)
+                command_context_by_id[id(command)] = command_context
+                cursor += _battle_command_encoded_size(
+                    command, descriptors, names, command_context
+                )
+                command_count += 1
+        elif kind == "private_data":
+            bind_labels(segment.get("labels"), f"{segment_context} labels", cursor)
+            source_offset = segment.get("source_offset")
+            size = segment.get("size")
+            digest = segment.get("sha1")
+            document_private.append((source_offset, size, digest))
+            offset = parse_integer(source_offset, 16, f"{segment_context} source_offset")
+            if not isinstance(size, int) or size < 0 or offset + size > len(source_entry):
+                raise DataModError(f"{segment_context} has an invalid private-data range")
+            payload = source_entry[offset : offset + size]
+            if digest != sha1(payload):
+                raise DataModError(f"{segment_context} private-data SHA-1 changed")
+            planned_segments.append((kind, payload, cursor))
+            cursor += size
+        else:
+            raise DataModError(f"{segment_context} has invalid kind {kind!r}")
+
+    if document_private != expected_private:
+        raise DataModError(
+            f"{context} must retain every private-data region in source order"
+        )
+    for slot, label in enumerate(entry_points):
+        if label is not None and label not in label_offsets:
+            raise DataModError(
+                f"{context} entry-point slot {slot} references unknown label {label!r}"
+            )
+    if cursor >= 0x10000:
+        raise DataModError(f"{context} exceeds the 16-bit entry-offset limit")
+
+    rebuilt = bytearray(header_size)
+    for slot, label in enumerate(entry_points):
+        offset = 0 if label is None else label_offsets[label]
+        struct.pack_into("<H", rebuilt, slot * 2, offset)
+    for kind, value, expected_offset in planned_segments:
+        if len(rebuilt) != expected_offset:
+            raise AssertionError("battle-script layout pass disagrees with encoder")
+        if kind == "private_data":
+            rebuilt.extend(value)
+            continue
+        commands = value
+        for command in commands:
+            command_offset = len(rebuilt)
+            command_context = command_context_by_id[id(command)]
+            encoded, _ = _compile_battle_command(
+                command,
+                descriptors,
+                names,
+                command_context,
+                label_offsets=label_offsets,
+                command_offset=command_offset,
+            )
+            rebuilt.extend(encoded)
+    return bytes(rebuilt), command_count
+
+
+def _build_battle_scripts_v2(
+    document: dict[str, Any],
+    source_data: bytes,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+) -> bytes:
+    source = document.get("source")
+    if document.get("source_sha1") != sha1(source_data):
+        raise DataModError(f"private source {source} does not match source_sha1")
+    if document.get("layout") != "relocatable-control-flow":
+        raise DataModError(
+            "battle script layout must remain relocatable-control-flow"
+        )
+    source_entries = parse_offset_archive(source_data)
+    rows = _require_list(document.get("entries"), "battle script entries")
+    if len(rows) != len(source_entries):
+        raise DataModError(
+            f"battle script archive must retain its {len(source_entries)} entries"
+    )
+    rebuilt_entries = []
+    for entry_id, (row, source_entry) in enumerate(zip(rows, source_entries)):
+        context = f"{source} entry {entry_id}"
+        if not isinstance(row, dict) or row.get("entry_id") != entry_id:
+            raise DataModError(
+                "battle script entries must retain contiguous entry_id values"
+            )
+        rebuilt, _ = _build_battle_script_entry_v2(
+            row, source_entry, descriptors, names, context
+        )
+        rebuilt_entries.append(rebuilt)
+    # command_count is exported for review and progress reporting. It is not an
+    # assembly input: requiring a manual counter edit after inserting or
+    # removing an instruction would make otherwise valid source fail to build.
+    return build_offset_archive(rebuilt_entries)
+
+
+def build_battle_scripts(
+    document: dict[str, Any],
+    source_data: bytes,
+    descriptors: tuple[int, ...],
+    names: dict[int, str],
+) -> bytes:
+    schema = document.get("schema")
+    if schema == BATTLE_SCRIPT_SCHEMA_V1:
+        return _build_battle_scripts_v1(document, source_data, descriptors, names)
+    if schema == BATTLE_SCRIPT_SCHEMA:
+        return _build_battle_scripts_v2(document, source_data, descriptors, names)
+    raise DataModError(
+        f"expected schema {BATTLE_SCRIPT_SCHEMA_V1!r} or {BATTLE_SCRIPT_SCHEMA!r}"
+    )
 
 
 def english_enemy_names(files_root: Path) -> list[str]:
@@ -1802,7 +2360,7 @@ def compile_project(
     document_groups = (
         ("text_documents", {MFSET_SCHEMA}),
         ("dialogue_documents", {DIALOGUE_SCHEMA}),
-        ("script_documents", {BATTLE_SCRIPT_SCHEMA}),
+        ("script_documents", {BATTLE_SCRIPT_SCHEMA_V1, BATTLE_SCRIPT_SCHEMA}),
         ("stat_documents", {ENEMY_SCHEMA, TREASURE_SCHEMA}),
     )
     for key, expected_schemas in document_groups:
@@ -1831,7 +2389,7 @@ def compile_project(
                 rebuilt = build_dialogue(document, source_data)
             elif schema == ENEMY_SCHEMA:
                 rebuilt = build_enemy_stats(document, source_data)
-            elif schema == BATTLE_SCRIPT_SCHEMA:
+            elif schema in {BATTLE_SCRIPT_SCHEMA_V1, BATTLE_SCRIPT_SCHEMA}:
                 rebuilt = build_battle_scripts(
                     document, source_data, descriptors, opcode_names
                 )

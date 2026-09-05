@@ -27,7 +27,7 @@ The raw-loader base and input image differ by overlay; see
 | 2 | 362,436 B | Battle engine, battle BAI extension, combat UI, effects, transitions, and results | Many maintained units; see `BATTLE_MAP.md` | Active; continue coherent clusters alongside other overlays |
 | 5 | 16,760 B | Shared resource owners plus Nintendo DS 2D display addressing, affine transforms, display-plane control, VRAM-bank reset, palette transfer, tile, and tilemap loading helpers are proven; whole-overlay role remains open | `0x02066224-0x02066358` and `0x02067AAC-0x02068594` (52 functions, 3,100 B) | Active quick-win target |
 | 6 | 66,492 B | Unknown | None | Untriaged |
-| 7 | 142,264 B | Unknown | None | Untriaged; split into call-graph clusters before choosing source units |
+| 7 | 142,264 B | Scene/object subsystem: a 210-entry script-VM descriptor table, its command handler, two global script slots, 56 object slots, movement/animation commands, and the `0x7000` variable extension are statically proven | `0x020841F8-0x0208435C` (2 functions, 356 B) | VM variable extension matching; recover opcode contracts and its private container grammar next |
 | 8 | 54,068 B | Unknown | None | Untriaged |
 | 9 | 78,984 B | Shop/menu overlay; recovered code maps menu categories to the four item classes and selects the item pool or 4-by-6 tier descriptor table for each of four shops | `0x0207DF1C-0x0207E008` (3 functions, 236 B) | Active quick-win target; shop-stock access is reconstructed and agrees with the editable-data layout |
 | 10 | 6,820 B | Six-slot enemy selection/snapshot logic, enemy-stat trait filtering, Q8 scaling, and threshold selection | `0x020C2340-0x020C259C` (6 functions, 604 B) | Active; high-value small overlay |

@@ -25,8 +25,8 @@ copied unchanged when the modded NitroFS tree is staged.
 - all 99 resident ARM9 item-master records, with the confirmed purchase-price
   field named and every not-yet-understood word/byte preserved explicitly;
 - all 14 battle-scenario, enemy-AI, and related `BAI_*.dat` VM archives: 230
-  archive entries, 242 entry-point scripts, and 129,127 decoded commands using
-  191 distinct opcodes;
+  archive entries, 243 non-null entry points, and 81,854 control-flow-reachable
+  commands using 189 distinct opcodes;
 - length-changing MFset edits: string pointers, language-entry sizes, and outer
   archive offsets are regenerated instead of patched in place.
 
@@ -193,44 +193,49 @@ unrelated C changes in resident ARM9.
 
 ## Battle scenarios and enemy AI
 
-The 14 files under `data/eur/scripts/` expose every decoded command from the
-`BAI_scn_*`, `BAI_mon_*`, `BAI_iwasaki`, and `BAI_sugiyama` archives. Each JSON
-line inside a `commands` array is one instruction and retains its entry-local
-byte offset, making an emulator trace or IDA address easy to correlate with
-source. For example:
+The 14 files under `data/eur/scripts/` expose every statically reachable command
+from the `BAI_scn_*`, `BAI_mon_*`, `BAI_iwasaki`, and `BAI_sugiyama` archives.
+The exporter starts at every archive entry point and follows both the resident
+VM's branches and overlay 2's script-spawning/branching opcodes. This avoids the
+old schema-v1 failure mode where embedded lookup tables happened to decode as
+plausible instructions. Each JSON line inside a `commands` array is one
+instruction and retains its original `source_offset` for IDA and runtime-trace
+correlation. For example:
 
 ```json
-{"offset": "0x00F4", "opcode": "op_011", "result": "0x1000", "args": [512, 0]}
-{"offset": "0x00FE", "opcode": "op_011", "result": "0x1001", "args": [{"variable": "0x1000"}, -128]}
+{"opcode": "subtract", "result": "state[0]", "args": [512, 0], "source_offset": "0x00F4"}
+{"opcode": "subtract", "result": "state[1]", "args": [{"variable": "state[0]"}, -128], "source_offset": "0x00FE"}
+{"opcode": "jump", "args": [0, {"label": "loc_00D2"}], "source_offset": "0x00E6"}
 ```
 
-A plain integer is a signed 16-bit literal. `{"variable": "0x1000"}` tells the
+A plain integer is a signed 16-bit literal. `{"variable": "state[0]"}` tells the
 VM to resolve that argument through its variable accessor, and `result` is the
 optional destination variable used by opcodes that return a value. A small
 number of original commands also carry `unused_mode_bits`; keep those preserved
 bits unless runtime research proves their meaning.
 
-Only opcodes `end` and `return` have names because their implementations are
-confirmed. The remaining `op_000` through `op_103` identifiers are deliberately
-neutral; do not turn a guess from one script into a global name. The compact
-command layouts come from the validated 260-entry descriptor table documented
-in `config/eur/battle_ai_vm.json`. The dispatcher navigation report in
-`docs/research/BATTLE_AI_OPCODES.md` is the starting point for assigning further
-semantics.
+Schema v2 renders the known variable namespaces symbolically, including
+`state[n]`, `context[n]`, `battle.shared[n]`, and named battle values such as
+`battle.owner_actor_id`. Hexadecimal IDs from schema v1 remain accepted by the
+compiler. Static control-flow and table references use `{"label": "..."}`.
+The assembler recalculates their signed halfword displacements as commands are
+inserted, removed, or changed in size, and also rebuilds every archive and entry
+offset table. `source_offset` and the command counters are provenance fields;
+the assembler recalculates the real layout and does not require those counters
+to be edited after adding or removing commands.
 
-Schema v1 is intentionally fixed-layout. Arguments, variable references,
-result variables, and opcodes with the same encoded command size can be edited.
-Commands, scripts, and archive entries cannot yet be inserted, removed, or
-resized. The builder compares every command boundary with the private source
-and rejects a shape change before packaging. This is necessary because branch
-and call operands are still numeric script offsets; label-based relocation is
-the next format milestone.
+Opaque `private_data` segments are not committed as original bytes. Their
+source range, size, and SHA-1 are recorded, and the builder copies each verified
+segment from the user's matching extraction. This retains embedded tables while
+preventing them from being mistaken for code. All 14 unchanged schema-v2
+documents currently rebuild byte for byte.
 
-Some entries contain data after their final VM return. Those 129,804 bytes are
-not silently treated as commands and are not committed as opaque hex. Each
-document stores only the tail offset, size, and SHA-1. During a build, the tool
-verifies and copies the tail from the user's matching private extraction. An
-unchanged export rebuilds every archive byte for byte.
+The compact command layouts come from the validated 260-entry descriptor table
+in `config/eur/battle_ai_vm.json`. Confirmed and evidence-backed opcode names are
+used in source; unresolved instructions retain neutral `op_000` through
+`op_103` names. The generated [semantic coverage report](research/SCRIPT_VM_SEMANTICS.md)
+lists every descriptor, real usage counts, variable namespaces, evidence level,
+and the highest-value unresolved opcodes.
 
 ## Generated build artifacts
 

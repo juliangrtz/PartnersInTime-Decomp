@@ -6,10 +6,10 @@ extern u8 *gSaveData;
 extern s32 func_ov000_02081c00(
     ScriptVm *vm, ScriptVmState *state, u16 variable, u32 index
 );
-extern void func_ov007_020841f8(
+extern void SceneScriptVM_WriteVariable(
     u16 variable, s32 value, ScriptVm *vm, ScriptVmState *state
 );
-extern s32 func_ov007_02084240(
+extern s32 SceneScriptVM_ReadVariable(
     u16 variable, ScriptVm *vm, ScriptVmState *state, u32 index
 );
 
@@ -48,7 +48,7 @@ s32 VM_ReadVariable(u16 variable, ScriptVm *vm, ScriptVmState *state) {
     case SCRIPT_VM_VAR_EXTENSION_4:
         return BattleVM_ReadVariable(variable, vm, state, index);
     case SCRIPT_VM_VAR_EXTENSION_7:
-        return func_ov007_02084240(variable, vm, state, index);
+        return SceneScriptVM_ReadVariable(variable, vm, state, index);
     case SCRIPT_VM_VAR_SAVE_WORDS:
         return ((s32 *)gSaveData)[index];
     case SCRIPT_VM_VAR_SAVE_BYTES_D0: {
@@ -124,7 +124,7 @@ void VM_WriteVariable(
         ((s32 *)gSaveData)[index] = value;
         return;
     case SCRIPT_VM_VAR_EXTENSION_7:
-        func_ov007_020841f8(variable, value, vm, state);
+        SceneScriptVM_WriteVariable(variable, value, vm, state);
         return;
     case SCRIPT_VM_VAR_SAVE_BYTES_D0: {
         u8 *save = gSaveData + index;
