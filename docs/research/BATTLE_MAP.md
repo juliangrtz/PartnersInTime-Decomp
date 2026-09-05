@@ -202,6 +202,7 @@ and runtime overlay 2.
 | `020A4EB0` | `BattleSceneObject_UnlinkMotion` | Preserves the final target and removes an object from the motion list |
 | `020A4F18` | `BattleSceneObject_StopMotionChannel` | Stops a channel and reconciles accumulated coordinate deltas |
 | `020A5294` | `BattleTransform_BuildBetweenPoints` | Builds a fixed-point 4x4 transform spanning two battle-space points |
+| `020A53E0` | `BattleSceneObject_StretchBetweenAnchors` | Stretches an object's primary model transform between two scene anchors |
 | `020A50C4` | `BattleSceneObject_GetMotionChannel` | Resolves one of the fixed-size per-object motion channels |
 | `020A50D4` | `BattleTaskList_Update` | Runs live callbacks and recycles stopped tasks |
 | `020A519C` | `BattleTask_BindOwnerSlot` | Binds a task handle to its owning object and returns the displaced task |
@@ -807,6 +808,11 @@ The following `BattleTransform_BuildBetweenPoints` is exact linked C. It uses
 the DS square-root and division units to build a fixed-point 4x4 transform with
 a normalized longitudinal axis, perpendicular lateral axis, and midpoint
 translation between two battle-space positions.
+Opcode `0xA1` exposes the adjacent anchor-based variant. Its readable C resolves
+two scene objects plus local offsets, optionally flattens their Z coordinates,
+updates the primary model's transform, centers the owning scene object, and
+averages its effect anchor. This 780-byte routine remains unlinked while its
+stack schedule and fixed-point truncation sequence are matched to MWCC.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets
