@@ -3,6 +3,8 @@
 
 #include <nitro.h>
 
+typedef struct Overlay17AttackObject Overlay17AttackObject;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -22,6 +24,12 @@ void *Overlay17Attack_QueueDisplayInitialization(void);
 void Overlay17Attack_InitializeDisplayPattern(void);
 void Overlay17Attack_FinalizeDisplay(void);
 int Overlay17Attack_ConfigureDisplay(int argument);
+int Overlay17Attack_AreObjectStatesIdle(Overlay17AttackObject *objects,
+                                        int object_count);
+void Overlay17Attack_ConfigureObjectModel(
+    Overlay17AttackObject *object, s16 animation_command,
+    int model_value, int render_state,
+    int synchronize_animation_layer, int flag_10);
 
 #ifdef __cplusplus
 }
