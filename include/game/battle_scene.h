@@ -152,7 +152,9 @@ struct BattleModel {
             u32 panel_animation_trigger : 1;
             u32 unknown_03_07 : 5;
             u32 animation_active : 1;
-            u32 unknown_09_31 : 23;
+            u32 unknown_09 : 1;
+            u32 facing_left : 1;
+            u32 unknown_11_31 : 21;
         } flag_bits;
     };
     u8 unk_080[0xC4];
@@ -191,7 +193,9 @@ struct BattleModel {
             u32 panel_animation_trigger : 1;
             u32 unknown_03_07 : 5;
             u32 animation_active : 1;
-            u32 unknown_09_31 : 23;
+            u32 unknown_09 : 1;
+            u32 facing_left : 1;
+            u32 unknown_11_31 : 21;
         } flag_bits;
     };
     u8 unk_080[0xC4];

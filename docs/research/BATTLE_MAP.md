@@ -738,12 +738,15 @@ half of battle fleeing. Four callbacks coordinate paired party members, wait
 for model state, start the run animation, move an actor to X=-32, clear partner
 links, and finish the task after the exit animation. This identification also
 explains why the preceding effect subtracts real coins from the save data.
-The core `0x020A1284`-`0x020A19B8` run callbacks are exact linked C too. Their
+The core `0x020A1284`-`0x020A1EF8` flee callbacks are exact linked C too. Their
 typed state names the initial partner delay, A/B/X/Y input-boost timer, random
 coin-spawn timer, Q8 X-coordinate remainder, and partner handshake. The update
 keeps helper object 40 attached to the runner, subtracts save coins, applies
 badge ID `0x3005` to reduce the loss, and dispatches formation-specific impact
-and voice effects before both actors leave the battle.
+and voice effects before both actors leave the battle. The following callbacks
+coordinate the delayed partner launch, reload run resources, move the active
+party object back into formation with a hardware-square-root duration, and set
+the save battle result to 2 once coin rendering and exit animations are done.
 When both the current actor and a computed damage target are enemies, the queue
 compiler starts the target's reaction script. Action and reaction modes use
 separate task pools and separate 184-byte actor-local VM states at actor offsets
