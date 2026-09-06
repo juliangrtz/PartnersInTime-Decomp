@@ -685,9 +685,8 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_SET_RUNTIME_FLAG_03:
         runtime_state = BattleContext_GetRuntimeState();
-        runtime_state->flags.raw =
-            (runtime_state->flags.raw & ~(1 << 3)) |
-            (((u16)command->arguments[0] & 1) << 3);
+        runtime_state->flags.bits.runtime_flag_03 =
+            (u16)command->arguments[0];
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SET_STATE_OVERRIDE:
