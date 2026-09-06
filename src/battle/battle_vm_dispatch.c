@@ -359,11 +359,11 @@ enum BattleVmSaveOffset {
     BATTLE_VM_SAVE_RESULT_CODE_OFFSET = 0x55E
 };
 
-static u32 BattleVm_PackHalfwords(s32 low, s32 high) {
+static inline u32 BattleVm_PackHalfwords(s32 low, s32 high) {
     return (u16)low | ((u32)high << 16);
 }
 
-static void BattleVm_DecodeFixedArgument(ScriptVmCommand *command,
+static inline void BattleVm_DecodeFixedArgument(ScriptVmCommand *command,
                                          int argument_index) {
     if ((command->argument_modes & (1 << argument_index)) == 0) {
         command->arguments[argument_index] =
@@ -374,24 +374,25 @@ static void BattleVm_DecodeFixedArgument(ScriptVmCommand *command,
     }
 }
 
-static void BattleVm_WriteResult(ScriptVm *vm, ScriptVmState *state,
+static inline void BattleVm_WriteResult(ScriptVm *vm, ScriptVmState *state,
                                  ScriptVmCommand *command, s32 value) {
     VM_WriteVariable(command->result_variable, value, vm, state);
 }
 
-static int BattleVm_RetryCurrentCommand(ScriptVm *vm, ScriptVmState *state,
-                                        ScriptVmCommand *command) {
-    u32 descriptor = vm->command_descriptors[command->opcode];
-    u32 halfword_count =
+static inline int BattleVm_RetryCurrentCommand(
+    ScriptVm *vm, ScriptVmState *state, u16 opcode
+) {
+    s32 descriptor = (u16)vm->command_descriptors[opcode];
+    s32 halfword_count =
         (descriptor & SCRIPT_VM_ARGUMENT_COUNT_MASK) +
-        ((descriptor & SCRIPT_VM_HAS_RESULT) != 0) +
-        ((descriptor & SCRIPT_VM_HAS_ARGUMENT_MODES) != 0) + 1;
+        ((descriptor & SCRIPT_VM_HAS_RESULT) >> 5) +
+        ((descriptor & SCRIPT_VM_HAS_ARGUMENT_MODES) >> 6) + 1;
 
     state->script -= halfword_count;
     return BATTLE_AI_VM_YIELD;
 }
 
-static BattlePosition BattleVm_GetObjectViewPosition(
+static inline BattlePosition BattleVm_GetObjectViewPosition(
     BattleSceneObject *object) {
     BattlePosition position;
 
@@ -435,7 +436,7 @@ static BattlePosition BattleVm_GetAbsoluteEffectPosition(
     return position;
 }
 
-static void BattleVm_ControlScript(int script_selector, int mode) {
+static inline void BattleVm_ControlScript(int script_selector, int mode) {
     BattleAIState *target;
 
     if (mode == BATTLE_VM_SCRIPT_STOP &&
@@ -463,43 +464,7 @@ static void BattleVm_ControlScript(int script_selector, int mode) {
     }
 }
 
-static int BattleVm_ReadEnemyStat(BattleEnemyActor *enemy,
-                                  BattleEnemyStatRecord *stats,
-                                  int stat_id) {
-    switch (stat_id) {
-    case 0: return stats->name_id;
-    case 1: return (s16)stats->packed_object_data_id;
-    case 2: return stats->unknown_04 & 1;
-    case 3: return (stats->unknown_04 >> 1) & 1;
-    case 4: return (stats->unknown_04 >> 2) & 1;
-    case 5: return stats->level;
-    case 6: return stats->max_hp;
-    case 7: return stats->power;
-    case 8: return stats->defense;
-    case 9: return stats->speed;
-    case 10: return enemy->state_flag_bits.traits;
-    case 11: return (stats->traits >> 2) & 1;
-    case 12: return (stats->traits >> 3) & 3;
-    case 13: return (stats->traits >> 8) & 3;
-    case 14: return (stats->traits >> 10) & 3;
-    case 15: return (stats->traits >> 12) & 3;
-    case 16: return (stats->traits >> 14) & 3;
-    case 17: return stats->experience;
-    case 18: return stats->coins;
-    case 19: return stats->item_drop_1.fields.item_id;
-    case 20: return stats->item_drop_1.fields.chance_percent;
-    case 21: return stats->item_drop_2.fields.item_id;
-    case 22: return stats->item_drop_2.fields.chance_percent;
-    }
-    return 0;
-}
-
-static void BattleVm_SetPackedField(u16 *field, u16 mask, int shift,
-                                    int value) {
-    *field = (*field & ~mask) | ((value << shift) & mask);
-}
-
-static void BattleVm_WriteEnemyStat(BattleEnemyActor *enemy,
+static inline void BattleVm_WriteEnemyStat(BattleEnemyActor *enemy,
                                     BattleEnemyStatRecord *stats,
                                     int stat_id, int value) {
     switch (stat_id) {
@@ -519,12 +484,24 @@ static void BattleVm_WriteEnemyStat(BattleEnemyActor *enemy,
         enemy->state_flags =
             (enemy->state_flags & ~(3 << 6)) | ((value & 3) << 6);
         break;
-    case 11: BattleVm_SetPackedField(&stats->traits, 1 << 2, 2, value); break;
-    case 12: BattleVm_SetPackedField(&stats->traits, 3 << 3, 3, value); break;
-    case 13: BattleVm_SetPackedField(&stats->traits, 3 << 8, 8, value); break;
-    case 14: BattleVm_SetPackedField(&stats->traits, 3 << 10, 10, value); break;
-    case 15: BattleVm_SetPackedField(&stats->traits, 3 << 12, 12, value); break;
-    case 16: BattleVm_SetPackedField(&stats->traits, 3 << 14, 14, value); break;
+    case 11:
+        stats->traits = (stats->traits & ~(1 << 2)) | ((value & 1) << 2);
+        break;
+    case 12:
+        stats->traits = (stats->traits & ~(3 << 3)) | ((value & 3) << 3);
+        break;
+    case 13:
+        stats->traits = (stats->traits & ~(3 << 8)) | ((value & 3) << 8);
+        break;
+    case 14:
+        stats->traits = (stats->traits & ~(3 << 10)) | ((value & 3) << 10);
+        break;
+    case 15:
+        stats->traits = (stats->traits & ~(3 << 12)) | ((value & 3) << 12);
+        break;
+    case 16:
+        stats->traits = (stats->traits & ~(3 << 14)) | ((value & 3) << 14);
+        break;
     case 17: stats->experience = value; break;
     case 18: stats->coins = value; break;
     case 19: stats->item_drop_1.fields.item_id = value; break;
@@ -546,7 +523,7 @@ static BattleAITask **BattleVm_FindFreeTaskHandleSlot(int *slot_index) {
     return &slots[index];
 }
 
-static int BattleVm_GetItemBattleAnimation(u16 tagged_item_id) {
+static inline int BattleVm_GetItemBattleAnimation(u16 tagged_item_id) {
     u16 item_index = tagged_item_id & ITEM_ID_INDEX_MASK;
 
     switch (tagged_item_id & ITEM_ID_TAG_MASK) {
@@ -562,21 +539,7 @@ static int BattleVm_GetItemBattleAnimation(u16 tagged_item_id) {
     return -1;
 }
 
-static int BattleVm_ObjectScriptMatches(BattleAIState *script_state,
-                                        int selector) {
-    if (selector >= BATTLE_AI_TASK_OBJECT) {
-        return script_state->order_tie_break ==
-            (selector & BATTLE_AI_TASK_ACTOR_ID_MASK);
-    }
-    return script_state->order == selector;
-}
-
-static BattleAIState *BattleVm_GetObjectScriptStates(void) {
-    return (BattleAIState *)(
-        gBattleContext + BATTLE_VM_OBJECT_SCRIPT_STATES_OFFSET);
-}
-
-static int BattleVm_EvaluateComparison(int operation, int left, int right) {
+static inline int BattleVm_EvaluateComparison(int operation, int left, int right) {
     switch (operation) {
     case 0: return left == right;
     case 1: return left != right;
@@ -612,7 +575,6 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     BattleEffect **effect_slots;
     BattleAITask *task;
     BattleAITask **task_slot;
-    BattleAIState *object_script_states;
     BattleAIState *object_script_state;
     s16 *motion_parameters;
     const u8 *keyframe_record;
@@ -678,7 +640,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_WAIT_OBJECT_DATA_LOAD:
         if (BattleObjectData_IsLoadPending((u16)command->arguments[0])) {
-            return BattleVm_RetryCurrentCommand(vm, state, command);
+            return BattleVm_RetryCurrentCommand(
+                vm, state, BATTLE_VM_WAIT_OBJECT_DATA_LOAD
+            );
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -856,12 +820,119 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         enemy = (BattleEnemyActor *)BattleActor_GetEnemySlot(
             (u16)command->arguments[0]);
         enemy_stats = BattleEnemy_GetStats((u16)command->arguments[0]);
-        BattleVm_WriteResult(
-            vm, state, command,
-            enemy != 0 && enemy_stats != 0
-                ? BattleVm_ReadEnemyStat(
-                      enemy, enemy_stats, (u16)command->arguments[1])
-                : 0);
+        if (enemy == 0 || enemy_stats == 0) {
+            BattleVm_WriteResult(vm, state, command, 0);
+            return SCRIPT_VM_CONTINUE;
+        }
+        switch ((u16)command->arguments[1]) {
+        case 0:
+            BattleVm_WriteResult(vm, state, command, enemy_stats->name_id);
+            return SCRIPT_VM_CONTINUE;
+        case 1:
+            BattleVm_WriteResult(
+                vm, state, command, (s16)enemy_stats->packed_object_data_id
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 2:
+            BattleVm_WriteResult(
+                vm, state, command, enemy_stats->unknown_04 & 1
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 3:
+            BattleVm_WriteResult(
+                vm, state, command, (enemy_stats->unknown_04 >> 1) & 1
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 4:
+            BattleVm_WriteResult(
+                vm, state, command, (enemy_stats->unknown_04 >> 2) & 1
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 5:
+            BattleVm_WriteResult(vm, state, command, enemy_stats->level);
+            return SCRIPT_VM_CONTINUE;
+        case 6:
+            BattleVm_WriteResult(vm, state, command, enemy_stats->max_hp);
+            return SCRIPT_VM_CONTINUE;
+        case 7:
+            BattleVm_WriteResult(vm, state, command, enemy_stats->power);
+            return SCRIPT_VM_CONTINUE;
+        case 8:
+            BattleVm_WriteResult(vm, state, command, enemy_stats->defense);
+            return SCRIPT_VM_CONTINUE;
+        case 9:
+            BattleVm_WriteResult(vm, state, command, enemy_stats->speed);
+            return SCRIPT_VM_CONTINUE;
+        case 10:
+            BattleVm_WriteResult(
+                vm, state, command, enemy->state_flag_bits.traits
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 11:
+            BattleVm_WriteResult(
+                vm, state, command, (enemy_stats->traits >> 2) & 1
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 12:
+            BattleVm_WriteResult(
+                vm, state, command, (enemy_stats->traits >> 3) & 3
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 13:
+            BattleVm_WriteResult(
+                vm, state, command, (enemy_stats->traits >> 8) & 3
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 14:
+            BattleVm_WriteResult(
+                vm, state, command, (enemy_stats->traits >> 10) & 3
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 15:
+            BattleVm_WriteResult(
+                vm, state, command, (enemy_stats->traits >> 12) & 3
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 16:
+            BattleVm_WriteResult(
+                vm, state, command, (enemy_stats->traits >> 14) & 3
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 17:
+            BattleVm_WriteResult(
+                vm, state, command, enemy_stats->experience
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 18:
+            BattleVm_WriteResult(vm, state, command, enemy_stats->coins);
+            return SCRIPT_VM_CONTINUE;
+        case 19:
+            BattleVm_WriteResult(
+                vm, state, command, enemy_stats->item_drop_1.fields.item_id
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 20:
+            BattleVm_WriteResult(
+                vm,
+                state,
+                command,
+                enemy_stats->item_drop_1.fields.chance_percent
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 21:
+            BattleVm_WriteResult(
+                vm, state, command, enemy_stats->item_drop_2.fields.item_id
+            );
+            return SCRIPT_VM_CONTINUE;
+        case 22:
+            BattleVm_WriteResult(
+                vm,
+                state,
+                command,
+                enemy_stats->item_drop_2.fields.chance_percent
+            );
+            return SCRIPT_VM_CONTINUE;
+        }
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SET_ENEMY_STAT:
@@ -884,7 +955,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         if (object->flags.bits.state == 0) {
             object->flags.bits.state = 1;
         }
-        return BattleVm_RetryCurrentCommand(vm, state, command);
+        return BattleVm_RetryCurrentCommand(
+            vm, state, BATTLE_VM_WAIT_OBJECT_PENDING_STATE
+        );
 
     case BATTLE_VM_SET_ACTIVE_MODEL_ANIMATION:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
@@ -1086,7 +1159,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         if (BattleSceneObject_IsAnimationActiveById(
                 (u16)command->arguments[0],
                 (u16)command->arguments[1])) {
-            return BattleVm_RetryCurrentCommand(vm, state, command);
+            return BattleVm_RetryCurrentCommand(
+                vm, state, BATTLE_VM_WAIT_ANIMATION
+            );
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -1150,7 +1225,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         aux_state = BattleAI_GetStateById(
             BATTLE_AI_TASK_AUXILIARY | (u16)command->arguments[0]);
         if (aux_state != 0 && aux_state->script != 0) {
-            return BattleVm_RetryCurrentCommand(vm, state, command);
+            return BattleVm_RetryCurrentCommand(
+                vm, state, BATTLE_VM_WAIT_AUX_SCRIPT
+            );
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -1226,7 +1303,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_WAIT_HIT_QUEUE:
         if (BattleActor_IsAnyHitLocked()) {
-            return BattleVm_RetryCurrentCommand(vm, state, command);
+            return BattleVm_RetryCurrentCommand(
+                vm, state, BATTLE_VM_WAIT_HIT_QUEUE
+            );
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -1516,7 +1595,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_WAIT_SCRIPT_HANDLE:
         if (BattleScriptHandle_IsActive((u16)command->arguments[0])) {
-            return BattleVm_RetryCurrentCommand(vm, state, command);
+            return BattleVm_RetryCurrentCommand(
+                vm, state, BATTLE_VM_WAIT_SCRIPT_HANDLE
+            );
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -1852,7 +1933,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         object_script_state = BattleScriptState_GetByObjectId(
             (u16)command->arguments[0]);
         if (object_script_state->script != 0) {
-            return BattleVm_RetryCurrentCommand(vm, state, command);
+            return BattleVm_RetryCurrentCommand(
+                vm, state, BATTLE_VM_WAIT_INLINE_OBJECT_SCRIPT_AND_SKIP
+            );
         }
         state->script =
             (const u16 *)state->script + command->arguments[1];
@@ -1869,54 +1952,97 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         object_script_state = BattleScriptState_GetByObjectId(
             (u16)command->arguments[0]);
         if (object_script_state->script != 0) {
-            return BattleVm_RetryCurrentCommand(vm, state, command);
+            return BattleVm_RetryCurrentCommand(
+                vm, state, BATTLE_VM_WAIT_OBJECT_SCRIPT
+            );
         }
         return SCRIPT_VM_CONTINUE;
 
-    case BATTLE_VM_WAIT_OBJECT_SCRIPTS_BY_OWNER:
+    case BATTLE_VM_WAIT_OBJECT_SCRIPTS_BY_OWNER: {
+        s16 remaining;
+
+        if (command->arguments[0] < 1) {
+            command->arguments[0] = ai_state->owner_id;
+        }
         script_selector = command->arguments[0];
-        if (script_selector < 1) {
-            script_selector = ai_state->owner_id;
+        object_script_state = (BattleAIState *)(
+            gBattleContext + BATTLE_VM_OBJECT_SCRIPT_STATES_OFFSET);
+        if (script_selector >= BATTLE_AI_TASK_OBJECT) {
+            remaining = BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+            script_selector &= BATTLE_AI_TASK_ACTOR_ID_MASK;
+            do {
+                if (script_selector == object_script_state->order_tie_break &&
+                    object_script_state->script != 0) {
+                    return BattleVm_RetryCurrentCommand(
+                        vm, state, BATTLE_VM_WAIT_OBJECT_SCRIPTS_BY_OWNER
+                    );
+                }
+                remaining = (s16)(remaining - 1);
+                object_script_state++;
+            } while (remaining != 0);
+            return SCRIPT_VM_CONTINUE;
         }
-        object_script_states = BattleVm_GetObjectScriptStates();
-        for (index = 0; index < BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
-             index++) {
-            object_script_state = &object_script_states[index];
-            if (object_script_state->script != 0 &&
-                BattleVm_ObjectScriptMatches(
-                    object_script_state, script_selector)) {
-                return BattleVm_RetryCurrentCommand(vm, state, command);
+
+        remaining = BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+        do {
+            if (script_selector == object_script_state->order &&
+                object_script_state->script != 0) {
+                return BattleVm_RetryCurrentCommand(
+                    vm, state, BATTLE_VM_WAIT_OBJECT_SCRIPTS_BY_OWNER
+                );
             }
-        }
+            remaining = (s16)(remaining - 1);
+            object_script_state++;
+        } while (remaining != 0);
         return SCRIPT_VM_CONTINUE;
+    }
 
     case BATTLE_VM_STOP_OBJECT_SCRIPT:
         BattleScriptState_GetByObjectId(
             (u16)command->arguments[0])->script = 0;
         return SCRIPT_VM_CONTINUE;
 
-    case BATTLE_VM_STOP_OBJECT_SCRIPTS_BY_OWNER:
+    case BATTLE_VM_STOP_OBJECT_SCRIPTS_BY_OWNER: {
+        s16 remaining;
+
+        if (command->arguments[0] < 1) {
+            command->arguments[0] = ai_state->owner_id;
+        }
         script_selector = command->arguments[0];
-        if (script_selector < 1) {
-            script_selector = ai_state->owner_id;
-        }
-        object_script_states = BattleVm_GetObjectScriptStates();
-        for (index = 0; index < BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
-             index++) {
-            object_script_state = &object_script_states[index];
-            if (object_script_state->script != 0 &&
-                BattleVm_ObjectScriptMatches(
-                    object_script_state, script_selector)) {
-                object_script_state = BattleScriptState_GetByObjectId(
-                    (u16)script_selector);
-                object_script_state->script = 0;
-                object_script_state->scratch_a8 = 0;
-                if (script_selector >= BATTLE_AI_TASK_OBJECT) {
-                    break;
+        object_script_state = (BattleAIState *)(
+            gBattleContext + BATTLE_VM_OBJECT_SCRIPT_STATES_OFFSET);
+        if (script_selector >= BATTLE_AI_TASK_OBJECT) {
+            remaining = BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+            do {
+                if ((script_selector & BATTLE_AI_TASK_ACTOR_ID_MASK) ==
+                        object_script_state->order_tie_break &&
+                    object_script_state->script != 0) {
+                    BattleScriptState_GetByObjectId(
+                        command->arguments[0])->script = 0;
+                    BattleScriptState_GetByObjectId(
+                        command->arguments[0])->scratch_a8 = 0;
+                    return SCRIPT_VM_CONTINUE;
                 }
-            }
+                remaining = (s16)(remaining - 1);
+                object_script_state++;
+            } while (remaining != 0);
+            return SCRIPT_VM_CONTINUE;
         }
+
+        remaining = BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+        do {
+            if (command->arguments[0] == object_script_state->order &&
+                object_script_state->script != 0) {
+                BattleScriptState_GetByObjectId(
+                    command->arguments[0])->script = 0;
+                BattleScriptState_GetByObjectId(
+                    command->arguments[0])->scratch_a8 = 0;
+            }
+            remaining = (s16)(remaining - 1);
+            object_script_state++;
+        } while (remaining > 0);
         return SCRIPT_VM_CONTINUE;
+    }
 
     case BATTLE_VM_PAUSE_OBJECT_SCRIPT:
         object_script_state = BattleScriptState_GetByObjectId(
@@ -1924,25 +2050,43 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         object_script_state->flags |= BATTLE_AI_STATE_FLAG_DISABLED;
         return BATTLE_AI_VM_YIELD;
 
-    case BATTLE_VM_PAUSE_OBJECT_SCRIPTS_BY_OWNER:
+    case BATTLE_VM_PAUSE_OBJECT_SCRIPTS_BY_OWNER: {
+        s16 remaining;
+
+        if (command->arguments[0] < 1) {
+            command->arguments[0] = ai_state->owner_id;
+        }
         script_selector = command->arguments[0];
-        if (script_selector < 1) {
-            script_selector = ai_state->owner_id;
-        }
-        object_script_states = BattleVm_GetObjectScriptStates();
-        for (index = 0; index < BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
-             index++) {
-            object_script_state = &object_script_states[index];
-            if (object_script_state->script != 0 &&
-                BattleVm_ObjectScriptMatches(
-                    object_script_state, script_selector)) {
-                object_script_state->flags |= BATTLE_AI_STATE_FLAG_DISABLED;
-                if (script_selector >= BATTLE_AI_TASK_OBJECT) {
-                    break;
+        object_script_state = (BattleAIState *)(
+            gBattleContext + BATTLE_VM_OBJECT_SCRIPT_STATES_OFFSET);
+        if (script_selector >= BATTLE_AI_TASK_OBJECT) {
+            u32 object_id = script_selector & BATTLE_AI_TASK_ACTOR_ID_MASK;
+
+            remaining = BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+            do {
+                if (object_id == object_script_state->order_tie_break &&
+                    object_script_state->script != 0) {
+                    object_script_state->flags |=
+                        BATTLE_AI_STATE_FLAG_DISABLED;
+                    return SCRIPT_VM_CONTINUE;
                 }
-            }
+                remaining = (s16)(remaining - 1);
+                object_script_state++;
+            } while (remaining != 0);
+            return SCRIPT_VM_CONTINUE;
         }
+
+        remaining = BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+        do {
+            if (command->arguments[0] == object_script_state->order &&
+                object_script_state->script != 0) {
+                object_script_state->flags |= BATTLE_AI_STATE_FLAG_DISABLED;
+            }
+            remaining = (s16)(remaining - 1);
+            object_script_state++;
+        } while (remaining > 0);
         return SCRIPT_VM_CONTINUE;
+    }
 
     case BATTLE_VM_RESUME_OBJECT_SCRIPT:
         object_script_state = BattleScriptState_GetByObjectId(
@@ -1950,25 +2094,43 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         object_script_state->flags &= ~BATTLE_AI_STATE_FLAG_DISABLED;
         return SCRIPT_VM_CONTINUE;
 
-    case BATTLE_VM_RESUME_OBJECT_SCRIPTS_BY_OWNER:
+    case BATTLE_VM_RESUME_OBJECT_SCRIPTS_BY_OWNER: {
+        s16 remaining;
+
+        if (command->arguments[0] < 1) {
+            command->arguments[0] = ai_state->owner_id;
+        }
         script_selector = command->arguments[0];
-        if (script_selector < 1) {
-            script_selector = ai_state->owner_id;
-        }
-        object_script_states = BattleVm_GetObjectScriptStates();
-        for (index = 0; index < BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
-             index++) {
-            object_script_state = &object_script_states[index];
-            if (object_script_state->script != 0 &&
-                BattleVm_ObjectScriptMatches(
-                    object_script_state, script_selector)) {
-                object_script_state->flags &= ~BATTLE_AI_STATE_FLAG_DISABLED;
-                if (script_selector >= BATTLE_AI_TASK_OBJECT) {
-                    break;
+        object_script_state = (BattleAIState *)(
+            gBattleContext + BATTLE_VM_OBJECT_SCRIPT_STATES_OFFSET);
+        if (script_selector >= BATTLE_AI_TASK_OBJECT) {
+            u32 object_id = script_selector & BATTLE_AI_TASK_ACTOR_ID_MASK;
+
+            remaining = BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+            do {
+                if (object_id == object_script_state->order_tie_break &&
+                    object_script_state->script != 0) {
+                    object_script_state->flags &=
+                        ~BATTLE_AI_STATE_FLAG_DISABLED;
+                    return SCRIPT_VM_CONTINUE;
                 }
-            }
+                remaining = (s16)(remaining - 1);
+                object_script_state++;
+            } while (remaining != 0);
+            return SCRIPT_VM_CONTINUE;
         }
+
+        remaining = BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+        do {
+            if (command->arguments[0] == object_script_state->order &&
+                object_script_state->script != 0) {
+                object_script_state->flags &= ~BATTLE_AI_STATE_FLAG_DISABLED;
+            }
+            remaining = (s16)(remaining - 1);
+            object_script_state++;
+        } while (remaining > 0);
         return SCRIPT_VM_CONTINUE;
+    }
 
     case BATTLE_VM_BRANCH_COMPARE:
         comparison = BattleVm_EvaluateComparison(
@@ -2056,7 +2218,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
             ((void **)(gBattleContext +
                        BATTLE_VM_SOUND_TASK_SLOTS_OFFSET))[
                 (u16)sound_task_id] != 0) {
-            return BattleVm_RetryCurrentCommand(vm, state, command);
+            return BattleVm_RetryCurrentCommand(
+                vm, state, BATTLE_VM_WAIT_SOUND_TASK
+            );
         }
         return SCRIPT_VM_CONTINUE;
 

@@ -138,9 +138,11 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   `0x0E8`, including actor damage/status handling, effect construction,
   inventory access, object-script ownership and waits, conditional branches,
   input control, and sound tasks. Unknown opcodes still delegate to the common
-  battle VM executor. Its current 15,676-byte Metrowerks output reaches 28.84%
-  fuzzy instruction similarity and remains unlinked while the original giant
-  switch layout is recovered without compromising the verified ROM build.
+  battle VM executor. Fixed-opcode retries, the complete enemy-stat switches,
+  object-position conversion, and the four 40-slot owner operations are now
+  reintegrated into the monolith. Its current 16,788-byte main function reaches
+  40.05% fuzzy instruction similarity and remains unlinked while the original
+  giant-switch layout is converged without compromising the verified ROM build.
   Overlay 0's still larger 23,492-byte field/world dispatcher now has the same
   complete structured reconstruction. One readable C switch covers all 290
   slots from `0x033` through `0x154`: child scripts, entity state and movement,

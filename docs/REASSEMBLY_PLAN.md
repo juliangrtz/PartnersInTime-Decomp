@@ -728,11 +728,14 @@ range still delegate to the separate common battle handler at `0x020698D4`.
 The reconstruction covers resource loading, actor and enemy properties,
 movement, hit/damage/status operations, battle effects, object-script
 ownership, relocatable branches, input control, inventory, and sound-task
-synchronization. MWCC currently emits 15,676 bytes across the dispatcher and
-its readability helpers versus the original monolithic 19,168-byte function;
-the main function has 28.84% fuzzy instruction similarity. It therefore stays
-unlinked until helper reintegration and switch/register-layout matching can be
-done without changing the verified ROM.
+synchronization. Fixed-opcode retry decoding, the complete nested enemy-stat
+switches, packed trait writes, object-view coordinate conversion, comparison
+logic, script control, and all four 40-record owner operations are now inlined
+into the main switch. MWCC emits a 16,788-byte dispatcher plus 412 bytes in the
+three remaining position/task-slot helpers versus the original monolithic
+19,168-byte function; the main function has 40.05% fuzzy instruction
+similarity. It therefore stays unlinked until final helper reintegration and
+switch/register-layout matching can be done without changing the verified ROM.
 
 The overlay-0 field/world dispatcher at `0x020823F8-0x02087FBC` is now a
 complete structured C work unit as well. All 290 consecutive slots
