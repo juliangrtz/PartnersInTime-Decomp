@@ -468,9 +468,11 @@ The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
 opcodes (`0x033..0x154`), including the four intentional legacy no-ops, while
 preserving the original command-rewind behavior for asynchronous waits. The
-22,048-byte dispatcher plus 2,548 bytes of helpers remains an unlinked objdiff
-work unit until it can reproduce the original 23,492-byte monolithic switch
-without sacrificing the maintained semantic structure.
+source-level semantic helpers now force-inline into one 26,436-byte function;
+no compiler-generated code helpers remain. It stays an unlinked objdiff work
+unit until the original outer table's nested command-family dispatch groups
+and register allocation reproduce the 23,492-byte monolith without sacrificing
+the maintained semantic structure.
 
 ## Variable namespaces
 

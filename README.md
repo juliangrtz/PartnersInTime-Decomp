@@ -151,10 +151,13 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   party control, room and time-hole transitions, cameras and palettes, field
   effects and input, battle/menu handoffs, save-backed inventory, the field
   timer, message windows, and audio ownership. Named runtime layouts replace
-  raw offsets for the shared entity, render, party, and field state. MWCC
-  currently emits a 22,048-byte main function and 2,548 bytes of readability
-  helpers. This work unit remains unlinked while its monolithic switch and
-  register layout are converged against the original executable.
+  raw offsets for the shared entity, render, party, and field state. All
+  source-level helpers now force-inline into one 26,436-byte MWCC function;
+  there are no compiler-generated code helpers left. IDA confirms that the
+  original outer 290-entry table funnels command families through several
+  nested switches, which is now the principal source of the size/layout delta
+  against the 23,492-byte original. The work unit remains unlinked while those
+  dispatch groups and the register layout are converged.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
