@@ -1579,8 +1579,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_MODEL_EFFECT:
+        z = (s16)((s16)command->arguments[3] -
+                  (s16)command->arguments[4]);
         y = (s16)command->arguments[3];
-        z = (s16)(y - (s16)command->arguments[4]);
         x = (s16)((s16)command->arguments[5] + 16 * (256 - y));
         if (x < 0) {
             x = 0;
@@ -2555,7 +2556,12 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         );
 
     case BATTLE_VM_SPAWN_RASTER_PARTICLE:
-        BattleVm_DecodeFixedArgument(command, 2);
+        if ((command->argument_modes & (1 << 2)) == 0) {
+            command->arguments[2] =
+                (s32)(((u32)command->arguments[2] & 0xFFFF) |
+                      ((u32)command->arguments[3] << 16)) /
+                16;
+        }
         BattleEffectParticle_Spawn(
             command->arguments[0], command->arguments[1],
             command->arguments[2]);

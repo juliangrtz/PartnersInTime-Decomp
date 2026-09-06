@@ -257,7 +257,7 @@ void BattleRasterResourceTransition_UpdateIn(BattleRasterEffectTask *task) {
 }
 
 BattleRasterEffectTask *BattleEffectParticle_Spawn(
-    s16 x, s16 y, u16 velocity) {
+    int x, int y, int velocity) {
     BattleRasterEffectTask *task =
         (BattleRasterEffectTask *)BattleTaskList_Insert(
             (BattleTaskPool *)(gBattleContext +
