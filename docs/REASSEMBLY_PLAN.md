@@ -714,10 +714,11 @@ The full overlay-7 scene command dispatcher at `0x02081730-0x02083B1C` is now
 represented by a single structured C switch as well. It covers every real and
 reserved opcode slot, explicit retry/yield behavior, object-script ownership,
 motion setup, sound tasks, and UI commands. The current Metrowerks output
-reproduces the original 9,196-byte size at 97.17% fuzzy instruction
+reproduces the original 9,196-byte size at 97.91% fuzzy instruction
 similarity. Fixed-opcode
-retry decoding with the original addition order, owner-script traversal and loop exits, resource render-group
-bitfields, the original kinematic-handler layout, keyframed paths, object-script
+retry decoding with the original addition order, branch-specific owner-script
+counters and loop exits, resource render-group bitfields, the original
+kinematic-handler layout, raw aligned keyframe-path addresses, object-script
 start and text-readiness symbol references, and the full
 ten-argument object-position command now agree with the original semantics.
 Packed arguments also reconstruct both literal halfwords with the original
