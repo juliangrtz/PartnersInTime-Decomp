@@ -714,10 +714,12 @@ The full overlay-7 scene command dispatcher at `0x02081730-0x02083B1C` is now
 represented by a single structured C switch as well. It covers every real and
 reserved opcode slot, explicit retry/yield behavior, object-script ownership,
 motion setup, sound tasks, and UI commands. The current Metrowerks output is
-9,284 bytes versus the original 9,196 bytes (83.89% fuzzy match). Fixed-opcode
-retry decoding, owner-script traversal, resource render-group bitfields,
-keyframed paths, and the full ten-argument object-position command now agree
-with the original semantics. The dispatcher remains an objdiff WIP rather than
+9,192 bytes versus the original 9,196 bytes (88.86% fuzzy match). Fixed-opcode
+retry decoding, owner-script traversal and loop exits, resource render-group
+bitfields, the original kinematic-handler layout, keyframed paths, and the full
+ten-argument object-position command now agree with the original semantics.
+The fixed-property opcode also reconstructs both literal halfwords instead of
+discarding the low half. The dispatcher remains an objdiff WIP rather than
 displacing the byte-identical assembly range until its remaining branch and
 register schedules converge.
 
