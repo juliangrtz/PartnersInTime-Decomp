@@ -373,8 +373,14 @@ typedef struct BattleVmPosition {
     s16 z;
 } BattleVmPosition;
 
+typedef struct BattleVmEffectView {
+    u8 unknown_000[0x9C];
+    s16 x;
+    s16 y;
+} BattleVmEffectView;
+
 static inline u32 BattleVm_PackHalfwords(s32 low, s32 high) {
-    return (u16)low | ((u32)high << 16);
+    return ((u32)low & 0xFFFF) | ((u32)high << 16);
 }
 
 static inline void BattleVm_DecodeFixedArgument(ScriptVmCommand *command,
@@ -398,8 +404,8 @@ static inline int BattleVm_RetryCurrentCommand(
 ) {
     s32 descriptor = (u16)vm->command_descriptors[opcode];
     s32 halfword_count =
-        (descriptor & SCRIPT_VM_ARGUMENT_COUNT_MASK) +
         ((descriptor & SCRIPT_VM_HAS_RESULT) >> 5) +
+        (descriptor & SCRIPT_VM_ARGUMENT_COUNT_MASK) +
         ((descriptor & SCRIPT_VM_HAS_ARGUMENT_MODES) >> 6) + 1;
 
     state->script -= halfword_count;
@@ -467,6 +473,7 @@ static inline const u8 *BattleVm_GetItemRecord(u16 tagged_item_id) {
 int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
                             ScriptVmCommand *command) {
     BattleAIState *ai_state = (BattleAIState *)state;
+    BattleRuntimeState *runtime_state;
     BattleObjectDataLoadState *load_state;
     BattleSceneObject *object;
     BattleSceneObject *reference;
@@ -677,8 +684,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SET_RUNTIME_FLAG_03:
-        BattleContext_GetRuntimeState()->flags.raw =
-            (BattleContext_GetRuntimeState()->flags.raw & ~(1 << 3)) |
+        runtime_state = BattleContext_GetRuntimeState();
+        runtime_state->flags.raw =
+            (runtime_state->flags.raw & ~(1 << 3)) |
             (((u16)command->arguments[0] & 1) << 3);
         return SCRIPT_VM_CONTINUE;
 
@@ -1432,15 +1440,15 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     case BATTLE_VM_HEAL_ACTOR:
         actor = BattleActor_GetById((u16)command->arguments[0]);
         damage = (u16)command->arguments[1];
+        object = actor->scene_object;
         if (actor->max_hp - actor->current_hp < damage) {
             damage = actor->max_hp - actor->current_hp;
         }
         actor->current_hp += damage;
         model_effect = (BattleModelEffect *)BattleModelEffect_Spawn(
             10, 0,
-            (s16)(actor->scene_object->x + command->arguments[2]),
-            (s16)(actor->scene_object->y - actor->scene_object->z +
-                  command->arguments[3]),
+            (s16)(object->x + command->arguments[2]),
+            (s16)(object->y - object->z + command->arguments[3]),
             0, 256);
         model_effect->user_value = damage;
         return SCRIPT_VM_CONTINUE;
@@ -1601,23 +1609,25 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
                 (u16)command->arguments[1]));
         return SCRIPT_VM_CONTINUE;
 
-    case BATTLE_VM_SPAWN_MODEL_EFFECT:
+    case BATTLE_VM_SPAWN_MODEL_EFFECT: {
+        BattleVmEffectView *effect_view =
+            (BattleVmEffectView *)(gBattleContext + 0xCB00);
+
         z = (s16)((s16)command->arguments[3] -
                   (s16)command->arguments[4]);
         y = (s16)command->arguments[3];
         x = (s16)((s16)command->arguments[5] + 16 * (256 - y));
+        z = (s16)(z - effect_view->y);
+        y = (s16)((s16)command->arguments[2] - effect_view->x);
         if (x < 0) {
             x = 0;
         }
         BattleModelEffect_SpawnFromResource(
             (u16)command->arguments[0], (u16)command->arguments[1],
-            (s16)(command->arguments[2] - *(s16 *)(
-                gBattleContext + BATTLE_VM_EFFECT_VIEW_X_OFFSET)),
-            (s16)(z - *(s16 *)(
-                gBattleContext + BATTLE_VM_EFFECT_VIEW_Y_OFFSET)),
-            (s16)x,
+            (s16)y, (s16)z, (s16)x,
             command->arguments[6] / 16);
         return SCRIPT_VM_CONTINUE;
+    }
 
     case BATTLE_VM_SPAWN_ATTACHED_MODEL_EFFECT:
         z = (s16)command->arguments[5];
@@ -1687,22 +1697,24 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
             effect_index | BATTLE_VM_MODEL_EFFECT_HANDLE_TAG);
         return SCRIPT_VM_CONTINUE;
 
-    case BATTLE_VM_SPAWN_SPRITE_EFFECT:
+    case BATTLE_VM_SPAWN_SPRITE_EFFECT: {
+        BattleVmEffectView *effect_view =
+            (BattleVmEffectView *)(gBattleContext + 0xCB00);
+
         y = (s16)command->arguments[2];
         z = (s16)(y - (s16)command->arguments[3]);
         x = (s16)((s16)command->arguments[4] + 16 * (256 - y));
-        duration = (z - *(s16 *)(
-            gBattleContext + BATTLE_VM_EFFECT_VIEW_Y_OFFSET)) << 16;
+        z = (s16)(z - effect_view->y);
+        y = (s16)((s16)command->arguments[1] - effect_view->x);
         if (x < 0) {
             x = 0;
         }
         BattleSpriteEffect_Spawn(
             (u16)command->arguments[0],
-            (s16)(command->arguments[1] - *(s16 *)(
-                gBattleContext + BATTLE_VM_EFFECT_VIEW_X_OFFSET)),
-            duration >> 16, (s16)x,
+            (s16)y, (s16)z, (s16)x,
             command->arguments[5] / 16);
         return SCRIPT_VM_CONTINUE;
+    }
 
     case BATTLE_VM_SPAWN_ATTACHED_SPRITE_EFFECT:
         z = (s16)command->arguments[4];

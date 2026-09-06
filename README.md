@@ -131,10 +131,11 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   schedules match. The complete 9,196-byte scene command dispatcher now also
   exists as one structured, compiling C switch with named opcode families and
   all reserved slots preserved. Its current 9,192-byte build is four bytes
-  short of the original and reaches 88.86% fuzzy instruction similarity.
+  short of the original and reaches 91.26% fuzzy instruction similarity.
   The original kinematic-handler order and owner-loop control flow are now
-  recovered, and fixed-property commands preserve both halves of their 32-bit
-  values. It remains unlinked while the last branch, literal-pool, and
+  recovered; retry decoding uses the original operand order, and packed
+  arguments preserve both halves of their 32-bit values with the original
+  low-half mask. It remains unlinked while the last branch, literal-pool, and
   Metrowerks register schedules are converged.
   The complete 19,168-byte battle-specific dispatcher is now represented the
   same way: one readable C unit covers all 182 slots from `0x033` through
@@ -144,10 +145,12 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   battle VM executor. Fixed-opcode retries, the complete enemy-stat switches,
   object-position conversion, typed effect handles, movement-duration paths,
   the effect/task-slot scans, and the four 40-slot owner operations are now
-  reintegrated into the monolith. Its current 19,152-byte function reaches
-  88.02% fuzzy instruction similarity with no compiler-generated helper
-  symbols left. The original `0x74`-byte stack frame, nine distinct XYZ work
-  areas, and non-numeric handler layout are recovered; it remains unlinked while the
+  reintegrated into the monolith. Its current 19,200-byte function is 32 bytes
+  above the original and reaches 91.52% fuzzy instruction similarity with no
+  compiler-generated helper symbols left. Original retry operand order and
+  low-half masking, explicit runtime/effect-view ownership, the `0x74`-byte
+  stack frame, nine distinct XYZ work areas, and non-numeric handler layout
+  are recovered; it remains unlinked while the
   original giant-switch layout is converged without compromising the verified
   ROM build.
   Overlay 0's still larger 23,492-byte original field/world dispatcher now has the same

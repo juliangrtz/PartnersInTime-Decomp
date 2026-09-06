@@ -196,7 +196,7 @@ extern s32 _s32_div_f(s32 numerator, s32 denominator);
 static inline s32 SceneVm_PackArgumentPair(
     const ScriptVmCommand *command, int low_index
 ) {
-    return (s32)((u16)command->arguments[low_index]
+    return (s32)(((u32)command->arguments[low_index] & 0xFFFF)
         | ((u32)command->arguments[low_index + 1] << 16));
 }
 
@@ -208,7 +208,7 @@ static inline int SceneVm_RewindAndYield(
     int result_words = (descriptor & SCRIPT_VM_HAS_RESULT) >> 5;
     int mode_words = (descriptor & SCRIPT_VM_HAS_ARGUMENT_MODES) >> 6;
 
-    state->script -= argument_words + result_words + mode_words + 1;
+    state->script -= result_words + argument_words + mode_words + 1;
     return SCRIPT_VM_YIELDED;
 }
 
