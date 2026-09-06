@@ -183,13 +183,12 @@ extern void func_ov007_02087b98();
 extern void func_ov007_02087b88();
 extern void func_ov007_02087b78();
 extern void func_ov007_02087b68();
-extern void func_ov007_02084030();
 extern int func_ov007_020875a0();
 extern void func_ov007_02087240();
 extern void func_ov007_02083c20(
     SceneObject *object, int tile_id, int palette, int x, int y
 );
-extern int func_ov007_02083c18();
+extern int SceneScript_IsReady();
 extern void func_ov007_0208a368();
 extern int func_ov007_0208a348();
 extern int func_ov007_020896f4();
@@ -513,10 +512,10 @@ int SceneVm_DispatchCommand(
         }
         switch (ARG_U16(2)) {
         case 1:
-            value = FX_Sqrt(
-                (ARG(3) * ARG(3) + ARG(4) * ARG(4) + ARG(5) * ARG(5))
-                << 12
-            );
+            dx = ARG(3);
+            dy = ARG(4);
+            dz = ARG(5);
+            value = FX_Sqrt((dx * dx + dy * dy + dz * dz) << 12);
             ARG(6) = _s32_div_f(value, ARG(6));
             func_ov007_02086abc(
                 object, ARG_U16(1), ARG(3), ARG(4), ARG(5), ARG(6)
@@ -537,8 +536,9 @@ int SceneVm_DispatchCommand(
             dy = ARG(4) - object->y;
             dz = ARG(5) - object->base_y;
             other = SceneObject_GetById(ARG(7));
+            value = other->x;
             value = FX_Sqrt(
-                ((dx + other->x) * (dx + other->x)
+                ((dx + value) * (dx + value)
                     + (dy + other->y) * (dy + other->y)
                     + (dz + other->base_y) * (dz + other->base_y))
                 << 12
@@ -770,13 +770,16 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_START_INLINE_OBJECT_SCRIPT:
-        func_ov007_02084030(ARG_U16(0), state->script, state, ARG_U16(1));
+        SceneScript_StartObjectScript(
+            ARG_U16(0), state->script,
+            (const SceneScriptState *)state, ARG_U16(1));
         state->script += ARG(2);
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_START_OBJECT_SCRIPT_AND_YIELD:
-        func_ov007_02084030(
-            ARG_U16(0), state->script + ARG(2), state, ARG_U16(1)
+        SceneScript_StartObjectScript(
+            ARG_U16(0), state->script + ARG(2),
+            (const SceneScriptState *)state, ARG_U16(1)
         );
         return SCRIPT_VM_YIELDED;
 
@@ -791,8 +794,9 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_START_OBJECT_SCRIPT:
-        func_ov007_02084030(
-            ARG_U16(0), state->script + ARG(2), state, ARG_U16(1)
+        SceneScript_StartObjectScript(
+            ARG_U16(0), state->script + ARG(2),
+            (const SceneScriptState *)state, ARG_U16(1)
         );
         return SCRIPT_VM_CONTINUE;
 
@@ -826,10 +830,11 @@ int SceneVm_DispatchCommand(
                 entry++;
             } while (remaining != 0);
         } else {
+            u32 object_id = owner & SCENE_SCRIPT_OWNER_ID_MASK;
+
             remaining = 40;
-            owner &= SCENE_SCRIPT_OWNER_ID_MASK;
             do {
-                if (owner == entry->parent_object_id &&
+                if (object_id == entry->parent_object_id &&
                     entry->vm_state.script != 0) {
                     return SceneVm_RewindAndYield(
                         vm, state, SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER
@@ -1071,9 +1076,9 @@ int SceneVm_DispatchCommand(
         return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_SOUND_TASK);
 
     case 0x0BC: return SCRIPT_VM_CONTINUE;
-    case 0x0BD: return SCRIPT_VM_CONTINUE;
     case 0x0BE: return SCRIPT_VM_CONTINUE;
     case 0x0BF: return SCRIPT_VM_CONTINUE;
+    case 0x0BD: return SCRIPT_VM_CONTINUE;
     case 0x0C0: return SCRIPT_VM_CONTINUE;
     case SCENE_OP_RENDER_OBJECT_TEXT_TILES:
         object = SceneObject_GetById(ARG(0));
@@ -1086,7 +1091,7 @@ int SceneVm_DispatchCommand(
             vm,
             state,
             command,
-            func_ov007_02083c18(object, ARG(1), ARG(2))
+            SceneScript_IsReady(object, ARG(1), ARG(2))
         );
         return SCRIPT_VM_CONTINUE;
 

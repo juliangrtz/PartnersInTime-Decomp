@@ -452,7 +452,7 @@ recomputes it when commands are inserted, removed, or resized.
 
 The overlay-7 native scene extension is represented by one structured C switch
 covering every real and reserved slot. It now emits the exact original
-9,196-byte function at 96.52% fuzzy instruction similarity. Its typed manager
+9,196-byte function at 97.17% fuzzy instruction similarity. Its typed manager
 layout exposes all 40 object-script and 16 sound-task slots; the pointer-backed
 scene mode/save inputs, fifth text-tile coordinate, dynamic UI retry
 descriptors, and reserved `0x097` epilogue are retained explicitly. It remains
