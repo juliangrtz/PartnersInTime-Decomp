@@ -1008,7 +1008,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "returns one unconditionally; all three decoded operands are ignored",
-      "evidence": "func_ov007_02081730 case 0x0C3; func_ov007_02083c18"
+      "evidence": "func_ov007_02081730 case 0x0C3; SceneScript_IsReady"
     },
     "199": {
       "arguments": ["resource_id"],
