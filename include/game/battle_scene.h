@@ -44,6 +44,7 @@ struct BattleSceneRenderOverride {
 typedef union BattleSceneFlags {
     u32 raw;
     s8 shadow_delay;
+    s8 pending_state;
     struct {
         u32 state : 8;
         u32 shadow_alpha : 6;
