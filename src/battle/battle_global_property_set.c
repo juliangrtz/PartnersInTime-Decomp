@@ -11,7 +11,7 @@ typedef struct BattlePartyGlobalPropertyView {
     u16 hit_flags;
 } BattlePartyGlobalPropertyView;
 
-void SceneBackground_StartFade(int fade_out);
+void SceneBackground_StartFade(int fade_out, int duration);
 
 void BattleGlobalProperty_Set(int property, int value) {
     switch (property) {
@@ -136,7 +136,7 @@ void BattleGlobalProperty_Set(int property, int value) {
         ((BattleContext *)gBattleContext)->runtime.flags.raw = flags;
         SceneBackground_StartFade(
             ((BattleContext *)gBattleContext)
-                ->runtime.flags.bits.background_faded_out);
+                ->runtime.flags.bits.background_faded_out, value);
         break;
     }
     case BATTLE_GLOBAL_PROPERTY_CONSTANT_ZERO:

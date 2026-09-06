@@ -1,14 +1,12 @@
 #include <game/battle_scene.h>
 
-int BattleSceneObject_StopMotionChannel(
+void BattleSceneObject_StopMotionChannel(
     BattleSceneObject *object, int channel_index,
     int apply_deferred_delta) {
-    BattleMotionChannel *channel;
     int index;
+    BattleMotionChannel *channel;
 
-    if ((int)BattleSceneObject_GetMotionChannel(
-            object, channel_index)->callback == 0) {
-        /* The original ABI leaves the zero callback value in the result. */
+    if (BattleSceneObject_GetMotionChannel(object, channel_index)->callback == 0) {
         return;
     }
 
@@ -16,7 +14,7 @@ int BattleSceneObject_StopMotionChannel(
     index = 0;
     while (1) {
         if (index == BATTLE_MOTION_CHANNEL_COUNT) {
-            return (int)channel;
+            return;
         }
         if (index == channel_index) {
             if (channel->callback != 0) {
@@ -34,7 +32,7 @@ int BattleSceneObject_StopMotionChannel(
                 ++channel;
                 if (index == BATTLE_MOTION_CHANNEL_COUNT ||
                     channel->callback != 0) {
-                    return (int)channel;
+                    return;
                 }
                 if (channel->has_deferred_delta != 0) {
                     if (apply_deferred_delta != 0) {
@@ -65,7 +63,7 @@ int BattleSceneObject_StopMotionChannel(
             stopped->frame_delta_z = 0;
             stopped->has_deferred_delta = 1;
             stopped->callback = 0;
-            return 1;
+            return;
         }
 
         ++channel;

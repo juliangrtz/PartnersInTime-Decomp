@@ -21,15 +21,20 @@ enum BattleDamageObjectConstant {
 
 int BattleDamage_CalculateByObject(u32 attacker_object_id,
                                    u32 defender_object_id) {
-    u32 attacker_id =
-        BattleSceneObject_GetById(attacker_object_id)->linked_actor_id;
-    u32 defender_id =
-        BattleSceneObject_GetById(defender_object_id)->linked_actor_id;
+    u32 attacker_id;
+    u32 defender_id;
     BattleActor *attacker;
     BattleActor *defender;
     int damage;
     int equipment_condition;
     u32 active_actor_id;
+
+    attacker_object_id =
+        BattleSceneObject_GetById(attacker_object_id)->linked_actor_id;
+    defender_object_id =
+        BattleSceneObject_GetById(defender_object_id)->linked_actor_id;
+    attacker_id = attacker_object_id;
+    defender_id = defender_object_id;
 
     if ((attacker_id >= BATTLE_ACTOR_PARTY_FIRST &&
          attacker_id < BATTLE_ACTOR_PARTY_FIRST + BATTLE_ACTOR_PARTY_COUNT) ||

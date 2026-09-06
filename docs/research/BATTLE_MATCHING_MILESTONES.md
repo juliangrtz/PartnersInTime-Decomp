@@ -1,0 +1,38 @@
+# Battle matching milestones toward 20 percent
+
+## Global properties, damage, and motion channels
+
+These four European overlay-2 units reproduce all 3,320 original bytes,
+including relocations and function order:
+
+| Unit | Bytes | Implementation |
+|---|---:|---|
+| `battle_global_property_set.c` | 1,304 | C |
+| `battle_damage_by_object.c` | 728 | C |
+| `battle_damage_numbers.c` | 860 | C with one ARM instruction |
+| `battle_scene_motion_stop.c` | 428 | C |
+
+`SceneBackground_StartFade` takes both a direction and a duration. Its resident
+implementation at `0x02027DB8` reads `r1`, substitutes 20 or 60 when the duration
+is -1, and calculates the fixed-point fade step. The global-property setter
+passes its property value through as this second argument. The previous
+one-argument declaration incorrectly allowed the compiler to overwrite it.
+
+`BattleSceneObject_StopMotionChannel` returns `void`. The C callers discard its
+result, and the original assembly's exit values are temporary values from
+channel scanning and stores. Removing artificial pointer/integer return values
+restores the original data flow. The scan retains separate index and channel
+variables, applies deferred movement in order, and clears the stopped channel.
+
+The damage calculator converts each object ID to an actor ID in the same input
+variable before looking up the actors. Those value lifetimes reproduce the
+original register reuse across the two object lookups.
+
+The damage-number cleanup callback explicitly materializes the payload address
+at task + 12. One `add` in inline assembly preserves that address boundary;
+the actor-ID read, actor lookup, effect check, and cleanup remain C. The other
+three functions in this unit are entirely C.
+
+Validation uses objdiff for each function, the complete module and symbol
+checks, and the normal unmodified-data ROM build. The reference ROM SHA-1 is
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`.

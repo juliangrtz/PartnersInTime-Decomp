@@ -10,6 +10,7 @@ src/battle/battle_ai_runtime.c
 src/battle/battle_ai_system.c
 src/battle/battle_actor_commands.cpp
 src/battle/battle_global_properties.c
+src/battle/battle_global_property_set.c
 src/battle/battle_script_properties.c
 src/battle/battle_script_property_set.c
 src/battle/battle_scene_slots.c
@@ -47,6 +48,8 @@ src/battle/battle_item_selection.c
 src/battle/battle_target_cursor_movement.c
 src/battle/battle_script_state.c
 src/battle/battle_damage_base.c
+src/battle/battle_damage_by_object.c
+src/battle/battle_damage_numbers.c
 src/battle/battle_status_clear.c
 src/battle/battle_status_apply.c
 src/battle/battle_damage_reactions.c
@@ -69,6 +72,7 @@ src/battle/battle_scene_movement.c
 src/battle/battle_scene_motion_update.c
 src/battle/battle_scene_motion_list.c
 src/battle/battle_scene_motion_channel.c
+src/battle/battle_scene_motion_stop.c
 src/battle/battle_task.c
 src/battle/battle_effect_transform.c
 src/battle/battle_status_party_visual.cpp

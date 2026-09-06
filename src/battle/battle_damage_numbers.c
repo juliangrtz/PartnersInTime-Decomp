@@ -143,8 +143,13 @@ void BattleDamageNumber_UpdateAttached(BattleAITask *base_task) {
 
 void BattleDamageNumber_CleanupAttached(BattleAITask *base_task) {
     BattleDamageNumberTask *task = (BattleDamageNumberTask *)base_task;
-    BattleDamageNumberPayload *payload = &task->data;
-    BattleActor *actor = BattleActor_GetById(payload->actor_id);
+    BattleDamageNumberPayload *payload;
+    BattleActor *actor;
+    /* Preserve the task/payload address boundary in this leaf callback. */
+    asm {
+        add payload, task, #12
+    }
+    actor = BattleActor_GetById(payload->actor_id);
 
     if (task->effect == 0) {
         task->callback = 0;
