@@ -128,7 +128,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   Readable WIP C also covers the depth-sorted renderer, secondary archive
   selection, eight-sprite factory, and its 964-byte transition controller;
   these register-sensitive units remain unlinked until their final instruction
-  schedules match.
+  schedules match. The complete 9,196-byte scene command dispatcher now also
+  exists as one structured, compiling C switch with named opcode families and
+  all reserved slots preserved; its current 8,748-byte build remains unlinked
+  while branch layout and Metrowerks register allocation are converged.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,

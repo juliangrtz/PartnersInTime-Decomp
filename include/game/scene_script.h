@@ -102,5 +102,8 @@ void SceneObjects_ClearPrimaryRange(u8 *manager);
 void SceneObjects_ClearSecondaryRange(u8 *manager);
 void SceneManager_ClearRuntime(void *manager);
 int SceneSpriteTask_Update(void *task);
+int SceneVm_DispatchCommand(
+    ScriptVm *vm, ScriptVmState *state, ScriptVmCommand *command
+);
 
 #endif
