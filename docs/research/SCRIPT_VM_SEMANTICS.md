@@ -468,10 +468,11 @@ The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
 opcodes (`0x033..0x154`), including the five intentional legacy no-ops, while
 preserving the original command-rewind behavior for asynchronous waits. The
-source-level semantic helpers now force-inline into one 23,296-byte function;
-no compiler-generated code helpers remain. The reconstructed common result
+source-level semantic helpers now fold into one 23,492-byte function, exactly
+matching the original size; no compiler-generated code helpers remain. The
+reconstructed common result
 path, cached field/party/map contexts, persistent argument base, and dynamic
-retry decoding now reach 46.91% fuzzy similarity against the 23,492-byte
+retry decoding now reach 48.02% fuzzy similarity against the 23,492-byte
 original. The ROM-proven persistent field-system pointer is
 `field_context + 0x24FC`; map operations use the distinct controller at
 `+0x2500`. The script-state flags live at `+0xB0`: owner type occupies bits

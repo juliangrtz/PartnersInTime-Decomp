@@ -745,17 +745,20 @@ camera/BG/palette effects, field input and touchscreen effects, battle and menu
 handoffs, save-backed HP/inventory/checkpoints, the field timer, message-window
 ownership and motion, and field audio lifecycle. Shared entity, render-object,
 party, field-system, and script-owner layouts are typed through the offsets
-used by these commands. The semantic helpers have now been force-inlined and
-simplified into one 23,296-byte MWCC function with no compiler-generated code
-helpers, versus the original 23,492-byte monolith. A shared dispatcher result,
+used by these commands. The semantic helpers now fold into one 23,492-byte
+MWCC function with no compiler-generated code helpers, exactly matching the
+original monolith's size. A shared dispatcher result,
 cached field/party/map contexts, a persistent argument base, and dynamic retry
 decoding reproduce the original broad register/control-flow architecture and
-reach 46.91% fuzzy instruction similarity. Typed entity subtype/resource,
+reach 48.02% fuzzy instruction similarity. Typed entity subtype/resource,
 script ownership/lifecycle, and saved presentation/animation state plus
 contact-direction, transform/movement, field-side/camera, and interaction-state
 bitfields plus ROM-shaped map-sync, collision-policy, render priority,
 position, resource-binding logic, dedicated matching-script loops, and
 separate main/subscreen register paths account for the latest convergence.
+The follower-rejoin command now forwards its boolean instant mode, and the
+active-party switch uses the ROM-proven five-argument call contract rather
+than a shortened prototype.
 The prolog now preserves the
 field-system pointer from `+0x24FC` while map operations load their distinct
 controller from `+0x2500`, matching the ROM. IDA's original
