@@ -152,10 +152,12 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   effects and input, battle/menu handoffs, save-backed inventory, the field
   timer, message windows, and audio ownership. Named runtime layouts replace
   raw offsets for the shared entity, render, party, and field state. All
-  source-level helpers now force-inline into one 26,436-byte MWCC function;
+  source-level helpers now force-inline into one 26,148-byte MWCC function;
   there are no compiler-generated code helpers left. IDA confirms that the
   original outer 290-entry table funnels command families through several
-  nested switches, which is now the principal source of the size/layout delta
+  nested switches. The auxiliary-script, entity-script, entity-effect, and
+  field-block/enemy-contact families now reproduce that two-stage shape; the
+  remaining families are the principal source of the size/layout delta
   against the 23,492-byte original. The work unit remains unlinked while those
   dispatch groups and the register layout are converged.
   High-level source also includes

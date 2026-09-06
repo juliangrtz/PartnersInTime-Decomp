@@ -151,7 +151,7 @@ field context (the other DS screen/field instance).
 | `0x061` | `set_entity_body_collision_enabled` | entity_selector, enabled | sets the entity's solid-body participation flag. When enabled, ordinary field entities resolve overlapping body rectangles against other enabled entities whose category is permitted by the entity's 11-bit collision mask, and their sprite sort key is derived from the feet/bottom Y coordinate so overlaps draw in depth order. The same flag also lets attached or related sprites constrain one another's automatic order. Disabling it leaves scripted trigger-region tests and the separate special collision path intact; all nine shipped calls disable the current script-owning entity, primarily to let cutscene actors pass through ordinary bodies |
 | `0x062` | `set_entity_render_order_priorities` | entity_selector, priority_0_or_auto, priority_1_or_auto, priority_2_or_auto, priority_3_or_auto, auxiliary_priority_or_auto | sets the per-component sprite overlap priorities stored at render-object bytes +0x134 through +0x137; -1 preserves automatic priority calculation. Normal entities also configure an optional auxiliary render object, while subtype 8 ignores the final argument |
 | `0x063` | `set_entity_interaction_bounds` | entity_selector, minimum_x, maximum_y, width, height, vertical_extent | replaces the entity's primary Q12 interaction bounds. These bounds provide the broad overlap rectangle and vertical span used for entity interaction/contact tests, sprite overlap ordering, effect attachment, and off-screen culling |
-| `0x064` | `set_entity_interaction_height` | entity_selector, vertical_extent | replaces only the Q12 vertical extent of the entity's primary interaction bounds, retaining its horizontal and vertical rectangle offsets |
+| `0x064` | `legacy_noop_064` | unused_entity_selector, unused_vertical_extent | intentional legacy no-op; the outer 290-entry jump table routes this slot directly to the default return. A would-be interaction-height handler survives inside a shared inner switch but is unreachable from the outer table |
 | `0x065` | `restore_entity_interaction_bounds` | entity_selector | restores the primary interaction bounds selected by the entity's current animation resource. An entity without a bound resource receives the default rectangle -8..8 by -8..0 and vertical extent 32 pixels |
 | `0x066` | `set_entity_animation_speed` | entity_selector, animation_speed_q8 | stores the signed 16-bit Q8 animation rate on the entity and updates the bound model while preserving its current animation position |
 | `0x067` | `set_entity_locomotion_parameters` | entity_selector, starting_speed_q12, acceleration_q12, maximum_speed_q12, idle_deceleration_q12, reverse_deceleration_q12, turn_speed_limit_q12 | sets the entity's default locomotion curve and resets its current speed and velocity accumulators. The script supplies positive idle and reverse deceleration magnitudes, which the dispatcher stores as negative Q12 rates. A non-opposite direction change above turn_speed_limit_q12 snaps the current speed down to that limit before normal acceleration resumes |
@@ -466,13 +466,14 @@ and currently reaches 40.13% fuzzy instruction similarity.
 
 The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
-opcodes (`0x033..0x154`), including the four intentional legacy no-ops, while
+opcodes (`0x033..0x154`), including the five intentional legacy no-ops, while
 preserving the original command-rewind behavior for asynchronous waits. The
-source-level semantic helpers now force-inline into one 26,436-byte function;
+source-level semantic helpers now force-inline into one 26,148-byte function;
 no compiler-generated code helpers remain. It stays an unlinked objdiff work
-unit until the original outer table's nested command-family dispatch groups
-and register allocation reproduce the 23,492-byte monolith without sacrificing
-the maintained semantic structure.
+unit while the remaining nested command-family dispatch groups and register
+allocation are converged on the 23,492-byte monolith. The auxiliary-script,
+entity-script, entity-effect, and field-block/enemy-contact families already
+use the original two-stage shape.
 
 ## Variable namespaces
 
