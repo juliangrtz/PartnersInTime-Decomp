@@ -63,7 +63,8 @@ struct FieldScriptState {
     u8 owner_data[4];
     s8 parent_entity_id;
     s8 queued_parent_entity_id;
-    u8 unknown_ba[6];
+    s16 script_values[2];
+    u8 unknown_be[2];
     const u16 *queued_script;
     u32 unknown_c4;
     FieldEntity *owner_entity;

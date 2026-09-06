@@ -181,15 +181,16 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   effects and input, battle/menu handoffs, save-backed inventory, the field
   timer, message windows, and audio ownership. Named runtime layouts replace
   raw offsets for the shared entity, render, party, and field state. All
-  source-level helpers now fold into one 23,492-byte MWCC function, exactly
-  matching the original function size; there are no compiler-generated
-  code helpers left. Its common return path,
+  source-level helpers now fold into one 23,488-byte MWCC function, four bytes
+  short of the 23,492-byte original; there are no compiler-generated code
+  helpers left. Its common return path,
   cached field/party/map contexts, dynamic retry decoding, and argument-base
   register now reproduce the original dispatcher architecture, raising fuzzy
-  instruction similarity to 93.96%. ROM-shaped bitfields now recover the
+  instruction similarity to 95.96%. ROM-shaped bitfields now recover the
   entity subtype/resource selection, six-direction contact mask, map-axis
   synchronization, signed collision-policy updates, script ownership and
-  lifecycle, saved presentation/animation state, transform and movement
+  lifecycle, the entity-owned embedded script-value bank, saved
+  presentation/animation state, transform and movement
   controllers, field-side/camera state, and signed block-bounce state without
   opaque raw arithmetic. Matching-script control flow and main/subscreen
   register paths now retain the original dispatch structure. The normal and

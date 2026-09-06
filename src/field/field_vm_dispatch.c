@@ -973,10 +973,9 @@ static inline FieldEntity *FieldVm_GetEntityByIndex(u8 *field_context,
 static inline int FieldVm_VisitMatchingEntityScripts(
     FieldVmRuntime *runtime, FieldScriptState *caller, int selector,
     int operation) {
-    FieldEntity **entities = (FieldEntity **)(
-        runtime->field_context + FIELD_VM_ENTITY_TABLE_OFFSET);
+    u8 *field_context = runtime->field_context;
     int entity_count = *(u8 *)(
-        runtime->field_context + FIELD_VM_ENTITY_COUNT_OFFSET);
+        field_context + FIELD_VM_ENTITY_COUNT_OFFSET);
     int parent_type = selector;
     int parent_entity_id = -1;
     int index;
@@ -991,7 +990,8 @@ static inline int FieldVm_VisitMatchingEntityScripts(
     switch (operation) {
     case FIELD_VM_WAIT_MATCHING_ENTITY_SCRIPTS:
         for (index = 0; index < entity_count; index++) {
-            FieldEntity *entity = entities[index];
+            FieldEntity *entity = ((FieldEntity **)(
+                field_context + FIELD_VM_ENTITY_TABLE_OFFSET))[index];
             FieldScriptState *target =
                 (FieldScriptState *)((u8 *)entity + 0x20);
 
@@ -1014,7 +1014,8 @@ static inline int FieldVm_VisitMatchingEntityScripts(
 
     case FIELD_VM_STOP_MATCHING_ENTITY_SCRIPTS:
         for (index = 0; index < entity_count; index++) {
-            FieldEntity *entity = entities[index];
+            FieldEntity *entity = ((FieldEntity **)(
+                field_context + FIELD_VM_ENTITY_TABLE_OFFSET))[index];
             FieldScriptState *target =
                 (FieldScriptState *)((u8 *)entity + 0x20);
 
@@ -1029,7 +1030,8 @@ static inline int FieldVm_VisitMatchingEntityScripts(
 
     case FIELD_VM_PAUSE_MATCHING_ENTITY_SCRIPTS:
         for (index = 0; index < entity_count; index++) {
-            FieldEntity *entity = entities[index];
+            FieldEntity *entity = ((FieldEntity **)(
+                field_context + FIELD_VM_ENTITY_TABLE_OFFSET))[index];
             FieldScriptState *target =
                 (FieldScriptState *)((u8 *)entity + 0x20);
 
@@ -1044,7 +1046,8 @@ static inline int FieldVm_VisitMatchingEntityScripts(
 
     case FIELD_VM_RESUME_MATCHING_ENTITY_SCRIPTS:
         for (index = 0; index < entity_count; index++) {
-            FieldEntity *entity = entities[index];
+            FieldEntity *entity = ((FieldEntity **)(
+                field_context + FIELD_VM_ENTITY_TABLE_OFFSET))[index];
             FieldScriptState *target =
                 (FieldScriptState *)((u8 *)entity + 0x20);
 
@@ -1668,20 +1671,24 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 vm, base_state);
             break;
 
-        case FIELD_VM_SET_ENTITY_ENABLED:
-            entity->property_00a_bits.property_00a_flag_00 =
-                arguments[1] != 0;
+        case FIELD_VM_SET_ENTITY_ENABLED: {
+            u32 properties = entity->property_00a;
+            int enabled = arguments[1] != 0;
+
+            properties = (properties & ~1) | (enabled & 1);
+            entity->property_00a = (u16)properties;
             break;
+        }
 
         case FIELD_VM_SET_ENTITY_SCRIPT_VALUE:
-            entity->script_values[arguments[1]] =
+            target->script_values[arguments[1]] =
                 (s16)arguments[2];
             break;
 
         case FIELD_VM_GET_ENTITY_SCRIPT_VALUE:
             VM_WriteVariable(
                 command->result_variable,
-                entity->script_values[arguments[1]],
+                target->script_values[arguments[1]],
                 vm, base_state);
             break;
         }
@@ -1804,13 +1811,6 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 runtime_entity->render_object, animation_speed);
             break;
         }
-
-        case FIELD_VM_SET_ENTITY_LOCOMOTION_PARAMETERS:
-            func_ov000_020a7410(
-                entity, arguments[1], arguments[2],
-                arguments[3], -arguments[4],
-                -arguments[5], arguments[6]);
-            break;
 
         case FIELD_VM_BIND_ENTITY_RESOURCE:
             if (arguments[2] != -1 && arguments[4] != 0) {
@@ -2145,6 +2145,13 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_STOP_ENTITY_ROTATION:
             func_ov000_020a40f8(entity, 0, 0);
+            break;
+
+        case FIELD_VM_SET_ENTITY_LOCOMOTION_PARAMETERS:
+            func_ov000_020a7410(
+                entity, arguments[1], arguments[2],
+                arguments[3], -arguments[4],
+                -arguments[5], arguments[6]);
             break;
 
         case FIELD_VM_START_ENTITY_MOVEMENT:
