@@ -458,9 +458,10 @@ PC rewinds used by wait commands, the halfword-relative object-script and
 conditional branches, all 40 object-script ownership records, tagged effect
 and task handles, and the argument-mode check used to combine literal
 fixed-point pairs. It remains an unlinked objdiff work unit solely because the
-original compiler formed one 19,168-byte monolithic switch, whereas the
-readability-oriented source currently emits a 13,216-byte dispatcher plus
-2,460 bytes of helpers.
+original compiler formed one 19,168-byte monolithic switch. The current source
+has reintegrated retry decoding, enemy stats, object-view coordinates,
+comparisons, script control, and the owner scans; it emits a 16,788-byte
+dispatcher plus 412 bytes in the three remaining position/task-slot helpers.
 
 The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
