@@ -714,12 +714,12 @@ The full overlay-7 scene command dispatcher at `0x02081730-0x02083B1C` is now
 represented by a single structured C switch as well. It covers every real and
 reserved opcode slot, explicit retry/yield behavior, object-script ownership,
 motion setup, sound tasks, and UI commands. The current Metrowerks output is
-9,192 bytes versus the original 9,196 bytes (88.86% fuzzy match). Fixed-opcode
-retry decoding, owner-script traversal and loop exits, resource render-group
+9,192 bytes versus the original 9,196 bytes (91.26% fuzzy match). Fixed-opcode
+retry decoding with the original addition order, owner-script traversal and loop exits, resource render-group
 bitfields, the original kinematic-handler layout, keyframed paths, and the full
 ten-argument object-position command now agree with the original semantics.
-The fixed-property opcode also reconstructs both literal halfwords instead of
-discarding the low half. The dispatcher remains an objdiff WIP rather than
+Packed arguments also reconstruct both literal halfwords with the original
+low-half mask instead of discarding the low half. The dispatcher remains an objdiff WIP rather than
 displacing the byte-identical assembly range until its remaining branch and
 register schedules converge.
 
@@ -733,9 +733,12 @@ ownership, relocatable branches, input control, inventory, and sound-task
 synchronization. Fixed-opcode retry decoding, the complete nested enemy-stat
 switches, packed trait writes, object-view coordinate conversion, comparison
 logic, script control, all effect/task-slot scans, and all four 40-record owner
-operations are now inlined into the main switch. MWCC emits one 19,152-byte
-dispatcher with no compiler-generated helper symbols versus the original
-monolithic 19,168-byte function; it has 88.02% fuzzy instruction similarity.
+operations are now inlined into the main switch. MWCC emits one 19,200-byte
+dispatcher with no compiler-generated helper symbols, 32 bytes above the
+original monolithic 19,168-byte function; it has 91.52% fuzzy instruction
+similarity. Retry decoding and packed wide arguments now use the original
+operand and low-half masking forms, while runtime and effect-view ownership is
+explicit in the C source.
 The original `0x74`-byte frame, nine separate XYZ temporaries, and exceptional
 handler ordering have also been recovered.
 It therefore stays unlinked until switch/register-layout matching can be done
