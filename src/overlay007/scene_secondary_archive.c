@@ -10,6 +10,12 @@ typedef struct SceneSecondaryArchiveLayout {
     u32 temporary_archive_size;
 } SceneSecondaryArchiveLayout;
 
+typedef struct SceneActionItemInput {
+    u8 unknown_00[0x10];
+    u8 flags;
+    u8 unknown_11[11];
+} SceneActionItemInput;
+
 extern u8 data_ov005_0206a180[];
 extern const u32 data_02050170[];
 extern const u8 gActionItemRecords[];
@@ -26,8 +32,7 @@ enum {
     SCENE_SHARED_MODE_OFFSET = 0x24,
     SCENE_ALTERNATE_INPUT_OFFSET = 0x118,
     SCENE_FORCED_INPUT_MODE_OFFSET = 0x11E,
-    ACTION_ITEM_INPUT_FLAGS_OFFSET = 0x10,
-    ACTION_ITEM_RECORD_SIZE = 28,
+    ACTION_ITEM_RECORD_SIZE = sizeof(SceneActionItemInput),
 };
 
 void SceneScript_LoadSecondaryArchive(
@@ -39,30 +44,32 @@ void SceneScript_LoadSecondaryArchive(
 
     if (data_ov007_020905f0[SCENE_FORCED_INPUT_MODE_OFFSET] == 4 ||
         (input_kind =
-             ((u32)gActionItemRecords[
-                  record_offset + ACTION_ITEM_INPUT_FLAGS_OFFSET] << 29) >> 30,
+             ((u32)((const SceneActionItemInput *)(
+                  gActionItemRecords + record_offset))->flags << 29) >> 30,
          input_kind == 2)) {
         *(s16 *)(data_ov007_020905f0 + SCENE_SHARED_MODE_OFFSET) = 2;
-    } else if (data_ov007_020905f0[SCENE_ALTERNATE_INPUT_OFFSET]) {
-        *(s16 *)(data_ov007_020905f0 + SCENE_SHARED_MODE_OFFSET) = 1;
-    } else {
+    } else if (!data_ov007_020905f0[SCENE_ALTERNATE_INPUT_OFFSET]) {
         *(s16 *)(data_ov007_020905f0 + SCENE_SHARED_MODE_OFFSET) = 0;
         if (input_kind == 1) {
             *(s16 *)(data_ov007_020905f0 + SCENE_SHARED_MODE_OFFSET) = 2;
         }
+    } else {
+        *(s16 *)(data_ov007_020905f0 + SCENE_SHARED_MODE_OFFSET) = 1;
     }
 
-    if (*(s16 *)(data_ov007_020905f0 + SCENE_SHARED_MODE_OFFSET) == 0) {
+    switch (*(s16 *)(data_ov007_020905f0 + SCENE_SHARED_MODE_OFFSET)) {
+    case 0:
         manager->primary_input_asset = 0;
         manager->secondary_input_asset = 1;
-    } else if (
-        *(s16 *)(data_ov007_020905f0 + SCENE_SHARED_MODE_OFFSET) == 1) {
+        break;
+    case 1:
         manager->primary_input_asset = 2;
         manager->secondary_input_asset = 3;
-    } else if (
-        *(s16 *)(data_ov007_020905f0 + SCENE_SHARED_MODE_OFFSET) == 2) {
+        break;
+    case 2:
         manager->primary_input_asset = 4;
         manager->secondary_input_asset = 5;
+        break;
     }
 
     manager->temporary_archive = func_ov005_020670b4(

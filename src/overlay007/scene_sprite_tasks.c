@@ -9,11 +9,11 @@ extern void func_ov005_02069330(SceneSpriteTaskData *sprite, int slot);
 
 void SceneSpriteTasks_Create(int width, int layout) {
     int task_index;
-    int half_width;
+    int y;
     int x;
     int base_y;
+    int half_width;
     int target_y;
-    int y;
     int owner;
 
     task_index = 0;
@@ -42,8 +42,8 @@ void SceneSpriteTasks_Create(int width, int layout) {
         sprite->target_x = (x - half_width) << 12;
         sprite->target_y = target_y;
 
-        task_index++;
         y += 8;
         x += 32;
+        task_index++;
     } while (task_index < 8);
 }

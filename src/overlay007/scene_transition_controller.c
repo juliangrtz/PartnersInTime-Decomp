@@ -31,7 +31,8 @@ extern void func_ov007_0208701c(SceneObject *object);
 extern void func_ov007_020894c4(void *renderable);
 
 static inline void SceneTransition_InitializeObject(
-    SceneObject *object, int variant, int resource) {
+    SceneObject *object, int variant, int resource,
+    int x, int y, int z) {
     object->resource_id = 20;
     object->animation_id = 0;
     if (object->secondary_renderable != 0) {
@@ -50,6 +51,9 @@ static inline void SceneTransition_InitializeObject(
     ((SceneRenderable *)object->secondary_renderable)->flags =
         (((SceneRenderable *)object->secondary_renderable)->flags & ~3) | 1;
     func_ov007_02088c50(object, variant, 1);
+    /* Existing secondary renderables keep their position on repeated updates. */
+    func_ov007_02086d08(
+        object, x - object->x, y - object->y, z - object->base_y);
 }
 
 static inline void SceneTransition_DestroySecondaryObject(
@@ -94,24 +98,11 @@ int SceneTransitionController_Update(SceneTransitionTask *task) {
             resource = func_ov005_020698dc(20);
 
             object = (SceneObject *)SceneObject_GetById(16);
-            SceneTransition_InitializeObject(object, 0, resource);
-            {
-                int x = -object->x;
-                int y = -24 - object->y;
-                int z = -object->base_y;
-
-                func_ov007_02086d08(object, x, y, z);
-            }
+            SceneTransition_InitializeObject(object, 0, resource, 0, -24, 0);
 
             object = (SceneObject *)SceneObject_GetById(17);
-            SceneTransition_InitializeObject(object, 1, resource);
-            {
-                int x = 128 - object->x;
-                int y = -16 - object->y;
-                int z = -136 - object->base_y;
-
-                func_ov007_02086d08(object, x, y, z);
-            }
+            SceneTransition_InitializeObject(
+                object, 1, resource, 128, -16, -136);
 
             SceneScript_StartSecondary(data_ov007_020a6b90);
             result = 3;

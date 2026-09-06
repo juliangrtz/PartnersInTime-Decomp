@@ -125,10 +125,12 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   starters, primary archive loading, all 56 object bindings, both reserved
   object-range resets, the 72 task slots, shared resource loading, controller
   start/stop/shutdown, and the sprite-follow callback are linked matching C.
-  Readable WIP C also covers the depth-sorted renderer, secondary archive
-  selection, eight-sprite factory, and its 964-byte transition controller;
-  these register-sensitive units remain unlinked until their final instruction
-  schedules match. The complete 9,196-byte scene command dispatcher now
+  The depth-sorted renderer, secondary archive selection, eight-sprite
+  factory, and transition controller also match all 2,004 bytes and are linked.
+  The renderer retains 68 bytes of inline assembly for its exact height and
+  initialization schedule; the other three units are pure C. See
+  [the presentation matching notes](docs/research/SCENE_PRESENTATION_MATCHING.md).
+  The complete 9,196-byte scene command dispatcher now
   matches every original byte and is linked. Its C switch includes a 64-byte
   inline-assembly block in opcode `0x04E` to preserve the original
   signed-height conversion schedule. The height calculation is symbolically

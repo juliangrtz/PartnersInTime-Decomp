@@ -113,6 +113,10 @@ src/overlay007/scene_script_runtime.c
 src/overlay007/scene_script_variables.c
 src/overlay007/scene_vm_dispatch.c
 src/overlay007/scene_object_runtime.c
+src/overlay007/scene_object_render.c
+src/overlay007/scene_secondary_archive.c
+src/overlay007/scene_sprite_tasks.c
+src/overlay007/scene_transition_controller.c
 src/overlay007/scene_script_manager.c
 src/overlay007/scene_object_cleanup.c
 src/overlay007/scene_manager_init.c
