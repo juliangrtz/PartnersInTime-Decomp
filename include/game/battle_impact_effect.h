@@ -104,7 +104,7 @@ void BattleImpactTrailEmitter_Update(BattleAITask *task);
 BattleAITask *BattleImpactEmitter_Start(
     u16 object_id, int mode, s16 target_scale_q4, u16 lifetime_multiplier,
     int spawn_interval, int size_multiplier, int target_size,
-    int initial_z_offset, int z_velocity);
+    int initial_z_offset, int z_velocity, int reserved);
 
 #ifdef __cplusplus
 }

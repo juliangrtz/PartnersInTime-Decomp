@@ -450,6 +450,18 @@ command. `read_table` adds another two halfwords before its indexed 32-bit read.
 Schema v2 replaces every statically resolvable relative operand with a label and
 recomputes it when commands are inserted, removed, or resized.
 
+The native battle extension is now represented completely in
+`src/battle/battle_vm_dispatch.c`. Its structured switch covers all 182 local
+opcodes (`0x033..0x0E8`) and preserves the original fallback into the common
+`0x000..0x103` battle executor. In particular, the C source exposes the exact
+PC rewinds used by wait commands, the halfword-relative object-script and
+conditional branches, all 40 object-script ownership records, tagged effect
+and task handles, and the argument-mode check used to combine literal
+fixed-point pairs. It remains an unlinked objdiff work unit solely because the
+original compiler formed one 19,168-byte monolithic switch, whereas the
+readability-oriented source currently emits a 13,216-byte dispatcher plus
+2,460 bytes of helpers.
+
 ## Variable namespaces
 
 | Encoded range | Editable form | Meaning |

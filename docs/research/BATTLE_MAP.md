@@ -1365,10 +1365,21 @@ open until a compatible frame trace crosses the removal path.
 
 `BattleAI_DispatchOpcode` is one real `0x4AE0`-byte function.
 `BattleTurnState_Update` is one real `0x7D5C`-byte function. They are genuine
-large switches, not accidental merged functions. Reconstruct their leaf
-operations and state layouts before attempting to translate either dispatcher
-as one unit. The complete 182-entry range, handler addresses, aliases,
-observed command-record fields, and direct calls are indexed in
+large switches, not accidental merged functions. The leaf-first analysis has
+now made a complete readable translation of `BattleAI_DispatchOpcode`
+practical: `src/battle/battle_vm_dispatch.c` covers all 182 battle-specific
+slots from `0x033` through `0x0E8`, then delegates the remaining shared range
+to `func_ov002_020698d4` as the original does. It includes exact retry/yield and
+relative-PC behavior, all three tagged effect/task handle families, the
+40-record object-script owner scan, and the literal-versus-variable fixed-point
+decoding paths. The current split-helper MWCC build totals 15,676 bytes and the
+13,216-byte main switch is 28.84% fuzzy-similar to the original 19,168-byte
+monolith, so it is deliberately not linked yet. Helper reintegration and
+compiler-layout work are now the matching task; opcode semantics are no longer
+the blocker.
+
+The complete 182-entry range, handler addresses, aliases, observed
+command-record fields, and direct calls are indexed in
 [`BATTLE_AI_OPCODES.md`](BATTLE_AI_OPCODES.md). Regenerate it from a matching
 ROM with:
 
