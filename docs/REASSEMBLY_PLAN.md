@@ -746,9 +746,13 @@ handoffs, save-backed HP/inventory/checkpoints, the field timer, message-window
 ownership and motion, and field audio lifecycle. Shared entity, render-object,
 party, field-system, and script-owner layouts are typed through the offsets
 used by these commands. The semantic helpers have now been force-inlined and
-simplified into one 26,148-byte MWCC function with no compiler-generated code
-helpers, versus the original 23,492-byte monolith. IDA's original control flow
-shows that the outer 290-entry table deliberately shares handlers through
+simplified into one 21,908-byte MWCC function with no compiler-generated code
+helpers, versus the original 23,492-byte monolith. A shared dispatcher result,
+cached field/party/map contexts, a persistent argument base, and dynamic retry
+decoding reproduce the original broad register/control-flow architecture and
+reach 14.59% fuzzy instruction similarity. The same pass corrected the
+map-controller field from `+0x2500` to the ROM-proven `+0x24FC`. IDA's original
+control flow shows that the outer 290-entry table deliberately shares handlers through
 nested command-family switches. The auxiliary-script, entity-script,
 entity-effect, and field-block/enemy-contact groups now follow that original
 shape; recovering the remaining groups is the next size and layout task. The
