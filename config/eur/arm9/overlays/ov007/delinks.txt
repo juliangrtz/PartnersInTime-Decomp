@@ -7,3 +7,9 @@
 src/overlay007/scene_script_variables.c:
     .text       start:0x020841f8 end:0x0208435c
 
+src/overlay007/scene_script_runtime.c:
+    .text       start:0x02083ef8 end:0x020841f8
+
+src/overlay007/scene_script_control.c:
+    .text       start:0x02083b1c end:0x02083c20
+

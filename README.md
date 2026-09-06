@@ -116,8 +116,11 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   save-data words/bytes/flags, and overlay extension hooks behind the editable
   BAI command format. Overlay 2's matching extension now exposes battle-script
   owner/target actor IDs and its 32 shared integer variables as editable C.
-  Overlay 7's matching scene-script extension likewise names its packed owner
-  ID/type, latched input values, and 32 shared variables.
+  Overlay 7's matching scene-script runtime likewise names its packed owner
+  ID/type, latched input values, 32 shared variables, both global script
+  slots, object-state lookup, and the complete object-script scheduler. The
+  scheduler now exposes replacement versus queued execution, parent ownership,
+  pause handling, VM result chaining, and task cleanup in editable C.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
