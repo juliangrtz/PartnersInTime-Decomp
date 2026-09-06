@@ -450,6 +450,14 @@ command. `read_table` adds another two halfwords before its indexed 32-bit read.
 Schema v2 replaces every statically resolvable relative operand with a label and
 recomputes it when commands are inserted, removed, or resized.
 
+The overlay-7 native scene extension is represented by one structured C switch
+covering every real and reserved slot. It now emits the exact original
+9,196-byte function at 96.52% fuzzy instruction similarity. Its typed manager
+layout exposes all 40 object-script and 16 sound-task slots; the pointer-backed
+scene mode/save inputs, fifth text-tile coordinate, dynamic UI retry
+descriptors, and reserved `0x097` epilogue are retained explicitly. It remains
+unlinked until the remaining local register schedules match byte-for-byte.
+
 The native battle extension is now represented completely in
 `src/battle/battle_vm_dispatch.c`. Its structured switch covers all 182 local
 opcodes (`0x033..0x0E8`) and preserves the original fallback into the common
