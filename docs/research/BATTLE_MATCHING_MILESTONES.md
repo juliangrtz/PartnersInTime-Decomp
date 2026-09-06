@@ -50,3 +50,27 @@ reproduces the complete original multiply, carry, and arithmetic-shift sequence.
 Its seven-instruction hardware setup block (28 bytes) retains the order of
 the mode write and the two operand-word writes. All other functions in this
 unit are C, including the corrected inverse square root.
+
+## VRAM bank management
+
+Four new GX units reconstruct the complete resident range
+`0x02035444..0x020364AC`: 40 functions and 4,200 bytes, entirely in C.
+
+The 26-byte `GxVramState` records assignments for LCDC, the two engines,
+textures, clear images, and extended palettes. The code initializes the bank
+state and control registers, calculates capacity from bank masks, disables
+and unlocks banks, moves assignments back into LCDC address space, and sets
+each engine's bank mappings. The assignments preserve both mapping-slot bits
+and the enable bits in the display control registers.
+
+The background and texture switches retain the original fallthrough groups
+and register-write order. The background switch's 33-entry ARM branch table
+was reconstructed directly from its branch destinations; the local decompiler
+did not recover that table. Unsupported masks preserve the original switch
+default behavior. The shared assignment expression reads the old engine mask
+and combines it with LCDC before replacing the engine mask; MWCC schedules
+the independent stores in the same order as the original.
+
+All 40 functions match at their original sizes. The whole-module and symbol
+checks, reference-ROM SHA-1 check, generated-progress check, public-content
+audit, and 66 tests pass for the linked milestone.

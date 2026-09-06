@@ -8,6 +8,18 @@
 src/nitro/math/fx_coprocessor.c:
     .text       start:0x0203476c end:0x02034a14
 
+src/nitro/gx/gx_bank_reset.c:
+    .text       start:0x02035598 end:0x020357b4
+
+src/nitro/gx/gx_bank_state.c:
+    .text       start:0x02035444 end:0x02035598
+
+src/nitro/gx/gx_bank_lcdc.c:
+    .text       start:0x020357b4 end:0x020358ac
+
+src/nitro/gx/gx_bank_assign.c:
+    .text       start:0x020358ac end:0x020364ac
+
 src/game/script_vm.c:
     .text       start:0x020071b0 end:0x020072e8
 
