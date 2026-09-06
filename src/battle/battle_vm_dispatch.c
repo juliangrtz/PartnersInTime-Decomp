@@ -403,39 +403,6 @@ static inline BattlePosition BattleVm_GetObjectViewPosition(
     return position;
 }
 
-static BattlePosition BattleVm_GetAttachedViewPosition(
-    BattleSceneObject *object, int offset_x, int offset_y, int offset_z,
-    int offset_changes_depth) {
-    BattlePosition position;
-    int anchor_y = object->y;
-
-    if (offset_changes_depth) {
-        anchor_y += (s16)offset_y;
-    }
-    BattlePosition_StoreViewRelative(
-        &position, (s16)(object->x + (s16)offset_x),
-        (s16)(object->y - object->z + (s16)offset_y),
-        (s16)(object->effect_anchor_z + (s16)offset_z +
-              16 * (256 - anchor_y)),
-        object->flags.bits.use_raw_position,
-        object->flags.bits.use_alternate_model);
-    return position;
-}
-
-static BattlePosition BattleVm_GetAbsoluteEffectPosition(
-    int view_x, int world_y, int world_z, int vertical_offset) {
-    BattlePosition position;
-    int baseline = (s16)(vertical_offset + 16 * (256 - (s16)world_y));
-
-    position.x = (s16)(view_x - *(s16 *)(
-        gBattleContext + BATTLE_VM_EFFECT_VIEW_X_OFFSET));
-    position.y = (s16)((s16)world_y - (s16)world_z - *(s16 *)(
-        gBattleContext + BATTLE_VM_EFFECT_VIEW_Y_OFFSET));
-    position.z = baseline < 0 ? 0 : baseline;
-    position.padding_06 = 0;
-    return position;
-}
-
 static inline void BattleVm_ControlScript(int script_selector, int mode) {
     BattleAIState *target;
 
@@ -511,18 +478,6 @@ static inline void BattleVm_WriteEnemyStat(BattleEnemyActor *enemy,
     }
 }
 
-static BattleAITask **BattleVm_FindFreeTaskHandleSlot(int *slot_index) {
-    BattleAITask **slots = (BattleAITask **)(
-        gBattleContext + BATTLE_VM_TASK_HANDLE_SLOTS_OFFSET);
-    int index = 0;
-
-    while (slots[index] != 0) {
-        index++;
-    }
-    *slot_index = index;
-    return &slots[index];
-}
-
 static inline int BattleVm_GetItemBattleAnimation(u16 tagged_item_id) {
     u16 item_index = tagged_item_id & ITEM_ID_INDEX_MASK;
 
@@ -574,7 +529,6 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     BattleEffect *effect;
     BattleEffect **effect_slots;
     BattleAITask *task;
-    BattleAITask **task_slot;
     BattleAIState *object_script_state;
     s16 *motion_parameters;
     const u8 *keyframe_record;
@@ -1447,20 +1401,32 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_MODEL_EFFECT:
-        object_position = BattleVm_GetAbsoluteEffectPosition(
-            command->arguments[2], command->arguments[3],
-            command->arguments[4], command->arguments[5]);
+        y = command->arguments[3];
+        z = y - command->arguments[4];
+        x = (s16)(command->arguments[5] + 16 * (256 - y));
+        if (x < 0) {
+            x = 0;
+        }
         BattleModelEffect_SpawnFromResource(
             (u16)command->arguments[0], (u16)command->arguments[1],
-            object_position.x, object_position.y, object_position.z,
+            (s16)(command->arguments[2] - *(u16 *)(
+                gBattleContext + BATTLE_VM_EFFECT_VIEW_X_OFFSET)),
+            (s16)(z - *(u16 *)(
+                gBattleContext + BATTLE_VM_EFFECT_VIEW_Y_OFFSET)),
+            (s16)x,
             command->arguments[6] / 16);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_ATTACHED_MODEL_EFFECT:
         object = BattleSceneObject_GetById((u16)command->arguments[2]);
-        object_position = BattleVm_GetAttachedViewPosition(
-            object, command->arguments[3], command->arguments[4],
-            command->arguments[5], 0);
+        BattlePosition_StoreViewRelative(
+            &object_position,
+            (s16)(object->x + (s16)command->arguments[3]),
+            (s16)(object->y - object->z + (s16)command->arguments[4]),
+            (s16)(object->effect_anchor_z + (s16)command->arguments[5] +
+                  16 * (256 - object->y)),
+            object->flags.bits.use_raw_position,
+            object->flags.bits.use_alternate_model);
         BattleModelEffect_SpawnFromResource(
             (u16)command->arguments[0], (u16)command->arguments[1],
             object_position.x, object_position.y, object_position.z,
@@ -1468,12 +1434,35 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_MODEL_EFFECT_HANDLE:
+        object = BattleSceneObject_GetById((u16)command->arguments[2]);
+        BattlePosition_StoreViewRelative(
+            &object_position,
+            (s16)(object->x + (s16)command->arguments[3]),
+            (s16)(object->y + (s16)command->arguments[4] - object->z),
+            (s16)(object->effect_anchor_z + (s16)command->arguments[5] +
+                  16 * (256 -
+                        (object->y + (s16)command->arguments[4]))),
+            object->flags.bits.use_raw_position,
+            object->flags.bits.use_alternate_model);
+        effect_index = BattleModelEffect_SpawnFromResourceInFreeSlot(
+            (u16)command->arguments[0], (u16)command->arguments[1],
+            object_position.x, object_position.y, object_position.z,
+            command->arguments[6] / 16);
+        BattleVm_WriteResult(
+            vm, state, command,
+            effect_index | BATTLE_VM_MODEL_EFFECT_HANDLE_TAG);
+        return SCRIPT_VM_CONTINUE;
+
     case BATTLE_VM_SPAWN_ALTERNATE_MODEL_EFFECT_HANDLE:
         object = BattleSceneObject_GetById((u16)command->arguments[2]);
-        object_position = BattleVm_GetAttachedViewPosition(
-            object, command->arguments[3], command->arguments[4],
-            command->arguments[5],
-            command->opcode == BATTLE_VM_SPAWN_MODEL_EFFECT_HANDLE);
+        BattlePosition_StoreViewRelative(
+            &object_position,
+            (s16)(object->x + (s16)command->arguments[3]),
+            (s16)(object->y - object->z + (s16)command->arguments[4]),
+            (s16)(object->effect_anchor_z + (s16)command->arguments[5] +
+                  16 * (256 - object->y)),
+            object->flags.bits.use_raw_position,
+            object->flags.bits.use_alternate_model);
         effect_index = BattleModelEffect_SpawnFromResourceInFreeSlot(
             (u16)command->arguments[0], (u16)command->arguments[1],
             object_position.x, object_position.y, object_position.z,
@@ -1484,20 +1473,32 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_SPRITE_EFFECT:
-        object_position = BattleVm_GetAbsoluteEffectPosition(
-            command->arguments[1], command->arguments[2],
-            command->arguments[3], command->arguments[4]);
+        y = command->arguments[2];
+        z = (s16)(y - command->arguments[3]);
+        x = (s16)(command->arguments[4] + 16 * (256 - y));
+        duration = (z - *(s16 *)(
+            gBattleContext + BATTLE_VM_EFFECT_VIEW_Y_OFFSET)) << 16;
+        if (x < 0) {
+            x = 0;
+        }
         BattleSpriteEffect_Spawn(
-            (u16)command->arguments[0], object_position.x,
-            object_position.y, object_position.z,
+            (u16)command->arguments[0],
+            (s16)(command->arguments[1] - *(u16 *)(
+                gBattleContext + BATTLE_VM_EFFECT_VIEW_X_OFFSET)),
+            duration >> 16, (s16)x,
             command->arguments[5] / 16);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_ATTACHED_SPRITE_EFFECT:
         object = BattleSceneObject_GetById((u16)command->arguments[1]);
-        object_position = BattleVm_GetAttachedViewPosition(
-            object, command->arguments[2], command->arguments[3],
-            command->arguments[4], 0);
+        BattlePosition_StoreViewRelative(
+            &object_position,
+            (s16)(object->x + (s16)command->arguments[2]),
+            (s16)(object->y - object->z + (s16)command->arguments[3]),
+            (s16)(object->effect_anchor_z + (s16)command->arguments[4] +
+                  16 * (256 - object->y)),
+            object->flags.bits.use_raw_position,
+            object->flags.bits.use_alternate_model);
         BattleSpriteEffect_Spawn(
             (u16)command->arguments[0], object_position.x,
             object_position.y, object_position.z,
@@ -1505,12 +1506,19 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_SPRITE_EFFECT_HANDLE:
-        object_position = BattleVm_GetAbsoluteEffectPosition(
-            command->arguments[1], command->arguments[2],
-            command->arguments[3], command->arguments[4]);
+        y = command->arguments[2];
+        z = (s16)(y - command->arguments[3]);
+        x = (s16)(command->arguments[4] + 16 * (256 - y));
+        duration = (z - *(s16 *)(
+            gBattleContext + BATTLE_VM_EFFECT_VIEW_Y_OFFSET)) << 16;
+        if (x < 0) {
+            x = 0;
+        }
         effect_index = BattleSpriteEffect_SpawnInFreeSlot(
-            (u16)command->arguments[0], object_position.x,
-            object_position.y, object_position.z,
+            (u16)command->arguments[0],
+            (s16)(command->arguments[1] - *(u16 *)(
+                gBattleContext + BATTLE_VM_EFFECT_VIEW_X_OFFSET)),
+            duration >> 16, (s16)x,
             command->arguments[5] / 16);
         BattleVm_WriteResult(
             vm, state, command,
@@ -1519,9 +1527,14 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_SPAWN_ATTACHED_SPRITE_EFFECT_HANDLE:
         object = BattleSceneObject_GetById((u16)command->arguments[1]);
-        object_position = BattleVm_GetAttachedViewPosition(
-            object, command->arguments[2], command->arguments[3],
-            command->arguments[4], 0);
+        BattlePosition_StoreViewRelative(
+            &object_position,
+            (s16)(object->x + (s16)command->arguments[2]),
+            (s16)(object->y - object->z + (s16)command->arguments[3]),
+            (s16)(object->effect_anchor_z + (s16)command->arguments[4] +
+                  16 * (256 - object->y)),
+            object->flags.bits.use_raw_position,
+            object->flags.bits.use_alternate_model);
         effect_index = BattleSpriteEffect_SpawnInFreeSlot(
             (u16)command->arguments[0], object_position.x,
             object_position.y, object_position.z,
@@ -1659,13 +1672,21 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_SCREEN_PARTICLE_SWEEP_HANDLE:
-        task_slot = BattleVm_FindFreeTaskHandleSlot(&slot_index);
+        for (slot_index = 0;
+             ((BattleAITask **)(gBattleContext +
+                 BATTLE_VM_TASK_HANDLE_SLOTS_OFFSET))[slot_index] != 0;
+             slot_index++) {
+        }
         task = func_ov002_020af97c(
             command->arguments[0], command->arguments[1],
             command->arguments[2], command->arguments[3],
             (u16)command->arguments[4], (u8)command->arguments[5],
             (u16)command->arguments[6]);
-        BattleTask_BindOwnerSlot(task, task_slot);
+        BattleTask_BindOwnerSlot(
+            task,
+            &((BattleAITask **)(gBattleContext +
+                BATTLE_VM_TASK_HANDLE_SLOTS_OFFSET))[slot_index]
+        );
         BattleVm_WriteResult(
             vm, state, command,
             slot_index | BATTLE_VM_TASK_HANDLE_TAG);
@@ -1679,12 +1700,20 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_GROUND_RIPPLE_HANDLE:
-        task_slot = BattleVm_FindFreeTaskHandleSlot(&slot_index);
+        for (slot_index = 0;
+             ((BattleAITask **)(gBattleContext +
+                 BATTLE_VM_TASK_HANDLE_SLOTS_OFFSET))[slot_index] != 0;
+             slot_index++) {
+        }
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
         task = func_ov002_020ae940(
             object, command->arguments[1], command->arguments[2],
             command->arguments[3]);
-        BattleTask_BindOwnerSlot(task, task_slot);
+        BattleTask_BindOwnerSlot(
+            task,
+            &((BattleAITask **)(gBattleContext +
+                BATTLE_VM_TASK_HANDLE_SLOTS_OFFSET))[slot_index]
+        );
         BattleVm_WriteResult(
             vm, state, command,
             slot_index | BATTLE_VM_TASK_HANDLE_TAG);
@@ -1819,11 +1848,19 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_RASTER_RESOURCE_TRANSITION:
-        task_slot = BattleVm_FindFreeTaskHandleSlot(&slot_index);
+        for (slot_index = 0;
+             ((BattleAITask **)(gBattleContext +
+                 BATTLE_VM_TASK_HANDLE_SLOTS_OFFSET))[slot_index] != 0;
+             slot_index++) {
+        }
         task = (BattleAITask *)BattleRasterResourceTransition_Start(
             command->arguments[0], (u16)command->arguments[1],
             command->arguments[2], command->arguments[3]);
-        BattleTask_BindOwnerSlot(task, task_slot);
+        BattleTask_BindOwnerSlot(
+            task,
+            &((BattleAITask **)(gBattleContext +
+                BATTLE_VM_TASK_HANDLE_SLOTS_OFFSET))[slot_index]
+        );
         BattleVm_WriteResult(
             vm, state, command,
             slot_index | BATTLE_VM_TASK_HANDLE_TAG);
