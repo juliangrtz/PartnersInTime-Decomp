@@ -123,7 +123,7 @@ field context (the other DS screen/field instance).
 | `0x045` | `resume_entity_script` | entity_selector | invokes the selected entity's script-resume method |
 | `0x046` | `resume_matching_entity_scripts` | entity_selector_or_minus_one | resumes every matching active entity script |
 | `0x047` | `get_entity_script_state` | entity_selector | fallthrough |
-| `0x048` | `start_paired_field_script` | paired_room_id, script_slot_or_minus_one, chain_if_active | starts a script entry in the paired field context when its room ID matches |
+| `0x048` | `start_paired_field_script` | paired_room_id, script_slot_or_minus_one, chain_if_active | starts a script entry only when the paired field context has type `0x47` and its separate room ID matches |
 | `0x049` | `get_entity_property` | entity_selector, property_id | fallthrough |
 | `0x04A` | `set_entity_visible` | entity_selector, visible | sets the entity render-enabled bit and forwards the state to its bound render object |
 | `0x04B` | `set_entity_enabled` | entity_selector, enabled | sets entity state bit 0, which gates the normal entity update path |
@@ -148,7 +148,7 @@ field context (the other DS screen/field instance).
 | `0x05E` | `set_entity_reserved_collision_flag` | entity_selector, flag_index, enabled | sets entity collision-state bit 16 + flag_index, where the implemented indices are 0 and 1. Both bits default to enabled for ordinary field entities and are copied together when entity state is cloned. An exhaustive instruction-level scan of overlay 0 found no behavioral reader for either bit, so they are currently classified as reserved or vestigial collision flags rather than assigning an unsupported gameplay meaning. All five reachable shipped commands address flag 0; no shipped command addresses flag 1 |
 | `0x05F` | `set_entity_category_collision_policy` | entity_selector, other_entity_category, solid_response_enabled, can_be_displaced, can_displace_other | replaces one three-bit entry in the entity's 16-category collision-policy table. Both entities need a nonzero policy for each other's category before body collision is considered. Matching bit 0 enables ordinary solid/contact resolution; this entity's bit 1 combined with the other's bit 2 permits one-way displacement of this entity by the other |
 | `0x060` | `set_entity_render_layer` | entity_selector, render_layer | stores the low four bits of render_layer in the high nibble of the entity's bound render-object sort key |
-| `0x061` | `set_entity_body_collision_enabled` | entity_selector, enabled | sets the entity's solid-body participation flag. When enabled, ordinary field entities resolve overlapping body rectangles against other enabled entities whose category is permitted by the entity's 11-bit collision mask, and their sprite sort key is derived from the feet/bottom Y coordinate so overlaps draw in depth order. The same flag also lets attached or related sprites constrain one another's automatic order. Disabling it leaves scripted trigger-region tests and the separate special collision path intact; all nine shipped calls disable the current script-owning entity, primarily to let cutscene actors pass through ordinary bodies |
+| `0x061` | `legacy_noop_061` | unused_entity_selector, unused_enabled | intentional legacy no-op; both encoded arguments are ignored. All nine shipped calls pass the current script-owning entity and zero, but inner-table entry `0x061 - 0x04A = 23` branches directly to the common default return |
 | `0x062` | `set_entity_render_order_priorities` | entity_selector, priority_0_or_auto, priority_1_or_auto, priority_2_or_auto, priority_3_or_auto, auxiliary_priority_or_auto | sets the per-component sprite overlap priorities stored at render-object bytes +0x134 through +0x137; -1 preserves automatic priority calculation. Normal entities also configure an optional auxiliary render object, while subtype 8 ignores the final argument |
 | `0x063` | `set_entity_interaction_bounds` | entity_selector, minimum_x, maximum_y, width, height, vertical_extent | replaces the entity's primary Q12 interaction bounds. These bounds provide the broad overlap rectangle and vertical span used for entity interaction/contact tests, sprite overlap ordering, effect attachment, and off-screen culling |
 | `0x064` | `legacy_noop_064` | unused_entity_selector, unused_vertical_extent | intentional legacy no-op; the outer 290-entry jump table routes this slot directly to the default return. A would-be interaction-height handler survives inside a shared inner switch but is unreachable from the outer table |
@@ -468,13 +468,13 @@ the dispatcher's exceptional physical handler order.
 
 The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
-opcodes (`0x033..0x154`), including the five intentional legacy no-ops, while
+opcodes (`0x033..0x154`), including the six intentional legacy no-ops, while
 preserving the original command-rewind behavior for asynchronous waits. The
-source-level semantic helpers now fold into one 23,492-byte function, exactly
-matching the original size; no compiler-generated code helpers remain. The
+source-level semantic helpers now fold into one 23,548-byte function, only 56
+bytes above the 23,492-byte original; no compiler-generated code helpers remain. The
 reconstructed common result
 path, cached field/party/map contexts, persistent argument base, and dynamic
-retry decoding now reach 66.35% fuzzy similarity against the 23,492-byte
+retry decoding now reach 71.67% fuzzy similarity against the 23,492-byte
 original. The ROM-proven persistent field-system pointer is
 `field_context + 0x24FC`; map operations use the distinct controller at
 `+0x2500`. The script-state flags live at `+0xB0`: owner type occupies bits

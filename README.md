@@ -150,19 +150,19 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   areas, and non-numeric handler layout are recovered; it remains unlinked while the
   original giant-switch layout is converged without compromising the verified
   ROM build.
-  Overlay 0's still larger 23,492-byte field/world dispatcher now has the same
+  Overlay 0's still larger 23,492-byte original field/world dispatcher now has the same
   complete structured reconstruction. One readable C switch covers all 290
   slots from `0x033` through `0x154`: child scripts, entity state and movement,
   party control, room and time-hole transitions, cameras and palettes, field
   effects and input, battle/menu handoffs, save-backed inventory, the field
   timer, message windows, and audio ownership. Named runtime layouts replace
   raw offsets for the shared entity, render, party, and field state. All
-  source-level helpers now fold into one 23,492-byte MWCC function, exactly
-  matching the original function size; there are no compiler-generated code
-  helpers left. Its common return path,
+  source-level helpers now fold into one 23,548-byte MWCC function, only 56
+  bytes above the original function size; there are no compiler-generated
+  code helpers left. Its common return path,
   cached field/party/map contexts, dynamic retry decoding, and argument-base
   register now reproduce the original dispatcher architecture, raising fuzzy
-  instruction similarity to 66.35%. ROM-shaped bitfields now recover the
+  instruction similarity to 71.67%. ROM-shaped bitfields now recover the
   entity subtype/resource selection, six-direction contact mask, map-axis
   synchronization, signed collision-policy updates, script ownership and
   lifecycle, saved presentation/animation state, transform and movement
@@ -183,7 +183,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   paired-script, entity-script, matching-script, room/camera, and party/gimmick
   families now also follow the original physical handler order. The remaining
   opcode bodies and local register schedules are the principal source of the
-  instruction delta against the equally sized original. The work unit remains
+  instruction and 56-byte size delta against the original. The work unit remains
   unlinked while those local schedules are converged.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
