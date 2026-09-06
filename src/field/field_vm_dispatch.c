@@ -413,7 +413,8 @@ struct FieldMapController {
 };
 
 typedef struct FieldCircularWipeParameters {
-    u16 duration_and_retain_mask;
+    u16 duration : 15;
+    u16 retain_after_completion : 1;
     u8 center_x;
     u8 center_y;
     s16 start_radius;
@@ -421,7 +422,8 @@ typedef struct FieldCircularWipeParameters {
 } FieldCircularWipeParameters;
 
 typedef struct FieldRectangularWipeParameters {
-    u16 duration_and_retain_mask;
+    u16 duration : 15;
+    u16 retain_after_completion : 1;
     u8 center_x;
     u8 center_y;
     s16 start_left;
@@ -790,47 +792,41 @@ enum FieldVmPairedContextOffset {
 };
 
 static inline int FieldVm_GetContextType(const FieldScriptState *state) {
-    return (state->flags & FIELD_SCRIPT_CONTEXT_TYPE_MASK) >>
-        FIELD_SCRIPT_CONTEXT_TYPE_SHIFT;
+    return state->flag_bits.context_type;
 }
 
 static inline int FieldVm_GetParentType(const FieldScriptState *state) {
-    return (state->flags & FIELD_SCRIPT_PARENT_TYPE_MASK) >>
-        FIELD_SCRIPT_PARENT_TYPE_SHIFT;
+    return state->flag_bits.parent_type;
 }
 
 static inline int FieldVm_GetEffectiveParentType(const FieldScriptState *state) {
-    int owner_type = (state->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
-        FIELD_SCRIPT_OWNER_TYPE_SHIFT;
+    int owner_type = state->flag_bits.owner_type;
 
     if (owner_type == FIELD_SCRIPT_OWNER_ENTITY) {
-        return (state->flags & FIELD_SCRIPT_PARENT_TYPE_MASK) >>
-            FIELD_SCRIPT_PARENT_TYPE_SHIFT;
+        return state->flag_bits.parent_type;
     }
     return owner_type;
 }
 
 static inline int FieldVm_GetOwnerSubtype(const FieldScriptState *state) {
-    return (s8)(state->flags >> FIELD_SCRIPT_OWNER_SUBTYPE_SHIFT);
+    return (s8)state->flag_bits.owner_subtype;
 }
 
 static inline int FieldVm_GetParentEntityId(const FieldScriptState *state) {
-    if (((state->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
-         FIELD_SCRIPT_OWNER_TYPE_SHIFT) == FIELD_SCRIPT_OWNER_ENTITY) {
+    if (state->flag_bits.owner_type == FIELD_SCRIPT_OWNER_ENTITY) {
         return *(s8 *)((u8 *)state->owner_entity + 4);
     }
     return -1;
 }
 
 static inline int FieldVm_GetScriptState(const FieldScriptState *state) {
-    if ((state->flags & FIELD_SCRIPT_ACTIVE) == 0) {
+    if (state->flag_bits.active == 0) {
         return 0;
     }
-    if ((state->flags & FIELD_SCRIPT_PAUSED) != 0) {
+    if (state->flag_bits.paused != 0) {
         return 3;
     }
-    if (((state->flags & FIELD_SCRIPT_RESULT_MASK) >>
-         FIELD_SCRIPT_RESULT_SHIFT) == 3) {
+    if (state->flag_bits.result == 3) {
         return 2;
     }
     return 1;
@@ -870,42 +866,82 @@ static inline int FieldVm_VisitMatchingEntityScripts(
     int index;
 
     if (selector == -1) {
-        parent_type = (caller->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
-            FIELD_SCRIPT_OWNER_TYPE_SHIFT;
+        parent_type = caller->flag_bits.owner_type;
     }
     if (parent_type == FIELD_SCRIPT_OWNER_ENTITY) {
         parent_entity_id = *(s8 *)((u8 *)caller->owner_entity + 4);
     }
 
-    for (index = 0; index < entity_count; index++) {
-        FieldEntity *entity = entities[index];
-        FieldScriptState *target =
-            (FieldScriptState *)((u8 *)entity + 0x20);
-        int target_parent_type =
-            (target->flags & FIELD_SCRIPT_PARENT_TYPE_MASK) >>
-            FIELD_SCRIPT_PARENT_TYPE_SHIFT;
+    switch (operation) {
+    case FIELD_VM_WAIT_MATCHING_ENTITY_SCRIPTS:
+        for (index = 0; index < entity_count; index++) {
+            FieldEntity *entity = entities[index];
+            FieldScriptState *target =
+                (FieldScriptState *)((u8 *)entity + 0x20);
 
-        if ((target->flags & FIELD_SCRIPT_ACTIVE) == 0 ||
-            (target_parent_type != parent_type &&
-             (parent_type != FIELD_SCRIPT_OWNER_ENTITY ||
-              target->parent_entity_id != parent_entity_id))) {
-            continue;
+            if (target->flag_bits.active != 0 &&
+                (target->flag_bits.parent_type == parent_type ||
+                 (parent_type == FIELD_SCRIPT_OWNER_ENTITY &&
+                  target->parent_entity_id == parent_entity_id))) {
+                s32 descriptor = (u16)
+                    runtime->vm.command_descriptors[operation];
+                int halfword_count =
+                    (descriptor & SCRIPT_VM_ARGUMENT_COUNT_MASK) +
+                    ((descriptor & SCRIPT_VM_HAS_RESULT) >> 5) +
+                    ((descriptor & SCRIPT_VM_HAS_ARGUMENT_MODES) >> 6) + 1;
+
+                caller->vm_state.script -= halfword_count;
+                return SCRIPT_VM_YIELDED;
+            }
         }
-        switch (operation) {
-        case FIELD_VM_WAIT_MATCHING_ENTITY_SCRIPTS:
-            return 1;
-        case FIELD_VM_STOP_MATCHING_ENTITY_SCRIPTS:
-            entity->vtable->stop_script(entity);
-            break;
-        case FIELD_VM_PAUSE_MATCHING_ENTITY_SCRIPTS:
-            entity->vtable->pause_script(entity);
-            break;
-        case FIELD_VM_RESUME_MATCHING_ENTITY_SCRIPTS:
-            entity->vtable->resume_script(entity);
-            break;
+        break;
+
+    case FIELD_VM_STOP_MATCHING_ENTITY_SCRIPTS:
+        for (index = 0; index < entity_count; index++) {
+            FieldEntity *entity = entities[index];
+            FieldScriptState *target =
+                (FieldScriptState *)((u8 *)entity + 0x20);
+
+            if (target->flag_bits.active != 0 &&
+                (target->flag_bits.parent_type == parent_type ||
+                 (parent_type == FIELD_SCRIPT_OWNER_ENTITY &&
+                  target->parent_entity_id == parent_entity_id))) {
+                entity->vtable->stop_script(entity);
+            }
         }
+        break;
+
+    case FIELD_VM_PAUSE_MATCHING_ENTITY_SCRIPTS:
+        for (index = 0; index < entity_count; index++) {
+            FieldEntity *entity = entities[index];
+            FieldScriptState *target =
+                (FieldScriptState *)((u8 *)entity + 0x20);
+
+            if (target->flag_bits.active != 0 &&
+                (target->flag_bits.parent_type == parent_type ||
+                 (parent_type == FIELD_SCRIPT_OWNER_ENTITY &&
+                  target->parent_entity_id == parent_entity_id))) {
+                entity->vtable->pause_script(entity);
+            }
+        }
+        break;
+
+    case FIELD_VM_RESUME_MATCHING_ENTITY_SCRIPTS:
+        for (index = 0; index < entity_count; index++) {
+            FieldEntity *entity = entities[index];
+            FieldScriptState *target =
+                (FieldScriptState *)((u8 *)entity + 0x20);
+
+            if (target->flag_bits.active != 0 &&
+                (target->flag_bits.parent_type == parent_type ||
+                 (parent_type == FIELD_SCRIPT_OWNER_ENTITY &&
+                  target->parent_entity_id == parent_entity_id))) {
+                entity->vtable->resume_script(entity);
+            }
+        }
+        break;
     }
-    return 0;
+    return SCRIPT_VM_CONTINUE;
 }
 
 static inline void FieldVm_StartEntityScript(FieldScriptState *caller,
@@ -915,23 +951,15 @@ static inline void FieldVm_StartEntityScript(FieldScriptState *caller,
     FieldScriptState *target =
         (FieldScriptState *)((u8 *)entity + 0x20);
 
-    if (chain_if_active && (target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
-        int parent_type =
-            (caller->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
-            FIELD_SCRIPT_OWNER_TYPE_SHIFT;
+    if (chain_if_active && target->flag_bits.active != 0) {
+        int parent_type = caller->flag_bits.owner_type;
 
         if (parent_type == FIELD_SCRIPT_OWNER_ENTITY) {
-            parent_type =
-                (caller->flags & FIELD_SCRIPT_PARENT_TYPE_MASK) >>
-                FIELD_SCRIPT_PARENT_TYPE_SHIFT;
+            parent_type = caller->flag_bits.parent_type;
         }
         target->queued_script = script;
-        target->flags =
-            (target->flags & ~FIELD_SCRIPT_QUEUED_PARENT_TYPE_MASK) |
-            ((parent_type << FIELD_SCRIPT_QUEUED_PARENT_TYPE_SHIFT) &
-             FIELD_SCRIPT_QUEUED_PARENT_TYPE_MASK);
-        if (((caller->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
-             FIELD_SCRIPT_OWNER_TYPE_SHIFT) == FIELD_SCRIPT_OWNER_ENTITY) {
+        target->flag_bits.queued_parent_type = parent_type;
+        if (caller->flag_bits.owner_type == FIELD_SCRIPT_OWNER_ENTITY) {
             target->queued_parent_entity_id =
                 *(s8 *)((u8 *)caller->owner_entity + 4);
         } else {
@@ -942,8 +970,7 @@ static inline void FieldVm_StartEntityScript(FieldScriptState *caller,
     entity->vtable->stop_script(entity);
     func_ov000_02082240(
         target, caller,
-        ((caller->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
-         FIELD_SCRIPT_OWNER_TYPE_SHIFT) & 3,
+        caller->flag_bits.owner_type & 3,
         script);
 }
 
@@ -953,7 +980,7 @@ static inline void FieldVm_StartPairedScript(FieldVmRuntime *runtime,
     u8 *paired = *(u8 **)(runtime->field_context +
                          FIELD_VM_PAIRED_FIELD_CONTEXT_OFFSET);
     int slot = command->arguments[1];
-    u32 *script_flags;
+    FieldScriptFlagBits *script_flags;
 
     if (paired == 0 ||
         *(u16 *)(paired + FIELD_VM_PAIRED_ROOM_ID_OFFSET) !=
@@ -961,14 +988,13 @@ static inline void FieldVm_StartPairedScript(FieldVmRuntime *runtime,
         return;
     }
 
-    script_flags = (u32 *)(paired + FIELD_VM_PAIRED_SCRIPT_FLAGS_OFFSET);
+    script_flags = (FieldScriptFlagBits *)(
+        paired + FIELD_VM_PAIRED_SCRIPT_FLAGS_OFFSET);
     if (command->arguments[2] != 0 &&
-        (*script_flags & FIELD_SCRIPT_ACTIVE) != 0) {
+        script_flags->active != 0) {
         const u16 *script_table;
         const u16 *queued_script = 0;
-        int parent_type =
-            (caller->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
-            FIELD_SCRIPT_OWNER_TYPE_SHIFT;
+        int parent_type = caller->flag_bits.owner_type;
 
         if (slot != -1) {
             script_table = *(const u16 **)(
@@ -979,17 +1005,10 @@ static inline void FieldVm_StartPairedScript(FieldVmRuntime *runtime,
         *(const u16 **)(paired + FIELD_VM_PAIRED_QUEUED_SCRIPT_OFFSET) =
             queued_script;
         if (parent_type == FIELD_SCRIPT_OWNER_ENTITY) {
-            parent_type =
-                (caller->flags & FIELD_SCRIPT_PARENT_TYPE_MASK) >>
-                FIELD_SCRIPT_PARENT_TYPE_SHIFT;
+            parent_type = caller->flag_bits.parent_type;
         }
-        *script_flags =
-            (*script_flags & ~FIELD_SCRIPT_QUEUED_PARENT_TYPE_MASK) |
-            ((parent_type <<
-              FIELD_SCRIPT_QUEUED_PARENT_TYPE_SHIFT) &
-             FIELD_SCRIPT_QUEUED_PARENT_TYPE_MASK);
-        if (((caller->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
-             FIELD_SCRIPT_OWNER_TYPE_SHIFT) == FIELD_SCRIPT_OWNER_ENTITY) {
+        script_flags->queued_parent_type = parent_type;
+        if (caller->flag_bits.owner_type == FIELD_SCRIPT_OWNER_ENTITY) {
             *(s8 *)(paired + FIELD_VM_PAIRED_PARENT_ENTITY_ID_OFFSET) =
                 *(s8 *)((u8 *)caller->owner_entity + 4);
         } else {
@@ -1108,16 +1127,9 @@ static inline int FieldVm_IsTwoDimensionalEntity(
     return entity->base.property_00a_bits.subtype == 8;
 }
 
-static inline u32 *FieldVm_GetInteractionFlags(FieldRuntimeEntity *entity) {
-    return (u32 *)((u8 *)entity + 0x520);
-}
-
-static inline void FieldVm_SetFlag(u32 *flags, u32 mask, int enabled) {
-    if (enabled) {
-        *flags |= mask;
-    } else {
-        *flags &= ~mask;
-    }
+static inline FieldInteractionFlags *FieldVm_GetInteractionFlags(
+    FieldRuntimeEntity *entity) {
+    return (FieldInteractionFlags *)((u8 *)entity + 0x520);
 }
 
 static inline void FieldVm_SetContactDirectionFilter(
@@ -1308,6 +1320,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     u8 *party_controller;
     const u16 *script;
     int owner_type;
+    FieldCircularWipeParameters circular_wipe_parameters;
+    FieldRectangularWipeParameters rectangular_wipe_parameters;
     int result = SCRIPT_VM_CONTINUE;
 
     switch (command->opcode) {
@@ -1334,23 +1348,17 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         target = FieldVm_GetAuxScript(runtime, arguments[0]);
         switch (command->opcode) {
         case FIELD_VM_SET_AUX_SCRIPT_ENABLED:
-            target->flags =
-                (target->flags & ~FIELD_SCRIPT_ENABLED) |
-                (arguments[1] & FIELD_SCRIPT_ENABLED);
+            target->flag_bits.enabled = arguments[1] & 1;
             break;
 
         case FIELD_VM_START_AUX_SCRIPT:
-            if ((target->flags & FIELD_SCRIPT_ENABLED) != 0) {
+            if (target->flag_bits.enabled != 0) {
                 script = state->vm_state.script + arguments[1];
                 if (arguments[2] != 0 &&
-                    (target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
+                    target->flag_bits.active != 0) {
                     target->queued_script = script;
-                    target->flags =
-                        (target->flags &
-                         ~FIELD_SCRIPT_QUEUED_PARENT_TYPE_MASK) |
-                        ((FieldVm_GetEffectiveParentType(state) <<
-                          FIELD_SCRIPT_QUEUED_PARENT_TYPE_SHIFT) &
-                         FIELD_SCRIPT_QUEUED_PARENT_TYPE_MASK);
+                    target->flag_bits.queued_parent_type =
+                        FieldVm_GetEffectiveParentType(state);
                     target->queued_parent_entity_id =
                         FieldVm_GetParentEntityId(state);
                 } else {
@@ -1360,7 +1368,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_WAIT_AUX_SCRIPT:
-            if ((target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
+            if (target->flag_bits.active != 0) {
                 result = FieldVm_RetryCurrentCommand(
                     vm, state, command->opcode);
                 break;
@@ -1368,16 +1376,16 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_STOP_AUX_SCRIPT:
-            target->flags &= ~FIELD_SCRIPT_ACTIVE;
+            target->flag_bits.active = 0;
             target->queued_script = 0;
             break;
 
         case FIELD_VM_PAUSE_AUX_SCRIPT:
-            target->flags |= FIELD_SCRIPT_PAUSED;
+            target->flag_bits.paused = 1;
             break;
 
         case FIELD_VM_RESUME_AUX_SCRIPT:
-            target->flags &= ~FIELD_SCRIPT_PAUSED;
+            target->flag_bits.paused = 0;
             break;
 
         case FIELD_VM_GET_AUX_SCRIPT_STATE:
@@ -1406,24 +1414,24 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         switch (command->opcode) {
         case FIELD_VM_START_INLINE_ENTITY_SCRIPT:
         case FIELD_VM_START_INLINE_ENTITY_SCRIPT_AND_WAIT:
-            if ((state->flags & FIELD_SCRIPT_INLINE_WAIT) == 0) {
+            if (state->flag_bits.inline_wait == 0) {
                 FieldVm_StartEntityScript(
                     state, entity, state->vm_state.script,
                     arguments[1]);
                 if (command->opcode ==
                     FIELD_VM_START_INLINE_ENTITY_SCRIPT_AND_WAIT) {
-                    state->flags |= FIELD_SCRIPT_INLINE_WAIT;
+                    state->flag_bits.inline_wait = 1;
                 }
             }
-            if ((state->flags & FIELD_SCRIPT_INLINE_WAIT) != 0 &&
-                (target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
+            if (state->flag_bits.inline_wait != 0 &&
+                target->flag_bits.active != 0) {
                 result = FieldVm_RetryCurrentCommand(
                     vm, state,
                     command->opcode);
                 break;
             }
             state->vm_state.script += arguments[2];
-            state->flags &= ~FIELD_SCRIPT_INLINE_WAIT;
+            state->flag_bits.inline_wait = 0;
             break;
 
         case FIELD_VM_START_RELATIVE_ENTITY_SCRIPT:
@@ -1433,7 +1441,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_WAIT_ENTITY_SCRIPT:
-            if ((target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
+            if (target->flag_bits.active != 0) {
                 result = FieldVm_RetryCurrentCommand(
                     vm, state, command->opcode);
                 break;
@@ -1467,8 +1475,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_ENABLED:
-            entity->property_00a = (entity->property_00a & ~1) |
-                (arguments[1] != 0);
+            entity->property_00a_bits.property_00a_flag_00 =
+                arguments[1] != 0;
             break;
 
         case FIELD_VM_SET_ENTITY_SCRIPT_VALUE:
@@ -1489,12 +1497,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_STOP_MATCHING_ENTITY_SCRIPTS:
     case FIELD_VM_PAUSE_MATCHING_ENTITY_SCRIPTS:
     case FIELD_VM_RESUME_MATCHING_ENTITY_SCRIPTS:
-        if (FieldVm_VisitMatchingEntityScripts(
-                runtime, state, arguments[0], command->opcode)) {
-            result = FieldVm_RetryCurrentCommand(
-                vm, state, command->opcode);
-            break;
-        }
+        result = FieldVm_VisitMatchingEntityScripts(
+            runtime, state, arguments[0], command->opcode);
         break;
 
     case FIELD_VM_START_PAIRED_FIELD_SCRIPT:
@@ -1559,21 +1563,17 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_OFFSCREEN_CONTACT_RETENTION_ENABLED:
-            FieldVm_SetFlag(
-                &runtime_entity->base_state_flags,
-                FIELD_ENTITY_RETAIN_OFFSCREEN_CONTACT,
-                arguments[1]);
+            runtime_entity->base_state_flag_bits.retain_offscreen_contact =
+                arguments[1] != 0;
             break;
 
         case FIELD_VM_SET_ENTITY_RESERVED_STATE_FLAG:
-            FieldVm_SetFlag(
-                &runtime_entity->base_state_flags,
-                FIELD_ENTITY_RESERVED_STATE, arguments[1]);
+            runtime_entity->base_state_flag_bits.reserved_state =
+                arguments[1] != 0;
             break;
         case FIELD_VM_SET_ENTITY_SEMITRANSPARENT:
-            FieldVm_SetFlag(
-                &runtime_entity->render_object->state_flags,
-                FIELD_RENDER_SEMITRANSPARENT, arguments[1] & 1);
+            runtime_entity->render_object->state_flag_bits.semitransparent =
+                arguments[1] & 1;
             break;
 
         case FIELD_VM_SET_ENTITY_RENDER_LAYER:
@@ -1585,10 +1585,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_BODY_COLLISION_ENABLED:
-            FieldVm_SetFlag(
-                &runtime_entity->field_state_flags,
-                FIELD_ENTITY_BODY_COLLISION_ENABLED,
-                arguments[1] & 1);
+            runtime_entity->field_state_flag_bits.body_collision_enabled =
+                arguments[1] & 1;
             break;
 
         case FIELD_VM_SET_ENTITY_RENDER_ORDER_PRIORITIES:
@@ -1623,8 +1621,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             if (arguments[2] != -1 && arguments[4] != 0) {
                 runtime_entity->saved_animation_id =
                     runtime_entity->animation_id;
-                runtime_entity->saved_presentation_flags |=
-                    FIELD_ENTITY_SAVED_RESOURCE_ANIMATION;
+                runtime_entity->saved_presentation_flag_bits.has_saved_resource_animation =
+                    1;
             }
             if (arguments[1] == -1) {
                 if (arguments[2] != -1) {
@@ -1638,8 +1636,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 if (arguments[4] != 0) {
                     runtime_entity->saved_resource_index =
                         runtime_entity->resource_index;
-                    runtime_entity->saved_presentation_flags |=
-                        FIELD_ENTITY_SAVED_RESOURCE;
+                    runtime_entity->saved_presentation_flag_bits.has_saved_resource =
+                        1;
                 }
                 runtime_entity->resource_index = (u8)arguments[1];
                 func_ov000_020a6d68(
@@ -1652,8 +1650,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_RESTORE_ENTITY_RESOURCE_STATE:
-            if ((runtime_entity->saved_presentation_flags &
-                 FIELD_ENTITY_SAVED_RESOURCE) != 0) {
+            if (runtime_entity->saved_presentation_flag_bits.has_saved_resource !=
+                0) {
                 const void *resource_record;
                 int animation_id = -1;
                 u16 special_resource_state =
@@ -1665,8 +1663,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
                 runtime_entity->resource_index =
                     runtime_entity->saved_resource_index;
-                runtime_entity->saved_presentation_flags &=
-                    ~FIELD_ENTITY_SAVED_RESOURCE;
+                runtime_entity->saved_presentation_flag_bits.has_saved_resource =
+                    0;
                 if (subtype > 1 || special_resource_index == -1) {
                     resource_record = FieldVm_GetResourceRecord(
                         runtime, runtime_entity,
@@ -1693,21 +1691,21 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     resource_record = records + special_resource_index *
                         FIELD_VM_RESOURCE_RECORD_SIZE;
                 }
-                if ((runtime_entity->saved_presentation_flags &
-                     FIELD_ENTITY_SAVED_RESOURCE_ANIMATION) != 0) {
+                if (runtime_entity->saved_presentation_flag_bits.
+                        has_saved_resource_animation != 0) {
                     animation_id = runtime_entity->saved_animation_id;
-                    runtime_entity->saved_presentation_flags &=
-                        ~FIELD_ENTITY_SAVED_RESOURCE_ANIMATION;
+                    runtime_entity->saved_presentation_flag_bits.
+                        has_saved_resource_animation = 0;
                 }
                 func_ov000_020a6d68(
                     &runtime_entity->base, resource_record, 0, 0,
                     animation_id, 1, 0);
-            } else if ((runtime_entity->saved_presentation_flags &
-                        FIELD_ENTITY_SAVED_RESOURCE_ANIMATION) != 0) {
+            } else if (runtime_entity->saved_presentation_flag_bits.
+                           has_saved_resource_animation != 0) {
                 runtime_entity->animation_id =
                     runtime_entity->saved_animation_id;
-                runtime_entity->saved_presentation_flags &=
-                    ~FIELD_ENTITY_SAVED_RESOURCE_ANIMATION;
+                runtime_entity->saved_presentation_flag_bits.
+                    has_saved_resource_animation = 0;
                 func_ov000_020a6c7c(
                     &runtime_entity->base, runtime_entity->animation_id,
                     -1, 1, 1);
@@ -1716,10 +1714,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_WAIT_ENTITY_ANIMATION:
             if ((runtime_entity->base_state_flags & 1) != 0 &&
-                (runtime_entity->render_object->state_flags &
-                 FIELD_RENDER_ANIMATION_ACTIVE) != 0 &&
-                (runtime_entity->render_object->state_flags &
-                 FIELD_RENDER_ANIMATION_SUPPRESSED) == 0) {
+                runtime_entity->render_object->state_flag_bits.
+                    animation_active != 0 &&
+                runtime_entity->render_object->state_flag_bits.
+                    animation_suppressed == 0) {
                 result = FieldVm_RetryCurrentCommand(
                     vm, state, command->opcode);
                 break;
@@ -1730,8 +1728,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             if (arguments[2] != 0) {
                 runtime_entity->saved_model_animation =
                     runtime_entity->render_object->animation_id;
-                runtime_entity->saved_presentation_flags |=
-                    FIELD_ENTITY_SAVED_ANIMATION;
+                runtime_entity->saved_presentation_flag_bits.
+                    has_saved_animation = 1;
             }
             runtime_entity->render_object->vtable->set_animation(
                 runtime_entity->render_object,
@@ -1740,10 +1738,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_RESTORE_ENTITY_ANIMATION:
-            if ((runtime_entity->saved_presentation_flags &
-                 FIELD_ENTITY_SAVED_ANIMATION) != 0) {
-                runtime_entity->saved_presentation_flags &=
-                    ~FIELD_ENTITY_SAVED_ANIMATION;
+            if (runtime_entity->saved_presentation_flag_bits.
+                    has_saved_animation != 0) {
+                runtime_entity->saved_presentation_flag_bits.
+                    has_saved_animation = 0;
                 runtime_entity->render_object->vtable->set_animation(
                     runtime_entity->render_object,
                     (u8)runtime_entity->animation_id,
@@ -1753,12 +1751,12 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_SET_ENTITY_BEHAVIOR_MODE:
             if (arguments[2] != 0) {
-                runtime_entity->saved_presentation_flags =
-                    (runtime_entity->saved_presentation_flags & ~0x1C00) |
-                    (((runtime_entity->saved_presentation_flags >> 7) & 7)
-                     << 10);
-                runtime_entity->saved_presentation_flags |=
-                    FIELD_ENTITY_SAVED_BEHAVIOR;
+                runtime_entity->saved_presentation_flag_bits.
+                    saved_behavior_mode =
+                    runtime_entity->saved_presentation_flag_bits.
+                        behavior_mode;
+                runtime_entity->saved_presentation_flag_bits.
+                    has_saved_behavior = 1;
             }
             func_ov000_020a4df8(
                 &runtime_entity->base, arguments[1],
@@ -1766,19 +1764,23 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_RESTORE_ENTITY_BEHAVIOR_STATE:
-            if ((runtime_entity->saved_presentation_flags &
-                 FIELD_ENTITY_SAVED_BEHAVIOR) != 0) {
+            if (runtime_entity->saved_presentation_flag_bits.
+                    has_saved_behavior != 0) {
                 func_ov000_020a4df8(
                     &runtime_entity->base,
-                    (runtime_entity->saved_presentation_flags >> 10) & 7,
-                    (runtime_entity->saved_presentation_flags >> 13) & 1);
-                runtime_entity->saved_presentation_flags &=
-                    ~FIELD_ENTITY_SAVED_BEHAVIOR;
+                    runtime_entity->saved_presentation_flag_bits.
+                        saved_behavior_mode,
+                    runtime_entity->saved_presentation_flag_bits.
+                        has_saved_behavior);
+                runtime_entity->saved_presentation_flag_bits.
+                    has_saved_behavior = 0;
             }
-            if ((runtime_entity->render_object->state_flags >> 12) != 0) {
-                runtime_entity->render_object->state_flags &= 0xFFFF0FFF;
-                runtime_entity->render_object->state_flags &=
-                    ~FIELD_RENDER_ANIMATION_SUPPRESSED;
+            if (runtime_entity->render_object->state_flag_bits.
+                    behavior_state != 0) {
+                runtime_entity->render_object->state_flag_bits.
+                    behavior_state = 0;
+                runtime_entity->render_object->state_flag_bits.
+                    animation_suppressed = 0;
             }
             break;
 
@@ -1786,8 +1788,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             if (arguments[2] != 0) {
                 runtime_entity->saved_presentation_state =
                     runtime_entity->presentation_state;
-                runtime_entity->saved_presentation_flags |=
-                    FIELD_ENTITY_SAVED_PALETTE_PROFILE;
+                runtime_entity->saved_presentation_flag_bits.
+                    has_saved_palette_profile = 1;
             }
             func_ov000_02076f40(
                 field_context, &runtime_entity->base,
@@ -1795,15 +1797,15 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_RESTORE_ENTITY_PALETTE_PROFILE:
-            if ((runtime_entity->saved_presentation_flags &
-                 FIELD_ENTITY_SAVED_PALETTE_PROFILE) != 0) {
+            if (runtime_entity->saved_presentation_flag_bits.
+                    has_saved_palette_profile != 0) {
                 int palette_selector =
                     runtime_entity->saved_presentation_state & 0x0F;
 
                 runtime_entity->presentation_state =
                     runtime_entity->saved_presentation_state;
-                runtime_entity->saved_presentation_flags &=
-                    ~FIELD_ENTITY_SAVED_PALETTE_PROFILE;
+                runtime_entity->saved_presentation_flag_bits.
+                    has_saved_palette_profile = 0;
                 if ((runtime_entity->saved_presentation_state & 0x80) != 0) {
                     palette_selector += 16;
                 }
@@ -2243,15 +2245,13 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         runtime_entity = FieldVm_GetRuntimeEntity(entity);
         switch (command->opcode) {
         case FIELD_VM_SET_ENTITY_TURN_TO_INTERACTOR_ENABLED:
-            FieldVm_SetFlag(
-                &runtime_entity->field_state_flags,
-                FIELD_ENTITY_TURN_TO_INTERACTOR, arguments[1]);
+            runtime_entity->field_state_flag_bits.turn_to_interactor =
+                arguments[1] != 0;
             break;
 
         case FIELD_VM_SET_ENTITY_GROUND_TRACKING:
-            FieldVm_SetFlag(
-                &runtime_entity->field_state_flags,
-                FIELD_ENTITY_TRACK_GROUND, arguments[1]);
+            runtime_entity->field_state_flag_bits.track_ground =
+                arguments[1] != 0;
             if (arguments[1] != 0) {
                 runtime_entity->runtime_flags |=
                     FIELD_ENTITY_VERTICAL_SYNC_DIRTY;
@@ -2259,17 +2259,13 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_ALTERNATE_COLLISION_FACES_ENABLED:
-            FieldVm_SetFlag(
-                &runtime_entity->runtime_flags,
-                FIELD_ENTITY_ALTERNATE_COLLISION_FACES,
-                arguments[1]);
+            runtime_entity->runtime_flag_bits.alternate_collision_faces =
+                arguments[1] != 0;
             break;
 
         case FIELD_VM_SET_ENTITY_NAVIGATION_OBSTACLE_IGNORED:
-            FieldVm_SetFlag(
-                &runtime_entity->field_state_flags,
-                FIELD_ENTITY_IGNORE_NAVIGATION_OBSTACLE,
-                arguments[1]);
+            runtime_entity->field_state_flag_bits.ignore_navigation_obstacle =
+                arguments[1] != 0;
             break;
         case FIELD_VM_SET_ENTITY_LINKED_CONTACT_MODE:
             runtime_entity->field_state_flags =
@@ -2283,9 +2279,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 runtime_entity, arguments[1]);
             break;
         case FIELD_VM_CONFIGURE_ENTITY_SHADOW:
-            FieldVm_SetFlag(
-                &runtime_entity->field_state_flags,
-                FIELD_ENTITY_SHADOW_ENABLED, arguments[1] & 1);
+            runtime_entity->field_state_flag_bits.shadow_enabled =
+                arguments[1] & 1;
             if (arguments[2] == -1) {
                 if ((runtime_entity->field_state_flags &
                      FIELD_ENTITY_SHADOW_ENABLED) != 0 &&
@@ -2360,13 +2355,11 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_SET_ENTITY_RESERVED_COLLISION_FLAG:
             if (arguments[1] == 0) {
-                FieldVm_SetFlag(
-                    &runtime_entity->collision_state_flags, 1 << 16,
-                    arguments[2]);
+                runtime_entity->collision_state_flag_bits.reserved_0 =
+                    arguments[2] != 0;
             } else if (arguments[1] == 1) {
-                FieldVm_SetFlag(
-                    &runtime_entity->collision_state_flags, 1 << 17,
-                    arguments[2]);
+                runtime_entity->collision_state_flag_bits.reserved_1 =
+                    arguments[2] != 0;
             }
             break;
 
@@ -2392,10 +2385,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_SHADOW_SUPPORT_ENABLED:
-            FieldVm_SetFlag(
-                &runtime_entity->field_state_flags,
-                FIELD_ENTITY_SHADOW_SUPPORT_ENABLED,
-                arguments[1] & 1);
+            runtime_entity->field_state_flag_bits.shadow_support_enabled =
+                arguments[1] & 1;
             break;
 
         case FIELD_VM_START_ENTITY_VERTICAL_MOTION:
@@ -2435,8 +2426,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_ROAMING_BOUNDARY_CLAMP_ENABLED:
-            FieldVm_SetFlag(
-                &runtime_entity->roaming_flags, 1, arguments[1] & 1);
+            runtime_entity->roaming_flag_bits.clamp_to_boundary =
+                arguments[1] & 1;
             break;
 
         case FIELD_VM_START_ENTITY_RANDOM_ROAMING:
@@ -2495,7 +2486,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_WAIT_FIELD_BLOCK_BOUNCE:
-            if ((s8)(*FieldVm_GetInteractionFlags(runtime_entity) >> 14) !=
+            if ((s8)(*(u32 *)FieldVm_GetInteractionFlags(runtime_entity) >> 14) !=
                 -1) {
                 result = FieldVm_RetryCurrentCommand(
                     vm, state, command->opcode);
@@ -2504,27 +2495,23 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENEMY_JUMP_FIRST_STRIKE_ENABLED:
-            FieldVm_SetFlag(
-                FieldVm_GetInteractionFlags(runtime_entity), 1 << 0,
-                arguments[1] != 0);
+            FieldVm_GetInteractionFlags(runtime_entity)->
+                jump_first_strike_enabled = arguments[1] != 0;
             break;
 
         case FIELD_VM_SET_ENEMY_SPIKED_JUMP_RESPONSE:
-            FieldVm_SetFlag(
-                FieldVm_GetInteractionFlags(runtime_entity), 1 << 1,
-                arguments[1] != 0);
+            FieldVm_GetInteractionFlags(runtime_entity)->spiked_jump_response =
+                arguments[1] != 0;
             break;
 
         case FIELD_VM_SET_ENEMY_SPECIAL_CONTACT_REMOVAL_ENABLED:
-            FieldVm_SetFlag(
-                FieldVm_GetInteractionFlags(runtime_entity), 1 << 2,
-                arguments[1] != 0);
+            FieldVm_GetInteractionFlags(runtime_entity)->
+                remove_after_special_contact = arguments[1] != 0;
             break;
 
         case FIELD_VM_SET_ENEMY_IMMEDIATE_BATTLE_REMOVAL_ENABLED:
-            FieldVm_SetFlag(
-                FieldVm_GetInteractionFlags(runtime_entity), 1 << 3,
-                arguments[1] != 0);
+            FieldVm_GetInteractionFlags(runtime_entity)->
+                remove_immediately_for_battle = arguments[1] != 0;
             break;
         }
         break;
@@ -2616,10 +2603,12 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_SET_PARTY_MEMBER_SWITCHING_ENABLED:
         party_controller = FieldVm_GetPartyController(
             party_manager, arguments[0]);
-        FieldVm_SetFlag(
-            (u32 *)(party_controller +
-                    FIELD_VM_PARTY_CONTROLLER_CONTROL_FLAGS_OFFSET),
-            1 << 2, arguments[1] & 1);
+        *(u32 *)(party_controller +
+                 FIELD_VM_PARTY_CONTROLLER_CONTROL_FLAGS_OFFSET) =
+            (*(u32 *)(party_controller +
+                      FIELD_VM_PARTY_CONTROLLER_CONTROL_FLAGS_OFFSET) &
+             ~(1 << 2)) |
+            ((arguments[1] & 1) << 2);
         break;
 
     case FIELD_VM_LEGACY_NOOP_0B9:
@@ -2766,9 +2755,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_SET_PARTY_PIGGYBACK_STATE:
-        FieldVm_SetFlag(
-            (u32 *)(party_manager + 4), 1 << 7,
-            arguments[0] & 1);
+        *(u32 *)(party_manager + 4) =
+            (*(u32 *)(party_manager + 4) & ~(1 << 7)) |
+            ((arguments[0] & 1) << 7);
         break;
 
     case FIELD_VM_RELEASE_ROOM_TRANSITION_CONTROL_LOCK:
@@ -2907,9 +2896,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_SET_FIELD_BG_LAYERS_ENABLED: {
         int screen = *(u16 *)(field_context +
                              FIELD_VM_SPECIAL_PARTY_STATE_OFFSET) & 1;
-        volatile u32 *display_control =
-            (volatile u32 *)(screen != 0 ? 0x04001000 : 0x04000000);
-        u32 layer_mask = (*display_control >> 8) & 0xF;
+        u32 display_control = screen != 0
+            ? *(volatile u32 *)0x04001000
+            : *(volatile u32 *)0x04000000;
+        u32 layer_mask = (display_control >> 8) & 0xF;
         int layer;
 
         for (layer = 0; layer < 4; layer++) {
@@ -2919,8 +2909,15 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 layer_mask &= ~(1 << layer);
             }
         }
-        *display_control = (*display_control & 0xFFFFE0FF) |
-            ((layer_mask | 0x10) << 8);
+        if (screen == 0) {
+            *(volatile u32 *)0x04000000 =
+                (*(volatile u32 *)0x04000000 & 0xFFFFE0FF) |
+                ((layer_mask | 0x10) << 8);
+        } else {
+            *(volatile u32 *)0x04001000 =
+                (*(volatile u32 *)0x04001000 & 0xFFFFE0FF) |
+                ((layer_mask | 0x10) << 8);
+        }
         break;
     }
 
@@ -3237,16 +3234,14 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_CIRCULAR_SCREEN_WIPE: {
-        FieldCircularWipeParameters parameters;
-
-        parameters.duration_and_retain_mask =
-            (arguments[0] & 0x7FFF) |
-            ((arguments[5] & 1) << 15);
-        parameters.center_x = (u8)arguments[1];
-        parameters.center_y = (u8)arguments[2];
-        parameters.start_radius = (s16)arguments[3];
-        parameters.end_radius = (s16)arguments[4];
-        func_ov000_02074810(field_context, 4, &parameters);
+        circular_wipe_parameters.duration = arguments[0];
+        circular_wipe_parameters.center_x = (u8)arguments[1];
+        circular_wipe_parameters.center_y = (u8)arguments[2];
+        circular_wipe_parameters.start_radius = (s16)arguments[3];
+        circular_wipe_parameters.end_radius = (s16)arguments[4];
+        circular_wipe_parameters.retain_after_completion = arguments[5];
+        func_ov000_02074810(
+            field_context, 4, &circular_wipe_parameters);
         if ((*(u16 *)(field_context +
                      FIELD_VM_SPECIAL_PARTY_STATE_OFFSET) & 1) == 0 &&
             arguments[3] == 0) {
@@ -3256,22 +3251,20 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_START_RECTANGULAR_SCREEN_WIPE: {
-        FieldRectangularWipeParameters parameters;
-
-        parameters.duration_and_retain_mask =
-            (arguments[0] & 0x7FFF) |
-            ((arguments[11] & 1) << 15);
-        parameters.center_x = (u8)arguments[1];
-        parameters.center_y = (u8)arguments[2];
-        parameters.start_left = (s16)arguments[3];
-        parameters.start_right = (s16)arguments[4];
-        parameters.start_top = (s16)arguments[5];
-        parameters.start_bottom = (s16)arguments[6];
-        parameters.end_left = (s16)arguments[7];
-        parameters.end_right = (s16)arguments[8];
-        parameters.end_top = (s16)arguments[9];
-        parameters.end_bottom = (s16)arguments[10];
-        func_ov000_02074810(field_context, 5, &parameters);
+        rectangular_wipe_parameters.duration = arguments[0];
+        rectangular_wipe_parameters.center_x = (u8)arguments[1];
+        rectangular_wipe_parameters.center_y = (u8)arguments[2];
+        rectangular_wipe_parameters.start_left = (s16)arguments[3];
+        rectangular_wipe_parameters.start_right = (s16)arguments[4];
+        rectangular_wipe_parameters.start_top = (s16)arguments[5];
+        rectangular_wipe_parameters.start_bottom = (s16)arguments[6];
+        rectangular_wipe_parameters.end_left = (s16)arguments[7];
+        rectangular_wipe_parameters.end_right = (s16)arguments[8];
+        rectangular_wipe_parameters.end_top = (s16)arguments[9];
+        rectangular_wipe_parameters.end_bottom = (s16)arguments[10];
+        rectangular_wipe_parameters.retain_after_completion = arguments[11];
+        func_ov000_02074810(
+            field_context, 5, &rectangular_wipe_parameters);
         if ((*(u16 *)(field_context +
                      FIELD_VM_SPECIAL_PARTY_STATE_OFFSET) & 1) == 0 &&
             arguments[3] == 0 && arguments[4] == 0 &&
@@ -3293,12 +3286,16 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_SET_FIELD_SCREEN_ALPHA_BLEND: {
         int screen = *(u16 *)(field_context +
                              FIELD_VM_SPECIAL_PARTY_STATE_OFFSET) & 1;
-        volatile u32 *blend_control =
-            (volatile u32 *)(screen != 0 ? 0x04001050 : 0x04000050);
 
-        func_02036988(
-            blend_control, arguments[0], arguments[1],
-            arguments[2], arguments[3]);
+        if (screen == 0) {
+            func_02036988(
+                (volatile u32 *)0x04000050, arguments[0], arguments[1],
+                arguments[2], arguments[3]);
+        } else {
+            func_02036988(
+                (volatile u32 *)0x04001050, arguments[0], arguments[1],
+                arguments[2], arguments[3]);
+        }
         break;
     }
 
@@ -3420,16 +3417,23 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
     }
 
-    case FIELD_VM_ENABLE_FIELD_TRIGGER_AREA:
+    case FIELD_VM_ENABLE_FIELD_TRIGGER_AREA: {
+        u8 *trigger_areas = *(u8 **)(
+            field_context + FIELD_VM_TRIGGER_AREAS_OFFSET);
+        u32 *trigger_flags = (u32 *)(
+            trigger_areas + 44 * arguments[0] + 40);
+
+        *trigger_flags &= ~1;
+        break;
+    }
+
     case FIELD_VM_DISABLE_FIELD_TRIGGER_AREA: {
         u8 *trigger_areas = *(u8 **)(
             field_context + FIELD_VM_TRIGGER_AREAS_OFFSET);
         u32 *trigger_flags = (u32 *)(
             trigger_areas + 44 * arguments[0] + 40);
 
-        FieldVm_SetFlag(
-            trigger_flags, 1,
-            command->opcode == FIELD_VM_DISABLE_FIELD_TRIGGER_AREA);
+        *trigger_flags = (*trigger_flags & ~1) | 1;
         break;
     }
 

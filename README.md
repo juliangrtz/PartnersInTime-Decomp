@@ -152,14 +152,16 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   effects and input, battle/menu handoffs, save-backed inventory, the field
   timer, message windows, and audio ownership. Named runtime layouts replace
   raw offsets for the shared entity, render, party, and field state. All
-  source-level helpers now force-inline into one 22,364-byte MWCC function;
+  source-level helpers now force-inline into one 22,852-byte MWCC function;
   there are no compiler-generated code helpers left. Its common return path,
   cached field/party/map contexts, dynamic retry decoding, and argument-base
   register now reproduce the original dispatcher architecture, raising fuzzy
-  instruction similarity to 30.27%. ROM-shaped bitfields now recover the
+  instruction similarity to 34.14%. ROM-shaped bitfields now recover the
   entity subtype/resource selection, six-direction contact mask, map-axis
-  synchronization, and signed collision-policy updates without opaque raw
-  arithmetic. IDA verifies the persistent field-system
+  synchronization, signed collision-policy updates, script ownership and
+  lifecycle, and saved presentation/animation state without opaque raw
+  arithmetic. Matching-script control flow and main/subscreen register paths
+  now retain the original dispatch structure. IDA verifies the persistent field-system
   pointer at `field_context + 0x24FC` and the separate map controller at
   `+0x2500`; the reconstructed prolog now loads both the field-system and party
   contexts in the same positions as the original. IDA

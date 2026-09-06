@@ -55,6 +55,88 @@ typedef struct FieldContactDirectionFlags {
     u32 reserved : 26;
 } FieldContactDirectionFlags;
 
+typedef struct FieldBaseStateFlags {
+    u32 unknown_00_07 : 8;
+    u32 retain_offscreen_contact : 1;
+    u32 unknown_09_11 : 3;
+    u32 reserved_state : 1;
+    u32 unknown_13_31 : 19;
+} FieldBaseStateFlags;
+
+typedef struct FieldEntityRuntimeFlags {
+    u32 sync_horizontal : 1;
+    u32 sync_vertical : 1;
+    u32 unknown_02 : 1;
+    u32 alternate_collision_faces : 1;
+    u32 horizontal_sync_dirty : 1;
+    u32 vertical_sync_dirty : 1;
+    u32 unknown_06_24 : 19;
+    u32 auto_auxiliary_priority : 1;
+    u32 auto_priority_0 : 1;
+    u32 auto_priority_1 : 1;
+    u32 auto_priority_2 : 1;
+    u32 auto_priority_3 : 1;
+    u32 unknown_30_31 : 2;
+} FieldEntityRuntimeFlags;
+
+typedef struct FieldEntityFieldStateFlags {
+    u32 contact_mode : 3;
+    u32 unknown_03_10 : 8;
+    u32 turn_to_interactor : 1;
+    u32 track_ground : 1;
+    u32 ignore_navigation_obstacle : 1;
+    u32 body_collision_enabled : 1;
+    u32 shadow_enabled : 1;
+    u32 unknown_16 : 1;
+    u32 shadow_support_enabled : 1;
+    u32 shadow_style : 3;
+    u32 unknown_21_31 : 11;
+} FieldEntityFieldStateFlags;
+
+typedef struct FieldCollisionStateFlags {
+    u32 unknown_00_15 : 16;
+    u32 reserved_0 : 1;
+    u32 reserved_1 : 1;
+    u32 unknown_18_31 : 14;
+} FieldCollisionStateFlags;
+
+typedef struct FieldRenderStateFlags {
+    u32 unknown_00_02 : 3;
+    u32 semitransparent : 1;
+    u32 unknown_04_07 : 4;
+    u32 animation_active : 1;
+    u32 animation_suppressed : 1;
+    u32 unknown_10_11 : 2;
+    u32 behavior_state : 4;
+    u32 unknown_16_31 : 16;
+} FieldRenderStateFlags;
+
+typedef struct FieldSavedPresentationFlags {
+    u32 unknown_00_06 : 7;
+    u32 behavior_mode : 3;
+    u32 saved_behavior_mode : 3;
+    u32 has_saved_behavior : 1;
+    u32 unknown_14_15 : 2;
+    u32 has_saved_resource : 1;
+    u32 has_saved_palette_profile : 1;
+    u32 has_saved_resource_animation : 1;
+    u32 has_saved_animation : 1;
+    u32 unknown_20_31 : 12;
+} FieldSavedPresentationFlags;
+
+typedef struct FieldRoamingFlags {
+    u32 clamp_to_boundary : 1;
+    u32 unknown_01_31 : 31;
+} FieldRoamingFlags;
+
+typedef struct FieldInteractionFlags {
+    u32 jump_first_strike_enabled : 1;
+    u32 spiked_jump_response : 1;
+    u32 remove_after_special_contact : 1;
+    u32 remove_immediately_for_battle : 1;
+    u32 unknown_04_31 : 28;
+} FieldInteractionFlags;
+
 struct FieldRenderObjectVTable {
     u8 unknown_00[0x68];
     void (*set_animation)(FieldRenderObject *render_object,
@@ -136,7 +218,10 @@ struct FieldRenderObject {
     u8 unknown_004[0x52];
     u16 animation_id;
     u8 unknown_058[0x24];
-    u32 state_flags;
+    union {
+        u32 state_flags;
+        FieldRenderStateFlags state_flag_bits;
+    };
     u8 unknown_080[0x38];
     u8 transition_active;
     u8 unknown_0b9[3];
@@ -160,9 +245,15 @@ struct FieldRuntimeEntity {
     u8 unknown_0fc[0x28];
     fx32 interaction_vertical_extent;
     u8 unknown_128[0x5C];
-    u32 base_state_flags;
+    union {
+        u32 base_state_flags;
+        FieldBaseStateFlags base_state_flag_bits;
+    };
     u8 unknown_188[0x0C];
-    u32 saved_presentation_flags;
+    union {
+        u32 saved_presentation_flags;
+        FieldSavedPresentationFlags saved_presentation_flag_bits;
+    };
     s16 animation_speed;
     u8 resource_index;
     u8 saved_resource_index;
@@ -200,16 +291,28 @@ struct FieldRuntimeEntity {
     fx32 default_gravity;
     fx32 terminal_fall_velocity;
     u8 unknown_370[0x1C];
-    u32 field_state_flags;
+    union {
+        u32 field_state_flags;
+        FieldEntityFieldStateFlags field_state_flag_bits;
+    };
     u32 collision_category_mask;
     s64 collision_policy;
-    u32 collision_state_flags;
+    union {
+        u32 collision_state_flags;
+        FieldCollisionStateFlags collision_state_flag_bits;
+    };
     u32 unknown_3a0;
     FieldContactDirectionFlags contact_direction_flags;
     u8 unknown_3a8[0x24];
-    u32 runtime_flags;
+    union {
+        u32 runtime_flags;
+        FieldEntityRuntimeFlags runtime_flag_bits;
+    };
     u8 unknown_3d0[0x10];
-    u32 roaming_flags;
+    union {
+        u32 roaming_flags;
+        FieldRoamingFlags roaming_flag_bits;
+    };
     u8 unknown_3e4[0x12C];
     FieldRenderObject *auxiliary_render_object;
 };
