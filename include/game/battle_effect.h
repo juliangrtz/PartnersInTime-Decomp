@@ -5,6 +5,7 @@
 #include <nitro.h>
 
 typedef struct BattleEffect BattleEffect;
+typedef struct BattleModelEffect BattleModelEffect;
 typedef struct BattlePosition BattlePosition;
 typedef struct BattleSpriteTransform BattleSpriteTransform;
 
@@ -50,6 +51,20 @@ struct BattleEffect {
     BattleEffect **owner_slot;
 };
 
+struct BattleModelEffect {
+    u8 unknown_00[0x12];
+    s16 scale_q4;
+    s16 x;
+    s16 y;
+    s16 z;
+    u8 unknown_1a[2];
+    u32 user_value;
+    u8 unknown_20[0x0C];
+    BattleSceneObject *parent;
+    u8 unknown_30[4];
+    BattleEffect **owner_slot;
+};
+
 struct BattleSpriteTransform {
     s32 matrix[12];
     s32 x;
@@ -62,6 +77,8 @@ typedef char BattlePosition_SizeCheck[
     sizeof(BattlePosition) == 8 ? 1 : -1
 ];
 typedef char BattleEffect_SizeCheck[sizeof(BattleEffect) == 0x30 ? 1 : -1];
+typedef char BattleModelEffect_SizeCheck[
+    sizeof(BattleModelEffect) == 0x38 ? 1 : -1];
 typedef char BattleSpriteTransform_SizeCheck[
     sizeof(BattleSpriteTransform) == 0x40 ? 1 : -1
 ];

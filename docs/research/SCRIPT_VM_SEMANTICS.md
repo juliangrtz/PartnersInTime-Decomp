@@ -461,8 +461,10 @@ fixed-point pairs. It remains an unlinked objdiff work unit solely because the
 original compiler formed one 19,168-byte monolithic switch. The current source
 has reintegrated retry decoding, enemy stats, object-view coordinates,
 comparisons, script control, the effect/task-slot scans, and the owner scans;
-it emits one 19,168-byte dispatcher with no compiler-generated helper symbols
-and currently reaches 76.21% fuzzy instruction similarity.
+it emits one 19,152-byte dispatcher with no compiler-generated helper symbols
+and currently reaches 88.02% fuzzy instruction similarity. The source also
+reproduces the original `0x74`-byte stack frame, separate XYZ work areas, and
+the dispatcher's exceptional physical handler order.
 
 The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local

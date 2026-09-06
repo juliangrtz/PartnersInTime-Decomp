@@ -40,18 +40,6 @@ struct BattleModelResourceEffectTask {
     BattleModelResourceEffectPayload data;
 };
 
-typedef struct BattleModelEffect {
-    u8 unknown_00[0x12];
-    s16 scale_q4;
-    s16 x;
-    s16 y;
-    s16 z;
-    u8 unknown_1a[0x12];
-    BattleSceneObject *parent;
-    u8 unknown_30[4];
-    BattleEffect **owner_slot;
-} BattleModelEffect;
-
 typedef struct BattleEffectRegistry {
     u8 unknown_0000[BATTLE_SPRITE_EFFECT_MANAGER_OFFSET];
     void *sprite_manager;
@@ -60,8 +48,6 @@ typedef struct BattleEffectRegistry {
     BattleEffect *model_slots[BATTLE_TRACKED_EFFECT_COUNT];
 } BattleEffectRegistry;
 
-typedef char BattleModelEffect_SizeCheck[
-    sizeof(BattleModelEffect) == 0x38 ? 1 : -1];
 typedef char BattleModelResourceEffectPayload_SizeCheck[
     sizeof(BattleModelResourceEffectPayload) == 0x20 ? 1 : -1];
 
