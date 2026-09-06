@@ -531,7 +531,7 @@ def render_svg(components: Sequence[Component], arm7_bytes: int) -> str:
         '<rect class="bg" width="1200" height="760" rx="12"/>',
         svg_text(margin, 34, "DECOMPILATION PROGRESS · EUROPEAN ROM", "eyebrow"),
         svg_text(margin, 68, "Mario & Luigi: Partners in Time", "title"),
-        svg_text(margin, 113, f"{c_percent:.2f}%", "percent"),
+        svg_text(margin, 113, f"{c_percent:.1f}%", "percent"),
         svg_text(145, 110, "matching C/C++", "subtitle"),
         svg_text(
             width - margin,

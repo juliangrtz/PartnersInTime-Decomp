@@ -710,7 +710,7 @@ archive selector, eight-sprite factory, and 964-byte transition state machine
 are retained as structured, size-aware WIP C rather than being linked before
 their remaining Metrowerks register schedules match.
 
-The complete VM dispatcher reconstruction now has three byte-identical,
+The complete VM dispatcher reconstruction now has four byte-identical,
 linked units:
 
 | Dispatcher | Source | Bytes | Local opcode slots | Status |
@@ -718,10 +718,11 @@ linked units:
 | Battle | `src/battle/battle_vm_dispatch.cpp` | 19,168 | 182 | 100%, linked |
 | Common battle | `src/battle/battle_vm_common_dispatch.c` | 1,844 | 27 | 100%, linked |
 | Field/world | `src/field/field_vm_dispatch.cpp` | 23,492 | 290 | 100%, linked |
-| Scene/object | `src/overlay007/scene_vm_dispatch.c` | 9,196 | all real/reserved slots | 99.35%, unlinked |
+| Scene/object | `src/overlay007/scene_vm_dispatch.c` | 9,196 | all real/reserved slots | 100%, linked; C with a small inline-assembly fragment |
 
-The three linked units add 44,504 bytes of matching C/C++. Their control flow,
-reserved slots, stack layouts, and relocations agree with the original.
+The four linked units add 53,700 bytes of matching C/C++, including a 64-byte
+inline-assembly block in Scene opcode `0x04E`. Their control flow, reserved
+slots, stack layouts, and relocations agree with the original.
 Battle and field dispatch model the original virtual calls directly in C++
 while retaining C linkage for the VM entry points and external functions.
 The C and C++ field-entity layouts preserve the same sizes and offsets.
@@ -737,13 +738,17 @@ virtual palette-animation argument widths. The paired-field ready guard reads
 the context type at `0x23F0`, not the room ID at `0x23F4`. The entity behavior
 setter takes two arguments; its callee overwrites incoming `r2` before use.
 
-The remaining Scene VM difference is confined to opcode `0x04E`, the signed
-height alignment of two objects, at dispatcher offsets `0x648..0x67C`.
-The readable C preserves both signed 16-bit screen-height conversions and
-then applies their difference to the object's render height. The remaining
-work is register allocation and scheduling within that block. Other scene
-corrections now match, including the raw object Y used for screen height,
-signed path-count division by two followed by `u16` narrowing, and the
+The Scene dispatcher now matches all 9,196 bytes. Its final opcode `0x04E`
+correction uses a 16-instruction (64-byte) inline-assembly block for the height
+update, retaining the original signed-height conversion schedule. The C
+reconstruction had matched all field reads, wide arithmetic, and the final
+update, leaving only three shift instructions at offsets `0x668`, `0x66C`,
+and `0x670` in a different order.
+`tools/verify_scene_alignment.py` also checks the compiled block's final
+registers, flags and height write for every input using SMT bit vectors.
+See [the compiler/data-flow and assembly rationale](research/SCENE_VM_MATCHING.md).
+Other scene corrections match too, including the raw object Y used for screen
+height, signed path-count division by two followed by `u16` narrowing, and the
 original path-call relocation. That relocation really targets the interior
 entry `func_ov007_020724b0` in overlay 7; it remains a label in the DSD symbols,
 not a newly inferred function boundary.
@@ -751,11 +756,11 @@ not a newly inferred function boundary.
 Matching was driven by original instruction/data-flow and callee-ABI analysis,
 without automated source permutations or brute-force compiler searches.
 The European ROM build and all ARM9/ITCM/DTCM/overlay module and symbol checks
-pass with the three new units linked. The regular `tools/build_nds.ps1
+pass with all four units linked. The regular `tools/build_nds.ps1
 -DisableDataMods` build also reproduces SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; the wrapper preserves the known
-fixed-layout header CRCs after DSD packaging. All 66 Python tests pass.
-The Scene dispatcher stays an objdiff work unit until its last block also matches.
+fixed-layout header CRCs after DSD packaging.
+All 66 Python tests pass.
 
 Priority formats:
 

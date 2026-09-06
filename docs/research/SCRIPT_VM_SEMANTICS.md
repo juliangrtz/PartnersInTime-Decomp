@@ -458,15 +458,21 @@ source status:
 | Battle, `0x033..0x0E8` | `src/battle/battle_vm_dispatch.cpp` | 19,168 bytes | Byte-identical, linked |
 | Common battle, `0x0E9..0x103` | `src/battle/battle_vm_common_dispatch.c` | 1,844 bytes | Byte-identical, linked |
 | Field/world, `0x033..0x154` | `src/field/field_vm_dispatch.cpp` | 23,492 bytes | Byte-identical, linked |
-| Scene/object | `src/overlay007/scene_vm_dispatch.c` | 9,196 bytes | 99.35% instruction similarity, unlinked |
+| Scene/object | `src/overlay007/scene_vm_dispatch.c` | 9,196 bytes | Byte-identical, linked; C with a small inline-assembly fragment |
 
 These are monolithic dispatchers with the original reserved cases, nested
 switch tables, exceptional handler order, and retry/rewind behavior. Battle
-and field use C++ virtual methods with C ABI entry points. All three linked
-units pass the complete European module and symbol checks.
+and field use C++ virtual methods with C ABI entry points. All four linked
+units total 53,700 bytes and pass the complete European module and symbol
+checks. Scene is C with a 16-instruction (64-byte) inline-assembly block in
+opcode `0x04E`.
 
-The remaining scene difference is only opcode `0x04E`'s register allocation
-and scheduling for signed height alignment. The coordinate getter now uses
+That sequence preserves the original signed-height conversion schedule. The
+C-only reconstruction had left three shift instructions at `+0x668`, `+0x66C`,
+and `+0x670` in a different order; the linked implementation now matches them
+exactly. A symbolic check of the actual compiled block also verifies equal
+final registers, flags and memory write for all inputs. See
+[the matching evidence](SCENE_VM_MATCHING.md). The coordinate getter uses
 raw object Y for render height, and the path starter divides the signed
 32-bit count before narrowing to `u16`. Its shipped overlay-7 interior call
 entry is preserved as a label rather than inferred as a new function.

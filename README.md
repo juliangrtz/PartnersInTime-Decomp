@@ -128,18 +128,20 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   Readable WIP C also covers the depth-sorted renderer, secondary archive
   selection, eight-sprite factory, and its 964-byte transition controller;
   these register-sensitive units remain unlinked until their final instruction
-  schedules match. The complete scene command dispatcher is also reconstructed as
-  one compiling C switch. Its 9,196-byte output reaches 99.35% instruction
-  similarity; only the height-alignment calculation in opcode `0x04E` still
-  differs in register allocation and scheduling. It remains unlinked. The
-  signed path count, screen-coordinate calculation, and original overlay-7
-  path-call relocation now match.
-- Three complete VM dispatchers now match every original byte and are linked
-  into the verified European ROM build: the 19,168-byte battle extension,
-  1,844-byte common battle executor, and 23,492-byte field/world extension.
-  Their 182, 27, and 290 local opcode slots retain all reserved cases,
-  asynchronous retries, and the original nested-switch layouts. These units
-  contribute 44,504 bytes of matching C/C++. Battle and field use the original
+  schedules match. The complete 9,196-byte scene command dispatcher now
+  matches every original byte and is linked. Its C switch includes a 64-byte
+  inline-assembly block in opcode `0x04E` to preserve the original
+  signed-height conversion schedule. The height calculation is symbolically
+  verified; the signed path count, screen-coordinate calculation, and
+  original overlay-7 path-call relocation also match. See
+  [the matching analysis](docs/research/SCENE_VM_MATCHING.md).
+- All four complete VM dispatchers now match every original byte and are
+  linked into the verified European ROM build: the 19,168-byte battle
+  extension, 1,844-byte common battle executor, 23,492-byte field/world
+  extension, and 9,196-byte scene/object extension. They retain all reserved
+  cases, asynchronous retries, and original nested-switch layouts. Together
+  they contribute 53,700 bytes of matching C/C++ with the small Scene
+  inline-assembly fragment described above. Battle and field use the original
   C++ virtual interfaces with C entry-point linkage. Recovered details include
   the battle motion-frame offset, animation argument reads after virtual calls,
   queued-script write ordering, resource-animation restoration, signed

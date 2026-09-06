@@ -7,7 +7,7 @@
  * This file deliberately keeps the original single-switch shape.  Splitting
  * commands into out-of-line handlers would make the code prettier today, but
  * would also destroy the compiler layout that the matching build ultimately
- * has to reproduce.  The named cases and small access macros keep the WIP C
+ * has to reproduce.  The named cases and small access macros keep the C
  * readable without changing that control-flow topology.
  */
 
@@ -214,12 +214,27 @@ static inline s32 SceneVm_PackArgumentPair(
 static inline int SceneVm_RewindAndYield(
     ScriptVm *vm, ScriptVmState *state, u16 opcode
 ) {
+    const u16 *script = state->script;
     s32 descriptor = (u16)vm->command_descriptors[opcode];
-    int argument_words = descriptor & SCRIPT_VM_ARGUMENT_COUNT_MASK;
-    int result_words = (descriptor & SCRIPT_VM_HAS_RESULT) >> 5;
     int mode_words = (descriptor & SCRIPT_VM_HAS_ARGUMENT_MODES) >> 6;
+    int result_words = (descriptor & SCRIPT_VM_HAS_RESULT) >> 5;
+    int argument_words = descriptor & SCRIPT_VM_ARGUMENT_COUNT_MASK;
 
-    state->script -= result_words + argument_words + mode_words + 1;
+    state->script = script - (result_words + argument_words + mode_words + 1);
+    return SCRIPT_VM_YIELDED;
+}
+
+/* Keep the dynamic opcode load inside this helper for the original schedule. */
+static inline int SceneVm_RewindCommandAndYield(
+    ScriptVm *vm, ScriptVmState *state, const ScriptVmCommand *command
+) {
+    const u16 *script = state->script;
+    s32 descriptor = (u16)vm->command_descriptors[command->opcode];
+    int mode_words = (descriptor & SCRIPT_VM_HAS_ARGUMENT_MODES) >> 6;
+    int result_words = (descriptor & SCRIPT_VM_HAS_RESULT) >> 5;
+    int argument_words = descriptor & SCRIPT_VM_ARGUMENT_COUNT_MASK;
+
+    state->script = script - (result_words + argument_words + mode_words + 1);
     return SCRIPT_VM_YIELDED;
 }
 
@@ -254,12 +269,14 @@ int SceneVm_DispatchCommand(
     case 0x033: return SCRIPT_VM_CONTINUE;
     case 0x034: return SCRIPT_VM_CONTINUE;
 
-    case SCENE_OP_LOAD_OBJECT_RESOURCE:
+    case SCENE_OP_LOAD_OBJECT_RESOURCE: {
+        u16 object_id = ARG_U16(0);
         value = SceneVm_PackArgumentPair(command, 1);
-        if (!func_ov007_020891dc(ARG_U16(0), value)) {
+        if (!func_ov007_020891dc(object_id, value)) {
             return SCRIPT_VM_CONTINUE;
         }
         return SceneVm_RewindAndYield(vm, state, SCENE_OP_LOAD_OBJECT_RESOURCE);
+    }
 
     case 0x036: return SCRIPT_VM_CONTINUE;
     case 0x037: return SCRIPT_VM_CONTINUE;
@@ -333,17 +350,34 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_ALIGN_OBJECTS: {
-        s16 other_screen_height;
-        s16 object_screen_height;
-
         object = SceneObject_GetById(ARG_U16(0));
         other = SceneObject_GetById(ARG_U16(1));
-        other_screen_height = (s16)(
-            other->render_height + 16 * (192 - other->y));
-        object_screen_height = (s16)(
-            object->render_height + 16 * (192 - object->y));
-        object->render_height += other_screen_height - object_screen_height +
-            ARG(2);
+        /*
+         * height += (s16)(other->render_height + 16 * (192 - other->y))
+         *         - (s16)(height + 16 * (192 - object->y)) + ARG(2).
+         * Preserve the original register allocation and paired narrowing
+         * schedule; MWCC's C output interleaves the two conversions.
+         * r0-r3 are scratch here.  The other pointer is dead after its two
+         * loads; object and command stay live in callee-saved registers.
+         */
+        asm {
+            ldrsh r1, [other, #6]
+            ldrsh r3, [object, #6]
+            ldrsh r2, [other, #0xd8]
+            rsb r1, r1, #192
+            ldrsh r0, [object, #0xd8]
+            rsb r3, r3, #192
+            add r1, r2, r1, lsl #4
+            add r3, r0, r3, lsl #4
+            mov r2, r1, lsl #16
+            mov r1, r3, lsl #16
+            mov r2, r2, asr #16
+            ldr r3, [command, #0x10]
+            sub r1, r2, r1, asr #16
+            add r1, r3, r1
+            add r0, r0, r1
+            strh r0, [object, #0xd8]
+        }
 
         resource = func_ov007_020894a8(ARG_U16(0));
         other = func_ov007_020894a8(ARG_U16(1));
@@ -480,8 +514,9 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_GET_OBJECT_MOTION_PROPERTY:
         object = SceneObject_GetById(ARG_U16(0));
-        value = *(s32 *)((u8 *)object + 0x3C + 40 * ARG_U16(1));
-        SceneVm_WriteResult(vm, state, command, (value >> 16) + 1);
+        VM_WriteVariable(command->result_variable,
+            (*(s32 *)((u8 *)object + 0x3C + 40 * ARG_U16(1)) >> 16) + 1,
+            vm, state);
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_MOVE_OBJECT_COMPLEX:
@@ -534,13 +569,10 @@ int SceneVm_DispatchCommand(
             dy = ARG(4) - object->y;
             dz = ARG(5) - object->base_y;
             other = SceneObject_GetById(ARG(7));
-            value = other->x;
-            value = FX_Sqrt(
-                ((dx + value) * (dx + value)
-                    + (dy + other->y) * (dy + other->y)
-                    + (dz + other->base_y) * (dz + other->base_y))
-                << 12
-            );
+            value = dx + other->x;
+            dy += other->y;
+            dz += other->base_y;
+            value = FX_Sqrt((value * value + dy * dy + dz * dz) << 12);
             ARG(6) = _s32_div_f(value, ARG(6));
             object = SceneObject_GetById(ARG(7));
             func_ov007_02085cb4(
@@ -1055,11 +1087,13 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_STOP_ALL_SOUND_TASKS:
-        for (i = 0; i < 16; i++) {
+        i = 0;
+        do {
             if (data_ov007_020a6b90->sound_tasks[i] != 0) {
                 func_ov007_02087240(i);
             }
-        }
+            i++;
+        } while (i < 16);
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_WAIT_SOUND_TASK:
@@ -1104,7 +1138,7 @@ int SceneVm_DispatchCommand(
         if (func_ov007_0208a348()) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command->opcode);
+        return SceneVm_RewindCommandAndYield(vm, state, command);
 
     case SCENE_OP_CREATE_UI_ELEMENT:
         value = VM_ReadVariable(SCRIPT_VM_VAR_SAVE_WORDS_40, vm, state);
@@ -1155,7 +1189,7 @@ int SceneVm_DispatchCommand(
     case SCENE_OP_WAIT_UI_ELEMENT_READY:
         if (func_ov007_020895b8(ARG(0)) &&
             func_ov007_02089670(ARG(0))) {
-            return SceneVm_RewindAndYield(vm, state, command->opcode);
+            return SceneVm_RewindCommandAndYield(vm, state, command);
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -1163,7 +1197,7 @@ int SceneVm_DispatchCommand(
         if (!func_ov007_020895b8(ARG(0))) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command->opcode);
+        return SceneVm_RewindCommandAndYield(vm, state, command);
 
     case SCENE_OP_DESTROY_UI_ELEMENT:
         func_ov007_0208953c(ARG(0));
