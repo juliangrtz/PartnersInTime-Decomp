@@ -322,11 +322,16 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_ALIGN_OBJECTS: {
+        s16 object_screen_height;
+        s16 other_screen_height;
+
         object = SceneObject_GetById(ARG_U16(0));
         other = SceneObject_GetById(ARG_U16(1));
-        object->render_height +=
-            (s16)(other->render_height + 16 * (192 - other->y)) -
-            (s16)(object->render_height + 16 * (192 - object->y)) +
+        other_screen_height = (s16)(
+            other->render_height + 16 * (192 - other->y));
+        object_screen_height = (s16)(
+            object->render_height + 16 * (192 - object->y));
+        object->render_height += other_screen_height - object_screen_height +
             ARG(2);
 
         resource = func_ov007_020894a8(ARG_U16(0));
@@ -349,7 +354,6 @@ int SceneVm_DispatchCommand(
     case SCENE_OP_GET_OBJECT_COORDINATE: {
         s16 object_y;
         s32 packed_screen_height;
-        s16 relative_y;
         s32 screen_height;
         u16 property_id;
         s16 object_x;
@@ -358,7 +362,7 @@ int SceneVm_DispatchCommand(
         object_y = object->y;
         packed_screen_height =
             (object->render_height + 16 * (192 - object_y)) << 16;
-        relative_y = object_y - object->base_y;
+        object_y -= object->base_y;
         screen_height = packed_screen_height >> 16;
         property_id = ARG_U16(1);
         object_x = object->x;
@@ -367,7 +371,7 @@ int SceneVm_DispatchCommand(
             SceneVm_WriteResult(vm, state, command, object_x);
             break;
         case 1:
-            SceneVm_WriteResult(vm, state, command, relative_y);
+            SceneVm_WriteResult(vm, state, command, object_y);
             break;
         case 2:
             SceneVm_WriteResult(vm, state, command, screen_height);
