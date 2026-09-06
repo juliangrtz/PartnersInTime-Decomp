@@ -1,0 +1,2072 @@
+#include <game/battle_actor.h>
+#include <game/battle_ai.h>
+#include <game/battle_context.h>
+#include <game/battle_damage.h>
+#include <game/battle_display_capture.h>
+#include <game/battle_effect.h>
+#include <game/battle_enemy_data.h>
+#include <game/battle_global_properties.h>
+#include <game/battle_hit.h>
+#include <game/battle_impact_effect.h>
+#include <game/battle_object.h>
+#include <game/battle_raster_effects.h>
+#include <game/battle_scene.h>
+#include <game/battle_script_properties.h>
+#include <game/battle_status.h>
+#include <game/item.h>
+#include <game/save_data.h>
+
+/*
+ * Complete high-level reconstruction of the battle-specific command range.
+ * Opcodes outside 0x033..0x0E8 are delegated to the common battle VM handler,
+ * exactly like the original dispatcher. This translation unit remains an
+ * objdiff work unit until its control-flow and register schedule converge.
+ */
+
+extern int func_ov002_0208bd88(int encounter_id);
+extern s32 _s32_div_f(s32 numerator, s32 denominator);
+extern int func_ov002_020789ec(ScriptVm *vm, ScriptVmState *state,
+                               ScriptVmCommand *command, int write_result);
+extern int func_ov002_020787f0(ScriptVm *vm, ScriptVmState *state,
+                               ScriptVmCommand *command, int write_result);
+extern int func_ov002_020786d0(ScriptVm *vm, ScriptVmState *state,
+                               ScriptVmCommand *command, int write_result);
+extern int func_ov002_02078580(ScriptVm *vm, ScriptVmState *state,
+                               ScriptVmCommand *command, int write_result);
+extern int func_ov002_02078460(ScriptVm *vm, ScriptVmState *state,
+                               ScriptVmCommand *command, int write_result);
+extern void func_ov002_020a3928(BattleSceneObject *object, int channel_index,
+                                int x, int y, int z, int duration,
+                                int argument_7, int argument_8,
+                                int argument_9);
+extern void func_ov002_020a3b2c(BattleSceneObject *object, int channel_index,
+                                int x, int y, int z, int duration,
+                                BattleSceneObject *target);
+extern int func_ov002_020be478(BattleSceneObject *object, int channel_index,
+                               int direction_x, int direction_y,
+                               int direction_z, int distance, int duration,
+                               int velocity_ratio_q8,
+                               int prefer_longer_duration);
+extern int func_ov002_020be3e8(BattleSceneObject *object, int channel_index,
+                               int direction_x, int direction_y,
+                               int direction_z, int distance,
+                               int initial_velocity, int terminal_velocity,
+                               int prefer_longer_duration);
+extern int func_ov002_020a3810(BattleSceneObject *object, int channel_index,
+                               s16 axis_start_x, s16 axis_start_y,
+                               s16 axis_start_z, s16 axis_end_x,
+                               s16 axis_end_y, s16 axis_end_z,
+                               s16 angle_step, s16 total_angle);
+extern void func_ov002_02078408(BattleSceneObject *object,
+                                BattleMotionChannel *channel);
+extern void func_ov002_020724b0(s16 *parameters, const void *keyframes,
+                                int keyframe_count, int extent_q16,
+                                int step_fixed);
+extern void func_ov002_02076c38(int paused);
+extern void func_ov002_02077e78(BattleActor *actor, s16 animation_id,
+                                int damage, int effect_offset_x,
+                                int effect_offset_y);
+extern int func_ov002_02079090(ScriptVm *vm, ScriptVmState *state,
+                               ScriptVmCommand *command, int spawn_mode);
+extern int func_ov002_020698d4(ScriptVm *vm, ScriptVmState *state,
+                               ScriptVmCommand *command);
+extern int func_ov002_02078e38(ScriptVm *vm, ScriptVmState *state,
+                               ScriptVmCommand *command, int spawn_mode);
+extern int func_ov002_02078bb4(ScriptVm *vm, ScriptVmState *state,
+                               ScriptVmCommand *command, int spawn_mode);
+extern int func_ov002_0207905c(int source, void **resolved_source);
+extern void func_ov002_0206c1e4(void *source_0, void *source_1,
+                                void *source_2, void *source_3);
+extern void func_ov002_020bccc4(u16 source_object_id, u16 target_object_id,
+                                u16 relaxation_period, u16 link_length,
+                                s8 flipped_y_adjustment, s8 source_x_offset,
+                                s8 source_y_offset, s8 target_x_offset,
+                                s8 target_y_offset, s8 render_mode,
+                                u16 color, int enabled);
+extern void func_ov002_020bca68(void);
+extern void func_ov002_020bca44(void);
+extern BattleAITask *func_ov002_020af97c(
+    int origin_x, int origin_y, int initial_step, int acceleration,
+    u16 color, u8 color_range, u16 anchor_object_id);
+extern BattleAITask *func_ov002_020ae940(BattleSceneObject *object,
+                                         int radius, int growth_frames,
+                                         int hold_frames);
+extern int func_ov002_020ae9c0(int center_x, int center_y, int radius,
+                               int band_width, int phase, int cutoff);
+extern void func_ov002_020bba60(BattleSceneObject *object);
+extern void func_ov002_020bb644(BattleSceneObject *object,
+                                u16 target_actor_id, int impact_count);
+extern int func_ov002_020bb274(BattleSceneObject *object);
+extern void func_ov002_020bbb5c(BattleSceneObject *object, int axis,
+                                u16 angle, int scale);
+extern void func_ov002_020bb00c(BattleSceneObject *primary,
+                                BattleSceneObject *secondary,
+                                int solver_parameter, int link_parameter,
+                                int target_x, int target_y, int vertical_bias);
+extern int func_ov002_020badd8(BattleSceneObject *object,
+                               int remaining_segment_offset);
+extern void func_ov002_020ba210(BattleSceneObject *primary,
+                                BattleSceneObject *secondary,
+                                int step_denominator, int path_numerator,
+                                int render_parameter, int primary_x_offset,
+                                int primary_y_offset, int base_z);
+extern void func_ov002_020b9978(BattleSceneObject *object);
+extern void func_ov002_020b9854(BattleSceneObject *object,
+                                int cell_delay_range, int quarter_delay_range,
+                                int selected_cell_count,
+                                int use_scanline_reveal);
+extern void func_ov002_020b9818(BattleSceneObject *object,
+                                int cell_delay_range, int quarter_delay_range);
+extern void func_ov002_020b97d0(BattleSceneObject *object,
+                                int cell_delay_range, int quarter_delay_range);
+extern int func_ov002_020b97a8(BattleSceneObject *object);
+extern int func_02019174(u16 item_id, int count_delta);
+extern int func_0201904c(u16 item_id);
+extern int BattleItemList_RebuildActionItems(void);
+extern int BattleItemList_RebuildUsableItems(void);
+extern void func_ov002_02076178(u16 sound_task_id);
+extern u8 data_02050290[];
+extern u8 data_020505c4[];
+
+enum BattleVmOpcode {
+    BATTLE_VM_ALLOCATE_OBJECT_DATA_BUFFER = 0x033,
+    BATTLE_VM_CONFIGURE_OBJECT_DATA_LOAD = 0x034,
+    BATTLE_VM_ENSURE_OBJECT_DATA_LOADED = 0x035,
+    BATTLE_VM_QUEUE_CAPTURE_SURFACE_UPLOAD = 0x036,
+    BATTLE_VM_QUEUE_OBJECT_DATA_LOAD = 0x037,
+    BATTLE_VM_QUEUE_OBJECT_DATA_ALTERNATE_LOAD = 0x038,
+    BATTLE_VM_WAIT_OBJECT_DATA_LOAD = 0x039,
+    BATTLE_VM_GET_OBJECT_DATA_RESOURCE = 0x03A,
+    BATTLE_VM_BIND_ENTITY_RESOURCE = 0x03B,
+    BATTLE_VM_RESET_OBJECT_DATA = 0x03C,
+    BATTLE_VM_SET_OBJECT_ANIMATION = 0x03D,
+    BATTLE_VM_START_SCRIPT_BY_ID = 0x03E,
+    BATTLE_VM_CONTROL_SCRIPT_EXECUTION_LEGACY = 0x03F,
+    BATTLE_VM_ASSIGN_SCRIPT_OWNER_GROUP = 0x040,
+    BATTLE_VM_SWAP_OBJECT_SLOTS = 0x041,
+    BATTLE_VM_SET_RUNTIME_FLAG_03 = 0x042,
+    BATTLE_VM_SET_STATE_OVERRIDE = 0x043,
+    BATTLE_VM_SET_RESULT_CODE = 0x044,
+    BATTLE_VM_CLEAR_NEXT_STATE = 0x045,
+    BATTLE_VM_GET_GLOBAL_PROPERTY = 0x046,
+    BATTLE_VM_SET_GLOBAL_PROPERTY = 0x047,
+    BATTLE_VM_FIND_MOST_DAMAGED_ENEMY = 0x048,
+    BATTLE_VM_LEGACY_NOOP_049 = 0x049,
+    BATTLE_VM_GET_ENCOUNTER_ID = 0x04A,
+    BATTLE_VM_GET_ENCOUNTER_RESOURCE_INDEX = 0x04B,
+    BATTLE_VM_LEGACY_NOOP_04C = 0x04C,
+    BATTLE_VM_GET_ACTOR_PROPERTY = 0x04D,
+    BATTLE_VM_SET_ACTOR_PROPERTY = 0x04E,
+    BATTLE_VM_SET_ACTOR_PROPERTY_FIXED = 0x04F,
+    BATTLE_VM_ALIGN_OBJECT_VIEW_BASELINE = 0x050,
+    BATTLE_VM_LEGACY_NOOP_051 = 0x051,
+    BATTLE_VM_APPLY_OBJECT_MOVEMENT = 0x052,
+    BATTLE_VM_GET_OBJECT_VIEW_COORDINATE = 0x053,
+    BATTLE_VM_GET_ENEMY_STAT = 0x054,
+    BATTLE_VM_SET_ENEMY_STAT = 0x055,
+    BATTLE_VM_WAIT_OBJECT_PENDING_STATE = 0x056,
+    BATTLE_VM_SET_ACTIVE_MODEL_ANIMATION = 0x057,
+    BATTLE_VM_CONFIGURE_ANIMATION_LAYER = 0x058,
+    BATTLE_VM_SET_ANIMATION_LAYER_STATE = 0x059,
+    BATTLE_VM_INVOKE_MODEL_RELATION_TEST = 0x05A,
+    BATTLE_VM_MOVE_OBJECT = 0x05B,
+    BATTLE_VM_START_SINUSOIDAL_DIRECTION_MOTION = 0x05C,
+    BATTLE_VM_MOVE_OBJECT_AT_SPEED = 0x05D,
+    BATTLE_VM_START_AXIS_KINEMATIC_MOTION = 0x05E,
+    BATTLE_VM_MOVE_WITH_KINEMATIC_DURATION = 0x05F,
+    BATTLE_VM_START_AXIS_KINEMATIC_MOTION_GET_DURATION = 0x060,
+    BATTLE_VM_MOVE_WITH_KINEMATIC_DURATION_GET_DURATION = 0x061,
+    BATTLE_VM_START_DIRECTIONAL_KINEMATIC_A = 0x062,
+    BATTLE_VM_START_DIRECTIONAL_KINEMATIC_B = 0x063,
+    BATTLE_VM_START_DIRECTIONAL_BALLISTIC = 0x064,
+    BATTLE_VM_START_DIRECTIONAL_KINEMATIC_A_GET_DURATION = 0x065,
+    BATTLE_VM_START_DIRECTIONAL_KINEMATIC_B_GET_DURATION = 0x066,
+    BATTLE_VM_START_DIRECTIONAL_BALLISTIC_GET_DURATION = 0x067,
+    BATTLE_VM_START_VELOCITY_MOTION = 0x068,
+    BATTLE_VM_START_ACCELERATION_MOTION = 0x069,
+    BATTLE_VM_START_ACCELERATED_MOTION = 0x06A,
+    BATTLE_VM_START_ACCELERATED_MOTION_WITH_RATIO = 0x06B,
+    BATTLE_VM_START_ACCELERATED_MOTION_BETWEEN_VELOCITIES = 0x06C,
+    BATTLE_VM_ROTATE_OBJECT_AROUND_AXIS = 0x06D,
+    BATTLE_VM_WAIT_ANIMATION = 0x06E,
+    BATTLE_VM_STOP_MOTION = 0x06F,
+    BATTLE_VM_SNAPSHOT_POSITION = 0x070,
+    BATTLE_VM_START_KEYFRAMED_MOTION = 0x071,
+    BATTLE_VM_GET_MOTION_FRAME = 0x072,
+    BATTLE_VM_START_AUX_SCRIPT = 0x073,
+    BATTLE_VM_WAIT_AUX_SCRIPT = 0x074,
+    BATTLE_VM_SUPPRESS_ACTOR_RENDERING = 0x075,
+    BATTLE_VM_RESTORE_ACTOR_RENDERING = 0x076,
+    BATTLE_VM_LEGACY_NOOP_077 = 0x077,
+    BATTLE_VM_REMOVE_ENEMY = 0x078,
+    BATTLE_VM_LEGACY_NOOP_079 = 0x079,
+    BATTLE_VM_LEGACY_NOOP_07A = 0x07A,
+    BATTLE_VM_LEGACY_NOOP_07B = 0x07B,
+    BATTLE_VM_LEGACY_NOOP_07C = 0x07C,
+    BATTLE_VM_DAMAGE_ACTOR = 0x07D,
+    BATTLE_VM_HEAL_ACTOR = 0x07E,
+    BATTLE_VM_WAIT_HIT_QUEUE = 0x07F,
+    BATTLE_VM_CALCULATE_EQUIPMENT_DAMAGE = 0x080,
+    BATTLE_VM_APPLY_STATUS = 0x081,
+    BATTLE_VM_CLEAR_STATUS = 0x082,
+    BATTLE_VM_SET_ACTOR_TARGETING_ENABLED = 0x083,
+    BATTLE_VM_CONFIGURE_HIT = 0x084,
+    BATTLE_VM_REFLECT_QUEUED_HITS = 0x085,
+    BATTLE_VM_FIND_HIT_DESCRIPTOR = 0x086,
+    BATTLE_VM_GET_QUEUED_HIT_X = 0x087,
+    BATTLE_VM_GET_QUEUED_HIT_Y = 0x088,
+    BATTLE_VM_GET_QUEUED_HIT_Z = 0x089,
+    BATTLE_VM_GET_QUEUED_HIT_KIND = 0x08A,
+    BATTLE_VM_DAMAGE_PARTY = 0x08B,
+    BATTLE_VM_SET_AUXILIARY_OBJECTS_PAUSED = 0x08C,
+    BATTLE_VM_CALCULATE_DAMAGE = 0x08D,
+    BATTLE_VM_SPAWN_MODEL_EFFECT = 0x08E,
+    BATTLE_VM_SPAWN_ATTACHED_MODEL_EFFECT = 0x08F,
+    BATTLE_VM_SPAWN_MODEL_EFFECT_HANDLE = 0x090,
+    BATTLE_VM_SPAWN_ALTERNATE_MODEL_EFFECT_HANDLE = 0x091,
+    BATTLE_VM_SPAWN_SPRITE_EFFECT = 0x092,
+    BATTLE_VM_SPAWN_ATTACHED_SPRITE_EFFECT = 0x093,
+    BATTLE_VM_SPAWN_SPRITE_EFFECT_HANDLE = 0x094,
+    BATTLE_VM_SPAWN_ATTACHED_SPRITE_EFFECT_HANDLE = 0x095,
+    BATTLE_VM_SET_ATTACHED_EFFECT_USER_VALUE = 0x096,
+    BATTLE_VM_SPAWN_MODEL_EFFECT_AT_WORLD_POSITION = 0x097,
+    BATTLE_VM_SPAWN_MODEL_EFFECT_AT_OBJECT_POSITION = 0x098,
+    BATTLE_VM_SPAWN_MODEL_EFFECT_AT_WORLD_POSITION_HANDLE = 0x099,
+    BATTLE_VM_SPAWN_MODEL_EFFECT_AT_OBJECT_POSITION_HANDLE = 0x09A,
+    BATTLE_VM_LEGACY_NOOP_09B = 0x09B,
+    BATTLE_VM_LEGACY_NOOP_09C = 0x09C,
+    BATTLE_VM_SET_TAGGED_EFFECT_FLAG = 0x09D,
+    BATTLE_VM_CLEAR_TAGGED_EFFECT_STATE = 0x09E,
+    BATTLE_VM_WAIT_SCRIPT_HANDLE = 0x09F,
+    BATTLE_VM_IS_SCRIPT_HANDLE_ACTIVE = 0x0A0,
+    BATTLE_VM_STRETCH_OBJECT_BETWEEN_ANCHORS = 0x0A1,
+    BATTLE_VM_START_IMPACT_TRAIL_EMITTER = 0x0A2,
+    BATTLE_VM_STOP_IMPACT_TRAIL_EMITTER = 0x0A3,
+    BATTLE_VM_START_INTERPOLATED_OBJECT_LINK = 0x0A4,
+    BATTLE_VM_STOP_INTERPOLATED_OBJECT_LINK = 0x0A5,
+    BATTLE_VM_CANCEL_INTERPOLATED_OBJECT_LINK = 0x0A6,
+    BATTLE_VM_START_SCREEN_PARTICLE_SWEEP = 0x0A7,
+    BATTLE_VM_START_SCREEN_PARTICLE_SWEEP_HANDLE = 0x0A8,
+    BATTLE_VM_START_GROUND_RIPPLE = 0x0A9,
+    BATTLE_VM_START_GROUND_RIPPLE_HANDLE = 0x0AA,
+    BATTLE_VM_DRAW_PROCEDURAL_GROUND_RIPPLES = 0x0AB,
+    BATTLE_VM_SCATTER_MODEL_PARTS = 0x0AC,
+    BATTLE_VM_START_MODEL_CRUSH = 0x0AD,
+    BATTLE_VM_GET_MODEL_PART_EFFECT_STATE = 0x0AE,
+    BATTLE_VM_TRANSFORM_MODEL_EFFECT_BASIS = 0x0AF,
+    BATTLE_VM_START_FLEXIBLE_OBJECT_LINK = 0x0B0,
+    BATTLE_VM_GET_FLEXIBLE_LINK_HEADING = 0x0B1,
+    BATTLE_VM_START_SEGMENTED_OBJECT_LINK = 0x0B2,
+    BATTLE_VM_INITIALIZE_SPRITE_GRID_CAPTURE = 0x0B3,
+    BATTLE_VM_START_SPRITE_GRID_CAPTURE = 0x0B4,
+    BATTLE_VM_ADVANCE_SPRITE_GRID_CAPTURE = 0x0B5,
+    BATTLE_VM_FINISH_SPRITE_GRID_CAPTURE = 0x0B6,
+    BATTLE_VM_IS_SPRITE_GRID_CAPTURE_ACTIVE = 0x0B7,
+    BATTLE_VM_SPAWN_OBJECT_DATA_EFFECT_AT_WORLD_POSITION = 0x0B8,
+    BATTLE_VM_SPAWN_OBJECT_DATA_EFFECT_AT_OBJECT_POSITION = 0x0B9,
+    BATTLE_VM_SPAWN_OBJECT_DATA_EFFECT_AT_WORLD_POSITION_HANDLE = 0x0BA,
+    BATTLE_VM_SPAWN_OBJECT_DATA_EFFECT_AT_OBJECT_POSITION_HANDLE = 0x0BB,
+    BATTLE_VM_CONFIGURE_GLOBAL_RESOURCE_SLOTS = 0x0BC,
+    BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_WORLD_POSITION = 0x0BD,
+    BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_OBJECT_POSITION = 0x0BE,
+    BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_WORLD_POSITION_HANDLE = 0x0BF,
+    BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_OBJECT_POSITION_HANDLE = 0x0C0,
+    BATTLE_VM_START_RASTER_RESOURCE_TRANSITION = 0x0C1,
+    BATTLE_VM_START_FINITE_RASTER_EFFECT = 0x0C2,
+    BATTLE_VM_LEGACY_NOOP_0C3 = 0x0C3,
+    BATTLE_VM_YIELD_ONE_FRAME = 0x0C4,
+    BATTLE_VM_SET_SUB_SCREEN_BLEND_COEFFICIENTS = 0x0C5,
+    BATTLE_VM_SET_SUB_SCREEN_BLEND_PLANES = 0x0C6,
+    BATTLE_VM_ADJUST_INVENTORY = 0x0C7,
+    BATTLE_VM_GET_INVENTORY_COUNT = 0x0C8,
+    BATTLE_VM_GET_ITEM_BATTLE_ANIMATION = 0x0C9,
+    BATTLE_VM_LEGACY_NOOP_0CA = 0x0CA,
+    BATTLE_VM_CONFIGURE_CONTROL_STATE = 0x0CB,
+    BATTLE_VM_UPDATE_CONTROL_MASK = 0x0CC,
+    BATTLE_VM_SET_INPUT_DISABLE_MASK = 0x0CD,
+    BATTLE_VM_SET_INPUT_DIRECTION_ROTATION = 0x0CE,
+    BATTLE_VM_LEGACY_NOOP_0CF = 0x0CF,
+    BATTLE_VM_LEGACY_NOOP_0D0 = 0x0D0,
+    BATTLE_VM_START_INLINE_OBJECT_SCRIPT = 0x0D1,
+    BATTLE_VM_START_INLINE_OBJECT_SCRIPT_AND_YIELD = 0x0D2,
+    BATTLE_VM_WAIT_INLINE_OBJECT_SCRIPT_AND_SKIP = 0x0D3,
+    BATTLE_VM_START_RELATIVE_OBJECT_SCRIPT = 0x0D4,
+    BATTLE_VM_WAIT_OBJECT_SCRIPT = 0x0D5,
+    BATTLE_VM_WAIT_OBJECT_SCRIPTS_BY_OWNER = 0x0D6,
+    BATTLE_VM_STOP_OBJECT_SCRIPT = 0x0D7,
+    BATTLE_VM_STOP_OBJECT_SCRIPTS_BY_OWNER = 0x0D8,
+    BATTLE_VM_PAUSE_OBJECT_SCRIPT = 0x0D9,
+    BATTLE_VM_PAUSE_OBJECT_SCRIPTS_BY_OWNER = 0x0DA,
+    BATTLE_VM_RESUME_OBJECT_SCRIPT = 0x0DB,
+    BATTLE_VM_RESUME_OBJECT_SCRIPTS_BY_OWNER = 0x0DC,
+    BATTLE_VM_BRANCH_COMPARE = 0x0DD,
+    BATTLE_VM_BRANCH_OBJECT_PROPERTY = 0x0DE,
+    BATTLE_VM_BRANCH_ACTOR_HIT_LOCKED = 0x0DF,
+    BATTLE_VM_LEGACY_NOOP_0E0 = 0x0E0,
+    BATTLE_VM_BRANCH_SCRIPT_ACTIVE = 0x0E1,
+    BATTLE_VM_BRANCH_ANIMATION_ACTIVE = 0x0E2,
+    BATTLE_VM_PLAY_SOUND_WITH_HANDLE = 0x0E3,
+    BATTLE_VM_PLAY_SOUND = 0x0E4,
+    BATTLE_VM_STOP_SOUND_TASK = 0x0E5,
+    BATTLE_VM_STOP_ALL_SOUND_TASKS = 0x0E6,
+    BATTLE_VM_WAIT_SOUND_TASK = 0x0E7,
+    BATTLE_VM_SPAWN_RASTER_PARTICLE = 0x0E8
+};
+
+enum BattleVmHandleTag {
+    BATTLE_VM_HANDLE_INDEX_MASK = 0x3FFF,
+    BATTLE_VM_MODEL_EFFECT_HANDLE_TAG = 0x4000,
+    BATTLE_VM_TASK_HANDLE_TAG = 0x4000,
+    BATTLE_VM_SPRITE_EFFECT_HANDLE_TAG = 0x8000,
+    BATTLE_VM_ATTACHED_EFFECT_HANDLE_TAG = 0xC000,
+    BATTLE_VM_HANDLE_TAG_MASK = 0xC000
+};
+
+enum BattleVmScriptControlMode {
+    BATTLE_VM_SCRIPT_STOP = 1,
+    BATTLE_VM_SCRIPT_RESUME = 2,
+    BATTLE_VM_SCRIPT_PAUSE = 3
+};
+
+enum BattleVmContextOffset {
+    BATTLE_VM_NEXT_STATE_OFFSET = 0x18,
+    BATTLE_VM_STATE_OVERRIDE_OFFSET = 0x1C,
+    BATTLE_VM_STATUS_DURATION_OFFSET = 0x12C,
+    BATTLE_VM_HIT_QUEUE_OFFSET = 0xCAD8,
+    BATTLE_VM_EFFECT_VIEW_X_OFFSET = 0xCB9C,
+    BATTLE_VM_EFFECT_VIEW_Y_OFFSET = 0xCB9E,
+    BATTLE_VM_SPRITE_EFFECT_SLOTS_OFFSET = 0xCBF8,
+    BATTLE_VM_ATTACHED_EFFECT_SLOTS_OFFSET = 0xCCF8,
+    BATTLE_VM_TASK_HANDLE_SLOTS_OFFSET = 0xCDF8,
+    BATTLE_VM_OBJECT_SCRIPT_STATES_OFFSET = 0x6D44,
+    BATTLE_VM_SUB_SCREEN_BLEND_EVB_OFFSET = 0x30,
+    BATTLE_VM_SUB_SCREEN_BLEND_EVA_OFFSET = 0x32,
+    BATTLE_VM_SUB_SCREEN_BLEND_SECOND_PLANES_OFFSET = 0x34,
+    BATTLE_VM_SUB_SCREEN_BLEND_FIRST_PLANES_OFFSET = 0x36,
+    BATTLE_VM_INPUT_DIRECTION_ROTATION_OFFSET = 0x108,
+    BATTLE_VM_INPUT_DISABLE_MASK_OFFSET = 0x10A,
+    BATTLE_VM_CONTROL_STATE_OFFSET = 0x10E,
+    BATTLE_VM_SOUND_TASK_SLOTS_OFFSET = 0xC8B4
+};
+
+enum BattleVmLimit {
+    BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT = 40,
+    BATTLE_VM_SOUND_TASK_COUNT = 16
+};
+
+enum BattleVmSaveOffset {
+    BATTLE_VM_SAVE_ENCOUNTER_ID_OFFSET = 0x55C,
+    BATTLE_VM_SAVE_RESULT_CODE_OFFSET = 0x55E
+};
+
+static u32 BattleVm_PackHalfwords(s32 low, s32 high) {
+    return (u16)low | ((u32)high << 16);
+}
+
+static void BattleVm_DecodeFixedArgument(ScriptVmCommand *command,
+                                         int argument_index) {
+    if ((command->argument_modes & (1 << argument_index)) == 0) {
+        command->arguments[argument_index] =
+            (s32)BattleVm_PackHalfwords(
+                command->arguments[argument_index],
+                command->arguments[argument_index + 1]) /
+            16;
+    }
+}
+
+static void BattleVm_WriteResult(ScriptVm *vm, ScriptVmState *state,
+                                 ScriptVmCommand *command, s32 value) {
+    VM_WriteVariable(command->result_variable, value, vm, state);
+}
+
+static int BattleVm_RetryCurrentCommand(ScriptVm *vm, ScriptVmState *state,
+                                        ScriptVmCommand *command) {
+    u32 descriptor = vm->command_descriptors[command->opcode];
+    u32 halfword_count =
+        (descriptor & SCRIPT_VM_ARGUMENT_COUNT_MASK) +
+        ((descriptor & SCRIPT_VM_HAS_RESULT) != 0) +
+        ((descriptor & SCRIPT_VM_HAS_ARGUMENT_MODES) != 0) + 1;
+
+    state->script -= halfword_count;
+    return BATTLE_AI_VM_YIELD;
+}
+
+static BattlePosition BattleVm_GetObjectViewPosition(
+    BattleSceneObject *object) {
+    BattlePosition position;
+
+    BattlePosition_StoreBattleRelative(
+        &position, object->x, object->y, object->z,
+        object->effect_anchor_z, object->flags.bits.use_raw_position,
+        object->flags.bits.use_alternate_model);
+    return position;
+}
+
+static BattlePosition BattleVm_GetAttachedViewPosition(
+    BattleSceneObject *object, int offset_x, int offset_y, int offset_z,
+    int offset_changes_depth) {
+    BattlePosition position;
+    int anchor_y = object->y;
+
+    if (offset_changes_depth) {
+        anchor_y += (s16)offset_y;
+    }
+    BattlePosition_StoreViewRelative(
+        &position, (s16)(object->x + (s16)offset_x),
+        (s16)(object->y - object->z + (s16)offset_y),
+        (s16)(object->effect_anchor_z + (s16)offset_z +
+              16 * (256 - anchor_y)),
+        object->flags.bits.use_raw_position,
+        object->flags.bits.use_alternate_model);
+    return position;
+}
+
+static BattlePosition BattleVm_GetAbsoluteEffectPosition(
+    int view_x, int world_y, int world_z, int vertical_offset) {
+    BattlePosition position;
+    int baseline = (s16)(vertical_offset + 16 * (256 - (s16)world_y));
+
+    position.x = (s16)(view_x - *(s16 *)(
+        gBattleContext + BATTLE_VM_EFFECT_VIEW_X_OFFSET));
+    position.y = (s16)((s16)world_y - (s16)world_z - *(s16 *)(
+        gBattleContext + BATTLE_VM_EFFECT_VIEW_Y_OFFSET));
+    position.z = baseline < 0 ? 0 : baseline;
+    position.padding_06 = 0;
+    return position;
+}
+
+static void BattleVm_ControlScript(int script_selector, int mode) {
+    BattleAIState *target;
+
+    if (mode == BATTLE_VM_SCRIPT_STOP &&
+        (script_selector & BATTLE_AI_TASK_TYPE_MASK) >=
+            BATTLE_AI_TASK_ACTION) {
+        BattleAI_StopScriptById((u16)script_selector);
+        return;
+    }
+
+    target = BattleAI_GetStateById((u16)script_selector);
+    if (target == 0) {
+        return;
+    }
+
+    switch (mode) {
+    case BATTLE_VM_SCRIPT_STOP:
+        target->script = 0;
+        break;
+    case BATTLE_VM_SCRIPT_RESUME:
+        target->flags &= ~BATTLE_AI_STATE_FLAG_DISABLED;
+        break;
+    case BATTLE_VM_SCRIPT_PAUSE:
+        target->flags |= BATTLE_AI_STATE_FLAG_DISABLED;
+        break;
+    }
+}
+
+static int BattleVm_ReadEnemyStat(BattleEnemyActor *enemy,
+                                  BattleEnemyStatRecord *stats,
+                                  int stat_id) {
+    switch (stat_id) {
+    case 0: return stats->name_id;
+    case 1: return (s16)stats->packed_object_data_id;
+    case 2: return stats->unknown_04 & 1;
+    case 3: return (stats->unknown_04 >> 1) & 1;
+    case 4: return (stats->unknown_04 >> 2) & 1;
+    case 5: return stats->level;
+    case 6: return stats->max_hp;
+    case 7: return stats->power;
+    case 8: return stats->defense;
+    case 9: return stats->speed;
+    case 10: return enemy->state_flag_bits.traits;
+    case 11: return (stats->traits >> 2) & 1;
+    case 12: return (stats->traits >> 3) & 3;
+    case 13: return (stats->traits >> 8) & 3;
+    case 14: return (stats->traits >> 10) & 3;
+    case 15: return (stats->traits >> 12) & 3;
+    case 16: return (stats->traits >> 14) & 3;
+    case 17: return stats->experience;
+    case 18: return stats->coins;
+    case 19: return stats->item_drop_1.fields.item_id;
+    case 20: return stats->item_drop_1.fields.chance_percent;
+    case 21: return stats->item_drop_2.fields.item_id;
+    case 22: return stats->item_drop_2.fields.chance_percent;
+    }
+    return 0;
+}
+
+static void BattleVm_SetPackedField(u16 *field, u16 mask, int shift,
+                                    int value) {
+    *field = (*field & ~mask) | ((value << shift) & mask);
+}
+
+static void BattleVm_WriteEnemyStat(BattleEnemyActor *enemy,
+                                    BattleEnemyStatRecord *stats,
+                                    int stat_id, int value) {
+    switch (stat_id) {
+    case 0: stats->name_id = value; break;
+    case 1: stats->packed_object_data_id = value; break;
+    case 2: stats->unknown_04 = (stats->unknown_04 & ~1) | (value & 1); break;
+    case 3: stats->unknown_04 =
+                (stats->unknown_04 & ~2) | ((value & 1) << 1); break;
+    case 4: stats->unknown_04 =
+                (stats->unknown_04 & ~4) | ((value & 1) << 2); break;
+    case 5: stats->level = value; break;
+    case 6: stats->max_hp = value; break;
+    case 7: stats->power = value; break;
+    case 8: stats->defense = value; break;
+    case 9: stats->speed = value; break;
+    case 10:
+        enemy->state_flags =
+            (enemy->state_flags & ~(3 << 6)) | ((value & 3) << 6);
+        break;
+    case 11: BattleVm_SetPackedField(&stats->traits, 1 << 2, 2, value); break;
+    case 12: BattleVm_SetPackedField(&stats->traits, 3 << 3, 3, value); break;
+    case 13: BattleVm_SetPackedField(&stats->traits, 3 << 8, 8, value); break;
+    case 14: BattleVm_SetPackedField(&stats->traits, 3 << 10, 10, value); break;
+    case 15: BattleVm_SetPackedField(&stats->traits, 3 << 12, 12, value); break;
+    case 16: BattleVm_SetPackedField(&stats->traits, 3 << 14, 14, value); break;
+    case 17: stats->experience = value; break;
+    case 18: stats->coins = value; break;
+    case 19: stats->item_drop_1.fields.item_id = value; break;
+    case 20: stats->item_drop_1.fields.chance_percent = value; break;
+    case 21: stats->item_drop_2.fields.item_id = value; break;
+    case 22: stats->item_drop_2.fields.chance_percent = value; break;
+    }
+}
+
+static BattleAITask **BattleVm_FindFreeTaskHandleSlot(int *slot_index) {
+    BattleAITask **slots = (BattleAITask **)(
+        gBattleContext + BATTLE_VM_TASK_HANDLE_SLOTS_OFFSET);
+    int index = 0;
+
+    while (slots[index] != 0) {
+        index++;
+    }
+    *slot_index = index;
+    return &slots[index];
+}
+
+static int BattleVm_GetItemBattleAnimation(u16 tagged_item_id) {
+    u16 item_index = tagged_item_id & ITEM_ID_INDEX_MASK;
+
+    switch (tagged_item_id & ITEM_ID_TAG_MASK) {
+    case ITEM_ID_ACTION_TAG:
+        return ((u8 *)&gActionItemRecords[item_index])[9];
+    case ITEM_ID_USABLE_TAG:
+        return ((u8 *)&gItemRecords[item_index])[9];
+    case ITEM_ID_BADGE_TAG:
+        return data_02050290[20 * item_index + 9];
+    case ITEM_ID_CLOTHING_TAG:
+        return data_020505c4[28 * item_index + 9];
+    }
+    return -1;
+}
+
+static int BattleVm_ObjectScriptMatches(BattleAIState *script_state,
+                                        int selector) {
+    if (selector >= BATTLE_AI_TASK_OBJECT) {
+        return script_state->order_tie_break ==
+            (selector & BATTLE_AI_TASK_ACTOR_ID_MASK);
+    }
+    return script_state->order == selector;
+}
+
+static BattleAIState *BattleVm_GetObjectScriptStates(void) {
+    return (BattleAIState *)(
+        gBattleContext + BATTLE_VM_OBJECT_SCRIPT_STATES_OFFSET);
+}
+
+static int BattleVm_EvaluateComparison(int operation, int left, int right) {
+    switch (operation) {
+    case 0: return left == right;
+    case 1: return left != right;
+    case 2: return left < right;
+    case 3: return left > right;
+    case 4: return left <= right;
+    case 5: return left >= right;
+    case 6: return left & right;
+    case 7: return left | right;
+    case 8: return left ^ right;
+    case 9: return left == 0;
+    case 10: return ~left;
+    }
+    return 0;
+}
+
+int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
+                            ScriptVmCommand *command) {
+    BattleAIState *ai_state = (BattleAIState *)state;
+    BattleObjectDataLoadState *load_state;
+    BattleSceneObject *object;
+    BattleSceneObject *reference;
+    BattleModel *model;
+    BattleActor *actor;
+    BattleEnemyActor *enemy;
+    BattleEnemyStatRecord *enemy_stats;
+    BattleAIState *aux_state;
+    BattleMotionChannel *motion_channel;
+    BattleHitDescriptor *hit_descriptor;
+    BattleHitRecord *hit_record;
+    BattlePartyActor *party_actor;
+    BattleEffect *effect;
+    BattleEffect **effect_slots;
+    BattleAITask *task;
+    BattleAITask **task_slot;
+    BattleAIState *object_script_states;
+    BattleAIState *object_script_state;
+    s16 *motion_parameters;
+    const u8 *keyframe_record;
+    const u16 *script;
+    BattlePosition object_position;
+    BattlePosition reference_position;
+    void *resource_sources[4];
+    int selected_actor;
+    int mode;
+    int x;
+    int y;
+    int z;
+    int duration;
+    int damage;
+    int handle;
+    int handle_index;
+    int handle_tag;
+    int effect_index;
+    int slot_index;
+    int script_selector;
+    int comparison;
+    int sound_task_id;
+    int index;
+
+    switch (command->opcode) {
+    case BATTLE_VM_ALLOCATE_OBJECT_DATA_BUFFER:
+        BattleObjectData_AllocateLoadBuffer(
+            (u16)command->arguments[0],
+            ((u32)(u16)command->arguments[1] << 2) & 0x3FFFF);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CONFIGURE_OBJECT_DATA_LOAD:
+        BattleObjectData_ConfigureLoad(
+            (u16)command->arguments[0], (u16)command->arguments[1],
+            (u16)command->arguments[2]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_ENSURE_OBJECT_DATA_LOADED:
+        BattleObjectData_EnsureLoaded(
+            (u16)command->arguments[0],
+            (s32)BattleVm_PackHalfwords(command->arguments[1],
+                                        command->arguments[2]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_QUEUE_CAPTURE_SURFACE_UPLOAD:
+        load_state = &BattleContext_GetRuntimeState()
+                          ->object_data_load_states[
+                              (u16)command->arguments[0]];
+        BattleObjectData_QueueCaptureSurfaceUpload(load_state);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_QUEUE_OBJECT_DATA_LOAD:
+        func_ov002_02091fd8(
+            (u16)command->arguments[0],
+            (s32)BattleVm_PackHalfwords(command->arguments[1],
+                                        command->arguments[2]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_QUEUE_OBJECT_DATA_ALTERNATE_LOAD:
+        func_ov002_02091f68((u16)command->arguments[0],
+                            command->arguments[1]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_WAIT_OBJECT_DATA_LOAD:
+        if (BattleObjectData_IsLoadPending((u16)command->arguments[0])) {
+            return BattleVm_RetryCurrentCommand(vm, state, command);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_OBJECT_DATA_RESOURCE:
+        load_state = BattleObjectData_GetLoadState(
+            (u16)command->arguments[0]);
+        BattleVm_WriteResult(vm, state, command, load_state->resource_id);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_BIND_ENTITY_RESOURCE:
+        BattleEntity_BindResource((u16)command->arguments[0],
+                                  (u16)command->arguments[1]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_RESET_OBJECT_DATA:
+        BattleObjectData_ResetAll();
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_OBJECT_ANIMATION:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        model = BattleSceneObject_GetActiveModel(object);
+        if (model != 0) {
+            model->flags &= ~BATTLE_MODEL_FLAG_09;
+        }
+        BattleSceneObject_SetAnimation(
+            object, command->arguments[1], command->arguments[2]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_SCRIPT_BY_ID:
+        BattleAI_StartScriptById((u16)command->arguments[0]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CONTROL_SCRIPT_EXECUTION_LEGACY:
+        /* The original descriptor exposes only the selector. The handler also
+         * consumes the following decoded word as a legacy control mode. */
+        BattleVm_ControlScript(command->arguments[0], command->arguments[1]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_ASSIGN_SCRIPT_OWNER_GROUP:
+        ai_state->order = (u16)command->arguments[0] - 3;
+        ai_state->flags |= BATTLE_AI_STATE_FLAG_ORDER_WAIT;
+        return BATTLE_AI_VM_YIELD;
+
+    case BATTLE_VM_SWAP_OBJECT_SLOTS:
+        BattleSceneObject_SwapSlots((u16)command->arguments[0],
+                                    (u16)command->arguments[1]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_RUNTIME_FLAG_03:
+        BattleContext_GetRuntimeState()->flags.raw =
+            (BattleContext_GetRuntimeState()->flags.raw & ~(1 << 3)) |
+            (((u16)command->arguments[0] & 1) << 3);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_STATE_OVERRIDE:
+        *(u32 *)(gBattleContext + BATTLE_VM_STATE_OVERRIDE_OFFSET) =
+            (u16)command->arguments[0];
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_RESULT_CODE:
+        *(u16 *)(gSaveData + BATTLE_VM_SAVE_RESULT_CODE_OFFSET) =
+            command->arguments[0];
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CLEAR_NEXT_STATE:
+        *(u32 *)(gBattleContext + BATTLE_VM_NEXT_STATE_OFFSET) = 0;
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_GLOBAL_PROPERTY:
+        BattleVm_WriteResult(
+            vm, state, command,
+            BattleGlobalProperty_Get((u16)command->arguments[0]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_GLOBAL_PROPERTY:
+        BattleGlobalProperty_Set((u16)command->arguments[0],
+                                 command->arguments[1]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_FIND_MOST_DAMAGED_ENEMY:
+        switch ((u16)command->arguments[0]) {
+        case 0:
+            BattleActor_FindHighestHpEnemy((u16)command->arguments[1]);
+            /* Intentional original fallthrough: the first two probes are
+             * discarded by the shipped legacy selector path. */
+        case 1:
+            BattleActor_FindLowestHpEnemy((u16)command->arguments[1]);
+        case 2:
+            selected_actor = BattleActor_FindMostDamagedEnemy(
+                (u16)command->arguments[1]);
+            BattleVm_WriteResult(vm, state, command, selected_actor);
+            break;
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_LEGACY_NOOP_049:
+    case BATTLE_VM_LEGACY_NOOP_04C:
+    case BATTLE_VM_LEGACY_NOOP_051:
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_ENCOUNTER_ID:
+        BattleVm_WriteResult(
+            vm, state, command,
+            *(s16 *)(gSaveData + BATTLE_VM_SAVE_ENCOUNTER_ID_OFFSET));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_ENCOUNTER_RESOURCE_INDEX:
+        BattleVm_WriteResult(
+            vm, state, command,
+            func_ov002_0208bd88(command->arguments[0]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_ACTOR_PROPERTY:
+        BattleVm_WriteResult(
+            vm, state, command,
+            BattleScript_GetProperty((u16)command->arguments[0],
+                                     (u16)command->arguments[1]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_ACTOR_PROPERTY_FIXED:
+        if ((command->argument_modes & (1 << 2)) == 0) {
+            command->arguments[2] = (s32)BattleVm_PackHalfwords(
+                command->arguments[2], command->arguments[3]);
+        }
+        /* fallthrough */
+    case BATTLE_VM_SET_ACTOR_PROPERTY:
+        BattleScript_SetProperty(
+            (u16)command->arguments[0], (u16)command->arguments[1],
+            command->arguments[2]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_ALIGN_OBJECT_VIEW_BASELINE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        reference = BattleSceneObject_GetById((u16)command->arguments[1]);
+        object_position = BattleVm_GetObjectViewPosition(object);
+        reference_position = BattleVm_GetObjectViewPosition(reference);
+        object->effect_anchor_z += command->arguments[2] +
+                                   reference_position.z - object_position.z;
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_APPLY_OBJECT_MOVEMENT:
+        BattleSceneObject_ApplyMovement(
+            (u16)command->arguments[0], 1, 0, command->arguments[1],
+            command->arguments[2], command->arguments[3], 0, 0, 0, 0);
+        BattleSceneObject_ApplyMovement(
+            (u16)command->arguments[0], 1, 0, command->arguments[1],
+            command->arguments[2], command->arguments[3], 0, 0, 0, 0);
+        if ((u16)command->arguments[0] >= BATTLE_ACTOR_PARTY_FIRST &&
+            (u16)command->arguments[0] <
+                BATTLE_ACTOR_ENEMY_FIRST + BATTLE_ACTOR_ENEMY_COUNT) {
+            actor = BattleActor_GetById((u16)command->arguments[0]);
+            actor->unk_018 = command->arguments[1];
+            actor->unk_01a = command->arguments[2];
+            actor->unk_01c = command->arguments[3];
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_OBJECT_VIEW_COORDINATE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        object_position = BattleVm_GetObjectViewPosition(object);
+        switch ((u16)command->arguments[1]) {
+        case 0:
+            BattleVm_WriteResult(vm, state, command, object_position.x);
+            break;
+        case 1:
+            BattleVm_WriteResult(vm, state, command, object_position.y);
+            break;
+        case 2:
+            BattleVm_WriteResult(vm, state, command, object_position.z);
+            break;
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_ENEMY_STAT:
+        enemy = (BattleEnemyActor *)BattleActor_GetEnemySlot(
+            (u16)command->arguments[0]);
+        enemy_stats = BattleEnemy_GetStats((u16)command->arguments[0]);
+        BattleVm_WriteResult(
+            vm, state, command,
+            enemy != 0 && enemy_stats != 0
+                ? BattleVm_ReadEnemyStat(
+                      enemy, enemy_stats, (u16)command->arguments[1])
+                : 0);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_ENEMY_STAT:
+        enemy = (BattleEnemyActor *)BattleActor_GetEnemySlot(
+            (u16)command->arguments[0]);
+        enemy_stats = BattleEnemy_GetStats((u16)command->arguments[0]);
+        if (enemy != 0 && enemy_stats != 0) {
+            BattleVm_WriteEnemyStat(
+                enemy, enemy_stats, (u16)command->arguments[1],
+                command->arguments[2]);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_WAIT_OBJECT_PENDING_STATE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        if ((s8)object->flags.bits.state < 0) {
+            object->flags.bits.state = 0;
+            return SCRIPT_VM_CONTINUE;
+        }
+        if (object->flags.bits.state == 0) {
+            object->flags.bits.state = 1;
+        }
+        return BattleVm_RetryCurrentCommand(vm, state, command);
+
+    case BATTLE_VM_SET_ACTIVE_MODEL_ANIMATION:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        model = BattleSceneObject_GetActiveModel(object);
+        model->vtable->set_primary_animation(
+            model, (u8)model->vtable->get_animation_id(model),
+            (s16)command->arguments[1], 1);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CONFIGURE_ANIMATION_LAYER:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        model = BattleSceneObject_GetActiveModel(object);
+        BattleSceneObject_ConfigureAnimationLayer(
+            (u16)command->arguments[0], (u16)command->arguments[1]);
+        if (model->animation_controller != 0 &&
+            (u16)command->arguments[1] == 0xFFFF) {
+            model->vtable->unknown_0a0(
+                model, model->vtable->unknown_0a4(model));
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_ANIMATION_LAYER_STATE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        model = BattleSceneObject_GetActiveModel(object);
+        model->vtable->configure_animation_layer(
+            model, (s8)command->arguments[2],
+            (s16)command->arguments[1], 1);
+        model->animation_layer_states[command->arguments[2]] =
+            command->arguments[3];
+        if (command->arguments[1] == -1) {
+            model->vtable->unknown_0a0(
+                model, model->vtable->unknown_0a4(model));
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_INVOKE_MODEL_RELATION_TEST:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        reference = BattleSceneObject_GetById((u16)command->arguments[1]);
+        BattleScene_TestModelRelation(
+            object, reference, command->arguments[2], command->arguments[3]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_MOVE_OBJECT:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        mode = (u16)command->arguments[2];
+        x = command->arguments[3];
+        y = command->arguments[4];
+        z = command->arguments[5];
+        if (mode == 0 && command->arguments[7] != 0) {
+            x += object->x;
+            y += object->y;
+            z += object->z;
+        }
+        BattleSceneObject_ApplyMovement(
+            (u16)command->arguments[0], (u16)command->arguments[1], mode,
+            x, y, z, command->arguments[6], command->arguments[7], 0, 0);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_SINUSOIDAL_DIRECTION_MOTION:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020a3928(
+            object, (u16)command->arguments[1], command->arguments[3],
+            command->arguments[4], command->arguments[5],
+            command->arguments[6], command->arguments[7],
+            command->arguments[8], command->arguments[9]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_MOVE_OBJECT_AT_SPEED:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        if (command->arguments[6] < 1) {
+            command->arguments[6] = object->smoothed_travel_distance;
+        }
+        mode = (u16)command->arguments[2];
+        x = command->arguments[3];
+        y = command->arguments[4];
+        z = command->arguments[5];
+        if (mode == 1) {
+            duration = _s32_div_f(
+                FX_Sqrt((x * x + y * y + z * z) << 12),
+                command->arguments[6]);
+            BattleSceneObject_MoveBy(
+                object, (u16)command->arguments[1], x, y, z, duration);
+        } else if (mode == 2) {
+            duration = _s32_div_f(
+                FX_Sqrt(((x - object->x) * (x - object->x) +
+                         (y - object->y) * (y - object->y) +
+                         (z - object->z) * (z - object->z)) << 12),
+                command->arguments[6]);
+            BattleSceneObject_MoveTo(
+                object, (u16)command->arguments[1], x, y, z, duration);
+        } else if (mode == 5) {
+            reference = BattleSceneObject_GetById(
+                (u16)command->arguments[7]);
+            duration = _s32_div_f(
+                FX_Sqrt(((x - object->x + reference->x) *
+                             (x - object->x + reference->x) +
+                         (y - object->y + reference->y) *
+                             (y - object->y + reference->y) +
+                         (z - object->z + reference->z) *
+                             (z - object->z + reference->z)) << 12),
+                command->arguments[6]);
+            func_ov002_020a3b2c(
+                reference, (u16)command->arguments[1], x, y, z, duration,
+                BattleSceneObject_GetById((u16)command->arguments[7]));
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_AXIS_KINEMATIC_MOTION:
+        func_ov002_020789ec(vm, state, command, 0);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_MOVE_WITH_KINEMATIC_DURATION:
+        func_ov002_020787f0(vm, state, command, 0);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_START_AXIS_KINEMATIC_MOTION_GET_DURATION:
+        func_ov002_020789ec(vm, state, command, 1);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_MOVE_WITH_KINEMATIC_DURATION_GET_DURATION:
+        func_ov002_020787f0(vm, state, command, 1);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_START_DIRECTIONAL_KINEMATIC_A:
+        func_ov002_020786d0(vm, state, command, 0);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_START_DIRECTIONAL_KINEMATIC_B:
+        func_ov002_02078580(vm, state, command, 0);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_START_DIRECTIONAL_BALLISTIC:
+        func_ov002_02078460(vm, state, command, 0);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_START_DIRECTIONAL_KINEMATIC_A_GET_DURATION:
+        func_ov002_020786d0(vm, state, command, 1);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_START_DIRECTIONAL_KINEMATIC_B_GET_DURATION:
+        func_ov002_02078580(vm, state, command, 1);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_START_DIRECTIONAL_BALLISTIC_GET_DURATION:
+        func_ov002_02078460(vm, state, command, 1);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_VELOCITY_MOTION:
+        BattleVm_DecodeFixedArgument(command, 7);
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        BattleSceneObject_StartMotionWithVelocityForDuration(
+            object, (u16)command->arguments[1], command->arguments[2],
+            command->arguments[3], command->arguments[4],
+            command->arguments[5], command->arguments[6],
+            command->arguments[7]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_ACCELERATION_MOTION:
+        BattleVm_DecodeFixedArgument(command, 7);
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        BattleSceneObject_StartMotionWithAccelerationForDuration(
+            object, (u16)command->arguments[1], command->arguments[2],
+            command->arguments[3], command->arguments[4],
+            command->arguments[5], command->arguments[6],
+            command->arguments[7]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_ACCELERATED_MOTION:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        BattleSceneObject_StartAcceleratedMotionForDuration(
+            object, (u16)command->arguments[1], command->arguments[2],
+            command->arguments[3], command->arguments[4],
+            command->arguments[5], command->arguments[6],
+            command->arguments[7], (u16)command->arguments[8]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_ACCELERATED_MOTION_WITH_RATIO:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020be478(
+            object, (u16)command->arguments[1], command->arguments[2],
+            command->arguments[3], command->arguments[4],
+            command->arguments[5], command->arguments[6],
+            command->arguments[7], (u16)command->arguments[8]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_ACCELERATED_MOTION_BETWEEN_VELOCITIES:
+        BattleVm_DecodeFixedArgument(command, 6);
+        BattleVm_DecodeFixedArgument(command, 8);
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020be3e8(
+            object, (u16)command->arguments[1], command->arguments[2],
+            command->arguments[3], command->arguments[4],
+            command->arguments[5], command->arguments[6],
+            command->arguments[8], (u16)command->arguments[10]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_ROTATE_OBJECT_AROUND_AXIS:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020a3810(
+            object, (u16)command->arguments[1],
+            (s16)command->arguments[2], (s16)command->arguments[3],
+            (s16)command->arguments[4], (s16)command->arguments[5],
+            (s16)command->arguments[6], (s16)command->arguments[7],
+            (s16)command->arguments[8], (s16)command->arguments[9]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_WAIT_ANIMATION:
+        if (BattleSceneObject_IsAnimationActiveById(
+                (u16)command->arguments[0],
+                (u16)command->arguments[1])) {
+            return BattleVm_RetryCurrentCommand(vm, state, command);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_STOP_MOTION:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        BattleSceneObject_StopMotionChannel(
+            object, (u16)command->arguments[1], 0);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SNAPSHOT_POSITION:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        BattleSceneObject_SnapshotPosition(object);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_KEYFRAMED_MOTION:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        motion_parameters = BattleSceneObject_BeginMotionChannel(
+            object, (u16)command->arguments[1], 0,
+            func_ov002_02078408);
+        keyframe_record =
+            (const u8 *)state->script + 2 * command->arguments[3];
+        keyframe_record = (const u8 *)((u32)keyframe_record & ~3);
+        BattleVm_DecodeFixedArgument(command, 5);
+        func_ov002_020724b0(
+            motion_parameters, keyframe_record + 4,
+            (*(const s32 *)keyframe_record +
+             (*(const s32 *)keyframe_record >> 31)) / 2,
+            (command->arguments[4] - 1) << 16, command->arguments[5]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_MOTION_FRAME:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        motion_channel = BattleSceneObject_GetMotionChannel(
+            object, (u16)command->arguments[1]);
+        BattleVm_WriteResult(
+            vm, state, command,
+            (*(s32 *)&motion_channel->parameters[0] >> 16) + 1);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_AUX_SCRIPT:
+        switch ((u16)command->arguments[1]) {
+        case 0x4000:
+            command->arguments[1] =
+                BattleActor_SelectRandomStatusTarget(0x38, 2);
+            break;
+        case 0x8000:
+            command->arguments[1] =
+                BattleActor_SelectRandomStatusTarget(0x3C, 6);
+            break;
+        case 0xC000:
+            command->arguments[1] =
+                BattleActor_SelectRandomStatusTarget(0x38, 8);
+            break;
+        }
+        BattleAI_StartActorAuxScript(
+            (u16)command->arguments[0], command->arguments[1],
+            state->script + command->arguments[2]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_WAIT_AUX_SCRIPT:
+        aux_state = BattleAI_GetStateById(
+            BATTLE_AI_TASK_AUXILIARY | (u16)command->arguments[0]);
+        if (aux_state != 0 && aux_state->script != 0) {
+            return BattleVm_RetryCurrentCommand(vm, state, command);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SUPPRESS_ACTOR_RENDERING:
+    case BATTLE_VM_RESTORE_ACTOR_RENDERING:
+        mode = command->opcode == BATTLE_VM_SUPPRESS_ACTOR_RENDERING;
+        actor = BattleActor_GetById((u16)command->arguments[0]);
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        model = BattleSceneObject_GetActiveModel(object);
+        if (actor != 0) {
+            if (mode) {
+                actor->flags |= BATTLE_ACTOR_FLAG_12;
+            } else {
+                actor->flags &= ~BATTLE_ACTOR_FLAG_12;
+            }
+            actor->scene_object->time_paused = mode;
+        }
+        if (model != 0) {
+            if (mode) {
+                model->flags |= BATTLE_MODEL_FLAG_09;
+            } else {
+                model->flags &= ~BATTLE_MODEL_FLAG_09;
+            }
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_REMOVE_ENEMY:
+        BattleEnemy_Remove((u16)command->arguments[0],
+                           (u16)command->arguments[1]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_LEGACY_NOOP_077:
+    case BATTLE_VM_LEGACY_NOOP_079:
+    case BATTLE_VM_LEGACY_NOOP_07A:
+    case BATTLE_VM_LEGACY_NOOP_07B:
+    case BATTLE_VM_LEGACY_NOOP_07C:
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_DAMAGE_ACTOR:
+        handle = (u16)command->arguments[0];
+        damage = (u16)command->arguments[1];
+        object = BattleSceneObject_GetById(handle);
+        if (handle >= BATTLE_ACTOR_PARTY_FIRST &&
+            handle < BATTLE_ACTOR_ENEMY_FIRST) {
+            BattleDamage_ApplyToParty(
+                object, command->arguments[2], command->arguments[3],
+                damage, 0, 0);
+        } else if (handle >= BATTLE_ACTOR_ENEMY_FIRST &&
+                   handle < BATTLE_ACTOR_ENEMY_FIRST + 6) {
+            BattleActor_ApplyDamage(object, damage);
+            object_position = BattleVm_GetObjectViewPosition(object);
+            BattleDamage_SpawnNumber(
+                damage, object_position.x + command->arguments[2],
+                object_position.y + command->arguments[3], 7, 0);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_HEAL_ACTOR:
+        actor = BattleActor_GetById((u16)command->arguments[0]);
+        damage = (u16)command->arguments[1];
+        if (actor->max_hp - actor->current_hp < damage) {
+            damage = actor->max_hp - actor->current_hp;
+        }
+        actor->current_hp += damage;
+        effect = BattleModelEffect_Spawn(
+            10, 0,
+            (s16)(actor->scene_object->x + command->arguments[2]),
+            (s16)(actor->scene_object->y - actor->scene_object->z +
+                  command->arguments[3]),
+            0, 256);
+        effect->user_value = damage;
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_WAIT_HIT_QUEUE:
+        if (BattleActor_IsAnyHitLocked()) {
+            return BattleVm_RetryCurrentCommand(vm, state, command);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CALCULATE_EQUIPMENT_DAMAGE:
+        damage = BattleDamage_ApplyEquipmentModifiers(
+            (u16)command->arguments[0], (u16)command->arguments[1],
+            (command->arguments[2] << 8) / 100,
+            command->arguments[3]);
+        BattleVm_WriteResult(vm, state, command, damage);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_APPLY_STATUS:
+        actor = BattleActor_GetById((u16)command->arguments[0]);
+        BattleVm_WriteResult(
+            vm, state, command,
+            BattleStatus_TryApply(
+                actor, command->arguments[1],
+                *(s16 *)(gBattleContext + BATTLE_VM_STATUS_DURATION_OFFSET),
+                command->arguments[3], command->arguments[2]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CLEAR_STATUS:
+        actor = BattleActor_GetById((u16)command->arguments[0]);
+        if (command->arguments[1] == -1) {
+            BattleStatus_ClearAll(actor);
+        } else {
+            BattleStatus_ClearEffect(actor, command->arguments[1]);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_ACTOR_TARGETING_ENABLED:
+        actor = BattleActor_GetById((u16)command->arguments[0]);
+        actor->flags =
+            (actor->flags & ~BATTLE_ACTOR_FLAG_13) |
+            ((command->arguments[1] == 0) << 13);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CONFIGURE_HIT:
+        hit_descriptor = BattleHitDescriptor_Configure(
+            command->arguments[0], command->arguments[1], 0,
+            command->arguments[2], BATTLE_HIT_KIND_DEFAULT);
+        BattleHitDescriptor_SetStatus(
+            hit_descriptor, command->arguments[3], command->arguments[4],
+            command->arguments[5]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_REFLECT_QUEUED_HITS:
+        BattleDamage_ReflectQueuedHits((u16)command->arguments[0]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_FIND_HIT_DESCRIPTOR:
+        hit_record = (BattleHitRecord *)(
+            gBattleContext + BATTLE_VM_HIT_QUEUE_OFFSET);
+        effect_index = 0;
+        while (hit_record->kind != 0) {
+            int source_id = hit_record->source_id;
+            int target_id = hit_record->target_id;
+            if (source_id == 8) source_id = BATTLE_ACTOR_MARIO;
+            if (source_id == 9) source_id = BATTLE_ACTOR_LUIGI;
+            if (target_id == 8) target_id = BATTLE_ACTOR_MARIO;
+            if (target_id == 9) target_id = BATTLE_ACTOR_LUIGI;
+            if (source_id == command->arguments[0] &&
+                target_id == command->arguments[1]) {
+                BattleVm_WriteResult(
+                    vm, state, command, effect_index + 1);
+                return SCRIPT_VM_CONTINUE;
+            }
+            hit_record++;
+            effect_index++;
+        }
+        BattleVm_WriteResult(vm, state, command, 0);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_QUEUED_HIT_X:
+    case BATTLE_VM_GET_QUEUED_HIT_Y:
+    case BATTLE_VM_GET_QUEUED_HIT_Z:
+    case BATTLE_VM_GET_QUEUED_HIT_KIND:
+        hit_record = (BattleHitRecord *)(
+            gBattleContext + BATTLE_VM_HIT_QUEUE_OFFSET) +
+            (command->arguments[0] - 1);
+        if (command->opcode == BATTLE_VM_GET_QUEUED_HIT_X) {
+            damage = hit_record->x;
+        } else if (command->opcode == BATTLE_VM_GET_QUEUED_HIT_Y) {
+            damage = hit_record->y;
+        } else if (command->opcode == BATTLE_VM_GET_QUEUED_HIT_Z) {
+            damage = hit_record->z;
+        } else {
+            damage = hit_record->kind;
+        }
+        BattleVm_WriteResult(vm, state, command, damage);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_DAMAGE_PARTY:
+        party_actor = (BattlePartyActor *)BattleActor_GetPartySlot(
+            (u16)command->arguments[0]);
+        mode = command->arguments[2] & 0x7FFF;
+        if (mode == 0) {
+            damage = 1;
+        } else if (mode == 1) {
+            damage = BattleDamage_CalculateByObject(
+                (u16)command->arguments[3],
+                party_actor->actor.scene_object->actor_id);
+        } else {
+            damage = command->arguments[3];
+        }
+        if (command->arguments[1] == -1) {
+            BattleDamage_ApplyToParty(
+                party_actor->actor.scene_object, command->arguments[4],
+                command->arguments[5], damage, 2, 0);
+            BattleDamage_StartPartyLaunchReaction(&party_actor->actor);
+        } else {
+            object_position = BattleVm_GetObjectViewPosition(
+                party_actor->actor.scene_object);
+            if ((command->arguments[2] & 0x8000) == 0) {
+                BattleModelEffect_Spawn(
+                    27, 0, object_position.x, object_position.y,
+                    object_position.z, 256);
+                BattleSpriteEffect_Spawn(
+                    12, object_position.x, object_position.y,
+                    object_position.z, 256);
+            }
+            func_ov002_02077e78(
+                &party_actor->actor, (s16)command->arguments[1], damage,
+                command->arguments[4], command->arguments[5]);
+        }
+        *(u16 *)party_actor->unknown_070 = 0;
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_AUXILIARY_OBJECTS_PAUSED:
+        func_ov002_02076c38(command->arguments[0]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CALCULATE_DAMAGE:
+        BattleVm_WriteResult(
+            vm, state, command,
+            BattleDamage_CalculateByObject(
+                (u16)command->arguments[0],
+                (u16)command->arguments[1]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_MODEL_EFFECT:
+        object_position = BattleVm_GetAbsoluteEffectPosition(
+            command->arguments[2], command->arguments[3],
+            command->arguments[4], command->arguments[5]);
+        BattleModelEffect_SpawnFromResource(
+            (u16)command->arguments[0], (u16)command->arguments[1],
+            object_position.x, object_position.y, object_position.z,
+            command->arguments[6] / 16);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_ATTACHED_MODEL_EFFECT:
+        object = BattleSceneObject_GetById((u16)command->arguments[2]);
+        object_position = BattleVm_GetAttachedViewPosition(
+            object, command->arguments[3], command->arguments[4],
+            command->arguments[5], 0);
+        BattleModelEffect_SpawnFromResource(
+            (u16)command->arguments[0], (u16)command->arguments[1],
+            object_position.x, object_position.y, object_position.z,
+            command->arguments[6] / 16);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_MODEL_EFFECT_HANDLE:
+    case BATTLE_VM_SPAWN_ALTERNATE_MODEL_EFFECT_HANDLE:
+        object = BattleSceneObject_GetById((u16)command->arguments[2]);
+        object_position = BattleVm_GetAttachedViewPosition(
+            object, command->arguments[3], command->arguments[4],
+            command->arguments[5],
+            command->opcode == BATTLE_VM_SPAWN_MODEL_EFFECT_HANDLE);
+        effect_index = BattleModelEffect_SpawnFromResourceInFreeSlot(
+            (u16)command->arguments[0], (u16)command->arguments[1],
+            object_position.x, object_position.y, object_position.z,
+            command->arguments[6] / 16);
+        BattleVm_WriteResult(
+            vm, state, command,
+            effect_index | BATTLE_VM_MODEL_EFFECT_HANDLE_TAG);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_SPRITE_EFFECT:
+        object_position = BattleVm_GetAbsoluteEffectPosition(
+            command->arguments[1], command->arguments[2],
+            command->arguments[3], command->arguments[4]);
+        BattleSpriteEffect_Spawn(
+            (u16)command->arguments[0], object_position.x,
+            object_position.y, object_position.z,
+            command->arguments[5] / 16);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_ATTACHED_SPRITE_EFFECT:
+        object = BattleSceneObject_GetById((u16)command->arguments[1]);
+        object_position = BattleVm_GetAttachedViewPosition(
+            object, command->arguments[2], command->arguments[3],
+            command->arguments[4], 0);
+        BattleSpriteEffect_Spawn(
+            (u16)command->arguments[0], object_position.x,
+            object_position.y, object_position.z,
+            command->arguments[5] / 16);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_SPRITE_EFFECT_HANDLE:
+        object_position = BattleVm_GetAbsoluteEffectPosition(
+            command->arguments[1], command->arguments[2],
+            command->arguments[3], command->arguments[4]);
+        effect_index = BattleSpriteEffect_SpawnInFreeSlot(
+            (u16)command->arguments[0], object_position.x,
+            object_position.y, object_position.z,
+            command->arguments[5] / 16);
+        BattleVm_WriteResult(
+            vm, state, command,
+            effect_index | BATTLE_VM_SPRITE_EFFECT_HANDLE_TAG);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_ATTACHED_SPRITE_EFFECT_HANDLE:
+        object = BattleSceneObject_GetById((u16)command->arguments[1]);
+        object_position = BattleVm_GetAttachedViewPosition(
+            object, command->arguments[2], command->arguments[3],
+            command->arguments[4], 0);
+        effect_index = BattleSpriteEffect_SpawnInFreeSlot(
+            (u16)command->arguments[0], object_position.x,
+            object_position.y, object_position.z,
+            command->arguments[5] / 16);
+        BattleVm_WriteResult(
+            vm, state, command,
+            effect_index | BATTLE_VM_SPRITE_EFFECT_HANDLE_TAG);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_ATTACHED_EFFECT_USER_VALUE:
+        effect_slots = (BattleEffect **)(
+            gBattleContext + BATTLE_VM_ATTACHED_EFFECT_SLOTS_OFFSET);
+        effect = effect_slots[
+            command->arguments[0] & BATTLE_VM_HANDLE_INDEX_MASK];
+        effect->user_value =
+            (effect->user_value & 0xFFFF0000) |
+            (u16)command->arguments[1];
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_MODEL_EFFECT_AT_WORLD_POSITION:
+        func_ov002_02079090(vm, state, command, 0x11);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_SPAWN_MODEL_EFFECT_AT_OBJECT_POSITION:
+        func_ov002_02079090(vm, state, command, 0x12);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_SPAWN_MODEL_EFFECT_AT_WORLD_POSITION_HANDLE:
+        func_ov002_02079090(vm, state, command, 0x21);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_SPAWN_MODEL_EFFECT_AT_OBJECT_POSITION_HANDLE:
+        func_ov002_02079090(vm, state, command, 0x22);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_LEGACY_NOOP_09B:
+    case BATTLE_VM_LEGACY_NOOP_09C:
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_TAGGED_EFFECT_FLAG:
+        handle = (u16)command->arguments[0];
+        handle_index = handle & BATTLE_VM_HANDLE_INDEX_MASK;
+        handle_tag = handle & BATTLE_VM_HANDLE_TAG_MASK;
+        if (handle_tag == BATTLE_VM_SPRITE_EFFECT_HANDLE_TAG) {
+            effect_slots = (BattleEffect **)(
+                gBattleContext + BATTLE_VM_SPRITE_EFFECT_SLOTS_OFFSET);
+            effect = effect_slots[handle_index];
+            *(u16 *)((u8 *)effect + 0x14) =
+                (*(u16 *)((u8 *)effect + 0x14) & ~0x4000) |
+                ((command->arguments[1] != 0) << 14);
+        } else if (handle_tag == BATTLE_VM_ATTACHED_EFFECT_HANDLE_TAG) {
+            effect_slots = (BattleEffect **)(
+                gBattleContext + BATTLE_VM_ATTACHED_EFFECT_SLOTS_OFFSET);
+            effect = effect_slots[handle_index];
+            effect->flags =
+                (effect->flags & ~1) | (command->arguments[1] != 0);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CLEAR_TAGGED_EFFECT_STATE:
+        handle = (u16)command->arguments[0];
+        handle_index = handle & BATTLE_VM_HANDLE_INDEX_MASK;
+        handle_tag = handle & BATTLE_VM_HANDLE_TAG_MASK;
+        if (handle_tag == BATTLE_VM_SPRITE_EFFECT_HANDLE_TAG) {
+            effect_slots = (BattleEffect **)(
+                gBattleContext + BATTLE_VM_SPRITE_EFFECT_SLOTS_OFFSET);
+            effect_slots[handle_index]->update_callback = 0;
+        } else if (handle_tag == BATTLE_VM_ATTACHED_EFFECT_HANDLE_TAG) {
+            effect_slots = (BattleEffect **)(
+                gBattleContext + BATTLE_VM_ATTACHED_EFFECT_SLOTS_OFFSET);
+            effect_slots[handle_index]->update_callback = 0;
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_WAIT_SCRIPT_HANDLE:
+        if (BattleScriptHandle_IsActive((u16)command->arguments[0])) {
+            return BattleVm_RetryCurrentCommand(vm, state, command);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_IS_SCRIPT_HANDLE_ACTIVE:
+        BattleVm_WriteResult(
+            vm, state, command,
+            BattleScriptHandle_IsActive((u16)command->arguments[0]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_STRETCH_OBJECT_BETWEEN_ANCHORS:
+        BattleSceneObject_StretchBetweenAnchors(
+            (s16)command->arguments[0], (s16)command->arguments[1],
+            (s16)command->arguments[2], (s16)command->arguments[3],
+            (s16)command->arguments[4], (s16)command->arguments[5],
+            (s16)command->arguments[6], (s16)command->arguments[7],
+            (s16)command->arguments[8], (s16)command->arguments[9],
+            (s16)command->arguments[10], (u16)command->arguments[11],
+            (u16)command->arguments[12], (u16)command->arguments[13]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_IMPACT_TRAIL_EMITTER:
+        BattleImpactEmitter_Start(
+            (u16)command->arguments[0], 0,
+            (s16)command->arguments[1], (u16)command->arguments[2],
+            command->arguments[3], command->arguments[4],
+            command->arguments[5], command->arguments[6],
+            command->arguments[7], 0);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_STOP_IMPACT_TRAIL_EMITTER:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        object->flags.bits.stop_impact_particles = 1;
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_INTERPOLATED_OBJECT_LINK:
+        func_ov002_020bccc4(
+            (u16)command->arguments[0], (u16)command->arguments[1],
+            (u16)command->arguments[2], (u16)command->arguments[3],
+            (s8)command->arguments[4], (s8)command->arguments[5],
+            (s8)command->arguments[6], (s8)command->arguments[7],
+            (s8)command->arguments[8], (s8)command->arguments[9],
+            (u16)command->arguments[10], 1);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_STOP_INTERPOLATED_OBJECT_LINK:
+        func_ov002_020bca68();
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CANCEL_INTERPOLATED_OBJECT_LINK:
+        func_ov002_020bca44();
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_SCREEN_PARTICLE_SWEEP:
+        func_ov002_020af97c(
+            command->arguments[0], command->arguments[1],
+            command->arguments[2], command->arguments[3],
+            (u16)command->arguments[4], (u8)command->arguments[5],
+            (u16)command->arguments[6]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_SCREEN_PARTICLE_SWEEP_HANDLE:
+        task_slot = BattleVm_FindFreeTaskHandleSlot(&slot_index);
+        task = func_ov002_020af97c(
+            command->arguments[0], command->arguments[1],
+            command->arguments[2], command->arguments[3],
+            (u16)command->arguments[4], (u8)command->arguments[5],
+            (u16)command->arguments[6]);
+        BattleTask_BindOwnerSlot(task, task_slot);
+        BattleVm_WriteResult(
+            vm, state, command,
+            slot_index | BATTLE_VM_TASK_HANDLE_TAG);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_GROUND_RIPPLE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020ae940(
+            object, command->arguments[1], command->arguments[2],
+            command->arguments[3]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_GROUND_RIPPLE_HANDLE:
+        task_slot = BattleVm_FindFreeTaskHandleSlot(&slot_index);
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        task = func_ov002_020ae940(
+            object, command->arguments[1], command->arguments[2],
+            command->arguments[3]);
+        BattleTask_BindOwnerSlot(task, task_slot);
+        BattleVm_WriteResult(
+            vm, state, command,
+            slot_index | BATTLE_VM_TASK_HANDLE_TAG);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_DRAW_PROCEDURAL_GROUND_RIPPLES:
+        BattleVm_WriteResult(
+            vm, state, command,
+            func_ov002_020ae9c0(
+                command->arguments[0], command->arguments[1],
+                command->arguments[2], command->arguments[3],
+                command->arguments[4], command->arguments[5]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SCATTER_MODEL_PARTS:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020bba60(object);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_MODEL_CRUSH:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020bb644(
+            object, (u16)command->arguments[1], command->arguments[2]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_MODEL_PART_EFFECT_STATE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        BattleVm_WriteResult(
+            vm, state, command, func_ov002_020bb274(object));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_TRANSFORM_MODEL_EFFECT_BASIS:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020bbb5c(
+            object, command->arguments[1], (u16)command->arguments[2],
+            4096);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_FLEXIBLE_OBJECT_LINK:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        reference = BattleSceneObject_GetById((u16)command->arguments[1]);
+        func_ov002_020bb00c(
+            object, reference, command->arguments[2], command->arguments[3],
+            command->arguments[4], command->arguments[5],
+            command->arguments[6]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_FLEXIBLE_LINK_HEADING:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        BattleVm_WriteResult(
+            vm, state, command,
+            func_ov002_020badd8(object, command->arguments[1]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_SEGMENTED_OBJECT_LINK:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        reference = BattleSceneObject_GetById((u16)command->arguments[1]);
+        func_ov002_020ba210(
+            object, reference, command->arguments[2], command->arguments[3],
+            command->arguments[4], command->arguments[5],
+            command->arguments[6], command->arguments[7]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_INITIALIZE_SPRITE_GRID_CAPTURE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020b9978(object);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_SPRITE_GRID_CAPTURE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020b9854(
+            object, command->arguments[1], command->arguments[2],
+            command->arguments[3], command->arguments[4]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_ADVANCE_SPRITE_GRID_CAPTURE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020b9818(
+            object, command->arguments[1], command->arguments[2]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_FINISH_SPRITE_GRID_CAPTURE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        func_ov002_020b97d0(
+            object, command->arguments[1], command->arguments[2]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_IS_SPRITE_GRID_CAPTURE_ACTIVE:
+        object = BattleSceneObject_GetById((u16)command->arguments[0]);
+        BattleVm_WriteResult(
+            vm, state, command, func_ov002_020b97a8(object));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_OBJECT_DATA_EFFECT_AT_WORLD_POSITION:
+        func_ov002_02078e38(vm, state, command, 0x11);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_SPAWN_OBJECT_DATA_EFFECT_AT_OBJECT_POSITION:
+        func_ov002_02078e38(vm, state, command, 0x12);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_SPAWN_OBJECT_DATA_EFFECT_AT_WORLD_POSITION_HANDLE:
+        func_ov002_02078e38(vm, state, command, 0x21);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_SPAWN_OBJECT_DATA_EFFECT_AT_OBJECT_POSITION_HANDLE:
+        func_ov002_02078e38(vm, state, command, 0x22);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CONFIGURE_GLOBAL_RESOURCE_SLOTS:
+        resource_sources[0] = 0;
+        resource_sources[1] = 0;
+        resource_sources[2] = 0;
+        resource_sources[3] = 0;
+        for (index = 0; index < 4; index++) {
+            func_ov002_0207905c(
+                command->arguments[index], &resource_sources[index]);
+        }
+        func_ov002_0206c1e4(
+            resource_sources[0], resource_sources[1],
+            resource_sources[2], resource_sources[3]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_WORLD_POSITION:
+        func_ov002_02078bb4(vm, state, command, 0x11);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_OBJECT_POSITION:
+        func_ov002_02078bb4(vm, state, command, 0x12);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_WORLD_POSITION_HANDLE:
+        func_ov002_02078bb4(vm, state, command, 0x21);
+        return SCRIPT_VM_CONTINUE;
+    case BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_OBJECT_POSITION_HANDLE:
+        func_ov002_02078bb4(vm, state, command, 0x22);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_RASTER_RESOURCE_TRANSITION:
+        task_slot = BattleVm_FindFreeTaskHandleSlot(&slot_index);
+        task = (BattleAITask *)BattleRasterResourceTransition_Start(
+            command->arguments[0], (u16)command->arguments[1],
+            command->arguments[2], command->arguments[3]);
+        BattleTask_BindOwnerSlot(task, task_slot);
+        BattleVm_WriteResult(
+            vm, state, command,
+            slot_index | BATTLE_VM_TASK_HANDLE_TAG);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_FINITE_RASTER_EFFECT:
+        x = command->arguments[0];
+        if (x == 0) {
+            x = 4;
+        } else if (x == 1) {
+            x = -4;
+        }
+        BattleRasterEffect_StartFinite(
+            x, (u16)command->arguments[1], command->arguments[2],
+            command->arguments[3], command->arguments[4]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_LEGACY_NOOP_0C3:
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_YIELD_ONE_FRAME:
+        return BATTLE_AI_VM_YIELD;
+
+    case BATTLE_VM_SET_SUB_SCREEN_BLEND_COEFFICIENTS:
+        *(u16 *)(gBattleContext + BATTLE_VM_SUB_SCREEN_BLEND_EVA_OFFSET) =
+            command->arguments[0];
+        *(u16 *)(gBattleContext + BATTLE_VM_SUB_SCREEN_BLEND_EVB_OFFSET) =
+            command->arguments[1];
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_SUB_SCREEN_BLEND_PLANES:
+        *(u16 *)(gBattleContext +
+                 BATTLE_VM_SUB_SCREEN_BLEND_FIRST_PLANES_OFFSET) =
+            command->arguments[0];
+        *(u16 *)(gBattleContext +
+                 BATTLE_VM_SUB_SCREEN_BLEND_SECOND_PLANES_OFFSET) =
+            command->arguments[1];
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_ADJUST_INVENTORY:
+        x = func_02019174(
+            (u16)command->arguments[0], command->arguments[1]);
+        BattleVm_WriteResult(vm, state, command, x);
+        BattleItemList_RebuildActionItems();
+        BattleItemList_RebuildUsableItems();
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_INVENTORY_COUNT:
+        BattleVm_WriteResult(
+            vm, state, command, func_0201904c((u16)command->arguments[0]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_GET_ITEM_BATTLE_ANIMATION:
+        BattleVm_WriteResult(
+            vm, state, command,
+            BattleVm_GetItemBattleAnimation((u16)command->arguments[0]));
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_LEGACY_NOOP_0CA:
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_CONFIGURE_CONTROL_STATE:
+        if ((u16)command->arguments[0] == 0) {
+            BattleAI_UpdateControlMask((u16)command->arguments[1], 1);
+        } else if ((u16)command->arguments[0] == 1) {
+            *(u16 *)(gBattleContext + BATTLE_VM_CONTROL_STATE_OFFSET) =
+                command->arguments[1];
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_UPDATE_CONTROL_MASK:
+        BattleAI_UpdateControlMask(
+            (u16)command->arguments[0], (u16)command->arguments[1]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_INPUT_DISABLE_MASK:
+        *(u16 *)(gBattleContext + BATTLE_VM_INPUT_DISABLE_MASK_OFFSET) =
+            command->arguments[0];
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SET_INPUT_DIRECTION_ROTATION:
+        *(u16 *)(gBattleContext +
+                 BATTLE_VM_INPUT_DIRECTION_ROTATION_OFFSET) =
+            command->arguments[0];
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_LEGACY_NOOP_0CF:
+    case BATTLE_VM_LEGACY_NOOP_0D0:
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_INLINE_OBJECT_SCRIPT:
+        script = (const u16 *)state->script;
+        BattleAI_StartObjectScript(
+            (u16)command->arguments[0], script, ai_state,
+            (u16)command->arguments[1]);
+        state->script = script + command->arguments[2];
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_INLINE_OBJECT_SCRIPT_AND_YIELD:
+        script = (const u16 *)state->script;
+        BattleAI_StartObjectScript(
+            (u16)command->arguments[0], script + command->arguments[2],
+            ai_state, (u16)command->arguments[1]);
+        return BATTLE_AI_VM_YIELD;
+
+    case BATTLE_VM_WAIT_INLINE_OBJECT_SCRIPT_AND_SKIP:
+        object_script_state = BattleScriptState_GetByObjectId(
+            (u16)command->arguments[0]);
+        if (object_script_state->script != 0) {
+            return BattleVm_RetryCurrentCommand(vm, state, command);
+        }
+        state->script =
+            (const u16 *)state->script + command->arguments[1];
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_START_RELATIVE_OBJECT_SCRIPT:
+        script = (const u16 *)state->script;
+        BattleAI_StartObjectScript(
+            (u16)command->arguments[0], script + command->arguments[2],
+            ai_state, (u16)command->arguments[1]);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_WAIT_OBJECT_SCRIPT:
+        object_script_state = BattleScriptState_GetByObjectId(
+            (u16)command->arguments[0]);
+        if (object_script_state->script != 0) {
+            return BattleVm_RetryCurrentCommand(vm, state, command);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_WAIT_OBJECT_SCRIPTS_BY_OWNER:
+        script_selector = command->arguments[0];
+        if (script_selector < 1) {
+            script_selector = ai_state->owner_id;
+        }
+        object_script_states = BattleVm_GetObjectScriptStates();
+        for (index = 0; index < BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+             index++) {
+            object_script_state = &object_script_states[index];
+            if (object_script_state->script != 0 &&
+                BattleVm_ObjectScriptMatches(
+                    object_script_state, script_selector)) {
+                return BattleVm_RetryCurrentCommand(vm, state, command);
+            }
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_STOP_OBJECT_SCRIPT:
+        BattleScriptState_GetByObjectId(
+            (u16)command->arguments[0])->script = 0;
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_STOP_OBJECT_SCRIPTS_BY_OWNER:
+        script_selector = command->arguments[0];
+        if (script_selector < 1) {
+            script_selector = ai_state->owner_id;
+        }
+        object_script_states = BattleVm_GetObjectScriptStates();
+        for (index = 0; index < BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+             index++) {
+            object_script_state = &object_script_states[index];
+            if (object_script_state->script != 0 &&
+                BattleVm_ObjectScriptMatches(
+                    object_script_state, script_selector)) {
+                object_script_state = BattleScriptState_GetByObjectId(
+                    (u16)script_selector);
+                object_script_state->script = 0;
+                object_script_state->scratch_a8 = 0;
+                if (script_selector >= BATTLE_AI_TASK_OBJECT) {
+                    break;
+                }
+            }
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_PAUSE_OBJECT_SCRIPT:
+        object_script_state = BattleScriptState_GetByObjectId(
+            (u16)command->arguments[0]);
+        object_script_state->flags |= BATTLE_AI_STATE_FLAG_DISABLED;
+        return BATTLE_AI_VM_YIELD;
+
+    case BATTLE_VM_PAUSE_OBJECT_SCRIPTS_BY_OWNER:
+        script_selector = command->arguments[0];
+        if (script_selector < 1) {
+            script_selector = ai_state->owner_id;
+        }
+        object_script_states = BattleVm_GetObjectScriptStates();
+        for (index = 0; index < BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+             index++) {
+            object_script_state = &object_script_states[index];
+            if (object_script_state->script != 0 &&
+                BattleVm_ObjectScriptMatches(
+                    object_script_state, script_selector)) {
+                object_script_state->flags |= BATTLE_AI_STATE_FLAG_DISABLED;
+                if (script_selector >= BATTLE_AI_TASK_OBJECT) {
+                    break;
+                }
+            }
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_RESUME_OBJECT_SCRIPT:
+        object_script_state = BattleScriptState_GetByObjectId(
+            (u16)command->arguments[0]);
+        object_script_state->flags &= ~BATTLE_AI_STATE_FLAG_DISABLED;
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_RESUME_OBJECT_SCRIPTS_BY_OWNER:
+        script_selector = command->arguments[0];
+        if (script_selector < 1) {
+            script_selector = ai_state->owner_id;
+        }
+        object_script_states = BattleVm_GetObjectScriptStates();
+        for (index = 0; index < BATTLE_VM_OBJECT_SCRIPT_STATE_COUNT;
+             index++) {
+            object_script_state = &object_script_states[index];
+            if (object_script_state->script != 0 &&
+                BattleVm_ObjectScriptMatches(
+                    object_script_state, script_selector)) {
+                object_script_state->flags &= ~BATTLE_AI_STATE_FLAG_DISABLED;
+                if (script_selector >= BATTLE_AI_TASK_OBJECT) {
+                    break;
+                }
+            }
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_BRANCH_COMPARE:
+        comparison = BattleVm_EvaluateComparison(
+            (u16)command->arguments[0], command->arguments[1],
+            command->arguments[2]);
+        if ((u16)command->arguments[4] ==
+            (comparison == command->arguments[3])) {
+            state->script =
+                (const u16 *)state->script + command->arguments[5];
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_BRANCH_OBJECT_PROPERTY:
+        if ((u16)command->arguments[2] ==
+            (BattleScript_GetProperty(
+                 (u16)command->arguments[0], command->arguments[1]) > 0)) {
+            state->script =
+                (const u16 *)state->script + command->arguments[3];
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_BRANCH_ACTOR_HIT_LOCKED:
+        if ((u16)command->arguments[1] ==
+            BattleActor_IsHitLocked((u16)command->arguments[0])) {
+            state->script =
+                (const u16 *)state->script + command->arguments[2];
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_LEGACY_NOOP_0E0:
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_BRANCH_SCRIPT_ACTIVE:
+        object_script_state = BattleAI_GetStateById(
+            (u16)command->arguments[0]);
+        if ((u16)command->arguments[1] ==
+            (object_script_state->script != 0)) {
+            state->script =
+                (const u16 *)state->script + command->arguments[2];
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_BRANCH_ANIMATION_ACTIVE:
+        if ((u16)command->arguments[2] ==
+            BattleSceneObject_IsAnimationActiveById(
+                (u16)command->arguments[0],
+                (u16)command->arguments[1])) {
+            state->script =
+                (const u16 *)state->script + command->arguments[3];
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_PLAY_SOUND_WITH_HANDLE:
+        sound_task_id = BattleSound_Play(
+            (u16)command->arguments[0], (s16)command->arguments[1],
+            (s16)command->arguments[2], 0);
+        if (sound_task_id != -1) {
+            BattleVm_WriteResult(vm, state, command, sound_task_id);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_PLAY_SOUND:
+        BattleSound_Play(
+            (u16)command->arguments[0], (s16)command->arguments[1], 0, 0);
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_STOP_SOUND_TASK:
+        if (command->arguments[0] != -1) {
+            func_ov002_02076178((u16)command->arguments[0]);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_STOP_ALL_SOUND_TASKS:
+        for (index = 0; index < BATTLE_VM_SOUND_TASK_COUNT; index++) {
+            if (((void **)(gBattleContext +
+                           BATTLE_VM_SOUND_TASK_SLOTS_OFFSET))[index] != 0) {
+                func_ov002_02076178(index);
+            }
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_WAIT_SOUND_TASK:
+        sound_task_id = command->arguments[0];
+        if (sound_task_id != -1 &&
+            ((void **)(gBattleContext +
+                       BATTLE_VM_SOUND_TASK_SLOTS_OFFSET))[
+                (u16)sound_task_id] != 0) {
+            return BattleVm_RetryCurrentCommand(vm, state, command);
+        }
+        return SCRIPT_VM_CONTINUE;
+
+    case BATTLE_VM_SPAWN_RASTER_PARTICLE:
+        BattleVm_DecodeFixedArgument(command, 2);
+        BattleEffectParticle_Spawn(
+            command->arguments[0], command->arguments[1],
+            command->arguments[2]);
+        return SCRIPT_VM_CONTINUE;
+    }
+
+    return func_ov002_020698d4(vm, state, command);
+}

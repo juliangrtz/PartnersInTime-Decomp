@@ -22,7 +22,11 @@ struct BattleEffect {
     s16 x;
     s16 y;
     s16 z;
-    u8 unknown_14[0x14];
+    u8 unknown_14[6];
+    u16 flags;
+    u8 unknown_1c[4];
+    u32 user_value;
+    u8 unknown_24[4];
     BattleEffect *(*completion_callback)(BattleEffect *effect);
     BattleEffect **owner_slot;
 };

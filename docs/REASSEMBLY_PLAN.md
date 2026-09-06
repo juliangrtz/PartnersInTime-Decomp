@@ -717,6 +717,19 @@ motion setup, sound tasks, and UI commands. The current Metrowerks output is
 8,748 bytes versus the original 9,196 bytes (55.37% fuzzy match), so it remains
 an objdiff WIP rather than displacing the byte-identical assembly range.
 
+The battle-specific half of the overlay-2 VM dispatcher at
+`0x02079950-0x0207E430` is now a complete structured C work unit too. Every one
+of its 182 opcode slots (`0x033..0x0E8`) is present, while commands outside that
+range still delegate to the separate common battle handler at `0x020698D4`.
+The reconstruction covers resource loading, actor and enemy properties,
+movement, hit/damage/status operations, battle effects, object-script
+ownership, relocatable branches, input control, inventory, and sound-task
+synchronization. MWCC currently emits 15,676 bytes across the dispatcher and
+its readability helpers versus the original monolithic 19,168-byte function;
+the main function has 28.84% fuzzy instruction similarity. It therefore stays
+unlinked until helper reintegration and switch/register-layout matching can be
+done without changing the verified ROM.
+
 Priority formats:
 
 1. finish argument contracts and semantic names in the implemented

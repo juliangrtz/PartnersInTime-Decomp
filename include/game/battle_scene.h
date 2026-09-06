@@ -192,7 +192,11 @@ struct BattleModel {
             u32 unknown_12_31 : 20;
         } flag_bits;
     };
-    u8 unk_080[0xC4];
+    u8 unk_080[4];
+    void *animation_controller;
+    u8 unk_088[0x70];
+    s8 animation_layer_states[16];
+    u8 unk_108[0x3C];
     u8 render_flags;
     u8 unk_145[0x19];
     u8 transform_flags;
@@ -245,7 +249,11 @@ struct BattleModel {
             u32 unknown_12_31 : 20;
         } flag_bits;
     };
-    u8 unk_080[0xC4];
+    u8 unk_080[4];
+    void *animation_controller;
+    u8 unk_088[0x70];
+    s8 animation_layer_states[16];
+    u8 unk_108[0x3C];
     u8 render_flags;
     u8 unk_145[0x19];
     u8 transform_flags;

@@ -8,13 +8,15 @@ enum BattleImpactEmitterOffset {
 BattleAITask *BattleImpactEmitter_Start(
     u16 object_id, int mode, s16 target_scale_q4, u16 lifetime_multiplier,
     int spawn_interval, int size_multiplier, int target_size,
-    int initial_z_offset, int z_velocity) {
+    int initial_z_offset, int z_velocity, int reserved) {
     BattleImpactTrailEmitterTask *task =
         (BattleImpactTrailEmitterTask *)BattleTaskList_Insert(
             (BattleTaskPool *)(gBattleContext +
                                BATTLE_IMPACT_EMITTER_TASK_POOL_OFFSET),
             0);
     BattleImpactTrailEmitterPayload *emitter;
+
+    (void)reserved;
 
     switch (mode) {
         case 0:

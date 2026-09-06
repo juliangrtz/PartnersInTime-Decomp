@@ -132,6 +132,14 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   exists as one structured, compiling C switch with named opcode families and
   all reserved slots preserved; its current 8,748-byte build remains unlinked
   while branch layout and Metrowerks register allocation are converged.
+  The complete 19,168-byte battle-specific dispatcher is now represented the
+  same way: one readable C unit covers all 182 slots from `0x033` through
+  `0x0E8`, including actor damage/status handling, effect construction,
+  inventory access, object-script ownership and waits, conditional branches,
+  input control, and sound tasks. Unknown opcodes still delegate to the common
+  battle VM executor. Its current 15,676-byte Metrowerks output reaches 28.84%
+  fuzzy instruction similarity and remains unlinked while the original giant
+  switch layout is recovered without compromising the verified ROM build.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
