@@ -60,7 +60,7 @@ extern int func_ov002_020a3810(BattleSceneObject *object, int channel_index,
 extern void func_ov002_02078408(BattleSceneObject *object,
                                 BattleMotionChannel *channel);
 extern void func_ov002_020724b0(s16 *parameters, const void *keyframes,
-                                int keyframe_count, int extent_q16,
+                                u16 keyframe_count, int extent_q16,
                                 int step_fixed);
 extern void func_ov002_02076c38(int paused);
 extern void func_ov002_02077e78(BattleActor *actor, s16 animation_id,
@@ -124,7 +124,7 @@ extern int func_02019174(u16 item_id, int count_delta);
 extern int func_0201904c(u16 item_id);
 extern int BattleItemList_RebuildActionItems(void);
 extern int BattleItemList_RebuildUsableItems(void);
-extern void func_ov002_02076178(u16 sound_task_id);
+extern void func_ov002_02076178(int sound_task_id);
 extern u8 data_02050290[];
 extern u8 data_020505c4[];
 
@@ -409,12 +409,6 @@ static inline void BattleVm_StoreObjectViewPosition(
         object->flags.bits.use_alternate_model);
 }
 
-static inline void BattleVm_SetActorTargetingDisabled(
-    BattleActor *actor, u16 disabled) {
-    actor->flags = (actor->flags & ~BATTLE_ACTOR_FLAG_13) |
-                   ((disabled & 1) << 13);
-}
-
 static inline const u8 *BattleVm_GetItemRecord(u16 tagged_item_id) {
     const u8 *item_record;
 
@@ -507,7 +501,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     case BATTLE_VM_ALLOCATE_OBJECT_DATA_BUFFER:
         BattleObjectData_AllocateLoadBuffer(
             (u16)command->arguments[0],
-            ((u32)(u16)command->arguments[1] << 2) & 0x3FFFF);
+            (u32)(u16)command->arguments[1] << 2);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_CONFIGURE_OBJECT_DATA_LOAD:
@@ -1005,12 +999,12 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_WAIT_OBJECT_PENDING_STATE:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        if ((s8)object->flags.bits.state < 0) {
-            object->flags.bits.state = 0;
+        if (object->flags.pending_state < 0) {
+            object->flags.pending_state = 0;
             return SCRIPT_VM_CONTINUE;
         }
-        if (object->flags.bits.state == 0) {
-            object->flags.bits.state = 1;
+        if (object->flags.pending_state == 0) {
+            object->flags.pending_state = 1;
         }
         return BattleVm_RetryCurrentCommand(
             vm, state, BATTLE_VM_WAIT_OBJECT_PENDING_STATE
@@ -1274,14 +1268,16 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         motion_parameters = BattleSceneObject_BeginMotionChannel(
             object, (u16)command->arguments[1], 0,
             func_ov002_02078408);
-        keyframe_record =
-            (const u8 *)state->script + 2 * command->arguments[3];
-        keyframe_record = (const u8 *)((u32)keyframe_record & ~3);
+        keyframe_record = (const u8 *)state->script;
+        keyframe_record += 2 * command->arguments[3];
+        if (((u32)keyframe_record & 3) != 0) {
+            keyframe_record = (const u8 *)((u32)keyframe_record & ~3);
+        }
         BattleVm_DecodeFixedArgument(command, 5);
         func_ov002_020724b0(
             motion_parameters, keyframe_record + 4,
             (*(const s32 *)keyframe_record +
-             (*(const s32 *)keyframe_record >> 31)) / 2,
+             ((u32)*(const s32 *)keyframe_record >> 31)) / 2,
             (command->arguments[4] - 1) << 16, command->arguments[5]);
         return SCRIPT_VM_CONTINUE;
 
@@ -1464,8 +1460,8 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_SET_ACTOR_TARGETING_ENABLED:
         actor = BattleActor_GetById((u16)command->arguments[0]);
-        BattleVm_SetActorTargetingDisabled(
-            actor, command->arguments[1] == 0);
+        actor->flag_bits.excluded_from_targeting =
+            (u16)(command->arguments[1] == 0);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_CONFIGURE_HIT:
@@ -2324,7 +2320,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     case BATTLE_VM_PAUSE_OBJECT_SCRIPT:
         object_script_state = BattleScriptState_GetByObjectId(
             (u16)command->arguments[0]);
-        object_script_state->flags |= BATTLE_AI_STATE_FLAG_DISABLED;
+        object_script_state->flags =
+            (object_script_state->flags & ~BATTLE_AI_STATE_FLAG_DISABLED) |
+            BATTLE_AI_STATE_FLAG_DISABLED;
         return BATTLE_AI_VM_YIELD;
 
     case BATTLE_VM_PAUSE_OBJECT_SCRIPTS_BY_OWNER: {
@@ -2544,15 +2542,17 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_WAIT_SOUND_TASK:
         sound_task_id = command->arguments[0];
-        if (sound_task_id != -1 &&
-            ((void **)(gBattleContext +
-                       BATTLE_VM_SOUND_TASK_SLOTS_OFFSET))[
-                (u16)sound_task_id] != 0) {
-            return BattleVm_RetryCurrentCommand(
-                vm, state, BATTLE_VM_WAIT_SOUND_TASK
-            );
+        if (sound_task_id == -1) {
+            return SCRIPT_VM_CONTINUE;
         }
-        return SCRIPT_VM_CONTINUE;
+        if (((void **)(gBattleContext +
+                       BATTLE_VM_SOUND_TASK_SLOTS_OFFSET))[
+                (u16)sound_task_id] == 0) {
+            return SCRIPT_VM_CONTINUE;
+        }
+        return BattleVm_RetryCurrentCommand(
+            vm, state, BATTLE_VM_WAIT_SOUND_TASK
+        );
 
     case BATTLE_VM_SPAWN_RASTER_PARTICLE:
         BattleVm_DecodeFixedArgument(command, 2);

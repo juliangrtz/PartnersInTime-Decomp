@@ -731,9 +731,9 @@ ownership, relocatable branches, input control, inventory, and sound-task
 synchronization. Fixed-opcode retry decoding, the complete nested enemy-stat
 switches, packed trait writes, object-view coordinate conversion, comparison
 logic, script control, all effect/task-slot scans, and all four 40-record owner
-operations are now inlined into the main switch. MWCC emits one 19,180-byte
+operations are now inlined into the main switch. MWCC emits one 19,188-byte
 dispatcher with no compiler-generated helper symbols versus the original
-monolithic 19,168-byte function; it has 75.50% fuzzy instruction similarity.
+monolithic 19,168-byte function; it has 76.13% fuzzy instruction similarity.
 It therefore stays unlinked until switch/register-layout matching can be done
 without changing the verified ROM.
 
