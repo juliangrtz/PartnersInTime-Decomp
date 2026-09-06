@@ -452,7 +452,7 @@
     "94": "set_entity_reserved_collision_flag",
     "95": "set_entity_category_collision_policy",
     "96": "set_entity_render_layer",
-    "97": "set_entity_body_collision_enabled",
+    "97": "legacy_noop_061",
     "98": "set_entity_render_order_priorities",
     "99": "set_entity_interaction_bounds",
     "100": "legacy_noop_064",
@@ -858,9 +858,9 @@
     "72": {
       "arguments": ["paired_room_id", "script_slot_or_minus_one", "chain_if_active"],
       "result": null,
-      "control_flow": "starts a script entry in the paired field context when its room ID matches",
+      "control_flow": "starts a script entry only when the paired field context has type 0x47 and its separate room ID matches",
       "yield": "never",
-      "evidence": "func_ov000_020823f8 case 0x048"
+      "evidence": "func_ov000_020823f8 case 0x048 checks paired-context halfwords +0x23F0 for type 0x47 and +0x23F4 for the requested room ID before starting or chaining"
     },
     "73": {
       "arguments": ["entity_selector", "property_id"],
@@ -1054,12 +1054,12 @@
       "evidence": "func_ov000_020823f8 case 0x060 and render-order consumer func_ov000_020a9180"
     },
     "97": {
-      "arguments": ["entity_selector", "enabled"],
+      "arguments": ["unused_entity_selector", "unused_enabled"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "sets the entity's solid-body participation flag. When enabled, ordinary field entities resolve overlapping body rectangles against other enabled entities whose category is permitted by the entity's 11-bit collision mask, and their sprite sort key is derived from the feet/bottom Y coordinate so overlaps draw in depth order. The same flag also lets attached or related sprites constrain one another's automatic order. Disabling it leaves scripted trigger-region tests and the separate special collision path intact; all nine shipped calls disable the current script-owning entity, primarily to let cutscene actors pass through ordinary bodies",
-      "evidence": "func_ov000_020823f8 case 0x061; body-overlap and response logic in func_ov000_020a9180; automatic sort-key update in func_ov000_020a9778; related-sprite ordering in func_ov000_020917f0; and all nine shipped calls"
+      "effect": "intentional legacy no-op; both encoded arguments are ignored. All nine shipped calls pass the current script-owning entity and zero, but the original 91-entry inner dispatch table routes slot 0x061 directly to the common default return",
+      "evidence": "func_ov000_020823f8 outer slot 0x061 enters the entity command family, whose inner table entry 0x061 - 0x04A = 23 points directly to the default return"
     },
     "98": {
       "arguments": ["entity_selector", "priority_0_or_auto", "priority_1_or_auto", "priority_2_or_auto", "priority_3_or_auto", "auxiliary_priority_or_auto"],

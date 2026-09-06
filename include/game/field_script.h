@@ -49,7 +49,7 @@ typedef struct FieldScriptFlagBits {
     u32 queued_parent_type : 3;
     u32 result : 2;
     u32 inline_wait : 1;
-    u32 owner_subtype : 8;
+    s32 owner_subtype : 8;
     u32 unknown_26_31 : 6;
 } FieldScriptFlagBits;
 
