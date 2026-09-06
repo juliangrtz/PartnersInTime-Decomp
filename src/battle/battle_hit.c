@@ -60,7 +60,7 @@ BattleHitDescriptor *BattleHitDescriptor_Configure(
 }
 
 void BattleHitDescriptor_SetStatus(BattleHitDescriptor *descriptor,
-                                   int status_id, s8 chance, s8 magnitude) {
+                                   int status_id, int chance, int magnitude) {
     u16 status = (u16)status_id;
 
     descriptor->flags =

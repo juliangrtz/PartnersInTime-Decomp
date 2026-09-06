@@ -100,7 +100,8 @@ void BattleDisplayCapture_FinishResetTask(BattleObjectUploadTask *task) {
 }
 
 int BattleObjectData_QueueCaptureSurfaceUpload(
-    BattleObjectDataLoadState *load_state) {
+    BattleObjectDataLoadState *load_state, u16 parameter_1,
+    u16 parameter_2) {
     return (int)BattleCaptureSurface_QueueUpload(
         0x38000, load_state->object_data_id, 0, 80, 256, 128);
 }
