@@ -130,8 +130,9 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   these register-sensitive units remain unlinked until their final instruction
   schedules match. The complete 9,196-byte scene command dispatcher now also
   exists as one structured, compiling C switch with named opcode families and
-  all reserved slots preserved; its current 8,748-byte build remains unlinked
-  while branch layout and Metrowerks register allocation are converged.
+  all reserved slots preserved. Its current 9,284-byte build reaches 83.89%
+  fuzzy instruction similarity and remains unlinked while the last branch,
+  literal-pool, and Metrowerks register schedules are converged.
   The complete 19,168-byte battle-specific dispatcher is now represented the
   same way: one readable C unit covers all 182 slots from `0x033` through
   `0x0E8`, including actor damage/status handling, effect construction,
