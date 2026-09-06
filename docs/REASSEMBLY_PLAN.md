@@ -746,11 +746,14 @@ handoffs, save-backed HP/inventory/checkpoints, the field timer, message-window
 ownership and motion, and field audio lifecycle. Shared entity, render-object,
 party, field-system, and script-owner layouts are typed through the offsets
 used by these commands. The semantic helpers have now been force-inlined and
-simplified into one 21,964-byte MWCC function with no compiler-generated code
+simplified into one 22,364-byte MWCC function with no compiler-generated code
 helpers, versus the original 23,492-byte monolith. A shared dispatcher result,
 cached field/party/map contexts, a persistent argument base, and dynamic retry
 decoding reproduce the original broad register/control-flow architecture and
-reach 27.48% fuzzy instruction similarity. The prolog now preserves the
+reach 30.27% fuzzy instruction similarity. Typed entity subtype/resource and
+contact-direction bitfields plus ROM-shaped map-sync, collision-policy, render
+priority, position, and resource-binding logic account for the latest
+convergence. The prolog now preserves the
 field-system pointer from `+0x24FC` while map operations load their distinct
 controller from `+0x2500`, matching the ROM. IDA's original
 control flow shows that the outer 290-entry table deliberately shares handlers through

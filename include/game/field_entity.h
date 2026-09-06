@@ -50,6 +50,11 @@ typedef struct FieldRenderObject FieldRenderObject;
 typedef struct FieldRenderObjectVTable FieldRenderObjectVTable;
 typedef struct FieldRuntimeEntity FieldRuntimeEntity;
 
+typedef struct FieldContactDirectionFlags {
+    u32 enabled_mask : 6;
+    u32 reserved : 26;
+} FieldContactDirectionFlags;
+
 struct FieldRenderObjectVTable {
     u8 unknown_00[0x68];
     void (*set_animation)(FieldRenderObject *render_object,
@@ -96,7 +101,10 @@ typedef struct FieldEntity {
         u16 property_00a;
         struct {
             u16 property_00a_flag_00 : 1;
-            u16 property_00a_unknown_01_15 : 15;
+            u16 property_00a_unknown_01 : 1;
+            u16 subtype : 4;
+            u16 resource_set : 1;
+            u16 property_00a_unknown_07_15 : 9;
         } property_00a_bits;
     };
     u8 unknown_00c[0xC4];
@@ -194,11 +202,10 @@ struct FieldRuntimeEntity {
     u8 unknown_370[0x1C];
     u32 field_state_flags;
     u32 collision_category_mask;
-    u32 collision_policy_low;
-    u32 collision_policy_high;
+    s64 collision_policy;
     u32 collision_state_flags;
     u32 unknown_3a0;
-    u32 contact_direction_flags;
+    FieldContactDirectionFlags contact_direction_flags;
     u8 unknown_3a8[0x24];
     u32 runtime_flags;
     u8 unknown_3d0[0x10];
