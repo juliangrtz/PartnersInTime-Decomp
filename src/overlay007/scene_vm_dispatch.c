@@ -1,4 +1,5 @@
 #include <game/scene_script.h>
+#include <game/save_data.h>
 
 /*
  * Scene/object command dispatcher (overlay 7, 0x02081730-0x02083B1C).
@@ -24,6 +25,13 @@ typedef struct SceneResource {
     u8 unknown_00[0x7C];
     SceneResourceFlags flags;
 } SceneResource;
+
+typedef struct SceneVmManagerLayout {
+    u8 unknown_0000[0x39DC];
+    SceneScriptState object_scripts[40];
+    u8 unknown_57dc[0x5010];
+    void *sound_tasks[16];
+} SceneVmManagerLayout;
 
 enum SceneVmOpcode {
     SCENE_OP_LOAD_OBJECT_RESOURCE = 0x035,
@@ -114,11 +122,9 @@ enum SceneVmOpcode {
     SCENE_OP_DESTROY_UI_ELEMENT = 0x0CD
 };
 
-extern u8 *data_ov007_020a6b90;
-extern u8 data_ov007_0208e1e0[];
+extern SceneVmManagerLayout *data_ov007_020a6b90;
+extern u8 *data_ov007_0208e1e0;
 extern u8 data_ov007_020905f0[];
-extern u8 gSaveData[];
-extern u8 byte_2090674;
 
 extern SceneScriptState *func_ov007_02089348(u32 object_id);
 extern void *func_ov007_020894a8(u32 object_id);
@@ -162,7 +168,10 @@ extern int func_ov007_02088fe4();
 extern void func_ov007_02087084();
 extern void *func_ov007_02086f74();
 extern void func_ov007_02087bf4();
-extern void func_ov007_020724b0();
+extern void func_ov007_020724b0(
+    void *motion, const void *path, u32 point_count,
+    u32 end_time, s32 movement_scale
+);
 extern void func_ov007_0207e770();
 extern int func_ov007_0208792c();
 extern void func_ov007_02070ae8();
@@ -177,7 +186,9 @@ extern void func_ov007_02087b68();
 extern void func_ov007_02084030();
 extern int func_ov007_020875a0();
 extern void func_ov007_02087240();
-extern void func_ov007_02083c20();
+extern void func_ov007_02083c20(
+    SceneObject *object, int tile_id, int palette, int x, int y
+);
 extern int func_ov007_02083c18();
 extern void func_ov007_0208a368();
 extern int func_ov007_0208a348();
@@ -226,7 +237,7 @@ static inline SceneScriptState *SceneVm_GetObjectScript(u32 object_id) {
 }
 
 static inline SceneScriptState *SceneVm_GetObjectScriptPool(void) {
-    return (SceneScriptState *)(data_ov007_020a6b90 + 0x39DC);
+    return data_ov007_020a6b90->object_scripts;
 }
 
 int SceneVm_DispatchCommand(
@@ -322,8 +333,8 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_ALIGN_OBJECTS: {
-        s16 object_screen_height;
         s16 other_screen_height;
+        s16 object_screen_height;
 
         object = SceneObject_GetById(ARG_U16(0));
         other = SceneObject_GetById(ARG_U16(1));
@@ -445,16 +456,16 @@ int SceneVm_DispatchCommand(
     /* MWCC places these two later opcode bodies beside the shared movement
      * cases; retaining that source order also preserves the original layout. */
     case SCENE_OP_START_OBJECT_PATH: {
-        u32 path_address;
+        const u32 *path;
         void *motion;
 
         object = SceneObject_GetById(ARG_U16(0));
         motion = func_ov007_02086f74(
             object, ARG_U16(1), 0, func_ov007_02087bf4
         );
-        path_address = (u32)state->script + 2 * ARG(3);
-        if ((path_address & 3) != 0) {
-            path_address &= ~3;
+        path = (const u32 *)((u32)state->script + 2 * ARG(3));
+        if (((u32)path & 3) != 0) {
+            path = (const u32 *)((u32)path & ~3);
         }
         if ((command->argument_modes & (1 << 5)) == 0) {
             ARG(5) = (s32)((ARG(5) & 0xFFFF) |
@@ -462,9 +473,8 @@ int SceneVm_DispatchCommand(
         }
         func_ov007_020724b0(
             motion,
-            (void *)(path_address + 4),
-            (u32)((*(u32 *)path_address +
-                (*(u32 *)path_address >> 31)) << 15) >> 16,
+            path + 1,
+            (u32)((*path + (*path >> 31)) << 15) >> 16,
             (ARG(4) - 1) << 16,
             ARG(5)
         );
@@ -675,13 +685,13 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_WAIT_SCENE_READY:
-        if (!byte_2090674) {
+        if (data_ov007_020905f0[0x84] == 0) {
             return SCRIPT_VM_CONTINUE;
         }
         return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_SCENE_READY);
 
     case SCENE_OP_SET_SCENE_MODE:
-        func_ov007_02070ae8(data_ov007_0208e1e0, (u8)ARG(0));
+        func_ov007_02070ae8(data_ov007_0208e1e0, (u8)ARG_U16(0));
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_SET_SCENE_FLAG:
@@ -805,31 +815,30 @@ int SceneVm_DispatchCommand(
         entry = SceneVm_GetObjectScriptPool();
         if (owner < SCENE_SCRIPT_OWNER_OBJECT) {
             remaining = 40;
-            while (owner != entry->parent_owner ||
-                   entry->vm_state.script == 0) {
+            do {
+                if (owner == entry->parent_owner &&
+                    entry->vm_state.script != 0) {
+                    return SceneVm_RewindAndYield(
+                        vm, state, SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER
+                    );
+                }
                 remaining = (s16)(remaining - 1);
                 entry++;
-                if (remaining == 0) {
-                    return SCRIPT_VM_CONTINUE;
+            } while (remaining != 0);
+        } else {
+            remaining = 40;
+            owner &= SCENE_SCRIPT_OWNER_ID_MASK;
+            do {
+                if (owner == entry->parent_object_id &&
+                    entry->vm_state.script != 0) {
+                    return SceneVm_RewindAndYield(
+                        vm, state, SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER
+                    );
                 }
-            }
-            return SceneVm_RewindAndYield(
-                vm, state, SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER
-            );
+                remaining = (s16)(remaining - 1);
+                entry++;
+            } while (remaining != 0);
         }
-
-        remaining = 40;
-        owner &= SCENE_SCRIPT_OWNER_ID_MASK;
-        do {
-            if (owner == entry->parent_object_id &&
-                entry->vm_state.script != 0) {
-                return SceneVm_RewindAndYield(
-                    vm, state, SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER
-                );
-            }
-            remaining = (s16)(remaining - 1);
-            entry++;
-        } while (remaining != 0);
         return SCRIPT_VM_CONTINUE;
     }
 
@@ -859,10 +868,7 @@ int SceneVm_DispatchCommand(
                 remaining = (s16)(remaining - 1);
                 entry++;
             } while (remaining > 0);
-            return SCRIPT_VM_CONTINUE;
-        }
-
-        {
+        } else {
             u32 object_id = owner & SCENE_SCRIPT_OWNER_ID_MASK;
 
             remaining = 40;
@@ -904,10 +910,7 @@ int SceneVm_DispatchCommand(
                 remaining = (s16)(remaining - 1);
                 entry++;
             } while (remaining > 0);
-            return SCRIPT_VM_CONTINUE;
-        }
-
-        {
+        } else {
             u32 object_id = owner & SCENE_SCRIPT_OWNER_ID_MASK;
 
             remaining = 40;
@@ -948,10 +951,7 @@ int SceneVm_DispatchCommand(
                 remaining = (s16)(remaining - 1);
                 entry++;
             } while (remaining > 0);
-            return SCRIPT_VM_CONTINUE;
-        }
-
-        {
+        } else {
             u32 object_id = owner & SCENE_SCRIPT_OWNER_ID_MASK;
 
             remaining = 40;
@@ -1055,17 +1055,17 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_STOP_ALL_SOUND_TASKS:
         for (i = 0; i < 16; i++) {
-            if (*(void **)(data_ov007_020a6b90 + 0xA7EC + i * 4) != 0) {
+            if (data_ov007_020a6b90->sound_tasks[i] != 0) {
                 func_ov007_02087240(i);
             }
         }
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_WAIT_SOUND_TASK:
-        if (ARG(0) == -1
-            || *(void **)(data_ov007_020a6b90
-                          + 0xA7EC
-                          + ((4 * ARG(0)) & 0x3FFFF)) == 0) {
+        if (ARG(0) == -1) {
+            return SCRIPT_VM_CONTINUE;
+        }
+        if (data_ov007_020a6b90->sound_tasks[ARG_U16(0)] == 0) {
             return SCRIPT_VM_CONTINUE;
         }
         return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_SOUND_TASK);
@@ -1075,11 +1075,9 @@ int SceneVm_DispatchCommand(
     case 0x0BE: return SCRIPT_VM_CONTINUE;
     case 0x0BF: return SCRIPT_VM_CONTINUE;
     case 0x0C0: return SCRIPT_VM_CONTINUE;
-    case 0x0C1: return SCRIPT_VM_CONTINUE;
-
     case SCENE_OP_RENDER_OBJECT_TEXT_TILES:
         object = SceneObject_GetById(ARG(0));
-        func_ov007_02083c20(object, ARG(1), ARG(2), ARG(3));
+        func_ov007_02083c20(object, ARG(1), ARG(2), ARG(3), ARG(4));
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_GET_OBJECT_TEXT_READY:
@@ -1092,6 +1090,7 @@ int SceneVm_DispatchCommand(
         );
         return SCRIPT_VM_CONTINUE;
 
+    case 0x0C1: return SCRIPT_VM_CONTINUE;
     case 0x0C4: return SCRIPT_VM_CONTINUE;
     case 0x0C5: return SCRIPT_VM_CONTINUE;
     case 0x0C6: return SCRIPT_VM_CONTINUE;
@@ -1104,7 +1103,7 @@ int SceneVm_DispatchCommand(
         if (func_ov007_0208a348()) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_UI_RESOURCE);
+        return SceneVm_RewindAndYield(vm, state, command->opcode);
 
     case SCENE_OP_CREATE_UI_ELEMENT:
         value = VM_ReadVariable(SCRIPT_VM_VAR_SAVE_WORDS_40, vm, state);
@@ -1153,19 +1152,17 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_WAIT_UI_ELEMENT_READY:
-        if (!func_ov007_020895b8(ARG(0))
-            || !func_ov007_02089670(ARG(0))) {
-            return SCRIPT_VM_CONTINUE;
+        if (func_ov007_020895b8(ARG(0)) &&
+            func_ov007_02089670(ARG(0))) {
+            return SceneVm_RewindAndYield(vm, state, command->opcode);
         }
-        return SceneVm_RewindAndYield(
-            vm, state, SCENE_OP_WAIT_UI_ELEMENT_READY
-        );
+        return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_WAIT_UI_ELEMENT:
         if (!func_ov007_020895b8(ARG(0))) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_UI_ELEMENT);
+        return SceneVm_RewindAndYield(vm, state, command->opcode);
 
     case SCENE_OP_DESTROY_UI_ELEMENT:
         func_ov007_0208953c(ARG(0));
@@ -1178,7 +1175,13 @@ int SceneVm_DispatchCommand(
 
     default:
         return SCRIPT_VM_CONTINUE;
+
+    /* The ROM retains a distinct legacy slot after the default epilogue. */
+    case 0x097:
+        break;
     }
+
+    return SCRIPT_VM_CONTINUE;
 }
 
 #undef ARG
