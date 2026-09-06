@@ -228,9 +228,7 @@ typedef struct FieldEntity {
             u32 unknown_flags_17_31 : 15;
         } state_flag_bits;
     };
-    u8 unknown_0d4[6];
-    s16 script_values[2];
-    u8 unknown_0de[2];
+    u8 unknown_0d4[0xC];
     u32 action_timer;
     u8 unknown_0e4[8];
 } FieldEntity;
