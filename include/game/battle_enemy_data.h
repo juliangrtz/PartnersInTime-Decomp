@@ -14,8 +14,13 @@ typedef union BattleEnemyItemDrop {
 typedef struct BattleEnemyStatRecord {
     u16 name_id;
     u16 packed_object_data_id;
-    u8 unknown_04;
-    u8 level;
+    union {
+        u16 flags_and_level;
+        struct {
+            u8 unknown_04;
+            u8 level;
+        };
+    };
     u16 max_hp;
     u16 power;
     u16 defense;

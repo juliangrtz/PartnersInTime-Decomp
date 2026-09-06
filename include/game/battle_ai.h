@@ -129,7 +129,7 @@ int BattleAI_TryClearOrderWait(BattleAIState *state);
 void BattleAI_StartObjectScript(int object_id, const void *script,
                                 BattleAIState *source_state,
                                 int queue_continuation);
-void BattleAI_StartActorAuxScript(u16 actor_id, u16 target_actor_id,
+void BattleAI_StartActorAuxScript(u16 actor_id, int target_actor_id,
                                   const void *script);
 void BattleAI_StartScriptTask(u16 actor_id, int task_type);
 void BattleAI_StartReactionScript(int actor_id);

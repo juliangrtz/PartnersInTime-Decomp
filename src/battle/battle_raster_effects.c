@@ -89,7 +89,7 @@ int BattleRasterEffect_ApplyToTable(
 }
 
 BattleRasterEffectTask *BattleRasterEffect_StartFinite(
-    s16 value, u16 extent, u16 duration, s16 progress_limit, int mode) {
+    int value, u16 extent, int duration, int progress_limit, int mode) {
     BattleRasterEffectTask *task =
         (BattleRasterEffectTask *)BattleTaskList_Insert(
             (BattleTaskPool *)(gBattleContext +
@@ -198,8 +198,8 @@ render_table_b:
 }
 
 BattleRasterEffectTask *BattleRasterResourceTransition_Start(
-    s16 resource_mode, s16 extent, u16 fade_out_duration,
-    u16 fade_in_duration) {
+    int resource_mode, u16 extent, int fade_out_duration,
+    int fade_in_duration) {
     BattleRasterEffectTask *task =
         (BattleRasterEffectTask *)BattleTaskList_Insert(
             (BattleTaskPool *)(gBattleContext +

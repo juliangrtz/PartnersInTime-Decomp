@@ -15,7 +15,7 @@ BattleSceneObject *BattleSceneObject_StretchBetweenAnchors(
     int first_object_id,
     s16 first_offset_x, s16 first_offset_y, int first_offset_z,
     int first_anchor_z,
-    u16 second_object_id,
+    s16 second_object_id,
     s16 second_offset_x, int second_offset_y, int second_offset_z,
     int second_anchor_z,
     u16 longitudinal_scale, u16 lateral_scale,

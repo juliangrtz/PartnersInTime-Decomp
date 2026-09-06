@@ -102,7 +102,7 @@ void BattleAI_StartReactionScript(int actor_id) {
     BattleAI_StartScriptTask((u16)actor_id, BATTLE_AI_TASK_REACTION);
 }
 
-void BattleAI_StartActorAuxScript(u16 actor_id, u16 target_actor_id,
+void BattleAI_StartActorAuxScript(u16 actor_id, int target_actor_id,
                                   const void *script) {
     BattleAIEnemyActor *actor =
         *(BattleAIEnemyActor **)(gBattleContext +

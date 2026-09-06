@@ -95,7 +95,7 @@ int BattleCollision_TestVolumes(BattleCollisionBounds *source_previous,
                                 BattlePosition *hit_position);
 void BattleHitDescriptor_DisableByActor(int actor_id);
 void BattleHitDescriptor_SetStatus(BattleHitDescriptor *descriptor,
-                                   int status_id, s8 chance, s8 magnitude);
+                                   int status_id, int chance, int magnitude);
 BattleHitDescriptor *BattleHitDescriptor_GetByActorId(u16 actor_id);
 BattleHitDescriptor *BattleHitDescriptor_Configure(
     u16 source_id, u16 target_id, BattleHitCallback callback,

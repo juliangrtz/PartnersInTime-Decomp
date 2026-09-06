@@ -22,8 +22,27 @@ struct BattleEffect {
     s16 x;
     s16 y;
     s16 z;
-    u8 unknown_14[6];
-    u16 flags;
+    union {
+        u8 unknown_14[6];
+        struct {
+            union {
+                u16 sprite_flags;
+                struct {
+                    u16 unknown_sprite_flags_00_13 : 14;
+                    u16 script_flag : 1;
+                    u16 unknown_sprite_flag_15 : 1;
+                };
+            };
+            u8 unknown_16[4];
+        };
+    };
+    union {
+        u16 flags;
+        struct {
+            u16 attached_script_flag : 1;
+            u16 unknown_flags_01_15 : 15;
+        };
+    };
     u8 unknown_1c[4];
     u32 user_value;
     u8 unknown_24[4];
@@ -68,7 +87,7 @@ BattleSceneObject *BattleSceneObject_StretchBetweenAnchors(
     int first_object_id,
     s16 first_offset_x, s16 first_offset_y, int first_offset_z,
     int first_anchor_z,
-    u16 second_object_id,
+    s16 second_object_id,
     s16 second_offset_x, int second_offset_y, int second_offset_z,
     int second_anchor_z,
     u16 longitudinal_scale, u16 lateral_scale,
