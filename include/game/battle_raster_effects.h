@@ -6,7 +6,7 @@
 typedef struct BattleRasterEffectTask BattleRasterEffectTask;
 
 BattleRasterEffectTask *BattleEffectParticle_Spawn(
-    s16 x, s16 y, u16 velocity);
+    int x, int y, int velocity);
 BattleRasterEffectTask *BattleRasterResourceTransition_Start(
     int resource_mode, u16 extent, int fade_out_duration,
     int fade_in_duration);
