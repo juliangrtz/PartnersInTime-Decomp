@@ -469,6 +469,15 @@ ownership is explicit. The source also reproduces the original `0x74`-byte
 stack frame, separate XYZ work areas, and the dispatcher's exceptional
 physical handler order.
 
+The battle dispatcher's common extension is now reconstructed separately in
+`src/battle/battle_vm_common_dispatch.c`. `BattleVm_DispatchCommonOpcode`
+implements every slot from `0x0E9` through `0x103`, including attachment and
+auxiliary-model operations, common resource loading, UI creation, effect and
+animation waits, object motion, and screen effects. The exact 1,844-byte
+original size is reproduced at 75.49% fuzzy instruction similarity. Its six
+legacy no-ops and both dedicated no-op epilogues remain explicit so that the
+switch layout and relocation boundaries are not accidentally collapsed.
+
 The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
 opcodes (`0x033..0x154`), including the six intentional legacy no-ops, while

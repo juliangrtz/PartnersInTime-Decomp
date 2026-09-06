@@ -1369,7 +1369,7 @@ large switches, not accidental merged functions. The leaf-first analysis has
 now made a complete readable translation of `BattleAI_DispatchOpcode`
 practical: `src/battle/battle_vm_dispatch.c` covers all 182 battle-specific
 slots from `0x033` through `0x0E8`, then delegates the remaining shared range
-to `func_ov002_020698d4` as the original does. It includes exact retry/yield and
+to `BattleVm_DispatchCommonOpcode` at `0x020698D4` as the original does. It includes exact retry/yield and
 relative-PC behavior, all three tagged effect/task handle families, the
 40-record object-script owner scan, and the literal-versus-variable fixed-point
 decoding paths. Retry decoding, enemy-stat access, packed trait writes,
@@ -1385,6 +1385,17 @@ and exceptional handler ordering now match. Remaining compiler work is
 concentrated in effect-coordinate scheduling, item-record selection, literal
 pools, and a few virtual-call register schedules; opcode semantics are no
 longer the blocker.
+
+The delegated common range is now readable C in
+`src/battle/battle_vm_common_dispatch.c` as well. Its 27-slot switch covers
+`0x0E9..0x103`: object attachments and auxiliary models, common-asset request
+and wait state, free and object-anchored battle UI, effect ownership and wait
+operations, speed-derived object motion, animation-channel waits, and the two
+screen-effect paths. The six absent/reserved commands remain intentional
+no-ops, including the original distinct epilogues for `0x0F0` and `0x0FC`.
+The current MWCC output is exactly the original 1,844 bytes and reaches 75.49%
+fuzzy instruction similarity. It remains unlinked only because its persistent
+state/argument registers are allocated in the opposite order from the ROM.
 
 The complete 182-entry range, handler addresses, aliases, observed
 command-record fields, and direct calls are indexed in
