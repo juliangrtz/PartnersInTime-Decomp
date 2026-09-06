@@ -74,7 +74,7 @@ struct SceneObject {
     u16 animation_id;
     u8 unknown_0d6[0x02];
     s16 render_height;
-    u16 unknown_0da;
+    s16 default_motion_speed;
     u16 object_id;
     u16 linked_object_id;
     SceneObjectFlags flags;

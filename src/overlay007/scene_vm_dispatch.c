@@ -12,6 +12,19 @@
 
 typedef void (*SceneMotionCallback)(SceneObject *object, void *motion);
 
+typedef union SceneResourceFlags {
+    u32 raw;
+    struct {
+        u32 render_group : 2;
+        u32 unknown_2_31 : 30;
+    } bits;
+} SceneResourceFlags;
+
+typedef struct SceneResource {
+    u8 unknown_00[0x7C];
+    SceneResourceFlags flags;
+} SceneResource;
+
 enum SceneVmOpcode {
     SCENE_OP_LOAD_OBJECT_RESOURCE = 0x035,
     SCENE_OP_WAIT_OBJECT_RESOURCE = 0x039,
@@ -103,8 +116,8 @@ enum SceneVmOpcode {
 
 extern u8 *data_ov007_020a6b90;
 extern u8 data_ov007_0208e1e0[];
+extern u8 data_ov007_020905f0[];
 extern u8 gSaveData[];
-extern s8 byte_2090700;
 extern u8 byte_2090674;
 
 extern SceneScriptState *func_ov007_02089348(u32 object_id);
@@ -118,7 +131,18 @@ extern int func_ov007_020883d0();
 extern void func_ov007_02088454();
 extern int func_ov007_02088468();
 extern void func_ov007_02088894();
-extern void func_ov007_02089000();
+extern void func_ov007_02089000(
+    u16 object_id,
+    int enabled,
+    int mode,
+    s32 x,
+    s32 y,
+    s32 z,
+    int argument_6,
+    int argument_7,
+    int argument_8,
+    int argument_9
+);
 extern void func_ov007_020883a0();
 extern void func_ov007_02086d08();
 extern void func_ov007_02086abc();
@@ -177,9 +201,9 @@ static inline s32 SceneVm_PackArgumentPair(
 }
 
 static inline int SceneVm_RewindAndYield(
-    ScriptVm *vm, ScriptVmState *state, const ScriptVmCommand *command
+    ScriptVm *vm, ScriptVmState *state, u16 opcode
 ) {
-    u32 descriptor = vm->command_descriptors[command->opcode];
+    s32 descriptor = (u16)vm->command_descriptors[opcode];
     int argument_words = descriptor & SCRIPT_VM_ARGUMENT_COUNT_MASK;
     int result_words = (descriptor & SCRIPT_VM_HAS_RESULT) >> 5;
     int mode_words = (descriptor & SCRIPT_VM_HAS_ARGUMENT_MODES) >> 6;
@@ -205,75 +229,6 @@ static inline SceneScriptState *SceneVm_GetObjectScriptPool(void) {
     return (SceneScriptState *)(data_ov007_020a6b90 + 0x39DC);
 }
 
-static inline int SceneVm_IsOwnedScriptActive(u32 owner) {
-    SceneScriptState *entry = SceneVm_GetObjectScriptPool();
-    int i;
-
-    for (i = 0; i < 40; i++, entry++) {
-        if (entry->vm_state.script == 0) {
-            continue;
-        }
-        if (owner < SCENE_SCRIPT_OWNER_OBJECT) {
-            if (entry->parent_owner == owner) {
-                return 1;
-            }
-        } else if (entry->parent_object_id
-                   == (owner & SCENE_SCRIPT_OWNER_ID_MASK)) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-static inline void SceneVm_SetOwnedScriptsPaused(u32 owner, int paused) {
-    SceneScriptState *entry = SceneVm_GetObjectScriptPool();
-    int i;
-
-    for (i = 0; i < 40; i++, entry++) {
-        if (entry->vm_state.script == 0) {
-            continue;
-        }
-        if (owner < SCENE_SCRIPT_OWNER_OBJECT) {
-            if (entry->parent_owner != owner) {
-                continue;
-            }
-        } else if (entry->parent_object_id
-                   != (owner & SCENE_SCRIPT_OWNER_ID_MASK)) {
-            continue;
-        }
-
-        entry->flags.bits.paused = paused;
-        if (owner >= SCENE_SCRIPT_OWNER_OBJECT) {
-            return;
-        }
-    }
-}
-
-static inline void SceneVm_StopOwnedScripts(u32 owner) {
-    SceneScriptState *entry = SceneVm_GetObjectScriptPool();
-    int i;
-
-    for (i = 0; i < 40; i++, entry++) {
-        if (entry->vm_state.script == 0) {
-            continue;
-        }
-        if (owner < SCENE_SCRIPT_OWNER_OBJECT) {
-            if (entry->parent_owner != owner) {
-                continue;
-            }
-        } else if (entry->parent_object_id
-                   != (owner & SCENE_SCRIPT_OWNER_ID_MASK)) {
-            continue;
-        }
-
-        entry->vm_state.script = 0;
-        entry->parent_owner = 0;
-        if (owner >= SCENE_SCRIPT_OWNER_OBJECT) {
-            return;
-        }
-    }
-}
-
 int SceneVm_DispatchCommand(
     ScriptVm *vm, ScriptVmState *state, ScriptVmCommand *command
 ) {
@@ -293,7 +248,7 @@ int SceneVm_DispatchCommand(
         if (!func_ov007_020891dc(ARG_U16(0), value)) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(vm, state, SCENE_OP_LOAD_OBJECT_RESOURCE);
 
     case 0x036: return SCRIPT_VM_CONTINUE;
     case 0x037: return SCRIPT_VM_CONTINUE;
@@ -303,7 +258,7 @@ int SceneVm_DispatchCommand(
         if (!func_ov007_020891a4(ARG_U16(0))) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_OBJECT_RESOURCE);
 
     case SCENE_OP_BIND_OBJECT_RESOURCE:
         func_ov007_02089178(ARG_U16(0), ARG_U16(1));
@@ -367,23 +322,23 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_ALIGN_OBJECTS: {
-        u32 first_flags;
-        u32 second_flags;
+        s16 other_screen_height;
+        s16 object_screen_height;
 
         object = SceneObject_GetById(ARG_U16(0));
         other = SceneObject_GetById(ARG_U16(1));
-        object->render_height = ARG(2)
-            + other->render_height
-            + 16 * (192 - other->y)
-            - 16 * (192 - object->y);
+        other_screen_height = other->render_height +
+            16 * (192 - other->y);
+        object_screen_height = object->render_height +
+            16 * (192 - object->y);
+        object->render_height +=
+            (other_screen_height - object_screen_height) + ARG(2);
 
         resource = func_ov007_020894a8(ARG_U16(0));
         other = func_ov007_020894a8(ARG_U16(1));
         if (resource != 0 && other != 0) {
-            first_flags = *(u32 *)((u8 *)resource + 0x7C);
-            second_flags = *(u8 *)((u8 *)other + 0x7C);
-            *(u32 *)((u8 *)resource + 0x7C) =
-                (first_flags & ~3) | (second_flags & 3);
+            ((SceneResource *)resource)->flags.bits.render_group =
+                ((SceneResource *)other)->flags.bits.render_group;
         }
         return SCRIPT_VM_CONTINUE;
     }
@@ -391,26 +346,40 @@ int SceneVm_DispatchCommand(
     case 0x04F: return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_SET_OBJECT_POSITION:
-        func_ov007_02089000(ARG_U16(0), 1);
+        func_ov007_02089000(
+            ARG_U16(0), 1, 0, ARG(1), ARG(2), ARG(3), 0, 0, 0, 0
+        );
         return SCRIPT_VM_CONTINUE;
 
-    case SCENE_OP_GET_OBJECT_COORDINATE:
+    case SCENE_OP_GET_OBJECT_COORDINATE: {
+        s16 object_y;
+        s32 packed_screen_height;
+        s16 relative_y;
+        s32 screen_height;
+        u16 property_id;
+        s16 object_x;
+
         object = SceneObject_GetById(ARG_U16(0));
-        switch (ARG_U16(1)) {
+        object_y = object->y;
+        packed_screen_height =
+            (object->render_height + 16 * (192 - object_y)) << 16;
+        relative_y = object_y - object->base_y;
+        screen_height = packed_screen_height >> 16;
+        property_id = ARG_U16(1);
+        object_x = object->x;
+        switch (property_id) {
         case 0:
-            value = object->x;
+            SceneVm_WriteResult(vm, state, command, object_x);
             break;
         case 1:
-            value = (s16)(object->y - object->base_y);
+            SceneVm_WriteResult(vm, state, command, relative_y);
             break;
         case 2:
-            value = object->render_height + 16 * (192 - object->y);
+            SceneVm_WriteResult(vm, state, command, screen_height);
             break;
-        default:
-            return SCRIPT_VM_CONTINUE;
         }
-        SceneVm_WriteResult(vm, state, command, value);
         return SCRIPT_VM_CONTINUE;
+    }
 
     case 0x052: return SCRIPT_VM_CONTINUE;
     case 0x053: return SCRIPT_VM_CONTINUE;
@@ -425,7 +394,9 @@ int SceneVm_DispatchCommand(
         if (value == 0) {
             *(s16 *)((u8 *)object + 0xD6) = 1;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(
+            vm, state, SCENE_OP_WAIT_OBJECT_PENDING_STATE
+        );
 
     case SCENE_OP_SET_OBJECT_ANIMATION:
         func_ov007_020883a0(ARG_U16(0), ARG_U16(1));
@@ -472,6 +443,41 @@ int SceneVm_DispatchCommand(
         }
         return SCRIPT_VM_CONTINUE;
 
+    /* MWCC places these two later opcode bodies beside the shared movement
+     * cases; retaining that source order also preserves the original layout. */
+    case SCENE_OP_START_OBJECT_PATH: {
+        u32 path_address;
+        void *motion;
+
+        object = SceneObject_GetById(ARG_U16(0));
+        motion = func_ov007_02086f74(
+            object, ARG_U16(1), 0, func_ov007_02087bf4
+        );
+        path_address = (u32)state->script + 2 * ARG(3);
+        if ((path_address & 3) != 0) {
+            path_address &= ~3;
+        }
+        if ((command->argument_modes & (1 << 5)) == 0) {
+            ARG(5) = (s32)((ARG(5) & 0xFFFF) |
+                ((u32)ARG(6) << 16)) / 16;
+        }
+        func_ov007_020724b0(
+            motion,
+            (void *)(path_address + 4),
+            (u32)((*(u32 *)path_address +
+                (*(u32 *)path_address >> 31)) << 15) >> 16,
+            (ARG(4) - 1) << 16,
+            ARG(5)
+        );
+        return SCRIPT_VM_CONTINUE;
+    }
+
+    case SCENE_OP_GET_OBJECT_MOTION_PROPERTY:
+        object = SceneObject_GetById(ARG_U16(0));
+        value = *(s32 *)((u8 *)object + 0x3C + 40 * ARG_U16(1));
+        SceneVm_WriteResult(vm, state, command, (value >> 16) + 1);
+        return SCRIPT_VM_CONTINUE;
+
     case SCENE_OP_MOVE_OBJECT_COMPLEX:
         object = SceneObject_GetById(ARG_U16(0));
         func_ov007_02085ab0(
@@ -494,7 +500,7 @@ int SceneVm_DispatchCommand(
 
         object = SceneObject_GetById(ARG_U16(0));
         if (ARG(6) < 1) {
-            ARG(6) = object->unknown_0da;
+            ARG(6) = object->default_motion_speed;
         }
         switch (ARG_U16(2)) {
         case 1:
@@ -521,7 +527,7 @@ int SceneVm_DispatchCommand(
             dx = ARG(3) - object->x;
             dy = ARG(4) - object->y;
             dz = ARG(5) - object->base_y;
-            other = SceneObject_GetById(ARG_U16(7));
+            other = SceneObject_GetById(ARG(7));
             value = FX_Sqrt(
                 ((dx + other->x) * (dx + other->x)
                     + (dy + other->y) * (dy + other->y)
@@ -529,14 +535,15 @@ int SceneVm_DispatchCommand(
                 << 12
             );
             ARG(6) = _s32_div_f(value, ARG(6));
+            object = SceneObject_GetById(ARG(7));
             func_ov007_02085cb4(
-                object,
+                other,
                 ARG_U16(1),
                 ARG(3),
                 ARG(4),
                 ARG(5),
                 ARG(6),
-                other
+                object
             );
             break;
         }
@@ -646,49 +653,23 @@ int SceneVm_DispatchCommand(
         if (!func_ov007_02088fe4(ARG_U16(0), ARG_U16(1))) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_OBJECT_MOTION);
 
     case SCENE_OP_CANCEL_OBJECT_MOTION:
         object = SceneObject_GetById(ARG_U16(0));
         func_ov007_02087084(object, ARG_U16(1), 0);
         return SCRIPT_VM_CONTINUE;
 
-    case SCENE_OP_START_OBJECT_PATH: {
-        s32 header;
-        u16 *path;
-        void *motion;
-
-        object = SceneObject_GetById(ARG_U16(0));
-        motion = func_ov007_02086f74(
-            object, ARG_U16(1), 0, func_ov007_02087bf4
-        );
-        path = (u16 *)((u32)(state->script + ARG(3)) & ~3);
-        if ((command->argument_modes & (1 << 5)) == 0) {
-            ARG(5) = SceneVm_PackArgumentPair(command, 5) / 16;
-        }
-        header = *(s32 *)path;
-        func_ov007_020724b0(
-            motion,
-            path + 2,
-            (u32)((header + (header >> 31)) << 15) >> 16,
-            (ARG(4) - 1) << 16,
-            ARG(5)
-        );
-        return SCRIPT_VM_CONTINUE;
-    }
-
-    case SCENE_OP_GET_OBJECT_MOTION_PROPERTY:
-        object = SceneObject_GetById(ARG_U16(0));
-        value = *(s32 *)((u8 *)object + 0x3C + 40 * ARG_U16(1));
-        SceneVm_WriteResult(vm, state, command, (value >> 16) + 1);
-        return SCRIPT_VM_CONTINUE;
-
     case SCENE_OP_SET_SCREEN_EFFECT:
-        func_ov007_0207e770(ARG_U16(0) ? 0 : 1, 0, 1);
+        if (ARG_U16(0) == 0) {
+            func_ov007_0207e770(1, 0, 1);
+        } else {
+            func_ov007_0207e770(0, 0, 1);
+        }
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_RESET_SCREEN_STATE:
-        byte_2090700 = -1;
+        *(s8 *)(data_ov007_020905f0 + 0x110) = -1;
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_GET_SCENE_STATE:
@@ -701,7 +682,7 @@ int SceneVm_DispatchCommand(
         if (!byte_2090674) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_SCENE_READY);
 
     case SCENE_OP_SET_SCENE_MODE:
         func_ov007_02070ae8(data_ov007_0208e1e0, (u8)ARG(0));
@@ -797,7 +778,9 @@ int SceneVm_DispatchCommand(
     case SCENE_OP_WAIT_OBJECT_SCRIPT_AND_SKIP:
         script = SceneVm_GetObjectScript(ARG_U16(0));
         if (script->vm_state.script != 0) {
-            return SceneVm_RewindAndYield(vm, state, command);
+            return SceneVm_RewindAndYield(
+                vm, state, SCENE_OP_WAIT_OBJECT_SCRIPT_AND_SKIP
+            );
         }
         state->script += ARG(1);
         return SCRIPT_VM_CONTINUE;
@@ -813,49 +796,182 @@ int SceneVm_DispatchCommand(
         if (script->vm_state.script == 0) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_OBJECT_SCRIPT);
 
-    case SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER:
+    case SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER: {
+        SceneScriptState *entry;
+        s32 owner;
+        s16 remaining;
+
         if (ARG(0) < 1) {
-            ARG(0) = state->loop_stack_base;
+            ARG(0) = ((SceneScriptState *)state)->owner;
         }
-        if (!SceneVm_IsOwnedScriptActive(ARG(0))) {
-            return SCRIPT_VM_CONTINUE;
+        owner = ARG(0);
+        entry = SceneVm_GetObjectScriptPool();
+        if (owner < SCENE_SCRIPT_OWNER_OBJECT) {
+            remaining = 40;
+            while (owner != entry->parent_owner ||
+                   entry->vm_state.script == 0) {
+                remaining = (s16)(remaining - 1);
+                entry++;
+                if (remaining == 0) {
+                    return SCRIPT_VM_CONTINUE;
+                }
+            }
+            return SceneVm_RewindAndYield(
+                vm, state, SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER
+            );
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+
+        remaining = 40;
+        owner &= SCENE_SCRIPT_OWNER_ID_MASK;
+        do {
+            if (owner == entry->parent_object_id &&
+                entry->vm_state.script != 0) {
+                return SceneVm_RewindAndYield(
+                    vm, state, SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER
+                );
+            }
+            remaining = (s16)(remaining - 1);
+            entry++;
+        } while (remaining != 0);
+        return SCRIPT_VM_CONTINUE;
+    }
 
     case SCENE_OP_STOP_OBJECT_SCRIPT:
         SceneVm_GetObjectScript(ARG_U16(0))->vm_state.script = 0;
         return SCRIPT_VM_FINISHED;
 
-    case SCENE_OP_STOP_OBJECT_SCRIPTS_BY_OWNER:
+    case SCENE_OP_STOP_OBJECT_SCRIPTS_BY_OWNER: {
+        SceneScriptState *entry;
+        s32 owner;
+        s16 remaining;
+
         if (ARG(0) < 1) {
-            ARG(0) = state->loop_stack_base;
+            ARG(0) = ((SceneScriptState *)state)->owner;
         }
-        SceneVm_StopOwnedScripts(ARG(0));
+        owner = ARG(0);
+        entry = SceneVm_GetObjectScriptPool();
+        if (owner < SCENE_SCRIPT_OWNER_OBJECT) {
+            remaining = 40;
+            do {
+                owner = ARG(0);
+                if (owner == entry->parent_owner &&
+                    entry->vm_state.script != 0) {
+                    SceneVm_GetObjectScript(owner)->vm_state.script = 0;
+                    SceneVm_GetObjectScript(ARG(0))->vm_state.stack_depth = 0;
+                }
+                remaining = (s16)(remaining - 1);
+                entry++;
+            } while (remaining > 0);
+            return SCRIPT_VM_CONTINUE;
+        }
+
+        {
+            u32 object_id = owner & SCENE_SCRIPT_OWNER_ID_MASK;
+
+            remaining = 40;
+            do {
+                if (object_id == entry->parent_object_id &&
+                    entry->vm_state.script != 0) {
+                    SceneVm_GetObjectScript(owner)->vm_state.script = 0;
+                    SceneVm_GetObjectScript(ARG(0))->vm_state.stack_depth = 0;
+                    return SCRIPT_VM_CONTINUE;
+                }
+                remaining = (s16)(remaining - 1);
+                entry++;
+            } while (remaining != 0);
+        }
         return SCRIPT_VM_CONTINUE;
+    }
 
     case SCENE_OP_PAUSE_OBJECT_SCRIPT:
         SceneVm_GetObjectScript(ARG_U16(0))->flags.bits.paused = 1;
         return SCRIPT_VM_YIELDED;
 
-    case SCENE_OP_PAUSE_OBJECT_SCRIPTS_BY_OWNER:
+    case SCENE_OP_PAUSE_OBJECT_SCRIPTS_BY_OWNER: {
+        SceneScriptState *entry;
+        s32 owner;
+        s16 remaining;
+
         if (ARG(0) < 1) {
-            ARG(0) = state->loop_stack_base;
+            ARG(0) = ((SceneScriptState *)state)->owner;
         }
-        SceneVm_SetOwnedScriptsPaused(ARG(0), 1);
+        owner = ARG(0);
+        entry = SceneVm_GetObjectScriptPool();
+        if (owner < SCENE_SCRIPT_OWNER_OBJECT) {
+            remaining = 40;
+            do {
+                if (ARG(0) == entry->parent_owner &&
+                    entry->vm_state.script != 0) {
+                    entry->flags.bits.paused = 1;
+                }
+                remaining = (s16)(remaining - 1);
+                entry++;
+            } while (remaining > 0);
+            return SCRIPT_VM_CONTINUE;
+        }
+
+        {
+            u32 object_id = owner & SCENE_SCRIPT_OWNER_ID_MASK;
+
+            remaining = 40;
+            do {
+                if (object_id == entry->parent_object_id &&
+                    entry->vm_state.script != 0) {
+                    entry->flags.bits.paused = 1;
+                    return SCRIPT_VM_CONTINUE;
+                }
+                remaining = (s16)(remaining - 1);
+                entry++;
+            } while (remaining != 0);
+        }
         return SCRIPT_VM_CONTINUE;
+    }
 
     case SCENE_OP_RESUME_OBJECT_SCRIPT:
         SceneVm_GetObjectScript(ARG_U16(0))->flags.bits.paused = 0;
         return SCRIPT_VM_CONTINUE;
 
-    case SCENE_OP_RESUME_OBJECT_SCRIPTS_BY_OWNER:
+    case SCENE_OP_RESUME_OBJECT_SCRIPTS_BY_OWNER: {
+        SceneScriptState *entry;
+        s32 owner;
+        s16 remaining;
+
         if (ARG(0) < 1) {
-            ARG(0) = state->loop_stack_base;
+            ARG(0) = ((SceneScriptState *)state)->owner;
         }
-        SceneVm_SetOwnedScriptsPaused(ARG(0), 0);
+        owner = ARG(0);
+        entry = SceneVm_GetObjectScriptPool();
+        if (owner < SCENE_SCRIPT_OWNER_OBJECT) {
+            remaining = 40;
+            do {
+                if (ARG(0) == entry->parent_owner &&
+                    entry->vm_state.script != 0) {
+                    entry->flags.bits.paused = 0;
+                }
+                remaining = (s16)(remaining - 1);
+                entry++;
+            } while (remaining > 0);
+            return SCRIPT_VM_CONTINUE;
+        }
+
+        {
+            u32 object_id = owner & SCENE_SCRIPT_OWNER_ID_MASK;
+
+            remaining = 40;
+            do {
+                if (object_id == entry->parent_object_id &&
+                    entry->vm_state.script != 0) {
+                    entry->flags.bits.paused = 0;
+                    return SCRIPT_VM_CONTINUE;
+                }
+                remaining = (s16)(remaining - 1);
+                entry++;
+            } while (remaining != 0);
+        }
         return SCRIPT_VM_CONTINUE;
+    }
 
     case SCENE_OP_BRANCH_IF:
         value = 0;
@@ -957,7 +1073,7 @@ int SceneVm_DispatchCommand(
                           + ((4 * ARG(0)) & 0x3FFFF)) == 0) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_SOUND_TASK);
 
     case 0x0BC: return SCRIPT_VM_CONTINUE;
     case 0x0BD: return SCRIPT_VM_CONTINUE;
@@ -993,7 +1109,7 @@ int SceneVm_DispatchCommand(
         if (func_ov007_0208a348()) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_UI_RESOURCE);
 
     case SCENE_OP_CREATE_UI_ELEMENT:
         value = VM_ReadVariable(SCRIPT_VM_VAR_SAVE_WORDS_40, vm, state);
@@ -1046,13 +1162,15 @@ int SceneVm_DispatchCommand(
             || !func_ov007_02089670(ARG(0))) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(
+            vm, state, SCENE_OP_WAIT_UI_ELEMENT_READY
+        );
 
     case SCENE_OP_WAIT_UI_ELEMENT:
         if (!func_ov007_020895b8(ARG(0))) {
             return SCRIPT_VM_CONTINUE;
         }
-        return SceneVm_RewindAndYield(vm, state, command);
+        return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_UI_ELEMENT);
 
     case SCENE_OP_DESTROY_UI_ELEMENT:
         func_ov007_0208953c(ARG(0));
