@@ -33,10 +33,28 @@ enum FieldScriptOwnerType {
     FIELD_SCRIPT_OWNER_ENTITY = 4
 };
 
+typedef struct FieldScriptFlagBits {
+    u32 enabled : 1;
+    u32 active : 1;
+    u32 paused : 1;
+    u32 unknown_03 : 1;
+    u32 owner_type : 3;
+    u32 context_type : 2;
+    u32 parent_type : 3;
+    u32 queued_parent_type : 3;
+    u32 result : 2;
+    u32 inline_wait : 1;
+    u32 owner_subtype : 8;
+    u32 unknown_26_31 : 6;
+} FieldScriptFlagBits;
+
 struct FieldScriptState {
     ScriptVmState vm_state;
     u32 unknown_ac;
-    u32 flags;
+    union {
+        u32 flags;
+        FieldScriptFlagBits flag_bits;
+    };
     u8 owner_data[4];
     s8 parent_entity_id;
     s8 queued_parent_entity_id;

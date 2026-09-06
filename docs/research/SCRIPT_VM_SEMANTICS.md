@@ -468,17 +468,22 @@ The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
 opcodes (`0x033..0x154`), including the five intentional legacy no-ops, while
 preserving the original command-rewind behavior for asynchronous waits. The
-source-level semantic helpers now force-inline into one 22,364-byte function;
+source-level semantic helpers now force-inline into one 22,852-byte function;
 no compiler-generated code helpers remain. The reconstructed common result
 path, cached field/party/map contexts, persistent argument base, and dynamic
-retry decoding now reach 30.27% fuzzy similarity against the 23,492-byte
+retry decoding now reach 34.14% fuzzy similarity against the 23,492-byte
 original. The ROM-proven persistent field-system pointer is
 `field_context + 0x24FC`; map operations use the distinct controller at
 `+0x2500`. The script-state flags live at `+0xB0`: owner type occupies bits
 4..6, while the message/branch context occupies bits 7..8. Entity property
 `+0x0A` and contact-direction `+0x3A4` are now represented as the original
 C bitfields, preserving subtype/resource semantics and the six-direction
-script-mask permutation.
+script-mask permutation. The same typed layout now covers script lifecycle,
+owner/context/parent relationships, result and inline-wait state, plus the
+entity's saved resource, palette, behavior, and animation markers. The four
+matching-script operations retain their original dedicated loops, while
+background-layer, blend, and wipe commands preserve separate main/subscreen
+register paths and typed wipe-duration fields.
 It stays an unlinked objdiff work unit while the remaining nested
 command bodies and local register allocation are converged. The two large
 entity families resolve one target apiece and reproduce the original 91- and
