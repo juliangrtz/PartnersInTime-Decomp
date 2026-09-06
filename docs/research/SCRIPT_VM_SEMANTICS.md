@@ -462,6 +462,14 @@ original compiler formed one 19,168-byte monolithic switch, whereas the
 readability-oriented source currently emits a 13,216-byte dispatcher plus
 2,460 bytes of helpers.
 
+The native field extension is likewise complete in
+`src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
+opcodes (`0x033..0x154`), including the four intentional legacy no-ops, while
+preserving the original command-rewind behavior for asynchronous waits. The
+22,048-byte dispatcher plus 2,548 bytes of helpers remains an unlinked objdiff
+work unit until it can reproduce the original 23,492-byte monolithic switch
+without sacrificing the maintained semantic structure.
+
 ## Variable namespaces
 
 | Encoded range | Editable form | Meaning |

@@ -45,7 +45,8 @@ struct FieldScriptState {
 
 struct FieldVmRuntime {
     ScriptVm vm;
-    u8 unknown_010[0x84];
+    u8 unknown_010[0x80];
+    u32 screen_selector;
     u8 *field_context;
 };
 
