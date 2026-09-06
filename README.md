@@ -162,7 +162,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   helpers left. Its common return path,
   cached field/party/map contexts, dynamic retry decoding, and argument-base
   register now reproduce the original dispatcher architecture, raising fuzzy
-  instruction similarity to 48.02%. ROM-shaped bitfields now recover the
+  instruction similarity to 66.35%. ROM-shaped bitfields now recover the
   entity subtype/resource selection, six-direction contact mask, map-axis
   synchronization, signed collision-policy updates, script ownership and
   lifecycle, saved presentation/animation state, transform and movement
@@ -179,11 +179,12 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   confirms that the original outer 290-entry table funnels command families through several
   nested switches. The two large 49- and 47-opcode entity families now share
   one target lookup apiece and reproduce the original 91- and 96-entry inner
-  tables, including all distinct case targets. The auxiliary-script and
-  entity-script families do likewise; the remaining opcode bodies and local
-  register schedules are the principal source of the size/layout delta
-  against the 23,492-byte original. The work unit remains unlinked while those
-  dispatch groups and the register layout are converged.
+  tables, including all distinct case targets. The auxiliary-script,
+  paired-script, entity-script, matching-script, room/camera, and party/gimmick
+  families now also follow the original physical handler order. The remaining
+  opcode bodies and local register schedules are the principal source of the
+  instruction delta against the equally sized original. The work unit remains
+  unlinked while those local schedules are converged.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,

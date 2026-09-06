@@ -1523,6 +1523,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         }
         break;
 
+    case FIELD_VM_START_PAIRED_FIELD_SCRIPT:
+        FieldVm_StartPairedScript(runtime, state, command);
+        break;
+
     case FIELD_VM_START_INLINE_ENTITY_SCRIPT:
     case FIELD_VM_START_INLINE_ENTITY_SCRIPT_AND_WAIT:
     case FIELD_VM_START_RELATIVE_ENTITY_SCRIPT:
@@ -1618,18 +1622,6 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 vm, base_state);
             break;
         }
-        break;
-
-    case FIELD_VM_WAIT_MATCHING_ENTITY_SCRIPTS:
-    case FIELD_VM_STOP_MATCHING_ENTITY_SCRIPTS:
-    case FIELD_VM_PAUSE_MATCHING_ENTITY_SCRIPTS:
-    case FIELD_VM_RESUME_MATCHING_ENTITY_SCRIPTS:
-        result = FieldVm_VisitMatchingEntityScripts(
-            runtime, state, arguments[0], command->opcode);
-        break;
-
-    case FIELD_VM_START_PAIRED_FIELD_SCRIPT:
-        FieldVm_StartPairedScript(runtime, state, command);
         break;
 
     case FIELD_VM_SET_ENTITY_VISIBLE:
@@ -2674,263 +2666,16 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         }
         break;
 
+    case FIELD_VM_WAIT_MATCHING_ENTITY_SCRIPTS:
+    case FIELD_VM_STOP_MATCHING_ENTITY_SCRIPTS:
+    case FIELD_VM_PAUSE_MATCHING_ENTITY_SCRIPTS:
+    case FIELD_VM_RESUME_MATCHING_ENTITY_SCRIPTS:
+        result = FieldVm_VisitMatchingEntityScripts(
+            runtime, state, arguments[0], command->opcode);
+        break;
+
     case FIELD_VM_LEGACY_NOOP_064:
         /* The outer jump table never enters the dead inner 0x064 handler. */
-        break;
-
-    case FIELD_VM_REJOIN_PARTY_FOLLOWER:
-        if ((FieldVm_GetPresentPartyMask(runtime) &
-             (1 << arguments[0])) != 0) {
-            func_ov000_0209b53c(FieldVm_GetPartyController(
-                party_manager, arguments[0]),
-                arguments[1] != 0);
-        }
-        break;
-
-    case FIELD_VM_WAIT_PARTY_FOLLOWER_REJOINED:
-        if ((FieldVm_GetPresentPartyMask(runtime) &
-             (1 << arguments[0])) != 0) {
-            party_controller = FieldVm_GetPartyController(
-                party_manager, arguments[0]);
-            if (FieldVm_GetPartyControllerFlags(party_controller)
-                    ->follower_rejoin_active != 0) {
-                result = FieldVm_RetryCurrentCommand(
-                    vm, state, command->opcode);
-                break;
-            }
-        }
-        break;
-
-    case FIELD_VM_DETACH_PARTY_FOLLOWER:
-        if ((FieldVm_GetPresentPartyMask(runtime) &
-             (1 << arguments[0])) != 0) {
-            func_ov000_0209b0b8(FieldVm_GetPartyController(
-                party_manager, arguments[0]));
-        }
-        break;
-
-    case FIELD_VM_REUNITE_SPLIT_PARTIES:
-        if (arguments[0] == -1) {
-            arguments[0] =
-                FieldVm_GetActivePartySide(party_manager);
-        }
-        func_ov000_0209e720(
-            party_manager, arguments[0],
-            arguments[1] != 0);
-        break;
-
-    case FIELD_VM_WAIT_SPLIT_PARTY_REUNION:
-        if (func_ov000_0209e6f4(party_manager)) {
-            result = FieldVm_RetryCurrentCommand(
-                vm, state, command->opcode);
-            break;
-        }
-        break;
-
-    case FIELD_VM_START_BABY_PIGGYBACK_MOUNT:
-        func_ov000_0209dfd4(party_manager);
-        break;
-
-    case FIELD_VM_WAIT_BABY_PIGGYBACK_MOUNT:
-        if (func_ov000_0209df70(party_manager)) {
-            result = FieldVm_RetryCurrentCommand(
-                vm, state, command->opcode);
-            break;
-        }
-        break;
-
-    case FIELD_VM_SET_PARTY_MEMBER_CHARACTER_ID:
-        func_ov000_0209ce44(
-            FieldVm_GetPartyController(
-                party_manager, arguments[0] / 2),
-            arguments[0] & 1, arguments[1]);
-        break;
-
-    case FIELD_VM_RESET_PARTY_MEMBER_CHARACTERS:
-        func_ov000_0209ce00(FieldVm_GetPartyController(
-            party_manager, arguments[0]));
-        break;
-
-    case FIELD_VM_SET_PARTY_FACING_DIRECTION:
-        func_ov000_0209bc84(
-            FieldVm_GetPartyController(
-                party_manager, arguments[0]),
-            arguments[1] != 0, arguments[2] != 0, 0);
-        break;
-
-    case FIELD_VM_SET_PARTY_MEMBER_SWITCHING_ENABLED:
-        party_controller = FieldVm_GetPartyController(
-            party_manager, arguments[0]);
-        *(u32 *)(party_controller +
-                 FIELD_VM_PARTY_CONTROLLER_CONTROL_FLAGS_OFFSET) =
-            (*(u32 *)(party_controller +
-                      FIELD_VM_PARTY_CONTROLLER_CONTROL_FLAGS_OFFSET) &
-             ~(1 << 2)) |
-            ((arguments[1] & 1) << 2);
-        break;
-
-    case FIELD_VM_LEGACY_NOOP_0B9:
-        break;
-
-    case FIELD_VM_SET_FIELD_PARTY_HUD_LAYOUT:
-        if (FieldVm_GetSpecialPartyState(field_context)->field_screen != 0) {
-            func_ov000_02071a38(
-                field_context, arguments[0] != 0,
-                arguments[1] != 0);
-        } else {
-            func_ov000_02071a38(
-                *(u8 **)(field_context +
-                         FIELD_VM_PAIRED_FIELD_CONTEXT_OFFSET),
-                arguments[0] != 0,
-                arguments[1] != 0);
-        }
-        break;
-
-    case FIELD_VM_SET_PARTY_ATTACHED_SPRITE_VISIBLE:
-        func_ov000_02089da8(
-            FieldVm_GetPartyController(party_manager, 1),
-            arguments[0] != 0);
-        break;
-
-    case FIELD_VM_SET_PARTY_FIELD_MODE:
-        if ((FieldVm_GetPresentPartyMask(runtime) &
-             (1 << arguments[0])) != 0) {
-            func_ov000_0209ec48(
-                party_manager, arguments[0],
-                (u16)arguments[1], 0, 0);
-        }
-        break;
-
-    case FIELD_VM_CANCEL_PARTY_ACTIONS:
-        if (arguments[0] == -1) {
-            if ((FieldVm_GetPresentPartyMask(runtime) & 1) != 0) {
-                func_ov000_0209e8cc(
-                    party_manager, 0, (u16)arguments[1]);
-            }
-            if ((FieldVm_GetPresentPartyMask(runtime) & 2) != 0) {
-                func_ov000_0209e8cc(
-                    party_manager, 1, (u16)arguments[1]);
-            }
-        } else if ((FieldVm_GetPresentPartyMask(runtime) &
-                    (1 << arguments[0])) != 0) {
-            func_ov000_0209e8cc(
-                party_manager, arguments[0],
-                (u16)arguments[1]);
-        }
-        break;
-
-    case FIELD_VM_WAIT_PARTY_ACTIONS_IDLE:
-        if ((FieldVm_GetPresentPartyMask(runtime) &
-             (1 << arguments[0])) != 0 &&
-            func_ov000_0209ebdc(
-                party_manager, arguments[0],
-                FieldVm_GetPresentPartyMask(runtime))) {
-            result = FieldVm_RetryCurrentCommand(
-                vm, state, command->opcode);
-            break;
-        }
-        break;
-
-    case FIELD_VM_START_BABY_HAMMER_SWING:
-        func_ov000_0208f1e0(
-            FieldVm_GetPartyController(party_manager, 1),
-            arguments[0] & 1);
-        break;
-
-    case FIELD_VM_WAIT_BABY_HAMMER_SWING:
-        if (func_ov000_0208efc4(
-                FieldVm_GetPartyController(party_manager, 1),
-                arguments[0] & 1)) {
-            result = FieldVm_RetryCurrentCommand(
-                vm, state, command->opcode);
-            break;
-        }
-        break;
-
-    case FIELD_VM_FINISH_BABY_HAMMER_SWING:
-        func_ov000_0208efec(
-            FieldVm_GetPartyController(party_manager, 1),
-            arguments[0] & 1);
-        break;
-
-    case FIELD_VM_PREPARE_BABY_DRILL_MARKER:
-        func_ov000_0209de24(party_manager, arguments[0]);
-        break;
-
-    case FIELD_VM_MOVE_PARTY_TO_GIMMICK_ANCHOR:
-        func_ov000_0209dddc(
-            party_manager, arguments[0],
-            arguments[1]);
-        break;
-
-    case FIELD_VM_PREPARE_BROS_BALL_CANNON_LAUNCH:
-        func_ov000_0209ddcc(party_manager);
-        break;
-
-    case FIELD_VM_LAUNCH_BROS_BALL_FROM_CANNON:
-        func_ov000_0209ddbc(party_manager, arguments[0]);
-        break;
-
-    case FIELD_VM_LAUNCH_BABY_PARTY_TO_ELEVATION:
-        func_ov000_0209dda4(
-            party_manager,
-            arguments[0] << FX32B_INT);
-        break;
-
-    case FIELD_VM_DROP_BABY_PARTY_FROM_ELEVATION:
-        func_ov000_0209dd8c(party_manager);
-        break;
-
-    case FIELD_VM_COMPLETE_AIRBORNE_BABY_TRANSFERS:
-        func_ov000_0209e1a8(party_manager);
-        break;
-
-    case FIELD_VM_GET_PARTY_CONTROLLER_PROPERTY:
-        VM_WriteVariable(
-            command->result_variable,
-            FieldVm_GetPartyControllerProperty(
-                FieldVm_GetPartyController(
-                    party_manager, arguments[0]),
-                arguments[1]),
-            vm, base_state);
-        break;
-
-    case FIELD_VM_SWITCH_ACTIVE_PARTY:
-        if (arguments[0] == -1) {
-            arguments[0] =
-                !FieldVm_GetActivePartySide(party_manager);
-        }
-        func_ov000_020a0c30(
-            party_manager, arguments[0], arguments[1] != 0, 0, 1);
-        break;
-
-    case FIELD_VM_WAIT_ACTIVE_PARTY_SWITCH:
-        if (FieldVm_GetPartyManagerFlags(party_manager)->
-            active_party_switching) {
-            result = FieldVm_RetryCurrentCommand(
-                vm, state, command->opcode);
-            break;
-        }
-        break;
-
-    case FIELD_VM_SET_PARTY_PIGGYBACK_STATE:
-        FieldVm_GetPartyManagerFlags(party_manager)->piggyback_state =
-            arguments[0] & 1;
-        break;
-
-    case FIELD_VM_RELEASE_ROOM_TRANSITION_CONTROL_LOCK:
-        *(u16 *)(field_context +
-                 FIELD_VM_FIELD_CONTROL_FLAGS_OFFSET) &= ~8;
-        break;
-
-    case FIELD_VM_SET_PARTY_LEADER_ANIMATION_OVERRIDE:
-        if (arguments[1] != 0) {
-            func_ov000_0209cbfc(FieldVm_GetPartyController(
-                party_manager, arguments[0]), 0);
-        } else {
-            func_ov000_0209cb90(FieldVm_GetPartyController(
-                party_manager, arguments[0]), 0);
-        }
         break;
 
     case FIELD_VM_CHANGE_FIELD_ROOM_FOR_PARTY:
@@ -3727,6 +3472,261 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             *(fx32 *)(field_context +
                       FIELD_VM_CAMERA_FOCUS_Y_OFFSET) =
                 runtime_entity->position_y - runtime_entity->position_z;
+        }
+        break;
+
+    case FIELD_VM_REJOIN_PARTY_FOLLOWER:
+        if ((FieldVm_GetPresentPartyMask(runtime) &
+             (1 << arguments[0])) != 0) {
+            func_ov000_0209b53c(FieldVm_GetPartyController(
+                party_manager, arguments[0]),
+                arguments[1] != 0);
+        }
+        break;
+
+    case FIELD_VM_WAIT_PARTY_FOLLOWER_REJOINED:
+        if ((FieldVm_GetPresentPartyMask(runtime) &
+             (1 << arguments[0])) != 0) {
+            party_controller = FieldVm_GetPartyController(
+                party_manager, arguments[0]);
+            if (FieldVm_GetPartyControllerFlags(party_controller)
+                    ->follower_rejoin_active != 0) {
+                result = FieldVm_RetryCurrentCommand(
+                    vm, state, command->opcode);
+                break;
+            }
+        }
+        break;
+
+    case FIELD_VM_DETACH_PARTY_FOLLOWER:
+        if ((FieldVm_GetPresentPartyMask(runtime) &
+             (1 << arguments[0])) != 0) {
+            func_ov000_0209b0b8(FieldVm_GetPartyController(
+                party_manager, arguments[0]));
+        }
+        break;
+
+    case FIELD_VM_REUNITE_SPLIT_PARTIES:
+        if (arguments[0] == -1) {
+            arguments[0] =
+                FieldVm_GetActivePartySide(party_manager);
+        }
+        func_ov000_0209e720(
+            party_manager, arguments[0],
+            arguments[1] != 0);
+        break;
+
+    case FIELD_VM_WAIT_SPLIT_PARTY_REUNION:
+        if (func_ov000_0209e6f4(party_manager)) {
+            result = FieldVm_RetryCurrentCommand(
+                vm, state, command->opcode);
+            break;
+        }
+        break;
+
+    case FIELD_VM_START_BABY_PIGGYBACK_MOUNT:
+        func_ov000_0209dfd4(party_manager);
+        break;
+
+    case FIELD_VM_WAIT_BABY_PIGGYBACK_MOUNT:
+        if (func_ov000_0209df70(party_manager)) {
+            result = FieldVm_RetryCurrentCommand(
+                vm, state, command->opcode);
+            break;
+        }
+        break;
+
+    case FIELD_VM_SET_PARTY_MEMBER_CHARACTER_ID:
+        func_ov000_0209ce44(
+            FieldVm_GetPartyController(
+                party_manager, arguments[0] / 2),
+            arguments[0] & 1, arguments[1]);
+        break;
+
+    case FIELD_VM_RESET_PARTY_MEMBER_CHARACTERS:
+        func_ov000_0209ce00(FieldVm_GetPartyController(
+            party_manager, arguments[0]));
+        break;
+
+    case FIELD_VM_SET_PARTY_FACING_DIRECTION:
+        func_ov000_0209bc84(
+            FieldVm_GetPartyController(
+                party_manager, arguments[0]),
+            arguments[1] != 0, arguments[2] != 0, 0);
+        break;
+
+    case FIELD_VM_SET_PARTY_MEMBER_SWITCHING_ENABLED:
+        party_controller = FieldVm_GetPartyController(
+            party_manager, arguments[0]);
+        *(u32 *)(party_controller +
+                 FIELD_VM_PARTY_CONTROLLER_CONTROL_FLAGS_OFFSET) =
+            (*(u32 *)(party_controller +
+                      FIELD_VM_PARTY_CONTROLLER_CONTROL_FLAGS_OFFSET) &
+             ~(1 << 2)) |
+            ((arguments[1] & 1) << 2);
+        break;
+
+    case FIELD_VM_LEGACY_NOOP_0B9:
+        break;
+
+    case FIELD_VM_SET_FIELD_PARTY_HUD_LAYOUT:
+        if (FieldVm_GetSpecialPartyState(field_context)->field_screen != 0) {
+            func_ov000_02071a38(
+                field_context, arguments[0] != 0,
+                arguments[1] != 0);
+        } else {
+            func_ov000_02071a38(
+                *(u8 **)(field_context +
+                         FIELD_VM_PAIRED_FIELD_CONTEXT_OFFSET),
+                arguments[0] != 0,
+                arguments[1] != 0);
+        }
+        break;
+
+    case FIELD_VM_SET_PARTY_ATTACHED_SPRITE_VISIBLE:
+        func_ov000_02089da8(
+            FieldVm_GetPartyController(party_manager, 1),
+            arguments[0] != 0);
+        break;
+
+    case FIELD_VM_SET_PARTY_FIELD_MODE:
+        if ((FieldVm_GetPresentPartyMask(runtime) &
+             (1 << arguments[0])) != 0) {
+            func_ov000_0209ec48(
+                party_manager, arguments[0],
+                (u16)arguments[1], 0, 0);
+        }
+        break;
+
+    case FIELD_VM_CANCEL_PARTY_ACTIONS:
+        if (arguments[0] == -1) {
+            if ((FieldVm_GetPresentPartyMask(runtime) & 1) != 0) {
+                func_ov000_0209e8cc(
+                    party_manager, 0, (u16)arguments[1]);
+            }
+            if ((FieldVm_GetPresentPartyMask(runtime) & 2) != 0) {
+                func_ov000_0209e8cc(
+                    party_manager, 1, (u16)arguments[1]);
+            }
+        } else if ((FieldVm_GetPresentPartyMask(runtime) &
+                    (1 << arguments[0])) != 0) {
+            func_ov000_0209e8cc(
+                party_manager, arguments[0],
+                (u16)arguments[1]);
+        }
+        break;
+
+    case FIELD_VM_WAIT_PARTY_ACTIONS_IDLE:
+        if ((FieldVm_GetPresentPartyMask(runtime) &
+             (1 << arguments[0])) != 0 &&
+            func_ov000_0209ebdc(
+                party_manager, arguments[0],
+                FieldVm_GetPresentPartyMask(runtime))) {
+            result = FieldVm_RetryCurrentCommand(
+                vm, state, command->opcode);
+            break;
+        }
+        break;
+
+    case FIELD_VM_START_BABY_HAMMER_SWING:
+        func_ov000_0208f1e0(
+            FieldVm_GetPartyController(party_manager, 1),
+            arguments[0] & 1);
+        break;
+
+    case FIELD_VM_WAIT_BABY_HAMMER_SWING:
+        if (func_ov000_0208efc4(
+                FieldVm_GetPartyController(party_manager, 1),
+                arguments[0] & 1)) {
+            result = FieldVm_RetryCurrentCommand(
+                vm, state, command->opcode);
+            break;
+        }
+        break;
+
+    case FIELD_VM_FINISH_BABY_HAMMER_SWING:
+        func_ov000_0208efec(
+            FieldVm_GetPartyController(party_manager, 1),
+            arguments[0] & 1);
+        break;
+
+    case FIELD_VM_PREPARE_BABY_DRILL_MARKER:
+        func_ov000_0209de24(party_manager, arguments[0]);
+        break;
+
+    case FIELD_VM_MOVE_PARTY_TO_GIMMICK_ANCHOR:
+        func_ov000_0209dddc(
+            party_manager, arguments[0],
+            arguments[1]);
+        break;
+
+    case FIELD_VM_PREPARE_BROS_BALL_CANNON_LAUNCH:
+        func_ov000_0209ddcc(party_manager);
+        break;
+
+    case FIELD_VM_LAUNCH_BROS_BALL_FROM_CANNON:
+        func_ov000_0209ddbc(party_manager, arguments[0]);
+        break;
+
+    case FIELD_VM_LAUNCH_BABY_PARTY_TO_ELEVATION:
+        func_ov000_0209dda4(
+            party_manager,
+            arguments[0] << FX32B_INT);
+        break;
+
+    case FIELD_VM_DROP_BABY_PARTY_FROM_ELEVATION:
+        func_ov000_0209dd8c(party_manager);
+        break;
+
+    case FIELD_VM_COMPLETE_AIRBORNE_BABY_TRANSFERS:
+        func_ov000_0209e1a8(party_manager);
+        break;
+
+    case FIELD_VM_GET_PARTY_CONTROLLER_PROPERTY:
+        VM_WriteVariable(
+            command->result_variable,
+            FieldVm_GetPartyControllerProperty(
+                FieldVm_GetPartyController(
+                    party_manager, arguments[0]),
+                arguments[1]),
+            vm, base_state);
+        break;
+
+    case FIELD_VM_SWITCH_ACTIVE_PARTY:
+        if (arguments[0] == -1) {
+            arguments[0] =
+                !FieldVm_GetActivePartySide(party_manager);
+        }
+        func_ov000_020a0c30(
+            party_manager, arguments[0], arguments[1] != 0, 0, 1);
+        break;
+
+    case FIELD_VM_WAIT_ACTIVE_PARTY_SWITCH:
+        if (FieldVm_GetPartyManagerFlags(party_manager)->
+            active_party_switching) {
+            result = FieldVm_RetryCurrentCommand(
+                vm, state, command->opcode);
+            break;
+        }
+        break;
+
+    case FIELD_VM_SET_PARTY_PIGGYBACK_STATE:
+        FieldVm_GetPartyManagerFlags(party_manager)->piggyback_state =
+            arguments[0] & 1;
+        break;
+
+    case FIELD_VM_RELEASE_ROOM_TRANSITION_CONTROL_LOCK:
+        *(u16 *)(field_context +
+                 FIELD_VM_FIELD_CONTROL_FLAGS_OFFSET) &= ~8;
+        break;
+
+    case FIELD_VM_SET_PARTY_LEADER_ANIMATION_OVERRIDE:
+        if (arguments[1] != 0) {
+            func_ov000_0209cbfc(FieldVm_GetPartyController(
+                party_manager, arguments[0]), 0);
+        } else {
+            func_ov000_0209cb90(FieldVm_GetPartyController(
+                party_manager, arguments[0]), 0);
         }
         break;
 
