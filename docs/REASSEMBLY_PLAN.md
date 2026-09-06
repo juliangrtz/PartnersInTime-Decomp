@@ -702,6 +702,14 @@ script pointers, and non-code room records, so its loader grammar and
 instance-specific control-flow opcodes must be typed before it can safely use
 the battle assembler infrastructure. See `docs/research/SCRIPT_VM_SEMANTICS.md`.
 
+Overlay 7 now has 3,940 bytes of linked matching C around that ABI. The recovered
+runtime initializes all 56 scene objects and 40 object-script states, owns both
+global script slots and their archives, services the 72 task slots, and performs
+the complete object/resource teardown. The neighboring renderer, secondary
+archive selector, eight-sprite factory, and 964-byte transition state machine
+are retained as structured, size-aware WIP C rather than being linked before
+their remaining Metrowerks register schedules match.
+
 Priority formats:
 
 1. finish argument contracts and semantic names in the implemented

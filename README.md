@@ -120,7 +120,15 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   ID/type, latched input values, 32 shared variables, both global script
   slots, object-state lookup, and the complete object-script scheduler. The
   scheduler now exposes replacement versus queued execution, parent ownership,
-  pause handling, VM result chaining, and task cleanup in editable C.
+  pause handling, VM result chaining, and task cleanup in editable C. The
+  adjacent scene-manager lifecycle is reconstructed too: both global script
+  starters, primary archive loading, all 56 object bindings, both reserved
+  object-range resets, the 72 task slots, shared resource loading, controller
+  start/stop/shutdown, and the sprite-follow callback are linked matching C.
+  Readable WIP C also covers the depth-sorted renderer, secondary archive
+  selection, eight-sprite factory, and its 964-byte transition controller;
+  these register-sensitive units remain unlinked until their final instruction
+  schedules match.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
