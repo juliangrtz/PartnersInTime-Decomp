@@ -36,3 +36,17 @@ three functions in this unit are entirely C.
 Validation uses objdiff for each function, the complete module and symbol
 checks, and the normal unmodified-data ROM build. The reference ROM SHA-1 is
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+
+## Fixed-point coprocessor routines
+
+The resident `fx_coprocessor.c` unit adds 680 matching bytes across eleven
+functions. In `FX_InvSqrt`, the Q32 reciprocal multiplied by the Q22 square-root
+result produces Q54. Returning Q12 requires adding `1 << 41` and shifting by
+42. The previous expression rounded and shifted the low word by ten bits,
+losing the required 32-bit scale adjustment. The corrected 64-bit C expression
+reproduces the complete original multiply, carry, and arithmetic-shift sequence.
+
+`FX_Sqrt` preserves its nonpositive-input guard and calls the C result reader.
+Its seven-instruction hardware setup block (28 bytes) retains the order of
+the mode write and the two operand-word writes. All other functions in this
+unit are C, including the corrected inverse square root.
