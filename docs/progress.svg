@@ -778,7 +778,7 @@
 <rect class="cell" x="325.83" y="366.72" width="27.37" height="23.76" fill="#263244"><title>Overlay 02 · func_ov002_020b8ca4 · 1.9 KiB · remaining</title></rect>
 <rect class="cell" x="353.20" y="366.72" width="27.09" height="23.76" fill="#263244"><title>Overlay 02 · func_ov002_020ba3b4 · 1.9 KiB · remaining</title></rect>
 <rect class="cell" x="380.28" y="366.72" width="26.51" height="23.76" fill="#263244"><title>Overlay 02 · func_ov002_02073a08 · 1.8 KiB · remaining</title></rect>
-<rect class="cell" x="406.80" y="366.72" width="26.29" height="23.76" fill="#263244"><title>Overlay 02 · func_ov002_020698d4 · 1.8 KiB · remaining</title></rect>
+<rect class="cell" x="406.80" y="366.72" width="26.29" height="23.76" fill="#263244"><title>Overlay 02 · BattleVm_DispatchCommonOpcode · 1.8 KiB · remaining</title></rect>
 <rect class="cell" x="433.08" y="366.72" width="25.72" height="23.76" fill="#2dd4a0"><title>Overlay 02 · battle_hit_queue · 1.8 KiB · matching C/C++</title></rect>
 <rect class="cell" x="458.80" y="366.72" width="25.37" height="23.76" fill="#263244"><title>Overlay 02 · func_ov002_020b99bc · 1.7 KiB · remaining</title></rect>
 <rect class="cell" x="484.18" y="366.72" width="25.32" height="23.76" fill="#263244"><title>Overlay 02 · func_ov002_0206d740 · 1.7 KiB · remaining</title></rect>

@@ -153,6 +153,15 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   are recovered; it remains unlinked while the
   original giant-switch layout is converged without compromising the verified
   ROM build.
+  Its delegated common executor is no longer opaque either:
+  `BattleVm_DispatchCommonOpcode` reconstructs all 27 slots from `0x0E9`
+  through `0x103`, including attachment/model control, common-asset loading,
+  UI creation, effect waits, object motion, and both screen-effect channels.
+  MWCC emits the exact original 1,844-byte function size at 75.49% fuzzy
+  instruction similarity. The six reserved no-ops, the two distinct no-op
+  epilogues, and every asynchronous retry boundary retain their original
+  control-flow positions; the function remains an unlinked objdiff work unit
+  while its register allocation is converged.
   Overlay 0's still larger 23,492-byte original field/world dispatcher now has the same
   complete structured reconstruction. One readable C switch covers all 290
   slots from `0x033` through `0x154`: child scripts, entity state and movement,

@@ -68,8 +68,6 @@ extern void func_ov002_02077e78(BattleActor *actor, s16 animation_id,
                                 int effect_offset_y);
 extern int func_ov002_02079090(ScriptVm *vm, ScriptVmState *state,
                                ScriptVmCommand *command, int spawn_mode);
-extern int func_ov002_020698d4(ScriptVm *vm, ScriptVmState *state,
-                               ScriptVmCommand *command);
 extern int func_ov002_02078e38(ScriptVm *vm, ScriptVmState *state,
                                ScriptVmCommand *command, int spawn_mode);
 extern int func_ov002_02078bb4(ScriptVm *vm, ScriptVmState *state,
@@ -2607,7 +2605,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     default:
-        return func_ov002_020698d4(vm, state, command);
+        return BattleVm_DispatchCommonOpcode(vm, state, command);
     }
 
     return SCRIPT_VM_CONTINUE;

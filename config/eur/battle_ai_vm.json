@@ -920,28 +920,28 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "requests the selected common battle asset group",
-      "evidence": "func_ov002_020698d4 case 0x0F5; BattleCommonAssets_RequestLoad"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0F5; BattleCommonAssets_RequestLoad"
     },
     "246": {
       "arguments": [],
       "result": null,
       "control_flow": "retries the same command until battle context flag 0x80 becomes clear",
       "yield": "while common asset loading is pending",
-      "evidence": "func_ov002_020698d4 case 0x0F6"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0F6"
     },
     "249": {
       "arguments": ["effect_handle"],
       "result": null,
       "control_flow": "retries while both the effect and its secondary phase are active",
       "yield": "while both effect predicates are true",
-      "evidence": "func_ov002_020698d4 case 0x0F9; func_ov002_020661d8; func_ov002_02066290"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0F9; func_ov002_020661d8; func_ov002_02066290"
     },
     "250": {
       "arguments": ["effect_handle"],
       "result": null,
       "control_flow": "retries the same command while the selected effect exists",
       "yield": "while active",
-      "evidence": "func_ov002_020698d4 case 0x0FA; func_ov002_020661d8"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0FA; func_ov002_020661d8"
     },
     "251": {
       "arguments": ["effect_handle"],
@@ -949,14 +949,14 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "stops and releases the selected battle effect handle",
-      "evidence": "func_ov002_020698d4 case 0x0FB; func_ov002_0206615c"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0FB; func_ov002_0206615c"
     },
     "254": {
       "arguments": ["party_slot", "animation_channel"],
       "result": null,
       "control_flow": "retries while the party slot has an attached effect object and that animation channel remains active",
       "yield": "while attached animation is active",
-      "evidence": "func_ov002_020698d4 case 0x0FE; BattleSceneObject_IsAnimationChannelActive"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0FE; BattleSceneObject_IsAnimationChannelActive"
     },
     "255": {
       "arguments": ["attached_effect_id", "property_id"],
@@ -964,7 +964,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "returns a selector-based property from the selected attached battle effect",
-      "evidence": "func_ov002_020698d4 case 0x0FF; func_ov002_020660fc"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0FF; func_ov002_020660fc"
     },
     "257": {
       "arguments": ["effect_id", "duration", "parameter"],
@@ -972,7 +972,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts the primary battle screen-effect channel",
-      "evidence": "func_ov002_020698d4 case 0x101; BattleScreenEffect_StartPrimary"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x101; BattleScreenEffect_StartPrimary"
     },
     "258": {
       "arguments": ["effect_id", "duration", "parameter"],
@@ -980,7 +980,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts the secondary battle screen-effect channel",
-      "evidence": "func_ov002_020698d4 case 0x102; BattleScreenEffect_StartSecondary"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x102; BattleScreenEffect_StartSecondary"
     },
     "259": {
       "arguments": [],
@@ -988,7 +988,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "resets both battle screen-effect channels and their shared state",
-      "evidence": "func_ov002_020698d4 case 0x103; func_ov002_02065dfc"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x103; func_ov002_02065dfc"
     },
     "55": {
       "arguments": ["object_data_slot", "resource_id_low", "resource_id_high"],
@@ -1356,7 +1356,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "the extended dispatcher has no case for this opcode and performs no operation",
-      "evidence": "absent from func_ov002_020698d4; descriptor 0x62"
+      "evidence": "absent from BattleVm_DispatchCommonOpcode; descriptor 0x62"
     },
     "235": {
       "arguments": ["unused_0", "unused_1", "unused_2"],
@@ -1364,7 +1364,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "the extended dispatcher has no case for this opcode and performs no operation",
-      "evidence": "absent from func_ov002_020698d4; descriptor 0x43"
+      "evidence": "absent from BattleVm_DispatchCommonOpcode; descriptor 0x43"
     },
     "237": {
       "arguments": ["unused_0", "unused_1", "unused_2"],
@@ -1372,7 +1372,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "the extended dispatcher has no case for this opcode and performs no operation",
-      "evidence": "absent from func_ov002_020698d4; descriptor 0x43"
+      "evidence": "absent from BattleVm_DispatchCommonOpcode; descriptor 0x43"
     },
     "238": {
       "arguments": ["object_id", "property_id", "element_index", "value", "unused_4"],
@@ -1381,7 +1381,7 @@
       "yield": "never",
       "effect": "writes a selector-based property on the object's attached model; selectors 0x100 through 0x105 address one or every 12-byte element record, while selectors below 0x100 configure fields of attached-model modes 2 and 5",
       "property_values": {"0x100": "element_s16_04", "0x101": "element_s16_06", "0x102": "element_u16_08", "0x103": "element_s8_0a", "0x104": "element_s8_0b", "0x105": "element_flags_0_1"},
-      "evidence": "func_ov002_020698d4 case 0x0EE; func_ov002_02068b50"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0EE; func_ov002_02068b50"
     },
     "239": {
       "arguments": ["object_id", "property_id", "element_index"],
@@ -1390,7 +1390,7 @@
       "yield": "never",
       "effect": "returns a selector-based property from the object's attached model; selectors 0x100 through 0x105 read one 12-byte element record, while selectors below 0x100 expose common mode-2 or mode-5 properties and return -1 when unsupported",
       "property_values": {"0x100": "element_s16_04", "0x101": "element_s16_06", "0x102": "element_u16_08", "0x103": "element_s8_0a", "0x104": "element_s8_0b", "0x105": "element_flags_0_1"},
-      "evidence": "func_ov002_020698d4 case 0x0EF; func_ov002_02068970"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0EF; func_ov002_02068970"
     },
     "240": {
       "arguments": ["unused_0", "unused_1"],
@@ -1398,7 +1398,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "the extended dispatcher has no case for this opcode and performs no operation",
-      "evidence": "absent from func_ov002_020698d4; descriptor 0x02"
+      "evidence": "absent from BattleVm_DispatchCommonOpcode; descriptor 0x02"
     },
     "241": {
       "arguments": ["unused_0", "unused_1", "unused_2"],
@@ -1406,7 +1406,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "the extended dispatcher has no case for this opcode and performs no operation",
-      "evidence": "absent from func_ov002_020698d4; descriptor 0x63"
+      "evidence": "absent from BattleVm_DispatchCommonOpcode; descriptor 0x63"
     },
     "252": {
       "arguments": ["unused_0", "unused_1"],
@@ -1414,7 +1414,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "the extended dispatcher has no case for this opcode and performs no operation",
-      "evidence": "absent from func_ov002_020698d4; descriptor 0x42"
+      "evidence": "absent from BattleVm_DispatchCommonOpcode; descriptor 0x42"
     },
     "87": {
       "arguments": ["object_id", "animation_id"],
@@ -1542,7 +1542,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "decodes the loaded object's animation/model catalog into catalog_slot, records per-entry boundaries, normalizes the generated coordinate data, and releases the temporary model wrapper",
-      "evidence": "func_ov002_020698d4 case 0x0E9; func_ov002_02069530"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0E9; func_ov002_02069530"
     },
     "236": {
       "arguments": ["object_id", "attachment_mode", "catalog_or_value", "element_index"],
@@ -1550,7 +1550,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "replaces the object's existing attached component, constructs attachment mode 2, 3, 4, or 5, initializes its mode-specific resource data, and marks object flag 0x20000",
-      "evidence": "func_ov002_020698d4 case 0x0EC; func_ov002_020691b8"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0EC; func_ov002_020691b8"
     },
     "242": {
       "arguments": ["object_data_slot", "control_mode", "value"],
@@ -1558,7 +1558,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "controls auxiliary model state for an object-data slot: mode 0 writes load-state flag bit 27, mode 1 constructs and starts a temporary model from the loaded resource, and mode 2 invokes the shared auxiliary reset path",
-      "evidence": "func_ov002_020698d4 case 0x0F2; func_ov002_02068878"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0F2; func_ov002_02068878"
     },
     "243": {
       "arguments": ["object_id", "property_id", "value", "unused_3"],
@@ -1567,7 +1567,7 @@
       "yield": "never",
       "effect": "sets an active-model auxiliary property: property 0 copies model state from the object selected by value, property 2 replaces flag bits 12 through 15, and other selectors do nothing",
       "property_values": {"0": "copy_model_state_from_object", "2": "flags_12_15"},
-      "evidence": "func_ov002_020698d4 case 0x0F3; func_ov002_020687ec"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0F3; func_ov002_020687ec"
     },
     "244": {
       "arguments": ["object_id", "property_id", "element_index", "unused_3"],
@@ -1576,7 +1576,7 @@
       "yield": "never",
       "effect": "returns zero for property 0, the span between two halfwords of the indexed eight-byte model record for property 1, or active-model flag bits 12 through 15 for property 2",
       "property_values": {"0": "zero", "1": "element_span", "2": "flags_12_15"},
-      "evidence": "func_ov002_020698d4 case 0x0F4; func_ov002_02068770"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0F4; func_ov002_02068770"
     },
     "247": {
       "arguments": ["horizontal_flip", "content_id", "x", "y", "style_id", "variant", "auto_vertical", "auto_horizontal", "priority_flag", "alignment", "content_width", "content_height", "invert_flag", "task_parameter", "resource_parameter"],
@@ -1584,7 +1584,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "packs the supplied geometry and style fields, derives missing content dimensions and automatic placement flags, creates a battle UI element, and returns its handle",
-      "evidence": "func_ov002_020698d4 case 0x0F7; func_ov002_02066314"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0F7; func_ov002_02066314"
     },
     "248": {
       "arguments": ["content_id", "anchor_object_id", "style_id", "placement_mode", "auto_vertical", "auto_horizontal", "x_offset_or_auto", "content_width", "content_height", "invert_flag", "task_parameter", "resource_parameter"],
@@ -1592,7 +1592,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "measures the requested content, derives a screen-clamped placement from the anchor object's view position and sprite bounds, creates the battle UI element, and returns its handle",
-      "evidence": "func_ov002_020698d4 case 0x0F8; func_ov002_020665cc; func_ov002_02066314"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0F8; func_ov002_020665cc; func_ov002_02066314"
     },
     "253": {
       "arguments": ["owner_object_id", "motion_slot", "motion_mode", "x", "y", "z", "speed_fixed", "unused_7"],
@@ -1600,7 +1600,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "resolves the owner's attached scene object; when speed_fixed is nonzero converts three-dimensional distance to duration, then motion mode 1 moves the attachment by the supplied vector",
-      "evidence": "func_ov002_020698d4 case 0x0FD; BattleSceneObject_MoveBy"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x0FD; BattleSceneObject_MoveBy"
     },
     "256": {
       "arguments": ["owner_object_id", "alignment_mode", "reference_object_id", "view_offset", "unused_4", "unused_5"],
@@ -1608,7 +1608,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "for alignment mode 1, adjusts the owner's attached scene-object baseline so its view-relative baseline equals the reference object's baseline plus view_offset; mode 0 and other modes do nothing",
-      "evidence": "func_ov002_020698d4 case 0x100; func_ov002_02066004; BattlePosition_StoreViewRelative"
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x100; func_ov002_02066004; BattlePosition_StoreViewRelative"
     },
     "64": {
       "arguments": ["encoded_owner_group"],

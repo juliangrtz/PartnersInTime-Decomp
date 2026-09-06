@@ -144,6 +144,8 @@ void BattleAI_TaskPoolsInit(void);
 void BattleAI_Initialize(void);
 int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
                             ScriptVmCommand *command);
+int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
+                                  ScriptVmCommand *command);
 int BattleActor_IsHitLocked(int actor_id);
 void BattleAI_UpdateControlMask(int mask, int enabled);
 int BattleScriptHandle_IsActive(int handle);

@@ -195,4 +195,4 @@ word loads observed from the command-record register (`r5`).
 | `0xE5` | `0x0207E298` | — | `0x8` | `func_ov002_02076178` |
 | `0xE6` | `0x0207E2C4` | — | — | `func_ov002_02076178` |
 | `0xE7` | `0x0207E308` | — | `0x8` | — |
-| `0xE8` | `0x0207E394` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleEffectParticle_Spawn`, `func_ov002_020698d4` |
+| `0xE8` | `0x0207E394` | — | `0x8`, `0xC`, `0x10`, `0x14` | `BattleEffectParticle_Spawn`, `BattleVm_DispatchCommonOpcode` |

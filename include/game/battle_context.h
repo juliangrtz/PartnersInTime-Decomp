@@ -33,7 +33,8 @@ typedef union BattleRuntimeFlags {
         u32 global_property_14 : 1;
         u32 global_property_29 : 1;
         u32 runtime_flag_03 : 1;
-        u32 unknown_04_07 : 4;
+        u32 unknown_04_06 : 3;
+        u32 common_asset_load_pending : 1;
         u32 asset_load_pending : 1;
         u32 unknown_09 : 1;
         u32 global_property_19 : 1;
