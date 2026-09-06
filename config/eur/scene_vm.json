@@ -377,7 +377,7 @@
     "83": "noop_scene_053",
     "102": "noop_scene_066",
     "103": "noop_scene_067",
-    "104": "noop_scene_068",
+    "104": "start_object_arc_motion",
     "116": "noop_scene_074",
     "117": "noop_scene_075",
     "118": "noop_scene_076",
@@ -1301,22 +1301,22 @@
     },
     "104": {
       "arguments": [
-        "unused_0",
-        "unused_1",
-        "unused_2",
-        "unused_3",
-        "unused_4",
-        "unused_5",
-        "unused_6",
-        "unused_7",
-        "unused_8",
-        "unused_9"
+        "object_id",
+        "motion_slot",
+        "arc_origin_x",
+        "arc_origin_y",
+        "arc_origin_z",
+        "arc_target_x",
+        "arc_target_y",
+        "arc_target_z",
+        "angle_step",
+        "total_angle"
       ],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "the descriptor decodes 10 operands, but the scene dispatcher has no case for this opcode and performs no operation",
-      "evidence": "absent from func_ov007_02081730; descriptor 0x4A"
+      "effect": "starts a circular-arc object motion task; its callback advances the angle, solves the three-dimensional arc through the supplied origin and target, and updates the object position each frame",
+      "evidence": "func_ov007_02081730 case 0x068; func_ov007_02085998 schedules func_ov007_02085a1c; func_ov007_0208552c performs the arc interpolation"
     },
     "116": {
       "arguments": [

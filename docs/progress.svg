@@ -3237,7 +3237,7 @@
 <rect class="cell" x="869.30" y="535.53" width="0.81" height="1.67" fill="#263244"><title>ARM9 resident · func_02048f04 · 4 B · remaining</title></rect>
 <rect class="component" x="561.44" y="224.00" width="310.67" height="315.20"/>
 <text x="568.4" y="242.0" class="module">ARM9 resident</text>
-<rect class="cell" x="563.44" y="541.20" width="48.30" height="63.53" fill="#263244"><title>Overlay 07 · func_ov007_02081730 · 9.0 KiB · remaining</title></rect>
+<rect class="cell" x="563.44" y="541.20" width="48.30" height="63.53" fill="#263244"><title>Overlay 07 · SceneVm_DispatchCommand · 9.0 KiB · remaining</title></rect>
 <rect class="cell" x="563.44" y="604.73" width="48.30" height="35.70" fill="#263244"><title>Overlay 07 · func_ov007_02070b50 · 5.0 KiB · remaining</title></rect>
 <rect class="cell" x="563.44" y="640.43" width="48.30" height="28.99" fill="#263244"><title>Overlay 07 · func_ov007_0206b080 · 4.1 KiB · remaining</title></rect>
 <rect class="cell" x="563.44" y="669.42" width="48.30" height="26.58" fill="#263244"><title>Overlay 07 · func_ov007_0207c140 · 3.8 KiB · remaining</title></rect>

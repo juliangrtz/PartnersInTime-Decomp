@@ -418,6 +418,14 @@ scripts (`0x0A5..0x0A9`), the terminal targeted stop at `0x0AB`, and four
 conditional branch forms (`0x0B1`, `0x0B2`, `0x0B5`, `0x0B6`). Opcode `0x033`
 is also proven to be an intentional two-argument no-op: it occurs 103 times but
 has no dispatcher case.
+
+Reconstructing the full dispatcher corrected one previously false no-op:
+opcode `0x068` starts a circular-arc object motion task. It supplies two 3D
+points plus angular step/extent parameters to `func_ov007_02085998`; the
+scheduled `func_ov007_02085a1c` callback advances the angle and
+`func_ov007_0208552c` solves the per-frame arc position. The shipped scene
+corpus does not currently reach this legacy command, which is why archive-only
+usage analysis had not exposed it.
 Opcodes `0x09F..0x0A4` control persistent/one-frame synthetic input,
 real-input rejection, and rejection feedback. Opcodes `0x059..0x065`
 form paired coordinate/directional kinematic motion families; their result

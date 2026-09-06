@@ -710,6 +710,13 @@ archive selector, eight-sprite factory, and 964-byte transition state machine
 are retained as structured, size-aware WIP C rather than being linked before
 their remaining Metrowerks register schedules match.
 
+The full overlay-7 scene command dispatcher at `0x02081730-0x02083B1C` is now
+represented by a single structured C switch as well. It covers every real and
+reserved opcode slot, explicit retry/yield behavior, object-script ownership,
+motion setup, sound tasks, and UI commands. The current Metrowerks output is
+8,748 bytes versus the original 9,196 bytes (55.37% fuzzy match), so it remains
+an objdiff WIP rather than displacing the byte-identical assembly range.
+
 Priority formats:
 
 1. finish argument contracts and semantic names in the implemented

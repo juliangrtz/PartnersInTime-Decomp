@@ -29,8 +29,6 @@ extern const u8 data_ov007_0208dca4[];
 
 extern void MI_CpuFill8(void *destination, u32 value, u32 size);
 extern void func_0203b76c(u16 value, void *destination, u32 size);
-extern int func_ov007_02081730(void *vm, void *state);
-
 void SceneManager_InitializeRuntime(SceneManagerInitLayout *manager) {
     int object_id;
     int script_id;
@@ -71,5 +69,5 @@ void SceneManager_InitializeRuntime(SceneManagerInitLayout *manager) {
     manager->vm.unknown_00 = 0;
     manager->vm.unknown_04 = 0;
     manager->vm.opcode_table = data_ov007_0208dca4;
-    manager->vm.command_handler = func_ov007_02081730;
+    manager->vm.command_handler = SceneVm_DispatchCommand;
 }
