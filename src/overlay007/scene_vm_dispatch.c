@@ -363,17 +363,15 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_GET_OBJECT_COORDINATE: {
         s16 object_y;
-        s32 packed_screen_height;
-        s32 screen_height;
+        s16 screen_height;
         u16 property_id;
         s16 object_x;
 
         object = SceneObject_GetById(ARG_U16(0));
         object_y = object->y;
-        packed_screen_height =
-            (object->render_height + 16 * (192 - object_y)) << 16;
-        object_y -= object->base_y;
-        screen_height = packed_screen_height >> 16;
+        screen_height = (s16)(
+            object->render_height + 16 * (192 - object_y));
+        object_y = (s16)(object_y - object->base_y);
         property_id = ARG_U16(1);
         object_x = object->x;
         switch (property_id) {
@@ -455,16 +453,16 @@ int SceneVm_DispatchCommand(
     /* MWCC places these two later opcode bodies beside the shared movement
      * cases; retaining that source order also preserves the original layout. */
     case SCENE_OP_START_OBJECT_PATH: {
-        const u32 *path;
+        u32 path_address;
         void *motion;
 
         object = SceneObject_GetById(ARG_U16(0));
         motion = func_ov007_02086f74(
             object, ARG_U16(1), 0, func_ov007_02087bf4
         );
-        path = (const u32 *)((u32)state->script + 2 * ARG(3));
-        if (((u32)path & 3) != 0) {
-            path = (const u32 *)((u32)path & ~3);
+        path_address = (u32)state->script + 2 * ARG(3);
+        if ((path_address & 3) != 0) {
+            path_address &= ~3;
         }
         if ((command->argument_modes & (1 << 5)) == 0) {
             ARG(5) = (s32)((ARG(5) & 0xFFFF) |
@@ -472,8 +470,9 @@ int SceneVm_DispatchCommand(
         }
         func_ov007_020724b0(
             motion,
-            path + 1,
-            (u32)((*path + (*path >> 31)) << 15) >> 16,
+            (const u32 *)(path_address + sizeof(u32)),
+            (u32)((*(const u32 *)path_address +
+                   (*(const u32 *)path_address >> 31)) << 15) >> 16,
             (ARG(4) - 1) << 16,
             ARG(5)
         );
@@ -809,18 +808,16 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER: {
         SceneScriptState *entry;
-        s32 owner;
         s16 remaining;
 
         if (ARG(0) < 1) {
             ARG(0) = ((SceneScriptState *)state)->owner;
         }
-        owner = ARG(0);
         entry = SceneVm_GetObjectScriptPool();
-        if (owner < SCENE_SCRIPT_OWNER_OBJECT) {
+        if (ARG(0) < SCENE_SCRIPT_OWNER_OBJECT) {
             remaining = 40;
             do {
-                if (owner == entry->parent_owner &&
+                if (ARG(0) == entry->parent_owner &&
                     entry->vm_state.script != 0) {
                     return SceneVm_RewindAndYield(
                         vm, state, SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER
@@ -830,9 +827,9 @@ int SceneVm_DispatchCommand(
                 entry++;
             } while (remaining != 0);
         } else {
-            u32 object_id = owner & SCENE_SCRIPT_OWNER_ID_MASK;
+            s16 object_remaining = 40;
+            u32 object_id = ARG(0) & SCENE_SCRIPT_OWNER_ID_MASK;
 
-            remaining = 40;
             do {
                 if (object_id == entry->parent_object_id &&
                     entry->vm_state.script != 0) {
@@ -840,9 +837,9 @@ int SceneVm_DispatchCommand(
                         vm, state, SCENE_OP_WAIT_OBJECT_SCRIPTS_BY_OWNER
                     );
                 }
-                remaining = (s16)(remaining - 1);
+                object_remaining = (s16)(object_remaining - 1);
                 entry++;
-            } while (remaining != 0);
+            } while (object_remaining != 0);
         }
         return SCRIPT_VM_CONTINUE;
     }
@@ -874,9 +871,9 @@ int SceneVm_DispatchCommand(
                 entry++;
             } while (remaining > 0);
         } else {
+            s16 object_remaining = 40;
             u32 object_id = owner & SCENE_SCRIPT_OWNER_ID_MASK;
 
-            remaining = 40;
             do {
                 if (object_id == entry->parent_object_id &&
                     entry->vm_state.script != 0) {
@@ -884,9 +881,9 @@ int SceneVm_DispatchCommand(
                     SceneVm_GetObjectScript(ARG(0))->vm_state.stack_depth = 0;
                     break;
                 }
-                remaining = (s16)(remaining - 1);
+                object_remaining = (s16)(object_remaining - 1);
                 entry++;
-            } while (remaining != 0);
+            } while (object_remaining != 0);
         }
         return SCRIPT_VM_CONTINUE;
     }

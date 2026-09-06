@@ -131,9 +131,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   schedules match. The complete 9,196-byte scene command dispatcher now also
   exists as one structured, compiling C switch with named opcode families and
   all reserved slots preserved. Its current build reproduces the exact
-  original 9,196-byte size and reaches 97.17% fuzzy instruction similarity.
-  The original kinematic-handler order and owner-loop control flow are now
-  recovered; retry decoding uses the original operand order, and packed
+  original 9,196-byte size and reaches 97.91% fuzzy instruction similarity.
+  The original kinematic-handler order, branch-specific owner-loop counters,
+  raw aligned path-address handling, and signed screen-coordinate values are
+  now recovered; retry decoding uses the original operand order, and packed
   arguments preserve both halves of their 32-bit values with the original
   low-half mask. Typed manager ownership now exposes the 40 object-script and
   16 sound-task slots. The fifth text-tile coordinate, pointer-backed scene
