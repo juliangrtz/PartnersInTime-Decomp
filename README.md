@@ -131,14 +131,17 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   schedules match. The complete 9,196-byte scene command dispatcher now also
   exists as one structured, compiling C switch with named opcode families and
   all reserved slots preserved. Its current build reproduces the exact
-  original 9,196-byte size and reaches 96.52% fuzzy instruction similarity.
+  original 9,196-byte size and reaches 97.17% fuzzy instruction similarity.
   The original kinematic-handler order and owner-loop control flow are now
   recovered; retry decoding uses the original operand order, and packed
   arguments preserve both halves of their 32-bit values with the original
   low-half mask. Typed manager ownership now exposes the 40 object-script and
   16 sound-task slots. The fifth text-tile coordinate, pointer-backed scene
   mode/save-data inputs, dynamic UI retry descriptors, and the distinct
-  reserved `0x097` epilogue now match the ROM. It remains unlinked while the
+  reserved `0x097` epilogue now match the ROM. Object-script starts and text
+  readiness now reference their reconstructed C symbols, and the reserved
+  `0x0BD..0x0BF` epilogues and all three speed-mode distance calculations use
+  the original layout. It remains unlinked while the
   last local Metrowerks register schedules are converged.
   The complete 19,168-byte battle-specific dispatcher is now represented the
   same way: one readable C unit covers all 182 slots from `0x033` through
