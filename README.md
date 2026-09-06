@@ -141,9 +141,10 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   battle VM executor. Fixed-opcode retries, the complete enemy-stat switches,
   object-position conversion, typed effect handles, movement-duration paths,
   the effect/task-slot scans, and the four 40-slot owner operations are now
-  reintegrated into the monolith. Its current 19,168-byte function reaches
-  76.21% fuzzy instruction similarity with no compiler-generated helper
-  symbols left, and remains unlinked while the
+  reintegrated into the monolith. Its current 19,152-byte function reaches
+  88.02% fuzzy instruction similarity with no compiler-generated helper
+  symbols left. The original `0x74`-byte stack frame, nine distinct XYZ work
+  areas, and non-numeric handler layout are recovered; it remains unlinked while the
   original giant-switch layout is converged without compromising the verified
   ROM build.
   Overlay 0's still larger 23,492-byte field/world dispatcher now has the same

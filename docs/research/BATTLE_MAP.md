@@ -1375,11 +1375,13 @@ relative-PC behavior, all three tagged effect/task handle families, the
 decoding paths. Retry decoding, enemy-stat access, packed trait writes,
 object-view coordinates, comparisons, script control, movement-duration
 calculation, typed effect flags, the effect/task-slot scans, and the owner
-scans are now reintegrated. The current MWCC build is one 19,168-byte function
-with no compiler-generated helper symbols. It is 76.21% fuzzy-similar to the
-original 19,168-byte monolith, so it is deliberately not linked yet. Compiler
-switch, stack, literal-pool, and register-layout work are now the matching
-task; opcode semantics are no longer the blocker.
+scans are now reintegrated. The current MWCC build is one 19,152-byte function
+with no compiler-generated helper symbols. It is 88.02% fuzzy-similar to the
+original 19,168-byte monolith, so it is deliberately not linked yet. Its
+`0x74`-byte stack frame, nine distinct position work areas, and exceptional
+handler ordering now match. Remaining compiler work is concentrated in raw
+effect-coordinate scheduling, item-record selection, literal pools, and a few
+virtual-call register schedules; opcode semantics are no longer the blocker.
 
 The complete 182-entry range, handler addresses, aliases, observed
 command-record fields, and direct calls are indexed in
