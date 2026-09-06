@@ -484,7 +484,7 @@ The battle dispatcher's common extension is now reconstructed separately in
 implements every slot from `0x0E9` through `0x103`, including attachment and
 auxiliary-model operations, common resource loading, UI creation, effect and
 animation waits, object motion, and screen effects. The exact 1,844-byte
-original size is reproduced at 75.49% fuzzy instruction similarity. Its six
+original size is reproduced at 98.92% fuzzy instruction similarity. Its six
 legacy no-ops and both dedicated no-op epilogues remain explicit so that the
 switch layout and relocation boundaries are not accidentally collapsed.
 

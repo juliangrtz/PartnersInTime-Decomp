@@ -105,13 +105,12 @@ typedef char BattleVmAttachmentOwner_SizeCheck[
         ? 1
         : -1];
 
-static inline BattleVmEmbeddedObject *BattleVm_GetAttachment(int owner_id) {
-    u8 *owner_context = *(u8 **)(
-        data_ov002_020c0660 + BATTLE_VM_ATTACHMENT_OWNER_OFFSET);
-    BattleVmAttachmentOwner *owners = *(BattleVmAttachmentOwner **)(
-        owner_context + BATTLE_VM_ATTACHMENT_TABLE_OFFSET);
-
-    return owners[owner_id].attachment;
+static inline BattleVmEmbeddedObject *BattleVm_GetAttachment(
+    volatile s32 *arguments) {
+    return (*(BattleVmAttachmentOwner **)(
+        *(u8 **)(data_ov002_020c0660 +
+                 BATTLE_VM_ATTACHMENT_OWNER_OFFSET) +
+        BATTLE_VM_ATTACHMENT_TABLE_OFFSET))[arguments[0]].attachment;
 }
 
 static inline int BattleVm_RetryCommonCommand(
@@ -134,7 +133,7 @@ static inline void BattleVm_WriteCommonResult(
 
 int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
                                   ScriptVmCommand *command) {
-    s32 *arguments = command->arguments;
+    volatile s32 *arguments = command->arguments;
     BattleVmEmbeddedObject *attachment;
     BattleSceneObject *object;
     int value;
@@ -242,7 +241,7 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
         int delta_y;
         int delta_z;
 
-        attachment = BattleVm_GetAttachment(arguments[0]);
+        attachment = BattleVm_GetAttachment(arguments);
         if (attachment == 0) {
             return SCRIPT_VM_CONTINUE;
         }
@@ -265,7 +264,7 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
     }
 
     case BATTLE_VM_WAIT_ATTACHED_ANIMATION:
-        attachment = BattleVm_GetAttachment(arguments[0]);
+        attachment = BattleVm_GetAttachment(arguments);
         if (attachment == 0) {
             return SCRIPT_VM_CONTINUE;
         }
