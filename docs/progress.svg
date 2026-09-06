@@ -28,7 +28,7 @@
 <text x="487.0" y="181.0" class="legend">Remaining  1.37 MiB</text>
 <text x="1172.0" y="181.0" class="legend" text-anchor="end">Rectangle area = code bytes</text>
 <rect class="cell" x="30.00" y="226.00" width="119.37" height="80.75" fill="#263244"><title>Overlay 00 · func_ov000_0209418c · 27.8 KiB · remaining</title></rect>
-<rect class="cell" x="149.37" y="226.00" width="98.54" height="80.75" fill="#263244"><title>Overlay 00 · func_ov000_020823f8 · 22.9 KiB · remaining</title></rect>
+<rect class="cell" x="149.37" y="226.00" width="98.54" height="80.75" fill="#263244"><title>Overlay 00 · FieldVm_DispatchCommand · 22.9 KiB · remaining</title></rect>
 <rect class="cell" x="247.91" y="226.00" width="46.37" height="80.75" fill="#263244"><title>Overlay 00 · func_ov000_020ae6c0 · 10.8 KiB · remaining</title></rect>
 <rect class="cell" x="30.00" y="306.75" width="80.94" height="44.69" fill="#263244"><title>Overlay 00 · func_ov000_0207c170 · 10.4 KiB · remaining</title></rect>
 <rect class="cell" x="110.94" y="306.75" width="39.32" height="44.69" fill="#263244"><title>Overlay 00 · func_ov000_020acc7c · 5.1 KiB · remaining</title></rect>

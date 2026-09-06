@@ -1,6 +1,6 @@
 #include <game/field_entity.h>
 
-extern void *data_ov000_020c0fc4[];
+extern FieldEntityVTable data_ov000_020c0fc4[];
 extern void func_02029bb0(FieldEntity *entity);
 extern void func_0202cbd4(void *destination, int value, u32 size);
 
