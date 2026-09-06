@@ -140,6 +140,15 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   battle VM executor. Its current 15,676-byte Metrowerks output reaches 28.84%
   fuzzy instruction similarity and remains unlinked while the original giant
   switch layout is recovered without compromising the verified ROM build.
+  Overlay 0's still larger 23,492-byte field/world dispatcher is now under the
+  same structured reconstruction. Its first 123 consecutive command slots
+  (`0x033` through `0x0AD`) are editable C, covering child-script ownership,
+  entity state and collision policy, resources, animation and palettes,
+  transforms, 2D/3D movement and orbits, roaming and waypoint records, field
+  effects, enemy contact policy, and entity script values. Named runtime
+  layouts replace raw offsets for the shared entity and render state. The
+  current 11,944-byte partial build remains unlinked while the remaining field
+  commands and final Metrowerks layout are reconstructed.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,

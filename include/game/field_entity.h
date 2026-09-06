@@ -2,14 +2,95 @@
 #define PARTNERS_IN_TIME_GAME_FIELD_ENTITY_H
 
 #include <nitro.h>
+#include <nitro/fx.h>
 
 enum FieldEntityStateFlag {
     FIELD_ENTITY_STATE_ACTIVE = 1 << 1,
     FIELD_ENTITY_STATE_FLAG_02 = 1 << 2
 };
 
+enum FieldRuntimeEntityFlag {
+    FIELD_ENTITY_RETAIN_OFFSCREEN_CONTACT = 1 << 8,
+    FIELD_ENTITY_RESERVED_STATE = 1 << 12,
+    FIELD_ENTITY_CONTACT_MODE_MASK = 7,
+    FIELD_ENTITY_TURN_TO_INTERACTOR = 1 << 11,
+    FIELD_ENTITY_TRACK_GROUND = 1 << 12,
+    FIELD_ENTITY_IGNORE_NAVIGATION_OBSTACLE = 1 << 13,
+    FIELD_ENTITY_BODY_COLLISION_ENABLED = 1 << 14,
+    FIELD_ENTITY_SHADOW_ENABLED = 1 << 15,
+    FIELD_ENTITY_SHADOW_SUPPORT_ENABLED = 1 << 17,
+    FIELD_ENTITY_SHADOW_STYLE_SHIFT = 18,
+    FIELD_ENTITY_SHADOW_STYLE_MASK = 7 << FIELD_ENTITY_SHADOW_STYLE_SHIFT,
+    FIELD_ENTITY_SAVED_RESOURCE = 1 << 16,
+    FIELD_ENTITY_SAVED_PALETTE_PROFILE = 1 << 17,
+    FIELD_ENTITY_SAVED_RESOURCE_ANIMATION = 1 << 18,
+    FIELD_ENTITY_SAVED_ANIMATION = 1 << 19,
+    FIELD_ENTITY_SAVED_BEHAVIOR = 1 << 13,
+    FIELD_ENTITY_SYNC_HORIZONTAL = 1 << 0,
+    FIELD_ENTITY_SYNC_VERTICAL = 1 << 1,
+    FIELD_ENTITY_ALTERNATE_COLLISION_FACES = 1 << 3,
+    FIELD_ENTITY_HORIZONTAL_SYNC_DIRTY = 1 << 4,
+    FIELD_ENTITY_VERTICAL_SYNC_DIRTY = 1 << 5,
+    FIELD_ENTITY_AUTO_AUXILIARY_PRIORITY = 1 << 25,
+    FIELD_ENTITY_AUTO_PRIORITY_0 = 1 << 26,
+    FIELD_ENTITY_AUTO_PRIORITY_1 = 1 << 27,
+    FIELD_ENTITY_AUTO_PRIORITY_2 = 1 << 28,
+    FIELD_ENTITY_AUTO_PRIORITY_3 = 1 << 29
+};
+
+enum FieldRenderObjectFlag {
+    FIELD_RENDER_SEMITRANSPARENT = 1 << 3,
+    FIELD_RENDER_ANIMATION_ACTIVE = 1 << 8,
+    FIELD_RENDER_ANIMATION_SUPPRESSED = 1 << 9
+};
+
+typedef struct FieldEntity FieldEntity;
+typedef struct FieldEntityVTable FieldEntityVTable;
+typedef struct FieldRenderObject FieldRenderObject;
+typedef struct FieldRenderObjectVTable FieldRenderObjectVTable;
+typedef struct FieldRuntimeEntity FieldRuntimeEntity;
+
+struct FieldRenderObjectVTable {
+    u8 unknown_00[0x68];
+    void (*set_animation)(FieldRenderObject *render_object,
+                          u8 resource_animation, s16 animation_id,
+                          int restart);
+    u8 unknown_6c[0x10];
+    void (*set_palette_animation_paused)(
+        FieldRenderObject *render_object, s8 slot, int paused);
+    void (*set_palette_animation_mode)(
+        FieldRenderObject *render_object, s8 slot, int mode);
+    u8 unknown_84[4];
+    void (*bind_palette_animation)(FieldRenderObject *render_object,
+                                   s8 slot, s16 animation_id,
+                                   int restart);
+    void (*request_base_palette_reload)(FieldRenderObject *render_object);
+};
+
+struct FieldEntityVTable {
+    u8 unknown_00[0x0C];
+    void (*stop_script)(FieldEntity *entity);
+    void (*pause_script)(FieldEntity *entity);
+    void (*resume_script)(FieldEntity *entity);
+    int (*get_property)(FieldEntity *entity, int property_id);
+    u8 unknown_1c[0x34];
+    void (*cancel_planar_movement)(FieldEntity *entity, void *controller,
+                                   int snap_to_destination);
+    u8 unknown_54[8];
+    void (*cancel_vertical_movement)(FieldEntity *entity, void *controller,
+                                     int snap_to_destination);
+    void (*set_visible)(FieldEntity *entity, int visible);
+    u8 unknown_64[0x28];
+    void (*set_collision_response_channels)(
+        FieldEntity *entity, int channel_0, int channel_1, int channel_2,
+        int channel_3, int channel_4);
+    void (*set_collision_response_channels_masked)(
+        FieldEntity *entity, u16 channel_mask, int enabled);
+    void (*restore_collision_response_channels)(FieldEntity *entity);
+};
+
 typedef struct FieldEntity {
-    void *vtable;
+    FieldEntityVTable *vtable;
     u8 unknown_004[6];
     union {
         u16 property_00a;
@@ -30,11 +111,106 @@ typedef struct FieldEntity {
             u32 unknown_flags_17_31 : 15;
         } state_flag_bits;
     };
-    u8 unknown_0d4[0x0C];
+    u8 unknown_0d4[6];
+    s16 script_values[2];
+    u8 unknown_0de[2];
     u32 action_timer;
     u8 unknown_0e4[8];
 } FieldEntity;
 
+/*
+ * Shared portion of the sprite/model object bound to a field entity. Keeping
+ * the command-facing fields typed makes the VM reconstruction readable while
+ * the renderer itself remains in assembly.
+ */
+struct FieldRenderObject {
+    FieldRenderObjectVTable *vtable;
+    u8 unknown_004[0x52];
+    u16 animation_id;
+    u8 unknown_058[0x24];
+    u32 state_flags;
+    u8 unknown_080[0x38];
+    u8 transition_active;
+    u8 unknown_0b9[3];
+    void *transition;
+    u8 unknown_0c0[0x40];
+    void *components[8];
+    u8 unknown_120[0x10];
+    u32 sort_key;
+    s8 overlap_priorities[4];
+};
+
+/*
+ * Runtime extension shared by the scriptable field-entity subclasses. The
+ * small FieldEntity base above is still used by its byte-matching constructor.
+ */
+struct FieldRuntimeEntity {
+    FieldEntity base;
+    u8 unknown_0ec[8];
+    fx32 position_x;
+    fx32 position_y;
+    u8 unknown_0fc[0x28];
+    fx32 interaction_vertical_extent;
+    u8 unknown_128[0x5C];
+    u32 base_state_flags;
+    u8 unknown_188[0x0C];
+    u32 saved_presentation_flags;
+    s16 animation_speed;
+    u8 resource_index;
+    u8 saved_resource_index;
+    u8 presentation_state;
+    u8 saved_presentation_state;
+    u16 animation_id;
+    u16 saved_animation_id;
+    u16 saved_model_animation;
+    u8 unknown_1a4[0x3C];
+    FieldRenderObject *render_object;
+    u8 unknown_1e4[0x10];
+    u32 planar_movement_flags;
+    u8 unknown_1f8[0x40];
+    u32 vertical_controller_flags;
+    u8 unknown_23c[0x44];
+    u16 transform_flags;
+    u8 unknown_282[0x3A];
+    fx32 position_z;
+    u8 unknown_2c0[0x28];
+    s32 body_corner_angles[4];
+    fx32 body_min_x;
+    fx32 body_max_x;
+    fx32 body_min_y;
+    fx32 body_max_y;
+    fx32 body_vertical_extent;
+    u8 unknown_30c[0x10];
+    fx32 body_center_y;
+    fx32 navigation_min_x;
+    fx32 navigation_max_x;
+    fx32 navigation_min_y;
+    fx32 navigation_max_y;
+    fx32 navigation_vertical_extent;
+    u8 unknown_334[0x30];
+    fx32 default_vertical_launch_velocity;
+    fx32 default_gravity;
+    fx32 terminal_fall_velocity;
+    u8 unknown_370[0x1C];
+    u32 field_state_flags;
+    u32 collision_category_mask;
+    u32 collision_policy_low;
+    u32 collision_policy_high;
+    u32 collision_state_flags;
+    u32 unknown_3a0;
+    u32 contact_direction_flags;
+    u8 unknown_3a8[0x24];
+    u32 runtime_flags;
+    u8 unknown_3d0[0x10];
+    u32 roaming_flags;
+    u8 unknown_3e4[0x12C];
+    FieldRenderObject *auxiliary_render_object;
+};
+
 typedef char FieldEntity_SizeCheck[sizeof(FieldEntity) == 0xEC ? 1 : -1];
+typedef char FieldRenderObject_SizeCheck[
+    sizeof(FieldRenderObject) == 0x138 ? 1 : -1];
+typedef char FieldRuntimeEntity_SizeCheck[
+    sizeof(FieldRuntimeEntity) == 0x514 ? 1 : -1];
 
 #endif

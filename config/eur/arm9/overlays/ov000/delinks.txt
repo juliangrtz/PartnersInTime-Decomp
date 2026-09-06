@@ -7,3 +7,6 @@
 src/field/field_entity_state.c:
     .text       start:0x020a2bbc end:0x020a2d04
 
+src/field/field_vm_dispatch.c:
+    .text       start:0x020823f8 end:0x02087fbc
+

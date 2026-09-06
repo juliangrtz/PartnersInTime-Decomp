@@ -730,6 +730,19 @@ the main function has 28.84% fuzzy instruction similarity. It therefore stays
 unlinked until helper reintegration and switch/register-layout matching can be
 done without changing the verified ROM.
 
+The overlay-0 field/world dispatcher at `0x020823F8-0x02087FBC` is now a
+structured C work unit as well. The first 123 consecutive slots
+(`0x033..0x0AD`) cover the complete script/entity-control prefix: inline and
+queued child scripts, entity render/collision state, bounds and priorities,
+resource/animation/palette state, scale and rotation, all fixed/linked orbit
+variants, profiled and timed movement, vertical motion, roaming and waypoint
+records, field effect sprites, enemy contact policy, and entity-local script
+values. Shared entity and render-object layouts are typed through the offsets
+used by these commands. MWCC currently emits 11,944 bytes for this partial
+source versus the original 23,492-byte monolith. It remains unlinked until the
+remaining `0x0AE..0x154` field-system commands and final instruction layout are
+complete.
+
 Priority formats:
 
 1. finish argument contracts and semantic names in the implemented
