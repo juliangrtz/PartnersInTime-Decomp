@@ -1395,9 +1395,10 @@ and wait state, free and object-anchored battle UI, effect ownership and wait
 operations, speed-derived object motion, animation-channel waits, and the two
 screen-effect paths. The six absent/reserved commands remain intentional
 no-ops, including the original distinct epilogues for `0x0F0` and `0x0FC`.
-The current MWCC output is exactly the original 1,844 bytes and reaches 75.49%
-fuzzy instruction similarity. It remains unlinked only because its persistent
-state/argument registers are allocated in the opposite order from the ROM.
+The current MWCC output is exactly the original 1,844 bytes and reaches 98.92%
+fuzzy instruction similarity. Its persistent state/argument registers now
+match the ROM; only five scheduling differences remain in the attached-object
+distance calculation.
 
 The complete 182-entry range, handler addresses, aliases, observed
 command-record fields, and direct calls are indexed in

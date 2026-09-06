@@ -756,9 +756,10 @@ complete structured C unit too. `BattleVm_DispatchCommonOpcode` covers all 27
 slots in `0x0E9..0x103`, preserving the six legacy no-ops, two dedicated no-op
 epilogues, attachment ownership, asynchronous asset/effect/animation waits,
 UI construction, motion calculation, and both screen-effect channels. MWCC
-emits the exact original 1,844-byte size at 75.49% fuzzy instruction
-similarity. It remains an objdiff WIP until the two persistent register
-assignments converge.
+emits the exact original 1,844-byte size at 98.92% fuzzy instruction
+similarity. Marking the live command arguments volatile recovers the original
+persistent register allocation; only five load-scheduling instructions in the
+attached-object distance calculation remain different.
 
 The overlay-0 field/world dispatcher at `0x020823F8-0x02087FBC` is now a
 complete structured C work unit as well. All 290 consecutive slots

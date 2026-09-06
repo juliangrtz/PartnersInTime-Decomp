@@ -163,7 +163,7 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   `BattleVm_DispatchCommonOpcode` reconstructs all 27 slots from `0x0E9`
   through `0x103`, including attachment/model control, common-asset loading,
   UI creation, effect waits, object motion, and both screen-effect channels.
-  MWCC emits the exact original 1,844-byte function size at 75.49% fuzzy
+  MWCC emits the exact original 1,844-byte function size at 98.92% fuzzy
   instruction similarity. The six reserved no-ops, the two distinct no-op
   epilogues, and every asynchronous retry boundary retain their original
   control-flow positions; the function remains an unlinked objdiff work unit
