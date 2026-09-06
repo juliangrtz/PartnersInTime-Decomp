@@ -162,7 +162,7 @@ extern void func_ov000_0207138c(u8 *field_context, FieldEntity *entity);
 extern int func_ov000_0207133c(u8 *field_context, FieldEntity *entity);
 extern void func_ov000_020bc8e4(FieldEntity *entity, int enabled);
 extern void func_ov000_020bc7d0(FieldEntity *entity, int enabled);
-extern void func_ov000_0209b53c(void *party_controller);
+extern void func_ov000_0209b53c(void *party_controller, int instant);
 extern void func_ov000_0209b0b8(void *party_controller);
 extern void func_ov000_0209e720(void *party_manager, int party_side,
                                 int instant);
@@ -198,7 +198,8 @@ extern void func_ov000_0209dda4(void *party_manager,
                                 fx32 target_elevation);
 extern void func_ov000_0209dd8c(void *party_manager);
 extern void func_ov000_0209e1a8(void *party_manager);
-extern void func_ov000_020a0c30(void *party_manager, int party_side);
+extern void func_ov000_020a0c30(void *party_manager, int party_side,
+                                int instant, int reserved, int enabled);
 extern void func_ov000_0209cbfc(void *party_controller, int reserved);
 extern void func_ov000_0209cb90(void *party_controller, int reserved);
 extern void func_ov000_0207fd54(
@@ -398,7 +399,7 @@ struct FieldMapControllerVTable {
     int (*are_palette_animations_active)(FieldMapController *controller);
     u8 unknown_60[4];
     void (*start_palette_animation)(FieldMapController *controller,
-                                    u8 animation_index, int loop_mode);
+                                    u8 animation_index, u8 loop_mode);
     u8 unknown_68[4];
     void (*reset_palette_animations)(FieldMapController *controller);
     void (*stop_palette_animation)(FieldMapController *controller,
@@ -451,6 +452,39 @@ typedef struct FieldSpecialResourceState {
     u16 unknown_14_15 : 2;
 } FieldSpecialResourceState;
 
+typedef struct FieldBrightnessTransitionFlags {
+    u8 active : 1;
+    u8 paused : 1;
+    u8 unknown_02_07 : 6;
+} FieldBrightnessTransitionFlags;
+
+typedef struct FieldTwoBitActivityFlags {
+    u16 activity_mode : 2;
+    u16 unknown_02_15 : 14;
+} FieldTwoBitActivityFlags;
+
+typedef struct FieldSingleActivityFlags16 {
+    u16 active : 1;
+    u16 unknown_01_15 : 15;
+} FieldSingleActivityFlags16;
+
+typedef struct FieldAsyncOperationFlags {
+    u32 active : 1;
+    u32 unknown_01_31 : 31;
+} FieldAsyncOperationFlags;
+
+typedef struct FieldControlFlags {
+    u16 unknown_00_02 : 3;
+    u16 release_party_action : 1;
+    u16 selected_party_side : 1;
+    u16 unknown_05_15 : 11;
+} FieldControlFlags;
+
+typedef struct FieldBgScrollControllerState {
+    FieldTwoBitActivityFlags flags;
+    u8 unknown_02[54];
+} FieldBgScrollControllerState;
+
 typedef struct FieldSpecialPartyState {
     u16 field_screen : 1;
     u16 party_control_enabled : 1;
@@ -460,6 +494,48 @@ typedef struct FieldSpecialPartyState {
     u16 camera_focus_enabled : 1;
     s8 camera_focus_entity_id;
 } FieldSpecialPartyState;
+
+typedef struct FieldPartyControllerFlags {
+    u32 unknown_00_06 : 7;
+    u32 field_screen : 1;
+    u32 unknown_08 : 1;
+    u32 special_contact_mode : 1;
+    u32 unknown_10_14 : 5;
+    u32 follower_rejoin_active : 1;
+    u32 unknown_16 : 1;
+    u32 active_member : 1;
+    u32 movement_active : 1;
+    u32 unknown_19 : 1;
+    u32 movement_state : 10;
+    u32 unknown_30_31 : 2;
+} FieldPartyControllerFlags;
+
+typedef struct FieldPartyManagerFlags {
+    u32 active_party_side : 1;
+    u32 active_party_switching : 1;
+    u32 unknown_02_06 : 5;
+    u32 piggyback_state : 1;
+    u32 unknown_08_16 : 9;
+    u32 active_music_buffer : 7;
+    u32 music_transition_level : 7;
+    u32 secondary_music_resource_pending : 1;
+} FieldPartyManagerFlags;
+
+typedef struct FieldPartyManagerSoundState {
+    u8 unknown_00[12];
+    u16 tracked_sounds[4];
+} FieldPartyManagerSoundState;
+
+typedef struct FieldPartyControllerAuxFlags {
+    u16 unknown_00 : 1;
+    u16 secondary_action_active : 1;
+    u16 unknown_02_15 : 14;
+} FieldPartyControllerAuxFlags;
+
+typedef struct FieldEntityAnimationRuntimeFlags {
+    u32 alternate_variant : 1;
+    u32 unknown_01_31 : 31;
+} FieldEntityAnimationRuntimeFlags;
 
 extern void func_ov000_02076f40(u8 *field_context, FieldEntity *entity,
                                 int palette_selector);
@@ -1066,6 +1142,12 @@ static inline FieldSpecialPartyState *FieldVm_GetSpecialPartyState(
         field_context + FIELD_VM_SPECIAL_PARTY_STATE_OFFSET);
 }
 
+static inline FieldBrightnessTransitionFlags *
+FieldVm_GetBrightnessTransitionFlags(u8 *field_context) {
+    return (FieldBrightnessTransitionFlags *)(
+        field_context + FIELD_VM_BRIGHTNESS_FLAGS_OFFSET);
+}
+
 static inline u8 *FieldVm_GetPartyManager(FieldVmRuntime *runtime) {
     return *(u8 **)(runtime->field_context + FIELD_VM_PARTY_MANAGER_OFFSET);
 }
@@ -1082,14 +1164,20 @@ static inline u8 *FieldVm_GetPartyController(u8 *party_manager,
         FIELD_VM_PARTY_CONTROLLER_SIZE * party_side;
 }
 
+#define FieldVm_GetPartyControllerFlags(party_controller)                  \
+    ((FieldPartyControllerFlags *)((party_controller) +                    \
+        FIELD_VM_PARTY_CONTROLLER_FLAGS_OFFSET))
+
 static inline int FieldVm_GetPresentPartyMask(FieldVmRuntime *runtime) {
     return FieldVm_GetSpecialPartyState(runtime->field_context)
         ->present_party_mask;
 }
 
-static inline int FieldVm_GetActivePartySide(const u8 *party_manager) {
-    return *(const u32 *)(party_manager + 4) & 1;
-}
+#define FieldVm_GetPartyManagerFlags(party_manager)                        \
+    ((FieldPartyManagerFlags *)((party_manager) + 4))
+
+#define FieldVm_GetActivePartySide(party_manager)                          \
+    (FieldVm_GetPartyManagerFlags(party_manager)->active_party_side)
 
 static inline int FieldVm_ResolveMenuPartyContext(FieldVmRuntime *runtime,
                                                   int requested_context) {
@@ -1106,7 +1194,7 @@ static inline int FieldVm_ResolveMenuPartyContext(FieldVmRuntime *runtime,
                              FIELD_VM_PARTY_MANAGER_OFFSET);
     party_controller = party_manager + FIELD_VM_PARTY_CONTROLLER_OFFSET +
         FIELD_VM_PARTY_CONTROLLER_SIZE *
-            (*(const u32 *)(party_manager + 4) & 1);
+            FieldVm_GetActivePartySide(party_manager);
     leader_entity = *(u8 **)(party_controller + 0x48);
     interaction_flags = *(u32 *)(leader_entity + 0x520);
     if (((interaction_flags >> 18) & 0xF) == 6) {
@@ -1118,37 +1206,45 @@ static inline int FieldVm_ResolveMenuPartyContext(FieldVmRuntime *runtime,
 
 static inline int FieldVm_GetPartyControllerProperty(u8 *party_controller,
                                                      int property_id) {
-    u32 flags = *(u32 *)(party_controller +
-                        FIELD_VM_PARTY_CONTROLLER_FLAGS_OFFSET);
-
     switch (property_id) {
     case 0:
-        return (flags >> 18) & 1;
+        return FieldVm_GetPartyControllerFlags(party_controller)->
+            movement_active;
     case 1: {
-        int member = (flags >> 17) & 1;
+        int member = FieldVm_GetPartyControllerFlags(party_controller)->
+            active_member;
         u8 *entity = *(u8 **)(party_controller + 0x48 +
                               member * sizeof(void *));
 
         return *(u8 *)(entity + 0x180);
     }
     case 2:
-        return flags >> 20;
+        return FieldVm_GetPartyControllerFlags(party_controller)->
+            movement_state;
     case 3: {
         u8 *entity = *(u8 **)(party_controller + 0x48);
+        u16 animation_id = *(u16 *)(entity + 0x17C);
 
-        switch (*(u16 *)(entity + 0x17C)) {
-        case 19:
+        if (animation_id == 19) {
             return 0;
-        case 20:
-            return 1;
-        case 21:
-            return (**(u32 **)(entity + 0x59C) & 1) != 0 ? 3 : 2;
-        default:
-            return -1;
         }
+        if (animation_id == 20) {
+            return 1;
+        }
+        if (animation_id == 21) {
+            FieldEntityAnimationRuntimeFlags *animation_flags =
+                *(FieldEntityAnimationRuntimeFlags **)(entity + 0x59C);
+
+            return animation_flags->alternate_variant ? 3 : 2;
+        }
+        return -1;
     }
-    case 4:
-        return (*(u16 *)(party_controller + 0x98) >> 1) & 1;
+    case 4: {
+        FieldPartyControllerAuxFlags *aux_flags =
+            (FieldPartyControllerAuxFlags *)(party_controller + 0x98);
+
+        return aux_flags->secondary_action_active;
+    }
     default:
         return 0;
     }
@@ -2586,7 +2682,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         if ((FieldVm_GetPresentPartyMask(runtime) &
              (1 << arguments[0])) != 0) {
             func_ov000_0209b53c(FieldVm_GetPartyController(
-                party_manager, arguments[0]));
+                party_manager, arguments[0]),
+                arguments[1] != 0);
         }
         break;
 
@@ -2595,9 +2692,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
              (1 << arguments[0])) != 0) {
             party_controller = FieldVm_GetPartyController(
                 party_manager, arguments[0]);
-            if ((*(u32 *)(party_controller +
-                         FIELD_VM_PARTY_CONTROLLER_FLAGS_OFFSET) &
-                 0x8000) != 0) {
+            if (FieldVm_GetPartyControllerFlags(party_controller)
+                    ->follower_rejoin_active != 0) {
                 result = FieldVm_RetryCurrentCommand(
                     vm, state, command->opcode);
                 break;
@@ -2804,11 +2900,13 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             arguments[0] =
                 !FieldVm_GetActivePartySide(party_manager);
         }
-        func_ov000_020a0c30(party_manager, arguments[0]);
+        func_ov000_020a0c30(
+            party_manager, arguments[0], arguments[1] != 0, 0, 1);
         break;
 
     case FIELD_VM_WAIT_ACTIVE_PARTY_SWITCH:
-        if ((*(u32 *)(party_manager + 4) & 2) != 0) {
+        if (FieldVm_GetPartyManagerFlags(party_manager)->
+            active_party_switching) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -2816,9 +2914,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_SET_PARTY_PIGGYBACK_STATE:
-        *(u32 *)(party_manager + 4) =
-            (*(u32 *)(party_manager + 4) & ~(1 << 7)) |
-            ((arguments[0] & 1) << 7);
+        FieldVm_GetPartyManagerFlags(party_manager)->piggyback_state =
+            arguments[0] & 1;
         break;
 
     case FIELD_VM_RELEASE_ROOM_TRANSITION_CONTROL_LOCK:
@@ -2827,12 +2924,12 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_SET_PARTY_LEADER_ANIMATION_OVERRIDE:
-        party_controller = FieldVm_GetPartyController(
-            party_manager, arguments[0]);
         if (arguments[1] != 0) {
-            func_ov000_0209cbfc(party_controller, 0);
+            func_ov000_0209cbfc(FieldVm_GetPartyController(
+                party_manager, arguments[0]), 0);
         } else {
-            func_ov000_0209cb90(party_controller, 0);
+            func_ov000_0209cb90(FieldVm_GetPartyController(
+                party_manager, arguments[0]), 0);
         }
         break;
 
@@ -2842,8 +2939,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             u8 *active_controller = FieldVm_GetPartyController(
                 party_manager, active_side);
             int controller_screen =
-                (*(u32 *)(active_controller +
-                          FIELD_VM_PARTY_CONTROLLER_FLAGS_OFFSET) >> 7) & 1;
+                FieldVm_GetPartyControllerFlags(active_controller)
+                    ->field_screen;
             int field_screen =
                 FieldVm_GetSpecialPartyState(field_context)->field_screen;
 
@@ -2888,8 +2985,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         party_controller = FieldVm_GetPartyController(
             party_manager, arguments[0]);
         if (FieldVm_GetSpecialPartyState(field_context)->field_screen ==
-            ((*(u32 *)(party_controller +
-                       FIELD_VM_PARTY_CONTROLLER_FLAGS_OFFSET) >> 7) & 1)) {
+            FieldVm_GetPartyControllerFlags(party_controller)->field_screen) {
             func_ov000_0209f644(
                 party_manager, arguments[0],
                 arguments[1], arguments[2],
@@ -3029,8 +3125,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_WAIT_CAMERA_MOVEMENT:
-        if ((*(u16 *)(field_context +
-                     FIELD_VM_CAMERA_MOVEMENT_FLAGS_OFFSET) & 3) != 0) {
+        if (((FieldTwoBitActivityFlags *)(field_context +
+                FIELD_VM_CAMERA_MOVEMENT_FLAGS_OFFSET))->activity_mode != 0) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3060,10 +3156,11 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_WAIT_BG_LAYER_SCROLL: {
-        u8 *controllers = *(u8 **)(
+        FieldBgScrollControllerState *controllers =
+            *(FieldBgScrollControllerState **)(
             field_context + FIELD_VM_BG_SCROLL_CONTROLLERS_OFFSET);
 
-        if ((*(u16 *)(controllers + 56 * arguments[0]) & 3) != 0) {
+        if (controllers[arguments[0]].flags.activity_mode != 0) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3084,8 +3181,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_WAIT_CAMERA_SHAKE:
-        if ((*(u16 *)(field_context +
-                     FIELD_VM_CAMERA_SHAKE_FLAGS_OFFSET) & 1) != 0) {
+        if (((FieldSingleActivityFlags16 *)(field_context +
+                FIELD_VM_CAMERA_SHAKE_FLAGS_OFFSET))->active) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3145,7 +3242,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_MASTER_BRIGHTNESS_TRANSITION: {
-        u16 field_flags;
+        FieldControlFlags *field_flags = (FieldControlFlags *)(
+            field_context + FIELD_VM_FIELD_CONTROL_FLAGS_OFFSET);
 
         func_ov000_02075c34(
             field_context, (s16)arguments[0],
@@ -3153,13 +3251,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         if (FieldVm_GetSpecialPartyState(field_context)->field_screen == 0) {
             func_ov000_0207c098(field_context);
         }
-        field_flags = *(u16 *)(field_context +
-                              FIELD_VM_FIELD_CONTROL_FLAGS_OFFSET);
-        if ((field_flags & 8) != 0) {
+        if (field_flags->release_party_action) {
             func_ov000_02093c98(FieldVm_GetPartyController(
-                party_manager, (field_flags >> 4) & 1));
-            *(u16 *)(field_context +
-                     FIELD_VM_FIELD_CONTROL_FLAGS_OFFSET) &= ~8;
+                party_manager, field_flags->selected_party_side));
+            field_flags->release_party_action = 0;
         }
         break;
     }
@@ -3174,24 +3269,19 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_PAUSE_MASTER_BRIGHTNESS_TRANSITION:
-        if ((*(u8 *)(field_context +
-                    FIELD_VM_BRIGHTNESS_FLAGS_OFFSET) & 1) != 0) {
-            *(u8 *)(field_context +
-                    FIELD_VM_BRIGHTNESS_FLAGS_OFFSET) |= 2;
+        if (FieldVm_GetBrightnessTransitionFlags(field_context)->active) {
+            FieldVm_GetBrightnessTransitionFlags(field_context)->paused = 1;
         }
         break;
 
     case FIELD_VM_RESUME_MASTER_BRIGHTNESS_TRANSITION:
-        if ((*(u8 *)(field_context +
-                    FIELD_VM_BRIGHTNESS_FLAGS_OFFSET) & 1) != 0) {
-            *(u8 *)(field_context +
-                    FIELD_VM_BRIGHTNESS_FLAGS_OFFSET) &= ~2;
+        if (FieldVm_GetBrightnessTransitionFlags(field_context)->active) {
+            FieldVm_GetBrightnessTransitionFlags(field_context)->paused = 0;
         }
         break;
 
     case FIELD_VM_REVERSE_MASTER_BRIGHTNESS_TRANSITION:
-        if ((*(u8 *)(field_context +
-                    FIELD_VM_BRIGHTNESS_FLAGS_OFFSET) & 1) != 0) {
+        if (FieldVm_GetBrightnessTransitionFlags(field_context)->active) {
             func_ov000_02075bc8(field_context);
         }
         break;
@@ -3282,8 +3372,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_WAIT_PALETTE_BANK_CROSSFADE:
-        if ((**(u32 **)(field_context +
-                       FIELD_VM_PALETTE_CROSSFADE_STATE_OFFSET) & 1) != 0) {
+        if ((*(FieldAsyncOperationFlags **)(field_context +
+                FIELD_VM_PALETTE_CROSSFADE_STATE_OFFSET))->active) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3340,8 +3430,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_WAIT_SCREEN_WIPE:
-        if ((**(u32 **)(field_context +
-                       FIELD_VM_SCREEN_WIPE_STATE_OFFSET) & 1) != 0) {
+        if ((*(FieldAsyncOperationFlags **)(field_context +
+                FIELD_VM_SCREEN_WIPE_STATE_OFFSET))->active) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3428,7 +3518,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
     case FIELD_VM_START_ANCHORED_FIELD_EFFECT_ANIMATION:
         func_ov000_02074e14(
-            field_context, runtime->screen_selector & 1,
+            field_context, runtime->screen_selector_bits.field_screen,
             arguments[0], arguments[1],
             arguments[2], arguments[3],
             arguments[4], (s16)arguments[5],
@@ -3447,7 +3537,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_START_FIELD_EFFECT_ANIMATION:
         func_ov000_02074d8c(
             field_context, arguments[0],
-            runtime->screen_selector & 1, arguments[1],
+            runtime->screen_selector_bits.field_screen, arguments[1],
             (s16)arguments[2], (s16)arguments[3],
             (s16)arguments[4]);
         break;
@@ -3614,14 +3704,11 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             party_controller = FieldVm_GetPartyController(
                 party_manager, selected_party_side);
             if (current_screen ==
-                ((*(u32 *)(party_controller +
-                           FIELD_VM_PARTY_CONTROLLER_FLAGS_OFFSET) >> 7) & 1)) {
-                u32 *party_0_flags = (u32 *)(
-                    FieldVm_GetPartyController(party_manager, 0) +
-                    FIELD_VM_PARTY_CONTROLLER_FLAGS_OFFSET);
-
-                *party_0_flags = (*party_0_flags & ~(1 << 17)) |
-                    ((arguments[1] & 1) << 17);
+                FieldVm_GetPartyControllerFlags(party_controller)
+                    ->field_screen) {
+                FieldVm_GetPartyControllerFlags(
+                    FieldVm_GetPartyController(party_manager, 0))
+                    ->active_member = arguments[1];
             }
         }
         break;
@@ -4035,9 +4122,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_WAIT_MESSAGE_WINDOW_SLIDE:
-        if ((*(u32 *)(field_context +
-                      FIELD_VM_MESSAGE_WINDOW_SLIDE_FLAGS_OFFSET) & 1) !=
-            0) {
+        if (((FieldAsyncOperationFlags *)(field_context +
+                FIELD_VM_MESSAGE_WINDOW_SLIDE_FLAGS_OFFSET))->active) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -4045,8 +4131,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_PLAY_FIELD_SOUND: {
-        u16 *tracked_sounds;
-        u16 tracked_sound;
+        FieldPartyManagerSoundState *sound_state =
+            (FieldPartyManagerSoundState *)party_manager;
         int index;
 
         func_02027cb8(
@@ -4055,20 +4141,23 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
         }
 
-        tracked_sounds = (u16 *)(party_manager + 12);
-        tracked_sound = (u16)arguments[0] |
-            (FieldVm_GetSpecialPartyState(field_context)->field_screen << 15);
         for (index = 0; index < 4; index++) {
             if (arguments[0] ==
-                (tracked_sounds[index] & 0x7FFF)) {
-                tracked_sounds[index] = tracked_sound;
+                (sound_state->tracked_sounds[index] & 0x7FFF)) {
+                sound_state->tracked_sounds[index] =
+                    (u16)arguments[0] |
+                    (FieldVm_GetSpecialPartyState(field_context)->
+                         field_screen << 15);
                 break;
             }
         }
         if (index == 4) {
             for (index = 0; index < 4; index++) {
-                if (tracked_sounds[index] == 0) {
-                    tracked_sounds[index] = tracked_sound;
+                if (sound_state->tracked_sounds[index] == 0) {
+                    sound_state->tracked_sounds[index] =
+                        (u16)arguments[0] |
+                        (FieldVm_GetSpecialPartyState(field_context)->
+                             field_screen << 15);
                     break;
                 }
             }
@@ -4077,15 +4166,15 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_STOP_FIELD_SOUND: {
-        u16 *tracked_sounds;
+        FieldPartyManagerSoundState *sound_state =
+            (FieldPartyManagerSoundState *)party_manager;
         int index;
 
         func_02027b7c((s16)arguments[0]);
-        tracked_sounds = (u16 *)(party_manager + 12);
         for (index = 0; index < 4; index++) {
             if (arguments[0] ==
-                (tracked_sounds[index] & 0x7FFF)) {
-                tracked_sounds[index] = 0;
+                (sound_state->tracked_sounds[index] & 0x7FFF)) {
+                sound_state->tracked_sounds[index] = 0;
                 break;
             }
         }
@@ -4103,12 +4192,11 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_LOAD_BACKGROUND_MUSIC_RESOURCE: {
         u32 loaded_resources = func_02027d6c();
         int buffer_index = arguments[1];
-        int loaded_resource = buffer_index == 0
-            ? loaded_resources & 0xFFFF
-            : loaded_resources >> 16;
+        u16 primary_resource = (u16)loaded_resources;
+        u16 secondary_resource = (u16)(loaded_resources >> 16);
 
-        if ((buffer_index == 0 || buffer_index == 1) &&
-            arguments[0] != loaded_resource) {
+        if ((buffer_index == 0 && arguments[0] != primary_resource) ||
+            (buffer_index == 1 && arguments[0] != secondary_resource)) {
             func_02027ea4(
                 arguments[0], buffer_index & 0xFF, 0xC00);
         }

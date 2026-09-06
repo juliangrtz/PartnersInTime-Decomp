@@ -7,6 +7,11 @@ typedef struct FieldEntity FieldEntity;
 typedef struct FieldScriptState FieldScriptState;
 typedef struct FieldVmRuntime FieldVmRuntime;
 
+typedef struct FieldVmScreenSelectorBits {
+    u32 field_screen : 1;
+    u32 unknown_01_31 : 31;
+} FieldVmScreenSelectorBits;
+
 enum FieldScriptFlag {
     FIELD_SCRIPT_ENABLED = 1 << 0,
     FIELD_SCRIPT_ACTIVE = 1 << 1,
@@ -67,7 +72,10 @@ struct FieldScriptState {
 struct FieldVmRuntime {
     ScriptVm vm;
     u8 unknown_010[0x80];
-    u32 screen_selector;
+    union {
+        u32 screen_selector;
+        FieldVmScreenSelectorBits screen_selector_bits;
+    };
     u8 *field_context;
 };
 
