@@ -29,9 +29,9 @@ Two properties of the current tree matter more than the completion percentage:
 
 The important qualification: this repository optimizes for byte matching, which
 is the wrong objective function for a port. A port needs semantic equivalence,
-not identical register allocation. The 23,548-byte reconstructed field dispatcher is nearly
+not identical register allocation. The 23,492-byte reconstructed field dispatcher is nearly
 usable as port code today — it compiles and covers all 290 slots — while it
-correctly remains unlinked for the ROM build at 71.67% fuzzy similarity. The
+correctly remains unlinked for the ROM build at 93.96% fuzzy similarity. The
 same holds for the 19,168-byte battle dispatcher and the 9,196-byte scene
 dispatcher.
 
