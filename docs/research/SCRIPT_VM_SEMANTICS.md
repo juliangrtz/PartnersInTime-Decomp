@@ -469,12 +469,14 @@ fixed-point pairs. It remains an unlinked objdiff work unit solely because the
 original compiler formed one 19,168-byte monolithic switch. The current source
 has reintegrated retry decoding, enemy stats, object-view coordinates,
 comparisons, script control, the effect/task-slot scans, and the owner scans;
-it emits one 19,176-byte dispatcher with no compiler-generated helper symbols,
-only 8 bytes above the original, and currently reaches 93.58% fuzzy instruction
+it emits one 19,164-byte dispatcher with no compiler-generated helper symbols,
+only 4 bytes below the original, and currently reaches 96.45% fuzzy instruction
 similarity. Packed wide values now use the original explicit low-half mask,
 retry decoding follows the original addition order, keyframe frame-count
 decoding is instruction-identical, and movement durations are stored before
-the motion call. Runtime/effect-view ownership is explicit. The source also
+the motion call. ROM-shaped enemy flag, trait, and status-resistance fields,
+tag-specific item accessors, and runtime/actor-script/effect-view ownership are
+explicit. The source also
 reproduces the original `0x74`-byte
 stack frame, separate XYZ work areas, and the dispatcher's exceptional
 physical handler order.

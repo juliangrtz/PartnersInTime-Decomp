@@ -17,6 +17,13 @@ typedef struct BattleEnemyStatRecord {
     union {
         u16 flags_and_level;
         struct {
+            u16 unknown_flag_0 : 1;
+            u16 unknown_flag_1 : 1;
+            u16 unknown_flag_2 : 1;
+            u16 unknown_flags_03_07 : 5;
+            u16 packed_level : 8;
+        } flag_bits;
+        struct {
             u8 unknown_04;
             u8 level;
         };
@@ -30,7 +37,8 @@ typedef struct BattleEnemyStatRecord {
         struct {
             u16 trait_class : 2;
             u16 unknown_trait_02 : 1;
-            u16 unknown_traits_03_15 : 13;
+            u16 unknown_trait_03_04 : 2;
+            u16 unknown_traits_05_15 : 11;
         } trait_bits;
         struct {
             u16 unknown_resistance_00_07 : 8;

@@ -151,14 +151,15 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   battle VM executor. Fixed-opcode retries, the complete enemy-stat switches,
   object-position conversion, typed effect handles, movement-duration paths,
   the effect/task-slot scans, and the four 40-slot owner operations are now
-  reintegrated into the monolith. Its current 19,176-byte function is only 8
-  bytes above the original and reaches 93.58% fuzzy instruction similarity
+  reintegrated into the monolith. Its current 19,164-byte function is only 4
+  bytes below the original and reaches 96.45% fuzzy instruction similarity
   with no compiler-generated helper symbols left. Original retry operand order
   and
   low-half masking, exact keyframe path decoding and motion-frame access,
-  in-place movement-duration writeback, halfword enemy flags, explicit
-  runtime/effect-view ownership, the `0x74`-byte stack frame, nine distinct
-  XYZ work areas, and non-numeric handler layout are recovered; it remains
+  in-place movement-duration writeback, ROM-shaped enemy flag, trait, and
+  status-resistance fields, tag-specific item accessors, explicit runtime,
+  actor-script, and effect-view ownership, the `0x74`-byte stack frame, nine
+  distinct XYZ work areas, and non-numeric handler layout are recovered; it remains
   unlinked while the
   original giant-switch layout is converged without compromising the verified
   ROM build.
