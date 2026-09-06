@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Lossless source language for Partners in Time field-event room scripts.
+"""Lossless source language for all Partners in Time script-VM instances.
 
-The public API translates ``pit-field-event-room-v1`` JSON documents to a
-small, deliberately strict language and back.  It is a source frontend rather
-than a second VM assembler: opcode descriptors and the binary ABI remain owned
-by :mod:`field_event_mod`.
+The public API translates field, battle, and scene JSON documents to a small,
+deliberately strict language and back.  It is a source frontend rather than a
+second VM assembler: opcode descriptors and binary ABIs remain owned by the
+three extraction/rebuild backends.  The battle/scene dialect implementations
+live in :mod:`pit_vm_language` and are loaded lazily to keep this module's
+field-room API backwards compatible.
 
 Two details are intentionally explicit in the language:
 
@@ -579,6 +581,12 @@ class Parser:
             return Value.variable(f"{name}[{index}]")
         if self.accept("."):
             member = self.expect_kind("IDENT", "named variable").text
+            if self.accept("["):
+                index = self.expect_kind("NUMBER", "variable index").value
+                self.expect("]")
+                if index < 0:
+                    raise self.error("variable index cannot be negative")
+                return Value.variable(f"{name}.{member}[{index}]")
             return Value.variable(f"{name}.{member}")
         raise self.error(f"bare identifier {name!r} is not a value")
 
@@ -1404,8 +1412,14 @@ class Decompiler:
 
 
 def decompile_json_to_script(json_data: dict) -> str:
-    """Translate one ``pit-field-event-room-v1`` document into PiT source."""
-    return Decompiler(json_data).run()
+    """Translate any supported field, battle, or scene JSON document."""
+    if isinstance(json_data, dict) and json_data.get("schema") == ROOM_SCHEMA:
+        return Decompiler(json_data).run()
+    # Lazy import avoids a module cycle: the extra dialects deliberately reuse
+    # this module's lexer and statement AST.
+    import pit_vm_language
+
+    return pit_vm_language.decompile_vm_json_to_script(json_data)
 
 
 def decompile_json_to_script_with_messages(
@@ -1943,8 +1957,19 @@ class Compiler:
 
 
 def compile_script_to_json(script_text: str) -> dict:
-    """Parse PiT field-event source and rebuild a fully relocated room JSON."""
-    return Compiler(script_text).run()
+    """Parse PiT source and rebuild the matching VM JSON document."""
+    tokens = _tokens(script_text)
+    root = tokens[0].text
+    if root == "room":
+        return Compiler(script_text).run()
+    if root in {"battle", "scene"}:
+        import pit_vm_language
+
+        return pit_vm_language.compile_vm_script_to_json(script_text)
+    token = tokens[0]
+    raise PitLanguageError(
+        f"line {token.line}, column {token.column}: expected 'room', 'battle', or 'scene'"
+    )
 
 
 def _write_text_atomic(path: Path, text: str) -> None:
@@ -2098,16 +2123,16 @@ def compile_room_corpus(
 
 def _build_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Compile or decompile PiT field-event room scripts"
+        description="Compile or decompile PiT field, battle, and scene VM scripts"
     )
     subparsers = parser.add_subparsers(dest="action", required=True)
     decompile = subparsers.add_parser(
-        "decompile", help="translate pit-field-event-room-v1 JSON to .pit source"
+        "decompile", help="translate supported PiT VM JSON to .pit source"
     )
     decompile.add_argument("input", type=Path)
     decompile.add_argument("output", type=Path)
     compile_parser = subparsers.add_parser(
-        "compile", help="translate .pit source to pit-field-event-room-v1 JSON"
+        "compile", help="translate field, battle, or scene .pit source to JSON"
     )
     compile_parser.add_argument("input", type=Path)
     compile_parser.add_argument("output", type=Path)
@@ -2124,6 +2149,20 @@ def _build_argument_parser() -> argparse.ArgumentParser:
     )
     corpus_compile.add_argument("input", type=Path)
     corpus_compile.add_argument("output", type=Path)
+    all_decompile = subparsers.add_parser(
+        "decompile-all-vms",
+        help="generate one private source corpus for field, battle, and scene VMs",
+    )
+    all_decompile.add_argument("scripts", type=Path)
+    all_decompile.add_argument("text", type=Path)
+    all_decompile.add_argument("output", type=Path)
+    all_decompile.add_argument("--language", default="german")
+    all_compile = subparsers.add_parser(
+        "compile-all-vms",
+        help="compile a private all-VM source corpus back to JSON",
+    )
+    all_compile.add_argument("input", type=Path)
+    all_compile.add_argument("output", type=Path)
     return parser
 
 
@@ -2157,10 +2196,39 @@ def main(argv: Sequence[str] | None = None) -> int:
                 f"{manifest['message_reference_count']} localized message references "
                 f"in {arguments.output}"
             )
-        else:
+        elif arguments.action == "compile-corpus":
             result = compile_room_corpus(arguments.input, arguments.output)
             print(
                 f"Compiled {result['room_count']} private room sources into "
+                f"{arguments.output}"
+            )
+        elif arguments.action == "decompile-all-vms":
+            import pit_vm_language
+
+            manifest = pit_vm_language.decompile_all_vm_corpus(
+                arguments.scripts,
+                arguments.text,
+                arguments.output,
+                arguments.language,
+            )
+            print(
+                "Generated all-VM private corpus: "
+                f"{manifest['field']['room_count']} field rooms, "
+                f"{manifest['battle']['archive_count']} battle archives, and "
+                f"{manifest['scene']['archive_count']} scene archives in "
+                f"{arguments.output}"
+            )
+        else:
+            import pit_vm_language
+
+            result = pit_vm_language.compile_all_vm_corpus(
+                arguments.input, arguments.output
+            )
+            print(
+                "Compiled all-VM private corpus: "
+                f"{result['field_room_count']} field rooms, "
+                f"{result['battle_archive_count']} battle archives, and "
+                f"{result['scene_archive_count']} scene archives into "
                 f"{arguments.output}"
             )
     except (OSError, json.JSONDecodeError, PitLanguageError) as exc:
