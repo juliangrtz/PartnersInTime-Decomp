@@ -1373,12 +1373,12 @@ to `func_ov002_020698d4` as the original does. It includes exact retry/yield and
 relative-PC behavior, all three tagged effect/task handle families, the
 40-record object-script owner scan, and the literal-versus-variable fixed-point
 decoding paths. Retry decoding, enemy-stat access, packed trait writes,
-object-view coordinates, comparisons, script control, and the owner scans are
-now reintegrated. The current MWCC build totals 17,200 bytes: a 16,788-byte main
-switch plus 412 bytes in the three remaining position/task-slot helpers. The
-main switch is 40.05% fuzzy-similar to the original 19,168-byte monolith, so it
-is deliberately not linked yet. Final helper reintegration and compiler-layout
-work are now the matching task; opcode semantics are no longer the blocker.
+object-view coordinates, comparisons, script control, the effect/task-slot
+scans, and the owner scans are now reintegrated. The current MWCC build is one
+17,736-byte function with no compiler-generated helper symbols. It is 40.13%
+fuzzy-similar to the original 19,168-byte monolith, so it is deliberately not
+linked yet. Compiler switch, stack, and register-layout work are now the
+matching task; opcode semantics are no longer the blocker.
 
 The complete 182-entry range, handler addresses, aliases, observed
 command-record fields, and direct calls are indexed in

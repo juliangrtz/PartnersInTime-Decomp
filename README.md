@@ -139,10 +139,12 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   inventory access, object-script ownership and waits, conditional branches,
   input control, and sound tasks. Unknown opcodes still delegate to the common
   battle VM executor. Fixed-opcode retries, the complete enemy-stat switches,
-  object-position conversion, and the four 40-slot owner operations are now
-  reintegrated into the monolith. Its current 16,788-byte main function reaches
-  40.05% fuzzy instruction similarity and remains unlinked while the original
-  giant-switch layout is converged without compromising the verified ROM build.
+  object-position conversion, the effect/task-slot scans, and the four 40-slot
+  owner operations are now reintegrated into the monolith. Its current
+  17,736-byte function reaches 40.13% fuzzy instruction similarity with no
+  compiler-generated helper symbols left, and remains unlinked while the
+  original giant-switch layout is converged without compromising the verified
+  ROM build.
   Overlay 0's still larger 23,492-byte field/world dispatcher now has the same
   complete structured reconstruction. One readable C switch covers all 290
   slots from `0x033` through `0x154`: child scripts, entity state and movement,
