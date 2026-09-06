@@ -79,11 +79,13 @@ The number of profiles or waypoints cannot yet change. General size-changing
 field-script edits remain locked until relocation rules for all field
 control-flow and embedded-data opcodes are complete.
 
-## High-level field-event language
+## High-level language for all script VMs
 
-`tools/pit_language_compiler.py` is a strict, lossless source frontend for one
-`pit-field-event-room-v1` shard at a time. It replaces the flat JSON command
-list with object-oriented calls, scoped inline actor scripts, symbolic VM
+`tools/pit_language_compiler.py` is the strict, lossless source frontend for
+all three VM instances proven in the game: Field/World (overlay 0), Battle AI
+(overlay 2), and Scene/Object (overlay 7). It dispatches from the JSON schema
+or the source root (`room`, `battle`, or `scene`) and replaces flat command
+lists with object-oriented calls, scoped inline actor scripts, symbolic VM
 variables, relocatable labels, and structured forms for the canonical shipped
 counted loop:
 
@@ -111,6 +113,39 @@ room 0 {
 }
 ```
 
+Battle archives use the same statement language while retaining their native
+entry/segment structure:
+
+```text
+battle "BAI/BAI_mon_4_hn.dat" {
+  metadata { "schema": "pit-battle-script-v2", "layout": "relocatable-control-flow" }
+
+  entry 0 {
+    metadata { "header_size": 4, "entry_points": ["entry_000", null] }
+    code {
+      entry_000:
+      state_24[0] = Actor.GetProperty(battle.owner_actor_id, 16);
+
+      async Actor.Run(battle.owner_actor_id, 0) {
+        Actor.MoveAtSpeed(battle.owner_actor_id, 1, 1, 2, 1, 0, 8192, 0);
+        Flow.Return();
+      }
+
+      state_24[1] = Actor.ApplyStatus(
+        battle.target_actor_id, Status.POWER_CHANGE, 100, 50
+      );
+    }
+    private_data { "source_offset": "0x0100", "size": 16, "sha1": "..." }
+  }
+}
+```
+
+The example is illustrative; generated sources keep every required metadata
+field and never invent a gameplay identity for an uncorrelated archive entry.
+Battle inline bodies whose target still lies inside an opaque private segment
+are visibly emitted as `Actor.StartInlineScriptRaw(...)`. They become scoped
+`async` blocks automatically once that target range is decoded as commands.
+
 The real generated metadata block contains the complete private-source layout
 contract and appears after the executable code so it does not obstruct normal
 editing. Embedded roaming profiles and waypoint paths use typed `data` blocks.
@@ -133,20 +168,23 @@ Generate the complete private editing corpus with searchable German dialogue
 comments:
 
 ```powershell
-python .\tools\pit_language_compiler.py decompile-corpus `
-  .\data\eur\scripts\FEvent__FEvData.dat `
-  .\data\eur\text\FEvent__FEvData.dat.json `
-  .\private\modding\field_events_de `
+python .\tools\pit_language_compiler.py decompile-all-vms `
+  .\data\eur\scripts `
+  .\data\eur\text `
+  .\private\modding\vm_sources_de `
   --language german
 ```
 
 Compile every edited source back into the normal local data project:
 
 ```powershell
-python .\tools\pit_language_compiler.py compile-corpus `
-  .\private\modding\field_events_de `
-  .\data\eur\scripts\FEvent__FEvData.dat
+python .\tools\pit_language_compiler.py compile-all-vms `
+  .\private\modding\vm_sources_de `
+  .\data\eur\scripts
 ```
+
+The older `decompile-corpus` and `compile-corpus` commands remain available
+when only Field/World room sources are wanted.
 
 The generated `private/` tree is ignored by Git. Each `OpenMessage` call is
 preceded by the corresponding localized text and internal event label as `//`
@@ -155,7 +193,7 @@ responsible script. Comments are non-semantic and do not rewrite dialogue.
 Rooms without a German localization entry use a visibly labelled English or
 Japanese fallback rather than silently attributing a translation to the ROM.
 
-The Python API exposes the same operations as
+The Python API exposes the same schema-dispatching operations as
 `decompile_json_to_script(json_data)` and `compile_script_to_json(script_text)`.
 The compiler derives every command boundary, local label, signed relative
 halfword displacement, `code_targets` entry, and `inline_size_halfwords` value
@@ -164,14 +202,22 @@ the literal `2`; descriptor bit 6 is checked before a variable argument is
 accepted. The decompiler adds non-semantic `//` comments for verified room
 contexts and for dialogue, camera, party, battle, and actor choreography.
 
-The complete European corpus test currently covers all 638 room shards and 778
-script-bearing members, including 2,739 inline actor scripts and all 434 shipped
-counted loops. Decompile/compile followed by the existing field-event builder
-reproduces `FEvData.dat` byte-for-byte. The current binary builder still enforces
-the original command boundaries, so use same-size source edits for ROM mods
-today. The language compiler already relocates size-changing edits in its output
-JSON; making those JSON layouts buildable requires the later full-member
-relocator described in `REASSEMBLY_PLAN.md`.
+The complete European corpus test covers 653 editable source documents with
+475,711 reachable commands: all 638 room shards/778 script-bearing Field
+members, all 14 Battle archives/230 entries, and all three Scene archives/18
+entries. Field contains 2,739 inline actor scripts and 434 canonical counted
+loops. Battle contributes another 117 inline opcodes, of which 115 currently
+have complete decoded bodies and become scoped `async` blocks. Unchanged
+source→JSON→binary pipelines reproduce `FEvData.dat`, all 14 `BAI` archives,
+and all three `MenuAI` archives byte-for-byte.
+
+Battle source is fully relocatable: instruction insertions/removals regenerate
+labels, signed halfword displacements, entry sizes, and outer archive offsets.
+The current Field binary builder still enforces original command boundaries,
+even though the language AST and JSON relocation are size-aware. Scene/Object
+also remains boundary-preserving because 26,076 bytes have not yet been
+classified as code or data. Use same-size source edits for Field and Scene ROM
+mods until those two conservative binary backends are replaced.
 
 The Menu/UI scene VM in overlay 7 uses three smaller `MenuAI` archives. Its
 editable document is `data/eur/scripts/MenuAI__scene_scripts.json`; the normal

@@ -249,8 +249,14 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   source;
   no neutral `op_000`-style battle instructions remain. The 387,272 reachable
   field-event commands are exported as 638 room-level source files and compile
-  through the normal data-mod/ROM build. Field dialogue and event changes are
-  merged conflict-safely into their shared `FEvent/FEvData.dat` archive.
+  through the normal data-mod/ROM build. A single strict high-level language now
+  covers all three VM instances and 475,711 reachable commands: 638 Field room
+  sources, 14 relocatable Battle archives, and all three Scene/Object archives.
+  It reconstructs object-oriented calls, canonical counted loops, 2,739 Field
+  inline scripts, and 115 fully decoded Battle inline scripts as scoped `async`
+  blocks. The private all-VM corpus embeds 1,789 German Field-message references
+  as searchable comments. Field dialogue and event changes are merged
+  conflict-safely into their shared `FEvent/FEvData.dat` archive.
 
 See [`docs/REASSEMBLY_PLAN.md`](docs/REASSEMBLY_PLAN.md) for the staged route
 from the fixed-layout bootstrap to a relocatable, size-extensible mod SDK.
@@ -269,8 +275,9 @@ against a private extraction with `tools/extract_script_vm_descriptors.py`.
 9.1/9.2 ARM32 database imports and batch Hex-Rays helpers for the resident ARM9
 and every overlay.
 [`docs/DATA_MODDING.md`](docs/DATA_MODDING.md) documents editable text/stats,
-control tokens, validation, ROM packaging, and the lossless high-level
-field-event language in [`tools/pit_language_compiler.py`](tools/pit_language_compiler.py).
+control tokens, validation, ROM packaging, and the lossless high-level language
+for the Field, Battle, and Scene VMs in
+[`tools/pit_language_compiler.py`](tools/pit_language_compiler.py).
 [`docs/research/RUNTIME_ANALYSIS.md`](docs/research/RUNTIME_ANALYSIS.md)
 documents the py-desmume capture workflow, compatible-state creation, overlay
 identification, memory hooks, and domain-specific battle snapshots.
