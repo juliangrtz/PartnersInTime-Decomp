@@ -745,10 +745,13 @@ camera/BG/palette effects, field input and touchscreen effects, battle and menu
 handoffs, save-backed HP/inventory/checkpoints, the field timer, message-window
 ownership and motion, and field audio lifecycle. Shared entity, render-object,
 party, field-system, and script-owner layouts are typed through the offsets
-used by these commands. MWCC currently emits a 22,048-byte dispatcher plus
-2,548 bytes of readability helpers versus the original 23,492-byte monolith.
-It remains unlinked until helper reintegration and final switch/register-layout
-matching can be completed without changing the verified ROM.
+used by these commands. The semantic helpers have now been force-inlined and
+simplified into one 26,436-byte MWCC function with no compiler-generated code
+helpers, versus the original 23,492-byte monolith. IDA's original control flow
+shows that the outer 290-entry table deliberately shares handlers through
+nested command-family switches; recovering those groups is the next size and
+layout task. The unit remains unlinked until that switch/register matching can
+be completed without changing the verified ROM.
 
 Priority formats:
 
