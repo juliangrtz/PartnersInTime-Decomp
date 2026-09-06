@@ -11,8 +11,10 @@ enum FieldScriptFlag {
     FIELD_SCRIPT_ENABLED = 1 << 0,
     FIELD_SCRIPT_ACTIVE = 1 << 1,
     FIELD_SCRIPT_PAUSED = 1 << 2,
-    FIELD_SCRIPT_OWNER_TYPE_SHIFT = 7,
+    FIELD_SCRIPT_OWNER_TYPE_SHIFT = 4,
     FIELD_SCRIPT_OWNER_TYPE_MASK = 7 << FIELD_SCRIPT_OWNER_TYPE_SHIFT,
+    FIELD_SCRIPT_CONTEXT_TYPE_SHIFT = 7,
+    FIELD_SCRIPT_CONTEXT_TYPE_MASK = 3 << FIELD_SCRIPT_CONTEXT_TYPE_SHIFT,
     FIELD_SCRIPT_PARENT_TYPE_SHIFT = 9,
     FIELD_SCRIPT_PARENT_TYPE_MASK = 7 << FIELD_SCRIPT_PARENT_TYPE_SHIFT,
     FIELD_SCRIPT_QUEUED_PARENT_TYPE_SHIFT = 12,
@@ -33,8 +35,9 @@ enum FieldScriptOwnerType {
 
 struct FieldScriptState {
     ScriptVmState vm_state;
+    u32 unknown_ac;
     u32 flags;
-    u8 owner_data[8];
+    u8 owner_data[4];
     s8 parent_entity_id;
     s8 queued_parent_entity_id;
     u8 unknown_ba[6];

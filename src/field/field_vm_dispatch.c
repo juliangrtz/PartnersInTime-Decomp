@@ -48,9 +48,13 @@ extern void func_ov000_020a7410(FieldEntity *entity, int starting_speed,
 extern void func_ov000_020ae520(FieldEntity *entity);
 extern void func_ov000_020b1394(FieldEntity *entity);
 extern void func_ov000_020a6c7c(FieldEntity *entity, int animation_id,
-                                int reserved);
+                                int resource_selector, int restart,
+                                int refresh);
 extern void func_ov000_020a6d68(FieldEntity *entity,
-                                const void *resource_record);
+                                const void *resource_record,
+                                int reserved_2, int reserved_3,
+                                int animation_id, int restart,
+                                int reserved_6);
 extern void func_ov000_020bd86c(FieldRenderObject *render_object);
 extern void func_ov000_020a64a0(FieldEntity *entity, int coordinate_mode,
                                 fx32 x, fx32 y, int motion_5, int motion_6,
@@ -785,9 +789,9 @@ enum FieldVmPairedContextOffset {
     FIELD_VM_PAIRED_QUEUED_SCRIPT_OFFSET = 0x29C8
 };
 
-static inline int FieldVm_GetOwnerType(const FieldScriptState *state) {
-    return (state->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
-        FIELD_SCRIPT_OWNER_TYPE_SHIFT;
+static inline int FieldVm_GetContextType(const FieldScriptState *state) {
+    return (state->flags & FIELD_SCRIPT_CONTEXT_TYPE_MASK) >>
+        FIELD_SCRIPT_CONTEXT_TYPE_SHIFT;
 }
 
 static inline int FieldVm_GetParentType(const FieldScriptState *state) {
@@ -1101,7 +1105,7 @@ static inline int FieldVm_GetPartyControllerProperty(u8 *party_controller,
 
 static inline int FieldVm_IsTwoDimensionalEntity(
     const FieldRuntimeEntity *entity) {
-    return ((entity->base.property_00a >> 2) & 0xF) == 8;
+    return entity->base.property_00a_bits.subtype == 8;
 }
 
 static inline u32 *FieldVm_GetInteractionFlags(FieldRuntimeEntity *entity) {
@@ -1116,16 +1120,27 @@ static inline void FieldVm_SetFlag(u32 *flags, u32 mask, int enabled) {
     }
 }
 
-static inline u32 FieldVm_MapContactDirectionMask(int script_mask) {
-    u32 direction_mask = 0;
-
-    if ((script_mask & 0x01) != 0) direction_mask |= 0x04;
-    if ((script_mask & 0x04) != 0) direction_mask |= 0x01;
-    if ((script_mask & 0x08) != 0) direction_mask |= 0x02;
-    if ((script_mask & 0x02) != 0) direction_mask |= 0x08;
-    if ((script_mask & 0x10) != 0) direction_mask |= 0x20;
-    if ((script_mask & 0x20) != 0) direction_mask |= 0x10;
-    return direction_mask;
+static inline void FieldVm_SetContactDirectionFilter(
+    FieldRuntimeEntity *entity, int script_mask) {
+    entity->contact_direction_flags.enabled_mask = 0;
+    if ((script_mask & 0x01) != 0) {
+        entity->contact_direction_flags.enabled_mask |= 0x04;
+    }
+    if ((script_mask & 0x04) != 0) {
+        entity->contact_direction_flags.enabled_mask |= 0x01;
+    }
+    if ((script_mask & 0x08) != 0) {
+        entity->contact_direction_flags.enabled_mask |= 0x02;
+    }
+    if ((script_mask & 0x02) != 0) {
+        entity->contact_direction_flags.enabled_mask |= 0x08;
+    }
+    if ((script_mask & 0x10) != 0) {
+        entity->contact_direction_flags.enabled_mask |= 0x20;
+    }
+    if ((script_mask & 0x20) != 0) {
+        entity->contact_direction_flags.enabled_mask |= 0x10;
+    }
 }
 
 static inline void FieldVm_SetNavigationBounds(FieldRuntimeEntity *entity,
@@ -1165,52 +1180,84 @@ static inline void FieldVm_SetCollisionPolicy(FieldRuntimeEntity *entity,
                                               int category, int solid,
                                               int can_be_displaced,
                                               int can_displace_other) {
-    u64 policy = entity->collision_policy_low |
-        ((u64)entity->collision_policy_high << 32);
-    u64 shift = 3 * category;
-    u64 value = solid != 0;
+    int shift = 3 * category;
+    int value = solid != 0;
 
-    value |= (u64)(can_be_displaced != 0) << 1;
-    value |= (u64)(can_displace_other != 0) << 2;
-    policy = (policy & ~((u64)7 << shift)) | (value << shift);
-    entity->collision_policy_low = (u32)policy;
-    entity->collision_policy_high = (u32)(policy >> 32);
+    value |= (can_be_displaced != 0) << 1;
+    value |= (can_displace_other != 0) << 2;
+    entity->collision_policy &= ~(7 << shift);
+    entity->collision_policy |= value << shift;
 }
 
 static inline void FieldVm_SetRenderPriorities(FieldRuntimeEntity *entity,
                                                const s32 *arguments) {
-    static const u32 automatic_priority_flags[4] = {
-        FIELD_ENTITY_AUTO_PRIORITY_0,
-        FIELD_ENTITY_AUTO_PRIORITY_1,
-        FIELD_ENTITY_AUTO_PRIORITY_2,
-        FIELD_ENTITY_AUTO_PRIORITY_3
-    };
-    int subtype = (entity->base.property_00a >> 2) & 0xF;
-    int index;
+    int subtype = entity->base.property_00a_bits.subtype;
 
-    if (subtype != 8 && entity->auxiliary_render_object != 0) {
-        if ((s8)arguments[5] == -1) {
-            entity->runtime_flags |= FIELD_ENTITY_AUTO_AUXILIARY_PRIORITY;
-        } else {
-            entity->runtime_flags &= ~FIELD_ENTITY_AUTO_AUXILIARY_PRIORITY;
-            entity->auxiliary_render_object->overlap_priorities[0] =
-                (s8)arguments[5];
-            entity->field_state_flags =
-                (entity->field_state_flags & ~(3 << 26)) |
-                (((u8)arguments[5] & 3) << 26);
+    if (subtype == 8) {
+        s8 priority_0 = (s8)arguments[1];
+        s8 priority_1 = (s8)arguments[2];
+        s8 priority_2 = (s8)arguments[3];
+        s8 priority_3 = (s8)arguments[4];
+        FieldRenderObject *render_object = entity->render_object;
+
+        if (render_object != 0) {
+            render_object->overlap_priorities[0] = priority_0;
+            render_object->overlap_priorities[1] = priority_1;
+            render_object->overlap_priorities[2] = priority_2;
+            render_object->overlap_priorities[3] = priority_3;
         }
-    }
-
-    if (entity->render_object == 0) {
         return;
     }
-    for (index = 0; index < 4; index++) {
-        if (subtype != 8 && (s8)arguments[index + 1] == -1) {
-            entity->runtime_flags |= automatic_priority_flags[index];
+
+    {
+        s8 priority_0 = (s8)arguments[1];
+        s8 priority_1 = (s8)arguments[2];
+        s8 priority_2 = (s8)arguments[3];
+        s8 priority_3 = (s8)arguments[4];
+        s8 auxiliary_priority = (s8)arguments[5];
+
+        if (entity->auxiliary_render_object != 0) {
+            if (auxiliary_priority == -1) {
+                entity->runtime_flags |=
+                    FIELD_ENTITY_AUTO_AUXILIARY_PRIORITY;
+            } else {
+                entity->runtime_flags &=
+                    ~FIELD_ENTITY_AUTO_AUXILIARY_PRIORITY;
+                entity->auxiliary_render_object->overlap_priorities[0] =
+                    auxiliary_priority;
+                entity->field_state_flags =
+                    (entity->field_state_flags & ~(3 << 26)) |
+                    (((u8)auxiliary_priority & 3) << 26);
+            }
+        }
+
+        if (entity->render_object == 0) {
+            return;
+        }
+
+        if (priority_0 == -1) {
+            entity->runtime_flags |= FIELD_ENTITY_AUTO_PRIORITY_0;
         } else {
-            entity->runtime_flags &= ~automatic_priority_flags[index];
-            entity->render_object->overlap_priorities[index] =
-                (s8)arguments[index + 1];
+            entity->runtime_flags &= ~FIELD_ENTITY_AUTO_PRIORITY_0;
+            entity->render_object->overlap_priorities[0] = priority_0;
+        }
+        if (priority_1 == -1) {
+            entity->runtime_flags |= FIELD_ENTITY_AUTO_PRIORITY_1;
+        } else {
+            entity->runtime_flags &= ~FIELD_ENTITY_AUTO_PRIORITY_1;
+            entity->render_object->overlap_priorities[1] = priority_1;
+        }
+        if (priority_2 == -1) {
+            entity->runtime_flags |= FIELD_ENTITY_AUTO_PRIORITY_2;
+        } else {
+            entity->runtime_flags &= ~FIELD_ENTITY_AUTO_PRIORITY_2;
+            entity->render_object->overlap_priorities[2] = priority_2;
+        }
+        if (priority_3 == -1) {
+            entity->runtime_flags |= FIELD_ENTITY_AUTO_PRIORITY_3;
+        } else {
+            entity->runtime_flags &= ~FIELD_ENTITY_AUTO_PRIORITY_3;
+            entity->render_object->overlap_priorities[3] = priority_3;
         }
     }
 }
@@ -1230,7 +1277,7 @@ static inline int FieldVm_DegreesToTurn16(int degrees) {
 
 static inline const void *FieldVm_GetResourceRecord(
     FieldVmRuntime *runtime, FieldRuntimeEntity *entity, int resource_index) {
-    int resource_set = (entity->base.property_00a >> 6) & 1;
+    int resource_set = entity->base.property_00a_bits.resource_set;
     u8 *context = runtime->field_context;
     int count = *(int *)(context + FIELD_VM_RESOURCE_COUNTS_OFFSET +
                          resource_set * sizeof(int));
@@ -1248,24 +1295,24 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                             ScriptVmCommand *command) {
     FieldVmRuntime *runtime = (FieldVmRuntime *)vm;
     FieldScriptState *state = (FieldScriptState *)base_state;
-    s32 *arguments = command->arguments;
     u8 *field_context = runtime->field_context;
     u8 *party_manager = *(u8 **)(field_context +
                                  FIELD_VM_PARTY_MANAGER_OFFSET);
+    void *field_system = *(void **)(field_context +
+                                    FIELD_VM_FIELD_SYSTEM_OFFSET);
+    s32 *arguments = command->arguments;
     FieldMapController *map_controller;
     FieldScriptState *target;
     FieldEntity *entity;
     FieldRuntimeEntity *runtime_entity;
     u8 *party_controller;
-    void *field_system = *(void **)(field_context +
-                                    FIELD_VM_FIELD_SYSTEM_OFFSET);
     const u16 *script;
     int owner_type;
     int result = SCRIPT_VM_CONTINUE;
 
     switch (command->opcode) {
     case FIELD_VM_BRANCH_IF_OWNER_SUBTYPE:
-        owner_type = FieldVm_GetOwnerType(state);
+        owner_type = FieldVm_GetContextType(state);
         if ((owner_type == FIELD_SCRIPT_OWNER_PRIMARY ||
              owner_type == FIELD_SCRIPT_OWNER_SECONDARY) &&
             FieldVm_GetOwnerSubtype(state) == arguments[0]) {
@@ -1508,7 +1555,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         runtime_entity = FieldVm_GetRuntimeEntity(entity);
         switch (command->opcode) {
         case FIELD_VM_SET_ENTITY_VISIBLE:
-            entity->vtable->set_visible(entity, arguments[1]);
+            entity->vtable->set_visible(entity, arguments[1] != 0);
             break;
 
         case FIELD_VM_SET_ENTITY_OFFSCREEN_CONTACT_RETENTION_ENABLED:
@@ -1582,7 +1629,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             if (arguments[1] == -1) {
                 if (arguments[2] != -1) {
                     func_ov000_020a6c7c(
-                        &runtime_entity->base, arguments[2], -1);
+                        &runtime_entity->base, arguments[2], -1, 1, 1);
                 }
             } else {
                 const void *resource_record = FieldVm_GetResourceRecord(
@@ -1596,7 +1643,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 }
                 runtime_entity->resource_index = (u8)arguments[1];
                 func_ov000_020a6d68(
-                    &runtime_entity->base, resource_record);
+                    &runtime_entity->base, resource_record, 0, 0,
+                    arguments[2] == -1 ? 0 : arguments[2], 1, 0);
             }
             if (arguments[3] != -1) {
                 func_ov000_020bd86c(runtime_entity->render_object);
@@ -1607,11 +1655,13 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             if ((runtime_entity->saved_presentation_flags &
                  FIELD_ENTITY_SAVED_RESOURCE) != 0) {
                 const void *resource_record;
+                int animation_id = -1;
                 u16 special_resource_state =
                     *(u16 *)((u8 *)runtime_entity + 0x592);
                 int special_resource_index =
                     (s8)(special_resource_state >> 6);
-                int subtype = (runtime_entity->base.property_00a >> 2) & 0xF;
+                int subtype =
+                    runtime_entity->base.property_00a_bits.subtype;
 
                 runtime_entity->resource_index =
                     runtime_entity->saved_resource_index;
@@ -1645,11 +1695,13 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 }
                 if ((runtime_entity->saved_presentation_flags &
                      FIELD_ENTITY_SAVED_RESOURCE_ANIMATION) != 0) {
+                    animation_id = runtime_entity->saved_animation_id;
                     runtime_entity->saved_presentation_flags &=
                         ~FIELD_ENTITY_SAVED_RESOURCE_ANIMATION;
                 }
                 func_ov000_020a6d68(
-                    &runtime_entity->base, resource_record);
+                    &runtime_entity->base, resource_record, 0, 0,
+                    animation_id, 1, 0);
             } else if ((runtime_entity->saved_presentation_flags &
                         FIELD_ENTITY_SAVED_RESOURCE_ANIMATION) != 0) {
                 runtime_entity->animation_id =
@@ -1657,7 +1709,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 runtime_entity->saved_presentation_flags &=
                     ~FIELD_ENTITY_SAVED_RESOURCE_ANIMATION;
                 func_ov000_020a6c7c(
-                    &runtime_entity->base, runtime_entity->animation_id, -1);
+                    &runtime_entity->base, runtime_entity->animation_id,
+                    -1, 1, 1);
             }
             break;
 
@@ -2075,9 +2128,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_POSITION:
-            arguments[2] <<= FX32B_INT;
-            arguments[3] <<= FX32B_INT;
             if (FieldVm_IsTwoDimensionalEntity(runtime_entity)) {
+                arguments[2] <<= FX32B_INT;
+                arguments[3] <<= FX32B_INT;
                 if (arguments[1] != 0) {
                     arguments[2] += runtime_entity->position_x;
                     arguments[3] += runtime_entity->position_y;
@@ -2086,6 +2139,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     &runtime_entity->base, arguments[2],
                     arguments[3]);
             } else {
+                arguments[2] <<= FX32B_INT;
+                arguments[3] <<= FX32B_INT;
                 arguments[4] <<= FX32B_INT;
                 if (arguments[1] != 0) {
                     arguments[2] += runtime_entity->position_x;
@@ -2224,9 +2279,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_CONTACT_DIRECTION_FILTER:
-            runtime_entity->contact_direction_flags =
-                (runtime_entity->contact_direction_flags & ~0x3F) |
-                FieldVm_MapContactDirectionMask(arguments[1]);
+            FieldVm_SetContactDirectionFilter(
+                runtime_entity, arguments[1]);
             break;
         case FIELD_VM_CONFIGURE_ENTITY_SHADOW:
             FieldVm_SetFlag(
@@ -2251,16 +2305,16 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_SET_ENTITY_MAP_SYNC_AXES:
             if (arguments[1] != -1) {
-                FieldVm_SetFlag(
-                    &runtime_entity->runtime_flags,
-                    FIELD_ENTITY_SYNC_HORIZONTAL,
-                    arguments[1] & 1);
+                runtime_entity->runtime_flags =
+                    (runtime_entity->runtime_flags &
+                     ~FIELD_ENTITY_SYNC_HORIZONTAL) |
+                    (arguments[1] & 1);
             }
             if (arguments[2] != -1) {
-                FieldVm_SetFlag(
-                    &runtime_entity->runtime_flags,
-                    FIELD_ENTITY_SYNC_VERTICAL,
-                    arguments[2] & 1);
+                runtime_entity->runtime_flags =
+                    (runtime_entity->runtime_flags &
+                     ~FIELD_ENTITY_SYNC_VERTICAL) |
+                    ((arguments[2] & 1) << 1);
             }
             if (arguments[1] == 1) {
                 runtime_entity->runtime_flags |=
@@ -3822,7 +3876,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         entity = func_ov000_0208221c(
             runtime, state, arguments[0]);
         func_ov000_0206f8ac(field_context);
-        if (FieldVm_GetOwnerType(state) == FIELD_SCRIPT_OWNER_PRIMARY) {
+        if (FieldVm_GetContextType(state) == FIELD_SCRIPT_OWNER_PRIMARY) {
             linked_owner = FieldVm_GetEntityByIndex(
                 runtime, (s8)state->owner_data[0]);
         }
