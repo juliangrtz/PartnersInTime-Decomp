@@ -450,84 +450,41 @@ command. `read_table` adds another two halfwords before its indexed 32-bit read.
 Schema v2 replaces every statically resolvable relative operand with a label and
 recomputes it when commands are inserted, removed, or resized.
 
-The overlay-7 native scene extension is represented by one structured C switch
-covering every real and reserved slot. It now emits the exact original
-9,196-byte function at 97.91% fuzzy instruction similarity. Its typed manager
-layout exposes all 40 object-script and 16 sound-task slots; the pointer-backed
-scene mode/save inputs, fifth text-tile coordinate, dynamic UI retry
-descriptors, branch-specific owner-loop counters, raw aligned path addresses,
-signed screen coordinates, and reserved `0x097` epilogue are retained explicitly. It remains
-unlinked until the remaining local register schedules match byte-for-byte.
+The native VM dispatcher implementations now have the following verified
+source status:
 
-The native battle extension is now represented completely in
-`src/battle/battle_vm_dispatch.c`. Its structured switch covers all 182 local
-opcodes (`0x033..0x0E8`) and preserves the original fallback into the common
-`0x000..0x103` battle executor. In particular, the C source exposes the exact
-PC rewinds used by wait commands, the halfword-relative object-script and
-conditional branches, all 40 object-script ownership records, tagged effect
-and task handles, and the argument-mode check used to combine literal
-fixed-point pairs. It remains an unlinked objdiff work unit solely because the
-original compiler formed one 19,168-byte monolithic switch. The current source
-has reintegrated retry decoding, enemy stats, object-view coordinates,
-comparisons, script control, the effect/task-slot scans, and the owner scans;
-it emits one 19,168-byte dispatcher with no compiler-generated helper symbols,
-exactly matching the original size, and currently reaches 98.83% fuzzy instruction
-similarity. Packed wide values now use the original explicit low-half mask,
-retry decoding follows the original addition order, keyframe frame-count
-decoding is instruction-identical, and movement durations are stored before
-the motion call. ROM-shaped enemy flag, trait, and status-resistance fields,
-tag-specific item accessors, exact direct-effect coordinate paths, and
-runtime/actor-script ownership are explicit. The source also
-reproduces the original `0x74`-byte
-stack frame, separate XYZ work areas, and the dispatcher's exceptional
-physical handler order.
+| Extension | Source | Original size | Current status |
+|---|---|---:|---|
+| Battle, `0x033..0x0E8` | `src/battle/battle_vm_dispatch.cpp` | 19,168 bytes | Byte-identical, linked |
+| Common battle, `0x0E9..0x103` | `src/battle/battle_vm_common_dispatch.c` | 1,844 bytes | Byte-identical, linked |
+| Field/world, `0x033..0x154` | `src/field/field_vm_dispatch.cpp` | 23,492 bytes | Byte-identical, linked |
+| Scene/object | `src/overlay007/scene_vm_dispatch.c` | 9,196 bytes | 99.35% instruction similarity, unlinked |
 
-The battle dispatcher's common extension is now reconstructed separately in
-`src/battle/battle_vm_common_dispatch.c`. `BattleVm_DispatchCommonOpcode`
-implements every slot from `0x0E9` through `0x103`, including attachment and
-auxiliary-model operations, common resource loading, UI creation, effect and
-animation waits, object motion, and screen effects. The exact 1,844-byte
-original size is reproduced at 98.92% fuzzy instruction similarity. Its six
-legacy no-ops and both dedicated no-op epilogues remain explicit so that the
-switch layout and relocation boundaries are not accidentally collapsed.
+These are monolithic dispatchers with the original reserved cases, nested
+switch tables, exceptional handler order, and retry/rewind behavior. Battle
+and field use C++ virtual methods with C ABI entry points. All three linked
+units pass the complete European module and symbol checks.
 
-The native field extension is likewise complete in
-`src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
-opcodes (`0x033..0x154`), including the six intentional legacy no-ops, while
-preserving the original command-rewind behavior for asynchronous waits. The
-source-level semantic helpers now fold into one 23,488-byte function, four
-bytes short of the 23,492-byte original; no compiler-generated code helpers
-remain. The
-reconstructed common result
-path, cached field/party/map contexts, persistent argument base, and dynamic
-retry decoding now reach 95.96% fuzzy similarity against the 23,492-byte
-original. The ROM-proven persistent field-system pointer is
-`field_context + 0x24FC`; map operations use the distinct controller at
-`+0x2500`. The script-state flags live at `+0xB0`: owner type occupies bits
-4..6, while the message/branch context occupies bits 7..8. Entity property
-`+0x0A` and contact-direction `+0x3A4` are now represented as the original
-C bitfields, preserving subtype/resource semantics and the six-direction
-script-mask permutation. The two signed entity script values are now owned by
-the embedded `FieldScriptState` at `+0xBA`, matching both the set and get
-handlers. The same typed layout now covers script lifecycle,
-owner/context/parent relationships, result and inline-wait state, plus the
-entity's saved resource, palette, behavior, and animation markers. Transform,
-planar/vertical movement, field-side/camera, special-resource, and block-bounce
-state are typed as the corresponding packed fields as well. The four
-matching-script operations retain their original dedicated loops, resolve the
-entity table from the field context in each operation path, and keep their
-physical position after the two entity command families. The locomotion
-parameter handler likewise retains its original physical position between the
-rotation and linear-movement command groups. Paired and entity script
-startup, room/camera commands, and party/gimmick commands likewise retain the
-original non-numeric handler order, while
-background-layer, blend, and wipe commands preserve separate main/subscreen
-register paths and typed wipe-duration fields.
-It stays an unlinked objdiff work unit while the remaining nested
-command bodies and local register allocation are converged. The two large
-entity families resolve one target apiece and reproduce the original 91- and
-96-entry inner tables with all distinct ROM case targets; the auxiliary-script
-and entity-script families also use the original two-stage shape.
+The remaining scene difference is only opcode `0x04E`'s register allocation
+and scheduling for signed height alignment. The coordinate getter now uses
+raw object Y for render height, and the path starter divides the signed
+32-bit count before narrowing to `u16`. Its shipped overlay-7 interior call
+entry is preserved as a label rather than inferred as a new function.
+
+The final battle pass recovers the motion-frame access at channel offset
+`0x3C`, animation argument reads after the virtual getter, model animation
+methods, runtime flags, and hit-record iteration. The common executor's
+attached-object distance calculation uses ordinary reads within its otherwise
+volatile command-argument access.
+
+Field layout and call-site matching additionally recovers the two-argument
+entity behavior setter, the queued-script store before parent-state reads,
+saved-resource animation restore ordering, map-sync argument capture,
+signed collision-policy updates, virtual palette mode narrowing, and the
+party-controller array used by menu contexts. The field-system pointer is
+`field_context + 0x24FC`, while the map controller is at `+0x2500`.
+The paired-field ready guard reads the context type at `0x23F0`; the room ID
+remains a separate value at `0x23F4`.
 
 ## Variable namespaces
 

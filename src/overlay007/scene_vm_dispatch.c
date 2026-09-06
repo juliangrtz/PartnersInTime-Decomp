@@ -168,8 +168,9 @@ extern int func_ov007_02088fe4();
 extern void func_ov007_02087084();
 extern void *func_ov007_02086f74();
 extern void func_ov007_02087bf4();
+/* The shipped path command targets this interior overlay-7 entry. */
 extern void func_ov007_020724b0(
-    void *motion, const void *path, u32 point_count,
+    void *motion, const void *path, u16 point_count,
     u32 end_time, s32 movement_scale
 );
 extern void func_ov007_0207e770();
@@ -368,10 +369,9 @@ int SceneVm_DispatchCommand(
         s16 object_x;
 
         object = SceneObject_GetById(ARG_U16(0));
-        object_y = object->y;
+        object_y = (s16)(object->y - object->base_y);
         screen_height = (s16)(
-            object->render_height + 16 * (192 - object_y));
-        object_y = (s16)(object_y - object->base_y);
+            object->render_height + 16 * (192 - object->y));
         property_id = ARG_U16(1);
         object_x = object->x;
         switch (property_id) {
@@ -471,8 +471,7 @@ int SceneVm_DispatchCommand(
         func_ov007_020724b0(
             motion,
             (const u32 *)(path_address + sizeof(u32)),
-            (u32)((*(const u32 *)path_address +
-                   (*(const u32 *)path_address >> 31)) << 15) >> 16,
+            *(const s32 *)path_address / 2,
             (ARG(4) - 1) << 16,
             ARG(5)
         );

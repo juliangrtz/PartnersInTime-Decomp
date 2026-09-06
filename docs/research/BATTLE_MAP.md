@@ -1367,7 +1367,7 @@ open until a compatible frame trace crosses the removal path.
 `BattleTurnState_Update` is one real `0x7D5C`-byte function. They are genuine
 large switches, not accidental merged functions. The leaf-first analysis has
 now made a complete readable translation of `BattleAI_DispatchOpcode`
-practical: `src/battle/battle_vm_dispatch.c` covers all 182 battle-specific
+practical: `src/battle/battle_vm_dispatch.cpp` covers all 182 battle-specific
 slots from `0x033` through `0x0E8`, then delegates the remaining shared range
 to `BattleVm_DispatchCommonOpcode` at `0x020698D4` as the original does. It includes exact retry/yield and
 relative-PC behavior, all three tagged effect/task handle families, the
@@ -1376,18 +1376,17 @@ decoding paths. Retry decoding, enemy-stat access, packed trait writes,
 object-view coordinates, comparisons, script control, movement-duration
 calculation, typed effect flags, the effect/task-slot scans, and the owner
 scans are now reintegrated. The current MWCC build is one 19,168-byte function
-with no compiler-generated helper symbols. It is 98.83% fuzzy-similar and has
-the exact size of the original monolith, but is deliberately
-not linked yet. Explicit low-half masking, the original retry operand order,
+with no compiler-generated helper symbols. It is byte-identical to the original monolith and linked into the
+verified European build. Explicit low-half masking, the original retry operand order,
 the keyframe frame-count division, direct motion-channel lookup, in-place
 movement-duration writeback, ROM-shaped enemy flags, traits, and status
 resistances are recovered, while tag-specific item accessors, direct-effect
 coordinate paths, and runtime/actor-script ownership are visible in the C source.
 Its `0x74`-byte stack frame, nine distinct position work areas,
-and exceptional handler ordering now match. Remaining compiler work is
-concentrated in model virtual-call register scheduling, the queued-hit scan,
-and a few motion/runtime register choices; opcode semantics are no
-longer the blocker.
+and exceptional handler ordering now match. C++ virtual methods recover
+the model-call layout while preserving the C dispatcher ABI. The final pass
+also recovers queued-hit iteration, runtime flags, animation argument reads
+after the getter, and the motion-frame word at channel offset `0x3C`.
 
 The delegated common range is now readable C in
 `src/battle/battle_vm_common_dispatch.c` as well. Its 27-slot switch covers
@@ -1396,10 +1395,10 @@ and wait state, free and object-anchored battle UI, effect ownership and wait
 operations, speed-derived object motion, animation-channel waits, and the two
 screen-effect paths. The six absent/reserved commands remain intentional
 no-ops, including the original distinct epilogues for `0x0F0` and `0x0FC`.
-The current MWCC output is exactly the original 1,844 bytes and reaches 98.92%
-fuzzy instruction similarity. Its persistent state/argument registers now
-match the ROM; only five scheduling differences remain in the attached-object
-distance calculation.
+The current MWCC output matches all 1,844 original bytes and is linked.
+The attached-object distance calculation uses ordinary command reads within
+the otherwise volatile argument access. This recovers the original load
+schedule without changing the asynchronous retry or movement behavior.
 
 The complete 182-entry range, handler addresses, aliases, observed
 command-record fields, and direct calls are indexed in

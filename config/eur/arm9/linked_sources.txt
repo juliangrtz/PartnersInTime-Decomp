@@ -27,6 +27,8 @@ src/battle/battle_object_upload.c
 src/battle/battle_object_texture_setup.c
 src/battle/battle_vm_variables.c
 src/battle/battle_vm_helpers.c
+src/battle/battle_vm_common_dispatch.c
+src/battle/battle_vm_dispatch.cpp
 src/battle/battle_scene_animation.cpp
 src/battle/battle_scene_movement_dispatch.c
 src/battle/battle_entity_resources.c
@@ -140,3 +142,4 @@ src/overlay021/attack_phase_state.c
 src/overlay026/attack_control.c
 src/overlay026/party_pairing.c
 src/field/field_entity_state.c
+src/field/field_vm_dispatch.cpp

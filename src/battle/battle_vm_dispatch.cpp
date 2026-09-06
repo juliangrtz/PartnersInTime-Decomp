@@ -1,3 +1,4 @@
+extern "C" {
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>
@@ -15,14 +16,17 @@
 #include <game/battle_status.h>
 #include <game/item.h>
 #include <game/save_data.h>
+#include <nitro/fx.h>
+}
 
 /*
  * Complete high-level reconstruction of the battle-specific command range.
  * Opcodes outside 0x033..0x0E8 are delegated to the common battle VM handler,
- * exactly like the original dispatcher. This translation unit remains an
- * objdiff work unit until its control-flow and register schedule converge.
+ * exactly like the original dispatcher. The complete 19,168-byte function
+ * matches the European ROM and is linked into the matching build.
  */
 
+extern "C" {
 extern int func_ov002_0208bd88(int encounter_id);
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
 extern int func_ov002_020789ec(ScriptVm *vm, ScriptVmState *state,
@@ -125,6 +129,7 @@ extern int BattleItemList_RebuildUsableItems(void);
 extern void func_ov002_02076178(int sound_task_id);
 extern u8 data_02050290[];
 extern u8 data_020505c4[];
+}
 
 enum BattleVmOpcode {
     BATTLE_VM_ALLOCATE_OBJECT_DATA_BUFFER = 0x033,
@@ -419,17 +424,17 @@ static inline void BattleVm_StorePackedObjectViewPosition(
 }
 
 static inline void BattleVm_RefreshModelAnimation(BattleModel *model) {
-    int animation_id = model->vtable->unknown_0a4(model);
+    int animation_id = model->unknown_a4();
 
-    model->vtable->unknown_0a0(model, animation_id);
+    model->unknown_a0(animation_id);
 }
 
 static inline void BattleVm_SetActiveModelAnimation(BattleModel *model,
-                                                    int animation_id) {
-    int active_animation_id = model->vtable->get_animation_id(model);
+                                                    ScriptVmCommand *command) {
+    int active_animation_id = model->get_animation_id();
 
-    model->vtable->set_primary_animation(
-        model, (u8)active_animation_id, (s16)animation_id, 1);
+    model->set_primary_animation(
+        (u8)active_animation_id, (s16)command->arguments[1], 1);
 }
 
 static inline const u8 *BattleVm_GetActionItemRecord(u16 tagged_item_id) {
@@ -479,7 +484,6 @@ static inline const u8 *BattleVm_GetItemRecord(u16 tagged_item_id) {
 int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
                             ScriptVmCommand *command) {
     BattleAIState *ai_state = (BattleAIState *)state;
-    BattleRuntimeState *runtime_state;
     BattleObjectDataLoadState *load_state;
     BattleSceneObject *object;
     BattleSceneObject *reference;
@@ -513,7 +517,6 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     void *resource_sources[4];
     u16 object_id;
     int script_target_id;
-    int selected_actor;
     int mode;
     int x;
     int y;
@@ -691,8 +694,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SET_RUNTIME_FLAG_03:
-        runtime_state = BattleContext_GetRuntimeState();
-        runtime_state->flags.bits.runtime_flag_03 =
+        ((BattleContext *)gBattleContext)->runtime.flags.bits.runtime_flag_03 =
             (u16)command->arguments[0];
         return SCRIPT_VM_CONTINUE;
 
@@ -721,7 +723,8 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
                                  command->arguments[1]);
         return SCRIPT_VM_CONTINUE;
 
-    case BATTLE_VM_FIND_MOST_DAMAGED_ENEMY:
+    case BATTLE_VM_FIND_MOST_DAMAGED_ENEMY: {
+        int probe_result;
         switch ((u16)command->arguments[0]) {
         case 0:
             BattleActor_FindHighestHpEnemy((u16)command->arguments[1]);
@@ -730,12 +733,13 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         case 1:
             BattleActor_FindLowestHpEnemy((u16)command->arguments[1]);
         case 2:
-            selected_actor = BattleActor_FindMostDamagedEnemy(
+            probe_result = BattleActor_FindMostDamagedEnemy(
                 (u16)command->arguments[1]);
-            BattleVm_WriteResult(vm, state, command, selected_actor);
             break;
         }
+        BattleVm_WriteResult(vm, state, command, probe_result);
         return SCRIPT_VM_CONTINUE;
+    }
 
     case BATTLE_VM_LEGACY_NOOP_049:
         return SCRIPT_VM_CONTINUE;
@@ -1052,7 +1056,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     case BATTLE_VM_SET_ACTIVE_MODEL_ANIMATION:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
         model = BattleSceneObject_GetActiveModel(object);
-        BattleVm_SetActiveModelAnimation(model, command->arguments[1]);
+        BattleVm_SetActiveModelAnimation(model, command);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_CONFIGURE_ANIMATION_LAYER:
@@ -1071,8 +1075,8 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
         active_model = BattleSceneObject_GetActiveModel(object);
-        active_model->vtable->configure_animation_layer(
-            active_model, (s8)command->arguments[2],
+        active_model->configure_animation_layer(
+            (s8)command->arguments[2],
             (s16)command->arguments[1], 1);
         active_model->animation_layer_states[command->arguments[2]] =
             command->arguments[3];
@@ -1150,7 +1154,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
             &object->motion_channels[(u16)command->arguments[1]];
         BattleVm_WriteResult(
             vm, state, command,
-            (*(s32 *)&motion_channel->parameters[0] >> 16) + 1);
+            (*(s32 *)&motion_channel->parameters[4] >> 16) + 1);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_SINUSOIDAL_DIRECTION_MOTION:
@@ -1195,16 +1199,18 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
                 command->arguments[4], command->arguments[5],
                 command->arguments[6]);
             break;
-        case 5:
-            x = command->arguments[3] - object->x;
-            y = command->arguments[4] - object->y;
-            z = command->arguments[5] - object->z;
+        case 5: {
+            int delta_x = command->arguments[3] - object->x;
+            int delta_y = command->arguments[4] - object->y;
+            int delta_z = command->arguments[5] - object->z;
             reference = BattleSceneObject_GetById(
                 (u16)command->arguments[7]);
+            delta_x += reference->x;
+            delta_y += reference->y;
+            delta_z += reference->z;
             command->arguments[6] = _s32_div_f(
-                FX_Sqrt(((x + reference->x) * (x + reference->x) +
-                         (y + reference->y) * (y + reference->y) +
-                         (z + reference->z) * (z + reference->z)) << 12),
+                FX_Sqrt((delta_x * delta_x + delta_y * delta_y +
+                         delta_z * delta_z) << 12),
                 command->arguments[6]);
             func_ov002_020a3b2c(
                 reference, (u16)command->arguments[1], command->arguments[3],
@@ -1212,6 +1218,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
                 command->arguments[6],
                 BattleSceneObject_GetById((u16)command->arguments[7]));
             break;
+        }
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -1499,7 +1506,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     case BATTLE_VM_SET_ACTOR_TARGETING_ENABLED:
         actor = BattleActor_GetById((u16)command->arguments[0]);
         actor->flag_bits.excluded_from_targeting =
-            (u16)(command->arguments[1] == 0);
+            (u16)(int)(command->arguments[1] == 0);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_CONFIGURE_HIT:
@@ -1515,31 +1522,34 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         BattleDamage_ReflectQueuedHits((u16)command->arguments[0]);
         return SCRIPT_VM_CONTINUE;
 
-    case BATTLE_VM_FIND_HIT_DESCRIPTOR:
-        hit_record = (BattleHitRecord *)(
+    case BATTLE_VM_FIND_HIT_DESCRIPTOR: {
+        int source_id;
+        int target_id;
+        BattleHitRecord *record = (BattleHitRecord *)(
             gBattleContext + BATTLE_VM_HIT_QUEUE_OFFSET);
-        effect_index = 0;
+        int record_index = 0;
 
         for (;;) {
-            if (hit_record->kind == 0) {
+            if (record->kind == 0) {
                 BattleVm_WriteResult(vm, state, command, 0);
                 return SCRIPT_VM_CONTINUE;
             }
-            selected_actor = hit_record->source_id;
-            handle = hit_record->target_id;
-            if (selected_actor == 8) selected_actor = BATTLE_ACTOR_MARIO;
-            if (selected_actor == 9) selected_actor = BATTLE_ACTOR_LUIGI;
-            if (handle == 8) handle = BATTLE_ACTOR_MARIO;
-            if (handle == 9) handle = BATTLE_ACTOR_LUIGI;
-            if (selected_actor == command->arguments[0] &&
-                handle == command->arguments[1]) {
+            source_id = record->source_id;
+            target_id = record->target_id;
+            if (source_id == 8) source_id = BATTLE_ACTOR_MARIO;
+            if (source_id == 9) source_id = BATTLE_ACTOR_LUIGI;
+            if (target_id == 8) target_id = BATTLE_ACTOR_MARIO;
+            if (target_id == 9) target_id = BATTLE_ACTOR_LUIGI;
+            if (source_id == command->arguments[0] &&
+                target_id == command->arguments[1]) {
                 BattleVm_WriteResult(
-                    vm, state, command, effect_index + 1);
+                    vm, state, command, record_index + 1);
                 return SCRIPT_VM_CONTINUE;
             }
-            hit_record++;
-            effect_index++;
+            record++;
+            record_index++;
         }
+    }
 
     case BATTLE_VM_GET_QUEUED_HIT_X:
     case BATTLE_VM_GET_QUEUED_HIT_Y:
@@ -1843,14 +1853,14 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
             effect_slots = (BattleEffect **)(
                 gBattleContext + BATTLE_VM_SPRITE_EFFECT_SLOTS_OFFSET);
             effect = effect_slots[handle_index];
-            effect->script_flag = (u16)(command->arguments[1] != 0);
+            effect->script_flag = (u16)(int)(command->arguments[1] != 0);
             break;
         case BATTLE_VM_ATTACHED_EFFECT_HANDLE_TAG:
             effect_slots = (BattleEffect **)(
                 gBattleContext + BATTLE_VM_ATTACHED_EFFECT_SLOTS_OFFSET);
             effect = effect_slots[handle_index];
             effect->attached_script_flag =
-                (u16)(command->arguments[1] != 0);
+                (u16)(int)(command->arguments[1] != 0);
             break;
         }
         return SCRIPT_VM_CONTINUE;

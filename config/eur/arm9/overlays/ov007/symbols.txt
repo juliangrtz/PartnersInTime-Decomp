@@ -49,7 +49,7 @@ func_ov007_02070b50 kind:function(arm,size=0x1430) addr:0x02070b50
 func_ov007_02071f80 kind:function(arm,size=0x2f0) addr:0x02071f80
 func_ov007_02072270 kind:function(arm,size=0x40c) addr:0x02072270
 func_ov007_020722d8 kind:label(arm) addr:0x020722d8
-.L_020724b0 kind:label(arm) addr:0x020724b0
+func_ov007_020724b0 kind:label(arm) addr:0x020724b0
 func_ov007_0207267c kind:function(arm,size=0x404) addr:0x0207267c
 func_ov007_02072a80 kind:function(arm,size=0x738) addr:0x02072a80
 func_ov007_020731b8 kind:function(arm,size=0x24c) addr:0x020731b8
