@@ -731,17 +731,17 @@ unlinked until helper reintegration and switch/register-layout matching can be
 done without changing the verified ROM.
 
 The overlay-0 field/world dispatcher at `0x020823F8-0x02087FBC` is now a
-structured C work unit as well. The first 123 consecutive slots
-(`0x033..0x0AD`) cover the complete script/entity-control prefix: inline and
-queued child scripts, entity render/collision state, bounds and priorities,
-resource/animation/palette state, scale and rotation, all fixed/linked orbit
-variants, profiled and timed movement, vertical motion, roaming and waypoint
-records, field effect sprites, enemy contact policy, and entity-local script
-values. Shared entity and render-object layouts are typed through the offsets
-used by these commands. MWCC currently emits 11,944 bytes for this partial
-source versus the original 23,492-byte monolith. It remains unlinked until the
-remaining `0x0AE..0x154` field-system commands and final instruction layout are
-complete.
+complete structured C work unit as well. All 290 consecutive slots
+(`0x033..0x154`) cover inline and queued scripts, entity render/collision and
+motion state, party composition and transfers, room/time-hole transitions,
+camera/BG/palette effects, field input and touchscreen effects, battle and menu
+handoffs, save-backed HP/inventory/checkpoints, the field timer, message-window
+ownership and motion, and field audio lifecycle. Shared entity, render-object,
+party, field-system, and script-owner layouts are typed through the offsets
+used by these commands. MWCC currently emits a 22,048-byte dispatcher plus
+2,548 bytes of readability helpers versus the original 23,492-byte monolith.
+It remains unlinked until helper reintegration and final switch/register-layout
+matching can be completed without changing the verified ROM.
 
 Priority formats:
 
