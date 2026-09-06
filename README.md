@@ -152,24 +152,29 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   effects and input, battle/menu handoffs, save-backed inventory, the field
   timer, message windows, and audio ownership. Named runtime layouts replace
   raw offsets for the shared entity, render, party, and field state. All
-  source-level helpers now force-inline into one 22,852-byte MWCC function;
+  source-level helpers now force-inline into one 23,296-byte MWCC function;
   there are no compiler-generated code helpers left. Its common return path,
   cached field/party/map contexts, dynamic retry decoding, and argument-base
   register now reproduce the original dispatcher architecture, raising fuzzy
-  instruction similarity to 34.14%. ROM-shaped bitfields now recover the
+  instruction similarity to 46.91%. ROM-shaped bitfields now recover the
   entity subtype/resource selection, six-direction contact mask, map-axis
   synchronization, signed collision-policy updates, script ownership and
-  lifecycle, and saved presentation/animation state without opaque raw
-  arithmetic. Matching-script control flow and main/subscreen register paths
-  now retain the original dispatch structure. IDA verifies the persistent field-system
+  lifecycle, saved presentation/animation state, transform and movement
+  controllers, field-side/camera state, and signed block-bounce state without
+  opaque raw arithmetic. Matching-script control flow and main/subscreen
+  register paths now retain the original dispatch structure. The normal and
+  transition-selecting battle starts, input-mask channels, timers, palette
+  controls, and roaming/waypoint controls also retain distinct ROM case
+  targets. IDA verifies the persistent field-system
   pointer at `field_context + 0x24FC` and the separate map controller at
   `+0x2500`; the reconstructed prolog now loads both the field-system and party
   contexts in the same positions as the original. IDA
   confirms that the original outer 290-entry table funnels command families through several
   nested switches. The two large 49- and 47-opcode entity families now share
   one target lookup apiece and reproduce the original 91- and 96-entry inner
-  tables. The auxiliary-script and entity-script families do likewise; the
-  remaining opcode bodies and local register schedules are the principal source of the size/layout delta
+  tables, including all distinct case targets. The auxiliary-script and
+  entity-script families do likewise; the remaining opcode bodies and local
+  register schedules are the principal source of the size/layout delta
   against the 23,492-byte original. The work unit remains unlinked while those
   dispatch groups and the register layout are converged.
   High-level source also includes

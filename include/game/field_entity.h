@@ -56,12 +56,35 @@ typedef struct FieldContactDirectionFlags {
 } FieldContactDirectionFlags;
 
 typedef struct FieldBaseStateFlags {
-    u32 unknown_00_07 : 8;
+    /* Enables waiting for the entity renderer's current animation. */
+    u32 animation_wait_enabled : 1;
+    u32 unknown_01_07 : 7;
     u32 retain_offscreen_contact : 1;
     u32 unknown_09_11 : 3;
     u32 reserved_state : 1;
     u32 unknown_13_31 : 19;
 } FieldBaseStateFlags;
+
+typedef struct FieldPlanarMovementFlags {
+    u32 active_state : 3;
+    u32 unknown_03_31 : 29;
+} FieldPlanarMovementFlags;
+
+typedef struct FieldVerticalControllerFlags {
+    u32 active : 1;
+    u32 unknown_01_31 : 31;
+} FieldVerticalControllerFlags;
+
+typedef struct FieldTransformFlags {
+    u16 scaling_active : 2;
+    u16 rotation_active : 1;
+    u16 unknown_03_15 : 13;
+} FieldTransformFlags;
+
+typedef struct FieldRenderSortKey {
+    u32 order : 28;
+    u32 layer : 4;
+} FieldRenderSortKey;
 
 typedef struct FieldEntityRuntimeFlags {
     u32 sync_horizontal : 1;
@@ -81,7 +104,9 @@ typedef struct FieldEntityRuntimeFlags {
 
 typedef struct FieldEntityFieldStateFlags {
     u32 contact_mode : 3;
-    u32 unknown_03_10 : 8;
+    u32 unknown_03 : 1;
+    u32 vertical_motion_active : 1;
+    u32 unknown_05_10 : 6;
     u32 turn_to_interactor : 1;
     u32 track_ground : 1;
     u32 ignore_navigation_obstacle : 1;
@@ -134,7 +159,9 @@ typedef struct FieldInteractionFlags {
     u32 spiked_jump_response : 1;
     u32 remove_after_special_contact : 1;
     u32 remove_immediately_for_battle : 1;
-    u32 unknown_04_31 : 28;
+    u32 unknown_04_13 : 10;
+    s32 block_bounce_state : 8;
+    u32 unknown_22_31 : 10;
 } FieldInteractionFlags;
 
 struct FieldRenderObjectVTable {
@@ -216,7 +243,7 @@ typedef struct FieldEntity {
 struct FieldRenderObject {
     FieldRenderObjectVTable *vtable;
     u8 unknown_004[0x52];
-    u16 animation_id;
+    s16 animation_id;
     u8 unknown_058[0x24];
     union {
         u32 state_flags;
@@ -229,7 +256,10 @@ struct FieldRenderObject {
     u8 unknown_0c0[0x40];
     void *components[8];
     u8 unknown_120[0x10];
-    u32 sort_key;
+    union {
+        u32 sort_key;
+        FieldRenderSortKey sort_key_bits;
+    };
     s8 overlap_priorities[4];
 };
 
@@ -265,11 +295,20 @@ struct FieldRuntimeEntity {
     u8 unknown_1a4[0x3C];
     FieldRenderObject *render_object;
     u8 unknown_1e4[0x10];
-    u32 planar_movement_flags;
+    union {
+        u32 planar_movement_flags;
+        FieldPlanarMovementFlags planar_movement_flag_bits;
+    };
     u8 unknown_1f8[0x40];
-    u32 vertical_controller_flags;
+    union {
+        u32 vertical_controller_flags;
+        FieldVerticalControllerFlags vertical_controller_flag_bits;
+    };
     u8 unknown_23c[0x44];
-    u16 transform_flags;
+    union {
+        u16 transform_flags;
+        FieldTransformFlags transform_flag_bits;
+    };
     u8 unknown_282[0x3A];
     fx32 position_z;
     u8 unknown_2c0[0x28];

@@ -336,7 +336,7 @@ field context (the other DS screen/field instance).
 | `0x11A` | `legacy_noop_11a` | unused_zero | intentional legacy no-op; its encoded argument is ignored. Every shipped use supplies zero and is immediately followed by opcode 0x11B and a scripted battle start |
 | `0x11B` | `legacy_noop_11b` | 0 literal args | intentional legacy no-op. Every shipped use follows opcode 0x11A and immediately precedes a scripted battle start |
 | `0x11C` | `start_scripted_battle` | battle_encounter_id, reserved_transition_argument, unused_minus_one, contact_mode, encounter_entity_selector, party_context | prepares the 36-byte battle-transfer block at save data +0x558. It records party_context, battle_encounter_id, the current room ID, contact_mode, the active field side, the selected encounter entity's ID, and the lead field entity's side. It also derives the encounter transition from entity class, collision direction, relative position, and field state, snapshots both parties' field coordinates, and releases the field scene. reserved_transition_argument is forwarded into the helper but not read there; unused_minus_one is not read by the dispatcher and is -1 in every shipped command |
-| `0x11D` | `start_scripted_battle_extended` | battle_encounter_id, reserved_transition_argument, unused_minus_one, contact_mode, encounter_entity_selector, party_context, transition_variant | performs the same battle-transfer setup as opcode 0x11C and additionally stores transition_variant in bits 4..7 of the battle flags. The sole shipped invocation supplies transition_variant 1; opcode 0x11C supplies the helper with its internal default value 3. reserved_transition_argument is forwarded but unused and unused_minus_one is not read by the dispatcher |
+| `0x11D` | `start_scripted_battle_extended` | battle_encounter_id, reserved_transition_argument, unused_minus_one, contact_mode, encounter_entity_selector, party_context, transition_variant | performs the same battle-transfer setup as opcode 0x11C and additionally stores transition_variant in bits 4..7 of the battle flags. The sole shipped invocation supplies transition_variant 1; opcode 0x11C passes zero. reserved_transition_argument is forwarded but unused and unused_minus_one is not read by the dispatcher |
 | `0x11E` | `open_pause_menu` | party_context_or_minus_one, initial_section, fade_to_black, return_screen_flag | clears and fills the ten-byte scene-transfer header at save data +0x558. -1 resolves party_context_or_minus_one from the active field party; initial_section 0 opens the normal menu root while nonzero values directly select zero-based section initial_section - 1; return_screen_flag becomes transfer bit 15. Field resources are released and both screens optionally fade from white to black over 16 frames |
 | `0x11F` | `set_save_location_id` | save_location_id | stores the unsigned 16-bit location selector used by the next save-menu handoff. Field variable 0x3023 reads the stored value, and opcode 0x120 copies its low byte into the save-menu transfer block |
 | `0x120` | `open_save_menu` | party_context_or_minus_one, fade_to_black, return_screen_flag | clears and fills the ten-byte scene-transfer header at save data +0x558: party_context_or_minus_one is resolved to the active field party configuration when -1, the saved location byte comes from opcode 0x11F, and return_screen_flag becomes transfer bit 15. Both field resource owners are released, both screens optionally fade from white to black over 16 frames, and the field scene is suspended for the save menu. Every shipped invocation uses arguments -1, 1, 1 |
@@ -468,10 +468,10 @@ The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
 opcodes (`0x033..0x154`), including the five intentional legacy no-ops, while
 preserving the original command-rewind behavior for asynchronous waits. The
-source-level semantic helpers now force-inline into one 22,852-byte function;
+source-level semantic helpers now force-inline into one 23,296-byte function;
 no compiler-generated code helpers remain. The reconstructed common result
 path, cached field/party/map contexts, persistent argument base, and dynamic
-retry decoding now reach 34.14% fuzzy similarity against the 23,492-byte
+retry decoding now reach 46.91% fuzzy similarity against the 23,492-byte
 original. The ROM-proven persistent field-system pointer is
 `field_context + 0x24FC`; map operations use the distinct controller at
 `+0x2500`. The script-state flags live at `+0xB0`: owner type occupies bits
@@ -480,15 +480,17 @@ original. The ROM-proven persistent field-system pointer is
 C bitfields, preserving subtype/resource semantics and the six-direction
 script-mask permutation. The same typed layout now covers script lifecycle,
 owner/context/parent relationships, result and inline-wait state, plus the
-entity's saved resource, palette, behavior, and animation markers. The four
+entity's saved resource, palette, behavior, and animation markers. Transform,
+planar/vertical movement, field-side/camera, special-resource, and block-bounce
+state are typed as the corresponding packed fields as well. The four
 matching-script operations retain their original dedicated loops, while
 background-layer, blend, and wipe commands preserve separate main/subscreen
 register paths and typed wipe-duration fields.
 It stays an unlinked objdiff work unit while the remaining nested
 command bodies and local register allocation are converged. The two large
 entity families resolve one target apiece and reproduce the original 91- and
-96-entry inner tables; the auxiliary-script and entity-script families also
-use the original two-stage shape.
+96-entry inner tables with all distinct ROM case targets; the auxiliary-script
+and entity-script families also use the original two-stage shape.
 
 ## Variable namespaces
 
