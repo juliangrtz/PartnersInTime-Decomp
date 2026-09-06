@@ -1375,12 +1375,14 @@ relative-PC behavior, all three tagged effect/task handle families, the
 decoding paths. Retry decoding, enemy-stat access, packed trait writes,
 object-view coordinates, comparisons, script control, movement-duration
 calculation, typed effect flags, the effect/task-slot scans, and the owner
-scans are now reintegrated. The current MWCC build is one 19,200-byte function
-with no compiler-generated helper symbols. It is 91.52% fuzzy-similar and 32
-bytes larger than the original 19,168-byte monolith, so it is deliberately not
-linked yet. Explicit low-half masking and the original retry operand order are
-recovered, while runtime, actor-scene, and effect-view ownership is visible in
-the C source. Its `0x74`-byte stack frame, nine distinct position work areas,
+scans are now reintegrated. The current MWCC build is one 19,176-byte function
+with no compiler-generated helper symbols. It is 93.58% fuzzy-similar and only
+8 bytes larger than the original 19,168-byte monolith, so it is deliberately
+not linked yet. Explicit low-half masking, the original retry operand order,
+the keyframe frame-count division, direct motion-channel lookup, in-place
+movement-duration writeback, and halfword enemy flags are recovered, while
+runtime, actor-scene, and effect-view ownership is visible in the C source.
+Its `0x74`-byte stack frame, nine distinct position work areas,
 and exceptional handler ordering now match. Remaining compiler work is
 concentrated in effect-coordinate scheduling, item-record selection, literal
 pools, and a few virtual-call register schedules; opcode semantics are no

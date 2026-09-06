@@ -738,12 +738,14 @@ ownership, relocatable branches, input control, inventory, and sound-task
 synchronization. Fixed-opcode retry decoding, the complete nested enemy-stat
 switches, packed trait writes, object-view coordinate conversion, comparison
 logic, script control, all effect/task-slot scans, and all four 40-record owner
-operations are now inlined into the main switch. MWCC emits one 19,200-byte
-dispatcher with no compiler-generated helper symbols, 32 bytes above the
-original monolithic 19,168-byte function; it has 91.52% fuzzy instruction
+operations are now inlined into the main switch. MWCC emits one 19,176-byte
+dispatcher with no compiler-generated helper symbols, only 8 bytes above the
+original monolithic 19,168-byte function; it has 93.58% fuzzy instruction
 similarity. Retry decoding and packed wide arguments now use the original
-operand and low-half masking forms, while runtime and effect-view ownership is
-explicit in the C source.
+operand and low-half masking forms. Keyframe records are typed 32-bit paths,
+their signed frame count now compiles exactly, movement duration is written
+back before use as in the ROM, and enemy flag access uses the original
+halfword. Runtime and effect-view ownership is explicit in the C source.
 The original `0x74`-byte frame, nine separate XYZ temporaries, and exceptional
 handler ordering have also been recovered.
 It therefore stays unlinked until switch/register-layout matching can be done
