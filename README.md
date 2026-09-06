@@ -342,6 +342,10 @@ for the Field, Battle, and Scene VMs in
 [`docs/research/RUNTIME_ANALYSIS.md`](docs/research/RUNTIME_ANALYSIS.md)
 documents the py-desmume capture workflow, compatible-state creation, overlay
 identification, memory hooks, and domain-specific battle snapshots.
+[`docs/PC_PORT.md`](docs/PC_PORT.md) evaluates what a native PC build could
+look like, which hardware boundary makes it feasible, and which source rules
+keep that option open. It is an assessment, not a commitment; the verified ROM
+build remains the primary goal and the correctness oracle.
 
 ## Verified European ROM
 
