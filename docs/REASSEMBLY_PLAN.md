@@ -754,7 +754,7 @@ MWCC function with no compiler-generated code helpers, exactly matching the
 original monolith's size. A shared dispatcher result,
 cached field/party/map contexts, a persistent argument base, and dynamic retry
 decoding reproduce the original broad register/control-flow architecture and
-reach 48.02% fuzzy instruction similarity. Typed entity subtype/resource,
+reach 66.35% fuzzy instruction similarity. Typed entity subtype/resource,
 script ownership/lifecycle, and saved presentation/animation state plus
 contact-direction, transform/movement, field-side/camera, and interaction-state
 bitfields plus ROM-shaped map-sync, collision-policy, render priority,
@@ -769,8 +769,9 @@ controller from `+0x2500`, matching the ROM. IDA's original
 control flow shows that the outer 290-entry table deliberately shares handlers through
 nested command-family switches. The two large entity families now resolve
 their target once and reproduce the ROM's 91- and 96-entry inner tables with
-all original case targets separated; the
-auxiliary-script and entity-script groups follow the same architecture.
+all original case targets separated; the auxiliary-, paired-, entity-, and
+matching-script groups plus the room/camera and party/gimmick groups follow
+the ROM's exceptional physical handler order.
 Opcode-body and local register-schedule convergence is the next task. The
 unit remains unlinked until that switch/register matching can
 be completed without changing the verified ROM.

@@ -474,7 +474,7 @@ source-level semantic helpers now fold into one 23,492-byte function, exactly
 matching the original size; no compiler-generated code helpers remain. The
 reconstructed common result
 path, cached field/party/map contexts, persistent argument base, and dynamic
-retry decoding now reach 48.02% fuzzy similarity against the 23,492-byte
+retry decoding now reach 66.35% fuzzy similarity against the 23,492-byte
 original. The ROM-proven persistent field-system pointer is
 `field_context + 0x24FC`; map operations use the distinct controller at
 `+0x2500`. The script-state flags live at `+0xB0`: owner type occupies bits
@@ -486,7 +486,10 @@ owner/context/parent relationships, result and inline-wait state, plus the
 entity's saved resource, palette, behavior, and animation markers. Transform,
 planar/vertical movement, field-side/camera, special-resource, and block-bounce
 state are typed as the corresponding packed fields as well. The four
-matching-script operations retain their original dedicated loops, while
+matching-script operations retain their original dedicated loops and physical
+position after the two entity command families. Paired and entity script
+startup, room/camera commands, and party/gimmick commands likewise retain the
+original non-numeric handler order, while
 background-layer, blend, and wipe commands preserve separate main/subscreen
 register paths and typed wipe-duration fields.
 It stays an unlinked objdiff work unit while the remaining nested
