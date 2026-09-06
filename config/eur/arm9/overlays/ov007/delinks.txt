@@ -13,3 +13,36 @@ src/overlay007/scene_script_runtime.c:
 src/overlay007/scene_script_control.c:
     .text       start:0x02083b1c end:0x02083c20
 
+src/overlay007/scene_object_runtime.c:
+    .text       start:0x020844e0 end:0x0208462c
+
+src/overlay007/scene_object_render.c:
+    .text       start:0x0208435c end:0x020844e0
+
+src/overlay007/scene_script_manager.c:
+    .text       start:0x0208462c end:0x02084784
+
+src/overlay007/scene_secondary_archive.c:
+    .text       start:0x02084784 end:0x020848f8
+
+src/overlay007/scene_object_cleanup.c:
+    .text       start:0x020848f8 end:0x02084ae8
+
+src/overlay007/scene_manager_init.c:
+    .text       start:0x02084ae8 end:0x02084c28
+
+src/overlay007/scene_controller.c:
+    .text       start:0x02084c28 end:0x02084ee4
+
+src/overlay007/scene_manager_resources.c:
+    .text       start:0x02084ee4 end:0x02084fbc
+
+src/overlay007/scene_sprite_tasks.c:
+    .text       start:0x02084fbc end:0x020850d4
+
+src/overlay007/scene_sprite_task.c:
+    .text       start:0x020850d4 end:0x02085168
+
+src/overlay007/scene_transition_controller.c:
+    .text       start:0x02085168 end:0x0208552c
+

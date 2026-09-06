@@ -109,6 +109,13 @@ src/overlay005/display_bg.c
 src/overlay007/scene_script_control.c
 src/overlay007/scene_script_runtime.c
 src/overlay007/scene_script_variables.c
+src/overlay007/scene_object_runtime.c
+src/overlay007/scene_script_manager.c
+src/overlay007/scene_object_cleanup.c
+src/overlay007/scene_manager_init.c
+src/overlay007/scene_controller.c
+src/overlay007/scene_manager_resources.c
+src/overlay007/scene_sprite_task.c
 src/overlay009/shop_stock.c
 src/overlay010/enemy_state.c
 src/overlay011/projectile_attack_helpers.c
