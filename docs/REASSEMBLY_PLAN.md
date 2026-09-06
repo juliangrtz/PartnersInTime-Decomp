@@ -746,11 +746,13 @@ handoffs, save-backed HP/inventory/checkpoints, the field timer, message-window
 ownership and motion, and field audio lifecycle. Shared entity, render-object,
 party, field-system, and script-owner layouts are typed through the offsets
 used by these commands. The semantic helpers have now been force-inlined and
-simplified into one 26,436-byte MWCC function with no compiler-generated code
+simplified into one 26,148-byte MWCC function with no compiler-generated code
 helpers, versus the original 23,492-byte monolith. IDA's original control flow
 shows that the outer 290-entry table deliberately shares handlers through
-nested command-family switches; recovering those groups is the next size and
-layout task. The unit remains unlinked until that switch/register matching can
+nested command-family switches. The auxiliary-script, entity-script,
+entity-effect, and field-block/enemy-contact groups now follow that original
+shape; recovering the remaining groups is the next size and layout task. The
+unit remains unlinked until that switch/register matching can
 be completed without changing the verified ROM.
 
 Priority formats:

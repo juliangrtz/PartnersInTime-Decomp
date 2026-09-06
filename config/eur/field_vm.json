@@ -455,7 +455,7 @@
     "97": "set_entity_body_collision_enabled",
     "98": "set_entity_render_order_priorities",
     "99": "set_entity_interaction_bounds",
-    "100": "set_entity_interaction_height",
+    "100": "legacy_noop_064",
     "101": "restore_entity_interaction_bounds",
     "102": "set_entity_animation_speed",
     "103": "set_entity_locomotion_parameters",
@@ -1078,12 +1078,12 @@
       "evidence": "func_ov000_020823f8 case 0x063 calls func_ov000_020a4f4c, which writes entity +0x114..+0x124; consumers func_ov000_020a9180, func_ov000_020a79dc, and func_ov000_02071434"
     },
     "100": {
-      "arguments": ["entity_selector", "vertical_extent"],
+      "arguments": ["unused_entity_selector", "unused_vertical_extent"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "replaces only the Q12 vertical extent of the entity's primary interaction bounds, retaining its horizontal and vertical rectangle offsets",
-      "evidence": "func_ov000_020823f8 case 0x064 writes entity +0x124; interaction, effect-placement, and culling consumers of that field"
+      "effect": "intentional legacy no-op; the outer 290-entry jump table routes this slot directly to the default return even though unreachable code for 0x064 survives inside a shared entity-command switch",
+      "evidence": "func_ov000_020823f8 outer jump-table index 49 at 0x02082500 branches to the default return; the apparent inner case 0x064 is unreachable from that table"
     },
     "101": {
       "arguments": ["entity_selector"],

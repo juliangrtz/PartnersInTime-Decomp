@@ -484,7 +484,7 @@ enum FieldVmOpcode {
     FIELD_VM_SET_ENTITY_BODY_COLLISION_ENABLED = 0x061,
     FIELD_VM_SET_ENTITY_RENDER_ORDER_PRIORITIES = 0x062,
     FIELD_VM_SET_ENTITY_INTERACTION_BOUNDS = 0x063,
-    FIELD_VM_SET_ENTITY_INTERACTION_HEIGHT = 0x064,
+    FIELD_VM_LEGACY_NOOP_064 = 0x064,
     FIELD_VM_RESTORE_ENTITY_INTERACTION_BOUNDS = 0x065,
     FIELD_VM_SET_ENTITY_ANIMATION_SPEED = 0x066,
     FIELD_VM_SET_ENTITY_LOCOMOTION_PARAMETERS = 0x067,
@@ -796,10 +796,12 @@ static inline int FieldVm_GetParentType(const FieldScriptState *state) {
 }
 
 static inline int FieldVm_GetEffectiveParentType(const FieldScriptState *state) {
-    int owner_type = FieldVm_GetOwnerType(state);
+    int owner_type = (state->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
+        FIELD_SCRIPT_OWNER_TYPE_SHIFT;
 
     if (owner_type == FIELD_SCRIPT_OWNER_ENTITY) {
-        return FieldVm_GetParentType(state);
+        return (state->flags & FIELD_SCRIPT_PARENT_TYPE_MASK) >>
+            FIELD_SCRIPT_PARENT_TYPE_SHIFT;
     }
     return owner_type;
 }
@@ -809,7 +811,8 @@ static inline int FieldVm_GetOwnerSubtype(const FieldScriptState *state) {
 }
 
 static inline int FieldVm_GetParentEntityId(const FieldScriptState *state) {
-    if (FieldVm_GetOwnerType(state) == FIELD_SCRIPT_OWNER_ENTITY) {
+    if (((state->flags & FIELD_SCRIPT_OWNER_TYPE_MASK) >>
+         FIELD_SCRIPT_OWNER_TYPE_SHIFT) == FIELD_SCRIPT_OWNER_ENTITY) {
         return *(s8 *)((u8 *)state->owner_entity + 4);
     }
     return -1;
@@ -1252,7 +1255,6 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     u8 *party_controller;
     void *field_system;
     const u16 *script;
-    int selector;
     int owner_type;
 
     switch (command->opcode) {
@@ -1270,95 +1272,160 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_SET_AUX_SCRIPT_ENABLED:
-        target = FieldVm_GetAuxScript(runtime, command->arguments[0]);
-        target->flags =
-            (target->flags & ~FIELD_SCRIPT_ENABLED) |
-            (command->arguments[1] & FIELD_SCRIPT_ENABLED);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_START_AUX_SCRIPT:
-        target = FieldVm_GetAuxScript(runtime, command->arguments[0]);
-        if ((target->flags & FIELD_SCRIPT_ENABLED) != 0) {
-            script = state->vm_state.script + command->arguments[1];
-            if (command->arguments[2] != 0 &&
-                (target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
-                target->queued_script = script;
-                FieldVm_SetQueuedOwner(target, state);
-            } else {
-                func_ov000_02082240(target, state, 0, script);
-            }
-        }
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_WAIT_AUX_SCRIPT:
-        target = FieldVm_GetAuxScript(runtime, command->arguments[0]);
-        if ((target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
-            return FieldVm_RetryCurrentCommand(
-                vm, state, FIELD_VM_WAIT_AUX_SCRIPT);
-        }
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_STOP_AUX_SCRIPT:
-        target = FieldVm_GetAuxScript(runtime, command->arguments[0]);
-        target->flags &= ~FIELD_SCRIPT_ACTIVE;
-        target->queued_script = 0;
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_PAUSE_AUX_SCRIPT:
-        FieldVm_GetAuxScript(runtime, command->arguments[0])->flags |=
-            FIELD_SCRIPT_PAUSED;
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_RESUME_AUX_SCRIPT:
-        FieldVm_GetAuxScript(runtime, command->arguments[0])->flags &=
-            ~FIELD_SCRIPT_PAUSED;
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_GET_AUX_SCRIPT_STATE:
         target = FieldVm_GetAuxScript(runtime, command->arguments[0]);
-        VM_WriteVariable(
-            command->result_variable, FieldVm_GetScriptState(target),
-            vm, base_state);
+        switch (command->opcode) {
+        case FIELD_VM_SET_AUX_SCRIPT_ENABLED:
+            target->flags =
+                (target->flags & ~FIELD_SCRIPT_ENABLED) |
+                (command->arguments[1] & FIELD_SCRIPT_ENABLED);
+            break;
+
+        case FIELD_VM_START_AUX_SCRIPT:
+            if ((target->flags & FIELD_SCRIPT_ENABLED) != 0) {
+                script = state->vm_state.script + command->arguments[1];
+                if (command->arguments[2] != 0 &&
+                    (target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
+                    target->queued_script = script;
+                    target->flags =
+                        (target->flags &
+                         ~FIELD_SCRIPT_QUEUED_PARENT_TYPE_MASK) |
+                        ((FieldVm_GetEffectiveParentType(state) <<
+                          FIELD_SCRIPT_QUEUED_PARENT_TYPE_SHIFT) &
+                         FIELD_SCRIPT_QUEUED_PARENT_TYPE_MASK);
+                    target->queued_parent_entity_id =
+                        FieldVm_GetParentEntityId(state);
+                } else {
+                    func_ov000_02082240(target, state, 0, script);
+                }
+            }
+            break;
+
+        case FIELD_VM_WAIT_AUX_SCRIPT:
+            if ((target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
+                return FieldVm_RetryCurrentCommand(
+                    vm, state, FIELD_VM_WAIT_AUX_SCRIPT);
+            }
+            break;
+
+        case FIELD_VM_STOP_AUX_SCRIPT:
+            target->flags &= ~FIELD_SCRIPT_ACTIVE;
+            target->queued_script = 0;
+            break;
+
+        case FIELD_VM_PAUSE_AUX_SCRIPT:
+            target->flags |= FIELD_SCRIPT_PAUSED;
+            break;
+
+        case FIELD_VM_RESUME_AUX_SCRIPT:
+            target->flags &= ~FIELD_SCRIPT_PAUSED;
+            break;
+
+        case FIELD_VM_GET_AUX_SCRIPT_STATE:
+            VM_WriteVariable(
+                command->result_variable, FieldVm_GetScriptState(target),
+                vm, base_state);
+            break;
+        }
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_START_INLINE_ENTITY_SCRIPT:
     case FIELD_VM_START_INLINE_ENTITY_SCRIPT_AND_WAIT:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        target = FieldVm_GetEntityScript(entity);
-        if ((state->flags & FIELD_SCRIPT_INLINE_WAIT) == 0) {
-            FieldVm_StartEntityScript(
-                state, entity, state->vm_state.script,
-                command->arguments[1]);
-            if (command->opcode ==
-                FIELD_VM_START_INLINE_ENTITY_SCRIPT_AND_WAIT) {
-                state->flags |= FIELD_SCRIPT_INLINE_WAIT;
-            }
-        }
-        if ((state->flags & FIELD_SCRIPT_INLINE_WAIT) != 0 &&
-            (target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
-            return FieldVm_RetryCurrentCommand(
-                vm, state, FIELD_VM_START_INLINE_ENTITY_SCRIPT_AND_WAIT);
-        }
-        state->vm_state.script += command->arguments[2];
-        state->flags &= ~FIELD_SCRIPT_INLINE_WAIT;
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_START_RELATIVE_ENTITY_SCRIPT:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        script = state->vm_state.script + command->arguments[1];
-        FieldVm_StartEntityScript(
-            state, entity, script, command->arguments[2]);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_WAIT_ENTITY_SCRIPT:
+    case FIELD_VM_STOP_ENTITY_SCRIPT:
+    case FIELD_VM_PAUSE_ENTITY_SCRIPT:
+    case FIELD_VM_RESUME_ENTITY_SCRIPT:
+    case FIELD_VM_GET_ENTITY_SCRIPT_STATE:
+    case FIELD_VM_GET_ENTITY_PROPERTY:
+    case FIELD_VM_SET_ENTITY_ENABLED:
+    case FIELD_VM_SET_ENTITY_SCRIPT_VALUE:
+    case FIELD_VM_GET_ENTITY_SCRIPT_VALUE:
         entity = func_ov000_0208221c(
             runtime, state, command->arguments[0]);
         target = FieldVm_GetEntityScript(entity);
-        if ((target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
-            return FieldVm_RetryCurrentCommand(
-                vm, state, FIELD_VM_WAIT_ENTITY_SCRIPT);
+        switch (command->opcode) {
+        case FIELD_VM_START_INLINE_ENTITY_SCRIPT:
+        case FIELD_VM_START_INLINE_ENTITY_SCRIPT_AND_WAIT:
+            if ((state->flags & FIELD_SCRIPT_INLINE_WAIT) == 0) {
+                FieldVm_StartEntityScript(
+                    state, entity, state->vm_state.script,
+                    command->arguments[1]);
+                if (command->opcode ==
+                    FIELD_VM_START_INLINE_ENTITY_SCRIPT_AND_WAIT) {
+                    state->flags |= FIELD_SCRIPT_INLINE_WAIT;
+                }
+            }
+            if ((state->flags & FIELD_SCRIPT_INLINE_WAIT) != 0 &&
+                (target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
+                return FieldVm_RetryCurrentCommand(
+                    vm, state,
+                    FIELD_VM_START_INLINE_ENTITY_SCRIPT_AND_WAIT);
+            }
+            state->vm_state.script += command->arguments[2];
+            state->flags &= ~FIELD_SCRIPT_INLINE_WAIT;
+            break;
+
+        case FIELD_VM_START_RELATIVE_ENTITY_SCRIPT:
+            script = state->vm_state.script + command->arguments[1];
+            FieldVm_StartEntityScript(
+                state, entity, script, command->arguments[2]);
+            break;
+
+        case FIELD_VM_WAIT_ENTITY_SCRIPT:
+            if ((target->flags & FIELD_SCRIPT_ACTIVE) != 0) {
+                return FieldVm_RetryCurrentCommand(
+                    vm, state, FIELD_VM_WAIT_ENTITY_SCRIPT);
+            }
+            break;
+
+        case FIELD_VM_STOP_ENTITY_SCRIPT:
+            entity->vtable->stop_script(entity);
+            break;
+
+        case FIELD_VM_PAUSE_ENTITY_SCRIPT:
+            entity->vtable->pause_script(entity);
+            break;
+
+        case FIELD_VM_RESUME_ENTITY_SCRIPT:
+            entity->vtable->resume_script(entity);
+            break;
+
+        case FIELD_VM_GET_ENTITY_SCRIPT_STATE:
+            VM_WriteVariable(
+                command->result_variable, FieldVm_GetScriptState(target),
+                vm, base_state);
+            break;
+
+        case FIELD_VM_GET_ENTITY_PROPERTY:
+            VM_WriteVariable(
+                command->result_variable,
+                entity->vtable->get_property(
+                    entity, command->arguments[1]),
+                vm, base_state);
+            break;
+
+        case FIELD_VM_SET_ENTITY_ENABLED:
+            entity->property_00a = (entity->property_00a & ~1) |
+                (command->arguments[1] != 0);
+            break;
+
+        case FIELD_VM_SET_ENTITY_SCRIPT_VALUE:
+            entity->script_values[command->arguments[1]] =
+                (s16)command->arguments[2];
+            break;
+
+        case FIELD_VM_GET_ENTITY_SCRIPT_VALUE:
+            VM_WriteVariable(
+                command->result_variable,
+                entity->script_values[command->arguments[1]],
+                vm, base_state);
+            break;
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -1373,44 +1440,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         }
         return SCRIPT_VM_CONTINUE;
 
-    case FIELD_VM_STOP_ENTITY_SCRIPT:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        entity->vtable->stop_script(entity);
-        return SCRIPT_VM_CONTINUE;
-
-    case FIELD_VM_PAUSE_ENTITY_SCRIPT:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        entity->vtable->pause_script(entity);
-        return SCRIPT_VM_CONTINUE;
-
-    case FIELD_VM_RESUME_ENTITY_SCRIPT:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        entity->vtable->resume_script(entity);
-        return SCRIPT_VM_CONTINUE;
-
-    case FIELD_VM_GET_ENTITY_SCRIPT_STATE:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        VM_WriteVariable(
-            command->result_variable,
-            FieldVm_GetScriptState(FieldVm_GetEntityScript(entity)),
-            vm, base_state);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_START_PAIRED_FIELD_SCRIPT:
         FieldVm_StartPairedScript(runtime, state, command);
-        return SCRIPT_VM_CONTINUE;
-
-    case FIELD_VM_GET_ENTITY_PROPERTY:
-        selector = command->arguments[0];
-        entity = func_ov000_0208221c(runtime, state, selector);
-        VM_WriteVariable(
-            command->result_variable,
-            entity->vtable->get_property(entity, command->arguments[1]),
-            vm, base_state);
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_SET_ENTITY_VISIBLE:
@@ -1419,83 +1450,83 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         entity->vtable->set_visible(entity, command->arguments[1]);
         return SCRIPT_VM_CONTINUE;
 
-    case FIELD_VM_SET_ENTITY_ENABLED:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        entity->property_00a = (entity->property_00a & ~1) |
-            (command->arguments[1] != 0);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENTITY_TURN_TO_INTERACTOR_ENABLED:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            &runtime_entity->field_state_flags,
-            FIELD_ENTITY_TURN_TO_INTERACTOR, command->arguments[1]);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENTITY_GROUND_TRACKING:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            &runtime_entity->field_state_flags, FIELD_ENTITY_TRACK_GROUND,
-            command->arguments[1]);
-        if (command->arguments[1] != 0) {
-            runtime_entity->runtime_flags |=
-                FIELD_ENTITY_VERTICAL_SYNC_DIRTY;
-        }
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENTITY_ALTERNATE_COLLISION_FACES_ENABLED:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            &runtime_entity->runtime_flags,
-            FIELD_ENTITY_ALTERNATE_COLLISION_FACES,
-            command->arguments[1]);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENTITY_NAVIGATION_OBSTACLE_IGNORED:
         runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
             runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            &runtime_entity->field_state_flags,
-            FIELD_ENTITY_IGNORE_NAVIGATION_OBSTACLE,
-            command->arguments[1]);
+        switch (command->opcode) {
+        case FIELD_VM_SET_ENTITY_TURN_TO_INTERACTOR_ENABLED:
+            FieldVm_SetFlag(
+                &runtime_entity->field_state_flags,
+                FIELD_ENTITY_TURN_TO_INTERACTOR, command->arguments[1]);
+            break;
+
+        case FIELD_VM_SET_ENTITY_GROUND_TRACKING:
+            FieldVm_SetFlag(
+                &runtime_entity->field_state_flags,
+                FIELD_ENTITY_TRACK_GROUND, command->arguments[1]);
+            if (command->arguments[1] != 0) {
+                runtime_entity->runtime_flags |=
+                    FIELD_ENTITY_VERTICAL_SYNC_DIRTY;
+            }
+            break;
+
+        case FIELD_VM_SET_ENTITY_ALTERNATE_COLLISION_FACES_ENABLED:
+            FieldVm_SetFlag(
+                &runtime_entity->runtime_flags,
+                FIELD_ENTITY_ALTERNATE_COLLISION_FACES,
+                command->arguments[1]);
+            break;
+
+        case FIELD_VM_SET_ENTITY_NAVIGATION_OBSTACLE_IGNORED:
+            FieldVm_SetFlag(
+                &runtime_entity->field_state_flags,
+                FIELD_ENTITY_IGNORE_NAVIGATION_OBSTACLE,
+                command->arguments[1]);
+            break;
+        }
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_SET_ENTITY_OFFSCREEN_CONTACT_RETENTION_ENABLED:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            &runtime_entity->base_state_flags,
-            FIELD_ENTITY_RETAIN_OFFSCREEN_CONTACT,
-            command->arguments[1]);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENTITY_RESERVED_STATE_FLAG:
         runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
             runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            &runtime_entity->base_state_flags,
-            FIELD_ENTITY_RESERVED_STATE, command->arguments[1]);
+        switch (command->opcode) {
+        case FIELD_VM_SET_ENTITY_OFFSCREEN_CONTACT_RETENTION_ENABLED:
+            FieldVm_SetFlag(
+                &runtime_entity->base_state_flags,
+                FIELD_ENTITY_RETAIN_OFFSCREEN_CONTACT,
+                command->arguments[1]);
+            break;
+
+        case FIELD_VM_SET_ENTITY_RESERVED_STATE_FLAG:
+            FieldVm_SetFlag(
+                &runtime_entity->base_state_flags,
+                FIELD_ENTITY_RESERVED_STATE, command->arguments[1]);
+            break;
+        }
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_SET_ENTITY_LINKED_CONTACT_MODE:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        runtime_entity->field_state_flags =
-            (runtime_entity->field_state_flags &
-             ~FIELD_ENTITY_CONTACT_MODE_MASK) |
-            (command->arguments[1] & FIELD_ENTITY_CONTACT_MODE_MASK);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENTITY_CONTACT_DIRECTION_FILTER:
         runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
             runtime, state, command->arguments[0]));
-        runtime_entity->contact_direction_flags =
-            (runtime_entity->contact_direction_flags & ~0x3F) |
-            FieldVm_MapContactDirectionMask(command->arguments[1]);
+        switch (command->opcode) {
+        case FIELD_VM_SET_ENTITY_LINKED_CONTACT_MODE:
+            runtime_entity->field_state_flags =
+                (runtime_entity->field_state_flags &
+                 ~FIELD_ENTITY_CONTACT_MODE_MASK) |
+                (command->arguments[1] & FIELD_ENTITY_CONTACT_MODE_MASK);
+            break;
+
+        case FIELD_VM_SET_ENTITY_CONTACT_DIRECTION_FILTER:
+            runtime_entity->contact_direction_flags =
+                (runtime_entity->contact_direction_flags & ~0x3F) |
+                FieldVm_MapContactDirectionMask(command->arguments[1]);
+            break;
+        }
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_SET_ENTITY_SEMITRANSPARENT:
@@ -1656,11 +1687,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             (u16)command->arguments[4], (u16)command->arguments[5]);
         return SCRIPT_VM_CONTINUE;
 
-    case FIELD_VM_SET_ENTITY_INTERACTION_HEIGHT:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        runtime_entity->interaction_vertical_extent =
-            command->arguments[1] << FX32B_INT;
+    case FIELD_VM_LEGACY_NOOP_064:
+        /* The outer jump table never enters the dead inner 0x064 handler. */
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_RESTORE_ENTITY_INTERACTION_BOUNDS:
@@ -2439,97 +2467,84 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_SPAWN_ENTITY_EFFECT_SPRITE:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        func_ov000_020713bc(
-            runtime->field_context, entity, -1, command->arguments[1],
-            command->arguments[2], (s16)command->arguments[3],
-            (s16)command->arguments[4], command->arguments[5],
-            command->arguments[6] != 0);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_REMOVE_ENTITY_EFFECT_SPRITE:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        func_ov000_0207138c(runtime->field_context, entity);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_WAIT_ENTITY_EFFECT_SPRITE:
         entity = func_ov000_0208221c(
             runtime, state, command->arguments[0]);
-        if (func_ov000_0207133c(runtime->field_context, entity)) {
-            return FieldVm_RetryCurrentCommand(
-                vm, state, FIELD_VM_WAIT_ENTITY_EFFECT_SPRITE);
+        switch (command->opcode) {
+        case FIELD_VM_SPAWN_ENTITY_EFFECT_SPRITE:
+            func_ov000_020713bc(
+                runtime->field_context, entity, -1,
+                command->arguments[1], command->arguments[2],
+                (s16)command->arguments[3],
+                (s16)command->arguments[4], command->arguments[5],
+                command->arguments[6] != 0);
+            break;
+
+        case FIELD_VM_REMOVE_ENTITY_EFFECT_SPRITE:
+            func_ov000_0207138c(runtime->field_context, entity);
+            break;
+
+        case FIELD_VM_WAIT_ENTITY_EFFECT_SPRITE:
+            if (func_ov000_0207133c(runtime->field_context, entity)) {
+                return FieldVm_RetryCurrentCommand(
+                    vm, state, FIELD_VM_WAIT_ENTITY_EFFECT_SPRITE);
+            }
+            break;
         }
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_SET_FIELD_BLOCK_IDLE_BOBBING_ENABLED:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        func_ov000_020bc8e4(entity, command->arguments[1] != 0);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_FIELD_BLOCK_BOUNCE_CONTROLLER_ENABLED:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        func_ov000_020bc7d0(entity, command->arguments[1] != 0);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_WAIT_FIELD_BLOCK_BOUNCE:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        if ((s8)(*FieldVm_GetInteractionFlags(runtime_entity) >> 14) !=
-            -1) {
-            return FieldVm_RetryCurrentCommand(
-                vm, state, FIELD_VM_WAIT_FIELD_BLOCK_BOUNCE);
-        }
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENEMY_JUMP_FIRST_STRIKE_ENABLED:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            FieldVm_GetInteractionFlags(runtime_entity), 1 << 0,
-            command->arguments[1] != 0);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENEMY_SPIKED_JUMP_RESPONSE:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            FieldVm_GetInteractionFlags(runtime_entity), 1 << 1,
-            command->arguments[1] != 0);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENEMY_SPECIAL_CONTACT_REMOVAL_ENABLED:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            FieldVm_GetInteractionFlags(runtime_entity), 1 << 2,
-            command->arguments[1] != 0);
-        return SCRIPT_VM_CONTINUE;
-
     case FIELD_VM_SET_ENEMY_IMMEDIATE_BATTLE_REMOVAL_ENABLED:
-        runtime_entity = FieldVm_GetRuntimeEntity(func_ov000_0208221c(
-            runtime, state, command->arguments[0]));
-        FieldVm_SetFlag(
-            FieldVm_GetInteractionFlags(runtime_entity), 1 << 3,
-            command->arguments[1] != 0);
-        return SCRIPT_VM_CONTINUE;
-
-    case FIELD_VM_SET_ENTITY_SCRIPT_VALUE:
         entity = func_ov000_0208221c(
             runtime, state, command->arguments[0]);
-        entity->script_values[command->arguments[1]] =
-            (s16)command->arguments[2];
-        return SCRIPT_VM_CONTINUE;
+        runtime_entity = FieldVm_GetRuntimeEntity(entity);
+        switch (command->opcode) {
+        case FIELD_VM_SET_FIELD_BLOCK_IDLE_BOBBING_ENABLED:
+            func_ov000_020bc8e4(entity, command->arguments[1] != 0);
+            break;
 
-    case FIELD_VM_GET_ENTITY_SCRIPT_VALUE:
-        entity = func_ov000_0208221c(
-            runtime, state, command->arguments[0]);
-        VM_WriteVariable(
-            command->result_variable,
-            entity->script_values[command->arguments[1]], vm, base_state);
+        case FIELD_VM_SET_FIELD_BLOCK_BOUNCE_CONTROLLER_ENABLED:
+            func_ov000_020bc7d0(entity, command->arguments[1] != 0);
+            break;
+
+        case FIELD_VM_WAIT_FIELD_BLOCK_BOUNCE:
+            if ((s8)(*FieldVm_GetInteractionFlags(runtime_entity) >> 14) !=
+                -1) {
+                return FieldVm_RetryCurrentCommand(
+                    vm, state, FIELD_VM_WAIT_FIELD_BLOCK_BOUNCE);
+            }
+            break;
+
+        case FIELD_VM_SET_ENEMY_JUMP_FIRST_STRIKE_ENABLED:
+            FieldVm_SetFlag(
+                FieldVm_GetInteractionFlags(runtime_entity), 1 << 0,
+                command->arguments[1] != 0);
+            break;
+
+        case FIELD_VM_SET_ENEMY_SPIKED_JUMP_RESPONSE:
+            FieldVm_SetFlag(
+                FieldVm_GetInteractionFlags(runtime_entity), 1 << 1,
+                command->arguments[1] != 0);
+            break;
+
+        case FIELD_VM_SET_ENEMY_SPECIAL_CONTACT_REMOVAL_ENABLED:
+            FieldVm_SetFlag(
+                FieldVm_GetInteractionFlags(runtime_entity), 1 << 2,
+                command->arguments[1] != 0);
+            break;
+
+        case FIELD_VM_SET_ENEMY_IMMEDIATE_BATTLE_REMOVAL_ENABLED:
+            FieldVm_SetFlag(
+                FieldVm_GetInteractionFlags(runtime_entity), 1 << 3,
+                command->arguments[1] != 0);
+            break;
+        }
         return SCRIPT_VM_CONTINUE;
 
     case FIELD_VM_REJOIN_PARTY_FOLLOWER:
