@@ -468,15 +468,17 @@ The native field extension is likewise complete in
 `src/field/field_vm_dispatch.c`. Its structured switch covers all 290 local
 opcodes (`0x033..0x154`), including the five intentional legacy no-ops, while
 preserving the original command-rewind behavior for asynchronous waits. The
-source-level semantic helpers now force-inline into one 21,908-byte function;
+source-level semantic helpers now force-inline into one 21,964-byte function;
 no compiler-generated code helpers remain. The reconstructed common result
 path, cached field/party/map contexts, persistent argument base, and dynamic
-retry decoding now reach 14.59% fuzzy similarity against the 23,492-byte
-original. The ROM-proven map-controller pointer is `field_context + 0x24FC`.
+retry decoding now reach 27.48% fuzzy similarity against the 23,492-byte
+original. The ROM-proven persistent field-system pointer is
+`field_context + 0x24FC`; map operations use the distinct controller at
+`+0x2500`.
 It stays an unlinked objdiff work unit while the remaining nested
-command-family dispatch groups and local register allocation are converged.
-The auxiliary-script,
-entity-script, entity-effect, and field-block/enemy-contact families already
+command bodies and local register allocation are converged. The two large
+entity families resolve one target apiece and reproduce the original 91- and
+96-entry inner tables; the auxiliary-script and entity-script families also
 use the original two-stage shape.
 
 ## Variable namespaces
