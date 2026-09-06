@@ -746,21 +746,23 @@ handoffs, save-backed HP/inventory/checkpoints, the field timer, message-window
 ownership and motion, and field audio lifecycle. Shared entity, render-object,
 party, field-system, and script-owner layouts are typed through the offsets
 used by these commands. The semantic helpers have now been force-inlined and
-simplified into one 22,852-byte MWCC function with no compiler-generated code
+simplified into one 23,296-byte MWCC function with no compiler-generated code
 helpers, versus the original 23,492-byte monolith. A shared dispatcher result,
 cached field/party/map contexts, a persistent argument base, and dynamic retry
 decoding reproduce the original broad register/control-flow architecture and
-reach 34.14% fuzzy instruction similarity. Typed entity subtype/resource,
+reach 46.91% fuzzy instruction similarity. Typed entity subtype/resource,
 script ownership/lifecycle, and saved presentation/animation state plus
-contact-direction bitfields plus ROM-shaped map-sync, collision-policy, render
-priority, position, resource-binding logic, dedicated matching-script loops,
-and separate main/subscreen register paths account for the latest convergence.
+contact-direction, transform/movement, field-side/camera, and interaction-state
+bitfields plus ROM-shaped map-sync, collision-policy, render priority,
+position, resource-binding logic, dedicated matching-script loops, and
+separate main/subscreen register paths account for the latest convergence.
 The prolog now preserves the
 field-system pointer from `+0x24FC` while map operations load their distinct
 controller from `+0x2500`, matching the ROM. IDA's original
 control flow shows that the outer 290-entry table deliberately shares handlers through
 nested command-family switches. The two large entity families now resolve
-their target once and reproduce the ROM's 91- and 96-entry inner tables; the
+their target once and reproduce the ROM's 91- and 96-entry inner tables with
+all original case targets separated; the
 auxiliary-script and entity-script groups follow the same architecture.
 Opcode-body and local register-schedule convergence is the next task. The
 unit remains unlinked until that switch/register matching can
