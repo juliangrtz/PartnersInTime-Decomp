@@ -314,7 +314,7 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_SET_OBJECT_PROPERTY_FIXED:
         if ((command->argument_modes & (1 << 2)) == 0) {
-            ARG(2) = SceneVm_PackArgumentPair(command, 2) >> 16;
+            ARG(2) = (ARG(2) & 0xFFFF) | ((u32)ARG(3) << 16);
         }
         /* fallthrough */
     case SCENE_OP_SET_OBJECT_PROPERTY:
@@ -322,17 +322,12 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_ALIGN_OBJECTS: {
-        s16 other_screen_height;
-        s16 object_screen_height;
-
         object = SceneObject_GetById(ARG_U16(0));
         other = SceneObject_GetById(ARG_U16(1));
-        other_screen_height = other->render_height +
-            16 * (192 - other->y);
-        object_screen_height = object->render_height +
-            16 * (192 - object->y);
         object->render_height +=
-            (other_screen_height - object_screen_height) + ARG(2);
+            (s16)(other->render_height + 16 * (192 - other->y)) -
+            (s16)(object->render_height + 16 * (192 - object->y)) +
+            ARG(2);
 
         resource = func_ov007_020894a8(ARG_U16(0));
         other = func_ov007_020894a8(ARG_U16(1));
@@ -553,11 +548,11 @@ int SceneVm_DispatchCommand(
     case SCENE_OP_KINEMATIC_AXIS2_A:
         func_ov007_020881d8(vm, state, command, 0);
         return SCRIPT_VM_CONTINUE;
-    case SCENE_OP_KINEMATIC_AXIS2_A_RESULT:
-        func_ov007_020881d8(vm, state, command, 1);
-        return SCRIPT_VM_CONTINUE;
     case SCENE_OP_KINEMATIC_TARGET_A:
         func_ov007_02087fdc(vm, state, command, 0);
+        return SCRIPT_VM_CONTINUE;
+    case SCENE_OP_KINEMATIC_AXIS2_A_RESULT:
+        func_ov007_020881d8(vm, state, command, 1);
         return SCRIPT_VM_CONTINUE;
     case SCENE_OP_KINEMATIC_TARGET_A_RESULT:
         func_ov007_02087fdc(vm, state, command, 1);
@@ -565,17 +560,17 @@ int SceneVm_DispatchCommand(
     case SCENE_OP_KINEMATIC_AXIS2_B:
         func_ov007_02087ebc(vm, state, command, 0);
         return SCRIPT_VM_CONTINUE;
-    case SCENE_OP_KINEMATIC_AXIS2_B_RESULT:
-        func_ov007_02087ebc(vm, state, command, 1);
-        return SCRIPT_VM_CONTINUE;
     case SCENE_OP_KINEMATIC_TARGET_B:
         func_ov007_02087d6c(vm, state, command, 0);
         return SCRIPT_VM_CONTINUE;
-    case SCENE_OP_KINEMATIC_TARGET_B_RESULT:
-        func_ov007_02087d6c(vm, state, command, 1);
-        return SCRIPT_VM_CONTINUE;
     case SCENE_OP_KINEMATIC_AXIS2_C:
         func_ov007_02087c4c(vm, state, command, 0);
+        return SCRIPT_VM_CONTINUE;
+    case SCENE_OP_KINEMATIC_AXIS2_B_RESULT:
+        func_ov007_02087ebc(vm, state, command, 1);
+        return SCRIPT_VM_CONTINUE;
+    case SCENE_OP_KINEMATIC_TARGET_B_RESULT:
+        func_ov007_02087d6c(vm, state, command, 1);
         return SCRIPT_VM_CONTINUE;
     case SCENE_OP_KINEMATIC_AXIS2_C_RESULT:
         func_ov007_02087c4c(vm, state, command, 1);
@@ -629,9 +624,6 @@ int SceneVm_DispatchCommand(
             ARG_U16(8)
         );
         return SCRIPT_VM_CONTINUE;
-
-    case 0x066: return SCRIPT_VM_CONTINUE;
-    case 0x067: return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_PARAMETRIC_MOTION:
         object = SceneObject_GetById(ARG_U16(0));
@@ -736,7 +728,6 @@ int SceneVm_DispatchCommand(
     case 0x094: return SCRIPT_VM_CONTINUE;
     case 0x095: return SCRIPT_VM_CONTINUE;
     case 0x096: return SCRIPT_VM_CONTINUE;
-    case 0x097: return SCRIPT_VM_CONTINUE;
     case 0x098: return SCRIPT_VM_CONTINUE;
     case SCENE_OP_YIELD_099: return SCRIPT_VM_YIELDED;
     case 0x09A: return SCRIPT_VM_CONTINUE;
@@ -876,7 +867,7 @@ int SceneVm_DispatchCommand(
                     entry->vm_state.script != 0) {
                     SceneVm_GetObjectScript(owner)->vm_state.script = 0;
                     SceneVm_GetObjectScript(ARG(0))->vm_state.stack_depth = 0;
-                    return SCRIPT_VM_CONTINUE;
+                    break;
                 }
                 remaining = (s16)(remaining - 1);
                 entry++;
@@ -920,7 +911,7 @@ int SceneVm_DispatchCommand(
                 if (object_id == entry->parent_object_id &&
                     entry->vm_state.script != 0) {
                     entry->flags.bits.paused = 1;
-                    return SCRIPT_VM_CONTINUE;
+                    break;
                 }
                 remaining = (s16)(remaining - 1);
                 entry++;
@@ -964,7 +955,7 @@ int SceneVm_DispatchCommand(
                 if (object_id == entry->parent_object_id &&
                     entry->vm_state.script != 0) {
                     entry->flags.bits.paused = 0;
-                    return SCRIPT_VM_CONTINUE;
+                    break;
                 }
                 remaining = (s16)(remaining - 1);
                 entry++;
