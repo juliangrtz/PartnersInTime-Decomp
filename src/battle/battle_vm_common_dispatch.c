@@ -237,6 +237,7 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_MOVE_ATTACHED_OBJECT_AT_SPEED: {
+        s32 *motion_arguments = (s32 *)arguments;
         int delta_x;
         int delta_y;
         int delta_z;
@@ -246,10 +247,10 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
             return SCRIPT_VM_CONTINUE;
         }
 
-        delta_x = arguments[3] - attachment->scene_object.x;
-        delta_y = arguments[4] - attachment->scene_object.y;
-        delta_z = arguments[5] - attachment->scene_object.z;
-        if (arguments[6] != 0) {
+        delta_x = motion_arguments[3] - attachment->scene_object.x;
+        delta_y = motion_arguments[4] - attachment->scene_object.y;
+        delta_z = motion_arguments[5] - attachment->scene_object.z;
+        if (motion_arguments[6] != 0) {
             arguments[6] = _s32_div_f(
                 FX_Sqrt((delta_x * delta_x + delta_y * delta_y +
                          delta_z * delta_z) << FX32B_INT),

@@ -710,102 +710,52 @@ archive selector, eight-sprite factory, and 964-byte transition state machine
 are retained as structured, size-aware WIP C rather than being linked before
 their remaining Metrowerks register schedules match.
 
-The full overlay-7 scene command dispatcher at `0x02081730-0x02083B1C` is now
-represented by a single structured C switch as well. It covers every real and
-reserved opcode slot, explicit retry/yield behavior, object-script ownership,
-motion setup, sound tasks, and UI commands. The current Metrowerks output
-reproduces the original 9,196-byte size at 97.91% fuzzy instruction
-similarity. Fixed-opcode
-retry decoding with the original addition order, branch-specific owner-script
-counters and loop exits, resource render-group bitfields, the original
-kinematic-handler layout, raw aligned keyframe-path addresses, object-script
-start and text-readiness symbol references, and the full
-ten-argument object-position command now agree with the original semantics.
-Packed arguments also reconstruct both literal halfwords with the original
-low-half mask instead of discarding the low half. Typed object-script and
-sound-task ownership, pointer-backed scene mode/save state, the text-tile
-handler's fifth coordinate, dynamic UI retry descriptors, and the distinct
-reserved `0x097` epilogue reproduce the ROM layout as well. The reserved
-`0x0BD..0x0BF` epilogues and all three speed-mode distance calculations now
-retain their original physical ordering too. The dispatcher
-remains an objdiff WIP rather than
-displacing the byte-identical assembly range until its remaining branch and
-register schedules converge.
+The complete VM dispatcher reconstruction now has three byte-identical,
+linked units:
 
-The battle-specific half of the overlay-2 VM dispatcher at
-`0x02079950-0x0207E430` is now a complete structured C work unit too. Every one
-of its 182 opcode slots (`0x033..0x0E8`) is present, while commands outside that
-range still delegate to the separate common battle handler at `0x020698D4`.
-The reconstruction covers resource loading, actor and enemy properties,
-movement, hit/damage/status operations, battle effects, object-script
-ownership, relocatable branches, input control, inventory, and sound-task
-synchronization. Fixed-opcode retry decoding, the complete nested enemy-stat
-switches, packed trait writes, object-view coordinate conversion, comparison
-logic, script control, all effect/task-slot scans, and all four 40-record owner
-operations are now inlined into the main switch. MWCC emits one 19,168-byte
-dispatcher with no compiler-generated helper symbols, exactly matching the
-original monolith's size; it has 98.83% fuzzy instruction
-similarity. Retry decoding and packed wide arguments now use the original
-operand and low-half masking forms. Keyframe records are typed 32-bit paths,
-their signed frame count now compiles exactly, movement duration is written
-back before use as in the ROM, and enemy flag, trait, and status-resistance
-access uses ROM-shaped bitfields. Tag-specific item accessors, direct-effect
-coordinate paths, and explicit runtime and actor-script ownership keep the C
-source readable.
-The original `0x74`-byte frame, nine separate XYZ temporaries, and exceptional
-handler ordering have also been recovered.
-It therefore stays unlinked until switch/register-layout matching can be done
-without changing the verified ROM.
+| Dispatcher | Source | Bytes | Local opcode slots | Status |
+|---|---|---:|---:|---|
+| Battle | `src/battle/battle_vm_dispatch.cpp` | 19,168 | 182 | 100%, linked |
+| Common battle | `src/battle/battle_vm_common_dispatch.c` | 1,844 | 27 | 100%, linked |
+| Field/world | `src/field/field_vm_dispatch.cpp` | 23,492 | 290 | 100%, linked |
+| Scene/object | `src/overlay007/scene_vm_dispatch.c` | 9,196 | all real/reserved slots | 99.35%, unlinked |
 
-The delegated common battle executor at `0x020698D4-0x0206A008` is now a
-complete structured C unit too. `BattleVm_DispatchCommonOpcode` covers all 27
-slots in `0x0E9..0x103`, preserving the six legacy no-ops, two dedicated no-op
-epilogues, attachment ownership, asynchronous asset/effect/animation waits,
-UI construction, motion calculation, and both screen-effect channels. MWCC
-emits the exact original 1,844-byte size at 98.92% fuzzy instruction
-similarity. Marking the live command arguments volatile recovers the original
-persistent register allocation; only five load-scheduling instructions in the
-attached-object distance calculation remain different.
+The three linked units add 44,504 bytes of matching C/C++. Their control flow,
+reserved slots, stack layouts, and relocations agree with the original.
+Battle and field dispatch model the original virtual calls directly in C++
+while retaining C linkage for the VM entry points and external functions.
+The C and C++ field-entity layouts preserve the same sizes and offsets.
 
-The overlay-0 field/world dispatcher at `0x020823F8-0x02087FBC` is now a
-complete structured C work unit as well. All 290 consecutive slots
-(`0x033..0x154`) cover inline and queued scripts, entity render/collision and
-motion state, party composition and transfers, room/time-hole transitions,
-camera/BG/palette effects, field input and touchscreen effects, battle and menu
-handoffs, save-backed HP/inventory/checkpoints, the field timer, message-window
-ownership and motion, and field audio lifecycle. Shared entity, render-object,
-party, field-system, and script-owner layouts are typed through the offsets
-used by these commands. The semantic helpers now fold into one 23,488-byte
-MWCC function with no compiler-generated code helpers, four bytes short of the
-23,492-byte original monolith. A shared dispatcher result,
-cached field/party/map contexts, a persistent argument base, and dynamic retry
-decoding reproduce the original broad register/control-flow architecture and
-reach 95.96% fuzzy instruction similarity. Typed entity subtype/resource,
-script ownership/lifecycle, embedded script-value ownership, and saved
-presentation/animation state plus
-contact-direction, transform/movement, field-side/camera, and interaction-state
-bitfields plus ROM-shaped map-sync, collision-policy, render priority,
-position, resource-binding logic, dedicated matching-script loops, and
-separate main/subscreen register paths account for the latest convergence.
-The follower-rejoin command now forwards its boolean instant mode, and the
-active-party switch uses the ROM-proven five-argument call contract rather
-than a shortened prototype.
-The prolog now preserves the
-field-system pointer from `+0x24FC` while map operations load their distinct
-controller from `+0x2500`, matching the ROM. IDA's original
-control flow shows that the outer 290-entry table deliberately shares handlers through
-nested command-family switches. The two large entity families now resolve
-their target once and reproduce the ROM's 91- and 96-entry inner tables with
-all original case targets separated; the auxiliary-, paired-, entity-, and
-matching-script groups plus the room/camera and party/gimmick groups follow
-the ROM's exceptional physical handler order.
-The retained dead handlers in the two entity-family inner switches are also
-represented. Static control-flow verification corrected opcode `0x061` to an
-intentional no-op and recovered the paired-field context-type guard plus its
-separate room-ID comparison.
-Opcode-body and local register-schedule convergence is the next task. The
-unit remains unlinked until that switch/register matching can
-be completed without changing the verified ROM.
+The final battle corrections include reading animation arguments after the
+virtual getter, accessing motion parameter 4 at offset `0x3C`, and retaining
+runtime flag and hit-record data flow. The common executor keeps its live
+command accesses volatile but takes ordinary reads for the attached-object
+distance calculation. Field matching recovers queued-script stores before
+parent-state reads, signed resource indices and collision masks, saved-animation
+restore order, map-axis argument reads, party-controller array indexing, and
+virtual palette-animation argument widths. The paired-field ready guard reads
+the context type at `0x23F0`, not the room ID at `0x23F4`. The entity behavior
+setter takes two arguments; its callee overwrites incoming `r2` before use.
+
+The remaining Scene VM difference is confined to opcode `0x04E`, the signed
+height alignment of two objects, at dispatcher offsets `0x648..0x67C`.
+The readable C preserves both signed 16-bit screen-height conversions and
+then applies their difference to the object's render height. The remaining
+work is register allocation and scheduling within that block. Other scene
+corrections now match, including the raw object Y used for screen height,
+signed path-count division by two followed by `u16` narrowing, and the
+original path-call relocation. That relocation really targets the interior
+entry `func_ov007_020724b0` in overlay 7; it remains a label in the DSD symbols,
+not a newly inferred function boundary.
+
+Matching was driven by original instruction/data-flow and callee-ABI analysis,
+without automated source permutations or brute-force compiler searches.
+The European ROM build and all ARM9/ITCM/DTCM/overlay module and symbol checks
+pass with the three new units linked. The regular `tools/build_nds.ps1
+-DisableDataMods` build also reproduces SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`; the wrapper preserves the known
+fixed-layout header CRCs after DSD packaging. All 66 Python tests pass.
+The Scene dispatcher stays an objdiff work unit until its last block also matches.
 
 Priority formats:
 

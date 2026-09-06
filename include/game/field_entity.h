@@ -173,7 +173,7 @@ struct FieldRenderObjectVTable {
     void (*set_palette_animation_paused)(
         FieldRenderObject *render_object, s8 slot, int paused);
     void (*set_palette_animation_mode)(
-        FieldRenderObject *render_object, s8 slot, int mode);
+        FieldRenderObject *render_object, s8 slot, u8 mode);
     u8 unknown_84[4];
     void (*bind_palette_animation)(FieldRenderObject *render_object,
                                    s8 slot, s16 animation_id,
@@ -204,7 +204,49 @@ struct FieldEntityVTable {
 };
 
 typedef struct FieldEntity {
+#ifdef __cplusplus
+    virtual void unknown_00();
+    virtual void unknown_04();
+    virtual void unknown_08();
+    virtual void stop_script();
+    virtual void pause_script();
+    virtual void resume_script();
+    virtual int get_property(int property_id);
+    virtual void unknown_1c();
+    virtual void unknown_20();
+    virtual void unknown_24();
+    virtual void unknown_28();
+    virtual void unknown_2c();
+    virtual void unknown_30();
+    virtual void unknown_34();
+    virtual void unknown_38();
+    virtual void unknown_3c();
+    virtual void unknown_40();
+    virtual void unknown_44();
+    virtual void unknown_48();
+    virtual void unknown_4c();
+    virtual void cancel_planar_movement(void *controller, int snap_to_destination);
+    virtual void unknown_54();
+    virtual void unknown_58();
+    virtual void cancel_vertical_movement(void *controller, int snap_to_destination);
+    virtual void set_visible(int visible);
+    virtual void unknown_64();
+    virtual void unknown_68();
+    virtual void unknown_6c();
+    virtual void unknown_70();
+    virtual void unknown_74();
+    virtual void unknown_78();
+    virtual void unknown_7c();
+    virtual void unknown_80();
+    virtual void unknown_84();
+    virtual void unknown_88();
+    virtual void set_collision_response_channels(
+        int channel_0, int channel_1, int channel_2, int channel_3, int channel_4);
+    virtual void set_collision_response_channels_masked(u16 channel_mask, int enabled);
+    virtual void restore_collision_response_channels();
+#else
     FieldEntityVTable *vtable;
+#endif
     u8 unknown_004[6];
     union {
         u16 property_00a;
@@ -239,7 +281,46 @@ typedef struct FieldEntity {
  * the renderer itself remains in assembly.
  */
 struct FieldRenderObject {
+#ifdef __cplusplus
+    virtual void unknown_00();
+    virtual void unknown_04();
+    virtual void unknown_08();
+    virtual void unknown_0c();
+    virtual void unknown_10();
+    virtual void unknown_14();
+    virtual void unknown_18();
+    virtual void unknown_1c();
+    virtual void unknown_20();
+    virtual void unknown_24();
+    virtual void unknown_28();
+    virtual void unknown_2c();
+    virtual void unknown_30();
+    virtual void unknown_34();
+    virtual void unknown_38();
+    virtual void unknown_3c();
+    virtual void unknown_40();
+    virtual void unknown_44();
+    virtual void unknown_48();
+    virtual void unknown_4c();
+    virtual void unknown_50();
+    virtual void unknown_54();
+    virtual void unknown_58();
+    virtual void unknown_5c();
+    virtual void unknown_60();
+    virtual void unknown_64();
+    virtual void set_animation(u8 resource_animation, s16 animation_id, int restart);
+    virtual void unknown_6c();
+    virtual void unknown_70();
+    virtual void unknown_74();
+    virtual void unknown_78();
+    virtual void set_palette_animation_paused(s8 slot, int paused);
+    virtual void set_palette_animation_mode(s8 slot, u8 mode);
+    virtual void unknown_84();
+    virtual void bind_palette_animation(s8 slot, s16 animation_id, int restart);
+    virtual void request_base_palette_reload();
+#else
     FieldRenderObjectVTable *vtable;
+#endif
     u8 unknown_004[0x52];
     s16 animation_id;
     u8 unknown_058[0x24];

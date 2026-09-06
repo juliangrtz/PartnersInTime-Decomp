@@ -128,88 +128,22 @@ See the [progress methodology and regeneration instructions](docs/PROGRESS.md).
   Readable WIP C also covers the depth-sorted renderer, secondary archive
   selection, eight-sprite factory, and its 964-byte transition controller;
   these register-sensitive units remain unlinked until their final instruction
-  schedules match. The complete 9,196-byte scene command dispatcher now also
-  exists as one structured, compiling C switch with named opcode families and
-  all reserved slots preserved. Its current build reproduces the exact
-  original 9,196-byte size and reaches 97.91% fuzzy instruction similarity.
-  The original kinematic-handler order, branch-specific owner-loop counters,
-  raw aligned path-address handling, and signed screen-coordinate values are
-  now recovered; retry decoding uses the original operand order, and packed
-  arguments preserve both halves of their 32-bit values with the original
-  low-half mask. Typed manager ownership now exposes the 40 object-script and
-  16 sound-task slots. The fifth text-tile coordinate, pointer-backed scene
-  mode/save-data inputs, dynamic UI retry descriptors, and the distinct
-  reserved `0x097` epilogue now match the ROM. Object-script starts and text
-  readiness now reference their reconstructed C symbols, and the reserved
-  `0x0BD..0x0BF` epilogues and all three speed-mode distance calculations use
-  the original layout. It remains unlinked while the
-  last local Metrowerks register schedules are converged.
-  The complete 19,168-byte battle-specific dispatcher is now represented the
-  same way: one readable C unit covers all 182 slots from `0x033` through
-  `0x0E8`, including actor damage/status handling, effect construction,
-  inventory access, object-script ownership and waits, conditional branches,
-  input control, and sound tasks. Unknown opcodes still delegate to the common
-  battle VM executor. Fixed-opcode retries, the complete enemy-stat switches,
-  object-position conversion, typed effect handles, movement-duration paths,
-  the effect/task-slot scans, and the four 40-slot owner operations are now
-  reintegrated into the monolith. Its current 19,168-byte function has the
-  exact original size and reaches 98.83% fuzzy instruction similarity
-  with no compiler-generated helper symbols left. Original retry operand order
-  and
-  low-half masking, exact keyframe path decoding and motion-frame access,
-  in-place movement-duration writeback, ROM-shaped enemy flag, trait, and
-  status-resistance fields, tag-specific item accessors, exact direct-effect
-  coordinate paths, explicit runtime and actor-script ownership, the
-  `0x74`-byte stack frame, nine
-  distinct XYZ work areas, and non-numeric handler layout are recovered; it remains
-  unlinked while the
-  original giant-switch layout is converged without compromising the verified
-  ROM build.
-  Its delegated common executor is no longer opaque either:
-  `BattleVm_DispatchCommonOpcode` reconstructs all 27 slots from `0x0E9`
-  through `0x103`, including attachment/model control, common-asset loading,
-  UI creation, effect waits, object motion, and both screen-effect channels.
-  MWCC emits the exact original 1,844-byte function size at 98.92% fuzzy
-  instruction similarity. The six reserved no-ops, the two distinct no-op
-  epilogues, and every asynchronous retry boundary retain their original
-  control-flow positions; the function remains an unlinked objdiff work unit
-  while its register allocation is converged.
-  Overlay 0's still larger 23,492-byte original field/world dispatcher now has the same
-  complete structured reconstruction. One readable C switch covers all 290
-  slots from `0x033` through `0x154`: child scripts, entity state and movement,
-  party control, room and time-hole transitions, cameras and palettes, field
-  effects and input, battle/menu handoffs, save-backed inventory, the field
-  timer, message windows, and audio ownership. Named runtime layouts replace
-  raw offsets for the shared entity, render, party, and field state. All
-  source-level helpers now fold into one 23,488-byte MWCC function, four bytes
-  short of the 23,492-byte original; there are no compiler-generated code
-  helpers left. Its common return path,
-  cached field/party/map contexts, dynamic retry decoding, and argument-base
-  register now reproduce the original dispatcher architecture, raising fuzzy
-  instruction similarity to 95.96%. ROM-shaped bitfields now recover the
-  entity subtype/resource selection, six-direction contact mask, map-axis
-  synchronization, signed collision-policy updates, script ownership and
-  lifecycle, the entity-owned embedded script-value bank, saved
-  presentation/animation state, transform and movement
-  controllers, field-side/camera state, and signed block-bounce state without
-  opaque raw arithmetic. Matching-script control flow and main/subscreen
-  register paths now retain the original dispatch structure. The normal and
-  transition-selecting battle starts, input-mask channels, timers, palette
-  controls, roaming/waypoint controls, follower rejoin mode, and the complete
-  five-argument active-party switch ABI also retain distinct ROM behavior.
-  IDA verifies the persistent field-system
-  pointer at `field_context + 0x24FC` and the separate map controller at
-  `+0x2500`; the reconstructed prolog now loads both the field-system and party
-  contexts in the same positions as the original. IDA
-  confirms that the original outer 290-entry table funnels command families through several
-  nested switches. The two large 49- and 47-opcode entity families now share
-  one target lookup apiece and reproduce the original 91- and 96-entry inner
-  tables, including all distinct case targets. The auxiliary-script,
-  paired-script, entity-script, matching-script, room/camera, and party/gimmick
-  families now also follow the original physical handler order. The remaining
-  opcode bodies and local register schedules are the principal source of the
-  instruction and 56-byte size delta against the original. The work unit remains
-  unlinked while those local schedules are converged.
+  schedules match. The complete scene command dispatcher is also reconstructed as
+  one compiling C switch. Its 9,196-byte output reaches 99.35% instruction
+  similarity; only the height-alignment calculation in opcode `0x04E` still
+  differs in register allocation and scheduling. It remains unlinked. The
+  signed path count, screen-coordinate calculation, and original overlay-7
+  path-call relocation now match.
+- Three complete VM dispatchers now match every original byte and are linked
+  into the verified European ROM build: the 19,168-byte battle extension,
+  1,844-byte common battle executor, and 23,492-byte field/world extension.
+  Their 182, 27, and 290 local opcode slots retain all reserved cases,
+  asynchronous retries, and the original nested-switch layouts. These units
+  contribute 44,504 bytes of matching C/C++. Battle and field use the original
+  C++ virtual interfaces with C entry-point linkage. Recovered details include
+  the battle motion-frame offset, animation argument reads after virtual calls,
+  queued-script write ordering, resource-animation restoration, signed
+  collision policies, and the paired-field context-type guard.
   High-level source also includes
   two hundred and six byte-matching overlay-2 battle functions: forty-four
   battle-AI/VM/target/state helpers, the eight-function generic task-pool unit,
