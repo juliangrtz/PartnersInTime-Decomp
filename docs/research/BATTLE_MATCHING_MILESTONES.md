@@ -1432,3 +1432,28 @@ and reset-fade routine remain assembly after isolated candidates showed literal
 loading or register differences. The total is 349,828 of 1,563,700 bytes (22.37%).
 All module/symbol checks, 74 tests, generated progress and public-content checks
 pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## SDK initialization, reset handshake and file opening
+
+Nine functions add 976 matching C bytes: arena initialization, vertical alarm
+and VRAM ownership initialization, reset FIFO setup/send/receive, and two file
+opening commands. Arena IDs and PXI interfaces now have shared declarations.
+The file commands use the existing archive, file and cursor layouts; the fast
+command reads a FAT entry before dispatching the direct-open command. The VRAM
+unlock loop remains assembly after its candidate showed register differences.
+
+A 400-frame cold boot entered all five initializers once, fast-open 1,163 times
+and direct-open 1,171 times. The arena table captured from main RAM contains
+main bounds 0x020CBFE0..0x023E0000 and disabled extended-main bounds 0/0.
+The opening animation has valid 22/51-model lists. Main/sub BG memory changed
+by 53,762/52,543 bytes and palettes by 82 bytes.
+
+A separate 184-frame replay from the field held L+R+Start+Select for two frames.
+At frame one the reset sender received command 0x10 and the callback received
+tag 12, data 0x1000 and error zero. Reset initialization ran again at frame
+seven, and the final screenshot shows the Nintendo/AlphaDream startup logos.
+The callback's unexpected-command termination branch was not exercised.
+Evidence remains private under build/runtime/eur_sdk_initializers_verified and
+eur_sdk_reset_fifo_verified. The total is 350,804 of 1,563,700 bytes (22.43%).
+All module/symbol checks, 74 tests, generated progress and public-content checks
+pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

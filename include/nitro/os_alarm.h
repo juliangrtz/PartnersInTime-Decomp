@@ -16,6 +16,7 @@ typedef struct OsAlarm {
 } OsAlarm;
 
 void OS_InitAlarm(void);
+void OS_InitVAlarm(void);
 int OS_IsAlarmAvailable(void);
 void OS_CreateAlarm(OsAlarm *alarm);
 void OS_SetAlarm(OsAlarm *alarm, u64 delay, OsAlarmCallback callback, void *argument);

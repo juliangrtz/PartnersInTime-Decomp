@@ -100,7 +100,7 @@ void CARDi_InitCommon(void) {
     work->priority = 4;
     func_020395d0(&work->thread, CARDi_TaskThread, 0, &cardi_rom_base, 1024, work->priority);
     OS_WakeupThreadDirect(&work->thread);
-    func_0203d5b8(11, CARDi_FifoCallback);
+    PXI_SetFifoRecvCallback(11, CARDi_FifoCallback);
     if (*(vu16 *)0x027FFC40 != 2) CARD_Enable(1);
 }
 

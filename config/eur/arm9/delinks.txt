@@ -724,3 +724,18 @@ src/nitro/os/os_owner.c:
 
 src/game/system_vblank.c:
     .text       start:0x02005330 end:0x0200547c
+
+src/nitro/os/os_arena.c:
+    .text       start:0x0203a2f0 end:0x0203a49c
+
+src/nitro/os/os_valarm.c:
+    .text       start:0x0203ad78 end:0x0203ade8
+
+src/nitro/os/os_vram_exclusive.c:
+    .text       start:0x0203b124 end:0x0203b158
+
+src/nitro/os/os_reset.c:
+    .text       start:0x0203af0c end:0x0203afe8
+
+src/nitro/fs/fs_open_commands.c:
+    .text       start:0x0203d738 end:0x0203d7dc

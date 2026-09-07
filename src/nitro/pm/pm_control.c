@@ -5,10 +5,10 @@ extern volatile u32 data_02064cc8;
 extern volatile u32 data_02064ccc;
 extern u32 data_02064cd4;
 extern OsMutex data_02064cec;
-extern void func_0203d3ac(void);
-extern int func_0203d590(u32 tag, int processor);
-extern void func_0203d5b8(u32 tag, void (*callback)(u32, u32, int));
-extern int func_0203d4dc(u32 tag, u32 data, int error);
+extern void PXI_Init(void);
+extern int PXI_IsCallbackReady(u32 tag, int processor);
+extern void PXI_SetFifoRecvCallback(u32 tag, void (*callback)(u32, u32, int));
+extern int PXI_SendWordByFifo(u32 tag, u32 data, int error);
 extern void func_02039f58(OsMutex *mutex);
 extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 func_02038cc4(u32 mask);
@@ -96,7 +96,7 @@ int PM_GetBackLight(int *top, int *bottom) {
     return result;
 }
 
-void PMi_SendPxiData(u32 data) { while (func_0203d4dc(8, data, 0) != 0) {} }
+void PMi_SendPxiData(u32 data) { while (PXI_SendWordByFifo(8, data, 0) != 0) {} }
 
 void PM_GoSleepMode(u32 triggers, u32 keys, u32 key_logic) {
     int power_off = 0;

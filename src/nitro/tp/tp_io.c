@@ -1,10 +1,10 @@
 #include <nitro/tp.h>
 
 extern u16 data_02064c88;
-extern void func_0203d3ac(void);
-extern int func_0203d590(u32 tag, int processor);
-extern void func_0203d5b8(u32 tag, void (*callback)(u32, u32, int));
-extern int func_0203d4dc(u32 tag, u32 data, int error);
+extern void PXI_Init(void);
+extern int PXI_IsCallbackReady(u32 tag, int processor);
+extern void PXI_SetFifoRecvCallback(u32 tag, void (*callback)(u32, u32, int));
+extern int PXI_SendWordByFifo(u32 tag, u32 data, int error);
 
 #define TP_DIVCNT (*(vu16 *)0x04000280)
 #define TP_NUMERATOR (*(vu32 *)0x04000290)
@@ -12,20 +12,20 @@ extern int func_0203d4dc(u32 tag, u32 data, int error);
 #define TP_QUOTIENT (*(volatile s32 *)0x040002A0)
 
 static inline int TPi_Send(u32 data) {
-    if (func_0203d4dc(6, data, 0) >= 0) return 1;
+    if (PXI_SendWordByFifo(6, data, 0) >= 0) return 1;
     return 0;
 }
 
 static inline int TPi_SendStart(u16 scanline, u16 frequency) {
-    if (func_0203d4dc(6, (u8)frequency | 0x02000100, 0) < 0) return 0;
-    if (func_0203d4dc(6, scanline | 0x01010000, 0) < 0) return 0;
+    if (PXI_SendWordByFifo(6, (u8)frequency | 0x02000100, 0) < 0) return 0;
+    if (PXI_SendWordByFifo(6, scanline | 0x01010000, 0) < 0) return 0;
     return 1;
 }
 
 void TP_Init(void) {
     if (data_02064c88) return;
     data_02064c88 = 1;
-    func_0203d3ac();
+    PXI_Init();
     data_02064c8c.state = 0;
     data_02064c8c.busy = 0;
     data_02064c8c.index = 0;
@@ -33,8 +33,8 @@ void TP_Init(void) {
     data_02064c8c.buffer = 0;
     data_02064c8c.calibrated = 0;
     data_02064c8c.errors = 0;
-    while (!func_0203d590(6, 1)) {}
-    func_0203d5b8(6, TPi_FifoCallback);
+    while (!PXI_IsCallbackReady(6, 1)) {}
+    PXI_SetFifoRecvCallback(6, TPi_FifoCallback);
 }
 
 int TP_GetUserInfo(TpCalibration *calibration) {

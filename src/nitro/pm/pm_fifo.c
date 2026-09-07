@@ -5,10 +5,10 @@ extern volatile u32 data_02064cc8;
 extern volatile u32 data_02064ccc;
 extern u32 data_02064cd4;
 extern OsMutex data_02064cec;
-extern void func_0203d3ac(void);
-extern int func_0203d590(u32 tag, int processor);
-extern void func_0203d5b8(u32 tag, void (*callback)(u32, u32, int));
-extern int func_0203d4dc(u32 tag, u32 data, int error);
+extern void PXI_Init(void);
+extern int PXI_IsCallbackReady(u32 tag, int processor);
+extern void PXI_SetFifoRecvCallback(u32 tag, void (*callback)(u32, u32, int));
+extern int PXI_SendWordByFifo(u32 tag, u32 data, int error);
 extern void func_02039f58(OsMutex *mutex);
 extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 func_02038cc4(u32 mask);
@@ -58,9 +58,9 @@ void PM_Init(void) {
     data_02064cc4 = 1;
     data_02064cdc.busy = 0;
     data_02064cdc.callback = 0;
-    func_0203d3ac();
-    while (!func_0203d590(8, 1)) {}
-    func_0203d5b8(8, PMi_FifoCallback);
+    PXI_Init();
+    while (!PXI_IsCallbackReady(8, 1)) {}
+    PXI_SetFifoRecvCallback(8, PMi_FifoCallback);
     for (i = 0; i < 4; i++) data_02064d00[i].ready = 0;
     func_02039f58(&data_02064cec);
     data_02064cd4 = PM_FRAME;

@@ -46,9 +46,9 @@ extern void OS_Terminate(void);
 extern void func_02038e34(u16 lock_id);
 extern u32 OS_ReadOwnerOfLockWord(const void *lock);
 extern int OS_TryLockCartridge(u16 lock_id);
-extern void func_0203d3ac(void);
-extern int func_0203d590(u32 tag, int processor);
-extern int func_0203d4dc(u32 tag, u32 data, int error);
-extern void func_0203d5b8(u32 tag, void (*callback)(u32, u32, int));
+extern void PXI_Init(void);
+extern int PXI_IsCallbackReady(u32 tag, int processor);
+extern int PXI_SendWordByFifo(u32 tag, u32 data, int error);
+extern void PXI_SetFifoRecvCallback(u32 tag, void (*callback)(u32, u32, int));
 
 #endif

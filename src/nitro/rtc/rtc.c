@@ -3,15 +3,15 @@
 extern u16 data_02064d20;
 extern u32 OS_DisableInterrupts(void);
 extern u32 OS_RestoreInterrupts(u32 state);
-extern void func_0203d3ac(void);
-extern int func_0203d590(u32 tag, int processor);
-extern void func_0203d5b8(u32 tag, void (*callback)(u32, u32, int));
-extern int func_0203d4dc(u32 tag, u32 data, int error);
+extern void PXI_Init(void);
+extern int PXI_IsCallbackReady(u32 tag, int processor);
+extern void PXI_SetFifoRecvCallback(u32 tag, void (*callback)(u32, u32, int));
+extern int PXI_SendWordByFifo(u32 tag, u32 data, int error);
 
 int RTCi_ReadTime(void) { return RTCi_SendCommand(0x12); }
 int RTCi_WriteStatus2(void) { return RTCi_SendCommand(0x27); }
 int RTCi_SendCommand(u16 command) {
-    return func_0203d4dc(5, (command << 8) & 0x7F00, 0) >= 0;
+    return PXI_SendWordByFifo(5, (command << 8) & 0x7F00, 0) >= 0;
 }
 
 void RTC_Init(void) {
@@ -22,9 +22,9 @@ void RTC_Init(void) {
     data_02064d24.alarm_callback = 0;
     data_02064d24.output = 0;
     data_02064d24.output2 = 0;
-    func_0203d3ac();
-    while (!func_0203d590(5, 1)) {}
-    func_0203d5b8(5, RTCi_FifoCallback);
+    PXI_Init();
+    while (!PXI_IsCallbackReady(5, 1)) {}
+    PXI_SetFifoRecvCallback(5, RTCi_FifoCallback);
 }
 
 u32 RTC_GetTimeAsync(RtcTime *time, RtcCallback callback, void *argument) {

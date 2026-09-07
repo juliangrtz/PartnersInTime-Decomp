@@ -121,6 +121,8 @@ int FSi_ReadFileCore(FsFile *file, void *buffer, int size, int asynchronous);
 int FSi_FindPath(FsFile *file, const char *path, FsFileId *id, FsDirectoryPosition *directory);
 int FSi_FindPathCommand(FsFile *file);
 int FSi_GetPathCommand(FsFile *file);
+int FSi_OpenFileFastCommand(FsFile *file);
+int FSi_OpenFileDirectCommand(FsFile *file);
 int func_0203e034(FsFile *file, u32 directory);
 int func_0203dfd0(const u8 *left, const u8 *right, int length);
 void func_0203e068(FsReadCursor *cursor, void *buffer, u32 size);

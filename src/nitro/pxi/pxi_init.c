@@ -52,7 +52,7 @@ void func_0203d624(void) {
     OS_RestoreInterrupts(state);
 }
 
-void func_0203d5b8(u32 tag, PxiCallback callback) {
+void PXI_SetFifoRecvCallback(u32 tag, PxiCallback callback) {
     u32 state = OS_DisableInterrupts();
     data_02064b88[tag] = callback;
     if (callback) PXI_SYSTEM->callback_mask[0] |= 1 << tag;

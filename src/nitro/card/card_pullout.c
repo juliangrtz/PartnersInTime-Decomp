@@ -2,7 +2,7 @@
 
 extern int data_02065720;
 extern int (*data_02065724)(void);
-extern void func_0203d3ac(void);
+extern void PXI_Init(void);
 extern void WaitByLoop(u32 cycles);
 extern int PM_ForceToPowerOff(void);
 
@@ -11,8 +11,8 @@ void CARD_TerminateForPulledOut(void);
 void CARDi_SendPxi(u32 data, u32 delay);
 
 void CARDi_InitPulledOutCallback(void) {
-    func_0203d3ac();
-    func_0203d5b8(14, CARDi_PulledOutCallback);
+    PXI_Init();
+    PXI_SetFifoRecvCallback(14, CARDi_PulledOutCallback);
     data_02065724 = 0;
 }
 
@@ -33,5 +33,5 @@ void CARD_TerminateForPulledOut(void) {
 }
 
 void CARDi_SendPxi(u32 data, u32 delay) {
-    while (func_0203d4dc(14, data, 0)) WaitByLoop(delay);
+    while (PXI_SendWordByFifo(14, data, 0)) WaitByLoop(delay);
 }

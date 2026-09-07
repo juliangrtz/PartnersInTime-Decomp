@@ -8,9 +8,9 @@ extern SoundCommand *data_02063068;
 
 extern int func_02039bac(void);
 extern void func_0203ae6c(u32 cycles);
-extern int func_0203d4dc(u32 tag, u32 data, int error);
-extern int func_0203d590(u32 tag, int processor);
-extern void func_0203d5b8(u32 tag, void (*callback)(u32, u32, int));
+extern int PXI_SendWordByFifo(u32 tag, u32 data, int error);
+extern int PXI_IsCallbackReady(u32 tag, int processor);
+extern void PXI_SetFifoRecvCallback(u32 tag, void (*callback)(u32, u32, int));
 
 int func_0203c51c(u32 serial) {
     u32 state = OS_DisableInterrupts();
@@ -54,12 +54,12 @@ void func_0203c44c(u32 tag, u32 value, int error) {
 }
 
 void func_0203c3e0(void) {
-    func_0203d5b8(7, func_0203c44c);
+    PXI_SetFifoRecvCallback(7, func_0203c44c);
     if (!func_0203c30c()) return;
-    while (!func_0203d590(7, 1)) func_0203ae6c(100);
+    while (!PXI_IsCallbackReady(7, 1)) func_0203ae6c(100);
 }
 
-void func_0203c3ac(void) { while (func_0203d4dc(7, 0, 0) < 0) {} }
+void func_0203c3ac(void) { while (PXI_SendWordByFifo(7, 0, 0) < 0) {} }
 
 SoundCommand *func_0203c354(void) {
     u32 state = OS_DisableInterrupts();

@@ -16,7 +16,7 @@ extern SoundCommand data_02063320[256];
 extern SoundSharedWork *data_02064b80;
 
 extern void func_0203ae6c(u32 cycles);
-extern int func_0203d4dc(u32 tag, u32 data, int error);
+extern int PXI_SendWordByFifo(u32 tag, u32 data, int error);
 extern void DC_FlushRange(const void *data, u32 size);
 
 void func_0203ca18(void) {
@@ -121,12 +121,12 @@ int func_0203c640(u32 flags) {
         do { func_0203c8e4(1); } while (data_02063074 >= 8);
     }
     DC_FlushRange(data_02063320, sizeof(data_02063320));
-    if (func_0203d4dc(7, (u32)data_02063060, 0) < 0) {
+    if (PXI_SendWordByFifo(7, (u32)data_02063060, 0) < 0) {
         if (!(flags & 1)) {
             OS_RestoreInterrupts(state);
             return 0;
         }
-        while (func_0203d4dc(7, (u32)data_02063060, 0) < 0) {
+        while (PXI_SendWordByFifo(7, (u32)data_02063060, 0) < 0) {
             OS_RestoreInterrupts(state);
             func_0203ae6c(100);
             state = OS_DisableInterrupts();

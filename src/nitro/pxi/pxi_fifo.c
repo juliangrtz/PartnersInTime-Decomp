@@ -29,7 +29,7 @@ static inline int SendFifoWord(PxiFifoWord *word) {
     return 0;
 }
 
-int func_0203d4dc(u32 tag, u32 data, int error) {
+int PXI_SendWordByFifo(u32 tag, u32 data, int error) {
     PxiFifoWord word;
     word.fields.tag = tag;
     word.fields.error = error;
@@ -70,4 +70,4 @@ void func_0203d3b8(void) {
     }
 }
 
-void func_0203d3ac(void) { func_0203d624(); }
+void PXI_Init(void) { func_0203d624(); }

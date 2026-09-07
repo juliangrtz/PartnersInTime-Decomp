@@ -99,5 +99,5 @@ void CTRDGi_Unlock(u16 lock_id, CtrdgLockState *state) {
 }
 
 void CTRDGi_SendPxi(u32 data) {
-    while (func_0203d4dc(13, data, 0)) WaitByLoop(1);
+    while (PXI_SendWordByFifo(13, data, 0)) WaitByLoop(1);
 }

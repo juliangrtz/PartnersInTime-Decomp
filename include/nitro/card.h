@@ -110,8 +110,8 @@ void CARDi_EndTask(void);
 int CARDi_ReadFromCache(CardRomStat *stat);
 void CARDi_InitPulledOutCallback(void);
 
-extern int func_0203d590(u32 tag, int processor);
-extern int func_0203d4dc(u32 tag, u32 data, int error);
+extern int PXI_IsCallbackReady(u32 tag, int processor);
+extern int PXI_SendWordByFifo(u32 tag, u32 data, int error);
 extern void func_0203ae6c(u32 cycles);
 extern void MI_StopDma(u32 dma);
 extern void MIi_CardDmaCopy32(u32 dma, const void *source, void *destination, u32 size);
@@ -137,6 +137,6 @@ extern void OS_SetThreadPriority(OsThread *thread, u32 priority);
 extern u32 func_0203929c(OsThread *thread);
 extern void func_020395d0(OsThread *thread, void (*entry)(void *), void *argument,
     void *stack, u32 stack_size, u32 priority);
-extern void func_0203d5b8(u32 tag, void (*callback)(u32, u32, int));
+extern void PXI_SetFifoRecvCallback(u32 tag, void (*callback)(u32, u32, int));
 
 #endif
