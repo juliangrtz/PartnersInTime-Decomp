@@ -10,3 +10,20 @@ src/overlay005/resource_owner.c:
 src/overlay005/display_bg.c:
     .text       start:0x02067aac end:0x02068594
 
+src/overlay005/touch_panel.c:
+    .text start:0x0206873c end:0x02068908
+
+src/overlay005/sprite_pool.cpp:
+    .text start:0x02068bbc end:0x02068ee0
+
+src/overlay005/draw_lists.cpp:
+    .text start:0x02068ee0 end:0x0206937c
+
+src/overlay005/item_pool.c:
+    .text start:0x0206964c end:0x020699f0
+
+src/overlay005/item_release.c:
+    .text start:0x020695cc end:0x020695ec
+
+src/overlay005/entry_list.cpp:
+    .text start:0x020699f0 end:0x02069d6c

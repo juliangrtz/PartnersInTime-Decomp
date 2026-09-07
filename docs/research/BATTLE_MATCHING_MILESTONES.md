@@ -938,3 +938,31 @@ The total is 314,356 of 1,563,700 bytes (20.10%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass. This milestone adds no inline assembly and changes no compiler
 settings.
+
+
+## Overlay 5 object, draw and sound services
+
+Seventy-two functions add 4,300 matching C/C++ bytes in overlay 5. The overlay
+owns three fixed-size object pools that share one shape: a constructed element
+array, a parallel link array, and free/taken singly linked lists spliced
+between them. Recovered pools cover the 336-byte sprite, the eight-byte draw
+entry and the 64-byte item.
+
+Sixty-four ordered draw lists per screen hold those entries; each list head
+doubles as the sentinel its tail pointer parks on while the list is empty. The
+per-frame update, draw and collect passes walk every list and dispatch through
+the drawn object's virtual table, so those units are C++ with a minimal
+interface declaration and extern "C" entry points.
+
+Also recovered: touch-panel start-up and shutdown, the reference-counted
+resource registry with its embedded head and tail markers, the affine matrix
+built from the sine table, the object shape/size lookup, and the 32-slot sound
+request queue with its priority-based replacement and per-frame countdown.
+
+Two functions are reconstructed but not yet identical and stay outside
+`linked_sources.txt`: a sprite pre-draw offset helper and an item reset whose
+16-bit clear value the original materializes through memory.
+
+The total is 318,656 of 1,563,700 bytes (20.38%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass. No inline assembly and no compiler-setting changes.
