@@ -229,3 +229,4 @@ src/nns/snd/snd_archive_waves.c
 src/nns/snd/snd_archive_load.c
 src/nns/snd/snd_archive_player.c
 src/nns/snd/snd_sequence_archive.c
+src/nns/snd/snd_stream.c

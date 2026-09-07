@@ -247,3 +247,6 @@ src/nns/snd/snd_archive_player.c:
 
 src/nns/snd/snd_sequence_archive.c:
     .text start:0x020340d4 end:0x02034114
+
+src/nns/snd/snd_stream.c:
+    .text start:0x0202f738 end:0x0202fdac

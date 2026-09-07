@@ -489,3 +489,15 @@ the original calling contract; storage still truncates to the original
 All new and affected functions match completely, without inline assembly.
 The total is 236,808 bytes (15.14%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress, and the public-content audit pass.
+
+## Sound stream channel and ring-buffer control
+
+Fourteen functions add 1,652 matching C bytes: stream initialization, channel
+reservation, aligned buffer setup, alarm callbacks, channel volume and pan,
+start/stop, and sleep suspension/resumption. The 92-byte stream state, signed
+status bitfields, channel records, and six-argument buffer callback are typed.
+Unsigned buffer division now identifies the resident `_u32_div_f` helper.
+
+All 14 functions match completely, without inline assembly. The total is
+238,460 bytes (15.25%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
+generated progress, and the public-content audit pass.
