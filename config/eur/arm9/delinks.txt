@@ -118,3 +118,6 @@ src/nitro/fs/fs_archive.c:
 
 src/nitro/fs/fs_archive_state.c:
     .text       start:0x0203e2a8 end:0x0203e438
+
+src/nitro/fs/fs_file.c:
+    .text       start:0x0203ed24 end:0x0203f33c

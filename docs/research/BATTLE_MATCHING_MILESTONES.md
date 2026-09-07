@@ -208,3 +208,14 @@ Archive-table loading and name packing remain outside the linked C set until
 their remaining instruction differences are resolved. Module/symbol checks,
 the reference-ROM SHA-1, generated progress, public-content audit, and all
 66 tests pass.
+
+## Filesystem file operations
+
+The file unit adds all 16 functions in `0x0203ED24..0x0203F33C`, totaling
+1,560 matching C bytes. It implements seeking, synchronous/asynchronous reads,
+cancellation and waiting, direct and path-based opens, close, file/list
+initialization, and archive-prefix path selection. Read requests keep the
+requested length separate from the clamped transfer length and actual result.
+The native structure-return ABI and directory-position copies are preserved.
+All module/symbol checks, the original-ROM SHA-1, progress consistency,
+public-content audit, and 66 tests pass.

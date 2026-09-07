@@ -186,3 +186,4 @@ src/nitro/pxi/pxi_fifo.c
 src/nitro/pxi/pxi_init.c
 src/nitro/fs/fs_archive.c
 src/nitro/fs/fs_archive_state.c
+src/nitro/fs/fs_file.c

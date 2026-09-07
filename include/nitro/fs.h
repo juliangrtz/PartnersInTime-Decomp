@@ -57,6 +57,7 @@ struct FsFile {
         FsDirectoryPosition directory;
         struct { void *buffer; u32 size; u32 length; } io;
         struct { u32 top; u32 bottom; u32 id; } direct;
+        struct { FsDirectoryPosition directory; const char *path; int find_directory; void *output; } path;
     } argument;
 };
 
@@ -78,7 +79,7 @@ static inline int FSi_TestArchiveFlag(const FsArchive *archive, u32 mask) {
 }
 static inline int FSi_ToLower(int character) {
     character -= 'A';
-    if ((u32)character <= 'Z' - 'A') return character + 'a';
+    if ((u32)character <= 'Z' - 'A') character += 'a' - 'A';
     return character + 'A';
 }
 
@@ -101,6 +102,10 @@ int FSi_SendCommand(FsFile *file, int command);
 void FSi_AppendToList(FsLink *item, FsLink *list);
 void FSi_CutFromList(FsLink *item);
 int func_0203e118(FsFile *file, int command);
+int FS_WaitAsync(FsFile *file);
+int FS_ConvertPathToFileID(FsFileId *id, const char *path);
+int FSi_ReadFileCore(FsFile *file, void *buffer, int size, int asynchronous);
+int FSi_FindPath(FsFile *file, const char *path, FsFileId *id, FsDirectoryPosition *directory);
 
 extern void MI_CpuCopy8(const void *source, void *destination, u32 size);
 extern void MI_CpuFill8(void *destination, u8 value, u32 size);
