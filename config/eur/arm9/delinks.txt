@@ -133,3 +133,12 @@ src/nitro/fs/fs_overlay_lifecycle.c:
 
 src/nitro/dgt/dgt_hash2.c:
     .text       start:0x0203fdb0 end:0x02040598
+
+src/nitro/cp/cp_context.c:
+    .text       start:0x02040598 end:0x02040678
+
+src/nitro/tp/tp_calibration_point.c:
+    .text       start:0x02040678 end:0x020407d4
+
+src/nitro/tp/tp_io.c:
+    .text       start:0x02040a44 end:0x02040fb0

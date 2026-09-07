@@ -278,3 +278,19 @@ original counter reloads and byte-by-byte construction of the first 16 words.
 The linked total is 211,316 bytes (13.51%). Every module/symbol check passes,
 the rebuilt ROM retains the original SHA-1, and all 66 tests, generated-progress
 checks, and public-content checks pass.
+
+## Touchscreen sampling and coprocessor context
+
+Twelve touchscreen functions and both coprocessor-context functions add 1,960
+matching C bytes, bringing the total to 213,276 bytes (13.64%). Touchscreen
+initialization, single/automatic sampling requests, result waits, user settings,
+calibration setup, and fixed-point coordinate conversion match. The checked
+work structure is 56 bytes and each sample is eight bytes. Calibration keeps
+the native 64-bit arithmetic and signed coordinate clamps. Division/square-root
+context save and restore preserve the original paired MMIO accesses.
+
+The calibration-parameter calculator and FIFO callback remain native while
+their remaining scheduling differences are investigated; they are excluded
+from the C total. No assembly fallback is added. The complete module/symbol
+check, reference-ROM SHA-1, progress check, public-content audit, and all 66
+tests pass.
