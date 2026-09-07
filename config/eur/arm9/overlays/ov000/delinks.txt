@@ -61,3 +61,9 @@ src/field/field_orbit.cpp:
 
 src/field/field_spatial_orbit.cpp:
     .text       start:0x020b2044 end:0x020b26ac
+
+src/field/field_orbit_start.cpp:
+    .text       start:0x020a5408 end:0x020a5bf4
+
+src/field/field_spatial_orbit_start.cpp:
+    .text       start:0x020b2c08 end:0x020b2e9c

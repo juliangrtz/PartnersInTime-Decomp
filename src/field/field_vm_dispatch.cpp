@@ -1,3 +1,4 @@
+#include <game/field_orbit.h>
 extern "C" {
 #include <game/field_entity.h>
 #include <game/field_presentation.h>
@@ -80,41 +81,18 @@ extern void func_ov000_020b39a8(FieldEntity *entity, FieldEntity *target,
                                 fx32 x, fx32 y, fx32 z, int duration,
                                 int motion_6, int motion_7, int motion_flag,
                                 int reserved);
-extern void func_ov000_020a59c4(
-    FieldEntity *entity, int relative_center, fx32 center_x, fx32 center_y,
-    int relative_angle, int angle, int initial_speed, int acceleration,
-    int maximum_speed, int deceleration, int direction,
-    int secondary_axis_scale, int snap_to_final_angle, int reserved);
 extern void func_ov000_020b2e9c(
     FieldEntity *entity, int relative_center, fx32 center_x, fx32 center_y,
     fx32 center_z, int relative_angle, int angle, int initial_speed,
     int acceleration, int maximum_speed, int deceleration, int plane,
     int direction, int secondary_axis_scale, int stop_on_contact_mask,
     int stop_on_state_mask, int snap_to_final_angle, int reserved);
-extern void func_ov000_020a57e4(
-    FieldEntity *entity, int relative_center, fx32 center_x, fx32 center_y,
-    int relative_angle, int angle, int duration, int direction,
-    int secondary_axis_scale, int snap_to_final_angle, int reserved);
-extern void func_ov000_020b2c08(
-    FieldEntity *entity, int relative_center, fx32 center_x, fx32 center_y,
-    fx32 center_z, int relative_angle, int angle, int duration, int plane,
-    int direction, int secondary_axis_scale, int stop_on_contact_mask,
-    int stop_on_state_mask, int snap_to_final_angle, int reserved);
-extern void func_ov000_020a55f0(
-    FieldEntity *entity, FieldEntity *center_entity, fx32 center_x,
-    fx32 center_y, int relative_angle, int angle, int speed, int direction,
-    int secondary_axis_scale, int snap_to_final_angle, int reserved);
 extern void func_ov000_020b295c(
     FieldEntity *entity, FieldEntity *center_entity, fx32 center_x,
     fx32 center_y, fx32 center_z, int relative_angle, int angle, int speed,
     int plane, int direction, int secondary_axis_scale,
     int stop_on_contact_mask, int stop_on_state_mask,
     int snap_to_final_angle, int reserved);
-extern void func_ov000_020a5408(
-    FieldEntity *entity, FieldEntity *center_entity, fx32 center_x,
-    fx32 center_y, int relative_angle, int angle, int duration,
-    int direction, int secondary_axis_scale, int snap_to_final_angle,
-    int reserved);
 extern void func_ov000_020b26ac(
     FieldEntity *entity, FieldEntity *center_entity, fx32 center_x,
     fx32 center_y, fx32 center_z, int relative_angle, int angle,
@@ -2230,8 +2208,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_START_ENTITY_ORBIT_AROUND_POINT:
             if (FieldVm_IsTwoDimensionalEntity(runtime_entity)) {
-                func_ov000_020a59c4(
-                    &runtime_entity->base,
+                FieldOrbit_StartAroundPoint(
+                    runtime_entity,
                     (arguments[1] >> 3) & 1,
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
@@ -2260,8 +2238,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_START_ENTITY_TIMED_ORBIT_AROUND_POINT:
             if (FieldVm_IsTwoDimensionalEntity(runtime_entity)) {
-                func_ov000_020a57e4(
-                    &runtime_entity->base,
+                FieldOrbit_StartTimedAroundPoint(
+                    runtime_entity,
                     (arguments[1] >> 3) & 1,
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
@@ -2270,8 +2248,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     arguments[6], arguments[7],
                     arguments[8], arguments[11] != 0, 0);
             } else {
-                func_ov000_020b2c08(
-                    &runtime_entity->base,
+                FieldOrbit3D_StartTimedAroundPoint(
+                    runtime_entity,
                     (arguments[1] >> 3) & 1,
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
@@ -2287,9 +2265,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_START_ENTITY_ORBIT_AROUND_ENTITY:
             if (FieldVm_IsTwoDimensionalEntity(runtime_entity)) {
-                func_ov000_020a55f0(
-                    &runtime_entity->base,
-                    FieldVm_GetEntityByIndex(field_context, arguments[1]),
+                FieldOrbit_StartAroundEntity(
+                    runtime_entity,
+                    (FieldRuntimeEntity *)FieldVm_GetEntityByIndex(field_context, arguments[1]),
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     (arguments[5] >> 2) & 1,
@@ -2314,9 +2292,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_START_ENTITY_TIMED_ORBIT_AROUND_ENTITY:
             if (FieldVm_IsTwoDimensionalEntity(runtime_entity)) {
-                func_ov000_020a5408(
-                    &runtime_entity->base,
-                    FieldVm_GetEntityByIndex(field_context, arguments[1]),
+                FieldOrbit_StartTimedAroundEntity(
+                    runtime_entity,
+                    (FieldRuntimeEntity *)FieldVm_GetEntityByIndex(field_context, arguments[1]),
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     (arguments[5] >> 2) & 1,

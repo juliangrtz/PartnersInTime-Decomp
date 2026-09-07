@@ -1796,3 +1796,33 @@ and build/runtime/eur_field_orbit_boundaries. Matching C/C++ is 365,272 of
 1,563,700 bytes (23.36%). All module/symbol checks, 74 tests, generated progress
 and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Orbit startup and Field VM integration
+
+Five starters add 2,688 matching C++ bytes: four planar variants for timed or
+speed-based orbits around points/entities, plus timed spatial orbits around a
+point. The shared interface now identifies initial angle and vertical radius.
+The Field VM calls typed, named starters instead of opaque assembly declarations.
+Angle wrapping preserves complete turns from the high word, winding direction,
+and the original in-place accumulation. Three spatial starter candidates remain
+assembly because register allocation differences persisted.
+
+Three controlled live tests invoke the new spatial starter through Field VM
+opcode 0x88, once for each plane. Each test reloads the normal field checkpoint,
+checks that entity table index 9 resolves to the observed runtime entity, and
+replaces one decoded RAM command at a natural dispatch. All 72 original command
+bytes are restored at the starter's entry after argument passing. No script
+bytecode, ROM or battery save is changed. Read-only entry/return hooks verify
+all fourteen arguments, success, flags, center coordinates, initial/destination
+angles, radius, circumference, duration and derived speed. Every case passed
+within one game frame. Radii were 46340/32768/32768 and speeds 6065/4289/4289 in
+Q12 units for planes Y/Z, X/Z and X/Y respectively.
+
+These are controlled command-injection checks, not naturally triggered story
+events. The planar starter entries remain covered by exact linked bytes; normal
+field smoke and orbit boundary evidence from the preceding milestone uses the
+same byte-identical ROM. New evidence remains private under
+build/runtime/eur_field_orbit_start_verified. Matching C/C++ is 367,960 of
+1,563,700 bytes (23.53%). All module/symbol checks, 74 tests, generated progress
+and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

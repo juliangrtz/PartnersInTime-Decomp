@@ -23,6 +23,29 @@ void FieldOrbit3D_Cancel(FieldRuntimeEntity *entity, FieldOrbitController *orbit
 void FieldOrbit3D_CalculatePosition(FieldRuntimeEntity *entity, fx32 *x, fx32 *y, fx32 *z,
                                     FieldOrbitController *orbit);
 
+/* relative_center == 1 adds the point offsets to the current position.
+ * relative_angle selects a sweep; otherwise angle gives the destination plus
+ * complete turns in its high word. Direction selects the winding sign. */
+int FieldOrbit_StartAroundPoint(FieldRuntimeEntity *entity, int relative_center, fx32 offset_x, fx32 offset_y,
+                                int relative_angle, s32 angle, fx32 speed, fx32 acceleration,
+                                fx32 maximum_speed, fx32 deceleration, int direction, fx32 scale,
+                                u8 stop_at_destination, FieldOrbitController *orbit);
+int FieldOrbit_StartTimedAroundPoint(FieldRuntimeEntity *entity, int relative_center, fx32 offset_x,
+                                     fx32 offset_y, int relative_angle, s32 angle, s32 duration,
+                                     int direction, fx32 scale, u8 stop_at_destination,
+                                     FieldOrbitController *orbit);
+int FieldOrbit_StartAroundEntity(FieldRuntimeEntity *entity, FieldRuntimeEntity *center, fx32 offset_x,
+                                 fx32 offset_y, int relative_angle, s32 angle, s32 speed, int direction,
+                                 fx32 scale, u8 stop_at_destination, FieldOrbitController *orbit);
+int FieldOrbit_StartTimedAroundEntity(FieldRuntimeEntity *entity, FieldRuntimeEntity *center, fx32 offset_x,
+                                      fx32 offset_y, int relative_angle, s32 angle, s32 duration,
+                                      int direction, fx32 scale, u8 stop_at_destination,
+                                      FieldOrbitController *orbit);
+int FieldOrbit3D_StartTimedAroundPoint(FieldRuntimeEntity *entity, int relative_center, fx32 offset_x,
+                                       fx32 offset_y, fx32 offset_z, int relative_angle, s32 angle,
+                                       s32 duration, int plane, int direction, fx32 scale, u32 stop_mask_a,
+                                       u32 stop_mask_b, u8 stop_at_destination, FieldOrbitController *orbit);
+
 #ifdef __cplusplus
 }
 #endif

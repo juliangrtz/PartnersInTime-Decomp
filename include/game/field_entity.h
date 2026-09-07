@@ -95,9 +95,10 @@ typedef struct FieldOrbitController {
     u32 elapsed_frames;
     fx32 speed;
     union { u32 duration_frames; fx32 acceleration; } timing;
-    fx32 deceleration, maximum_speed, unknown_18;
+    fx32 deceleration, maximum_speed;
+    s32 initial_angle;
     s32 destination_angle, angle, remaining_angle;
-    fx32 vertical_scale, radius, unknown_30, circumference;
+    fx32 vertical_scale, radius, vertical_radius, circumference;
     fx32 center_x, center_y, center_z;
     FieldRuntimeEntity *center_entity;
 } FieldOrbitController;
@@ -230,7 +231,7 @@ struct FieldEntityVTable {
     void (*cancel_planar_movement)(FieldEntity *entity, void *controller,
                                    int snap_to_destination);
     u8 unknown_54[8];
-    void (*cancel_orbit_movement)(FieldEntity *entity, void *controller,
+    void (*cancel_orbit_movement)(FieldEntity *entity, FieldOrbitController *controller,
                                      int snap_to_destination);
     void (*set_visible)(FieldEntity *entity, int visible);
     u8 unknown_64[0x10];
