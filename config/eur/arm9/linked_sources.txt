@@ -224,3 +224,6 @@ src/nns/snd/snd_heap.c
 src/nns/snd/snd_archive_io.c
 src/nns/snd/snd_archive_info.c
 src/nns/snd/snd_archive_init.c
+src/nns/snd/snd_archive_file.c
+src/nns/snd/snd_archive_waves.c
+src/nns/snd/snd_archive_load.c

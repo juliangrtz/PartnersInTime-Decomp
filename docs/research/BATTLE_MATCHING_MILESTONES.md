@@ -464,3 +464,16 @@ The 140-byte archive state combines the 48-byte SDAT header, the existing
 All 21 functions match completely in objdiff, without inline assembly. The
 total is 233,008 bytes (14.90%). Module/symbol checks, original-ROM SHA-1, all
 66 tests, generated progress, and the public-content audit pass.
+
+## Sound archive asset loading
+
+Twenty-one functions add 2,856 matching C bytes: cached sequence/bank/wave
+files, individual-wave header tables, archive-safe disposal, bank instrument
+traversal, dependency loading, group dispatch, and public load wrappers. The
+SDAT sequence, bank, wave, and group records now have explicit C layouts.
+The single-wave allocator remains original code until its register allocation
+is matched; no partial match is linked.
+
+All 21 new functions match completely, without inline assembly. The total is
+235,864 bytes (15.08%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
+generated progress, and the public-content audit pass.

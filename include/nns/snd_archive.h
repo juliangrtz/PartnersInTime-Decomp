@@ -3,6 +3,7 @@
 
 #include <nns/snd.h>
 #include <nitro/fs.h>
+#include <nitro/snd_bank.h>
 
 typedef struct NNSSndArcHeader {
     u32 signature;
@@ -60,6 +61,39 @@ typedef struct NNSSndArc {
 
 typedef char NNSSndArcSizeCheck[(sizeof(NNSSndArc) == 140) ? 1 : -1];
 
+typedef struct NNSSndArcSeqInfo {
+    u32 file;
+    u16 bank;
+    u8 volume;
+    u8 channel_priority;
+    u8 player_priority;
+    u8 player;
+    u16 reserved;
+} NNSSndArcSeqInfo;
+
+typedef struct NNSSndArcSeqArcInfo { u32 file; } NNSSndArcSeqArcInfo;
+typedef struct NNSSndArcBankInfo { u32 file; u16 wave_archives[4]; } NNSSndArcBankInfo;
+typedef struct NNSSndArcWaveArcInfo {
+    u32 file : 24;
+    u32 flags : 8;
+} NNSSndArcWaveArcInfo;
+typedef struct NNSSndArcGroupItem {
+    u8 type;
+    u8 flags;
+    u16 reserved;
+    u32 index;
+} NNSSndArcGroupItem;
+typedef struct NNSSndArcGroupInfo { u32 count; NNSSndArcGroupItem items[1]; } NNSSndArcGroupInfo;
+
+int NNSi_SndArcLoadWaveArc(int index, u32 flags, NNSSndHeap *heap, int register_file, SoundWaveArchive **output);
+int NNSi_SndArcLoadBank(int index, u32 flags, NNSSndHeap *heap, int register_file, SoundBank **output);
+int NNSi_SndArcLoadSeqArc(int index, u32 flags, NNSSndHeap *heap, int register_file, void **output);
+int NNSi_SndArcLoadSeq(int index, u32 flags, NNSSndHeap *heap, int register_file, void **output);
+int NNSi_SndArcLoadGroup(int index, NNSSndHeap *heap);
+int NNS_SndArcLoadBankEx(int index, u32 flags, NNSSndHeap *heap);
+int NNS_SndArcLoadSeqArc(int index, NNSSndHeap *heap);
+int NNS_SndArcLoadGroup(int index, NNSSndHeap *heap);
+
 extern NNSSndArc *data_02061e34;
 
 void NNSi_SndArcDisposeSymbols(void *memory, u32 size, u32 archive, u32 argument);
@@ -83,5 +117,20 @@ NNSSndArc *NNS_SndArcGetCurrent(void);
 NNSSndArc *NNS_SndArcSetCurrent(NNSSndArc *archive);
 int NNSi_SndArcLoadHeader(NNSSndArc *archive, NNSSndHeap *heap, int load_symbols);
 void NNS_SndArcInit(NNSSndArc *archive, const char *path, NNSSndHeap *heap, int load_symbols);
+
+void *NNSi_SndArcLoadFile(u32 file, NNSSndHeapDisposeCallback dispose, u32 user0, u32 user1, NNSSndHeap *heap);
+void *NNSi_SndArcLoadSeqFile(u32 file, NNSSndHeap *heap, int register_file);
+void *NNSi_SndArcLoadSeqArcFile(u32 file, NNSSndHeap *heap, int register_file);
+SoundBank *NNSi_SndArcLoadBankFile(u32 file, NNSSndHeap *heap, int register_file);
+SoundWaveArchive *NNSi_SndArcLoadWaveArcFile(u32 file, NNSSndHeap *heap, int register_file);
+SoundWaveArchive *NNSi_SndArcLoadWaveArcHeader(u32 file, NNSSndHeap *heap, int register_file);
+void NNSi_SndArcUncacheFile(void *memory, NNSSndArc *archive, u32 file);
+void NNSi_SndArcDisposeSequence(void *memory, u32 size, u32 archive, u32 file);
+void NNSi_SndArcDisposeBank(void *memory, u32 size, u32 archive, u32 file);
+void NNSi_SndArcDisposeWaveArchive(void *memory, u32 size, u32 archive, u32 file);
+void NNSi_SndArcDisposeWaveHeader(void *memory, u32 size, u32 archive, u32 file);
+void NNSi_SndArcDisposeWave(void *memory, u32 size, u32 archive, u32 index);
+int NNSi_SndArcLoadWave(SoundWaveArchive *wave, u32 index, u32 file, NNSSndHeap *heap);
+int NNSi_SndArcLoadWaves(SoundWaveArchive *wave, SoundBank *bank, int slot, u32 file, NNSSndHeap *heap);
 
 #endif

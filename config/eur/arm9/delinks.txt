@@ -232,3 +232,12 @@ src/nns/snd/snd_archive_info.c:
 
 src/nns/snd/snd_archive_init.c:
     .text start:0x02030c8c end:0x02030f58
+
+src/nns/snd/snd_archive_file.c:
+    .text start:0x02031518 end:0x02031a80
+
+src/nns/snd/snd_archive_waves.c:
+    .text start:0x02031354 end:0x02031424
+
+src/nns/snd/snd_archive_load.c:
+    .text start:0x02031a80 end:0x02031f70

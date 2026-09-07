@@ -10,7 +10,9 @@ typedef struct SoundWaveLink {
 } SoundWaveLink;
 
 struct SoundWaveArchive {
-    u8 unknown00[24];
+    u8 unknown00[8];
+    u32 file_size;
+    u8 unknown0c[12];
     SoundWaveLink *links;
     u8 unknown1c[28];
     u32 count;
@@ -40,6 +42,15 @@ typedef struct SoundInstrumentRegions {
     SoundInstrument instruments[1];
 } SoundInstrumentRegions;
 typedef struct SoundBankCursor { u32 instrument; u32 region; } SoundBankCursor;
+
+void *func_0203cd6c(SoundWaveArchive *archive, int index);
+void func_0203cdb4(SoundWaveArchive *archive, int index, void *wave);
+u32 func_0203cdec(const SoundWaveArchive *archive);
+int func_0203cdf4(SoundBank *bank, SoundInstrument *output, SoundBankCursor *cursor);
+SoundBankCursor func_0203cfcc(void);
+void func_0203d1e4(SoundWaveArchive *archive);
+void func_0203d230(SoundBank *bank);
+void func_0203d2d0(SoundBank *bank, int index, SoundWaveArchive *archive);
 
 typedef char SoundWaveLinkSizeCheck[(sizeof(SoundWaveLink) == 8) ? 1 : -1];
 typedef char SoundBankSizeCheck[(sizeof(SoundBank) == 64) ? 1 : -1];
