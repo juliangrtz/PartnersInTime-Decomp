@@ -1035,3 +1035,18 @@ The scroll checks compare the rotating origin against the roster length.
 The total is 325,748 of 1,563,700 bytes (20.83%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass.
+
+
+## Overlay 7 point motion
+
+Nine functions add 1,004 matching C bytes. A tracked point keeps its current
+position, the position it held last frame and the position the interface draws
+it at. Moves either apply immediately or start a timed motion whose per-frame
+update interpolates a linear step or evaluates a quadratic curve, both scaling
+by a 4.12 fraction of the elapsed time over the duration. The immediate path
+walks a list to decide whether the previous position should follow the move.
+Travelled distance is averaged through the hardware square-root unit.
+
+The total is 326,752 of 1,563,700 bytes (20.90%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass.
