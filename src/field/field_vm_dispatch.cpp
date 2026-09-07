@@ -1,5 +1,6 @@
 extern "C" {
 #include <game/field_entity.h>
+#include <game/field_timer.h>
 #include <game/field_script.h>
 #include <game/save_data.h>
 
@@ -341,10 +342,6 @@ extern int func_ov000_020660f8(void *field_system);
 extern void GameRumble_PlayTimed(int rumble_pattern, int repeat_count);
 extern u8 data_0205a00c;
 extern void GameRumble_Stop(void);
-extern void func_ov000_020beda0(void *timer, s8 minutes, s8 seconds,
-                                s8 centiseconds);
-extern void func_ov000_020beca4(void *timer, int screen, s16 x, s16 y);
-extern void func_ov000_020becc8(void *timer, int visible);
 extern void func_ov000_0206f8ac(u8 *field_context);
 extern int func_ov000_02070930(
     u8 *field_context, int window_mode, int x, int y, int width,
@@ -4078,8 +4075,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         timer = *(void **)((u8 *)field_system +
                            FIELD_VM_FIELD_SYSTEM_TIMER_OFFSET);
-        func_ov000_020beda0(
-            timer, (s8)arguments[0],
+        FieldTimer_SetValue(
+            (FieldTimer *)timer, (s8)arguments[0],
             (s8)arguments[1], (s8)arguments[2]);
         break;
     }
@@ -4099,8 +4096,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         }
         timer = *(void **)((u8 *)field_system +
                            FIELD_VM_FIELD_SYSTEM_TIMER_OFFSET);
-        func_ov000_020beca4(
-            timer, arguments[0], (s16)arguments[1],
+        FieldTimer_SetPosition(
+            (FieldTimer *)timer, arguments[0], (s16)arguments[1],
             (s16)arguments[2]);
         break;
     }
@@ -4110,7 +4107,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         timer = *(void **)((u8 *)field_system +
                            FIELD_VM_FIELD_SYSTEM_TIMER_OFFSET);
-        func_ov000_020becc8(timer, arguments[0] != 0);
+        FieldTimer_SetVisible((FieldTimer *)timer, arguments[0] != 0);
         break;
     }
 
@@ -4148,7 +4145,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         timer = *(u8 **)((u8 *)field_system +
                          FIELD_VM_FIELD_SYSTEM_TIMER_OFFSET);
-        func_ov000_020becc8(timer, 0);
+        FieldTimer_SetVisible((FieldTimer *)timer, 0);
         timer[1] = 0;
         break;
     }

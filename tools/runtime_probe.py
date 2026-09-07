@@ -349,6 +349,33 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label.startswith("FieldTimer_") and is_main_ram_pointer(r0, 40):
+        flags = read_u8(emulator, r0)
+        result = {
+            "timer": f"{r0:#010x}",
+            "screen": flags & 1,
+            "allocated": bool(flags & 2),
+            "paused": bool(flags & 4),
+            "clock": {
+                name: int(emulator.memory.signed.read_byte(r0 + offset))
+                for offset, name in enumerate(
+                    ("step", "minutes", "seconds", "frames", "hundredths"), start=1
+                )
+            },
+            "position": [read_s16(emulator, r0 + 6), read_s16(emulator, r0 + 8)],
+            "image": f"{read_u32(emulator, r0 + 12):#010x}",
+            "allocation_offset": read_u32(emulator, r0 + 16),
+        }
+        if label == "FieldTimer_SetValue":
+            result["requested_clock"] = [to_s32(value) for value in (r1, r2, r3)]
+        elif label == "FieldTimer_SetVisible":
+            result["requested_visible"] = r1 & 0xFF
+        elif label == "FieldTimer_SetPosition":
+            result["requested_position"] = [to_s32(value) for value in (r1, r2, r3)]
+        elif label == "FieldTimer_SetImage":
+            result["requested_image"] = f"{r1:#010x}"
+        return result
+
     if label == "GameGraphics_SetOrthographicProjection":
         return {"near_plane_q12": to_s32(r0), "far_plane_q12": to_s32(r1)}
 

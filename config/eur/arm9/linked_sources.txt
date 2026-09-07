@@ -416,3 +416,4 @@ src/nitro/os/os_valarm.c
 src/nitro/os/os_vram_exclusive.c
 src/nitro/os/os_reset.c
 src/nitro/fs/fs_open_commands.c
+src/field/field_timer.c

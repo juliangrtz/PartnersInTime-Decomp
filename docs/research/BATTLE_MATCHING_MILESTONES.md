@@ -1457,3 +1457,35 @@ Evidence remains private under build/runtime/eur_sdk_initializers_verified and
 eur_sdk_reset_fifo_verified. The total is 350,804 of 1,563,700 bytes (22.43%).
 All module/symbol checks, 74 tests, generated progress and public-content checks
 pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Field timer controls and clock updates
+
+Seven functions add 764 matching C bytes. The checked 40-byte timer layout
+contains signed minute/second/frame counters, a signed count step, displayed
+hundredths, screen position and sprite allocation. The setter takes frames as
+its third clock argument; it converts those to hundredths using frames*100/60.
+The field VM now includes the shared declarations. Its compiled bytes remain
+unchanged. The timer's OAM builder remains assembly after its isolated C
+candidate showed register differences.
+
+A normal 2,033-frame boot/save-load replay entered initialization and image
+setup once each, then updated the timer 251 times. The live timer resides at
+0x02324AC0 and uses image 0x020CE624. This route leaves its count step zero and
+its display unallocated. Render lists remain valid with 30/40 models; main/sub
+BG memory changed by 55,110/47,962 bytes and palettes by 243 bytes.
+
+Seven controlled runtime cases then reloaded that same compatible field state,
+seeded only pause bit 2 and the five clock bytes, and executed one normal frame
+each. The loaded update function was compared to the original overlay bytes
+before every case. Each case entered the updater once and produced the expected
+result: minute rollover, saturation at 99:59.99, countdown borrowing a minute,
+stopping exactly at zero, clearing an underflow, retaining paused counters,
+and retaining stopped counters. These are live RAM-seeded boundary checks,
+separate from the normal gameplay replay; no ROM or battery save was modified.
+
+Evidence remains private under build/runtime/eur_field_timer_verified and
+eur_field_timer_boundaries. Visibility changes, position/value setters and
+destruction were not entered by the normal route. The total is 351,568 of
+1,563,700 bytes (22.48%). All module/symbol checks, 74 tests, generated progress
+and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
