@@ -27,13 +27,19 @@ typedef struct NNSiSndArcStrmRequest { int player; int stream; } NNSiSndArcStrmR
 typedef struct NNSiSndArcStrmResponse { int stream; u32 offset_ms; } NNSiSndArcStrmResponse;
 typedef int (*NNSSndArcStrmCallback)(int event, NNSiSndArcStrmRequest *request, NNSiSndArcStrmResponse *response, void *argument);
 
+typedef struct NNSiSndAdpcmState {
+    s16 sample;
+    u8 index;
+    u8 reserved;
+} NNSiSndAdpcmState;
+
 struct NNSiSndArcStrmPlayer {
     NNSSndStrm stream;
     FsFile file;
     u32 file_offset;
     NNSiSndStrmFileHeader header;
     NNSiSndFader fader;
-    u8 decoder[24];
+    NNSiSndAdpcmState decoder[6];
     signed int active : 1;
     signed int playing : 1;
     signed int start_pending : 1;

@@ -666,3 +666,15 @@ outside this linked set.
 All linked functions match completely, without inline assembly. The total is
 263,988 bytes (16.88%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+### Stream preparation and output effects (2026-09-07)
+
+Linked `NNSi_SndArcStrmPrepare` and seven output-effect routines in matching C.
+The reconstructed paths cover stream headers, file opening, ADPCM seek setup,
+channel allocation, effect callbacks, mode changes, mono mixing and surround
+history. These add 1,768 matching bytes, bringing the total to
+265,756 / 1,563,700 bytes (17.00%, rounded).
+
+All linked modules and the rebuilt ROM remain byte-identical; ROM SHA-1 is
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. All 66 tests, generated progress,
+and the public-content audit pass. The stream decoder and headphone mixer
+remain private analysis candidates and do not contribute to this total.

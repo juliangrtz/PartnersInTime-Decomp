@@ -346,3 +346,12 @@ src/nns/snd/snd_arc_stream_init.c:
 
 src/nns/snd/snd_arc_stream_thread.c:
     .text start:0x020322e0 end:0x02032350
+
+src/nns/snd/snd_arc_stream_prepare.c:
+    .text start:0x02033310 end:0x020335e8
+
+src/nns/snd/snd_capture_output_effect.c:
+    .text start:0x02033d10 end:0x020340d4
+
+src/nns/snd/snd_capture_effect_mono.c:
+    .text start:0x02033ac4 end:0x02033b10

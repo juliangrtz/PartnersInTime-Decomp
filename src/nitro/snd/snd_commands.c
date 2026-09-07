@@ -56,7 +56,7 @@ void func_0203be24(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
 void func_0203bdf0(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 width) {
     func_0203bd6c(7, arg0 | (width << 24), arg1, arg2, arg3);
 }
-void func_0203bdc4(u32 arg0) { func_0203bd6c(22, arg0, 0, 0, 0); }
+void SND_SetSurroundDecay(u32 arg0) { func_0203bd6c(22, arg0, 0, 0, 0); }
 void func_0203bd6c(u32 opcode, u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
     SoundCommand *command = func_0203c848(1);
     if (!command) return;

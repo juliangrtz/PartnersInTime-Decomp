@@ -28,7 +28,7 @@ typedef struct SceneManagerInitLayout {
 extern const u8 data_ov007_0208dca4[];
 
 extern void MI_CpuFill8(void *destination, u32 value, u32 size);
-extern void func_0203b76c(u16 value, void *destination, u32 size);
+extern void MIi_CpuClear16(u16 value, void *destination, u32 size);
 void SceneManager_InitializeRuntime(SceneManagerInitLayout *manager) {
     int object_id;
     int script_id;
@@ -44,7 +44,7 @@ void SceneManager_InitializeRuntime(SceneManagerInitLayout *manager) {
     MI_CpuFill8(manager->shared_variables, 0, 0x80);
 
     clear_value = 0;
-    func_0203b76c(clear_value, manager->objects, sizeof(manager->objects));
+    MIi_CpuClear16(clear_value, manager->objects, sizeof(manager->objects));
     object_metadata = (u32 *)manager;
     object = manager->objects;
     object_id = 0;

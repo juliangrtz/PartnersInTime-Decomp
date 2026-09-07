@@ -18,7 +18,7 @@ typedef struct SceneManager {
     SceneManagerWork work;
 } SceneManager;
 
-extern void func_0203b76c(u16 value, void *destination, u32 size);
+extern void MIi_CpuClear16(u16 value, void *destination, u32 size);
 extern void func_ov005_02069084(void *renderable, int selector);
 extern void func_ov007_02086d60(void);
 extern void func_ov007_02089398(SceneObject *object);
@@ -36,7 +36,7 @@ void SceneObjects_UpdateAndDraw(u8 *manager) {
 
     func_ov007_02086d60();
     clear_value = 0;
-    func_0203b76c(
+    MIi_CpuClear16(
         clear_value, scene->work.render_rows,
         192 * sizeof(SceneObject *)
     );
