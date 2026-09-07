@@ -10,7 +10,7 @@ void func_02038ab4(BattleResourceStream *stream, u8 *destination,
                    u32 capacity);
 u32 func_02038a04(BattleResourceStream *stream);
 void func_0202cbd4(void *destination, int value, u32 size);
-void *func_02029be0(u32 size, u32 heap_id, void *allocator, int argument);
+void *GameHeap_New(u32 size, u32 heap_id, void *allocator, int argument);
 BattleResourceModel *func_02010634(BattleResourceModel *model);
 void func_ov002_0206f1f0(BattleResourceModel *model,
                          BattleSceneResource *resource,
@@ -34,7 +34,7 @@ void BattleObjectData_BeginRebuildTask(BattleQueuedTask *task) {
         }
     }
 
-    model = (BattleResourceModel *)func_02029be0(
+    model = (BattleResourceModel *)GameHeap_New(
         sizeof(BattleResourceModel),
         ((BattleContext *)gBattleContext)->runtime.resource_heap_id,
         data_ov002_020bf6fc, 0);

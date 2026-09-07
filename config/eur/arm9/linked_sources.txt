@@ -243,3 +243,4 @@ src/game/irq_task.cpp
 src/game/task.cpp
 src/game/archive_compressed_lifecycle.c
 src/game/archive_memory_decoder.c
+src/game/heap.c

@@ -58,7 +58,7 @@ extern BattleModelEffect *func_02018af4(
     void *manager, const void *resource,
     void (*update_callback)(BattleModelEffect *effect), int initial_scale);
 extern void func_ov002_020aaac8(BattleModelEffect *effect);
-extern void *func_02029be0(
+extern void *GameHeap_New(
     u32 size, u32 heap_id, const void *allocator, int argument_3);
 extern BattleModel *func_02010634(BattleModel *model);
 extern void func_ov002_0206f1f0(
@@ -179,7 +179,7 @@ BattleAITask *BattleModelEffect_SpawnFromResource(
             0);
     BattleModelResourceEffectPayload *payload = &task->data;
     BattleObjectDataLoadState *load_state;
-    BattleModel *model = (BattleModel *)func_02029be0(
+    BattleModel *model = (BattleModel *)GameHeap_New(
         sizeof(BattleModel),
         BattleContext_GetRuntimeState()->resource_heap_id,
         data_ov002_020c0318, 0);

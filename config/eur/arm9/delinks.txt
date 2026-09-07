@@ -289,3 +289,6 @@ src/game/archive_compressed_lifecycle.c:
 
 src/game/archive_memory_decoder.c:
     .text start:0x0202c824 end:0x0202cb48
+
+src/game/heap.c:
+    .text start:0x02029808 end:0x02029c04

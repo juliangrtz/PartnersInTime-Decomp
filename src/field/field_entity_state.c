@@ -1,7 +1,7 @@
 #include <game/field_entity.h>
 
 extern FieldEntityVTable data_ov000_020c0fc4[];
-extern void func_02029bb0(FieldEntity *entity);
+extern void GameHeap_Delete(FieldEntity *entity);
 extern void func_0202cbd4(void *destination, int value, u32 size);
 
 /* Metrowerks emits C functions in reverse source order. */
@@ -26,7 +26,7 @@ FieldEntity *FieldEntity_SetVTableB(FieldEntity *entity) {
 
 FieldEntity *FieldEntity_Finalize(FieldEntity *entity) {
     entity->vtable = data_ov000_020c0fc4;
-    func_02029bb0(entity);
+    GameHeap_Delete(entity);
     return entity;
 }
 

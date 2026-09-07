@@ -3,7 +3,7 @@
 
 extern u32 data_02059bdc[];
 extern s16 data_02060b2c[];
-extern void func_02029bb0(void *allocation);
+extern void GameHeap_Delete(void *allocation);
 extern int FS_SetDefaultDMA(int dma);
 
 ArchiveIO *ArchiveIO_InitComplete(ArchiveIO *archive, u32 priority, u32 unused, void *argument, int dma)
@@ -55,7 +55,7 @@ ArchiveIO *ArchiveIO_Delete(ArchiveIO *archive)
     archive->vtable = data_02059bdc;
     if (FSi_TestFileFlag(&archive->file, 16)) FS_CloseFile(&archive->file);
     GameTask_DestroyBase((GameTask *)archive);
-    func_02029bb0(archive);
+    GameHeap_Delete(archive);
     return archive;
 }
 

@@ -16,7 +16,7 @@ typedef struct SceneControllerManagerLayout {
 
 extern u8 data_ov005_0206a180[];
 
-extern void func_02029ba4(void *allocation);
+extern void GameHeap_DeleteArray(void *allocation);
 extern void func_ov005_0206650c(SceneControllerTask *task);
 extern SceneControllerTask *func_ov005_0206659c(
     void (*callback)(SceneControllerTask *), int group, int priority);
@@ -38,27 +38,27 @@ SceneControllerManagerLayout *SceneManager_Shutdown(
     func_ov007_0208a480();
 
     if (manager->common_archives[5] != 0) {
-        func_02029ba4(manager->common_archives[5]);
+        GameHeap_DeleteArray(manager->common_archives[5]);
         manager->common_archives[5] = 0;
     }
     if (manager->common_archives[4] != 0) {
-        func_02029ba4(manager->common_archives[4]);
+        GameHeap_DeleteArray(manager->common_archives[4]);
         manager->common_archives[4] = 0;
     }
     if (manager->common_archives[3] != 0) {
-        func_02029ba4(manager->common_archives[3]);
+        GameHeap_DeleteArray(manager->common_archives[3]);
         manager->common_archives[3] = 0;
     }
     if (manager->common_archives[2] != 0) {
-        func_02029ba4(manager->common_archives[2]);
+        GameHeap_DeleteArray(manager->common_archives[2]);
         manager->common_archives[2] = 0;
     }
     if (manager->common_archives[1] != 0) {
-        func_02029ba4(manager->common_archives[1]);
+        GameHeap_DeleteArray(manager->common_archives[1]);
         manager->common_archives[1] = 0;
     }
     if (manager->common_archives[0] != 0) {
-        func_02029ba4(manager->common_archives[0]);
+        GameHeap_DeleteArray(manager->common_archives[0]);
         manager->common_archives[0] = 0;
     }
     func_ov005_02067424(

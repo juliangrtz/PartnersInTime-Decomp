@@ -8,7 +8,7 @@ extern "C" u8 data_02060d6c;
 extern "C" GameIrqTask *data_02060d88;
 extern "C" GameIrqTask *data_02060d7c;
 extern "C" GameIrqTask *data_02060d80;
-extern "C" void func_02029bb0(void *allocation);
+extern "C" void GameHeap_Delete(void *allocation);
 
 GameIrqTask *GameIrqTask_Init(GameIrqTask *task, u32 priority, u32 unused, void *argument)
 {
@@ -75,7 +75,7 @@ GameIrqTask *GameIrqTask_DestroyComplete(GameIrqTask *task)
 GameIrqTask *GameIrqTask_Delete(GameIrqTask *task)
 {
     GameIrqTask_Unlink(task);
-    func_02029bb0(task);
+    GameHeap_Delete(task);
     return task;
 }
 

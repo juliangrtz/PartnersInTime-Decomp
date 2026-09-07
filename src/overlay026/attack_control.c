@@ -10,7 +10,7 @@ enum Overlay26ActionState {
     OVERLAY26_ACTION_STATE_THIRD = 3,
 };
 
-extern void func_02029bb0(void *allocation);
+extern void GameHeap_Delete(void *allocation);
 extern void func_ov002_0207179c(BattlePartyActor *actor,
                                 BattleSceneObject *object);
 
@@ -123,7 +123,7 @@ void Overlay26Attack_DestroyState(void *owner, int restore_party_objects) {
     }
 
     if (gOverlay26AttackState != 0) {
-        func_02029bb0(gOverlay26AttackState);
+        GameHeap_Delete(gOverlay26AttackState);
         gOverlay26AttackState = 0;
     }
 }

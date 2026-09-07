@@ -4,7 +4,7 @@
 
 extern "C" {
 extern void OS_Terminate(void);
-extern void *func_02029be0(u32 size, u32 heap_id, const void *allocator,
+extern void *GameHeap_New(u32 size, u32 heap_id, const void *allocator,
                           int argument_3);
 extern BattleModel *func_02010634(BattleModel *model);
 extern void func_ov002_020696f4(BattleSceneObject *object, int animation_id,
@@ -102,7 +102,7 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
 
     if (object->flags.bits.render_mode != 0) {
         if (model == 0) {
-            model = (BattleModel *)func_02029be0(
+            model = (BattleModel *)GameHeap_New(
                 sizeof(BattleModel),
                 ((BattleContext *)gBattleContext)->runtime.resource_heap_id,
                 data_ov002_020bf718, 0);
@@ -307,7 +307,7 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
                 }
 
                 if (model == 0) {
-                    model = (BattleModel *)func_02029be0(
+                    model = (BattleModel *)GameHeap_New(
                         sizeof(BattleModel),
                         ((BattleContext *)gBattleContext)
                             ->runtime.resource_heap_id,

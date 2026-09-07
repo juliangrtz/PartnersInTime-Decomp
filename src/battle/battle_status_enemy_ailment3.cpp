@@ -7,7 +7,7 @@
 #include <game/battle_status.h>
 
 extern "C" {
-void *func_02029be0(u32 size, u32 heap_id, const void *allocator,
+void *GameHeap_New(u32 size, u32 heap_id, const void *allocator,
                     int argument_3);
 BattleModel *func_02010634(BattleModel *model);
 void func_ov002_0206f1f0(BattleModel *model,
@@ -67,7 +67,7 @@ BattleAITask *BattleStatus_StartEnemyAilment3Visual(int actor_id) {
     payload->actor_id = actor_id;
     payload->flags.bits.active_animation_started = 0;
 
-    model = (BattleModel *)func_02029be0(
+    model = (BattleModel *)GameHeap_New(
         sizeof(BattleModel),
         BattleContext_GetRuntimeState()->resource_heap_id,
         data_ov002_020c0318, 0);

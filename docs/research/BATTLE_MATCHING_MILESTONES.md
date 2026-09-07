@@ -565,3 +565,15 @@ constructors and destructors now use the reconstructed base lifecycle.
 All functions match completely, without inline assembly. The total is
 248,696 bytes (15.90%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Game heap allocation and release
+
+Nine functions add 1,020 matching C bytes: aligned allocation, forward and
+backward block splitting, free-block coalescing, dynamic heap creation/removal,
+and the game's New/Delete entry points. Block headers and region entries are
+both 16 bytes. The previously separate head/cursor/size symbols now identify
+one region table, with explicit relocation addends for its columns.
+
+All functions match completely, without inline assembly. The total is
+249,716 bytes (15.97%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

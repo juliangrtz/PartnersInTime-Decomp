@@ -8,7 +8,7 @@
 #include <game/save_data.h>
 
 extern "C" {
-void *func_02029be0(u32 size, u32 heap_id, const void *allocator,
+void *GameHeap_New(u32 size, u32 heap_id, const void *allocator,
                     int argument_3);
 BattleModel *func_02010634(BattleModel *model);
 void func_ov002_0206f1f0(BattleModel *model,
@@ -355,7 +355,7 @@ void BattleStatus_UpdatePartyStatVisuals(BattleAITask *base_task) {
             if (payload->model == 0) {
                 BattleObjectDataLoadState *load_state;
 
-                payload->model = (BattleModel *)func_02029be0(
+                payload->model = (BattleModel *)GameHeap_New(
                     sizeof(BattleModel),
                     BattleContext_GetRuntimeState()->resource_heap_id,
                     data_ov002_020c0318, 0);

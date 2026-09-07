@@ -14,7 +14,7 @@ extern const u8 data_ov002_020bf6d8[];
 extern const u8 data_ov002_020bf6e8[];
 extern const u8 data_ov002_020bf6f4[];
 
-void *func_02029928(u32 heap_id, u32 size, const void *allocator, int use_default);
+void *GameHeap_Allocate(u32 heap_id, u32 size, const void *allocator, int use_default);
 void func_020262f4(BattleInterfaceLayer *layer, void *asset_table,
                    void *asset, int unknown_3, int unknown_4, int unknown_5,
                    int unknown_6, int unknown_7, int unknown_8, int unknown_9,
@@ -62,7 +62,7 @@ void BattleInterface_LoadScreenAssetTask(BattleQueuedTask *task) {
     archive_cursor = ((BattleContext *)gBattleContext)->asset_read.archive_cursor;
     ((BattleContext *)gBattleContext)->asset_read.read_size =
         *(u32 *)(archive_cursor + (*(u32 *)archive_cursor & ~3) - 4);
-    destination = func_02029928(
+    destination = GameHeap_Allocate(
         ((BattleContext *)gBattleContext)->runtime.heap_id,
         ((BattleContext *)gBattleContext)->asset_read.read_size,
         data_ov002_020bf6f4, 1);
@@ -120,7 +120,7 @@ void BattleInterface_LoadLocalizedAssetTask(BattleQueuedTask *task) {
     ((BattleContext *)gBattleContext)->asset_read.read_size =
         (BattleArchive_GetEntrySize(gBattleSystem, request->archive_cursor,
                                     request->entry_index) + 3) & ~3;
-    ((BattleContext *)gBattleContext)->interface_assets[0] = func_02029928(
+    ((BattleContext *)gBattleContext)->interface_assets[0] = GameHeap_Allocate(
         ((BattleContext *)gBattleContext)->runtime.heap_id,
         ((BattleContext *)gBattleContext)->asset_read.read_size,
         data_ov002_020bf6e8, 1);
@@ -142,7 +142,7 @@ void BattleInterface_LoadSharedAssetTask(BattleQueuedTask *task) {
     ((BattleContext *)gBattleContext)->asset_read.read_size =
         (BattleArchive_GetEntrySize(gBattleSystem, request->archive_cursor,
                                     request->entry_index) + 3) & ~3;
-    ((BattleContext *)gBattleContext)->interface_assets[1] = func_02029928(
+    ((BattleContext *)gBattleContext)->interface_assets[1] = GameHeap_Allocate(
         ((BattleContext *)gBattleContext)->runtime.heap_id,
         ((BattleContext *)gBattleContext)->asset_read.read_size,
         data_ov002_020bf6e8, 1);
@@ -178,7 +178,7 @@ void BattleInterface_InitLayersTask(BattleQueuedTask *task) {
     layer->y = -8;
     layer->width = 128;
     layer->height = 16;
-    asset = func_02029928(
+    asset = GameHeap_Allocate(
         ((BattleContext *)gBattleContext)->runtime.heap_id,
         layer->allocation_size, data_ov002_020bf6d8, 1);
     func_020262f4(layer,
@@ -192,7 +192,7 @@ void BattleInterface_InitLayersTask(BattleQueuedTask *task) {
     layer->y = -8;
     layer->width = 128;
     layer->height = 16;
-    asset = func_02029928(
+    asset = GameHeap_Allocate(
         ((BattleContext *)gBattleContext)->runtime.heap_id,
         layer->allocation_size, data_ov002_020bf6d8, 1);
     func_020262f4(layer,
@@ -206,7 +206,7 @@ void BattleInterface_InitLayersTask(BattleQueuedTask *task) {
     layer->y = -48;
     layer->width = 128;
     layer->height = 32;
-    asset = func_02029928(
+    asset = GameHeap_Allocate(
         ((BattleContext *)gBattleContext)->runtime.heap_id,
         layer->allocation_size, data_ov002_020bf6d8, 1);
     func_020262f4(layer,

@@ -26,7 +26,7 @@ extern void *func_ov005_020670b4(
     u32 *size_output, int allocate_from_end);
 extern void MI_CpuCopy8(
     const void *source, void *destination, u32 size);
-extern void func_02029ba4(void *allocation);
+extern void GameHeap_DeleteArray(void *allocation);
 
 enum {
     SCENE_SHARED_MODE_OFFSET = 0x24,
@@ -79,7 +79,7 @@ void SceneScript_LoadSecondaryArchive(
         manager->temporary_archive, manager->archive_data,
         manager->temporary_archive_size);
     if (manager->temporary_archive != 0) {
-        func_02029ba4(manager->temporary_archive);
+        GameHeap_DeleteArray(manager->temporary_archive);
         manager->temporary_archive = 0;
     }
 }

@@ -3,7 +3,7 @@
 
 extern u32 data_02059c18[];
 extern s16 data_02060b2c[];
-extern void func_02029bb0(void *allocation);
+extern void GameHeap_Delete(void *allocation);
 extern void func_0202bf10(u8 **source, u8 **destination);
 extern void func_0202bfbc(u8 **source, u8 **destination);
 
@@ -31,7 +31,7 @@ ArchiveMemoryDecoder *ArchiveMemoryDecoder_Delete(ArchiveMemoryDecoder *decoder)
 {
     decoder->vtable = data_02059c18;
     GameTask_DestroyBase((GameTask *)decoder);
-    func_02029bb0(decoder);
+    GameHeap_Delete(decoder);
     return decoder;
 }
 

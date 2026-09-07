@@ -4,7 +4,7 @@
 #include <game/battle_task_queue.h>
 
 extern void OS_Terminate(void);
-extern void *func_02029928(u32 heap_id, u32 size, const void *name,
+extern void *GameHeap_Allocate(u32 heap_id, u32 size, const void *name,
                           int use_default);
 extern int func_0202a914(char *destination, const char *format, ...);
 extern void func_0202cbd4(void *destination, int value, u32 size);
@@ -60,7 +60,7 @@ void BattleObjectData_AllocateLoadBuffer(int object_data_id, u32 size) {
 
     func_0202a914(allocation_name, data_ov002_020bf724, object_data_id);
     load_state = BattleObjectData_GetLoadState(object_data_id);
-    load_state->data = func_02029928(heap_id, size, allocation_name, 1);
+    load_state->data = GameHeap_Allocate(heap_id, size, allocation_name, 1);
 
     if (size > BATTLE_OBJECT_DATA_STREAM_HEADER_SIZE) {
         buffer = *(void **)(

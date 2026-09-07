@@ -23,7 +23,7 @@ extern const u8 data_ov002_020becec[];
 extern const u8 data_ov002_020bed14[];
 extern const u8 data_ov002_020bed00[];
 
-void *func_02029928(u32 heap_id, u32 size, const void *allocator,
+void *GameHeap_Allocate(u32 heap_id, u32 size, const void *allocator,
                     int use_default);
 int ArchiveIO_BeginOverlay(void *system, int handle, int mode);
 void func_ov002_0208ddd0(BattleQueuedTask *task);
@@ -110,7 +110,7 @@ void BattleAIArchives_Load(BattleQueuedTask *task) {
         if (size > 0) {
             ((BattleContext *)gBattleContext)
                 ->active_object_resource->archive_cursor =
-                func_02029928(
+                GameHeap_Allocate(
                     ((BattleContext *)gBattleContext)->runtime.heap_id,
                     size, allocators[archive_index], 1);
             BattleArchive_Open(

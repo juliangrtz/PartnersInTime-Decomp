@@ -21,7 +21,7 @@ typedef struct SceneManagerCleanupLayout {
 
 extern u8 *data_ov007_020a6b90;
 
-extern void func_02029ba4(void *allocation);
+extern void GameHeap_DeleteArray(void *allocation);
 extern void func_0202cbd4(void *destination, u32 value, u32 size);
 extern void func_ov005_020663d8(int group);
 extern void func_ov005_02068c54(void *renderable);
@@ -69,11 +69,11 @@ void SceneManager_ClearRuntime(void *manager_raw) {
     }
 
     if (manager->temporary_archive != 0) {
-        func_02029ba4(manager->temporary_archive);
+        GameHeap_DeleteArray(manager->temporary_archive);
         manager->temporary_archive = 0;
     }
     if (manager->primary_script_archive != 0) {
-        func_02029ba4(manager->primary_script_archive);
+        GameHeap_DeleteArray(manager->primary_script_archive);
         manager->primary_script_archive = 0;
     }
 }
