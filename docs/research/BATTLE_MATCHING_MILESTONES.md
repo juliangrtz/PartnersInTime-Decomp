@@ -832,3 +832,16 @@ The total is 292,452 bytes (18.70%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress and the public-content audit pass. No inline
 assembly or compiler-setting changes were added. Existing sprite units remain
 identical.
+
+## Texture allocation, palette uploads and graphics offsets
+
+Thirteen functions add 4,856 matching C bytes. Texture and palette allocation
+handle fixed positions, shared resources and free-space searches. Palette
+buffer management, dirty uploads and unlinking preserve the recovered flags
+and list layouts. Graphics offset generation reuses the storage of repeated
+images, both across an object list and within individual groups. Touchscreen
+calibration reconstructs both hardware divisions and their range checks.
+
+The total is 297,308 bytes (19.01%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress and the public-content audit pass. No inline
+assembly or compiler-setting changes were added.

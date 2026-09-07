@@ -306,3 +306,9 @@ src/game/audio_map_waves.c
 src/game/audio_wave_list.c
 src/game/sprite_allocation_compact.c
 src/game/sprite_allocation_create.c
+src/nitro/tp/tp_calculate.c
+src/game/texture_allocation.c
+src/game/texture_palette_allocate.c
+src/game/texture_palette_state.c
+src/game/texture_allocation_unlink.c
+src/game/graphics_texture_offsets.c
