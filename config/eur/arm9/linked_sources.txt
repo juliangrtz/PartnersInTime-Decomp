@@ -215,3 +215,6 @@ src/msl/object_register.c
 src/nns/fnd/list.c
 src/nns/fnd/heap_common.c
 src/nns/fnd/frame_heap.c
+src/nns/snd/snd_fader.c
+src/nns/snd/snd_resource.c
+src/nns/snd/snd_player.c

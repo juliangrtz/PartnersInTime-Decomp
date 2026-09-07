@@ -414,3 +414,15 @@ The original option checks and optional allocation clearing are retained.
 All 23 functions match completely in objdiff, without inline assembly. The total
 is 226,580 bytes (14.49%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
 generated progress, and the public-content audit pass.
+
+## Sound sequence players, resource locks, and volume fades
+
+Twenty-seven functions add 2,356 matching C bytes. Resource management reserves
+alarms, capture units, and sound channels. Sequence players now have exact
+priority insertion, handle and heap ownership, allocation/preemption, deferred
+start, fade-out, and per-frame volume updates. Their 68-byte layout and the
+36-byte player-group layout are reconstructed, along with the 16-byte fader.
+All 27 functions match completely in objdiff, without inline assembly.
+
+The total is 228,936 bytes (14.64%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress, and the public-content audit pass.
