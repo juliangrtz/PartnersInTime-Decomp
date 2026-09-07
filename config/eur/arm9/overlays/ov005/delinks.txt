@@ -27,3 +27,15 @@ src/overlay005/item_release.c:
 
 src/overlay005/entry_list.cpp:
     .text start:0x020699f0 end:0x02069d6c
+
+src/overlay005/archive_queue.c:
+    .text start:0x02067174 end:0x02067638
+
+src/overlay005/holders.c:
+    .text start:0x02067638 end:0x0206786c
+
+src/overlay005/display_windows.c:
+    .text start:0x0206786c end:0x02067aac
+
+src/overlay005/element_lists.c:
+    .text start:0x02066358 end:0x02066920

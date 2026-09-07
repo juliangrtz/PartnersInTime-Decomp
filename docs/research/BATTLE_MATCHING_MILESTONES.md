@@ -966,3 +966,23 @@ Two functions are reconstructed but not yet identical and stay outside
 The total is 318,656 of 1,563,700 bytes (20.38%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass. No inline assembly and no compiler-setting changes.
+
+
+## Overlay 5 archive queue, element lists and display windows
+
+Fifty-eight functions add 3,840 matching C bytes. The overlay queues archive
+reads through a 128-entry request ring whose head, tail and free-list markers
+are embedded in the owning object, dispatching each queued read either to the
+battle archive reader or to the compressed-read path and recycling the entry
+once its state word reports completion. Twelve opened archives keep their
+descriptor and offset table side by side.
+
+A second, 72-byte element pool feeds twelve update lists; elements carry an
+update callback, a release callback and a flag word that marks them for removal
+during the next sweep. Also recovered: the file read helper that sizes its
+buffer from the open file, the resource-holder release paths, master
+brightness, and the hardware window bounds and plane masks for both engines.
+
+The total is 322,496 of 1,563,700 bytes (20.62%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass. No inline assembly and no compiler-setting changes.
