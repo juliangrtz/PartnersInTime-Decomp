@@ -241,3 +241,9 @@ src/nns/snd/snd_archive_waves.c:
 
 src/nns/snd/snd_archive_load.c:
     .text start:0x02031a80 end:0x02031f70
+
+src/nns/snd/snd_archive_player.c:
+    .text start:0x02031f70 end:0x020322e0
+
+src/nns/snd/snd_sequence_archive.c:
+    .text start:0x020340d4 end:0x02034114

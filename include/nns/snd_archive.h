@@ -85,6 +85,37 @@ typedef struct NNSSndArcGroupItem {
 } NNSSndArcGroupItem;
 typedef struct NNSSndArcGroupInfo { u32 count; NNSSndArcGroupItem items[1]; } NNSSndArcGroupInfo;
 
+typedef struct NNSSndArcPlayerInfo {
+    u8 max_sequences;
+    u8 reserved;
+    u16 channel_mask;
+    u32 heap_size;
+} NNSSndArcPlayerInfo;
+
+typedef struct NNSSndSeqFile { u8 header[24]; u32 data_offset; } NNSSndSeqFile;
+typedef struct NNSSndSeqArcEntry {
+    u32 offset;
+    u16 bank;
+    u8 volume;
+    u8 channel_priority;
+    u8 player_priority;
+    u8 player;
+    u16 reserved;
+} NNSSndSeqArcEntry;
+typedef struct NNSSndSeqArcFile {
+    u8 header[24];
+    u32 data_offset;
+    u32 count;
+    NNSSndSeqArcEntry entries[1];
+} NNSSndSeqArcFile;
+
+NNSSndSeqArcEntry *NNSi_SndSeqArcGetEntry(NNSSndSeqArcFile *archive, int index);
+int NNSi_SndArcStartSeqArc(NNSSndHandle *handle, int player, int bank, int priority, NNSSndSeqArcEntry *entry, NNSSndSeqArcFile *file, int archive, int index);
+int NNSi_SndArcStartSeq(NNSSndHandle *handle, int player, int bank, int priority, NNSSndArcSeqInfo *info, int index);
+int NNS_SndArcPlayerStartSeqArc(NNSSndHandle *handle, int archive, int index);
+int NNS_SndArcPlayerStartSeq(NNSSndHandle *handle, int index);
+int NNS_SndArcPlayerSetup(NNSSndHeap *heap);
+
 int NNSi_SndArcLoadWaveArc(int index, u32 flags, NNSSndHeap *heap, int register_file, SoundWaveArchive **output);
 int NNSi_SndArcLoadBank(int index, u32 flags, NNSSndHeap *heap, int register_file, SoundBank **output);
 int NNSi_SndArcLoadSeqArc(int index, u32 flags, NNSSndHeap *heap, int register_file, void **output);

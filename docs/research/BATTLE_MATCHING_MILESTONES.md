@@ -477,3 +477,15 @@ is matched; no partial match is linked.
 All 21 new functions match completely, without inline assembly. The total is
 235,864 bytes (15.08%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
 generated progress, and the public-content audit pass.
+
+## Sound archive playback and player setup
+
+Six functions add 944 matching C bytes: sequence and sequence-archive startup,
+player configuration and heap creation, and bounded sequence-archive entry
+lookup. The sequence-ID setters now accept full integer arguments, matching
+the original calling contract; storage still truncates to the original
+16-bit fields. Both setters retain their exact instructions.
+
+All new and affected functions match completely, without inline assembly.
+The total is 236,808 bytes (15.14%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress, and the public-content audit pass.

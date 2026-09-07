@@ -130,8 +130,8 @@ void NNSi_SndPlayerSetInitialVolume(NNSSndHandle *handle, u8 volume);
 void NNS_SndPlayerMoveVolume(NNSSndHandle *handle, int volume, int frames);
 void NNS_SndPlayerSetChannelPriority(NNSSndHandle *handle, u32 priority);
 void NNS_SndPlayerSetTrackVolume(NNSSndHandle *handle, u32 tracks, int volume);
-void NNSi_SndPlayerSetSeqNo(NNSSndHandle *handle, u16 sequence);
-void NNSi_SndPlayerSetSeqArcNo(NNSSndHandle *handle, u16 archive, u16 sequence);
+void NNSi_SndPlayerSetSeqNo(NNSSndHandle *handle, int sequence);
+void NNSi_SndPlayerSetSeqArcNo(NNSSndHandle *handle, int archive, int sequence);
 int NNS_SndPlayerWriteGlobalVariable(u32 index, s16 value);
 
 void NNSi_SndHeapWaitCommands(void);

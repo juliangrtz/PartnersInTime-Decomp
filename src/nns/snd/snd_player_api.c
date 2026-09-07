@@ -125,7 +125,7 @@ void NNS_SndPlayerSetTrackVolume(NNSSndHandle *handle, u32 tracks, int volume)
     }
 }
 
-void NNSi_SndPlayerSetSeqNo(NNSSndHandle *handle, u16 sequence)
+void NNSi_SndPlayerSetSeqNo(NNSSndHandle *handle, int sequence)
 {
     if (handle->player) {
         handle->player->sequence_kind = 1;
@@ -133,7 +133,7 @@ void NNSi_SndPlayerSetSeqNo(NNSSndHandle *handle, u16 sequence)
     }
 }
 
-void NNSi_SndPlayerSetSeqArcNo(NNSSndHandle *handle, u16 archive, u16 sequence)
+void NNSi_SndPlayerSetSeqArcNo(NNSSndHandle *handle, int archive, int sequence)
 {
     if (handle->player) {
         handle->player->sequence_kind = 2;
