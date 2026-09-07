@@ -198,9 +198,8 @@ src/nitro/pm/pm_control.c
 src/nitro/pm/pm_fifo.c
 src/nitro/rtc/rtc.c
 src/nitro/rtc/rtc_convert.c
-src/nitro/card/card_lock_wrappers.c
 src/nitro/card/card_common.c
-src/nitro/card/card_task.c
-src/nitro/card/card_write.c
-src/nitro/card/card_task_end.c
-src/nitro/card/card_backup_wait.c
+src/nitro/card/card_backup.c
+src/nitro/card/card_rom.c
+src/nitro/card/card_rom_dma.c
+src/nitro/card/card_rom_registers.c

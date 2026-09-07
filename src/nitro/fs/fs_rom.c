@@ -4,7 +4,7 @@ extern int data_02064c20;
 extern int data_02064c1c;
 extern const char data_02059d98[];
 extern int OS_GetLockID(void);
-extern void func_0204326c(int lock_id);
+extern void CARD_Init(int lock_id);
 extern void CARD_LockRom(u16 lock_id);
 extern void CARD_UnlockRom(u16 lock_id);
 extern void CARDi_ReadRom(int dma, u32 source, void *destination, u32 size,
@@ -43,7 +43,7 @@ void FSi_InitRom(int dma) {
     fsi_ovt9.size = 0;
     fsi_ovt7.offset = 0;
     fsi_ovt7.size = 0;
-    func_0204326c(data_02064c1c);
+    CARD_Init(data_02064c1c);
     FS_InitArchive(&fsi_arc_rom);
     FS_RegisterArchiveName(&fsi_arc_rom, data_02059d98, 3);
     if (*(vu16 *)0x027FFC40 == 2) {

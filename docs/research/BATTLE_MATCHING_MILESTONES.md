@@ -332,3 +332,22 @@ their native order. Remaining card candidates stay outside the linked total.
 
 The total is 217,968 bytes (13.94%). Module and symbol checks, the original-ROM
 SHA-1, all 66 tests, generated progress, and the public-content audit pass.
+
+## Card scheduling, backup reads, and ROM requests
+
+The card work grows by 2,820 matching bytes to 4,196 linked card bytes. Resource
+locking/waiting, the worker loop and FIFO callback, backup identification and
+submission, chunked backup reads, ROM initialization/submission/completion,
+cache reads, ROM command registers, and DMA eligibility now match. Related
+source fragments are consolidated. A pointer-through-integer accessor preserves
+the shared work block as a register-based address, preventing the front end
+from prematurely substituting individual global-field references. Transfer
+fields retain their original volatile reloads.
+
+DMA eligibility uses one four-byte inline-assembly load to preserve the transfer
+length's register lifetime. All other newly linked instructions come from C.
+The backup-specification initializer, polled ROM reader, and DMA interrupt
+completion remain native until their remaining scheduling details match.
+
+The total is 220,788 bytes (14.12%). All module/symbol checks, the original-ROM
+SHA-1, all 66 tests, generated progress, and the public-content audit pass.
