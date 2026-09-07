@@ -356,6 +356,11 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label == "FieldGeometry_GetVectorLength":
+        return {"vector_q12": [to_s32(r0), to_s32(r1), to_s32(r2)]}
+    if label == "FieldGeometry_GetOrbitLength":
+        return {"radii_q12": [to_s32(r0), to_s32(r1)]}
+
     if label.startswith(("FieldOrbit_", "FieldOrbit3D_")):
         result = {"entity": f"{r0:#010x}"}
         if label == "FieldOrbit_AdjustRadius":

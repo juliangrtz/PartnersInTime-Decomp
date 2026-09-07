@@ -1826,3 +1826,30 @@ build/runtime/eur_field_orbit_start_verified. Matching C/C++ is 367,960 of
 1,563,700 bytes (23.53%). All module/symbol checks, 74 tests, generated progress
 and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Vector distance and orbit length
+
+Two shared geometry helpers add 384 matching C bytes. Vector length takes
+absolute components, chooses a safe common shift from leading-zero counts,
+rounds each Q12 square, takes the hardware square root and restores the scale.
+Three single-instruction CLZ operations use the existing inline-assembly idiom;
+the surrounding control flow and arithmetic are C. Orbit length preserves the
+original circular path (Q32 pi times diameter) and asymmetric approximation
+sqrt(x*x + (y*y)/2) times Q32 two-pi.
+
+The normal 2,033-frame boot/save-load smoke replay remains healthy but does not
+enter these helpers. Six controlled Field VM startup cases therefore verify
+both helper returns against independent integer Q12/Q32 arithmetic and integer
+square root. All twelve return checks pass, covering negative components,
+circular and asymmetric radii, and large-vector downscaling. The 2,048-pixel
+boundary also verifies the original arithmetic overflow: the orbit-length
+approximation and derived speed become zero. The initial positive-length test
+assumption was corrected; the reconstructed implementation retains the original
+behavior. Each case reloads the checkpoint and restores the substituted decoded
+command at starter entry. Loaded helper bytes match the original overlay.
+
+Evidence remains private under build/runtime/eur_field_distance_verified and
+build/runtime/eur_field_distance_boundaries. Matching C/C++ is 368,344 of
+1,563,700 bytes (23.56%). All module/symbol checks, 74 tests, generated progress
+and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

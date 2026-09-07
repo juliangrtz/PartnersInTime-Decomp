@@ -3,9 +3,8 @@ extern "C" {
 extern u16 FX_Atan2Idx(fx32, fx32);
 }
 #include <game/field_orbit.h>
+#include <game/field_geometry.h>
 extern "C" {
-extern fx32 func_ov000_020be7d0(fx32, fx32, fx32);
-extern fx32 func_ov000_020be894(fx32, fx32);
 #define ORBIT_MUL(a, b) ((fx32)(((s64)(a) * (b) + 2048) >> 12))
 
 int FieldOrbit_StartAroundPoint(FieldRuntimeEntity *entity, int relative_center, fx32 offset_x, fx32 offset_y,
@@ -52,10 +51,10 @@ int FieldOrbit_StartAroundPoint(FieldRuntimeEntity *entity, int relative_center,
         orbit->angle = initial_angle;
         orbit->remaining_angle = remaining;
         orbit->vertical_scale = scale;
-        fx32 distance = func_ov000_020be7d0(entity->position_x - offset_x, entity->position_y - offset_y, 0);
+        fx32 distance = FieldGeometry_GetVectorLength(entity->position_x - offset_x, entity->position_y - offset_y, 0);
         orbit->radius = FieldOrbit_AdjustRadius(entity, distance, initial_angle, scale);
         orbit->vertical_radius = ORBIT_MUL(orbit->radius, scale);
-        orbit->circumference = func_ov000_020be894(orbit->radius, orbit->vertical_radius);
+        orbit->circumference = FieldGeometry_GetOrbitLength(orbit->radius, orbit->vertical_radius);
         if (speed) {
             orbit->speed = speed;
             orbit->timing.acceleration = acceleration;
@@ -116,10 +115,10 @@ int FieldOrbit_StartTimedAroundPoint(FieldRuntimeEntity *entity, int relative_ce
     orbit->remaining_angle = remaining;
     orbit->timing.duration_frames = duration;
     orbit->vertical_scale = scale;
-    fx32 distance = func_ov000_020be7d0(entity->position_x - offset_x, entity->position_y - offset_y, 0);
+    fx32 distance = FieldGeometry_GetVectorLength(entity->position_x - offset_x, entity->position_y - offset_y, 0);
     orbit->radius = FieldOrbit_AdjustRadius(entity, distance, initial_angle, scale);
     orbit->vertical_radius = ORBIT_MUL(orbit->radius, scale);
-    orbit->circumference = func_ov000_020be894(orbit->radius, orbit->vertical_radius);
+    orbit->circumference = FieldGeometry_GetOrbitLength(orbit->radius, orbit->vertical_radius);
     orbit->speed = ORBIT_MUL(orbit->circumference, remaining) / (duration * 16);
     return 1;
 }
@@ -169,11 +168,11 @@ int FieldOrbit_StartAroundEntity(FieldRuntimeEntity *entity, FieldRuntimeEntity 
         orbit->vertical_scale = scale;
         orbit->center_x = offset_x;
         orbit->center_y = offset_y;
-        fx32 distance = func_ov000_020be7d0(entity->position_x - center->position_x,
+        fx32 distance = FieldGeometry_GetVectorLength(entity->position_x - center->position_x,
                                             entity->position_y - center->position_y, 0);
         orbit->radius = FieldOrbit_AdjustRadius(entity, distance, initial_angle, scale);
         orbit->vertical_radius = ORBIT_MUL(orbit->radius, scale);
-        orbit->circumference = func_ov000_020be894(orbit->radius, orbit->vertical_radius);
+        orbit->circumference = FieldGeometry_GetOrbitLength(orbit->radius, orbit->vertical_radius);
         return 1;
     }
     return 0;
@@ -221,11 +220,11 @@ int FieldOrbit_StartTimedAroundEntity(FieldRuntimeEntity *entity, FieldRuntimeEn
     orbit->vertical_scale = scale;
     orbit->center_x = offset_x;
     orbit->center_y = offset_y;
-    fx32 distance = func_ov000_020be7d0(entity->position_x - center->position_x,
+    fx32 distance = FieldGeometry_GetVectorLength(entity->position_x - center->position_x,
                                         entity->position_y - center->position_y, 0);
     orbit->radius = FieldOrbit_AdjustRadius(entity, distance, initial_angle, scale);
     orbit->vertical_radius = ORBIT_MUL(orbit->radius, scale);
-    orbit->circumference = func_ov000_020be894(orbit->radius, orbit->vertical_radius);
+    orbit->circumference = FieldGeometry_GetOrbitLength(orbit->radius, orbit->vertical_radius);
     orbit->speed = ORBIT_MUL(orbit->circumference, remaining) / (duration * 16);
     return 1;
 }

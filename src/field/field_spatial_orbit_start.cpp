@@ -3,9 +3,8 @@ extern "C" {
 extern u16 FX_Atan2Idx(fx32, fx32);
 }
 #include <game/field_orbit.h>
+#include <game/field_geometry.h>
 extern "C" {
-extern fx32 func_ov000_020be7d0(fx32, fx32, fx32);
-extern fx32 func_ov000_020be894(fx32, fx32);
 #define ORBIT_MUL(a, b) ((fx32)(((s64)(a) * (b) + 2048) >> 12))
 
 int FieldOrbit3D_StartTimedAroundPoint(FieldRuntimeEntity *entity, int relative_center, fx32 offset_x,
@@ -70,10 +69,10 @@ int FieldOrbit3D_StartTimedAroundPoint(FieldRuntimeEntity *entity, int relative_
     orbit->remaining_angle = remaining;
     orbit->timing.duration_frames = duration;
     orbit->vertical_scale = scale;
-    fx32 distance = func_ov000_020be7d0(delta_x, delta_y, 0);
+    fx32 distance = FieldGeometry_GetVectorLength(delta_x, delta_y, 0);
     orbit->radius = FieldOrbit_AdjustRadius(entity, distance, initial_angle, scale);
     orbit->vertical_radius = ORBIT_MUL(orbit->radius, scale);
-    orbit->circumference = func_ov000_020be894(orbit->radius, orbit->vertical_radius);
+    orbit->circumference = FieldGeometry_GetOrbitLength(orbit->radius, orbit->vertical_radius);
     orbit->speed = ORBIT_MUL(orbit->circumference, remaining) / (duration * 16);
     return 1;
 }
