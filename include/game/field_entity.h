@@ -85,7 +85,7 @@ typedef struct FieldLinearController {
         } bits;
         struct { u32 x : 1, y : 1, z : 1, unknown_03_31 : 29; } axes;
     };
-    u16 direction, unknown_06;
+    u16 direction, vertical_direction;
     u32 elapsed_frames;
     union { u32 duration_frames; fx32 speed; } timing;
     fx32 acceleration, deceleration, maximum_speed;

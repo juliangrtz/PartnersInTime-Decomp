@@ -31,6 +31,17 @@ int FieldLinear_StartFollowing(FieldRuntimeEntity *entity, FieldRuntimeEntity *t
 int FieldLinear_StartTimedFollowing(FieldRuntimeEntity *entity, FieldRuntimeEntity *target, fx32 x, fx32 y,
                                     u32 duration, u8 stop, FieldLinearController *movement);
 
+/* Spatial starters suppress the Z axis while tracking ground. Masks are
+ * truncated to the controller's six-bit contact/state fields. */
+int FieldLinear3D_Start(FieldRuntimeEntity *entity, int relative, fx32 x, fx32 y, fx32 z, fx32 speed, fx32 acceleration,
+                      fx32 maximum_speed, fx32 deceleration, u32 stop_mask_a, u32 stop_mask_b, u8 stop, FieldLinearController *movement);
+int FieldLinear3D_StartTimed(FieldRuntimeEntity *entity, int relative, fx32 x, fx32 y, fx32 z, s32 duration, u32 stop_mask_a, u32 stop_mask_b, u8 stop,
+                           FieldLinearController *movement);
+int FieldLinear3D_StartFollowing(FieldRuntimeEntity *entity, FieldRuntimeEntity *target, fx32 x, fx32 y, fx32 z,
+                               fx32 speed, u32 stop_mask_a, u32 stop_mask_b, u8 stop, FieldLinearController *movement);
+int FieldLinear3D_StartTimedFollowing(FieldRuntimeEntity *entity, FieldRuntimeEntity *target, fx32 x, fx32 y, fx32 z,
+                                    u32 duration, u32 stop_mask_a, u32 stop_mask_b, u8 stop, FieldLinearController *movement);
+
 #ifdef __cplusplus
 }
 #endif

@@ -1948,3 +1948,30 @@ build/runtime/eur_field_linear_start_boundaries. Matching C/C++ is 373,576 of
 1,563,700 bytes (23.89%). All module/symbol checks, 74 tests, generated progress
 and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Spatial movement startup
+
+Four starters add 2,168 matching C++ bytes and take matching C/C++ past 24%.
+Timed/speed movement toward points or live targets shares the planar controller
+and adds Z-axis selection, a vertical direction angle and six-bit stop masks.
+Ground tracking suppresses Z-axis startup. Timed point movement preserves
+velocity fields for inactive axes. The speed-following starter rejects a
+coincident target only when stopping at the destination is requested.
+
+The normal 2,033-frame replay enters timed point startup 117 times. Its render
+lists retain 30/40 valid models, with 55,110/47,962 changed main/sub BG bytes and
+243 changed palette bytes. Eleven controlled Field VM command cases verify all
+four starters, default locomotion, coincident-point rejection, both coincident
+target modes, ground tracking and X-only timed movement. All pass. Entry hooks
+check every register/stack argument and restore all 72 substituted command
+bytes. Return hooks check the controller's flags, truncated masks, destinations,
+target, parameters, velocities and preserved inactive fields. The ground flag
+is explicitly seeded per case; these are controlled tests using a real entity
+from the live table, not naturally triggered story events. Loaded starter bytes
+match the original overlay.
+
+Evidence remains private under build/runtime/eur_field_spatial_linear_start_verified
+and build/runtime/eur_field_spatial_linear_start_boundaries. Matching C/C++ is
+375,744 of 1,563,700 bytes (24.03%). All module/symbol checks, 74 tests, generated
+progress and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

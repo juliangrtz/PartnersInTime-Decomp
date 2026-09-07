@@ -5,10 +5,6 @@ extern "C" {
 #include <game/field_geometry.h>
 extern "C" {
 #define LINEAR_DEFAULT(entity) (&(entity)->linear_controller)
-extern void func_ov000_020b3cb0(FieldRuntimeEntity *, int, fx32, fx32, fx32, int, u32, u32, int,
-                                FieldLinearController *);
-extern void func_ov000_020b3f00(FieldRuntimeEntity *, int, fx32, fx32, fx32, fx32, fx32, fx32, fx32, u32, u32,
-                                int, FieldLinearController *);
 extern void func_ov000_020be654(fx32, fx32, fx32, fx32 *, fx32 *);
 extern void func_ov000_020be4f0(fx32, fx32, fx32, fx32, fx32 *, fx32 *, fx32 *);
 extern void func_ov000_020b4c78(FieldRuntimeEntity *, fx32, fx32, fx32);
@@ -25,7 +21,7 @@ void FieldLinear3D_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearControl
             fx32 y = target->position_y + movement->destination_y;
             fx32 z = target->position_z + movement->destination_z;
             if (!movement->bits.fixed_duration) {
-                func_ov000_020b3f00(entity, 0, x, y, z, movement->timing.speed, movement->acceleration,
+                FieldLinear3D_Start(entity, 0, x, y, z, movement->timing.speed, movement->acceleration,
                                     movement->maximum_speed, movement->deceleration,
                                     movement->bits.stop_mask_a, movement->bits.stop_mask_b,
                                     movement->bits.stop_at_destination != 0, &temporary);
@@ -33,7 +29,7 @@ void FieldLinear3D_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearControl
                 int remaining = movement->timing.duration_frames - movement->elapsed_frames;
                 if (remaining <= 0)
                     remaining = 1;
-                func_ov000_020b3cb0(entity, 0, x, y, z, remaining, movement->bits.stop_mask_a,
+                FieldLinear3D_StartTimed(entity, 0, x, y, z, remaining, movement->bits.stop_mask_a,
                                     movement->bits.stop_mask_b, movement->bits.stop_at_destination != 0,
                                     &temporary);
             }

@@ -52,23 +52,6 @@ extern void func_ov000_020a6d68(FieldEntity *entity,
                                 int reserved_2, int reserved_3,
                                 int animation_id, int restart,
                                 int reserved_6);
-extern void func_ov000_020b3f00(FieldEntity *entity, int coordinate_mode,
-                                fx32 x, fx32 y, fx32 z, int motion_5,
-                                int motion_6, int motion_7, int motion_8,
-                                int motion_9, int motion_10, int motion_11,
-                                int reserved);
-extern void func_ov000_020b3cb0(FieldEntity *entity, int coordinate_mode,
-                                fx32 x, fx32 y, fx32 z, int duration,
-                                int motion_6, int motion_7, int motion_flag,
-                                int reserved);
-extern void func_ov000_020b3b00(FieldEntity *entity, FieldEntity *target,
-                                fx32 x, fx32 y, fx32 z, int motion_5,
-                                int motion_6, int motion_7, int motion_flag,
-                                int reserved);
-extern void func_ov000_020b39a8(FieldEntity *entity, FieldEntity *target,
-                                fx32 x, fx32 y, fx32 z, int duration,
-                                int motion_6, int motion_7, int motion_flag,
-                                int reserved);
 extern void func_ov000_020b2e9c(
     FieldEntity *entity, int relative_center, fx32 center_x, fx32 center_y,
     fx32 center_z, int relative_angle, int angle, int initial_speed,
@@ -2121,8 +2104,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     arguments[7], -arguments[8],
                     arguments[11] != 0, 0);
             } else {
-                func_ov000_020b3f00(
-                    &runtime_entity->base, arguments[1],
+                FieldLinear3D_Start(
+                    runtime_entity, arguments[1],
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     arguments[4] << FX32B_INT,
@@ -2141,8 +2124,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     arguments[3] << FX32B_INT,
                     arguments[5], arguments[8] != 0, 0);
             } else {
-                func_ov000_020b3cb0(
-                    &runtime_entity->base, arguments[1],
+                FieldLinear3D_StartTimed(
+                    runtime_entity, arguments[1],
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     arguments[4] << FX32B_INT,
@@ -2160,9 +2143,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     arguments[3] << FX32B_INT,
                     arguments[5], arguments[8] != 0, 0);
             } else {
-                func_ov000_020b3b00(
-                    &runtime_entity->base,
-                    FieldVm_GetEntityByIndex(field_context, arguments[1]),
+                FieldLinear3D_StartFollowing(
+                    runtime_entity,
+                    (FieldRuntimeEntity *)FieldVm_GetEntityByIndex(field_context, arguments[1]),
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     arguments[4] << FX32B_INT,
@@ -2180,9 +2163,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     arguments[3] << FX32B_INT,
                     arguments[5], arguments[8] != 0, 0);
             } else {
-                func_ov000_020b39a8(
-                    &runtime_entity->base,
-                    FieldVm_GetEntityByIndex(field_context, arguments[1]),
+                FieldLinear3D_StartTimedFollowing(
+                    runtime_entity,
+                    (FieldRuntimeEntity *)FieldVm_GetEntityByIndex(field_context, arguments[1]),
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     arguments[4] << FX32B_INT,

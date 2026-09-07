@@ -356,9 +356,11 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
-    if label.startswith("FieldLinear_Start"):
+    if label.startswith(("FieldLinear_Start", "FieldLinear3D_Start")):
         stack = registers.sp & 0xFFFFFFFF
-        count = 6 if label == "FieldLinear_Start" else 3
+        count = 6 if label in ("FieldLinear_Start", "FieldLinear3D_Start") else 3
+        if label.startswith("FieldLinear3D_"):
+            count += 3
         result = {"entity": f"{r0:#010x}", "selector_or_target": f"{r1:#010x}",
                   "x_q12": to_s32(r2), "y_q12": to_s32(r3)}
         if is_arm9_work_ram_pointer(stack, count * 4):
