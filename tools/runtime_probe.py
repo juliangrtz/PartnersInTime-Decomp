@@ -143,6 +143,13 @@ def is_main_ram_pointer(address: int, size: int = 1) -> bool:
     return MAIN_RAM_START <= address and address + size <= MAIN_RAM_END
 
 
+def is_arm9_work_ram_pointer(address: int, size: int = 1) -> bool:
+    """Accept main RAM and the game's 16 KiB DTCM stack region."""
+    return is_main_ram_pointer(address, size) or (
+        0x027E0000 <= address and address + size <= 0x027E4000
+    )
+
+
 def capture_scene_object(emulator: DeSmuME, address: int) -> dict[str, Any] | None:
     if not is_main_ram_pointer(address, 0x104):
         return None
@@ -348,6 +355,23 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r1 = registers.r1 & 0xFFFFFFFF
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
+
+    if label == "FieldRenderList_Clear":
+        return {"screen": to_s32(r0)}
+
+    if label in {"FieldAnimationRenderer_Init", "FieldAnimationRenderer_InitBase",
+                 "FieldAnimationRenderer_DestroyBase", "FieldTimedRenderer_DestroyBase"}:
+        return {"renderer": f"{r0:#010x}"}
+
+    if label == "FieldAnimationRenderer_GetOverlapPriority" and is_main_ram_pointer(r0, 0x138) and is_arm9_work_ram_pointer(r1, 10):
+        mode = read_u16(emulator, r1 + 8) >> 14
+        return {"renderer": f"{r0:#010x}", "mode": mode,
+                "priority": read_u8(emulator, r0 + 0x134 + mode)}
+
+    if label == "FieldAnimationRenderer_RestoreController" and is_arm9_work_ram_pointer(r1, 0x60):
+        return {"renderer": f"{r0:#010x}", "descriptor": f"{r1:#010x}",
+                "controller": f"{r2:#010x}", "animation": to_s32(r3),
+                "requested_overlap_priority": read_u32(emulator, r1 + 0x54) & 3}
 
     if label.startswith("FieldTimedRenderer_") and is_main_ram_pointer(r0, 0x13C):
         flags = read_u32(emulator, r0 + 0x7C)

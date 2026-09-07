@@ -1,5 +1,67 @@
-extern "C" {
 #include <game/field_timed_renderer.h>
+#include <game/battle_scene.h>
+extern "C" {
+#include <game/heap.h>
+extern FieldRenderObjectVTable data_ov000_020c1594;
+extern FieldRenderObjectVTable data_ov000_020c14d4;
+
+static inline FieldAnimationRenderer *InitRenderer(FieldAnimationRenderer *model)
+{
+    BattleModelController_Init((BattleModel *)model);
+    *(FieldRenderObjectVTable **)model = &data_ov000_020c1594;
+    /* Preserve the low six order bits while selecting field layer 14. */
+    model->base.sort_key &= 0xF000003F;
+    model->base.sort_key_bits.layer = 14;
+    model->base.overlap_priority_bytes[0] = 0;
+    model->base.overlap_priority_bytes[1] = 0;
+    model->base.overlap_priority_bytes[2] = 0;
+    model->base.overlap_priority_bytes[3] = 0;
+    model->control.loops_remaining = 0;
+    model->control.finished = 0;
+    model->base.texture_offsets = 0;
+    model->base.texture.previous = 0;
+    model->base.texture.next = 0;
+    return model;
+}
+
+FieldAnimationRenderer *FieldAnimationRenderer_Init(FieldAnimationRenderer *model)
+{
+    return InitRenderer(model);
+}
+
+FieldAnimationRenderer *FieldAnimationRenderer_InitBase(FieldAnimationRenderer *model)
+{
+    return InitRenderer(model);
+}
+
+void FieldAnimationRenderer_RestoreController(FieldRenderObject *model, const ModelRenderDescriptor *descriptor,
+                       void *controller, s16 animation)
+{
+    BattleModelController_Restore((BattleModel *)model, descriptor, controller, animation);
+    model->overlap_priority_bytes[0] = descriptor->flag_bits.overlap_priority;
+    model->overlap_priority_bytes[1] = descriptor->flag_bits.overlap_priority;
+    model->overlap_priority_bytes[2] = descriptor->flag_bits.overlap_priority;
+    model->overlap_priority_bytes[3] = descriptor->flag_bits.overlap_priority;
+}
+
+u8 FieldAnimationRenderer_GetOverlapPriority(const FieldRenderObject *model, const ModelRenderSortKey *key)
+{
+    return model->overlap_priority_bytes[key->mode];
+}
+
+void FieldRenderList_Clear(int screen)
+{
+    BattleModel *model = gModelRenderList[screen];
+    gModelRenderList[screen] = 0;
+    gModelRenderListTail[screen] = 0;
+    while (model) {
+        BattleModel *next = model->render_next;
+        GameHeap_DeleteArray((void *)model->texture_offsets);
+        if (model)
+            model->unknown_14();
+        model = next;
+    }
+}
 
 extern void func_020093b4(FieldRenderObject *model, int enabled);
 extern void func_0200c9c8(FieldRenderObject *model);
@@ -78,4 +140,19 @@ void FieldTimedRenderer_Update(FieldTimedRenderer *model)
     }
 }
 
+
+FieldTimedRenderer *FieldTimedRenderer_DestroyBase(FieldTimedRenderer *model)
+{
+    *(FieldRenderObjectVTable **)model = &data_ov000_020c14d4;
+    *(FieldRenderObjectVTable **)model = &data_ov000_020c1594;
+    BattleModelController_DestroyBase((BattleModel *)model);
+    return model;
+}
+
+FieldAnimationRenderer *FieldAnimationRenderer_DestroyBase(FieldAnimationRenderer *model)
+{
+    *(FieldRenderObjectVTable **)model = &data_ov000_020c1594;
+    BattleModelController_DestroyBase((BattleModel *)model);
+    return model;
+}
 }

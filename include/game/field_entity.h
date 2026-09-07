@@ -3,6 +3,7 @@
 
 #include <nitro.h>
 #include <nitro/fx.h>
+#include <game/sprite_output.h>
 
 enum FieldEntityStateFlag {
     FIELD_ENTITY_STATE_ACTIVE = 1 << 1,
@@ -327,9 +328,14 @@ struct FieldRenderObject {
 #else
     FieldRenderObjectVTable *vtable;
 #endif
-    u8 unknown_004[0x44];
+    FieldRenderObject *render_previous, *render_next;
+    void *owner;
+    u8 screen, unknown_011[3];
+    GameSpriteAllocation texture;
+    u8 unknown_02c[0x1C];
     const FieldRenderAnimationRange *animation_ranges;
-    u8 unknown_04c[8];
+    const void *extra_resource_data;
+    const u16 *texture_offsets;
     s16 resource_animation;
     s16 animation_id;
     u8 unknown_058[2];

@@ -1582,3 +1582,27 @@ Evidence remains private under build/runtime/eur_renderer_loop_geometry_verified
 and eur_timed_renderer_loops. The total is 353,676 of 1,563,700 bytes (22.62%).
 All module/symbol checks, 74 tests, generated progress and public-content checks
 pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Field renderer construction, priorities and cleanup
+
+Seven functions add 596 matching C++ bytes: both animation-renderer constructor
+entries, animation/timed base destructors, descriptor restoration, mode-indexed
+overlap-priority lookup and screen render-list cleanup. They extend the existing
+contiguous renderer module. The shared field layout now describes its render
+links and sprite allocation; descriptor bits 0..1 supply all four overlap
+priorities. All seven initial structured candidates matched the original bytes.
+
+A normal 2,033-frame boot/save-load replay entered the complete constructor 41
+times, base constructor 45 times, controller restoration 70 times and priority
+lookup 12,445 times. Live descriptors on the DTCM stack requested priorities
+zero and one, also observed by subsequent priority lookups. Runtime decoding
+now accepts this stack region for descriptor and sort-key arguments. The final
+render lists contain 30/40 valid models; main/sub BG memory changed by
+55,110/47,962 bytes and palettes by 243 bytes. Visual inspection confirmed the
+normal field screen. List cleanup and the two destructors were not entered by
+this route; their linked bytes match exactly.
+
+Evidence remains private under build/runtime/eur_field_renderer_lifecycle_verified.
+The total is 354,272 of 1,563,700 bytes (22.66%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

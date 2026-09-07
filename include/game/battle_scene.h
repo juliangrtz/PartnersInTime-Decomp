@@ -24,7 +24,10 @@ typedef struct GamePaletteEffectController GamePaletteEffectController;
 
 typedef struct ModelRenderDescriptor {
     u8 unknown_00[0x54];
-    u32 flags;
+    union {
+        u32 flags;
+        struct { u32 overlap_priority : 2, unknown_02_31 : 30; } flag_bits;
+    };
     u8 unknown_58, unknown_59;
     u16 unknown_5a;
     void *unknown_5c;

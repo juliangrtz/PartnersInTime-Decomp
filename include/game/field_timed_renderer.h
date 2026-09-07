@@ -3,6 +3,9 @@
 
 #include <game/field_entity.h>
 
+struct ModelRenderDescriptor;
+struct ModelRenderSortKey;
+
 typedef struct FieldAnimationRenderer {
     FieldRenderObject base;
     union {
@@ -27,6 +30,15 @@ typedef char FieldTimedRenderer_SizeCheck[sizeof(FieldTimedRenderer) == 0x140 ? 
 #ifdef __cplusplus
 extern "C" {
 #endif
+FieldAnimationRenderer *FieldAnimationRenderer_Init(FieldAnimationRenderer *model);
+FieldAnimationRenderer *FieldAnimationRenderer_InitBase(FieldAnimationRenderer *model);
+FieldAnimationRenderer *FieldAnimationRenderer_DestroyBase(FieldAnimationRenderer *model);
+FieldTimedRenderer *FieldTimedRenderer_DestroyBase(FieldTimedRenderer *model);
+void FieldAnimationRenderer_RestoreController(FieldRenderObject *model,
+    const struct ModelRenderDescriptor *descriptor, void *controller, s16 animation);
+u8 FieldAnimationRenderer_GetOverlapPriority(const FieldRenderObject *model,
+    const struct ModelRenderSortKey *key);
+void FieldRenderList_Clear(int screen);
 void FieldTimedRenderer_Update(FieldTimedRenderer *model);
 void FieldTimedRenderer_UpdateAnimation(FieldAnimationRenderer *model);
 void FieldTimedRenderer_ResetAnimationControl(FieldAnimationRenderer *model);
