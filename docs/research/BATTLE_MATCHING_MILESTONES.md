@@ -74,3 +74,19 @@ the independent stores in the same order as the original.
 All 40 functions match at their original sizes. The whole-module and symbol
 checks, reference-ROM SHA-1 check, generated-progress check, public-content
 audit, and 66 tests pass for the linked milestone.
+
+## Background addresses, blending, and geometry command lists
+
+Three further GX units reconstruct `0x020364AC..0x02036CDC`: 35 functions
+and 2,096 bytes, entirely in C. The background address getters distinguish
+text, affine, and bitmap modes and account for the main engine's global
+character/map offsets. The affine setup retains the signed Q12-to-Q8
+coefficient conversion before packing two 16-bit hardware coefficients.
+
+The geometry command list preserves four opcode bytes per command word,
+parameter cursor advancement, and the padding required by parameterless
+commands. Its matrix and zero-to-three-parameter emitters reproduce the
+original stores and call sequence. No assembly fallback is needed.
+
+All 35 functions match at their original sizes. The linked module/symbol
+checks and the complete reference-ROM hash pass.
