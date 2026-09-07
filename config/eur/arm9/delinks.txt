@@ -706,3 +706,12 @@ src/game/field_background_origin.cpp:
 
 src/game/sprite_image_decode_wide.c:
     .text       start:0x02022db0 end:0x02022e34
+
+src/game/session_init.c:
+    .text       start:0x02004d40 end:0x02004f9c
+
+src/game/session_requests.c:
+    .text       start:0x02005d74 end:0x02005da4
+
+src/game/session_task.c:
+    .text       start:0x020062ec end:0x020063a4

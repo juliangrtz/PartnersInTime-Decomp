@@ -1384,3 +1384,26 @@ Evidence remains private under build/runtime/eur_render_controls_verified and
 eur_window_dispatch_verified. The total is 348,252 of 1,563,700 bytes (22.27%).
 All module/symbol checks, 74 tests, generated progress and public-content checks
 pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Session initialization and task lifetime
+
+Eight functions add 836 matching C bytes: session settings initialization,
+save-variable/party reset, session startup, task initialization/destruction and
+two state-request helpers. Checked shared layouts describe the 16-byte session
+settings and 44-byte task. Unknown option fields remain unnamed by purpose.
+Settings use byte-width option arguments and retain the original language
+fallback. The two request entry points select scheduler phases zero and two.
+
+A fresh 2,033-frame boot/save-load replay captured startup, settings and task
+initialization once each. Settings requested the system language with option
+values zero/one. Task initialization used priority eight; the first state request
+was nine, followed by phase-two requests for states two, eight and zero as the
+opening sequence, load menu and field were reached. The final render lists are
+valid with 30/40 models. Main/sub BG memory changed by 55,110/47,962 bytes and
+palettes by 243 bytes. Evidence remains private under
+build/runtime/eur_session_init_verified. Reset and destructor paths were not
+entered on this route; their linked bytes match.
+
+The total is 349,088 of 1,563,700 bytes (22.32%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
