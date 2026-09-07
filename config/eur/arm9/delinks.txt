@@ -112,3 +112,9 @@ src/nitro/pxi/pxi_fifo.c:
 
 src/nitro/pxi/pxi_init.c:
     .text       start:0x0203d5b8 end:0x0203d730
+
+src/nitro/fs/fs_archive.c:
+    .text       start:0x0203e564 end:0x0203ecc0
+
+src/nitro/fs/fs_archive_state.c:
+    .text       start:0x0203e2a8 end:0x0203e438

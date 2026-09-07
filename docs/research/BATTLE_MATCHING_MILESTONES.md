@@ -191,3 +191,20 @@ handshake all match. The 40-byte remote callback-mask getter remains native:
 its current C form materializes the fixed shared-memory base differently.
 No assembly fallback is added. Module/symbol checks, the original ROM SHA-1,
 progress consistency, public-content audit, and all 66 tests pass.
+
+## Filesystem archives and command scheduling
+
+Two FS units add 16 matching C functions and 2,284 bytes. They cover archive
+registration, memory callbacks, suspension/resumption, command submission,
+synchronous and asynchronous execution, cancellation-list processing, and
+completion wakeups. The reconstructed layouts are 80 bytes for an archive,
+68 bytes for a file, and 12 bytes for a directory position, checked at compile
+time. Status flags and results retain their volatile accesses.
+
+Small inline C status predicates preserve the original explicit Boolean
+conversion before branch decisions. Command execution and shutdown paths use
+the native branch order, including unlock/relock boundaries and callbacks.
+Archive-table loading and name packing remain outside the linked C set until
+their remaining instruction differences are resolved. Module/symbol checks,
+the reference-ROM SHA-1, generated progress, public-content audit, and all
+66 tests pass.
