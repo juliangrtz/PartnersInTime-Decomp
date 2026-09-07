@@ -233,3 +233,20 @@ The adjacent archive-state functions are consolidated into the same command
 module. Every included function matches byte for byte. The whole-ROM hash,
 module/symbol checks, generated progress, public-content audit, and all 66
 tests verify the milestone.
+
+## ROM archives and overlay image loading
+
+The ROM and overlay I/O units add 17 functions and 1,952 matching bytes,
+bringing linked C/C++ to 208,568 bytes (13.34%). The reconstructed 44-byte
+overlay descriptor includes the 24-bit compressed length, flags, processor,
+and resolved file extent. ROM callbacks, DMA selection, direct and cached
+overlay metadata, synchronous/asynchronous image reads, cache invalidation,
+BSS clearing, and digest comparison retain the native behavior.
+
+Three small inline-assembly blocks total 44 instruction bytes: the ROM
+registration argument setup, the ordered overlay-table selection, and one
+indexed digest-word read. Their surrounding control flow and data handling
+are C. These blocks preserve instruction scheduling and literal-pool order;
+they are not assembly bodies for the reconstructed functions. The full ROM
+matches the reference SHA-1, every module and symbol check passes, and all
+66 tests, progress checks, and the public-content audit pass.

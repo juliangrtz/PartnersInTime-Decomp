@@ -111,6 +111,15 @@ int FS_ConvertPathToFileID(FsFileId *id, const char *path);
 int FSi_ReadFileCore(FsFile *file, void *buffer, int size, int asynchronous);
 int FSi_FindPath(FsFile *file, const char *path, FsFileId *id, FsDirectoryPosition *directory);
 void func_0203e068(FsReadCursor *cursor, void *buffer, u32 size);
+void FS_InitArchive(FsArchive *archive);
+int FS_RegisterArchiveName(FsArchive *archive, const char *name, int length);
+void FS_SetArchiveProc(FsArchive *archive, FsArchiveProc procedure, u32 mask);
+int FS_SuspendArchive(FsArchive *archive);
+int FS_ResumeArchive(FsArchive *archive);
+u32 FS_LoadArchiveTables(FsArchive *archive, void *buffer, u32 size);
+int FS_LoadArchive(FsArchive *archive, u32 base, u32 fat, u32 fat_size,
+                  u32 fnt, u32 fnt_size, FsArchiveIo read, FsArchiveIo write);
+void FS_NotifyArchiveAsyncEnd(FsArchive *archive, int result);
 
 extern void MI_CpuCopy8(const void *source, void *destination, u32 size);
 extern void MI_CpuFill8(void *destination, u8 value, u32 size);

@@ -187,3 +187,5 @@ src/nitro/pxi/pxi_init.c
 src/nitro/fs/fs_archive.c
 src/nitro/fs/fs_commands.c
 src/nitro/fs/fs_file.c
+src/nitro/fs/fs_rom.c
+src/nitro/fs/fs_overlay_io.c
