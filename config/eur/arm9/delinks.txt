@@ -148,3 +148,9 @@ src/nitro/pm/pm_control.c:
 
 src/nitro/pm/pm_fifo.c:
     .text       start:0x02041a0c end:0x02041dac
+
+src/nitro/rtc/rtc.c:
+    .text       start:0x020423e8 end:0x02042584
+
+src/nitro/rtc/rtc_convert.c:
+    .text       start:0x02041dc4 end:0x02041e58

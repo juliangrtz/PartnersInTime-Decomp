@@ -309,3 +309,13 @@ The 120-byte asynchronous register-read submission remains native pending its
 literal-load scheduling match. Every included function is byte-identical;
 module/symbol checks, the original-ROM SHA-1, generated progress, public-content
 audit, and all 66 tests pass.
+
+## RTC initialization and time requests
+
+Eight RTC functions add 560 matching C bytes: initialization, synchronous and
+asynchronous time requests, FIFO command submission, the sync-result callback,
+and validated eight-digit BCD conversion. The FIFO response handler and its
+busy-wait helper remain native pending exact register/scheduling matches.
+The linked total is 216,592 bytes (13.85%). The complete module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress, and public-content audit
+pass. No assembly fallback is added.
