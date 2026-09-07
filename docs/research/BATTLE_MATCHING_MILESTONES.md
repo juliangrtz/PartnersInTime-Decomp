@@ -319,3 +319,16 @@ busy-wait helper remain native pending exact register/scheduling matches.
 The linked total is 216,592 bytes (13.85%). The complete module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress, and public-content audit
 pass. No assembly fallback is added.
+
+## Card initialization and backup write workers
+
+Sixteen card functions add 1,376 matching bytes in pure C. They cover ROM and
+backup lock wrappers, resource release, card availability/enabling, common
+initialization, task dispatch/completion, backup waiting, and chunked write/
+program operations followed by verification. The checked command structure is
+64 bytes; the common work structure is 480 bytes, including its OS thread and
+256-byte transfer buffer. Cache maintenance and ARM7 request retries retain
+their native order. Remaining card candidates stay outside the linked total.
+
+The total is 217,968 bytes (13.94%). Module and symbol checks, the original-ROM
+SHA-1, all 66 tests, generated progress, and the public-content audit pass.

@@ -154,3 +154,21 @@ src/nitro/rtc/rtc.c:
 
 src/nitro/rtc/rtc_convert.c:
     .text       start:0x02041dc4 end:0x02041e58
+
+src/nitro/card/card_lock_wrappers.c:
+    .text       start:0x02042584 end:0x02042614
+
+src/nitro/card/card_common.c:
+    .text       start:0x02042670 end:0x02042874
+
+src/nitro/card/card_task.c:
+    .text       start:0x02042910 end:0x020429a0
+
+src/nitro/card/card_write.c:
+    .text       start:0x02042f80 end:0x02043140
+
+src/nitro/card/card_task_end.c:
+    .text       start:0x020431fc end:0x0204326c
+
+src/nitro/card/card_backup_wait.c:
+    .text       start:0x02042c1c end:0x02042c28

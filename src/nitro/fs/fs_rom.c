@@ -5,8 +5,8 @@ extern int data_02064c1c;
 extern const char data_02059d98[];
 extern int OS_GetLockID(void);
 extern void func_0204326c(int lock_id);
-extern void func_020425c4(u16 lock_id);
-extern void func_020425a4(u16 lock_id);
+extern void CARD_LockRom(u16 lock_id);
+extern void CARD_UnlockRom(u16 lock_id);
 extern void CARDi_ReadRom(int dma, u32 source, void *destination, u32 size,
     void (*callback)(FsArchive *), FsArchive *argument, int asynchronous);
 
@@ -27,8 +27,8 @@ int FSi_WriteDummyCallback(FsArchive *archive, void *buffer, u32 offset, u32 siz
 
 int FSi_RomArchiveProc(FsFile *file, int command) {
     switch (command) {
-    case 9: func_020425c4((u16)data_02064c1c); return 0;
-    case 10: func_020425a4((u16)data_02064c1c); return 0;
+    case 9: CARD_LockRom((u16)data_02064c1c); return 0;
+    case 10: CARD_UnlockRom((u16)data_02064c1c); return 0;
     case 1: return 4;
     default: return 8;
     }
