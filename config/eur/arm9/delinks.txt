@@ -322,3 +322,12 @@ src/game/input.c:
 
 src/game/random.c:
     .text start:0x0202cb48 end:0x0202cbd4
+
+src/nitro/gx/gx_init.c:
+    .text start:0x020350d0 end:0x02035444
+
+src/game/format_string.c:
+    .text start:0x0202a944 end:0x0202aa74
+
+src/game/format_binary.c:
+    .text start:0x0202abf4 end:0x0202acc8

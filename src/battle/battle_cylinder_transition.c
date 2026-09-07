@@ -29,7 +29,7 @@ extern u32 SDK_AUTOLOAD_DTCM_START[];
 #define BATTLE_DTCM_SYSTEM_RESERVED (BATTLE_DTCM_BASE + 0x3FC0)
 #define BATTLE_INTERRUPT_CHECK_BUFFER (BATTLE_DTCM_SYSTEM_RESERVED + 0x38)
 
-extern void func_02035284(void *allocation);
+extern void GX_SetVCountEqVal(void *allocation);
 extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 OS_EnableIrqMask(u32 mask);
 extern void OS_SetIrqFunction(u32 mask, void (*callback)(void));
@@ -110,7 +110,7 @@ void BattleCylinderTransition_UpdateAlternateRotationTask(
 
 void BattleCylinderTransition_RestoreDisplayTask(
     BattleCylinderRestoreTask *task) {
-    func_02035284(task->allocation);
+    GX_SetVCountEqVal(task->allocation);
     OS_EnableIrqMask(BATTLE_CYLINDER_VCOUNT_IRQ);
     *(vu16 *)0x04000004 |= BATTLE_CYLINDER_DISPSTAT_VCOUNT_IRQ;
     *(vu16 *)0x04000304 &= ~BATTLE_CYLINDER_SWAP_DISPLAYS;

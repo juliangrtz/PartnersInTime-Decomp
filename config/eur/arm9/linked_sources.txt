@@ -255,3 +255,6 @@ src/game/save_storage_load.c
 src/game/rumble.c
 src/game/input.c
 src/game/random.c
+src/nitro/gx/gx_init.c
+src/game/format_string.c
+src/game/format_binary.c

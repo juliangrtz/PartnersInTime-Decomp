@@ -13,8 +13,8 @@ extern void func_02039f58(OsMutex *mutex);
 extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 func_02038cc4(u32 mask);
 extern int CTRDG_IsExisting(u32 value);
-extern void func_020351dc(void);
-extern void func_02035190(void);
+extern void GX_DispOff(void);
+extern void GX_DispOn(void);
 extern void OS_Halt(void);
 extern void func_0203ae6c(u32 cycles);
 
@@ -127,7 +127,7 @@ void PM_GoSleepMode(u32 triggers, u32 keys, u32 key_logic) {
     frame = PM_FRAME;
     while (frame == PMi_GetFrame()) {}
     frame = PM_FRAME;
-    func_020351dc();
+    GX_DispOff();
     *(vu32 *)0x04001000 &= ~0x10000;
     while (frame == PMi_GetFrame()) {}
     frame = PM_FRAME;
@@ -141,7 +141,7 @@ void PM_GoSleepMode(u32 triggers, u32 keys, u32 key_logic) {
     if (!power_off) {
         if (lcd == 1) {
             PM_SetLCDPower(1, 1, 1, 0);
-            func_02035190();
+            GX_DispOn();
         } else {
             PM_SetLED(1);
         }

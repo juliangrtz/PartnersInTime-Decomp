@@ -13,8 +13,8 @@ extern void func_02039f58(OsMutex *mutex);
 extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 func_02038cc4(u32 mask);
 extern int CTRDG_IsExisting(u32 value);
-extern void func_020351dc(void);
-extern void func_02035190(void);
+extern void GX_DispOff(void);
+extern void GX_DispOn(void);
 extern void OS_Halt(void);
 extern void func_0203ae6c(u32 cycles);
 

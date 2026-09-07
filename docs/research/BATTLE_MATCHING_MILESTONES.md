@@ -640,3 +640,15 @@ alarm declarations now expose the existing SDK operations by name.
 All functions match completely, without inline assembly. The total is
 259,428 bytes (16.59%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Display initialization and text-formatting helpers
+
+Fourteen functions add 1,400 matching C bytes. Graphics initialization now
+reconstructs the power/display register sequence, DMA/CPU clearing, display
+mode save/restore, scanline comparison, interrupt enable bits and master
+brightness. The formatting helpers cover string padding, string length,
+binary and hexadecimal conversion. Decimal conversion remains unlinked.
+
+All linked functions match completely, without inline assembly. The total is
+260,828 bytes (16.68%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

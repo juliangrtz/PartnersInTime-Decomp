@@ -25,7 +25,7 @@ extern u32 SDK_AUTOLOAD_DTCM_START[];
 #define BATTLE_WIPE_INTERRUPT_CHECK_BUFFER \
     (BATTLE_WIPE_DTCM_SYSTEM_RESERVED + 0x38)
 
-extern void func_02035284(void *allocation);
+extern void GX_SetVCountEqVal(void *allocation);
 extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 OS_EnableIrqMask(u32 mask);
 extern void OS_SetIrqFunction(u32 mask, void (*callback)(void));
@@ -105,7 +105,7 @@ void BattleCylinderWipe_UpdateRotationTask(BattleCylinderWipeTask *task) {
 void BattleCylinderWipe_RestoreDisplayTask(
     BattleCylinderWipeRestoreTask *task) {
     if ((int)task->allocation != -1) {
-        func_02035284(task->allocation);
+        GX_SetVCountEqVal(task->allocation);
         OS_EnableIrqMask(BATTLE_CYLINDER_WIPE_VCOUNT_IRQ);
         *(vu16 *)0x04000004 |= BATTLE_CYLINDER_WIPE_DISPSTAT_VCOUNT_IRQ;
     }
