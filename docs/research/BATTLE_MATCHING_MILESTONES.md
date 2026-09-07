@@ -147,3 +147,14 @@ The unsigned 64-bit division entry at `0x0204626C` is identified as `_ll_udiv`,
 allowing the C division expression to link to the original runtime helper.
 All functions and the linked modules match. The reference-ROM hash, generated
 progress check, public-content audit, and 66 tests pass.
+
+## DMA control and transfers
+
+Two MI units add 11 functions and 1,340 matching bytes in C. They preserve
+channel-zero source restrictions, incompatible automatic-transfer checks,
+stop/wait register accesses, synchronous copy/fill, display-timed transfers,
+and asynchronous copy callbacks. Channel zero's idle reset retains its
+three register writes, and stopping DMA retains both volatile control reads.
+
+All linked instructions and module symbols match. The complete reference-ROM
+SHA-1, generated progress, public-content audit, and 66 tests pass.
