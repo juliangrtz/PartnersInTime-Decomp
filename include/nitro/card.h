@@ -40,7 +40,7 @@ struct CardWork {
     CardCallback callback;
     void *argument;
     CardTask task;
-    u32 flags;
+    volatile u32 flags;
     volatile u32 priority;
     OsThread thread;
     OsThread *volatile current_thread;

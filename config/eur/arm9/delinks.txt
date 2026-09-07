@@ -169,3 +169,9 @@ src/nitro/card/card_rom_dma.c:
 
 src/nitro/card/card_rom_registers.c:
     .text       start:0x02043724 end:0x02043934
+
+src/nitro/card/card_request.c:
+    .text start:0x02043934 end:0x02043a70
+
+src/nitro/card/card_pullout.c:
+    .text start:0x02043a70 end:0x02043bb8

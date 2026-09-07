@@ -351,3 +351,12 @@ completion remain native until their remaining scheduling details match.
 
 The total is 220,788 bytes (14.12%). All module/symbol checks, the original-ROM
 SHA-1, all 66 tests, generated progress, and the public-content audit pass.
+
+## Card ARM7 requests and removal handling
+
+Five functions add 644 matching C bytes: shared-command submission, ARM7
+initialization handshakes, retry/wait handling, removal notifications, callback
+registration, and the power-off/termination path. The request flags remain
+volatile so each required shared-state read survives compilation. The linked
+total is 221,432 bytes (14.16%). Module/symbol checks, original-ROM SHA-1, all
+66 tests, generated progress, and the public-content audit pass.
