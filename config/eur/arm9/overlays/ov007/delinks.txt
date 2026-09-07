@@ -49,3 +49,8 @@ src/overlay007/scene_sprite_task.c:
 src/overlay007/scene_transition_controller.c:
     .text       start:0x02085168 end:0x0208552c
 
+src/overlay007/party_values.c:
+    .text start:0x020750bc end:0x02075360
+
+src/overlay007/party_navigation.c:
+    .text start:0x02075400 end:0x020754d0

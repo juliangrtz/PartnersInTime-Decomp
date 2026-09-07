@@ -1020,3 +1020,18 @@ a reference-counted asset and issues the image, tile and palette loads.
 The total is 324,864 of 1,563,700 bytes (20.78%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass.
+
+
+## Overlay 7 party value helpers
+
+Thirteen functions add 884 matching C bytes in overlay 7. A roster keeps a
+rotating display order over up to 128 slots plus the per-slot value the
+interface shows; adding to a value clamps it to zero below and to a per-kind
+limit above. The availability query subtracts the members already committed to
+the same slot, counting the four save entries either in or out of the current
+party depending on which query is asked, and reports a full bar for slot zero.
+The scroll checks compare the rotating origin against the roster length.
+
+The total is 325,748 of 1,563,700 bytes (20.83%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass.
