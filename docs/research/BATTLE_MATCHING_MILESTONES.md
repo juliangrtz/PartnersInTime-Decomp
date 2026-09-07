@@ -754,3 +754,16 @@ The total is 279,044 bytes (17.85%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress and the public-content audit pass, with no
 additional inline assembly. Animation registration and tile remapping remain
 private matching candidates until their remaining instructions agree.
+
+## Sprite effects and planar image decoding
+
+Ten functions add 2,536 matching C bytes. Effect activation, frame updates,
+scaling, pause/resume and release now reproduce the original intrusive-list
+behavior. The small returned image-size structure preserves the native ABI.
+Three image decoders recover 8-by-8, 8-by-12 and 8-by-16 two-plane images
+into the shared buffer with its 20-pixel row pitch.
+
+The total reaches 281,580 bytes (18.01%). Module/symbol checks, original-ROM
+SHA-1, all 66 tests, generated progress and the public-content audit pass.
+No inline assembly was added. The wider/taller decoder and draw-dispatch
+candidates remain outside the linked source set.

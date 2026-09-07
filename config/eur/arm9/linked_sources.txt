@@ -291,3 +291,7 @@ src/game/sprite_animator.c
 src/game/sprite_animation.cpp
 src/game/sprite_animator_tiles.c
 src/game/sprite_effect_pool.c
+src/game/sprite_effect_animation.c
+src/game/sprite_effect_control.c
+src/game/sprite_effect_scale.c
+src/game/sprite_image_decode.c
