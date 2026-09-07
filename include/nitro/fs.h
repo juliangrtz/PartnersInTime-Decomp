@@ -13,6 +13,13 @@ typedef struct FsDirectoryPosition {
     u16 index;
     u32 position;
 } FsDirectoryPosition;
+typedef struct FsReadCursor { FsArchive *archive; u32 position; } FsReadCursor;
+typedef struct FsDirectoryEntry {
+    union { FsDirectoryPosition directory; FsFileId file; } entry;
+    int is_directory;
+    u32 name_length;
+    char name[128];
+} FsDirectoryEntry;
 typedef int (*FsArchiveIo)(FsArchive *archive, void *buffer, u32 offset, u32 size);
 typedef int (*FsArchiveProc)(FsFile *file, int command);
 
@@ -64,6 +71,7 @@ struct FsFile {
 typedef char FsArchiveSizeCheck[(sizeof(FsArchive) == 80) ? 1 : -1];
 typedef char FsFileSizeCheck[(sizeof(FsFile) == 68) ? 1 : -1];
 typedef char FsDirectoryPositionSizeCheck[(sizeof(FsDirectoryPosition) == 12) ? 1 : -1];
+typedef char FsDirectoryEntrySizeCheck[(sizeof(FsDirectoryEntry) == 148) ? 1 : -1];
 
 static inline int FS_IsBusy(const FsFile *file) {
     if (file->flags & 1) return 1;
@@ -77,11 +85,7 @@ static inline int FSi_TestArchiveFlag(const FsArchive *archive, u32 mask) {
     if (archive->flags & mask) return 1;
     return 0;
 }
-static inline int FSi_ToLower(int character) {
-    character -= 'A';
-    if ((u32)character <= 'Z' - 'A') character += 'a' - 'A';
-    return character + 'A';
-}
+
 
 void FS_InitFile(FsFile *file);
 int FS_OpenFileDirect(FsFile *file, FsArchive *archive, u32 top, u32 bottom, u32 id);
@@ -106,6 +110,7 @@ int FS_WaitAsync(FsFile *file);
 int FS_ConvertPathToFileID(FsFileId *id, const char *path);
 int FSi_ReadFileCore(FsFile *file, void *buffer, int size, int asynchronous);
 int FSi_FindPath(FsFile *file, const char *path, FsFileId *id, FsDirectoryPosition *directory);
+void func_0203e068(FsReadCursor *cursor, void *buffer, u32 size);
 
 extern void MI_CpuCopy8(const void *source, void *destination, u32 size);
 extern void MI_CpuFill8(void *destination, u8 value, u32 size);

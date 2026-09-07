@@ -219,3 +219,17 @@ requested length separate from the clamped transfer length and actual result.
 The native structure-return ABI and directory-position copies are preserved.
 All module/symbol checks, the original-ROM SHA-1, progress consistency,
 public-content audit, and 66 tests pass.
+
+## Directory reads and filesystem command handlers
+
+Eight additional functions add 1,264 matching C bytes. They implement directory
+record reads, directory seeks, archive read/write callbacks, case-insensitive
+name comparisons, synchronous metadata reads, and the archive/default command
+dispatch sequence. The directory-entry union has a checked 148-byte layout.
+Callbacks retain the original four-argument ABI, including offset and length;
+result handling preserves completion flags and thread wake/wait behavior.
+
+The adjacent archive-state functions are consolidated into the same command
+module. Every included function matches byte for byte. The whole-ROM hash,
+module/symbol checks, generated progress, public-content audit, and all 66
+tests verify the milestone.
