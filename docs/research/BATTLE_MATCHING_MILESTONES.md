@@ -1100,3 +1100,31 @@ halfwords ahead of its animation id, which is itself signed.
 The total is 331,292 of 1,563,700 bytes (21.19%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass.
+
+## Resident rendering, affine inverse and field transfers
+
+Nineteen functions add 2,848 matching C bytes. The render-list operations
+identify the model's display selector and membership bit. The model-animation
+pool connects four model pointers to a matrix-animation track and releases its
+context through the track's completion callback. The Q8 matrix inverse preserves
+the original determinant rounding, saturation and overlapping hardware/software
+division. Its callers now share the matrix type and the correct return type.
+
+The field-background transfer object has a 16-entry queue, separate source,
+destination and size arrays, and deferred alpha-blend parameters. Reconstructed
+helpers upload palettes and tilemaps, apply scroll offsets, and drain the queue.
+GX_LoadTex handles both contiguous texture storage and transfers crossing the
+split between two physical VRAM spans.
+
+Runtime verification booted the canonical EUR ROM from the raw battery save,
+loaded the field, walked, opened the menu and returned to the field. The captured
+calls include 70 render-list insertions, 64 removals, 666 matrix inversions,
+104 queued transfers, 18 queue drains, 15 tilemap uploads, two palette uploads
+and 702 scroll updates. Both field render lists passed link, display and
+membership checks. RAM, mapped VRAM, palette, OAM and display-register captures
+remain private under build/runtime/. The texture split and model-animation pool
+did not receive runtime coverage in this route; their exact linked bytes passed.
+
+The total is 334,140 of 1,563,700 bytes (21.37%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

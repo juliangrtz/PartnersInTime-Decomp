@@ -26,6 +26,19 @@ DEFAULT_SYMBOL_ROOT = PROJECT_ROOT / "config/eur/arm9"
 DEFAULT_ENEMY_STATS = PROJECT_ROOT / "data/eur/stats/enemies.json"
 MAIN_RAM_START = 0x02000000
 MAIN_RAM_END = 0x02400000
+# ARM9 CPU-visible ranges. VRAM contents depend on the current bank mapping;
+# capture the display registers as well when interpreting a graphics dump.
+CAPTURE_REGIONS = (
+    (MAIN_RAM_START, MAIN_RAM_END),
+    (0x04000000, 0x04002000),  # display and other I/O registers
+    (0x05000000, 0x05000800),  # main/sub BG and OBJ palettes
+    (0x06000000, 0x06080000),  # main BG
+    (0x06200000, 0x06220000),  # sub BG
+    (0x06400000, 0x06440000),  # main OBJ
+    (0x06600000, 0x06620000),  # sub OBJ
+    (0x06800000, 0x068A4000),  # banks mapped to LCDC
+    (0x07000000, 0x07000800),  # main/sub OAM
+)
 SYMBOL_PATTERN = re.compile(r"^(\S+)\s+kind:function[^\n]*\saddr:(0x[0-9a-fA-F]+)")
 
 # European overlay 2 globals and offsets recovered by the matching C sources.
@@ -70,10 +83,10 @@ def parse_memory_range(value: str) -> MemoryRange:
         raise argparse.ArgumentTypeError("range must use [NAME=]START:END")
     start = parse_int(start_text)
     end = parse_int(end_text)
-    if not name or start >= end:
-        raise argparse.ArgumentTypeError("range name must be non-empty and START must be below END")
-    if start < MAIN_RAM_START or end > MAIN_RAM_END:
-        raise argparse.ArgumentTypeError("runtime dumps are limited to 0x02000000:0x02400000")
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", name) or start >= end:
+        raise argparse.ArgumentTypeError("range name must be a filename-safe label and START must be below END")
+    if not any(low <= start < end <= high for low, high in CAPTURE_REGIONS):
+        raise argparse.ArgumentTypeError("range must lie within one ARM9 RAM, I/O, palette, VRAM or OAM region")
     return MemoryRange(name=name, start=start, end=end)
 
 
@@ -477,13 +490,55 @@ def is_overlay_active(matches: list[dict[str, Any]], overlay_id: int) -> bool:
     )
 
 
+def capture_model_render_lists(emulator: DeSmuME) -> list[dict[str, Any]]:
+    """Read the two resident lists and check the recovered link fields."""
+    lists = []
+    for screen in range(2):
+        head = read_u32(emulator, 0x0205A89C + 4 * screen)
+        tail = read_u32(emulator, 0x0205A8A4 + 4 * screen)
+        address = head
+        previous = 0
+        visited: set[int] = set()
+        models = []
+        errors = []
+        while address:
+            if not is_main_ram_pointer(address, 0x80) or address in visited:
+                errors.append(f"invalid or cyclic node {address:#010x}")
+                break
+            visited.add(address)
+            node_previous = read_u32(emulator, address + 4)
+            next_address = read_u32(emulator, address + 8)
+            node_screen = read_u8(emulator, address + 0x10)
+            flags = read_u32(emulator, address + 0x7C)
+            if node_previous != previous or node_screen != screen or not flags & 0x10:
+                errors.append(f"link, screen or membership mismatch at {address:#010x}")
+            models.append({
+                "address": f"{address:#010x}",
+                "vtable": f"{read_u32(emulator, address):#010x}",
+                "previous": f"{node_previous:#010x}",
+                "next": f"{next_address:#010x}",
+                "screen": node_screen,
+                "flags": f"{flags:#010x}",
+            })
+            previous, address = address, next_address
+        if previous != tail:
+            errors.append("last visited node does not equal the tail")
+        lists.append({
+            "screen": screen, "head": f"{head:#010x}", "tail": f"{tail:#010x}",
+            "models": models, "errors": errors,
+        })
+    return lists
+
+
 def capture_domain_state(
     emulator: DeSmuME,
     overlay_matches: list[dict[str, Any]],
     enemy_stats_path: Path,
 ) -> dict[str, Any]:
+    render_lists = capture_model_render_lists(emulator)
     if not is_overlay_active(overlay_matches, 2):
         return {
+            "model_render_lists": render_lists,
             "battle": {
                 "available": False,
                 "reason": "European battle overlay 2 is not active",
@@ -493,7 +548,7 @@ def capture_domain_state(
     battle["available"] = battle["valid_context"]
     if not battle["valid_context"]:
         battle["reason"] = "overlay 2 is active but gBattleContext is not valid"
-    return {"battle": battle}
+    return {"battle": battle, "model_render_lists": render_lists}
 
 
 def changed_runs(before: bytes, after: bytes, base_address: int) -> list[dict[str, Any]]:
@@ -525,6 +580,7 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--rom", type=Path, required=True, help="legally obtained PiT ROM or rebuilt ROM")
     parser.add_argument("--battery-save", type=Path, help="raw .sav battery save to import before execution")
     parser.add_argument("--state", type=Path, help="DeSmuME .dst savestate to load")
+    parser.add_argument("--save-state", type=Path, help="optional compatible state after the captured actions")
     parser.add_argument("--output", type=Path, required=True, help="ignored output directory for evidence")
     parser.add_argument("--frames", type=int, default=0, help="frames to execute after loading the state")
     parser.add_argument(
@@ -533,7 +589,7 @@ def build_argument_parser() -> argparse.ArgumentParser:
         action="append",
         default=[],
         metavar="KEY[:FRAMES]",
-        help="ordered DS input or wait action (repeatable; cannot be combined with --frames)",
+        help="ordered DS button, chord (select+a), or wait (repeatable; cannot be combined with --frames)",
     )
     parser.add_argument(
         "--allow-state-advance",
@@ -561,6 +617,8 @@ def main() -> int:
         raise SystemExit("--frames must not be negative")
     if args.frames and args.action:
         raise SystemExit("--frames and --action cannot be combined; use --action wait:FRAMES")
+    if len({region.name for region in args.diff_range}) != len(args.diff_range):
+        raise SystemExit("--diff-range labels must be unique")
     if (args.frames or args.action) and args.state is not None and not args.allow_state_advance:
         raise SystemExit(
             "refusing to advance a loaded savestate without --allow-state-advance; "
@@ -579,6 +637,9 @@ def main() -> int:
         raise SystemExit(f"missing battery save: {args.battery_save}")
     if args.state is not None and not args.state.exists():
         raise SystemExit(f"missing savestate: {args.state}")
+    input_state = None if args.state is None else {
+        "path": str(args.state.resolve()), "sha1": sha1_file(args.state)
+    }
 
     args.output.mkdir(parents=True, exist_ok=True)
     emulator = DeSmuME()
@@ -588,7 +649,9 @@ def main() -> int:
     try:
         emulator.open(str(args.rom.resolve()), auto_resume=False)
         if args.battery_save is not None:
-            if not emulator.backup.import_file(str(args.battery_save.resolve())):
+            if not emulator.backup.import_file(
+                str(args.battery_save.resolve()), force_size=args.battery_save.stat().st_size
+            ):
                 raise RuntimeError(f"failed to import battery save: {args.battery_save}")
         if args.state is not None:
             emulator.savestate.load_file(str(args.state.resolve()))
@@ -678,6 +741,12 @@ def main() -> int:
         if not args.no_screenshot:
             emulator.screenshot().save(args.output / "screens.png")
 
+        saved_state = None
+        if args.save_state is not None:
+            args.save_state.parent.mkdir(parents=True, exist_ok=True)
+            emulator.savestate.save_file(str(args.save_state.resolve()))
+            saved_state = {"path": str(args.save_state.resolve()), "sha1": sha1_file(args.save_state)}
+
         final_overlay_matches = compare_overlays(
             emulator, args.overlay_config, args.overlay_directory
         )
@@ -698,10 +767,10 @@ def main() -> int:
                 "path": str(args.battery_save.resolve()),
                 "sha1": sha1_file(args.battery_save),
             },
-            "savestate": None
-            if args.state is None
-            else {"path": str(args.state.resolve()), "sha1": sha1_file(args.state)},
+            "savestate": input_state,
             "frames_executed": executed_frames,
+            "saved_state": saved_state,
+            "memory_view": "ARM9 CPU address space; VRAM uses the current bank mapping",
             "input_actions": [
                 {"input": name, "frames": frames} for name, frames in args.action
             ],

@@ -22,7 +22,7 @@ def build_argument_parser() -> argparse.ArgumentParser:
         action="append",
         default=[],
         metavar="KEY[:FRAMES]",
-        help="ordered input; KEY is a DS button or wait (repeatable)",
+        help="ordered input; KEY is a DS button, chord such as select+a, or wait (repeatable)",
     )
     parser.add_argument("--save-state", type=Path, required=True, help="resulting .dst state")
     parser.add_argument("--screenshot", type=Path, help="optional resulting screen image")

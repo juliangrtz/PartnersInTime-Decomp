@@ -610,3 +610,21 @@ src/battle/battle_model_state.cpp:
 
 src/game/display_render_list.cpp:
     .text start:0x02008fc4 end:0x02009174
+
+src/game/model_render_links.c:
+    .text       start:0x0200b880 end:0x0200ba34
+
+src/game/affine_inverse.c:
+    .text       start:0x02010aa8 end:0x02010c34
+
+src/game/model_animation_pool.c:
+    .text       start:0x02010c34 end:0x02010e38
+
+src/game/field_background_transfers.c:
+    .text       start:0x02011184 end:0x020114f4
+
+src/game/field_background_tilemap.c:
+    .text       start:0x02011750 end:0x02011858
+
+src/nitro/gx/gx_texture_load.c:
+    .text       start:0x02038820 end:0x02038984

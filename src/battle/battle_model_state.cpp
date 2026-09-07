@@ -1,4 +1,5 @@
 #include <game/battle_scene.h>
+#include <game/affine.h>
 extern "C" {
 #include <game/sprite_output.h>
 }
@@ -31,7 +32,6 @@ extern "C" {
 
 extern u8 data_02060340[2][1024];
 
-extern void func_02010aa8(const s16 *source, s16 *destination);
 extern void func_0200c3b0(void), func_0200c3b8(void), func_0200c3c0(void);
 extern void func_0200c3d8(void *argument);
 
@@ -60,18 +60,18 @@ u8 func_02009630(BattleModel *model)
 void func_02009598(BattleTransformRow *rows, u8 first, u8 last)
 {
     BattleTransformRow *row = &rows[first];
-    s16 source[4];
-    s16 destination[4];
+    AffineMatrixQ8 source;
+    AffineMatrixQ8 destination;
     for (; first < last; ++first) {
-        source[0] = row->matrix[0][3];
-        source[1] = row->matrix[1][3];
-        source[2] = row->matrix[2][3];
-        source[3] = row->matrix[3][3];
-        func_02010aa8(source, destination);
-        row->matrix[0][3] = destination[0];
-        row->matrix[1][3] = destination[1];
-        row->matrix[2][3] = destination[2];
-        row->matrix[3][3] = destination[3];
+        source.values[0] = row->matrix[0][3];
+        source.values[1] = row->matrix[1][3];
+        source.values[2] = row->matrix[2][3];
+        source.values[3] = row->matrix[3][3];
+        GameAffine_InvertQ8(&source, &destination);
+        row->matrix[0][3] = destination.values[0];
+        row->matrix[1][3] = destination.values[1];
+        row->matrix[2][3] = destination.values[2];
+        row->matrix[3][3] = destination.values[3];
         ++row;
     }
 }

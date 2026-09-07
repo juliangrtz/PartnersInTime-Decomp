@@ -25,7 +25,8 @@ DS_KEYS = {
 
 def parse_action(value: str) -> tuple[str, int]:
     name, separator, frames_text = value.lower().partition(":")
-    if name != "wait" and name not in DS_KEYS:
+    buttons = name.split("+")
+    if name != "wait" and any(button not in DS_KEYS for button in buttons):
         raise argparse.ArgumentTypeError(f"unknown DS input: {name}")
     try:
         frames = int(frames_text) if separator else 1
@@ -37,4 +38,8 @@ def parse_action(value: str) -> tuple[str, int]:
 
 
 def action_mask(name: str) -> int:
-    return 0 if name == "wait" else keymask(DS_KEYS[name])
+    mask = 0
+    if name != "wait":
+        for button in name.split("+"):
+            mask |= keymask(DS_KEYS[button])
+    return mask

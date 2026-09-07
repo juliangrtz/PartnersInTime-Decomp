@@ -110,7 +110,7 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
                 model = func_02010634(model);
             }
             object->primary_model = model;
-            model->unk_010[0] = 0;
+            model->screen = 0;
             model->start();
             model->render_flags &= ~4;
             model->transform_flags &= ~0x20;

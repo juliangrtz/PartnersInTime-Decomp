@@ -187,6 +187,53 @@ cannot be mixed silently.
 
 ## Evidence discipline
 
+### Canonical EUR boot, field and menu route
+
+The raw battery save can be imported into a fresh 0.9.12 session; this avoids
+advancing the incompatible legacy state. The following route was replayed with
+the byte-identical rebuilt EUR ROM (ARMP, CRC 3184FBC4):
+
+```powershell
+python tools/runtime_drive.py --rom PiT_eur.nds `
+  --battery-save PiT_SaveStates/younger_princess_shroob.sav `
+  --action wait:1200 --action start:30 --action wait:300 `
+  --action a:8 --action wait:180 --action a:8 --action wait:300 `
+  --save-state build/runtime/states/eur_field.dst `
+  --screenshot build/runtime/states/eur_field.png
+```
+
+This reaches the save point at Peach's Castle in the past. From that checkpoint,
+`down:30, wait:30, start:8, wait:90` opens the menu. Then
+`b:8, wait:120, up:45, wait:30` returns to the field and walks toward the save
+point. Each action also includes the tools' documented one-frame release.
+
+Both tools accept button chords such as `select+a:30`. runtime_probe can save
+the resulting state with `--save-state` and capture these additional ARM9
+address ranges through `--diff-range`:
+
+- `display=0x04000000:0x04000070` and `vram_banks=0x04000240:0x0400024a`;
+- `main_bg=0x06000000:0x06020000` (other BG/OBJ and LCDC apertures are accepted);
+- `palettes=0x05000000:0x05000800` and `oam=0x07000000:0x07000800`.
+
+VRAM dumps show the current CPU mapping, not all physical banks independently.
+Capture the bank controls with graphics data and compare equal mappings. The
+probe also records the two model render lists, checking previous/next links,
+head/tail consistency, screen selection and the recovered membership bit.
+
+The field/menu captures exercised GameAffine_InvertQ8 666 times, and returning
+to the field exercised FieldBackground_QueueTransfer 104 times,
+FieldBackground_TransferQueued 18 times and FieldBackground_SetScroll 702 times.
+The latter route changed 23,477 bytes in the captured main-BG aperture; the bank
+mapping changed too, so this number alone is not a count of uploaded tile bytes.
+
+The supplied debug-menu notes describe Select+A-triggered Action Replay writes
+to 0x0205E768 and 0x0205EF50, setting each halfword to 12. Those addresses have
+not been validated as EUR scene selectors. The verified route above uses normal
+save loading. Debug warps need separate evidence: a successful teleport does not
+establish valid story flags, party setup or battle state.
+
+### Recording findings
+
 - Record the ROM and savestate SHA-1 values with every capture.
 - Repeat observations from a fresh state before turning them into field names or C types.
 - Prefer execution hooks on known functions over broad write watches once the responsible code is narrowed down.

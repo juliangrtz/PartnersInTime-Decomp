@@ -175,7 +175,8 @@ struct BattleModel {
     BattleModel *render_previous;
     BattleModel *render_next;
     BattleSceneObject *owner;
-    u8 unk_010[0x18];
+    u8 screen;
+    u8 unk_011[0x17];
     u32 property_028;
     /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
     u8 *property_02c;
@@ -209,7 +210,8 @@ struct BattleModel {
             u32 unknown_00_01 : 2;
             u32 panel_animation_trigger : 1;
             u32 unknown_03 : 1;
-            u32 unknown_04_07 : 4;
+            u32 render_linked : 1;
+            u32 unknown_05_07 : 3;
             u32 animation_active : 1;
             u32 unknown_09 : 1;
             u32 facing_left : 1;
@@ -246,7 +248,8 @@ struct BattleModel {
     BattleModel *render_previous;
     BattleModel *render_next;
     BattleSceneObject *owner;
-    u8 unk_010[0x18];
+    u8 screen;
+    u8 unk_011[0x17];
     u32 property_028;
     /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
     u8 *property_02c;
@@ -280,7 +283,8 @@ struct BattleModel {
             u32 unknown_00_01 : 2;
             u32 panel_animation_trigger : 1;
             u32 unknown_03 : 1;
-            u32 unknown_04_07 : 4;
+            u32 render_linked : 1;
+            u32 unknown_05_07 : 3;
             u32 animation_active : 1;
             u32 unknown_09 : 1;
             u32 facing_left : 1;
@@ -493,6 +497,9 @@ int BattleSceneObject_IsAnimationActiveById(u32 object_id,
 int BattleSceneObject_ConfigureAnimationLayer(int object_id, int layer);
 BattleSceneObject *BattleSceneObject_GetById(u32 object_id);
 int BattleModel_SetAlpha(BattleModel *model, u8 alpha, u8 mode);
+void BattleModel_AppendRenderList(BattleModel *model);
+void BattleModel_UnlinkRenderList(BattleModel *model);
+void BattleModel_DetachRenderList(BattleModel *model);
 
 #ifdef __cplusplus
 }
