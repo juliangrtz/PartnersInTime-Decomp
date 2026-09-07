@@ -46,4 +46,3 @@ u8 func_ov007_02075408(Overlay7Party *party) {
 u8 func_ov007_02075400(Overlay7Party *party) {
     return party->kind;
 }
-
