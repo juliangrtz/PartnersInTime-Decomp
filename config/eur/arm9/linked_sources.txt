@@ -267,3 +267,6 @@ src/nns/snd/snd_arc_stream_thread.c
 src/nns/snd/snd_arc_stream_prepare.c
 src/nns/snd/snd_capture_output_effect.c
 src/nns/snd/snd_capture_effect_mono.c
+src/game/equipment.c
+src/game/task_factories.c
+src/game/debug_console.c

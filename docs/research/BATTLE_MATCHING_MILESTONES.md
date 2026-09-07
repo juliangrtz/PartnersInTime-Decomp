@@ -666,7 +666,8 @@ outside this linked set.
 All linked functions match completely, without inline assembly. The total is
 263,988 bytes (16.88%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
-### Stream preparation and output effects (2026-09-07)
+
+## Stream preparation and output effects
 
 Linked `NNSi_SndArcStrmPrepare` and seven output-effect routines in matching C.
 The reconstructed paths cover stream headers, file opening, ADPCM seek setup,
@@ -678,3 +679,15 @@ All linked modules and the rebuilt ROM remain byte-identical; ROM SHA-1 is
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. All 66 tests, generated progress,
 and the public-content audit pass. The stream decoder and headphone mixer
 remain private analysis candidates and do not contribute to this total.
+
+## Equipment, task factories and debug console
+
+Sixteen functions add 2,436 matching C bytes. Equipment handling recovers the
+five signed bonuses, base-stat application, original clamps, HP adjustment
+and equipment selection. Eight factories allocate and construct the menu,
+scene and credits tasks. The six console routines reconstruct text and
+variadic formatting, cursor state, clearing, tile uploads and display setup.
+
+All functions match completely without inline assembly. The total is
+268,192 bytes (17.15%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

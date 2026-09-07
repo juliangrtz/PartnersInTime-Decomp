@@ -55,6 +55,13 @@ extern "C" {
 #endif
 
 void GameTask_InitSystem(void);
+GameTask *GameTask_CreateTitleScreen(void);
+GameTask *GameTask_CreateSceneController(void);
+GameTask *GameTask_CreateSaveMenu(void);
+GameTask *GameTask_CreateLoadMenu(void);
+GameTask *GameTask_CreateGameOver(void);
+GameTask *GameTask_CreateShopMenu(void);
+GameTask *GameTask_CreateStaffCredits(void);
 void GameTask_UpdateAll(void);
 void GameTask_DisableNormal(void);
 void GameTask_Enable(GameTask *task);
