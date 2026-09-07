@@ -863,3 +863,20 @@ layouts are 56 bytes per track and 100 bytes for the animation manager.
 The total is 302,624 bytes (19.35%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress and the public-content audit pass. No inline
 assembly or compiler-setting changes were added.
+
+## Sprite animation management and vector scaling
+
+Fifteen functions add 2,948 matching C bytes. Sprite animation management now
+covers initialization, allocation, starting tracks, duration scans, frame
+updates and owner release. Color packing clamps the three components before
+encoding RGB15. Resource loading and overlapping 16-bit moves also match.
+
+Vector helpers reconstruct bit-width measurement, individual and paired
+scaling, cross products and cosine calculation using the hardware square-root
+unit. Leading-zero counting uses a one-instruction inline-ASM helper; the
+surrounding arithmetic and control flow are C. The sprite geometry interpreter
+and nonmatching private candidates remain outside this milestone.
+
+The total is 305,572 bytes (19.54%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress and the public-content audit pass. No compiler
+settings were changed.

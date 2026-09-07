@@ -505,3 +505,24 @@ src/game/matrix_animation_state.c:
 
 src/game/matrix_animation_release.c:
     .text start:0x02017ec8 end:0x02017ee8
+
+src/game/vector_cosine.c:
+    .text start:0x020163f0 end:0x020165c0
+
+src/game/vector_scale.c:
+    .text start:0x020165c0 end:0x020168f0
+
+src/game/resource_read.c:
+    .text start:0x020168f0 end:0x020169f8
+
+src/game/sprite_animation_color.c:
+    .text start:0x020169f8 end:0x02016a6c
+
+src/game/sprite_animation_scan.c:
+    .text start:0x020179c0 end:0x02017b4c
+
+src/game/sprite_animation_update.c:
+    .text start:0x02017b4c end:0x02017d38
+
+src/game/sprite_animation_state.c:
+    .text start:0x02017d38 end:0x02017ec8

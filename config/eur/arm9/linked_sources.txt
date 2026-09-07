@@ -319,3 +319,10 @@ src/game/matrix_animation.c
 src/game/matrix_animation_update.c
 src/game/matrix_animation_state.c
 src/game/matrix_animation_release.c
+src/game/vector_cosine.c
+src/game/vector_scale.c
+src/game/resource_read.c
+src/game/sprite_animation_color.c
+src/game/sprite_animation_scan.c
+src/game/sprite_animation_update.c
+src/game/sprite_animation_state.c

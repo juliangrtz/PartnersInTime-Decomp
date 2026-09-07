@@ -51,7 +51,7 @@ typedef struct BattleEffectRegistry {
 typedef char BattleModelResourceEffectPayload_SizeCheck[
     sizeof(BattleModelResourceEffectPayload) == 0x20 ? 1 : -1];
 
-extern BattleEffect *func_02017d38(
+extern BattleEffect *GameSpriteAnimation_Start(
     void *manager, const void *resource,
     int x, int y, int z, int scale);
 extern BattleModelEffect *GameMatrixAnimation_Start(
@@ -76,7 +76,7 @@ BattleEffect *BattleSpriteEffect_Spawn(
     const u8 *resource_table =
         *(const u8 **)(context + BATTLE_SPRITE_RESOURCE_TABLE_OFFSET);
 
-    return func_02017d38(
+    return GameSpriteAnimation_Start(
         *(void **)(context + BATTLE_SPRITE_EFFECT_MANAGER_OFFSET),
         resource_table + ((const u32 *)resource_table)[effect_id],
         x + *(s16 *)(context + BATTLE_EFFECT_VIEW_X_OFFSET),
