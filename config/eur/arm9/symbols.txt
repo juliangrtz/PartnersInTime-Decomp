@@ -1961,7 +1961,7 @@ data_0205a09c kind:bss addr:0x0205a09c
 data_0205a740 kind:bss addr:0x0205a740
 data_0205a758 kind:bss addr:0x0205a758
 gModelRenderList kind:bss addr:0x0205a89c
-data_0205a8a4 kind:bss addr:0x0205a8a4
+gModelRenderListTail kind:bss addr:0x0205a8a4
 data_0205a8ac kind:bss addr:0x0205a8ac
 data_0205a8b0 kind:bss addr:0x0205a8b0
 data_0205a8b4 kind:bss addr:0x0205a8b4

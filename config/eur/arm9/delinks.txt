@@ -604,3 +604,9 @@ src/game/sprite_window_open.c:
 
 src/game/sprite_window.c:
     .text start:0x02020e44 end:0x02021090
+
+src/battle/battle_model_state.cpp:
+    .text start:0x02009208 end:0x020096b0
+
+src/game/display_render_list.cpp:
+    .text start:0x02008fc4 end:0x02009174

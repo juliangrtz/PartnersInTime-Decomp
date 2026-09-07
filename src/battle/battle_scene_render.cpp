@@ -39,7 +39,7 @@ extern "C" int BattleScene_RenderModels(void) {
         observer->begin_frame();
     }
 
-    for (model = gModelRenderList; model != 0; model = model->render_next) {
+    for (model = gModelRenderList[0]; model != 0; model = model->render_next) {
         BattleSceneObject *object = model->owner;
 
         if (model->flag_bits.animation_active) {

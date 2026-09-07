@@ -198,8 +198,8 @@ extern "C" void BattleFlee_InitializeScene(BattleAITask *base_task) {
                 (u16)((BattleFleeControllerConstant)index +
                       BATTLE_FLEE_PARTICLE_OBJECT_FIRST)));
         model->stop();
-        frame_span = model->animation_data->end_frame -
-                     model->animation_data->start_frame;
+        frame_span = model->animation_data[BATTLE_FLEE_PARTICLE_ANIMATION].end_frame -
+                     model->animation_data[BATTLE_FLEE_PARTICLE_ANIMATION].start_frame;
         model->set_animation(
             BATTLE_FLEE_PARTICLE_ANIMATION,
             (s16)(index * frame_span / BATTLE_FLEE_PARTICLE_OBJECT_COUNT));

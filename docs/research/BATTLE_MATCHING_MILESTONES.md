@@ -1067,3 +1067,20 @@ unswitch the kind test out of the loop.
 The total is 327,592 of 1,563,700 bytes (20.95%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass.
+
+
+## Battle model accessors and the render lists
+
+Twenty-seven functions add 1,624 matching C++ bytes across two units. The model
+struct gains the render-list back pointer, the shared render-state block, the
+resource header, the per-frame table and the anchor offset it carries between
+models; its animation table turns out to be an array of eight-byte frame ranges
+indexed by animation id, which is how the flee controller was already reading
+it. The flag word splits into the animation mode, a three-bit state and the bit
+that selects which render callback the scene installs. The render list itself is
+one head and one tail per display engine, walked by two virtual-dispatch passes
+and by the draw pass that records the object range each model claimed.
+
+The total is 329,216 of 1,563,700 bytes (21.05%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass.

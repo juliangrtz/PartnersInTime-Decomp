@@ -207,7 +207,7 @@ extern "C" void BattleScene_RenderShadows(void) {
 
     *(u8 **)(gBattleContext + BATTLE_SHADOW_RENDER_BUFFER_OFFSET) =
         gBattleContext + BATTLE_SHADOW_RENDER_BUFFER_START_OFFSET;
-    for (model = gModelRenderList; model != 0; model = model->render_next) {
+    for (model = gModelRenderList[0]; model != 0; model = model->render_next) {
         BattleSceneObject *object = model->owner;
 
         if (object->flags.bits.render_mode != 1) {

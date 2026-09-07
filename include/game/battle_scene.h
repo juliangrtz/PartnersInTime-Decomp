@@ -31,11 +31,22 @@ enum {
     BATTLE_MOTION_CHANNEL_COUNT = 4
 };
 
+/* One row of the model's animation table, indexed by animation id. */
 struct BattleModelAnimationData {
-    u8 unknown_000[0xC8];
     u16 start_frame;
     u16 end_frame;
+    u32 unknown_04;
 };
+
+/* One row of the model's frame table: the second halfword carries a nine-bit
+   offset the renderer compares against the anchor after scaling it by 256. */
+typedef struct BattleModelFrameEntry {
+    u16 unknown_00;
+    union {
+        u16 raw;
+        struct { u16 offset : 9, unknown_09_15 : 7; } bits;
+    } value;
+} BattleModelFrameEntry;
 
 struct BattleSceneRenderOverride {
     int (*render)(BattleSceneObject *object, int pass);
@@ -77,8 +88,8 @@ struct BattleMotionChannel {
 struct BattleModelVTable {
     void (*prepare_render)(BattleModel *model);
     void (*unknown_004)(BattleModel *model);
-    void (*draw)(BattleModel *model, int argument_1,
-                 int argument_2, int argument_3);
+    void (*draw)(BattleModel *model, void *buffer, u8 *object_count,
+                 u8 *affine_count);
     u8 unknown_00c[8];
     void (*unknown_014)(BattleModel *model);
     u8 unknown_018[0x0C];
@@ -88,7 +99,10 @@ struct BattleModelVTable {
     int (*set_animation)(BattleModel *model, u8 animation_id, int argument_2);
     u8 unknown_038[4];
     int (*get_animation_id)(BattleModel *model);
-    u8 unknown_040[0x28];
+    u8 unknown_040[4];
+    u32 (*get_sort_key)(BattleModel *model);
+    void (*unknown_048)(BattleModel *model, int enabled);
+    u8 unknown_04c[0x1C];
     int (*set_primary_animation)(BattleModel *model, u8 animation_id,
                                  int argument_2, int enabled);
     u8 unknown_06c[0x1C];
@@ -107,7 +121,7 @@ struct BattleModelVTable {
 struct BattleModel {
     virtual void prepare_render();
     virtual void unknown_04();
-    virtual void draw(int argument_1, int argument_2, int argument_3);
+    virtual void draw(void *buffer, u8 *object_count, u8 *affine_count);
     virtual void unknown_0c();
     virtual void unknown_10();
     virtual void unknown_14();
@@ -122,8 +136,8 @@ struct BattleModel {
     virtual void unknown_38();
     virtual int get_animation_id();
     virtual void unknown_40();
-    virtual void unknown_44();
-    virtual void unknown_48();
+    virtual u32 get_sort_key();
+    virtual void unknown_48(int enabled);
     virtual void unknown_4c();
     virtual void unknown_50();
     virtual void unknown_54();
@@ -158,10 +172,18 @@ struct BattleModel {
     virtual void unknown_c0();
     virtual void unknown_c4();
     virtual struct BattleSpriteTransform *get_sprite_transform();
-    u8 unk_004[4];
+    BattleModel *render_previous;
     BattleModel *render_next;
     BattleSceneObject *owner;
-    u8 unk_010[0x38];
+    u8 unk_010[0x18];
+    u32 property_028;
+    /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
+    u8 *property_02c;
+    u8 unk_030[8];
+    /* Resource header; the sixth halfword holds the frame count. */
+    const u16 *property_038;
+    u8 unk_03c[8];
+    const BattleModelFrameEntry *frames;
     BattleModelAnimationData *animation_data;
     u8 unk_04c[8];
     s16 animation_id;
@@ -173,7 +195,8 @@ struct BattleModel {
     };
     s16 animation_offset_x;
     s16 animation_offset_y;
-    u8 unk_060[8];
+    u8 unk_060[4];
+    s32 anchor_offset;
     s32 render_anchor_z;
     u8 unk_06c[8];
     s16 scale_x;
@@ -190,7 +213,11 @@ struct BattleModel {
             u32 unknown_09 : 1;
             u32 facing_left : 1;
             u32 flip_y : 1;
-            u32 unknown_12_31 : 20;
+            u32 animation_mode : 4;
+            u32 unknown_16_18 : 3;
+            u32 unknown_19_21 : 3;
+            u32 no_sort_key : 1;
+            u32 unknown_23_31 : 9;
         } flag_bits;
     };
     u8 unk_080[4];
@@ -215,10 +242,18 @@ struct BattleModel {
 #else
 struct BattleModel {
     BattleModelVTable *vtable;
-    u8 unk_004[4];
+    BattleModel *render_previous;
     BattleModel *render_next;
     BattleSceneObject *owner;
-    u8 unk_010[0x38];
+    u8 unk_010[0x18];
+    u32 property_028;
+    /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
+    u8 *property_02c;
+    u8 unk_030[8];
+    /* Resource header; the sixth halfword holds the frame count. */
+    const u16 *property_038;
+    u8 unk_03c[8];
+    const BattleModelFrameEntry *frames;
     BattleModelAnimationData *animation_data;
     u8 unk_04c[8];
     s16 animation_id;
@@ -230,7 +265,8 @@ struct BattleModel {
     };
     s16 animation_offset_x;
     s16 animation_offset_y;
-    u8 unk_060[8];
+    u8 unk_060[4];
+    s32 anchor_offset;
     s32 render_anchor_z;
     u8 unk_06c[8];
     s16 scale_x;
@@ -247,7 +283,11 @@ struct BattleModel {
             u32 unknown_09 : 1;
             u32 facing_left : 1;
             u32 flip_y : 1;
-            u32 unknown_12_31 : 20;
+            u32 animation_mode : 4;
+            u32 unknown_16_18 : 3;
+            u32 unknown_19_21 : 3;
+            u32 no_sort_key : 1;
+            u32 unknown_23_31 : 9;
         } flag_bits;
     };
     u8 unk_080[4];
@@ -326,7 +366,9 @@ typedef char BattleSceneObject_SizeCheck[
 typedef char BattleModel_SizeCheck[sizeof(BattleModel) == 0x1B8 ? 1 : -1];
 
 extern BattleSceneObject *gBattleMotionObjectList;
-extern BattleModel *gModelRenderList;
+/* One render list per display engine. */
+extern BattleModel *gModelRenderList[2];
+extern BattleModel *gModelRenderListTail[2];
 
 #ifdef __cplusplus
 extern "C" {

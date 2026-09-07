@@ -2,6 +2,10 @@
 #define PIT_GAME_SPRITE_OUTPUT_H
 #include <nitro.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct GameOamEntry { u16 attributes[3]; u16 affine; } GameOamEntry;
 typedef struct GameOamSortRecord {
     u32 key;
@@ -38,11 +42,12 @@ extern GameSpritePalette *data_0205a07c[2], *data_0205a084[2];
 extern u8 *data_0205a08c[2], *data_0205a094[2];
 extern GameOamSortRecord data_0205a09c[2][128];
 
+void DisplayVram_ClearEngineAssignments(int screen);
 void GameOam_CopyState(void *destination);
 void GameOam_CopyAffine(const GameOamEntry *source, GameOamEntry *destination);
 void GameOam_BuildSorted(int screen, const GameOamEntry *source, GameOamEntry *destination);
 void GameOam_SortGroups(int screen);
-void GameOam_AddGroup(int screen, u32 key, int count, u8 affine_count);
+void GameOam_AddGroup(int screen, u32 key, int count, int affine_count);
 void GameOam_SetReserved(int screen, int count, u8 affine_count, int group_count);
 void GameSpritePalette_Upload(int screen, const u8 *extended, const u8 *standard);
 void GameSpritePalette_UploadScreen(int screen);
@@ -99,5 +104,9 @@ static inline void GameSprite_CopyBytes(const void *source, void *destination, u
     if ((u32)source < (u32)destination) func_0202cd2c(source, destination, size);
     else func_0202cc58(source, destination, size);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
