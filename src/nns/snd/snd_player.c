@@ -8,10 +8,9 @@ extern const s16 data_0204fb34[128];
 
 extern void func_0203129c(void *heap);
 extern void func_020311dc(void *heap);
-extern void func_0202f554(NNSSndHandle *handle);
 extern void func_0203c1f4(u32 sequence, int volume);
 extern void func_0203c26c(u32 sequence);
-extern void func_0203c238(u32 sequence);
+extern void func_0203c238(u32 sequence, const void *data, u32 offset, const void *bank);
 extern void func_0203c154(u32 sequence, u32 tracks, u32 mask);
 extern u32 func_0203c570(void);
 extern int func_0203c51c(u32 command);
@@ -91,7 +90,7 @@ NNSiSndSeqPlayer *NNSi_SndPlayerAlloc(NNSSndHandle *handle, int index, int prior
     NNSiSndPlayer *player = &data_02061320[index];
     NNSiSndSeqPlayer *sequence;
     if (handle->player) {
-        func_0202f554(handle);
+        NNS_SndHandleReleaseSeq(handle);
     }
     if (player->sequences.count >= player->max_sequences) {
         sequence = NNS_FndGetNextListObject(&player->sequences, 0);
@@ -118,10 +117,10 @@ void NNSi_SndPlayerReleaseSequence(NNSiSndSeqPlayer *sequence)
     NNSi_SndPlayerFreeSequence(sequence);
 }
 
-void NNSi_SndPlayerPrepareSequence(NNSiSndSeqPlayer *sequence)
+void NNSi_SndPlayerPrepareSequence(NNSiSndSeqPlayer *sequence, const void *data, u32 offset, const void *bank)
 {
     NNSiSndPlayer *player = sequence->owner;
-    func_0203c238(sequence->index);
+    func_0203c238(sequence->index, data, offset, bank);
     if (player->channel_mask) {
         func_0203c154(sequence->index, 0xffff, player->channel_mask);
     }
@@ -164,7 +163,7 @@ void NNSi_SndPlayerResetSequence(NNSiSndSeqPlayer *sequence)
     sequence->paused = 0;
     sequence->started = 0;
     sequence->start_pending = 0;
-    sequence->sequence = 0;
+    sequence->sequence_kind = 0;
     sequence->volume_db = 0;
     sequence->initial_volume = 127;
     sequence->external_volume = 127;

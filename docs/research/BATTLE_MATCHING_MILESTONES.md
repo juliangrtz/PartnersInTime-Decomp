@@ -426,3 +426,16 @@ All 27 functions match completely in objdiff, without inline assembly.
 
 The total is 228,936 bytes (14.64%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress, and the public-content audit pass.
+
+## Sound API and main-loop integration
+
+Twenty functions add 1,188 matching C bytes: sequence handles and archive IDs,
+play-count queries, archive stop operations, channel priority/volume, player heap
+creation, global variables, sound initialization, the main loop, and pre/post
+sleep callbacks. Caller disassembly also establishes all four arguments of
+sequence preparation; the C declaration now carries sequence data, offset, and
+bank explicitly while retaining identical instructions.
+
+All 20 new functions and the updated player unit match completely in objdiff.
+The total is 230,124 bytes (14.72%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress, and the public-content audit pass.

@@ -46,8 +46,10 @@ struct NNSiSndSeqPlayer {
     u8 paused;
     u8 start_pending;
     u32 command;
-    u16 sequence;
-    u8 unknown36[6];
+    u16 sequence_kind;
+    u16 unknown36;
+    u16 archive_or_sequence;
+    u16 archive_sequence;
     u8 index;
     u8 priority;
     s16 volume_db;
@@ -65,6 +67,8 @@ int NNSi_SndFaderGet(NNSiSndFader *fader);
 void NNSi_SndFaderUpdate(NNSiSndFader *fader);
 int NNSi_SndFaderIsFinished(NNSiSndFader *fader);
 
+void NNS_SndInit(void);
+void NNS_SndMain(void);
 void NNSi_SndInitResource(void);
 void NNSi_SndFreeAlarm(int alarm);
 int NNSi_SndAllocAlarm(void);
@@ -83,10 +87,27 @@ void NNSi_SndPlayerInsert(NNSiSndPlayer *player, NNSiSndSeqPlayer *sequence);
 void NNSi_SndPlayerResetSequence(NNSiSndSeqPlayer *sequence);
 void *NNSi_SndPlayerAllocHeap(int index, NNSiSndSeqPlayer *sequence);
 void NNSi_SndPlayerStopSequence(NNSiSndSeqPlayer *sequence, int frames);
-void NNSi_SndPlayerPrepareSequence(NNSiSndSeqPlayer *sequence);
+void NNSi_SndPlayerPrepareSequence(NNSiSndSeqPlayer *sequence, const void *data, u32 offset, const void *bank);
 void NNSi_SndPlayerReleaseSequence(NNSiSndSeqPlayer *sequence);
 NNSiSndSeqPlayer *NNSi_SndPlayerAlloc(NNSSndHandle *handle, int index, int priority);
 void NNSi_SndPlayerMain(void);
 void NNSi_SndPlayerInit(void);
+
+void NNS_SndPlayerSetPlayableSeqCount(int player, int count);
+void NNS_SndPlayerSetAllocatableChannel(int player, u32 mask);
+int NNS_SndPlayerCreateHeap(int player, void *heap, u32 size);
+void NNS_SndStopSeq(NNSSndHandle *handle, int frames);
+void NNS_SndStopSeqArc(int archive, int frames);
+void NNS_SndStopSeqArcIdx(int archive, int index, int frames);
+void NNS_SndHandleInit(NNSSndHandle *handle);
+void NNS_SndHandleReleaseSeq(NNSSndHandle *handle);
+int NNS_SndCountPlayingSeqArcIdx(int archive, int index);
+void NNSi_SndPlayerSetInitialVolume(NNSSndHandle *handle, u8 volume);
+void NNS_SndPlayerMoveVolume(NNSSndHandle *handle, int volume, int frames);
+void NNS_SndPlayerSetChannelPriority(NNSSndHandle *handle, u32 priority);
+void NNS_SndPlayerSetTrackVolume(NNSSndHandle *handle, u32 tracks, int volume);
+void NNSi_SndPlayerSetSeqNo(NNSSndHandle *handle, u16 sequence);
+void NNSi_SndPlayerSetSeqArcNo(NNSSndHandle *handle, u16 archive, u16 sequence);
+int NNS_SndPlayerWriteGlobalVariable(u32 index, s16 value);
 
 #endif
