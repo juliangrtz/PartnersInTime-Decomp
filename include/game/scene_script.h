@@ -70,9 +70,10 @@ struct SceneObject {
     void *primary_renderable;
     void *secondary_renderable;
     void *resource;
-    u8 unknown_0d0[0x04];
-    u16 animation_id;
-    u8 unknown_0d6[0x02];
+    s16 property_0d0;
+    s16 property_0d2;
+    s16 animation_id;
+    s16 property_0d6;
     s16 render_height;
     s16 default_motion_speed;
     u16 object_id;

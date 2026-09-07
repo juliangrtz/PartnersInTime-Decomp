@@ -370,3 +370,6 @@ src/overlay007/point_motion.c
 src/overlay007/items.c
 src/game/display_render_list.cpp
 src/battle/battle_model_state.cpp
+src/overlay007/vm_motion.c
+src/overlay007/properties.c
+src/overlay007/animation_layer.cpp

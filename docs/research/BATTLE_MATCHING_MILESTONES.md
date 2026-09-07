@@ -1084,3 +1084,19 @@ and by the draw pass that records the object range each model claimed.
 The total is 329,216 of 1,563,700 bytes (21.05%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass.
+
+
+## Overlay 7 scene motion commands
+
+Eight functions add 2,076 matching bytes. Five of them are script commands that
+move a scene object: each joins the pairs of script words the argument-mode bits
+say are still split, divides the fixed-point results down by sixteen, picks the
+curve or the linear helper and writes the returned duration back into the
+command's result variable when the caller asked for one. Alongside them sit the
+animation-layer reset, which reaches the model through its virtual table, and
+two small selectors over the scene block. The scene object gains the two signed
+halfwords ahead of its animation id, which is itself signed.
+
+The total is 331,292 of 1,563,700 bytes (21.19%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass.
