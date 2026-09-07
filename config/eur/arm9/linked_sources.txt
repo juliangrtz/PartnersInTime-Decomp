@@ -194,3 +194,5 @@ src/nitro/dgt/dgt_hash2.c
 src/nitro/cp/cp_context.c
 src/nitro/tp/tp_calibration_point.c
 src/nitro/tp/tp_io.c
+src/nitro/pm/pm_control.c
+src/nitro/pm/pm_fifo.c

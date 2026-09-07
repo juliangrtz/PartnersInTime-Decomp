@@ -142,3 +142,9 @@ src/nitro/tp/tp_calibration_point.c:
 
 src/nitro/tp/tp_io.c:
     .text       start:0x02040a44 end:0x02040fb0
+
+src/nitro/pm/pm_control.c:
+    .text       start:0x02041270 end:0x02041994
+
+src/nitro/pm/pm_fifo.c:
+    .text       start:0x02041a0c end:0x02041dac

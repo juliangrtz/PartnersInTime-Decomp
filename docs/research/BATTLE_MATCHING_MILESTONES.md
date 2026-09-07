@@ -294,3 +294,18 @@ their remaining scheduling differences are investigated; they are excluded
 from the C total. No assembly fallback is added. The complete module/symbol
 check, reference-ROM SHA-1, progress check, public-content audit, and all 66
 tests pass.
+
+## Power management and sleep transitions
+
+Twenty-eight power-management functions add 2,756 matching bytes in pure C,
+raising the linked total to 216,032 bytes (13.82%). The implementation covers
+sleep callback lists, LCD/LED/backlight control, synchronous/asynchronous
+commands, ARM7 replies, request locking/completion, and sleep/wake transitions.
+Sleep preserves display state, interrupt state and masks, frame-boundary waits,
+wake-source filtering, and the power-off path. Its saved state remains in the
+native stack slots, and explicit inline C conversions reproduce reply narrowing.
+
+The 120-byte asynchronous register-read submission remains native pending its
+literal-load scheduling match. Every included function is byte-identical;
+module/symbol checks, the original-ROM SHA-1, generated progress, public-content
+audit, and all 66 tests pass.
