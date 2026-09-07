@@ -807,3 +807,15 @@ the on-disk directory-position representation.
 The total is 288,208 bytes (18.43%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress and the public-content audit pass. No inline
 assembly was added; the existing filesystem command functions still match.
+
+## Map sound-wave selection and list loading
+
+Two functions add 1,084 matching C bytes. Map-specific instrument lists extend
+the common wave list, and the loader resolves each instrument's wave, queues
+the sample reads, connects the bank to its wave archive, and starts deferred
+loading at the requested byte rate. The former FieldAssets_LoadForMap symbol
+is now named GameAudio_LoadMapWaves to reflect this recovered behavior.
+
+The total is 289,292 bytes (18.50%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress and the public-content audit pass. No inline
+assembly was added, and the battle background's callers remain identical.

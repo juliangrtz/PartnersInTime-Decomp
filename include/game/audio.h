@@ -31,6 +31,11 @@ typedef struct GameAudioQueueEnd {
     GameAudioLoadCommand **tail;
 } GameAudioQueueEnd;
 
+typedef struct GameAudioWaveList {
+    s16 count;
+    u16 instruments[1];
+} GameAudioWaveList;
+
 typedef char GameAudioLoadCommandSizeCheck[(sizeof(GameAudioLoadCommand) == 28) ? 1 : -1];
 typedef char GameAudioLoaderSizeCheck[(sizeof(GameAudioLoader) == 56) ? 1 : -1];
 typedef char GameAudioMusicFilesSizeCheck[(sizeof(GameAudioMusicFiles) == 24) ? 1 : -1];
@@ -121,4 +126,6 @@ int GameAudio_LoadWave(SoundWaveArchive *archive, u32 index, u32 file, NNSSndHea
 void GameAudio_LoadBankWaves(SoundWaveArchive *archive, SoundBank *bank, int slot, u32 file, NNSSndHeap *heap);
 void GameAudio_InitWaveTable(GameAudioLoadCommand *command);
 void GameAudio_LoadDeferredWaves(int sequence, int bank);
+void GameAudio_LoadMapWaves(s16 map, u32 bytes_per_frame);
+void GameAudio_LoadWaveList(const GameAudioWaveList *list, int deferred, u32 bytes_per_frame);
 #endif

@@ -454,3 +454,9 @@ src/game/text_next.cpp:
 
 src/nitro/fs/fs_path.c:
     .text start:0x0203d7dc end:0x0203ddb8
+
+src/game/audio_map_waves.c:
+    .text start:0x02026524 end:0x020267f4
+
+src/game/audio_wave_list.c:
+    .text start:0x020278c0 end:0x02027a2c

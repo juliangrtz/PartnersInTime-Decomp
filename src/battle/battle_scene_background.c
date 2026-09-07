@@ -5,7 +5,7 @@ enum BattleBackgroundConstant {
     SAVE_BATTLE_BACKGROUND_FLAGS_OFFSET = 0x514,
     SAVE_CURRENT_MAP_ID_OFFSET = 0x55A,
     BATTLE_BACKGROUND_DEFAULT_ID = 4,
-    BATTLE_BACKGROUND_LOAD_DURATION = 0x800
+    BATTLE_BACKGROUND_LOAD_BYTES_PER_FRAME = 0x800
 };
 
 typedef union SaveBattleBackgroundFlags {
@@ -16,7 +16,7 @@ typedef union SaveBattleBackgroundFlags {
     } bits;
 } SaveBattleBackgroundFlags;
 
-void FieldAssets_LoadForMap(s16 map_id, int duration);
+void GameAudio_LoadMapWaves(s16 map_id, u32 bytes_per_frame);
 void GameAudio_FadeMusic(int fade_out, int duration);
 void GameAudio_SetMusic(int background_id);
 void GameAudio_LoadMusic(u16 background_id, u8 buffer_index, int duration);
@@ -44,7 +44,7 @@ void BattleBackground_LoadTask(BattleQueuedTask *task) {
         background_id = BATTLE_BACKGROUND_DEFAULT_ID;
     }
     GameAudio_LoadMusic(background_id, runtime->flags.bits.background_buffer,
-                         BATTLE_BACKGROUND_LOAD_DURATION);
+                         BATTLE_BACKGROUND_LOAD_BYTES_PER_FRAME);
     task->callback = BattleBackground_FinishLoadTask;
 }
 
@@ -98,7 +98,7 @@ BattleQueuedTask *BattleFieldAssets_RequestReload(void) {
 void BattleFieldAssets_ReloadTask(BattleQueuedTask *task) {
     s16 map_id = *(s16 *)(gSaveData + SAVE_CURRENT_MAP_ID_OFFSET);
 
-    FieldAssets_LoadForMap(map_id, BATTLE_BACKGROUND_LOAD_DURATION);
+    GameAudio_LoadMapWaves(map_id, BATTLE_BACKGROUND_LOAD_BYTES_PER_FRAME);
     task->callback = BattleFieldAssets_FinishReloadTask;
 }
 
