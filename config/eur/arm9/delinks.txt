@@ -223,3 +223,12 @@ src/nns/snd/snd_main.c:
 
 src/nns/snd/snd_heap.c:
     .text start:0x02030f58 end:0x02031354
+
+src/nns/snd/snd_archive_io.c:
+    .text start:0x02030810 end:0x0203096c
+
+src/nns/snd/snd_archive_info.c:
+    .text start:0x0203096c end:0x02030c8c
+
+src/nns/snd/snd_archive_init.c:
+    .text start:0x02030c8c end:0x02030f58

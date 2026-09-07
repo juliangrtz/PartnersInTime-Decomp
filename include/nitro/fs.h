@@ -91,6 +91,7 @@ void FS_InitFile(FsFile *file);
 int FS_OpenFileDirect(FsFile *file, FsArchive *archive, u32 top, u32 bottom, u32 id);
 int FS_OpenFileFast(FsFile *file, FsFileId id);
 int FS_ReadFile(FsFile *file, void *buffer, int size);
+int FS_SeekFile(FsFile *file, int offset, int origin);
 int FS_ReadFileAsync(FsFile *file, void *buffer, int size);
 int FS_CloseFile(FsFile *file);
 FsArchive *FS_FindArchive(const char *name, int length);

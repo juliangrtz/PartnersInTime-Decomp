@@ -452,3 +452,15 @@ callers; its instructions remain unchanged.
 All new and affected functions match completely in objdiff. The total is
 231,144 bytes (14.78%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
 generated progress, and the public-content audit pass.
+
+## Sound archive tables and file I/O
+
+Twenty-one functions add 1,864 matching C bytes: SDAT archive initialization,
+header/INFO/FAT/SYMB loading and disposal, current-archive switching, all eight
+INFO table lookups, file offset/size/address access, and bounded file reads.
+The 140-byte archive state combines the 48-byte SDAT header, the existing
+68-byte filesystem handle, its file ID, and the three loaded block pointers.
+
+All 21 functions match completely in objdiff, without inline assembly. The
+total is 233,008 bytes (14.90%). Module/symbol checks, original-ROM SHA-1, all
+66 tests, generated progress, and the public-content audit pass.
