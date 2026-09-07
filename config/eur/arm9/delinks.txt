@@ -175,3 +175,9 @@ src/nitro/card/card_request.c:
 
 src/nitro/card/card_pullout.c:
     .text start:0x02043a70 end:0x02043bb8
+
+src/nitro/ctrdg/ctrdg.c:
+    .text start:0x02043bb8 end:0x02043fe0
+
+src/nitro/ctrdg/ctrdg_init.c:
+    .text start:0x020441ac end:0x02044248

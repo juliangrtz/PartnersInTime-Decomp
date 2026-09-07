@@ -205,3 +205,5 @@ src/nitro/card/card_rom_dma.c
 src/nitro/card/card_rom_registers.c
 src/nitro/card/card_request.c
 src/nitro/card/card_pullout.c
+src/nitro/ctrdg/ctrdg.c
+src/nitro/ctrdg/ctrdg_init.c

@@ -360,3 +360,15 @@ registration, and the power-off/termination path. The request flags remain
 volatile so each required shared-state read survives compilation. The linked
 total is 221,432 bytes (14.16%). Module/symbol checks, original-ROM SHA-1, all
 66 tests, generated progress, and the public-content audit pass.
+
+## GBA cartridge control and identification
+
+Fourteen cartridge functions add 1,220 matching bytes in pure C: initialization,
+FIFO messages, bus locking, bus-timing save/restore, module identification and
+presence checks, and removal callbacks. The GBA header uses ordinary ROM reads
+while the ARM7-shared module flags remain volatile, preserving the native access
+order. The module-header import routine remains native pending its scheduling
+match. No assembly fallback is added.
+
+The total is 222,652 bytes (14.24%). Module/symbol checks, the original-ROM SHA-1,
+all 66 tests, generated progress, and the public-content audit pass.

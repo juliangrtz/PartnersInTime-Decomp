@@ -12,7 +12,7 @@ extern int func_0203d4dc(u32 tag, u32 data, int error);
 extern void func_02039f58(OsMutex *mutex);
 extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 func_02038cc4(u32 mask);
-extern int func_02043d40(u32 value);
+extern int CTRDG_IsExisting(u32 value);
 extern void func_020351dc(void);
 extern void func_02035190(void);
 extern void OS_Halt(void);
@@ -118,7 +118,7 @@ void PM_GoSleepMode(u32 triggers, u32 keys, u32 key_logic) {
     (void)PM_IME;
     PM_IME = 1;
     if ((triggers & 8) && *(vu16 *)0x027FFC40 == 2) triggers &= ~8;
-    if ((triggers & 16) && !func_02043d40(triggers & 16)) triggers &= ~16;
+    if ((triggers & 16) && !CTRDG_IsExisting(triggers & 16)) triggers &= ~16;
     main_display = *(vu32 *)0x04000000;
     sub_display = *(vu32 *)0x04001000;
     lcd = PM_GetLCDPower();

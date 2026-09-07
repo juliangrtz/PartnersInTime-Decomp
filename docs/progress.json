@@ -4,11 +4,11 @@
   "scope": "DSD ranges marked as ARM9 code; BSS, assets, and ARM7 mixed images are excluded",
   "totals": {
     "mapped_code_bytes": 1563700,
-    "matching_c_bytes": 221432,
+    "matching_c_bytes": 222652,
     "symbolic_asm_bytes": 5404,
-    "remaining_bytes": 1336864,
-    "matching_c_percent": 14.1608,
-    "source_coverage_percent": 14.5064,
+    "remaining_bytes": 1335644,
+    "matching_c_percent": 14.2388,
+    "source_coverage_percent": 14.5844,
     "arm7_symbolic_bytes": 43852
   },
   "components": [
@@ -16,9 +16,9 @@
       "id": "arm9",
       "label": "ARM9 resident",
       "mapped_code_bytes": 282376,
-      "matching_c_bytes": 50380,
+      "matching_c_bytes": 51600,
       "symbolic_asm_bytes": 260,
-      "remaining_bytes": 231736,
+      "remaining_bytes": 230516,
       "function_symbols": 1616
     },
     {
