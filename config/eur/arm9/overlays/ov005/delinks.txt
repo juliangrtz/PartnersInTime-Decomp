@@ -39,3 +39,9 @@ src/overlay005/display_windows.c:
 
 src/overlay005/element_lists.c:
     .text start:0x02066358 end:0x02066920
+
+src/overlay005/asset_loader.c:
+    .text start:0x02066bd4 end:0x020670b4
+
+src/overlay005/touch_state.c:
+    .text start:0x02068594 end:0x020686cc

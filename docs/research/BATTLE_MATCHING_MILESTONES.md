@@ -986,3 +986,24 @@ brightness, and the hardware window bounds and plane masks for both engines.
 The total is 322,496 of 1,563,700 bytes (20.62%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass. No inline assembly and no compiler-setting changes.
+
+
+## Overlay 5 asset loading and touch state
+
+Six functions add 1,560 matching C bytes. Compressed and plain archive entries
+are now loaded through the queue recovered earlier: each load first asks the
+registry whether the key is already resident, otherwise constructs a
+reference-counted buffer entry, prepares the read, sizes and allocates the
+destination and links the result into the requesting asset. The synchronous
+variant reads into a scratch buffer, dispatches on the four-bit compression tag
+in the header word and frees the scratch buffer before returning.
+
+The archive request record, its opened-archive table and the registry entry
+types moved into `include/game/overlay005_archive.h`, which both archive units
+now share. Touch input reads the four newest auto-sampling slots, keeps the
+calibrated points, and derives held, pressed and repeat flags with a delay
+countdown that reloads from two separate initial and repeat constants.
+
+The total is 324,056 of 1,563,700 bytes (20.72%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass. No inline assembly and no compiler-setting changes.

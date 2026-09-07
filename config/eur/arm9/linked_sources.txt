@@ -360,3 +360,5 @@ src/overlay005/archive_queue.c
 src/overlay005/holders.c
 src/overlay005/display_windows.c
 src/overlay005/element_lists.c
+src/overlay005/asset_loader.c
+src/overlay005/touch_state.c

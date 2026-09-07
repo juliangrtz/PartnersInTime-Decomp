@@ -1,36 +1,6 @@
-#include <game/archive_io.h>
+#include <game/overlay005_archive.h>
 #include <game/battle_archive.h>
 #include <game/heap.h>
-
-/* One queued archive read: list links, the free-list link, the shared request
-   record and the completion callback. */
-typedef struct Overlay5ArchiveRequest {
-    struct Overlay5ArchiveRequest *previous, *next, *free_next;
-    ArchiveCompressedRequest request;
-    u8 kind;
-    u8 reserved4d[7];
-    void (*callback)(struct Overlay5ArchiveRequest *request);
-    u32 key;
-} Overlay5ArchiveRequest;
-
-/* One opened archive: its descriptor and the offset table read for it. */
-typedef struct Overlay5ArchiveTable {
-    const void *descriptor;
-    u32 *offsets;
-} Overlay5ArchiveTable;
-
-typedef struct Overlay5Archive {
-    ArchiveCompressedIO base;
-    u8 reserved340[0x100];
-    Overlay5ArchiveTable tables[12];
-    Overlay5ArchiveRequest requests[128];
-    Overlay5ArchiveRequest head;
-    Overlay5ArchiveRequest tail;
-    Overlay5ArchiveRequest *free_list;
-} Overlay5Archive;
-
-typedef char Overlay5ArchiveRequestSizeCheck[sizeof(Overlay5ArchiveRequest) == 0x5c ? 1 : -1];
-typedef char Overlay5ArchiveSizeCheck[sizeof(Overlay5Archive) == 0x335c ? 1 : -1];
 
 extern void *data_ov005_02069f68;
 
