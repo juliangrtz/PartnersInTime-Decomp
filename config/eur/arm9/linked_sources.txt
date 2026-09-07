@@ -258,3 +258,8 @@ src/game/random.c
 src/nitro/gx/gx_init.c
 src/game/format_string.c
 src/game/format_binary.c
+src/nns/snd/snd_arc_stream_commands.c
+src/nns/snd/snd_arc_stream_player.c
+src/nns/snd/snd_arc_stream_callbacks.c
+src/nns/snd/snd_arc_stream_init.c
+src/nns/snd/snd_arc_stream_thread.c

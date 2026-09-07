@@ -652,3 +652,17 @@ binary and hexadecimal conversion. Decimal conversion remains unlinked.
 All linked functions match completely, without inline assembly. The total is
 260,828 bytes (16.68%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Stream players, worker commands and callbacks
+
+Twenty-five functions add 3,160 matching C bytes. The recovered 348-byte
+stream-player structure connects archive/file state, decoding, channels,
+faders, handles and callbacks. Matching code covers command pooling and
+queues, worker-thread creation/execution, channel references, player
+allocation and stopping, fades, stream changes, buffer disposal, player
+setup and initialization. The large read/decode and prepare routines remain
+outside this linked set.
+
+All linked functions match completely, without inline assembly. The total is
+263,988 bytes (16.88%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

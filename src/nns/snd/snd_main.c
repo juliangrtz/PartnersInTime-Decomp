@@ -11,7 +11,7 @@ extern void NNSi_SndCapturePostSleep(void);
 extern void NNSi_SndCapturePreSleep(void);
 extern void NNSi_SndCaptureMain(void);
 extern void NNSi_SndCaptureInit(void);
-extern void func_020336cc(void);
+extern void NNSi_SndArcStrmMain(void);
 extern void func_0203c2c0(void);
 extern void func_0203c0b0(u32 channels, u32 captures, u32 alarms, u32 flags);
 extern u32 func_0203c570(void);
@@ -50,7 +50,7 @@ void NNS_SndMain(void)
     }
     NNSi_SndPlayerMain();
     NNSi_SndCaptureMain();
-    func_020336cc();
+    NNSi_SndArcStrmMain();
     func_0203c640(0);
 }
 

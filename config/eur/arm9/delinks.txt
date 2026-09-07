@@ -331,3 +331,18 @@ src/game/format_string.c:
 
 src/game/format_binary.c:
     .text start:0x0202abf4 end:0x0202acc8
+
+src/nns/snd/snd_arc_stream_commands.c:
+    .text start:0x02032f50 end:0x02033310
+
+src/nns/snd/snd_arc_stream_player.c:
+    .text start:0x020335e8 end:0x020339c0
+
+src/nns/snd/snd_arc_stream_callbacks.c:
+    .text start:0x02032c04 end:0x02032f50
+
+src/nns/snd/snd_arc_stream_init.c:
+    .text start:0x020339c0 end:0x02033ac4
+
+src/nns/snd/snd_arc_stream_thread.c:
+    .text start:0x020322e0 end:0x02032350
