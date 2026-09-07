@@ -270,3 +270,8 @@ src/nns/snd/snd_capture_effect_mono.c
 src/game/equipment.c
 src/game/task_factories.c
 src/game/debug_console.c
+src/game/audio_fade_delay.c
+src/game/audio_output.c
+src/game/audio_playback.cpp
+src/game/audio_destroy.c
+src/game/audio_music_load.cpp

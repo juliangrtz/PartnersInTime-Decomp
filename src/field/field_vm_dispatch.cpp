@@ -367,22 +367,22 @@ extern void func_ov000_0206f448(u8 *field_context, int window_slot,
                                 fx32 x, fx32 y, int speed);
 extern void func_ov000_0206f378(u8 *field_context, int window_slot,
                                 fx32 x, fx32 y, int duration);
-extern void func_02027cb8(s16 sound_id, int playback_mode,
+extern void GameAudio_PlayEffectDelayed(s16 sound_id, int playback_mode,
                           int reserved_channel);
-extern void func_02027b7c(s16 sound_id);
-extern void func_02027a2c(s16 sequence_id, int reserved_channel);
-extern void func_02027818(s16 sequence_id);
-extern u32 func_02027d6c(void);
+extern void GameAudio_StopEffect(s16 sound_id);
+extern void GameAudio_PlayVoice(s16 sequence_id, int reserved_channel);
+extern void GameAudio_StopVoice(s16 sequence_id);
+extern u32 GameAudio_GetMusicBanks(void);
 /* Resident symbol names are retained here for the field audio commands. */
-extern void SceneBackground_Load(int sequence_id, u8 buffer_index,
+extern void GameAudio_LoadMusic(int sequence_id, u8 buffer_index,
                           int fade_duration);
-extern int func_02027718(void);
-extern void SceneBackground_Set(int buffer_index);
-extern void func_02027e20(int fade_duration);
-extern void SceneBackground_StartFade(int muted, int reserved_channel);
-extern void func_0202775c(int sound_group_id);
-extern int func_02027728(void);
-extern void func_02027744(void);
+extern int GameAudio_IsLoading(void);
+extern void GameAudio_SetMusic(int buffer_index);
+extern void GameAudio_StopMusic(int fade_duration);
+extern void GameAudio_FadeMusic(int muted, int reserved_channel);
+extern void GameAudio_StartStream(int sound_group_id);
+extern int GameAudio_IsStreamPlaying(void);
+extern void GameAudio_StopStream(void);
 }
 
 struct FieldMapController {
@@ -4260,7 +4260,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         FieldPartyManagerSoundState *sound_state =
             (FieldPartyManagerSoundState *)party_manager;
 
-        func_02027cb8(
+        GameAudio_PlayEffectDelayed(
             (s16)arguments[0], arguments[1], -1);
         if (arguments[2] == 0) {
             break;
@@ -4295,7 +4295,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         FieldPartyManagerSoundState *sound_state =
             (FieldPartyManagerSoundState *)party_manager;
 
-        func_02027b7c((s16)arguments[0]);
+        GameAudio_StopEffect((s16)arguments[0]);
         for (index = 0; index < 4; index++) {
             if (arguments[0] ==
                 (sound_state->tracked_sounds[index] & 0x7FFF)) {
@@ -4307,21 +4307,21 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_PLAY_BACKGROUND_MUSIC:
-        func_02027a2c((s16)arguments[0], -1);
+        GameAudio_PlayVoice((s16)arguments[0], -1);
         break;
 
     case FIELD_VM_STOP_BACKGROUND_MUSIC:
-        func_02027818((s16)arguments[0]);
+        GameAudio_StopVoice((s16)arguments[0]);
         break;
 
     case FIELD_VM_LOAD_BACKGROUND_MUSIC_RESOURCE: {
-        u32 loaded_resources = func_02027d6c();
+        u32 loaded_resources = GameAudio_GetMusicBanks();
         u16 primary_resource = (u16)loaded_resources;
         u16 secondary_resource = (u16)(loaded_resources >> 16);
 
         if ((arguments[1] == 0 && arguments[0] != primary_resource) ||
             (arguments[1] == 1 && arguments[0] != secondary_resource)) {
-            SceneBackground_Load(
+            GameAudio_LoadMusic(
                 arguments[0], arguments[1] & 0xFF, 0xC00);
         }
         if (arguments[1] == 1) {
@@ -4331,7 +4331,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_WAIT_BACKGROUND_MUSIC_RESOURCE:
-        if (func_02027718()) {
+        if (GameAudio_IsLoading()) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -4342,8 +4342,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         if (((FieldMusicActivationFlags *)&gSaveData[1300])->disabled == 0) {
             u32 *party_flags;
 
-            func_02027d6c();
-            SceneBackground_Set(arguments[0]);
+            GameAudio_GetMusicBanks();
+            GameAudio_SetMusic(arguments[0]);
             party_flags = (u32 *)(party_manager + 4);
             *party_flags = (*party_flags & 0xFF01FFFF) |
                 ((arguments[0] & 0x7F) << 17);
@@ -4352,20 +4352,20 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_FADE_OUT_BACKGROUND_MUSIC:
-        func_02027e20(arguments[0]);
+        GameAudio_StopMusic(arguments[0]);
         *(u32 *)(party_manager + 4) &= 0xFF01FFFF;
         break;
 
     case FIELD_VM_SET_GLOBAL_SOUND_MUTED:
-        SceneBackground_StartFade(arguments[0], -1);
+        GameAudio_FadeMusic(arguments[0], -1);
         break;
 
     case FIELD_VM_LOAD_SOUND_GROUP_ASYNC:
-        func_0202775c(arguments[0]);
+        GameAudio_StartStream(arguments[0]);
         break;
 
     case FIELD_VM_WAIT_SOUND_GROUP_LOAD:
-        if (func_02027728() == 1) {
+        if (GameAudio_IsStreamPlaying() == 1) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -4373,7 +4373,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_RELEASE_SOUND_GROUP:
-        func_02027744();
+        GameAudio_StopStream();
         break;
     }
 

@@ -364,3 +364,18 @@ src/game/task_factories.c:
 
 src/game/debug_console.c:
     .text start:0x0202acc8 end:0x0202b1cc
+
+src/game/audio_fade_delay.c:
+    .text start:0x020274d8 end:0x02027718
+
+src/game/audio_output.c:
+    .text start:0x02027718 end:0x020278c0
+
+src/game/audio_playback.cpp:
+    .text start:0x02027a2c end:0x02027fec
+
+src/game/audio_destroy.c:
+    .text start:0x02028040 end:0x020280ec
+
+src/game/audio_music_load.cpp:
+    .text start:0x02027344 end:0x020274d8

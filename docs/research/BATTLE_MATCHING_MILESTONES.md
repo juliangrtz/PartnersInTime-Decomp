@@ -691,3 +691,18 @@ variadic formatting, cursor state, clearing, tile uploads and display setup.
 All functions match completely without inline assembly. The total is
 268,192 bytes (17.15%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Game audio playback and music preparation
+
+Thirty functions add 3,048 matching C/C++ bytes. They recover delayed
+effects, effect-handle selection, voice playback, stream controls, output
+effects, music fades and bank preparation, common-bank loading and heap
+destruction. The handle-validity paths preserve the original C++ Boolean
+conversion. The previously named `SceneBackground` calls are identified
+as music controls and now use the `GameAudio` names in their callers.
+
+All linked functions match completely without inline assembly. The total
+is 271,240 bytes (17.35%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass. The full
+initialization, frame-update and loaded-music registration candidates remain
+outside this linked set.

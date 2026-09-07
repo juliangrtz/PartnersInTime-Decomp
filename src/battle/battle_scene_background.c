@@ -17,9 +17,9 @@ typedef union SaveBattleBackgroundFlags {
 } SaveBattleBackgroundFlags;
 
 void FieldAssets_LoadForMap(s16 map_id, int duration);
-void SceneBackground_StartFade(int fade_out, int duration);
-void SceneBackground_Set(int background_id);
-void SceneBackground_Load(u16 background_id, u8 buffer_index, int duration);
+void GameAudio_FadeMusic(int fade_out, int duration);
+void GameAudio_SetMusic(int background_id);
+void GameAudio_LoadMusic(u16 background_id, u8 buffer_index, int duration);
 
 BattleQueuedTask *BattleBackground_RequestLoad(void) {
     BattleRuntimeFlags *flags;
@@ -43,7 +43,7 @@ void BattleBackground_LoadTask(BattleQueuedTask *task) {
     if (background_id == 0) {
         background_id = BATTLE_BACKGROUND_DEFAULT_ID;
     }
-    SceneBackground_Load(background_id, runtime->flags.bits.background_buffer,
+    GameAudio_LoadMusic(background_id, runtime->flags.bits.background_buffer,
                          BATTLE_BACKGROUND_LOAD_DURATION);
     task->callback = BattleBackground_FinishLoadTask;
 }
@@ -71,12 +71,12 @@ int BattleBackground_ToggleTask(BattleQueuedTask *task) {
     int background_id;
     int result;
 
-    SceneBackground_StartFade(0, 1);
+    GameAudio_FadeMusic(0, 1);
     background_id = ((BattleContext *)gBattleContext)->background_id;
     if (background_id == 0) {
         background_id = BATTLE_BACKGROUND_DEFAULT_ID;
     }
-    SceneBackground_Set(background_id);
+    GameAudio_SetMusic(background_id);
 
     ((BattleContext *)gBattleContext)->runtime.flags.bits.background_buffer ^=
         1;
