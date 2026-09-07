@@ -589,3 +589,15 @@ full-precision reciprocal scale, including its final rounding.
 All six functions match completely, without inline assembly. The total is
 251,440 bytes (16.08%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Four-by-four matrix operations
+
+Three functions add 1,332 matching C bytes: matrix concatenation, scaling,
+and translation. Concatenation preserves the original row/column snapshots
+and temporary matrix when the output aliases the right input. Scaling copies
+the untouched translation row in pairs; translation narrows each shifted
+64-bit dot product before the final 32-bit addition.
+
+All three functions match completely, without inline assembly. The total is
+252,772 bytes (16.17%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

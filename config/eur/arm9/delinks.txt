@@ -298,3 +298,6 @@ src/nitro/math/fx_atan.c:
 
 src/nitro/math/fx_vec.c:
     .text start:0x02034a14 end:0x02034c34
+
+src/nitro/math/fx_mtx44.c:
+    .text start:0x02034238 end:0x0203476c

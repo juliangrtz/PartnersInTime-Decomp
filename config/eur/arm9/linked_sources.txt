@@ -246,3 +246,4 @@ src/game/archive_memory_decoder.c
 src/game/heap.c
 src/nitro/math/fx_atan.c
 src/nitro/math/fx_vec.c
+src/nitro/math/fx_mtx44.c
