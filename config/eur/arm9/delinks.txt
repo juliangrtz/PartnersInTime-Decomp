@@ -44,6 +44,21 @@ src/nitro/gx/gx_texture_load_end.c:
 src/nitro/gx/gx_texture_load_begin.c:
     .text       start:0x02038984 end:0x02038a04
 
+src/nitro/os/os_irq.c:
+    .text       start:0x02038af0 end:0x02038e34
+
+src/nitro/os/os_message.c:
+    .text       start:0x02039bb4 end:0x02039d28
+
+src/nitro/os/os_mutex.c:
+    .text       start:0x02039d28 end:0x02039f58
+
+src/nitro/os/os_thread_core.c:
+    .text       start:0x02039250 end:0x020396d8
+
+src/nitro/os/os_thread_list.c:
+    .text       start:0x02039858 end:0x02039938
+
 src/nitro/gx/gx_command_list_end.c:
     .text       start:0x02038a04 end:0x02038ab4
 

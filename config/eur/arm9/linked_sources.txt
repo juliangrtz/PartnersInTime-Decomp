@@ -167,3 +167,8 @@ src/nitro/gx/gx_command_list_end.c
 src/nitro/gx/gx_texture_palette_load.c
 src/nitro/gx/gx_texture_load_end.c
 src/nitro/gx/gx_texture_load_begin.c
+src/nitro/os/os_irq.c
+src/nitro/os/os_message.c
+src/nitro/os/os_mutex.c
+src/nitro/os/os_thread_core.c
+src/nitro/os/os_thread_list.c

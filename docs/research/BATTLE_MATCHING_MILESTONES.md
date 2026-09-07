@@ -112,3 +112,24 @@ start, as established by the finalizer's byte-count calculation.
 
 The module/symbol checks, original-ROM SHA-1, progress consistency, public
 content audit, and all 66 tests pass for this milestone.
+
+## Interrupts, threads, message queues, and mutexes
+
+Five OS units add 43 functions and 3,152 matching bytes, entirely in C.
+They reconstruct interrupt masks and callbacks, thread selection and context
+switch coordination, priority-list insertion/removal, thread creation and
+exit, blocking/nonblocking message queues, and recursive mutex ownership.
+The low-level context save/load and initial ARM register setup retain their
+original assembly implementations.
+
+The recovered layouts have compile-time size checks: context `0x64`, thread
+`0x94`, mutex `0x14`, and thread-info `0x54`. Thread queues use 16-bit masks;
+the wake operation widens its mask to 32 bits for the scan. Mutex ownership
+uses a doubly linked list in each thread. Interrupt-mask updates retain the
+master-enable read before restoring its previous value.
+
+The IRQ callback fields are now expressed as one structure. Objdiff reports
+relocation-name differences for the old separately named field aliases;
+after linking, those addresses and all instructions are byte-identical.
+The complete module and symbol checks, original-ROM SHA-1, generated progress,
+public-content audit, and 66 tests verify this milestone.
