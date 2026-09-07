@@ -439,3 +439,16 @@ bank explicitly while retaining identical instructions.
 All 20 new functions and the updated player unit match completely in objdiff.
 The total is 230,124 bytes (14.72%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress, and the public-content audit pass.
+
+## Sound heap allocation and state rollback
+
+Eleven functions add 1,020 matching C bytes. Sound heaps now reconstruct aligned
+allocation, section lists, save/load levels, reverse-order disposal callbacks,
+command completion waits, and destruction. The 16-byte heap, 20-byte section,
+and 32-byte allocation header have explicit layouts. The sequence-heap disposal
+callback now declares the full four-argument callback contract confirmed by its
+callers; its instructions remain unchanged.
+
+All new and affected functions match completely in objdiff. The total is
+231,144 bytes (14.78%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
+generated progress, and the public-content audit pass.

@@ -8,8 +8,6 @@ extern u8 data_02061338[];
 extern u8 data_0206133c[];
 extern const s16 data_0204fb34[128];
 
-extern void *func_0203116c(void *heap, u32 size, void (*dispose)(NNSiSndSeqHeap *), u32 arg0, u32 arg1);
-extern void *func_020312b8(void *start, u32 size);
 extern void func_0203c188(u32 player, u32 tracks, int volume);
 extern void func_0203c1dc(u32 player, u32 priority);
 extern void func_0203c1b0(u32 index, s16 value);
@@ -26,15 +24,15 @@ void NNS_SndPlayerSetAllocatableChannel(int player, u32 mask)
 
 int NNS_SndPlayerCreateHeap(int player, void *parent, u32 size)
 {
-    NNSiSndSeqHeap *heap = func_0203116c(parent, size + sizeof(NNSiSndSeqHeap), NNSi_SndPlayerDisposeHeap, 0, 0);
-    void *created;
+    NNSiSndSeqHeap *heap = NNS_SndHeapAlloc(parent, size + sizeof(NNSiSndSeqHeap), NNSi_SndPlayerDisposeHeap, 0, 0);
+    NNSSndHeap *created;
     if (!heap) {
         return 0;
     }
     heap->player = 0;
     heap->player_index = player;
     heap->heap = 0;
-    created = func_020312b8(heap + 1, size);
+    created = NNS_SndHeapCreate(heap + 1, size);
     if (!created) {
         return 0;
     }

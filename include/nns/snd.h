@@ -13,6 +13,27 @@ typedef struct NNSiSndFader {
 typedef struct NNSiSndSeqPlayer NNSiSndSeqPlayer;
 typedef struct NNSiSndPlayer NNSiSndPlayer;
 typedef struct NNSiSndSeqHeap NNSiSndSeqHeap;
+typedef struct NNSSndHeap NNSSndHeap;
+typedef void (*NNSSndHeapDisposeCallback)(void *memory, u32 size, u32 user0, u32 user1);
+
+typedef struct NNSiSndHeapBlock {
+    NNSFndLink link;
+    u32 size;
+    NNSSndHeapDisposeCallback dispose;
+    u32 user0;
+    u32 user1;
+    u32 reserved18[2];
+} NNSiSndHeapBlock;
+
+typedef struct NNSiSndHeapSection {
+    NNSFndList blocks;
+    NNSFndLink link;
+} NNSiSndHeapSection;
+
+struct NNSSndHeap {
+    NNSFndHeapHead *frame;
+    NNSFndList sections;
+};
 
 typedef struct NNSSndHandle {
     NNSiSndSeqPlayer *player;
@@ -29,7 +50,7 @@ struct NNSiSndPlayer {
 
 struct NNSiSndSeqHeap {
     NNSFndLink link;
-    void *heap;
+    NNSSndHeap *heap;
     NNSiSndSeqPlayer *player;
     int player_index;
 };
@@ -58,6 +79,9 @@ struct NNSiSndSeqPlayer {
     u8 padding42[2];
 };
 
+typedef char NNSSndHeapSizeCheck[(sizeof(NNSSndHeap) == 16) ? 1 : -1];
+typedef char NNSiSndHeapSectionSizeCheck[(sizeof(NNSiSndHeapSection) == 20) ? 1 : -1];
+typedef char NNSiSndHeapBlockSizeCheck[(sizeof(NNSiSndHeapBlock) == 32) ? 1 : -1];
 typedef char NNSiSndPlayerSizeCheck[(sizeof(NNSiSndPlayer) == 36) ? 1 : -1];
 typedef char NNSiSndSeqPlayerSizeCheck[(sizeof(NNSiSndSeqPlayer) == 68) ? 1 : -1];
 
@@ -78,7 +102,7 @@ void NNSi_SndUnlockChannel(u32 mask);
 int NNSi_SndLockChannel(u32 mask);
 
 void NNSi_SndPlayerSetPriority(NNSiSndSeqPlayer *sequence, u8 priority);
-void NNSi_SndPlayerDisposeHeap(NNSiSndSeqHeap *heap);
+void NNSi_SndPlayerDisposeHeap(void *memory, u32 size, u32 user0, u32 user1);
 void NNSi_SndPlayerFreeSequence(NNSiSndSeqPlayer *sequence);
 NNSiSndSeqPlayer *NNSi_SndPlayerAllocSequence(int priority);
 void NNSi_SndPlayerForceStop(NNSiSndSeqPlayer *sequence);
@@ -109,5 +133,17 @@ void NNS_SndPlayerSetTrackVolume(NNSSndHandle *handle, u32 tracks, int volume);
 void NNSi_SndPlayerSetSeqNo(NNSSndHandle *handle, u16 sequence);
 void NNSi_SndPlayerSetSeqArcNo(NNSSndHandle *handle, u16 archive, u16 sequence);
 int NNS_SndPlayerWriteGlobalVariable(u32 index, s16 value);
+
+void NNSi_SndHeapWaitCommands(void);
+int NNSi_SndHeapNewSection(NNSSndHeap *heap);
+int NNSi_SndHeapInit(NNSSndHeap *heap, NNSFndHeapHead *frame);
+void NNSi_SndHeapInitSection(NNSiSndHeapSection *section);
+int NNS_SndHeapGetCurrentLevel(NNSSndHeap *heap);
+void NNS_SndHeapLoadState(NNSSndHeap *heap, int level);
+int NNS_SndHeapSaveState(NNSSndHeap *heap);
+void *NNS_SndHeapAlloc(NNSSndHeap *heap, u32 size, NNSSndHeapDisposeCallback dispose, u32 user0, u32 user1);
+void NNS_SndHeapClear(NNSSndHeap *heap);
+void NNS_SndHeapDestroy(NNSSndHeap *heap);
+NNSSndHeap *NNS_SndHeapCreate(void *start, u32 size);
 
 #endif

@@ -6,8 +6,6 @@ extern NNSiSndSeqPlayer data_02060ee0[16];
 extern NNSiSndPlayer data_02061320[32];
 extern const s16 data_0204fb34[128];
 
-extern void func_0203129c(void *heap);
-extern void func_020311dc(void *heap);
 extern void func_0203c1f4(u32 sequence, int volume);
 extern void func_0203c26c(u32 sequence);
 extern void func_0203c238(u32 sequence, const void *data, u32 offset, const void *bank);
@@ -154,7 +152,7 @@ void *NNSi_SndPlayerAllocHeap(int index, NNSiSndSeqPlayer *sequence)
     NNS_FndRemoveListObject(&player->heaps, heap);
     heap->player = sequence;
     sequence->heap = heap;
-    func_020311dc(heap->heap);
+    NNS_SndHeapClear(heap->heap);
     return heap->heap;
 }
 
@@ -241,12 +239,13 @@ void NNSi_SndPlayerFreeSequence(NNSiSndSeqPlayer *sequence)
     sequence->state = 0;
 }
 
-void NNSi_SndPlayerDisposeHeap(NNSiSndSeqHeap *heap)
+void NNSi_SndPlayerDisposeHeap(void *memory, u32 size, u32 user0, u32 user1)
 {
+    NNSiSndSeqHeap *heap = memory;
     if (!heap->heap) {
         return;
     }
-    func_0203129c(heap->heap);
+    NNS_SndHeapDestroy(heap->heap);
     if (heap->player) {
         heap->player->heap = 0;
     } else {

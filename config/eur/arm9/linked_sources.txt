@@ -220,3 +220,4 @@ src/nns/snd/snd_resource.c
 src/nns/snd/snd_player.c
 src/nns/snd/snd_player_api.c
 src/nns/snd/snd_main.c
+src/nns/snd/snd_heap.c
