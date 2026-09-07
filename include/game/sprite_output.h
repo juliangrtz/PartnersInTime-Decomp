@@ -49,6 +49,22 @@ void *GameSpritePalette_GetBuffer(const GameSpritePalette *palette);
 void GameSpritePalette_Unlink(GameSpritePalette *palette);
 void GameSpriteAllocation_Unlink(GameSpriteAllocation *allocation);
 
+extern vu32 *data_0204ff88[2];
+static inline u16 GameSprite_ObjBoundaryShift(int screen)
+{
+    return (*data_0204ff88[screen] & 0x00300000) >> 20;
+}
+static inline u16 GameSprite_ObjBoundary(int screen)
+{
+    return 32 << GameSprite_ObjBoundaryShift(screen);
+}
+static inline u8 *GameSprite_ObjAddress(const GameSpriteAllocation *allocation)
+{
+    return allocation->flags.bits.screen == 0
+        ? (u8 *)(allocation->offset + 0x06400000)
+        : (u8 *)(allocation->offset + 0x06600000);
+}
+
 /* These copies choose their direction from the relative buffer addresses. */
 void func_0202cc58(const void *source, void *destination, u32 size);
 void func_0202cd2c(const void *source, void *destination, u32 size);

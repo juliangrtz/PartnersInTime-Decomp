@@ -287,3 +287,7 @@ src/game/sprite_palette.c
 src/game/sprite_allocation_unlink.c
 src/game/sprite_oam.c
 src/game/sprite_oam_state.c
+src/game/sprite_animator.c
+src/game/sprite_animation.cpp
+src/game/sprite_animator_tiles.c
+src/game/sprite_effect_pool.c

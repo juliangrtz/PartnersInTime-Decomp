@@ -412,3 +412,15 @@ src/game/sprite_palette.c:
 
 src/game/sprite_allocation_unlink.c:
     .text start:0x020084d8 end:0x0200856c
+
+src/game/sprite_animator.c:
+    .text start:0x02021b98 end:0x02021fac
+
+src/game/sprite_animation.cpp:
+    .text start:0x02022164 end:0x0202223c
+
+src/game/sprite_animator_tiles.c:
+    .text start:0x020214ec end:0x02021654
+
+src/game/sprite_effect_pool.c:
+    .text start:0x0202223c end:0x0202234c

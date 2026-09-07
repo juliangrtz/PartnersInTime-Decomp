@@ -742,3 +742,15 @@ The total is 277,152 bytes (17.72%), with no additional inline assembly.
 Module/symbol checks, original-ROM SHA-1, all 66 tests, generated progress,
 and the public-content audit pass. Affine copying and the remaining OAM
 registration routines retain their original binary implementations.
+
+## Sprite animation initialization and frame updates
+
+Ten functions add 1,892 matching C/C++ bytes. They reconstruct both animator
+constructors, destruction, per-screen loading, tile uploads with the original
+VRAM alignment, virtual frame dispatch, and effect-pool allocation/list setup.
+The recovered layouts distinguish animation ranges, frames and OAM objects.
+
+The total is 279,044 bytes (17.85%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress and the public-content audit pass, with no
+additional inline assembly. Animation registration and tile remapping remain
+private matching candidates until their remaining instructions agree.
