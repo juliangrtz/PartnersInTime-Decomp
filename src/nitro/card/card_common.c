@@ -1,7 +1,7 @@
 #include <nitro/card.h>
 
-extern void func_02038f10(u16 lock_id);
-extern void func_02038f2c(u16 lock_id);
+extern void OS_UnlockCard(u16 lock_id);
+extern void OS_LockCard(u16 lock_id);
 
 void CARDi_FifoCallback(u32 tag, u32 data, int error) {
     if (tag == 11) {
@@ -122,9 +122,9 @@ int CARD_IsAvailable(void) { return cardi_common.flags != 0; }
 
 u32 CARD_GetResultCode(void) { return cardi_common.command->result; }
 
-void CARD_LockRom(u16 lock_id) { CARDi_LockResource(lock_id, 1); func_02038f2c(lock_id); }
+void CARD_LockRom(u16 lock_id) { CARDi_LockResource(lock_id, 1); OS_LockCard(lock_id); }
 
-void CARD_UnlockRom(u16 lock_id) { func_02038f10(lock_id); CARDi_UnlockResource(lock_id, 1); }
+void CARD_UnlockRom(u16 lock_id) { OS_UnlockCard(lock_id); CARDi_UnlockResource(lock_id, 1); }
 
 void CARD_LockBackup(u16 lock_id) { CARDi_LockResource(lock_id, 2); }
 

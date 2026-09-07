@@ -95,4 +95,3 @@ void GameAudio_InitWaveTable(GameAudioLoadCommand *command)
     MI_CpuCopy8(wave->offsets, &wave->offsets[wave->count], size);
     MI_CpuFill8(wave->offsets, 0, size);
 }
-

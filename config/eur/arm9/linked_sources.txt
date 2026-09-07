@@ -280,3 +280,5 @@ src/game/audio_dispose.c
 src/game/audio_loader.c
 src/game/audio_wave_load.c
 src/game/audio_waves.c
+src/nitro/os/os_lock.c
+src/nitro/os/os_init.c

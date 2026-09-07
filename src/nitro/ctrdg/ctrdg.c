@@ -85,9 +85,9 @@ void CTRDGi_RestoreBus(const CtrdgBusState *state) {
 void CTRDGi_Lock(u16 lock_id, CtrdgLockState *state) {
     for (;;) {
         state->interrupts = OS_DisableInterrupts();
-        state->already_locked = func_02038ed8((void *)0x027FFFE8) & 64;
+        state->already_locked = OS_ReadOwnerOfLockWord((void *)0x027FFFE8) & 64;
         if (state->already_locked) return;
-        if (!func_02038f78(lock_id)) return;
+        if (!OS_TryLockCartridge(lock_id)) return;
         OS_RestoreInterrupts(state->interrupts);
         WaitByLoop(1);
     }

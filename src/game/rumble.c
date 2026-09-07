@@ -8,8 +8,8 @@ extern u32 data_02060e5c[6];
 extern u16 data_02060e84;
 extern const volatile char data_0204b7ec[19];
 extern void MIi_CpuClearFast(u32 value, void *destination, u32 size);
-extern void func_02038fb8(u16 lock);
-extern void func_02038f98(u16 lock);
+extern void OS_LockCartridge(u16 lock);
+extern void OS_UnlockCartridge(u16 lock);
 
 static inline u32 GameRumble_ToTicks(u32 milliseconds)
 {
@@ -31,9 +31,9 @@ int GameRumble_InitCartridge(void)
 
 void GameRumble_Write(u16 value)
 {
-    func_02038fb8(data_02060e84);
+    OS_LockCartridge(data_02060e84);
     *(vu16 *)0x08001000 = value;
-    func_02038f98(data_02060e84);
+    OS_UnlockCartridge(data_02060e84);
 }
 
 int GameRumble_IsPresent(void)

@@ -719,3 +719,13 @@ All linked functions match completely without inline assembly. The total
 is 273,732 bytes (17.51%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass. The small
 bank-instrument traversal candidate remains outside this linked set.
+
+## OS locking and initialization
+
+Eighteen functions add 980 matching C bytes. They implement card/cartridge
+bus ownership, interrupt-protected lock acquisition and release, spin waits,
+shared lock initialization, and the central OS initialization sequence.
+The total is 274,712 bytes (17.57%), with no additional inline assembly.
+Module/symbol checks, original-ROM SHA-1, all 66 tests, generated progress,
+and the public-content audit pass. The RTC callback remains an unlinked
+analysis candidate until its remaining callback accesses match.
