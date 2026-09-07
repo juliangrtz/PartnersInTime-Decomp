@@ -8,14 +8,14 @@ extern FieldEntityVTable data_ov000_020c13e0;
 extern const s8 data_ov000_020c0c9c[];
 extern const s8 data_ov000_020c0cc0[];
 extern void func_ov000_020a7a80(FieldRuntimeEntity *, const FieldRuntimeEntity *);
-extern void func_ov000_020b5e84(FieldRuntimeEntity *, int, const FieldSpawnRecord *, int, int, u8);
+
 extern void func_ov000_020b4990(FieldRuntimeEntity *);
 extern void func_0202cbd4(void *, int, u32);
 
 FieldDeferredEntity *FieldDeferredEntity_Init(FieldDeferredEntity *entity, int entity_index,
     const FieldSpawnRecord *spawn_record, int argument_3, int resource_set, u8 argument_5)
 {
-    func_ov000_020b5e84(&entity->runtime, entity_index, spawn_record, argument_3, resource_set, argument_5);
+    FieldEntity3D_InitPlacement(&entity->runtime, entity_index, spawn_record, argument_3, resource_set, argument_5);
     *(FieldEntityVTable **)entity = &data_ov000_020c13e0;
     func_0202cbd4(&entity->control, 0, sizeof(entity->control));
     if (spawn_record && entity->runtime.unknown_3d4 == -1)

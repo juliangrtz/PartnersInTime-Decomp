@@ -20,8 +20,12 @@ typedef struct FieldSpawnRecord {
     union {
         u32 raw;
         struct {
-            u32 animation_enabled : 1, entity_enabled : 1, unknown_02_18 : 17;
-            u32 retain_offscreen_contact : 1, subtype : 4, unknown_24_31 : 8;
+            u32 animation_enabled : 1, entity_enabled : 1, contact_mode : 3;
+            u32 turn_to_interactor : 1, collision_flag_00 : 1, collision_flags_02_03 : 1;
+            u32 collision_flag_01 : 1, collision_flag_06 : 1, collision_flag_04 : 1;
+            u32 ignore_navigation_obstacle : 1, synchronize : 1, auto_priorities : 1;
+            u32 alternate_collision_faces : 1, track_ground : 1, shadow_style : 3;
+            u32 retain_offscreen_contact : 1, subtype : 4, collision_mode : 2, unknown_26_31 : 6;
         } bits;
     } flags;
 } FieldSpawnRecord;

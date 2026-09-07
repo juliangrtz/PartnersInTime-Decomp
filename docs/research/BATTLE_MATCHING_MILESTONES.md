@@ -1734,3 +1734,30 @@ results remain private under build/runtime/eur_field_spawn_verified. The total
 is 359,208 of 1,563,700 bytes (22.97%). All module/symbol checks, 74 tests,
 generated progress and public-content checks pass. The rebuilt ROM retains
 SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Spatial entity placement initialization
+
+Two constructor entries add 3,272 matching C++ bytes to the spatial lifecycle
+module. Their shared inline implementation initializes height, collision and
+navigation flags, shadow selection, render priorities and vertical motion
+parameters from the checked spawn record. Direct instruction comparison resolved
+the subtype switch and a five-bit field that is initialized to 15. Keeping the
+subtype predicate next to its switch reproduces the original register allocation.
+The collision-channel masks preserve the original signed 32-bit extension into
+the 64-bit policy; the resulting default is 0xFFFFFFFFC0FFFFFF.
+
+A normal 2,033-frame boot/save-load replay entered the complete constructor 21
+times and the base entry ten times. Read-only entry/return hooks checked the
+loaded instructions against the original overlay and verified all 31 results:
+Q12 height, initial and current vertical parameters [21496, 1296, 0], signed
+sentinels, collision category and policy, roaming defaults, spawn collision
+flags, synchronization, priority selection, subtype predicate and shadow flags.
+All checks passed without seeding runtime state. Observed height included 48
+pixels (196608 in Q12 units).
+
+Final render lists contain 30/40 valid models; main/sub BG memory changed by
+55,110/47,962 bytes and palettes by 243 bytes. Evidence remains private under
+build/runtime/eur_field_spatial_spawn_verified. Matching C/C++ is 362,480 of
+1,563,700 bytes (23.18%). All module/symbol checks, 74 tests, generated progress
+and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

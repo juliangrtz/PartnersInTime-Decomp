@@ -101,7 +101,8 @@ typedef struct FieldEntityRuntimeFlags {
     u32 alternate_collision_faces : 1;
     u32 horizontal_sync_dirty : 1;
     u32 vertical_sync_dirty : 1;
-    u32 unknown_06_24 : 19;
+    u32 unknown_06_20 : 15;
+    u32 unknown_21 : 1, unknown_22 : 1, unknown_23_24 : 2;
     u32 auto_auxiliary_priority : 1;
     u32 auto_priority_0 : 1;
     u32 auto_priority_1 : 1;
@@ -123,14 +124,16 @@ typedef struct FieldEntityFieldStateFlags {
     u32 unknown_16 : 1;
     u32 shadow_support_enabled : 1;
     u32 shadow_style : 3;
-    u32 unknown_21_31 : 11;
+    u32 unknown_21_25 : 5, unknown_26_31 : 6;
 } FieldEntityFieldStateFlags;
 
 typedef struct FieldCollisionStateFlags {
-    u32 unknown_00_15 : 16;
+    u32 unknown_00 : 1, unknown_01 : 1, unknown_02 : 1, unknown_03 : 1;
+    u32 unknown_04 : 1, unknown_05 : 1, unknown_06 : 1, unknown_07 : 1;
+    u32 unknown_08_15 : 8;
     u32 reserved_0 : 1;
     u32 reserved_1 : 1;
-    u32 unknown_18_31 : 14;
+    u32 unknown_18_19 : 2, unknown_20_31 : 12;
 } FieldCollisionStateFlags;
 
 typedef struct FieldRenderStateFlags {
@@ -164,7 +167,7 @@ typedef struct FieldSavedPresentationFlags {
 
 typedef struct FieldRoamingFlags {
     u32 clamp_to_boundary : 1;
-    u32 unknown_01_31 : 31;
+    u32 unknown_01_07 : 7, unknown_08_13 : 6, unknown_14_19 : 6, unknown_20_31 : 12;
 } FieldRoamingFlags;
 
 typedef struct FieldInteractionFlags {
@@ -466,10 +469,14 @@ struct FieldRuntimeEntity {
         u16 transform_flags;
         FieldTransformFlags transform_flag_bits;
     };
-    u8 unknown_282[0x3A];
+    u8 unknown_282[0x2E];
+    u8 unknown_2b0[8];
+    s8 unknown_2b8, unknown_2b9;
+    u16 unknown_2ba;
     fx32 position_z;
     s32 unknown_2c0;
-    u8 unknown_2c4[0x24];
+    u8 unknown_2c4[0x20];
+    s8 unknown_2e4[4];
     s32 body_corner_angles[4];
     fx32 body_min_x;
     fx32 body_max_x;
@@ -489,7 +496,7 @@ struct FieldRuntimeEntity {
     fx32 default_vertical_launch_velocity;
     fx32 default_gravity;
     fx32 terminal_fall_velocity;
-    u32 unknown_370;
+    u16 unknown_370, unknown_372;
     fx32 initial_vertical_launch_velocity, initial_gravity, initial_terminal_fall_velocity;
     u8 unknown_380[0xC];
     union {
@@ -501,16 +508,19 @@ struct FieldRuntimeEntity {
     union {
         u32 collision_state_flags;
         FieldCollisionStateFlags collision_state_flag_bits;
+        struct { u8 current, saved; u16 unknown_02; } collision_flag_bytes;
     };
     union {
         u32 unknown_3a0;
         struct { u32 unknown_00_19 : 20, unknown_20_25 : 6, unknown_26_31 : 6; } unknown_3a0_bits;
     };
     FieldContactDirectionFlags contact_direction_flags;
-    u8 unknown_3a8[0x24];
+    u8 unknown_3a8[0x20];
+    struct { u32 unknown_00 : 1, unknown_01_31 : 31; } unknown_3c8_bits;
     union {
         u32 runtime_flags;
         FieldEntityRuntimeFlags runtime_flag_bits;
+        struct { u32 unknown_00_24 : 25, auto_priority_mask : 5, unknown_30_31 : 2; } priority_flag_bits;
     };
     u8 unknown_3d0[4];
     s16 unknown_3d4;
@@ -519,7 +529,8 @@ struct FieldRuntimeEntity {
         u32 roaming_flags;
         FieldRoamingFlags roaming_flag_bits;
     };
-    u8 unknown_3e4[0x12C];
+    struct { u32 unknown_00_09 : 10, unknown_10_15 : 6, unknown_16_21 : 6, unknown_22_31 : 10; } unknown_3e4_bits;
+    u8 unknown_3e8[0x128];
     FieldRenderObject *auxiliary_render_object;
 };
 

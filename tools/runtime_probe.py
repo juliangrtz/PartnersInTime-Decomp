@@ -356,7 +356,8 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
-    if label in {"FieldEntity2D_InitPlacement", "FieldEntity2D_InitPlacementBase"}:
+    if label in {"FieldEntity2D_InitPlacement", "FieldEntity2D_InitPlacementBase",
+                 "FieldEntity3D_InitPlacement", "FieldEntity3D_InitPlacementBase"}:
         result = {"entity": f"{r0:#010x}", "entity_index": to_s32(r1), "spawn": f"{r2:#010x}"}
         if is_arm9_work_ram_pointer(r2, 28):
             result["cell"] = [read_s16(emulator, r2 + index * 2) for index in range(3)]

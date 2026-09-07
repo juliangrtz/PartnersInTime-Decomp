@@ -29,6 +29,10 @@ void FieldEntity_SetLocomotionParameters(FieldRuntimeEntity *entity, fx32 starti
 void FieldEntity2D_AllocateRenderer(FieldRuntimeEntity *entity);
 FieldAnimationRenderer *FieldAnimationRenderer_Delete(FieldAnimationRenderer *renderer);
 void FieldEntity2D_ReleaseRenderer(FieldRuntimeEntity *entity);
+FieldRuntimeEntity *FieldEntity3D_InitPlacement(FieldRuntimeEntity *entity, int entity_index,
+    const FieldSpawnRecord *spawn, int argument_3, int resource_set, u8 animation_enabled);
+FieldRuntimeEntity *FieldEntity3D_InitPlacementBase(FieldRuntimeEntity *entity, int entity_index,
+    const FieldSpawnRecord *spawn, int argument_3, int resource_set, u8 animation_enabled);
 FieldRuntimeEntity *FieldEntity3D_Init(FieldRuntimeEntity *entity);
 FieldRuntimeEntity *FieldEntity3D_InitBase(FieldRuntimeEntity *entity);
 FieldRuntimeEntity *FieldEntity3D_Destroy(FieldRuntimeEntity *entity);
