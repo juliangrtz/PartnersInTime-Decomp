@@ -1,0 +1,17 @@
+#ifndef PIT_GAME_FIELD_GEOMETRY_H
+#define PIT_GAME_FIELD_GEOMETRY_H
+
+#include <nitro/fx.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+u32 FieldResource_GetSectionSize(const u32 *resource, int section);
+const void *FieldResource_GetSection(const u32 *resource, int section);
+int FieldGeometry_GetOrientation(fx32 x0, fx32 y0, fx32 x1, fx32 y1, fx32 x2, fx32 y2);
+fx32 FieldGeometry_GetDirectionVector(int direction, fx32 length, fx32 *x, fx32 *y);
+#ifdef __cplusplus
+}
+#endif
+
+#endif

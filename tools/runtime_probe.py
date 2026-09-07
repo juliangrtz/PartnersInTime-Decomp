@@ -349,7 +349,7 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
-    if label.startswith("FieldTimedRenderer_") and is_main_ram_pointer(r0, 0x140):
+    if label.startswith("FieldTimedRenderer_") and is_main_ram_pointer(r0, 0x13C):
         flags = read_u32(emulator, r0 + 0x7C)
         control = read_u16(emulator, r0 + 0x138)
         result = {
@@ -361,12 +361,13 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
             "animation_suppressed": bool(flags & 0x200),
             "behavior_state": (flags >> 12) & 15,
             "finished": bool(control & 16),
-            "delay": read_s16(emulator, r0 + 0x138) >> 5,
-            "expired": bool(read_u32(emulator, r0 + 0x13C) & 0x8000),
-            "remaining": read_u16(emulator, r0 + 0x13E),
+            "loops_remaining": read_s16(emulator, r0 + 0x138) >> 5,
         }
-        if label == "FieldTimedRenderer_SetAnimationDelay":
-            result["requested_delay"] = to_s32(r1)
+        if label == "FieldTimedRenderer_Update" and is_main_ram_pointer(r0, 0x140):
+            result["expired"] = bool(read_u32(emulator, r0 + 0x13C) & 0x8000)
+            result["remaining"] = read_u16(emulator, r0 + 0x13E)
+        if label == "FieldTimedRenderer_SetLoopCount":
+            result["requested_loop_count"] = to_s32(r1)
         return result
 
     if label.startswith("FieldTimer_") and is_main_ram_pointer(r0, 40):

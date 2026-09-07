@@ -1,6 +1,7 @@
 extern "C" {
 #include <game/field_entity.h>
 #include <game/field_timer.h>
+#include <game/field_timed_renderer.h>
 #include <game/field_script.h>
 #include <game/save_data.h>
 
@@ -56,7 +57,6 @@ extern void func_ov000_020a6d68(FieldEntity *entity,
                                 int reserved_2, int reserved_3,
                                 int animation_id, int restart,
                                 int reserved_6);
-extern void FieldTimedRenderer_SetAnimationDelay(FieldRenderObject *render_object);
 extern void func_ov000_020a64a0(FieldEntity *entity, int coordinate_mode,
                                 fx32 x, fx32 y, int motion_5, int motion_6,
                                 int motion_7, int motion_8, int motion_11,
@@ -1855,7 +1855,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     &runtime_entity->base, arguments[2], -1, 1, 1);
             }
             if (arguments[3] != -1) {
-                FieldTimedRenderer_SetAnimationDelay(runtime_entity->render_object);
+                FieldTimedRenderer_SetLoopCount(
+                    (FieldAnimationRenderer *)runtime_entity->render_object, arguments[3]);
             }
             break;
 

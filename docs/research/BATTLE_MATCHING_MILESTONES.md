@@ -1520,9 +1520,9 @@ BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
 ## Timed field renderer animation controls
 
 Four functions add 452 matching C++ bytes: animation update/expiry, reset,
-delay selection and restarting at the first or last frame according to speed.
+repeat-limit selection and restarting at the first or last frame according to speed.
 The restart helper uses the existing virtual animation interface. A checked
-0x140-byte layout extends the field renderer with a signed 11-bit delay,
+0x140-byte layout extends the field renderer with a signed 11-bit repeat counter,
 completion flag and expiration counter. The shared renderer now describes its
 animation ranges, resource animation, speed and positional offsets.
 
@@ -1537,7 +1537,7 @@ A normal 2,033-frame boot/save-load replay entered the updater 6,260 times
 across 41 renderers and the reset helper 12 times. Updates included 1,772 active
 and 4,488 inactive cases; all had zero remaining time. The field retained valid
 30/40-model lists, with main/sub BG changes of 55,110/47,962 bytes and palette
-changes of 243 bytes. Delay selection and restart were not entered by this route.
+changes of 243 bytes. Repeat-limit selection and restart were not entered by this route.
 
 Three separate live RAM-seeded cases reloaded that normal field checkpoint.
 A remaining count of one set the expired flag after one frame, then disabled
@@ -1547,5 +1547,38 @@ count of two. Hooks confirmed the disable calls and their zero argument.
 These controlled counter/flag checks changed neither ROM nor battery save.
 Evidence remains private under build/runtime/eur_timed_renderer_verified and
 eur_timed_renderer_expiry. The total is 353,028 of 1,563,700 bytes (22.58%).
+All module/symbol checks, 74 tests, generated progress and public-content checks
+pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Field renderer repeat limits and geometry helpers
+
+Five functions add 648 matching C/C++ bytes: finite animation repetition,
+resource-section size/address lookup, a rounded Q12 orientation predicate and
+eight-direction vector lookup. The repeat handler establishes that the signed
+11-bit field is a loop counter. Field VM command 0x06C now explicitly passes
+argument 3 to the correctly declared setter; the original instructions already
+kept that argument in r1, and the corrected C++ call produces identical bytes.
+
+Checked layouts distinguish the 0x13C-byte animation renderer from its 0x140-byte
+extension with a frame-lifetime counter. Runtime decoding reads the extension
+only for the timed update entry, avoiding unrelated memory after base objects.
+The larger vector-scaling helpers remain assembly after isolated candidates
+showed register and control-flow differences.
+
+A normal 2,033-frame boot/save-load replay entered animation update 10,630 times,
+the orientation predicate 340 times, direction lookup 236 times, section-size
+lookup 27 times and section-address lookup twice. It retained valid 30/40-model
+lists; main/sub BG memory changed by 55,110/47,962 bytes and palettes by 243 bytes.
+
+Three live RAM-seeded cases reloaded an active renderer with a two-frame
+animation, placed it on its final frame and selected loop counts two, one and
+zero. Count two became one and called restart once, returning to frame zero.
+Counts one and zero marked completion without restarting and became inactive
+on the next frame. These tests modified only transient renderer state, leaving
+ROM and battery save unchanged. The setter was not entered by the normal route;
+its source and the corrected VM call both match the linked reference.
+
+Evidence remains private under build/runtime/eur_renderer_loop_geometry_verified
+and eur_timed_renderer_loops. The total is 353,676 of 1,563,700 bytes (22.62%).
 All module/symbol checks, 74 tests, generated progress and public-content checks
 pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

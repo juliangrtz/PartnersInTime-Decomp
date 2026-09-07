@@ -27,4 +27,10 @@ src/field/field_sprite_animation_controls.c:
     .text       start:0x020bf110 end:0x020bf200
 
 src/field/field_timed_renderer.cpp:
-    .text       start:0x020bd778 end:0x020bd93c
+    .text       start:0x020bd778 end:0x020bda88
+
+src/field/field_geometry.c:
+    .text       start:0x020be280 end:0x020be344
+
+src/field/field_direction.c:
+    .text       start:0x020be758 end:0x020be7d0
