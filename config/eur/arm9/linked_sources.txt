@@ -397,3 +397,7 @@ src/game/window_number_controls.c
 src/game/localized_text_resources.c
 src/game/palette_effect_controls.c
 src/game/palette_effect_controller.c
+src/game/model_render_palette.cpp
+src/game/model_texture_updates.cpp
+src/game/model_texture_restore.cpp
+src/game/model_texture_state.cpp

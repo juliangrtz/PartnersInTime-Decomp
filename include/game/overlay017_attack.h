@@ -4,6 +4,7 @@
 #include <nitro.h>
 
 typedef struct Overlay17AttackObject Overlay17AttackObject;
+struct GameTexturePalette;
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,8 +23,8 @@ int Overlay17Attack_ConfigurePartyObjects(void);
 int Overlay17Attack_UpdateObjectAnimations(void);
 void *Overlay17Attack_QueueDisplayInitialization(void);
 void Overlay17Attack_InitializeDisplayPattern(void);
-void Overlay17Attack_FinalizeDisplay(void);
-int Overlay17Attack_ConfigureDisplay(int argument);
+void Overlay17Attack_FinalizeDisplay(struct GameTexturePalette *palette);
+int Overlay17Attack_ConfigureDisplay(struct GameTexturePalette *palette);
 int Overlay17Attack_AreObjectStatesIdle(Overlay17AttackObject *objects,
                                         int object_count);
 void Overlay17Attack_ConfigureObjectModel(

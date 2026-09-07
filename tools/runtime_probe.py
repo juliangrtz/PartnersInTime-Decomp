@@ -350,6 +350,25 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r3 = registers.r3 & 0xFFFFFFFF
 
     if label in {
+        "BattleRenderModel_UpdateTexture", "BattleRenderModel_SetTextureDirty",
+    } and is_main_ram_pointer(r0, 0x1B8):
+        offset = read_u32(emulator, r0 + 0x130)
+        state = read_u32(emulator, r0 + 0x144)
+        return {
+            "model": f"{r0:#010x}",
+            "texture_offset": f"{offset:#010x}",
+            "texture_bank": offset >> 17,
+            "offset_within_bank": offset & 0x1FFFF,
+            "texture_dirty": bool(state & 4),
+            "texture_state": f"{state:#010x}",
+            "resource": f"{read_u32(emulator, r0 + 0x38):#010x}",
+            "pixels": f"{read_u32(emulator, r0 + 0x30):#010x}",
+            "palette_source": f"{read_u32(emulator, r0 + 0x158):#010x}",
+            "palette_bytes": read_u16(emulator, r0 + 0x15C),
+            "palette_state": f"{read_u16(emulator, r0 + 0x15E):#06x}",
+        }
+
+    if label in {
         "BattleRenderModel_Init", "BattleModelController_Init",
         "BattleModelController_InitBase", "BattleModel_InitResourceState",
     }:

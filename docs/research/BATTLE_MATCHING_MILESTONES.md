@@ -1292,3 +1292,36 @@ eur_menu_resources_verified and eur_throne_dialogue_verified.
 The total is 345,412 of 1,563,700 bytes (22.09%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Render-model texture updates and palette state
+
+Twenty-two functions add 916 matching C/C++ bytes. They cover filtered texture
+updates across the main render list, individual texture uploads, alpha control,
+texture/palette dirty flags, palette access, controller forwarding, resource
+release, object-size queries and global texture-list reset. The 3D allocation
+and palette occupy model offsets 0x130 and 0x148. These shared types replace the
+opaque render storage and misleading palette flag alias; the model size remains
+0x1B8. Two overlay-17 palette wrappers now declare and forward their receiver
+instead of using incompatible prototypes. All affected callers still match.
+
+A 400-frame canonical-ROM opening-animation replay captured 109 list updates,
+2,398 individual texture-update calls, 2,420 palette-buffer queries, 77 dirty-flag
+assignments and 22 controller restorations. Entry RAM showed 2,396 clean early
+returns and two dirty uploads. Both uploads reached the copy routine from the
+new model update at 0x0200FCD0, targeting CPU-visible addresses 0x06814E80 and
+0x06805100. Sampled palettes contain 320 or 512 bytes. Other calls to the copy
+routine came from existing 2D sprite paths and are counted separately.
+
+The opening animation renders stars and clouds with 22 main and 51 sub-screen
+models on valid render lists. Overlays 5 and 6 match their original loaded images.
+Main/sub BG captures changed by 53,762/52,543 bytes and palettes by 82 bytes.
+LCDC snapshots taken only before and after the run do not capture transient
+texture-bank mappings, so they are not evidence of individual texture writes.
+The trace and compatible checkpoint remain private under
+build/runtime/eur_model_texture_verified. The frame-specific upload branch,
+explicit palette editing, alpha control, resource release and list reset were
+not exercised in this replay; their linked bytes match.
+
+The total is 346,328 of 1,563,700 bytes (22.15%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

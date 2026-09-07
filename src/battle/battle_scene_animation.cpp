@@ -112,8 +112,8 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
             object->primary_model = model;
             model->screen = 0;
             model->start();
-            model->render_flags &= ~4;
-            model->transform_flags &= ~0x20;
+            model->render_texture.flags.raw &= ~4;
+            model->render_palette.flags &= ~0x20;
             model->flags |= BATTLE_MODEL_FLAG_ANIMATION_ACTIVE;
             model->animation_offset_x = 0;
             model->animation_offset_y = 0;

@@ -7,7 +7,6 @@ extern u8 *gBattleSystem;
 
 u32 ArchiveIO_PrepareCompressedRead(u8 *system, BattleTextureUploadRequest *request,
                   void *source, void *component);
-u32 func_0200f844(const void *resource, u32 copy_flag);
 void func_0202cbd4(void *destination, int value, u32 size);
 void func_02009d24(BattleTextureDecodeState *state, int texture_id,
                    int unknown_2, int copy_flag, void *component_10,
@@ -27,7 +26,7 @@ void BattleObjectData_PrepareBodyDecodeTask(BattleQueuedTask *task) {
              ->current_texture_upload->size & ~3);
     resource->component_10 =
         (u8 *)resource->component_0c +
-        ((func_0200f844(resource->data,
+        ((BattleRenderModel_GetTextureConversionSize(resource->data,
                         resource->flags.bits.copy_flag == 0) + 3) /
             4) * 4;
     resource->component_14 =

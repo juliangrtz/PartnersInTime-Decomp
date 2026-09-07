@@ -6,10 +6,19 @@
 #include <nitro/fx_mtx.h>
 #include <game/sprite_output.h>
 #include <game/graphics_resource.h>
+#include <game/texture_allocation.h>
 
 typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleModel BattleModel;
+
+typedef struct ModelRenderSortKey {
+    u16 unknown_00[4];
+    u16 unknown_08 : 14, mode : 2;
+} ModelRenderSortKey;
+typedef char ModelRenderSortKey_SizeCheck[sizeof(ModelRenderSortKey) == 10 ? 1 : -1];
+
+
 typedef struct BattleModelVTable BattleModelVTable;
 typedef struct GamePaletteEffectController GamePaletteEffectController;
 
@@ -157,7 +166,7 @@ struct BattleModel {
     virtual void prepare_render();
     virtual void unknown_04();
     virtual void draw(void *buffer, u8 *object_count, u8 *affine_count);
-    virtual void unknown_0c();
+    virtual u32 get_object_size();
     virtual void unknown_10();
     virtual void unknown_14();
     virtual void unknown_18();
@@ -173,13 +182,13 @@ struct BattleModel {
     virtual void unknown_40();
     virtual u32 get_sort_key();
     virtual void unknown_48(int enabled);
-    virtual void unknown_4c();
+    virtual int is_texture_dirty();
     virtual void set_palette_dirty(int enabled);
     virtual void unknown_54();
     virtual void unknown_58();
-    virtual void unknown_5c();
+    virtual int restore_controller(const void *descriptor, void *controller, s16 animation);
     virtual void reset_controller_work();
-    virtual void unknown_64();
+    virtual int configure_controller(const void *descriptor, void *controller, s16 animation);
     virtual int set_primary_animation(u8 animation_id, int argument_2,
                                       int enabled);
     virtual void unknown_6c();
@@ -202,7 +211,7 @@ struct BattleModel {
     virtual void unknown_ac();
     virtual void restore_resources(const void *descriptor);
     virtual void configure_resources(const void *descriptor);
-    virtual void unknown_b8();
+    virtual void update_texture(const u32 *banks);
     virtual void unknown_bc();
     virtual void unknown_c0();
     virtual void unknown_c4();
@@ -218,7 +227,10 @@ struct BattleModel {
     };
     /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
     union { u8 *property_02c; struct GameSpritePalette *palette; };
-    u8 unk_030[8];
+    union {
+        u8 unk_030[8];
+        struct { const void *resource_pixels; u32 unknown_034; };
+    };
     /* Graphics resource header shared by frame and animation lookup. */
     union { const u16 *property_038; const GameGraphicsResource *resource; };
     const GameGraphicsObject *resource_objects;
@@ -276,17 +288,15 @@ struct BattleModel {
         };
     };
     u8 unk_12c[4];
-    u32 unknown_130;
-    u8 unk_134[0x10];
-    u8 render_flags;
-    u8 unk_145[0x19];
-    u8 transform_flags;
-    u8 unk_15f[3];
+    GameTextureAllocation render_texture;
+    GameTexturePalette render_palette;
+    u8 unknown_160[2];
     union {
         u16 animation_state;
         struct {
             u16 state : 5;
-            u16 unknown_05_15 : 11;
+            u16 mode : 1;
+            u16 unknown_06_15 : 10;
         } animation_state_bits;
     };
     u16 owner_render_state;
@@ -310,7 +320,10 @@ struct BattleModel {
     };
     /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
     union { u8 *property_02c; struct GameSpritePalette *palette; };
-    u8 unk_030[8];
+    union {
+        u8 unk_030[8];
+        struct { const void *resource_pixels; u32 unknown_034; };
+    };
     /* Graphics resource header shared by frame and animation lookup. */
     union { const u16 *property_038; const GameGraphicsResource *resource; };
     const GameGraphicsObject *resource_objects;
@@ -368,17 +381,15 @@ struct BattleModel {
         };
     };
     u8 unk_12c[4];
-    u32 unknown_130;
-    u8 unk_134[0x10];
-    u8 render_flags;
-    u8 unk_145[0x19];
-    u8 transform_flags;
-    u8 unk_15f[3];
+    GameTextureAllocation render_texture;
+    GameTexturePalette render_palette;
+    u8 unknown_160[2];
     union {
         u16 animation_state;
         struct {
             u16 state : 5;
-            u16 unknown_05_15 : 11;
+            u16 mode : 1;
+            u16 unknown_06_15 : 10;
         } animation_state_bits;
     };
     u16 owner_render_state;
@@ -614,6 +625,28 @@ void BattleModel_CopyAnimationLayers(BattleModel *source, BattleModel *destinati
 void BattleModel_RestoreSourcePalette(BattleModel *model);
 
 void BattleRenderModel_InitDescriptor(ModelRenderDescriptor *descriptor, int mode);
+
+u8 BattleRenderModel_ReadSortKeyMode(BattleModel *unused, const ModelRenderSortKey *key);
+void BattleRenderModel_SetPaletteBuffered(BattleModel *model, int enabled);
+int BattleRenderModel_GetPaletteColorCount(BattleModel *model);
+const void *BattleRenderModel_GetPaletteSource(BattleModel *model);
+void BattleRenderModel_SetPalette(BattleModel *model, const void *source);
+void *BattleRenderModel_GetPaletteBuffer(BattleModel *model);
+MtxFx44 *BattleRenderModel_GetTransform(BattleModel *model);
+int BattleRenderModel_ConfigureController(BattleModel *model, const void *descriptor, void *controller, s16 animation);
+void BattleRenderModel_UnlinkTexture(BattleModel *model);
+void BattleRenderModels_UpdateTextures(const u32 *banks, u8 filter);
+int BattleRenderModel_GetTextureConversionSize(const GameGraphicsResource *resource, u32 alternate);
+int BattleRenderModel_RestoreController(BattleModel *model, const void *descriptor, void *controller, s16 animation);
+void BattleRenderModel_ReleaseResources(BattleModel *model);
+void BattleRenderModel_UpdateTexture(BattleModel *model, const u32 *banks);
+void BattleRenderModel_NoOp(BattleModel *model);
+u32 BattleRenderModel_GetObjectSize(BattleModel *model);
+void BattleRenderModel_SetTextureDirty(BattleModel *model, int enabled);
+int BattleRenderModel_IsTextureDirty(BattleModel *model);
+void BattleRenderModel_SetPaletteDirty(BattleModel *model, int enabled);
+int BattleRenderModel_IsPaletteDirty(BattleModel *model);
+void GameTexture_ResetLists(void);
 
 #ifdef __cplusplus
 }

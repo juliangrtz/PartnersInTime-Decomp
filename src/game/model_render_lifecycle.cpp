@@ -11,7 +11,7 @@ BattleModel *BattleRenderModel_Init(BattleModel *model)
 {
     BattleModelController_Init(model);
     *(BattleModelVTable **)model = &data_02050bb0;
-    func_0202cbd4(&model->unknown_130, 0, model->unk_1b4 - (u8 *)&model->unknown_130);
+    func_0202cbd4(&model->render_texture.offset, 0, model->unk_1b4 - (u8 *)&model->render_texture.offset);
     model->animation_state_bits.state = 31;
     model->owner_render_state = 0x7fff;
     model->unknown_16c = 16;

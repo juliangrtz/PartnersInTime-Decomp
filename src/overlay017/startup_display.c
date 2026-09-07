@@ -13,22 +13,16 @@ enum Overlay17StartupDisplayConstant {
 extern void *func_ov002_020725a4(
     void (*callback)(), const void *argument_1,
     void *argument_2, u32 argument_3);
-extern void GameTexturePalette_Unlink(void);
-extern int GameTexturePalette_Allocate(int argument_0, int argument_1,
-                         int argument_2, int argument_3,
-                         int argument_4, int argument_5,
-                         int argument_6, const void *argument_7,
-                         int argument_8, int argument_9);
 extern u8 data_ov017_020c6c98[];
 
 /* Metrowerks emits C functions in reverse source order. */
-int Overlay17Attack_ConfigureDisplay(int argument) {
-    return GameTexturePalette_Allocate(argument, 0, 6, 8, 0, 1, 0,
+int Overlay17Attack_ConfigureDisplay(GameTexturePalette *palette) {
+    return GameTexturePalette_Allocate(palette, 0, 6, 8, 0, 1, 0,
                          data_ov017_020c6c98, -15, 0);
 }
 
-void Overlay17Attack_FinalizeDisplay(void) {
-    GameTexturePalette_Unlink();
+void Overlay17Attack_FinalizeDisplay(GameTexturePalette *palette) {
+    GameTexturePalette_Unlink(palette);
 }
 
 void Overlay17Attack_InitializeDisplayPattern(void) {

@@ -26,6 +26,10 @@ struct GameTexturePalette {
 typedef char GameTextureAllocationSizeCheck[sizeof(GameTextureAllocation) == 24 ? 1 : -1];
 typedef char GameTexturePaletteSizeCheck[sizeof(GameTexturePalette) == 24 ? 1 : -1];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern GameTextureAllocation *data_0205a8c0, *data_0205a8b4;
 extern GameTexturePalette *data_0205a8b0, *data_0205a8bc;
 extern u8 *data_0205a8c4;
@@ -43,5 +47,9 @@ void *GameTexturePalette_GetBuffer(const GameTexturePalette *palette);
 void GameTexturePalette_Upload(const u32 *banks);
 void GameTexturePalette_SetBuffer(void *buffer, u32 size);
 void GameTexturePalette_ReleaseBuffer(int release);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
