@@ -501,3 +501,16 @@ Unsigned buffer division now identifies the resident `_u32_div_f` helper.
 All 14 functions match completely, without inline assembly. The total is
 238,460 bytes (15.25%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
 generated progress, and the public-content audit pass.
+
+## Sound capture callbacks, effects, and fades
+
+Eleven functions add 1,716 matching C bytes: stereo block callbacks, an
+eight-entry callback queue and worker thread, sleep transitions, resource
+release, volume-fade updates, and effect/reverb wrappers. The 84-byte capture
+state and 20-byte callback record have explicit layouts; the existing OS
+message-queue layout now lives in a shared header. The central capture-start
+routine and effect-stop wrapper remain original code pending complete matches.
+
+All linked functions are byte-identical, without inline assembly. The total
+is 240,176 bytes (15.36%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

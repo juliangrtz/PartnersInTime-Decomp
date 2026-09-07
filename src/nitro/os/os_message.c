@@ -1,13 +1,4 @@
-#include <nitro/os_sync.h>
-
-typedef struct OsMessageQueue {
-    OsThreadQueue send_waiters;
-    OsThreadQueue receive_waiters;
-    void **messages;
-    int capacity;
-    int first;
-    int count;
-} OsMessageQueue;
+#include <nitro/os_message.h>
 
 void func_02039d08(OsMessageQueue *queue, void **buffer, int capacity) {
     queue->send_waiters = 0;
