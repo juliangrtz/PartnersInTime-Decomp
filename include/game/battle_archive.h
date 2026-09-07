@@ -5,9 +5,9 @@
 
 u32 BattleArchive_GetEntrySize(void *system, const u8 *archive_cursor,
                                u16 entry_index);
-void BattleArchive_ReadAsync(void *system, void *request,
+int BattleArchive_ReadAsync(void *system, void *request,
                              int unknown_2, const u8 *archive_cursor,
-                             const void *descriptor, int unknown_5);
+                             const void *descriptor, u16 unknown_5);
 u32 BattleArchive_GetDescriptorSize(void *system, const void *descriptor);
 int BattleArchive_Open(void *system, const u8 *source, u32 size,
                         const void *descriptor);

@@ -527,3 +527,17 @@ confirmed by its original success and queue-full paths.
 All 20 functions match completely, without inline assembly. The total is
 242,624 bytes (15.52%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
 generated progress, and the public-content audit pass.
+
+## Archive lifecycle and compressed read requests
+
+Thirteen functions add 2,440 matching C bytes: archive construction/destruction,
+scanline-based work scheduling, immediate reads, compressed request setup,
+block progression, and the BattleArchive asynchronous read entry point.
+The 64-byte compressed request extends the ordinary read request, while the
+derived manager supplies its 512-byte input buffer. The archive-read API now
+expresses its verified status result and 16-bit flags argument.
+
+All linked functions match completely, without inline assembly. The small
+decoder selector remains original code pending its complete match. The total
+is 245,064 bytes (15.67%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

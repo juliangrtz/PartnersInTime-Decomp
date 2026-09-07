@@ -236,3 +236,6 @@ src/nns/snd/snd_capture_effect.c
 src/game/archive_io.c
 src/game/archive_filesystem.c
 src/game/archive_requests.c
+src/game/archive_lifecycle.c
+src/game/archive_compressed.c
+src/game/archive_compressed_update.c

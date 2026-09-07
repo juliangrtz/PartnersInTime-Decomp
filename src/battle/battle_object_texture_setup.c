@@ -4,13 +4,13 @@
 
 extern u8 *gBattleSystem;
 
-u32 func_0202c5a8(u8 *system, BattleTextureUploadRequest *request,
+u32 ArchiveIO_PrepareCompressedRead(u8 *system, BattleTextureUploadRequest *request,
                   void *source, void *component);
 u32 BattleArchive_GetEntrySize(u8 *system, void *source, u16 texture_id);
 void BattleArchive_ReadAsync(u8 *system, BattleTextureUploadRequest *request,
                              int unknown_2, void *source, void *component,
                              int unknown_5);
-void func_0202c510(u8 *system, BattleTextureUploadRequest *request,
+void ArchiveIO_QueueCompressedRead(u8 *system, BattleTextureUploadRequest *request,
                    void *destination);
 
 void BattleObjectData_BeginTextureSetupTask(BattleQueuedTask *task) {
@@ -22,14 +22,14 @@ void BattleObjectData_BeginTextureSetupTask(BattleQueuedTask *task) {
     ((BattleContext *)gBattleContext)->current_texture_upload->texture_id =
         ((BattleContext *)gBattleContext)->texture_body_id;
     ((BattleContext *)gBattleContext)->current_texture_upload->size =
-        (func_0202c5a8(
+        (ArchiveIO_PrepareCompressedRead(
              gBattleSystem,
              ((BattleContext *)gBattleContext)->current_texture_upload,
              ((BattleContext *)gBattleContext)
                  ->current_texture_upload->source,
              ((BattleContext *)gBattleContext)
                  ->current_texture_upload->component) + 3) & ~3;
-    func_0202c510(
+    ArchiveIO_QueueCompressedRead(
         gBattleSystem,
         ((BattleContext *)gBattleContext)->current_texture_upload,
         resource->data);

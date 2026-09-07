@@ -4,7 +4,7 @@
 
 extern u8 *gBattleSystem;
 
-u32 func_0202c5a8(u8 *system, BattleTextureUploadRequest *request,
+u32 ArchiveIO_PrepareCompressedRead(u8 *system, BattleTextureUploadRequest *request,
                   void *source, void *component);
 u32 func_0200f844(const void *resource, u32 copy_flag);
 u32 func_0200c300(int texture_id, int copy_flag, const void *resource);
@@ -39,7 +39,7 @@ void BattleObjectData_PrepareBodyDecodeTask(BattleQueuedTask *task) {
     ((BattleContext *)gBattleContext)->current_texture_upload->texture_id =
         ((BattleContext *)gBattleContext)->texture_body_id + 1;
     ((BattleContext *)gBattleContext)->current_texture_upload->size =
-        (func_0202c5a8(
+        (ArchiveIO_PrepareCompressedRead(
              gBattleSystem,
              ((BattleContext *)gBattleContext)->current_texture_upload,
              ((BattleContext *)gBattleContext)

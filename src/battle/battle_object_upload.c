@@ -12,7 +12,7 @@ int func_020096b0(BattleTextureDecodeState *state, int count);
 void func_02009d24(BattleTextureDecodeState *state, int texture_id,
                    int unknown_2, int copy_flag, void *component_10,
                    u8 *data);
-void func_0202c510(u8 *system, BattleTextureUploadRequest *request,
+void ArchiveIO_QueueCompressedRead(u8 *system, BattleTextureUploadRequest *request,
                    void *destination);
 void *func_ov002_02072508(int (*callback)(BattleObjectUploadTask *task),
                           BattleSceneResource *resource, int unknown_2,
@@ -54,7 +54,7 @@ void BattleObjectData_QueueFinalUploadTask(BattleQueuedTask *task) {
 
     ((BattleContext *)gBattleContext)
         ->current_texture_upload->destination = resource->component_14;
-    func_0202c510(
+    ArchiveIO_QueueCompressedRead(
         gBattleSystem,
         ((BattleContext *)gBattleContext)->current_texture_upload,
                   resource->component_14);

@@ -28,7 +28,7 @@ typedef struct ArchiveOpenRequest {
 
 typedef struct ArchiveIO {
     void *vtable;
-    u8 allocator[36];
+    u8 task_state[36];
     ArchiveReadRequest *first;
     ArchiveReadRequest *last;
     FsFile file;
@@ -52,6 +52,30 @@ typedef char ArchiveReadRequestSizeCheck[(sizeof(ArchiveReadRequest) == 40) ? 1 
 typedef char ArchiveOpenRequestSizeCheck[(sizeof(ArchiveOpenRequest) == 16) ? 1 : -1];
 typedef char ArchiveIOSizeCheck[(sizeof(ArchiveIO) == 320) ? 1 : -1];
 
+typedef void (*ArchiveBlockDecoder)(u8 **source, u8 **destination);
+typedef struct ArchiveCompressedRequest {
+    ArchiveReadRequest read;
+    u16 compressed_state;
+    u16 reserved;
+    u8 *destination;
+    u8 *write_cursor;
+    ArchiveBlockDecoder decode;
+    u32 output_size;
+    u16 blocks;
+    u16 reserved_3e;
+} ArchiveCompressedRequest;
+typedef struct ArchiveCompressedIO { ArchiveIO base; u8 buffer[512]; } ArchiveCompressedIO;
+typedef char ArchiveCompressedRequestSizeCheck[(sizeof(ArchiveCompressedRequest) == 64) ? 1 : -1];
+
+void ArchiveCodec_ReadHeader(u8 **source, u32 *blocks, u32 *size);
+void ArchiveIO_SelectDecoder(ArchiveIO *archive, ArchiveCompressedRequest *request);
+int ArchiveIO_ProcessCompressedRead(ArchiveIO *archive);
+int ArchiveIO_ReadImmediate(ArchiveIO *archive, ArchiveReadRequest *request);
+void ArchiveIO_WaitCompressedRead(ArchiveIO *archive, ArchiveReadRequest *request);
+int ArchiveIO_QueueCompressedRead(ArchiveIO *archive, ArchiveCompressedRequest *request, void *destination);
+u32 ArchiveIO_PrepareCompressedRead(ArchiveIO *archive, ArchiveCompressedRequest *request, const u32 *offsets, const char *path);
+void ArchiveIO_UpdateCompressed(ArchiveIO *archive);
+
 int ArchiveIO_ProcessOverlay(ArchiveIO *archive);
 int ArchiveIO_ProcessRead(ArchiveIO *archive);
 int ArchiveIO_QueueRead(ArchiveIO *archive, ArchiveReadRequest *request, u32 offset, const u32 *offsets, const char *path, u16 flags);
@@ -69,6 +93,12 @@ int ArchiveIO_LoadOverlay(u32 id, int processor);
 void ArchiveIO_WaitRead(ArchiveIO *archive, ArchiveReadRequest *request);
 int ArchiveIO_GetOpenState(ArchiveIO *archive, const char *path);
 void ArchiveIO_WaitOpen(ArchiveIO *archive, const char *path);
+void ArchiveIO_Update(ArchiveIO *archive);
+ArchiveIO *ArchiveIO_DestroyBase(ArchiveIO *archive);
+ArchiveIO *ArchiveIO_Delete(ArchiveIO *archive);
+ArchiveIO *ArchiveIO_DestroyComplete(ArchiveIO *archive);
+ArchiveIO *ArchiveIO_InitBase(ArchiveIO *archive, u32 priority, u32 unused, void *argument, int dma);
+ArchiveIO *ArchiveIO_InitComplete(ArchiveIO *archive, u32 priority, u32 unused, void *argument, int dma);
 
 static inline int ArchiveIO_FileSucceeded(FsFile *file)
 {
