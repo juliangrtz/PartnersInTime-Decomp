@@ -4,7 +4,7 @@ void GameWindow_AlignText(GameWindowManager *manager, GameWindow *window, GameTe
     if (!window->measured_height) window->measured_height = GameText_MeasureHeight(text);
     height = window->properties.shape.bits.height;
     switch (alignment) {
-    case 0: text->cursor.bits.y = window->origin_y; break;
+    case 0: text->cursor.bits.y = window->text_state.bytes.origin_y; break;
     case 1:
         text->cursor.bits.y = (8 * (height + 1) - (window->measured_height & 255)) >> 1;
         if (!window->properties.shape.bits.position_mode) text->cursor.bits.y += window->properties.position.bits.y & 7;

@@ -334,3 +334,16 @@ src/game/window_release.c
 src/game/window_measure.c
 src/game/window_alignment.c
 src/game/window_voice.c
+src/game/window_irq.cpp
+src/game/window_cache.c
+src/game/window_tilemap.c
+src/game/window_allocate.c
+src/game/window_link_scroll.c
+src/game/window_update.c
+src/game/window_destroy.c
+src/game/window_pause.c
+src/game/window_pool.c
+src/game/window_pool_allocate.c
+src/game/window_close.c
+src/game/window_properties.c
+src/game/window_sprite_destroy.c

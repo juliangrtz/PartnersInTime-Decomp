@@ -550,3 +550,42 @@ src/game/window_alignment.c:
 
 src/game/window_voice.c:
     .text start:0x0201dc3c end:0x0201dc98
+
+src/game/window_irq.cpp:
+    .text start:0x020196f8 end:0x020197ec
+
+src/game/window_cache.c:
+    .text start:0x02019e00 end:0x02019e74
+
+src/game/window_tilemap.c:
+    .text start:0x0201b37c end:0x0201b4cc
+
+src/game/window_allocate.c:
+    .text start:0x0201cdb4 end:0x0201d030
+
+src/game/window_link_scroll.c:
+    .text start:0x0201f044 end:0x0201f150
+
+src/game/window_update.c:
+    .text start:0x0201f150 end:0x0201f2c4
+
+src/game/window_destroy.c:
+    .text start:0x0201f2c4 end:0x0201f50c
+
+src/game/window_pause.c:
+    .text start:0x0201fef0 end:0x0201fff8
+
+src/game/window_pool.c:
+    .text start:0x0201fff8 end:0x020200d0
+
+src/game/window_pool_allocate.c:
+    .text start:0x020200d0 end:0x020201fc
+
+src/game/window_close.c:
+    .text start:0x020201fc end:0x02020250
+
+src/game/window_properties.c:
+    .text start:0x02020304 end:0x02020420
+
+src/game/window_sprite_destroy.c:
+    .text start:0x02020e44 end:0x02020ebc

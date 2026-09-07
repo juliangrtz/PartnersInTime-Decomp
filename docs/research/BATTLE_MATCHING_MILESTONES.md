@@ -893,3 +893,22 @@ vertical alignment, tilemap rebuilds, and text sounds also match.
 The total is 309,004 bytes (19.76%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress and the public-content audit pass. No inline
 assembly or compiler-setting changes were added.
+
+
+## Window allocation and the 20% C/C++ milestone
+
+Twenty-two functions add 3,824 matching C/C++ bytes. Window allocation now
+searches free buffer regions, initializes the selected record, and inserts it
+in address order. Pool creation and release, tilemap generation, text-cache
+reset, pause/resume, property defaults and close operations also match.
+
+The frame update handles both screen lists, text processing and sprite scroll
+deltas. IRQ callbacks upload pending graphics through the original C++ virtual
+call ABI. The base and sprite-window destruction paths release their owned
+resources and tasks. Window properties, embedded sprite links and text caches
+have compile-time size checks.
+
+The total is 312,828 of 1,563,700 bytes (20.01%), exceeding the 312,740-byte
+20% target. Module/symbol checks, original-ROM SHA-1, all 66 tests, generated
+progress and the public-content audit pass. This milestone adds no inline
+assembly and changes no compiler settings.
