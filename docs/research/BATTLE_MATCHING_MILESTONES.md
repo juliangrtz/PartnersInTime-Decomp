@@ -1325,3 +1325,31 @@ not exercised in this replay; their linked bytes match.
 The total is 346,328 of 1,563,700 bytes (22.15%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Animation controls and background origin
+
+Eleven functions add 1,028 matching C/C++ bytes. Model controllers now have
+readable primary/layer animation selection, speed, state and mode controls,
+including all-eight-layer updates and optional component reset. Background
+origin updates use the configuration's three-bit relative-scroll mask to select
+between Q8 displacement and per-layer scaling. A window effect callback clears,
+redraws and marks its window dirty; it shares the adjacent scroll-link module.
+
+A 362-frame normal field replay captured 137 primary animation selections,
+47 layer animation selections, three background origin updates and one call
+each to the layer state and mode setters. Entry RAM confirmed animation 3's
+resolved layer track before the latter setters. The background configuration
+used mask zero, with origin requests ending at (87, 126) from (8, 8).
+The relative-scroll branch was not entered on this route.
+
+The throne-area screenshot renders correctly, and both model lists remain
+valid with 36/40 entries. Main/sub BG captures changed by 97,433/442 bytes and
+palettes by 218 bytes. Evidence and a compatible checkpoint remain private
+under build/runtime/eur_animation_controls_verified. Speed setters, primary
+state/mode controls and the window redraw callback were not exercised here;
+all linked bytes match. The harder frame-selection and component-preservation
+routines remain assembly after isolated candidates showed register mismatches.
+
+The total is 347,356 of 1,563,700 bytes (22.21%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

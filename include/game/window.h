@@ -113,6 +113,7 @@ void GameWindow_ResetTextCache(GameWindowManager *manager, GameWindow *window);
 void GameWindow_WriteTilemap(GameWindowManager *manager, GameWindow *window);
 GameWindow *GameWindow_Allocate(GameWindowManager *manager, int screen, u32 size, s16 requested_index);
 void GameWindow_ScrollLink(GameWindowManager *manager, GameWindowLink *link);
+void GameWindow_RedrawAfterEffect(GameSpriteEffect *effect);
 void GameWindow_Update(GameWindowManager *manager);
 GameWindowManager *GameWindow_DestroyBase(GameWindowManager *manager);
 GameWindowManager *GameWindow_Delete(GameWindowManager *manager);

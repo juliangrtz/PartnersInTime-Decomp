@@ -191,7 +191,7 @@ struct BattleModel {
     virtual int configure_controller(const void *descriptor, void *controller, s16 animation);
     virtual int set_primary_animation(u8 animation_id, int argument_2,
                                       int enabled);
-    virtual void unknown_6c();
+    virtual void set_primary_state(u8 state);
     virtual void unknown_70();
     virtual void unknown_74();
     virtual void set_controller_animation(int animation, int reset);
@@ -595,6 +595,15 @@ BattleModel *BattleRenderModel_Delete(BattleModel *model);
 BattleModel *BattleRenderModel_Destroy(BattleModel *model);
 BattleModel *BattleRenderModel_Init(BattleModel *model);
 void BattleModelController_Reset(BattleModel *model);
+void BattleModelController_SetLayerAnimation(BattleModel *model, int layer, int animation, int reset);
+void BattleModelController_SetLayerSpeed(BattleModel *model, int layer, s16 speed_q8, int use_model_speed);
+void BattleModelController_SetLayerMode(BattleModel *model, int layer, u8 mode);
+void BattleModelController_SetLayerState(BattleModel *model, int layer, u8 state);
+void BattleModelController_SetPrimarySpeed(BattleModel *model, int component, s16 speed_q8, int use_model_speed);
+void BattleModelController_SetPrimaryMode(BattleModel *model, u8 mode);
+void BattleModelController_SetPrimaryState(BattleModel *model, u8 state);
+void BattleModelController_SetPrimaryAnimation(BattleModel *model, u8 animation, int frame, int update_controller);
+u32 BattleModelController_GetObjectSize(BattleModel *model);
 int BattleModelController_Configure(BattleModel *model, const void *descriptor, void *controller, s16 animation);
 int BattleModelController_Restore(BattleModel *model, const void *descriptor, void *controller, s16 animation);
 int BattleModelController_ConfigureResources(BattleModel *model, const void *descriptor);

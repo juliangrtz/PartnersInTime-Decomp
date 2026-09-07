@@ -58,7 +58,7 @@ typedef struct FieldBackgroundBlendAnimation {
 
 typedef struct FieldBackgroundConfiguration {
     u32 unknown_00[2];
-    u32 unknown_00_07 : 8;
+    u32 unknown_00_04 : 5, relative_scroll_layers : 3;
     u32 first_x : 4, first_y : 4;
     u32 second_x : 4, second_y : 4;
     u32 third_x : 4, third_y : 4;
@@ -274,6 +274,7 @@ const void *FieldBackground_GetResource650(FieldBackground *background);
 const FieldBackgroundConfiguration *FieldBackground_GetConfiguration(FieldBackground *background);
 int FieldBackground_IsReady(FieldBackground *background);
 void FieldBackground_GetOrigin(FieldBackground *background, s16 *x, s16 *y);
+void FieldBackground_SetOrigin(FieldBackground *background, int x, int y);
 void FieldBackground_SetScrollParameters(FieldBackground *background, s16 x, s16 y);
 FieldBackground *FieldBackground_Delete(FieldBackground *background);
 FieldBackground *FieldBackground_Destroy(FieldBackground *background);

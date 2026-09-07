@@ -338,7 +338,7 @@ src/game/window_irq.cpp
 src/game/window_cache.c
 src/game/window_tilemap.c
 src/game/window_allocate.c
-src/game/window_link_scroll.c
+src/game/window_link_scroll.cpp
 src/game/window_update.c
 src/game/window_destroy.c
 src/game/window_pause.c
@@ -401,3 +401,6 @@ src/game/model_render_palette.cpp
 src/game/model_texture_updates.cpp
 src/game/model_texture_restore.cpp
 src/game/model_texture_state.cpp
+src/game/model_layer_controls.cpp
+src/game/model_primary_controls.cpp
+src/game/field_background_origin.cpp

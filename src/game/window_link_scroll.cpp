@@ -1,4 +1,19 @@
 #include <game/window.h>
+
+class GameWindowClearInterface {
+public:
+    virtual void reserved00();
+    virtual void reserved04();
+    virtual void reserved08();
+    virtual void reserved0c();
+    virtual void reserved10();
+    virtual void reserved14();
+    virtual void clear(int index);
+};
+
+extern "C" {
+extern void func_020197ec(GameWindowManager *, GameWindow *);
+
 void GameWindow_ScrollLink(GameWindowManager *manager, GameWindowLink *link) {
     s16 dx, dy;
     if (link->state.bits.linked) {
@@ -15,4 +30,16 @@ void GameWindow_ScrollLink(GameWindowManager *manager, GameWindowLink *link) {
         link->state.bits.x += dx;
         link->state.bits.y += dy;
     }
+}
+
+void GameWindow_RedrawAfterEffect(GameSpriteEffect *effect)
+{
+    GameWindowManager *manager = (GameWindowManager *)effect->unknown10;
+    int index = (u8)(effect->state.words.id >> 8);
+    if ((u8)manager->windows[(s16)index].allocation.bits.suppress_redraw) return;
+    ((GameWindowClearInterface *)manager)->clear(index);
+    func_020197ec(manager, &manager->windows[index]);
+    manager->windows[(s16)index].allocation.bits.dirty = 1;
+    manager->state.raw |= 8;
+}
 }

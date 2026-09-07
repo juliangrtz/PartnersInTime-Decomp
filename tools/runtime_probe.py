@@ -349,6 +349,19 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label == "FieldBackground_SetOrigin" and is_main_ram_pointer(r0, 0x754):
+        configuration = read_u32(emulator, r0 + 0x634)
+        return {
+            "background": f"{r0:#010x}",
+            "requested_origin": [to_s32(r1), to_s32(r2)],
+            "previous_origin": [to_s32(read_u32(emulator, r0 + offset))
+                                for offset in (0x74C, 0x750)],
+            "relative_scroll_layers": (read_u32(emulator, configuration + 8) >> 5) & 7
+            if is_main_ram_pointer(configuration, 12) else None,
+            "scroll_x_q8": [to_s32(read_u32(emulator, r0 + 0x734 + i * 4)) for i in range(3)],
+            "scroll_y_q8": [to_s32(read_u32(emulator, r0 + 0x740 + i * 4)) for i in range(3)],
+        }
+
     if label in {
         "BattleRenderModel_UpdateTexture", "BattleRenderModel_SetTextureDirty",
     } and is_main_ram_pointer(r0, 0x1B8):
@@ -379,7 +392,11 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
         "BattleModelController_Reset", "BattleModelController_Configure",
         "BattleModelController_Restore", "BattleModelController_DestroyBase",
         "BattleRenderModel_Delete", "BattleModel_ReleaseTexture",
-        "BattleModel_CopyAnimationLayers", "func_0200c5d8",
+        "BattleModel_CopyAnimationLayers", "BattleModelController_SetLayerAnimation",
+        "BattleModelController_SetLayerSpeed", "BattleModelController_SetLayerMode",
+        "BattleModelController_SetLayerState", "BattleModelController_SetPrimarySpeed",
+        "BattleModelController_SetPrimaryMode", "BattleModelController_SetPrimaryState",
+        "BattleModelController_SetPrimaryAnimation",
     } and is_main_ram_pointer(r0, 0x12C):
         return {
             "model": f"{r0:#010x}",
