@@ -29,8 +29,8 @@ typedef struct BattleSpecialState {
 
 extern BattleSpecialState *data_ov002_020c0660;
 
-int func_0202b6fc(void *system);
-void func_0202b6e4(void *handle, int argument);
+int ArchiveIO_FinishOverlay(void *system);
+void ArchiveIO_UnloadOverlay(void *handle, int argument);
 void BattleSpecialHandle_QueueReload(void *handle_slot);
 
 void BattlePartyScript_FinishLoadTask(BattleQueuedTask *task);
@@ -43,7 +43,7 @@ BattleQueuedTask *BattleActionScript_RequestLoad(BattleActionState *action) {
     if (*(s16 *)(gSaveData + SAVE_CURRENT_MAP_ID_OFFSET) ==
         BATTLE_SPECIAL_MAP_ID) {
         if (data_ov002_020c0660->handle != 0) {
-            func_0202b6e4((void *)data_ov002_020c0660->handle, 0);
+            ArchiveIO_UnloadOverlay((void *)data_ov002_020c0660->handle, 0);
         }
         /* MWCC otherwise selects MOV for this pointer-like mode value; keep
          * the original literal load and register schedule localized here. */
@@ -71,7 +71,7 @@ void BattleActionScript_LoadTask(BattleQueuedTask *task) {
 
     if (*(s16 *)(gSaveData + SAVE_CURRENT_MAP_ID_OFFSET) ==
             BATTLE_SPECIAL_MAP_ID &&
-        func_0202b6fc(gBattleSystem) != 0) {
+        ArchiveIO_FinishOverlay(gBattleSystem) != 0) {
         return;
     }
 

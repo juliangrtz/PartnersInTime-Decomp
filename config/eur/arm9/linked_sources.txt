@@ -233,3 +233,6 @@ src/nns/snd/snd_stream.c
 src/nns/snd/snd_capture.c
 src/nns/snd/snd_capture_update.c
 src/nns/snd/snd_capture_effect.c
+src/game/archive_io.c
+src/game/archive_filesystem.c
+src/game/archive_requests.c

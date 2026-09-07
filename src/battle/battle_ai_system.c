@@ -25,7 +25,7 @@ extern const u8 data_ov002_020bed00[];
 
 void *func_02029928(u32 heap_id, u32 size, const void *allocator,
                     int use_default);
-int func_0202b734(void *system, int handle, int mode);
+int ArchiveIO_BeginOverlay(void *system, int handle, int mode);
 void func_ov002_0208ddd0(BattleQueuedTask *task);
 
 void BattleSpecialHandle_ClearTask(BattleQueuedTask *task);
@@ -51,7 +51,7 @@ void BattleSpecialHandle_QueueReload(void *handle_slot) {
 void BattleSpecialHandle_ReloadTask(BattleQueuedTask *task) {
     void **handle_slot = (void **)task->argument;
 
-    func_0202b734(gBattleSystem, (int)*handle_slot, 0);
+    ArchiveIO_BeginOverlay(gBattleSystem, (int)*handle_slot, 0);
     task->callback = BattleSpecialHandle_ClearTask;
 }
 

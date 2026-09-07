@@ -514,3 +514,16 @@ routine and effect-stop wrapper remain original code pending complete matches.
 All linked functions are byte-identical, without inline assembly. The total
 is 240,176 bytes (15.36%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Game archive I/O and overlay request queues
+
+Twenty functions add 2,448 matching C bytes. The game's 320-byte archive
+manager now reconstructs queued file opens, 512-byte read/overlay progress,
+request waiting, archive entry sizes, file-table setup, and synchronous and
+asynchronous overlay wrappers. Its 40-byte read request and 16-byte open
+request have explicit layouts. Archive opening now exposes the status result
+confirmed by its original success and queue-full paths.
+
+All 20 functions match completely, without inline assembly. The total is
+242,624 bytes (15.52%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
+generated progress, and the public-content audit pass.

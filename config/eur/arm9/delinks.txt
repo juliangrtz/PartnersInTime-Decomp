@@ -259,3 +259,12 @@ src/nns/snd/snd_capture_update.c:
 
 src/nns/snd/snd_capture_effect.c:
     .text start:0x02030634 end:0x02030810
+
+src/game/archive_io.c:
+    .text start:0x0202b1cc end:0x0202b614
+
+src/game/archive_filesystem.c:
+    .text start:0x0202b614 end:0x0202b908
+
+src/game/archive_requests.c:
+    .text start:0x0202b908 end:0x0202bb5c
