@@ -116,7 +116,7 @@ void func_ov005_02066dbc(Overlay5Archive *archive, u16 group, u16 index,
     owner->image = entry;
 }
 
-void func_ov005_02066d04(Overlay5Archive *archive, u8 index, u16 entry,
+void func_ov005_02066d04(Overlay5Archive *archive, u16 index, u16 entry,
                          Overlay5BufferEntry *owner, u8 mode, int heap) {
     Overlay5ArchiveRequest *request = func_ov005_02067184(archive, owner->key);
     ArchiveCompressedRequest *io;

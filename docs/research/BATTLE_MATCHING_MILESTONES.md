@@ -1007,3 +1007,16 @@ countdown that reloads from two separate initial and repeat constants.
 The total is 324,056 of 1,563,700 bytes (20.72%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass. No inline assembly and no compiler-setting changes.
+
+
+## Overlay 5 asset row lookup
+
+One function adds 344 matching bytes. An asset row names the image and palette
+entries for a graphic; a per-row flag selects an alternate row for the current
+save file, and the alternate rows are stored directly after the row array. The
+lookup reuses a resident registry entry when the key matches, otherwise builds
+a reference-counted asset and issues the image, tile and palette loads.
+
+The total is 324,864 of 1,563,700 bytes (20.78%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass.

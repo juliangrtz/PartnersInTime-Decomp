@@ -48,3 +48,6 @@ src/overlay005/touch_state.c:
 
 src/overlay005/scene_system.cpp:
     .text start:0x02065d40 end:0x02065f10
+
+src/overlay005/asset_tables.c:
+    .text start:0x02066a7c end:0x02066bd4
