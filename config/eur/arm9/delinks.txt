@@ -277,3 +277,9 @@ src/game/archive_compressed.c:
 
 src/game/archive_compressed_update.c:
     .text start:0x0202c628 end:0x0202c748
+
+src/game/irq_task.cpp:
+    .text start:0x02029de4 end:0x0202a2c8
+
+src/game/task.cpp:
+    .text start:0x0202a2c8 end:0x0202a814

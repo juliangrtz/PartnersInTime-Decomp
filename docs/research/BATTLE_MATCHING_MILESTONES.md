@@ -541,3 +541,15 @@ All linked functions match completely, without inline assembly. The small
 decoder selector remains original code pending its complete match. The total
 is 245,064 bytes (15.67%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Main and interrupt task managers
+
+Nineteen functions add 2,608 matching C++ bytes. Both 24-byte task layouts
+now describe priority-ordered insertion, removal during callbacks, activation,
+and update accounting. Main tasks retain their signed four-bit interval and
+four-bit counter; interrupt tasks preserve VBlank IRQ masking around list
+operations. Virtual callbacks use the original C++ calling convention.
+
+All functions match completely, without inline assembly. The total is
+247,672 bytes (15.84%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

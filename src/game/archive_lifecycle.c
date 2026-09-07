@@ -1,15 +1,14 @@
 #include <game/archive_io.h>
+#include <game/task.h>
 
 extern u32 data_02059bdc[];
 extern s16 data_02060b2c[];
-extern void *func_0202a710(void *task, u32 priority, u32 unused, void *argument);
-extern void *func_0202a56c(void *task);
 extern void func_02029bb0(void *allocation);
 extern int FS_SetDefaultDMA(int dma);
 
 ArchiveIO *ArchiveIO_InitComplete(ArchiveIO *archive, u32 priority, u32 unused, void *argument, int dma)
 {
-    func_0202a710(archive, priority, unused, argument);
+    GameTask_Init((GameTask *)archive, priority, unused, argument);
     archive->vtable = data_02059bdc;
     archive->last = 0;
     archive->first = archive->last;
@@ -27,7 +26,7 @@ ArchiveIO *ArchiveIO_InitComplete(ArchiveIO *archive, u32 priority, u32 unused, 
 
 ArchiveIO *ArchiveIO_InitBase(ArchiveIO *archive, u32 priority, u32 unused, void *argument, int dma)
 {
-    func_0202a710(archive, priority, unused, argument);
+    GameTask_Init((GameTask *)archive, priority, unused, argument);
     archive->vtable = data_02059bdc;
     archive->last = 0;
     archive->first = archive->last;
@@ -47,7 +46,7 @@ ArchiveIO *ArchiveIO_DestroyComplete(ArchiveIO *archive)
 {
     archive->vtable = data_02059bdc;
     if (FSi_TestFileFlag(&archive->file, 16)) FS_CloseFile(&archive->file);
-    func_0202a56c(archive);
+    GameTask_DestroyBase((GameTask *)archive);
     return archive;
 }
 
@@ -55,7 +54,7 @@ ArchiveIO *ArchiveIO_Delete(ArchiveIO *archive)
 {
     archive->vtable = data_02059bdc;
     if (FSi_TestFileFlag(&archive->file, 16)) FS_CloseFile(&archive->file);
-    func_0202a56c(archive);
+    GameTask_DestroyBase((GameTask *)archive);
     func_02029bb0(archive);
     return archive;
 }
@@ -64,7 +63,7 @@ ArchiveIO *ArchiveIO_DestroyBase(ArchiveIO *archive)
 {
     archive->vtable = data_02059bdc;
     if (FSi_TestFileFlag(&archive->file, 16)) FS_CloseFile(&archive->file);
-    func_0202a56c(archive);
+    GameTask_DestroyBase((GameTask *)archive);
     return archive;
 }
 
