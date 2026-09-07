@@ -10,6 +10,61 @@ extern FieldEntityVTable data_ov000_020c1008;
 extern FieldRenderObjectVTable data_ov000_020c1594;
 extern void func_0202cbd4(void *, int, u32);
 
+extern void func_ov000_020a2e68(FieldEntity *, int, const FieldSpawnRecord *, int, int, u8);
+
+static inline FieldRuntimeEntity *InitializeSpawn(FieldRuntimeEntity *entity, int entity_index,
+    const FieldSpawnRecord *spawn, int argument_3, int resource_set, u8 animation_enabled)
+{
+    func_ov000_020a2e68(&entity->base, entity_index, spawn, argument_3, resource_set, animation_enabled);
+    *(FieldEntityVTable **)entity = &data_ov000_020c1008;
+    func_0202cbd4(entity->unknown_0ec, 0, FIELD_ENTITY_2D_SIZE - sizeof(FieldEntity));
+    if (spawn) {
+        entity->position_x = (spawn->offset_x + 8 * spawn->cell_x) << 12;
+        entity->position_y = (spawn->offset_y + 8 * spawn->cell_y) << 12;
+        entity->base_state_flag_bits.animation_wait_enabled = spawn->flags.bits.animation_enabled & animation_enabled;
+        entity->base_state_flag_bits.retain_offscreen_contact = spawn->flags.bits.retain_offscreen_contact;
+        entity->saved_presentation_flag_bits.resource_set = spawn->appearance.bits.resource_set;
+        entity->resource_index = spawn->appearance.bits.resource_index;
+        entity->presentation_state = spawn->appearance.bytes.presentation_state;
+        entity->saved_presentation_flag_bits.palette_slot = entity->presentation_state & ~0x80;
+        if (entity->presentation_state & 0x80)
+            entity->saved_presentation_flag_bits.palette_slot |= 16;
+        entity->saved_presentation_flag_bits.behavior_mode = 3;
+        if (spawn->animation & 0x8000) {
+            entity->base_state_flag_bits.facing_direction = spawn->animation & ~0x8000;
+            entity->unknown_178 = entity->base_state_flag_bits.facing_direction << 13;
+            entity->base_state_flags |= 2;
+        } else {
+            entity->animation_id = spawn->animation;
+        }
+        entity->saved_presentation_flags |= 0x4000;
+    }
+    entity->initial_locomotion.starting_speed = 8192;
+    entity->initial_locomotion.acceleration = 0;
+    entity->initial_locomotion.maximum_speed = 8192;
+    entity->initial_locomotion.deceleration = -8192;
+    entity->initial_locomotion.reverse_deceleration = 0;
+    entity->initial_locomotion.turn_speed_limit = 8192;
+    entity->animation_speed = 256;
+    entity->bounds_index = -1;
+    entity->base.reset_motion_parameters();
+    entity->locomotion_state = 0;
+    entity->unknown_180 = 0;
+    return entity;
+}
+
+FieldRuntimeEntity *FieldEntity2D_InitPlacement(FieldRuntimeEntity *entity, int entity_index,
+    const FieldSpawnRecord *spawn, int argument_3, int resource_set, u8 animation_enabled)
+{
+    return InitializeSpawn(entity, entity_index, spawn, argument_3, resource_set, animation_enabled);
+}
+
+FieldRuntimeEntity *FieldEntity2D_InitPlacementBase(FieldRuntimeEntity *entity, int entity_index,
+    const FieldSpawnRecord *spawn, int argument_3, int resource_set, u8 animation_enabled)
+{
+    return InitializeSpawn(entity, entity_index, spawn, argument_3, resource_set, animation_enabled);
+}
+
 static inline FieldRuntimeEntity *InitEntity2D(FieldRuntimeEntity *entity)
 {
     FieldEntity_InitializeB(&entity->base);

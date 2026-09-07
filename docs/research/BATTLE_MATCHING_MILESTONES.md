@@ -1701,3 +1701,36 @@ build/runtime/eur_field_lifetimes_verified. The total is 358,160 of 1,563,700 by
 (22.90%). All module/symbol checks, 74 tests, generated progress and
 public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Planar entity placement initialization
+
+Two constructor entries add 1,048 matching C++ bytes and extend the existing
+entity lifecycle module. A shared, checked 28-byte spawn record describes
+eight-pixel cells, signed pixel offsets, animation/facing selection, appearance
+and placement flags. Both entries share one inline implementation. The
+remaining register difference was resolved by preserving the original operand
+order when combining the record's animation flag with the caller's enable bit.
+
+Live arguments and the base constructor establish that argument one is an
+entity index, stored at byte +4. The placement and deferred-entity interfaces
+now use an integer index and integer resource-set selector, correcting earlier
+opaque pointer declarations. Unresolved argument three remains neutral. The
+adjacent base initializer candidates remain assembly because a conditional-move
+ordering difference persisted; their additional typed fields come from direct
+inspection of the original stores.
+
+A normal 2,033-frame boot/save-load replay entered the complete placement entry
+31 times and the base placement entry three times. Read-only entry/return hooks
+checked all 34 calls, including 16 with null spawn records. At return, indices,
+Q12 positions, resource indices, presentation bytes, initial locomotion
+parameters, Q8 animation speed 256 and bounds index -1 matched the inputs and
+constructor defaults. Null records produced zero positions and resource
+selection. Loaded constructor bytes were checked against the original overlay.
+No runtime state was seeded for these checks.
+
+Final render lists contain 30/40 valid models; main/sub BG memory changed by
+55,110/47,962 bytes and palettes by 243 bytes. Evidence and the 34 postcondition
+results remain private under build/runtime/eur_field_spawn_verified. The total
+is 359,208 of 1,563,700 bytes (22.97%). All module/symbol checks, 74 tests,
+generated progress and public-content checks pass. The rebuilt ROM retains
+SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

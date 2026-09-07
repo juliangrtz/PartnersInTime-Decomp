@@ -51,7 +51,7 @@ src/field/field_interaction_bounds.cpp:
     .text       start:0x020a4f4c end:0x020a4f88
 
 src/field/field_entity_lifecycle.cpp:
-    .text       start:0x020a7310 end:0x020a75c4
+    .text       start:0x020a7310 end:0x020a79dc
 
 src/field/field_spatial_lifecycle.cpp:
     .text       start:0x020b5608 end:0x020b5820

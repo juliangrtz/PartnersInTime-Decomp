@@ -356,6 +356,16 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label in {"FieldEntity2D_InitPlacement", "FieldEntity2D_InitPlacementBase"}:
+        result = {"entity": f"{r0:#010x}", "entity_index": to_s32(r1), "spawn": f"{r2:#010x}"}
+        if is_arm9_work_ram_pointer(r2, 28):
+            result["cell"] = [read_s16(emulator, r2 + index * 2) for index in range(3)]
+            result["pixel_offset"] = [read_s16(emulator, r2 + 6 + index * 2) for index in range(3)]
+            result["animation_or_facing"] = f"{read_u16(emulator, r2 + 12):#06x}"
+            result["appearance"] = f"{read_u16(emulator, r2 + 14):#06x}"
+            result["spawn_flags"] = f"{read_u32(emulator, r2 + 24):#010x}"
+        return result
+
     if label.startswith(("FieldEntity2D_", "FieldEntity3D_")):
         return {"entity": f"{r0:#010x}"}
 
@@ -395,7 +405,7 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     if label in {"FieldDeferredEntity_Init", "FieldDeferredEntity_InitEmpty"}:
         result = {"entity": f"{r0:#010x}"}
         if label == "FieldDeferredEntity_Init":
-            result.update(descriptor=f"{r1:#010x}", spawn_record=f"{r2:#010x}")
+            result.update(entity_index=to_s32(r1), spawn_record=f"{r2:#010x}")
         return result
 
     if label.startswith("FieldDeferredEntity_") and is_main_ram_pointer(r0, 0x524):

@@ -146,7 +146,9 @@ typedef struct FieldRenderStateFlags {
 } FieldRenderStateFlags;
 
 typedef struct FieldSavedPresentationFlags {
-    u32 unknown_00_06 : 7;
+    u32 resource_set : 1;
+    u32 palette_slot : 5;
+    u32 unknown_06 : 1;
     u32 behavior_mode : 3;
     u32 saved_behavior_mode : 3;
     u32 has_saved_behavior : 1;
@@ -230,7 +232,7 @@ typedef struct FieldEntity {
     virtual int get_property(int property_id);
     virtual void unknown_1c();
     virtual void unknown_20();
-    virtual void unknown_24();
+    virtual void reset_motion_parameters();
     virtual void unknown_28();
     virtual void release_renderers();
     virtual void unknown_30();
@@ -264,7 +266,8 @@ typedef struct FieldEntity {
 #else
     FieldEntityVTable *vtable;
 #endif
-    u8 unknown_004[6];
+    u8 index, unknown_005[3];
+    u16 unknown_008;
     union {
         u16 property_00a;
         struct {
@@ -274,24 +277,29 @@ typedef struct FieldEntity {
             u16 resource_set : 1;
             u16 property_00a_unknown_07_08 : 2;
             u16 heap : 3;
-            u16 property_00a_unknown_12_15 : 4;
+            u16 property_00a_unknown_12_14 : 3;
+            u16 property_00a_unknown_15 : 1;
         } property_00a_bits;
     };
-    u8 unknown_00c[0xC4];
+    s16 unknown_00c;
+    u8 unknown_00e[0xC2];
     union {
         u32 state_flags;
         struct {
             u32 unknown_flag_00 : 1;
             u32 active : 1;
             u32 flag_02 : 1;
-            u32 unknown_flags_03_14 : 12;
+            u32 unknown_flag_03 : 1;
+            u32 unknown_flags_04_06 : 3;
+            u32 unknown_flags_07_14 : 8;
             u32 interaction_state : 2;
             u32 unknown_flags_17_31 : 15;
         } state_flag_bits;
     };
     u8 unknown_0d4[0xC];
     u32 action_timer;
-    u8 unknown_0e4[8];
+    u32 unknown_0e4;
+    FieldEntity *self;
 } FieldEntity;
 
 /*
@@ -420,7 +428,8 @@ struct FieldRuntimeEntity {
     FieldLocomotionParameters locomotion, initial_locomotion;
     u8 unknown_168[0x10];
     u16 unknown_178;
-    u8 unknown_17a[0xA];
+    u16 unknown_17a, locomotion_state, previous_locomotion_state;
+    u8 unknown_180, unknown_181[3];
     union {
         u32 base_state_flags;
         FieldBaseStateFlags base_state_flag_bits;

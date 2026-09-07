@@ -2,6 +2,7 @@
 #define PIT_GAME_FIELD_DEFERRED_ENTITY_H
 
 #include <game/field_entity.h>
+#include <game/field_spawn.h>
 
 typedef struct FieldDeferredEntity {
     FieldRuntimeEntity runtime;
@@ -19,8 +20,8 @@ typedef char FieldDeferredEntity_SizeCheck[sizeof(FieldDeferredEntity) == 0x524 
 #ifdef __cplusplus
 extern "C" {
 #endif
-FieldDeferredEntity *FieldDeferredEntity_Init(FieldDeferredEntity *entity, const void *descriptor,
-    const void *spawn_record, int argument_3, const void *argument_4, u8 argument_5);
+FieldDeferredEntity *FieldDeferredEntity_Init(FieldDeferredEntity *entity, int entity_index,
+    const FieldSpawnRecord *spawn_record, int argument_3, int resource_set, u8 argument_5);
 FieldDeferredEntity *FieldDeferredEntity_InitEmpty(FieldDeferredEntity *entity);
 FieldDeferredEntity *FieldDeferredEntity_DestroyBase(FieldDeferredEntity *entity);
 FieldDeferredEntity *FieldDeferredEntity_Delete(FieldDeferredEntity *entity);

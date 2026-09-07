@@ -3,6 +3,7 @@
 
 #include <game/field_entity.h>
 #include <game/field_timed_renderer.h>
+#include <game/field_spawn.h>
 
 /* Allocation sizes of the planar base and its spatial extension.
  * FieldRuntimeEntity describes their shared command-facing offsets;
@@ -13,6 +14,10 @@ enum { FIELD_ENTITY_2D_SIZE = 0x2B0, FIELD_ENTITY_3D_SIZE = 0x520 };
 extern "C" {
 #endif
 
+FieldRuntimeEntity *FieldEntity2D_InitPlacement(FieldRuntimeEntity *entity, int entity_index,
+    const FieldSpawnRecord *spawn, int argument_3, int resource_set, u8 animation_enabled);
+FieldRuntimeEntity *FieldEntity2D_InitPlacementBase(FieldRuntimeEntity *entity, int entity_index,
+    const FieldSpawnRecord *spawn, int argument_3, int resource_set, u8 animation_enabled);
 FieldRuntimeEntity *FieldEntity2D_Init(FieldRuntimeEntity *entity);
 FieldRuntimeEntity *FieldEntity2D_InitBase(FieldRuntimeEntity *entity);
 FieldRuntimeEntity *FieldEntity2D_Destroy(FieldRuntimeEntity *entity);
