@@ -599,5 +599,18 @@ the untouched translation row in pairs; translation narrows each shifted
 64-bit dot product before the final 32-bit addition.
 
 All three functions match completely, without inline assembly. The total is
-252,772 bytes (16.17%). Module/symbol checks, original-ROM SHA-1, all 66
+252,772 bytes (16.16%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.
+
+## Camera and projection matrices
+
+Three functions add 1,668 matching C bytes: LookAt, orthographic projection,
+and perspective projection, each supporting a returned matrix and direct
+geometry-FIFO loading. The reconstruction preserves asynchronous division,
+the optional W scale, and fixed-point depth rounding. The former OrthoW label
+now identifies its full G3 interface; the signed 64-bit divide runtime is
+identified as `_ll_sdiv`.
+
+All three functions match completely, without inline assembly. The total is
+254,440 bytes (16.27%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.

@@ -301,3 +301,6 @@ src/nitro/math/fx_vec.c:
 
 src/nitro/math/fx_mtx44.c:
     .text start:0x02034238 end:0x0203476c
+
+src/nitro/gx/gx_projection.c:
+    .text start:0x02037328 end:0x020379ac
