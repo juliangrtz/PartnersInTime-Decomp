@@ -101,7 +101,7 @@ void func_0203e068(FsReadCursor *cursor, void *buffer, u32 size) {
     cursor->position += size;
 }
 
-int func_0203e034(FsFile *file, u16 directory) {
+int func_0203e034(FsFile *file, u32 directory) {
     file->flags |= 4;
     file->argument.directory.archive = file->archive;
     file->argument.directory.position = 0;

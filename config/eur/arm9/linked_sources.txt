@@ -301,3 +301,4 @@ src/game/text_state.c
 src/game/text_measure.c
 src/game/text_control.c
 src/game/text_next.cpp
+src/nitro/fs/fs_path.c

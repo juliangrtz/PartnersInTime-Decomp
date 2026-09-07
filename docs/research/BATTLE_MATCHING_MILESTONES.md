@@ -794,3 +794,16 @@ The total reaches 286,708 bytes (18.34%). Module/symbol checks, original-ROM
 SHA-1, all 66 tests, generated progress and the public-content audit pass.
 No inline assembly was added. The callback-table relocations resolve to the
 original addresses, and the existing battle-interface callers still match.
+
+## Filesystem path lookup and reconstruction
+
+Two functions add 1,500 matching C bytes. Path lookup handles both separators,
+relative directory components, case-insensitive entry lookup and file/directory
+results. Path reconstruction caches the required length, finds parent entries,
+and writes the archive prefix and components into a capacity-checked buffer.
+The directory-command argument retains its full input width until storage in
+the on-disk directory-position representation.
+
+The total is 288,208 bytes (18.43%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress and the public-content audit pass. No inline
+assembly was added; the existing filesystem command functions still match.

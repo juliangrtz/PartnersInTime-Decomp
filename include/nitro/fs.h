@@ -14,6 +14,12 @@ typedef struct FsDirectoryPosition {
     u32 position;
 } FsDirectoryPosition;
 typedef struct FsReadCursor { FsArchive *archive; u32 position; } FsReadCursor;
+typedef struct FsGetPathArgs {
+    char *buffer;
+    u32 capacity;
+    u16 length;
+    u16 directory;
+} FsGetPathArgs;
 typedef struct FsDirectoryEntry {
     union { FsDirectoryPosition directory; FsFileId file; } entry;
     int is_directory;
@@ -64,6 +70,8 @@ struct FsFile {
         FsDirectoryPosition directory;
         struct { void *buffer; u32 size; u32 length; } io;
         struct { u32 top; u32 bottom; u32 id; } direct;
+        struct { FsDirectoryEntry *entry; int skip_name; } read_directory;
+        FsGetPathArgs get_path;
         struct { FsDirectoryPosition directory; const char *path; int find_directory; void *output; } path;
     } argument;
 };
@@ -111,6 +119,10 @@ int FS_WaitAsync(FsFile *file);
 int FS_ConvertPathToFileID(FsFileId *id, const char *path);
 int FSi_ReadFileCore(FsFile *file, void *buffer, int size, int asynchronous);
 int FSi_FindPath(FsFile *file, const char *path, FsFileId *id, FsDirectoryPosition *directory);
+int FSi_FindPathCommand(FsFile *file);
+int FSi_GetPathCommand(FsFile *file);
+int func_0203e034(FsFile *file, u32 directory);
+int func_0203dfd0(const u8 *left, const u8 *right, int length);
 void func_0203e068(FsReadCursor *cursor, void *buffer, u32 size);
 void FS_InitArchive(FsArchive *archive);
 int FS_RegisterArchiveName(FsArchive *archive, const char *name, int length);

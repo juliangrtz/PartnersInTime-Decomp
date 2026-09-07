@@ -451,3 +451,6 @@ src/game/text_control.c:
 
 src/game/text_next.cpp:
     .text start:0x02025774 end:0x02025dd8
+
+src/nitro/fs/fs_path.c:
+    .text start:0x0203d7dc end:0x0203ddb8
