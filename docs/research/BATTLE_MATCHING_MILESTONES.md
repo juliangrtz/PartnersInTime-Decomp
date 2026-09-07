@@ -880,3 +880,16 @@ and nonmatching private candidates remain outside this milestone.
 The total is 305,572 bytes (19.54%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress and the public-content audit pass. No compiler
 settings were changed.
+
+
+## Window uploads, background control and lifecycle
+
+Twelve functions add 3,432 matching C bytes. Window graphics and tilemap
+uploads, scroll registers, and background configuration now use recovered
+window and manager layouts. Window release unlinks both embedded records,
+stops active sounds, and updates the screen counts. Text measurement,
+vertical alignment, tilemap rebuilds, and text sounds also match.
+
+The total is 309,004 bytes (19.76%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress and the public-content audit pass. No inline
+assembly or compiler-setting changes were added.

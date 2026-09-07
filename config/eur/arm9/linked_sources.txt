@@ -326,3 +326,11 @@ src/game/sprite_animation_color.c
 src/game/sprite_animation_scan.c
 src/game/sprite_animation_update.c
 src/game/sprite_animation_state.c
+src/game/window_scroll.c
+src/game/window_upload.c
+src/game/window_background.c
+src/game/window_rebuild.c
+src/game/window_release.c
+src/game/window_measure.c
+src/game/window_alignment.c
+src/game/window_voice.c
