@@ -1,6 +1,31 @@
 #include <game/sprite_window.h>
-
 #include <game/heap.h>
+extern s16 func_0201d320(GameWindowManager *, const GameWindowProperties *, int);
+extern void func_0201a714(GameWindowManager *, GameWindow *);
+
+int GameSpriteWindow_OpenWithProperties(GameSpriteWindowManager *manager, const GameWindowProperties *properties, int requested_index)
+{
+    int index;
+    /* Callers select either background (0) or sprite (1) presentation. */
+    switch (properties->shape.bits.position_mode) {
+    case 0:
+        index = func_0201d320(&manager->base, properties, requested_index);
+        if (index == -1) return -1;
+        GameWindow_WriteTilemap(&manager->base, &manager->base.windows[(s16)index]);
+        if ((u8)manager->base.windows[(s16)index].properties.shape.bits.screen)
+            manager->base.state.raw |= 4;
+        else
+            manager->base.state.raw |= 2;
+        break;
+    case 1:
+        index = GameSpriteWindow_Open(manager, properties, requested_index);
+        if (index == -1) return -1;
+        break;
+    }
+    func_0201a714(&manager->base, &manager->base.windows[(s16)index]);
+    if (requested_index != -1) index = requested_index;
+    return index;
+}
 
 extern u8 data_020565f0[];
 extern void *data_020565d4[];

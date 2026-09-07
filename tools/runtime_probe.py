@@ -349,6 +349,42 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label == "GameGraphics_SetOrthographicProjection":
+        return {"near_plane_q12": to_s32(r0), "far_plane_q12": to_s32(r1)}
+
+    if label == "GameSpriteWindow_OpenWithProperties" and is_main_ram_pointer(r1, 28):
+        shape = read_u32(emulator, r1)
+        return {
+            "manager": f"{r0:#010x}",
+            "properties": f"{r1:#010x}",
+            "screen": shape & 1,
+            "skin": (shape >> 1) & 15,
+            "position_mode": (shape >> 17) & 7,
+            "requested_index": to_s32(r2),
+        }
+
+    if label in {"FieldBackground_ActivateTilemapPatch", "func_020131b0"} and is_main_ram_pointer(r0, 0x790):
+        patches = read_u32(emulator, r0 + 0xAC)
+        patch = patches + to_s32(r1) * 20
+        if is_main_ram_pointer(patch, 20):
+            save = read_u32(emulator, 0x02059FE8)
+            flags = [read_u16(emulator, patch + offset) for offset in (16, 18)]
+            flag_values = [
+                bool(read_u32(emulator, save + 0x50 + (flag >> 5) * 4) & (1 << (flag & 31)))
+                if flag != 0x7FFF and is_main_ram_pointer(save, 0x50 + (flag >> 5) * 4 + 4)
+                else None for flag in flags
+            ]
+            return {
+                "background": f"{r0:#010x}",
+                "index": to_s32(r1),
+                "tiles": f"{read_u32(emulator, patch):#010x}",
+                "unknown_04": f"{read_u32(emulator, patch + 4):#010x}",
+                "rectangle": [read_u16(emulator, patch + offset) for offset in (8, 10, 12, 14)],
+                "set_flag": flags[0],
+                "clear_flag": flags[1],
+                "save_flag_values": flag_values,
+            }
+
     if label == "FieldBackground_SetOrigin" and is_main_ram_pointer(r0, 0x754):
         configuration = read_u32(emulator, r0 + 0x634)
         return {

@@ -12,6 +12,22 @@ typedef struct FieldBackgroundResource {
     const void *data;
 } FieldBackgroundResource;
 
+typedef struct FieldBackgroundTilemapSource {
+    u32 size;
+    u16 *tiles;
+} FieldBackgroundTilemapSource;
+
+typedef struct FieldBackgroundTilemapPatch {
+    const u16 *tiles;
+    u32 unknown_04;
+    u16 x, y, width, height;
+    u16 set_flag, clear_flag;
+} FieldBackgroundTilemapPatch;
+typedef char FieldBackgroundTilemapPatch_SizeCheck[
+    sizeof(FieldBackgroundTilemapPatch) == 20 ? 1 : -1];
+typedef char FieldBackgroundTilemapSource_SizeCheck[
+    sizeof(FieldBackgroundTilemapSource) == 8 ? 1 : -1];
+
 typedef struct FieldBackgroundPaletteEffect {
     s16 mode;
     u16 color;
@@ -84,7 +100,7 @@ struct FieldBackground {
     virtual const void *get_resource_638();
     virtual void unknown_34();
     virtual void unknown_38();
-    virtual void unknown_3c();
+    virtual void apply_tilemap_patch(int index);
     virtual void unknown_40();
     virtual int restart_tile_animation(int index);
     virtual void update_tile_animations();
@@ -136,10 +152,11 @@ struct FieldBackground {
     u32 unknown_094, unknown_098;
     const s16 *palette_components[3];
     FieldBackgroundPaletteEffect *palette_effects;
-    void *tilemap_patches;
+    FieldBackgroundTilemapPatch *tilemap_patches;
     u8 unknown_0b0[0x40];
     void *resource_data;
-    u8 unknown_0f4[0x524];
+    u8 unknown_0f4[0x50c];
+    FieldBackgroundTilemapSource tilemap_sources[3];
     FieldBackgroundPaletteSource palette_sources[3];
     u8 unknown_630[4];
     const FieldBackgroundConfiguration *configuration;
@@ -275,6 +292,7 @@ const FieldBackgroundConfiguration *FieldBackground_GetConfiguration(FieldBackgr
 int FieldBackground_IsReady(FieldBackground *background);
 void FieldBackground_GetOrigin(FieldBackground *background, s16 *x, s16 *y);
 void FieldBackground_SetOrigin(FieldBackground *background, int x, int y);
+u32 FieldBackground_ActivateTilemapPatch(FieldBackground *background, int index);
 void FieldBackground_SetScrollParameters(FieldBackground *background, s16 x, s16 y);
 FieldBackground *FieldBackground_Delete(FieldBackground *background);
 FieldBackground *FieldBackground_Destroy(FieldBackground *background);

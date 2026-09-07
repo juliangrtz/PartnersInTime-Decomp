@@ -1,4 +1,27 @@
 #include <game/graphics_resource.h>
+#include <nitro/gx_projection.h>
+
+extern int func_02036dd0(int *level);
+extern const VecFx32 data_020499d0;
+extern const VecFx32 data_020499dc;
+extern const VecFx32 data_020499e8;
+
+#define MATRIX_MODE (*(volatile u32 *)0x04000440)
+#define MATRIX_POP (*(volatile u32 *)0x04000448)
+#define MATRIX_IDENTITY (*(volatile u32 *)0x04000454)
+
+void GameGraphics_SetOrthographicProjection(fx32 near_plane, fx32 far_plane)
+{
+    int projection_level;
+    while (func_02036dd0(&projection_level)) {}
+    MATRIX_MODE = 0;
+    if (projection_level) MATRIX_POP = projection_level;
+    MATRIX_IDENTITY = 0;
+    G3i_OrthoW(0, 0xc000, 0, 0x10000, near_plane, far_plane, 0x1000, 1, 0);
+    G3i_LookAt(&data_020499d0, &data_020499dc, &data_020499e8, 1, 0);
+    MATRIX_MODE = 1;
+}
+
 extern const u8 data_020499bc[8];
 extern const u16 data_02049940[12];
 

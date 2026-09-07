@@ -56,12 +56,14 @@ void GameSpriteWindow_Upload(GameSpriteWindowManager *manager, GameWindow *windo
 void GameSpriteWindow_UploadDirty(GameSpriteWindowManager *manager);
 GameOamObject *GameSpriteWindow_ApplyTileOffsets(GameSpriteWindowManager *manager, GameWindow *window);
 u16 GameSpriteWindow_BuildObjects(GameSpriteWindowManager *manager, GameWindow *window);
-s16 GameSpriteWindow_Open(GameSpriteWindowManager *manager, u32 size, s16 requested_index);
+s16 GameSpriteWindow_Open(GameSpriteWindowManager *manager, const GameWindowProperties *properties, int requested_index);
 void GameSpriteWindow_ReleaseSlots(GameSpriteWindowManager *manager);
 void GameSpriteWindow_AllocateSlots(GameSpriteWindowManager *manager, int heap, int count);
 GameSpriteWindowManager *GameSpriteWindow_Delete(GameSpriteWindowManager *manager);
 GameSpriteWindowManager *GameSpriteWindow_Destroy(GameSpriteWindowManager *manager);
 void GameSpriteWindow_Release(GameSpriteWindowManager *manager, s16 index);
+int GameSpriteWindow_OpenWithProperties(GameSpriteWindowManager *manager,
+    const GameWindowProperties *properties, int requested_index);
 
 #ifdef __cplusplus
 }

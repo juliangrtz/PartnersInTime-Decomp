@@ -1353,3 +1353,34 @@ routines remain assembly after isolated candidates showed register mismatches.
 The total is 347,356 of 1,563,700 bytes (22.21%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Projection, tilemap patch activation and window dispatch
+
+Six functions add 896 matching C/C++ bytes: orthographic projection setup,
+tilemap patch activation, window presentation dispatch and three 16-pixel-wide
+sprite decoders. The window dispatcher selects background or sprite rendering,
+and the sprite-opening API now correctly describes its properties pointer and
+requested index. Existing callers still match after that declaration correction.
+The wider decoders compose two existing eight-pixel decoder calls.
+
+Tilemap patches have a checked 20-byte layout containing a tile source,
+an unresolved word, a rectangle and set/clear flag IDs. Vtable slot 0x3C takes
+the patch index; its corrected declaration preserves the argument in the
+activation routine. The actual tile-copy loop remains assembly after its C
+candidate showed register differences. The field background's three source
+tilemaps now have checked size/pointer pairs in the shared layout.
+
+A fresh 2,033-frame boot/save-load replay captured projection setup once with
+near/far Q12 values 0/-4096. Two patch activations reached the original tile-copy
+loop: rectangles (13, 19, 8, 8) and (11, 9, 12, 10), setting flags 480/481 and
+clearing 605/606. RAM showed these flags already had their requested values at
+entry and retained them before tile copying; this run does not demonstrate a
+flag transition. The resulting field has valid 30/40-model lists. Main/sub BG
+memory changed by 55,110/47,962 bytes and palette memory by 243 bytes.
+
+The window dispatcher and wider decoder wrappers were not entered during this
+boot or the subsequent normal throne dialogue replay. Their linked bytes match.
+Evidence remains private under build/runtime/eur_render_controls_verified and
+eur_window_dispatch_verified. The total is 348,252 of 1,563,700 bytes (22.27%).
+All module/symbol checks, 74 tests, generated progress and public-content checks
+pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

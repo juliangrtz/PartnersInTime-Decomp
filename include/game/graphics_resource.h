@@ -1,6 +1,7 @@
 #ifndef PIT_GAME_GRAPHICS_RESOURCE_H
 #define PIT_GAME_GRAPHICS_RESOURCE_H
 #include <nitro.h>
+#include <nitro/fx.h>
 
 typedef struct GameGraphicsResource {
     union { u16 raw; struct { u16 reserved0 : 4, alternate_boundary : 3, normal_boundary : 3,
@@ -26,4 +27,5 @@ const void *GameGraphics_GetSection(const GameGraphicsResource *resource, int se
 u8 GameGraphics_GetTextureFormat(const GameGraphicsResource *resource);
 void GameGraphics_BuildTextureOffsets(u16 *output, const GameGraphicsResource *resource);
 void GameGraphics_BuildGroupTextureOffsets(u16 *output, const GameGraphicsResource *resource, int group);
+void GameGraphics_SetOrthographicProjection(fx32 near_plane, fx32 far_plane);
 #endif

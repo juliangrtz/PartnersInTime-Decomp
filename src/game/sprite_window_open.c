@@ -1,8 +1,8 @@
 #include <game/sprite_window.h>
 
-extern s16 func_0201d320(GameWindowManager *manager, u32 size, s16 requested_index);
+extern s16 func_0201d320(GameWindowManager *manager, const GameWindowProperties *properties, int requested_index);
 
-s16 GameSpriteWindow_Open(GameSpriteWindowManager *manager, u32 size, s16 requested_index) {
+s16 GameSpriteWindow_Open(GameSpriteWindowManager *manager, const GameWindowProperties *properties, int requested_index) {
     s16 free_slot;
     s16 index;
     GameWindow *window;
@@ -16,7 +16,7 @@ s16 GameSpriteWindow_Open(GameSpriteWindowManager *manager, u32 size, s16 reques
         --free_slot;
     }
     if (!found) return -1;
-    index = func_0201d320(&manager->base, size, requested_index);
+    index = func_0201d320(&manager->base, properties, requested_index);
     if (index == -1) return -1;
     manager->slots[free_slot].active = 1;
     manager->slots[free_slot].window = index;

@@ -386,7 +386,7 @@ src/game/palette_animation_cycle.c
 src/game/animation_table.c
 src/game/field_background_controls.cpp
 src/game/field_background_transfer_task.cpp
-src/game/field_background_accessors.c
+src/game/field_background_accessors.cpp
 src/game/field_background_lifecycle.c
 src/game/palette_effect.c
 src/game/model_resource_controls.cpp
@@ -404,3 +404,4 @@ src/game/model_texture_state.cpp
 src/game/model_layer_controls.cpp
 src/game/model_primary_controls.cpp
 src/game/field_background_origin.cpp
+src/game/sprite_image_decode_wide.c

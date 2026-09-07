@@ -24,4 +24,7 @@ void GameSpriteImage_Decode8x12(const u32 *source, u8 *destination);
 void GameSpriteImage_Decode8x16(const u32 *source, u8 *destination);
 void GameSpriteImage_Decode8x20(const u32 *source, u8 *destination);
 void GameSpriteImage_Decode8x24(const u32 *source, u8 *destination);
+void GameSpriteImage_Decode16x16(const u32 *source, u8 *destination);
+void GameSpriteImage_Decode16x20(const u32 *source, u8 *destination);
+void GameSpriteImage_Decode16x24(const u32 *source, u8 *destination);
 #endif
