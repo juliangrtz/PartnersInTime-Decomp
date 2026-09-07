@@ -1,3 +1,4 @@
+#include <game/field_linear.h>
 #include <game/field_orbit.h>
 extern "C" {
 #include <game/field_entity.h>
@@ -51,32 +52,19 @@ extern void func_ov000_020a6d68(FieldEntity *entity,
                                 int reserved_2, int reserved_3,
                                 int animation_id, int restart,
                                 int reserved_6);
-extern void func_ov000_020a64a0(FieldEntity *entity, int coordinate_mode,
-                                fx32 x, fx32 y, int motion_5, int motion_6,
-                                int motion_7, int motion_8, int motion_11,
-                                int reserved);
 extern void func_ov000_020b3f00(FieldEntity *entity, int coordinate_mode,
                                 fx32 x, fx32 y, fx32 z, int motion_5,
                                 int motion_6, int motion_7, int motion_8,
                                 int motion_9, int motion_10, int motion_11,
                                 int reserved);
-extern void func_ov000_020a6394(FieldEntity *entity, int coordinate_mode,
-                                fx32 x, fx32 y, int duration,
-                                int motion_flag, int reserved);
 extern void func_ov000_020b3cb0(FieldEntity *entity, int coordinate_mode,
                                 fx32 x, fx32 y, fx32 z, int duration,
                                 int motion_6, int motion_7, int motion_flag,
                                 int reserved);
-extern void func_ov000_020a6260(FieldEntity *entity, FieldEntity *target,
-                                fx32 x, fx32 y, int motion_5,
-                                int motion_flag, int reserved);
 extern void func_ov000_020b3b00(FieldEntity *entity, FieldEntity *target,
                                 fx32 x, fx32 y, fx32 z, int motion_5,
                                 int motion_6, int motion_7, int motion_flag,
                                 int reserved);
-extern void func_ov000_020a61b8(FieldEntity *entity, FieldEntity *target,
-                                fx32 x, fx32 y, int duration,
-                                int motion_flag, int reserved);
 extern void func_ov000_020b39a8(FieldEntity *entity, FieldEntity *target,
                                 fx32 x, fx32 y, fx32 z, int duration,
                                 int motion_6, int motion_7, int motion_flag,
@@ -104,7 +92,6 @@ extern void func_ov000_020b44ac(FieldEntity *entity, fx32 initial_velocity,
 extern void func_ov000_020b4414(FieldEntity *entity, fx32 height,
                                 fx32 gravity, fx32 terminal_velocity);
 extern void func_ov000_020b4300(FieldEntity *entity);
-extern void func_ov000_020a6710(FieldEntity *entity, fx32 x, fx32 y);
 extern void func_ov000_020b42c8(FieldEntity *entity, fx32 x, fx32 y,
                                 fx32 z);
 extern void func_ov000_020736a4(u8 *field_context, FieldEntity *entity,
@@ -123,8 +110,6 @@ extern void func_ov000_020b1a24(FieldEntity *entity, const void *path,
                                 int path_size_halfwords);
 extern void func_ov000_020b18e4(FieldEntity *entity);
 extern void func_ov000_020b1a08(FieldEntity *entity);
-extern void func_ov000_020a6690(FieldEntity *entity, int direction_mode,
-                                int direction, int refresh);
 extern void func_ov000_020b426c(FieldEntity *entity, FieldEntity *target);
 extern void func_ov000_020713bc(u8 *field_context, FieldEntity *entity,
                                 int effect_slot, int animation_id,
@@ -2128,8 +2113,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_START_ENTITY_MOVEMENT:
             if (FieldVm_IsTwoDimensionalEntity(runtime_entity)) {
-                func_ov000_020a64a0(
-                    &runtime_entity->base, arguments[1],
+                FieldLinear_Start(
+                    runtime_entity, arguments[1],
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     arguments[5], arguments[6],
@@ -2150,8 +2135,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_START_ENTITY_TIMED_MOVEMENT:
             if (FieldVm_IsTwoDimensionalEntity(runtime_entity)) {
-                func_ov000_020a6394(
-                    &runtime_entity->base, arguments[1],
+                FieldLinear_StartTimed(
+                    runtime_entity, arguments[1],
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     arguments[5], arguments[8] != 0, 0);
@@ -2168,9 +2153,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_START_ENTITY_MOVEMENT_RELATIVE_TO_ENTITY:
             if (FieldVm_IsTwoDimensionalEntity(runtime_entity)) {
-                func_ov000_020a6260(
-                    &runtime_entity->base,
-                    FieldVm_GetEntityByIndex(field_context, arguments[1]),
+                FieldLinear_StartFollowing(
+                    runtime_entity,
+                    (FieldRuntimeEntity *)FieldVm_GetEntityByIndex(field_context, arguments[1]),
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     arguments[5], arguments[8] != 0, 0);
@@ -2188,9 +2173,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         case FIELD_VM_START_ENTITY_TIMED_MOVEMENT_RELATIVE_TO_ENTITY:
             if (FieldVm_IsTwoDimensionalEntity(runtime_entity)) {
-                func_ov000_020a61b8(
-                    &runtime_entity->base,
-                    FieldVm_GetEntityByIndex(field_context, arguments[1]),
+                FieldLinear_StartTimedFollowing(
+                    runtime_entity,
+                    (FieldRuntimeEntity *)FieldVm_GetEntityByIndex(field_context, arguments[1]),
                     arguments[2] << FX32B_INT,
                     arguments[3] << FX32B_INT,
                     arguments[5], arguments[8] != 0, 0);
@@ -2339,8 +2324,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     arguments[2] += runtime_entity->position_x;
                     arguments[3] += runtime_entity->position_y;
                 }
-                func_ov000_020a6710(
-                    &runtime_entity->base, arguments[2],
+                FieldEntity2D_SetPosition(
+                    runtime_entity, arguments[2],
                     arguments[3]);
             } else {
                 arguments[2] <<= FX32B_INT;
@@ -2368,8 +2353,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_FACING_DIRECTION:
-            func_ov000_020a6690(
-                entity, arguments[1], arguments[2], 1);
+            FieldEntity_SetFacingDirection(
+                runtime_entity, arguments[1], arguments[2], 1);
             break;
 
         case FIELD_VM_SPAWN_ENTITY_EFFECT_SPRITE:

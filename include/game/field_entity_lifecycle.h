@@ -18,6 +18,8 @@ FieldRuntimeEntity *FieldEntity2D_InitPlacement(FieldRuntimeEntity *entity, int 
     const FieldSpawnRecord *spawn, int argument_3, int resource_set, u8 animation_enabled);
 FieldRuntimeEntity *FieldEntity2D_InitPlacementBase(FieldRuntimeEntity *entity, int entity_index,
     const FieldSpawnRecord *spawn, int argument_3, int resource_set, u8 animation_enabled);
+void FieldEntity2D_UpdateMotionAndAnimation(FieldRuntimeEntity *entity);
+void FieldEntity2D_SetPosition(FieldRuntimeEntity *entity, fx32 x, fx32 y);
 FieldRuntimeEntity *FieldEntity2D_Init(FieldRuntimeEntity *entity);
 FieldRuntimeEntity *FieldEntity2D_InitBase(FieldRuntimeEntity *entity);
 FieldRuntimeEntity *FieldEntity2D_Destroy(FieldRuntimeEntity *entity);

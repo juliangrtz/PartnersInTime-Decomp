@@ -20,6 +20,17 @@ int FieldLinear3D_CheckStopMasks(FieldRuntimeEntity *entity, FieldLinearControll
 void FieldLinear3D_Cancel(FieldRuntimeEntity *entity, FieldLinearController *movement,
                           int snap_to_destination);
 
+/* relative == 1 interprets point coordinates as offsets from the entity.
+ * Timed movement retains the caller's duration; speed zero selects defaults. */
+int FieldLinear_Start(FieldRuntimeEntity *entity, int relative, fx32 x, fx32 y, fx32 speed, fx32 acceleration,
+                      fx32 maximum_speed, fx32 deceleration, u8 stop, FieldLinearController *movement);
+int FieldLinear_StartTimed(FieldRuntimeEntity *entity, int relative, fx32 x, fx32 y, s32 duration, u8 stop,
+                           FieldLinearController *movement);
+int FieldLinear_StartFollowing(FieldRuntimeEntity *entity, FieldRuntimeEntity *target, fx32 x, fx32 y,
+                               fx32 speed, u8 stop, FieldLinearController *movement);
+int FieldLinear_StartTimedFollowing(FieldRuntimeEntity *entity, FieldRuntimeEntity *target, fx32 x, fx32 y,
+                                    u32 duration, u8 stop, FieldLinearController *movement);
+
 #ifdef __cplusplus
 }
 #endif

@@ -6,9 +6,6 @@ extern "C" {
 #define LINEAR_DEFAULT(entity) (&(entity)->linear_controller)
 #define LINEAR_MUL(a, b) ((fx32)(((s64)(a) * (b) + 2048) >> 12))
 
-extern void func_ov000_020a6394(FieldRuntimeEntity *, int, fx32, fx32, int, int, FieldLinearController *);
-extern void func_ov000_020a64a0(FieldRuntimeEntity *, int, fx32, fx32, fx32, fx32, fx32, fx32, int,
-                                FieldLinearController *);
 extern void func_ov000_020be654(fx32, fx32, fx32, fx32 *, fx32 *);
 extern void func_ov000_020a681c(FieldRuntimeEntity *, fx32, fx32);
 void FieldLinear_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearController *movement)
@@ -21,14 +18,14 @@ void FieldLinear_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearControlle
             fx32 x = movement->target->position_x + movement->destination_x;
             fx32 y = movement->target->position_y + movement->destination_y;
             if (!movement->bits.fixed_duration) {
-                func_ov000_020a64a0(entity, 0, x, y, movement->timing.speed, movement->acceleration,
+                FieldLinear_Start(entity, 0, x, y, movement->timing.speed, movement->acceleration,
                                     movement->maximum_speed, movement->deceleration,
                                     movement->bits.stop_at_destination != 0, &temporary);
             } else {
                 int remaining = movement->timing.duration_frames - movement->elapsed_frames;
                 if (remaining <= 0)
                     remaining = 1;
-                func_ov000_020a6394(entity, 0, x, y, remaining, movement->bits.stop_at_destination != 0,
+                FieldLinear_StartTimed(entity, 0, x, y, remaining, movement->bits.stop_at_destination != 0,
                                     &temporary);
             }
             entity->base.update_linear_movement(&temporary);

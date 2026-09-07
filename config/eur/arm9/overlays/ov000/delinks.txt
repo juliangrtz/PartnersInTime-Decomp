@@ -76,3 +76,9 @@ src/field/field_linear.cpp:
 
 src/field/field_spatial_linear.cpp:
     .text       start:0x020b3160 end:0x020b39a8
+
+src/field/field_linear_start.cpp:
+    .text       start:0x020a61b8 end:0x020a6690
+
+src/field/field_entity_motion.cpp:
+    .text       start:0x020a6690 end:0x020a681c

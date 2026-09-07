@@ -1914,3 +1914,37 @@ and build/runtime/eur_field_linear_boundaries. Matching C/C++ is 371,940 of
 1,563,700 bytes (23.79%). All module/symbol checks, 74 tests, generated progress
 and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Planar movement startup and entity motion
+
+Eight functions add 1,636 matching C++ bytes: four timed/speed movement starters,
+facing and position setters, a virtual-dispatch wrapper and the entity motion
+and animation update. The starters cover fixed points and live targets, retain
+default locomotion parameters when requested, and expose the controller's
+direction halfword. The wrapper retains its address-based name because the
+delegated virtual operation has not yet been identified.
+
+The entity update reveals the missing planar scheduling condition: property
+0x00A bit 0 enables movement and completion callbacks. The normal 2,033-frame
+replay enters this update 357 times and retains 30/40 valid models, with
+55,110/47,962 changed main/sub BG bytes and 243 changed palette bytes. The new
+starters and setters are not entered naturally on this route.
+
+Ten controlled planar cases reload the normal checkpoint, enable that documented
+gate and seed the controller of a verified subtype-8 entity. All pass through
+the ordinary frame loop, covering X/Y/combined axes, pause, inactivity, timed
+completion, positive/negative destination crossing, braking and a live target.
+This closes the active-path runtime gap recorded for planar linear movement.
+Six further controlled Field VM command cases verify timed/speed point and
+target startup, default speed and coincident-point rejection. Each substituted
+decoded command is restored at starter entry. Arguments, flags, destinations,
+target pointers, duration/speed and timed velocities satisfy the expected RAM
+postconditions. Loaded function bytes match the original overlay. These are
+controlled runtime cases, not naturally triggered story events.
+
+Evidence remains private under build/runtime/eur_field_linear_start_verified,
+build/runtime/eur_field_planar_linear_boundaries and
+build/runtime/eur_field_linear_start_boundaries. Matching C/C++ is 373,576 of
+1,563,700 bytes (23.89%). All module/symbol checks, 74 tests, generated progress
+and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

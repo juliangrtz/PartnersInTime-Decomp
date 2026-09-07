@@ -85,7 +85,8 @@ typedef struct FieldLinearController {
         } bits;
         struct { u32 x : 1, y : 1, z : 1, unknown_03_31 : 29; } axes;
     };
-    u32 unknown_04, elapsed_frames;
+    u16 direction, unknown_06;
+    u32 elapsed_frames;
     union { u32 duration_frames; fx32 speed; } timing;
     fx32 acceleration, deceleration, maximum_speed;
     fx32 start_x, start_y, start_z;
@@ -285,10 +286,10 @@ typedef struct FieldEntity {
     virtual void unknown_40();
     virtual void unknown_44();
     virtual void update_linear_movement(FieldLinearController *controller);
-    virtual void unknown_4c();
+    virtual int check_linear_completion(FieldLinearController *controller);
     virtual void cancel_linear_movement(FieldLinearController *controller, int snap_to_destination);
-    virtual void unknown_54();
-    virtual void unknown_58();
+    virtual void update_orbit_movement(FieldOrbitController *controller);
+    virtual int advance_orbit_frame(FieldOrbitController *controller);
     virtual void cancel_orbit_movement(FieldOrbitController *controller, int snap_to_destination);
     virtual void set_visible(int visible);
     virtual void unknown_64();
@@ -392,10 +393,10 @@ struct FieldRenderObject {
     virtual void unknown_40();
     virtual void unknown_44();
     virtual void update_linear_movement(FieldLinearController *controller);
-    virtual void unknown_4c();
+    virtual int check_linear_completion(FieldLinearController *controller);
     virtual void unknown_50();
-    virtual void unknown_54();
-    virtual void unknown_58();
+    virtual void update_orbit_movement(FieldOrbitController *controller);
+    virtual int advance_orbit_frame(FieldOrbitController *controller);
     virtual void unknown_5c();
     virtual void unknown_60();
     virtual void unknown_64();
@@ -469,7 +470,8 @@ struct FieldRuntimeEntity {
     fx32 interaction_vertical_extent;
     fx32 movement_speed, movement_velocity_x, movement_velocity_y, unknown_134;
     FieldLocomotionParameters locomotion, initial_locomotion;
-    u8 unknown_168[0x10];
+    fx32 unknown_168, unknown_16c;
+    u8 unknown_170[8];
     u16 unknown_178;
     u16 unknown_17a, locomotion_state, previous_locomotion_state;
     u8 unknown_180, unknown_181[3];

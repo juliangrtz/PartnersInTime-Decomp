@@ -356,6 +356,19 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label.startswith("FieldLinear_Start"):
+        stack = registers.sp & 0xFFFFFFFF
+        count = 6 if label == "FieldLinear_Start" else 3
+        result = {"entity": f"{r0:#010x}", "selector_or_target": f"{r1:#010x}",
+                  "x_q12": to_s32(r2), "y_q12": to_s32(r3)}
+        if is_arm9_work_ram_pointer(stack, count * 4):
+            result["stack_arguments"] = [to_s32(read_u32(emulator, stack + 4 * i)) for i in range(count)]
+        return result
+    if label == "FieldEntity_SetFacingDirection":
+        return {"entity": f"{r0:#010x}", "relative": to_s32(r1), "direction": to_s32(r2), "refresh": to_s32(r3)}
+    if label == "FieldEntity2D_SetPosition":
+        return {"entity": f"{r0:#010x}", "position_q12": [to_s32(r1), to_s32(r2)]}
+
     if label.startswith(("FieldLinear_", "FieldLinear3D_")):
         pointer = r1 or r0 + 0x1F4
         result = {"entity": f"{r0:#010x}", "controller": f"{pointer:#010x}"}
