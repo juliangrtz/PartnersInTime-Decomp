@@ -1606,3 +1606,29 @@ Evidence remains private under build/runtime/eur_field_renderer_lifecycle_verifi
 The total is 354,272 of 1,563,700 bytes (22.66%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Deferred field-entity script controls
+
+Eleven functions add 1,336 matching C++ bytes: entity initialization and cleanup,
+state copying, script stop/pause/resume, blink completion, and a 180-frame timed
+pause. A checked 0x524-byte extension names the deferred phase and pause counter;
+unresolved flags and constructor arguments retain neutral names. Removing an
+unnecessary explicit halfword cast reproduces the original counter decrement.
+Other differences in the isolated objects were ordinary call relocations.
+
+Following virtual slot 0x74 through its wrapper and default callbacks confirms
+that it starts a visibility sequence: the callbacks enable and disable the
+primary renderer and eligible auxiliary renderer. The shared interface now
+names this method start_blink and types its duration table and callbacks.
+Base-state bits 13..14 select the blink mode. These names follow original code
+data flow; no particular gameplay encounter is inferred for this subclass.
+
+A normal 2,033-frame boot/save-load replay completed with valid 30/40-model
+lists and the expected field display. Main/sub BG memory changed by
+55,110/47,962 bytes and palettes by 243 bytes. None of this subclass's eleven
+entries was reached on that route, so this is a ROM smoke check, not runtime
+coverage of the new functions. Their complete linked bytes match the original.
+Evidence remains private under build/runtime/eur_field_deferred_entity_verified.
+The total is 355,608 of 1,563,700 bytes (22.74%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

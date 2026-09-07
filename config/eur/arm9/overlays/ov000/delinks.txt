@@ -34,3 +34,6 @@ src/field/field_geometry.c:
 
 src/field/field_direction.c:
     .text       start:0x020be758 end:0x020be7d0
+
+src/field/field_deferred_entity.cpp:
+    .text       start:0x020bd1ec end:0x020bd724

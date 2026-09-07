@@ -356,6 +356,24 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label in {"FieldDeferredEntity_Init", "FieldDeferredEntity_InitEmpty"}:
+        result = {"entity": f"{r0:#010x}"}
+        if label == "FieldDeferredEntity_Init":
+            result.update(descriptor=f"{r1:#010x}", spawn_record=f"{r2:#010x}")
+        return result
+
+    if label.startswith("FieldDeferredEntity_") and is_main_ram_pointer(r0, 0x524):
+        control = read_u32(emulator, r0 + 0x520)
+        result = {"entity": f"{r0:#010x}", "phase": (control >> 4) & 3,
+                  "pause_frames": (control >> 6) & 0xFFFF,
+                  "blink_mode": (read_u32(emulator, r0 + 0x184) >> 13) & 3,
+                  "property_flag_00": bool(read_u16(emulator, r0 + 10) & 1)}
+        if label == "FieldDeferredEntity_CopyState":
+            result["source"] = f"{r1:#010x}"
+        elif label == "FieldDeferredEntity_StopScript":
+            result["deferred"] = to_s32(r1)
+        return result
+
     if label == "FieldRenderList_Clear":
         return {"screen": to_s32(r0)}
 

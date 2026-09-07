@@ -50,6 +50,7 @@ typedef struct FieldEntityVTable FieldEntityVTable;
 typedef struct FieldRenderObject FieldRenderObject;
 typedef struct FieldRenderObjectVTable FieldRenderObjectVTable;
 typedef struct FieldRuntimeEntity FieldRuntimeEntity;
+typedef void (*FieldEntityVisibilityCallback)(FieldEntity *entity);
 
 typedef struct FieldContactDirectionFlags {
     u32 enabled_mask : 6;
@@ -63,7 +64,8 @@ typedef struct FieldBaseStateFlags {
     u32 retain_offscreen_contact : 1;
     u32 unknown_09_11 : 3;
     u32 reserved_state : 1;
-    u32 unknown_13_31 : 19;
+    u32 blink_mode : 2;
+    u32 unknown_15_31 : 17;
 } FieldBaseStateFlags;
 
 typedef struct FieldPlanarMovementFlags {
@@ -195,7 +197,10 @@ struct FieldEntityVTable {
     void (*cancel_vertical_movement)(FieldEntity *entity, void *controller,
                                      int snap_to_destination);
     void (*set_visible)(FieldEntity *entity, int visible);
-    u8 unknown_64[0x28];
+    u8 unknown_64[0x10];
+    void (*start_blink)(FieldEntity *entity, int mode, const u8 *durations, u8 length,
+                        FieldEntityVisibilityCallback show, FieldEntityVisibilityCallback hide);
+    u8 unknown_78[0x14];
     void (*set_collision_response_channels)(
         FieldEntity *entity, int channel_0, int channel_1, int channel_2,
         int channel_3, int channel_4);
@@ -235,7 +240,8 @@ typedef struct FieldEntity {
     virtual void unknown_68();
     virtual void unknown_6c();
     virtual void unknown_70();
-    virtual void unknown_74();
+    virtual void start_blink(int mode, const u8 *durations, u8 length,
+                             FieldEntityVisibilityCallback show, FieldEntityVisibilityCallback hide);
     virtual void unknown_78();
     virtual void unknown_7c();
     virtual void unknown_80();
@@ -442,14 +448,19 @@ struct FieldRuntimeEntity {
         u32 collision_state_flags;
         FieldCollisionStateFlags collision_state_flag_bits;
     };
-    u32 unknown_3a0;
+    union {
+        u32 unknown_3a0;
+        struct { u32 unknown_00_19 : 20, unknown_20_25 : 6, unknown_26_31 : 6; } unknown_3a0_bits;
+    };
     FieldContactDirectionFlags contact_direction_flags;
     u8 unknown_3a8[0x24];
     union {
         u32 runtime_flags;
         FieldEntityRuntimeFlags runtime_flag_bits;
     };
-    u8 unknown_3d0[0x10];
+    u8 unknown_3d0[4];
+    s16 unknown_3d4;
+    u8 unknown_3d6[0xA];
     union {
         u32 roaming_flags;
         FieldRoamingFlags roaming_flag_bits;
