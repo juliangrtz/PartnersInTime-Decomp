@@ -158,3 +158,20 @@ three register writes, and stopping DMA retains both volatile control reads.
 
 All linked instructions and module symbols match. The complete reference-ROM
 SHA-1, generated progress, public-content audit, and 66 tests pass.
+
+## Sound commands and ARM7 command queues
+
+The sound command builders, initialization, command-pool and queue management,
+alarm callbacks, and shared-state setup add 49 functions and 3,864 C bytes.
+The mutex initializer adds another 20-byte C function. Commands have a 24-byte
+layout, use a 256-entry pool, and track up to eight submitted chains through
+a nine-slot ring. Serial completion comparisons retain unsigned wraparound.
+The shared ARM7 status structure is 640 bytes; its per-track and global
+variables are initialized to -1 and flushed before submission.
+
+Callback generation checks and cache maintenance preserve the native access
+order. The 64-byte serial getter at `0x0203C570` remains native because its
+conditional load order still differs in C. Every included function links to
+identical original bytes, including the pool-tail relocation aliases.
+The complete ROM SHA-1, module/symbol checks, progress check, public-content
+audit, and all 66 tests pass.

@@ -4,6 +4,12 @@ OsMutex *func_02039d28(OsThread *thread);
 void func_02039d50(OsThread *thread, OsMutex *mutex);
 void func_02039d74(OsThread *thread, OsMutex *mutex);
 
+void func_02039f58(OsMutex *mutex) {
+    mutex->queue = 0;
+    mutex->owner = 0;
+    mutex->count = 0;
+}
+
 void func_02039ecc(OsMutex *mutex) {
     u32 state = OS_DisableInterrupts();
     OsThread *thread = OSi_ThreadInfo.current;

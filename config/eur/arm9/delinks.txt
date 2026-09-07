@@ -51,7 +51,7 @@ src/nitro/os/os_message.c:
     .text       start:0x02039bb4 end:0x02039d28
 
 src/nitro/os/os_mutex.c:
-    .text       start:0x02039d28 end:0x02039f58
+    .text       start:0x02039d28 end:0x02039f6c
 
 src/nitro/os/os_thread_core.c:
     .text       start:0x02039250 end:0x020396d8
@@ -88,3 +88,18 @@ src/game/script_vm_variables.c:
 
 src/nitro/gx/gx_vram_load.c:
     .text       start:0x02037e98 end:0x0203869c
+
+src/nitro/snd/snd_commands.c:
+    .text       start:0x0203bd6c end:0x0203c298
+
+src/nitro/snd/snd_init.c:
+    .text       start:0x0203c298 end:0x0203c30c
+
+src/nitro/snd/snd_command_queue.c:
+    .text       start:0x0203c5b0 end:0x0203cb30
+
+src/nitro/snd/snd_shared.c:
+    .text       start:0x0203cb30 end:0x0203ccc4
+
+src/nitro/snd/snd_command_status.c:
+    .text       start:0x0203c30c end:0x0203c570
