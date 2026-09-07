@@ -252,3 +252,6 @@ src/nitro/gx/gx_projection.c
 src/game/save_backup.c
 src/game/save_storage.c
 src/game/save_storage_load.c
+src/game/rumble.c
+src/game/input.c
+src/game/random.c

@@ -1,16 +1,4 @@
-#include <nitro/os_sync.h>
-
-typedef void (*OsAlarmCallback)(void *argument);
-typedef struct OsAlarm {
-    OsAlarmCallback callback;
-    void *argument;
-    u32 tag;
-    u64 fire;
-    struct OsAlarm *previous;
-    struct OsAlarm *next;
-    u64 period;
-    u64 start;
-} OsAlarm;
+#include <nitro/os_alarm.h>
 
 typedef struct OsAlarmList {
     OsAlarm *head;
@@ -50,7 +38,7 @@ void func_0203acdc(OsAlarm *alarm) {
     OS_EnableIrqMask(16);
 }
 
-void func_0203ac84(void) {
+void OS_InitAlarm(void) {
     if (data_02063000) return;
     data_02063000 = 1;
     func_0203a6fc(1);
@@ -59,9 +47,9 @@ void func_0203ac84(void) {
     OS_DisableIrqMask(16);
 }
 
-int func_0203ac74(void) { return data_02063000; }
+int OS_IsAlarmAvailable(void) { return data_02063000; }
 
-void func_0203ac64(OsAlarm *alarm) {
+void OS_CreateAlarm(OsAlarm *alarm) {
     alarm->callback = 0;
     alarm->tag = 0;
 }
@@ -103,7 +91,7 @@ void func_0203ab24(OsAlarm *alarm, u64 fire) {
     }
 }
 
-void func_0203aaac(OsAlarm *alarm, u64 delay, OsAlarmCallback callback, void *argument) {
+void OS_SetAlarm(OsAlarm *alarm, u64 delay, OsAlarmCallback callback, void *argument) {
     u32 state;
     if (!alarm || alarm->callback) OS_Terminate();
     state = OS_DisableInterrupts();
@@ -114,7 +102,7 @@ void func_0203aaac(OsAlarm *alarm, u64 delay, OsAlarmCallback callback, void *ar
     OS_RestoreInterrupts(state);
 }
 
-void func_0203aa14(OsAlarm *alarm) {
+void OS_CancelAlarm(OsAlarm *alarm) {
     u32 state = OS_DisableInterrupts();
     OsAlarm *next;
     if (!alarm->callback) {

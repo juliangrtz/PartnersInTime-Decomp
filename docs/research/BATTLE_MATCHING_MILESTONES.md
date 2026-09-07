@@ -626,3 +626,17 @@ The separate image-initialization routine remains outside the linked C set.
 All linked functions match completely, without inline assembly. The total is
 257,028 bytes (16.44%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Rumble, input, display and frame timing
+
+Twenty-one functions add 2,400 matching C bytes. Rumble reconstruction covers
+cartridge initialization, pulse validation, millisecond-to-tick conversion,
+alarm scheduling, repeat limits and removal callbacks. Input reconstruction
+covers button edges and repeat countdowns; display helpers upload and clear
+OAM, set background colors and track frame/VBlank timing. The random generator
+preserves its zero-seed fallback, mixing and signed modulo behavior. Shared
+alarm declarations now expose the existing SDK operations by name.
+
+All functions match completely, without inline assembly. The total is
+259,428 bytes (16.59%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.
