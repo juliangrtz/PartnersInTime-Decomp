@@ -1,13 +1,13 @@
 #include <game/session.h>
 #include <game/heap.h>
 #include <game/inventory.h>
+#include <game/system.h>
 
 extern GameSessionSettings data_02059fec;
 extern GameSessionTask *data_02059ffc;
 extern u8 data_02059f58;
 extern u8 data_0204ffa8[];
 extern void func_02007664(void);
-extern u8 data_02059f7c[];
 extern void MI_CpuFill8(void *destination, u8 value, u32 size);
 
 void GameSession_Start(int language, u8 option_2, u8 option_3)
@@ -25,7 +25,7 @@ void GameSession_InitSettings(int language, u8 option_2, u8 option_3, GameSessio
 {
     int index;
     if (language == -1) {
-        language = data_02059f7c[12];
+        language = data_02059f7c.owner.language;
         if (language != 1 && language != 2 && language != 3 && language != 4 && language != 5)
             language = 1;
     }

@@ -6,7 +6,7 @@ extern u8 data_02060740[1024];
 extern GameFrameTiming data_02060b2c;
 extern const u16 data_02049fb8[10];
 extern u8 SDK_AUTOLOAD_DTCM_START[];
-extern void func_020053b0(void);
+extern void GameSystem_UpdateVBlank(void);
 extern void VBlankIntrWait(void);
 extern void DC_FlushRange(const void *source, u32 size);
 extern void MIi_CpuClearFast(u32 value, void *destination, u32 size);
@@ -97,7 +97,7 @@ void GameFrame_VBlank(void)
 {
     int end;
     data_02060b2c.irq_start = *(vu16 *)0x04000006;
-    func_020053b0();
+    GameSystem_UpdateVBlank();
     ++data_02060b2c.pending_vblanks;
     end = *(vu16 *)0x04000006;
     data_02060b2c.irq_end = end;

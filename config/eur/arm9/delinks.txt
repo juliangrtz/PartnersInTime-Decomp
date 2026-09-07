@@ -715,3 +715,12 @@ src/game/session_requests.c:
 
 src/game/session_task.c:
     .text       start:0x020062ec end:0x020063a4
+
+src/game/system_init.c:
+    .text       start:0x02005114 end:0x02005214
+
+src/nitro/os/os_owner.c:
+    .text       start:0x0203affc end:0x0203b094
+
+src/game/system_vblank.c:
+    .text       start:0x02005330 end:0x0200547c

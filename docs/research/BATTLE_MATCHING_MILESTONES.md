@@ -1407,3 +1407,28 @@ entered on this route; their linked bytes match.
 The total is 349,088 of 1,563,700 bytes (22.32%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## System startup and VBlank reset controls
+
+Five functions add 740 matching C bytes: system initialization, owner-information
+and MAC-address copying, reset-key polling and VBlank task dispatch. Shared
+layouts describe the 80-byte owner-information result and 108-byte game system
+record. Session language selection now uses that typed record. The firmware
+value at settings offset 0x68 remains unresolved and its getter remains assembly.
+
+A 400-frame cold boot exercised initialization and both copy routines once,
+VBlank dispatch 394 times and reset-key polling 390 times. The opening animation
+renders correctly with valid 22/51-model lists. Main/sub BG memory changed by
+53,762/52,543 bytes and palettes by 82 bytes. A separate 184-frame replay from
+the field held L+R+Start+Select for two frames: the reset request and fade loop
+ran once at frame zero, followed by the original system-reset entry at frame one
+with parameter one. The final screenshot shows the Nintendo/AlphaDream startup
+logos. The replay's main/sub BG memory changed by 67,933/26,117 bytes.
+
+Evidence and compatible checkpoints remain private under
+build/runtime/eur_system_init_verified and eur_reset_keys_verified. The rumble
+and deferred-reset branches were not covered. The larger main/session loops
+and reset-fade routine remain assembly after isolated candidates showed literal
+loading or register differences. The total is 349,828 of 1,563,700 bytes (22.37%).
+All module/symbol checks, 74 tests, generated progress and public-content checks
+pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
