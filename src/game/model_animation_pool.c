@@ -31,7 +31,7 @@ void GameModelAnimation_ReleaseContext(GameMatrixAnimationTrack *track)
 
 GameModelAnimation *GameModelAnimation_Initialize(GameModelAnimation *pool,
     GameMatrixAnimation *animation, GameModelAnimationContext *storage, int count,
-    void (*prepare)(BattleModel *, BattleModel *, GameModelAnimationContext *, MtxFx44 *))
+    void (*prepare)(FieldRenderObject *, FieldRenderObject *, GameModelAnimationContext *, MtxFx44 *))
 {
     GameModelAnimationContext *context;
     int i;
@@ -58,7 +58,7 @@ GameModelAnimation *GameModelAnimation_Finalize(GameModelAnimation *pool)
 }
 
 GameMatrixAnimationTrack *GameModelAnimation_Start(GameModelAnimation *pool, const s16 *commands,
-    BattleModel *const *models, int count,
+    FieldRenderObject *const *models, int count,
     void (*draw)(int, MtxFx44 *, GameMatrixAnimationTrack *), int speed)
 {
     GameMatrixAnimationTrack *track;

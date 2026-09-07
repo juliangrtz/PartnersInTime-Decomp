@@ -1510,11 +1510,42 @@ model lists but did not enter additional helpers in this batch.
 
 Track creation, cancellation, display restoration and cleanup remain outside
 the exercised gameplay routes; their linked bytes match. The larger sprite
-update loop and model preparation callback remain assembly. The rendering role
-of model bytes 0x134..0x137 is still unresolved and the shared context names
-retain that offset. Evidence remains private under
+update loop and model preparation callback remain assembly. Evidence remains private under
 build/runtime/eur_field_animation_verified, eur_field_animation_pools and
 eur_field_animation_transition_verified. The total is 352,576 of 1,563,700 bytes
 (22.55%). All module/symbol checks, 74 tests, generated progress and public-content
 checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Timed field renderer animation controls
+
+Four functions add 452 matching C++ bytes: animation update/expiry, reset,
+delay selection and restarting at the first or last frame according to speed.
+The restart helper uses the existing virtual animation interface. A checked
+0x140-byte layout extends the field renderer with a signed 11-bit delay,
+completion flag and expiration counter. The shared renderer now describes its
+animation ranges, resource animation, speed and positional offsets.
+
+The model preparation callback's bytes 0x134..0x137 correspond to the existing
+FieldRenderObject overlap priorities used by field VM command 0x062. Model
+animation pool interfaces now use that renderer type and name the corresponding
+context fields. The callback itself remains assembly after its isolated C
+candidate showed register differences. Existing pool, owner and VM bytes still
+match after these declaration corrections.
+
+A normal 2,033-frame boot/save-load replay entered the updater 6,260 times
+across 41 renderers and the reset helper 12 times. Updates included 1,772 active
+and 4,488 inactive cases; all had zero remaining time. The field retained valid
+30/40-model lists, with main/sub BG changes of 55,110/47,962 bytes and palette
+changes of 243 bytes. Delay selection and restart were not entered by this route.
+
+Three separate live RAM-seeded cases reloaded that normal field checkpoint.
+A remaining count of one set the expired flag after one frame, then disabled
+animation on the next frame. A finished animation in behavior state one
+disabled animation immediately. An inactive animation retained its remaining
+count of two. Hooks confirmed the disable calls and their zero argument.
+These controlled counter/flag checks changed neither ROM nor battery save.
+Evidence remains private under build/runtime/eur_timed_renderer_verified and
+eur_timed_renderer_expiry. The total is 353,028 of 1,563,700 bytes (22.58%).
+All module/symbol checks, 74 tests, generated progress and public-content checks
+pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

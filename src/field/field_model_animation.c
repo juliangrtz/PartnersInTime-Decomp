@@ -2,7 +2,7 @@
 #include <game/heap.h>
 
 extern void func_0202cbd4(void *destination, int value, u32 size);
-extern void func_ov000_020bee20(BattleModel *, BattleModel *, GameModelAnimationContext *, MtxFx44 *);
+extern void func_ov000_020bee20(FieldRenderObject *, FieldRenderObject *, GameModelAnimationContext *, MtxFx44 *);
 extern void func_02010e38(int, MtxFx44 *, GameMatrixAnimationTrack *);
 
 FieldModelAnimation *FieldModelAnimation_Init(FieldModelAnimation *state)
@@ -39,8 +39,8 @@ FieldModelAnimation *FieldModelAnimation_Destroy(FieldModelAnimation *state)
 }
 
 GameMatrixAnimationTrack *FieldModelAnimation_Start(FieldModelAnimation *state, int index,
-    const s16 *commands, BattleModel **models, BattleModel *first, BattleModel *second,
-    BattleModel *third, BattleModel *fourth, s16 x, s16 y, s16 z, int property_134, int speed)
+    const s16 *commands, FieldRenderObject **models, FieldRenderObject *first, FieldRenderObject *second,
+    FieldRenderObject *third, FieldRenderObject *fourth, s16 x, s16 y, s16 z, int overlap_priority, int speed)
 {
     GameMatrixAnimationTrack *track;
     GameModelAnimationContext *context;
@@ -50,18 +50,18 @@ GameMatrixAnimationTrack *FieldModelAnimation_Start(FieldModelAnimation *state, 
     context->offset_x = x;
     context->offset_y = y;
     context->offset_z = z;
-    context->property_134 = property_134;
-    context->flags.property_134 = property_134;
+    context->overlap_priority = overlap_priority;
+    context->flags.overlap_priority = overlap_priority;
     track->speed = speed * 16;
     state->tracks[index] = track;
     return track;
 }
 
-void FieldModelAnimation_SetModels(FieldModelAnimation *state, BattleModel **models,
-    BattleModel *first, BattleModel *second, BattleModel *third, BattleModel *fourth)
+void FieldModelAnimation_SetModels(FieldModelAnimation *state, FieldRenderObject **models,
+    FieldRenderObject *first, FieldRenderObject *second, FieldRenderObject *third, FieldRenderObject *fourth)
 {
-    if (first != (BattleModel *)-1) models[0] = first;
-    if (second != (BattleModel *)-1) models[1] = second;
-    if (third != (BattleModel *)-1) models[2] = third;
-    if (fourth != (BattleModel *)-1) models[3] = fourth;
+    if (first != (FieldRenderObject *)-1) models[0] = first;
+    if (second != (FieldRenderObject *)-1) models[1] = second;
+    if (third != (FieldRenderObject *)-1) models[2] = third;
+    if (fourth != (FieldRenderObject *)-1) models[3] = fourth;
 }

@@ -56,7 +56,7 @@ extern void func_ov000_020a6d68(FieldEntity *entity,
                                 int reserved_2, int reserved_3,
                                 int animation_id, int restart,
                                 int reserved_6);
-extern void func_ov000_020bd86c(FieldRenderObject *render_object);
+extern void FieldTimedRenderer_SetAnimationDelay(FieldRenderObject *render_object);
 extern void func_ov000_020a64a0(FieldEntity *entity, int coordinate_mode,
                                 fx32 x, fx32 y, int motion_5, int motion_6,
                                 int motion_7, int motion_8, int motion_11,
@@ -1855,7 +1855,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     &runtime_entity->base, arguments[2], -1, 1, 1);
             }
             if (arguments[3] != -1) {
-                func_ov000_020bd86c(runtime_entity->render_object);
+                FieldTimedRenderer_SetAnimationDelay(runtime_entity->render_object);
             }
             break;
 

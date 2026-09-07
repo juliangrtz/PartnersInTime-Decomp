@@ -421,3 +421,4 @@ src/field/field_model_animation.c
 src/field/field_sprite_animation_lifecycle.c
 src/field/field_sprite_animation_start.c
 src/field/field_sprite_animation_controls.c
+src/field/field_timed_renderer.cpp

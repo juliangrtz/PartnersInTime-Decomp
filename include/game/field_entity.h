@@ -280,6 +280,12 @@ typedef struct FieldEntity {
  * the command-facing fields typed makes the VM reconstruction readable while
  * the renderer itself remains in assembly.
  */
+typedef struct FieldRenderAnimationRange {
+    u16 first, end;
+    u8 unknown_04[4];
+} FieldRenderAnimationRange;
+typedef char FieldRenderAnimationRange_SizeCheck[sizeof(FieldRenderAnimationRange) == 8 ? 1 : -1];
+
 struct FieldRenderObject {
 #ifdef __cplusplus
     virtual void unknown_00();
@@ -321,9 +327,17 @@ struct FieldRenderObject {
 #else
     FieldRenderObjectVTable *vtable;
 #endif
-    u8 unknown_004[0x52];
+    u8 unknown_004[0x44];
+    const FieldRenderAnimationRange *animation_ranges;
+    u8 unknown_04c[8];
+    s16 resource_animation;
     s16 animation_id;
-    u8 unknown_058[0x24];
+    u8 unknown_058[2];
+    s16 animation_speed;
+    s16 animation_offset_x, animation_offset_y;
+    u8 unknown_060[8];
+    s32 render_anchor_z;
+    u8 unknown_06c[0x10];
     union {
         u32 state_flags;
         FieldRenderStateFlags state_flag_bits;
@@ -339,7 +353,10 @@ struct FieldRenderObject {
         u32 sort_key;
         FieldRenderSortKey sort_key_bits;
     };
-    s8 overlap_priorities[4];
+    union {
+        s8 overlap_priorities[4];
+        u8 overlap_priority_bytes[4];
+    };
 };
 
 /*

@@ -349,6 +349,26 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label.startswith("FieldTimedRenderer_") and is_main_ram_pointer(r0, 0x140):
+        flags = read_u32(emulator, r0 + 0x7C)
+        control = read_u16(emulator, r0 + 0x138)
+        result = {
+            "renderer": f"{r0:#010x}",
+            "resource_animation": read_s16(emulator, r0 + 0x54),
+            "animation": read_s16(emulator, r0 + 0x56),
+            "speed": read_s16(emulator, r0 + 0x5A),
+            "animation_active": bool(flags & 0x100),
+            "animation_suppressed": bool(flags & 0x200),
+            "behavior_state": (flags >> 12) & 15,
+            "finished": bool(control & 16),
+            "delay": read_s16(emulator, r0 + 0x138) >> 5,
+            "expired": bool(read_u32(emulator, r0 + 0x13C) & 0x8000),
+            "remaining": read_u16(emulator, r0 + 0x13E),
+        }
+        if label == "FieldTimedRenderer_SetAnimationDelay":
+            result["requested_delay"] = to_s32(r1)
+        return result
+
     if label.startswith("FieldTimer_") and is_main_ram_pointer(r0, 40):
         flags = read_u8(emulator, r0)
         result = {
