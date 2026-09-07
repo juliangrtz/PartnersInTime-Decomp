@@ -36,4 +36,22 @@ BattleModel *BattleRenderModel_Delete(BattleModel *model)
     GameHeap_Delete(model);
     return model;
 }
+
+void BattleRenderModel_InitDescriptor(ModelRenderDescriptor *descriptor, int mode)
+{
+    BattleModel_InitDescriptor(descriptor);
+    /* The original retains identical initialization paths for both modes. */
+    if (!mode) {
+        descriptor->flags &= ~0x380000;
+        descriptor->unknown_58 = 0;
+        descriptor->unknown_59 = 15;
+        descriptor->unknown_5c = 0;
+        return;
+    } else {
+        descriptor->flags &= ~0x380000;
+        descriptor->unknown_58 = 0;
+        descriptor->unknown_59 = 15;
+        descriptor->unknown_5c = 0;
+    }
+}
 }

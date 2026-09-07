@@ -393,3 +393,7 @@ src/game/model_resource_controls.cpp
 src/game/model_controller_setup.cpp
 src/game/model_render_lifecycle.cpp
 src/game/model_resource_lifecycle.cpp
+src/game/window_number_controls.c
+src/game/localized_text_resources.c
+src/game/palette_effect_controls.c
+src/game/palette_effect_controller.c

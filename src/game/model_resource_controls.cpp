@@ -9,12 +9,6 @@ extern void func_02009148(BattleModel *);
 extern void func_0202cbd4(void *, int, u32);
 extern void func_0202cc58(const void *, void *, u32);
 extern void func_0202cd2c(const void *, void *, u32);
-typedef struct ModelPaletteMask {
-    u32 unknown_00, mask;
-    u8 unknown_08[12];
-} ModelPaletteMask;
-typedef char ModelPaletteMask_SizeCheck[sizeof(ModelPaletteMask) == 20 ? 1 : -1];
-extern ModelPaletteMask *func_0200d000(void *, int);
 extern const u16 *func_0200c224(int, int, const GameGraphicsResource *);
 int BattleModel_GetTextureConversionSize(int, int, const GameGraphicsResource *);
 
@@ -41,15 +35,15 @@ void BattleModel_CopyAnimationLayers(BattleModel *source, BattleModel *destinati
     }
 }
 
-void BattleModel_SetPaletteMask(BattleModel *model, void *table, int index, int enabled)
+void BattleModel_SetPaletteMask(BattleModel *model, GamePaletteEffectController *table, int index, int enabled)
 {
-    ModelPaletteMask *entry = func_0200d000(table, index);
+    GamePaletteEffectEntry *entry = GamePaletteEffects_GetEntry(table, index);
     GameSpritePalette *palette = model->palette;
     u32 mask;
     if (palette->bank > 15) mask = ((1 << palette->count) - 1) << (palette->first + 16);
     else mask = 1 << palette->bank;
-    if (enabled) entry->mask |= mask;
-    else entry->mask &= ~mask;
+    if (enabled) entry->palette_mask |= mask;
+    else entry->palette_mask &= ~mask;
 }
 
 void BattleModel_SetPaletteBuffered(BattleModel *model, int enabled)

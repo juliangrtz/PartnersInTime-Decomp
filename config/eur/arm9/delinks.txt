@@ -378,7 +378,7 @@ src/game/audio_destroy.c:
     .text start:0x02028040 end:0x020280ec
 
 src/game/audio_music_load.cpp:
-    .text start:0x02027344 end:0x020274d8
+    .text start:0x02027264 end:0x020274d8
 
 src/game/audio_dispose.c:
     .text start:0x020267f4 end:0x020269bc
@@ -573,7 +573,7 @@ src/game/window_destroy.c:
     .text start:0x0201f2c4 end:0x0201f50c
 
 src/game/window_pause.c:
-    .text start:0x0201fef0 end:0x0201fff8
+    .text start:0x0201fe5c end:0x0201fff8
 
 src/game/window_pool.c:
     .text start:0x0201fff8 end:0x020200d0
@@ -603,7 +603,7 @@ src/game/sprite_window_open.c:
     .text start:0x02020d1c end:0x02020e44
 
 src/game/sprite_window.c:
-    .text start:0x02020e44 end:0x02021090
+    .text start:0x02020e44 end:0x0202111c
 
 src/battle/battle_model_state.cpp:
     .text start:0x02009208 end:0x020096b0
@@ -666,7 +666,19 @@ src/game/model_controller_setup.cpp:
     .text       start:0x0200cd68 end:0x0200d000
 
 src/game/model_render_lifecycle.cpp:
-    .text       start:0x020105c4 end:0x020106a4
+    .text       start:0x02010550 end:0x020106a4
 
 src/game/model_resource_lifecycle.cpp:
     .text       start:0x0200be3c end:0x0200bef0
+
+src/game/window_number_controls.c:
+    .text       start:0x0201a0c4 end:0x0201a1ac
+
+src/game/localized_text_resources.c:
+    .text       start:0x02018ed8 end:0x02018f48
+
+src/game/palette_effect_controls.c:
+    .text       start:0x0200d000 end:0x0200d100
+
+src/game/palette_effect_controller.c:
+    .text       start:0x0200d6cc end:0x0200d754

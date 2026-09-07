@@ -61,6 +61,8 @@ void GameSpriteWindow_ReleaseSlots(GameSpriteWindowManager *manager);
 void GameSpriteWindow_AllocateSlots(GameSpriteWindowManager *manager, int heap, int count);
 GameSpriteWindowManager *GameSpriteWindow_Delete(GameSpriteWindowManager *manager);
 GameSpriteWindowManager *GameSpriteWindow_Destroy(GameSpriteWindowManager *manager);
+void GameSpriteWindow_Release(GameSpriteWindowManager *manager, s16 index);
+
 #ifdef __cplusplus
 }
 #endif

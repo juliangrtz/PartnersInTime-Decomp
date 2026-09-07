@@ -37,4 +37,23 @@ void GameAudio_LoadCommonBank(void)
     GameAudio_LoadWaveArchive(wave->file, data_0205ad64, 0, 1, 0);
 }
 
+void GameAudio_StartLoadedMusic(int sequence, int bank)
+{
+    GameAudioMusicFiles *files = &data_0205adb8[bank];
+    NNSSndArcSeqInfo *info = (NNSSndArcSeqInfo *)NNS_SndArcGetSeqInfo(sequence);
+    NNSSndArcBankInfo *bank_info = (NNSSndArcBankInfo *)NNS_SndArcGetBankInfo(info->bank);
+    int index;
+    NNS_SndArcSetFileAddress(info->file, files->sequence);
+    NNS_SndArcSetFileAddress(bank_info->file, files->bank);
+    for (index = 0; index < 4; ++index) {
+        if (files->waves[index]) {
+            NNSSndArcWaveArcInfo *wave = (NNSSndArcWaveArcInfo *)NNS_SndArcGetWaveArcInfo(bank_info->wave_archives[index]);
+            NNS_SndArcSetFileAddress(wave->file, files->waves[index]);
+        }
+    }
+    NNS_SndArcPlayerStartSeq(&data_0205ad24, sequence);
+    NNS_SndPlayerSetTrackVolume(&data_0205ad24, 0xFFFF, (data_0205ad88.current >> 12) & 0xFFF);
+    data_0205ad68.sequence = sequence;
+    data_0205ad68.bank = bank;
+}
 }

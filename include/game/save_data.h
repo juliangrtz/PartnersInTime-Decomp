@@ -62,6 +62,17 @@ typedef char PartyLevelGrowth_SizeCheck[
     sizeof(PartyLevelGrowth) == 0x0C ? 1 : -1
 ];
 
+/* Prefix of the live save context containing the language and loaded text
+   tables. The table pointers are runtime data, not serialized file offsets. */
+typedef struct SaveLocalizedResourceState {
+    u8 unknown_000[0x515];
+    u8 language;
+    u8 unknown_516[10];
+    const u8 *tables[14];
+} SaveLocalizedResourceState;
+typedef char SaveLocalizedResourceState_SizeCheck[
+    sizeof(SaveLocalizedResourceState) == 0x558 ? 1 : -1];
+
 extern u8 *gSaveData;
 extern const PartyLevelGrowth gMarioLevelGrowth[];
 extern const PartyLevelGrowth gLuigiLevelGrowth[];

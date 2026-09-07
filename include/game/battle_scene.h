@@ -11,6 +11,18 @@ typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
 typedef struct BattleModel BattleModel;
 typedef struct BattleModelVTable BattleModelVTable;
+typedef struct GamePaletteEffectController GamePaletteEffectController;
+
+typedef struct ModelRenderDescriptor {
+    u8 unknown_00[0x54];
+    u32 flags;
+    u8 unknown_58, unknown_59;
+    u16 unknown_5a;
+    void *unknown_5c;
+} ModelRenderDescriptor;
+typedef char ModelRenderDescriptor_SizeCheck[sizeof(ModelRenderDescriptor) == 0x60 ? 1 : -1];
+
+
 typedef struct BattleModelAnimationData BattleModelAnimationData;
 typedef struct BattleSceneRenderOverride BattleSceneRenderOverride;
 struct BattleSpriteTransform;
@@ -207,7 +219,7 @@ struct BattleModel {
     /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
     union { u8 *property_02c; struct GameSpritePalette *palette; };
     u8 unk_030[8];
-    /* Resource header; the sixth halfword holds the frame count. */
+    /* Graphics resource header shared by frame and animation lookup. */
     union { const u16 *property_038; const GameGraphicsResource *resource; };
     const GameGraphicsObject *resource_objects;
     const GameGraphicsRange *resource_groups;
@@ -299,7 +311,7 @@ struct BattleModel {
     /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
     union { u8 *property_02c; struct GameSpritePalette *palette; };
     u8 unk_030[8];
-    /* Resource header; the sixth halfword holds the frame count. */
+    /* Graphics resource header shared by frame and animation lookup. */
     union { const u16 *property_038; const GameGraphicsResource *resource; };
     const GameGraphicsObject *resource_objects;
     const GameGraphicsRange *resource_groups;
@@ -597,9 +609,11 @@ void BattleModel_SetPalette(BattleModel *model, const void *source);
 const void *BattleModel_GetPaletteSource(BattleModel *model);
 int BattleModel_GetPaletteColorCount(BattleModel *model);
 void BattleModel_SetPaletteBuffered(BattleModel *model, int enabled);
-void BattleModel_SetPaletteMask(BattleModel *model, void *table, int index, int enabled);
+void BattleModel_SetPaletteMask(BattleModel *model, GamePaletteEffectController *table, int index, int enabled);
 void BattleModel_CopyAnimationLayers(BattleModel *source, BattleModel *destination);
 void BattleModel_RestoreSourcePalette(BattleModel *model);
+
+void BattleRenderModel_InitDescriptor(ModelRenderDescriptor *descriptor, int mode);
 
 #ifdef __cplusplus
 }

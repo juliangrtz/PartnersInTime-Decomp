@@ -125,6 +125,10 @@ void GameWindow_ReleaseAll(GameWindowManager *manager);
 void GameWindow_AllocatePool(GameWindowManager *manager, int heap, u32 count, int mode);
 void GameWindow_Close(GameWindowManager *manager, s16 index);
 void GameWindow_ResetProperties(GameWindowManager *manager, GameWindowProperties *properties);
+int GameWindow_MeasurePaddedNumber(void *argument, GameText *text, int process);
+int GameWindow_MeasureNumber(void *argument, GameText *text, int process);
+u32 GameWindow_MeasureWindowSize(GameWindowManager *manager, const u8 *string, const u32 *const *fonts);
+
 #ifdef __cplusplus
 }
 #endif

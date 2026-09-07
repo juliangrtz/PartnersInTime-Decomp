@@ -1,4 +1,5 @@
 #include <game/sprite_window.h>
+
 #include <game/heap.h>
 
 extern u8 data_020565f0[];
@@ -10,6 +11,19 @@ extern GameWindowManager *func_0201f9b4(GameWindowManager *manager, int heap, in
     const u16 *tilemaps, int configure, GameSpriteAnimator *animator);
 extern GameWindowManager *GameWindow_DestroyBase(GameWindowManager *);
 
+void GameSpriteWindow_Release(GameSpriteWindowManager *manager, s16 index)
+{
+    if (!GameWindow_Release(&manager->base, index)) return;
+    switch (manager->base.windows[index].properties.shape.bits.position_mode) {
+    case 0:
+        GameWindow_RebuildTilemap(&manager->base,
+            (u8)manager->base.windows[index].properties.shape.bits.screen);
+        return;
+    case 1:
+        GameSpriteWindow_Close(manager, index);
+        return;
+    }
+}
 void GameSpriteWindow_AllocateSlots(GameSpriteWindowManager *manager, int heap, int count) {
     /* One allocation holds the slot array followed by every slot's objects. */
     u32 slot_bytes = count * sizeof(GameSpriteWindowSlot);

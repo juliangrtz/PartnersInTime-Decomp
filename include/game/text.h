@@ -80,4 +80,6 @@ u16 GameText_MeasureLine(const GameText *text);
 u16 GameText_MeasureHeight(const GameText *text);
 void GameText_MeasureBounds(const GameText *text, GameTextBounds *bounds);
 void GameText_SetControl(int index, s8 length, GameTextCallback callback, void *argument);
+void GameTextResources_LoadAll(void);
+const void *GameTextResources_GetEntry(int table, int entry);
 #endif

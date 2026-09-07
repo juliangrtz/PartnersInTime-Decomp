@@ -1254,3 +1254,41 @@ uninitialized storage from decoded snapshots.
 The total is 344,048 of 1,563,700 bytes (22.00%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Palette-effect controls, localized text and window helpers
+
+Sixteen functions add 1,364 matching C/C++ bytes. The eight palette-effect
+controller routines cover construction, destruction, entry reset, setup, lookup,
+pause status and reversal. Their shared 20-byte entry describes the effect mode,
+color, palette mask, duration, elapsed Q8 time, speed, repeat mode and flags;
+the existing model palette-mask accessor now uses that same type. The controller
+is 12 bytes. Larger palette playback dispatch remains original assembly.
+
+Two localized-text routines load fourteen resource tables and select entries
+through the current language's relative-offset table. Number-control callbacks,
+text-derived window dimensions and background/sprite release dispatch extend
+the window subsystem. Loaded-music setup registers the sequence, bank and wave
+files before starting playback and applying the current fade volume. The render
+descriptor initializer extends the adjacent model lifecycle module. Each source
+addition uses structured C/C++, with shared declarations and checked layouts.
+
+A fresh canonical-ROM boot and save load ran 2,033 frames. It captured the text
+table loader once, render-descriptor initialization 22 times, palette-controller
+initialization four times, entry reset eight times and deletion twice. Both
+screens initialized two entries per controller. Loaded-music setup played
+sequences 37 and 32 from bank zero. The field's 30/40-model render lists remained
+valid. A separate 330-frame item-menu replay captured 20 localized entry lookups
+from tables 6 and 8, plus two palette-entry resets. Its screenshots show item
+names and descriptions; main-BG memory changed by 58,124 bytes and palette memory
+by 88 bytes. Menu overlays 5 and 7 matched their original loaded images.
+
+Normal dialogue advancement exercised window release once across 1,830 frames,
+with valid 36/40-model lists afterward. Number measurement, window sizing,
+effect configuration/reversal/pause queries and entry lookup did not receive
+runtime coverage on these routes. All their linked bytes match. Captures remain
+private under build/runtime/eur_resources_boot_verified,
+eur_menu_resources_verified and eur_throne_dialogue_verified.
+
+The total is 345,412 of 1,563,700 bytes (22.09%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
