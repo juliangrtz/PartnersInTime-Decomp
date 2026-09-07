@@ -2,15 +2,29 @@
 #define PIT_GAME_FIELD_BACKGROUND_H
 #include <nitro.h>
 
+typedef struct FieldBackgroundPaletteSource {
+    u32 size;
+    const u16 *colors;
+} FieldBackgroundPaletteSource;
+
 typedef struct FieldBackground {
     void **vtable;
     u8 unknown_004[0x70];
     u16 *tilemaps[3];
-    u8 unknown_080[0x0c];
+    u16 *extended_palettes[3];
     u16 *palette;
-    u8 unknown_090[0x6f2];
+    u16 *base_palette;
+    u8 unknown_094[0x584];
+    FieldBackgroundPaletteSource palette_sources[3];
+    u8 unknown_630[0x152];
     u8 screen;
-    u8 wide_layers;
+    u8 color256_layers;
+    u8 heap;
+    u8 unknown_785[7];
+    union {
+        u8 raw;
+        struct { u8 animation : 2, unknown_02_03 : 2, upload_full_palette : 1, unknown_05_07 : 3; } bits;
+    } palette_state;
 } FieldBackground;
 
 typedef struct FieldBackgroundTransfers {
@@ -31,7 +45,7 @@ typedef struct FieldBackgroundTransfers {
 typedef char FieldBackgroundTransfers_SizeCheck[
     sizeof(FieldBackgroundTransfers) == 0x100 ? 1 : -1];
 
-int FieldBackground_GetLayerWidth(FieldBackground *background, int layer);
+int FieldBackground_GetTileBytes(FieldBackground *background, int layer);
 void FieldBackground_ApplyBlend(FieldBackgroundTransfers *transfers);
 void FieldBackground_QueueBlend(FieldBackgroundTransfers *transfers,
     int planes_a, int planes_b, int coefficient_a, int coefficient_b);
@@ -42,4 +56,7 @@ void *FieldBackground_GetTilemapAddress(FieldBackgroundTransfers *transfers, int
 void FieldBackground_UploadPalette(FieldBackgroundTransfers *transfers);
 void FieldBackground_SetScroll(FieldBackgroundTransfers *transfers, int layer, int x, int y);
 void FieldBackground_UploadTilemap(FieldBackgroundTransfers *transfers, int layer);
+void FieldBackground_AllocatePalettes(FieldBackground *background);
+void FieldBackground_UploadAllPalettes(FieldBackground *background);
+void FieldBackground_RestorePalettes(FieldBackground *background);
 #endif

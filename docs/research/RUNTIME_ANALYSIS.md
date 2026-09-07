@@ -226,6 +226,16 @@ FieldBackground_TransferQueued 18 times and FieldBackground_SetScroll 702 times.
 The latter route changed 23,477 bytes in the captured main-BG aperture; the bank
 mapping changed too, so this number alone is not a count of uploaded tile bytes.
 
+Palette hooks on the return-to-field route observed GamePaletteAnimation_Reflect
+329 times, GamePaletteAnimation_Add eight times and GamePaletteAnimation_Blend
+twice. Their keyframe selector ran ten times. The probe decodes background
+palette pointers, byte counts, workspaces, format flags and BG control words
+when hooked on FieldBackground_GetTileBytes or the palette setup/upload helpers.
+At the field checkpoint, background 0x02315428 selected screen 1 and had
+color256_layers = 7; sub BG1/2/3 controls were 0x4A89, 0x4C92 and 0x4E97.
+Each control's bit 7 agreed with the recovered per-layer 256-color flag.
+Consequently the getter's 32/64 result is bytes per tile, not tilemap width.
+
 The supplied debug-menu notes describe Select+A-triggered Action Replay writes
 to 0x0205E768 and 0x0205EF50, setting each halfword to 12. Those addresses have
 not been validated as EUR scene selectors. The verified route above uses normal

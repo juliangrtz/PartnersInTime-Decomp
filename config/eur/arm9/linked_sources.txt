@@ -379,3 +379,9 @@ src/game/model_animation_pool.c
 src/game/field_background_transfers.c
 src/game/field_background_tilemap.c
 src/nitro/gx/gx_texture_load.c
+src/game/field_background_palettes.c
+src/game/field_background_palette_restore.c
+src/game/palette_animation_handlers.c
+src/game/palette_animation_keyframes.c
+src/game/palette_animation_cycle.c
+src/game/animation_table.c

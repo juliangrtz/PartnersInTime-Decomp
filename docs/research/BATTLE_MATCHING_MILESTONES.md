@@ -1128,3 +1128,37 @@ did not receive runtime coverage in this route; their exact linked bytes passed.
 The total is 334,140 of 1,563,700 bytes (21.37%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Field palettes and palette-animation commands
+
+Fifteen functions add 3,264 matching C bytes. Field palette allocation separates
+the three extended-palette workspaces from the shared standard palette and its
+saved base copy. Upload and restoration preserve the original fallback and
+backdrop-color paths. Following these consumers establishes that field 0x783
+selects 256-color layers: the adjacent getter returns bytes per tile (32 or 64),
+not tilemap width. The public names now reflect that distinction.
+
+Nine palette-animation routines reconstruct keyframe selection, scaled color
+operations, crossfading, cyclic rotation and reflected rotation. They preserve
+overlapping source/destination handling and the signed time/amount conversions.
+Three animation-table lookups resolve default and indexed component tracks.
+The small RGB555 arithmetic kernels remain original code; naming them does not
+increase the matching-C count.
+
+Nine unreferenced symbols were actually unreachable trailing epilogues of the
+preceding palette functions. Their bytes are now included in the correct
+function sizes, verified against the original linked image. This changes no
+code bytes or progress denominator.
+
+The canonical EUR field/menu replay entered reflected cycling 329 times,
+keyframe selection ten times, additive color animation eight times, blending
+twice, default-track lookup 42 times, indexed-track lookup once, palette
+allocation twice and palette upload twice. The observed sub-screen background
+had mask 7 at 0x783 and BG1/2/3 control words 0x4A89, 0x4C92 and 0x4E97; all
+three have the hardware 256-color bit set. This provides live register evidence
+for the corrected field name. Other animation modes passed byte matching but
+were not exercised by this route.
+
+The total is 337,404 of 1,563,700 bytes (21.58%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

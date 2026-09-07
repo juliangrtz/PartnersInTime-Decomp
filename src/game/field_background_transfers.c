@@ -105,7 +105,7 @@ void FieldBackground_ApplyBlend(FieldBackgroundTransfers *transfers)
     transfers->blend_dirty = 0;
 }
 
-int FieldBackground_GetLayerWidth(FieldBackground *background, int layer)
+int FieldBackground_GetTileBytes(FieldBackground *background, int layer)
 {
-    return 32 * (((background->wide_layers >> layer) & 1) + 1);
+    return 32 * (((background->color256_layers >> layer) & 1) + 1);
 }

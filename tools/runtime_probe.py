@@ -349,6 +349,30 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label in {
+        "FieldBackground_GetTileBytes", "FieldBackground_AllocatePalettes",
+        "FieldBackground_UploadAllPalettes", "FieldBackground_RestorePalettes",
+    } and is_main_ram_pointer(r0, 0x78D):
+        screen = read_u8(emulator, r0 + 0x782)
+        return {
+            "background": f"{r0:#010x}",
+            "screen": screen,
+            "color256_layers": read_u8(emulator, r0 + 0x783),
+            "palette_state": read_u8(emulator, r0 + 0x78C),
+            "bg_control_words": [
+                f"{read_u16(emulator, 0x0400000A + screen * 0x1000 + layer * 2):#06x}"
+                for layer in range(3)
+            ] if screen in (0, 1) else None,
+            "palette_sources": [
+                {
+                    "bytes": read_u32(emulator, r0 + 0x618 + 8 * layer),
+                    "colors": f"{read_u32(emulator, r0 + 0x61C + 8 * layer):#010x}",
+                    "workspace": f"{read_u32(emulator, r0 + 0x80 + 4 * layer):#010x}",
+                }
+                for layer in range(3)
+            ],
+        }
+
     if label == "VM_WriteVariable":
         return {
             "variable": f"{r0 & 0xFFFF:#06x}",
