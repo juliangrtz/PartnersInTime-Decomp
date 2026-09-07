@@ -338,7 +338,7 @@ extern void func_ov000_02066b34(void *field_system);
 extern int func_ov000_02066b0c(void *field_system);
 extern void func_ov000_02066ae4(void *field_system);
 extern int func_ov000_020660f8(void *field_system);
-extern void func_02007408(int rumble_pattern, int repeat_count);
+extern void GameRumble_PlayTimed(int rumble_pattern, int repeat_count);
 extern u8 data_0205a00c;
 extern void GameRumble_Stop(void);
 extern void func_ov000_020beda0(void *timer, s8 minutes, s8 seconds,
@@ -4058,7 +4058,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_PLAY_RUMBLE_PATTERN:
-        func_02007408(
+        GameRumble_PlayTimed(
             arguments[0] - 1, arguments[1]);
         break;
 

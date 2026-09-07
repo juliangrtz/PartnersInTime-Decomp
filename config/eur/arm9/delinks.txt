@@ -397,3 +397,18 @@ src/nitro/os/os_lock.c:
 
 src/nitro/os/os_init.c:
     .text start:0x0203a068 end:0x0203a0b4
+
+src/game/rumble_control.cpp:
+    .text start:0x020072e8 end:0x02007664
+
+src/game/sprite_oam_state.c:
+    .text start:0x020077f0 end:0x02007848
+
+src/game/sprite_oam.c:
+    .text start:0x020078b4 end:0x02007aac
+
+src/game/sprite_palette.c:
+    .text start:0x02007b94 end:0x02007ebc
+
+src/game/sprite_allocation_unlink.c:
+    .text start:0x020084d8 end:0x0200856c

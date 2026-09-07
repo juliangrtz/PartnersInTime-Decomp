@@ -37,5 +37,12 @@ void GameRumble_SkipPulse(void);
 void GameRumble_SetRemovedCallback(void (*callback)(void));
 void GameRumble_Alarm(void *argument);
 int GameRumble_Removed(int event);
+void GameRumble_ControlRemoved(void);
+void GameRumble_UpdateControl(void);
+void GameRumble_PlayTimed(int pattern, u32 frames);
+void GameRumble_PlayRepeated(int pattern, u32 repeats);
+void GameRumble_PlayPattern(const GameRumblePattern *pattern, u16 frames);
+void GameRumble_SetPatterns(const GameRumblePattern *patterns, u8 bank);
+void GameRumble_InitControl(void);
 
 #endif

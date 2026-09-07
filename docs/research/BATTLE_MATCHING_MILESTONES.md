@@ -729,3 +729,16 @@ The total is 274,712 bytes (17.57%), with no additional inline assembly.
 Module/symbol checks, original-ROM SHA-1, all 66 tests, generated progress,
 and the public-content audit pass. The RTC callback remains an unlinked
 analysis candidate until its remaining callback accesses match.
+
+## Rumble control and sprite output
+
+Sixteen functions add 2,440 matching C/C++ bytes. Rumble control recovers
+pattern playback, repetition counts, frame limits and accessory removal.
+Sprite output includes stable OAM group sorting, sorted-buffer assembly,
+state copies, palette dirty tracking, standard/extended VRAM uploads and
+intrusive palette/allocation unlinking.
+
+The total is 277,152 bytes (17.72%), with no additional inline assembly.
+Module/symbol checks, original-ROM SHA-1, all 66 tests, generated progress,
+and the public-content audit pass. Affine copying and the remaining OAM
+registration routines retain their original binary implementations.

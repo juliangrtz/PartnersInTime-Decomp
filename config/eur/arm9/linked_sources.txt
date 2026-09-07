@@ -282,3 +282,8 @@ src/game/audio_wave_load.c
 src/game/audio_waves.c
 src/nitro/os/os_lock.c
 src/nitro/os/os_init.c
+src/game/rumble_control.cpp
+src/game/sprite_palette.c
+src/game/sprite_allocation_unlink.c
+src/game/sprite_oam.c
+src/game/sprite_oam_state.c
