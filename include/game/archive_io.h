@@ -65,6 +65,20 @@ typedef struct ArchiveCompressedRequest {
     u16 reserved_3e;
 } ArchiveCompressedRequest;
 typedef struct ArchiveCompressedIO { ArchiveIO base; u8 buffer[512]; } ArchiveCompressedIO;
+
+typedef struct ArchiveMemoryDecoder {
+    void *vtable;
+    u8 task_state[36];
+    ArchiveReadRequest *first;
+    ArchiveReadRequest *last;
+    u32 scanline;
+    u16 budget_frames;
+    u16 interval_frames;
+    u16 current_frame;
+    u16 reserved;
+} ArchiveMemoryDecoder;
+
+typedef char ArchiveMemoryDecoderSizeCheck[(sizeof(ArchiveMemoryDecoder) == 60) ? 1 : -1];
 typedef char ArchiveCompressedRequestSizeCheck[(sizeof(ArchiveCompressedRequest) == 64) ? 1 : -1];
 
 void ArchiveCodec_ReadHeader(u8 **source, u32 *blocks, u32 *size);
@@ -75,6 +89,19 @@ void ArchiveIO_WaitCompressedRead(ArchiveIO *archive, ArchiveReadRequest *reques
 int ArchiveIO_QueueCompressedRead(ArchiveIO *archive, ArchiveCompressedRequest *request, void *destination);
 u32 ArchiveIO_PrepareCompressedRead(ArchiveIO *archive, ArchiveCompressedRequest *request, const u32 *offsets, const char *path);
 void ArchiveIO_UpdateCompressed(ArchiveIO *archive);
+ArchiveCompressedIO *ArchiveCompressedIO_DestroyBase(ArchiveCompressedIO *archive);
+ArchiveCompressedIO *ArchiveCompressedIO_Delete(ArchiveCompressedIO *archive);
+ArchiveCompressedIO *ArchiveCompressedIO_DestroyComplete(ArchiveCompressedIO *archive);
+ArchiveCompressedIO *ArchiveCompressedIO_InitBase(ArchiveCompressedIO *archive, u32 priority, u32 unused, void *argument, int dma);
+ArchiveCompressedIO *ArchiveCompressedIO_InitComplete(ArchiveCompressedIO *archive, u32 priority, u32 unused, void *argument, int dma);
+void ArchiveMemoryDecoder_Process(ArchiveMemoryDecoder *decoder);
+void ArchiveMemoryDecoder_Wait(ArchiveMemoryDecoder *decoder, ArchiveCompressedRequest *request);
+void ArchiveMemoryDecoder_Queue(ArchiveMemoryDecoder *decoder, ArchiveCompressedRequest *request, void *destination);
+u32 ArchiveMemoryDecoder_Prepare(ArchiveMemoryDecoder *decoder, ArchiveCompressedRequest *request);
+void ArchiveMemoryDecoder_Update(ArchiveMemoryDecoder *decoder);
+ArchiveMemoryDecoder *ArchiveMemoryDecoder_Delete(ArchiveMemoryDecoder *decoder);
+ArchiveMemoryDecoder *ArchiveMemoryDecoder_Destroy(ArchiveMemoryDecoder *decoder);
+ArchiveMemoryDecoder *ArchiveMemoryDecoder_Init(ArchiveMemoryDecoder *decoder, u32 priority, u32 unused, void *argument);
 
 int ArchiveIO_ProcessOverlay(ArchiveIO *archive);
 int ArchiveIO_ProcessRead(ArchiveIO *archive);

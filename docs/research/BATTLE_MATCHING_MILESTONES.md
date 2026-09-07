@@ -553,3 +553,15 @@ operations. Virtual callbacks use the original C++ calling convention.
 All functions match completely, without inline assembly. The total is
 247,672 bytes (15.84%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Memory decompression and compressed archive lifecycle
+
+Thirteen functions add 1,024 matching C bytes. The 60-byte memory decoder
+queues existing compressed buffers, chooses byte or halfword output for the
+destination memory region, advances blocks, waits for requests, and applies
+the same scanline/frame budget as file-backed reads. The compressed archive's
+constructors and destructors now use the reconstructed base lifecycle.
+
+All functions match completely, without inline assembly. The total is
+248,696 bytes (15.90%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

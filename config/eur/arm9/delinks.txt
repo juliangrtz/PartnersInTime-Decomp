@@ -283,3 +283,9 @@ src/game/irq_task.cpp:
 
 src/game/task.cpp:
     .text start:0x0202a2c8 end:0x0202a814
+
+src/game/archive_compressed_lifecycle.c:
+    .text start:0x0202c748 end:0x0202c824
+
+src/game/archive_memory_decoder.c:
+    .text start:0x0202c824 end:0x0202cb48
