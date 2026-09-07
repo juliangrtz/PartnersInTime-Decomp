@@ -275,3 +275,8 @@ src/game/audio_output.c
 src/game/audio_playback.cpp
 src/game/audio_destroy.c
 src/game/audio_music_load.cpp
+
+src/game/audio_dispose.c
+src/game/audio_loader.c
+src/game/audio_wave_load.c
+src/game/audio_waves.c

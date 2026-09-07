@@ -12,7 +12,8 @@ typedef struct SoundWaveLink {
 struct SoundWaveArchive {
     u8 unknown00[8];
     u32 file_size;
-    u8 unknown0c[12];
+    u16 header_size;
+    u8 unknown0e[10];
     SoundWaveLink *links;
     u8 unknown1c[28];
     u32 count;

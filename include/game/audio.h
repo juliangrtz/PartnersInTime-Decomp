@@ -26,6 +26,10 @@ typedef struct GameAudioLoader {
     int mode;
     int start;
 } GameAudioLoader;
+typedef struct GameAudioQueueEnd {
+    GameAudioLoadCommand *next;
+    GameAudioLoadCommand **tail;
+} GameAudioQueueEnd;
 
 typedef char GameAudioLoadCommandSizeCheck[(sizeof(GameAudioLoadCommand) == 28) ? 1 : -1];
 typedef char GameAudioLoaderSizeCheck[(sizeof(GameAudioLoader) == 56) ? 1 : -1];
@@ -49,12 +53,15 @@ extern int data_0205ad50, data_0205ad54, data_0205ad58, data_0205ad5c;
 extern NNSSndStrmHandle data_0205ad60;
 extern NNSSndHeap *data_0205ad64;
 extern GameAudioMusic data_0205ad68;
+extern GameAudioQueueEnd data_0205ad70;
 extern NNSSndHandle data_0205ad78[4];
 extern NNSSndHandle data_0205ad84;
 extern GameAudioFade data_0205ad88;
 extern GameAudioDelayedEffect data_0205ad98[4];
 extern GameAudioMusicFiles data_0205adb8[2];
 extern GameAudioLoader data_0205ade8;
+extern SoundWaveArchive data_0205ae20;
+extern NNSSndArc data_0205ae5c;
 
 void GameAudio_UpdateMusicFade(void);
 void GameAudio_PlayEffect(int sequence, int volume);
@@ -93,7 +100,23 @@ void GameAudio_InitLoaderQueue(void);
 void GameAudio_ProcessLoader(void);
 void GameAudio_LoadCommonBank(void);
 int GameAudio_LoadSequenceBank(NNSSndHeap *heap, int sequence, GameAudioMusicFiles *files);
-void *GameAudio_LoadWaveArchive(u32 file, NNSSndHeap *heap, int async, int register_file, int deferred);
+void *GameAudio_LoadWaveArchive(u32 file, NNSSndHeap *heap, int force, int register_file, int deferred);
 void GameAudio_StartLoader(u8 mode, int sequence, u8 bank, int start);
 int GameAudio_StartReverb(int size, int volume);
+void GameAudio_UncacheFile(void *memory, NNSSndArc *archive, u32 file);
+void GameAudio_DisposeWave(void *memory, u32 size, u32 archive, u32 index);
+void GameAudio_DisposeWaveHeader(void *memory, u32 size, u32 archive, u32 file);
+void GameAudio_DisposeBank(void *memory, u32 size, u32 archive, u32 file);
+void GameAudio_DisposeWaveArchive(void *memory, u32 size, u32 archive, u32 file);
+void GameAudio_DisposeSequence(void *memory, u32 size, u32 archive, u32 file);
+int GameAudio_ProcessLoadChunks(void);
+void GameAudio_QueueRead(GameAudioLoadCommand *buffer, u32 size, u32 file, u32 offset,
+                        void (*callback)(GameAudioLoadCommand *), void *argument);
+void *GameAudio_AllocReadBuffer(NNSSndHeap *heap, u32 size,
+                              NNSSndHeapDisposeCallback dispose, u32 user0, u32 user1);
+u32 GameAudio_GetWaveSize(const SoundWaveArchive *archive, u32 index);
+int GameAudio_LoadWave(SoundWaveArchive *archive, u32 index, u32 file, NNSSndHeap *heap, int deferred);
+void GameAudio_LoadBankWaves(SoundWaveArchive *archive, SoundBank *bank, int slot, u32 file, NNSSndHeap *heap);
+void GameAudio_InitWaveTable(GameAudioLoadCommand *command);
+void GameAudio_LoadDeferredWaves(int sequence, int bank);
 #endif

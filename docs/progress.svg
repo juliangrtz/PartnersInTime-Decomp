@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 17.35 percent is matching C/C++ and 17.69 percent has matching C/C++ or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 17.51 percent is matching C/C++ and 17.85 percent has matching C/C++ or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -13,15 +13,15 @@
 <rect class="bg" width="1200" height="760" rx="12"/>
 <text x="28.0" y="34.0" class="eyebrow">DECOMPILATION PROGRESS · EUROPEAN ROM</text>
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
-<text x="28.0" y="113.0" class="percent">17.3%</text>
+<text x="28.0" y="113.0" class="percent">17.5%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C/C++</text>
-<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">17.69% source-understood</text>
+<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">17.85% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="198.439" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="226.439" y="130" width="3.954" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="200.262" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="228.262" y="130" width="3.954" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C/C++  264.9 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C/C++  267.3 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
 <text x="267.0" y="181.0" class="legend">Symbolic ASM  5.3 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
@@ -1711,7 +1711,7 @@
 <rect class="cell" x="806.85" y="292.58" width="12.74" height="12.31" fill="#2dd4a0"><title>ARM9 resident · snd_stream · 464 B · matching C/C++</title></rect>
 <rect class="cell" x="819.59" y="292.58" width="12.63" height="12.31" fill="#263244"><title>ARM9 resident · func_02005ba8 · 460 B · remaining</title></rect>
 <rect class="cell" x="832.22" y="292.58" width="12.63" height="12.31" fill="#263244"><title>ARM9 resident · func_02022e34 · 460 B · remaining</title></rect>
-<rect class="cell" x="844.85" y="292.58" width="12.63" height="12.31" fill="#263244"><title>ARM9 resident · GameAudio_LoadSequenceBank · 460 B · remaining</title></rect>
+<rect class="cell" x="844.85" y="292.58" width="12.63" height="12.31" fill="#2dd4a0"><title>ARM9 resident · audio_waves · 460 B · matching C/C++</title></rect>
 <rect class="cell" x="857.48" y="292.58" width="12.63" height="12.31" fill="#263244"><title>ARM9 resident · CTRDGi_InitModuleInfo · 460 B · remaining</title></rect>
 <rect class="cell" x="637.38" y="304.89" width="11.86" height="12.88" fill="#263244"><title>ARM9 resident · func_02009e38 · 452 B · remaining</title></rect>
 <rect class="cell" x="637.38" y="317.77" width="11.86" height="12.77" fill="#263244"><title>ARM9 resident · func_02012ea4 · 448 B · remaining</title></rect>
@@ -1813,12 +1813,12 @@
 <rect class="cell" x="659.50" y="517.71" width="10.06" height="9.81" fill="#263244"><title>ARM9 resident · func_020483f4 · 292 B · remaining</title></rect>
 <rect class="cell" x="659.50" y="527.52" width="10.06" height="9.68" fill="#263244"><title>ARM9 resident · func_02015a38 · 288 B · remaining</title></rect>
 <rect class="cell" x="669.56" y="326.84" width="9.75" height="9.98" fill="#263244"><title>ARM9 resident · func_0201d928 · 288 B · remaining</title></rect>
-<rect class="cell" x="679.31" y="326.84" width="9.75" height="9.98" fill="#263244"><title>ARM9 resident · func_020269bc · 288 B · remaining</title></rect>
+<rect class="cell" x="679.31" y="326.84" width="9.75" height="9.98" fill="#2dd4a0"><title>ARM9 resident · audio_loader · 288 B · matching C/C++</title></rect>
 <rect class="cell" x="689.06" y="326.84" width="9.75" height="9.98" fill="#2dd4a0"><title>ARM9 resident · archive_lifecycle · 288 B · matching C/C++</title></rect>
 <rect class="cell" x="698.81" y="326.84" width="9.75" height="9.98" fill="#2dd4a0"><title>ARM9 resident · archive_compressed_update · 288 B · matching C/C++</title></rect>
 <rect class="cell" x="708.56" y="326.84" width="9.61" height="9.98" fill="#263244"><title>ARM9 resident · func_02020304 · 284 B · remaining</title></rect>
 <rect class="cell" x="718.17" y="326.84" width="9.61" height="9.98" fill="#263244"><title>ARM9 resident · func_020261d8 · 284 B · remaining</title></rect>
-<rect class="cell" x="727.79" y="326.84" width="9.61" height="9.98" fill="#263244"><title>ARM9 resident · GameAudio_LoadWaveArchive · 284 B · remaining</title></rect>
+<rect class="cell" x="727.79" y="326.84" width="9.61" height="9.98" fill="#2dd4a0"><title>ARM9 resident · audio_waves · 284 B · matching C/C++</title></rect>
 <rect class="cell" x="737.40" y="326.84" width="9.61" height="9.98" fill="#2dd4a0"><title>ARM9 resident · ctrdg · 284 B · matching C/C++</title></rect>
 <rect class="cell" x="747.01" y="326.84" width="9.48" height="9.98" fill="#263244"><title>ARM9 resident · func_02012244 · 280 B · remaining</title></rect>
 <rect class="cell" x="756.49" y="326.84" width="9.48" height="9.98" fill="#263244"><title>ARM9 resident · func_02012378 · 280 B · remaining</title></rect>
@@ -1915,8 +1915,8 @@
 <rect class="cell" x="818.94" y="346.15" width="8.63" height="8.45" fill="#263244"><title>ARM9 resident · MI_UncompressLZ16 · 216 B · remaining</title></rect>
 <rect class="cell" x="827.58" y="346.15" width="8.63" height="8.45" fill="#263244"><title>ARM9 resident · MI_UncompressHuffman · 216 B · remaining</title></rect>
 <rect class="cell" x="836.21" y="346.15" width="8.47" height="8.45" fill="#263244"><title>ARM9 resident · func_02020fbc · 212 B · remaining</title></rect>
-<rect class="cell" x="844.69" y="346.15" width="8.47" height="8.45" fill="#263244"><title>ARM9 resident · GameAudio_ProcessLoader · 212 B · remaining</title></rect>
-<rect class="cell" x="853.16" y="346.15" width="8.47" height="8.45" fill="#263244"><title>ARM9 resident · func_02026d04 · 212 B · remaining</title></rect>
+<rect class="cell" x="844.69" y="346.15" width="8.47" height="8.45" fill="#2dd4a0"><title>ARM9 resident · audio_loader · 212 B · matching C/C++</title></rect>
+<rect class="cell" x="853.16" y="346.15" width="8.47" height="8.45" fill="#2dd4a0"><title>ARM9 resident · audio_wave_load · 212 B · matching C/C++</title></rect>
 <rect class="cell" x="861.63" y="346.15" width="8.47" height="8.45" fill="#263244"><title>ARM9 resident · func_02039a60 · 212 B · remaining</title></rect>
 <rect class="cell" x="687.99" y="354.60" width="8.45" height="8.32" fill="#263244"><title>ARM9 resident · func_02017d38 · 208 B · remaining</title></rect>
 <rect class="cell" x="696.44" y="354.60" width="8.45" height="8.32" fill="#2dd4a0"><title>ARM9 resident · audio_fade_delay · 208 B · matching C/C++</title></rect>
@@ -1968,14 +1968,14 @@
 <rect class="cell" x="720.46" y="362.92" width="8.14" height="7.64" fill="#2dd4a0"><title>ARM9 resident · pm_fifo · 184 B · matching C/C++</title></rect>
 <rect class="cell" x="728.60" y="362.92" width="7.96" height="7.64" fill="#263244"><title>ARM9 resident · func_02007408 · 180 B · remaining</title></rect>
 <rect class="cell" x="736.56" y="362.92" width="7.96" height="7.64" fill="#263244"><title>ARM9 resident · func_02020250 · 180 B · remaining</title></rect>
-<rect class="cell" x="744.52" y="362.92" width="7.96" height="7.64" fill="#263244"><title>ARM9 resident · func_02026dd8 · 180 B · remaining</title></rect>
+<rect class="cell" x="744.52" y="362.92" width="7.96" height="7.64" fill="#263244"><title>ARM9 resident · GameAudio_LoadBankWaves · 180 B · remaining</title></rect>
 <rect class="cell" x="752.48" y="362.92" width="7.96" height="7.64" fill="#2dd4a0"><title>ARM9 resident · snd_archive_file · 180 B · matching C/C++</title></rect>
 <rect class="cell" x="760.44" y="362.92" width="7.96" height="7.64" fill="#2dd4a0"><title>ARM9 resident · gx_blend_affine · 180 B · matching C/C++</title></rect>
 <rect class="cell" x="768.40" y="362.92" width="7.96" height="7.64" fill="#2dd4a0"><title>ARM9 resident · os_thread_core · 180 B · matching C/C++</title></rect>
 <rect class="cell" x="776.36" y="362.92" width="7.96" height="7.64" fill="#2dd4a0"><title>ARM9 resident · mi_dma_control · 180 B · matching C/C++</title></rect>
 <rect class="cell" x="784.32" y="362.92" width="7.96" height="7.64" fill="#2dd4a0"><title>ARM9 resident · pxi_fifo · 180 B · matching C/C++</title></rect>
 <rect class="cell" x="792.28" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_0201af6c · 176 B · remaining</title></rect>
-<rect class="cell" x="800.06" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_02026fe8 · 176 B · remaining</title></rect>
+<rect class="cell" x="800.06" y="362.92" width="7.78" height="7.64" fill="#2dd4a0"><title>ARM9 resident · audio_waves · 176 B · matching C/C++</title></rect>
 <rect class="cell" x="807.85" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_0202d5e8 · 176 B · remaining</title></rect>
 <rect class="cell" x="815.63" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_0202d6a8 · 176 B · remaining</title></rect>
 <rect class="cell" x="823.41" y="362.92" width="7.78" height="7.64" fill="#2dd4a0"><title>ARM9 resident · snd_capture_update · 176 B · matching C/C++</title></rect>
@@ -2133,7 +2133,7 @@
 <rect class="cell" x="718.11" y="485.32" width="6.88" height="6.49" fill="#263244"><title>ARM9 resident · func_02004f18 · 132 B · remaining</title></rect>
 <rect class="cell" x="718.11" y="491.80" width="6.88" height="6.49" fill="#263244"><title>ARM9 resident · func_0200cd68 · 132 B · remaining</title></rect>
 <rect class="cell" x="718.11" y="498.29" width="6.88" height="6.49" fill="#263244"><title>ARM9 resident · func_020239dc · 132 B · remaining</title></rect>
-<rect class="cell" x="718.11" y="504.77" width="6.88" height="6.49" fill="#263244"><title>ARM9 resident · GameAudio_StartLoader · 132 B · remaining</title></rect>
+<rect class="cell" x="718.11" y="504.77" width="6.88" height="6.49" fill="#2dd4a0"><title>ARM9 resident · audio_loader · 132 B · matching C/C++</title></rect>
 <rect class="cell" x="718.11" y="511.26" width="6.88" height="6.49" fill="#2dd4a0"><title>ARM9 resident · audio_music_load · 132 B · matching C/C++</title></rect>
 <rect class="cell" x="718.11" y="517.74" width="6.88" height="6.49" fill="#2dd4a0"><title>ARM9 resident · audio_playback · 132 B · matching C/C++</title></rect>
 <rect class="cell" x="718.11" y="524.23" width="6.88" height="6.49" fill="#2dd4a0"><title>ARM9 resident · save_storage_load · 132 B · matching C/C++</title></rect>
@@ -2350,8 +2350,8 @@
 <rect class="cell" x="761.55" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · DisplayVram_ClearEngineAssignments · 96 B · remaining</title></rect>
 <rect class="cell" x="767.27" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_0200b028 · 96 B · remaining</title></rect>
 <rect class="cell" x="773.00" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_0200b7c8 · 96 B · remaining</title></rect>
-<rect class="cell" x="778.73" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_0202682c · 96 B · remaining</title></rect>
-<rect class="cell" x="784.45" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_0202688c · 96 B · remaining</title></rect>
+<rect class="cell" x="778.73" y="422.66" width="5.73" height="5.67" fill="#2dd4a0"><title>ARM9 resident · audio_dispose · 96 B · matching C/C++</title></rect>
+<rect class="cell" x="784.45" y="422.66" width="5.73" height="5.67" fill="#2dd4a0"><title>ARM9 resident · audio_dispose · 96 B · matching C/C++</title></rect>
 <rect class="cell" x="790.18" y="422.66" width="5.73" height="5.67" fill="#2dd4a0"><title>ARM9 resident · save_backup · 96 B · matching C/C++</title></rect>
 <rect class="cell" x="795.90" y="422.66" width="5.73" height="5.67" fill="#2dd4a0"><title>ARM9 resident · archive_filesystem · 96 B · matching C/C++</title></rect>
 <rect class="cell" x="801.63" y="422.66" width="5.73" height="5.67" fill="#2dd4a0"><title>ARM9 resident · snd_player · 96 B · matching C/C++</title></rect>
@@ -2528,7 +2528,7 @@
 <rect class="cell" x="812.15" y="444.10" width="4.83" height="4.76" fill="#263244"><title>ARM9 resident · func_0200d060 · 68 B · remaining</title></rect>
 <rect class="cell" x="816.98" y="444.10" width="4.83" height="4.76" fill="#263244"><title>ARM9 resident · func_02012c24 · 68 B · remaining</title></rect>
 <rect class="cell" x="821.81" y="444.10" width="4.83" height="4.76" fill="#263244"><title>ARM9 resident · func_020181cc · 68 B · remaining</title></rect>
-<rect class="cell" x="826.64" y="444.10" width="4.83" height="4.76" fill="#263244"><title>ARM9 resident · func_02026cc0 · 68 B · remaining</title></rect>
+<rect class="cell" x="826.64" y="444.10" width="4.83" height="4.76" fill="#2dd4a0"><title>ARM9 resident · audio_loader · 68 B · matching C/C++</title></rect>
 <rect class="cell" x="831.47" y="444.10" width="4.83" height="4.76" fill="#2dd4a0"><title>ARM9 resident · audio_fade_delay · 68 B · matching C/C++</title></rect>
 <rect class="cell" x="836.30" y="444.10" width="4.83" height="4.76" fill="#2dd4a0"><title>ARM9 resident · save_backup · 68 B · matching C/C++</title></rect>
 <rect class="cell" x="841.13" y="444.10" width="4.83" height="4.76" fill="#2dd4a0"><title>ARM9 resident · task_factories · 68 B · matching C/C++</title></rect>
@@ -2563,7 +2563,7 @@
 <rect class="cell" x="809.65" y="448.86" width="4.65" height="4.65" fill="#263244"><title>ARM9 resident · func_0201fff8 · 64 B · remaining</title></rect>
 <rect class="cell" x="814.30" y="448.86" width="4.65" height="4.65" fill="#263244"><title>ARM9 resident · func_02020e44 · 64 B · remaining</title></rect>
 <rect class="cell" x="818.95" y="448.86" width="4.65" height="4.65" fill="#263244"><title>ARM9 resident · func_02025fc0 · 64 B · remaining</title></rect>
-<rect class="cell" x="823.61" y="448.86" width="4.65" height="4.65" fill="#263244"><title>ARM9 resident · func_02026e8c · 64 B · remaining</title></rect>
+<rect class="cell" x="823.61" y="448.86" width="4.65" height="4.65" fill="#2dd4a0"><title>ARM9 resident · audio_waves · 64 B · matching C/C++</title></rect>
 <rect class="cell" x="828.26" y="448.86" width="4.65" height="4.65" fill="#263244"><title>ARM9 resident · func_0202d03c · 64 B · remaining</title></rect>
 <rect class="cell" x="832.91" y="448.86" width="4.65" height="4.65" fill="#2dd4a0"><title>ARM9 resident · frame_heap · 64 B · matching C/C++</title></rect>
 <rect class="cell" x="837.56" y="448.86" width="4.65" height="4.65" fill="#2dd4a0"><title>ARM9 resident · snd_player_api · 64 B · matching C/C++</title></rect>
@@ -2583,9 +2583,9 @@
 <rect class="cell" x="786.40" y="487.17" width="4.46" height="4.55" fill="#263244"><title>ARM9 resident · func_0200c700 · 60 B · remaining</title></rect>
 <rect class="cell" x="786.40" y="491.72" width="4.46" height="4.55" fill="#263244"><title>ARM9 resident · func_0200c91c · 60 B · remaining</title></rect>
 <rect class="cell" x="786.40" y="496.26" width="4.46" height="4.55" fill="#263244"><title>ARM9 resident · func_020105c4 · 60 B · remaining</title></rect>
-<rect class="cell" x="786.40" y="500.81" width="4.46" height="4.55" fill="#263244"><title>ARM9 resident · func_02026910 · 60 B · remaining</title></rect>
-<rect class="cell" x="786.40" y="505.36" width="4.46" height="4.55" fill="#263244"><title>ARM9 resident · func_0202694c · 60 B · remaining</title></rect>
-<rect class="cell" x="786.40" y="509.91" width="4.46" height="4.55" fill="#263244"><title>ARM9 resident · func_02026c34 · 60 B · remaining</title></rect>
+<rect class="cell" x="786.40" y="500.81" width="4.46" height="4.55" fill="#2dd4a0"><title>ARM9 resident · audio_dispose · 60 B · matching C/C++</title></rect>
+<rect class="cell" x="786.40" y="505.36" width="4.46" height="4.55" fill="#2dd4a0"><title>ARM9 resident · audio_dispose · 60 B · matching C/C++</title></rect>
+<rect class="cell" x="786.40" y="509.91" width="4.46" height="4.55" fill="#2dd4a0"><title>ARM9 resident · audio_loader · 60 B · matching C/C++</title></rect>
 <rect class="cell" x="786.40" y="514.46" width="4.46" height="4.55" fill="#2dd4a0"><title>ARM9 resident · save_backup · 60 B · matching C/C++</title></rect>
 <rect class="cell" x="786.40" y="519.01" width="4.46" height="4.55" fill="#2dd4a0"><title>ARM9 resident · debug_console · 60 B · matching C/C++</title></rect>
 <rect class="cell" x="786.40" y="523.55" width="4.46" height="4.55" fill="#263244"><title>ARM9 resident · ArchiveIO_SelectDecoder · 60 B · remaining</title></rect>
@@ -2621,7 +2621,7 @@
 <rect class="cell" x="790.86" y="498.58" width="4.41" height="4.29" fill="#263244"><title>ARM9 resident · func_0200fb34 · 56 B · remaining</title></rect>
 <rect class="cell" x="790.86" y="502.87" width="4.41" height="4.29" fill="#263244"><title>ARM9 resident · func_02020e84 · 56 B · remaining</title></rect>
 <rect class="cell" x="790.86" y="507.16" width="4.41" height="4.29" fill="#263244"><title>ARM9 resident · func_02026470 · 56 B · remaining</title></rect>
-<rect class="cell" x="790.86" y="511.45" width="4.41" height="4.29" fill="#263244"><title>ARM9 resident · GameAudio_StartReverb · 56 B · remaining</title></rect>
+<rect class="cell" x="790.86" y="511.45" width="4.41" height="4.29" fill="#2dd4a0"><title>ARM9 resident · audio_dispose · 56 B · matching C/C++</title></rect>
 <rect class="cell" x="790.86" y="515.74" width="4.41" height="4.29" fill="#2dd4a0"><title>ARM9 resident · irq_task · 56 B · matching C/C++</title></rect>
 <rect class="cell" x="790.86" y="520.03" width="4.41" height="4.29" fill="#2dd4a0"><title>ARM9 resident · task · 56 B · matching C/C++</title></rect>
 <rect class="cell" x="790.86" y="524.33" width="4.41" height="4.29" fill="#2dd4a0"><title>ARM9 resident · archive_filesystem · 56 B · matching C/C++</title></rect>
@@ -2654,7 +2654,7 @@
 <rect class="cell" x="795.27" y="491.49" width="4.23" height="4.16" fill="#263244"><title>ARM9 resident · func_02010600 · 52 B · remaining</title></rect>
 <rect class="cell" x="795.27" y="495.64" width="4.23" height="4.16" fill="#263244"><title>ARM9 resident · func_02011c58 · 52 B · remaining</title></rect>
 <rect class="cell" x="795.27" y="499.80" width="4.23" height="4.16" fill="#263244"><title>ARM9 resident · func_02012b48 · 52 B · remaining</title></rect>
-<rect class="cell" x="795.27" y="503.95" width="4.23" height="4.16" fill="#263244"><title>ARM9 resident · func_02026988 · 52 B · remaining</title></rect>
+<rect class="cell" x="795.27" y="503.95" width="4.23" height="4.16" fill="#2dd4a0"><title>ARM9 resident · audio_dispose · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="795.27" y="508.11" width="4.23" height="4.16" fill="#2dd4a0"><title>ARM9 resident · audio_playback · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="795.27" y="512.27" width="4.23" height="4.16" fill="#2dd4a0"><title>ARM9 resident · audio_playback · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="795.27" y="516.42" width="4.23" height="4.16" fill="#2dd4a0"><title>ARM9 resident · irq_task · 52 B · matching C/C++</title></rect>
@@ -2738,7 +2738,7 @@
 <rect class="cell" x="803.69" y="501.89" width="3.79" height="3.92" fill="#263244"><title>ARM9 resident · func_02022db0 · 44 B · remaining</title></rect>
 <rect class="cell" x="803.69" y="505.81" width="3.79" height="3.92" fill="#263244"><title>ARM9 resident · func_02022ddc · 44 B · remaining</title></rect>
 <rect class="cell" x="803.69" y="509.74" width="3.79" height="3.92" fill="#263244"><title>ARM9 resident · func_02022e08 · 44 B · remaining</title></rect>
-<rect class="cell" x="803.69" y="513.66" width="3.79" height="3.92" fill="#263244"><title>ARM9 resident · func_02026c94 · 44 B · remaining</title></rect>
+<rect class="cell" x="803.69" y="513.66" width="3.79" height="3.92" fill="#2dd4a0"><title>ARM9 resident · audio_loader · 44 B · matching C/C++</title></rect>
 <rect class="cell" x="803.69" y="517.58" width="3.79" height="3.92" fill="#2dd4a0"><title>ARM9 resident · audio_playback · 44 B · matching C/C++</title></rect>
 <rect class="cell" x="803.69" y="521.51" width="3.79" height="3.92" fill="#2dd4a0"><title>ARM9 resident · debug_console · 44 B · matching C/C++</title></rect>
 <rect class="cell" x="803.69" y="525.43" width="3.79" height="3.92" fill="#2dd4a0"><title>ARM9 resident · archive_compressed_lifecycle · 44 B · matching C/C++</title></rect>
@@ -2818,8 +2818,8 @@
 <rect class="cell" x="845.95" y="481.90" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · func_02011bc0 · 36 B · remaining</title></rect>
 <rect class="cell" x="849.40" y="481.90" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · func_02019724 · 36 B · remaining</title></rect>
 <rect class="cell" x="852.85" y="481.90" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · func_02019748 · 36 B · remaining</title></rect>
-<rect class="cell" x="856.30" y="481.90" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · func_020268ec · 36 B · remaining</title></rect>
-<rect class="cell" x="859.76" y="481.90" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · GameAudio_InitLoaderQueue · 36 B · remaining</title></rect>
+<rect class="cell" x="856.30" y="481.90" width="3.45" height="3.53" fill="#2dd4a0"><title>ARM9 resident · audio_dispose · 36 B · matching C/C++</title></rect>
+<rect class="cell" x="859.76" y="481.90" width="3.45" height="3.53" fill="#2dd4a0"><title>ARM9 resident · audio_loader · 36 B · matching C/C++</title></rect>
 <rect class="cell" x="863.21" y="481.90" width="3.45" height="3.53" fill="#2dd4a0"><title>ARM9 resident · audio_playback · 36 B · matching C/C++</title></rect>
 <rect class="cell" x="866.66" y="481.90" width="3.45" height="3.53" fill="#2dd4a0"><title>ARM9 resident · save_backup · 36 B · matching C/C++</title></rect>
 <rect class="cell" x="814.89" y="485.42" width="3.52" height="3.45" fill="#2dd4a0"><title>ARM9 resident · save_storage · 36 B · matching C/C++</title></rect>

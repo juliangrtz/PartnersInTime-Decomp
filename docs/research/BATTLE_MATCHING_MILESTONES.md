@@ -706,3 +706,16 @@ is 271,240 bytes (17.35%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass. The full
 initialization, frame-update and loaded-music registration candidates remain
 outside this linked set.
+
+## Game audio loading queue and sample buffers
+
+Nineteen functions add 2,492 matching C bytes. The reconstruction covers
+reverb startup, heap-disposal callbacks, file-cache invalidation, intrusive
+read queues, per-frame read budgets, loader transitions, sequence/bank
+allocation, deferred wave headers and individual sample reads. Commands are
+copied before reads overwrite the buffers that hold the queue links.
+
+All linked functions match completely without inline assembly. The total
+is 273,732 bytes (17.51%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass. The small
+bank-instrument traversal candidate remains outside this linked set.
