@@ -352,13 +352,37 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     if label in {
         "FieldBackground_GetTileBytes", "FieldBackground_AllocatePalettes",
         "FieldBackground_UploadAllPalettes", "FieldBackground_RestorePalettes",
+        "FieldBackground_InitializePaletteAnimation", "FieldBackground_UpdatePaletteAnimations",
+        "FieldBackground_HasPaletteAnimation", "FieldBackground_GetPaletteAnimation",
+        "FieldBackground_UpdateBlendAnimation", "FieldBackground_SetPaletteEffects",
+        "FieldBackground_ConfigurePaletteEffect", "FieldBackground_ResetPaletteEffect",
+        "FieldBackground_RestoreAndUploadPalette", "FieldBackground_UploadBasePalette",
     } and is_main_ram_pointer(r0, 0x78D):
         screen = read_u8(emulator, r0 + 0x782)
+        track_count = read_u8(emulator, r0 + 0x78A) + 1
+        states = read_u32(emulator, r0 + 0x75C)
+        times = read_u32(emulator, r0 + 0x758)
         return {
             "background": f"{r0:#010x}",
             "screen": screen,
             "color256_layers": read_u8(emulator, r0 + 0x783),
             "palette_state": read_u8(emulator, r0 + 0x78C),
+            "palette_animation": {
+                "table": f"{read_u32(emulator, r0 + 0x644):#010x}",
+                "track_count_including_default": track_count,
+                "states": [read_u8(emulator, states + i) for i in range(track_count)]
+                if is_main_ram_pointer(states, track_count) else None,
+                "times_q8": [to_s32(read_u32(emulator, times + 4 * i)) for i in range(track_count)]
+                if is_main_ram_pointer(times, 4 * track_count) else None,
+                "speed_q8": to_s32(read_u32(emulator, r0 + 0x760)),
+                "components": [f"{read_u32(emulator, r0 + 0x9C + 4 * i):#010x}" for i in range(3)],
+            },
+            "palette_effect_count": read_u8(emulator, r0 + 0x78B),
+            "blend_animation": {
+                "resource": f"{read_u32(emulator, r0 + 0x728):#010x}",
+                "remaining_q8": to_s32(read_u32(emulator, r0 + 0x72C)),
+                "frame": read_u16(emulator, r0 + 0x730),
+            },
             "bg_control_words": [
                 f"{read_u16(emulator, 0x0400000A + screen * 0x1000 + layer * 2):#06x}"
                 for layer in range(3)

@@ -1162,3 +1162,30 @@ were not exercised by this route.
 The total is 337,404 of 1,563,700 bytes (21.58%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Field palette controls and background animation state
+
+Twenty-four functions add 2,440 matching C/C++ bytes. They reconstruct palette
+effect setup, base-palette editing, layer parameters, character-memory selection,
+blend-animation updates, palette-animation initialization and playback controls,
+and tile-animation start/stop. The palette update preserves the original maximum
+duration accumulated across active tracks. Adjacent palette allocation, upload
+and restoration functions now share the same source module.
+
+The resident vtables establish the C++ dispatch slots. Shared structures describe
+the 24-byte palette effects, 12-byte tile-animation entries, four-byte blend
+frames and animation state; compile-time checks verify the recovered object
+sizes. C++ virtual calls reproduce the native BLX dispatch without inline ASM.
+
+The canonical EUR menu-to-field replay executed 207 frames and captured 726 layer
+parameter queries, 116 character-memory queries and two effect-list assignments.
+The resulting field has 30 and 40 models on its two valid render lists. Captures
+show 23,477 changed main-BG bytes, 81,042 changed sub-BG bytes and 764 changed
+palette bytes. This route does not enter the background palette/blend playback
+routines, so those have byte-match coverage but no playback coverage yet. Entry
+snapshots of animation fields may contain uninitialized values before setup.
+Evidence and the compatible checkpoint remain private under build/runtime/.
+
+The total is 339,844 of 1,563,700 bytes (21.73%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
