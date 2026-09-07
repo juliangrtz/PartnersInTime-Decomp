@@ -92,6 +92,8 @@ void GameAudio_PlayMusic(int sequence, u8 bank, u32 bytes_per_frame);
 void GameAudio_ProcessLoading(void);
 void GameAudio_Update(void);
 void GameAudio_Destroy(void);
+void GameAudio_ResetScene(void);
+void GameAudio_PlayEncoded(s16 sound_id);
 void GameAudio_Init(int load_symbols, u32 first_music_heap, u32 second_music_heap);
 
 void GameAudio_StartLoadedMusic(int sequence, int bank);

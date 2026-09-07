@@ -295,3 +295,5 @@ src/game/sprite_effect_animation.c
 src/game/sprite_effect_control.c
 src/game/sprite_effect_scale.c
 src/game/sprite_image_decode.c
+src/battle/battle_impact_particle_motion.c
+src/game/audio_scene.c

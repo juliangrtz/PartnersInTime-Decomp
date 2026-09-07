@@ -15,7 +15,7 @@ extern void func_ov002_0206bd74(BattleImpactParticlePayload *particle);
                                                                             \
         render_particle(particle);                                          \
         remaining_frames = particle->frame;                                 \
-        if (particle->frame != 0) {                                         \
+        if (remaining_frames != 0) {                                         \
             emitter = (BattleImpactTrailEmitterPayload *)                   \
                 particle->controller;                                       \
             target_scale_q4 = emitter->target_scale_q4;                     \
@@ -23,7 +23,7 @@ extern void func_ov002_0206bd74(BattleImpactParticlePayload *particle);
                 (target_scale_q4 +                                          \
                  _s32_div_f((remaining_frames - 1) *                        \
                                 (16 * particle->scale_x - target_scale_q4),  \
-                            particle->frame)) /                             \
+                            remaining_frames)) /                             \
                 16;                                                         \
             target_scale_q4 = emitter->target_scale_q4;                     \
             particle->scale_y =                                            \

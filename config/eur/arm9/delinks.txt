@@ -436,3 +436,6 @@ src/game/sprite_effect_scale.c:
 
 src/game/sprite_image_decode.c:
     .text start:0x020235fc end:0x020239dc
+
+src/game/audio_scene.c:
+    .text start:0x02026470 end:0x020264a8

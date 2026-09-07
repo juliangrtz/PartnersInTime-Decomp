@@ -767,3 +767,14 @@ The total reaches 281,580 bytes (18.01%). Module/symbol checks, original-ROM
 SHA-1, all 66 tests, generated progress and the public-content audit pass.
 No inline assembly was added. The wider/taller decoder and draw-dispatch
 candidates remain outside the linked source set.
+
+## Impact particle motion and scene audio reset
+
+Three functions add 616 matching C bytes. Both impact-particle update paths
+use the frame count captured after rendering for their remaining-distance
+interpolation. The scene audio reset restores the sound heaps and player
+channel allocation.
+
+The total is 282,196 bytes (18.05%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress and the public-content audit pass. No inline
+assembly was added. Encoded sound dispatch remains a private candidate.
