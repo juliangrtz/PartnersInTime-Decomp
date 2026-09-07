@@ -327,11 +327,11 @@ extern void func_ov000_0206acf8(void *field_system, int shop_scene_id,
                                 int return_screen_flag);
 extern void func_ov000_0206abd8(void *field_system, int fade_to_black);
 extern void func_ov000_0206a9a4(void *field_system, int fade_to_black);
-extern void func_02019330(int new_game_preset);
+extern void GameParty_Initialize(int new_game_preset);
 extern void func_ov000_0206d274(void *field_system, int character_index);
 extern void func_ov000_0206d1dc(void *field_system, int character_index,
                                 int hp_delta);
-extern int func_02019174(u16 item_id, int count_delta);
+extern int GameInventory_Add(u16 item_id, int count_delta);
 extern const u16 data_02048f1a[];
 extern void func_ov000_02081bd4(int enabled);
 extern void func_ov000_02066b34(void *field_system);
@@ -3945,7 +3945,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_INITIALIZE_NEW_GAME_PRESET:
-        func_02019330(arguments[0]);
+        GameParty_Initialize(arguments[0]);
         break;
 
     case FIELD_VM_RESTORE_PARTY_MEMBER_HP:
@@ -3962,7 +3962,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_ADJUST_COINS: {
-        int updated_count = func_02019174(
+        int updated_count = GameInventory_Add(
             0xFFFF, arguments[0]);
 
         VM_WriteVariable(
@@ -3972,7 +3972,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_ADJUST_BEANS: {
-        int updated_count = func_02019174(
+        int updated_count = GameInventory_Add(
             0xFFFE, arguments[0]);
 
         VM_WriteVariable(
@@ -3985,7 +3985,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_ADJUST_ITEM_COUNT: {
-        int updated_count = func_02019174(
+        int updated_count = GameInventory_Add(
             (u16)arguments[0], arguments[1]);
 
         VM_WriteVariable(

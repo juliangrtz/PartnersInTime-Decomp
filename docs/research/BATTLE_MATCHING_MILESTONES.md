@@ -845,3 +845,21 @@ calibration reconstructs both hardware divisions and their range checks.
 The total is 297,308 bytes (19.01%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress and the public-content audit pass. No inline
 assembly or compiler-setting changes were added.
+
+## Party initialization, inventory and matrix animation
+
+Fifteen functions add 5,316 matching C bytes. Party initialization restores
+starting levels, experience, growth stats, equipment and item counts. Inventory
+queries and changes handle the four item categories, coins and beans, including
+the original count limits. The equipment application signature now reflects
+the byte-sized party member argument; existing callers and the callee match.
+
+The matrix animation subsystem now includes all five curve evaluators, its
+transform interpreter, track allocation and initialization, frame updates,
+completion callbacks and owner release. The interpreter handles nested
+sequences, scaling, translation, rotation and parameter channels. The recovered
+layouts are 56 bytes per track and 100 bytes for the animation manager.
+
+The total is 302,624 bytes (19.35%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress and the public-content audit pass. No inline
+assembly or compiler-setting changes were added.

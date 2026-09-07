@@ -122,8 +122,8 @@ extern void func_ov002_020b9818(BattleSceneObject *object,
 extern void func_ov002_020b97d0(BattleSceneObject *object,
                                 int cell_delay_range, int quarter_delay_range);
 extern int func_ov002_020b97a8(BattleSceneObject *object);
-extern int func_02019174(u16 item_id, int count_delta);
-extern int func_0201904c(u16 item_id);
+extern int GameInventory_Add(u16 item_id, int count_delta);
+extern int GameInventory_GetCount(u16 item_id);
 extern int BattleItemList_RebuildActionItems(void);
 extern int BattleItemList_RebuildUsableItems(void);
 extern void func_ov002_02076178(int sound_task_id);
@@ -2199,7 +2199,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_ADJUST_INVENTORY:
-        x = func_02019174(
+        x = GameInventory_Add(
             (u16)command->arguments[0], command->arguments[1]);
         BattleVm_WriteResult(vm, state, command, x);
         BattleItemList_RebuildActionItems();
@@ -2211,7 +2211,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_GET_INVENTORY_COUNT:
         BattleVm_WriteResult(
-            vm, state, command, func_0201904c((u16)command->arguments[0]));
+            vm, state, command, GameInventory_GetCount((u16)command->arguments[0]));
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_GET_ITEM_BATTLE_ANIMATION: {

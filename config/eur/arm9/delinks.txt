@@ -484,3 +484,24 @@ src/game/texture_allocation_unlink.c:
 
 src/game/graphics_texture_offsets.c:
     .text start:0x0200e110 end:0x0200e3f8
+
+src/game/inventory.c:
+    .text start:0x0201904c end:0x02019330
+
+src/game/party_initialize.c:
+    .text start:0x02019330 end:0x020196f8
+
+src/game/animation_values.c:
+    .text start:0x02017ee8 end:0x0201828c
+
+src/game/matrix_animation.c:
+    .text start:0x0201828c end:0x02018780
+
+src/game/matrix_animation_update.c:
+    .text start:0x02018780 end:0x02018af4
+
+src/game/matrix_animation_state.c:
+    .text start:0x02018af4 end:0x02018ce0
+
+src/game/matrix_animation_release.c:
+    .text start:0x02017ec8 end:0x02017ee8

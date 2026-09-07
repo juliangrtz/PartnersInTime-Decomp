@@ -28,7 +28,7 @@ typedef union SavePartyExperienceToNextLevel {
 } SavePartyExperienceToNextLevel;
 
 typedef struct SavePartyMember {
-    u8 unknown_000[2];
+    u16 member_id;
     u16 base_max_hp;
     u16 base_power;
     u16 base_defense;
@@ -55,7 +55,7 @@ typedef struct PartyLevelGrowth {
     u16 defense;
     u16 speed;
     u16 experience_to_next_level;
-    u8 unknown_00a[2];
+    u16 stache;
 } PartyLevelGrowth;
 
 typedef char PartyLevelGrowth_SizeCheck[

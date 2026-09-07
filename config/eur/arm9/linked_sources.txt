@@ -312,3 +312,10 @@ src/game/texture_palette_allocate.c
 src/game/texture_palette_state.c
 src/game/texture_allocation_unlink.c
 src/game/graphics_texture_offsets.c
+src/game/inventory.c
+src/game/party_initialize.c
+src/game/animation_values.c
+src/game/matrix_animation.c
+src/game/matrix_animation_update.c
+src/game/matrix_animation_state.c
+src/game/matrix_animation_release.c

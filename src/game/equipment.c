@@ -16,7 +16,7 @@ void Equipment_GetBonuses(u16 equipment, s16 *hp, s16 *power, s16 *defense, s16 
     *stache = data_020505dc[index][0];
 }
 
-void Equipment_Apply(int party_member, u16 equipment)
+void Equipment_Apply(u8 party_member, u16 equipment)
 {
     int offset = party_member * 36;
     SavePartyMember *member = (SavePartyMember *)(gSaveData + 1016 + offset);

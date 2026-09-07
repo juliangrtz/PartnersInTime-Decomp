@@ -54,7 +54,7 @@ typedef char BattleModelResourceEffectPayload_SizeCheck[
 extern BattleEffect *func_02017d38(
     void *manager, const void *resource,
     int x, int y, int z, int scale);
-extern BattleModelEffect *func_02018af4(
+extern BattleModelEffect *GameMatrixAnimation_Start(
     void *manager, const void *resource,
     void (*update_callback)(BattleModelEffect *effect), int initial_scale);
 extern void func_ov002_020aaac8(BattleModelEffect *effect);
@@ -124,7 +124,7 @@ BattleEffect *BattleModelEffect_Spawn(
     u8 *context = gBattleContext;
     const u8 *resource_table =
         *(const u8 **)(context + BATTLE_MODEL_RESOURCE_TABLE_OFFSET);
-    BattleModelEffect *effect = func_02018af4(
+    BattleModelEffect *effect = GameMatrixAnimation_Start(
         *(void **)(context + BATTLE_MODEL_EFFECT_MANAGER_OFFSET),
         resource_table + ((const u32 *)resource_table)[effect_id],
         func_ov002_020aaac8, BATTLE_MODEL_EFFECT_INITIAL_SCALE);
