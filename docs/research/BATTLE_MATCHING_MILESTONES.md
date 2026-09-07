@@ -912,3 +912,29 @@ The total is 312,828 of 1,563,700 bytes (20.01%), exceeding the 312,740-byte
 20% target. Module/symbol checks, original-ROM SHA-1, all 66 tests, generated
 progress and the public-content audit pass. This milestone adds no inline
 assembly and changes no compiler settings.
+
+
+## Sprite windows
+
+Eight functions add 1,528 matching C/C++ bytes. The sprite-window manager
+derives from the ordinary window manager and presents window pixels through
+OAM objects instead of a background tilemap. Its slot array is allocated in one
+block that holds the slots followed by twelve hardware objects per slot; every
+slot embeds a direct-mode sprite animation entry and the object-tile
+allocation that backs it.
+
+Slot construction, release and teardown, window opening (free-slot search,
+object-tile allocation and animator registration), and closing (unlink plus
+allocation release) match. The per-frame dirty scan dispatches tilemap windows
+to the ordinary upload path and sprite windows to the object blitter.
+`GameSpriteWindow_ApplyTileOffsets` rebases every object tile index after the
+allocator has chosen a VRAM offset; recovering its return value, which the
+original leaves in the object cursor, was what fixed its register assignment.
+
+`GameSpriteWindow_Upload` and `GameSpriteWindow_BuildObjects` are reconstructed
+but not yet byte-identical, so they stay outside `linked_sources.txt`.
+
+The total is 314,356 of 1,563,700 bytes (20.10%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass. This milestone adds no inline assembly and changes no compiler
+settings.

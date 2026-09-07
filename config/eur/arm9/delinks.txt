@@ -587,5 +587,20 @@ src/game/window_close.c:
 src/game/window_properties.c:
     .text start:0x02020304 end:0x02020420
 
-src/game/window_sprite_destroy.c:
-    .text start:0x02020e44 end:0x02020ebc
+src/game/sprite_window_close.c:
+    .text start:0x02020420 end:0x020204c4
+
+src/game/sprite_window_upload.c:
+    .text start:0x020204c4 end:0x020207c4
+
+src/game/sprite_window_update.c:
+    .text start:0x020207c4 end:0x02020a1c
+
+src/game/sprite_window_objects.c:
+    .text start:0x02020a1c end:0x02020d1c
+
+src/game/sprite_window_open.c:
+    .text start:0x02020d1c end:0x02020e44
+
+src/game/sprite_window.c:
+    .text start:0x02020e44 end:0x02021090

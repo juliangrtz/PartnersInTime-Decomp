@@ -55,7 +55,8 @@ typedef struct GameWindow {
     u8 reservedac[20];
     u8 has_selection, selection;
     u16 measured_height;
-    u8 reservedc4[8];
+    u8 sprite_slot;
+    u8 reservedc5[7];
 } GameWindow;
 typedef struct GameWindowManager {
     void **vtable;
@@ -124,8 +125,6 @@ void GameWindow_ReleaseAll(GameWindowManager *manager);
 void GameWindow_AllocatePool(GameWindowManager *manager, int heap, u32 count, int mode);
 void GameWindow_Close(GameWindowManager *manager, s16 index);
 void GameWindow_ResetProperties(GameWindowManager *manager, GameWindowProperties *properties);
-GameWindowManager *GameSpriteWindow_Delete(GameWindowManager *manager);
-GameWindowManager *GameSpriteWindow_Destroy(GameWindowManager *manager);
 #ifdef __cplusplus
 }
 #endif

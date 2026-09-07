@@ -69,6 +69,13 @@ static inline u8 *GameSprite_ObjAddress(const GameSpriteAllocation *allocation)
         ? (u8 *)(allocation->offset + 0x06400000)
         : (u8 *)(allocation->offset + 0x06600000);
 }
+/* Inverse of GameSprite_ObjAddress: the object-tile index a VRAM address holds. */
+static inline u16 GameSprite_TileIndex(u8 screen, const u8 *address)
+{
+    if (!screen) return ((u32)address - 0x06400000) >> (GameSprite_ObjBoundaryShift(0) + 5);
+    if (screen == 1) return ((u32)address - 0x06600000) >> (GameSprite_ObjBoundaryShift(1) + 5);
+    return 0xffff;
+}
 
 extern u32 func_0203550c(void), func_020354c4(void);
 static inline u32 GameSprite_ObjCapacity(int screen)
