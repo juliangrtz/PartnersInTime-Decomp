@@ -425,3 +425,5 @@ src/field/field_timed_renderer.cpp
 src/field/field_geometry.c
 src/field/field_direction.c
 src/field/field_deferred_entity.cpp
+src/field/field_blink.c
+src/field/field_blink_callbacks.c

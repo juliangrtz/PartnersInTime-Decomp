@@ -356,6 +356,21 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label.startswith("FieldBlink_") and is_main_ram_pointer(r0, 0x514):
+        flags = read_u32(emulator, r0 + 0x184)
+        frames = (flags >> 17) & 0xFF
+        result = {"entity": f"{r0:#010x}", "mode": (flags >> 13) & 3,
+                  "paused": bool(flags & 0x8000), "phase": (flags >> 16) & 1,
+                  "frames": frames if frames < 128 else frames - 256,
+                  "offset": flags >> 25,
+                  "durations": f"{read_u32(emulator, r0 + 0x188):#010x}",
+                  "first_phase": f"{read_u32(emulator, r0 + 0x18C):#010x}",
+                  "second_phase": f"{read_u32(emulator, r0 + 0x190):#010x}",
+                  "renderer": f"{read_u32(emulator, r0 + 0x1E0):#010x}"}
+        if label in {"FieldBlink_Start", "FieldBlink_StartRenderers", "FieldBlink_Stop"}:
+            result["requested_mode"] = to_s32(r1)
+        return result
+
     if label in {"FieldDeferredEntity_Init", "FieldDeferredEntity_InitEmpty"}:
         result = {"entity": f"{r0:#010x}"}
         if label == "FieldDeferredEntity_Init":

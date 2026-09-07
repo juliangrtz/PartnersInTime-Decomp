@@ -1632,3 +1632,36 @@ Evidence remains private under build/runtime/eur_field_deferred_entity_verified.
 The total is 355,608 of 1,563,700 bytes (22.74%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Shared field blink sequencing and renderer callbacks
+
+Eight functions add 1,124 matching C bytes: blink start/update/stop, the renderer
+callback wrapper, show/hide callbacks and two sort-key-to-anchor copies. The
+shared layout now describes the signed duration table, phase callbacks, mode,
+pause flag, phase bit, signed eight-bit frame count and seven-bit table offset.
+Mode three advances through duration pairs; other active modes move backward.
+A signed -1 duration terminates the sequence. The virtual blink interface now
+correctly uses signed duration bytes. Unresolved auxiliary-renderer conditions
+retain their existing neutral field names.
+
+A normal 2,033-frame boot/save-load replay entered blink update 2,774 times,
+the two-anchor copy 5,554 times and the single-anchor copy 354 times. These
+entities had blink mode zero. The final render lists contain 30/40 valid models;
+main/sub BG memory changed by 55,110/47,962 bytes and palettes by 243 bytes.
+
+Seven live RAM-seeded checks then reloaded one normally updated entity at
+0x02315BC8, installed the original duration table and renderer callbacks, and
+executed one ordinary game frame per case. Each entered the updater exactly
+once. The checks verified first-phase switching, forward/reverse pair stepping,
+both end sentinels, paused state and stopped state. Callback traces and the
+primary renderer's active flag agreed: reverse completion hid then showed the
+renderer and restored property flag zero; forward completion hid it and ended
+the sequence. Loaded updater/callback bytes were checked against the original
+overlay before each case. Only transient blink state and property flag zero
+were seeded; ROM and battery save were unchanged.
+
+Start, stop and the default-callback wrapper were not entered on these routes.
+Evidence remains private under build/runtime/eur_field_blink_verified and
+eur_field_blink_boundaries. The total is 356,732 of 1,563,700 bytes (22.81%).
+All module/symbol checks, 74 tests, generated progress and public-content checks
+pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

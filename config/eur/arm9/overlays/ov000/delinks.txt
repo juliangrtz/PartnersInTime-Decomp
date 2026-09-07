@@ -37,3 +37,9 @@ src/field/field_direction.c:
 
 src/field/field_deferred_entity.cpp:
     .text       start:0x020bd1ec end:0x020bd724
+
+src/field/field_blink.c:
+    .text       start:0x020a461c end:0x020a4940
+
+src/field/field_blink_callbacks.c:
+    .text       start:0x020a9638 end:0x020a9778

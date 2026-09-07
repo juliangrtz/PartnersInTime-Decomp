@@ -1,11 +1,11 @@
 #include <game/field_deferred_entity.h>
+#include <game/field_blink.h>
 extern "C" {
 #include <game/heap.h>
 
 extern FieldEntityVTable data_ov000_020c13e0;
-extern const u8 data_ov000_020c0c9c[];
-extern const u8 data_ov000_020c0cc0[];
-extern void func_ov000_020a46bc(FieldRuntimeEntity *);
+extern const s8 data_ov000_020c0c9c[];
+extern const s8 data_ov000_020c0cc0[];
 extern void func_ov000_020a7a80(FieldRuntimeEntity *, const FieldRuntimeEntity *);
 extern void func_ov000_020b5e84(FieldRuntimeEntity *, const void *, const void *, int, const void *, u8);
 extern void func_ov000_020b57e8(FieldRuntimeEntity *);
@@ -108,7 +108,7 @@ void FieldDeferredEntity_PauseScript(FieldDeferredEntity *entity)
 void FieldDeferredEntity_UpdateBlink(FieldDeferredEntity *entity)
 {
     if (entity->runtime.base_state_flag_bits.blink_mode) {
-        func_ov000_020a46bc(&entity->runtime);
+        FieldBlink_Update(&entity->runtime);
         if (!entity->runtime.base_state_flag_bits.blink_mode) {
             if (entity->control.phase) {
                 switch (entity->control.phase) {

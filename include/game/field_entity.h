@@ -65,7 +65,10 @@ typedef struct FieldBaseStateFlags {
     u32 unknown_09_11 : 3;
     u32 reserved_state : 1;
     u32 blink_mode : 2;
-    u32 unknown_15_31 : 17;
+    u32 blink_paused : 1;
+    u32 blink_phase : 1;
+    s32 blink_frames : 8;
+    u32 blink_offset : 7;
 } FieldBaseStateFlags;
 
 typedef struct FieldPlanarMovementFlags {
@@ -198,7 +201,7 @@ struct FieldEntityVTable {
                                      int snap_to_destination);
     void (*set_visible)(FieldEntity *entity, int visible);
     u8 unknown_64[0x10];
-    void (*start_blink)(FieldEntity *entity, int mode, const u8 *durations, u8 length,
+    void (*start_blink)(FieldEntity *entity, int mode, const s8 *durations, u8 length,
                         FieldEntityVisibilityCallback show, FieldEntityVisibilityCallback hide);
     u8 unknown_78[0x14];
     void (*set_collision_response_channels)(
@@ -240,7 +243,7 @@ typedef struct FieldEntity {
     virtual void unknown_68();
     virtual void unknown_6c();
     virtual void unknown_70();
-    virtual void start_blink(int mode, const u8 *durations, u8 length,
+    virtual void start_blink(int mode, const s8 *durations, u8 length,
                              FieldEntityVisibilityCallback show, FieldEntityVisibilityCallback hide);
     virtual void unknown_78();
     virtual void unknown_7c();
@@ -387,7 +390,8 @@ struct FieldRuntimeEntity {
         u32 base_state_flags;
         FieldBaseStateFlags base_state_flag_bits;
     };
-    u8 unknown_188[0x0C];
+    const s8 *blink_durations;
+    FieldEntityVisibilityCallback blink_first_phase, blink_second_phase;
     union {
         u32 saved_presentation_flags;
         FieldSavedPresentationFlags saved_presentation_flag_bits;
@@ -419,7 +423,8 @@ struct FieldRuntimeEntity {
     };
     u8 unknown_282[0x3A];
     fx32 position_z;
-    u8 unknown_2c0[0x28];
+    s32 unknown_2c0;
+    u8 unknown_2c4[0x24];
     s32 body_corner_angles[4];
     fx32 body_min_x;
     fx32 body_max_x;
