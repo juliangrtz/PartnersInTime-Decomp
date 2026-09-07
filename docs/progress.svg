@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 15.97 percent is matching C/C++ and 16.32 percent has matching C/C++ or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 16.08 percent is matching C/C++ and 16.43 percent has matching C/C++ or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -13,15 +13,15 @@
 <rect class="bg" width="1200" height="760" rx="12"/>
 <text x="28.0" y="34.0" class="eyebrow">DECOMPILATION PROGRESS · EUROPEAN ROM</text>
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
-<text x="28.0" y="113.0" class="percent">16.0%</text>
+<text x="28.0" y="113.0" class="percent">16.1%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C/C++</text>
-<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">16.32% source-understood</text>
+<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">16.43% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="182.692" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="210.692" y="130" width="3.954" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="183.953" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="211.953" y="130" width="3.954" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C/C++  243.9 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C/C++  245.5 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
 <text x="267.0" y="181.0" class="legend">Symbolic ASM  5.3 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
@@ -1700,12 +1700,12 @@
 <rect class="cell" x="664.18" y="292.58" width="13.18" height="12.31" fill="#263244"><title>ARM9 resident · func_02029c04 · 480 B · remaining</title></rect>
 <rect class="cell" x="677.36" y="292.58" width="13.18" height="12.31" fill="#2dd4a0"><title>ARM9 resident · task · 480 B · matching C/C++</title></rect>
 <rect class="cell" x="690.54" y="292.58" width="13.18" height="12.31" fill="#263244"><title>ARM9 resident · func_02047388 · 480 B · remaining</title></rect>
-<rect class="cell" x="703.72" y="292.58" width="13.07" height="12.31" fill="#263244"><title>ARM9 resident · FX_Atan2 · 476 B · remaining</title></rect>
+<rect class="cell" x="703.72" y="292.58" width="13.07" height="12.31" fill="#2dd4a0"><title>ARM9 resident · fx_atan · 476 B · matching C/C++</title></rect>
 <rect class="cell" x="716.79" y="292.58" width="12.96" height="12.31" fill="#263244"><title>ARM9 resident · func_02026000 · 472 B · remaining</title></rect>
 <rect class="cell" x="729.75" y="292.58" width="12.96" height="12.31" fill="#2dd4a0"><title>ARM9 resident · snd_bank · 472 B · matching C/C++</title></rect>
 <rect class="cell" x="742.71" y="292.58" width="12.96" height="12.31" fill="#263244"><title>ARM9 resident · CARDi_SetBackupSpec · 472 B · remaining</title></rect>
 <rect class="cell" x="755.67" y="292.58" width="12.85" height="12.31" fill="#263244"><title>ARM9 resident · func_02029130 · 468 B · remaining</title></rect>
-<rect class="cell" x="768.52" y="292.58" width="12.85" height="12.31" fill="#263244"><title>ARM9 resident · FX_Atan2Idx · 468 B · remaining</title></rect>
+<rect class="cell" x="768.52" y="292.58" width="12.85" height="12.31" fill="#2dd4a0"><title>ARM9 resident · fx_atan · 468 B · matching C/C++</title></rect>
 <rect class="cell" x="781.37" y="292.58" width="12.74" height="12.31" fill="#263244"><title>ARM9 resident · func_0200e228 · 464 B · remaining</title></rect>
 <rect class="cell" x="794.11" y="292.58" width="12.74" height="12.31" fill="#263244"><title>ARM9 resident · func_020163f0 · 464 B · remaining</title></rect>
 <rect class="cell" x="806.85" y="292.58" width="12.74" height="12.31" fill="#2dd4a0"><title>ARM9 resident · snd_stream · 464 B · matching C/C++</title></rect>
@@ -1779,7 +1779,7 @@
 <rect class="cell" x="649.24" y="381.67" width="10.26" height="10.81" fill="#2dd4a0"><title>ARM9 resident · tp_io · 328 B · matching C/C++</title></rect>
 <rect class="cell" x="649.24" y="392.48" width="10.26" height="10.54" fill="#263244"><title>ARM9 resident · func_0202ad98 · 320 B · remaining</title></rect>
 <rect class="cell" x="649.24" y="403.02" width="10.26" height="10.54" fill="#2dd4a0"><title>ARM9 resident · snd_archive_load · 320 B · matching C/C++</title></rect>
-<rect class="cell" x="649.24" y="413.57" width="10.26" height="10.54" fill="#263244"><title>ARM9 resident · VEC_Normalize · 320 B · remaining</title></rect>
+<rect class="cell" x="649.24" y="413.57" width="10.26" height="10.54" fill="#2dd4a0"><title>ARM9 resident · fx_vec · 320 B · matching C/C++</title></rect>
 <rect class="cell" x="649.24" y="424.11" width="10.26" height="10.54" fill="#2dd4a0"><title>ARM9 resident · os_alarm · 320 B · matching C/C++</title></rect>
 <rect class="cell" x="649.24" y="434.66" width="10.26" height="10.41" fill="#263244"><title>ARM9 resident · func_020237b8 · 316 B · remaining</title></rect>
 <rect class="cell" x="649.24" y="445.07" width="10.26" height="10.41" fill="#2dd4a0"><title>ARM9 resident · card_request · 316 B · matching C/C++</title></rect>
@@ -1879,7 +1879,7 @@
 <rect class="cell" x="679.01" y="355.18" width="8.98" height="9.03" fill="#263244"><title>ARM9 resident · func_02039160 · 240 B · remaining</title></rect>
 <rect class="cell" x="679.01" y="364.21" width="8.98" height="9.03" fill="#2dd4a0"><title>ARM9 resident · pm_control · 240 B · matching C/C++</title></rect>
 <rect class="cell" x="679.01" y="373.25" width="8.98" height="8.88" fill="#2dd4a0"><title>ARM9 resident · snd_heap · 236 B · matching C/C++</title></rect>
-<rect class="cell" x="679.01" y="382.13" width="8.98" height="8.88" fill="#263244"><title>ARM9 resident · FX_AtanIdx · 236 B · remaining</title></rect>
+<rect class="cell" x="679.01" y="382.13" width="8.98" height="8.88" fill="#2dd4a0"><title>ARM9 resident · fx_atan · 236 B · matching C/C++</title></rect>
 <rect class="cell" x="679.01" y="391.01" width="8.98" height="8.88" fill="#2dd4a0"><title>ARM9 resident · dgt_hash2 · 236 B · matching C/C++</title></rect>
 <rect class="cell" x="679.01" y="399.90" width="8.98" height="8.88" fill="#2dd4a0"><title>ARM9 resident · pm_fifo · 236 B · matching C/C++</title></rect>
 <rect class="cell" x="679.01" y="408.78" width="8.98" height="8.73" fill="#263244"><title>ARM9 resident · func_02004a14 · 232 B · remaining</title></rect>
@@ -2048,7 +2048,7 @@
 <rect class="cell" x="703.65" y="501.54" width="7.39" height="7.13" fill="#2dd4a0"><title>ARM9 resident · task · 156 B · matching C/C++</title></rect>
 <rect class="cell" x="703.65" y="508.68" width="7.39" height="7.13" fill="#2dd4a0"><title>ARM9 resident · snd_capture_update · 156 B · matching C/C++</title></rect>
 <rect class="cell" x="703.65" y="515.81" width="7.39" height="7.13" fill="#2dd4a0"><title>ARM9 resident · snd_heap · 156 B · matching C/C++</title></rect>
-<rect class="cell" x="703.65" y="522.94" width="7.39" height="7.13" fill="#263244"><title>ARM9 resident · VEC_CrossProduct · 156 B · remaining</title></rect>
+<rect class="cell" x="703.65" y="522.94" width="7.39" height="7.13" fill="#2dd4a0"><title>ARM9 resident · fx_vec · 156 B · matching C/C++</title></rect>
 <rect class="cell" x="703.65" y="530.07" width="7.39" height="7.13" fill="#2dd4a0"><title>ARM9 resident · os_irq · 156 B · matching C/C++</title></rect>
 <rect class="cell" x="711.04" y="377.94" width="7.43" height="7.10" fill="#2dd4a0"><title>ARM9 resident · os_tick · 156 B · matching C/C++</title></rect>
 <rect class="cell" x="718.47" y="377.94" width="7.43" height="7.10" fill="#2dd4a0"><title>ARM9 resident · os_alarm · 156 B · matching C/C++</title></rect>
@@ -2544,7 +2544,7 @@
 <rect class="cell" x="781.75" y="468.62" width="4.65" height="4.94" fill="#2dd4a0"><title>ARM9 resident · archive_memory_decoder · 68 B · matching C/C++</title></rect>
 <rect class="cell" x="781.75" y="473.56" width="4.65" height="4.94" fill="#2dd4a0"><title>ARM9 resident · snd_resource · 68 B · matching C/C++</title></rect>
 <rect class="cell" x="781.75" y="478.50" width="4.65" height="4.94" fill="#2dd4a0"><title>ARM9 resident · snd_stream · 68 B · matching C/C++</title></rect>
-<rect class="cell" x="781.75" y="483.44" width="4.65" height="4.94" fill="#263244"><title>ARM9 resident · VEC_DotProduct · 68 B · remaining</title></rect>
+<rect class="cell" x="781.75" y="483.44" width="4.65" height="4.94" fill="#2dd4a0"><title>ARM9 resident · fx_vec · 68 B · matching C/C++</title></rect>
 <rect class="cell" x="781.75" y="488.38" width="4.65" height="4.94" fill="#263244"><title>ARM9 resident · OS_LoadContext · 68 B · remaining</title></rect>
 <rect class="cell" x="781.75" y="493.32" width="4.65" height="4.94" fill="#263244"><title>ARM9 resident · func_0203af3c · 68 B · remaining</title></rect>
 <rect class="cell" x="781.75" y="498.26" width="4.65" height="4.94" fill="#2dd4a0"><title>ARM9 resident · snd_commands · 68 B · matching C/C++</title></rect>

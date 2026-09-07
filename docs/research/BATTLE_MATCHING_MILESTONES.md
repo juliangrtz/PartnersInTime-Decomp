@@ -577,3 +577,15 @@ one region table, with explicit relocation addends for its columns.
 All functions match completely, without inline assembly. The total is
 249,716 bytes (15.97%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Fixed-point angles and vectors
+
+Six functions add 1,724 matching C bytes. Quadrant reduction and signed table
+lookups reconstruct Atan2 in radians and angle indices, plus one-argument
+AtanIdx. Vector dot/cross products preserve 64-bit intermediates and rounding.
+Normalization reconstructs the hardware divide/square-root sequence and the
+full-precision reciprocal scale, including its final rounding.
+
+All six functions match completely, without inline assembly. The total is
+251,440 bytes (16.08%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.

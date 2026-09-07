@@ -244,3 +244,5 @@ src/game/task.cpp
 src/game/archive_compressed_lifecycle.c
 src/game/archive_memory_decoder.c
 src/game/heap.c
+src/nitro/math/fx_atan.c
+src/nitro/math/fx_vec.c
