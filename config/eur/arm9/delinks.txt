@@ -304,3 +304,12 @@ src/nitro/math/fx_mtx44.c:
 
 src/nitro/gx/gx_projection.c:
     .text start:0x02037328 end:0x020379ac
+
+src/game/save_backup.c:
+    .text start:0x02028350 end:0x0202890c
+
+src/game/save_storage.c:
+    .text start:0x0202890c end:0x02028ce8
+
+src/game/save_storage_load.c:
+    .text start:0x02028e6c end:0x02028ef0

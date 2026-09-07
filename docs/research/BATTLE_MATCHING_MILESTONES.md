@@ -614,3 +614,15 @@ identified as `_ll_sdiv`.
 All three functions match completely, without inline assembly. The total is
 254,440 bytes (16.27%). Module/symbol checks, original-ROM SHA-1, all 66
 tests, generated progress, and the public-content audit pass.
+
+## Save backup and storage access
+
+Thirty-two functions add 2,588 matching C bytes. The backup layer now covers
+EEPROM/flash selection, cartridge locks, asynchronous read/write callbacks,
+status and checksum handling. The storage layer reconstructs signature,
+settings, directory, slot and footer access, whole-image reads and erasure.
+The separate image-initialization routine remains outside the linked C set.
+
+All linked functions match completely, without inline assembly. The total is
+257,028 bytes (16.44%). Module/symbol checks, original-ROM SHA-1, all 66
+tests, generated progress, and the public-content audit pass.
