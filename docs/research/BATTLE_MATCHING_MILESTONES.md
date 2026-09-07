@@ -819,3 +819,16 @@ is now named GameAudio_LoadMapWaves to reflect this recovered behavior.
 The total is 289,292 bytes (18.50%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress and the public-content audit pass. No inline
 assembly was added, and the battle background's callers remain identical.
+
+## Sprite allocation and compaction
+
+Two functions add 3,160 matching C bytes. Allocation handles fixed positions,
+shared resource reuse, and forward or backward free-space searches. Compaction
+closes gaps in either direction and marks moved allocations for upload. Both
+use the recovered OBJ capacity calculation, including the display boundary
+limit and available VRAM. The allocation metadata has both byte and word views.
+
+The total is 292,452 bytes (18.70%). Module/symbol checks, original-ROM SHA-1,
+all 66 tests, generated progress and the public-content audit pass. No inline
+assembly or compiler-setting changes were added. Existing sprite units remain
+identical.

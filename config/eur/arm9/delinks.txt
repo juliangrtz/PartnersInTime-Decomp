@@ -460,3 +460,9 @@ src/game/audio_map_waves.c:
 
 src/game/audio_wave_list.c:
     .text start:0x020278c0 end:0x02027a2c
+
+src/game/sprite_allocation_compact.c:
+    .text start:0x020082d8 end:0x020084d8
+
+src/game/sprite_allocation_create.c:
+    .text start:0x0200856c end:0x02008fc4

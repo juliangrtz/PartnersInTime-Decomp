@@ -304,3 +304,5 @@ src/game/text_next.cpp
 src/nitro/fs/fs_path.c
 src/game/audio_map_waves.c
 src/game/audio_wave_list.c
+src/game/sprite_allocation_compact.c
+src/game/sprite_allocation_create.c

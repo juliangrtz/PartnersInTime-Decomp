@@ -23,9 +23,11 @@ typedef struct GameSpriteAllocation GameSpriteAllocation;
 struct GameSpriteAllocation {
     u32 offset, size;
     GameSpriteAllocation *previous, *next;
-    u32 unknown10;
-    GameSpriteFlags flags;
-    u8 end, reserved[2];
+    u32 resource;
+    union {
+        u32 state;
+        struct { GameSpriteFlags flags; u8 end, reserved[2]; };
+    };
 };
 
 extern void *data_0205a054;
@@ -48,6 +50,9 @@ void GameSpritePalette_MarkDirty(GameSpritePalette *palette, const void *source)
 void *GameSpritePalette_GetBuffer(const GameSpritePalette *palette);
 void GameSpritePalette_Unlink(GameSpritePalette *palette);
 void GameSpriteAllocation_Unlink(GameSpriteAllocation *allocation);
+int GameSpriteAllocation_Compact(int screen, int reverse, int dirty);
+int GameSpriteAllocation_Allocate(GameSpriteAllocation *allocation, int screen, int mode,
+                                  u32 tiles, u8 shared, u32 resource, u8 dirty, u32 first_tile);
 
 extern vu32 *data_0204ff88[2];
 static inline u16 GameSprite_ObjBoundaryShift(int screen)
@@ -63,6 +68,20 @@ static inline u8 *GameSprite_ObjAddress(const GameSpriteAllocation *allocation)
     return allocation->flags.bits.screen == 0
         ? (u8 *)(allocation->offset + 0x06400000)
         : (u8 *)(allocation->offset + 0x06600000);
+}
+
+extern u32 func_0203550c(void), func_020354c4(void);
+static inline u32 GameSprite_ObjCapacity(int screen)
+{
+    if (!screen) {
+        if (func_0203550c() > (GameSprite_ObjBoundary(0) << 10))
+            return GameSprite_ObjBoundary(0) << 10;
+        return func_0203550c();
+    } else {
+        if (func_020354c4() > (GameSprite_ObjBoundary(1) << 10))
+            return GameSprite_ObjBoundary(1) << 10;
+        return func_020354c4();
+    }
 }
 
 /* These copies choose their direction from the relative buffer addresses. */
