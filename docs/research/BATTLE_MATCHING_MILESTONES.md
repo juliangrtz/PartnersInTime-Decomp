@@ -1883,3 +1883,34 @@ build/runtime/eur_field_linear_cancel_verified.
 Matching C/C++ is 369,820 of 1,563,700 bytes (23.65%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Spatial linear movement control
+
+Four functions add 2,120 matching C++ bytes: cancellation, stop-mask checks,
+completion/braking checks and updates. They share the checked linear controller
+and extend its planar behavior with an independent Z axis, ground tracking and
+live-target movement. Temporary controllers preserve virtual dispatch when
+following another entity. Explicit planar/spatial distance calls retain the
+original branching and exact instruction order.
+
+The normal 2,033-frame boot/save-load replay enters update and completion 2,892
+times each, stop-mask checking 6,370 times and cancellation four times. Final
+render lists contain 30/40 valid models, with 55,110/47,962 changed main/sub BG
+bytes and 243 changed palette bytes.
+
+Twelve controlled cases reload that normal checkpoint, seed the linear
+controller of an entity observed in the update loop, and execute one game frame.
+Read-only hooks and RAM postconditions verify individual and combined axes,
+paused/inactive states, fixed-duration completion, ground-tracked completion,
+positive/negative destination crossing, braking and a live target. All pass.
+The target case verifies the nested virtual update through a temporary
+controller. Ground-tracked completion preserves the height at completion entry;
+the earlier update can already have changed that height. Loaded function bytes
+match the original overlay. These are controlled RAM cases, not naturally
+triggered story events.
+
+Evidence remains private under build/runtime/eur_field_spatial_linear_verified
+and build/runtime/eur_field_linear_boundaries. Matching C/C++ is 371,940 of
+1,563,700 bytes (23.79%). All module/symbol checks, 74 tests, generated progress
+and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

@@ -356,7 +356,7 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
-    if label.startswith("FieldLinear_"):
+    if label.startswith(("FieldLinear_", "FieldLinear3D_")):
         pointer = r1 or r0 + 0x1F4
         result = {"entity": f"{r0:#010x}", "controller": f"{pointer:#010x}"}
         if is_arm9_work_ram_pointer(pointer, 0x44):

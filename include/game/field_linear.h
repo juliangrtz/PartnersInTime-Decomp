@@ -14,6 +14,12 @@ void FieldLinear_Cancel(FieldRuntimeEntity *entity, FieldLinearController *movem
 void FieldLinear_Pause(FieldRuntimeEntity *entity, FieldLinearController *movement);
 void FieldLinear_Resume(FieldRuntimeEntity *entity, FieldLinearController *movement);
 
+void FieldLinear3D_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearController *movement);
+int FieldLinear3D_CheckCompletion(FieldRuntimeEntity *entity, FieldLinearController *movement);
+int FieldLinear3D_CheckStopMasks(FieldRuntimeEntity *entity, FieldLinearController *movement);
+void FieldLinear3D_Cancel(FieldRuntimeEntity *entity, FieldLinearController *movement,
+                          int snap_to_destination);
+
 #ifdef __cplusplus
 }
 #endif

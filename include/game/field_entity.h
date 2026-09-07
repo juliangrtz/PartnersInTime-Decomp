@@ -80,7 +80,8 @@ typedef struct FieldLinearController {
         u32 flags;
         struct {
             u32 active_axes : 3, paused : 1, fixed_duration : 1;
-            u32 stop_at_destination : 1, braking : 1, unknown_07_31 : 25;
+            u32 stop_at_destination : 1, braking : 1;
+            u32 stop_mask_a : 6, stop_mask_b : 6, unknown_19_31 : 13;
         } bits;
         struct { u32 x : 1, y : 1, z : 1, unknown_03_31 : 29; } axes;
     };
