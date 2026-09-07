@@ -1,5 +1,7 @@
 extern "C" {
 #include <game/field_entity.h>
+#include <game/field_presentation.h>
+#include <game/field_entity_lifecycle.h>
 #include <game/field_timer.h>
 #include <game/field_timed_renderer.h>
 #include <game/field_script.h>
@@ -19,11 +21,7 @@ extern int func_ov000_02082240(FieldScriptState *target,
 extern void func_ov000_0208911c(void *paired_script_manager,
                                 FieldScriptState *parent,
                                 s16 script_slot);
-extern void func_ov000_020a4f4c(FieldEntity *entity, s16 minimum_x,
-                                s16 maximum_y, u16 width, u16 height,
-                                u16 vertical_extent);
 extern void func_ov000_020a4e84(FieldEntity *entity);
-extern void func_ov000_020a4df8(FieldEntity *entity, int behavior_mode);
 extern void func_ov000_020a4468(FieldEntity *entity, int scale_mode,
                                 s16 target_x, s16 target_y, s16 step_x,
                                 s16 step_y, int reserved);
@@ -42,11 +40,6 @@ extern void func_ov000_020a412c(FieldEntity *entity, int angle_mode,
                                 int reserved);
 extern void func_ov000_020a40f8(FieldEntity *entity, int snap_to_target,
                                 int reserved);
-extern void func_ov000_020a7410(FieldEntity *entity, int starting_speed,
-                                int acceleration, int maximum_speed,
-                                int idle_deceleration,
-                                int reverse_deceleration,
-                                int turn_speed_limit);
 extern void func_ov000_020ae520(FieldEntity *entity);
 extern void func_ov000_020b1394(FieldEntity *entity);
 extern void func_ov000_020a6c7c(FieldEntity *entity, int animation_id,
@@ -1800,7 +1793,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_INTERACTION_BOUNDS:
-            func_ov000_020a4f4c(
+            FieldEntity_SetInteractionBounds(
                 entity, (s16)arguments[1],
                 (s16)arguments[2], (u16)arguments[3],
                 (u16)arguments[4], (u16)arguments[5]);
@@ -1983,14 +1976,14 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 runtime_entity->saved_presentation_flag_bits.
                     has_saved_behavior = 1;
             }
-            func_ov000_020a4df8(
+            FieldEntity_SetBehaviorMode(
                 &runtime_entity->base, arguments[1]);
             break;
 
         case FIELD_VM_RESTORE_ENTITY_BEHAVIOR_STATE:
             if (runtime_entity->saved_presentation_flag_bits.
                     has_saved_behavior != 0) {
-                func_ov000_020a4df8(
+                FieldEntity_SetBehaviorMode(
                     &runtime_entity->base,
                     runtime_entity->saved_presentation_flag_bits.
                         saved_behavior_mode);
@@ -2149,8 +2142,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_LOCOMOTION_PARAMETERS:
-            func_ov000_020a7410(
-                entity, arguments[1], arguments[2],
+            FieldEntity_SetLocomotionParameters(
+                runtime_entity, arguments[1], arguments[2],
                 arguments[3], -arguments[4],
                 -arguments[5], arguments[6]);
             break;

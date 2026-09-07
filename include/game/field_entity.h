@@ -60,7 +60,9 @@ typedef struct FieldContactDirectionFlags {
 typedef struct FieldBaseStateFlags {
     /* Enables waiting for the entity renderer's current animation. */
     u32 animation_wait_enabled : 1;
-    u32 unknown_01_07 : 7;
+    u32 unknown_01 : 1;
+    u32 facing_direction : 3;
+    u32 previous_facing_direction : 3;
     u32 retain_offscreen_contact : 1;
     u32 unknown_09_11 : 3;
     u32 reserved_state : 1;
@@ -134,7 +136,8 @@ typedef struct FieldCollisionStateFlags {
 typedef struct FieldRenderStateFlags {
     u32 unknown_00_02 : 3;
     u32 semitransparent : 1;
-    u32 unknown_04_07 : 4;
+    u32 render_linked : 1;
+    u32 unknown_05_07 : 3;
     u32 animation_active : 1;
     u32 animation_suppressed : 1;
     u32 unknown_10_11 : 2;
@@ -152,7 +155,9 @@ typedef struct FieldSavedPresentationFlags {
     u32 has_saved_palette_profile : 1;
     u32 has_saved_resource_animation : 1;
     u32 has_saved_animation : 1;
-    u32 unknown_20_31 : 12;
+    u32 unknown_20_29 : 10;
+    u32 skip_auxiliary_renderer : 1;
+    u32 unknown_31 : 1;
 } FieldSavedPresentationFlags;
 
 typedef struct FieldRoamingFlags {
@@ -193,7 +198,9 @@ struct FieldEntityVTable {
     void (*pause_script)(FieldEntity *entity);
     void (*resume_script)(FieldEntity *entity);
     int (*get_property)(FieldEntity *entity, int property_id);
-    u8 unknown_1c[0x34];
+    u8 unknown_1c[0x10];
+    void (*release_renderers)(FieldEntity *entity);
+    u8 unknown_30[0x20];
     void (*cancel_planar_movement)(FieldEntity *entity, void *controller,
                                    int snap_to_destination);
     u8 unknown_54[8];
@@ -225,7 +232,7 @@ typedef struct FieldEntity {
     virtual void unknown_20();
     virtual void unknown_24();
     virtual void unknown_28();
-    virtual void unknown_2c();
+    virtual void release_renderers();
     virtual void unknown_30();
     virtual void unknown_34();
     virtual void unknown_38();
@@ -265,7 +272,9 @@ typedef struct FieldEntity {
             u16 property_00a_unknown_01 : 1;
             u16 subtype : 4;
             u16 resource_set : 1;
-            u16 property_00a_unknown_07_15 : 9;
+            u16 property_00a_unknown_07_08 : 2;
+            u16 heap : 3;
+            u16 property_00a_unknown_12_15 : 4;
         } property_00a_bits;
     };
     u8 unknown_00c[0xC4];
@@ -296,6 +305,21 @@ typedef struct FieldRenderAnimationRange {
 } FieldRenderAnimationRange;
 typedef char FieldRenderAnimationRange_SizeCheck[sizeof(FieldRenderAnimationRange) == 8 ? 1 : -1];
 
+typedef struct FieldInteractionBounds {
+    s8 minimum_x, maximum_y, width, height, vertical_extent;
+} FieldInteractionBounds;
+typedef struct FieldAnimationBoundsIndex {
+    u8 unknown_00[2], bounds_index, unknown_03[3];
+} FieldAnimationBoundsIndex;
+typedef char FieldInteractionBounds_SizeCheck[sizeof(FieldInteractionBounds) == 5 ? 1 : -1];
+typedef char FieldAnimationBoundsIndex_SizeCheck[sizeof(FieldAnimationBoundsIndex) == 6 ? 1 : -1];
+
+typedef struct FieldLocomotionParameters {
+    fx32 starting_speed, acceleration, maximum_speed;
+    fx32 deceleration, reverse_deceleration, turn_speed_limit;
+} FieldLocomotionParameters;
+typedef char FieldLocomotionParameters_SizeCheck[sizeof(FieldLocomotionParameters) == 24 ? 1 : -1];
+
 struct FieldRenderObject {
 #ifdef __cplusplus
     virtual void unknown_00();
@@ -303,12 +327,12 @@ struct FieldRenderObject {
     virtual void unknown_08();
     virtual void unknown_0c();
     virtual void unknown_10();
-    virtual void unknown_14();
+    virtual void delete_self();
     virtual void unknown_18();
     virtual void unknown_1c();
     virtual void unknown_20();
     virtual void unknown_24();
-    virtual void unknown_28();
+    virtual void stop();
     virtual void unknown_2c();
     virtual void unknown_30();
     virtual void unknown_34();
@@ -383,9 +407,20 @@ struct FieldRuntimeEntity {
     u8 unknown_0ec[8];
     fx32 position_x;
     fx32 position_y;
-    u8 unknown_0fc[0x28];
+    u8 unknown_0fc[8];
+    const void *bounds_resource;
+    const FieldInteractionBounds *interaction_bounds;
+    const FieldAnimationBoundsIndex *animation_bounds;
+    u8 bounds_animation_count;
+    s8 bounds_index;
+    u8 unknown_112[2];
+    fx32 interaction_min_x, interaction_max_x, interaction_min_y, interaction_max_y;
     fx32 interaction_vertical_extent;
-    u8 unknown_128[0x5C];
+    fx32 movement_speed, movement_velocity_x, movement_velocity_y, unknown_134;
+    FieldLocomotionParameters locomotion, initial_locomotion;
+    u8 unknown_168[0x10];
+    u16 unknown_178;
+    u8 unknown_17a[0xA];
     union {
         u32 base_state_flags;
         FieldBaseStateFlags base_state_flag_bits;
@@ -404,7 +439,8 @@ struct FieldRuntimeEntity {
     u16 animation_id;
     u16 saved_animation_id;
     u16 saved_model_animation;
-    u8 unknown_1a4[0x3C];
+    s16 saved_animation_frame;
+    u8 unknown_1a6[0x3A];
     FieldRenderObject *render_object;
     u8 unknown_1e4[0x10];
     union {
@@ -438,11 +474,15 @@ struct FieldRuntimeEntity {
     fx32 navigation_min_y;
     fx32 navigation_max_y;
     fx32 navigation_vertical_extent;
-    u8 unknown_334[0x30];
+    u8 unknown_334[0x20];
+    fx32 unknown_354;
+    u8 unknown_358[0xC];
     fx32 default_vertical_launch_velocity;
     fx32 default_gravity;
     fx32 terminal_fall_velocity;
-    u8 unknown_370[0x1C];
+    u32 unknown_370;
+    fx32 initial_vertical_launch_velocity, initial_gravity, initial_terminal_fall_velocity;
+    u8 unknown_380[0xC];
     union {
         u32 field_state_flags;
         FieldEntityFieldStateFlags field_state_flag_bits;

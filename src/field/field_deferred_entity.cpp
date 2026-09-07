@@ -1,3 +1,4 @@
+#include <game/field_entity_lifecycle.h>
 #include <game/field_deferred_entity.h>
 #include <game/field_blink.h>
 extern "C" {
@@ -8,8 +9,6 @@ extern const s8 data_ov000_020c0c9c[];
 extern const s8 data_ov000_020c0cc0[];
 extern void func_ov000_020a7a80(FieldRuntimeEntity *, const FieldRuntimeEntity *);
 extern void func_ov000_020b5e84(FieldRuntimeEntity *, const void *, const void *, int, const void *, u8);
-extern void func_ov000_020b57e8(FieldRuntimeEntity *);
-extern void func_ov000_020b573c(FieldRuntimeEntity *);
 extern void func_ov000_020b4990(FieldRuntimeEntity *);
 extern void func_0202cbd4(void *, int, u32);
 
@@ -30,7 +29,7 @@ FieldDeferredEntity *FieldDeferredEntity_Init(FieldDeferredEntity *entity, const
 
 FieldDeferredEntity *FieldDeferredEntity_InitEmpty(FieldDeferredEntity *entity)
 {
-    func_ov000_020b57e8(&entity->runtime);
+    FieldEntity3D_Init(&entity->runtime);
     *(FieldEntityVTable **)entity = &data_ov000_020c13e0;
     func_0202cbd4((u8 *)entity + 4, 0, sizeof(*entity) - 4);
     return entity;
@@ -39,14 +38,14 @@ FieldDeferredEntity *FieldDeferredEntity_InitEmpty(FieldDeferredEntity *entity)
 FieldDeferredEntity *FieldDeferredEntity_DestroyBase(FieldDeferredEntity *entity)
 {
     *(FieldEntityVTable **)entity = &data_ov000_020c13e0;
-    func_ov000_020b573c(&entity->runtime);
+    FieldEntity3D_DestroyBase(&entity->runtime);
     return entity;
 }
 
 FieldDeferredEntity *FieldDeferredEntity_Delete(FieldDeferredEntity *entity)
 {
     *(FieldEntityVTable **)entity = &data_ov000_020c13e0;
-    func_ov000_020b573c(&entity->runtime);
+    FieldEntity3D_DestroyBase(&entity->runtime);
     GameHeap_Delete(entity);
     return entity;
 }

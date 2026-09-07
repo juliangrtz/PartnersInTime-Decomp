@@ -427,3 +427,7 @@ src/field/field_direction.c
 src/field/field_deferred_entity.cpp
 src/field/field_blink.c
 src/field/field_blink_callbacks.c
+src/field/field_behavior.cpp
+src/field/field_interaction_bounds.cpp
+src/field/field_entity_lifecycle.cpp
+src/field/field_spatial_lifecycle.cpp

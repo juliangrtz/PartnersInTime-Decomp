@@ -1665,3 +1665,39 @@ Evidence remains private under build/runtime/eur_field_blink_verified and
 eur_field_blink_boundaries. The total is 356,732 of 1,563,700 bytes (22.81%).
 All module/symbol checks, 74 tests, generated progress and public-content checks
 pass. The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Field entity lifetimes, motion parameters and bounds
+
+Twenty-one functions add 1,428 matching C++ bytes: planar/spatial constructors
+and destructors, primary/auxiliary renderer allocation and release, renderer
+deletion, locomotion/vertical parameter setters and restoration, behavior-mode
+selection and interaction bounds. Shared declarations identify the 0x2B0-byte
+planar allocation, 0x520-byte spatial allocation and 0x13C-byte renderer. The
+larger FieldRuntimeEntity interface describes offsets shared by both variants;
+fields beyond the planar allocation belong to the spatial extension.
+
+Allocation uses heap bits 9..11 of entity property 0x00A and retains the
+constructor's returned pointer. Release preserves the primary animation frame,
+unlinks a linked renderer, frees its texture-offset array and invokes the
+deleting virtual method. The shared layout now names the current and initial
+locomotion parameters, signed bounds records, heap selector and optional-renderer
+allocation flag. Field VM calls use the shared behavior, bounds and locomotion
+declarations with unchanged compiled bytes. The packed bounds-table lookup
+remains assembly after its candidate selected different address instructions.
+
+A normal 2,033-frame boot/save-load replay entered spatial initialization four
+times and its planar initializer four times. It entered primary renderer
+allocation 16 times and the spatial allocation wrapper 13 times, locomotion
+restoration 69 times, spatial motion restoration 35 times, bounds selection
+35 times, behavior selection ten times and locomotion selection twice. Live
+initial locomotion parameters were [8192, 0, 8192, -8192, 0, 8192] in Q12 units.
+Observed bounds included x=-8, y=0, width=16, height=8 or 16 and vertical extent=32.
+Final render lists contain 30/40 valid models; main/sub BG memory changed by
+55,110/47,962 bytes, main OBJ memory by 12,297 and palettes by 243 bytes.
+
+Cleanup, alternate constructor entries and the vertical setter were not entered
+by this route; their linked bytes match. Evidence remains private under
+build/runtime/eur_field_lifetimes_verified. The total is 358,160 of 1,563,700 bytes
+(22.90%). All module/symbol checks, 74 tests, generated progress and
+public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

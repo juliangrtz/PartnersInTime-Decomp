@@ -356,7 +356,28 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
-    if label.startswith("FieldBlink_") and is_main_ram_pointer(r0, 0x514):
+    if label.startswith(("FieldEntity2D_", "FieldEntity3D_")):
+        return {"entity": f"{r0:#010x}"}
+
+    if label == "FieldEntity_SetBehaviorMode":
+        return {"entity": f"{r0:#010x}", "requested_mode": to_s32(r1)}
+
+    if label == "FieldEntity_SetInteractionBounds":
+        result = {"entity": f"{r0:#010x}", "minimum_x": to_s32(r1),
+                  "maximum_y": to_s32(r2), "width": r3 & 0xFFFF}
+        stack = registers.sp & 0xFFFFFFFF
+        if is_arm9_work_ram_pointer(stack, 8):
+            result.update(height=read_u16(emulator, stack), vertical_extent=read_u16(emulator, stack + 4))
+        return result
+
+    if label == "FieldEntity_ResetLocomotionParameters" and is_main_ram_pointer(r0, 0x168):
+        return {"entity": f"{r0:#010x}", "initial_locomotion_q12":
+                [read_s32(emulator, r0 + 0x150 + index * 4) for index in range(6)]}
+
+    if label in {"FieldEntity_SetLocomotionParameters", "FieldEntity_SetVerticalParameters"}:
+        return {"entity": f"{r0:#010x}", "arguments_1_3": [to_s32(value) for value in (r1, r2, r3)]}
+
+    if label.startswith("FieldBlink_") and is_main_ram_pointer(r0, 0x2B0):
         flags = read_u32(emulator, r0 + 0x184)
         frames = (flags >> 17) & 0xFF
         result = {"entity": f"{r0:#010x}", "mode": (flags >> 13) & 3,
