@@ -59,6 +59,12 @@ src/nitro/os/os_thread_core.c:
 src/nitro/os/os_thread_list.c:
     .text       start:0x02039858 end:0x02039938
 
+src/nitro/os/os_tick.c:
+    .text       start:0x0203a6fc end:0x0203a8ec
+
+src/nitro/os/os_alarm.c:
+    .text       start:0x0203a8fc end:0x0203ad78
+
 src/nitro/gx/gx_command_list_end.c:
     .text       start:0x02038a04 end:0x02038ab4
 

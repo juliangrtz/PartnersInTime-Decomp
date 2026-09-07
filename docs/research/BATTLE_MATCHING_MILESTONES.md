@@ -133,3 +133,17 @@ relocation-name differences for the old separately named field aliases;
 after linking, those addresses and all instructions are byte-identical.
 The complete module and symbol checks, original-ROM SHA-1, generated progress,
 public-content audit, and 66 tests verify this milestone.
+
+## Timer ticks and alarms
+
+The tick and alarm units add 12 functions and 1,644 matching bytes in C.
+Timer 0 supplies a 16-bit counter with a 48-bit software overflow count.
+The read preserves volatile accesses, interrupt exclusion, and the pending
+overflow correction. Alarms maintain a deadline-ordered doubly linked list,
+reschedule periodic events using unsigned 64-bit division, and program timer 1
+with the original late-event and long-delay reload values.
+
+The unsigned 64-bit division entry at `0x0204626C` is identified as `_ll_udiv`,
+allowing the C division expression to link to the original runtime helper.
+All functions and the linked modules match. The reference-ROM hash, generated
+progress check, public-content audit, and 66 tests pass.

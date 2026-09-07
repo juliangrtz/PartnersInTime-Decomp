@@ -172,3 +172,5 @@ src/nitro/os/os_message.c
 src/nitro/os/os_mutex.c
 src/nitro/os/os_thread_core.c
 src/nitro/os/os_thread_list.c
+src/nitro/os/os_tick.c
+src/nitro/os/os_alarm.c
