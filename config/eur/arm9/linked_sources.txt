@@ -367,3 +367,4 @@ src/overlay005/asset_tables.c
 src/overlay007/party_values.c
 src/overlay007/party_navigation.c
 src/overlay007/point_motion.c
+src/overlay007/items.c

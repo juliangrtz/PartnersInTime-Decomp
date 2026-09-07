@@ -1,28 +1,9 @@
-#include <nitro.h>
+#include <game/overlay007_party.h>
 #include <game/save_data.h>
-
-/* The scene's party roster: the rotating display order and the per-slot values
-   the interface shows. */
-typedef struct Overlay7Party {
-    u8 unknown_00;
-    u8 kind;
-    u8 unknown_02[2];
-    u8 slots[128];
-    s8 *values;
-    u8 unknown_88[128];
-    s8 first;
-    u8 count;
-    u8 unknown_10a;
-    union { s8 offset; u8 index; } span;
-} Overlay7Party;
-
-typedef char Overlay7PartySizeCheck[sizeof(Overlay7Party) == 0x10c ? 1 : -1];
 
 /* Per-kind limits, stored as two interleaved columns. */
 extern const u8 data_ov007_0208dad4[];
 extern const u8 data_ov007_0208daf4[], data_ov007_0208daf5[];
-extern u8 data_ov007_020905f0[];
-extern const u8 data_0205004d[], data_02050165[], data_02050299[], data_020505cd[];
 
 extern s8 *func_ov007_02075d60(Overlay7Party *party, int kind, int mode);
 

@@ -1050,3 +1050,20 @@ Travelled distance is averaged through the hardware square-root unit.
 The total is 326,752 of 1,563,700 bytes (20.90%). Module/symbol checks,
 original-ROM SHA-1, all 66 tests, generated progress and the public-content
 audit pass.
+
+
+## Overlay 7 item rows and caption measurement
+
+Eight functions add 840 matching C bytes. The roster struct grows the per-kind
+starting offsets and the 48-byte text object the captions are built in, so the
+three units that model it now share include/game/overlay007_party.h. The item
+table has 33 rows of 28 bytes: identifiers, a packed word holding an amount, a
+percentage and a one-bit group, and five stat deltas that only the gear kind
+copies out. Captions run the same tail: build the string, clear the text
+cursor's x and y and measure the line. The membership count duplicates its loop
+because each arm compares and increments on its own, which lets the compiler
+unswitch the kind test out of the loop.
+
+The total is 327,592 of 1,563,700 bytes (20.95%). Module/symbol checks,
+original-ROM SHA-1, all 66 tests, generated progress and the public-content
+audit pass.

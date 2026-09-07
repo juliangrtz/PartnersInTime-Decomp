@@ -57,3 +57,6 @@ src/overlay007/party_navigation.c:
 
 src/overlay007/point_motion.c:
     .text start:0x02086974 end:0x02086d60
+
+src/overlay007/items.c:
+    .text start:0x02074a00 end:0x02074d48
