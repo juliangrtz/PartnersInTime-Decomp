@@ -1,6 +1,7 @@
 #include <game/battle_archive.h>
 #include <game/battle_interface_assets.h>
 #include <game/save_data.h>
+#include <game/text.h>
 
 enum BattleInterfaceConstant {
     SAVE_LANGUAGE_OFFSET = 0x515,
@@ -15,12 +16,6 @@ extern const u8 data_ov002_020bf6e8[];
 extern const u8 data_ov002_020bf6f4[];
 
 void *GameHeap_Allocate(u32 heap_id, u32 size, const void *allocator, int use_default);
-void func_020262f4(BattleInterfaceLayer *layer, void *asset_table,
-                   void *asset, int unknown_3, int unknown_4, int unknown_5,
-                   int unknown_6, int unknown_7, int unknown_8, int unknown_9,
-                   int unknown_10, int unknown_11, int unknown_12,
-                   int unknown_13);
-
 void BattleInterface_InitLayersTask(BattleQueuedTask *task);
 void BattleInterface_LoadSharedAssetTask(BattleQueuedTask *task);
 void BattleInterface_LoadLocalizedAssetTask(BattleQueuedTask *task);
@@ -166,8 +161,8 @@ void BattleInterface_InitLayersTask(BattleQueuedTask *task) {
     layer->y = -8;
     layer->width = 144;
     layer->height = 72;
-    func_020262f4(layer,
-                   ((BattleContext *)gBattleContext)->interface_assets,
+    GameText_Init((GameText *)layer,
+                   (const u32 *const *)((BattleContext *)gBattleContext)->interface_assets,
                    gBattleContext + BATTLE_INTERFACE_STATIC_DATA_OFFSET,
                    0, 0, 0, 1, 3, 1, 6, 31, 0, 255, 0);
 
@@ -181,8 +176,8 @@ void BattleInterface_InitLayersTask(BattleQueuedTask *task) {
     asset = GameHeap_Allocate(
         ((BattleContext *)gBattleContext)->runtime.heap_id,
         layer->allocation_size, data_ov002_020bf6d8, 1);
-    func_020262f4(layer,
-                   ((BattleContext *)gBattleContext)->interface_assets,
+    GameText_Init((GameText *)layer,
+                   (const u32 *const *)((BattleContext *)gBattleContext)->interface_assets,
                    asset, 0, 0, 0, 1, 3, 1, 6, 31, 0, 255, 0);
 
     layer = &((BattleContext *)gBattleContext)->interface_layer_2;
@@ -195,8 +190,8 @@ void BattleInterface_InitLayersTask(BattleQueuedTask *task) {
     asset = GameHeap_Allocate(
         ((BattleContext *)gBattleContext)->runtime.heap_id,
         layer->allocation_size, data_ov002_020bf6d8, 1);
-    func_020262f4(layer,
-                   ((BattleContext *)gBattleContext)->interface_assets,
+    GameText_Init((GameText *)layer,
+                   (const u32 *const *)((BattleContext *)gBattleContext)->interface_assets,
                    asset, 0, 0, 0, 1, 3, 1, 6, 15, 0, 255, 0);
 
     layer = &((BattleContext *)gBattleContext)->interface_layer_3;
@@ -209,8 +204,8 @@ void BattleInterface_InitLayersTask(BattleQueuedTask *task) {
     asset = GameHeap_Allocate(
         ((BattleContext *)gBattleContext)->runtime.heap_id,
         layer->allocation_size, data_ov002_020bf6d8, 1);
-    func_020262f4(layer,
-                   ((BattleContext *)gBattleContext)->interface_assets,
+    GameText_Init((GameText *)layer,
+                   (const u32 *const *)((BattleContext *)gBattleContext)->interface_assets,
                    asset, 0, 0, 0, 1, 3, 1, 6, 15, 0, 255, 0);
 
     task->callback = 0;

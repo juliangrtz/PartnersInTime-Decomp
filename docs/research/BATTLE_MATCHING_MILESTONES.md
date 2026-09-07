@@ -778,3 +778,19 @@ channel allocation.
 The total is 282,196 bytes (18.05%). Module/symbol checks, original-ROM SHA-1,
 all 66 tests, generated progress and the public-content audit pass. No inline
 assembly was added. Encoded sound dispatch remains a private candidate.
+
+## Text layout, control codes and character rendering
+
+Eight functions add 4,512 matching C/C++ bytes. They reconstruct the 48-byte
+text state, initialization/reset, line and bounds measurement, callback
+registration, control-code dispatch and the complete character reader.
+This includes font-bank selection, extended character codes, spaces, line
+alignment, scaling, glyph drawing and accumulated text bounds. Callback
+implementations confirm that the control mode is passed as a third argument.
+The measured dimensions use a packed 16-bit return, while drawing returns
+the small size aggregate.
+
+The total reaches 286,708 bytes (18.34%). Module/symbol checks, original-ROM
+SHA-1, all 66 tests, generated progress and the public-content audit pass.
+No inline assembly was added. The callback-table relocations resolve to the
+original addresses, and the existing battle-interface callers still match.

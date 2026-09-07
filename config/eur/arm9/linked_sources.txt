@@ -297,3 +297,7 @@ src/game/sprite_effect_scale.c
 src/game/sprite_image_decode.c
 src/battle/battle_impact_particle_motion.c
 src/game/audio_scene.c
+src/game/text_state.c
+src/game/text_measure.c
+src/game/text_control.c
+src/game/text_next.cpp

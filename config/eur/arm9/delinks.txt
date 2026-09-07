@@ -439,3 +439,15 @@ src/game/sprite_image_decode.c:
 
 src/game/audio_scene.c:
     .text start:0x02026470 end:0x020264a8
+
+src/game/text_state.c:
+    .text start:0x020261d8 end:0x02026470
+
+src/game/text_measure.c:
+    .text start:0x02025dd8 end:0x02026000
+
+src/game/text_control.c:
+    .text start:0x020250f8 end:0x02025774
+
+src/game/text_next.cpp:
+    .text start:0x02025774 end:0x02025dd8
