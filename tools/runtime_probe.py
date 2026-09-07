@@ -356,6 +356,26 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label.startswith(("FieldOrbit_", "FieldOrbit3D_")):
+        result = {"entity": f"{r0:#010x}"}
+        if label == "FieldOrbit_AdjustRadius":
+            result.update(radius_q12=to_s32(r1), angle=r2 & 0xFFFF, scale_q12=to_s32(r3))
+            return result
+        if label == "FieldOrbit3D_CalculatePosition":
+            stack = registers.sp & 0xFFFFFFFF
+            pointer = read_u32(emulator, stack) if is_arm9_work_ram_pointer(stack, 4) else 0
+        else:
+            pointer = r3 if label == "FieldOrbit_CalculatePosition" else (r1 or r0 + 0x238)
+        result["controller"] = f"{pointer:#010x}"
+        if is_arm9_work_ram_pointer(pointer, 0x48):
+            flags = read_u32(emulator, pointer)
+            result.update(flags=f"{flags:#010x}", active=bool(flags & 1), paused=bool(flags & 2),
+                          elapsed_frames=read_u32(emulator, pointer + 4),
+                          speed_q12=read_s32(emulator, pointer + 8),
+                          angle=read_s32(emulator, pointer + 0x20),
+                          remaining_angle=read_s32(emulator, pointer + 0x24))
+        return result
+
     if label in {"FieldEntity2D_InitPlacement", "FieldEntity2D_InitPlacementBase",
                  "FieldEntity3D_InitPlacement", "FieldEntity3D_InitPlacementBase"}:
         result = {"entity": f"{r0:#010x}", "entity_index": to_s32(r1), "spawn": f"{r2:#010x}"}

@@ -78,10 +78,31 @@ typedef struct FieldPlanarMovementFlags {
     u32 unknown_03_31 : 29;
 } FieldPlanarMovementFlags;
 
-typedef struct FieldVerticalControllerFlags {
-    u32 active : 1;
-    u32 unknown_01_31 : 31;
-} FieldVerticalControllerFlags;
+/* Angles use 65536 units per turn. Planar orbit zero points upward.
+ * The spatial implementation uses the same controller at +0x238. */
+typedef struct FieldOrbitController {
+    union {
+        u32 flags;
+        struct {
+            u32 active : 1, paused : 1, fixed_duration : 1;
+            u32 plane : 2; /* 0: Y/Z, 1: X/Z, 2: X/Y. */
+            u32 stop_at_destination : 1, braking : 1;
+            u32 stop_mask_a : 6, stop_mask_b : 6, unknown_19_23 : 5;
+            s32 direction : 8;
+        } bits;
+        struct { u8 unknown_00[3]; s8 direction; } bytes;
+    };
+    u32 elapsed_frames;
+    fx32 speed;
+    union { u32 duration_frames; fx32 acceleration; } timing;
+    fx32 deceleration, maximum_speed, unknown_18;
+    s32 destination_angle, angle, remaining_angle;
+    fx32 vertical_scale, radius, unknown_30, circumference;
+    fx32 center_x, center_y, center_z;
+    FieldRuntimeEntity *center_entity;
+} FieldOrbitController;
+
+typedef char FieldOrbitController_SizeCheck[sizeof(FieldOrbitController) == 0x48 ? 1 : -1];
 
 typedef struct FieldTransformFlags {
     u16 scaling_active : 2;
@@ -101,7 +122,7 @@ typedef struct FieldEntityRuntimeFlags {
     u32 alternate_collision_faces : 1;
     u32 horizontal_sync_dirty : 1;
     u32 vertical_sync_dirty : 1;
-    u32 unknown_06_20 : 15;
+    u32 unknown_06_08 : 3, contact_mask_b : 6, unknown_15_20 : 6;
     u32 unknown_21 : 1, unknown_22 : 1, unknown_23_24 : 2;
     u32 auto_auxiliary_priority : 1;
     u32 auto_priority_0 : 1;
@@ -209,7 +230,7 @@ struct FieldEntityVTable {
     void (*cancel_planar_movement)(FieldEntity *entity, void *controller,
                                    int snap_to_destination);
     u8 unknown_54[8];
-    void (*cancel_vertical_movement)(FieldEntity *entity, void *controller,
+    void (*cancel_orbit_movement)(FieldEntity *entity, void *controller,
                                      int snap_to_destination);
     void (*set_visible)(FieldEntity *entity, int visible);
     u8 unknown_64[0x10];
@@ -249,7 +270,7 @@ typedef struct FieldEntity {
     virtual void cancel_planar_movement(void *controller, int snap_to_destination);
     virtual void unknown_54();
     virtual void unknown_58();
-    virtual void cancel_vertical_movement(void *controller, int snap_to_destination);
+    virtual void cancel_orbit_movement(FieldOrbitController *controller, int snap_to_destination);
     virtual void set_visible(int visible);
     virtual void unknown_64();
     virtual void unknown_68();
@@ -418,7 +439,7 @@ struct FieldRuntimeEntity {
     u8 unknown_0ec[8];
     fx32 position_x;
     fx32 position_y;
-    u8 unknown_0fc[8];
+    fx32 previous_position_x, previous_position_y;
     const void *bounds_resource;
     const FieldInteractionBounds *interaction_bounds;
     const FieldAnimationBoundsIndex *animation_bounds;
@@ -460,11 +481,7 @@ struct FieldRuntimeEntity {
         FieldPlanarMovementFlags planar_movement_flag_bits;
     };
     u8 unknown_1f8[0x40];
-    union {
-        u32 vertical_controller_flags;
-        FieldVerticalControllerFlags vertical_controller_flag_bits;
-    };
-    u8 unknown_23c[0x44];
+    FieldOrbitController orbit_controller;
     union {
         u16 transform_flags;
         FieldTransformFlags transform_flag_bits;
@@ -475,7 +492,9 @@ struct FieldRuntimeEntity {
     u16 unknown_2ba;
     fx32 position_z;
     s32 unknown_2c0;
-    u8 unknown_2c4[0x20];
+    u8 unknown_2c4[4];
+    fx32 previous_position_z;
+    u8 unknown_2cc[0x18];
     s8 unknown_2e4[4];
     s32 body_corner_angles[4];
     fx32 body_min_x;
@@ -512,7 +531,7 @@ struct FieldRuntimeEntity {
     };
     union {
         u32 unknown_3a0;
-        struct { u32 unknown_00_19 : 20, unknown_20_25 : 6, unknown_26_31 : 6; } unknown_3a0_bits;
+        struct { u32 unknown_00_01 : 2, contact_mask_a : 6, unknown_08_19 : 12, unknown_20_25 : 6, unknown_26_31 : 6; } unknown_3a0_bits;
     };
     FieldContactDirectionFlags contact_direction_flags;
     u8 unknown_3a8[0x20];

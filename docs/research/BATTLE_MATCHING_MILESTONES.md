@@ -1761,3 +1761,38 @@ build/runtime/eur_field_spatial_spawn_verified. Matching C/C++ is 362,480 of
 1,563,700 bytes (23.18%). All module/symbol checks, 74 tests, generated progress
 and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Planar and spatial orbit controllers
+
+Twelve functions add 2,792 matching C++ bytes: radius adjustment, planar and
+spatial position calculation, pause/resume, cancellation, frame advancement,
+braking, movement updates and spatial stop masks. A checked 72-byte controller
+replaces the opaque +0x238 block. Vtable slots and the reconstructed calculations
+establish orbital movement, correcting the earlier vertical-controller name in
+the Scene VM interface. Spatial modes operate in Y/Z, X/Z or X/Y and can follow
+another entity's displacement on the remaining axis. The fixed-point expressions
+retain explicit intermediate values and the original addition grouping.
+
+A normal 2,033-frame boot/save-load replay entered the spatial update and frame
+advancement functions 2,100 times each and the stop-mask check 5,578 times. All
+observed controllers were inactive. The planar helpers, spatial cancellation
+and active position calculation were not entered naturally by this route.
+Final render lists contain 30/40 valid models; main/sub BG memory changed by
+55,110/47,962 bytes and palettes by 243 bytes.
+
+Thirteen additional controlled cases reload that checkpoint, seed only the
+embedded orbit controller of a normally updated field entity, and execute one
+game frame. All pass: each plane with a fixed center and a live entity center,
+paused/inactive controllers, fixed-duration and remaining-angle completion,
+entering braking distance, staying outside it and the braking speed floor.
+Read-only entry/return hooks verify calculated coordinates against live positions
+and the game's sine table. The cases perform 13 position checks, including two
+for each completion case. Loaded function bytes match the original overlay.
+These are RAM-seeded boundary checks, not naturally triggered story events;
+planar pause/resume and cancellation remain covered by exact linked bytes.
+
+Evidence remains private under build/runtime/eur_field_spatial_orbit_verified
+and build/runtime/eur_field_orbit_boundaries. Matching C/C++ is 365,272 of
+1,563,700 bytes (23.36%). All module/symbol checks, 74 tests, generated progress
+and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
