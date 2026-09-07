@@ -73,10 +73,27 @@ typedef struct FieldBaseStateFlags {
     u32 blink_offset : 7;
 } FieldBaseStateFlags;
 
-typedef struct FieldPlanarMovementFlags {
-    u32 active_state : 3;
-    u32 unknown_03_31 : 29;
-} FieldPlanarMovementFlags;
+/* Shared linear controller: active bits select X, Y and Z independently.
+ * The planar implementation uses X/Y; spatial overrides share this layout. */
+typedef struct FieldLinearController {
+    union {
+        u32 flags;
+        struct {
+            u32 active_axes : 3, paused : 1, fixed_duration : 1;
+            u32 stop_at_destination : 1, braking : 1, unknown_07_31 : 25;
+        } bits;
+        struct { u32 x : 1, y : 1, z : 1, unknown_03_31 : 29; } axes;
+    };
+    u32 unknown_04, elapsed_frames;
+    union { u32 duration_frames; fx32 speed; } timing;
+    fx32 acceleration, deceleration, maximum_speed;
+    fx32 start_x, start_y, start_z;
+    fx32 destination_x, destination_y, destination_z;
+    fx32 velocity_x, velocity_y, velocity_z;
+    FieldRuntimeEntity *target;
+} FieldLinearController;
+
+typedef char FieldLinearController_SizeCheck[sizeof(FieldLinearController) == 0x44 ? 1 : -1];
 
 /* Angles use 65536 units per turn. Planar orbit zero points upward.
  * The spatial implementation uses the same controller at +0x238. */
@@ -228,7 +245,7 @@ struct FieldEntityVTable {
     u8 unknown_1c[0x10];
     void (*release_renderers)(FieldEntity *entity);
     u8 unknown_30[0x20];
-    void (*cancel_planar_movement)(FieldEntity *entity, void *controller,
+    void (*cancel_linear_movement)(FieldEntity *entity, FieldLinearController *controller,
                                    int snap_to_destination);
     u8 unknown_54[8];
     void (*cancel_orbit_movement)(FieldEntity *entity, FieldOrbitController *controller,
@@ -266,9 +283,9 @@ typedef struct FieldEntity {
     virtual void unknown_3c();
     virtual void unknown_40();
     virtual void unknown_44();
-    virtual void unknown_48();
+    virtual void update_linear_movement(FieldLinearController *controller);
     virtual void unknown_4c();
-    virtual void cancel_planar_movement(void *controller, int snap_to_destination);
+    virtual void cancel_linear_movement(FieldLinearController *controller, int snap_to_destination);
     virtual void unknown_54();
     virtual void unknown_58();
     virtual void cancel_orbit_movement(FieldOrbitController *controller, int snap_to_destination);
@@ -373,7 +390,7 @@ struct FieldRenderObject {
     virtual void unknown_3c();
     virtual void unknown_40();
     virtual void unknown_44();
-    virtual void unknown_48();
+    virtual void update_linear_movement(FieldLinearController *controller);
     virtual void unknown_4c();
     virtual void unknown_50();
     virtual void unknown_54();
@@ -477,11 +494,7 @@ struct FieldRuntimeEntity {
     u8 unknown_1a6[0x3A];
     FieldRenderObject *render_object;
     u8 unknown_1e4[0x10];
-    union {
-        u32 planar_movement_flags;
-        FieldPlanarMovementFlags planar_movement_flag_bits;
-    };
-    u8 unknown_1f8[0x40];
+    FieldLinearController linear_controller;
     FieldOrbitController orbit_controller;
     union {
         u16 transform_flags;

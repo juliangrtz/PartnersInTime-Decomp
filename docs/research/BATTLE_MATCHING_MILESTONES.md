@@ -1853,3 +1853,33 @@ build/runtime/eur_field_distance_boundaries. Matching C/C++ is 368,344 of
 1,563,700 bytes (23.56%). All module/symbol checks, 74 tests, generated progress
 and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Planar linear movement control
+
+Five functions add 1,476 matching C++ bytes: pause/resume, cancellation,
+completion/braking checks and movement updates. The checked 68-byte linear
+controller identifies independent active axes, timed/speed mode, destination,
+velocity and an optional live target. It replaces the opaque +0x1F4 block and
+corrects the movement virtual interface. The completion routine preserves
+per-axis crossing tests and the original target-following behavior. Named X/Y
+deltas resolve argument evaluation order in the update routine.
+
+A normal 2,033-frame boot/save-load replay retains 30/40 valid render-list models,
+55,110/47,962 changed main/sub BG bytes and 243 changed palette bytes. None of the
+new planar hooks fire on that route. A read-only inventory of both field
+contexts identifies actual subtype-8 planar entities at indices 3, 4 and 5 in
+the second context. Seeding a controller alone does not cause this checkpoint
+to schedule their movement updates; those paths remain covered by exact bytes.
+
+Two controlled Field VM opcode 0x8C cases target the verified planar entity at
+index 3. Each reloads the normal checkpoint, seeds only inactive or active X/Y
+axes, and restores the substituted decoded command at native cancellation entry.
+Read-only return checks confirm cleared axes and unchanged positions in both
+cases. The conditional early returns are observed separately. No script
+bytecode, ROM or battery save is changed. Evidence remains private under
+build/runtime/eur_field_linear_verified and
+build/runtime/eur_field_linear_cancel_verified.
+
+Matching C/C++ is 369,820 of 1,563,700 bytes (23.65%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

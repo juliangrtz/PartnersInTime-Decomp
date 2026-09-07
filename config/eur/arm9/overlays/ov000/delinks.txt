@@ -70,3 +70,6 @@ src/field/field_spatial_orbit_start.cpp:
 
 src/field/field_distance.c:
     .text       start:0x020be7d0 end:0x020be950
+
+src/field/field_linear.cpp:
+    .text       start:0x020a5bf4 end:0x020a61b8

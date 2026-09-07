@@ -2318,7 +2318,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_WAIT_ENTITY_MOVEMENT:
-            if (runtime_entity->planar_movement_flag_bits.active_state != 0 ||
+            if (runtime_entity->linear_controller.bits.active_axes != 0 ||
                 runtime_entity->orbit_controller.bits.active != 0) {
                 result = FieldVm_RetryCurrentCommand(
                     vm, state, command->opcode);
@@ -2327,7 +2327,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_CANCEL_ENTITY_MOVEMENT:
-            entity->cancel_planar_movement(0, 0);
+            entity->cancel_linear_movement(0, 0);
             entity->cancel_orbit_movement(0, 0);
             break;
 

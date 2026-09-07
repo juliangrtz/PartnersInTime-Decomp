@@ -356,6 +356,16 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label.startswith("FieldLinear_"):
+        pointer = r1 or r0 + 0x1F4
+        result = {"entity": f"{r0:#010x}", "controller": f"{pointer:#010x}"}
+        if is_arm9_work_ram_pointer(pointer, 0x44):
+            flags = read_u32(emulator, pointer)
+            result.update(active_axes=flags & 7, paused=bool(flags & 8),
+                          elapsed_frames=read_u32(emulator, pointer + 8),
+                          speed_or_duration=read_s32(emulator, pointer + 12))
+        return result
+
     if label == "FieldGeometry_GetVectorLength":
         return {"vector_q12": [to_s32(r0), to_s32(r1), to_s32(r2)]}
     if label == "FieldGeometry_GetOrbitLength":

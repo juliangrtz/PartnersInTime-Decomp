@@ -436,3 +436,4 @@ src/field/field_spatial_orbit.cpp
 src/field/field_orbit_start.cpp
 src/field/field_spatial_orbit_start.cpp
 src/field/field_distance.c
+src/field/field_linear.cpp
