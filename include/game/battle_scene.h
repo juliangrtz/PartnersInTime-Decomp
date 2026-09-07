@@ -3,6 +3,9 @@
 
 #include <game/battle_object.h>
 #include <nitro.h>
+#include <nitro/fx_mtx.h>
+#include <game/sprite_output.h>
+#include <game/graphics_resource.h>
 
 typedef struct BattleSceneObject BattleSceneObject;
 typedef struct BattleMotionChannel BattleMotionChannel;
@@ -11,6 +14,7 @@ typedef struct BattleModelVTable BattleModelVTable;
 typedef struct BattleModelAnimationData BattleModelAnimationData;
 typedef struct BattleSceneRenderOverride BattleSceneRenderOverride;
 struct BattleSpriteTransform;
+struct GameSpritePalette;
 typedef void (*BattleMotionCallback)(BattleSceneObject *object,
                                      BattleMotionChannel *channel);
 
@@ -37,6 +41,25 @@ struct BattleModelAnimationData {
     u16 end_frame;
     u32 unknown_04;
 };
+
+typedef struct BattleModelControllerWork {
+    void *controller;
+    const s16 *primary_components[8];
+    s16 primary_steps_q8[8];
+    u8 primary_state, primary_mode;
+    u8 unknown_36[2];
+    const s16 *primary_track;
+    const s16 *layer_components[8];
+    s16 layer_steps_q8[8];
+    u8 layer_states[8], layer_modes[8];
+    const s16 *layer_tracks[8];
+    u8 layer_animation_ids[8];
+    s16 initial_animation_id;
+    u16 unknown_a6;
+} BattleModelControllerWork;
+
+typedef char BattleModelControllerWork_SizeCheck[
+    sizeof(BattleModelControllerWork) == 0xA8 ? 1 : -1];
 
 /* One row of the model's frame table: the second halfword carries a nine-bit
    offset the renderer compares against the anchor after scaling it by 256. */
@@ -139,18 +162,18 @@ struct BattleModel {
     virtual u32 get_sort_key();
     virtual void unknown_48(int enabled);
     virtual void unknown_4c();
-    virtual void unknown_50();
+    virtual void set_palette_dirty(int enabled);
     virtual void unknown_54();
     virtual void unknown_58();
     virtual void unknown_5c();
-    virtual void unknown_60();
+    virtual void reset_controller_work();
     virtual void unknown_64();
     virtual int set_primary_animation(u8 animation_id, int argument_2,
                                       int enabled);
     virtual void unknown_6c();
     virtual void unknown_70();
     virtual void unknown_74();
-    virtual void unknown_78();
+    virtual void set_controller_animation(int animation, int reset);
     virtual void unknown_7c();
     virtual void unknown_80();
     virtual void unknown_84();
@@ -165,8 +188,8 @@ struct BattleModel {
     virtual int unknown_a4();
     virtual void unknown_a8();
     virtual void unknown_ac();
-    virtual void unknown_b0();
-    virtual void unknown_b4();
+    virtual void restore_resources(const void *descriptor);
+    virtual void configure_resources(const void *descriptor);
     virtual void unknown_b8();
     virtual void unknown_bc();
     virtual void unknown_c0();
@@ -176,17 +199,22 @@ struct BattleModel {
     BattleModel *render_next;
     BattleSceneObject *owner;
     u8 screen;
-    u8 unk_011[0x17];
-    u32 property_028;
+    u8 unk_011[3];
+    union {
+        GameSpriteAllocation texture;
+        struct { u8 unk_014[0x14]; u32 property_028; };
+    };
     /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
-    u8 *property_02c;
+    union { u8 *property_02c; struct GameSpritePalette *palette; };
     u8 unk_030[8];
     /* Resource header; the sixth halfword holds the frame count. */
-    const u16 *property_038;
-    u8 unk_03c[8];
+    union { const u16 *property_038; const GameGraphicsResource *resource; };
+    const GameGraphicsObject *resource_objects;
+    const GameGraphicsRange *resource_groups;
     const BattleModelFrameEntry *frames;
     BattleModelAnimationData *animation_data;
-    u8 unk_04c[8];
+    const void *extra_resource_data;
+    const u16 *texture_offsets;
     s16 animation_id;
     s16 property_056;
     u8 unk_058[2];
@@ -217,17 +245,27 @@ struct BattleModel {
             u32 facing_left : 1;
             u32 flip_y : 1;
             u32 animation_mode : 4;
-            u32 unknown_16_18 : 3;
+            u32 texture_allocation_mode : 3;
             u32 unknown_19_21 : 3;
             u32 no_sort_key : 1;
             u32 unknown_23_31 : 9;
         } flag_bits;
     };
     u8 unk_080[4];
-    void *animation_controller;
-    u8 unk_088[0x70];
-    s8 animation_layer_states[16];
-    u8 unk_108[0x3C];
+    union {
+        BattleModelControllerWork controller_work;
+        struct {
+            void *animation_controller;
+            u8 unk_088[0x70];
+            s8 animation_layer_states[16];
+            u8 unk_108[0x20];
+            s16 initial_animation_id;
+            u16 unk_12a;
+        };
+    };
+    u8 unk_12c[4];
+    u32 unknown_130;
+    u8 unk_134[0x10];
     u8 render_flags;
     u8 unk_145[0x19];
     u8 transform_flags;
@@ -240,7 +278,11 @@ struct BattleModel {
         } animation_state_bits;
     };
     u16 owner_render_state;
-    u8 unk_166[0x52];
+    u8 unk_166[6];
+    u16 unknown_16c, unknown_16e;
+    u32 unknown_170;
+    MtxFx44 transform;
+    u8 unk_1b4[4];
 };
 #else
 struct BattleModel {
@@ -249,17 +291,22 @@ struct BattleModel {
     BattleModel *render_next;
     BattleSceneObject *owner;
     u8 screen;
-    u8 unk_011[0x17];
-    u32 property_028;
+    u8 unk_011[3];
+    union {
+        GameSpriteAllocation texture;
+        struct { u8 unk_014[0x14]; u32 property_028; };
+    };
     /* Render state shared with the owning object; bit 3 of byte 0x13 gates it. */
-    u8 *property_02c;
+    union { u8 *property_02c; struct GameSpritePalette *palette; };
     u8 unk_030[8];
     /* Resource header; the sixth halfword holds the frame count. */
-    const u16 *property_038;
-    u8 unk_03c[8];
+    union { const u16 *property_038; const GameGraphicsResource *resource; };
+    const GameGraphicsObject *resource_objects;
+    const GameGraphicsRange *resource_groups;
     const BattleModelFrameEntry *frames;
     BattleModelAnimationData *animation_data;
-    u8 unk_04c[8];
+    const void *extra_resource_data;
+    const u16 *texture_offsets;
     s16 animation_id;
     s16 property_056;
     u8 unk_058[2];
@@ -290,17 +337,27 @@ struct BattleModel {
             u32 facing_left : 1;
             u32 flip_y : 1;
             u32 animation_mode : 4;
-            u32 unknown_16_18 : 3;
+            u32 texture_allocation_mode : 3;
             u32 unknown_19_21 : 3;
             u32 no_sort_key : 1;
             u32 unknown_23_31 : 9;
         } flag_bits;
     };
     u8 unk_080[4];
-    void *animation_controller;
-    u8 unk_088[0x70];
-    s8 animation_layer_states[16];
-    u8 unk_108[0x3C];
+    union {
+        BattleModelControllerWork controller_work;
+        struct {
+            void *animation_controller;
+            u8 unk_088[0x70];
+            s8 animation_layer_states[16];
+            u8 unk_108[0x20];
+            s16 initial_animation_id;
+            u16 unk_12a;
+        };
+    };
+    u8 unk_12c[4];
+    u32 unknown_130;
+    u8 unk_134[0x10];
     u8 render_flags;
     u8 unk_145[0x19];
     u8 transform_flags;
@@ -313,7 +370,11 @@ struct BattleModel {
         } animation_state_bits;
     };
     u16 owner_render_state;
-    u8 unk_166[0x52];
+    u8 unk_166[6];
+    u16 unknown_16c, unknown_16e;
+    u32 unknown_170;
+    MtxFx44 transform;
+    u8 unk_1b4[4];
 };
 #endif
 
@@ -500,6 +561,45 @@ int BattleModel_SetAlpha(BattleModel *model, u8 alpha, u8 mode);
 void BattleModel_AppendRenderList(BattleModel *model);
 void BattleModel_UnlinkRenderList(BattleModel *model);
 void BattleModel_DetachRenderList(BattleModel *model);
+
+int BattleModel_ReleaseTexture(BattleModel *model, int force);
+void BattleModel_RestoreRenderList(BattleModel *model);
+void BattleModel_UnlinkTexture(BattleModel *model);
+BattleModel *BattleModel_DestroyResourceBase(BattleModel *model);
+BattleModel *BattleModel_DeleteResource(BattleModel *model);
+BattleModel *BattleModel_DestroyResource(BattleModel *model);
+BattleModel *BattleRenderModel_Delete(BattleModel *model);
+BattleModel *BattleRenderModel_Destroy(BattleModel *model);
+BattleModel *BattleRenderModel_Init(BattleModel *model);
+void BattleModelController_Reset(BattleModel *model);
+int BattleModelController_Configure(BattleModel *model, const void *descriptor, void *controller, s16 animation);
+int BattleModelController_Restore(BattleModel *model, const void *descriptor, void *controller, s16 animation);
+int BattleModelController_ConfigureResources(BattleModel *model, const void *descriptor);
+int BattleModelController_RestoreResources(BattleModel *model, const void *descriptor);
+BattleModel *BattleModelController_DestroyBase(BattleModel *model);
+BattleModel *BattleModelController_Delete(BattleModel *model);
+BattleModel *BattleModelController_Destroy(BattleModel *model);
+BattleModel *BattleModelController_InitBase(BattleModel *model);
+BattleModel *BattleModelController_Init(BattleModel *model);
+int BattleModel_GetTextureConversionSize(int boundary, int alternate, const GameGraphicsResource *resource);
+int BattleModel_GetScreenTextureConversionSize(int screen, int alternate, const GameGraphicsResource *resource);
+BattleModel *BattleModel_InitResourceState(BattleModel *model);
+void BattleModel_InitDescriptor(void *descriptor);
+u16 BattleModel_ReadSortKeyLow(const u16 *key, int unused);
+u16 BattleModel_ReadSortKeyHigh(const u16 *key, int unused);
+u16 BattleModel_ReadSortKeyOverride(const u16 *unused, int index);
+void BattleModel_SetSortKeyOverride(const u16 *table);
+u16 BattleModel_GetRelativeAnimationId(BattleModel *model);
+u16 BattleModel_GetRelativeAnimationCount(BattleModel *model);
+void BattleModel_SetInitialAnimation(BattleModel *model, s16 animation);
+void *BattleModel_GetPaletteBuffer(BattleModel *model);
+void BattleModel_SetPalette(BattleModel *model, const void *source);
+const void *BattleModel_GetPaletteSource(BattleModel *model);
+int BattleModel_GetPaletteColorCount(BattleModel *model);
+void BattleModel_SetPaletteBuffered(BattleModel *model, int enabled);
+void BattleModel_SetPaletteMask(BattleModel *model, void *table, int index, int enabled);
+void BattleModel_CopyAnimationLayers(BattleModel *source, BattleModel *destination);
+void BattleModel_RestoreSourcePalette(BattleModel *model);
 
 #ifdef __cplusplus
 }

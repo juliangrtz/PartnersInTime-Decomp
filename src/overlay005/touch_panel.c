@@ -1,3 +1,4 @@
+#include <game/battle_scene.h>
 #include <nitro.h>
 #include <nitro/tp.h>
 #include <game/heap.h>
@@ -9,8 +10,6 @@ extern u8 data_ov005_0206a36c[94];
 extern void *data_ov005_0206a02c[];
 
 extern void MI_CpuFill8(void *destination, u8 value, u32 size);
-extern u32 func_0200c300(int texture_id, int copy_flag, const void *resource);
-extern void func_0200cf1c(void *object);
 extern void func_0200c9c8(void *object, int mode);
 extern void func_0200b6c4(void *object, int mode);
 
@@ -29,13 +28,13 @@ typedef struct Overlay5TextureObject {
 } Overlay5TextureObject;
 
 void func_ov005_020688cc(Overlay5TextureObject *object, int copy_flag) {
-    u32 size = func_0200c300(0, copy_flag, object->resource);
+    u32 size = BattleModel_GetScreenTextureConversionSize(0, copy_flag, object->resource);
     object->buffer = size ? GameHeap_NewArray(size, 0, 0, 1) : 0;
 }
 
 Overlay5TextureObject *func_ov005_020688a0(Overlay5TextureObject *object) {
     object->vtable = data_ov005_0206a02c;
-    func_0200cf1c(object);
+    BattleModelController_DestroyBase((BattleModel *)object);
     GameHeap_Delete(object);
     return object;
 }
@@ -61,7 +60,7 @@ void func_ov005_0206883c(Overlay5TextureObject *object) {
 
 Overlay5TextureObject *func_ov005_02068818(Overlay5TextureObject *object) {
     object->vtable = data_ov005_0206a02c;
-    func_0200cf1c(object);
+    BattleModelController_DestroyBase((BattleModel *)object);
     return object;
 }
 

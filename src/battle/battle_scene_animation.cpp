@@ -6,7 +6,7 @@ extern "C" {
 extern void OS_Terminate(void);
 extern void *GameHeap_New(u32 size, u32 heap_id, const void *allocator,
                           int argument_3);
-extern BattleModel *func_02010634(BattleModel *model);
+extern BattleModel *BattleRenderModel_Init(BattleModel *model);
 extern void func_ov002_020696f4(BattleSceneObject *object, int animation_id,
                                 int argument_2);
 extern void func_ov002_0206f1b8(BattleModel *model);
@@ -107,7 +107,7 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
                 ((BattleContext *)gBattleContext)->runtime.resource_heap_id,
                 data_ov002_020bf718, 0);
             if (model != 0) {
-                model = func_02010634(model);
+                model = BattleRenderModel_Init(model);
             }
             object->primary_model = model;
             model->screen = 0;
@@ -313,7 +313,7 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
                             ->runtime.resource_heap_id,
                         data_ov002_020bf718, 0);
                     if (model != 0) {
-                        model = func_02010634(model);
+                        model = BattleRenderModel_Init(model);
                     }
                     object->primary_model = model;
                     model->flags &= ~BATTLE_MODEL_FLAG_ANIMATION_ACTIVE;

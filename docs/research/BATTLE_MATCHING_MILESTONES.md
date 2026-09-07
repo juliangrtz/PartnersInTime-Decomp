@@ -1222,3 +1222,35 @@ bytes. The effect-template routine was not exercised by this route.
 The total is 341,968 of 1,563,700 bytes (21.87%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Model resource controls and controller lifetime
+
+Thirty-eight functions add 2,080 matching C/C++ bytes. They reconstruct model
+resource initialization and destruction, texture-conversion sizing, palette
+access and masks, sort-key callbacks, animation-layer copying, controller
+reset/configuration/restoration, and render-model construction/destruction.
+Restoring detached render-list links and conditional texture release extend the
+existing render-list module. Shared declarations replace the sort callbacks'
+old void signatures and callers' incompatible constructor declarations.
+
+The 0xA8-byte controller work area now describes both animation tracks and the
+eight layer components, step values, states, modes, track pointers and animation
+IDs. Reset and copy consumers establish those offsets; the resource flags also
+distinguish normal and alternate texture boundaries. Compile-time checks retain
+the complete model's 0x1B8-byte layout. All additions are structured C/C++.
+
+The canonical EUR room-transition replay ran 362 frames and captured 52 controller
+and resource-state initializations, 46 base destructions, 44 resets, eight full
+configurations and 36 restorations. Every reset was followed by layer setup with
+eight zero states, eight null track pointers and mode 2 in every layer. The final
+render lists contain 36 and 40 models without errors. Captures include 31,610
+changed main-OBJ bytes, 97,433 main-BG bytes and 218 palette bytes. Evidence and
+the compatible checkpoint remain private under
+build/runtime/eur_model_controller_verified. Render-model construction/deletion,
+layer copying and conditional texture release were not reached on this route;
+their complete linked bytes match. Constructor entry hooks intentionally omit
+uninitialized storage from decoded snapshots.
+
+The total is 344,048 of 1,563,700 bytes (22.00%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

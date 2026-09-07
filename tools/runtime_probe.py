@@ -350,6 +350,33 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r3 = registers.r3 & 0xFFFFFFFF
 
     if label in {
+        "BattleRenderModel_Init", "BattleModelController_Init",
+        "BattleModelController_InitBase", "BattleModel_InitResourceState",
+    }:
+        # Entry hooks run before the constructor has initialized its storage.
+        return {"model": f"{r0:#010x}", "initializing": True}
+
+    if label in {
+        "BattleModelController_Reset", "BattleModelController_Configure",
+        "BattleModelController_Restore", "BattleModelController_DestroyBase",
+        "BattleRenderModel_Delete", "BattleModel_ReleaseTexture",
+        "BattleModel_CopyAnimationLayers", "func_0200c5d8",
+    } and is_main_ram_pointer(r0, 0x12C):
+        return {
+            "model": f"{r0:#010x}",
+            "screen": read_u8(emulator, r0 + 0x10),
+            "flags": f"{read_u32(emulator, r0 + 0x7C):#010x}",
+            "controller": f"{read_u32(emulator, r0 + 0x84):#010x}",
+            "primary_state": read_u8(emulator, r0 + 0xB8),
+            "primary_mode": read_u8(emulator, r0 + 0xB9),
+            "primary_track": f"{read_u32(emulator, r0 + 0xBC):#010x}",
+            "layer_states": [read_u8(emulator, r0 + 0xF0 + i) for i in range(8)],
+            "layer_modes": [read_u8(emulator, r0 + 0xF8 + i) for i in range(8)],
+            "layer_tracks": [f"{read_u32(emulator, r0 + 0x100 + 4 * i):#010x}" for i in range(8)],
+            "layer_animation_ids": [read_u8(emulator, r0 + 0x120 + i) for i in range(8)],
+        }
+
+    if label in {
         "FieldBackground_UpdateTransfers", "FieldBackground_InitTransfers",
         "FieldBackground_DestroyTransfers", "FieldBackground_DeleteTransfers",
     } and is_main_ram_pointer(r0, 0x100):

@@ -3,7 +3,8 @@
 #include <nitro.h>
 
 typedef struct GameGraphicsResource {
-    union { u16 raw; struct { u16 reserved0 : 10, texture_format : 3, reserved13 : 1, color256 : 1, reserved15 : 1; } bits; } flags;
+    union { u16 raw; struct { u16 reserved0 : 4, alternate_boundary : 3, normal_boundary : 3,
+        texture_format : 3, reserved13 : 1, color256 : 1, reserved15 : 1; } bits; } flags;
     u16 extra_count;
     u8 reserved04[8];
     u16 animation_count, frame_count, group_count, object_count;

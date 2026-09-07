@@ -50,3 +50,26 @@ void BattleModel_DetachRenderList(BattleModel *model)
         model->flag_bits.render_linked = 0;
     }
 }
+
+void BattleModel_RestoreRenderList(BattleModel *model)
+{
+    if (!model->flag_bits.render_linked) {
+        if (model->render_previous) model->render_previous->render_next = model;
+        else gModelRenderList[model->screen] = model;
+        if (model->render_next) model->render_next->render_previous = model;
+        else gModelRenderListTail[model->screen] = model;
+        model->flag_bits.render_linked = 1;
+    }
+}
+
+int BattleModel_ReleaseTexture(BattleModel *model, int force)
+{
+    if (force) {
+        GameSpriteAllocation_Unlink(&model->texture);
+        return 1;
+    } else {
+        if (model->flag_bits.texture_allocation_mode != 3) return 0;
+        GameSpriteAllocation_Unlink(&model->texture);
+        return 1;
+    }
+}

@@ -60,7 +60,7 @@ extern BattleModelEffect *GameMatrixAnimation_Start(
 extern void func_ov002_020aaac8(BattleModelEffect *effect);
 extern void *GameHeap_New(
     u32 size, u32 heap_id, const void *allocator, int argument_3);
-extern BattleModel *func_02010634(BattleModel *model);
+extern BattleModel *BattleRenderModel_Init(BattleModel *model);
 extern void func_ov002_0206f1f0(
     BattleModel *model, BattleObjectDataLoadState *load_state,
     u32 component_offset);
@@ -185,7 +185,7 @@ BattleAITask *BattleModelEffect_SpawnFromResource(
         data_ov002_020c0318, 0);
 
     if (model != 0) {
-        model = func_02010634(model);
+        model = BattleRenderModel_Init(model);
     }
     payload->model = model;
 

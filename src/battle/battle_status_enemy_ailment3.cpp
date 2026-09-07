@@ -9,7 +9,7 @@
 extern "C" {
 void *GameHeap_New(u32 size, u32 heap_id, const void *allocator,
                     int argument_3);
-BattleModel *func_02010634(BattleModel *model);
+BattleModel *BattleRenderModel_Init(BattleModel *model);
 void func_ov002_0206f1f0(BattleModel *model,
                          BattleSceneResource *resource,
                          u32 component_offset);
@@ -72,7 +72,7 @@ BattleAITask *BattleStatus_StartEnemyAilment3Visual(int actor_id) {
         BattleContext_GetRuntimeState()->resource_heap_id,
         data_ov002_020c0318, 0);
     if (model != 0) {
-        model = func_02010634(model);
+        model = BattleRenderModel_Init(model);
     }
     payload->model = model;
     load_state = BattleObjectData_GetLoadState(

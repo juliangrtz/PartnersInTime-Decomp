@@ -26,14 +26,12 @@ struct BattleTransformRow {
     s16 matrix[4][4];
 };
 
-typedef void (*BattleModelRenderProc)(void);
+typedef u16 (*BattleModelRenderProc)(const u16 *key, int index);
 
 extern "C" {
 
 extern u8 data_02060340[2][1024];
 
-extern void func_0200c3b0(void), func_0200c3b8(void), func_0200c3c0(void);
-extern void func_0200c3d8(void *argument);
 
 u32 func_02009474(const BattleTransformPack *pack, int word, int component);
 
@@ -79,7 +77,7 @@ void func_02009598(BattleTransformRow *rows, u8 first, u8 last)
 void func_02009558(BattleModel *model, int enabled)
 {
     if (model->flag_bits.no_sort_key) return;
-    if (model->flag_bits.unknown_16_18 == 3) return;
+    if (model->flag_bits.texture_allocation_mode == 3) return;
     if (enabled) model->property_028 |= 0x10;
     else model->property_028 &= ~0x10;
 }
@@ -147,10 +145,10 @@ void func_02009360(BattleModel *source, BattleModel *destination)
 BattleModelRenderProc func_0200930c(BattleModel *model, void *override)
 {
     if (override == 0) {
-        return model->flag_bits.no_sort_key == 0 ? func_0200c3b8 : func_0200c3b0;
+        return model->flag_bits.no_sort_key == 0 ? BattleModel_ReadSortKeyHigh : BattleModel_ReadSortKeyLow;
     }
-    func_0200c3d8(override);
-    return func_0200c3c0;
+    BattleModel_SetSortKeyOverride((const u16 *)override);
+    return BattleModel_ReadSortKeyOverride;
 }
 
 /* Draws every model on one engine's render list and records the object range

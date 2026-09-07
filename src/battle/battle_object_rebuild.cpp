@@ -1,4 +1,5 @@
 #include <game/battle_context.h>
+#include <game/battle_scene.h>
 #include <game/battle_object.h>
 #include <game/battle_task_queue.h>
 
@@ -11,7 +12,6 @@ void func_02038ab4(BattleResourceStream *stream, u8 *destination,
 u32 func_02038a04(BattleResourceStream *stream);
 void func_0202cbd4(void *destination, int value, u32 size);
 void *GameHeap_New(u32 size, u32 heap_id, void *allocator, int argument);
-BattleResourceModel *func_02010634(BattleResourceModel *model);
 void func_ov002_0206f1f0(BattleResourceModel *model,
                          BattleSceneResource *resource,
                          u32 component_offset);
@@ -39,7 +39,7 @@ void BattleObjectData_BeginRebuildTask(BattleQueuedTask *task) {
         ((BattleContext *)gBattleContext)->runtime.resource_heap_id,
         data_ov002_020bf6fc, 0);
     if (model != 0) {
-        model = func_02010634(model);
+        model = (BattleResourceModel *)BattleRenderModel_Init((BattleModel *)model);
     }
     ((BattleContext *)gBattleContext)
         ->resource_models[destination->object_data_id] = model;

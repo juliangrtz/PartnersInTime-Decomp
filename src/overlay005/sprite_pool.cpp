@@ -1,3 +1,4 @@
+#include <game/battle_scene.h>
 extern "C" {
 #include <game/sprite_output.h>
 #include <game/heap.h>
@@ -64,8 +65,6 @@ extern Overlay5SpritePool data_ov005_0206a3d8;
 extern const void *data_ov005_0206a02c[];
 
 extern void func_0200a4cc(Overlay5Sprite *sprite);
-extern void func_0200ce84(Overlay5Sprite *sprite, int mode, int unused2, int unused3);
-extern void func_0200cfc8(Overlay5Sprite *sprite);
 extern void *func_02048aac(void *memory, u32 count, u32 size, u32 header,
                            void *(*construct)(void *), void *(*destroy)(void *));
 extern void func_02048874(void *array, u32 size, u32 header, void *(*destroy)(void *));
@@ -140,7 +139,7 @@ void func_ov005_02068ce4(Overlay5SpritePool *pool, u32 count) {
 }
 
 Overlay5Sprite *func_ov005_02068cc0(Overlay5Sprite *sprite) {
-    func_0200cfc8(sprite);
+    BattleModelController_Init((BattleModel *)sprite);
     sprite->vtable = data_ov005_0206a02c;
     return sprite;
 }
@@ -163,7 +162,7 @@ void func_ov005_02068c54(Overlay5Sprite *sprite) {
 }
 
 void func_ov005_02068c1c(Overlay5Sprite *sprite, int mode) {
-    func_0200ce84(sprite, mode, 0, 0);
+    BattleModelController_Restore((BattleModel *)sprite, (const void *)mode, 0, 0);
     sprite->active = 1;
     sprite->offset_x = 0;
     sprite->offset_y = 0;

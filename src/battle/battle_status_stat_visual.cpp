@@ -10,7 +10,7 @@
 extern "C" {
 void *GameHeap_New(u32 size, u32 heap_id, const void *allocator,
                     int argument_3);
-BattleModel *func_02010634(BattleModel *model);
+BattleModel *BattleRenderModel_Init(BattleModel *model);
 void func_ov002_0206f1f0(BattleModel *model,
                          BattleSceneResource *resource,
                          u32 component_offset);
@@ -360,7 +360,7 @@ void BattleStatus_UpdatePartyStatVisuals(BattleAITask *base_task) {
                     BattleContext_GetRuntimeState()->resource_heap_id,
                     data_ov002_020c0318, 0);
                 if (payload->model != 0) {
-                    payload->model = func_02010634(payload->model);
+                    payload->model = BattleRenderModel_Init(payload->model);
                 }
                 load_state = BattleObjectData_GetLoadState(
                     BATTLE_STATUS_MODEL_OBJECT_DATA_ID);

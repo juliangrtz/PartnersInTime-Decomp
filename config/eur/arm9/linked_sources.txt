@@ -389,3 +389,7 @@ src/game/field_background_transfer_task.cpp
 src/game/field_background_accessors.c
 src/game/field_background_lifecycle.c
 src/game/palette_effect.c
+src/game/model_resource_controls.cpp
+src/game/model_controller_setup.cpp
+src/game/model_render_lifecycle.cpp
+src/game/model_resource_lifecycle.cpp

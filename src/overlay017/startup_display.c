@@ -13,8 +13,6 @@ enum Overlay17StartupDisplayConstant {
 extern void *func_ov002_020725a4(
     void (*callback)(), const void *argument_1,
     void *argument_2, u32 argument_3);
-extern int func_0202cc58(const void *source, void *destination, u32 size);
-extern int func_0202cd2c(const void *source, void *destination, u32 size);
 extern void GameTexturePalette_Unlink(void);
 extern int GameTexturePalette_Allocate(int argument_0, int argument_1,
                          int argument_2, int argument_3,

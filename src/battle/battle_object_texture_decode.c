@@ -1,4 +1,5 @@
 #include <game/battle_context.h>
+#include <game/battle_scene.h>
 #include <game/battle_object.h>
 #include <game/battle_task_queue.h>
 
@@ -7,7 +8,6 @@ extern u8 *gBattleSystem;
 u32 ArchiveIO_PrepareCompressedRead(u8 *system, BattleTextureUploadRequest *request,
                   void *source, void *component);
 u32 func_0200f844(const void *resource, u32 copy_flag);
-u32 func_0200c300(int texture_id, int copy_flag, const void *resource);
 void func_0202cbd4(void *destination, int value, u32 size);
 void func_02009d24(BattleTextureDecodeState *state, int texture_id,
                    int unknown_2, int copy_flag, void *component_10,
@@ -32,7 +32,7 @@ void BattleObjectData_PrepareBodyDecodeTask(BattleQueuedTask *task) {
             4) * 4;
     resource->component_14 =
         (u8 *)resource->component_10 +
-        ((func_0200c300(1, !resource->flags.bits.copy_flag,
+        ((BattleModel_GetScreenTextureConversionSize(1, !resource->flags.bits.copy_flag,
                         resource->data) + 3) / 4) * 4;
 
     ++((BattleContext *)gBattleContext)->current_texture_upload;
