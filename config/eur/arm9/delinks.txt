@@ -196,3 +196,12 @@ src/msl/object_lifetime.c:
 
 src/msl/object_register.c:
     .text start:0x02048824 end:0x02048868
+
+src/nns/fnd/list.c:
+    .text start:0x0202e384 end:0x0202e5ac
+
+src/nns/fnd/heap_common.c:
+    .text start:0x0202e5ac end:0x0202e6f4
+
+src/nns/fnd/frame_heap.c:
+    .text start:0x0202e6f4 end:0x0202ea1c

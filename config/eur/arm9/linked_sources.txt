@@ -212,3 +212,6 @@ src/msl/console_io.c
 src/msl/encoded_integer.c
 src/msl/object_lifetime.c
 src/msl/object_register.c
+src/nns/fnd/list.c
+src/nns/fnd/heap_common.c
+src/nns/fnd/frame_heap.c

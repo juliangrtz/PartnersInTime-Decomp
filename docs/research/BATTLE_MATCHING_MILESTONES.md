@@ -402,3 +402,15 @@ unchanged, and the table is not counted as reconstructed C.
 
 The linked total is 224,892 bytes (14.38%). Module/symbol checks, original-ROM
 SHA-1, all 66 tests, generated progress, and the public-content audit pass.
+
+## Foundation lists and frame heaps
+
+Twenty-three functions add 1,688 matching C bytes: intrusive list traversal and
+mutation, nested heap registration/lookup, aligned frame-heap allocation from
+both ends, reset, and tagged state save/restore. The reconstructed layouts are
+12-byte lists, 36-byte heap headers, 12-byte frame data, and 16-byte state records.
+The original option checks and optional allocation clearing are retained.
+
+All 23 functions match completely in objdiff, without inline assembly. The total
+is 226,580 bytes (14.49%). Module/symbol checks, original-ROM SHA-1, all 66 tests,
+generated progress, and the public-content audit pass.
