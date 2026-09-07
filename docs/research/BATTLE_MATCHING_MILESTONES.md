@@ -265,3 +265,16 @@ destructors. The image-size intermediate uses signed subtraction as in the
 native bounds calculation; no assembly fallback is needed. Module/symbol
 checks, the reference-ROM SHA-1, progress consistency, the public-content audit,
 and all 66 tests pass.
+
+## SHA-1 block processing and HMAC
+
+All six digest routines add 2,024 matching bytes in pure C. The 104-byte SHA-1
+context preserves the split bit count, block index, finalization state, and
+error result. Padding, endian conversion, the 80-word schedule, four round
+groups, optional zeroing/restoration of two input words, and HMAC key reduction
+and inner/outer hashes match the native code. Volatile accesses preserve the
+original counter reloads and byte-by-byte construction of the first 16 words.
+
+The linked total is 211,316 bytes (13.51%). Every module/symbol check passes,
+the rebuilt ROM retains the original SHA-1, and all 66 tests, generated-progress
+checks, and public-content checks pass.

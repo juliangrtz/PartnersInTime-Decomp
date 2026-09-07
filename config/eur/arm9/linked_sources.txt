@@ -190,3 +190,4 @@ src/nitro/fs/fs_file.c
 src/nitro/fs/fs_rom.c
 src/nitro/fs/fs_overlay_io.c
 src/nitro/fs/fs_overlay_lifecycle.c
+src/nitro/dgt/dgt_hash2.c
