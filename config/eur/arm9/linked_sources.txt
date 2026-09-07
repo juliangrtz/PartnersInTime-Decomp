@@ -208,3 +208,7 @@ src/nitro/card/card_pullout.c
 src/nitro/ctrdg/ctrdg.c
 src/nitro/ctrdg/ctrdg_init.c
 src/msl/runtime.c
+src/msl/console_io.c
+src/msl/encoded_integer.c
+src/msl/object_lifetime.c
+src/msl/object_register.c

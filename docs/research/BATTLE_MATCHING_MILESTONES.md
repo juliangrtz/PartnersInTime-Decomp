@@ -386,3 +386,19 @@ allocation in both critical-region callers.
 The total is 224,008 bytes (14.33%). All nine functions match completely in
 objdiff; module/symbol checks, original-ROM SHA-1, all 66 tests, generated
 progress, and the public-content audit pass.
+
+## Runtime console I/O and object lifetime
+
+Ten more functions add 884 matching C bytes: console reads/writes, compact
+signed/unsigned integer decoding, caught-exception cleanup, exception-table
+binary search, global constructors/destructors and registration, and terminate
+dispatch. All ten functions match completely in objdiff.
+
+The internal 256-byte lookup table at 0x020469B4 retains its data label with a
+zero ELF symbol size: its bytes are already covered by its enclosing function.
+This prevents the MW linker's overlapping-symbol-size error when the surrounding
+reference object becomes smaller. The table bytes and function extent remain
+unchanged, and the table is not counted as reconstructed C.
+
+The linked total is 224,892 bytes (14.38%). Module/symbol checks, original-ROM
+SHA-1, all 66 tests, generated progress, and the public-content audit pass.

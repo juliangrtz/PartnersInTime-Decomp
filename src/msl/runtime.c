@@ -15,7 +15,7 @@ extern MslFile data_02059db4[3];
 extern int func_02039d98(OsMutex *mutex);
 extern void func_02039ecc(OsMutex *mutex);
 extern void func_02039e5c(OsMutex *mutex);
-extern void func_02048584(void);
+extern void MSL_DestroyGlobalChain(void);
 extern void func_02046dd4(void);
 
 static inline void MSL_EnterCriticalRegion(int region, OsMutex *mutex)
@@ -156,7 +156,7 @@ void MSL_Abort(void)
 void MSL_Exit(int status)
 {
     if (!data_0206580c) {
-        func_02048584();
+        MSL_DestroyGlobalChain();
         if (data_02065804) {
             data_02065804();
             data_02065804 = 0;
