@@ -90,3 +90,25 @@ original stores and call sequence. No assembly fallback is needed.
 
 All 35 functions match at their original sizes. The linked module/symbol
 checks and the complete reference-ROM hash pass.
+
+## Geometry state and graphics transfers
+
+Seven further GX units add 52 matching functions and 5,468 bytes, entirely
+in C. They cover matrix-stack reset, geometry initialization, fog and clear
+values, extended palette mapping/restoration, CPU/DMA transfer selection,
+texture mapping setup and cleanup, and command-list finalization.
+
+All hardware stores and reloads are checked against the original ARM code.
+The decompiler initially folded repeated MMIO accesses; the C implementation
+uses volatile accesses and preserves the complete register-write sequence.
+Inline C accessors for the fixed object-memory bases preserve the original
+address materialization without assembly.
+
+Texture transfers that cross a bank boundary remain outside the linked C
+set: their current C reconstruction has a register-allocation difference.
+The five matching texture setup, cleanup, and palette functions are linked
+independently. The shared command-list layout now identifies its buffer
+start, as established by the finalizer's byte-count calculation.
+
+The module/symbol checks, original-ROM SHA-1, progress consistency, public
+content audit, and all 66 tests pass for this milestone.

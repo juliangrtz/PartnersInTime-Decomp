@@ -1,11 +1,4 @@
-#include <nitro.h>
-
-typedef struct GxCommandList {
-    u8 *command;
-    u32 *parameters;
-    u32 unknown08[2];
-    u32 padding_required;
-} GxCommandList;
+#include <nitro/gx_command_list.h>
 
 extern void MI_Copy36B(const void *source, void *destination);
 extern void MI_Copy64B(const void *source, void *destination);

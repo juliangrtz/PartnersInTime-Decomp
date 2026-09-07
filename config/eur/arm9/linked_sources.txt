@@ -160,3 +160,10 @@ src/field/field_vm_dispatch.cpp
 src/nitro/gx/gx_bg_address.c
 src/nitro/gx/gx_blend_affine.c
 src/nitro/gx/gx_command_list.c
+src/nitro/gx/gx_geometry_state.c
+src/nitro/gx/gx_extended_palette.c
+src/nitro/gx/gx_vram_load.c
+src/nitro/gx/gx_command_list_end.c
+src/nitro/gx/gx_texture_palette_load.c
+src/nitro/gx/gx_texture_load_end.c
+src/nitro/gx/gx_texture_load_begin.c

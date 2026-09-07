@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 11.73 percent is matching C/C++ and 12.07 percent has matching C/C++ or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 12.08 percent is matching C/C++ and 12.42 percent has matching C/C++ or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -13,15 +13,15 @@
 <rect class="bg" width="1200" height="760" rx="12"/>
 <text x="28.0" y="34.0" class="eyebrow">DECOMPILATION PROGRESS · EUROPEAN ROM</text>
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
-<text x="28.0" y="113.0" class="percent">11.7%</text>
+<text x="28.0" y="113.0" class="percent">12.1%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C/C++</text>
-<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">12.07% source-understood</text>
+<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">12.42% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="134.169" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="162.169" y="130" width="3.954" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="138.170" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="166.170" y="130" width="3.954" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C/C++  179.1 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C/C++  184.4 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
 <text x="267.0" y="181.0" class="legend">Symbolic ASM  5.3 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
@@ -1762,7 +1762,7 @@
 <rect class="cell" x="740.06" y="316.12" width="11.10" height="10.72" fill="#263244"><title>ARM9 resident · FSi_FindPath · 352 B · remaining</title></rect>
 <rect class="cell" x="751.16" y="316.12" width="10.97" height="10.72" fill="#263244"><title>ARM9 resident · func_0201cc58 · 348 B · remaining</title></rect>
 <rect class="cell" x="762.13" y="316.12" width="10.97" height="10.72" fill="#263244"><title>ARM9 resident · func_0202b290 · 348 B · remaining</title></rect>
-<rect class="cell" x="773.11" y="316.12" width="10.97" height="10.72" fill="#263244"><title>ARM9 resident · func_02037190 · 348 B · remaining</title></rect>
+<rect class="cell" x="773.11" y="316.12" width="10.97" height="10.72" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 348 B · matching C/C++</title></rect>
 <rect class="cell" x="784.08" y="316.12" width="10.85" height="10.72" fill="#263244"><title>ARM9 resident · func_020132a0 · 344 B · remaining</title></rect>
 <rect class="cell" x="794.93" y="316.12" width="10.85" height="10.72" fill="#263244"><title>ARM9 resident · func_0201ee5c · 344 B · remaining</title></rect>
 <rect class="cell" x="805.78" y="316.12" width="10.85" height="10.72" fill="#263244"><title>ARM9 resident · func_02021a40 · 344 B · remaining</title></rect>
@@ -1854,7 +1854,7 @@
 <rect class="cell" x="669.56" y="509.31" width="9.45" height="9.30" fill="#263244"><title>ARM9 resident · func_0202a710 · 260 B · remaining</title></rect>
 <rect class="cell" x="669.56" y="518.61" width="9.45" height="9.30" fill="#263244"><title>ARM9 resident · func_0202fe18 · 260 B · remaining</title></rect>
 <rect class="cell" x="669.56" y="527.90" width="9.45" height="9.30" fill="#263244"><title>ARM9 resident · func_020339c0 · 260 B · remaining</title></rect>
-<rect class="cell" x="679.01" y="336.82" width="9.42" height="9.32" fill="#263244"><title>ARM9 resident · GX_BeginLoadBGExtPltt · 260 B · remaining</title></rect>
+<rect class="cell" x="679.01" y="336.82" width="9.42" height="9.32" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 260 B · matching C/C++</title></rect>
 <rect class="cell" x="688.43" y="336.82" width="9.28" height="9.32" fill="#263244"><title>ARM9 resident · Entry · 256 B · remaining</title></rect>
 <rect class="cell" x="697.71" y="336.82" width="9.28" height="9.32" fill="#263244"><title>ARM9 resident · func_02005114 · 256 B · remaining</title></rect>
 <rect class="cell" x="706.99" y="336.82" width="9.28" height="9.32" fill="#263244"><title>ARM9 resident · func_0200e128 · 256 B · remaining</title></rect>
@@ -1964,7 +1964,7 @@
 <rect class="cell" x="687.99" y="529.49" width="8.07" height="7.71" fill="#263244"><title>ARM9 resident · func_0202f804 · 184 B · remaining</title></rect>
 <rect class="cell" x="696.05" y="362.92" width="8.14" height="7.64" fill="#2dd4a0"><title>ARM9 resident · gx_bank_assign · 184 B · matching C/C++</title></rect>
 <rect class="cell" x="704.19" y="362.92" width="8.14" height="7.64" fill="#2dd4a0"><title>ARM9 resident · gx_bank_assign · 184 B · matching C/C++</title></rect>
-<rect class="cell" x="712.33" y="362.92" width="8.14" height="7.64" fill="#263244"><title>ARM9 resident · func_02036e28 · 184 B · remaining</title></rect>
+<rect class="cell" x="712.33" y="362.92" width="8.14" height="7.64" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 184 B · matching C/C++</title></rect>
 <rect class="cell" x="720.46" y="362.92" width="8.14" height="7.64" fill="#263244"><title>ARM9 resident · func_02041a80 · 184 B · remaining</title></rect>
 <rect class="cell" x="728.60" y="362.92" width="7.96" height="7.64" fill="#263244"><title>ARM9 resident · func_02007408 · 180 B · remaining</title></rect>
 <rect class="cell" x="736.56" y="362.92" width="7.96" height="7.64" fill="#263244"><title>ARM9 resident · func_02020250 · 180 B · remaining</title></rect>
@@ -1979,8 +1979,8 @@
 <rect class="cell" x="807.85" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_0202d5e8 · 176 B · remaining</title></rect>
 <rect class="cell" x="815.63" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_0202d6a8 · 176 B · remaining</title></rect>
 <rect class="cell" x="823.41" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_02030480 · 176 B · remaining</title></rect>
-<rect class="cell" x="831.19" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_02037024 · 176 B · remaining</title></rect>
-<rect class="cell" x="838.98" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_02038a04 · 176 B · remaining</title></rect>
+<rect class="cell" x="831.19" y="362.92" width="7.78" height="7.64" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 176 B · matching C/C++</title></rect>
+<rect class="cell" x="838.98" y="362.92" width="7.78" height="7.64" fill="#2dd4a0"><title>ARM9 resident · gx_command_list_end · 176 B · matching C/C++</title></rect>
 <rect class="cell" x="846.76" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_0203a718 · 176 B · remaining</title></rect>
 <rect class="cell" x="854.54" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · func_0203e068 · 176 B · remaining</title></rect>
 <rect class="cell" x="862.33" y="362.92" width="7.78" height="7.64" fill="#263244"><title>ARM9 resident · FS_SuspendArchive · 176 B · remaining</title></rect>
@@ -1993,7 +1993,7 @@
 <rect class="cell" x="696.05" y="416.50" width="7.59" height="7.66" fill="#263244"><title>ARM9 resident · func_02031cf8 · 172 B · remaining</title></rect>
 <rect class="cell" x="696.05" y="424.15" width="7.59" height="7.66" fill="#263244"><title>ARM9 resident · func_02032ea4 · 172 B · remaining</title></rect>
 <rect class="cell" x="696.05" y="431.81" width="7.59" height="7.66" fill="#2dd4a0"><title>ARM9 resident · gx_bank_assign · 172 B · matching C/C++</title></rect>
-<rect class="cell" x="696.05" y="439.46" width="7.59" height="7.66" fill="#263244"><title>ARM9 resident · func_02036f78 · 172 B · remaining</title></rect>
+<rect class="cell" x="696.05" y="439.46" width="7.59" height="7.66" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 172 B · matching C/C++</title></rect>
 <rect class="cell" x="696.05" y="447.12" width="7.59" height="7.66" fill="#263244"><title>ARM9 resident · func_02039bb4 · 172 B · remaining</title></rect>
 <rect class="cell" x="696.05" y="454.77" width="7.59" height="7.66" fill="#263244"><title>ARM9 resident · func_02040e74 · 172 B · remaining</title></rect>
 <rect class="cell" x="696.05" y="462.43" width="7.59" height="7.48" fill="#263244"><title>ARM9 resident · func_0200f25c · 168 B · remaining</title></rect>
@@ -2119,7 +2119,7 @@
 <rect class="cell" x="718.11" y="391.87" width="6.88" height="6.68" fill="#263244"><title>ARM9 resident · func_0202bd5c · 136 B · remaining</title></rect>
 <rect class="cell" x="718.11" y="398.55" width="6.88" height="6.68" fill="#263244"><title>ARM9 resident · func_0202bde4 · 136 B · remaining</title></rect>
 <rect class="cell" x="718.11" y="405.23" width="6.88" height="6.68" fill="#263244"><title>ARM9 resident · func_02030ed0 · 136 B · remaining</title></rect>
-<rect class="cell" x="718.11" y="411.91" width="6.88" height="6.68" fill="#263244"><title>ARM9 resident · func_02037108 · 136 B · remaining</title></rect>
+<rect class="cell" x="718.11" y="411.91" width="6.88" height="6.68" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 136 B · matching C/C++</title></rect>
 <rect class="cell" x="718.11" y="418.60" width="6.88" height="6.68" fill="#263244"><title>ARM9 resident · func_0203a7c8 · 136 B · remaining</title></rect>
 <rect class="cell" x="718.11" y="425.28" width="6.88" height="6.68" fill="#263244"><title>ARM9 resident · func_0203b09c · 136 B · remaining</title></rect>
 <rect class="cell" x="718.11" y="431.96" width="6.88" height="6.68" fill="#263244"><title>ARM9 resident · FSi_ReadFileCore · 136 B · remaining</title></rect>
@@ -2165,8 +2165,8 @@
 <rect class="cell" x="724.99" y="411.86" width="6.48" height="6.68" fill="#2dd4a0"><title>ARM9 resident · gx_bank_state · 128 B · matching C/C++</title></rect>
 <rect class="cell" x="724.99" y="418.54" width="6.48" height="6.68" fill="#2dd4a0"><title>ARM9 resident · gx_bg_address · 128 B · matching C/C++</title></rect>
 <rect class="cell" x="724.99" y="425.22" width="6.48" height="6.68" fill="#2dd4a0"><title>ARM9 resident · gx_bg_address · 128 B · matching C/C++</title></rect>
-<rect class="cell" x="724.99" y="431.90" width="6.48" height="6.68" fill="#263244"><title>ARM9 resident · GX_LoadBGExtPltt · 128 B · remaining</title></rect>
-<rect class="cell" x="724.99" y="438.58" width="6.48" height="6.68" fill="#263244"><title>ARM9 resident · func_02038984 · 128 B · remaining</title></rect>
+<rect class="cell" x="724.99" y="431.90" width="6.48" height="6.68" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 128 B · matching C/C++</title></rect>
+<rect class="cell" x="724.99" y="438.58" width="6.48" height="6.68" fill="#2dd4a0"><title>ARM9 resident · gx_texture_load_begin · 128 B · matching C/C++</title></rect>
 <rect class="cell" x="724.99" y="445.26" width="6.48" height="6.68" fill="#263244"><title>ARM9 resident · func_02038fd8 · 128 B · remaining</title></rect>
 <rect class="cell" x="724.99" y="451.93" width="6.48" height="6.68" fill="#263244"><title>ARM9 resident · func_0203ae8c · 128 B · remaining</title></rect>
 <rect class="cell" x="724.99" y="458.61" width="6.48" height="6.68" fill="#263244"><title>ARM9 resident · func_0203cc10 · 128 B · remaining</title></rect>
@@ -2223,10 +2223,10 @@
 <rect class="cell" x="731.47" y="512.15" width="6.26" height="6.26" fill="#263244"><title>ARM9 resident · func_02033028 · 116 B · remaining</title></rect>
 <rect class="cell" x="731.47" y="518.42" width="6.26" height="6.26" fill="#2dd4a0"><title>ARM9 resident · fx_coprocessor · 116 B · matching C/C++</title></rect>
 <rect class="cell" x="731.47" y="524.68" width="6.26" height="6.26" fill="#263244"><title>ARM9 resident · func_0203511c · 116 B · remaining</title></rect>
-<rect class="cell" x="731.47" y="530.94" width="6.26" height="6.26" fill="#263244"><title>ARM9 resident · GXS_LoadOBJExtPltt · 116 B · remaining</title></rect>
-<rect class="cell" x="737.73" y="405.07" width="6.15" height="6.37" fill="#263244"><title>ARM9 resident · GXS_LoadBGExtPltt · 116 B · remaining</title></rect>
-<rect class="cell" x="737.73" y="411.44" width="6.15" height="6.37" fill="#263244"><title>ARM9 resident · GX_LoadOBJExtPltt · 116 B · remaining</title></rect>
-<rect class="cell" x="737.73" y="417.81" width="6.15" height="6.37" fill="#263244"><title>ARM9 resident · func_020386f4 · 116 B · remaining</title></rect>
+<rect class="cell" x="731.47" y="530.94" width="6.26" height="6.26" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 116 B · matching C/C++</title></rect>
+<rect class="cell" x="737.73" y="405.07" width="6.15" height="6.37" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 116 B · matching C/C++</title></rect>
+<rect class="cell" x="737.73" y="411.44" width="6.15" height="6.37" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 116 B · matching C/C++</title></rect>
+<rect class="cell" x="737.73" y="417.81" width="6.15" height="6.37" fill="#2dd4a0"><title>ARM9 resident · gx_texture_palette_load · 116 B · matching C/C++</title></rect>
 <rect class="cell" x="737.73" y="424.18" width="6.15" height="6.37" fill="#263244"><title>ARM9 resident · OS_WakeupThread · 116 B · remaining</title></rect>
 <rect class="cell" x="737.73" y="430.55" width="6.15" height="6.37" fill="#263244"><title>ARM9 resident · func_02039d98 · 116 B · remaining</title></rect>
 <rect class="cell" x="737.73" y="436.92" width="6.15" height="6.37" fill="#263244"><title>ARM9 resident · func_0203a4e8 · 116 B · remaining</title></rect>
@@ -2253,8 +2253,8 @@
 <rect class="cell" x="775.55" y="405.07" width="6.33" height="5.98" fill="#263244"><title>ARM9 resident · func_02031c88 · 112 B · remaining</title></rect>
 <rect class="cell" x="781.89" y="405.07" width="6.33" height="5.98" fill="#263244"><title>ARM9 resident · func_020322e0 · 112 B · remaining</title></rect>
 <rect class="cell" x="788.22" y="405.07" width="6.33" height="5.98" fill="#263244"><title>ARM9 resident · func_0203319c · 112 B · remaining</title></rect>
-<rect class="cell" x="794.56" y="405.07" width="6.33" height="5.98" fill="#263244"><title>ARM9 resident · GX_BeginLoadOBJExtPltt · 112 B · remaining</title></rect>
-<rect class="cell" x="800.89" y="405.07" width="6.33" height="5.98" fill="#263244"><title>ARM9 resident · func_020387b0 · 112 B · remaining</title></rect>
+<rect class="cell" x="794.56" y="405.07" width="6.33" height="5.98" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 112 B · matching C/C++</title></rect>
+<rect class="cell" x="800.89" y="405.07" width="6.33" height="5.98" fill="#2dd4a0"><title>ARM9 resident · gx_texture_load_end · 112 B · matching C/C++</title></rect>
 <rect class="cell" x="807.22" y="405.07" width="6.33" height="5.98" fill="#263244"><title>ARM9 resident · func_02039e5c · 112 B · remaining</title></rect>
 <rect class="cell" x="813.56" y="405.07" width="6.33" height="5.98" fill="#263244"><title>ARM9 resident · func_0203ad78 · 112 B · remaining</title></rect>
 <rect class="cell" x="819.89" y="405.07" width="6.33" height="5.98" fill="#263244"><title>ARM9 resident · MIi_CheckDma0SourceAddress · 112 B · remaining</title></rect>
@@ -2296,23 +2296,23 @@
 <rect class="cell" x="791.99" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_0202e500 · 104 B · remaining</title></rect>
 <rect class="cell" x="798.00" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_0202f5e8 · 104 B · remaining</title></rect>
 <rect class="cell" x="804.01" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_0203387c · 104 B · remaining</title></rect>
-<rect class="cell" x="810.02" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_02037e98 · 104 B · remaining</title></rect>
-<rect class="cell" x="816.03" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_02037f00 · 104 B · remaining</title></rect>
-<rect class="cell" x="822.03" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_02037f68 · 104 B · remaining</title></rect>
-<rect class="cell" x="828.04" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_02037fd0 · 104 B · remaining</title></rect>
-<rect class="cell" x="834.05" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_02038038 · 104 B · remaining</title></rect>
-<rect class="cell" x="840.06" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_020380a0 · 104 B · remaining</title></rect>
-<rect class="cell" x="846.07" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_02038108 · 104 B · remaining</title></rect>
-<rect class="cell" x="852.08" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_02038170 · 104 B · remaining</title></rect>
-<rect class="cell" x="858.09" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_020381d8 · 104 B · remaining</title></rect>
-<rect class="cell" x="864.10" y="411.04" width="6.01" height="5.85" fill="#263244"><title>ARM9 resident · func_02038240 · 104 B · remaining</title></rect>
-<rect class="cell" x="749.92" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · func_020382a8 · 104 B · remaining</title></rect>
-<rect class="cell" x="756.02" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · func_02038310 · 104 B · remaining</title></rect>
-<rect class="cell" x="762.11" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · func_02038378 · 104 B · remaining</title></rect>
-<rect class="cell" x="768.20" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · func_020383e0 · 104 B · remaining</title></rect>
-<rect class="cell" x="774.29" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · func_02038448 · 104 B · remaining</title></rect>
-<rect class="cell" x="780.38" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · func_020384b0 · 104 B · remaining</title></rect>
-<rect class="cell" x="786.47" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · func_020385d8 · 104 B · remaining</title></rect>
+<rect class="cell" x="810.02" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="816.03" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="822.03" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="828.04" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="834.05" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="840.06" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="846.07" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="852.08" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="858.09" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="864.10" y="411.04" width="6.01" height="5.85" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="749.92" y="416.89" width="6.09" height="5.77" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="756.02" y="416.89" width="6.09" height="5.77" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="762.11" y="416.89" width="6.09" height="5.77" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="768.20" y="416.89" width="6.09" height="5.77" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="774.29" y="416.89" width="6.09" height="5.77" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="780.38" y="416.89" width="6.09" height="5.77" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="786.47" y="416.89" width="6.09" height="5.77" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 104 B · matching C/C++</title></rect>
 <rect class="cell" x="792.56" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · OS_SleepThread · 104 B · remaining</title></rect>
 <rect class="cell" x="798.65" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · OSi_InsertThreadToList · 104 B · remaining</title></rect>
 <rect class="cell" x="804.75" y="416.89" width="6.09" height="5.77" fill="#263244"><title>ARM9 resident · func_0203af80 · 104 B · remaining</title></rect>
@@ -2337,7 +2337,7 @@
 <rect class="cell" x="749.92" y="468.52" width="5.90" height="5.73" fill="#263244"><title>ARM9 resident · func_02030c28 · 100 B · remaining</title></rect>
 <rect class="cell" x="749.92" y="474.26" width="5.90" height="5.73" fill="#263244"><title>ARM9 resident · func_020332ac · 100 B · remaining</title></rect>
 <rect class="cell" x="749.92" y="479.99" width="5.90" height="5.73" fill="#2dd4a0"><title>ARM9 resident · gx_command_list · 100 B · matching C/C++</title></rect>
-<rect class="cell" x="749.92" y="485.72" width="5.90" height="5.73" fill="#263244"><title>ARM9 resident · GX_EndLoadBGExtPltt · 100 B · remaining</title></rect>
+<rect class="cell" x="749.92" y="485.72" width="5.90" height="5.73" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 100 B · matching C/C++</title></rect>
 <rect class="cell" x="749.92" y="491.45" width="5.90" height="5.73" fill="#263244"><title>ARM9 resident · func_02039938 · 100 B · remaining</title></rect>
 <rect class="cell" x="749.92" y="497.19" width="5.90" height="5.73" fill="#263244"><title>ARM9 resident · func_0203dfd0 · 100 B · remaining</title></rect>
 <rect class="cell" x="749.92" y="502.92" width="5.90" height="5.73" fill="#263244"><title>ARM9 resident · FSi_GetPackedName · 100 B · remaining</title></rect>
@@ -2359,8 +2359,8 @@
 <rect class="cell" x="813.08" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_0202ffbc · 96 B · remaining</title></rect>
 <rect class="cell" x="818.81" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_020306f4 · 96 B · remaining</title></rect>
 <rect class="cell" x="824.54" y="422.66" width="5.73" height="5.67" fill="#2dd4a0"><title>ARM9 resident · gx_bg_address · 96 B · matching C/C++</title></rect>
-<rect class="cell" x="830.26" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_02038518 · 96 B · remaining</title></rect>
-<rect class="cell" x="835.99" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_02038578 · 96 B · remaining</title></rect>
+<rect class="cell" x="830.26" y="422.66" width="5.73" height="5.67" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 96 B · matching C/C++</title></rect>
+<rect class="cell" x="835.99" y="422.66" width="5.73" height="5.67" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 96 B · matching C/C++</title></rect>
 <rect class="cell" x="841.72" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_0203cb30 · 96 B · remaining</title></rect>
 <rect class="cell" x="847.44" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_02040c2c · 96 B · remaining</title></rect>
 <rect class="cell" x="853.17" y="422.66" width="5.73" height="5.67" fill="#263244"><title>ARM9 resident · func_02043f44 · 96 B · remaining</title></rect>
@@ -2379,7 +2379,7 @@
 <rect class="cell" x="755.82" y="485.63" width="5.43" height="5.73" fill="#263244"><title>ARM9 resident · func_0202efac · 92 B · remaining</title></rect>
 <rect class="cell" x="755.82" y="491.36" width="5.43" height="5.73" fill="#263244"><title>ARM9 resident · func_0202f068 · 92 B · remaining</title></rect>
 <rect class="cell" x="755.82" y="497.09" width="5.43" height="5.73" fill="#263244"><title>ARM9 resident · func_0202fa68 · 92 B · remaining</title></rect>
-<rect class="cell" x="755.82" y="502.82" width="5.43" height="5.73" fill="#263244"><title>ARM9 resident · func_02038640 · 92 B · remaining</title></rect>
+<rect class="cell" x="755.82" y="502.82" width="5.43" height="5.73" fill="#2dd4a0"><title>ARM9 resident · gx_vram_load · 92 B · matching C/C++</title></rect>
 <rect class="cell" x="755.82" y="508.55" width="5.43" height="5.73" fill="#263244"><title>ARM9 resident · func_02039574 · 92 B · remaining</title></rect>
 <rect class="cell" x="755.82" y="514.28" width="5.43" height="5.73" fill="#263244"><title>ARM9 resident · FS_LoadOverlay · 92 B · remaining</title></rect>
 <rect class="cell" x="755.82" y="520.01" width="5.43" height="5.73" fill="#263244"><title>ARM9 resident · CARDi_WaitAsync · 92 B · remaining</title></rect>
@@ -2404,8 +2404,8 @@
 <rect class="cell" x="848.39" y="428.33" width="5.43" height="5.48" fill="#263244"><title>ARM9 resident · func_0203407c · 88 B · remaining</title></rect>
 <rect class="cell" x="853.82" y="428.33" width="5.43" height="5.48" fill="#2dd4a0"><title>ARM9 resident · fx_coprocessor · 88 B · matching C/C++</title></rect>
 <rect class="cell" x="859.25" y="428.33" width="5.43" height="5.48" fill="#2dd4a0"><title>ARM9 resident · gx_bg_address · 88 B · matching C/C++</title></rect>
-<rect class="cell" x="864.68" y="428.33" width="5.43" height="5.48" fill="#263244"><title>ARM9 resident · GX_EndLoadOBJExtPltt · 88 B · remaining</title></rect>
-<rect class="cell" x="761.25" y="433.81" width="5.35" height="5.56" fill="#263244"><title>ARM9 resident · func_0203869c · 88 B · remaining</title></rect>
+<rect class="cell" x="864.68" y="428.33" width="5.43" height="5.48" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 88 B · matching C/C++</title></rect>
+<rect class="cell" x="761.25" y="433.81" width="5.35" height="5.56" fill="#2dd4a0"><title>ARM9 resident · gx_texture_palette_load · 88 B · matching C/C++</title></rect>
 <rect class="cell" x="761.25" y="439.37" width="5.35" height="5.56" fill="#263244"><title>ARM9 resident · OS_GetLockID · 88 B · remaining</title></rect>
 <rect class="cell" x="761.25" y="444.93" width="5.35" height="5.56" fill="#263244"><title>ARM9 resident · func_02039108 · 88 B · remaining</title></rect>
 <rect class="cell" x="761.25" y="450.49" width="5.35" height="5.56" fill="#263244"><title>ARM9 resident · func_0203ac84 · 88 B · remaining</title></rect>
@@ -2431,7 +2431,7 @@
 <rect class="cell" x="766.59" y="455.74" width="5.18" height="5.48" fill="#263244"><title>ARM9 resident · func_020321e4 · 84 B · remaining</title></rect>
 <rect class="cell" x="766.59" y="461.22" width="5.18" height="5.48" fill="#263244"><title>ARM9 resident · func_02032fd4 · 84 B · remaining</title></rect>
 <rect class="cell" x="766.59" y="466.70" width="5.18" height="5.48" fill="#2dd4a0"><title>ARM9 resident · gx_bank_state · 84 B · matching C/C++</title></rect>
-<rect class="cell" x="766.59" y="472.19" width="5.18" height="5.48" fill="#263244"><title>ARM9 resident · func_02036f24 · 84 B · remaining</title></rect>
+<rect class="cell" x="766.59" y="472.19" width="5.18" height="5.48" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 84 B · matching C/C++</title></rect>
 <rect class="cell" x="766.59" y="477.67" width="5.18" height="5.48" fill="#263244"><title>ARM9 resident · func_0203c51c · 84 B · remaining</title></rect>
 <rect class="cell" x="766.59" y="483.15" width="5.18" height="5.48" fill="#263244"><title>ARM9 resident · FS_SetDefaultDMA · 84 B · remaining</title></rect>
 <rect class="cell" x="766.59" y="488.64" width="5.18" height="5.48" fill="#263244"><title>ARM9 resident · FS_UnloadOverlay · 84 B · remaining</title></rect>
@@ -2456,7 +2456,7 @@
 <rect class="cell" x="823.53" y="433.81" width="5.18" height="5.22" fill="#2dd4a0"><title>ARM9 resident · fx_coprocessor · 80 B · matching C/C++</title></rect>
 <rect class="cell" x="828.70" y="433.81" width="5.18" height="5.22" fill="#2dd4a0"><title>ARM9 resident · fx_coprocessor · 80 B · matching C/C++</title></rect>
 <rect class="cell" x="833.88" y="433.81" width="5.18" height="5.22" fill="#2dd4a0"><title>ARM9 resident · gx_bg_address · 80 B · matching C/C++</title></rect>
-<rect class="cell" x="839.06" y="433.81" width="5.18" height="5.22" fill="#263244"><title>ARM9 resident · func_02036d80 · 80 B · remaining</title></rect>
+<rect class="cell" x="839.06" y="433.81" width="5.18" height="5.22" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 80 B · matching C/C++</title></rect>
 <rect class="cell" x="844.23" y="433.81" width="5.18" height="5.22" fill="#263244"><title>ARM9 resident · func_02039e0c · 80 B · remaining</title></rect>
 <rect class="cell" x="849.41" y="433.81" width="5.18" height="5.22" fill="#263244"><title>ARM9 resident · FS_FindArchive · 80 B · remaining</title></rect>
 <rect class="cell" x="854.58" y="433.81" width="5.18" height="5.22" fill="#263244"><title>ARM9 resident · FS_OpenFile · 80 B · remaining</title></rect>
@@ -2473,8 +2473,8 @@
 <rect class="cell" x="771.77" y="480.83" width="5.01" height="5.12" fill="#263244"><title>ARM9 resident · func_02032f88 · 76 B · remaining</title></rect>
 <rect class="cell" x="771.77" y="485.96" width="5.01" height="5.12" fill="#263244"><title>ARM9 resident · func_02033ac4 · 76 B · remaining</title></rect>
 <rect class="cell" x="771.77" y="491.08" width="5.01" height="5.12" fill="#263244"><title>ARM9 resident · func_02035190 · 76 B · remaining</title></rect>
-<rect class="cell" x="771.77" y="496.21" width="5.01" height="5.12" fill="#263244"><title>ARM9 resident · GXS_EndLoadOBJExtPltt · 76 B · remaining</title></rect>
-<rect class="cell" x="771.77" y="501.33" width="5.01" height="5.12" fill="#263244"><title>ARM9 resident · GXS_EndLoadBGExtPltt · 76 B · remaining</title></rect>
+<rect class="cell" x="771.77" y="496.21" width="5.01" height="5.12" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 76 B · matching C/C++</title></rect>
+<rect class="cell" x="771.77" y="501.33" width="5.01" height="5.12" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 76 B · matching C/C++</title></rect>
 <rect class="cell" x="771.77" y="506.45" width="5.01" height="5.12" fill="#263244"><title>ARM9 resident · func_02038cf8 · 76 B · remaining</title></rect>
 <rect class="cell" x="771.77" y="511.58" width="5.01" height="5.12" fill="#263244"><title>ARM9 resident · func_02038d44 · 76 B · remaining</title></rect>
 <rect class="cell" x="771.77" y="516.70" width="5.01" height="5.12" fill="#263244"><title>ARM9 resident · OS_SaveContext · 76 B · remaining</title></rect>
@@ -2508,7 +2508,7 @@
 <rect class="cell" x="776.78" y="468.60" width="4.97" height="4.90" fill="#263244"><title>ARM9 resident · func_02033114 · 72 B · remaining</title></rect>
 <rect class="cell" x="776.78" y="473.50" width="4.97" height="4.90" fill="#263244"><title>ARM9 resident · func_020351dc · 72 B · remaining</title></rect>
 <rect class="cell" x="776.78" y="478.40" width="4.97" height="4.90" fill="#2dd4a0"><title>ARM9 resident · gx_bg_address · 72 B · matching C/C++</title></rect>
-<rect class="cell" x="776.78" y="483.30" width="4.97" height="4.90" fill="#263244"><title>ARM9 resident · func_02038768 · 72 B · remaining</title></rect>
+<rect class="cell" x="776.78" y="483.30" width="4.97" height="4.90" fill="#2dd4a0"><title>ARM9 resident · gx_texture_palette_load · 72 B · matching C/C++</title></rect>
 <rect class="cell" x="776.78" y="488.20" width="4.97" height="4.90" fill="#263244"><title>ARM9 resident · OS_DisableIrqMask · 72 B · remaining</title></rect>
 <rect class="cell" x="776.78" y="493.10" width="4.97" height="4.90" fill="#263244"><title>ARM9 resident · func_02039858 · 72 B · remaining</title></rect>
 <rect class="cell" x="776.78" y="498.00" width="4.97" height="4.90" fill="#263244"><title>ARM9 resident · func_0203c30c · 72 B · remaining</title></rect>
@@ -2600,7 +2600,7 @@
 <rect class="cell" x="817.28" y="453.51" width="4.40" height="4.61" fill="#263244"><title>ARM9 resident · func_02034144 · 60 B · remaining</title></rect>
 <rect class="cell" x="821.68" y="453.51" width="4.40" height="4.61" fill="#2dd4a0"><title>ARM9 resident · fx_coprocessor · 60 B · matching C/C++</title></rect>
 <rect class="cell" x="826.08" y="453.51" width="4.40" height="4.61" fill="#2dd4a0"><title>ARM9 resident · fx_coprocessor · 60 B · matching C/C++</title></rect>
-<rect class="cell" x="830.48" y="453.51" width="4.40" height="4.61" fill="#263244"><title>ARM9 resident · func_020372ec · 60 B · remaining</title></rect>
+<rect class="cell" x="830.48" y="453.51" width="4.40" height="4.61" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 60 B · matching C/C++</title></rect>
 <rect class="cell" x="834.89" y="453.51" width="4.40" height="4.61" fill="#263244"><title>ARM9 resident · FS_Init · 60 B · remaining</title></rect>
 <rect class="cell" x="839.29" y="453.51" width="4.40" height="4.61" fill="#263244"><title>ARM9 resident · func_02041794 · 60 B · remaining</title></rect>
 <rect class="cell" x="843.69" y="453.51" width="4.40" height="4.61" fill="#263244"><title>ARM9 resident · func_020417e8 · 60 B · remaining</title></rect>
@@ -2670,7 +2670,7 @@
 <rect class="cell" x="820.27" y="462.40" width="4.15" height="4.23" fill="#2dd4a0"><title>ARM9 resident · gx_bg_address · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="824.42" y="462.40" width="4.15" height="4.23" fill="#2dd4a0"><title>ARM9 resident · gx_bg_address · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="828.57" y="462.40" width="4.15" height="4.23" fill="#2dd4a0"><title>ARM9 resident · gx_bg_address · 52 B · matching C/C++</title></rect>
-<rect class="cell" x="832.73" y="462.40" width="4.15" height="4.23" fill="#263244"><title>ARM9 resident · func_020370d4 · 52 B · remaining</title></rect>
+<rect class="cell" x="832.73" y="462.40" width="4.15" height="4.23" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="836.88" y="462.40" width="4.15" height="4.23" fill="#263244"><title>ARM9 resident · OS_ResetRequestIrqMask · 52 B · remaining</title></rect>
 <rect class="cell" x="841.03" y="462.40" width="4.15" height="4.23" fill="#263244"><title>ARM9 resident · func_02038cc4 · 52 B · remaining</title></rect>
 <rect class="cell" x="845.19" y="462.40" width="4.15" height="4.23" fill="#263244"><title>ARM9 resident · func_02039268 · 52 B · remaining</title></rect>
@@ -2716,7 +2716,7 @@
 <rect class="cell" x="807.87" y="470.54" width="4.17" height="3.89" fill="#263244"><title>ARM9 resident · func_02035224 · 48 B · remaining</title></rect>
 <rect class="cell" x="812.04" y="470.54" width="4.17" height="3.89" fill="#263244"><title>ARM9 resident · func_02035254 · 48 B · remaining</title></rect>
 <rect class="cell" x="816.21" y="470.54" width="4.17" height="3.89" fill="#2dd4a0"><title>ARM9 resident · gx_command_list · 48 B · matching C/C++</title></rect>
-<rect class="cell" x="820.39" y="470.54" width="4.17" height="3.89" fill="#263244"><title>ARM9 resident · func_02036ee0 · 48 B · remaining</title></rect>
+<rect class="cell" x="820.39" y="470.54" width="4.17" height="3.89" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 48 B · matching C/C++</title></rect>
 <rect class="cell" x="824.56" y="470.54" width="4.17" height="3.89" fill="#263244"><title>ARM9 resident · func_02038e98 · 48 B · remaining</title></rect>
 <rect class="cell" x="828.73" y="470.54" width="4.17" height="3.89" fill="#263244"><title>ARM9 resident · func_02039908 · 48 B · remaining</title></rect>
 <rect class="cell" x="832.90" y="470.54" width="4.17" height="3.89" fill="#263244"><title>ARM9 resident · func_0203af0c · 48 B · remaining</title></rect>
@@ -2753,8 +2753,8 @@
 <rect class="cell" x="830.97" y="474.42" width="3.91" height="3.80" fill="#263244"><title>ARM9 resident · func_020350d4 · 44 B · remaining</title></rect>
 <rect class="cell" x="834.88" y="474.42" width="3.91" height="3.80" fill="#2dd4a0"><title>ARM9 resident · gx_command_list · 44 B · matching C/C++</title></rect>
 <rect class="cell" x="838.80" y="474.42" width="3.91" height="3.80" fill="#2dd4a0"><title>ARM9 resident · gx_command_list · 44 B · matching C/C++</title></rect>
-<rect class="cell" x="842.71" y="474.42" width="3.91" height="3.80" fill="#263244"><title>ARM9 resident · func_02036dd0 · 44 B · remaining</title></rect>
-<rect class="cell" x="846.63" y="474.42" width="3.91" height="3.80" fill="#263244"><title>ARM9 resident · func_02036dfc · 44 B · remaining</title></rect>
+<rect class="cell" x="842.71" y="474.42" width="3.91" height="3.80" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 44 B · matching C/C++</title></rect>
+<rect class="cell" x="846.63" y="474.42" width="3.91" height="3.80" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 44 B · matching C/C++</title></rect>
 <rect class="cell" x="850.54" y="474.42" width="3.91" height="3.80" fill="#263244"><title>ARM9 resident · OS_SelectThread · 44 B · remaining</title></rect>
 <rect class="cell" x="854.45" y="474.42" width="3.91" height="3.80" fill="#263244"><title>ARM9 resident · DC_StoreAll · 44 B · remaining</title></rect>
 <rect class="cell" x="858.37" y="474.42" width="3.91" height="3.80" fill="#263244"><title>ARM9 resident · MI_Copy64B · 44 B · remaining</title></rect>
@@ -2841,8 +2841,8 @@
 <rect class="cell" x="821.86" y="485.42" width="3.45" height="3.53" fill="#2dd4a0"><title>ARM9 resident · gx_blend_affine · 36 B · matching C/C++</title></rect>
 <rect class="cell" x="825.31" y="485.42" width="3.45" height="3.53" fill="#2dd4a0"><title>ARM9 resident · gx_command_list · 36 B · matching C/C++</title></rect>
 <rect class="cell" x="828.75" y="485.42" width="3.45" height="3.53" fill="#2dd4a0"><title>ARM9 resident · gx_command_list · 36 B · matching C/C++</title></rect>
-<rect class="cell" x="832.20" y="485.42" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · GXS_BeginLoadOBJExtPltt · 36 B · remaining</title></rect>
-<rect class="cell" x="835.64" y="485.42" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · GXS_BeginLoadBGExtPltt · 36 B · remaining</title></rect>
+<rect class="cell" x="832.20" y="485.42" width="3.45" height="3.53" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 36 B · matching C/C++</title></rect>
+<rect class="cell" x="835.64" y="485.42" width="3.45" height="3.53" fill="#2dd4a0"><title>ARM9 resident · gx_extended_palette · 36 B · matching C/C++</title></rect>
 <rect class="cell" x="839.09" y="485.42" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · func_02039d50 · 36 B · remaining</title></rect>
 <rect class="cell" x="842.54" y="485.42" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · func_02039d74 · 36 B · remaining</title></rect>
 <rect class="cell" x="845.98" y="485.42" width="3.45" height="3.53" fill="#263244"><title>ARM9 resident · DC_FlushRange · 36 B · remaining</title></rect>
@@ -3029,7 +3029,7 @@
 <rect class="cell" x="842.70" y="506.95" width="2.49" height="2.71" fill="#2dd4a0"><title>ARM9 resident · gx_bank_reset · 20 B · matching C/C++</title></rect>
 <rect class="cell" x="845.19" y="506.95" width="2.49" height="2.71" fill="#2dd4a0"><title>ARM9 resident · gx_bank_lcdc · 20 B · matching C/C++</title></rect>
 <rect class="cell" x="847.68" y="506.95" width="2.49" height="2.71" fill="#2dd4a0"><title>ARM9 resident · gx_bank_lcdc · 20 B · matching C/C++</title></rect>
-<rect class="cell" x="850.18" y="506.95" width="2.49" height="2.71" fill="#263244"><title>ARM9 resident · func_02036f10 · 20 B · remaining</title></rect>
+<rect class="cell" x="850.18" y="506.95" width="2.49" height="2.71" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 20 B · matching C/C++</title></rect>
 <rect class="cell" x="852.67" y="506.95" width="2.49" height="2.71" fill="#263244"><title>ARM9 resident · func_02038e20 · 20 B · remaining</title></rect>
 <rect class="cell" x="855.16" y="506.95" width="2.49" height="2.71" fill="#263244"><title>ARM9 resident · func_02039254 · 20 B · remaining</title></rect>
 <rect class="cell" x="857.65" y="506.95" width="2.49" height="2.71" fill="#263244"><title>ARM9 resident · func_02039f58 · 20 B · remaining</title></rect>
@@ -3101,7 +3101,7 @@
 <rect class="cell" x="861.13" y="514.55" width="2.24" height="2.41" fill="#263244"><title>ARM9 resident · func_0203100c · 16 B · remaining</title></rect>
 <rect class="cell" x="863.38" y="514.55" width="2.24" height="2.41" fill="#2dd4a0"><title>ARM9 resident · gx_bank_state · 16 B · matching C/C++</title></rect>
 <rect class="cell" x="865.62" y="514.55" width="2.24" height="2.41" fill="#2dd4a0"><title>ARM9 resident · gx_bank_state · 16 B · matching C/C++</title></rect>
-<rect class="cell" x="867.87" y="514.55" width="2.24" height="2.41" fill="#263244"><title>ARM9 resident · func_02036d70 · 16 B · remaining</title></rect>
+<rect class="cell" x="867.87" y="514.55" width="2.24" height="2.41" fill="#2dd4a0"><title>ARM9 resident · gx_geometry_state · 16 B · matching C/C++</title></rect>
 <rect class="cell" x="847.67" y="516.96" width="2.40" height="2.25" fill="#263244"><title>ARM9 resident · func_02038af0 · 16 B · remaining</title></rect>
 <rect class="cell" x="847.67" y="519.20" width="2.40" height="2.25" fill="#263244"><title>ARM9 resident · func_02038b00 · 16 B · remaining</title></rect>
 <rect class="cell" x="847.67" y="521.45" width="2.40" height="2.25" fill="#263244"><title>ARM9 resident · func_02038b10 · 16 B · remaining</title></rect>
