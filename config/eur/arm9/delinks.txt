@@ -181,3 +181,6 @@ src/nitro/ctrdg/ctrdg.c:
 
 src/nitro/ctrdg/ctrdg_init.c:
     .text start:0x020441ac end:0x02044248
+
+src/msl/runtime.c:
+    .text start:0x02044310 end:0x0204485c

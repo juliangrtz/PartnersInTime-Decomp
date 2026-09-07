@@ -372,3 +372,17 @@ match. No assembly fallback is added.
 
 The total is 222,652 bytes (14.24%). Module/symbol checks, the original-ROM SHA-1,
 all 66 tests, generated progress, and the public-content audit pass.
+
+## C runtime termination, signals, and stream buffers
+
+Nine runtime functions add 1,356 matching bytes in pure C: exit-handler and
+global-destructor dispatch, abort and signal handling, flushing all streams,
+individual stream flushing, and buffer preparation. The stream structure is
+reconstructed with its original 76-byte layout and mode/state bitfields. The
+newline conversion routine is an empty function in the original executable.
+Explicit lock-owner and current-thread values preserve the native register
+allocation in both critical-region callers.
+
+The total is 224,008 bytes (14.33%). All nine functions match completely in
+objdiff; module/symbol checks, original-ROM SHA-1, all 66 tests, generated
+progress, and the public-content audit pass.
