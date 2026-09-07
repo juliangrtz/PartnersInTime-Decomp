@@ -1,20 +1,4 @@
-#include <game/matrix_animation.h>
-#include <game/battle_scene.h>
-
-typedef struct GameModelAnimationContext {
-    struct GameModelAnimationContext *next;
-    u32 unknown_04[5];
-    BattleModel *models[4];
-} GameModelAnimationContext;
-
-typedef struct GameModelAnimation {
-    GameMatrixAnimation *animation;
-    GameModelAnimationContext *storage;
-    GameModelAnimationContext *free_head;
-    GameModelAnimationContext *free_tail;
-    GameModelAnimationContext *active;
-    void (*prepare)(BattleModel *, BattleModel *, GameModelAnimationContext *, MtxFx44 *);
-} GameModelAnimation;
+#include <game/model_animation.h>
 
 extern GameModelAnimation *data_0205a8c8;
 extern void func_0202cbd4(void *, int, u32);

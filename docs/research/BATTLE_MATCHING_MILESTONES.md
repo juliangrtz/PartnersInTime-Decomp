@@ -1489,3 +1489,32 @@ destruction were not entered by the normal route. The total is 351,568 of
 1,563,700 bytes (22.48%). All module/symbol checks, 74 tests, generated progress
 and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Field model and sprite animation ownership
+
+Nine functions add 1,008 matching C bytes: model-animation allocation, cleanup,
+model selection and track creation, plus sprite-animation allocation, cleanup,
+track creation, cancellation and display restoration. Shared headers now own
+the existing model-animation pool/context layouts and checked field owner
+layouts. Empty matrix/sprite finalizers now accept the owner pointer passed by
+the original callers. All existing compiled bytes remain unchanged.
+
+A normal 2,033-frame boot/save-load replay entered both owner initializers once.
+Read-only inspection of that checkpoint verified three acyclic free lists and
+their tail pointers: 32 matrix tracks at stride 56, 32 model contexts at stride
+40, and 128 sprite tracks at stride 48. The model owner is at 0x023209A0 and the
+sprite owner at 0x020C9B58. The final render lists contain 30/40 valid models;
+main/sub BG memory changed by 55,110/47,962 bytes, OBJ by 12,297 and palettes by
+243 bytes. A subsequent 362-frame throne-room transition retained valid 36/40
+model lists but did not enter additional helpers in this batch.
+
+Track creation, cancellation, display restoration and cleanup remain outside
+the exercised gameplay routes; their linked bytes match. The larger sprite
+update loop and model preparation callback remain assembly. The rendering role
+of model bytes 0x134..0x137 is still unresolved and the shared context names
+retain that offset. Evidence remains private under
+build/runtime/eur_field_animation_verified, eur_field_animation_pools and
+eur_field_animation_transition_verified. The total is 352,576 of 1,563,700 bytes
+(22.55%). All module/symbol checks, 74 tests, generated progress and public-content
+checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

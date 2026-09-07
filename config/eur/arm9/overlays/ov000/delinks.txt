@@ -13,3 +13,15 @@ src/field/field_vm_dispatch.cpp:
 
 src/field/field_timer.c:
     .text       start:0x020beb24 end:0x020bee20
+
+src/field/field_model_animation.c:
+    .text       start:0x020bef14 end:0x020bf110
+
+src/field/field_sprite_animation_lifecycle.c:
+    .text       start:0x020bf510 end:0x020bf5b8
+
+src/field/field_sprite_animation_start.c:
+    .text       start:0x020bf2e0 end:0x020bf33c
+
+src/field/field_sprite_animation_controls.c:
+    .text       start:0x020bf110 end:0x020bf200

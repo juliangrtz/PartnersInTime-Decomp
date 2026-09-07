@@ -15,7 +15,7 @@ GameSpriteAnimation *GameSpriteAnimation_Initialize(GameSpriteAnimation *animati
     animation->active = 0;
     return animation;
 }
-void GameSpriteAnimation_Finalize(void) {}
+void GameSpriteAnimation_Finalize(GameSpriteAnimation *animation) {}
 GameSpriteAnimationTrack *GameSpriteAnimation_Allocate(GameSpriteAnimation *animation) {
     GameSpriteAnimationTrack *track = animation->free_head;
     if (track == animation->free_tail) return 0;

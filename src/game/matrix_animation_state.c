@@ -23,7 +23,7 @@ GameMatrixAnimation *GameMatrixAnimation_Initialize(GameMatrixAnimation *animati
     animation->active = 0;
     return animation;
 }
-void GameMatrixAnimation_Finalize(void) {}
+void GameMatrixAnimation_Finalize(GameMatrixAnimation *animation) {}
 GameMatrixAnimationTrack *GameMatrixAnimation_Allocate(GameMatrixAnimation *animation) {
     GameMatrixAnimationTrack *track = animation->free_head;
     if (track == animation->free_tail) return 0;

@@ -48,7 +48,7 @@ void GameMatrixAnimation_Update(GameMatrixAnimation *animation);
 GameMatrixAnimationTrack *GameMatrixAnimation_Start(GameMatrixAnimation *animation,
     const s16 *commands,
     void (*draw)(int, MtxFx44 *, GameMatrixAnimationTrack *), int speed);
-void GameMatrixAnimation_Finalize(void);
+void GameMatrixAnimation_Finalize(GameMatrixAnimation *animation);
 GameMatrixAnimation *GameMatrixAnimation_Initialize(GameMatrixAnimation *animation,
     void *storage, int tracks, int matrices);
 #endif

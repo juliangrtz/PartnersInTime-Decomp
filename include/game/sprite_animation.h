@@ -36,7 +36,7 @@ void GameSpriteAnimation_Scan(GameSpriteAnimation *animation, GameSpriteAnimatio
 void func_02016c0c(GameSpriteAnimation *, GameSpriteAnimationTrack *, const s16 *);
 GameSpriteAnimation *GameSpriteAnimation_Initialize(GameSpriteAnimation *animation,
     void *storage, int tracks, int buffer_size);
-void GameSpriteAnimation_Finalize(void);
+void GameSpriteAnimation_Finalize(GameSpriteAnimation *animation);
 GameSpriteAnimationTrack *GameSpriteAnimation_Start(GameSpriteAnimation *animation,
     const s16 *commands, int x, int y, int z, int speed);
 void GameSpriteAnimation_Update(GameSpriteAnimation *animation);
