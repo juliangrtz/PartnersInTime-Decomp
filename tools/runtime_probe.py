@@ -350,6 +350,25 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r3 = registers.r3 & 0xFFFFFFFF
 
     if label in {
+        "FieldBackground_UpdateTransfers", "FieldBackground_InitTransfers",
+        "FieldBackground_DestroyTransfers", "FieldBackground_DeleteTransfers",
+    } and is_main_ram_pointer(r0, 0x100):
+        initializing = label == "FieldBackground_InitTransfers"
+        background = r3 if initializing else read_u32(emulator, r0 + 4)
+        return {
+            "transfers": f"{r0:#010x}",
+            "background": f"{background:#010x}",
+            "initializing": initializing,
+            "priority_argument": r1 if initializing else None,
+            "state": None if initializing else read_u32(emulator, r0 + 0x28),
+            "queued_transfers": None if initializing else read_u8(emulator, r0 + 0xFC),
+            "dirty_flags": None if initializing else read_u8(emulator, r0 + 0xFD),
+            "waiting_vblank": bool(read_u16(emulator, 0x02060B40) & 0x100),
+            "background_load_status": read_u8(emulator, background + 0x28)
+            if is_main_ram_pointer(background, 0x29) else None,
+        }
+
+    if label in {
         "FieldBackground_GetTileBytes", "FieldBackground_AllocatePalettes",
         "FieldBackground_UploadAllPalettes", "FieldBackground_RestorePalettes",
         "FieldBackground_InitializePaletteAnimation", "FieldBackground_UpdatePaletteAnimations",
@@ -357,6 +376,7 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
         "FieldBackground_UpdateBlendAnimation", "FieldBackground_SetPaletteEffects",
         "FieldBackground_ConfigurePaletteEffect", "FieldBackground_ResetPaletteEffect",
         "FieldBackground_RestoreAndUploadPalette", "FieldBackground_UploadBasePalette",
+        "FieldBackground_IsReady",
     } and is_main_ram_pointer(r0, 0x78D):
         screen = read_u8(emulator, r0 + 0x782)
         track_count = read_u8(emulator, r0 + 0x78A) + 1
@@ -364,6 +384,7 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
         times = read_u32(emulator, r0 + 0x758)
         return {
             "background": f"{r0:#010x}",
+            "load_status": read_u8(emulator, r0 + 0x28),
             "screen": screen,
             "color256_layers": read_u8(emulator, r0 + 0x783),
             "palette_state": read_u8(emulator, r0 + 0x78C),

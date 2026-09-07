@@ -1189,3 +1189,36 @@ Evidence and the compatible checkpoint remain private under build/runtime/.
 The total is 339,844 of 1,563,700 bytes (21.73%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Background lifetime, VBlank transfers and effect templates
+
+Fifteen functions add 2,124 matching C/C++ bytes. The background constructor and
+both destructors recover task registration, transfer-task allocation, initial
+state, palette cleanup and shared tile-source ownership. Destruction clears
+earlier duplicate tile-source pointers after freeing a source, avoiding repeated
+frees. The transfer task initializes scroll registers, waits for background load
+status 101, then processes dirty tilemaps, scroll, palettes, queued copies and
+blend settings while the frame is waiting for VBlank. The original impossible
+comparison of the one-bit palette-dirty field with 2 remains byte-identical.
+
+Resource accessors, origin retrieval and scroll-parameter setup fill the small
+contiguous accessor block. A 32-byte palette-effect template describes the
+command header and two endpoint layouts by name; the setup routine no longer
+needs unexplained halfword-array indices. Its battle caller uses the shared
+prototype and palette-pointer types. Tile-animation resource fields were also
+mapped from their consumers, but the larger playback routines remain assembly.
+
+Runtime verification navigated from the save-point field through its normal
+downward exit into the throne room. The rebuilt ROM captured one background
+deletion and initialization, one transfer-task deletion and initialization,
+38 readiness queries and 683 transfer updates. Transfer state progressed through
+0, 1 and 255 with background status 101. Of the active-state entries, 651 were
+inside the VBlank wait and 30 outside it. The constructor received priority 8
+and its owning background pointer, agreeing with the reconstructed call.
+The destination render lists contain 36 and 40 models without link errors.
+Private captures contain 97,433 changed main-BG bytes and 218 changed palette
+bytes. The effect-template routine was not exercised by this route.
+
+The total is 341,968 of 1,563,700 bytes (21.87%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

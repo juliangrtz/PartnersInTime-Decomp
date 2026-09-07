@@ -5,6 +5,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+int GamePaletteAnimation_ApplyEffect(int mode, int color, int duration, int time,
+    u16 *destination, int count, const u16 *source, int loop);
+
 /* RGB555 operations use an interpolation amount on the 0..32 scale. */
 u32 GameColor_Blend(u32 color, u32 tint, int amount);
 u32 GameColor_AddScaled(u32 color, u32 tint, int amount);

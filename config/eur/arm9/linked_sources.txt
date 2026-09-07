@@ -385,4 +385,7 @@ src/game/palette_animation_keyframes.c
 src/game/palette_animation_cycle.c
 src/game/animation_table.c
 src/game/field_background_controls.cpp
-src/game/field_background_palette_reverse.c
+src/game/field_background_transfer_task.cpp
+src/game/field_background_accessors.c
+src/game/field_background_lifecycle.c
+src/game/palette_effect.c

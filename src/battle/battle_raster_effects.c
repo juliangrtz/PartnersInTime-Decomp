@@ -2,6 +2,7 @@
 #include <game/battle_context.h>
 #include <game/battle_object.h>
 #include <game/battle_raster_effects.h>
+#include <game/palette_animation.h>
 
 enum BattleRasterEffectOffset {
     BATTLE_RASTER_TASK_POOL_OFFSET = 0x8B44,
@@ -45,9 +46,6 @@ extern void *func_ov002_020725a4(
 extern void func_ov002_0208b254(void *task);
 extern void func_ov002_0208ace0(
     BattleObjectDataLoadState *load_state, s16 value);
-extern int func_0202da0c(
-    int value, int extent, int duration, int progress,
-    int table_cursor, int scale, int table, int flags);
 extern int func_ov002_020b05f0(s16 x, s16 y, int frame);
 extern int BattleRasterEffect_ApplyToTable(
     int value, int extent, int duration, int progress,
@@ -83,9 +81,9 @@ int BattleRasterEffect_ApplyToTable(
     } else {
         *table_cursor = (int)table + 0x200;
     }
-    return func_0202da0c(
+    return GamePaletteAnimation_ApplyEffect(
         value, extent, duration, progress,
-        *table_cursor, 0x100, (int)table, 0);
+        (u16 *)*table_cursor, 0x100, (const u16 *)table, 0);
 }
 
 BattleRasterEffectTask *BattleRasterEffect_StartFinite(

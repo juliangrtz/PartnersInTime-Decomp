@@ -15,7 +15,10 @@ typedef struct GameInput {
 
 typedef struct GameFrameTiming {
     u8 reserved[20];
-    u16 flags;
+    union {
+        u16 flags;
+        struct { u16 unknown_00_07 : 8, waiting_vblank : 1, unknown_09_15 : 7; } bits;
+    };
     s16 frame_start;
     s16 frame_end;
     s16 frame_lines;
