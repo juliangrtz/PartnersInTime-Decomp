@@ -175,3 +175,19 @@ conditional load order still differs in C. Every included function links to
 identical original bytes, including the pool-tail relocation aliases.
 The complete ROM SHA-1, module/symbol checks, progress check, public-content
 audit, and all 66 tests pass.
+
+## Instrument banks and processor FIFO
+
+The instrument-bank and processor-FIFO units, plus the shared-status getter,
+add 16 functions and 2,628 matching bytes in C. The bank reader handles simple
+instruments, contiguous key ranges, and eight-region key splits. Wave archives
+retain their pointer/offset distinction and linked references from banks;
+reference changes preserve cache-store ranges and lock boundaries.
+
+The FIFO packet is a 5-bit tag, 1-bit error flag, and 26-bit payload. Its C
+bitfields reproduce the original packet updates. Interrupt-driven receive,
+unhandled-tag replies, transmit errors, callback registration, and startup
+handshake all match. The 40-byte remote callback-mask getter remains native:
+its current C form materializes the fixed shared-memory base differently.
+No assembly fallback is added. Module/symbol checks, the original ROM SHA-1,
+progress consistency, public-content audit, and all 66 tests pass.

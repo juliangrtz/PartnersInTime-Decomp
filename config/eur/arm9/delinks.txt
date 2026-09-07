@@ -99,7 +99,16 @@ src/nitro/snd/snd_command_queue.c:
     .text       start:0x0203c5b0 end:0x0203cb30
 
 src/nitro/snd/snd_shared.c:
-    .text       start:0x0203cb30 end:0x0203ccc4
+    .text       start:0x0203cb30 end:0x0203ccf8
 
 src/nitro/snd/snd_command_status.c:
     .text       start:0x0203c30c end:0x0203c570
+
+src/nitro/snd/snd_bank.c:
+    .text       start:0x0203ccf8 end:0x0203d3ac
+
+src/nitro/pxi/pxi_fifo.c:
+    .text       start:0x0203d3ac end:0x0203d590
+
+src/nitro/pxi/pxi_init.c:
+    .text       start:0x0203d5b8 end:0x0203d730

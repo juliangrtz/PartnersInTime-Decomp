@@ -39,6 +39,8 @@ typedef char SoundSharedWorkSizeCheck[(sizeof(SoundSharedWork) == 640) ? 1 : -1]
 void func_0203bd6c(u32 opcode, u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 void func_0203bdf0(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 width);
 void func_0203be24(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+void func_0203c298(void);
+void func_0203c2ac(void);
 int func_0203c30c(void);
 SoundCommand *func_0203c354(void);
 void func_0203c3ac(void);

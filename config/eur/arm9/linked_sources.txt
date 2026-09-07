@@ -181,3 +181,6 @@ src/nitro/snd/snd_init.c
 src/nitro/snd/snd_command_queue.c
 src/nitro/snd/snd_command_status.c
 src/nitro/snd/snd_shared.c
+src/nitro/snd/snd_bank.c
+src/nitro/pxi/pxi_fifo.c
+src/nitro/pxi/pxi_init.c

@@ -5,6 +5,11 @@ extern SoundSharedWork *data_02064b80;
 extern void DC_FlushRange(const void *data, u32 size);
 extern void DC_InvalidateRange(const void *data, u32 size);
 
+u32 func_0203ccc4(void) {
+    DC_InvalidateRange(data_02064b80, sizeof(SoundSharedWork));
+    return data_02064b80->status;
+}
+
 u32 func_0203cc90(void) {
     DC_InvalidateRange(data_02064b80, sizeof(SoundSharedWork));
     return data_02064b80->completed_serial;
