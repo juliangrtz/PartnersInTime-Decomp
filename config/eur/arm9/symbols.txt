@@ -1913,6 +1913,8 @@ data_02059ef4 kind:data(any) addr:0x02059ef4
 data_02059efc kind:data(any) addr:0x02059efc
 data_02059f18 kind:data(any) addr:0x02059f18
 data_02059f38 kind:data(any) addr:0x02059f38
+fsi_digest_table_start kind:data(any) addr:0x02059f38
+fsi_digest_table_end kind:data(any) addr:0x02059f38
 data_02059f40 kind:bss addr:0x02059f40
 data_02059f44 kind:bss addr:0x02059f44
 data_02059f48 kind:bss addr:0x02059f48

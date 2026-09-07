@@ -127,3 +127,6 @@ src/nitro/fs/fs_rom.c:
 
 src/nitro/fs/fs_overlay_io.c:
     .text       start:0x0203f928 end:0x0203fdb0
+
+src/nitro/fs/fs_overlay_lifecycle.c:
+    .text       start:0x0203f654 end:0x0203f928

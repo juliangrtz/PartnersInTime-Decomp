@@ -250,3 +250,18 @@ are C. These blocks preserve instruction scheduling and literal-pool order;
 they are not assembly bodies for the reconstructed functions. The full ROM
 matches the reference SHA-1, every module and symbol check passes, and all
 66 tests, progress checks, and the public-content audit pass.
+
+## Overlay initialization and destructor cleanup
+
+All five overlay lifecycle functions add 724 matching bytes in pure C. Loading
+checks metadata and image reads before initialization. Startup preserves digest
+verification, optional backward decompression, cache flushing, and constructor
+iteration. Named start/end aliases retain the empty digest-table boundaries
+without folding away the original verification branch.
+
+Unload detaches matching destructors under the interrupt lock, invokes them
+after restoring interrupts, and repeats to handle callbacks that register more
+destructors. The image-size intermediate uses signed subtraction as in the
+native bounds calculation; no assembly fallback is needed. Module/symbol
+checks, the reference-ROM SHA-1, progress consistency, the public-content audit,
+and all 66 tests pass.
