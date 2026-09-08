@@ -1,3 +1,4 @@
+#include <game/field_system.h>
 #include <game/field_transform.h>
 #include <game/field_entity_motion.h>
 #include <game/field_linear.h>
@@ -236,9 +237,6 @@ extern void func_ov000_0206acf8(void *field_system, int shop_scene_id,
 extern void func_ov000_0206abd8(void *field_system, int fade_to_black);
 extern void func_ov000_0206a9a4(void *field_system, int fade_to_black);
 extern void GameParty_Initialize(int new_game_preset);
-extern void func_ov000_0206d274(void *field_system, int character_index);
-extern void func_ov000_0206d1dc(void *field_system, int character_index,
-                                int hp_delta);
 extern int GameInventory_Add(u16 item_id, int count_delta);
 extern const u16 data_02048f1a[];
 extern void func_ov000_02081bd4(int enabled);
@@ -3854,12 +3852,12 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_RESTORE_PARTY_MEMBER_HP:
-        func_ov000_0206d274(field_system, arguments[0]);
+        FieldSystem_RefillMemberHp((FieldSystem *)field_system, arguments[0]);
         break;
 
     case FIELD_VM_ADJUST_PARTY_MEMBER_HP:
-        func_ov000_0206d1dc(
-            field_system, arguments[0], arguments[1]);
+        FieldSystem_AdjustMemberHp(
+            (FieldSystem *)field_system, arguments[0], arguments[1]);
         break;
 
     case FIELD_VM_SET_COINS:

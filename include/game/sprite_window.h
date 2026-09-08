@@ -51,6 +51,9 @@ typedef char GameSpriteWindowManagerSizeCheck[sizeof(GameSpriteWindowManager) ==
 #ifdef __cplusplus
 extern "C" {
 #endif
+GameSpriteWindowManager *GameSpriteWindow_Construct(GameSpriteWindowManager *manager, int priority,
+    int unused, u8 main_bg, u8 sub_bg, u8 main_priority, u8 sub_priority,
+    const u32 *buffers, const u16 *tilemaps, int configure, GameSpriteAnimator *animator);
 void GameSpriteWindow_Close(GameSpriteWindowManager *manager, s16 index);
 void GameSpriteWindow_Upload(GameSpriteWindowManager *manager, GameWindow *window);
 void GameSpriteWindow_UploadDirty(GameSpriteWindowManager *manager);

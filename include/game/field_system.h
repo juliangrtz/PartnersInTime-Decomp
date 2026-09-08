@@ -2,9 +2,12 @@
 #define PIT_GAME_FIELD_SYSTEM_H
 #include <game/field_party_manager.h>
 #include <game/task.h>
-#include <game/field_timer.h>
-#include <game/field_animation.h>
+#include <game/field_resources.h>
 #include <nitro/tp.h>
+typedef struct FieldTimer FieldTimer;
+typedef struct FieldModelAnimation FieldModelAnimation;
+typedef struct FieldSpriteAnimation FieldSpriteAnimation;
+typedef struct GameSpriteWindowManager GameSpriteWindowManager;
 typedef struct FieldSystem {
     GameTask task;
     u8 unknown_18[16];
@@ -15,7 +18,10 @@ typedef struct FieldSystem {
             GameTask *update_task;
             FieldArchive *archive;
             GameIrqTask *irq_task;
-            u8 unknown_4c[540];
+            FieldPrimaryResource *shared_primary;
+            FieldSecondaryResource *shared_secondary, *temporary_secondary;
+            u16 shared_palette[256];
+            u8 unknown_258[16];
             struct {
                 u32 enabled : 1, state : 3;
                 s32 x : 9, y : 9;
@@ -27,8 +33,8 @@ typedef struct FieldSystem {
             FieldTimer *timer;
             FieldModelAnimation *model_animation;
             FieldSpriteAnimation *sprite_animation;
-            ModelRenderDescriptor *render_descriptor;
-            u8 unknown_3b0[8];
+            GameSpriteWindowManager *windows;
+            FieldAreaContext *areas[2];
         };
     };
 } FieldSystem;
@@ -59,6 +65,10 @@ enum FieldTouchState {
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldSystem_AdjustMemberHp(FieldSystem *system, int member, int amount);
+void FieldSystem_RefillMemberHp(FieldSystem *system, int member);
+void FieldSystem_CreateSpriteWindows(FieldSystem *system);
+void FieldSystem_ReleaseSharedResources(FieldSystem *system);
 FieldSystem *FieldSystem_Init(FieldSystem *system, u32 priority, u32 unused, void *argument);
 FieldSystem *FieldSystem_Destroy(FieldSystem *system);
 FieldSystem *FieldSystem_Delete(FieldSystem *system);

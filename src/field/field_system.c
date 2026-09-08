@@ -1,3 +1,5 @@
+#include <game/field_timer.h>
+#include <game/field_animation.h>
 #include <game/field_display.h>
 #include <game/field_system.h>
 #include <game/heap.h>

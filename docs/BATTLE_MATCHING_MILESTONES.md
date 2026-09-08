@@ -920,3 +920,29 @@ battery save is unchanged. Private evidence is `display_save83.json` and
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Shared field resources, sprite windows and HP helpers (2026-09-09)
+
+Four contiguous functions add 548 matching C bytes, reaching
+522,000 / 1,563,700 bytes (33.38%). Resource teardown frees graphics and
+animation buffers for 85 shared primary records, optional bounds, two secondary
+buffers and their owning arrays. Window setup constructs the sprite-window
+manager and allocates eight windows and two sprite slots. HP helpers refill a
+member or apply a signed delta clamped to zero and maximum HP, then refresh the
+second area's HUD when its state is 71. Existing VM calls now use these names
+and the shared field-system interface.
+
+Checkpoint-83 boot/load and save-block replays each verify the window pool's
+eight-entry capacity, two sprite slots and allocated pointers. The save-block
+replay verifies all 231 resource-array deletion arguments in exact native order,
+including 57 non-null bounds arrays; null bounds are skipped. HP operations and
+allocation failures were not reached and remain statically verified only.
+No callback failures or pending returns occur and the source battery save is
+unchanged. The cold-load replay reaches the visible field; the save-block flow
+retains the previously documented black final screen. Private evidence is
+`resources_cold83.json` and `resources_save83.json` under
+`build/runtime/eur_field_resources/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
