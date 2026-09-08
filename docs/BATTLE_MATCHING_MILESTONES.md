@@ -409,3 +409,27 @@ and both source battery saves remain unchanged. Private evidence is
 Native linking, all 74 tests, progress consistency and the public-content
 audit pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Sub-display tilemap upload (2026-09-08)
+
+The next 828-byte map-loader callback is now matching C, bringing the total
+to 488,680 / 1,563,700 bytes (31.25%). It completes four asynchronous read
+stages, splits a 64-by-32 tilemap into the DS's two 32-by-32 screen blocks,
+clears absent optional backgrounds and starts the sub-display matrix animation.
+The callback is consolidated into the existing contiguous map-transfer module.
+
+Fresh checkpoint 83 and 65 battle entries execute all four stages. Each replay
+compares all 4,096 uploaded BG1 bytes with an independently rearranged copy of
+the live source data and verifies the 4,096 cleared bytes of each optional
+background. Task completion, resource flags and read-stage transitions also
+pass. Checkpoint 83 additionally exercises animation setup and completes the
+automated Bros. Jump; checkpoint 65 covers completion without that animation.
+Nonempty optional BG2/BG3 uploads are statically byte-verified but are not
+reached by these two maps. The encounter substitution is restored at entry,
+and the source battery saves are unchanged. Private evidence is
+`map_sub_update83.json` and `map_sub_update65.json` under
+`build/runtime/eur_attack_helpers/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

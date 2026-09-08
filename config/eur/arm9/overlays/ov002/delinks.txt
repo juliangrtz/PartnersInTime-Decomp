@@ -402,4 +402,4 @@ src/battle/battle_texture_catalog_load.c:
     .text start:0x0208db18 end:0x0208ddd0
 
 src/battle/battle_map_transfer.c:
-    .text start:0x0208b090 end:0x0208b3cc
+    .text start:0x0208ad54 end:0x0208b3cc

@@ -19,6 +19,7 @@ int BattleMap_GetEncounterResourceIndex(int encounter_id);
 void BattleTextureCatalog_ReadTask(BattleQueuedTask *task);
 void BattleTextureCatalog_OpenTask(BattleQueuedTask *task);
 void BattleAIArchives_ReadSceneTask(BattleQueuedTask *task);
+void BattleMap_UpdateSubDisplayTask(BattleQueuedTask *task);
 void BattleMap_ReadSubDisplayTask(BattleQueuedTask *task);
 void BattleMap_ConfigureDisplays(void);
 void BattleMap_BeginSubDisplayTask(BattleQueuedTask *task);
