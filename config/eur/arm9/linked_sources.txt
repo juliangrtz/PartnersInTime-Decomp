@@ -640,3 +640,8 @@ src/overlay008/save_menu_models.cpp
 src/overlay008/load_menu_models.cpp
 src/overlay008/load_menu_motion.c
 src/battle/battle_mesh_transform.c
+src/battle/battle_mesh_hit_task.c
+src/battle/battle_mesh_fade_task.c
+src/battle/battle_mesh_rotation.c
+src/field/field_area_lifecycle.c
+src/overlay006/title_panel_scroll.c

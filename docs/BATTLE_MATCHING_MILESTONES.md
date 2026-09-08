@@ -506,3 +506,36 @@ battery save is unchanged. Private evidence is `mesh_elder_battle83.json` and
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Field snapshots, mesh tasks and title scrolling (2026-09-08)
+
+Seven functions add 996 matching C bytes, reaching 491,860 / 1,563,700
+bytes (31.45%). Field-area construction, destruction and packed snapshots use
+checked 11,216-byte context and 16-byte snapshot layouts. Mesh hit-task setup,
+fade completion and matrix rotation/normalization share checked 28-byte task
+and 76-byte resource layouts. Title-panel scrolling preserves the four native
+BG2/BG3 scroll writes across both display engines. The Battle VM now uses the
+shared mesh declarations, and its complete dispatch function remains matching.
+
+All seven functions execute in checkpoint 83 replays. A normal cold boot
+checks all 164 MMIO writes made by 41 title-scroll calls. These write-only
+registers are verified from the CPU operands at their native store instructions,
+with a full-function byte guard, rather than by reading the registers back.
+Normal save-block interaction captures room 459 and room 472 snapshots,
+including preserved flag bits, signed area values and camera coordinates.
+Two construction/destruction pairs are checked across the entire context.
+The source battery save remains unchanged.
+
+The native Elder Shrooboid encounter command from room 460 is restored at
+battle entry as documented above. Its replay adds one checked construction/
+destruction pair, 1,726 independently recalculated matrix rotations and
+normalizations, two initialized hit tasks for objects 40/41 and actors 56/57,
+and 182 fade-task updates including both completions. Rotation axes 0, 1 and 2
+execute. All RAM and CPU-store checks pass with no pending return hooks.
+Private evidence is `scene_support_cold_verified83.json`,
+`scene_support_save83.json` and `scene_support_entry83.json` under
+`build/runtime/eur_mesh/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

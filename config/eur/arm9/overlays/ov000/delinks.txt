@@ -148,3 +148,6 @@ src/field/field_resource_lookup.c:
 
 src/field/field_room_scripts.c:
     .text       start:0x020797e4 end:0x02079b0c
+
+src/field/field_area_lifecycle.c:
+    .text start:0x02081454 end:0x020815a0

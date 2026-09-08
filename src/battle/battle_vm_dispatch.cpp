@@ -9,6 +9,7 @@ extern "C" {
 #include <game/battle_global_properties.h>
 #include <game/battle_hit.h>
 #include <game/battle_impact_effect.h>
+#include <game/battle_mesh.h>
 #include <game/battle_object.h>
 #include <game/battle_raster_effects.h>
 #include <game/battle_scene.h>
@@ -96,11 +97,7 @@ extern BattleAITask *func_ov002_020ae940(BattleSceneObject *object,
 extern int func_ov002_020ae9c0(int center_x, int center_y, int radius,
                                int band_width, int phase, int cutoff);
 extern void func_ov002_020bba60(BattleSceneObject *object);
-extern void func_ov002_020bb644(BattleSceneObject *object,
-                                u16 target_actor_id, int impact_count);
 extern int func_ov002_020bb274(BattleSceneObject *object);
-extern void func_ov002_020bbb5c(BattleSceneObject *object, int axis,
-                                u16 angle, int scale);
 extern void func_ov002_020bb00c(BattleSceneObject *primary,
                                 BattleSceneObject *secondary,
                                 int solver_parameter, int link_parameter,
@@ -2022,7 +2019,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_START_MODEL_CRUSH:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020bb644(
+        BattleMesh_CreateHitTask(
             object, (u16)command->arguments[1], command->arguments[2]);
         return SCRIPT_VM_CONTINUE;
 
@@ -2034,7 +2031,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_TRANSFORM_MODEL_EFFECT_BASIS:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020bbb5c(
+        BattleMesh_RotateAndNormalize(
             object, command->arguments[1], (u16)command->arguments[2],
             4096);
         return SCRIPT_VM_CONTINUE;

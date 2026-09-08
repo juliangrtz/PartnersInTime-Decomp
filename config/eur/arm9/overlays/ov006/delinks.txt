@@ -32,3 +32,6 @@ src/overlay006/credits_scene_lifecycle.c:
 
 src/overlay006/credits_irq_init.c:
     .text       start:0x0207af14 end:0x0207af38
+
+src/overlay006/title_panel_scroll.c:
+    .text start:0x02074c18 end:0x02074c74
