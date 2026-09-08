@@ -433,3 +433,27 @@ and the source battery saves are unchanged. Private evidence is
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Hammer attack lifecycle (2026-09-08)
+
+Two more functions add 492 matching C++ bytes, reaching 489,172 / 1,563,700
+bytes (31.28%). They allocate and initialize the 68-byte Hammer work area,
+load its attack resource and advance the entry/active/completion lifecycle.
+The adjacent initialization and return helpers are consolidated with them in
+`src/overlay021/hammer_lifecycle.cpp`; the checked work layout is shared in
+the attack header.
+
+The checkpoint 83 replay enters Hammer through the command wheel and confirms
+the target with X. Live input-window data drives the X impact input at frame
+69. Return hooks verify the work pointers, formation-specific configuration,
+resource 52, animation anchor and actor callback. All three lifecycle phases
+execute, with 127 update calls; the callback and work pointer are cleared at
+completion and the game returns to Luigi's command wheel. The replay uses
+normal buttons and read-only memory checks, and preserves the source save.
+Private evidence is `hammer_lifecycle_active83.json` under
+`build/runtime/eur_attack_helpers/`, starting from the recorded target-selection
+state `hammer_lifecycle83.dst`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

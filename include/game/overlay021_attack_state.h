@@ -40,11 +40,21 @@ typedef struct Overlay21AttackState {
         } bits;
     };
 } Overlay21AttackState;
+typedef struct Overlay21AttackWork {
+    u8 unknown_00[17];
+    s8 phase;
+    u8 unknown_12[22];
+    Overlay21AttackState attack;
+} Overlay21AttackWork;
+typedef char Overlay21AttackWork_SizeCheck[sizeof(Overlay21AttackWork)==68?1:-1];
+
 typedef char Overlay21AttackConfig_SizeCheck[sizeof(Overlay21AttackConfig) == 64 ? 1 : -1];
 typedef char Overlay21AttackState_SizeCheck[sizeof(Overlay21AttackState) == 28 ? 1 : -1];
 #ifdef __cplusplus
 extern "C" {
 #endif
+void Overlay21Attack_Create(BattlePartyActor *actor);
+void Overlay21Attack_Update(BattlePartyActor *actor);
 void Overlay21Attack_ConfigureAnimation(Overlay21AttackState *, int, int);
 void Overlay21Attack_ClearPrimaryPhase(Overlay21AttackState *);
 void Overlay21Attack_SetPrimaryPhase(Overlay21AttackState *, int, int);

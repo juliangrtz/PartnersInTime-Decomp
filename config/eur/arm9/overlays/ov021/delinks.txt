@@ -13,5 +13,5 @@ src/overlay021/attack_transitions.cpp:
 src/overlay021/attack_entry.cpp:
     .text start:0x020c395c end:0x020c39b0
 
-src/overlay021/attack_initialize.cpp:
-    .text start:0x020c3cf0 end:0x020c3d94
+src/overlay021/hammer_lifecycle.cpp:
+    .text start:0x020c3cf0 end:0x020c3f80
