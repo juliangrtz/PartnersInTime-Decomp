@@ -9,3 +9,18 @@ src/overlay012/attack_sequence_state.c:
 src/overlay012/attack_controller.c:
     .text       start:0x020c4fa8 end:0x020c50c0
 
+
+src/overlay012/ov12_attack_show_hit.cpp:
+    .text start:0x020c2c10 end:0x020c2fcc
+
+src/overlay012/ov12_attack_hide_object.cpp:
+    .text start:0x020c3480 end:0x020c34e0
+
+src/overlay012/ov12_controller_begin_finish.cpp:
+    .text start:0x020c3888 end:0x020c3afc
+
+src/overlay012/ov12_controller_schedule_launch.cpp:
+    .text start:0x020c3d1c end:0x020c3db8
+
+src/overlay012/ov12_attack_initialize.cpp:
+    .text start:0x020c5614 end:0x020c59e0

@@ -1504,11 +1504,11 @@ MSL_PrepareBuffer kind:function(arm,size=0x34) addr:0x020445d4
 MSL_ConvertFromNewlines kind:function(arm,size=0x4) addr:0x02044608
 MSL_Flush kind:function(arm,size=0x100) addr:0x0204460c
 MSL_Raise kind:function(arm,size=0x150) addr:0x0204470c
-func_0204485c kind:function(arm,size=0x318) addr:0x0204485c
-func_02044b74 kind:function(arm,size=0x4c) addr:0x02044b74
+_dadd kind:function(arm,size=0x318) addr:0x0204485c
+_dfix kind:function(arm,size=0x4c) addr:0x02044b74
 func_02044bc0 kind:function(arm,size=0x3c) addr:0x02044bc0
-func_02044bfc kind:function(arm,size=0x40) addr:0x02044bfc
-func_02044c3c kind:function(arm,size=0x364) addr:0x02044c3c
+_dflt kind:function(arm,size=0x40) addr:0x02044bfc
+_dmul kind:function(arm,size=0x364) addr:0x02044c3c
 func_02044fb8 kind:function(arm,size=0x3b4) addr:0x02044fb8
 func_0204536c kind:function(arm,size=0x21c) addr:0x0204536c
 func_02045588 kind:function(arm,size=0x8) addr:0x02045588
@@ -1548,7 +1548,7 @@ _ll_sdiv kind:function(arm,size=0x1b0) addr:0x020462c4
 _s32_div_f kind:function(arm,size=0x20c) addr:0x02046474
 _u32_div_f kind:function(arm,size=0x1e4) addr:0x02046680
 .L_02046688 kind:label(arm) addr:0x02046688
-func_0204687c kind:function(arm,size=0x544) addr:0x0204687c
+_ddiv kind:function(arm,size=0x544) addr:0x0204687c
 .L_020469b4 kind:data(byte[0]) addr:0x020469b4
 func_02046dc0 kind:function(arm,size=0x4) addr:0x02046dc0
 func_02046dc4 kind:function(arm,size=0x8) addr:0x02046dc4

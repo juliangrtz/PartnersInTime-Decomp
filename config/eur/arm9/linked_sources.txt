@@ -586,3 +586,8 @@ src/overlay011/ov11_support_schedule_intercept.cpp
 src/overlay011/ov11_projectile_is_ready.cpp
 src/overlay011/ov11_controller_initialize.cpp
 src/overlay011/ov11_attack_initialize.cpp
+src/overlay012/ov12_attack_show_hit.cpp
+src/overlay012/ov12_attack_hide_object.cpp
+src/overlay012/ov12_controller_begin_finish.cpp
+src/overlay012/ov12_controller_schedule_launch.cpp
+src/overlay012/ov12_attack_initialize.cpp
