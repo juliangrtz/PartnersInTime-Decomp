@@ -635,3 +635,4 @@ src/overlay020/attack_lifecycle.c
 src/battle/battle_position_helpers.c
 src/battle/battle_map_resources.c
 src/battle/battle_texture_catalog_load.c
+src/battle/battle_map_transfer.c

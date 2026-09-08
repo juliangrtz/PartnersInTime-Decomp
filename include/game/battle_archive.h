@@ -19,6 +19,13 @@ int BattleMap_GetEncounterResourceIndex(int encounter_id);
 void BattleTextureCatalog_ReadTask(BattleQueuedTask *task);
 void BattleTextureCatalog_OpenTask(BattleQueuedTask *task);
 void BattleAIArchives_ReadSceneTask(BattleQueuedTask *task);
+void BattleMap_ReadSubDisplayTask(BattleQueuedTask *task);
+void BattleMap_ConfigureDisplays(void);
+void BattleMap_BeginSubDisplayTask(BattleQueuedTask *task);
+BattleQueuedTask *BattleMap_QueueSubDisplayLoad(void);
+void BattleMap_SavePalette(void);
+void BattleMap_ReadCompressedEntry(int entry, u8 **destinations, u32 *sizes);
+void BattleMap_ReadEntry(int entry, u8 **destinations, u32 *sizes);
 #ifdef __cplusplus
 }
 #endif

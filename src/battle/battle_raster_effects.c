@@ -43,7 +43,7 @@ typedef char BattleRasterEffectTask_SizeCheck[
 extern void *func_ov002_020725a4(
     void (*callback)(void *task), void *argument_1,
     int argument_2, int argument_3);
-extern void func_ov002_0208b254(void *task);
+extern void BattleMap_SavePalette(void *task);
 extern void func_ov002_0208ace0(
     BattleObjectDataLoadState *load_state, s16 value);
 extern int func_ov002_020b05f0(s16 x, s16 y, int frame);
@@ -248,7 +248,7 @@ void BattleRasterResourceTransition_UpdateIn(BattleRasterEffectTask *task) {
             4, (u16)state->value, (s16)state->duration,
             (s16)state->progress);
         if ((s16)state->progress >= (s16)state->duration) {
-            func_ov002_020725a4(func_ov002_0208b254, 0, 0, 0);
+            func_ov002_020725a4(BattleMap_SavePalette, 0, 0, 0);
             task->callback = 0;
         }
     }

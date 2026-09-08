@@ -385,3 +385,27 @@ under `build/runtime/eur_attack_helpers/`.
 Native linking, all 74 tests, progress consistency and the public-content
 audit pass. The ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Battle-map transfer and display setup (2026-09-08)
+
+Seven functions add 828 matching C bytes, reaching 487,852 / 1,563,700
+bytes (31.20%). They read raw and compressed map sections, preserve the
+palette, queue the second-display read and configure its background planes.
+The archive offsets, destination pointers and section sizes retain their
+native 16-entry layout.
+
+Fresh battle entries from story checkpoints 83 and 65 execute all seven
+functions. Read-only return hooks check section indices, sizes and destinations,
+asynchronous callbacks and queue flags against live RAM. Each run verifies
+all 512 copied palette bytes and 2,080 cleared VRAM bytes, plus both display
+plane masks and the sub-display tile destination. Compressed sizes are checked
+after decoding against the request's live output length. Checkpoint 83 also
+completes an automated Bros. Jump; checkpoint 65 reaches Mario's command wheel.
+The documented encounter-command substitution is restored at battle entry,
+and both source battery saves remain unchanged. Private evidence is
+`map_transfer83.json` and `map_transfer65.json` under
+`build/runtime/eur_attack_helpers/`.
+
+Native linking, all 74 tests, progress consistency and the public-content
+audit pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
