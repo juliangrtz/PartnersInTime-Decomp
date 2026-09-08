@@ -478,3 +478,31 @@ sequence, ROM/save hashes and observed object pointers.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Battle triangle transforms and depth sorting (2026-09-08)
+
+Four functions add 1,028 matching C bytes, reaching 490,864 / 1,563,700
+bytes (31.39%). The contiguous mesh module reconstructs triangle centering,
+optional per-triangle updates, signed fixed-point vertex/center transforms,
+and depth-sorted linked lists with optional backface rejection. Shared layouts
+have compile-time checks for 6-byte vertices, 12-byte centers and 64-byte
+triangles. Each matrix product retains the original independent truncation.
+
+The checkpoint 83 probe uses the original Elder Shrooboid encounter command
+from room 460, offset 0x18CE, with arguments [8231, -1, -1, 1, 0, 2]. The
+72-byte temporary command is restored at native battle entry. Subsequent
+Mario/Luigi Jump selections use only ordinary keypad input. The boss's
+20-triangle effects execute all four new functions: 103,860 vertex transforms,
+34,620 center transforms and 1,731 calls each to preparation and sorting.
+Read-only return hooks compare transformed coordinates and sorted next pointers
+with independent calculations from live RAM. Preparation also checks the
+original colors, alpha values and centered source geometry when no triangle
+callback is installed; callbacks may intentionally change these values.
+All checks pass, with no pending returns. The active renderer uses culling
+mode zero, so backface rejection remains statically verified only. The source
+battery save is unchanged. Private evidence is `mesh_elder_battle83.json` and
+`mesh_elder_verified83.json` under `build/runtime/eur_mesh/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
