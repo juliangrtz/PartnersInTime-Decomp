@@ -11,6 +11,7 @@ typedef struct Overlay18AttackObjectSource Overlay18AttackObjectSource;
 extern "C" {
 #endif
 
+void Overlay18Attack_ApplyTableDeltas(void);
 int Overlay18Attack_GetTerminalVelocityParameter(int progress, int grade);
 int Overlay18Attack_GetMotionDuration(int progress, int grade);
 int Overlay18Attack_GetAlternateActorChance(int progress);

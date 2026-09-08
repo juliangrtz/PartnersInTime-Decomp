@@ -35,3 +35,9 @@ src/overlay018/support_initialize.cpp:
 
 src/overlay018/support_entry.cpp:
     .text start:0x020c5670 end:0x020c57b0
+
+src/overlay018/chomp_table_setup.c:
+    .text start:0x020c2ae0 end:0x020c2c14
+
+src/overlay018/chomp_tether_setup.c:
+    .text start:0x020c2ca4 end:0x020c2d34

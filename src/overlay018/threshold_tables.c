@@ -7,8 +7,8 @@ enum Overlay18AttackThresholdConstant {
 extern const s16 *gOverlay18HorizontalDistanceTables[];
 extern const s16 *gOverlay18InputTimingWindowTables[];
 extern const s16 gOverlay18AlternateActorChanceTable[];
-extern const s16 gOverlay18MotionScaleQ8Table[];
-extern const s16 gOverlay18TravelSpeedQ8Table[];
+extern s16 gOverlay18MotionScaleQ8Table[];
+extern s16 gOverlay18TravelSpeedQ8Table[];
 extern const s16 gOverlay18LaunchHeightTable[];
 extern const s16 gOverlay18MotionDurationByGradeTable[];
 extern const s16 gOverlay18TerminalVelocityByGradeTable[];

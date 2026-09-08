@@ -70,12 +70,21 @@ typedef struct PocketChompSupport {
     u16 unknown_1e;
 } PocketChompSupport;
 
+typedef struct PocketChompTether {
+    BattleSceneObject *target;
+    s8 source_x, source_z, target_x, target_z;
+} PocketChompTether;
+typedef char PocketChompTether_SizeCheck[sizeof(PocketChompTether) == 8 ? 1 : -1];
+
 typedef char PocketChomp_SizeCheck[sizeof(PocketChomp) == 192 ? 1 : -1];
 typedef char PocketChompSupport_SizeCheck[sizeof(PocketChompSupport) == 32 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+int PocketChompSupport_GetClampedDistance(PocketChompSupport *support, PocketChomp *center);
+PocketChompTether *PocketChomp_StartTether(BattleSceneObject *object, int channel,
+    BattleSceneObject *target, int source_x, int source_z, int target_x, int target_z);
 void PocketChompAttack_ReturnBackdrop(void);
 int PocketChompAttack_IsBackdropIdle(void);
 int PocketChompAttack_AreAdultsIdle(void);

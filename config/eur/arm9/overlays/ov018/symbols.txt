@@ -1,7 +1,7 @@
-func_ov018_020c2ae0 kind:function(arm,size=0x134) addr:0x020c2ae0
+Overlay18Attack_ApplyTableDeltas kind:function(arm,size=0x134) addr:0x020c2ae0
 func_ov018_020c2c14 kind:function(arm,size=0x90) addr:0x020c2c14
-func_ov018_020c2ca4 kind:function(arm,size=0x44) addr:0x020c2ca4
-func_ov018_020c2ce8 kind:function(arm,size=0x4c) addr:0x020c2ce8
+PocketChompSupport_GetClampedDistance kind:function(arm,size=0x44) addr:0x020c2ca4
+PocketChomp_StartTether kind:function(arm,size=0x4c) addr:0x020c2ce8
 func_ov018_020c2d34 kind:function(arm,size=0xc8) addr:0x020c2d34
 func_ov018_020c2dfc kind:function(arm,size=0x54) addr:0x020c2dfc
 func_ov018_020c2e50 kind:function(arm,size=0x2a0) addr:0x020c2e50

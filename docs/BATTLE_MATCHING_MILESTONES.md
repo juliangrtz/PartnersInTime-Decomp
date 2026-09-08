@@ -594,3 +594,30 @@ verified only. Private evidence is `interface_text_entry83.json` and
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Pocket Chomp table adjustments and object links (2026-09-08)
+
+Three functions add 452 matching C bytes, reaching 495,284 / 1,563,700
+bytes (31.67%). The badge-dependent table setup adds signed row adjustments
+to six parameter tables. The two modified public threshold-table declarations
+now correctly describe mutable data. A checked eight-byte tether payload
+records the linked object and four signed offsets; its setup and the
+24-to-192 distance clamp are reconstructed in a contiguous pair of functions.
+
+Checkpoint 83 replay selects Pocket Chomp from the Bros.-Item list. A new
+input driver reads the original adult-controller phase, countdown and pending
+grade, then presses the actor's native button when the countdown is one.
+The next game update decrements it to the documented timing point. These are
+ordinary keypad inputs; no RAM or register values are changed. Seventeen
+successful input events produce seventeen checked tether setups and sixteen
+checked distance results. Both directions execute, with eight unrestricted
+results and eight upper-bound clamps. All payload bytes, motion callback,
+channel timing and return pointers match live RAM. The lower-bound clamp and
+badge-dependent table adjustment are statically verified only; the equipped
+badge in this replay does not enable that branch. Source save 83 is unchanged.
+Private evidence is `chomp_common83.json` and `chomp_auto83.json` under
+`build/runtime/eur_chomp_common/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
