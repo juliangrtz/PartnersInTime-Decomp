@@ -1007,3 +1007,26 @@ evidence is `visibility_cold83.json`, `visibility_pause83.json` and
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Packed field boundary records (2026-09-09)
+
+Two adjacent conversion routines add 1,016 matching C bytes, reaching
+526,960 / 1,563,700 bytes (33.70%). Checked 24-byte packed records expand into
+40-byte boundary records or 44-byte paired bounds. The C reproduces fixed-point
+coordinate conversion, packed plane values, individual mode/enable fields,
+reserved bits and the extra output terminator. Names remain neutral where the
+exact gameplay role of a coordinate or flag is still unknown.
+
+Normal battery boots of story checkpoints 83 and 27 exercise both converters:
+nine boundary records across two calls and two paired-bounds records in one
+call. The probe compares all output bytes, including retained fields and the
+additional terminators, against predictions made from the live packed records.
+It also verifies that both source streams and source battery saves remain
+unchanged. All checks pass with no pending callbacks. Null source streams and
+negative coordinates were not observed and remain statically verified only.
+Private evidence is `bounds_cold83.json` and `bounds_cold27.json` under
+`build/runtime/eur_bounds_records/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

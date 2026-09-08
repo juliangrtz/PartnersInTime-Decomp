@@ -672,3 +672,4 @@ src/field/field_display.c
 src/field/field_system_resources.c
 src/field/field_party_following.c
 src/field/field_party_indicators.c
+src/field/field_bounds_records.c

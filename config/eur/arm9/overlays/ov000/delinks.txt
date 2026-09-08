@@ -217,3 +217,6 @@ src/field/field_party_following.c:
 
 src/field/field_party_indicators.c:
     .text start:0x0209b6b0 end:0x0209c020
+
+src/field/field_bounds_records.c:
+    .text start:0x0207b19c end:0x0207b594
