@@ -648,3 +648,28 @@ gameplay identity. Source battery saves are unchanged. Private evidence is
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Field party auxiliary objects and follower transitions (2026-09-08)
+
+Six adjacent functions add 2,988 matching C++ bytes, reaching
+502,092 / 1,563,700 bytes (32.11%). The auxiliary-object setup and restart
+restore renderer and collision state, bind the resource record and follow the
+leader with a direction-table lookup. Three follower transitions use the
+saved separation, elapsed movement time and navigation height to configure
+timed following and vertical movement. Checked views now distinguish the
+auxiliary motion payload from the linear controller occupying the same bytes.
+The setup writes the confirmed animation field at +0x19E; the follower return
+preserves subtraction before addition in its height calculation.
+
+The new six functions are statically verified only: the ordinary-input replay
+from checkpoint 55 does not enter these special modes. A checkpoint-83 replay
+on the rebuilt ROM rechecks one paired wait, one following start and two
+reciprocal member links, with no failed checks or pending returns. This
+confirms the existing pairing paths after the shared-layout extensions; it
+does not claim execution of the new auxiliary paths. Both battery saves are
+unchanged. Private evidence is `party_movement55.json` and
+`party_auxiliary_smoke83.json` under `build/runtime/eur_party_states/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

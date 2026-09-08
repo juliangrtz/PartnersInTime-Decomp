@@ -17,11 +17,26 @@ typedef struct FieldPartyEntity {
             u32 unknown_00_15 : 16, saved_collision_faces : 1, collision_faces_saved : 1;
             u32 movement_mode : 4, unknown_22_31 : 10;
         } bits;
+        /* The auxiliary renderer uses the same word for its own state. */
+        struct {
+            u32 unknown_00 : 1, unknown_01 : 1, direction_mode : 2, unknown_04 : 1;
+            u32 unknown_05_06 : 2, unknown_07_08 : 2, unknown_09 : 1;
+            u32 unknown_10_18 : 9, unknown_19 : 1, unknown_20_27 : 8, unknown_28_31 : 4;
+        } auxiliary_bits;
         struct {
             u8 saved_collision, collision_saved, unknown_02[2];
         } bytes;
     };
-    FieldLinearController movement;
+    union {
+        FieldLinearController movement;
+        struct {
+            u8 unknown_524[24];
+            fx32 unknown_53c, unknown_540, unknown_544;
+            u8 unknown_548[4];
+            struct FieldPartyEntity *target;
+            u8 unknown_550[24];
+        } auxiliary_motion;
+    };
     u16 *unknown_568;
     u8 unknown_56c[8];
     struct FieldPartyEntity *partner;
@@ -51,7 +66,9 @@ typedef struct FieldPartyController {
         u32 unknown_16 : 1, active_member : 1, movement_active : 1;
         u32 unknown_19 : 1, movement_state : 10, unknown_30_31 : 2;
     } flags;
-    u8 unknown_054[32];
+    u8 unknown_054[12];
+    fx32 separation_x, separation_y, separation_z;
+    u8 unknown_06c[8];
     union {
         u32 state_flags;
         struct {
@@ -64,8 +81,9 @@ typedef struct FieldPartyController {
     u8 unknown_094[2212];
     FieldResourceContext **areas;
     struct FieldPartyController *paired;
+    u8 *resources;
 } FieldPartyController;
-typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x940 ? 1 : -1];
+typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x944 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
@@ -76,6 +94,12 @@ void FieldParty_WaitForPairedFollowing(FieldPartyController *party);
 void FieldParty_PrepareCollisionOverride(FieldPartyController *party, int preserve_state);
 void FieldParty_RestoreCollisionState(FieldPartyController *party, int check_contacts);
 void FieldParty_RestartCollisionOverride(FieldPartyController *party);
+void FieldParty_InitializeAuxiliary(FieldPartyController *party, int preserve_state);
+void FieldParty_UpdateAuxiliaryFacing(FieldPartyController *party);
+void FieldParty_ReverseFollowerOffset(FieldPartyController *party);
+void FieldParty_ReturnFollowerToLeader(FieldPartyController *party);
+void FieldParty_RestartAuxiliary(FieldPartyController *party);
+void FieldParty_RaiseFollowerToLeader(FieldPartyController *party);
 /* State 34's gameplay identity has not yet been observed. */
 void FieldParty_BeginState34(FieldPartyController *party);
 #ifdef __cplusplus

@@ -28,5 +28,9 @@ void func_ov000_0208dbd4(FieldPartyController *, FieldRuntimeEntity **, int);
 
 extern const u8 data_ov000_020c0684[];
 extern const s16 data_ov000_020c06ac[];
+extern const u8 data_ov000_020c06a4[];
+void func_ov000_020a7010(FieldPartyEntity *, const void *, const void *, const void *, int);
+void func_ov000_02092e24(FieldPartyController *, FieldPartyEntity *);
+void func_ov000_02094140(FieldPartyController *);
 }
 #endif

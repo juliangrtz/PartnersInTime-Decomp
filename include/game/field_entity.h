@@ -513,7 +513,9 @@ struct FieldRuntimeEntity {
     s16 unknown_1a6[4], unknown_1ae[4];
     u8 unknown_1b6[0x2A];
     FieldRenderObject *render_object;
-    u8 unknown_1e4[0x10];
+    u8 unknown_1e4[4];
+    void *unknown_1e8, *unknown_1ec;
+    u8 unknown_1f0[4];
     FieldLinearController linear_controller;
     FieldOrbitController orbit_controller;
     union {
