@@ -441,7 +441,8 @@ struct FieldRenderObject {
     u8 unknown_058[2];
     s16 animation_speed;
     s16 animation_offset_x, animation_offset_y;
-    u8 unknown_060[8];
+    u16 unknown_060;
+    u8 unknown_062[6];
     s32 render_anchor_z;
     u8 unknown_06c[0x10];
     union {
@@ -582,7 +583,10 @@ struct FieldRuntimeEntity {
     FieldNavigationSurface *navigation_cursor;
     fx32 navigation_scan_limit;
     u8 unknown_3b8[0x10];
-    struct { u32 unknown_00 : 1, unknown_01_31 : 31; } unknown_3c8_bits;
+    union {
+        u32 unknown_3c8;
+        struct { u32 unknown_00 : 1, unknown_01_31 : 31; } unknown_3c8_bits;
+    };
     union {
         u32 runtime_flags;
         FieldEntityRuntimeFlags runtime_flag_bits;

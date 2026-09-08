@@ -621,3 +621,30 @@ Private evidence is `chomp_common83.json` and `chomp_auto83.json` under
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Field party pairing and collision-state transitions (2026-09-08)
+
+Seven functions add 3,820 matching C++ bytes, reaching 499,104 / 1,563,700
+bytes (31.92%). Checked partial party-entity and controller views describe
+paired members, their separate linear controllers, saved collision flags and
+saved presentation modes. The area entity list reuses the existing resource
+context. Two contiguous source regions cover paired waiting/following/linking
+and collision override preparation, restoration and restart, including the
+still neutrally named state-34 transition. A 136-byte contact scanner between
+the regions remains in assembly; its C version still differs in register use.
+
+Ordinary inputs from story checkpoints 83 and 65 verify the paired state
+transitions, reciprocal entity links, flags, zeroed movement speeds, matching
+locomotion states, eight-frame following duration and target pointers in live
+RAM. The checkpoint-83 replay checks three waits, three following starts and
+six member links; checkpoint 65 adds one wait, one following start and two
+links. All return checks pass with no pending hooks. The four collision/state
+transitions have not yet been reached by these input sequences and remain
+statically verified only. In particular, the state-34 name does not claim a
+gameplay identity. Source battery saves are unchanged. Private evidence is
+`party_inputs83.json` and `party_actions65.json` under
+`build/runtime/eur_party_states/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
