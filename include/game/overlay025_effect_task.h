@@ -1,0 +1,110 @@
+#ifndef PIT_GAME_OVERLAY025_EFFECT_TASK_H
+#define PIT_GAME_OVERLAY025_EFFECT_TASK_H
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <nitro.h>
+#include <game/battle_actor.h>
+#include <game/battle_object.h>
+#ifdef __cplusplus
+}
+#endif
+#include <game/battle_effect.h>
+typedef struct Overlay25Task Overlay25Task;
+typedef struct Overlay25WorkPrefix Overlay25WorkPrefix;
+typedef void (*Overlay25Callback)(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
+typedef struct Overlay25Parameters {
+    s16 index, parameter, timer;
+    union {
+        s16 angle;
+        struct {
+            s8 travel_sound;
+            u8 unknown0b;
+        };
+    };
+    union {
+        s16 mode;
+        u16 mode_flags;
+    };
+    u16 unknown0e;
+    BattleEffect *effect;
+    s8 sound;
+    u8 unknown15[15];
+} Overlay25Parameters;
+struct Overlay25Task {
+    Overlay25Callback update;
+    union {
+        int sound_handle;
+        Overlay25Parameters parameters;
+    };
+};
+struct Overlay25WorkPrefix {
+    u8 unknown000[6688];
+    BattleEffect *model_effect, *sprite_effect;
+    u32 unknown1a28;
+    s16 phase, unknown1a2e;
+    s16 slots[7];
+    u8 unknown1a3e[82];
+    Overlay25Task tasks[8];
+};
+typedef char Overlay25Parameters_SizeCheck[sizeof(Overlay25Parameters) == 32 ? 1 : -1];
+
+typedef char Overlay25Task_SizeCheck[sizeof(Overlay25Task) == 36 ? 1 : -1];
+typedef char Overlay25WorkPrefix_SizeCheck[sizeof(Overlay25WorkPrefix) == 7088 ? 1 : -1];
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void Overlay25Enemy_BeginReturn(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
+void Overlay25EffectSequence_InitializeAlternate(Overlay25Task *task, BattleSceneObject *object,
+                                                 Overlay25WorkPrefix *);
+void Overlay25EffectSequence_BeginPositioning(Overlay25Task *task, BattleSceneObject *object,
+                                              Overlay25WorkPrefix *);
+void Overlay25EffectSequence_FinishModelEffect(Overlay25Task *task, BattleSceneObject *,
+                                               Overlay25WorkPrefix *work);
+void Overlay25EffectSequence_FinishParticles(Overlay25Task *task, BattleSceneObject *,
+                                             Overlay25WorkPrefix *work);
+void Overlay25EffectSequence_AdvanceSprite(Overlay25Task *task, BattleSceneObject *,
+                                           Overlay25WorkPrefix *work);
+void Overlay25EffectSequence_StartSprite(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *work);
+void Overlay25EffectSequence_StartModel(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *work);
+void Overlay25EffectSequence_PositionEffect(Overlay25Task *task, BattleSceneObject *object,
+                                            Overlay25WorkPrefix *work);
+void Overlay25Projectile_UpdateSpin(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
+void Overlay25Projectile_WaitAll(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *work);
+void Overlay25Projectile_UpdateTrail(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
+void Overlay25Projectile_WaitSpin(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
+void Overlay25Enemy_ResetAnimation(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
+void Overlay25EffectSequence_Initialize(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
+void Overlay25Projectile_SpawnBurst798(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
+void Overlay25Projectile_SpawnBurst799(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
+void Overlay25Enemy_BeginLoadAndMove(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
+void Overlay25Enemy_BeginPause(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
+void Overlay25Enemy_UpdatePause(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
+void Overlay25Enemy_BeginProjectilePhase(Overlay25Task *task, BattleSceneObject *object,
+                                         Overlay25WorkPrefix *);
+void Overlay25Enemy_WaitProjectiles(Overlay25Task *task, BattleSceneObject *object,
+                                    Overlay25WorkPrefix *work);
+void Overlay25Enemy_WaitReturnVariant(Overlay25Task *task, BattleSceneObject *object,
+                                      Overlay25WorkPrefix *work);
+void Overlay25Projectile_HideAndSignal(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
+void Overlay25Enemy_BeginNextAnimation(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
+void Overlay25Enemy_ResetStoppedAnimation(Overlay25Task *task, BattleSceneObject *object,
+                                          Overlay25WorkPrefix *);
+void Overlay25Enemy_BeginModelEffect(Overlay25Task *task, BattleSceneObject *object,
+                                     Overlay25WorkPrefix *work);
+void Overlay25Enemy_WaitPair(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Enemy_WaitReturn(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Enemy_WaitAttachedEffect(Overlay25Task *task, BattleSceneObject *object,
+                                       Overlay25WorkPrefix *work);
+void Overlay25Task_WaitSibling(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *work);
+void Overlay25Party_UnlockAfterTask(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *work);
+void Overlay25Enemy_FinishAttachedEffect(Overlay25Task *task, BattleSceneObject *object,
+                                         Overlay25WorkPrefix *work);
+void Overlay25Enemy_WaitAnimation(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
+void Overlay25Enemy_EmitTravelEffects(Overlay25Task *task, BattleSceneObject *object,
+                                      Overlay25WorkPrefix *work);
+#ifdef __cplusplus
+}
+#endif
+#endif

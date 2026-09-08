@@ -1447,3 +1447,24 @@ from adjacent room 306 temporarily replaced one decoded Field VM command and was
 restored before battle transfer. The Pocket Chomps replay itself used only normal
 buttons and read-only execution/RAM hooks. Raw states, screenshots and return
 records remain private under `build/runtime/eur_attack_helpers/chomp_verified_*`.
+
+## Overlay 25 effect and projectile tasks
+
+Thirty-five functions covering 5,704 bytes are reconstructed in C++ with C
+linkage. They implement effect initialization and cleanup, model/sprite positioning,
+projectile spin and trail updates, paired task waits, animation transitions,
+resource loading and return motion. The 36-byte task contains a 32-byte parameter
+payload; its address must remain distinct from the callback header to reproduce
+the native load/store schedule. The 7,088-byte work prefix holds eight tasks and
+two attached effect handles. All reconstructed layouts have compile-time size
+checks. Gameplay-specific boss naming remains unconfirmed.
+
+The complete linked European ROM is byte-identical, including all 5,704 new bytes;
+SHA-1 is `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. The 74 automated tests pass.
+Checkpoint 102 was cold-booted from the supplied battery save and navigated by
+normal buttons through the statue exterior into room 552. Read-only Field VM
+hooks confirmed the room transition and party positions. The battery save SHA-1,
+`85ef75685b600487f520ba28280aea7436e9d364`, remained unchanged. This field replay
+did not enter the Overlay 25 callbacks, so their runtime branch coverage remains
+open. The older Princess Shroob snapshot did not advance reliably in this emulator
+and supplies no additional runtime evidence for this batch.

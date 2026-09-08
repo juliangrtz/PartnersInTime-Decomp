@@ -3,3 +3,66 @@
     .data       start:0x020cbf80 end:0x020cbfa0 kind:data align:32
     .bss        start:0x020cbfa0 end:0x020cbfc0 kind:bss align:32
 
+
+src/overlay025/ov25_enemy_begin_return.cpp:
+    .text start:0x020c30cc end:0x020c31a0
+
+src/overlay025/ov25_effect_sequence_initialize_alternate.cpp:
+    .text start:0x020c34e8 end:0x020c3748
+
+src/overlay025/ov25_effect_sequence_advance_sprite.cpp:
+    .text start:0x020c3c5c end:0x020c4084
+
+src/overlay025/ov25_effect_sequence_begin_positioning.cpp:
+    .text start:0x020c4268 end:0x020c44b0
+
+src/overlay025/ov25_projectile_wait_all.cpp:
+    .text start:0x020c4f60 end:0x020c4fd8
+
+src/overlay025/ov25_projectile_update_trail.cpp:
+    .text start:0x020c5260 end:0x020c5374
+
+src/overlay025/ov25_enemy_reset_animation.cpp:
+    .text start:0x020c5798 end:0x020c57f0
+
+src/overlay025/ov25_enemy_wait_return.cpp:
+    .text start:0x020c61b4 end:0x020c61e0
+
+src/overlay025/ov25_enemy_wait_attached_effect.cpp:
+    .text start:0x020c6f00 end:0x020c7124
+
+src/overlay025/ov25_enemy_wait_animation.cpp:
+    .text start:0x020c7210 end:0x020c7250
+
+src/overlay025/ov25_enemy_finish_attached_effect.cpp:
+    .text start:0x020c822c end:0x020c8268
+
+src/overlay025/ov25_party_unlock_after_task.cpp:
+    .text start:0x020c85f0 end:0x020c8634
+
+src/overlay025/ov25_task_wait_sibling.cpp:
+    .text start:0x020c8ac8 end:0x020c8af4
+
+src/overlay025/ov25_enemy_wait_pair.cpp:
+    .text start:0x020c951c end:0x020c9580
+
+src/overlay025/ov25_enemy_begin_model_effect.cpp:
+    .text start:0x020c97c8 end:0x020c98d8
+
+src/overlay025/ov25_enemy_reset_stopped_animation.cpp:
+    .text start:0x020ca2f8 end:0x020ca350
+
+src/overlay025/ov25_enemy_begin_next_animation.cpp:
+    .text start:0x020caca8 end:0x020cad04
+
+src/overlay025/ov25_projectile_spawn_burst799.cpp:
+    .text start:0x020cb320 end:0x020cb594
+
+src/overlay025/ov25_enemy_wait_return_variant.cpp:
+    .text start:0x020cb838 end:0x020cb8d4
+
+src/overlay025/ov25_enemy_begin_projectile_phase.cpp:
+    .text start:0x020cbaa4 end:0x020cbbb0
+
+src/overlay025/ov25_enemy_begin_load_and_move.cpp:
+    .text start:0x020cbe28 end:0x020cbf68
