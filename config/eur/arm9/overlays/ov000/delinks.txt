@@ -109,3 +109,21 @@ src/field/field_bounds_resources.cpp:
 
 src/field/field_spatial_bounds_resources.cpp:
     .text       start:0x020b5364 end:0x020b5420
+
+src/field/field_archive_lifecycle.c:
+    .text       start:0x020897d0 end:0x0208995c
+
+src/field/field_archive_lookup.c:
+    .text       start:0x020894b4 end:0x020895f0
+
+src/field/field_script_manager.cpp:
+    .text       start:0x02089280 end:0x020894b4
+
+src/field/field_script_auxiliary.cpp:
+    .text       start:0x0208911c end:0x02089188
+
+src/field/field_script_interaction.cpp:
+    .text       start:0x0208815c end:0x0208834c
+
+src/field/field_script_entity_controls.cpp:
+    .text       start:0x02087fbc end:0x02088008

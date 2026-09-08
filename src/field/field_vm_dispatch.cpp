@@ -8,6 +8,7 @@ extern "C" {
 #include <game/field_timer.h>
 #include <game/field_timed_renderer.h>
 #include <game/field_script.h>
+#include <game/field_script_manager.h>
 #include <game/save_data.h>
 
 /*
@@ -21,9 +22,6 @@ extern FieldEntity *func_ov000_0208221c(
 extern int func_ov000_02082240(FieldScriptState *target,
                                FieldScriptState *parent, int owner_type,
                                const u16 *script);
-extern void func_ov000_0208911c(void *paired_script_manager,
-                                FieldScriptState *parent,
-                                s16 script_slot);
 extern void func_ov000_020a4e84(FieldEntity *entity);
 extern void func_ov000_020a4468(FieldEntity *entity, int scale_mode,
                                 s16 target_x, s16 target_y, s16 step_x,
@@ -1086,8 +1084,8 @@ static inline void FieldVm_StartPairedScript(u8 *field_context,
         if (arguments[2] == 0 ||
             ((FieldScriptFlagBits *)(
                  paired + FIELD_VM_PAIRED_SCRIPT_FLAGS_OFFSET))->active == 0) {
-            func_ov000_0208911c(
-                paired + FIELD_VM_PAIRED_SCRIPT_MANAGER_OFFSET, caller,
+            FieldScriptManager_StartAuxiliary(
+                (FieldScriptManager *)(paired + FIELD_VM_PAIRED_SCRIPT_MANAGER_OFFSET), caller,
                 (s16)arguments[1]);
         } else {
             const u16 *script_table;

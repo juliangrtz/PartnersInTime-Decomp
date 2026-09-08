@@ -2047,3 +2047,34 @@ build/runtime/eur_field_placement_boundaries. Matching C/C++ is 378,120 of
 1,563,700 bytes (24.18%). All module/symbol checks, 74 tests, generated progress
 and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Field archive indexes and script-manager lifecycle
+
+Sixteen functions add 1,956 matching C/C++ bytes. The archive constructor and
+destructors manage seven descriptor tables and three resource indexes; lookups
+separate the category byte from the record index and select localized primary
+records using the save context's language. Script-manager functions initialize
+two runtimes and four script states, copy their arrays with overlap-aware
+helpers, start the auxiliary state, and initialize/finish entity interactions.
+Two small entity helpers restore contact flags and control animation waiting.
+The asynchronous archive update and per-frame script runner remain private
+candidates because of register-allocation differences.
+
+Normal cold boots of supplied story saves 1, 58 and 103 run 2,585 frames each.
+Read-only entry/return hooks check 500 archive-index results, 429 primary and
+71 secondary records, 141 descriptor results and four archive initializations.
+Four localized primary lookups exercise the live language offset. Six manager
+initializations, ten constructions and four copies pass their RAM checks, as
+do 574 contact restorations, nine animation-wait changes, four interaction
+setups and one interaction completion. Every newly entered function is checked
+against its original loaded bytes before its trace is accepted. The auxiliary
+starter and non-deleting archive destructor are not entered in these replays;
+their verification is exact binary matching. The final screenshots show valid
+save menus in saves 1/58 and the late-story NPC conversation in save 103.
+No RAM, ROM, script or supplied battery-save data is modified by the harness;
+all three supplied save hashes are unchanged.
+
+Evidence remains private under build/runtime/eur_field_archives_scripts.
+Matching C/C++ is 380,076 of 1,563,700 bytes (24.31%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
