@@ -410,7 +410,7 @@ void Overlay5DisplayBg_SetOffset(DisplayEngine engine, int background, s16 x, s1
         (x & 0x1FF) | ((y & 0x1FF) << 16);
 }
 
-void Overlay5DisplayBg_SetVerticalOffset(DisplayEngine engine, int background, s16 y) {
+void Overlay5DisplayBg_SetVerticalOffset(DisplayEngine engine, int background, int y) {
     *(vu16 *)(REG_BG_VERTICAL_OFFSET + (engine << 12) + (background << 2)) = y & 0x1FF;
 }
 

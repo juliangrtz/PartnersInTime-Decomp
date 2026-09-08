@@ -144,7 +144,7 @@ ShopSceneTask *ShopScene_Init(ShopSceneTask *task, u32 priority, u32 unused)
     data_ov009_0207ea24 = (ShopPanel *)object;
     object = GameHeap_New(656, 0, 0, 0);
     if (object)
-        object = func_ov009_0207dba8(object);
+        object = ShopList_Init((ShopList *)object);
     data_ov009_0207ea2c = object;
     if (!data_ov009_0207ea3c.special_shop) {
         if (((ShopSavedState *)gSaveData)->shop)
@@ -264,7 +264,7 @@ ShopSceneTask *ShopScene_Destroy(ShopSceneTask *task)
     {
         void *object = data_ov009_0207ea2c;
         if (object) {
-            DeleteShopAuxiliary(object);
+            DeleteShopList(object);
             data_ov009_0207ea2c = 0;
         }
     }
@@ -384,7 +384,7 @@ ShopSceneTask *ShopScene_Delete(ShopSceneTask *task)
     {
         void *object = data_ov009_0207ea2c;
         if (object) {
-            DeleteShopAuxiliary(object);
+            DeleteShopList(object);
             data_ov009_0207ea2c = 0;
         }
     }

@@ -14,3 +14,27 @@ src/overlay009/shop_scene_lifecycle.cpp:
 
 src/overlay009/shop_irq_init.cpp:
     .text       start:0x020700e8 end:0x0207010c
+
+src/overlay009/shop_list_phase.c:
+    .text       start:0x0207d218 end:0x0207d220
+
+src/overlay009/shop_list_constraints.c:
+    .text       start:0x0207d4f4 end:0x0207d660
+
+src/overlay009/shop_list_positions.c:
+    .text       start:0x0207d794 end:0x0207d92c
+
+src/overlay009/shop_list_lifecycle.c:
+    .text       start:0x0207dba4 end:0x0207dbc0
+
+src/overlay009/shop_inventory_equipment.c:
+    .text       start:0x0207dcf0 end:0x0207ddac
+
+src/overlay009/shop_inventory_counts.c:
+    .text       start:0x0207ddf4 end:0x0207df1c
+
+src/overlay009/shop_backgrounds.cpp:
+    .text       start:0x0206e288 end:0x0206e8ac
+
+src/overlay009/shop_irq_upload.cpp:
+    .text       start:0x0206fd40 end:0x020700e8

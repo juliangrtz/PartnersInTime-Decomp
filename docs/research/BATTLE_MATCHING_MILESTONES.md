@@ -2244,3 +2244,35 @@ covered by exact binary verification. Private evidence: build/runtime/eur_shop_s
 Matching C/C++ reaches 404,296 of 1,563,700 bytes (25.86%). Module/symbol checks,
 74 tests, generated progress and public-content checks pass. The complete ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Shop list animation, inventory queries and background transfers
+
+Twenty-two functions add 3,800 matching C/C++ bytes. They cover list point
+integration, pinned-point restoration, velocity damping, position/priority queries,
+scale and lifecycle helpers, inventory array/count/equipment queries and bounded
+inventory adjustment, background resources and IRQ frame upload. The vertical
+background-offset API now accepts the original full-width argument; its native
+nine-bit register mask and compiled bytes are unchanged. Existing item-tag names
+are shared with the inventory helpers.
+
+Three controlled shop entries use supplied saves 65 and 86 and restore the entire
+72-byte decoded Field VM command at the native helper. Normal A/down/B inputs
+open a list, move its selection, cancel and leave the shop without a transaction.
+The item and clothing runs take 971 frames each; the sell-view run takes 1,161
+frames and also enters/exits the normal shop. Full original function bytes reject
+overlay aliases, and stack-aware return hooks drain shared tail-call returns.
+
+Live oracles verify 13,448 inventory counts and array results, 1,152 equipment
+eligibility results, 190 list simulation steps, 2,084 point integrations,
+16,672 pinned-point checks and 2,084 velocity updates. Position, priority, phase,
+scale and complete list initialization/destruction records are also checked.
+The four background loads request all 27 expected archive entries. Across 2,255
+IRQ callbacks, signed scroll offsets agree with live work RAM; four complete
+48-KiB background copies match their source buffers at VRAM address 0x06214000.
+All four scene lifecycles complete and supplied save hashes remain unchanged.
+Inventory adjustment is not entered; exact binary matching covers that function.
+Private evidence: build/runtime/eur_shop_list.
+
+Matching C/C++ reaches 408,096 of 1,563,700 bytes (26.10%). Module/symbol checks,
+74 tests, generated progress and public-content checks pass. The complete ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

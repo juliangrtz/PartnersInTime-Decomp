@@ -500,3 +500,11 @@ src/overlay008/save_menu_location_image.c
 src/overlay009/shop_irq_destroy.cpp
 src/overlay009/shop_scene_lifecycle.cpp
 src/overlay009/shop_irq_init.cpp
+src/overlay009/shop_list_phase.c
+src/overlay009/shop_list_constraints.c
+src/overlay009/shop_list_positions.c
+src/overlay009/shop_list_lifecycle.c
+src/overlay009/shop_inventory_equipment.c
+src/overlay009/shop_inventory_counts.c
+src/overlay009/shop_backgrounds.cpp
+src/overlay009/shop_irq_upload.cpp
