@@ -778,3 +778,32 @@ under `build/runtime/eur_specialized_entity/`.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Renderer presentation snapshots (2026-09-09)
+
+Two contiguous functions add 1,296 matching C bytes, reaching
+514,988 / 1,563,700 bytes (32.93%). A checked 36-byte view names the saved
+animation, scale, rotation, ordering and overlap-priority fields. The existing
+animation-renderer extension supplies the finished flag and signed loop count;
+its base allocation size is unchanged. Both operations can use the entity's
+embedded storage or a caller-provided record. Invalid snapshots and absent
+renderers retain the original early-return behavior.
+
+Opening the pause menu with Start and closing it with B from checkpoint 83
+checks 36 saves and 36 restore returns. Nineteen saves contain valid renderer
+state, sixteen clear the valid flag and one has no renderer. Nineteen restores
+compare every transferred field immediately before the final virtual refresh;
+seventeen return without applying a snapshot. Full saved records, including
+reserved bytes, match. The external-storage path remains statically verified
+only. The replay returns to the visible field normally. Additional identical
+pause-menu replays recheck all three base/planar/spatial copies (60 calls each)
+and all five specialized entity routines, closing the prior end-to-end screen
+observation gap for those paths. No callback failures or pending returns occur,
+and the source battery save is unchanged. Private evidence is `render_pause83.json`
+under `build/runtime/eur_render_snapshot/`, `copy_pause83.json` under
+`build/runtime/eur_entity_copy/` and `specialized_pause83.json` under
+`build/runtime/eur_specialized_entity/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

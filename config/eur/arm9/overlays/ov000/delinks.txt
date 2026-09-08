@@ -187,3 +187,6 @@ src/field/field_party_copy.c:
 
 src/field/field_party_auxiliary_copy.c:
     .text start:0x020b6560 end:0x020b6744
+
+src/field/field_render_snapshot.c:
+    .text start:0x020a3928 end:0x020a3e38

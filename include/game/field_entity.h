@@ -179,13 +179,13 @@ typedef struct FieldCollisionStateFlags {
 } FieldCollisionStateFlags;
 
 typedef struct FieldRenderStateFlags {
-    u32 unknown_00_02 : 3;
+    u32 unknown_00 : 1, unknown_01 : 1, unknown_02 : 1;
     u32 semitransparent : 1;
     u32 render_linked : 1;
     u32 unknown_05_07 : 3;
     u32 animation_active : 1;
     u32 animation_suppressed : 1;
-    u32 unknown_10_11 : 2;
+    u32 unknown_10 : 1, unknown_11 : 1;
     u32 behavior_state : 4;
     u32 unknown_16_31 : 16;
 } FieldRenderStateFlags;
@@ -223,7 +223,9 @@ typedef struct FieldInteractionFlags {
 } FieldInteractionFlags;
 
 struct FieldRenderObjectVTable {
-    u8 unknown_00[0x68];
+    u8 unknown_00[0x48];
+    void (*unknown_48)(FieldRenderObject *, int);
+    u8 unknown_4c[0x1C];
     void (*set_animation)(FieldRenderObject *render_object,
                           u8 resource_animation, s16 animation_id,
                           int restart);
@@ -415,7 +417,7 @@ struct FieldRenderObject {
     virtual void unknown_3c();
     virtual void unknown_40();
     virtual void unknown_44();
-    virtual void update_linear_movement(FieldLinearController *controller);
+    virtual void unknown_48(int);
     virtual int check_linear_completion(FieldLinearController *controller);
     virtual void unknown_50();
     virtual void update_orbit_movement(FieldOrbitController *controller);
@@ -450,9 +452,12 @@ struct FieldRenderObject {
     s16 animation_speed;
     s16 animation_offset_x, animation_offset_y;
     u16 unknown_060;
-    u8 unknown_062[6];
+    u16 unknown_062;
+    u32 unknown_064;
     s32 render_anchor_z;
-    u8 unknown_06c[0x10];
+    u8 unknown_06c[8];
+    s16 scale_x, scale_y;
+    u16 rotation, unknown_07a;
     union {
         u32 state_flags;
         FieldRenderStateFlags state_flag_bits;
@@ -473,6 +478,26 @@ struct FieldRenderObject {
         u8 overlap_priority_bytes[4];
     };
 };
+
+/* Renderer presentation retained by a field entity while its renderer is
+ * rebound. The optional argument to save/restore selects external storage. */
+typedef struct FieldRenderSnapshot {
+    struct {
+        u16 valid : 1, render_02 : 1, semitransparent : 1, render_05_07 : 3;
+        u16 animation_active : 1, animation_suppressed : 1, render_10 : 1, render_11 : 1;
+        u16 behavior_state : 4, unknown_14_15 : 2;
+    } flags;
+    u16 unknown_02;
+    s16 animation_id;
+    u16 unknown_06;
+    u32 unknown_08;
+    s16 animation_speed, scale_x, scale_y;
+    u16 rotation, unknown_14, unknown_16;
+    u32 sort_key;
+    u8 overlap_priorities[4];
+    struct { u16 finished : 1; s16 loops_remaining : 15; } animation_control;
+} FieldRenderSnapshot;
+typedef char FieldRenderSnapshot_SizeCheck[sizeof(FieldRenderSnapshot) == 36 ? 1 : -1];
 
 /* The spatial copy transfers this 260-byte payload as one aggregate. Its
  * internal controller layout is not yet identified. */
@@ -524,16 +549,23 @@ struct FieldRuntimeEntity {
     u16 saved_model_animation;
     u16 saved_animation_frame;
     s16 unknown_1a6[4], unknown_1ae[4];
-    u16 unknown_1b6, unknown_1b8, unknown_1ba;
-    s16 unknown_1bc;
-    u16 unknown_1be;
-    u32 unknown_1c0;
-    s16 unknown_1c4, unknown_1c6, unknown_1c8;
-    u16 unknown_1ca, unknown_1cc, unknown_1ce;
-    u32 unknown_1d0;
-    struct { u8 unknown_00, unknown_01; } unknown_1d4, unknown_1d6;
-    u16 unknown_1d8;
-    u8 unknown_1da[6];
+    u16 unknown_1b6;
+    union {
+        FieldRenderSnapshot render_snapshot;
+        struct {
+            u16 unknown_1b8, unknown_1ba;
+            s16 unknown_1bc;
+            u16 unknown_1be;
+            u32 unknown_1c0;
+            s16 unknown_1c4, unknown_1c6, unknown_1c8;
+            u16 unknown_1ca, unknown_1cc, unknown_1ce;
+            u32 unknown_1d0;
+            struct { u8 unknown_00, unknown_01; } unknown_1d4, unknown_1d6;
+            u16 unknown_1d8;
+            u8 unknown_1da[2];
+        };
+    };
+    u8 unknown_1dc[4];
     FieldRenderObject *render_object;
     u8 unknown_1e4[4];
     void *unknown_1e8, *unknown_1ec;
@@ -655,6 +687,8 @@ typedef char FieldRuntimeEntity_SizeCheck[
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldEntity_SaveRenderSnapshot(FieldRuntimeEntity *entity, FieldRenderSnapshot *snapshot);
+void FieldEntity_RestoreRenderSnapshot(FieldRuntimeEntity *entity, const FieldRenderSnapshot *snapshot);
 FieldEntity *FieldEntity_CopyState(FieldEntity *entity, const FieldEntity *source);
 FieldRuntimeEntity *FieldEntity_CopyPlanarState(FieldRuntimeEntity *entity, const FieldRuntimeEntity *source);
 FieldRuntimeEntity *FieldEntity_CopySpatialState(FieldRuntimeEntity *entity, const FieldRuntimeEntity *source);
