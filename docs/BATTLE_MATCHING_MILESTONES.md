@@ -565,3 +565,32 @@ is unchanged. Private evidence is `title_effects_intro83.json` and
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Battle text, number formatting and VRAM uploads (2026-09-08)
+
+Five functions add 1,500 matching C bytes, reaching 494,832 / 1,563,700
+bytes (31.64%). One contiguous module reconstructs number requests, decimal
+formatting, incremental text/number processing and tile-to-row pixel uploads.
+The number buffer stores digits in reverse order for right-to-left drawing;
+negative sentinels produce dashes. Checked request and upload-prefix layouts
+replace opaque payload offsets. The target-label renderer uses the shared
+upload declaration and remains byte-identical.
+
+Checkpoint 83 battle entry verifies 34 resource-text updates and 142 uploads,
+including independent comparison of 287,744 bytes in live VRAM. The original
+Elder Shrooboid encounter command from room 460 is restored at native battle
+entry as documented above. Scrolling the saved Bros.-Item list with normal
+keypad input executes all five functions: 15 number requests, formatting calls
+and completed number tasks, 241 resource-text updates and 53 uploads. Checks
+cover packed coordinates and flags, all fourteen text-initialization arguments,
+reversed number strings, per-token cursor movement, task completion and pixel
+layout. Another 151,552 VRAM bytes match the independent tile conversion.
+Nested text-parser calls are excluded using the verified direct call sites.
+No runtime checks fail and no returns remain pending. Both source saves are
+unchanged. Negative number sentinels and number-task clearing remain statically
+verified only. Private evidence is `interface_text_entry83.json` and
+`interface_text_bros_verified83.json` under `build/runtime/eur_interface_text/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
