@@ -10,7 +10,8 @@ enum Overlay26AttackConstant {
 };
 
 typedef struct Overlay26TrackedObjectState {
-    u8 unknown_00[5];
+    int timer;
+    s8 phase;
     union {
         u8 flags;
         struct {
@@ -32,7 +33,10 @@ typedef struct Overlay26AttackState {
     void *async_tasks[OVERLAY26_ASYNC_TASK_COUNT];
     void **completion_link;
     u16 resource_id;
-    u8 unknown_46[26];
+    s8 phase;
+    u8 unknown_47[5];
+    int timer;
+    u8 unknown_50[16];
 } Overlay26AttackState;
 
 typedef struct Overlay26ActionStateView {

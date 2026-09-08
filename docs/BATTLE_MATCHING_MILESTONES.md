@@ -182,3 +182,30 @@ positions using the live camera offsets, and effect-slot ownership. The
 facing-animation helper, used by the revival sequence, was not reached.
 Private evidence is in `item_red_pepper83.json`, `item_enemy_attack83.json`
 and `item_healing_verified83.json` under `build/runtime/eur_attack_helpers/`.
+
+### Item entry and resource selection (2026-09-08)
+
+The first batch toward 50% adds 1,244 matching C++ bytes in two Overlay 26
+functions, reaching 470,528 / 1,563,700 bytes (30.09%). It reconstructs the
+resource choices for the user, target, partner and carried-baby cases, plus
+the complete four-phase entry sequence and item-kind dispatch. Adjacent
+resource, launch and effect-slot functions are consolidated into
+`src/overlay026/item_sequence.cpp`. The state view now names the observed
+signed phase bytes and timers without changing allocation size or offsets.
+
+Checkpoint 83 replays cover both new functions: Red Pepper enters the sequence
+61 times, and Mushroom enters it 54 times. Guarded RAM checks verify resource
+selection for the user, resource-load waiting, phase transitions, the launch
+timer and dispatch callbacks, alongside the existing position/resource
+oracles. Both runs return to Luigi's command wheel, and Mushroom restores
+Mario from 87 to 100 HP. The source save remains unchanged; the replays use
+normal inputs from the previously documented battle setup. Revival and KO
+resource branches are not covered by these two replays.
+
+All 74 tests, native linking, progress consistency and the public-content
+audit pass. The full ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Private evidence is in
+`item_entry_pepper83.json` and `item_entry_healing83.json` under
+`build/runtime/eur_attack_helpers/`. The larger group-item sequence is still
+private WIP: its behavior and missing stack arguments are recovered, but
+36 instruction words differ in register allocation at the exact native size.

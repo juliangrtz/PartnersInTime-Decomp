@@ -7,6 +7,7 @@ extern "C" {
 #include <game/battle_effect.h>
 #include <game/heap.h>
 #include <game/save_data.h>
+#include <game/item.h>
 #include <game/overlay026_attack.h>
 #include "attack_state.h"
 }
@@ -35,8 +36,13 @@ extern s8 data_ov026_020c64e0[][6];
 extern s8 data_ov026_020c63d8[][3], data_ov026_020c6420[][3], data_ov026_020c6468[][3],
     data_ov026_020c6498[][3];
 void func_0202cbd4(void *, int, int);
-void func_ov026_020c2d38(Overlay26ItemUser *);
-void func_ov026_020c3054(Overlay26ItemUser *);
+extern int data_ov026_020c64c8[], data_ov026_020c6384[];
+void func_ov002_0206edb8(BattleSceneObject *, int, int);
+void func_ov026_020c57d0(Overlay26ItemUser *);
+void func_ov026_020c49ac(Overlay26ItemUser *);
+void func_ov026_020c3850(Overlay26ItemUser *);
+void Overlay26Attack_PrepareResources(Overlay26ItemUser *);
+void Overlay26Attack_UpdateEntry(Overlay26ItemUser *);
 
 void Overlay26Attack_LoadResource(u16 resource, int size, int resource_index, int resource_id,
                                   int compressed);

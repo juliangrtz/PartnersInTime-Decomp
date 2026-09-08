@@ -10,11 +10,7 @@ src/overlay026/party_pairing.c:
     .text       start:0x020c34a8 end:0x020c3570
 
 
-src/overlay026/ov26_attack_load_resource.cpp:
-    .text start:0x020c2f78 end:0x020c3054
 
-src/overlay026/ov26_attack_spawn_party_effect.cpp:
-    .text start:0x020c32f0 end:0x020c34a8
 
 src/overlay026/ov26_attack_get_phase_position.cpp:
     .text start:0x020c3570 end:0x020c3850
@@ -24,3 +20,6 @@ src/overlay026/ov26_attack_set_facing_animation.cpp:
 
 src/overlay026/ov26_attack_initialize.cpp:
     .text start:0x020c6264 end:0x020c6354
+
+src/overlay026/item_sequence.cpp:
+    .text start:0x020c2d38 end:0x020c34a8

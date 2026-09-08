@@ -17,7 +17,7 @@ void Overlay26Attack_Initialize(Overlay26ItemUser *user)
             gOverlay26AttackState->tracked_objects[i].object_id = actor->actor.scene_object->actor_id;
         }
     }
-    func_ov026_020c2d38(user);
-    user->callback = func_ov026_020c3054;
+    Overlay26Attack_PrepareResources(user);
+    user->callback = Overlay26Attack_UpdateEntry;
 }
 }
