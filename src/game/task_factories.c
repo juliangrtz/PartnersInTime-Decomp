@@ -3,9 +3,9 @@
 #include <game/save_menu.h>
 #include <game/frontend_scene.h>
 #include <game/shop_scene.h>
+#include <game/pause_scene.h>
 
 extern GameTask *func_ov006_02075b60(void *memory, u32 priority, void *argument);
-extern GameTask *func_ov007_02072a80(void *memory, u32 priority, void *argument);
 
 GameTask *GameTask_CreateTitleScreen(void)
 {
@@ -24,7 +24,7 @@ GameTask *func_020290a8(void)
 GameTask *GameTask_CreateSceneController(void)
 {
     void *memory = GameHeap_New(56, 0, 0, 0);
-    if (memory) return func_ov007_02072a80(memory, 8, 0);
+    if (memory) return (GameTask *)PauseScene_Init((PauseSceneTask *)memory, 8, 0);
     return memory;
 }
 

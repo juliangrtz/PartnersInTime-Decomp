@@ -2340,3 +2340,39 @@ paths use secondary models; primary-model branches are likewise byte-verified.
 Resource readiness and property 24 have verified entry/return coverage but no
 independent result oracle in this probe. A separate cold-boot attempt with save 12
 did not enter the target routines and is not counted as runtime evidence.
+
+
+### Pause-menu scene construction and ownership (2026-09-08)
+
+Five additional overlay-7 functions contribute 2,992 matching C/C++ bytes:
+`PauseScene_Init`, the non-deleting `PauseScene_Destroy`, and the IRQ constructor
+and two destructors. Total: 415,848 / 1,563,700 (26.5938%). The typed 56-byte task
+and 90,600-byte work area describe the menu's owned buffers, palettes, sprite
+allocations, 48 sprite slots and panel. Construction preserves the original
+background-bank setup, input-repeat settings, tutorial selection and scene/script
+startup. The regular scene-controller factory now calls the named constructor.
+
+The deleting destructor also matches privately, but is deliberately not linked:
+the existing Scene VM path command references `func_ov007_020724b0`, an interior
+label within that destructor. Keeping the existing assembly retains that shipped
+entry without inventing a new function boundary or changing its behavior. This
+routine contributes no new C progress. The separate non-deleting destructor has
+no such interior label and is linked normally.
+
+Validation: complete native relink and ROM match the original SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`; all 74 tests and the progress,
+public-content and whitespace checks pass. Local evidence in
+`build/runtime/eur_pause_scene` covers the supplied checkpoints 65, 86 and 103.
+Checkpoint 103 is imported directly from its supplied save for a full cold boot;
+the other two use compatible states derived from their supplied saves. Normal
+menu/demo controls cover 6,203 frames and three complete menu lifecycles. Read-only
+checks verify constructor state, IRQ ownership/vtable, display modes, input repeat,
+48 sprites per lifecycle, and cleanup of all 17 owned arrays per lifecycle through
+the original deleting destructor. The previous object/animation/resource oracles
+also pass. Supplied save hashes remain unchanged.
+
+The new constructor and deleting IRQ destructor execute in all three runs. The
+non-deleting scene and IRQ destructors are byte-exact but were not entered by
+these normal exit paths. Cleanup observations through the original deleting
+scene destructor are recorded as supporting lifecycle evidence, not as runtime
+execution of the new non-deleting C function.

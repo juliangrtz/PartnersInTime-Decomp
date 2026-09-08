@@ -1,5 +1,5 @@
-func_ov007_0206ab80 kind:function(arm,size=0x24) addr:0x0206ab80
-func_ov007_0206aba4 kind:function(arm,size=0x2c) addr:0x0206aba4
+PauseSceneIrq_Destroy kind:function(arm,size=0x24) addr:0x0206ab80
+PauseSceneIrq_Delete kind:function(arm,size=0x2c) addr:0x0206aba4
 func_ov007_0206abd0 kind:function(arm,size=0xd0) addr:0x0206abd0
 func_ov007_0206aca0 kind:function(arm,size=0x3e0) addr:0x0206aca0
 func_ov007_0206b080 kind:function(arm,size=0x1064) addr:0x0206b080
@@ -50,10 +50,10 @@ func_ov007_02071f80 kind:function(arm,size=0x2f0) addr:0x02071f80
 func_ov007_02072270 kind:function(arm,size=0x40c) addr:0x02072270
 func_ov007_020722d8 kind:label(arm) addr:0x020722d8
 func_ov007_020724b0 kind:label(arm) addr:0x020724b0
-func_ov007_0207267c kind:function(arm,size=0x404) addr:0x0207267c
-func_ov007_02072a80 kind:function(arm,size=0x738) addr:0x02072a80
+PauseScene_Destroy kind:function(arm,size=0x404) addr:0x0207267c
+PauseScene_Init kind:function(arm,size=0x738) addr:0x02072a80
 func_ov007_020731b8 kind:function(arm,size=0x24c) addr:0x020731b8
-func_ov007_02073404 kind:function(arm,size=0x24) addr:0x02073404
+PauseSceneIrq_Init kind:function(arm,size=0x24) addr:0x02073404
 func_ov007_02073428 kind:function(arm,size=0x88) addr:0x02073428
 func_ov007_020734b0 kind:function(arm,size=0xac) addr:0x020734b0
 func_ov007_0207355c kind:function(arm,size=0x1ac) addr:0x0207355c

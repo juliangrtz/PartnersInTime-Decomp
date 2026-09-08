@@ -517,3 +517,6 @@ src/overlay007/scene_object_animation.cpp
 src/overlay007/scene_object_resources.cpp
 src/overlay007/scene_window_close.cpp
 src/overlay007/scene_window_open.cpp
+src/overlay007/pause_irq_destroy.cpp
+src/overlay007/pause_scene_lifecycle.cpp
+src/overlay007/pause_irq_init.cpp
