@@ -25,11 +25,13 @@ typedef struct ShopSceneWork {
     u8 background_dirty, unknown_7d;
     s16 wave_pending, wave_current, unknown_82;
     void *owned_84[2];
-    u8 unknown_8c[11];
+    u8 unknown_8c[2], available[4], displayed[4], party_count;
     u8 variant, animated_background, special_shop;
-    u8 unknown_9a[5];
+    u8 unknown_9a[4], initialized;
     u8 selected_category;
-    u8 unknown_a0[0x8cc - 0xa0];
+    u8 unknown_a0[0x8c0 - 0xa0];
+    u8 unknown_8c0, unknown_8c1, selected_member;
+    u8 unknown_8c3[9];
     void *sprites[60];
 } ShopSceneWork;
 typedef char ShopSceneWorkSizeCheck[sizeof(ShopSceneWork) == 2492 ? 1 : -1];
@@ -64,7 +66,7 @@ extern void func_ov005_02065f10(void), func_ov005_02069928(void), func_ov005_020
 extern void func_02035fd0(int), func_0203613c(int), func_02035e04(int), func_02035ebc(int),
     func_020359c4(int), func_02035a40(int), func_020358ac(int), func_02035938(int);
 extern void MI_CpuFill8(void *, u8, u32);
-extern void func_ov009_0206d160(ShopSceneTask *), func_ov009_02074ea8(int);
+extern void ShopScene_LoadResources(ShopSceneTask *), func_ov009_02074ea8(int);
 extern ShopMenuElement *func_ov005_0206659c(void (*)(ShopMenuElement *), int, int);
 extern void func_ov009_0206abd0(ShopMenuElement *), func_ov009_0206ca78(ShopMenuElement *);
 extern void func_ov009_0207ce1c(void);

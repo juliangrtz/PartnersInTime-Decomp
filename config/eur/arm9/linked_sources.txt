@@ -574,3 +574,6 @@ src/overlay017/ov17_participant_set_animation.cpp
 src/overlay017/ov17_participant_begin_entry.cpp
 src/overlay017/ov17_participant_hide.cpp
 src/overlay007/pause_resources.cpp
+src/overlay009/shop_resources.cpp
+src/overlay008/menu_resources.c
+src/overlay008/erase_resources.c

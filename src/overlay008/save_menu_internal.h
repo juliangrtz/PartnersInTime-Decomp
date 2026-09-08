@@ -92,7 +92,7 @@ extern void func_ov008_02075c38(SaveMenuTransferTask *);
 extern GameTaskVTable data_ov008_02078264, data_ov008_02078250;
 extern SaveSceneTask *data_ov008_0207aa98;
 extern u8 data_02059f44, data_02059f48;
-extern void func_ov008_020773b4(SaveSceneTask *);
+extern void EraseScene_LoadResources(SaveSceneTask *);
 extern void func_ov008_02076c70(MenuElement *);
 extern void func_ov008_02075dc8(SaveMenuText *);
 static inline void SaveMenuText_DeleteOwned(SaveMenuText *text)

@@ -81,3 +81,9 @@ src/overlay008/save_menu_location_name.c:
 
 src/overlay008/save_menu_location_image.c:
     .text       start:0x02071d30 end:0x02071ec8
+
+src/overlay008/menu_resources.c:
+    .text start:0x02071ec8 end:0x0207275c
+
+src/overlay008/erase_resources.c:
+    .text start:0x020773b4 end:0x020777dc

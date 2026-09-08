@@ -118,7 +118,7 @@ ShopSceneTask *ShopScene_Init(ShopSceneTask *task, u32 priority, u32 unused)
     GX_DispOn();
     REG32(0x04001000) |= 0x10000;
     MI_CpuFill8(&data_ov009_0207ea3c, 0, sizeof(data_ov009_0207ea3c));
-    func_ov009_0206d160(task);
+    ShopScene_LoadResources(task);
     if (!((ShopSavedState *)gSaveData)->shop) {
         /* The original loop writes the same two bytes three times. */
         for (i = 0; i < 3; ++i) {

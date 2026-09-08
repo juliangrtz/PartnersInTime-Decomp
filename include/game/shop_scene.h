@@ -14,6 +14,7 @@ extern "C" {
 GameIrqTask *ShopSceneIrq_Destroy(GameIrqTask *task);
 GameIrqTask *ShopSceneIrq_Delete(GameIrqTask *task);
 GameIrqTask *ShopSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
+void ShopScene_LoadResources(ShopSceneTask *task);
 ShopSceneTask *ShopScene_Init(ShopSceneTask *task, u32 priority, u32 unused);
 ShopSceneTask *ShopScene_Delete(ShopSceneTask *task);
 ShopSceneTask *ShopScene_Destroy(ShopSceneTask *task);

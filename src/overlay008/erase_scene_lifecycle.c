@@ -59,7 +59,7 @@ SaveSceneTask *EraseScene_Init(SaveSceneTask *task, u32 priority, u32 unused)
     GameIrqTask_Enable(task->irq);
     GX_DispOn();
     REG32(0x04001000) |= 0x10000;
-    func_ov008_020773b4(task);
+    EraseScene_LoadResources(task);
     func_ov005_0206659c(func_ov008_02076c70, 6, 1);
     task->phase = 0;
     return task;

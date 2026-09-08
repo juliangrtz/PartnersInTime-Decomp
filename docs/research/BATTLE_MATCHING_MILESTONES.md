@@ -2457,3 +2457,36 @@ by exact machine-code matching. An earlier foreign-boss selection from checkpoin
 55 did not reach a valid attack sequence and is excluded from these totals, as
 are field-navigation attempts and the unavailable Hammer target in the flower
 test encounter.
+
+## Shop, load-menu and erase-menu resources
+
+Three resource initializers add 7,652 matching C/C++ bytes:
+`ShopScene_LoadResources` (4,392), `SaveMenu_LoadResources` (2,196), and
+`EraseScene_LoadResources` (1,064). Shared typed tables describe resource IDs,
+loading modes and language selections. The shop work layout now names confirmed
+party availability, displayed members, selection and initialization fields.
+Structured tilemap loops reproduce the original palette-bank adjustments and
+26-by-9 text-tile layout.
+
+Controlled shop entries on supplied story saves 83 and 65 exercise normal and
+sell views. As in earlier shop probes, a decoded Field VM `0x121` command is
+restored in full (72 bytes) at its native helper before normal scene loading.
+Normal B inputs exit without purchases. The sell view reopens the normal shop,
+so the two 681-frame runs cover three complete resource initializations and
+teardowns. Read-only return hooks verify all 60 sprite slots, shared font buffers,
+party selection and ownership cleanup. Seven tilemaps, 5,376 entries in total,
+are compared in live VRAM against their captured original values plus the
+native palette-bank adjustment of 4,096.
+
+A separate 2,603-frame cold boot of save 83 uses normal keypad inputs and no
+substitution. It enters the shared load-menu initializer twice; both runs verify
+all 1,024 live tilemap entries, including the 234 sequential text tiles, and the
+constructed text context. Full native bytes guard target entries. The erase-menu
+initializer is byte-exact but has not yet been entered by these replays.
+Language 1 and full-party states are covered; other resource branches remain
+runtime coverage gaps. Source battery-save hashes are unchanged. Private evidence:
+`build/runtime/eur_shop_resources` and `build/runtime/eur_menu_resources`.
+
+Matching C/C++ reaches 450,360 of 1,563,700 bytes (28.80%). Full module/symbol
+checks, all 74 tests, generated progress and the public-content audit pass.
+The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

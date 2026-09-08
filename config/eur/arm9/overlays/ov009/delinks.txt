@@ -53,3 +53,6 @@ src/overlay009/shop_icon_transfer.c:
 
 src/overlay009/shop_text_lookup.c:
     .text       start:0x02074838 end:0x02074950
+
+src/overlay009/shop_resources.cpp:
+    .text start:0x0206d160 end:0x0206e288
