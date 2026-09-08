@@ -65,6 +65,9 @@ void SaveMenuText_QueueObjectStrip(int engine, int offset, int row, int column, 
 u16 SaveMenuText_MeasureWidth(SaveMenuText *context, int table, int entry);
 const u8 *SaveMenuText_GetString(SaveMenuText *context, int table, int entry);
 SaveMenuText *SaveMenuText_Init(SaveMenuText *context);
+void SaveMenu_CreateModels(void);
+void LoadMenu_CreateModels(void);
+int LoadMenuMotion_Update(SaveMenuMotion *motion);
 int SaveMenuMotion_Update(SaveMenuMotion *motion);
 SaveSceneTask *SaveScene_Init(SaveSceneTask *task, u32 priority, u32 unused);
 SaveSceneTask *LoadScene_Init(SaveSceneTask *task, u32 priority, u32 unused);

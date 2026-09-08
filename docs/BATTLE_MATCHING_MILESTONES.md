@@ -457,3 +457,24 @@ state `hammer_lifecycle83.dst`.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Save/load menu model creation and cursor motion (2026-09-08)
+
+Three functions add 664 matching C/C++ bytes, reaching 489,836 / 1,563,700
+bytes (31.33%). The save and load menus now create their title and cursor
+models in readable C++, preserving the native virtual animation calls,
+resource ownership and task callbacks. The load-menu cursor's acceleration,
+velocity, position and countdown update is reconstructed in C.
+
+A normal cold boot with checkpoint 83 enters both menus using keypad input.
+Read-only hooks validate both pairs of model/task pointers, task priority,
+title timer, animation IDs, render flags, title coordinates and cursor callback.
+Seven cursor updates are compared with independently calculated live RAM
+results. All three new functions execute. The source battery save remains
+unchanged. Private evidence is
+`build/runtime/eur_save_load_models/evidence_083.json`, including the input
+sequence, ROM/save hashes and observed object pointers.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

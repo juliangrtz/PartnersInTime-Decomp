@@ -87,3 +87,12 @@ src/overlay008/menu_resources.c:
 
 src/overlay008/erase_resources.c:
     .text start:0x020773b4 end:0x020777dc
+
+src/overlay008/save_menu_models.cpp:
+    .text start:0x0206bf64 end:0x0206c078
+
+src/overlay008/load_menu_models.cpp:
+    .text start:0x0206ed44 end:0x0206ee58
+
+src/overlay008/load_menu_motion.c:
+    .text start:0x0206f3a4 end:0x0206f414

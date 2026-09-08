@@ -636,3 +636,6 @@ src/battle/battle_position_helpers.c
 src/battle/battle_map_resources.c
 src/battle/battle_texture_catalog_load.c
 src/battle/battle_map_transfer.c
+src/overlay008/save_menu_models.cpp
+src/overlay008/load_menu_models.cpp
+src/overlay008/load_menu_motion.c
