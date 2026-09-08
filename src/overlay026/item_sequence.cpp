@@ -85,7 +85,7 @@ void Overlay26Attack_UpdateEntry(Overlay26ItemUser *user)
                                              position[2] - object->z);
             object->flags.bits.unk_20_23 = 2;
             gOverlay26AttackState->timer = 0;
-            func_ov002_0206edb8(object, 3, 16);
+            BattleMotion_StartAppear(object, 3, 16);
             ++gOverlay26AttackState->phase;
         }
         break;

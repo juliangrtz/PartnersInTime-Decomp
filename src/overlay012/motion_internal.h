@@ -49,7 +49,7 @@ void func_ov002_02071c44(int);
 int Overlay10Enemy_IsSelectable(int);
 void Overlay10Enemy_PlayHitReaction(int, int);
 void func_ov002_020719e4(BattleSceneObject *, int, int, int);
-void func_ov002_0206e7e4(BattleSceneObject *, int, int, int, int, int, int, int, int, int, int);
+void BattleMotion_StartTransform(BattleSceneObject *, int, int, int, int, int, int, int, int, int, int);
 void func_ov002_02071e40(int, BattleSceneObject *, int, int, int, int);
 void func_ov002_02071f08(int, BattleSceneObject *, BattleSceneObject *, int, int, int, int);
 void func_ov012_020c3db8(Overlay12AttackController *);

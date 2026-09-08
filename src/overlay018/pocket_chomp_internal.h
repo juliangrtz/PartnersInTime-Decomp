@@ -35,7 +35,7 @@ extern int func_ov002_020b8ac8(BattleSceneObject *, int, int);
 extern int func_ov002_020b8ab0(BattleSceneObject *, int, int, int);
 extern void func_ov002_020b8b14(BattleSceneObject *, BattleSceneObject *, int, int, int);
 extern int func_ov002_020b8a68(BattleSceneObject *, int, int, int);
-extern void func_ov002_0206eb78(BattleSceneObject *, BattleSceneObject *, int);
+extern void BattleMotion_StartFollower(BattleSceneObject *, BattleSceneObject *, int);
 extern void func_0200940c(BattleModel *, s16);
 extern void func_ov018_020c2e50(void *, int);
 extern void Overlay10Party_AverageStats(void *, int);

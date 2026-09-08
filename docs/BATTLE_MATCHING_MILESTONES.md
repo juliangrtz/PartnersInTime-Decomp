@@ -209,3 +209,31 @@ audit pass. The full ROM SHA-1 remains
 `build/runtime/eur_attack_helpers/`. The larger group-item sequence is still
 private WIP: its behavior and missing stack arguments are recovered, but
 36 instruction words differ in register allocation at the exact native size.
+
+### Shared motion effects (2026-09-08)
+
+Eleven functions add 1,404 matching C++ bytes, reaching 471,932 / 1,563,700
+bytes (30.18%). Five contiguous source units reconstruct scale-wave setup and
+updates, transform and pursuit setup, follower setup and updates, sine-motion
+setup, and appear/shrink effects. Typed parameter views fit the existing
+16-byte motion-channel storage; compile-time size checks cover each layout.
+Existing attack callers now use the recovered names. No inline assembly was
+added.
+
+Checkpoint 83 replays exercise five of the eleven functions. Bro Flower
+verifies two transform setups, including scale/rotation endpoints and mode.
+Pocket Chomp verifies two follower setups and 425 follower updates against
+live object coordinates, previous positions and movement targets. The three
+Bro-item replays each observe appear setup and verify nine appear updates
+against the resident sine table. These checks use full native-byte guards
+and stack-matched return hooks. The other six functions remain statically
+verified; these replays do not establish their runtime coverage.
+
+Trampoline, Bro Flower and Pocket Chomp runs use 3,190, 2,590 and 3,110 frames
+respectively and return to Luigi's command wheel. Inputs are ordinary buttons
+from the previously documented controlled encounter; checks only read RAM,
+and the source battery save remains unchanged. Private evidence is in
+`motion_trampoline83.json`, `motion_flower83.json` and `motion_chomp83.json`
+under `build/runtime/eur_attack_helpers/`. Native linking, all 74 tests,
+progress consistency and the public-content audit pass; the full ROM retains
+SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.

@@ -376,3 +376,18 @@ src/battle/battle_iris_capture.c:
 
 src/battle/battle_iris_transition_phase_b.c:
     .text       start:0x020b5d04 end:0x020b5d58
+
+src/battle/battle_motion_parameters.cpp:
+    .text start:0x0206e578 end:0x0206e64c
+
+src/battle/battle_transform_motion.cpp:
+    .text start:0x0206e7e4 end:0x0206e89c
+
+src/battle/battle_pursuit_setup.cpp:
+    .text start:0x0206e984 end:0x0206ea08
+
+src/battle/battle_follow_motion.cpp:
+    .text start:0x0206eb78 end:0x0206ecfc
+
+src/battle/battle_scale_effects.cpp:
+    .text start:0x0206edb8 end:0x0206efa0

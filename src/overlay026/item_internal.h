@@ -37,7 +37,7 @@ extern s8 data_ov026_020c63d8[][3], data_ov026_020c6420[][3], data_ov026_020c646
     data_ov026_020c6498[][3];
 void func_0202cbd4(void *, int, int);
 extern int data_ov026_020c64c8[], data_ov026_020c6384[];
-void func_ov002_0206edb8(BattleSceneObject *, int, int);
+void BattleMotion_StartAppear(BattleSceneObject *, int, int);
 void func_ov026_020c57d0(Overlay26ItemUser *);
 void func_ov026_020c49ac(Overlay26ItemUser *);
 void func_ov026_020c3850(Overlay26ItemUser *);

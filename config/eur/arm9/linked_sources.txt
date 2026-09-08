@@ -610,3 +610,8 @@ src/overlay026/ov26_attack_get_phase_position.cpp
 src/overlay026/ov26_attack_set_facing_animation.cpp
 src/overlay026/ov26_attack_initialize.cpp
 src/overlay026/item_sequence.cpp
+src/battle/battle_motion_parameters.cpp
+src/battle/battle_transform_motion.cpp
+src/battle/battle_pursuit_setup.cpp
+src/battle/battle_follow_motion.cpp
+src/battle/battle_scale_effects.cpp

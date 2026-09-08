@@ -13,7 +13,7 @@ void PocketChompSupport_Attach(PocketChompSupport *support, PocketChomp *center,
         BattleSceneObject *object = support->object;
         BattleSceneObject_AdjustPosition(object, linked->x + 4 * sign - object->x, linked->y + 1 - object->y,
                                          linked->z + 9 - object->z);
-        func_ov002_0206eb78(linked, support->object, 3);
+        BattleMotion_StartFollower(linked, support->object, 3);
         func_ov018_020c2e50(support, 17152);
         support->object->effect_anchor_z = -48;
         PocketChompSupport_SetLinkedAnimation(support, 9);
