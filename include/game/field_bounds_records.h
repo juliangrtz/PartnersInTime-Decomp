@@ -47,6 +47,28 @@ typedef struct FieldPairedBoundsRuntime {
 } FieldPairedBoundsRuntime;
 typedef char FieldPairedBoundsRuntime_SizeCheck[sizeof(FieldPairedBoundsRuntime) == 44 ? 1 : -1];
 
+typedef struct FieldQuadRegionRecord {
+    struct {
+        s16 x, y;
+    } corners[4];
+    s16 z, height;
+    struct {
+        u16 mode_a : 2, mode_b : 2, unknown_04 : 1, unknown_05 : 1, value : 9, unknown_15 : 1;
+    } flags;
+    struct {
+        u16 index : 15, unknown_15 : 1;
+    } target;
+} FieldQuadRegionRecord;
+typedef char FieldQuadRegionRecord_SizeCheck[sizeof(FieldQuadRegionRecord) == 24 ? 1 : -1];
+typedef struct FieldQuadRegion {
+    fx32 x[4], y[4], min_z, max_z;
+    struct {
+        u32 active : 1, last : 1, mode_a : 2, mode_b : 2, unknown_06 : 1, unknown_07 : 1, value : 9,
+            index : 15;
+    } flags;
+} FieldQuadRegion;
+typedef char FieldQuadRegion_SizeCheck[sizeof(FieldQuadRegion) == 44 ? 1 : -1];
+
 #ifdef __cplusplus
 extern "C" {
 #endif

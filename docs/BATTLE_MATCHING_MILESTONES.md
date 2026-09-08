@@ -1030,3 +1030,32 @@ Private evidence is `bounds_cold83.json` and `bounds_cold27.json` under
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Quad regions and variable-entity creation (2026-09-09)
+
+Two adjacent field initialization functions add 1,212 matching C bytes, reaching
+528,172 / 1,563,700 bytes (33.78%). Quad-region setup expands four corners,
+vertical limits and packed metadata into checked 44-byte records, restores each
+screen's saved activation mask, writes a terminator, and clears the consumed
+mask. Variable-entity setup consumes a terminated 12-byte placement stream,
+skips mode zero, constructs modes one through three, and updates the area's
+entity table and counters. The placement terminator bit and previously opaque
+area fields now have explicit names.
+
+Normal battery boots of checkpoints 83 and 27 verify four calls to each routine
+against the complete 11,216-byte area context. Quad checks cover two populated
+records with finite height and two allocated empty lists, including their full
+output buffers, terminators and consumed masks. Variable checks cover all four
+placement modes: five mode-three, one mode-one and one mode-two objects are
+constructed; one mode-zero record is skipped. All seven constructors receive
+the expected entity index, screen and placement pointer, and the returned
+objects occupy the expected slots. Null placement lists are also observed.
+
+The live packed records and both source battery saves remain unchanged. All
+checks pass with no pending callbacks. Negative coordinates, unbounded heights,
+null quad sources and allocation failures were not reached and remain
+statically verified only. Private evidence is `regions_cold83.json` and
+`regions_cold27.json` under `build/runtime/eur_area_regions/`.
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

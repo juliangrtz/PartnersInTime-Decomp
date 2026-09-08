@@ -2,13 +2,18 @@
 #define PIT_GAME_FIELD_AREA_H
 
 #include <game/field_script_manager.h>
+#include <game/field_bounds_records.h>
+
+typedef struct FieldVariablePlacement FieldVariablePlacement;
 
 typedef struct FieldAreaContext {
     const void *vtable;
     void *owner;
     u8 unknown_0008[34];
     s8 unknown_2a;
-    u8 unknown_002b[9153];
+    u8 unknown_002b[8913];
+    const FieldQuadRegionRecord *quad_records;
+    u8 unknown_2300[236];
     void *archive;
     u16 unknown_23f0, unknown_23f2;
     u16 room_id;
@@ -66,8 +71,11 @@ typedef struct FieldAreaContext {
     } hud;
     s16 unknown_24da, unknown_24dc;
     u8 unknown_24de[18];
-    u32 unknown_24f0;
-    u8 unknown_24f4[8];
+    union { u32 unknown_24f0; u32 quad_region_count; };
+    union {
+        u8 unknown_24f4[8];
+        struct { FieldQuadRegion *quad_regions; const FieldVariablePlacement *variable_records; };
+    };
     void *auxiliary;
     u8 unknown_2500[4], unknown_2504[8], unknown_250c[44], unknown_2538[40];
     void *party_order;
@@ -75,7 +83,8 @@ typedef struct FieldAreaContext {
     void *unknown_2568;
     void *party;
     FieldScriptManager scripts;
-    u8 unknown_29d4[148];
+    u8 unknown_29d4[4];
+    struct FieldRuntimeEntity *entities[36];
     void *shared_resources;
     void *unknown_2a6c;
     void *unknown_2a70;
@@ -87,7 +96,7 @@ typedef struct FieldAreaContext {
             u16 unknown_00_01 : 2, unknown_02_15 : 14;
         } state_bits;
     };
-    u8 unknown_2b32[2];
+    union { u8 unknown_2b32[2]; struct { u8 entity_count, variable_count; }; };
     s8 special_resources[6];
     u8 unknown_2b3a[34], unknown_2b5c[52], unknown_2b90[52], unknown_2bc4[12];
 } FieldAreaContext;
@@ -107,6 +116,8 @@ typedef char FieldAreaSnapshot_SizeCheck[sizeof(FieldAreaSnapshot) == 16 ? 1 : -
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldArea_InitializeQuadRegions(FieldAreaContext *field);
+void FieldArea_CreateVariableEntities(FieldAreaContext *field);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source);
 void FieldArea_UpdateGraphics(FieldAreaContext *field);
 FieldAreaContext *FieldArea_Construct(FieldAreaContext *field);

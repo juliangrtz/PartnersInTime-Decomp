@@ -26,7 +26,7 @@ typedef struct FieldVariableEntity {
 } FieldVariableEntity;
 typedef struct FieldVariablePlacement {
     struct {
-        u8 unknown_00 : 1, mode : 2, unknown_03_07 : 5;
+        u8 last : 1, mode : 2, unknown_03_07 : 5;
     } flags;
     struct {
         u8 unknown_00_04 : 5, direction : 1, unknown_06_07 : 2;

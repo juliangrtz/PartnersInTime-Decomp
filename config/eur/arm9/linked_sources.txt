@@ -673,3 +673,4 @@ src/field/field_system_resources.c
 src/field/field_party_following.c
 src/field/field_party_indicators.c
 src/field/field_bounds_records.c
+src/field/field_area_regions.c

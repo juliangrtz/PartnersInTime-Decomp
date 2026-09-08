@@ -220,3 +220,6 @@ src/field/field_party_indicators.c:
 
 src/field/field_bounds_records.c:
     .text start:0x0207b19c end:0x0207b594
+
+src/field/field_area_regions.c:
+    .text start:0x0207a890 end:0x0207ad4c
