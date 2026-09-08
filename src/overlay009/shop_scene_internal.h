@@ -3,6 +3,7 @@
 extern "C" {
 #include <game/shop_scene.h>
 #include <game/shop_list.h>
+#include <game/shop_panels.h>
 #include <game/heap.h>
 #include <game/save_data.h>
 #include <game/input.h>
@@ -72,9 +73,9 @@ extern void OS_SetIrqFunction(u32, void (*)(void));
 extern int GX_HBlankIntr(int);
 extern void func_ov005_020679fc(int, int, int, int), func_ov005_020679a4(int, int, int),
     func_ov005_0206786c(int, int, int, int, int, int);
-extern void *func_ov009_02074b80(void *, void *), *func_ov009_02073200(void *);
+extern void *func_ov009_02074b80(void *, void *);
 extern ShopPanel *func_ov009_02072030(void *), *func_ov009_02074410(void *);
-extern void func_ov009_02074b7c(void *), func_ov009_020731fc(void *);
+extern void func_ov009_02074b7c(void *);
 static inline void DeletePanel(ShopPanel *panel)
 {
     if (panel)
@@ -90,7 +91,7 @@ static inline void DeleteShopDigitRenderer(void *p)
 static inline void DeleteShopWidget(void *p)
 {
     if (p) {
-        func_ov009_020731fc(p);
+        ShopStockPanel_Destroy((ShopStockPanel *)p);
         GameHeap_Delete(p);
     }
 }

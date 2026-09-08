@@ -136,7 +136,7 @@ ShopSceneTask *ShopScene_Init(ShopSceneTask *task, u32 priority, u32 unused)
     data_ov009_0207ea34 = (ShopPanel *)object;
     object = GameHeap_New(224, 0, 0, 0);
     if (object)
-        object = func_ov009_02073200(object);
+        object = ShopStockPanel_Init((ShopStockPanel *)object);
     data_ov009_0207ea28 = object;
     object = GameHeap_New(848, 0, 0, 0);
     if (object)

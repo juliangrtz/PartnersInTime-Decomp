@@ -38,3 +38,18 @@ src/overlay009/shop_backgrounds.cpp:
 
 src/overlay009/shop_irq_upload.cpp:
     .text       start:0x0206fd40 end:0x020700e8
+
+src/overlay009/shop_item_panel_queries.c:
+    .text       start:0x0207017c end:0x02070334
+
+src/overlay009/shop_stock_panel_queries.c:
+    .text       start:0x02072d50 end:0x02072df0
+
+src/overlay009/shop_stock_panel_lifecycle.c:
+    .text       start:0x020731fc end:0x02073228
+
+src/overlay009/shop_icon_transfer.c:
+    .text       start:0x02074464 end:0x020744a4
+
+src/overlay009/shop_text_lookup.c:
+    .text       start:0x02074838 end:0x02074950

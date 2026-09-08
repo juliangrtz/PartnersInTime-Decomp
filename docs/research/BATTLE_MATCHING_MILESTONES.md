@@ -2276,3 +2276,30 @@ Private evidence: build/runtime/eur_shop_list.
 Matching C/C++ reaches 408,096 of 1,563,700 bytes (26.10%). Module/symbol checks,
 74 tests, generated progress and public-content checks pass. The complete ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Shop panel queries, localized text selection and icon copies
+
+Twenty-seven functions add 988 matching C bytes. Shared item-panel queries now
+cover visible rows, circular list indices, selection/window edges, positions and
+selected tile offsets. Stock-panel queries and construction/destruction are also
+matching, together with localized text selection, line-width measurement and
+icon transfer. The background loader declaration retains the unused scene
+argument confirmed by its native caller. Larger resource and text-rendering
+candidates with remaining register differences stay private.
+
+Three controlled entries from supplied saves 65 and 86 run 3,363 frames in total.
+Normal controller input opens lists and a quantity view, moves selections,
+cancels and exits all four scene instances. No inventory-adjustment operation
+occurs, and supplied save hashes remain unchanged. Independent RAM oracles check
+85,449 item-row selections, 4,113 stock-row selections and 10,836 stock quantities,
+along with circular indices, edges, positions, output vectors and complete stock
+panel lifecycle records. All 88 string results are calculated from live item
+records and localized offset tables. One text-width request has the expected
+string, reset cursor and returned width. Forty-seven 128-byte icon copies match
+their source data in live object VRAM. Previous list, inventory and background
+checks also pass. The stock-count getter is not entered and remains covered by
+exact binary matching. Private evidence: build/runtime/eur_shop_panels.
+
+Matching C/C++ reaches 409,084 of 1,563,700 bytes (26.16%). Module/symbol checks,
+74 tests, generated progress and public-content checks pass. The complete ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

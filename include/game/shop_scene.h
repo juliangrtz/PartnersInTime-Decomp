@@ -17,7 +17,7 @@ GameIrqTask *ShopSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void
 ShopSceneTask *ShopScene_Init(ShopSceneTask *task, u32 priority, u32 unused);
 ShopSceneTask *ShopScene_Delete(ShopSceneTask *task);
 ShopSceneTask *ShopScene_Destroy(ShopSceneTask *task);
-void ShopScene_LoadBackgrounds(void);
+void ShopScene_LoadBackgrounds(ShopSceneTask *task);
 void ShopScene_UploadFrame(void);
 #ifdef __cplusplus
 }

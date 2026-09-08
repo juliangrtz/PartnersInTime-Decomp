@@ -13,7 +13,7 @@ extern ShopBackgroundEntry data_ov009_0207e0dc[], data_ov009_0207e0de[], data_ov
 extern void *func_ov005_020670b4(Overlay5Archive *, u8, int, u32 *, int);
 extern void DC_FlushRange(const void *, u32), MI_UncompressLZ16(const void *, void *);
 #define WORK data_ov009_0207ea3c
-void ShopScene_LoadBackgrounds(void)
+void ShopScene_LoadBackgrounds(ShopSceneTask *task)
 {
     void *resource;
     if (!WORK.special_shop) {

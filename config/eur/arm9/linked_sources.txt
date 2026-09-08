@@ -508,3 +508,8 @@ src/overlay009/shop_inventory_equipment.c
 src/overlay009/shop_inventory_counts.c
 src/overlay009/shop_backgrounds.cpp
 src/overlay009/shop_irq_upload.cpp
+src/overlay009/shop_item_panel_queries.c
+src/overlay009/shop_stock_panel_queries.c
+src/overlay009/shop_stock_panel_lifecycle.c
+src/overlay009/shop_icon_transfer.c
+src/overlay009/shop_text_lookup.c
