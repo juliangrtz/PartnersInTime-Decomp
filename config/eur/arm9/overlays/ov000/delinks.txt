@@ -190,3 +190,6 @@ src/field/field_party_auxiliary_copy.c:
 
 src/field/field_render_snapshot.c:
     .text start:0x020a3928 end:0x020a3e38
+
+src/field/field_area_state.c:
+    .text start:0x0206e4d8 end:0x0206ec68

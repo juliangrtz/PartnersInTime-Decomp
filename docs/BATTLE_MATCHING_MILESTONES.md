@@ -807,3 +807,26 @@ under `build/runtime/eur_render_snapshot/`, `copy_pause83.json` under
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Field area state and graphics refresh (2026-09-09)
+
+Two contiguous functions add 1,936 matching C bytes, reaching
+516,924 / 1,563,700 bytes (33.06%). The checked 11,216-byte area view now
+represents the copied state flags, camera values, input masks and embedded
+script manager. State transfer retains resource pointers and reserved bytes;
+four opaque blocks use the original directional copy helpers. Graphics refresh
+uploads the selected screen's sprites and palettes when the area state or
+refresh flag requires it, then runs the state-71 update callbacks.
+
+A checkpoint-83 Start/B pause-menu roundtrip verifies two complete area copies,
+one for each source/destination address ordering, and their returned pointers.
+Another 526 return checks verify the graphics-refresh flag against its native
+entry conditions across the observed area states. These checks establish flag
+handling; they do not independently validate every graphics upload. All checks
+pass, no callbacks remain pending, and the replay returns to the visible field.
+The source battery save is unchanged. Private evidence is `area_pause83.json`
+under `build/runtime/eur_area_state/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

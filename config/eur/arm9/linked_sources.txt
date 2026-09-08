@@ -663,3 +663,4 @@ src/field/field_variable_lifecycle.c
 src/field/field_party_copy.c
 src/field/field_party_auxiliary_copy.c
 src/field/field_render_snapshot.c
+src/field/field_area_state.c
