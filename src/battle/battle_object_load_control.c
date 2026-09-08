@@ -8,7 +8,7 @@ extern void *GameHeap_Allocate(u32 heap_id, u32 size, const void *name,
                           int use_default);
 extern int func_0202a914(char *destination, const char *format, ...);
 extern void func_0202cbd4(void *destination, int value, u32 size);
-extern BattleQueuedTask *func_ov002_0208bd38(
+extern BattleQueuedTask *BattleMap_QueueLoad(
     BattleObjectDataLoadState *load_state, s32 resource_id);
 extern const char data_ov002_020bf724[];
 
@@ -176,7 +176,7 @@ BattleQueuedTask *func_ov002_02091f68(int object_data_id, s32 resource_id) {
         (BattleObjectDataLoadState *)(
             gBattleContext + BATTLE_OBJECT_DATA_LOAD_STATE_TABLE_OFFSET +
             offset);
-    task = func_ov002_0208bd38(load_state, resource_id);
+    task = BattleMap_QueueLoad(load_state, resource_id);
     task->state = object_data_id;
     return task;
 }

@@ -350,3 +350,38 @@ verified. Private evidence is in `ov20_jump83.json`,
 Native linking, all 74 tests, progress consistency and the public-content
 audit pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Encounter map selection and archive loading (2026-09-08)
+
+Six functions add 8,720 matching C bytes, reaching 487,024 / 1,563,700
+bytes (31.15%). The largest is the 7,568-byte mapping from encounter IDs to
+battle-map resource indices. Its 620 explicit cases are recovered from the
+native jump destinations and return values, independently compared with the
+private decompiler export, and listed in their original code order. Separate
+return blocks reproduce the native function exactly; grouping equal results
+or replacing the switch with a table would change its binary representation.
+The original -1/current-encounter fallback and default -1 result are preserved.
+
+The adjacent functions open and queue `/BMap/BMap.dat`, open and read the
+party/enemy/interface texture catalogs, and read the selected scene AI archive.
+They reuse the checked context, queued-task and archive-request layouts. The
+scene read is consolidated into the existing AI archive module. Native call
+arguments establish the asynchronous read descriptors and offset tables that
+the initial decompiler output omitted.
+
+Fresh entries from checkpoints 83 and 65 execute and check all six functions.
+The mapping returns 576 for encounter 459 and 416 for encounter 348. Each
+replay opens and reads all three texture catalogs, checks allocation pointers
+and aligned entry sizes against live archive offsets, verifies map request
+state and the selected AI read buffer, and reaches a command wheel. Checkpoint
+83 additionally completes the automated Bros. Jump. The encounter setup uses
+the documented native command substitution, restored at battle entry; all
+following checks are read-only and both source saves remain unchanged.
+The current-encounter fallback, unmapped IDs and already-loaded catalog branch
+are not covered by these two live replays. The complete mapping is statically
+byte-verified. Private evidence is `map_catalog83.json` and `map_catalog65.json`
+under `build/runtime/eur_attack_helpers/`.
+
+Native linking, all 74 tests, progress consistency and the public-content
+audit pass. The ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

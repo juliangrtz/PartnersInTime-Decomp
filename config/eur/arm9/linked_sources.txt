@@ -633,3 +633,5 @@ src/overlay020/support_state.c
 src/overlay020/attack_approach.c
 src/overlay020/attack_lifecycle.c
 src/battle/battle_position_helpers.c
+src/battle/battle_map_resources.c
+src/battle/battle_texture_catalog_load.c

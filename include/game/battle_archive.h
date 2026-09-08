@@ -2,14 +2,25 @@
 #define PIT_GAME_BATTLE_ARCHIVE_H
 
 #include <game/battle_context.h>
+#include <game/battle_task_queue.h>
 
-u32 BattleArchive_GetEntrySize(void *system, const u8 *archive_cursor,
-                               u16 entry_index);
-int BattleArchive_ReadAsync(void *system, void *request,
-                             int unknown_2, const u8 *archive_cursor,
-                             const void *descriptor, u16 unknown_5);
+u32 BattleArchive_GetEntrySize(void *system, const u8 *archive_cursor, u16 entry_index);
+int BattleArchive_ReadAsync(void *system, void *request, int unknown_2, const u8 *archive_cursor,
+                            const void *descriptor, u16 unknown_5);
 u32 BattleArchive_GetDescriptorSize(void *system, const void *descriptor);
-int BattleArchive_Open(void *system, const u8 *source, u32 size,
-                        const void *descriptor);
+int BattleArchive_Open(void *system, const u8 *source, u32 size, const void *descriptor);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void BattleMap_OpenArchiveTask(BattleQueuedTask *task);
+BattleQueuedTask *BattleMap_QueueLoad(BattleSceneResource *resource, int index);
+int BattleMap_GetEncounterResourceIndex(int encounter_id);
+void BattleTextureCatalog_ReadTask(BattleQueuedTask *task);
+void BattleTextureCatalog_OpenTask(BattleQueuedTask *task);
+void BattleAIArchives_ReadSceneTask(BattleQueuedTask *task);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

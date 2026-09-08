@@ -3,6 +3,7 @@
 #include <game/battle_archive.h>
 #include <game/battle_context.h>
 #include <game/battle_task_queue.h>
+#include <game/save_data.h>
 
 extern void *gBattleSystem;
 extern const void *gBattleAIArchivePaths[BATTLE_AI_ARCHIVE_COUNT];
@@ -26,7 +27,7 @@ extern const u8 data_ov002_020bed00[];
 void *GameHeap_Allocate(u32 heap_id, u32 size, const void *allocator,
                     int use_default);
 int ArchiveIO_BeginOverlay(void *system, int handle, int mode);
-void func_ov002_0208ddd0(BattleQueuedTask *task);
+void BattleAIArchives_ReadSceneTask(BattleQueuedTask *task);
 
 void BattleSpecialHandle_ClearTask(BattleQueuedTask *task);
 void BattleSpecialHandle_ReloadTask(BattleQueuedTask *task);
@@ -125,5 +126,32 @@ void BattleAIArchives_Load(BattleQueuedTask *task) {
         request_offset += sizeof(BattleObjectResourceRequest);
     } while (archive_index < BATTLE_AI_ARCHIVE_COUNT);
 
-    task->callback = func_ov002_0208ddd0;
+    task->callback = BattleAIArchives_ReadSceneTask;
+}
+
+extern const char data_ov002_020bf710[];
+static inline BattleContext *Context(void)
+{
+    return (BattleContext *)gBattleContext;
+}
+
+void BattleAIArchives_ReadSceneTask(BattleQueuedTask *task)
+{
+    BattleObjectResourceRequest *resource = BattleObjectData_ResolveSlot(*(u16 *)(gSaveData + 0x55a));
+    u32 size;
+    void *buffer;
+    Context()->active_object_resource = resource;
+    size = (BattleArchive_GetEntrySize(gBattleSystem, Context()->active_object_resource->archive_cursor,
+                                       Context()->active_object_resource->entry_index) +
+            3) &
+           ~3;
+    Context()->active_object_resource->read_size = size;
+    buffer = GameHeap_Allocate(Context()->runtime.heap_id, Context()->active_object_resource->read_size,
+                               (void *)data_ov002_020bf710, 1);
+    *(void **)(gBattleContext + 54212) = buffer;
+    Context()->active_object_resource->destination = *(void **)(gBattleContext + 54212);
+    BattleArchive_ReadAsync(gBattleSystem, Context()->active_object_resource, 0,
+                            Context()->active_object_resource->archive_cursor,
+                            Context()->active_object_resource->descriptor, 0);
+    task->callback = 0;
 }

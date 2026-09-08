@@ -27,7 +27,7 @@ extern "C" {
  */
 
 extern "C" {
-extern int func_ov002_0208bd88(int encounter_id);
+extern int BattleMap_GetEncounterResourceIndex(int encounter_id);
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
 extern int func_ov002_020789ec(ScriptVm *vm, ScriptVmState *state,
                                ScriptVmCommand *command, int write_result);
@@ -753,7 +753,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     case BATTLE_VM_GET_ENCOUNTER_RESOURCE_INDEX:
         BattleVm_WriteResult(
             vm, state, command,
-            func_ov002_0208bd88(command->arguments[0]));
+            BattleMap_GetEncounterResourceIndex(command->arguments[0]));
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_LEGACY_NOOP_04C:
