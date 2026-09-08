@@ -698,3 +698,30 @@ evidence is `snapshot83.json` and `snapshot_cold83.json` under
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Entity state copy hierarchy (2026-09-09)
+
+Three functions add 4,028 matching C bytes, reaching 509,276 / 1,563,700
+bytes (32.57%). Base, planar and spatial copies form a checked hierarchy.
+They preserve destination vtables and renderer bindings, transfer selected
+flag fields independently, copy the embedded controller payloads in an
+overlap-safe direction, and reset the base self pointer to the destination.
+The spatial copy transfers its still unidentified 260-byte payload as an
+aggregate. Its internals retain neutral names. Existing deferred-entity code
+now calls the named spatial copy through the shared declaration.
+
+Normal checkpoint-83 battery boot/load followed by save-block interaction
+executes each function 60 times. Read-only return probes compare the entire
+236-byte base, 688-byte planar and 1,300-byte spatial views, including retained
+bytes, against the original load/store ranges and masks. Thirty calls per
+function use each address ordering for the directional block copies. Every
+comparison and returned destination pointer passes; no callbacks remain
+pending. This establishes the copy behavior during the interaction; the final
+screen is black and does not establish completion of the save-menu flow.
+A separate cold-load replay reaches the visible field normally. The source
+battery save is unchanged. Private evidence is `copy_cold83.json` and
+`copy_field83.json` under `build/runtime/eur_entity_copy/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

@@ -64,7 +64,7 @@ typedef struct FieldBaseStateFlags {
     u32 facing_direction : 3;
     u32 previous_facing_direction : 3;
     u32 retain_offscreen_contact : 1;
-    u32 unknown_09_11 : 3;
+    u32 unknown_09 : 1, unknown_10 : 1, unknown_11 : 1;
     u32 reserved_state : 1;
     u32 blink_mode : 2;
     u32 blink_paused : 1;
@@ -142,7 +142,8 @@ typedef struct FieldEntityRuntimeFlags {
     u32 alternate_collision_faces : 1;
     u32 horizontal_sync_dirty : 1;
     u32 vertical_sync_dirty : 1;
-    u32 unknown_06_08 : 3, contact_mask_b : 6, previous_contact_mask_b : 6;
+    u32 unknown_06 : 1, unknown_07 : 1, unknown_08 : 1;
+    u32 contact_mask_b : 6, previous_contact_mask_b : 6;
     u32 unknown_21 : 1, unknown_22 : 1, unknown_23_24 : 2;
     u32 auto_auxiliary_priority : 1;
     u32 auto_priority_0 : 1;
@@ -165,7 +166,7 @@ typedef struct FieldEntityFieldStateFlags {
     u32 unknown_16 : 1;
     u32 shadow_support_enabled : 1;
     u32 shadow_style : 3;
-    u32 unknown_21_25 : 5, unknown_26_31 : 6;
+    u32 unknown_21_25 : 5, unknown_26_27 : 2, unknown_28_31 : 4;
 } FieldEntityFieldStateFlags;
 
 typedef struct FieldCollisionStateFlags {
@@ -196,7 +197,7 @@ typedef struct FieldSavedPresentationFlags {
     u32 behavior_mode : 3;
     u32 saved_behavior_mode : 3;
     u32 has_saved_behavior : 1;
-    u32 unknown_14_15 : 2;
+    u32 unknown_14 : 1, unknown_15 : 1;
     u32 has_saved_resource : 1;
     u32 has_saved_palette_profile : 1;
     u32 has_saved_resource_animation : 1;
@@ -324,27 +325,33 @@ typedef struct FieldEntity {
             u16 property_00a_unknown_12_14 : 3;
             u16 property_00a_unknown_15 : 1;
         } property_00a_bits;
-        struct { u16 unknown_00_06 : 7, unknown_07 : 1, unknown_08_15 : 8; } visibility_bits;
+        struct { u16 unknown_00_06 : 7, unknown_07 : 1, unknown_08 : 1, unknown_09_15 : 7; } visibility_bits;
     };
     s16 unknown_00c;
-    u8 unknown_00e[0xC2];
+    u8 unknown_00e[0x12];
     union {
-        u32 state_flags;
+        u8 state_payload[0xCC];
         struct {
-            u32 unknown_flag_00 : 1;
-            u32 active : 1;
-            u32 flag_02 : 1;
-            u32 unknown_flag_03 : 1;
-            u32 unknown_flags_04_06 : 3;
-            u32 unknown_flags_07_14 : 8;
-            u32 interaction_state : 2;
-            u32 unknown_flags_17_31 : 15;
-        } state_flag_bits;
+            u8 unknown_020[0xB0];
+            union {
+                u32 state_flags;
+                struct {
+                    u32 unknown_flag_00 : 1;
+                    u32 active : 1;
+                    u32 flag_02 : 1;
+                    u32 unknown_flag_03 : 1;
+                    u32 unknown_flags_04_06 : 3;
+                    u32 unknown_flags_07_14 : 8;
+                    u32 interaction_state : 2;
+                    u32 unknown_flags_17_31 : 15;
+                } state_flag_bits;
+            };
+            u8 unknown_0d4[0xC];
+            u32 action_timer;
+            u32 unknown_0e4;
+            FieldEntity *self;
+        };
     };
-    u8 unknown_0d4[0xC];
-    u32 action_timer;
-    u32 unknown_0e4;
-    FieldEntity *self;
 } FieldEntity;
 
 /*
@@ -467,6 +474,11 @@ struct FieldRenderObject {
     };
 };
 
+/* The spatial copy transfers this 260-byte payload as one aggregate. Its
+ * internal controller layout is not yet identified. */
+typedef struct FieldEntityMotionState { u32 unknown_000[65]; } FieldEntityMotionState;
+typedef char FieldEntityMotionState_SizeCheck[sizeof(FieldEntityMotionState) == 260 ? 1 : -1];
+
 /*
  * Runtime extension shared by the scriptable field-entity subclasses. The
  * small FieldEntity base above is still used by its byte-matching constructor.
@@ -510,9 +522,18 @@ struct FieldRuntimeEntity {
     u16 animation_id;
     u16 saved_animation_id;
     u16 saved_model_animation;
-    s16 saved_animation_frame;
+    u16 saved_animation_frame;
     s16 unknown_1a6[4], unknown_1ae[4];
-    u8 unknown_1b6[0x2A];
+    u16 unknown_1b6, unknown_1b8, unknown_1ba;
+    s16 unknown_1bc;
+    u16 unknown_1be;
+    u32 unknown_1c0;
+    s16 unknown_1c4, unknown_1c6, unknown_1c8;
+    u16 unknown_1ca, unknown_1cc, unknown_1ce;
+    u32 unknown_1d0;
+    struct { u8 unknown_00, unknown_01; } unknown_1d4, unknown_1d6;
+    u16 unknown_1d8;
+    u8 unknown_1da[6];
     FieldRenderObject *render_object;
     u8 unknown_1e4[4];
     void *unknown_1e8, *unknown_1ec;
@@ -520,10 +541,15 @@ struct FieldRuntimeEntity {
     FieldLinearController linear_controller;
     FieldOrbitController orbit_controller;
     union {
-        u16 transform_flags;
-        FieldTransformFlags transform_flag_bits;
+        u8 transform_state[0x30];
+        struct {
+            union {
+                u16 transform_flags;
+                FieldTransformFlags transform_flag_bits;
+            };
+            u8 unknown_282[0x2E];
+        };
     };
-    u8 unknown_282[0x2E];
     FieldNavigationSurface *navigation_surfaces;
     const void *navigation_resource;
     s8 support_entity_index, previous_support_entity_index;
@@ -567,12 +593,16 @@ struct FieldRuntimeEntity {
         u32 field_state_flags;
         FieldEntityFieldStateFlags field_state_flag_bits;
     };
-    u32 collision_category_mask;
+    union {
+        u32 collision_category_mask;
+        struct { u32 categories : 11, unknown_11_31 : 21; } collision_category_bits;
+    };
     s64 collision_policy;
     union {
         u32 collision_state_flags;
         FieldCollisionStateFlags collision_state_flag_bits;
-        struct { u32 unknown_00_22 : 23, unknown_23 : 1, unknown_24_31 : 8; } collision_extra_bits;
+        struct { u32 unknown_00_15 : 16, unknown_16_17 : 2, unknown_18_19 : 2;
+                 u32 unknown_20 : 1, unknown_21 : 1, unknown_22 : 1, unknown_23 : 1, unknown_24_31 : 8; } collision_extra_bits;
         struct { u8 current, saved; u16 unknown_02; } collision_flag_bytes;
     };
     union {
@@ -587,7 +617,7 @@ struct FieldRuntimeEntity {
     s32 unknown_3a8, unknown_3ac;
     FieldNavigationSurface *navigation_cursor;
     fx32 navigation_scan_limit;
-    u8 unknown_3b8[0x10];
+    u32 unknown_3b8[4];
     union {
         u32 unknown_3c8;
         struct { u32 unknown_00 : 1, unknown_01_31 : 31; } unknown_3c8_bits;
@@ -599,13 +629,16 @@ struct FieldRuntimeEntity {
     };
     s16 unknown_3d0, unknown_3d2;
     s16 unknown_3d4;
-    u8 unknown_3d6[0xA];
+    struct { u16 unknown_00_01 : 2, unknown_02_15 : 14; } unknown_3d6_bits;
+    u32 unknown_3d8;
+    u16 unknown_3dc, unknown_3de;
     union {
         u32 roaming_flags;
         FieldRoamingFlags roaming_flag_bits;
     };
     struct { u32 unknown_00_09 : 10, unknown_10_15 : 6, unknown_16_21 : 6, unknown_22_31 : 10; } unknown_3e4_bits;
-    u8 unknown_3e8[0x108];
+    u32 unknown_3e8;
+    FieldEntityMotionState unknown_3ec;
     void *unknown_4f0, *unknown_4f4;
     FieldRuntimeEntity *support_entity, *previous_support_entity;
     void *unknown_500, *unknown_504, *unknown_508, *unknown_50c;
@@ -617,5 +650,16 @@ typedef char FieldRenderObject_SizeCheck[
     sizeof(FieldRenderObject) == 0x138 ? 1 : -1];
 typedef char FieldRuntimeEntity_SizeCheck[
     sizeof(FieldRuntimeEntity) == 0x514 ? 1 : -1];
+
+/* Copy state while retaining the destination's vtable and renderer bindings. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+FieldEntity *FieldEntity_CopyState(FieldEntity *entity, const FieldEntity *source);
+FieldRuntimeEntity *FieldEntity_CopyPlanarState(FieldRuntimeEntity *entity, const FieldRuntimeEntity *source);
+FieldRuntimeEntity *FieldEntity_CopySpatialState(FieldRuntimeEntity *entity, const FieldRuntimeEntity *source);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

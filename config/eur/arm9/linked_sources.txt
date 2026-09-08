@@ -654,3 +654,6 @@ src/field/field_party_pairing.cpp
 src/field/field_party_collision.cpp
 src/field/field_party_auxiliary.cpp
 src/field/field_party_snapshot.c
+src/field/field_base_copy.c
+src/field/field_planar_copy.c
+src/field/field_spatial_copy.c

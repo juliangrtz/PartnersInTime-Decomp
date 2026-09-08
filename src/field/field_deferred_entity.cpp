@@ -7,7 +7,6 @@ extern "C" {
 extern FieldEntityVTable data_ov000_020c13e0;
 extern const s8 data_ov000_020c0c9c[];
 extern const s8 data_ov000_020c0cc0[];
-extern void func_ov000_020a7a80(FieldRuntimeEntity *, const FieldRuntimeEntity *);
 
 extern void func_ov000_020b4990(FieldRuntimeEntity *);
 extern void func_0202cbd4(void *, int, u32);
@@ -129,7 +128,7 @@ FieldDeferredEntity *FieldDeferredEntity_CopyState(FieldDeferredEntity *entity, 
     entity->control.phase = source->control.phase;
     entity->control.pause_frames = source->control.pause_frames;
     entity->control.unknown_22 = source->control.unknown_22;
-    func_ov000_020a7a80(&entity->runtime, &source->runtime);
+    FieldEntity_CopySpatialState(&entity->runtime, &source->runtime);
     return entity;
 }
 }
