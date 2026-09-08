@@ -1410,3 +1410,40 @@ python tools\analyze_battle_ai_dispatch.py `
   --rom 'C:\path\to\your\PiT.nds' --version eur `
   --format markdown --output docs\research\BATTLE_AI_OPCODES.md
 ```
+
+
+## Pocket Chomps entry, attachment and support helpers
+
+Overlay 18 is confirmed as Pocket Chomps by selecting that Bros. item in the
+running European game. Thirty-two functions covering 4,756 bytes are now linked
+as readable C++ with C linkage. The complete rebuilt ROM remains byte-identical.
+The recovered 192-byte Chomp state and 32-byte support state include their object
+links, packed phases, timers, per-mode bounce parameters and model attachment
+fields. Nine contiguous source units preserve the intervening assembly gaps.
+
+The helpers cover the reveal and bounce sequence, side positioning, rotated
+attachment offsets, participant particles and animations, entry and exit motion,
+and cleanup. The reveal rolls below 5 out of 100 for the alternate animation
+bank. That rare branch was established from native code, not observed in this
+runtime replay. Motion calls were reconstructed from register and stack arguments;
+the decompiler had omitted several height and duration parameters. Adult entry
+uses `(dx << 8) / 768`, as established by the original signed-division constant.
+
+With the rebuilt ROM, story checkpoint 55 (Gritzy Caves before the boss) exercised
+31 of the 32 newly linked functions over 2,015 frames. Twenty functions also had
+independent RAM assertions for initialization, phase/timer writes, attachment
+anchors, animation flags, particle counters, squash scaling and trigonometric
+anchor offsets. The replay selected Pocket Chomps from the normal Bros. menu,
+started with A, exercised the support buttons, completed the attack and returned
+to actor 57's command wheel. `PocketChompSupport_StopLinkedMotion` was not entered.
+These observations do not establish complete branch coverage or successful timing
+for every support action.
+
+The source battery save SHA-1 is
+`239ff9d26a5806eada7c1b73a95e27e38872681c`; its bytes remained unchanged. The ROM
+SHA-1 is `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. The starting battle follows the
+previously documented checkpoint-55 controlled entry: the valid encounter command
+from adjacent room 306 temporarily replaced one decoded Field VM command and was
+restored before battle transfer. The Pocket Chomps replay itself used only normal
+buttons and read-only execution/RAM hooks. Raw states, screenshots and return
+records remain private under `build/runtime/eur_attack_helpers/chomp_verified_*`.

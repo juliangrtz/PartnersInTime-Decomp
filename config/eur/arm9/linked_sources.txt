@@ -535,3 +535,12 @@ src/overlay010/party_effect_position.c
 src/overlay021/attack_transitions.cpp
 src/overlay021/attack_entry.cpp
 src/overlay021/attack_initialize.cpp
+src/overlay018/chomp_attack_entry.cpp
+src/overlay018/chomp_anchor.cpp
+src/overlay018/chomp_exit.cpp
+src/overlay018/chomp_animation.cpp
+src/overlay018/support_animation.cpp
+src/overlay018/support_attach.cpp
+src/overlay018/support_attack.cpp
+src/overlay018/support_initialize.cpp
+src/overlay018/support_entry.cpp

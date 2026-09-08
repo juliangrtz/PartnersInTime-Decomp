@@ -8,3 +8,30 @@ src/overlay018/threshold_tables.c:
 
 src/overlay018/object_controller.c:
     .text       start:0x020c6918 end:0x020c6a20
+
+src/overlay018/chomp_attack_entry.cpp:
+    .text start:0x020c33bc end:0x020c3b28
+
+src/overlay018/chomp_anchor.cpp:
+    .text start:0x020c3cfc end:0x020c3ea8
+
+src/overlay018/chomp_exit.cpp:
+    .text start:0x020c3f70 end:0x020c40b8
+
+src/overlay018/chomp_animation.cpp:
+    .text start:0x020c43dc end:0x020c4518
+
+src/overlay018/support_animation.cpp:
+    .text start:0x020c4908 end:0x020c4bd0
+
+src/overlay018/support_attach.cpp:
+    .text start:0x020c4dd8 end:0x020c4f3c
+
+src/overlay018/support_attack.cpp:
+    .text start:0x020c51b4 end:0x020c5214
+
+src/overlay018/support_initialize.cpp:
+    .text start:0x020c54a0 end:0x020c55cc
+
+src/overlay018/support_entry.cpp:
+    .text start:0x020c5670 end:0x020c57b0
