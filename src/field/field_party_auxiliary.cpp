@@ -71,7 +71,7 @@ void FieldParty_RestartAuxiliary(FieldPartyController *party)
     auxiliary->entity.locomotion_state = party->leader->entity.locomotion_state;
     auxiliary->auxiliary_bits.unknown_19 = 0;
     auxiliary->auxiliary_bits.unknown_20_27 = 28;
-    auxiliary->auxiliary_bits.unknown_28_31 = 15;
+    auxiliary->auxiliary_bits.unknown_28_31 = -1;
     auxiliary->auxiliary_motion.unknown_53c = 0;
     auxiliary->auxiliary_motion.unknown_540 = 0;
     auxiliary->auxiliary_motion.unknown_544 = 0;
@@ -202,7 +202,7 @@ void FieldParty_InitializeAuxiliary(FieldPartyController *party, int preserve_st
     auxiliary->entity.locomotion_state = party->leader->entity.locomotion_state;
     auxiliary->auxiliary_bits.unknown_19 = 0;
     auxiliary->auxiliary_bits.unknown_20_27 = 28;
-    auxiliary->auxiliary_bits.unknown_28_31 = 15;
+    auxiliary->auxiliary_bits.unknown_28_31 = -1;
     auxiliary->auxiliary_motion.unknown_53c = 0;
     auxiliary->auxiliary_motion.unknown_540 = 0;
     auxiliary->auxiliary_motion.unknown_544 = 0;

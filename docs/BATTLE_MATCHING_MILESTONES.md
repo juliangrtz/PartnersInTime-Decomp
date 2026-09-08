@@ -750,3 +750,31 @@ uses in the two-member pointer loop. No claim of completion is made for it.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Variable-bound entities and specialized state copies (2026-09-09)
+
+Five functions add 2,976 matching C bytes, reaching 513,692 / 1,563,700
+bytes (32.85%). Two constructors initialize an entity from either the generic
+spawn format or a 12-byte placement with a persistent script-variable binding.
+A checked 16-byte state describes the transferred fields without assigning an
+unconfirmed gameplay class. The constructors preserve the original signed
+32-bit collision masks extended to 64 bits and wrapped variable-bank offset.
+Three copies transfer variable-bound, party and auxiliary state before calling
+the shared spatial copy. Signed byte and nibble fields now retain their -1
+sentinels in the checked party layout.
+
+A normal checkpoint-83 boot/load and save-block interaction reaches all five
+functions: six generic constructions, twelve variable-bound constructions,
+eight party copies, thirty-two auxiliary copies and eighteen variable-entity
+copies. Read-only probes compare complete destination views, including retained
+bytes. Constructor checks use the observed base-initializer result, placement
+record, direction table and original VM variable return. All twelve variable
+lookups select the enabled case; the disabled case remains statically verified
+only. The copy runs cover both source/destination address orderings equally.
+All comparisons and returned pointers pass, with no pending callbacks. The
+source battery save is unchanged. Private evidence is `specialized_cold83.json`
+under `build/runtime/eur_specialized_entity/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

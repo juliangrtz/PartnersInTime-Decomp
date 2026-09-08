@@ -14,13 +14,15 @@ typedef struct FieldPartyEntity {
         u32 flags;
         struct {
             u32 unknown_00_15 : 16, saved_collision_faces : 1, collision_faces_saved : 1;
-            u32 movement_mode : 4, unknown_22_31 : 10;
+            u32 movement_mode : 4, unknown_22 : 1, unknown_23 : 1, unknown_24 : 1;
+            u32 unknown_25_30 : 6, unknown_31 : 1;
         } bits;
         /* The auxiliary renderer uses the same word for its own state. */
         struct {
             u32 unknown_00 : 1, unknown_01 : 1, direction_mode : 2, unknown_04 : 1;
             u32 unknown_05_06 : 2, unknown_07_08 : 2, unknown_09 : 1;
-            u32 unknown_10_18 : 9, unknown_19 : 1, unknown_20_27 : 8, unknown_28_31 : 4;
+            u32 unknown_10_15 : 6, unknown_16_18 : 3, unknown_19 : 1;
+            s32 unknown_20_27 : 8, unknown_28_31 : 4;
         } auxiliary_bits;
         struct {
             u8 saved_collision, collision_saved, unknown_02[2];
@@ -29,7 +31,7 @@ typedef struct FieldPartyEntity {
     union {
         FieldLinearController movement;
         struct {
-            u8 unknown_524[24];
+            u32 unknown_524[6];
             fx32 unknown_53c, unknown_540, unknown_544;
             u8 unknown_548[4];
             struct FieldPartyEntity *target;
@@ -47,9 +49,10 @@ typedef struct FieldPartyEntity {
         s16 resource_index : 8;
         u16 unknown_14 : 1, unknown_15 : 1;
     } presentation;
-    u8 unknown_594[2];
-    s8 unknown_596, unknown_597, unknown_598;
-    u8 unknown_599[3];
+    struct { u8 unknown_00 : 1, unknown_01_07 : 7; } unknown_594;
+    u8 unknown_595;
+    s8 unknown_596, unknown_597, unknown_598, unknown_599;
+    u8 unknown_59a[2];
     u32 unknown_59c;
 } FieldPartyEntity;
 typedef char FieldPartyEntity_SizeCheck[sizeof(FieldPartyEntity) == 0x5a0 ? 1 : -1];
@@ -118,6 +121,8 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+FieldPartyEntity *FieldPartyEntity_CopyState(FieldPartyEntity *entity, const FieldPartyEntity *source);
+FieldPartyEntity *FieldPartyAuxiliary_CopyState(FieldPartyEntity *entity, const FieldPartyEntity *source);
 void FieldParty_LinkPairedMember(FieldPartyController *party, int member);
 void FieldParty_StartPairedFollowing(FieldPartyController *party);
 void FieldParty_WaitForPairedFollowing(FieldPartyController *party);
