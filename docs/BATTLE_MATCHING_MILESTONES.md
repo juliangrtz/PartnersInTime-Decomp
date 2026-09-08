@@ -237,3 +237,26 @@ and the source battery save remains unchanged. Private evidence is in
 under `build/runtime/eur_attack_helpers/`. Native linking, all 74 tests,
 progress consistency and the public-content audit pass; the full ROM retains
 SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+
+### Nawatobi rope updates (2026-09-08)
+
+Five functions add 596 matching C bytes, reaching 472,528 / 1,563,700 bytes
+(30.22%). They reconstruct point integration, ground and pinned-point
+constraints, velocity damping, link-collision dispatch and the rope update
+sequence. Checked layouts describe 40-byte points, 12-byte links and the
+1,652-byte rope. The distance solver remains native assembly.
+
+The checkpoint 65 probe enters Super Nawatobi Bros. using the previously
+documented single phase-selector write in the fully initialized pause menu.
+The native transition constructs and later destroys the minigame; this is a
+controlled scene-entry test, not proof of an ordinary gameplay entry route.
+After scene selection, checks only read memory. A 491-frame run executes all
+five new functions and verifies 24,832 complete point records, 97 update
+dispatch sequences and the arguments of 3,007 segment-collision calls.
+The existing bitmap oracle also verifies 294,912 uploaded bytes. The run
+exits with B and preserves the original battery save. Private evidence is
+`build/runtime/eur_nawatobi/rope_evidence_065.json`.
+
+Native linking, all 74 tests, progress consistency and the public-content
+audit pass. The ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`.

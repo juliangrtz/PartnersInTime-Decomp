@@ -615,3 +615,7 @@ src/battle/battle_transform_motion.cpp
 src/battle/battle_pursuit_setup.cpp
 src/battle/battle_follow_motion.cpp
 src/battle/battle_scale_effects.cpp
+src/overlay007/nawatobi_rope_collisions.c
+src/overlay007/nawatobi_rope_update.c
+src/overlay007/nawatobi_rope_constraints.c
+src/overlay007/nawatobi_rope_integrate.c
