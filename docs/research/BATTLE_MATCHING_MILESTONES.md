@@ -2107,3 +2107,48 @@ Private evidence: build/runtime/eur_field_hud_resources. Matching C/C++ is
 383,400 of 1,563,700 bytes (24.52%). Module/symbol checks, 74 tests, generated
 progress and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+
+## Save, load and game-over scenes; menu summaries and text
+
+Thirty-four functions add 9,552 matching C bytes. All three scene constructors,
+geometry setup routines, deleting/non-deleting destructors and IRQ-task
+constructors/destructors are reconstructed. The save and game-over IRQ upload
+callbacks, one menu-motion update, saved/live party summaries, localized text
+lookup and initialization, text measurement/drawing, and three deferred text
+transfer schedulers are also matching. The summary records preserve the
+original asymmetric equipment-stat limits and party-presence flags. The scene
+factories now use the shared typed declarations. Larger menu state machines
+and several transfer workers remain untouched.
+
+Three normal cold replays of new story saves 1, 30 and 103 run 2,603 frames each.
+Full original function bytes are checked before accepting any callback. The
+read-only checks verify five stored summaries and two live summaries against
+save-slot RAM, current party records and equipment tables. Both Mario alone
+and the four-member party are exercised. They also verify 91 localized string
+results, 13 rendered texture rows and their allocation offsets, 148 object-strip
+requests, 29 text-width return values and eight text-resource initializations.
+All three load-scene lifecycles and two save-scene initializations are entered;
+one save-scene deletion and 682 save IRQ uploads complete. Fourteen menu-motion
+steps agree with the live velocities and accelerations. Initial harness
+assumptions about text-bound storage, save-flag namespace and display-plane
+changes were corrected against the source/assembly; the final recorded replays
+pass. Supplied save hashes remain unchanged.
+
+A separate 481-frame controlled test starts from the compatible field state
+created from new save 86. One natural Field VM dispatch receives decoded opcode
+0x123 with fading enabled; its complete 72-byte command is restored at the
+native helper entry. The game then performs its normal game-over transition.
+The game-over constructor, geometry, IRQ initialization and 460 IRQ uploads
+run successfully, along with a stored summary and localized text work. The
+final image shows the original retry/load menu. This is a controlled scene
+entry, not a naturally lost battle. No ROM, script bytecode or supplied battery
+save is altered. Non-deleting destructors, game-over deletion and the background
+text path are not entered by these runs; their verification remains exact
+binary matching.
+
+Private evidence: build/runtime/eur_save_menu and
+build/runtime/eur_game_over_entry. Matching C/C++ is 392,952 of 1,563,700 bytes
+(25.13%). Module/symbol checks, 74 tests, generated progress and public-content
+checks pass. The ROM remains byte-identical with SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

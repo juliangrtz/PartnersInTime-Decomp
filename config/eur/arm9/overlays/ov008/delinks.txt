@@ -3,3 +3,63 @@
     .data       start:0x02077ec0 end:0x02078280 kind:data align:32
     .bss        start:0x02078280 end:0x0207aaa0 kind:bss align:32
 
+
+src/overlay008/save_irq_destroy.c:
+    .text       start:0x0206ab80 end:0x0206abd0
+
+src/overlay008/save_menu_motion.c:
+    .text       start:0x0206c290 end:0x0206c300
+
+src/overlay008/save_geometry.c:
+    .text       start:0x0206c378 end:0x0206c474
+
+src/overlay008/save_scene_lifecycle.c:
+    .text       start:0x0206c87c end:0x0206cfa4
+
+src/overlay008/save_irq_init.c:
+    .text       start:0x0206cfa4 end:0x0206d038
+
+src/overlay008/load_irq_destroy.c:
+    .text       start:0x0206d038 end:0x0206d088
+
+src/overlay008/load_geometry.c:
+    .text       start:0x0206f48c end:0x0206f588
+
+src/overlay008/load_scene_lifecycle.c:
+    .text       start:0x0206f7b0 end:0x0206fed8
+
+src/overlay008/load_irq_init.c:
+    .text       start:0x0206ffb4 end:0x0206ffd8
+
+src/overlay008/game_over_irq_destroy.c:
+    .text       start:0x0206ffd8 end:0x02070028
+
+src/overlay008/game_over_geometry.c:
+    .text       start:0x0207075c end:0x02070858
+
+src/overlay008/game_over_scene_lifecycle.c:
+    .text       start:0x02070c44 end:0x0207136c
+
+src/overlay008/game_over_irq_init.c:
+    .text       start:0x0207136c end:0x02071400
+
+src/overlay008/save_menu_summary.c:
+    .text       start:0x02073ac4 end:0x02073f04
+
+src/overlay008/save_menu_text_draw.c:
+    .text       start:0x02075390 end:0x02075624
+
+src/overlay008/save_menu_texture_row.c:
+    .text       start:0x02075a90 end:0x02075ac8
+
+src/overlay008/save_menu_background.c:
+    .text       start:0x02075b5c end:0x02075b94
+
+src/overlay008/save_menu_object_strip.c:
+    .text       start:0x02075be8 end:0x02075c38
+
+src/overlay008/save_menu_text_lookup.c:
+    .text       start:0x02075cd4 end:0x02075dc8
+
+src/overlay008/save_menu_text_init.c:
+    .text       start:0x02075e58 end:0x02076008
