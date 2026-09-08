@@ -90,6 +90,7 @@ extern "C" {
 void BattlePosition_StoreViewRelative(BattlePosition *position,
                                       int x, int y, int z,
                                       int use_raw_position, int view_index);
+void *BattleText_GetEntry(int archive_id, u16 resource_id);
 void BattlePosition_StoreBattleRelative(BattlePosition *position,
                                         int x, s16 anchor_y,
                                         s16 offset_y, s16 offset_z,

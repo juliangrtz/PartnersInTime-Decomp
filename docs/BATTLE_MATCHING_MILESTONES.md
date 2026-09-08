@@ -315,3 +315,38 @@ uses the previously documented controlled encounter. Private evidence is
 Native linking, all 74 tests, progress consistency and the public-content
 audit pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Jump attack lifecycle, support and view coordinates (2026-09-08)
+
+Thirteen functions add 1,704 matching C/C++ bytes, reaching 478,304 /
+1,563,700 bytes (30.59%). Overlay 20 gains attack allocation and resource
+loading, main-actor initialization, phase dispatch, approach movement,
+animation-duration fitting and four support-state helpers. The checked
+112-byte work layout and 116-byte configuration expose only fields supported
+by these routines. The animation-duration function uses the existing C++
+model class for its native virtual call. Three adjacent battle-core helpers
+cover view-relative positions, text-resource lookup and resource-54 binding;
+the last helper retains its address name because its wider role is unresolved.
+
+Normal Jump replays from checkpoint 83 cover nine of the ten new Overlay 20
+functions. A replay from the field checkpoint repeats the previously documented
+72-byte encounter-command substitution, restores it at battle entry and
+confirms carrying formation 4 and native support allocation. Subsequent
+checks only read RAM. The successful Bros. Jump replay reads the game's input
+window flags, presses X at frame 170 for the support jump, then A at frame 227
+for the second impact. It verifies the support's placement and movement deltas,
+four animation-rate calculations and the attack's return to Luigi's command
+wheel. An ordinary single-jump replay separately covers support mode updates.
+The original source save remains unchanged.
+
+The position oracle checks 29,947 calls in the ordinary replay, covering both
+camera views and raw screen coordinates, including the nonnegative depth
+clamp. Text lookup is also executed. Support StopInput and the resource-54
+binding helper are not reached by these encounters and remain statically
+verified. Private evidence is in `ov20_jump83.json`,
+`ov20_input_diagnostic83.json`, `ov20_bros_jump83.json` and
+`ov20_fresh83.json` under `build/runtime/eur_attack_helpers/`.
+
+Native linking, all 74 tests, progress consistency and the public-content
+audit pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

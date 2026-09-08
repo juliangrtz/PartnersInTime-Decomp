@@ -628,3 +628,8 @@ src/overlay016/pair_controller_geometry.c
 src/overlay016/pair_controller_scale.c
 src/overlay016/participant_effect_phases.c
 src/overlay016/participant_effect_position.c
+src/overlay020/animation_duration.cpp
+src/overlay020/support_state.c
+src/overlay020/attack_approach.c
+src/overlay020/attack_lifecycle.c
+src/battle/battle_position_helpers.c

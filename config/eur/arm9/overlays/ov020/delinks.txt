@@ -6,3 +6,15 @@
 src/overlay020/target_arc_state.c:
     .text       start:0x020c34a4 end:0x020c3724
 
+
+src/overlay020/animation_duration.cpp:
+    .text start:0x020c2ae0 end:0x020c2b40
+
+src/overlay020/support_state.c:
+    .text start:0x020c30f0 end:0x020c326c
+
+src/overlay020/attack_approach.c:
+    .text start:0x020c3e64 end:0x020c3eec
+
+src/overlay020/attack_lifecycle.c:
+    .text start:0x020c4b74 end:0x020c4ed4

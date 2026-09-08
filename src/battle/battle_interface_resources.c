@@ -1,5 +1,6 @@
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
+#include <game/battle_effect.h>
 #include <game/item.h>
 #include <game/save_data.h>
 
@@ -17,7 +18,6 @@ enum BattleInterfaceResourceOffset {
     SAVE_LANGUAGE_OFFSET = 0x515
 };
 
-extern void *func_ov002_02076b00(int archive_id, u16 resource_id);
 typedef struct BattleTargetSelectionEntry {
     s16 packed_command;
     u8 unknown_02[6];
@@ -99,7 +99,7 @@ int BattleInterface_LoadTargetName(u32 actor_id) {
             resource_id = 20;
             break;
         }
-        resource = func_ov002_02076b00(0, resource_id);
+        resource = BattleText_GetEntry(0, resource_id);
     } else {
         if (actor_id < BATTLE_ACTOR_PARTY_FIRST) {
             resource_id = -1;
@@ -112,7 +112,7 @@ int BattleInterface_LoadTargetName(u32 actor_id) {
                    BATTLE_ACTOR_ENEMY_FIRST + BATTLE_ACTOR_ENEMY_COUNT) {
             resource_id = BattleEnemy_GetStats(actor_id)->name_id;
         }
-        resource = func_ov002_02076b00(1, resource_id);
+        resource = BattleText_GetEntry(1, resource_id);
     }
 
     result = 0;
@@ -132,7 +132,7 @@ int BattleInterface_LoadTargetName(u32 actor_id) {
 
 int BattleInterface_LoadTargetLabelResource(int resource_id) {
     int result = 0;
-    void *resource = func_ov002_02076b00(0, resource_id);
+    void *resource = BattleText_GetEntry(0, resource_id);
 
     if (resource != 0) {
         *(u32 *)(gBattleContext + BATTLE_TARGET_LABEL_STATE_OFFSET) = 0;
@@ -178,7 +178,7 @@ int BattleInterface_LoadCommandMenu(int resource_id) {
         }
     }
 
-    if (func_ov002_02076b00(0, selected_resource) != 0) {
+    if (BattleText_GetEntry(0, selected_resource) != 0) {
         *(u16 *)(gBattleContext + BATTLE_COMMAND_MENU_RESOURCE_OFFSET) =
             selected_resource + 1;
     }
@@ -199,7 +199,7 @@ int BattleInterface_LoadItemName(int item_id) {
         } else {
             item = &gActionItemRecords[item_id & ITEM_ID_INDEX_MASK];
         }
-        resource = func_ov002_02076b00(5, item->interface_resource_id);
+        resource = BattleText_GetEntry(5, item->interface_resource_id);
         break;
     }
     case ITEM_ID_USABLE_TAG: {
@@ -210,7 +210,7 @@ int BattleInterface_LoadItemName(int item_id) {
         } else {
             item = &gItemRecords[item_id & ITEM_ID_INDEX_MASK];
         }
-        resource = func_ov002_02076b00(8, item->interface_resource_id);
+        resource = BattleText_GetEntry(8, item->interface_resource_id);
         if (gSaveData[SAVE_LANGUAGE_OFFSET] == 0) {
             language_variant = 8;
         }

@@ -99,7 +99,6 @@ extern void func_02036cc0(BattleSpriteTransform *transform);
 extern int func_ov002_02093b88(void *task);
 extern void *func_ov002_020725a4(int (*callback)(void *task),
                                  void *argument, int priority, int flags);
-extern void *func_ov002_02076b00(int archive_id, u16 resource_id);
 
 void BattleCommandMenu_Update(BattleInterfacePanelState *state) {
     int requested_side = state->requested_side;
@@ -138,7 +137,7 @@ void BattleCommandMenu_Update(BattleInterfacePanelState *state) {
             }
 
             state->interface.resource = 0;
-            resource = func_ov002_02076b00(
+            resource = BattleText_GetEntry(
                 0, (u16)(requested_side - 1));
             BattleInterfaceLayer_SetResource(
                 &state->interface.layer, resource, 3, 3, 1, 1);
