@@ -6,3 +6,18 @@
 src/overlay014/attack_object_state.c:
     .text       start:0x020c3700 end:0x020c3aa4
 
+
+src/overlay014/projectile_hide.cpp:
+    .text start:0x020c3ce4 end:0x020c3dac
+
+src/overlay014/projectile_level.cpp:
+    .text start:0x020c4130 end:0x020c43a8
+
+src/overlay014/participant_throw.cpp:
+    .text start:0x020c4734 end:0x020c4c10
+
+src/overlay014/participant_position.cpp:
+    .text start:0x020c50a0 end:0x020c53d4
+
+src/overlay014/participant_init.cpp:
+    .text start:0x020c5724 end:0x020c578c

@@ -85,7 +85,7 @@ extern void func_ov005_02065eec(void);
 extern GameTaskVTable data_ov006_0207b508;
 extern GameTaskVTable data_ov006_0207bba4;
 extern void func_ov005_02067468(Overlay5Archive *, u8, const void *, int);
-extern void *func_ov005_020670b4(Overlay5Archive *, u8, int, u32 *, int);
+extern void *Overlay5Archive_ReadEntry(Overlay5Archive *, u8, int, u32 *, int);
 extern void *func_ov005_02066f78(Overlay5Archive *, int, u16, u32 *, int);
 extern Overlay5Asset *func_ov005_02066a7c(Overlay5Archive *, u16, u16, const void *, u8, int);
 extern void func_ov005_020698c8(u32, Overlay5Asset *);

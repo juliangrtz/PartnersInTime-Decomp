@@ -20,7 +20,7 @@ extern SaveMenuText *data_ov008_0207828c;
 extern u8 data_ov005_0206a180[];
 extern const char *data_ov008_020780bc[4];
 extern void func_ov005_02067468(void *, u8, const void *, int);
-extern void *func_ov005_020670b4(void *, u8, int, void *, int);
+extern void *Overlay5Archive_ReadEntry(void *, u8, int, void *, int);
 extern void func_ov005_02067424(void *, u8);
 extern void *func_ov005_0206687c(const char *, u32 *, int);
 extern SaveMenuTransferTask *func_ov005_0206659c(void (*)(SaveMenuTransferTask *), int, int);

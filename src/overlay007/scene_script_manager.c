@@ -7,7 +7,7 @@ extern void MI_CpuFill8(void *destination, u32 value, u32 size);
 extern void func_ov005_02067468(
     void *archive_manager, int archive_slot, const void *archive_name,
     int load_immediately);
-extern void *func_ov005_020670b4(
+extern void *Overlay5Archive_ReadEntry(
     void *archive_manager, int archive_slot, int member_id,
     void *size_output, int allocate_from_end);
 extern int func_ov005_02067424(void *archive_manager, int archive_slot);
@@ -57,7 +57,7 @@ int SceneScript_LoadPrimaryArchive(
     func_ov005_02067468(
         *(void **)(data_ov005_0206a180 + 0x2C), 0,
         data_ov007_0208dbbc[archive_kind + 1], 1);
-    *(void **)(manager + 0x57DC) = func_ov005_020670b4(
+    *(void **)(manager + 0x57DC) = Overlay5Archive_ReadEntry(
         *(void **)(data_ov005_0206a180 + 0x2C), 0, member_id, 0, 0);
     return func_ov005_02067424(
         *(void **)(data_ov005_0206a180 + 0x2C), 0);

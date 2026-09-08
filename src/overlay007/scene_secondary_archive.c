@@ -21,7 +21,7 @@ extern const u32 data_02050170[];
 extern const u8 gActionItemRecords[];
 extern u8 data_ov007_020905f0[];
 
-extern void *func_ov005_020670b4(
+extern void *Overlay5Archive_ReadEntry(
     void *archive_manager, int archive_slot, u16 member_id,
     u32 *size_output, int allocate_from_end);
 extern void MI_CpuCopy8(
@@ -72,7 +72,7 @@ void SceneScript_LoadSecondaryArchive(
         break;
     }
 
-    manager->temporary_archive = func_ov005_020670b4(
+    manager->temporary_archive = Overlay5Archive_ReadEntry(
         *(void **)(data_ov005_0206a180 + 0x2C), 4, member_id,
         &manager->temporary_archive_size, 0);
     MI_CpuCopy8(

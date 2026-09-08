@@ -522,3 +522,16 @@ src/overlay007/pause_scene_lifecycle.cpp
 src/overlay007/pause_irq_init.cpp
 src/game/window_construct.c
 src/overlay007/scene_text_archive.cpp
+src/overlay014/projectile_hide.cpp
+src/overlay014/projectile_level.cpp
+src/overlay014/participant_throw.cpp
+src/overlay014/participant_position.cpp
+src/overlay014/participant_init.cpp
+src/overlay010/bounce_height.c
+src/overlay010/motion_stop.c
+src/overlay010/target_distance.c
+src/overlay010/target_selection.c
+src/overlay010/party_effect_position.c
+src/overlay021/attack_transitions.cpp
+src/overlay021/attack_entry.cpp
+src/overlay021/attack_initialize.cpp

@@ -10,7 +10,7 @@ enum Overlay18AttackObjectConstant {
     OVERLAY18_OBJECT_RUNTIME_FLAGS_MASK = 0x7C0,
 };
 
-extern void func_ov010_020c1e1c(BattleSceneObject *object);
+extern void Overlay10Motion_StopAll(BattleSceneObject *object);
 extern void func_ov018_020c2e50(
     Overlay18AttackObjectController *controller, int state);
 
@@ -50,7 +50,7 @@ void Overlay18Attack_ClearObjectAnchor(
 
 void Overlay18Attack_ResetObjectController(
     Overlay18AttackObjectController *controller) {
-    func_ov010_020c1e1c(controller->object);
+    Overlay10Motion_StopAll(controller->object);
     func_ov018_020c2e50(controller, -1);
     controller->flags &= ~OVERLAY18_OBJECT_RUNTIME_FLAGS_MASK;
 }

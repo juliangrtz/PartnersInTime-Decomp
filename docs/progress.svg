@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 26.79 percent is matching C/C++ and 27.14 percent has matching C/C++ or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 27.17 percent is matching C/C++ and 27.51 percent has matching C/C++ or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -13,19 +13,19 @@
 <rect class="bg" width="1200" height="760" rx="12"/>
 <text x="28.0" y="34.0" class="eyebrow">DECOMPILATION PROGRESS · EUROPEAN ROM</text>
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
-<text x="28.0" y="113.0" class="percent">26.8%</text>
+<text x="28.0" y="113.0" class="percent">27.2%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C/C++</text>
-<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">27.14% source-understood</text>
+<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">27.51% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="306.484" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="334.484" y="130" width="3.954" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="310.771" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="338.771" y="130" width="3.954" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C/C++  409.1 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C/C++  414.8 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
 <text x="267.0" y="181.0" class="legend">Symbolic ASM  5.3 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
-<text x="487.0" y="181.0" class="legend">Remaining  1.09 MiB</text>
+<text x="487.0" y="181.0" class="legend">Remaining  1.08 MiB</text>
 <text x="1172.0" y="181.0" class="legend" text-anchor="end">Rectangle area = code bytes</text>
 <rect class="cell" x="30.00" y="226.00" width="119.37" height="80.75" fill="#263244"><title>Overlay 00 · func_ov000_0209418c · 27.8 KiB · remaining</title></rect>
 <rect class="cell" x="149.37" y="226.00" width="98.54" height="80.75" fill="#2dd4a0"><title>Overlay 00 · field_vm_dispatch · 22.9 KiB · matching C/C++</title></rect>
@@ -4552,7 +4552,7 @@
 <rect class="cell" x="979.00" y="518.41" width="8.36" height="8.63" fill="#2dd4a0"><title>Overlay 05 · display_bg · 232 B · matching C/C++</title></rect>
 <rect class="cell" x="979.00" y="527.05" width="8.36" height="8.34" fill="#2dd4a0"><title>Overlay 05 · display_bg · 224 B · matching C/C++</title></rect>
 <rect class="cell" x="979.00" y="535.38" width="8.36" height="8.19" fill="#2dd4a0"><title>Overlay 05 · display_bg · 220 B · matching C/C++</title></rect>
-<rect class="cell" x="979.00" y="543.57" width="8.36" height="7.15" fill="#263244"><title>Overlay 05 · func_ov005_020670b4 · 192 B · remaining</title></rect>
+<rect class="cell" x="979.00" y="543.57" width="8.36" height="7.15" fill="#2dd4a0"><title>Overlay 05 · asset_loader · 192 B · matching C/C++</title></rect>
 <rect class="cell" x="979.00" y="550.72" width="8.36" height="6.85" fill="#2dd4a0"><title>Overlay 05 · asset_loader · 184 B · matching C/C++</title></rect>
 <rect class="cell" x="979.00" y="557.57" width="8.36" height="6.70" fill="#2dd4a0"><title>Overlay 05 · archive_queue · 180 B · matching C/C++</title></rect>
 <rect class="cell" x="979.00" y="564.27" width="8.36" height="6.55" fill="#2dd4a0"><title>Overlay 05 · display_windows · 176 B · matching C/C++</title></rect>
@@ -4775,52 +4775,52 @@
 <rect class="cell" x="981.94" y="653.74" width="15.72" height="14.56" fill="#263244"><title>Overlay 14 · func_ov014_020c30a0 · 744 B · remaining</title></rect>
 <rect class="cell" x="981.94" y="668.30" width="15.72" height="14.09" fill="#263244"><title>Overlay 14 · func_ov014_020c4464 · 720 B · remaining</title></rect>
 <rect class="cell" x="981.94" y="682.38" width="15.72" height="13.62" fill="#263244"><title>Overlay 14 · func_ov014_020c5e2c · 696 B · remaining</title></rect>
-<rect class="cell" x="997.67" y="638.72" width="16.00" height="13.23" fill="#263244"><title>Overlay 14 · func_ov014_020c5110 · 688 B · remaining</title></rect>
+<rect class="cell" x="997.67" y="638.72" width="16.00" height="13.23" fill="#2dd4a0"><title>Overlay 14 · participant_position · 688 B · matching C/C++</title></rect>
 <rect class="cell" x="1013.66" y="638.72" width="13.95" height="13.23" fill="#263244"><title>Overlay 14 · func_ov014_020c3ed8 · 600 B · remaining</title></rect>
 <rect class="cell" x="1027.62" y="638.72" width="13.39" height="13.23" fill="#263244"><title>Overlay 14 · func_ov014_020c3aa4 · 576 B · remaining</title></rect>
 <rect class="cell" x="997.67" y="651.94" width="14.93" height="11.87" fill="#263244"><title>Overlay 14 · func_ov014_020c5bec · 576 B · remaining</title></rect>
 <rect class="cell" x="1012.60" y="651.94" width="10.37" height="11.87" fill="#263244"><title>Overlay 14 · func_ov014_020c4f10 · 400 B · remaining</title></rect>
 <rect class="cell" x="1022.97" y="651.94" width="9.54" height="11.87" fill="#263244"><title>Overlay 14 · func_ov014_020c2bb4 · 368 B · remaining</title></rect>
-<rect class="cell" x="1032.51" y="651.94" width="8.50" height="11.87" fill="#263244"><title>Overlay 14 · func_ov014_020c4260 · 328 B · remaining</title></rect>
-<rect class="cell" x="997.67" y="663.81" width="8.64" height="10.82" fill="#263244"><title>Overlay 14 · func_ov014_020c4130 · 304 B · remaining</title></rect>
+<rect class="cell" x="1032.51" y="651.94" width="8.50" height="11.87" fill="#2dd4a0"><title>Overlay 14 · projectile_level · 328 B · matching C/C++</title></rect>
+<rect class="cell" x="997.67" y="663.81" width="8.64" height="10.82" fill="#2dd4a0"><title>Overlay 14 · projectile_level · 304 B · matching C/C++</title></rect>
 <rect class="cell" x="997.67" y="674.64" width="8.64" height="10.68" fill="#263244"><title>Overlay 14 · func_ov014_020c35d4 · 300 B · remaining</title></rect>
 <rect class="cell" x="997.67" y="685.32" width="8.64" height="10.68" fill="#263244"><title>Overlay 14 · func_ov014_020c3dac · 300 B · remaining</title></rect>
 <rect class="cell" x="1006.30" y="663.81" width="8.10" height="9.57" fill="#263244"><title>Overlay 14 · func_ov014_020c348c · 252 B · remaining</title></rect>
-<rect class="cell" x="1006.30" y="673.38" width="8.10" height="7.90" fill="#263244"><title>Overlay 14 · func_ov014_020c4928 · 208 B · remaining</title></rect>
+<rect class="cell" x="1006.30" y="673.38" width="8.10" height="7.90" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 208 B · matching C/C++</title></rect>
 <rect class="cell" x="1006.30" y="681.27" width="8.10" height="7.44" fill="#2dd4a0"><title>Overlay 14 · attack_object_state · 196 B · matching C/C++</title></rect>
 <rect class="cell" x="1006.30" y="688.71" width="8.10" height="7.29" fill="#2dd4a0"><title>Overlay 14 · attack_object_state · 192 B · matching C/C++</title></rect>
-<rect class="cell" x="1014.41" y="663.81" width="7.55" height="7.49" fill="#263244"><title>Overlay 14 · func_ov014_020c4a80 · 184 B · remaining</title></rect>
-<rect class="cell" x="1021.96" y="663.81" width="7.23" height="7.49" fill="#263244"><title>Overlay 14 · func_ov014_020c4b38 · 176 B · remaining</title></rect>
+<rect class="cell" x="1014.41" y="663.81" width="7.55" height="7.49" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 184 B · matching C/C++</title></rect>
+<rect class="cell" x="1021.96" y="663.81" width="7.23" height="7.49" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 176 B · matching C/C++</title></rect>
 <rect class="cell" x="1029.19" y="663.81" width="6.08" height="7.49" fill="#2dd4a0"><title>Overlay 14 · attack_object_state · 148 B · matching C/C++</title></rect>
 <rect class="cell" x="1035.26" y="663.81" width="5.75" height="7.49" fill="#263244"><title>Overlay 14 · func_ov014_020c3388 · 140 B · remaining</title></rect>
 <rect class="cell" x="1014.41" y="671.30" width="6.73" height="6.40" fill="#2dd4a0"><title>Overlay 14 · attack_object_state · 140 B · matching C/C++</title></rect>
 <rect class="cell" x="1014.41" y="677.71" width="6.73" height="6.22" fill="#263244"><title>Overlay 14 · func_ov014_020c43a8 · 136 B · remaining</title></rect>
-<rect class="cell" x="1014.41" y="683.93" width="6.73" height="6.22" fill="#263244"><title>Overlay 14 · func_ov014_020c49f8 · 136 B · remaining</title></rect>
+<rect class="cell" x="1014.41" y="683.93" width="6.73" height="6.22" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 136 B · matching C/C++</title></rect>
 <rect class="cell" x="1014.41" y="690.15" width="6.73" height="5.85" fill="#263244"><title>Overlay 14 · func_ov014_020c2af8 · 128 B · remaining</title></rect>
-<rect class="cell" x="1021.13" y="671.30" width="6.77" height="5.63" fill="#263244"><title>Overlay 14 · func_ov014_020c3d30 · 124 B · remaining</title></rect>
+<rect class="cell" x="1021.13" y="671.30" width="6.77" height="5.63" fill="#2dd4a0"><title>Overlay 14 · projectile_hide · 124 B · matching C/C++</title></rect>
 <rect class="cell" x="1027.91" y="671.30" width="6.55" height="5.63" fill="#263244"><title>Overlay 14 · func_ov014_020c3414 · 120 B · remaining</title></rect>
-<rect class="cell" x="1034.46" y="671.30" width="6.55" height="5.63" fill="#263244"><title>Overlay 14 · func_ov014_020c4800 · 120 B · remaining</title></rect>
-<rect class="cell" x="1021.13" y="676.94" width="4.97" height="6.93" fill="#263244"><title>Overlay 14 · func_ov014_020c50a0 · 112 B · remaining</title></rect>
-<rect class="cell" x="1021.13" y="683.87" width="4.97" height="6.44" fill="#263244"><title>Overlay 14 · func_ov014_020c4878 · 104 B · remaining</title></rect>
+<rect class="cell" x="1034.46" y="671.30" width="6.55" height="5.63" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 120 B · matching C/C++</title></rect>
+<rect class="cell" x="1021.13" y="676.94" width="4.97" height="6.93" fill="#2dd4a0"><title>Overlay 14 · participant_position · 112 B · matching C/C++</title></rect>
+<rect class="cell" x="1021.13" y="683.87" width="4.97" height="6.44" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 104 B · matching C/C++</title></rect>
 <rect class="cell" x="1021.13" y="690.31" width="4.97" height="5.69" fill="#2dd4a0"><title>Overlay 14 · attack_object_state · 92 B · matching C/C++</title></rect>
 <rect class="cell" x="1026.10" y="676.94" width="4.97" height="4.70" fill="#263244"><title>Overlay 14 · func_ov014_020c3588 · 76 B · remaining</title></rect>
-<rect class="cell" x="1031.07" y="676.94" width="4.97" height="4.70" fill="#263244"><title>Overlay 14 · func_ov014_020c3ce4 · 76 B · remaining</title></rect>
-<rect class="cell" x="1036.04" y="676.94" width="4.97" height="4.70" fill="#263244"><title>Overlay 14 · func_ov014_020c4770 · 76 B · remaining</title></rect>
-<rect class="cell" x="1026.10" y="681.64" width="4.37" height="5.07" fill="#263244"><title>Overlay 14 · func_ov014_020c48e0 · 72 B · remaining</title></rect>
-<rect class="cell" x="1026.10" y="686.71" width="4.37" height="4.79" fill="#263244"><title>Overlay 14 · func_ov014_020c47bc · 68 B · remaining</title></rect>
+<rect class="cell" x="1031.07" y="676.94" width="4.97" height="4.70" fill="#2dd4a0"><title>Overlay 14 · projectile_hide · 76 B · matching C/C++</title></rect>
+<rect class="cell" x="1036.04" y="676.94" width="4.97" height="4.70" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 76 B · matching C/C++</title></rect>
+<rect class="cell" x="1026.10" y="681.64" width="4.37" height="5.07" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 72 B · matching C/C++</title></rect>
+<rect class="cell" x="1026.10" y="686.71" width="4.37" height="4.79" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 68 B · matching C/C++</title></rect>
 <rect class="cell" x="1026.10" y="691.49" width="4.37" height="4.51" fill="#2dd4a0"><title>Overlay 14 · attack_object_state · 64 B · matching C/C++</title></rect>
-<rect class="cell" x="1030.47" y="681.64" width="3.76" height="4.90" fill="#263244"><title>Overlay 14 · func_ov014_020c4734 · 60 B · remaining</title></rect>
-<rect class="cell" x="1034.24" y="681.64" width="3.51" height="4.90" fill="#263244"><title>Overlay 14 · func_ov014_020c5754 · 56 B · remaining</title></rect>
+<rect class="cell" x="1030.47" y="681.64" width="3.76" height="4.90" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 60 B · matching C/C++</title></rect>
+<rect class="cell" x="1034.24" y="681.64" width="3.51" height="4.90" fill="#2dd4a0"><title>Overlay 14 · participant_init · 56 B · matching C/C++</title></rect>
 <rect class="cell" x="1037.75" y="681.64" width="3.26" height="4.90" fill="#2dd4a0"><title>Overlay 14 · attack_object_state · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="1030.47" y="686.54" width="3.25" height="4.92" fill="#263244"><title>Overlay 14 · func_ov014_020c4430 · 52 B · remaining</title></rect>
-<rect class="cell" x="1030.47" y="691.46" width="3.25" height="4.54" fill="#263244"><title>Overlay 14 · func_ov014_020c5724 · 48 B · remaining</title></rect>
+<rect class="cell" x="1030.47" y="691.46" width="3.25" height="4.54" fill="#2dd4a0"><title>Overlay 14 · participant_init · 48 B · matching C/C++</title></rect>
 <rect class="cell" x="1033.73" y="686.54" width="3.64" height="3.38" fill="#263244"><title>Overlay 14 · func_ov014_020c2b8c · 40 B · remaining</title></rect>
-<rect class="cell" x="1037.37" y="686.54" width="3.64" height="3.38" fill="#263244"><title>Overlay 14 · func_ov014_020c4be8 · 40 B · remaining</title></rect>
+<rect class="cell" x="1037.37" y="686.54" width="3.64" height="3.38" fill="#2dd4a0"><title>Overlay 14 · participant_throw · 40 B · matching C/C++</title></rect>
 <rect class="cell" x="1033.73" y="689.92" width="2.63" height="3.27" fill="#2dd4a0"><title>Overlay 14 · attack_object_state · 28 B · matching C/C++</title></rect>
 <rect class="cell" x="1033.73" y="693.19" width="2.63" height="2.81" fill="#263244"><title>Overlay 14 · func_ov014_020c2ae0 · 24 B · remaining</title></rect>
 <rect class="cell" x="1036.36" y="689.92" width="2.33" height="2.64" fill="#263244"><title>Overlay 14 · func_ov014_020c2b78 · 20 B · remaining</title></rect>
 <rect class="cell" x="1038.68" y="689.92" width="2.33" height="2.64" fill="#2dd4a0"><title>Overlay 14 · attack_object_state · 20 B · matching C/C++</title></rect>
-<rect class="cell" x="1036.36" y="692.56" width="1.79" height="3.44" fill="#263244"><title>Overlay 14 · func_ov014_020c53c0 · 20 B · remaining</title></rect>
+<rect class="cell" x="1036.36" y="692.56" width="1.79" height="3.44" fill="#2dd4a0"><title>Overlay 14 · participant_position · 20 B · matching C/C++</title></rect>
 <rect class="cell" x="1038.15" y="692.56" width="2.86" height="1.72" fill="#263244"><title>Overlay 14 · func_ov014_020c60e4 · 16 B · remaining</title></rect>
 <rect class="cell" x="1038.15" y="694.28" width="2.86" height="1.72" fill="#263244"><title>Overlay 14 · func_ov014_020c60f4 · 16 B · remaining</title></rect>
 <rect class="component" x="964.58" y="636.72" width="78.43" height="61.28"/>
@@ -4983,29 +4983,29 @@
 <rect class="cell" x="1129.72" y="645.66" width="9.31" height="10.60" fill="#263244"><title>Overlay 10 · func_ov010_020c259c · 340 B · remaining</title></rect>
 <rect class="cell" x="1139.03" y="622.72" width="8.36" height="9.86" fill="#263244"><title>Overlay 10 · func_ov010_020c27d8 · 284 B · remaining</title></rect>
 <rect class="cell" x="1147.39" y="622.72" width="7.77" height="9.86" fill="#263244"><title>Overlay 10 · func_ov010_020c1d14 · 264 B · remaining</title></rect>
-<rect class="cell" x="1155.16" y="622.72" width="7.54" height="9.86" fill="#263244"><title>Overlay 10 · func_ov010_020c21d0 · 256 B · remaining</title></rect>
+<rect class="cell" x="1155.16" y="622.72" width="7.54" height="9.86" fill="#2dd4a0"><title>Overlay 10 · target_selection · 256 B · matching C/C++</title></rect>
 <rect class="cell" x="1162.70" y="622.72" width="7.30" height="9.86" fill="#263244"><title>Overlay 10 · func_ov010_020c1e50 · 248 B · remaining</title></rect>
 <rect class="cell" x="1139.03" y="632.57" width="7.89" height="8.68" fill="#263244"><title>Overlay 10 · func_ov010_020c2978 · 236 B · remaining</title></rect>
 <rect class="cell" x="1139.03" y="641.25" width="7.89" height="7.94" fill="#263244"><title>Overlay 10 · func_ov010_020c20f8 · 216 B · remaining</title></rect>
 <rect class="cell" x="1139.03" y="649.20" width="7.89" height="7.06" fill="#263244"><title>Overlay 10 · func_ov010_020c2718 · 192 B · remaining</title></rect>
 <rect class="cell" x="1146.92" y="632.57" width="6.25" height="7.24" fill="#2dd4a0"><title>Overlay 10 · enemy_state · 156 B · matching C/C++</title></rect>
 <rect class="cell" x="1153.17" y="632.57" width="5.77" height="7.24" fill="#263244"><title>Overlay 10 · func_ov010_020c1c84 · 144 B · remaining</title></rect>
-<rect class="cell" x="1158.94" y="632.57" width="5.77" height="7.24" fill="#263244"><title>Overlay 10 · func_ov010_020c1fb8 · 144 B · remaining</title></rect>
-<rect class="cell" x="1164.71" y="632.57" width="5.29" height="7.24" fill="#263244"><title>Overlay 10 · func_ov010_020c28f4 · 132 B · remaining</title></rect>
-<rect class="cell" x="1146.92" y="639.81" width="6.42" height="5.78" fill="#263244"><title>Overlay 10 · func_ov010_020c1304 · 128 B · remaining</title></rect>
+<rect class="cell" x="1158.94" y="632.57" width="5.77" height="7.24" fill="#2dd4a0"><title>Overlay 10 · target_distance · 144 B · matching C/C++</title></rect>
+<rect class="cell" x="1164.71" y="632.57" width="5.29" height="7.24" fill="#2dd4a0"><title>Overlay 10 · party_effect_position · 132 B · matching C/C++</title></rect>
+<rect class="cell" x="1146.92" y="639.81" width="6.42" height="5.78" fill="#2dd4a0"><title>Overlay 10 · bounce_height · 128 B · matching C/C++</title></rect>
 <rect class="cell" x="1146.92" y="645.60" width="6.42" height="5.60" fill="#2dd4a0"><title>Overlay 10 · enemy_state · 124 B · matching C/C++</title></rect>
-<rect class="cell" x="1146.92" y="651.20" width="6.42" height="5.06" fill="#263244"><title>Overlay 10 · func_ov010_020c1f48 · 112 B · remaining</title></rect>
-<rect class="cell" x="1153.34" y="639.81" width="5.58" height="5.83" fill="#263244"><title>Overlay 10 · func_ov010_020c22d0 · 112 B · remaining</title></rect>
-<rect class="cell" x="1153.34" y="645.64" width="5.58" height="5.41" fill="#263244"><title>Overlay 10 · func_ov010_020c2048 · 104 B · remaining</title></rect>
+<rect class="cell" x="1146.92" y="651.20" width="6.42" height="5.06" fill="#2dd4a0"><title>Overlay 10 · target_distance · 112 B · matching C/C++</title></rect>
+<rect class="cell" x="1153.34" y="639.81" width="5.58" height="5.83" fill="#2dd4a0"><title>Overlay 10 · target_selection · 112 B · matching C/C++</title></rect>
+<rect class="cell" x="1153.34" y="645.64" width="5.58" height="5.41" fill="#2dd4a0"><title>Overlay 10 · target_distance · 104 B · matching C/C++</title></rect>
 <rect class="cell" x="1153.34" y="651.05" width="5.58" height="5.20" fill="#263244"><title>Overlay 10 · func_ov010_020c0fc0 · 100 B · remaining</title></rect>
 <rect class="cell" x="1158.92" y="639.81" width="5.67" height="4.50" fill="#2dd4a0"><title>Overlay 10 · enemy_state · 88 B · matching C/C++</title></rect>
 <rect class="cell" x="1164.59" y="639.81" width="5.41" height="4.50" fill="#263244"><title>Overlay 10 · func_ov010_020c13bc · 84 B · remaining</title></rect>
 <rect class="cell" x="1158.92" y="644.32" width="5.82" height="4.19" fill="#2dd4a0"><title>Overlay 10 · enemy_state · 84 B · matching C/C++</title></rect>
 <rect class="cell" x="1164.74" y="644.32" width="5.26" height="4.19" fill="#2dd4a0"><title>Overlay 10 · enemy_state · 76 B · matching C/C++</title></rect>
 <rect class="cell" x="1158.92" y="648.51" width="5.54" height="3.98" fill="#2dd4a0"><title>Overlay 10 · enemy_state · 76 B · matching C/C++</title></rect>
-<rect class="cell" x="1158.92" y="652.49" width="5.54" height="3.77" fill="#263244"><title>Overlay 10 · func_ov010_020c20b0 · 72 B · remaining</title></rect>
-<rect class="cell" x="1164.46" y="648.51" width="5.54" height="2.93" fill="#263244"><title>Overlay 10 · func_ov010_020c1384 · 56 B · remaining</title></rect>
-<rect class="cell" x="1164.46" y="651.44" width="3.13" height="4.82" fill="#263244"><title>Overlay 10 · func_ov010_020c1e1c · 52 B · remaining</title></rect>
+<rect class="cell" x="1158.92" y="652.49" width="5.54" height="3.77" fill="#2dd4a0"><title>Overlay 10 · target_distance · 72 B · matching C/C++</title></rect>
+<rect class="cell" x="1164.46" y="648.51" width="5.54" height="2.93" fill="#2dd4a0"><title>Overlay 10 · bounce_height · 56 B · matching C/C++</title></rect>
+<rect class="cell" x="1164.46" y="651.44" width="3.13" height="4.82" fill="#2dd4a0"><title>Overlay 10 · motion_stop · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="1167.59" y="651.44" width="2.41" height="4.82" fill="#263244"><title>Overlay 10 · func_ov010_020c26f0 · 40 B · remaining</title></rect>
 <rect class="component" x="1109.00" y="620.72" width="63.00" height="37.54"/>
 <text x="1116.0" y="633.7" class="module-small">Overlay 10</text>
@@ -5016,23 +5016,23 @@
 <rect class="cell" x="1125.50" y="670.42" width="8.24" height="8.57" fill="#263244"><title>Overlay 21 · func_ov021_020c3864 · 248 B · remaining</title></rect>
 <rect class="cell" x="1125.50" y="678.99" width="8.24" height="8.57" fill="#263244"><title>Overlay 21 · func_ov021_020c3d94 · 248 B · remaining</title></rect>
 <rect class="cell" x="1125.50" y="687.57" width="8.24" height="8.43" fill="#263244"><title>Overlay 21 · func_ov021_020c3e8c · 244 B · remaining</title></rect>
-<rect class="cell" x="1133.74" y="670.42" width="8.87" height="7.19" fill="#263244"><title>Overlay 21 · func_ov021_020c35d4 · 224 B · remaining</title></rect>
-<rect class="cell" x="1142.62" y="670.42" width="5.86" height="7.19" fill="#263244"><title>Overlay 21 · func_ov021_020c3474 · 148 B · remaining</title></rect>
-<rect class="cell" x="1148.48" y="670.42" width="4.59" height="7.19" fill="#263244"><title>Overlay 21 · func_ov021_020c3560 · 116 B · remaining</title></rect>
-<rect class="cell" x="1133.74" y="677.61" width="4.96" height="6.67" fill="#263244"><title>Overlay 21 · func_ov021_020c3d20 · 116 B · remaining</title></rect>
-<rect class="cell" x="1133.74" y="684.28" width="4.96" height="5.98" fill="#263244"><title>Overlay 21 · func_ov021_020c37fc · 104 B · remaining</title></rect>
-<rect class="cell" x="1133.74" y="690.25" width="4.96" height="5.75" fill="#263244"><title>Overlay 21 · func_ov021_020c3380 · 100 B · remaining</title></rect>
-<rect class="cell" x="1138.70" y="677.61" width="5.06" height="5.63" fill="#263244"><title>Overlay 21 · func_ov021_020c3708 · 100 B · remaining</title></rect>
+<rect class="cell" x="1133.74" y="670.42" width="8.87" height="7.19" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 224 B · matching C/C++</title></rect>
+<rect class="cell" x="1142.62" y="670.42" width="5.86" height="7.19" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 148 B · matching C/C++</title></rect>
+<rect class="cell" x="1148.48" y="670.42" width="4.59" height="7.19" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 116 B · matching C/C++</title></rect>
+<rect class="cell" x="1133.74" y="677.61" width="4.96" height="6.67" fill="#2dd4a0"><title>Overlay 21 · attack_initialize · 116 B · matching C/C++</title></rect>
+<rect class="cell" x="1133.74" y="684.28" width="4.96" height="5.98" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 104 B · matching C/C++</title></rect>
+<rect class="cell" x="1133.74" y="690.25" width="4.96" height="5.75" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 100 B · matching C/C++</title></rect>
+<rect class="cell" x="1138.70" y="677.61" width="5.06" height="5.63" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 100 B · matching C/C++</title></rect>
 <rect class="cell" x="1143.76" y="677.61" width="4.86" height="5.63" fill="#2dd4a0"><title>Overlay 21 · attack_phase_state · 96 B · matching C/C++</title></rect>
-<rect class="cell" x="1148.62" y="677.61" width="4.45" height="5.63" fill="#263244"><title>Overlay 21 · func_ov021_020c3508 · 88 B · remaining</title></rect>
-<rect class="cell" x="1138.70" y="683.24" width="5.54" height="4.32" fill="#263244"><title>Overlay 21 · func_ov021_020c36b4 · 84 B · remaining</title></rect>
-<rect class="cell" x="1138.70" y="687.56" width="5.54" height="4.32" fill="#263244"><title>Overlay 21 · func_ov021_020c395c · 84 B · remaining</title></rect>
-<rect class="cell" x="1138.70" y="691.88" width="5.54" height="4.12" fill="#263244"><title>Overlay 21 · func_ov021_020c33e4 · 80 B · remaining</title></rect>
-<rect class="cell" x="1144.23" y="683.24" width="4.65" height="4.90" fill="#263244"><title>Overlay 21 · func_ov021_020c376c · 80 B · remaining</title></rect>
+<rect class="cell" x="1148.62" y="677.61" width="4.45" height="5.63" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 88 B · matching C/C++</title></rect>
+<rect class="cell" x="1138.70" y="683.24" width="5.54" height="4.32" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 84 B · matching C/C++</title></rect>
+<rect class="cell" x="1138.70" y="687.56" width="5.54" height="4.32" fill="#2dd4a0"><title>Overlay 21 · attack_entry · 84 B · matching C/C++</title></rect>
+<rect class="cell" x="1138.70" y="691.88" width="5.54" height="4.12" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 80 B · matching C/C++</title></rect>
+<rect class="cell" x="1144.23" y="683.24" width="4.65" height="4.90" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 80 B · matching C/C++</title></rect>
 <rect class="cell" x="1148.89" y="683.24" width="4.19" height="4.90" fill="#2dd4a0"><title>Overlay 21 · attack_phase_state · 72 B · matching C/C++</title></rect>
-<rect class="cell" x="1144.23" y="688.14" width="4.64" height="3.93" fill="#263244"><title>Overlay 21 · func_ov021_020c3434 · 64 B · remaining</title></rect>
-<rect class="cell" x="1144.23" y="692.07" width="4.64" height="3.93" fill="#263244"><title>Overlay 21 · func_ov021_020c37bc · 64 B · remaining</title></rect>
-<rect class="cell" x="1148.87" y="688.14" width="4.20" height="3.25" fill="#263244"><title>Overlay 21 · func_ov021_020c3cf0 · 48 B · remaining</title></rect>
+<rect class="cell" x="1144.23" y="688.14" width="4.64" height="3.93" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 64 B · matching C/C++</title></rect>
+<rect class="cell" x="1144.23" y="692.07" width="4.64" height="3.93" fill="#2dd4a0"><title>Overlay 21 · attack_transitions · 64 B · matching C/C++</title></rect>
+<rect class="cell" x="1148.87" y="688.14" width="4.20" height="3.25" fill="#2dd4a0"><title>Overlay 21 · attack_initialize · 48 B · matching C/C++</title></rect>
 <rect class="cell" x="1148.87" y="691.39" width="2.26" height="3.52" fill="#2dd4a0"><title>Overlay 21 · attack_phase_state · 28 B · matching C/C++</title></rect>
 <rect class="cell" x="1151.13" y="691.39" width="1.94" height="3.52" fill="#2dd4a0"><title>Overlay 21 · attack_phase_state · 24 B · matching C/C++</title></rect>
 <rect class="cell" x="1148.87" y="694.92" width="4.20" height="1.08" fill="#2dd4a0"><title>Overlay 21 · attack_phase_state · 16 B · matching C/C++</title></rect>

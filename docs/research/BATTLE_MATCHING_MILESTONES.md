@@ -2404,3 +2404,56 @@ reached only the resident base constructor because its early-story state did not
 open this menu, so it is not counted in the successful runtime runs. Larger
 scene-window setup and text decoding candidates remain private because of
 register-allocation differences and contribute no matching-C credit.
+
+### Flower projectiles, hammer phases, and shared attack helpers (2026-09-08)
+
+Forty-six functions add 5,860 matching C/C++ bytes: 20 projectile/participant
+helpers in overlay 14, 15 attack transitions in overlay 21, ten shared motion and
+enemy-selection helpers in overlay 10, and the uncompressed archive entry reader
+in overlay 5. Total: 424,784 / 1,563,700 (27.1653%). The 268-byte projectile,
+44-byte flower participant, 64-byte hammer configuration and 28-byte hammer state
+have explicit layouts and size checks. The archive reader extends its existing
+ownership unit; callers now use its descriptive name. No inline assembly was
+added in this batch.
+
+The complete native relink and rebuilt ROM remain byte-identical to the EUR
+original, SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. All 74 tests,
+generated-progress checks, public-content audit and whitespace checks pass.
+
+Local evidence in `build/runtime/eur_attack_helpers/verified_batch_summary.json`
+combines 9,366 frames from supplied checkpoints 55 and 22. Both were imported
+from their original battery saves into fresh emulator sessions before deriving
+compatible states. The controlled entry uses the shipped decoded Field VM
+command `0x11C`: checkpoint 55 uses room 306's encounter `-32748`, and checkpoint
+22 uses room 219's encounter `8192`. These are controlled battle selections,
+not claims that the field doors or story prerequisites were completed. Each
+72-byte temporary command is restored at the native battle-transfer helper,
+before scene teardown. Save-file hashes remain unchanged. Subsequent menu,
+target and attack input uses the normal keypad interface.
+
+The Bros. Flower run proves overlay 14's flower-attack role and executes 19 of
+its 20 new helpers. Checks cover participant/projectile initialization, animation
+selection, levels, timers, particle scale/alpha/height, recovery and release of
+all 32 projectile models. The run observes 104 particle updates, 28 projectile
+mode changes and 95 bounce starts. Shared motion cleanup verifies all four
+channels on 103 calls. The Green Shell run independently checks 422 XYZ-distance
+results, including the SDK square-root rounding, and the saturating scale-step
+update. Projected-damage bookkeeping also executes, without an independent result
+oracle in this probe.
+
+The Hammer run proves overlay 21's role and executes eight of its 15 new
+transitions. One replay deliberately misses the primary input; a second reads
+the recovered input-window state and supplies X on frame 66, with 40 frames
+remaining in the window. It reaches the successful primary-hit path. Both
+replays check configuration pointers, phase masks, timers and return cleanup.
+The timing decision changes only keypad input; no attack-state RAM is written.
+
+Every accepted entry is compared against the entire original function and every
+return is guarded by SP, including nested wrappers sharing a return address.
+Overall, 32 of the 46 new functions execute. The remaining coverage gaps are
+the flower secondary throw, seven hammer advance/secondary transitions, five
+shared motion/selection helpers, and the archive reader. They remain supported
+by exact machine-code matching. An earlier foreign-boss selection from checkpoint
+55 did not reach a valid attack sequence and is excluded from these totals, as
+are field-navigation attempts and the unavailable Hammer target in the flower
+test encounter.

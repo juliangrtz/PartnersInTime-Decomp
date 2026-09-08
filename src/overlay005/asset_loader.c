@@ -25,6 +25,24 @@ extern void func_ov005_0206735c(Overlay5Archive *archive, Overlay5ArchiveRequest
 extern void func_ov005_020668f8(void *owner);
 extern void func_ov005_0206690c(void *owner);
 
+void *Overlay5Archive_ReadEntry(Overlay5Archive *archive, int index, u16 entry, u32 *length,
+                          int heap) {
+    Overlay5ReadRequest request;
+    MI_CpuFill8(&request, 0, sizeof(request));
+    request.read.path = archive->tables[index].descriptor;
+    request.read.offsets = archive->tables[index].offsets;
+    request.read.entry = entry;
+    request.read.limit =
+        BattleArchive_GetEntrySize(archive, (const u8 *)request.read.offsets, request.read.entry);
+    if (!request.read.limit) return 0;
+    request.read.destination = GameHeap_NewArray(request.read.limit, heap, 0, 1);
+    BattleArchive_ReadAsync(archive, &request, 0, (const u8 *)request.read.offsets,
+                            request.read.path, 0);
+    ArchiveIO_WaitCompressedRead(&archive->base.base, (ArchiveReadRequest *)&request);
+    if (length) *length = request.read.limit;
+    return request.read.destination;
+}
+
 void *func_ov005_02066f78(Overlay5Archive *archive, int index, u16 entry, u32 *length,
                           int heap) {
     Overlay5ReadRequest request;

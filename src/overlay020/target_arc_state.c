@@ -16,7 +16,7 @@ extern void func_ov020_020c2efc(Overlay20AttackState *state,
 extern void func_ov020_020c2ae0(BattleSceneObject *object, int value);
 extern void func_ov002_0207179c(BattlePartyActor *actor,
                                 BattleSceneObject *object);
-extern void func_ov010_020c1304(BattleSceneObject *object,
+extern void Overlay10Motion_AdjustBounce(BattleSceneObject *object,
                                 BattleSceneObject *target,
                                 int *parameter_x, int *parameter_y);
 extern Overlay20AttackConfig data_ov020_020c4fd0[];
@@ -35,7 +35,7 @@ void Overlay20Attack_StartTargetArc(Overlay20AttackState *state) {
     func_ov020_020c2efc(state, 0xC008);
     parameter_x = config->arc_parameter_x;
     parameter_y = config->arc_parameter_y;
-    func_ov010_020c1304(object, target, &parameter_x, &parameter_y);
+    Overlay10Motion_AdjustBounce(object, target, &parameter_x, &parameter_y);
     duration = BattleSceneObject_StartVerticalArc(
         object, 3, parameter_x, parameter_y, target->z + target->property_0fa);
     func_ov020_020c2ae0(object, duration);

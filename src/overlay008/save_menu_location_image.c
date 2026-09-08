@@ -33,7 +33,7 @@ void SaveMenu_LoadLocationImage(int slot, int location)
     first = 3 * entry;
     data_ov008_0207844c[slot] =
         func_ov005_02066f78(MENU_ARCHIVE, 3, (u16)first, &data_ov008_02078458[slot], 0);
-    resource = func_ov005_020670b4(MENU_ARCHIVE, 3, (u16)(first + 2), &length, 0);
+    resource = Overlay5Archive_ReadEntry(MENU_ARCHIVE, 3, (u16)(first + 2), &length, 0);
     GameResource_Move16(resource, data_ov008_02078464[slot], length);
     if (resource)
         GameHeap_DeleteArray(resource);

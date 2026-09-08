@@ -4,11 +4,11 @@
   "scope": "DSD ranges marked as ARM9 code; BSS, assets, and ARM7 mixed images are excluded",
   "totals": {
     "mapped_code_bytes": 1563700,
-    "matching_c_bytes": 418924,
+    "matching_c_bytes": 424784,
     "symbolic_asm_bytes": 5404,
-    "remaining_bytes": 1139372,
-    "matching_c_percent": 26.7906,
-    "source_coverage_percent": 27.1362,
+    "remaining_bytes": 1133512,
+    "matching_c_percent": 27.1653,
+    "source_coverage_percent": 27.5109,
     "arm7_symbolic_bytes": 43852
   },
   "components": [
@@ -52,9 +52,9 @@
       "id": "arm9_ov005",
       "label": "Overlay 05",
       "mapped_code_bytes": 16760,
-      "matching_c_bytes": 13608,
+      "matching_c_bytes": 13800,
       "symbolic_asm_bytes": 0,
-      "remaining_bytes": 3152,
+      "remaining_bytes": 2960,
       "function_symbols": 204
     },
     {
@@ -97,9 +97,9 @@
       "id": "arm9_ov010",
       "label": "Overlay 10",
       "mapped_code_bytes": 6820,
-      "matching_c_bytes": 604,
+      "matching_c_bytes": 1772,
       "symbolic_asm_bytes": 0,
-      "remaining_bytes": 6216,
+      "remaining_bytes": 5048,
       "function_symbols": 30
     },
     {
@@ -133,9 +133,9 @@
       "id": "arm9_ov014",
       "label": "Overlay 14",
       "mapped_code_bytes": 13860,
-      "matching_c_bytes": 932,
+      "matching_c_bytes": 3932,
       "symbolic_asm_bytes": 0,
-      "remaining_bytes": 12928,
+      "remaining_bytes": 9928,
       "function_symbols": 55
     },
     {
@@ -187,9 +187,9 @@
       "id": "arm9_ov021",
       "label": "Overlay 21",
       "mapped_code_bytes": 5280,
-      "matching_c_bytes": 236,
+      "matching_c_bytes": 1736,
       "symbolic_asm_bytes": 0,
-      "remaining_bytes": 5044,
+      "remaining_bytes": 3544,
       "function_symbols": 27
     },
     {

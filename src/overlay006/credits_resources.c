@@ -9,7 +9,7 @@ void CreditsScene_LoadResources(CreditsSceneTask *task)
     int variant;
     MI_CpuFill8(data_ov006_0207c594, 0, sizeof(data_ov006_0207c594));
     func_ov005_02067468(ARCHIVE, 1, data_ov006_0207b5e4[1], 1);
-    resource = func_ov005_020670b4(ARCHIVE, 1, 193, &length, 0);
+    resource = Overlay5Archive_ReadEntry(ARCHIVE, 1, 193, &length, 0);
     Overlay5Display_LoadObjPalette(0, resource, 0, length);
     Overlay5Display_LoadObjPalette(1, resource, 0, length);
     if (resource)
@@ -22,7 +22,7 @@ void CreditsScene_LoadResources(CreditsSceneTask *task)
     func_020387b0();
     if (resource)
         GameHeap_DeleteArray(resource);
-    resource = func_ov005_020670b4(ARCHIVE, 1, data_ov006_0207beda[variant].entry, &length, 0);
+    resource = Overlay5Archive_ReadEntry(ARCHIVE, 1, data_ov006_0207beda[variant].entry, &length, 0);
     DC_FlushRange(resource, length);
     func_02038768();
     func_020386f4(resource, 0, length);
@@ -36,7 +36,7 @@ void CreditsScene_LoadResources(CreditsSceneTask *task)
     func_020387b0();
     if (resource)
         GameHeap_DeleteArray(resource);
-    resource = func_ov005_020670b4(ARCHIVE, 1, 178, &length, 0);
+    resource = Overlay5Archive_ReadEntry(ARCHIVE, 1, 178, &length, 0);
     DC_FlushRange(resource, length);
     func_02038768();
     func_020386f4(resource, 1024, length);
@@ -50,7 +50,7 @@ void CreditsScene_LoadResources(CreditsSceneTask *task)
     func_020387b0();
     if (resource)
         GameHeap_DeleteArray(resource);
-    resource = func_ov005_020670b4(ARCHIVE, 1, (u16)palette_entries.entries[gSaveData[1301]], &length, 0);
+    resource = Overlay5Archive_ReadEntry(ARCHIVE, 1, (u16)palette_entries.entries[gSaveData[1301]], &length, 0);
     DC_FlushRange(resource, length);
     func_02038768();
     func_020386f4(resource, 1152, length);
@@ -64,7 +64,7 @@ void CreditsScene_LoadResources(CreditsSceneTask *task)
     func_020387b0();
     if (resource)
         GameHeap_DeleteArray(resource);
-    resource = func_ov005_020670b4(ARCHIVE, 1, 192, &length, 0);
+    resource = Overlay5Archive_ReadEntry(ARCHIVE, 1, 192, &length, 0);
     DC_FlushRange(resource, length);
     func_02038768();
     func_020386f4(resource, 1184, length);
@@ -72,7 +72,7 @@ void CreditsScene_LoadResources(CreditsSceneTask *task)
     if (resource)
         GameHeap_DeleteArray(resource);
     func_ov005_02067468(ARCHIVE, 0, data_ov006_0207b5e4[2], 1);
-    task->font = func_ov005_020670b4(ARCHIVE, 0, 5, 0, 0);
+    task->font = Overlay5Archive_ReadEntry(ARCHIVE, 0, 5, 0, 0);
     func_ov005_02067424(ARCHIVE, 0);
     GameAudio_ResetScene();
     GameAudio_LoadMusic(40, 0, 303104);

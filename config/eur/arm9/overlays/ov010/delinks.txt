@@ -7,3 +7,18 @@
 src/overlay010/enemy_state.c:
     .text       start:0x020c2340 end:0x020c259c
 
+
+src/overlay010/bounce_height.c:
+    .text start:0x020c1304 end:0x020c13bc
+
+src/overlay010/motion_stop.c:
+    .text start:0x020c1e1c end:0x020c1e50
+
+src/overlay010/target_distance.c:
+    .text start:0x020c1f48 end:0x020c20f8
+
+src/overlay010/target_selection.c:
+    .text start:0x020c21d0 end:0x020c2340
+
+src/overlay010/party_effect_position.c:
+    .text start:0x020c28f4 end:0x020c2978

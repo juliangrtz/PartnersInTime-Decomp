@@ -6,3 +6,12 @@
 src/overlay021/attack_phase_state.c:
     .text       start:0x020c2ae0 end:0x020c2bcc
 
+
+src/overlay021/attack_transitions.cpp:
+    .text start:0x020c3380 end:0x020c3864
+
+src/overlay021/attack_entry.cpp:
+    .text start:0x020c395c end:0x020c39b0
+
+src/overlay021/attack_initialize.cpp:
+    .text start:0x020c3cf0 end:0x020c3d94
