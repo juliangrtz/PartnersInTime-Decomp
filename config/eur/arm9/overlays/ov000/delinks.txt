@@ -199,3 +199,9 @@ src/field/field_transform_update.cpp:
 
 src/field/field_scaling.cpp:
     .text start:0x020a4320 end:0x020a461c
+
+src/field/field_party_manager_storage.c:
+    .text start:0x020a28b4 end:0x020a2a58
+
+src/field/field_system.c:
+    .text start:0x0206e040 end:0x0206e4d8

@@ -856,3 +856,36 @@ saves are unchanged. Private evidence is `transform_pause83.json` and
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Field system initialization and aggregate snapshots (2026-09-09)
+
+Eight functions add 1,596 matching C bytes, reaching
+520,272 / 1,563,700 bytes (33.27%). Checked layouts describe the 952-byte
+field task, 16,764-byte party manager, 772-byte party-manager snapshot and
+804-byte aggregate field snapshot. The field constructor either allocates its
+persistent timer/model/party systems or reuses them, creates the archive and
+update/IRQ tasks, and initializes sprite animation. Its ARM-to-Thumb VBlank
+call is verified in the native link. The touch poll preserves the original
+signed nine-bit coordinate sentinels and pressed/held/released state handling.
+
+A normal checkpoint-83 boot/load verifies the party manager's complete zeroed
+allocation and the field constructor's 912-byte storage plus retained prefix
+fields. Scheduler-maintained previous/next links are excluded from the
+constructor comparison. A save-block interaction verifies the reused-system
+constructor path, the full 772-byte manager snapshot and the full 804-byte
+aggregate snapshot, including reserved fields. The deleting destructor's
+returned pointer is checked. Both constructor paths and all snapshot comparisons
+pass. The save-block replay ends black, so it does not establish completion of
+the save-menu return; the cold-load replay reaches the visible field normally.
+
+The two replays also check 936 touch returns. Touch input remains disabled in
+these field scenes, including during ordinary simulated stylus contacts; active
+sampling branches remain statically verified only. Manager destruction, the
+non-deleting field destructor and allocation failures are also static-only.
+No callback failures or pending returns remain, and the source battery save is
+unchanged. Private evidence is `system_cold83.json` and `system_snapshot83.json`
+under `build/runtime/eur_field_system/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
