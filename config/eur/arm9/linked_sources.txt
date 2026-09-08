@@ -577,3 +577,6 @@ src/overlay007/pause_resources.cpp
 src/overlay009/shop_resources.cpp
 src/overlay008/menu_resources.c
 src/overlay008/erase_resources.c
+src/overlay007/nawatobi_resources.cpp
+src/overlay007/nawatobi_lifecycle.cpp
+src/overlay007/nawatobi_irq_destroy.cpp

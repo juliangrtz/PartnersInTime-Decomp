@@ -2490,3 +2490,35 @@ runtime coverage gaps. Source battery-save hashes are unchanged. Private evidenc
 Matching C/C++ reaches 450,360 of 1,563,700 bytes (28.80%). Full module/symbol
 checks, all 74 tests, generated progress and the public-content audit pass.
 The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Super Nawatobi Bros. scene resources and lifecycle
+
+Eight functions add 3,280 matching C++ bytes: Nawatobi scene construction, both
+destruction variants, resource initialization, frame uploads and all three IRQ
+lifecycle routines. The embedded title and live screen both identify this
+separate pause-menu scene as "Super Nawatobi Bros." It allocates two 400-byte
+buffers and a 102,400-byte bitmap workspace, two debug consoles, sprite assets,
+a Scene VM and its primary script. Frame uploads copy separate 49,152-byte
+bitmap regions to the two engines and then upload both console tilemaps.
+
+The supplied save-65 checkpoint was first navigated normally into a fully
+initialized pause menu. A controlled probe changed only that task's phase from
+2 to 7 at the native update entry. The original transition destroyed the pause
+scene and constructed Nawatobi; this demonstrates the native transition, not
+ordinary menu accessibility. The 491-frame replay displayed the level selector
+and returned to the pause menu with normal B input. Full original bytes guarded
+every accepted target entry. Six of the eight reconstructed functions ran;
+non-deleting scene and IRQ destructors remain byte-verified only. Read-only
+checks validated scene/IRQ ownership, the cleared bitmap workspace, resource
+pointers and their teardown. Three paired bitmap uploads were compared in live
+VRAM, covering 294,912 bytes. The source save remained unchanged. Private evidence:
+`build/runtime/eur_nawatobi/evidence_065.json`.
+
+The separately investigated pause deleting destructor retains its original
+assembly: a shipped Scene VM command targets an interior label in that routine.
+Replacing its body requires preserving that entry explicitly; it is not counted
+as new matching C.
+
+Matching C/C++ reaches 453,640 of 1,563,700 bytes (29.01%). Full module/symbol
+checks, all 74 tests, progress validation and the public-content audit pass.
+The rebuilt ROM retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
