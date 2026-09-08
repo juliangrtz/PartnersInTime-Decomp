@@ -7,6 +7,8 @@
 /* Checked allocation layouts with unknown interiors retained as opaque fields.
  * The party entity extends FieldRuntimeEntity. The low flag bytes save collision state, while the
  * same word holds the movement mode used by the state dispatcher. */
+typedef struct FieldPartyFollowerFlags { u16 enabled : 1, unknown_01_15 : 15; } FieldPartyFollowerFlags;
+typedef char FieldPartyFollowerFlags_SizeCheck[sizeof(FieldPartyFollowerFlags) == 2 ? 1 : -1];
 typedef struct FieldPartyEntity {
     FieldRuntimeEntity entity;
     u8 unknown_514[12];
@@ -38,7 +40,7 @@ typedef struct FieldPartyEntity {
             u8 unknown_550[24];
         } auxiliary_motion;
     };
-    u16 *unknown_568;
+    union { u16 *unknown_568; FieldPartyFollowerFlags *follower_flags; };
     u8 unknown_56c[8];
     struct FieldPartyEntity *partner;
     struct FieldPartyEntity *auxiliary;
@@ -97,15 +99,27 @@ typedef struct FieldPartyController {
     u8 actions[4];
     union {
         u32 state_flags;
+        struct { u32 unknown_00_08 : 9, sliding : 1, unknown_10_31 : 22; } indicator_bits;
         struct {
             u32 unknown_00 : 1, unknown_01 : 1, unknown_02 : 1;
             u32 unknown_03_04 : 2, unknown_05 : 1, unknown_06_10 : 5, unknown_11_12 : 2;
             u32 unknown_13 : 1, unknown_14_17 : 4, movement_mode : 4, unknown_22_31 : 10;
         } state_bits;
     };
-    u8 unknown_078[16];
+    union {
+        u8 unknown_078[16];
+        struct {
+            u16 unknown_078_halfword;
+            s16 indicator_velocity, indicator_x, indicator_y;
+            s16 indicator_offset_x, indicator_offset_y, indicator_slide_y;
+            u16 unknown_086;
+        };
+    };
     FieldRenderObject *unknown_088, *unknown_08c, *unknown_090;
-    u8 unknown_094[2212];
+    union {
+        u8 unknown_094[2212];
+        struct { FieldRenderObject *unknown_094_render; u8 follower_state[2208]; };
+    };
     FieldResourceContext **areas;
     struct FieldPartyController *paired;
     u8 *resources;
@@ -121,6 +135,17 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_DisableFollowing(FieldPartyController *party);
+void FieldParty_ResetFollowingContacts(FieldPartyController *party);
+void FieldParty_InitializeFollowing(FieldPartyController *party, int argument);
+void FieldParty_UpdateFollowing(FieldPartyController *party);
+void FieldParty_EnableFollowing(FieldPartyController *party);
+int FieldParty_CheckFollowerRejoin(FieldPartyController *party);
+void FieldParty_RejoinFollower(FieldPartyController *party, int instant);
+void FieldParty_SetIndicatorLayer(FieldPartyController *party, int alternate);
+void FieldParty_UpdateIndicatorPositions(FieldPartyController *party);
+void FieldParty_UpdateIndicatorSlide(FieldPartyController *party);
+void FieldParty_StartIndicatorSlide(FieldPartyController *party, int upward);
 FieldPartyEntity *FieldPartyEntity_CopyState(FieldPartyEntity *entity, const FieldPartyEntity *source);
 FieldPartyEntity *FieldPartyAuxiliary_CopyState(FieldPartyEntity *entity, const FieldPartyEntity *source);
 void FieldParty_LinkPairedMember(FieldPartyController *party, int member);

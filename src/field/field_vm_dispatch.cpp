@@ -1,3 +1,4 @@
+#include <game/field_party.h>
 #include <game/field_system.h>
 #include <game/field_transform.h>
 #include <game/field_entity_motion.h>
@@ -74,8 +75,6 @@ extern void func_ov000_020b1a08(FieldEntity *entity);
 extern int func_ov000_0207133c(u8 *field_context, FieldEntity *entity);
 extern void func_ov000_020bc8e4(FieldEntity *entity, int enabled);
 extern void func_ov000_020bc7d0(FieldEntity *entity, int enabled);
-extern void func_ov000_0209b53c(void *party_controller, int instant);
-extern void func_ov000_0209b0b8(void *party_controller);
 extern void func_ov000_0209e720(void *party_manager, int party_side,
                                 int instant);
 extern int func_ov000_0209e6f4(void *party_manager);
@@ -3510,7 +3509,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_REJOIN_PARTY_FOLLOWER:
         if ((FieldVm_GetPresentPartyMask(field_context) &
              (1 << arguments[0])) != 0) {
-            func_ov000_0209b53c(FieldVm_GetPartyController(
+            FieldParty_RejoinFollower((FieldPartyController *)FieldVm_GetPartyController(
                 party_manager, arguments[0]),
                 arguments[1] != 0);
         }
@@ -3533,7 +3532,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_DETACH_PARTY_FOLLOWER:
         if ((FieldVm_GetPresentPartyMask(field_context) &
              (1 << arguments[0])) != 0) {
-            func_ov000_0209b0b8(FieldVm_GetPartyController(
+            FieldParty_DisableFollowing((FieldPartyController *)FieldVm_GetPartyController(
                 party_manager, arguments[0]));
         }
         break;

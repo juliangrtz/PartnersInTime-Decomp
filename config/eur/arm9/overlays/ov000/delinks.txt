@@ -211,3 +211,9 @@ src/field/field_display.c:
 
 src/field/field_system_resources.c:
     .text start:0x0206d1dc end:0x0206d400
+
+src/field/field_party_following.c:
+    .text start:0x0209b0b8 end:0x0209b6b0
+
+src/field/field_party_indicators.c:
+    .text start:0x0209b6b0 end:0x0209b99c

@@ -946,3 +946,36 @@ retains the previously documented black final screen. Private evidence is
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Party following and indicator helpers (2026-09-09)
+
+Eleven contiguous functions add 2,276 matching C bytes, reaching
+524,276 / 1,563,700 bytes (33.53%). Following controls retain the original
+collision-category masks, reset contact flags, transfer locomotion parameters,
+and start or finish the follower's rejoin movement. Indicator helpers set both
+renderer anchors, place the individual indicators, and advance their short
+vertical slides. The checked party layout now exposes the indicator coordinates
+and the embedded following-state buffer. Existing VM commands use the shared
+interface. Unknown renderer fields and state values retain neutral names.
+
+Normal battery boots of story checkpoints 1 and 83 reach the visible field.
+Read-only probes verify five contact resets against both complete 1,440-byte
+party entities, three indicator-layer changes against complete 312-byte renderer
+records (including both layer choices), and three following-flag updates after
+the native history helper returns. Live pointers confirm that the follower flag
+can alias the controller's embedded buffer. Two active following initializations
+verify the six locomotion parameters, animation speed, cleared velocity fields
+and all arguments passed to the native history initializer. In addition, 1,907
+idle rejoin checks and 1,701 idle slide updates preserve the full controller.
+A separate movement/pause replay also completes without a mismatch.
+
+Active rejoin movement, enabling/disabling following, indicator positioning and
+active slide branches were not reached by these ordinary-input replays and
+remain statically verified only. All observed checks pass with no pending
+callbacks; both source battery saves are unchanged. Private evidence is
+`following_cold83.json`, `following_story1.json` and `following_move83.json`
+under `build/runtime/eur_party_following/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
