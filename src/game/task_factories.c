@@ -4,7 +4,6 @@
 #include <game/frontend_scene.h>
 
 extern GameTask *func_ov006_02075b60(void *memory, u32 priority, void *argument);
-extern GameTask *func_ov008_02077b1c(void *memory, u32 priority, void *argument);
 extern GameTask *func_ov007_02072a80(void *memory, u32 priority, void *argument);
 extern GameTask *func_ov009_0206f440(void *memory, u32 priority, void *argument);
 
@@ -18,7 +17,7 @@ GameTask *GameTask_CreateTitleScreen(void)
 GameTask *func_020290a8(void)
 {
     void *memory = GameHeap_New(48, 0, 0, 0);
-    if (memory) return func_ov008_02077b1c(memory, 8, 0);
+    if (memory) return (GameTask *)EraseScene_Init(memory, 8, 0);
     return memory;
 }
 

@@ -63,3 +63,21 @@ src/overlay008/save_menu_text_lookup.c:
 
 src/overlay008/save_menu_text_init.c:
     .text       start:0x02075e58 end:0x02076008
+
+src/overlay008/erase_scene_lifecycle.c:
+    .text       start:0x02077904 end:0x02077e20
+
+src/overlay008/erase_irq_destroy.c:
+    .text       start:0x02076008 end:0x02076058
+
+src/overlay008/erase_irq_init.c:
+    .text       start:0x02077e20 end:0x02077eb4
+
+src/overlay008/save_menu_resource_cleanup.c:
+    .text       start:0x0207275c end:0x020727d8
+
+src/overlay008/save_menu_location_name.c:
+    .text       start:0x020719dc end:0x02071a50
+
+src/overlay008/save_menu_location_image.c:
+    .text       start:0x02071d30 end:0x02071ec8

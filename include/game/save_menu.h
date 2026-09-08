@@ -89,6 +89,17 @@ GameIrqTask *GameOverSceneIrq_Delete(GameIrqTask *task);
 GameIrqTask *GameOverSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
 void SaveScene_UploadFrame(void);
 void GameOverScene_UploadFrame(void);
+GameIrqTask *EraseSceneIrq_Destroy(GameIrqTask *task);
+GameIrqTask *EraseSceneIrq_Delete(GameIrqTask *task);
+SaveSceneTask *EraseScene_Delete(SaveSceneTask *task);
+SaveSceneTask *EraseScene_Destroy(SaveSceneTask *task);
+SaveSceneTask *EraseScene_Init(SaveSceneTask *task, u32 priority, u32 unused);
+void EraseScene_UploadFrame(void);
+GameIrqTask *EraseSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
+void SaveMenu_FreeResources(void);
+void SaveMenu_LoadLocationName(int slot, int location);
+void SaveMenu_LoadLocationImage(int slot, int location);
+void SaveMenu_BuildInversePalette(int slot);
 #ifdef __cplusplus
 }
 #endif

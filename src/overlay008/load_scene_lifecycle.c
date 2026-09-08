@@ -117,7 +117,7 @@ SaveSceneTask *LoadScene_Destroy(SaveSceneTask *task)
     }
     for (i = 0; i < 4; ++i)
         func_ov005_02067424(MENU_ARCHIVE, (u8)i);
-    func_ov008_0207275c();
+    SaveMenu_FreeResources();
     func_ov005_02065f10();
     func_02009058(0);
     func_02009058(1);
@@ -147,7 +147,7 @@ SaveSceneTask *LoadScene_Delete(SaveSceneTask *task)
     }
     for (i = 0; i < 4; ++i)
         func_ov005_02067424(MENU_ARCHIVE, (u8)i);
-    func_ov008_0207275c();
+    SaveMenu_FreeResources();
     func_ov005_02065f10();
     func_02009058(0);
     func_02009058(1);

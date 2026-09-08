@@ -2186,3 +2186,36 @@ binary matching. Private evidence is in build/runtime/eur_frontend.
 Matching C/C++ reaches 397,660 of 1,563,700 bytes (25.43%). Module/symbol checks,
 74 tests, generated progress and public-content checks pass. The complete ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Backup-check/erase scene and menu location resources
+
+Eleven functions add 2,184 matching C bytes. The backup-check/erase scene now has
+matching construction, both destruction variants and IRQ construction,
+destruction and frame upload. Shared menu resource cleanup, location-name loading,
+location-image loading and inverse RGB555 palette construction are also matching.
+The startup factory and existing save/load/game-over destructors use their shared
+declarations. The large common loader and two background transfer workers retain
+compiler register differences and remain outside the matching-C total.
+
+Three normal cold replays of new saves 1, 30 and 103 run 2,603 frames each. All
+three enter and leave the startup backup-check scene before continuing to the
+title and load menu. Read-only return oracles verify 13 location-name results,
+13 image allocations, 13 complete 256-color inverse palettes and four resource
+cleanups. The image selections include default, castle and Yoshi's Island
+resources. Existing summary, text and scene checks also pass.
+
+A further 912-frame cold replay of save 103 holds A+B+X+Y+L+R at startup, the
+combination checked by the original controller. This opens the original erase
+confirmation, with No selected; B cancels it and returns to the title. The run
+checks scene/IRQ initialization and deletion, 311 IRQ uploads and the previously
+unentered background text-drawing path. No erase operation occurs. A preliminary
+1,843-frame controlled test redirected one normal session-request argument from
+state 8 to state 9, then canceled; that test also passed. The key-combination
+replay requires no register or RAM substitution.
+
+Every accepted entry is guarded by the complete original function bytes, and
+all supplied save hashes stay unchanged. Non-deleting destructors remain covered
+by exact binary verification. Private evidence: build/runtime/eur_menu_helpers.
+Matching C/C++ reaches 399,844 of 1,563,700 bytes (25.57%). Module/symbol checks,
+74 tests, generated progress and public-content checks pass. The complete ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

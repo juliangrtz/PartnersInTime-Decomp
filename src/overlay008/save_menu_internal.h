@@ -68,7 +68,6 @@ extern SaveSceneTask *data_ov008_02078288;
 extern void func_ov008_02070858(SaveSceneTask *);
 extern void func_ov008_02070334(MenuElement *);
 extern void func_ov005_020671e4(Overlay5Archive *);
-extern void func_ov008_0207275c(void);
 extern void func_ov005_02065f10(void);
 extern void func_02009058(int);
 extern void func_ov005_02069928(void);
@@ -90,4 +89,17 @@ extern u8 data_ov008_02078290[];
 extern void func_ov008_02075ac8(SaveMenuTransferTask *);
 extern void func_ov008_02075b94(SaveMenuTransferTask *);
 extern void func_ov008_02075c38(SaveMenuTransferTask *);
+extern GameTaskVTable data_ov008_02078264, data_ov008_02078250;
+extern SaveSceneTask *data_ov008_0207aa98;
+extern u8 data_02059f44, data_02059f48;
+extern void func_ov008_020773b4(SaveSceneTask *);
+extern void func_ov008_02076c70(MenuElement *);
+extern void func_ov008_02075dc8(SaveMenuText *);
+static inline void SaveMenuText_DeleteOwned(SaveMenuText *text)
+{
+    if (text) {
+        func_ov008_02075dc8(text);
+        GameHeap_Delete(text);
+    }
+}
 #endif
