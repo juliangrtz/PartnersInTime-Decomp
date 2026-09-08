@@ -238,6 +238,34 @@ under `build/runtime/eur_attack_helpers/`. Native linking, all 74 tests,
 progress consistency and the public-content audit pass; the full ROM retains
 SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
 
+### Mix Flowers effect pairs and participants (2026-09-08)
+
+Twenty functions add 2,320 matching C bytes, reaching 474,848 / 1,563,700
+bytes (30.37%). Normal selection of Mix Flowers confirms Overlay 16's item
+identity. Seven contiguous units reconstruct the effect-pair pool, resource
+and animation changes, kind transitions, pursuit setup, reset and destruction,
+plus participant initialization and three resource/animation phases. Checked
+structures describe paired 260-byte scene objects in each 524-byte effect,
+the 32-byte controller and 24-byte participants. Unobserved fields retain
+neutral names. The native pursuit caller supplies `1` for the animation-state
+argument omitted by the initial decompiler output.
+
+A 3,070-frame checkpoint 83 replay executes and checks all 20 new functions.
+Read-only oracles cover object positions, resource pointers, animation flags,
+phase/kind updates, free-slot and idle queries, participant fields and model
+release. The conditional reset is observed 452 times without a request and
+four times with a request. The replay returns to Luigi's command wheel and
+preserves the source save. Inputs are ordinary buttons from the previously
+documented controlled encounter. This run also expands coverage of the prior
+shared-motion batch to scale-wave setup and eight updates, four sine-move
+setups and one pursuit setup; all corresponding RAM oracles pass.
+
+Native linking, 74 tests, progress consistency and the public-content audit
+pass, with canonical ROM SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Private evidence is
+`build/runtime/eur_attack_helpers/ov16_mix_verified83.json`; its menu capture
+confirms the selected item. No new inline assembly was added.
+
 ### Nawatobi rope updates (2026-09-08)
 
 Five functions add 596 matching C bytes, reaching 472,528 / 1,563,700 bytes
