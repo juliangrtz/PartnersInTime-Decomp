@@ -127,3 +127,24 @@ src/field/field_script_interaction.cpp:
 
 src/field/field_script_entity_controls.cpp:
     .text       start:0x02087fbc end:0x02088008
+
+src/field/field_effect_lookup.cpp:
+    .text       start:0x020712fc end:0x0207133c
+
+src/field/field_hud_effects.cpp:
+    .text       start:0x0207138c end:0x02071a38
+
+src/field/field_hud_portraits.cpp:
+    .text       start:0x02071b70 end:0x02071c08
+
+src/field/field_hud_visibility.cpp:
+    .text       start:0x02071ce8 end:0x02071de8
+
+src/field/field_camera_shake_stop.cpp:
+    .text       start:0x02071fec end:0x02072074
+
+src/field/field_resource_lookup.c:
+    .text       start:0x02077a44 end:0x02077b0c
+
+src/field/field_room_scripts.c:
+    .text       start:0x020797e4 end:0x02079b0c

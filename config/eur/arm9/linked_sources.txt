@@ -455,3 +455,10 @@ src/field/field_script_manager.cpp
 src/field/field_script_auxiliary.cpp
 src/field/field_script_interaction.cpp
 src/field/field_script_entity_controls.cpp
+src/field/field_effect_lookup.cpp
+src/field/field_hud_effects.cpp
+src/field/field_hud_portraits.cpp
+src/field/field_hud_visibility.cpp
+src/field/field_camera_shake_stop.cpp
+src/field/field_resource_lookup.c
+src/field/field_room_scripts.c

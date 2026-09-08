@@ -6,6 +6,7 @@ extern "C" {
 #include <game/field_presentation.h>
 #include <game/field_entity_lifecycle.h>
 #include <game/field_timer.h>
+#include <game/field_hud.h>
 #include <game/field_timed_renderer.h>
 #include <game/field_script.h>
 #include <game/field_script_manager.h>
@@ -82,11 +83,6 @@ extern void func_ov000_020b1a24(FieldEntity *entity, const void *path,
                                 int path_size_halfwords);
 extern void func_ov000_020b18e4(FieldEntity *entity);
 extern void func_ov000_020b1a08(FieldEntity *entity);
-extern void func_ov000_020713bc(u8 *field_context, FieldEntity *entity,
-                                int effect_slot, int animation_id,
-                                int position_mode, s16 x, s16 y,
-                                int lifetime, int follow_entity);
-extern void func_ov000_0207138c(u8 *field_context, FieldEntity *entity);
 extern int func_ov000_0207133c(u8 *field_context, FieldEntity *entity);
 extern void func_ov000_020bc8e4(FieldEntity *entity, int enabled);
 extern void func_ov000_020bc7d0(FieldEntity *entity, int enabled);
@@ -178,7 +174,6 @@ extern void func_ov000_020721c0(u8 *field_context, int bg_layer);
 extern void func_ov000_02072074(u8 *field_context, int axis,
                                 fx32 amplitude, int step, int half_cycles,
                                 int rumble_pattern);
-extern void func_ov000_02071fec(u8 *field_context);
 extern void func_ov000_02075c34(u8 *field_context, s16 start_brightness,
                                 s16 target_brightness, u16 duration);
 extern void func_ov000_0207c098(u8 *field_context);
@@ -235,8 +230,6 @@ extern int func_ov000_02074d50(u8 *field_context, int effect_slot);
 extern void func_020052b0(int scene_id, int argument_1);
 extern void func_ov000_020a23f8(void *party_manager, int reserved);
 extern void func_ov000_02079d74(u8 *field_context, int party_mode);
-extern void func_ov000_020714e4(u8 *field_context);
-extern int func_ov000_020714a8(u8 *field_context);
 extern void func_ov000_0206ba2c(
     void *field_system, int start_mode, s16 encounter_id,
     int reserved_transition_argument, u16 source_room_id, int contact_mode,
@@ -2329,8 +2322,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SPAWN_ENTITY_EFFECT_SPRITE:
-            func_ov000_020713bc(
-                field_context, entity, -1,
+            FieldEffect_StartForEntity(
+                field_context, (FieldRuntimeEntity *)entity, -1,
                 arguments[1], arguments[2],
                 (s16)arguments[3],
                 (s16)arguments[4], arguments[5],
@@ -2338,7 +2331,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_REMOVE_ENTITY_EFFECT_SPRITE:
-            func_ov000_0207138c(field_context, entity);
+            FieldEffect_StopForEntity(field_context, (FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_WAIT_ENTITY_EFFECT_SPRITE:
@@ -2978,7 +2971,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_STOP_CAMERA_SHAKE:
-        func_ov000_02071fec(field_context);
+        FieldCamera_StopShake(field_context);
         break;
 
     case FIELD_VM_START_MAP_PALETTE_ANIMATION: {
@@ -3785,11 +3778,11 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_REMOVE_ALL_ENTITY_EFFECT_SPRITES:
-        func_ov000_020714e4(field_context);
+        FieldEffect_StopAll(field_context);
         break;
 
     case FIELD_VM_WAIT_ALL_ENTITY_EFFECT_SPRITES:
-        if (func_ov000_020714a8(field_context)) {
+        if (FieldEffect_AnyActive(field_context)) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;

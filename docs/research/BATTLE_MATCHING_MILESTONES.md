@@ -2078,3 +2078,32 @@ Evidence remains private under build/runtime/eur_field_archives_scripts.
 Matching C/C++ is 380,076 of 1,563,700 bytes (24.31%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+
+## Field HUD, temporary effects and room-script resources
+
+Sixteen functions add 3,324 matching C/C++ bytes. The reconstructed HUD selects
+party portraits, positions sprites and emits HP/coin digits from the live save
+context. Temporary effects use eight renderer slots, entity ownership and
+frame-duration or animation-loop limits. Other functions stop camera shake,
+select resource heaps, find shared resources and queue the room's scripts and
+optional auxiliary data. Typed partial context views document the recovered
+layouts without claiming that the entire field context is understood.
+
+Normal cold boots of new story saves 30, 65 and 86 run 2,715 frames each.
+Read-only entry/return checks verify 1,391 HUD draws against live HP/coins and
+OAM contents, 12 portrait selections, seven HUD initializations, seven renderer
+visibility updates and seven position updates. Ten room-script loads check
+archive entry sizes and destination pointers; 161 shared-resource searches
+include 28 hits and 133 misses; 133 heap decisions include 22 alternate-heap
+results. Every accepted function entry first verifies its full original bytes.
+All checks pass and the supplied save hashes remain unchanged. Final images
+show the Yoshi's Island save menu and normal field gameplay in Thwomp Volcano
+and Shroob Castle. These routes do not enter the temporary-effect or camera-stop
+functions, or the single-member and moving HUD branches; exact binary matching
+is their current verification. No RAM or script substitution is used.
+
+Private evidence: build/runtime/eur_field_hud_resources. Matching C/C++ is
+383,400 of 1,563,700 bytes (24.52%). Module/symbol checks, 74 tests, generated
+progress and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
