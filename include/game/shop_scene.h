@@ -1,0 +1,23 @@
+#ifndef PIT_GAME_SHOP_SCENE_H
+#define PIT_GAME_SHOP_SCENE_H
+#include <game/task.h>
+typedef struct ShopSceneTask {
+    GameTask base;
+    u8 unknown_18[16];
+    GameIrqTask *irq;
+    int phase;
+} ShopSceneTask;
+typedef char ShopSceneTaskSizeCheck[sizeof(ShopSceneTask) == 48 ? 1 : -1];
+#ifdef __cplusplus
+extern "C" {
+#endif
+GameIrqTask *ShopSceneIrq_Destroy(GameIrqTask *task);
+GameIrqTask *ShopSceneIrq_Delete(GameIrqTask *task);
+GameIrqTask *ShopSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
+ShopSceneTask *ShopScene_Init(ShopSceneTask *task, u32 priority, u32 unused);
+ShopSceneTask *ShopScene_Delete(ShopSceneTask *task);
+ShopSceneTask *ShopScene_Destroy(ShopSceneTask *task);
+#ifdef __cplusplus
+}
+#endif
+#endif

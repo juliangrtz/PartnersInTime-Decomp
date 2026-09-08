@@ -2187,6 +2187,7 @@ Matching C/C++ reaches 397,660 of 1,563,700 bytes (25.43%). Module/symbol checks
 74 tests, generated progress and public-content checks pass. The complete ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
 
+
 ## Backup-check/erase scene and menu location resources
 
 Eleven functions add 2,184 matching C bytes. The backup-check/erase scene now has
@@ -2217,5 +2218,29 @@ Every accepted entry is guarded by the complete original function bytes, and
 all supplied save hashes stay unchanged. Non-deleting destructors remain covered
 by exact binary verification. Private evidence: build/runtime/eur_menu_helpers.
 Matching C/C++ reaches 399,844 of 1,563,700 bytes (25.57%). Module/symbol checks,
+74 tests, generated progress and public-content checks pass. The complete ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Shop scene construction and resource ownership
+
+Six functions add 4,452 matching C++ bytes: shop scene construction, both
+destruction variants and IRQ-task construction/destruction. Typed views describe
+the scene, shared work area, saved selection fields and virtual panel deletion.
+Initialization and cleanup preserve the original resource order and the native
+loop that repeatedly clears the same two saved-selection bytes.
+
+Three controlled replays use compatible states generated from supplied saves 65
+and 86. A decoded Field VM command selects normal items, clothing/badges or the
+sell view; all 72 command bytes are restored at the native helper entry. Normal
+B input leaves each view without purchases. The sell view first recreates the
+normal shop, then exits. Across 2,043 frames, four complete scene/IRQ lifecycles
+pass live ownership, display-mode and conditional HBlank checks. Deletion hooks
+account for 43 owned arrays, 20 menu objects and 240 sprite entries, and verify
+that ownership slots and the scene pointer are cleared. Full original function
+bytes guard every accepted entry; return hooks also check the saved stack pointer.
+All supplied save hashes remain unchanged. Non-deleting destructors remain
+covered by exact binary verification. Private evidence: build/runtime/eur_shop_scene.
+
+Matching C/C++ reaches 404,296 of 1,563,700 bytes (25.86%). Module/symbol checks,
 74 tests, generated progress and public-content checks pass. The complete ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

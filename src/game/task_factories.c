@@ -2,10 +2,10 @@
 #include <game/task.h>
 #include <game/save_menu.h>
 #include <game/frontend_scene.h>
+#include <game/shop_scene.h>
 
 extern GameTask *func_ov006_02075b60(void *memory, u32 priority, void *argument);
 extern GameTask *func_ov007_02072a80(void *memory, u32 priority, void *argument);
-extern GameTask *func_ov009_0206f440(void *memory, u32 priority, void *argument);
 
 GameTask *GameTask_CreateTitleScreen(void)
 {
@@ -52,7 +52,7 @@ GameTask *GameTask_CreateGameOver(void)
 GameTask *GameTask_CreateShopMenu(void)
 {
     void *memory = GameHeap_New(48, 0, 0, 0);
-    if (memory) return func_ov009_0206f440(memory, 8, 0);
+    if (memory) return (GameTask *)ShopScene_Init(memory, 8, 0);
     return memory;
 }
 
