@@ -657,3 +657,4 @@ src/field/field_party_snapshot.c
 src/field/field_base_copy.c
 src/field/field_planar_copy.c
 src/field/field_spatial_copy.c
+src/field/field_party_storage.c

@@ -49,9 +49,40 @@ typedef struct FieldPartySnapshot {
 } FieldPartySnapshot;
 typedef char FieldPartySnapshot_SizeCheck[sizeof(FieldPartySnapshot) == 136 ? 1 : -1];
 
+typedef struct FieldPartyControllerSnapshot {
+    struct {
+        u32 members : 2, state_02_03 : 2, party_00_01 : 2, party_02 : 1, party_03 : 1;
+        u32 party_04 : 1, party_05 : 1, party_06 : 1, field_screen : 1, special_contact_mode : 1;
+        u32 party_10_13 : 4, party_14 : 1, follower_rejoin_active : 1, active_member : 1;
+        u32 movement_active : 1, party_19 : 1, unknown_22_30 : 9, backup_11 : 1;
+    } flags;
+    struct {
+        u16 movement_state : 14, unknown_14_15 : 2;
+    } area;
+    u8 unknown_006, unknown_007;
+    u16 input_masks[2];
+    u8 unknown_00c;
+    s8 unknown_00d;
+    u8 unknown_00e[2];
+    u32 unknown_010, unknown_014;
+    fx32 separation_x, separation_y, separation_z;
+    u32 unknown_024;
+    u8 actions[4];
+    struct {
+        u32 unknown_00 : 1, unknown_01 : 1, unknown_02 : 1, unknown_03_04 : 2, unknown_05 : 1;
+        u32 unknown_06_07 : 2, unknown_08 : 1, unknown_09_12 : 4, movement_mode : 4, unknown_17_31 : 15;
+    } state;
+    FieldPartySnapshot members[2];
+    FieldPartyStateRecord records[2];
+} FieldPartyControllerSnapshot;
+typedef char FieldPartyControllerSnapshot_SizeCheck[sizeof(FieldPartyControllerSnapshot) == 384 ? 1 : -1];
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_SaveSnapshot(FieldPartyController *party, FieldPartyControllerSnapshot *snapshot);
+FieldPartyController *FieldParty_DestroyBackups(FieldPartyController *party);
+FieldPartyController *FieldParty_InitializeStorage(FieldPartyController *party);
 void FieldPartyEntity_SaveSnapshot(FieldPartyEntity *party, FieldPartySnapshot *snapshot);
 FieldPartyEntity *FieldPartyEntity_RestoreSnapshot(FieldPartyEntity *party,
                                                    const FieldPartySnapshot *snapshot,

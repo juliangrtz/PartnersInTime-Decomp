@@ -725,3 +725,28 @@ battery save is unchanged. Private evidence is `copy_cold83.json` and
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Party controller storage and snapshot capture (2026-09-09)
+
+Three contiguous functions add 1,440 matching C bytes, reaching
+510,716 / 1,563,700 bytes (32.66%). The checked controller allocation is
+8,356 bytes and contains two 1,440-byte backup entities. Its 384-byte snapshot
+stores party flags, input masks, action selection, separation, two compact
+entity snapshots and two opaque 32-byte records. Capture selects live entities,
+backup entities or existing compact snapshots according to the backup flags.
+Initialization constructs the backups, clears the controller and sets the
+signed unknown byte at +0x55 to -1; destruction releases the backup array.
+
+A normal checkpoint-83 boot/load and save-block interaction verifies two
+complete controller initializations and two complete 384-byte snapshot writes
+from live entities. The return probes compare reserved bytes as well as
+transferred fields; all checks pass with no pending callbacks. Backup capture
+branches and backup destruction remain statically verified only. The source
+battery save is unchanged. Private evidence is `storage_cold83.json` under
+`build/runtime/eur_party_storage/`. The companion controller restoration
+routine remains assembly: a private C candidate has nine differing register
+uses in the two-member pointer loop. No claim of completion is made for it.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

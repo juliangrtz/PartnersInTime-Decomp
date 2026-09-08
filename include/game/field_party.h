@@ -4,9 +4,8 @@
 #include <game/field_entity.h>
 #include <game/field_resources.h>
 
-/* Partial views used by the paired-member and collision-state transitions.
- * The party entity extends FieldRuntimeEntity; neither view describes the
- * complete allocation. The low flag bytes save collision state, while the
+/* Checked allocation layouts with unknown interiors retained as opaque fields.
+ * The party entity extends FieldRuntimeEntity. The low flag bytes save collision state, while the
  * same word holds the movement mode used by the state dispatcher. */
 typedef struct FieldPartyEntity {
     FieldRuntimeEntity entity;
@@ -51,14 +50,28 @@ typedef struct FieldPartyEntity {
     u8 unknown_594[2];
     s8 unknown_596, unknown_597, unknown_598;
     u8 unknown_599[3];
+    u32 unknown_59c;
 } FieldPartyEntity;
-typedef char FieldPartyEntity_SizeCheck[sizeof(FieldPartyEntity) == 0x59c ? 1 : -1];
+typedef char FieldPartyEntity_SizeCheck[sizeof(FieldPartyEntity) == 0x5a0 ? 1 : -1];
+
+typedef struct FieldPartySnapshot FieldPartySnapshot;
+typedef struct FieldPartyStateRecord {
+    u32 unknown_00[8];
+} FieldPartyStateRecord;
+typedef char FieldPartyStateRecord_SizeCheck[sizeof(FieldPartyStateRecord) == 32 ? 1 : -1];
 
 typedef struct FieldPartyController {
-    struct {
-        u16 unknown_00 : 1, unknown_01 : 1, unknown_02_15 : 14;
-    } state;
-    u8 unknown_002[70];
+    union {
+        struct {
+            u16 unknown_00 : 1, unknown_01 : 1, unknown_02_15 : 14;
+        } state;
+        struct {
+            u16 members : 2, unknown_02_03 : 2, unknown_04_15 : 12;
+        } state_groups;
+    };
+    u8 unknown_002, unknown_003;
+    u16 input_masks[2];
+    FieldPartyStateRecord records[2];
     union {
         struct {
             FieldPartyEntity *leader, *follower;
@@ -66,20 +79,25 @@ typedef struct FieldPartyController {
         FieldPartyEntity *members[2];
     };
     struct {
-        u32 unknown_00_03 : 4, unknown_04 : 1, unknown_05 : 1, unknown_06 : 1;
+        u32 unknown_00_01 : 2, unknown_02 : 1, unknown_03 : 1, unknown_04 : 1, unknown_05 : 1, unknown_06 : 1;
         u32 field_screen : 1, previous_field_screen : 1, special_contact_mode : 1;
         u32 unknown_10_13 : 4, unknown_14 : 1, follower_rejoin_active : 1;
         u32 unknown_16 : 1, active_member : 1, movement_active : 1;
         u32 unknown_19 : 1, movement_state : 10, unknown_30_31 : 2;
     } flags;
-    u8 unknown_054[12];
+    u8 unknown_054;
+    s8 unknown_055;
+    u8 unknown_056[2];
+    u32 unknown_058, unknown_05c;
     fx32 separation_x, separation_y, separation_z;
-    u8 unknown_06c[8];
+    u32 unknown_06c;
+    u8 actions[4];
     union {
         u32 state_flags;
         struct {
             u32 unknown_00 : 1, unknown_01 : 1, unknown_02 : 1;
-            u32 unknown_03_04 : 2, unknown_05_17 : 13, movement_mode : 4, unknown_22_31 : 10;
+            u32 unknown_03_04 : 2, unknown_05 : 1, unknown_06_10 : 5, unknown_11_12 : 2;
+            u32 unknown_13 : 1, unknown_14_17 : 4, movement_mode : 4, unknown_22_31 : 10;
         } state_bits;
     };
     u8 unknown_078[16];
@@ -88,8 +106,14 @@ typedef struct FieldPartyController {
     FieldResourceContext **areas;
     struct FieldPartyController *paired;
     u8 *resources;
+    u8 unknown_944[3092];
+    struct {
+        u32 active : 1, movement_state : 10, unknown_11 : 1, snapshot_backed : 1, unknown_13_31 : 19;
+    } backup;
+    FieldPartyEntity backup_entities[2];
+    const FieldPartySnapshot *backup_snapshots[2];
 } FieldPartyController;
-typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x944 ? 1 : -1];
+typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20a4 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
