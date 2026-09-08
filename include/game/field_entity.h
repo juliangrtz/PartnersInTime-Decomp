@@ -324,6 +324,7 @@ typedef struct FieldEntity {
             u16 property_00a_unknown_12_14 : 3;
             u16 property_00a_unknown_15 : 1;
         } property_00a_bits;
+        struct { u16 unknown_00_06 : 7, unknown_07 : 1, unknown_08_15 : 8; } visibility_bits;
     };
     s16 unknown_00c;
     u8 unknown_00e[0xC2];
@@ -556,7 +557,8 @@ struct FieldRuntimeEntity {
     fx32 default_vertical_launch_velocity;
     fx32 default_gravity;
     fx32 terminal_fall_velocity;
-    u16 unknown_370, unknown_372;
+    s16 unknown_370;
+    u16 unknown_372;
     fx32 initial_vertical_launch_velocity, initial_gravity, initial_terminal_fall_velocity;
     fx32 frame_delta_z;
     fx32 previous_frame_delta_z;
@@ -570,6 +572,7 @@ struct FieldRuntimeEntity {
     union {
         u32 collision_state_flags;
         FieldCollisionStateFlags collision_state_flag_bits;
+        struct { u32 unknown_00_22 : 23, unknown_23 : 1, unknown_24_31 : 8; } collision_extra_bits;
         struct { u8 current, saved; u16 unknown_02; } collision_flag_bytes;
     };
     union {

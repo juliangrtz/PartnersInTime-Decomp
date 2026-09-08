@@ -41,12 +41,18 @@ typedef struct FieldPartyEntity {
     u8 unknown_56c[8];
     struct FieldPartyEntity *partner;
     struct FieldPartyEntity *auxiliary;
-    u8 unknown_57c[22];
+    u8 unknown_57c[20];
+    s16 saved_animation_speed;
     struct {
-        u16 unknown_00 : 1, saved_behavior : 3, behavior_saved : 1, unknown_05_15 : 11;
+        u16 unknown_00 : 1, saved_behavior : 3, behavior_saved : 1, unknown_05 : 1;
+        s16 resource_index : 8;
+        u16 unknown_14 : 1, unknown_15 : 1;
     } presentation;
+    u8 unknown_594[2];
+    s8 unknown_596, unknown_597, unknown_598;
+    u8 unknown_599[3];
 } FieldPartyEntity;
-typedef char FieldPartyEntity_SizeCheck[sizeof(FieldPartyEntity) == 0x594 ? 1 : -1];
+typedef char FieldPartyEntity_SizeCheck[sizeof(FieldPartyEntity) == 0x59c ? 1 : -1];
 
 typedef struct FieldPartyController {
     struct {

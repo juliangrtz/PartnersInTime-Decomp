@@ -673,3 +673,28 @@ unchanged. Private evidence is `party_movement55.json` and
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Compact field-party entity snapshots (2026-09-08)
+
+Two contiguous functions add 3,156 matching C bytes, reaching
+505,248 / 1,563,700 bytes (32.31%). The checked 136-byte snapshot layout
+packs animation, locomotion, presentation and contact state, stores linked
+entities by signed index, and preserves reserved bits and byte +0x51.
+Restoration resolves the index and synchronizes current and previous position,
+relative height and support clearance. Signed blink frames and resource indices
+remain explicit in the shared layouts; animation IDs are unsigned halfwords.
+
+Read-only entry/return probes on the rebuilt ROM check four complete 136-byte
+snapshot writes from checkpoint 83. A normal battery boot and load of the same
+checkpoint checks four complete 1,436-byte entity views after restoration,
+including bytes that must remain unchanged and the returned entity pointer.
+All comparisons pass, with no failed or pending callbacks. These runs exercise
+the null linked-entity case; non-null index resolution remains statically
+verified only. The cold-load screenshot shows the party in the Space Castle
+field beside the save block. The source battery save is unchanged. Private
+evidence is `snapshot83.json` and `snapshot_cold83.json` under
+`build/runtime/eur_party_snapshot/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

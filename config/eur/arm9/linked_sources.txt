@@ -653,3 +653,4 @@ src/overlay018/chomp_tether_setup.c
 src/field/field_party_pairing.cpp
 src/field/field_party_collision.cpp
 src/field/field_party_auxiliary.cpp
+src/field/field_party_snapshot.c
