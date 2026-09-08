@@ -606,3 +606,8 @@ src/overlay014/ov14_projectiles_are_idle.cpp
 src/overlay014/ov14_attack_update_sequence.cpp
 src/overlay013/ov13_attack_update_retreat.cpp
 src/overlay013/ov13_attack_show_landing_effect.cpp
+src/overlay026/ov26_attack_load_resource.cpp
+src/overlay026/ov26_attack_spawn_party_effect.cpp
+src/overlay026/ov26_attack_get_phase_position.cpp
+src/overlay026/ov26_attack_set_facing_animation.cpp
+src/overlay026/ov26_attack_initialize.cpp

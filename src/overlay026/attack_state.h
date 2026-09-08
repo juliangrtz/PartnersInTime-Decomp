@@ -19,7 +19,7 @@ typedef struct Overlay26TrackedObjectState {
             u8 unknown_flags_2_7 : 6;
         } flag_bits;
     };
-    u8 unknown_06[2];
+    u16 object_data_id;
     u16 object_id;
     s16 state;
 } Overlay26TrackedObjectState;
@@ -32,6 +32,7 @@ typedef struct Overlay26AttackState {
     void *async_tasks[OVERLAY26_ASYNC_TASK_COUNT];
     void **completion_link;
     u16 resource_id;
+    u8 unknown_46[26];
 } Overlay26AttackState;
 
 typedef struct Overlay26ActionStateView {
@@ -47,7 +48,7 @@ typedef struct Overlay26AttackOwnerView {
 typedef char Overlay26TrackedObjectState_SizeCheck[
     sizeof(Overlay26TrackedObjectState) == 0xC ? 1 : -1];
 typedef char Overlay26AttackState_SizeCheck[
-    sizeof(Overlay26AttackState) == 0x48 ? 1 : -1];
+    sizeof(Overlay26AttackState) == 0x60 ? 1 : -1];
 
 extern Overlay26AttackState *gOverlay26AttackState;
 

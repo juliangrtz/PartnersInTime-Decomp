@@ -146,3 +146,39 @@ The attack run used only ordinary button inputs and read-only RAM probes.
 The original battery save remained unchanged. The starting Petey battle state
 retains the previously documented temporary native encounter-command setup.
 The private trace is `build/runtime/eur_attack_helpers/trampoline_verified83.json`.
+
+### Item resources, positions and saved party state: 30% milestone (2026-09-08)
+
+Ten Overlay 26 functions add 1,672 matching C++ bytes. Matching C/C++ now
+covers 469,284 / 1,563,700 bytes (30.01%), independently of the additional
+symbolic-assembly coverage. The new source reconstructs item resource loading,
+launch trajectories, world and view positions, phase-specific offsets, party
+effect selection and ownership, facing animation and state initialization.
+Five source units preserve the contiguous native regions.
+
+The initializer establishes the full 96-byte allocation size. The previous
+72-byte prefix view is extended with an explicitly unknown tail, and the saved
+object-data ID at tracked-object offset 6 now has a typed field. The item actor's
+callback at offset 120 has a named view. Compile-time checks cover the state,
+tracked object, effect slot and item actor layouts. Native loads establish that
+the phase-animation table and save field at +0x558 are signed. No inline assembly
+was added. The full ROM remains byte-identical with SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`; linking, 74 tests, progress
+consistency and the public-content audit pass.
+
+The new checkpoint 83 supplied the battery save. Normal command-wheel and
+item-menu inputs first used a Red Pepper in a 1,320-frame run. Luigi then used
+an ordinary jump, and Petey's unblocked attack reduced Mario from 100 to 87 HP
+and Luigi from 114 to 101 HP. A 1,720-frame Mushroom run restored Mario to
+his 100-HP maximum and returned to Luigi's command wheel. No code or RAM state
+was patched during these runs, and the source battery save was unchanged.
+The starting encounter retains the earlier documented native-command setup.
+
+Full-byte-guarded, stack-matched hooks observed nine of the ten new functions.
+Read-only checks covered resource IDs, allocation sizes and encoded indices,
+all four saved actor states and original resources, the entry callback,
+world and phase positions, three launched-item destinations, three view
+positions using the live camera offsets, and effect-slot ownership. The
+facing-animation helper, used by the revival sequence, was not reached.
+Private evidence is in `item_red_pepper83.json`, `item_enemy_attack83.json`
+and `item_healing_verified83.json` under `build/runtime/eur_attack_helpers/`.
