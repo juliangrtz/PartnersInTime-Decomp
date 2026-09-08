@@ -115,3 +115,34 @@ results, entry timers and phases, 1,483 selected-target eligibility checks,
 effect release and final attack-work cleanup. The badge-dependent duration
 extension was not entered. Private evidence is in `flower_fire_verified83.json`
 and `flower_ice_auto83.json` under `build/runtime/eur_attack_helpers/`.
+
+### Trampoline motion, effects and battle restoration (2026-09-08)
+
+Seven Overlay 13 functions add 3,324 matching C++ bytes, reaching
+467,612 / 1,563,700 bytes (29.90%). Two contiguous source units reconstruct
+resource initialization, jump launch, bounce and airborne effects, retreat,
+landing feedback and final battle restoration. The 580-byte work allocation
+and 52-byte participant pair now have checked layouts. A model virtual method
+at vtable offset 0x38 receives the second model pointer shown by its native
+caller; its unknown name is retained pending fuller semantic evidence.
+
+The complete ROM is byte-identical with SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Linking, 74 tests, progress
+consistency and the public-content audit pass. These functions use ordinary
+C++ without new inline assembly. The larger entry sequencer remains an
+assembly gap because its compiler allocation differences are still unresolved.
+
+Normal menu inputs from the new checkpoint 83 selected Trampolines. The
+3,190-frame run exercised all seven functions and returned to Luigi's command
+wheel. Full-byte guards and stack-matched return hooks verified seven resource
+IDs, sizes and encoded load indices, saved background and original resources,
+six jump configurations, two bounce launches and copy positions, 404 arc
+completion results, 642 retreat completion results, and final background,
+anchor and work-allocation cleanup. Resource indices store the configured
+value plus one; motion destinations reside in channel parameters, separately
+from the object's accumulated motion target.
+
+The attack run used only ordinary button inputs and read-only RAM probes.
+The original battery save remained unchanged. The starting Petey battle state
+retains the previously documented temporary native encounter-command setup.
+The private trace is `build/runtime/eur_attack_helpers/trampoline_verified83.json`.

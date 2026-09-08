@@ -180,7 +180,7 @@ struct BattleModel {
     virtual void unknown_2c();
     virtual void unknown_30();
     virtual int set_animation(u8 animation_id, int argument_2);
-    virtual void unknown_38();
+    virtual void unknown_38(BattleModel *source);
     virtual int get_animation_id();
     virtual void unknown_40();
     virtual u32 get_sort_key();

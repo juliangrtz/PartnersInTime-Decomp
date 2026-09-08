@@ -604,3 +604,5 @@ src/overlay014/ov14_attack_release_enemy_effects.cpp
 src/overlay014/ov14_attack_schedule_next_participant.cpp
 src/overlay014/ov14_projectiles_are_idle.cpp
 src/overlay014/ov14_attack_update_sequence.cpp
+src/overlay013/ov13_attack_update_retreat.cpp
+src/overlay013/ov13_attack_show_landing_effect.cpp
