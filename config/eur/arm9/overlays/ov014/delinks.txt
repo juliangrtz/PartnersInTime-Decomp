@@ -21,3 +21,21 @@ src/overlay014/participant_position.cpp:
 
 src/overlay014/participant_init.cpp:
     .text start:0x020c5724 end:0x020c578c
+
+src/overlay014/ov14_attack_extend_duration.cpp:
+    .text start:0x020c2ae0 end:0x020c2af8
+
+src/overlay014/ov14_participant_end_fade.cpp:
+    .text start:0x020c2b78 end:0x020c2bb4
+
+src/overlay014/ov14_attack_release_enemy_effects.cpp:
+    .text start:0x020c3388 end:0x020c348c
+
+src/overlay014/ov14_attack_schedule_next_participant.cpp:
+    .text start:0x020c3588 end:0x020c3700
+
+src/overlay014/ov14_projectiles_are_idle.cpp:
+    .text start:0x020c43a8 end:0x020c4464
+
+src/overlay014/ov14_attack_update_sequence.cpp:
+    .text start:0x020c578c end:0x020c5e2c

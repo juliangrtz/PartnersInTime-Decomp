@@ -86,3 +86,32 @@ enemy animation restore and enemy center helper were not reached. These
 runs did not modify game state or code and used the existing, documented
 Petey encounter checkpoint. Private evidence is in `common_cannon_verified83.json`
 and `common_shell_verified83.json` under `build/runtime/eur_attack_helpers/`.
+
+### Flower attack sequence, targeting and effect ownership (2026-09-08)
+
+Eleven Overlay 14 functions add 2,604 matching C++ bytes, reaching
+464,288 / 1,563,700 bytes (29.69%). They cover the complete entry and main
+sequence, timeout extension, random target eligibility, participant scheduling,
+projectile availability, fade setup and stop, and allocation-state initialization
+and release for eighteen enemy effect objects. The shared 304-byte attack-work
+layout is now available separately from the Overlay 10 call declarations.
+
+The rebuilt ROM remains byte-identical with SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`; full linking, 74 tests,
+progress consistency and the public-content audit pass. The initial build caught
+an argument-width declaration changing an existing Overlay 10 caller's code;
+the caller declarations were separated and the full build was rerun successfully.
+
+Checkpoint 83 was used through the normal Bros. menu. A 2,790-frame Bro Flower
+run and a 2,830-frame Ice Flower run both returned to Luigi's command wheel.
+For Ice Flowers, read-only participant state drove 71 ordinary A/B presses,
+producing nine participant handoffs and 73 projectile-slot searches. No code,
+RAM state or battery save was modified during these runs. The starting Petey
+battle checkpoint uses the previously documented encounter setup.
+
+Guarded hooks observed ten of eleven new functions. RAM oracles verified all
+18 effect resources and initial fields, both fades, nine handoffs, free-slot
+results, entry timers and phases, 1,483 selected-target eligibility checks,
+effect release and final attack-work cleanup. The badge-dependent duration
+extension was not entered. Private evidence is in `flower_fire_verified83.json`
+and `flower_ice_auto83.json` under `build/runtime/eur_attack_helpers/`.

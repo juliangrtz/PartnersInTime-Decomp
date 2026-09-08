@@ -3,7 +3,7 @@ extern "C" {
 #include <game/battle_effect.h>
 extern u8 *data_ov002_020c0710;
 extern s8 data_ov014_020c6180[][4], data_ov014_020c6204[];
-extern int func_ov014_020c35d4(int);
+extern int Overlay14Attack_PickTarget(int);
 extern void func_ov002_02071750(BattleSceneObject *, int);
 extern void func_0200940c(BattleModel *, s16);
 extern void func_ov002_0206f1b8(BattleModel *);
@@ -11,7 +11,7 @@ extern void Overlay10Motion_StopAll(BattleSceneObject *);
 extern void func_ov002_0206b5c0(BattleImpactParticlePayload *);
 int Overlay14Attack_HasTarget(void)
 {
-    return func_ov014_020c35d4(0) != 0;
+    return Overlay14Attack_PickTarget(0) != 0;
 }
 
 void Overlay14Participant_BeginPrimaryThrow(Overlay14Participant *participant)

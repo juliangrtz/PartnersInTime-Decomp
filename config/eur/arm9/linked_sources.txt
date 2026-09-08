@@ -598,3 +598,9 @@ src/overlay010/ov10_attack_move_background.cpp
 src/overlay010/ov10_attack_show_rating.cpp
 src/overlay010/ov10_enemy_play_hit_reaction.cpp
 src/overlay010/ov10_party_average_stats.cpp
+src/overlay014/ov14_attack_extend_duration.cpp
+src/overlay014/ov14_participant_end_fade.cpp
+src/overlay014/ov14_attack_release_enemy_effects.cpp
+src/overlay014/ov14_attack_schedule_next_participant.cpp
+src/overlay014/ov14_projectiles_are_idle.cpp
+src/overlay014/ov14_attack_update_sequence.cpp
