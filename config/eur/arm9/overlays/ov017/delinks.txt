@@ -17,3 +17,27 @@ src/overlay017/attack_object.cpp:
 
 src/overlay017/attack_object_motion.cpp:
     .text       start:0x020c3570 end:0x020c3748
+
+src/overlay017/ov17_participant_get_travel_duration.cpp:
+    .text start:0x020c2b44 end:0x020c2b8c
+
+src/overlay017/ov17_participant_get_home_position.cpp:
+    .text start:0x020c2c28 end:0x020c2c94
+
+src/overlay017/ov17_attack_object_release_model.cpp:
+    .text start:0x020c4260 end:0x020c4474
+
+src/overlay017/ov17_participant_begin_exit.cpp:
+    .text start:0x020c4510 end:0x020c4620
+
+src/overlay017/ov17_participant_return_others.cpp:
+    .text start:0x020c468c end:0x020c4794
+
+src/overlay017/ov17_participant_set_animation.cpp:
+    .text start:0x020c47d0 end:0x020c4994
+
+src/overlay017/ov17_participant_begin_entry.cpp:
+    .text start:0x020c57a4 end:0x020c58cc
+
+src/overlay017/ov17_participant_hide.cpp:
+    .text start:0x020c5f90 end:0x020c60bc

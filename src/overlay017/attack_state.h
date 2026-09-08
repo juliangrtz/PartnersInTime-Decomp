@@ -3,6 +3,7 @@
 
 #include <nitro.h>
 #include <game/battle_scene.h>
+#include <game/overlay017_participant.h>
 
 enum Overlay17BattleStateConstant {
     OVERLAY17_ATTACK_STATE_COUNT = 8,
@@ -12,22 +13,23 @@ enum Overlay17BattleStateConstant {
 
 typedef struct Overlay17BattleStateView {
     u8 unknown_000[0x130];
-    u8 attack_states[OVERLAY17_ATTACK_STATE_COUNT]
-                    [OVERLAY17_ATTACK_STATE_SIZE];
-    u8 unknown_a70[0x14];
+    u8 attack_states[OVERLAY17_ATTACK_STATE_COUNT][OVERLAY17_ATTACK_STATE_SIZE];
+    Overlay17Participant *last_participant, *head;
+    int tuning, spawn_timer;
+    u16 input_mask, pressed_mask;
     u8 setup_flags;
     u8 control_flags;
     s8 active_attack_slot;
     u8 unknown_a87;
-    int party_animation_components[
-        OVERLAY17_PARTY_ANIMATION_COMPONENT_COUNT];
+    int party_animation_components[OVERLAY17_PARTY_ANIMATION_COMPONENT_COUNT];
 } Overlay17BattleStateView;
 
 typedef struct Overlay17AttackObject {
     BattleSceneObject object;
     int animation_component;
     int motion_variant;
-    u8 unknown_10c[0x44];
+    u8 unknown_10c[0x40];
+    s16 scale_x, scale_y;
     union {
         u32 flags;
         struct {
@@ -42,10 +44,8 @@ typedef struct Overlay17AttackObject {
     };
 } Overlay17AttackObject;
 
-typedef char Overlay17BattleStateView_SizeCheck[
-    sizeof(Overlay17BattleStateView) == 0xA90 ? 1 : -1];
-typedef char Overlay17AttackObject_SizeCheck[
-    sizeof(Overlay17AttackObject) == 0x154 ? 1 : -1];
+typedef char Overlay17BattleStateView_SizeCheck[sizeof(Overlay17BattleStateView) == 0xA90 ? 1 : -1];
+typedef char Overlay17AttackObject_SizeCheck[sizeof(Overlay17AttackObject) == 0x154 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {

@@ -16,7 +16,7 @@ extern u16 data_ov017_020c6c90[];
 void func_ov002_0207179c(BattlePartyActor *actor,
                          BattleSceneObject *object);
 void func_ov002_02071750(BattleSceneObject *object, int value);
-int func_ov017_020c5f90(void *attack_state);
+
 }
 
 /* Metrowerks emits C functions in reverse source order. */
@@ -83,7 +83,7 @@ int Overlay17Attack_ConfigurePartyObjects(void) {
     } while (party_index < OVERLAY17_PARTY_OBJECT_COUNT);
 
     if (battle_state->active_attack_slot != -1) {
-        return func_ov017_020c5f90(
+        return (int)Overlay17Participant_Hide((Overlay17Participant *)
             battle_state->attack_states[battle_state->active_attack_slot]);
     }
     return -1;

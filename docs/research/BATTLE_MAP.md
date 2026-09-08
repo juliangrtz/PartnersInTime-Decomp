@@ -1468,3 +1468,40 @@ hooks confirmed the room transition and party positions. The battery save SHA-1,
 did not enter the Overlay 25 callbacks, so their runtime branch coverage remains
 open. The older Princess Shroob snapshot did not advance reliably in this emulator
 and supplies no additional runtime evidence for this batch.
+
+## Copy Flowers participant and effect-object helpers
+
+Selecting Copy Flowers in the running game confirms Overlay 17's identity.
+Eighteen additional functions, 2,296 bytes, now match as linked C++. The recovered
+296-byte participant state contains its list link, animation component, timing
+parameters, effect handle, target, height and packed phase/input fields. Its
+40-byte state view overlaps the last four bytes of the common scene object,
+matching the native `object + 0x100` base. The existing 340-byte effect-object
+layout now also exposes its two scale values. Eight contiguous source units
+retain the unconverted intervening functions.
+
+The native list cleanup stops after unlinking the first idle entry: clearing its
+next pointer also ends traversal. The C preserves this behavior. The hide helper
+returns the native state pointer, including through the previously reconstructed
+party-object wrapper. These details were checked in both the linked image and
+live return/RAM records.
+
+A replay using story checkpoint 83 exercised 15 of the 18 new functions over
+2,110 frames. Thirteen functions had independent RAM assertions, including all
+eight participant initializers, all 40 effect-object initializers, model/resource
+selection, entry coordinates, phase writes, list changes, timing-table lookup,
+home coordinates and model cleanup. Ten normal button presses were selected from
+the participant formation and live timing countdown. The attack completed and
+returned to actor 57's command wheel. `BeginExit`, `BeginRecoveryAnimation` and
+`ResumeArc` were not entered; this is not complete branch coverage.
+
+The starting battery save is `83. Star Shrine - Third area (Before boss).sav`,
+SHA-1 `2cb577d3008975c390a2f00e2b2cd646e4005c1b`, and remained unchanged. To test the
+later Bros. inventory in a reproducible battle, the already established Petey
+Piranha encounter command from room 306, offset `0x2926`, temporarily replaced one
+decoded Field VM command. All 72 bytes were restored before battle transfer;
+the replay does not claim the native Star Shrine boss encounter. Subsequent menu
+selection and attack execution used normal buttons and read-only RAM/execution
+hooks. Private evidence is under `build/runtime/eur_attack_helpers/copy_verified_*`.
+The complete ROM remains byte-identical, SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`, and all 74 automated tests pass.

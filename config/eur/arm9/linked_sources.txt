@@ -565,3 +565,11 @@ src/overlay025/ov25_projectile_spawn_burst799.cpp
 src/overlay025/ov25_enemy_wait_return_variant.cpp
 src/overlay025/ov25_enemy_begin_projectile_phase.cpp
 src/overlay025/ov25_enemy_begin_load_and_move.cpp
+src/overlay017/ov17_participant_get_travel_duration.cpp
+src/overlay017/ov17_participant_get_home_position.cpp
+src/overlay017/ov17_attack_object_release_model.cpp
+src/overlay017/ov17_participant_begin_exit.cpp
+src/overlay017/ov17_participant_return_others.cpp
+src/overlay017/ov17_participant_set_animation.cpp
+src/overlay017/ov17_participant_begin_entry.cpp
+src/overlay017/ov17_participant_hide.cpp
