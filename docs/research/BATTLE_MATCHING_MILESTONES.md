@@ -2303,3 +2303,40 @@ exact binary matching. Private evidence: build/runtime/eur_shop_panels.
 Matching C/C++ reaches 409,084 of 1,563,700 bytes (26.16%). Module/symbol checks,
 74 tests, generated progress and public-content checks pass. The complete ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+
+### Scene object animation, resource selection and window commands (2026-09-08)
+
+Reconstructed 22 functions in four contiguous overlay-7 ranges, adding 3,772
+matching C/C++ bytes. Total: 412,856 / 1,563,700 (26.4025%). The new modules cover
+object property writes, primary/secondary model selection, animation limits,
+motion queries, resource-slot loading and the scene's window commands. Shared
+object fields now describe the existing point positions and four motion channels;
+compile-time checks retain the 228-byte object and 40-byte channel layouts.
+Explicit no-op switch entries and archive-tag cases are preserved from the
+original instructions. No new inline assembly was needed for this batch.
+
+Validation: native relink and rebuilt ROM are byte-identical to the European
+original (SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`); 74 tests, progress
+consistency, public-content audit and whitespace checks pass.
+
+Runtime evidence is local in `build/runtime/eur_scene_objects`. Using the supplied
+saves 65 (Thwomp Volcano after the eruption) and 86 (Shroob Castle), normal Start,
+D-pad and A/B inputs open the Bros.-Item demonstration list, move between demos
+and return to the field. The two runs cover 3,810 frames and enter 17 of the 22
+new functions. Every accepted function entry is checked against its entire
+original instruction sequence, and return hooks require the original SP, including
+nested wrappers sharing one return address. Read-only oracles check object/model
+selection, motion activity, animation counters and flags, resource IDs, property
+writes, and all 70 resource requests against the tagged archive/member mapping.
+They observe archive groups 0, 1 and 2, 26,166 active-model lookups, 24,036 animation
+limit updates and 1,423 property writes. Screenshots confirm the menu and the
+playing shell/other item demonstrations. Both source-save hashes remain unchanged.
+
+Coverage limits: the window close/open/query functions, slot swapping and the
+standalone vertical-flip helper were not reached in these runs. Their machine code
+matches exactly, but they have no new runtime coverage. The observed animation
+paths use secondary models; primary-model branches are likewise byte-verified.
+Resource readiness and property 24 have verified entry/return coverage but no
+independent result oracle in this probe. A separate cold-boot attempt with save 12
+did not enter the target routines and is not counted as runtime evidence.

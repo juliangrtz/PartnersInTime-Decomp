@@ -19,8 +19,8 @@ extern void func_0202cbd4(void *destination, u32 value, u32 size);
 extern void func_ov005_02068c54(void *renderable);
 extern void func_ov005_020698f0(int slot);
 extern void func_ov007_0208701c(SceneObject *object);
-extern void func_ov007_020894c4(void *renderable);
-extern SceneScriptState *func_ov007_02089348(u32 object_id);
+extern void SceneModel_Stop(void *renderable);
+extern SceneScriptState *SceneScript_GetObjectState(u32 object_id);
 
 /* Metrowerks emits C functions in reverse source order. */
 void SceneObjects_ClearPrimaryRange(u8 *manager) {
@@ -35,14 +35,14 @@ void SceneObjects_ClearPrimaryRange(u8 *manager) {
 
         func_ov007_0208701c(object);
         if (object->primary_renderable != 0) {
-            func_ov007_020894c4(object->primary_renderable);
+            SceneModel_Stop(object->primary_renderable);
             if (object->primary_renderable != 0) {
                 func_ov005_02068c54(object->primary_renderable);
                 object->primary_renderable = 0;
             }
         }
         if (object->secondary_renderable != 0) {
-            func_ov007_020894c4(object->secondary_renderable);
+            SceneModel_Stop(object->secondary_renderable);
             if (object->secondary_renderable != 0) {
                 func_ov005_02068c54(object->secondary_renderable);
                 object->secondary_renderable = 0;
@@ -52,7 +52,7 @@ void SceneObjects_ClearPrimaryRange(u8 *manager) {
         object->object_id = object_id;
     }
     for (object_id = 28; object_id < 40; object_id++) {
-        func_ov007_02089348(object_id)->vm_state.script = 0;
+        SceneScript_GetObjectState(object_id)->vm_state.script = 0;
     }
     for (slot = 36; slot < 52; slot++) {
         scene->work.task_slots[slot] = 0;

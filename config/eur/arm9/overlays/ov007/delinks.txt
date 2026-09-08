@@ -69,3 +69,15 @@ src/overlay007/properties.c:
 
 src/overlay007/animation_layer.cpp:
     .text start:0x020883a0 end:0x020883d0
+
+src/overlay007/scene_object_animation.cpp:
+    .text start:0x02088894 end:0x02089000
+
+src/overlay007/scene_object_resources.cpp:
+    .text start:0x02089178 end:0x0208953c
+
+src/overlay007/scene_window_close.cpp:
+    .text start:0x0208953c end:0x020895b8
+
+src/overlay007/scene_window_open.cpp:
+    .text start:0x02089670 end:0x02089980

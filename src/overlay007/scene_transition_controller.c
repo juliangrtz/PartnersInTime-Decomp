@@ -23,12 +23,12 @@ extern void func_ov005_02068908(
     void *renderable, int animation_id, int resource, int enabled,
     int frame);
 extern void SceneScript_LoadSecondaryArchive(u8 *manager, u8 scene_id);
-extern void func_ov007_02088c50(
+extern void SceneObject_SetAnimation(
     SceneObject *object, int variant, int enabled);
 extern void func_ov007_02086d08(
     SceneObject *object, int x, int y, int z);
 extern void func_ov007_0208701c(SceneObject *object);
-extern void func_ov007_020894c4(void *renderable);
+extern void SceneModel_Stop(void *renderable);
 
 static inline void SceneTransition_InitializeObject(
     SceneObject *object, int variant, int resource,
@@ -50,7 +50,7 @@ static inline void SceneTransition_InitializeObject(
         object->secondary_renderable, 1, resource, 1, -1);
     ((SceneRenderable *)object->secondary_renderable)->flags =
         (((SceneRenderable *)object->secondary_renderable)->flags & ~3) | 1;
-    func_ov007_02088c50(object, variant, 1);
+    SceneObject_SetAnimation(object, variant, 1);
     /* Existing secondary renderables keep their position on repeated updates. */
     func_ov007_02086d08(
         object, x - object->x, y - object->y, z - object->base_y);
@@ -59,7 +59,7 @@ static inline void SceneTransition_InitializeObject(
 static inline void SceneTransition_DestroySecondaryObject(
     SceneObject *object) {
     if (object->secondary_renderable != 0) {
-        func_ov007_020894c4(object->secondary_renderable);
+        SceneModel_Stop(object->secondary_renderable);
         if (object->secondary_renderable != 0) {
             func_ov005_02068c54(object->secondary_renderable);
             object->secondary_renderable = 0;

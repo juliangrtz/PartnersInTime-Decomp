@@ -513,3 +513,7 @@ src/overlay009/shop_stock_panel_queries.c
 src/overlay009/shop_stock_panel_lifecycle.c
 src/overlay009/shop_icon_transfer.c
 src/overlay009/shop_text_lookup.c
+src/overlay007/scene_object_animation.cpp
+src/overlay007/scene_object_resources.cpp
+src/overlay007/scene_window_close.cpp
+src/overlay007/scene_window_open.cpp

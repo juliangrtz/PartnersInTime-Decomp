@@ -10,9 +10,11 @@ typedef struct SceneObject SceneObject;
 typedef union SceneObjectFlags {
     u16 raw;
     struct {
-        u16 unknown_0_2 : 3;
+        u16 use_secondary_model : 1;
+        u16 unknown_1_2 : 2;
         u16 ready : 1;
-        u16 unknown_4_15 : 12;
+        u16 hide_after_animation : 1;
+        u16 unknown_5_15 : 11;
     } bits;
 } SceneObjectFlags;
 
@@ -58,12 +60,26 @@ struct SceneTask {
     u16 owner_id;
 };
 
+typedef struct SceneMotionChannel {
+    void (*callback)(SceneObject *, struct SceneMotionChannel *);
+    s32 elapsed_q8;
+    s16 duration;
+    u8 unknown_0a[14];
+    s16 parameters[8];
+} SceneMotionChannel;
+typedef char SceneMotionChannel_SizeCheck[sizeof(SceneMotionChannel) == 40 ? 1 : -1];
+
 struct SceneObject {
     u8 unknown_000[0x04];
     s16 x;
     s16 y;
     s16 base_y;
-    u8 unknown_00a[0xB2];
+    s16 previous_x, previous_y, previous_z;
+    s16 drawn_x, drawn_y, drawn_z;
+    s16 unknown_016;
+    s16 distance;
+    u16 unknown_01a;
+    SceneMotionChannel motion[4];
     SceneObject *render_next;
     u16 resource_id;
     u16 unknown_0c2;

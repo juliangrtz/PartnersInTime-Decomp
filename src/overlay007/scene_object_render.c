@@ -21,7 +21,7 @@ typedef struct SceneManager {
 extern void MIi_CpuClear16(u16 value, void *destination, u32 size);
 extern void func_ov005_02069084(void *renderable, int selector);
 extern void func_ov007_02086d60(void);
-extern void func_ov007_02089398(SceneObject *object);
+extern void SceneObject_UpdateAnimationLimit(SceneObject *object);
 
 void SceneObjects_UpdateAndDraw(u8 *manager) {
     SceneManager *scene = (SceneManager *)manager;
@@ -96,7 +96,7 @@ void SceneObjects_UpdateAndDraw(u8 *manager) {
             }
             object->render_next = scene->work.render_rows[row];
             scene->work.render_rows[row] = object;
-            func_ov007_02089398(object);
+            SceneObject_UpdateAnimationLimit(object);
         }
         object_id++;
         object++;

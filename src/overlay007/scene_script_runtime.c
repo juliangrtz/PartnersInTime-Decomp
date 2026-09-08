@@ -4,7 +4,7 @@ typedef void (*SceneTaskCallback)(SceneTask *task);
 
 extern u8 *data_ov007_020a6b90;
 
-extern SceneScriptState *func_ov007_02089348(u32 object_id);
+extern SceneScriptState *SceneScript_GetObjectState(u32 object_id);
 extern SceneTask *func_ov005_0206659c(
     SceneTaskCallback callback, int task_group, int priority
 );
@@ -32,7 +32,7 @@ SceneScriptState *SceneScript_GetState(u32 owner) {
     default:
         switch (owner & SCENE_SCRIPT_OWNER_TYPE_MASK) {
         case SCENE_SCRIPT_OWNER_OBJECT:
-            return func_ov007_02089348(
+            return SceneScript_GetObjectState(
                 owner & SCENE_SCRIPT_OWNER_ID_MASK
             );
         default:
@@ -47,7 +47,7 @@ void SceneScript_StartObjectScript(
     const SceneScriptState *parent,
     int queue_if_running
 ) {
-    SceneScriptState *state = func_ov007_02089348(object_id);
+    SceneScriptState *state = SceneScript_GetObjectState(object_id);
 
     if (state->vm_state.script != 0 && queue_if_running) {
         if (parent->owner >= SCENE_SCRIPT_OWNER_OBJECT) {

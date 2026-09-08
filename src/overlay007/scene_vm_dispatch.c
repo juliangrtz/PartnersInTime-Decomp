@@ -126,17 +126,17 @@ extern SceneVmManagerLayout *data_ov007_020a6b90;
 extern u8 *data_ov007_0208e1e0;
 extern u8 data_ov007_020905f0[];
 
-extern SceneScriptState *func_ov007_02089348(u32 object_id);
-extern void *func_ov007_020894a8(u32 object_id);
-extern int func_ov007_020891dc();
-extern int func_ov007_020891a4();
-extern void func_ov007_02089178();
-extern void func_ov007_02088e10();
-extern void func_ov007_02088b90();
+extern SceneScriptState *SceneScript_GetObjectState(u32 object_id);
+extern void *SceneObject_GetModelById(u32 object_id);
+extern int SceneResource_LoadSlot();
+extern int SceneResource_IsReady();
+extern void SceneObject_SetResourceId();
+extern void SceneObject_SetAnimationById();
+extern void SceneObjects_SwapSlots();
 extern int func_ov007_020883d0();
 extern void func_ov007_02088454();
 extern int func_ov007_02088468();
-extern void func_ov007_02088894();
+extern void SceneObject_SetProperty();
 extern void func_ov007_02089000(
     u16 object_id,
     int enabled,
@@ -164,7 +164,7 @@ extern void func_ov007_02086044();
 extern void func_ov007_02085f60();
 extern void func_ov007_02085de4();
 extern void func_ov007_02085998();
-extern int func_ov007_02088fe4();
+extern int SceneObject_IsMotionActiveById();
 extern void func_ov007_02087084();
 extern void *func_ov007_02086f74();
 extern void func_ov007_02087bf4();
@@ -192,11 +192,11 @@ extern void func_ov007_02083c20(
 extern int SceneScript_IsReady();
 extern void func_ov007_0208a368();
 extern int func_ov007_0208a348();
-extern int func_ov007_020896f4();
+extern int SceneWindow_Open();
 extern int func_ov007_02089980();
 extern int func_ov007_020895b8();
-extern int func_ov007_02089670();
-extern void func_ov007_0208953c();
+extern int SceneWindow_IsOpen();
+extern void SceneWindow_Close();
 extern s32 FX_Sqrt(s32 value);
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
 
@@ -248,7 +248,7 @@ static inline void SceneVm_WriteResult(
 }
 
 static inline SceneScriptState *SceneVm_GetObjectScript(u32 object_id) {
-    return func_ov007_02089348(object_id);
+    return SceneScript_GetObjectState(object_id);
 }
 
 static inline SceneScriptState *SceneVm_GetObjectScriptPool(void) {
@@ -272,7 +272,7 @@ int SceneVm_DispatchCommand(
     case SCENE_OP_LOAD_OBJECT_RESOURCE: {
         u16 object_id = ARG_U16(0);
         value = SceneVm_PackArgumentPair(command, 1);
-        if (!func_ov007_020891dc(object_id, value)) {
+        if (!SceneResource_LoadSlot(object_id, value)) {
             return SCRIPT_VM_CONTINUE;
         }
         return SceneVm_RewindAndYield(vm, state, SCENE_OP_LOAD_OBJECT_RESOURCE);
@@ -283,21 +283,21 @@ int SceneVm_DispatchCommand(
     case 0x038: return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_WAIT_OBJECT_RESOURCE:
-        if (!func_ov007_020891a4(ARG_U16(0))) {
+        if (!SceneResource_IsReady(ARG_U16(0))) {
             return SCRIPT_VM_CONTINUE;
         }
         return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_OBJECT_RESOURCE);
 
     case SCENE_OP_BIND_OBJECT_RESOURCE:
-        func_ov007_02089178(ARG_U16(0), ARG_U16(1));
+        SceneObject_SetResourceId(ARG_U16(0), ARG_U16(1));
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_ACTIVATE_OBJECT_RESOURCE:
-        resource = func_ov007_020894a8(ARG_U16(0));
+        resource = SceneObject_GetModelById(ARG_U16(0));
         if (resource != 0) {
             *(u32 *)((u8 *)resource + 0x7C) &= ~0x200;
         }
-        func_ov007_02088e10(ARG_U16(0), ARG(1), ARG(2));
+        SceneObject_SetAnimationById(ARG_U16(0), ARG(1), ARG(2));
         return SCRIPT_VM_CONTINUE;
 
     case 0x03C: return SCRIPT_VM_CONTINUE;
@@ -307,7 +307,7 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_YIELDED;
 
     case SCENE_OP_SWAP_OBJECT_SLOTS:
-        func_ov007_02088b90(ARG_U16(0), ARG_U16(1));
+        SceneObjects_SwapSlots(ARG_U16(0), ARG_U16(1));
         return SCRIPT_VM_CONTINUE;
 
     case 0x040: return SCRIPT_VM_CONTINUE;
@@ -346,7 +346,7 @@ int SceneVm_DispatchCommand(
         }
         /* fallthrough */
     case SCENE_OP_SET_OBJECT_PROPERTY:
-        func_ov007_02088894(ARG_U16(0), ARG_U16(1), ARG(2));
+        SceneObject_SetProperty(ARG_U16(0), ARG_U16(1), ARG(2));
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_ALIGN_OBJECTS: {
@@ -379,8 +379,8 @@ int SceneVm_DispatchCommand(
             strh r0, [object, #0xd8]
         }
 
-        resource = func_ov007_020894a8(ARG_U16(0));
-        other = func_ov007_020894a8(ARG_U16(1));
+        resource = SceneObject_GetModelById(ARG_U16(0));
+        other = SceneObject_GetModelById(ARG_U16(1));
         if (resource != 0 && other != 0) {
             ((SceneResource *)resource)->flags.bits.render_group =
                 ((SceneResource *)other)->flags.bits.render_group;
@@ -686,7 +686,7 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_WAIT_OBJECT_MOTION:
-        if (!func_ov007_02088fe4(ARG_U16(0), ARG_U16(1))) {
+        if (!SceneObject_IsMotionActiveById(ARG_U16(0), ARG_U16(1))) {
             return SCRIPT_VM_CONTINUE;
         }
         return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_OBJECT_MOTION);
@@ -1061,7 +1061,7 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_BRANCH_IF_OBJECT_MOTION:
-        value = func_ov007_02088fe4(ARG_U16(0), ARG_U16(1));
+        value = SceneObject_IsMotionActiveById(ARG_U16(0), ARG_U16(1));
         if (ARG_U16(2) == value) {
             state->script += ARG(3);
         }
@@ -1142,7 +1142,7 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_CREATE_UI_ELEMENT:
         value = VM_ReadVariable(SCRIPT_VM_VAR_SAVE_WORDS_40, vm, state);
-        value = func_ov007_020896f4(
+        value = SceneWindow_Open(
             ARG(1),
             ARG(0),
             ARG(2),
@@ -1188,7 +1188,7 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_WAIT_UI_ELEMENT_READY:
         if (func_ov007_020895b8(ARG(0)) &&
-            func_ov007_02089670(ARG(0))) {
+            SceneWindow_IsOpen(ARG(0))) {
             return SceneVm_RewindCommandAndYield(vm, state, command);
         }
         return SCRIPT_VM_CONTINUE;
@@ -1200,7 +1200,7 @@ int SceneVm_DispatchCommand(
         return SceneVm_RewindCommandAndYield(vm, state, command);
 
     case SCENE_OP_DESTROY_UI_ELEMENT:
-        func_ov007_0208953c(ARG(0));
+        SceneWindow_Close(ARG(0));
         return SCRIPT_VM_CONTINUE;
 
     case 0x0CE: return SCRIPT_VM_CONTINUE;
