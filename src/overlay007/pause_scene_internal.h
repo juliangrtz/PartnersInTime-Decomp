@@ -8,12 +8,21 @@ extern "C" {
 #include <game/overlay005_display.h>
 #include <game/overlay005_archive.h>
 #include <game/sprite_output.h>
+#include <game/palette_animation.h>
 #include <nitro/gx_init.h>
 }
 extern "C" {
 #include <game/rumble.h>
 #include <game/scene_script.h>
 }
+struct Overlay5DisplayResources {
+    u8 unknown000[40];
+    void *oam;
+    Overlay5Archive *archive;
+    GameSpriteAllocation allocations[2];
+    GameSpritePalette palettes[4];
+};
+typedef char DisplayResourcesSizeCheck[sizeof(Overlay5DisplayResources) == 176 ? 1 : -1];
 struct PausePanel {
     virtual void destroy();
     virtual void deleteInstance();
@@ -21,26 +30,38 @@ struct PausePanel {
 struct PauseSceneWork {
     u8 unknown00[0x1e];
     u16 input_mask;
-    u8 unknown20[8];
-    void *owned28, *owned2c;
-    u8 unknown30[0x50];
+    u8 unknown20[4];
+    s16 saved_party_state;
+    u16 unknown026;
+    void *owned28, *owned2c, *image30, *palette34;
+    u8 unknown038[40];
+    void *image60, *palette64;
+    u8 unknown068[24];
     void *owned80;
-    u8 unknown84, tutorial, background_dirty, unknown87;
+    u8 initialized, tutorial, background_dirty, unknown087;
     void *owned88, *owned8c, *owned90, *owned94;
-    u8 palette98[20], paletteac[20];
-    void *ownedc0;
-    void *ownedc4[2], *ownedcc[2], *ownedd4[2];
-    void *owneddc, *ownede0, *ownede4;
-    u8 palettee8[20], palettefc[20];
-    u8 unknown110[0x1ac];
+    GameSpritePalette palette98, paletteac;
+    void *ownedc0, *ownedc4[2], *ownedcc[2], *ownedd4[2], *owneddc, *ownede0, *ownede4;
+    GameSpritePalette palettee8, palettefc;
+    u8 unknown110[4];
+    s8 menu_count;
+    u8 unknown115;
+    u8 available[4], displayed[4];
+    u8 party_count;
+    u8 unknown11f;
+    u8 special_available, abilities[6];
+    u8 unknown127[0x195];
     void *renderer;
-    u8 unknown2c0[32];
+    u8 unknown2c0[4];
+    s8 selected[4];
+    u8 unknown2c8[24];
     GameSpriteAllocation main_allocation, sub_allocation;
     void *sprites[48];
-    PausePanel *panel;
-    u8 unknown3d4[90600 - 0x3d4];
+    GamePaletteEffectController *palette_controller;
+    GamePaletteEffectEntry palette_entries[129];
+    u8 unknown_de8[90600 - 0xde8];
 };
-typedef char PauseSceneWorkSizeCheck[sizeof(PauseSceneWork) == 90600 ? 1 : -1];
+typedef char PauseSceneWorkSize[sizeof(PauseSceneWork) == 90600 ? 1 : -1];
 struct PauseSavedState {
     u8 unknown[1370];
     s16 tutorial;
@@ -58,7 +79,7 @@ extern u8 data_0205a00c;
 extern void *SceneManager_LoadResources(void *);
 extern void SceneManager_Shutdown(void *), SceneController_Create(u8 *), SceneTask_LoadArchiveMember(u8 *);
 extern void SceneScript_LoadPrimaryArchive(u8 *, int, u16);
-extern void func_ov007_02081664(int), func_ov007_02070b50(PauseSceneTask *), func_ov007_0208a918(void);
+extern void func_ov007_02081664(int), func_ov007_0208a918(void);
 extern void func_ov007_0206e918(PauseMenuElement *), func_ov007_020762dc(void *);
 extern void func_ov005_02068c54(void *);
 
@@ -98,9 +119,10 @@ extern void func_02035fd0(int), func_0203613c(int), func_02035e04(int), func_020
     func_020359c4(int), func_02035a40(int), func_020358ac(int), func_02035938(int);
 extern void MI_CpuFill8(void *, u8, u32);
 
-extern u8 data_ov005_0206a180[], data_0206032c[];
-#define ARCHIVE (*(Overlay5Archive **)(data_ov005_0206a180 + 44))
-#define OAM_BUFFERS (*(u8 **)(data_ov005_0206a180 + 40))
+extern Overlay5DisplayResources data_ov005_0206a180;
+extern u8 data_0206032c[];
+#define ARCHIVE data_ov005_0206a180.archive
+#define OAM_BUFFERS ((u8 *)data_ov005_0206a180.oam)
 #define REG16(a) (*(vu16 *)(a))
 #define REG32(a) (*(vu32 *)(a))
 extern PauseMenuElement *func_ov005_0206659c(void (*)(PauseMenuElement *), int, int);

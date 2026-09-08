@@ -112,7 +112,7 @@ PauseSceneTask *PauseScene_Init(PauseSceneTask *task, u32 priority, u32 unused)
     MI_CpuFill8(&WORK, 0, 90600);
     MI_CpuFill8(data_ov007_0208e1e8, 0, 9224);
     GameRumble_SetPatterns(data_ov007_0208d738, 8);
-    func_ov007_02070b50(task);
+    PauseScene_LoadResources(task);
     task->menu = func_ov005_0206659c(func_ov007_0206e918, 1, 1);
     task->phase = 0;
     if (SAVED_TUTORIAL)
@@ -159,9 +159,9 @@ PauseSceneTask *PauseScene_Destroy(PauseSceneTask *task)
         func_ov005_02068c54(WORK.renderer);
         WORK.renderer = 0;
     }
-    if (WORK.panel) {
-        DeletePausePanel((PausePanel *)WORK.panel);
-        WORK.panel = 0;
+    if (WORK.palette_controller) {
+        DeletePausePanel((PausePanel *)WORK.palette_controller);
+        WORK.palette_controller = 0;
     }
     func_ov005_02067424(ARCHIVE, 2);
     func_ov005_02067424(ARCHIVE, 1);
@@ -195,10 +195,10 @@ PauseSceneTask *PauseScene_Destroy(PauseSceneTask *task)
         GameHeap_DeleteArray(WORK.owned94);
         WORK.owned94 = 0;
     }
-    GameSpritePalette_Unlink((GameSpritePalette *)WORK.palettee8);
-    GameSpritePalette_Unlink((GameSpritePalette *)WORK.palettefc);
-    GameSpritePalette_Unlink((GameSpritePalette *)WORK.palette98);
-    GameSpritePalette_Unlink((GameSpritePalette *)WORK.paletteac);
+    GameSpritePalette_Unlink(&WORK.palettee8);
+    GameSpritePalette_Unlink(&WORK.palettefc);
+    GameSpritePalette_Unlink(&WORK.palette98);
+    GameSpritePalette_Unlink(&WORK.paletteac);
     if (WORK.owned90) {
         GameHeap_DeleteArray(WORK.owned90);
         WORK.owned90 = 0;

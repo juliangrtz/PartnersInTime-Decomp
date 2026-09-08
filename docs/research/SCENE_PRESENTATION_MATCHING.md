@@ -52,3 +52,33 @@ The normal `tools/build_nds.ps1 -DisableDataMods` build reproduces reference
 SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
 Progress artifacts are regenerated and checked with `tools/generate_progress.py`.
 All 66 tests pass with `python -m pytest tests -q --import-mode=importlib`.
+
+## Pause resource initialization
+
+`PauseScene_LoadResources` replaces all 5,168 bytes at `0x02070B50` with matching
+C++. It copies the resource-selection tables, derives the available/displayed
+party and menu entries from VM variables, allocates 48 sprites and the palette
+controller, and loads both screens' character, tilemap and palette data. The
+shared pause-work layout now describes these fields and the 129 palette-effect
+entries used by both initialization and teardown. Localized assets retain their
+original selection rules; their IDs remain numeric where no semantic name is
+established.
+
+Read-only emulator replays opened and closed the menu using normal Start/B
+inputs on supplied story saves 65 and 83. The first used its compatible derived
+field state (440 frames); the second cold-booted the battery save (2,733 frames).
+Each accepted function entry compared the entire routine with the original ROM.
+VM-read results independently predicted party availability, displayed members,
+selected member, menu count and six ability flags. Return hooks checked those
+values, the saved party field, 48 sprite pointers, 129 palette entries and the
+shared image/palette buffers. Teardown verified the owned allocations were
+freed and cleared. Both runs passed; ability flags differed between the saves
+and matched their respective VM results. Language 1 and a four-member party
+were exercised; alternate languages and reduced-party branches remain runtime
+coverage gaps.
+
+Save SHA-1 values: 65 `0844b75810855bc3a738122b29382ed5a6c9f983`,
+83 `2cb577d3008975c390a2f00e2b2cd646e4005c1b`. Source saves stayed unchanged.
+Full module/symbol checks, all 74 tests, progress validation and the public-content
+audit pass. The rebuilt ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`.

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 27.98 percent is matching C/C++ and 28.33 percent has matching C/C++ or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 28.31 percent is matching C/C++ and 28.66 percent has matching C/C++ or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -13,19 +13,19 @@
 <rect class="bg" width="1200" height="760" rx="12"/>
 <text x="28.0" y="34.0" class="eyebrow">DECOMPILATION PROGRESS · EUROPEAN ROM</text>
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
-<text x="28.0" y="113.0" class="percent">28.0%</text>
+<text x="28.0" y="113.0" class="percent">28.3%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C/C++</text>
-<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">28.33% source-understood</text>
+<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">28.66% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="320.103" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="348.103" y="130" width="3.954" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="323.884" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="351.884" y="130" width="3.954" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C/C++  427.3 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C/C++  432.3 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
 <text x="267.0" y="181.0" class="legend">Symbolic ASM  5.3 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
-<text x="487.0" y="181.0" class="legend">Remaining  1.07 MiB</text>
+<text x="487.0" y="181.0" class="legend">Remaining  1.06 MiB</text>
 <text x="1172.0" y="181.0" class="legend" text-anchor="end">Rectangle area = code bytes</text>
 <rect class="cell" x="30.00" y="226.00" width="119.37" height="80.75" fill="#263244"><title>Overlay 00 · func_ov000_0209418c · 27.8 KiB · remaining</title></rect>
 <rect class="cell" x="149.37" y="226.00" width="98.54" height="80.75" fill="#2dd4a0"><title>Overlay 00 · field_vm_dispatch · 22.9 KiB · matching C/C++</title></rect>
@@ -3229,7 +3229,7 @@
 <rect class="component" x="561.44" y="224.00" width="310.67" height="315.20"/>
 <text x="568.4" y="242.0" class="module">ARM9 resident</text>
 <rect class="cell" x="563.44" y="541.20" width="48.30" height="63.53" fill="#2dd4a0"><title>Overlay 07 · scene_vm_dispatch · 9.0 KiB · matching C/C++</title></rect>
-<rect class="cell" x="563.44" y="604.73" width="48.30" height="35.70" fill="#263244"><title>Overlay 07 · func_ov007_02070b50 · 5.0 KiB · remaining</title></rect>
+<rect class="cell" x="563.44" y="604.73" width="48.30" height="35.70" fill="#2dd4a0"><title>Overlay 07 · pause_resources · 5.0 KiB · matching C/C++</title></rect>
 <rect class="cell" x="563.44" y="640.43" width="48.30" height="28.99" fill="#263244"><title>Overlay 07 · func_ov007_0206b080 · 4.1 KiB · remaining</title></rect>
 <rect class="cell" x="563.44" y="669.42" width="48.30" height="26.58" fill="#263244"><title>Overlay 07 · func_ov007_0207c140 · 3.8 KiB · remaining</title></rect>
 <rect class="cell" x="611.75" y="541.20" width="28.14" height="40.89" fill="#263244"><title>Overlay 07 · func_ov007_0206c6a0 · 3.4 KiB · remaining</title></rect>

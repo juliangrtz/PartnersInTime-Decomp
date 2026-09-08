@@ -16,6 +16,7 @@ extern "C" {
 GameIrqTask *PauseSceneIrq_Destroy(GameIrqTask *task);
 GameIrqTask *PauseSceneIrq_Delete(GameIrqTask *task);
 PauseSceneTask *PauseScene_Destroy(PauseSceneTask *task);
+void PauseScene_LoadResources(PauseSceneTask *task);
 PauseSceneTask *PauseScene_Init(PauseSceneTask *task, u32 priority, u32 unused);
 GameIrqTask *PauseSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
 #ifdef __cplusplus
