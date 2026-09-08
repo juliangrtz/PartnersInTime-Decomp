@@ -71,20 +71,33 @@ typedef struct GameWindowManager {
     union { u32 raw; struct { u32 enabled:1, main_map_dirty:1, sub_map_dirty:1, dirty:1, main_count:5, sub_count:5, main_bg:2, sub_bg:2, main_priority:2, sub_priority:2, main_bg_palette:4, sub_bg_palette:4, buffer_mode:2; } bits; } state;
     union { u32 raw; struct { u32 main_palette:4, sub_palette:4, reserved8:17, fixed_main_scroll:1, fixed_sub_scroll:1, current_window:5; } bits; } display;
     const u32 *tiles;
-    u8 reserved5c[3748];
+    const void *palette_data;
+    u8 reserved60[3744];
     GameWindow *windows;
     union { u8 *back_buffer; GameWindowTextCache *text_cache; };
     u16 window_capacity;
-    u8 reservedf0a[6];
+    u8 reservedf0a[2];
+    GameWindow *main_head_marker;
     GameWindow *main_windows;
-    u8 reservedf14[12];
+    GameWindow *main_last, *main_tail_marker, *sub_head_marker;
     GameWindow *sub_windows;
-    u8 reservedf24[8];
+    GameWindow *sub_last, *sub_tail_marker;
     s16 main_scroll_x, main_scroll_y, sub_scroll_x, sub_scroll_y;
     s16 main_origin_x, main_origin_y, sub_origin_x, sub_origin_y;
     u16 reservedf3c, reservedf3e;
     GameIrqTask *irq_task;
 } GameWindowManager;
+typedef struct GameWindowBuffers {
+    u8 *main, *sub;
+    u32 main_capacity, sub_capacity;
+} GameWindowBuffers;
+typedef struct GameWindowTilemaps {
+    u16 *main, *sub;
+    u16 main_size, sub_size;
+} GameWindowTilemaps;
+typedef char GameWindowManagerSizeCheck[sizeof(GameWindowManager) == 3908 ? 1 : -1];
+typedef char GameWindowBuffersSizeCheck[sizeof(GameWindowBuffers) == 16 ? 1 : -1];
+typedef char GameWindowTilemapsSizeCheck[sizeof(GameWindowTilemaps) == 12 ? 1 : -1];
 extern const GameWindowSkin *data_0205671c[];
 typedef char GameWindow_SizeCheck[sizeof(GameWindow) == 204 ? 1 : -1];
 typedef char GameWindowProperties_SizeCheck[sizeof(GameWindowProperties) == 28 ? 1 : -1];
@@ -93,6 +106,14 @@ typedef char GameWindowTextCache_SizeCheck[sizeof(GameWindowTextCache) == 212 ? 
 #ifdef __cplusplus
 extern "C" {
 #endif
+GameWindowManager *GameWindow_ConstructComplete(GameWindowManager *manager, int priority, int unused,
+    u8 main_bg, u8 sub_bg, u8 main_priority, u8 sub_priority,
+    const GameWindowBuffers *buffers, const GameWindowTilemaps *tilemaps, int configure,
+    GameSpriteAnimator *animator);
+GameWindowManager *GameWindow_ConstructBase(GameWindowManager *manager, int priority, int unused,
+    u8 main_bg, u8 sub_bg, u8 main_priority, u8 sub_priority,
+    const GameWindowBuffers *buffers, const GameWindowTilemaps *tilemaps, int configure,
+    GameSpriteAnimator *animator);
 void GameWindow_ApplyScroll(GameWindowManager *manager);
 void GameWindow_Upload(GameWindowManager *manager, GameWindow *window);
 void GameWindow_UploadDirty(GameWindowManager *manager);

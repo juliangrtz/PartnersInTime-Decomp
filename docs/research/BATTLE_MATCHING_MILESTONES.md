@@ -2376,3 +2376,31 @@ non-deleting scene and IRQ destructors are byte-exact but were not entered by
 these normal exit paths. Cleanup observations through the original deleting
 scene destructor are recorded as supporting lifecycle evidence, not as runtime
 execution of the new non-deleting C function.
+
+### Window construction and scene text archive ownership (2026-09-08)
+
+Eight more functions add 3,076 matching C/C++ bytes, bringing the total to
+418,924 / 1,563,700 (26.7905%). Both resident window constructors use one readable
+inlined implementation with typed optional pixel buffers and tilemaps. The scene
+text archive unit supplies entry lookup/size, asynchronous load dispatch and
+completion polling, and window/text cleanup. Window list sentinels and optional
+buffer ownership now have explicit fields and size checks.
+
+The complete ROM remains byte-identical, SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. All 74 tests, progress checks,
+public-content audit and whitespace checks pass. Read-only emulator probes in
+`build/runtime/eur_window_archive` use supplied save 65 via its compatible derived
+state and save 103 through a direct cold boot. Normal menu/demo controls cover
+4,773 frames. Both constructors execute: five constructions validate argument
+handling, pointers/capacities, list sentinels, initial flags, scrolling state,
+IRQ ownership and 19,200 bytes of cleared tilemaps. Scene window destruction
+executes twice and clears the manager and archive slots; neither run owns loaded
+text arrays at that point. Existing pause, scene-object and resource checks pass.
+Both source-save hashes remain unchanged.
+
+The five text-entry/load helpers were not entered in these menu demonstrations;
+their new evidence is exact machine-code matching. A separate save-1 attempt
+reached only the resident base constructor because its early-story state did not
+open this menu, so it is not counted in the successful runtime runs. Larger
+scene-window setup and text decoding candidates remain private because of
+register-allocation differences and contribute no matching-C credit.

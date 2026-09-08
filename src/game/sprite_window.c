@@ -31,9 +31,6 @@ extern u8 data_020565f0[];
 extern void *data_020565d4[];
 extern void MI_CpuFill8(void *destination, u8 value, u32 size);
 extern void func_0202cbd4(void *destination, int value, u32 size);
-extern GameWindowManager *func_0201f9b4(GameWindowManager *manager, int heap, int priority,
-    u8 main_bg, u8 sub_bg, u8 main_priority, u8 sub_priority, const u32 *buffers,
-    const u16 *tilemaps, int configure, GameSpriteAnimator *animator);
 extern GameWindowManager *GameWindow_DestroyBase(GameWindowManager *);
 
 void GameSpriteWindow_Release(GameSpriteWindowManager *manager, s16 index)
@@ -92,8 +89,8 @@ void GameSpriteWindow_ReleaseSlots(GameSpriteWindowManager *manager) {
 GameSpriteWindowManager *GameSpriteWindow_Construct(GameSpriteWindowManager *manager, int heap,
         int priority, u8 main_bg, u8 sub_bg, u8 main_priority, u8 sub_priority,
         const u32 *buffers, const u16 *tilemaps, int configure, GameSpriteAnimator *animator) {
-    func_0201f9b4(&manager->base, heap, priority, main_bg, sub_bg, main_priority, sub_priority,
-                  buffers, tilemaps, configure, animator);
+    GameWindow_ConstructBase(&manager->base, heap, priority, main_bg, sub_bg, main_priority, sub_priority,
+                  (const GameWindowBuffers *)buffers, (const GameWindowTilemaps *)tilemaps, configure, animator);
     manager->base.vtable = data_020565d4;
     manager->slots = 0;
     manager->state.bytes.count = 0;

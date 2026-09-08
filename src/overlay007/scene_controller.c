@@ -24,7 +24,7 @@ extern int func_ov005_02066920(
     void *archive_manager, int archive_slot, int member_id,
     void *destination, int argument_4, int argument_5);
 extern int func_ov005_02067424(void *archive_manager, int archive_slot);
-extern void func_ov007_0208a480(void);
+extern void SceneWindow_Destroy(void);
 extern void SceneTransitionController_Update(SceneControllerTask *task);
 
 /* Metrowerks emits C functions in reverse source order. */
@@ -35,7 +35,7 @@ SceneControllerManagerLayout *SceneManager_Shutdown(
         manager->controller_task = 0;
     }
     SceneManager_ClearRuntime(manager);
-    func_ov007_0208a480();
+    SceneWindow_Destroy();
 
     if (manager->common_archives[5] != 0) {
         GameHeap_DeleteArray(manager->common_archives[5]);

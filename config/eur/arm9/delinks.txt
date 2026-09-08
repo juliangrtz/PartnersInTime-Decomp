@@ -739,3 +739,6 @@ src/nitro/os/os_reset.c:
 
 src/nitro/fs/fs_open_commands.c:
     .text       start:0x0203d738 end:0x0203d7dc
+
+src/game/window_construct.c:
+    .text start:0x0201f50c end:0x0201fe5c

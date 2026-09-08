@@ -190,8 +190,8 @@ extern void func_ov007_02083c20(
     SceneObject *object, int tile_id, int palette, int x, int y
 );
 extern int SceneScript_IsReady();
-extern void func_ov007_0208a368();
-extern int func_ov007_0208a348();
+extern void SceneText_LoadArchive();
+extern int SceneText_IsLoadComplete();
 extern int SceneWindow_Open();
 extern int func_ov007_02089980();
 extern int func_ov007_020895b8();
@@ -1131,11 +1131,11 @@ int SceneVm_DispatchCommand(
     case 0x0C6: return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_LOAD_UI_RESOURCE:
-        func_ov007_0208a368(ARG_U16(0));
+        SceneText_LoadArchive(ARG_U16(0));
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_WAIT_UI_RESOURCE:
-        if (func_ov007_0208a348()) {
+        if (SceneText_IsLoadComplete()) {
             return SCRIPT_VM_CONTINUE;
         }
         return SceneVm_RewindCommandAndYield(vm, state, command);

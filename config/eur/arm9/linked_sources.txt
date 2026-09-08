@@ -520,3 +520,5 @@ src/overlay007/scene_window_open.cpp
 src/overlay007/pause_irq_destroy.cpp
 src/overlay007/pause_scene_lifecycle.cpp
 src/overlay007/pause_irq_init.cpp
+src/game/window_construct.c
+src/overlay007/scene_text_archive.cpp

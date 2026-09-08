@@ -90,3 +90,6 @@ src/overlay007/pause_scene_lifecycle.cpp:
 
 src/overlay007/pause_irq_init.cpp:
     .text start:0x02073404 end:0x02073428
+
+src/overlay007/scene_text_archive.cpp:
+    .text start:0x0208a318 end:0x0208a5cc

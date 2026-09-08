@@ -4,6 +4,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void SceneWindow_Destroy(void);
+void SceneText_LoadArchive(int entry);
+int SceneText_IsLoadComplete(void);
+u32 SceneText_GetEntrySize(const u32 *archive, int index);
+void *SceneText_GetEntry(const u32 *archive, int index);
 void SceneWindow_Close(int index);
 int SceneWindow_IsOpen(int index);
 int SceneWindow_Open(int text, int screen, int x, int y, int skin, int mode, int flag4, int style, int flag9,
