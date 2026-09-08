@@ -591,3 +591,10 @@ src/overlay012/ov12_attack_hide_object.cpp
 src/overlay012/ov12_controller_begin_finish.cpp
 src/overlay012/ov12_controller_schedule_launch.cpp
 src/overlay012/ov12_attack_initialize.cpp
+src/overlay010/ov10_object_get_graphic_bounds.cpp
+src/overlay010/ov10_enemy_restore_hit_animation.cpp
+src/overlay010/ov10_party_has_badge_two.cpp
+src/overlay010/ov10_attack_move_background.cpp
+src/overlay010/ov10_attack_show_rating.cpp
+src/overlay010/ov10_enemy_play_hit_reaction.cpp
+src/overlay010/ov10_party_average_stats.cpp

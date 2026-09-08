@@ -65,7 +65,7 @@ void PocketChomp_Initialize(PocketChomp *center, BattleSceneObject *linked)
     center->linked_object = linked;
     center->timer = 0;
     center->bits.phase = 0;
-    func_ov010_020c259c(center->party_snapshot, 4);
+    Overlay10Party_AverageStats(center->party_snapshot, 4);
 }
 
 void PocketChomp_Hide(PocketChomp *center)

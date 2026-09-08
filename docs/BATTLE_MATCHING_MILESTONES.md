@@ -64,3 +64,25 @@ launch states, cleanup, and all 1,104 computed heights: 548 ordinary samples,
 above-threshold final-position branch were not reached. Private evidence is in
 `cannon_setup83.json` and `cannon_auto_verified83.json` under
 `build/runtime/eur_attack_helpers/`.
+
+### Shared Bros. attack setup and feedback (2026-09-08)
+
+Eleven Overlay 10 functions add 2,260 matching C++ bytes, reaching
+461,684 / 1,563,700 bytes (29.53%). They reconstruct party-stat averaging,
+badge selection, entry configuration and background movement, shared damage
+and rating calls, enemy hit animation and position helpers. Existing attack
+callers now use the recovered names. The rebuilt ROM remains byte-identical
+with SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; all build checks,
+74 tests, progress checks and the public-content audit pass.
+
+Checkpoint 83 supplied the unchanged battery save described above. Normal
+menu input selected Cannonballers; four timed A/B/X/Y inputs completed the
+attack in a 2,750-frame run. A separate 2,110-frame Green Shell run returned
+to Luigi's command wheel as well. Full-byte-guarded, stack-matched hooks
+observed eight of eleven reconstructed functions. Independent read-only RAM
+checks covered the averaged actor statistics, badge result, initial transition
+configuration, callback, timers and rating flags. The graphic-bound wrapper,
+enemy animation restore and enemy center helper were not reached. These
+runs did not modify game state or code and used the existing, documented
+Petey encounter checkpoint. Private evidence is in `common_cannon_verified83.json`
+and `common_shell_verified83.json` under `build/runtime/eur_attack_helpers/`.

@@ -91,10 +91,10 @@ extern Overlay11ControllerConfig data_ov011_020c6000[], data_ov011_020c6140[][6]
 extern Overlay11ParticleConfig data_ov011_020c5fac[];
 extern int data_ov011_020c5f64[], data_ov011_020c5f6c[], data_ov011_020c5f74[];
 Overlay11AttackWork *func_ov010_020c2978(BattlePartyActor *, int, int);
-int func_ov010_020c13bc();
+int Overlay10Party_HasBadgeTwo();
 void func_ov011_020c2ae0();
 void func_ov011_020c57cc(BattlePartyActor *);
-void func_ov010_020c1d14(BattlePartyActor *, void (*)(BattlePartyActor *));
+void Overlay10Attack_BeginEntry(BattlePartyActor *, void (*)(BattlePartyActor *));
 
 void func_ov002_02071c44(int);
 

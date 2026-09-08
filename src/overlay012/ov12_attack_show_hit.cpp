@@ -42,13 +42,13 @@ void Overlay12Attack_ShowHit(int actor_id, Overlay12AttackController *controller
             BattleEffect_SetVariant(6);
             BattleSpriteEffect_Spawn(286, position.x, position.y, position.z, 256);
             BattleModelEffect_Spawn(406, 0, position.x, position.y, position.z, 256);
-            func_ov010_020c20f8(actor_id, 407);
+            Overlay10Enemy_PlayHitReaction(actor_id, 407);
             BattleSound_Play(49, 0, 0, 0);
         } else {
             BattleEffect_SetVariant(1);
             BattleSpriteEffect_Spawn(286, position.x, position.y, position.z, 256);
             BattleModelEffect_Spawn(406, 0, position.x, position.y, position.z, 256);
-            func_ov010_020c20f8(actor_id, 407);
+            Overlay10Enemy_PlayHitReaction(actor_id, 407);
             BattleSound_Play(56, 0, 0, 0);
         }
         BattleScreenEffect_StartSecondary(5, 1, 0);
@@ -56,7 +56,7 @@ void Overlay12Attack_ShowHit(int actor_id, Overlay12AttackController *controller
     } else {
         BattleEffect_SetVariant(-1);
         BattleModelEffect_Spawn(418, 0, position.x, position.y, position.z, 256);
-        func_ov010_020c20f8(actor_id, 408);
+        Overlay10Enemy_PlayHitReaction(actor_id, 408);
         BattleSound_Play(60, 0, 0, 0);
     }
     func_ov002_020719e4(object, popup_x, popup_y, 1);

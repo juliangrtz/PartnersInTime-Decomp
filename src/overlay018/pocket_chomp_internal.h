@@ -38,7 +38,7 @@ extern int func_ov002_020b8a68(BattleSceneObject *, int, int, int);
 extern void func_ov002_0206eb78(BattleSceneObject *, BattleSceneObject *, int);
 extern void func_0200940c(BattleModel *, s16);
 extern void func_ov018_020c2e50(void *, int);
-extern void func_ov010_020c259c(void *, int);
+extern void Overlay10Party_AverageStats(void *, int);
 extern int func_ov018_020c2c14(u16, BattleSceneObject *);
 extern void func_ov018_020c4c70(PocketChompSupport *, PocketChomp *);
 extern void func_ov018_020c3ea8(PocketChomp *);

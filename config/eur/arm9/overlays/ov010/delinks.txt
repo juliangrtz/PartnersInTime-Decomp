@@ -22,3 +22,24 @@ src/overlay010/target_selection.c:
 
 src/overlay010/party_effect_position.c:
     .text start:0x020c28f4 end:0x020c2978
+
+src/overlay010/ov10_object_get_graphic_bounds.cpp:
+    .text start:0x020c0fc0 end:0x020c1024
+
+src/overlay010/ov10_enemy_restore_hit_animation.cpp:
+    .text start:0x020c11a8 end:0x020c1304
+
+src/overlay010/ov10_party_has_badge_two.cpp:
+    .text start:0x020c13bc end:0x020c1410
+
+src/overlay010/ov10_attack_move_background.cpp:
+    .text start:0x020c1c84 end:0x020c1e1c
+
+src/overlay010/ov10_attack_show_rating.cpp:
+    .text start:0x020c1e50 end:0x020c1f48
+
+src/overlay010/ov10_enemy_play_hit_reaction.cpp:
+    .text start:0x020c20f8 end:0x020c21d0
+
+src/overlay010/ov10_party_average_stats.cpp:
+    .text start:0x020c259c end:0x020c28f4
