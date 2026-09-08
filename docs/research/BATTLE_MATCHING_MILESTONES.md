@@ -2152,3 +2152,37 @@ build/runtime/eur_game_over_entry. Matching C/C++ is 392,952 of 1,563,700 bytes
 (25.13%). Module/symbol checks, 74 tests, generated progress and public-content
 checks pass. The ROM remains byte-identical with SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Title resources and staff-credit scene lifecycle
+
+Eighteen functions add 4,708 matching C bytes: title resource loading,
+save-dependent greeting selection, title deletion and IRQ tasks; the staff-credit
+constructor, geometry setup, resources, deleting/non-deleting destructors and IRQ
+tasks; and two credit animation acceleration/ease-out calculations. Typed views
+describe the 48-byte title task, 4,200-byte credit task and resource-table strides.
+The title constructor and several rendering callbacks still have compiler-layout
+differences and are left for later work.
+
+Normal cold replays of story saves 1, 30 and 103 run 2,033 frames each. Each enters
+title resource loading, IRQ construction, deletion and 231 frame uploads. The
+greeting oracle verifies Mario alone and the full-party selection from live slot
+flags; the archive oracle checks all seven resource requests per replay.
+
+A controlled entry from the compatible state generated from supplied save 86
+substitutes decoded Field VM opcode 0x122 for one dispatch. All 72 command bytes
+are restored at the credits helper after argument delivery. The normal transition
+then enters the credit constructor, geometry, resource loader and IRQ task.
+Across 2,401 frames, 4,096 acceleration and 2,486 ease-out calculations agree with
+the live motion records. All ten archive entries are checked. Four texture and
+four palette transfers, totaling 40,128 bytes, match their source buffers in live
+VRAM after DMA completion and before native bank restoration. The captured image
+shows the original scrolling staff credits and animated picture tiles.
+
+Every accepted function entry checks the entire original function byte sequence
+to reject overlay-address aliases. No supplied save changes. Non-deleting
+destructors and credit deletion are not entered; their verification remains exact
+binary matching. Private evidence is in build/runtime/eur_frontend.
+
+Matching C/C++ reaches 397,660 of 1,563,700 bytes (25.43%). Module/symbol checks,
+74 tests, generated progress and public-content checks pass. The complete ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

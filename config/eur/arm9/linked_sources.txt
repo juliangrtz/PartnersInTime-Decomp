@@ -482,3 +482,12 @@ src/overlay008/save_menu_background.c
 src/overlay008/save_menu_object_strip.c
 src/overlay008/save_menu_text_lookup.c
 src/overlay008/save_menu_text_init.c
+src/overlay006/title_irq_destroy.c
+src/overlay006/title_resources.c
+src/overlay006/title_scene_destroy.c
+src/overlay006/title_irq_init.c
+src/overlay006/credits_irq_destroy.c
+src/overlay006/credits_motion.c
+src/overlay006/credits_resources.c
+src/overlay006/credits_scene_lifecycle.c
+src/overlay006/credits_irq_init.c

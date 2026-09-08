@@ -5,3 +5,30 @@
     .data       start:0x0207b0a0 end:0x0207c4e0 kind:data align:32
     .bss        start:0x0207c4e0 end:0x020997e0 kind:bss align:32
 
+
+src/overlay006/title_irq_destroy.c:
+    .text       start:0x020751a0 end:0x020751f0
+
+src/overlay006/title_resources.c:
+    .text       start:0x020754e4 end:0x020758d8
+
+src/overlay006/title_scene_destroy.c:
+    .text       start:0x020759c8 end:0x02075b60
+
+src/overlay006/title_irq_init.c:
+    .text       start:0x02075eb0 end:0x02075f44
+
+src/overlay006/credits_irq_destroy.c:
+    .text       start:0x02075f44 end:0x02075f94
+
+src/overlay006/credits_motion.c:
+    .text       start:0x02077c00 end:0x02077ce8
+
+src/overlay006/credits_resources.c:
+    .text       start:0x0207a1dc end:0x0207a788
+
+src/overlay006/credits_scene_lifecycle.c:
+    .text       start:0x0207a8f8 end:0x0207ade4
+
+src/overlay006/credits_irq_init.c:
+    .text       start:0x0207af14 end:0x0207af38
