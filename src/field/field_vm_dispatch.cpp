@@ -83,8 +83,6 @@ extern int func_ov000_0209df70(void *party_manager);
 extern void func_ov000_0209ce44(void *party_controller, int member,
                                 int character_id);
 extern void func_ov000_0209ce00(void *party_controller);
-extern void func_ov000_0209bc84(void *party_controller, int facing_direction,
-                                int instant, int reserved);
 extern void func_ov000_02071a38(u8 *field_context, int layout_mode,
                                 int instant);
 extern void func_ov000_02089da8(void *baby_party_controller, int visible);
@@ -606,7 +604,7 @@ enum FieldVmOpcode {
     FIELD_VM_WAIT_BABY_PIGGYBACK_MOUNT = 0x0B4,
     FIELD_VM_SET_PARTY_MEMBER_CHARACTER_ID = 0x0B5,
     FIELD_VM_RESET_PARTY_MEMBER_CHARACTERS = 0x0B6,
-    FIELD_VM_SET_PARTY_FACING_DIRECTION = 0x0B7,
+    FIELD_VM_SET_PARTY_INDICATOR_VISIBILITY = 0x0B7,
     FIELD_VM_SET_PARTY_MEMBER_SWITCHING_ENABLED = 0x0B8,
     FIELD_VM_LEGACY_NOOP_0B9 = 0x0B9,
     FIELD_VM_SET_FIELD_PARTY_HUD_LAYOUT = 0x0BA,
@@ -3579,9 +3577,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             party_manager, arguments[0]));
         break;
 
-    case FIELD_VM_SET_PARTY_FACING_DIRECTION:
-        func_ov000_0209bc84(
-            FieldVm_GetPartyController(
+    case FIELD_VM_SET_PARTY_INDICATOR_VISIBILITY:
+        FieldParty_SetIndicatorVisibility(
+            (FieldPartyController *)FieldVm_GetPartyController(
                 party_manager, arguments[0]),
             arguments[1] != 0, arguments[2] != 0, 0);
         break;

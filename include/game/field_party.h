@@ -99,7 +99,11 @@ typedef struct FieldPartyController {
     u8 actions[4];
     union {
         u32 state_flags;
-        struct { u32 unknown_00_08 : 9, sliding : 1, unknown_10_31 : 22; } indicator_bits;
+        struct {
+            u32 visible : 1, unknown_01_04 : 4, slide_from_bottom : 1;
+            u32 visibility_transition : 1, unknown_07 : 1, unknown_08 : 1;
+            u32 sliding : 1, swap_active : 1, unknown_11_31 : 21;
+        } indicator_bits;
         struct {
             u32 unknown_00 : 1, unknown_01 : 1, unknown_02 : 1;
             u32 unknown_03_04 : 2, unknown_05 : 1, unknown_06_10 : 5, unknown_11_12 : 2;
@@ -109,7 +113,7 @@ typedef struct FieldPartyController {
     union {
         u8 unknown_078[16];
         struct {
-            u16 unknown_078_halfword;
+            union { u16 unknown_078_halfword; u16 indicator_frame; };
             s16 indicator_velocity, indicator_x, indicator_y;
             s16 indicator_offset_x, indicator_offset_y, indicator_slide_y;
             u16 unknown_086;
@@ -142,6 +146,10 @@ void FieldParty_UpdateFollowing(FieldPartyController *party);
 void FieldParty_EnableFollowing(FieldPartyController *party);
 int FieldParty_CheckFollowerRejoin(FieldPartyController *party);
 void FieldParty_RejoinFollower(FieldPartyController *party, int instant);
+void FieldParty_UpdateIndicatorVisibility(FieldPartyController *party);
+void FieldParty_SetIndicatorVisibility(FieldPartyController *party, int visible, int instant, int transfer);
+void FieldParty_UpdateIndicatorSwap(FieldPartyController *party);
+void FieldParty_StartIndicatorSwap(FieldPartyController *party);
 void FieldParty_SetIndicatorLayer(FieldPartyController *party, int alternate);
 void FieldParty_UpdateIndicatorPositions(FieldPartyController *party);
 void FieldParty_UpdateIndicatorSlide(FieldPartyController *party);

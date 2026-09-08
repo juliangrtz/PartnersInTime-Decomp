@@ -979,3 +979,31 @@ under `build/runtime/eur_party_following/`.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Party indicator visibility and swap animation (2026-09-09)
+
+Four more functions complete the adjacent indicator module, adding 1,668
+matching C bytes and reaching 525,944 / 1,563,700 bytes (33.63%). They show or
+hide indicators immediately or through a vertical transition, coordinate area
+refreshes, and play the eleven-frame table-driven swap animation. The verified
+flow also corrects opcode `0x0B7`: its C name and research description now identify
+indicator visibility. The old `set_party_facing_direction` string is retained
+as a legacy serialized name so existing editable script files remain compatible.
+
+A normal checkpoint-83 boot/load and pause round trip verify 1,618 idle visibility
+updates against the complete party controller. A separate `R`, `L`, `X`, `Y`
+replay exercises two complete eleven-frame swaps: both starts, all 22 updates,
+the frame counter's terminal transition, offsets from the live animation table,
+eleven sets of indicator positions, and both renderer-layer selections pass.
+Nested following initialization also checks its forwarded parameters. The replay
+ends at the game's save-choice menu, reached through ordinary controls; it does
+not select a save operation. All checks pass with no pending callbacks and the
+source battery save remains unchanged.
+
+The actual show/hide transition branches, reversal and area-transfer paths were
+not reached by these replays and remain statically verified only. Private
+evidence is `visibility_cold83.json`, `visibility_pause83.json` and
+`visibility_controls83.json` under `build/runtime/eur_party_visibility/`.
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
