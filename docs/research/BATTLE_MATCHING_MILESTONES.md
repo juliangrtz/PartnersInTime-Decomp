@@ -2011,3 +2011,39 @@ build/runtime/eur_field_vertical_boundaries and build/runtime/eur_field_vertical
 Matching C/C++ is 376,864 of 1,563,700 bytes (24.10%). All module/symbol checks,
 74 tests, generated progress and public-content checks pass. The rebuilt ROM
 retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Frame snapshots, placement and bounds resources
+
+Ten functions add 1,256 matching C++ bytes. Planar/spatial BeginFrame routines
+snapshot position, facing, locomotion and contact state, then clear the current
+frame's accumulators. Spatial helpers bind navigation records, synchronize
+absolute position, face a live target and update support clearance. Bounds
+resource binders decode relative offsets and refresh bounds through the virtual
+interface; animation setup and renderer stop complete the batch. The larger
+spatial update and planar bounds-selection routine remain private candidates
+because of persistent compiler allocation/addressing differences.
+
+Three normal runs use the new story saves: a 2,293-frame cold replay of save 18
+and 322-frame keypad continuations of saves 1 and 103. Read-only entry/return
+hooks verify 32,935 planar and 27,043 spatial snapshots, including nonzero XY/Z
+deltas and contact masks; 12,812 support-clearance updates; 372 animation setups;
+50 navigation bindings; 21 spatial bounds bindings with resources; four planar
+bindings without resources; and two naturally triggered face-target calls.
+Every checked postcondition passes. Full loaded function bytes are checked
+before accepting traces. An initial harness cleanup failure was resolved by
+running each emulator instance in its own process and removing callbacks before
+cleanup; all three recorded runs exit successfully.
+
+Ten further controlled Field VM cases verify absolute/relative XYZ setters and
+all eight cardinal/diagonal facing directions. The full substituted command is
+restored at function entry; temporary placement and target coordinates are
+restored immediately after return checks. All pass. No supplied save, ROM or
+script bytecode is changed. The renderer-stop helper, planar non-null resource
+binding and support-clearance branch with a live support pointer are not entered
+by these normal replays; exact matching remains their current verification.
+
+Evidence remains private under build/runtime/eur_frame_snapshot_live and
+build/runtime/eur_field_placement_boundaries. Matching C/C++ is 378,120 of
+1,563,700 bytes (24.18%). All module/symbol checks, 74 tests, generated progress
+and public-content checks pass. The rebuilt ROM retains SHA-1
+BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

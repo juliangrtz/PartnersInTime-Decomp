@@ -23,6 +23,15 @@ void FieldVertical_StartToHeight(FieldRuntimeEntity *entity, fx32 height, fx32 g
 void FieldVertical_Update(FieldRuntimeEntity *entity);
 void FieldVertical_Stop(FieldRuntimeEntity *entity);
 
+/* BeginFrame snapshots previous state and clears this frame's motion/contact accumulators. */
+void FieldEntity2D_BeginFrame(FieldRuntimeEntity *entity);
+void FieldEntity3D_BeginFrame(FieldRuntimeEntity *entity);
+void FieldEntity3D_SetPosition(FieldRuntimeEntity *entity, fx32 x, fx32 y, fx32 z);
+void FieldEntity_FaceTarget(FieldRuntimeEntity *entity, FieldRuntimeEntity *target);
+void FieldEntity3D_UpdateSupportClearance(FieldRuntimeEntity *entity);
+void FieldEntity3D_SetNavigationSurfaces(FieldRuntimeEntity *entity, FieldNavigationSurface *surfaces,
+                                         const void *resource);
+
 #ifdef __cplusplus
 }
 #endif

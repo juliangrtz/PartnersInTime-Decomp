@@ -45,9 +45,6 @@ extern void func_ov000_020a40f8(FieldEntity *entity, int snap_to_target,
                                 int reserved);
 extern void func_ov000_020ae520(FieldEntity *entity);
 extern void func_ov000_020b1394(FieldEntity *entity);
-extern void func_ov000_020a6c7c(FieldEntity *entity, int animation_id,
-                                int resource_selector, int restart,
-                                int refresh);
 extern void func_ov000_020a6d68(FieldEntity *entity,
                                 const void *resource_record,
                                 int reserved_2, int reserved_3,
@@ -71,8 +68,6 @@ extern void func_ov000_020b26ac(
     int duration, int plane, int direction, int secondary_axis_scale,
     int stop_on_contact_mask, int stop_on_state_mask,
     int snap_to_final_angle, int reserved);
-extern void func_ov000_020b42c8(FieldEntity *entity, fx32 x, fx32 y,
-                                fx32 z);
 extern void func_ov000_020736a4(u8 *field_context, FieldEntity *entity,
                                 int argument_2, int argument_3);
 extern void func_ov000_020b2020(FieldEntity *entity, int minimum_x,
@@ -89,7 +84,6 @@ extern void func_ov000_020b1a24(FieldEntity *entity, const void *path,
                                 int path_size_halfwords);
 extern void func_ov000_020b18e4(FieldEntity *entity);
 extern void func_ov000_020b1a08(FieldEntity *entity);
-extern void func_ov000_020b426c(FieldEntity *entity, FieldEntity *target);
 extern void func_ov000_020713bc(u8 *field_context, FieldEntity *entity,
                                 int effect_slot, int animation_id,
                                 int position_mode, s16 x, s16 y,
@@ -1786,8 +1780,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     &runtime_entity->base, resource_record, 0, 0,
                     arguments[2] == -1 ? 0 : arguments[2], 1, 0);
             } else if (arguments[2] != -1) {
-                func_ov000_020a6c7c(
-                    &runtime_entity->base, arguments[2], -1, 1, 1);
+                FieldEntity_SetResourceAnimation(
+                    runtime_entity, arguments[2], -1, 1, 1);
             }
             if (arguments[3] != -1) {
                 FieldTimedRenderer_SetLoopCount(
@@ -1869,8 +1863,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     runtime_entity->saved_animation_id;
                 runtime_entity->saved_presentation_flag_bits.
                     has_saved_resource_animation = 0;
-                func_ov000_020a6c7c(
-                    &runtime_entity->base, runtime_entity->animation_id,
+                FieldEntity_SetResourceAnimation(
+                    runtime_entity, runtime_entity->animation_id,
                     -1, 1, 1);
             }
             break;
@@ -2315,8 +2309,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     arguments[3] += runtime_entity->position_y;
                     arguments[4] += runtime_entity->position_z;
                 }
-                func_ov000_020b42c8(
-                    &runtime_entity->base, arguments[2],
+                FieldEntity3D_SetPosition(
+                    runtime_entity, arguments[2],
                     arguments[3], arguments[4]);
                 if (FieldVm_GetSpecialPartyState(field_context)
                             ->camera_focus_enabled != 0 &&
@@ -2676,8 +2670,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_FACE_ENTITY_TOWARD_ENTITY:
-            func_ov000_020b426c(
-                entity, FieldVm_GetEntityByIndex(field_context, arguments[1]));
+            FieldEntity_FaceTarget(
+                runtime_entity, (FieldRuntimeEntity *)FieldVm_GetEntityByIndex(field_context, arguments[1]));
             break;
 
         case FIELD_VM_SET_FIELD_BLOCK_IDLE_BOBBING_ENABLED:

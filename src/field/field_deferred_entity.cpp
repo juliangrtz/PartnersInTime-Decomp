@@ -67,7 +67,7 @@ void FieldDeferredEntity_BeginTimedPause(FieldDeferredEntity *entity)
     entity->runtime.base.pause_script();
     /* Three seconds at the game's 60 Hz update rate. */
     entity->control.pause_frames = 180;
-    entity->control.unknown_22 = (entity->runtime.unknown_3a0_bits.unknown_20_25 & 5) != 0;
+    entity->control.unknown_22 = (entity->runtime.unknown_3a0_bits.previous_contact_mask_b & 5) != 0;
 }
 
 void FieldDeferredEntity_ResumeScript(FieldDeferredEntity *entity)

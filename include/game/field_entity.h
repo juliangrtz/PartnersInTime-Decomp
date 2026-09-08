@@ -142,7 +142,7 @@ typedef struct FieldEntityRuntimeFlags {
     u32 alternate_collision_faces : 1;
     u32 horizontal_sync_dirty : 1;
     u32 vertical_sync_dirty : 1;
-    u32 unknown_06_08 : 3, contact_mask_b : 6, unknown_15_20 : 6;
+    u32 unknown_06_08 : 3, contact_mask_b : 6, previous_contact_mask_b : 6;
     u32 unknown_21 : 1, unknown_22 : 1, unknown_23_24 : 2;
     u32 auto_auxiliary_priority : 1;
     u32 auto_priority_0 : 1;
@@ -156,7 +156,7 @@ typedef struct FieldEntityFieldStateFlags {
     u32 contact_mode : 3;
     u32 unknown_03 : 1;
     u32 vertical_motion_active : 1;
-    u32 unknown_05 : 1, vertical_motion_paused : 1, unknown_07 : 1, unknown_08_10 : 3;
+    u32 previous_vertical_motion_active : 1, vertical_motion_paused : 1, unknown_07 : 1, unknown_08_10 : 3;
     u32 turn_to_interactor : 1;
     u32 track_ground : 1;
     u32 ignore_navigation_obstacle : 1;
@@ -274,7 +274,7 @@ typedef struct FieldEntity {
     virtual void pause_script();
     virtual void resume_script();
     virtual int get_property(int property_id);
-    virtual void unknown_1c();
+    virtual void update_bounds();
     virtual void unknown_20();
     virtual void reset_motion_parameters();
     virtual void unknown_28();
@@ -361,7 +361,9 @@ typedef struct FieldInteractionBounds {
     s8 minimum_x, maximum_y, width, height, vertical_extent;
 } FieldInteractionBounds;
 typedef struct FieldAnimationBoundsIndex {
-    u8 unknown_00[2], bounds_index, unknown_03[3];
+    u8 unknown_00[2];
+    s8 bounds_index;
+    u8 unknown_03[3];
 } FieldAnimationBoundsIndex;
 typedef char FieldInteractionBounds_SizeCheck[sizeof(FieldInteractionBounds) == 5 ? 1 : -1];
 typedef char FieldAnimationBoundsIndex_SizeCheck[sizeof(FieldAnimationBoundsIndex) == 6 ? 1 : -1];
@@ -371,6 +373,19 @@ typedef struct FieldLocomotionParameters {
     fx32 deceleration, reverse_deceleration, turn_speed_limit;
 } FieldLocomotionParameters;
 typedef char FieldLocomotionParameters_SizeCheck[sizeof(FieldLocomotionParameters) == 24 ? 1 : -1];
+
+/* The spatial update walks 92-byte navigation records ordered by sort_x. */
+typedef struct FieldNavigationSurface {
+    union {
+        u32 flags;
+        struct { u32 unknown_00 : 1, end : 1, unknown_02_31 : 30; } bits;
+    };
+    u8 unknown_04[8];
+    fx32 sort_x;
+    u8 unknown_10[0x3C];
+    fx32 min_x, max_x, min_y, max_y;
+} FieldNavigationSurface;
+typedef char FieldNavigationSurface_SizeCheck[sizeof(FieldNavigationSurface) == 92 ? 1 : -1];
 
 struct FieldRenderObject {
 #ifdef __cplusplus
@@ -471,10 +486,10 @@ struct FieldRuntimeEntity {
     fx32 movement_speed, movement_velocity_x, movement_velocity_y, unknown_134;
     FieldLocomotionParameters locomotion, initial_locomotion;
     fx32 frame_delta_x, frame_delta_y;
-    u8 unknown_170[8];
+    fx32 previous_frame_delta_x, previous_frame_delta_y;
     u16 movement_direction;
-    u16 unknown_17a, locomotion_state, previous_locomotion_state;
-    u8 locomotion_category, unknown_181[3];
+    u16 previous_movement_direction, locomotion_state, previous_locomotion_state;
+    u8 locomotion_category, previous_locomotion_category, unknown_182[2];
     union {
         u32 base_state_flags;
         FieldBaseStateFlags base_state_flag_bits;
@@ -494,7 +509,8 @@ struct FieldRuntimeEntity {
     u16 saved_animation_id;
     u16 saved_model_animation;
     s16 saved_animation_frame;
-    u8 unknown_1a6[0x3A];
+    s16 unknown_1a6[4], unknown_1ae[4];
+    u8 unknown_1b6[0x2A];
     FieldRenderObject *render_object;
     u8 unknown_1e4[0x10];
     FieldLinearController linear_controller;
@@ -504,14 +520,17 @@ struct FieldRuntimeEntity {
         FieldTransformFlags transform_flag_bits;
     };
     u8 unknown_282[0x2E];
-    u8 unknown_2b0[8];
-    s8 unknown_2b8, unknown_2b9;
+    FieldNavigationSurface *navigation_surfaces;
+    const void *navigation_resource;
+    s8 support_entity_index, previous_support_entity_index;
     u16 unknown_2ba;
     fx32 position_z;
     fx32 relative_height;
-    u8 unknown_2c4[4];
+    fx32 support_clearance;
     fx32 previous_position_z;
-    u8 unknown_2cc[0x18];
+    fx32 previous_relative_height, previous_support_clearance;
+    const FieldInteractionBounds *body_bounds, *navigation_bounds;
+    const void *body_bounds_lookup, *navigation_bounds_lookup;
     s8 unknown_2e4[4];
     s32 body_corner_angles[4];
     fx32 body_min_x;
@@ -526,7 +545,8 @@ struct FieldRuntimeEntity {
     fx32 navigation_min_y;
     fx32 navigation_max_y;
     fx32 navigation_vertical_extent;
-    u8 unknown_334[0x20];
+    u8 unknown_334[0x10];
+    fx32 swept_min_x, swept_min_y, swept_max_x, swept_max_y;
     fx32 vertical_velocity, vertical_gravity, vertical_terminal_velocity;
     s16 falling_frames;
     u16 unknown_362;
@@ -536,7 +556,7 @@ struct FieldRuntimeEntity {
     u16 unknown_370, unknown_372;
     fx32 initial_vertical_launch_velocity, initial_gravity, initial_terminal_fall_velocity;
     fx32 frame_delta_z;
-    s32 unknown_384;
+    fx32 previous_frame_delta_z;
     fx32 vertical_start_z;
     union {
         u32 field_state_flags;
@@ -551,17 +571,24 @@ struct FieldRuntimeEntity {
     };
     union {
         u32 unknown_3a0;
-        struct { u32 unknown_00_01 : 2, contact_mask_a : 6, unknown_08_19 : 12, unknown_20_25 : 6, unknown_26_31 : 6; } unknown_3a0_bits;
+        struct {
+            u32 contact_active : 1, previous_contact_active : 1;
+            u32 contact_mask_a : 6, previous_contact_mask_a : 6;
+            u32 contact_mask_b : 6, previous_contact_mask_b : 6, unknown_26_31 : 6;
+        } unknown_3a0_bits;
     };
     FieldContactDirectionFlags contact_direction_flags;
-    u8 unknown_3a8[0x20];
+    s32 unknown_3a8, unknown_3ac;
+    FieldNavigationSurface *navigation_cursor;
+    fx32 navigation_scan_limit;
+    u8 unknown_3b8[0x10];
     struct { u32 unknown_00 : 1, unknown_01_31 : 31; } unknown_3c8_bits;
     union {
         u32 runtime_flags;
         FieldEntityRuntimeFlags runtime_flag_bits;
         struct { u32 unknown_00_24 : 25, auto_priority_mask : 5, unknown_30_31 : 2; } priority_flag_bits;
     };
-    u8 unknown_3d0[4];
+    s16 unknown_3d0, unknown_3d2;
     s16 unknown_3d4;
     u8 unknown_3d6[0xA];
     union {
@@ -569,7 +596,10 @@ struct FieldRuntimeEntity {
         FieldRoamingFlags roaming_flag_bits;
     };
     struct { u32 unknown_00_09 : 10, unknown_10_15 : 6, unknown_16_21 : 6, unknown_22_31 : 10; } unknown_3e4_bits;
-    u8 unknown_3e8[0x128];
+    u8 unknown_3e8[0x108];
+    void *unknown_4f0, *unknown_4f4;
+    FieldRuntimeEntity *support_entity, *previous_support_entity;
+    void *unknown_500, *unknown_504, *unknown_508, *unknown_50c;
     FieldRenderObject *auxiliary_render_object;
 };
 

@@ -18,7 +18,7 @@ static inline FieldRuntimeEntity *InitializeSpatialPlacement(FieldRuntimeEntity 
 {
     FieldEntity2D_InitPlacement(entity, entity_index, spawn, argument_3, resource_set, enabled);
     *(FieldEntityVTable **)entity = &data_ov000_020c10b0;
-    func_0202cbd4(entity->unknown_2b0, 0, FIELD_ENTITY_3D_SIZE - FIELD_ENTITY_2D_SIZE);
+    func_0202cbd4(&entity->navigation_surfaces, 0, FIELD_ENTITY_3D_SIZE - FIELD_ENTITY_2D_SIZE);
     if (spawn) {
         bool subtype_enabled;
         s8 priorities;
@@ -68,8 +68,8 @@ static inline FieldRuntimeEntity *InitializeSpatialPlacement(FieldRuntimeEntity 
         entity->unknown_3d4 = spawn->unknown_12;
         entity->unknown_3c8_bits.unknown_00 = 1;
     }
-    entity->unknown_2b8 = -1;
-    entity->unknown_2b9 = -1;
+    entity->support_entity_index = -1;
+    entity->previous_support_entity_index = -1;
     entity->initial_vertical_launch_velocity = 21496;
     entity->initial_gravity = 1296;
     entity->initial_terminal_fall_velocity = 0;

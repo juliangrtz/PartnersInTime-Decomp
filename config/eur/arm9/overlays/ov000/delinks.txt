@@ -94,3 +94,18 @@ src/field/field_locomotion_state.cpp:
 
 src/field/field_spatial_locomotion_state.cpp:
     .text       start:0x020b4c78 end:0x020b4d7c
+
+src/field/field_frame_snapshot.cpp:
+    .text       start:0x020a6ab4 end:0x020a6b4c
+
+src/field/field_spatial_frame_snapshot.cpp:
+    .text       start:0x020b4d7c end:0x020b4edc
+
+src/field/field_spatial_placement.cpp:
+    .text       start:0x020b4220 end:0x020b4300
+
+src/field/field_bounds_resources.cpp:
+    .text       start:0x020a6c14 end:0x020a6d68
+
+src/field/field_spatial_bounds_resources.cpp:
+    .text       start:0x020b5364 end:0x020b5420
