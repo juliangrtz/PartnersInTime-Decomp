@@ -32,7 +32,7 @@ static inline FieldRuntimeEntity *InitializeSpawn(FieldRuntimeEntity *entity, in
         entity->saved_presentation_flag_bits.behavior_mode = 3;
         if (spawn->animation & 0x8000) {
             entity->base_state_flag_bits.facing_direction = spawn->animation & ~0x8000;
-            entity->unknown_178 = entity->base_state_flag_bits.facing_direction << 13;
+            entity->movement_direction = entity->base_state_flag_bits.facing_direction << 13;
             entity->base_state_flags |= 2;
         } else {
             entity->animation_id = spawn->animation;
@@ -49,7 +49,7 @@ static inline FieldRuntimeEntity *InitializeSpawn(FieldRuntimeEntity *entity, in
     entity->bounds_index = -1;
     entity->base.reset_motion_parameters();
     entity->locomotion_state = 0;
-    entity->unknown_180 = 0;
+    entity->locomotion_category = 0;
     return entity;
 }
 

@@ -356,6 +356,25 @@ def decode_hook_arguments(emulator: DeSmuME, label: str) -> dict[str, Any] | Non
     r2 = registers.r2 & 0xFFFFFFFF
     r3 = registers.r3 & 0xFFFFFFFF
 
+    if label.startswith("FieldVertical_"):
+        result = {"entity": f"{r0:#010x}"}
+        if label in ("FieldVertical_Start", "FieldVertical_StartToHeight"):
+            result.update(velocity_or_height_q12=to_s32(r1), gravity_q12=to_s32(r2),
+                          terminal_velocity_q12=to_s32(r3))
+        if is_arm9_work_ram_pointer(r0, 0x390):
+            flags = read_u32(emulator, r0 + 0x38C)
+            result.update(active=bool(flags & 16), paused=bool(flags & 64),
+                          z_q12=read_s32(emulator, r0 + 0x2BC),
+                          relative_height_q12=read_s32(emulator, r0 + 0x2C0),
+                          velocity_q12=read_s32(emulator, r0 + 0x354),
+                          gravity_q12=read_s32(emulator, r0 + 0x358))
+        return result
+    if label in ("FieldEntity2D_AccumulateMotion", "FieldEntity3D_AccumulateMotion"):
+        delta = [to_s32(r1), to_s32(r2)]
+        if label.startswith("FieldEntity3D_"):
+            delta.append(to_s32(r3))
+        return {"entity": f"{r0:#010x}", "delta_q12": delta}
+
     if label.startswith(("FieldLinear_Start", "FieldLinear3D_Start")):
         stack = registers.sp & 0xFFFFFFFF
         count = 6 if label in ("FieldLinear_Start", "FieldLinear3D_Start") else 3

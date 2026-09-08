@@ -156,7 +156,7 @@ typedef struct FieldEntityFieldStateFlags {
     u32 contact_mode : 3;
     u32 unknown_03 : 1;
     u32 vertical_motion_active : 1;
-    u32 unknown_05_10 : 6;
+    u32 unknown_05 : 1, vertical_motion_paused : 1, unknown_07 : 1, unknown_08_10 : 3;
     u32 turn_to_interactor : 1;
     u32 track_ground : 1;
     u32 ignore_navigation_obstacle : 1;
@@ -281,8 +281,8 @@ typedef struct FieldEntity {
     virtual void release_renderers();
     virtual void unknown_30();
     virtual void unknown_34();
-    virtual void unknown_38();
-    virtual void unknown_3c();
+    virtual void update_locomotion_state();
+    virtual void map_locomotion_state();
     virtual void unknown_40();
     virtual void unknown_44();
     virtual void update_linear_movement(FieldLinearController *controller);
@@ -470,11 +470,11 @@ struct FieldRuntimeEntity {
     fx32 interaction_vertical_extent;
     fx32 movement_speed, movement_velocity_x, movement_velocity_y, unknown_134;
     FieldLocomotionParameters locomotion, initial_locomotion;
-    fx32 unknown_168, unknown_16c;
+    fx32 frame_delta_x, frame_delta_y;
     u8 unknown_170[8];
-    u16 unknown_178;
+    u16 movement_direction;
     u16 unknown_17a, locomotion_state, previous_locomotion_state;
-    u8 unknown_180, unknown_181[3];
+    u8 locomotion_category, unknown_181[3];
     union {
         u32 base_state_flags;
         FieldBaseStateFlags base_state_flag_bits;
@@ -508,7 +508,7 @@ struct FieldRuntimeEntity {
     s8 unknown_2b8, unknown_2b9;
     u16 unknown_2ba;
     fx32 position_z;
-    s32 unknown_2c0;
+    fx32 relative_height;
     u8 unknown_2c4[4];
     fx32 previous_position_z;
     u8 unknown_2cc[0x18];
@@ -527,14 +527,17 @@ struct FieldRuntimeEntity {
     fx32 navigation_max_y;
     fx32 navigation_vertical_extent;
     u8 unknown_334[0x20];
-    fx32 unknown_354;
-    u8 unknown_358[0xC];
+    fx32 vertical_velocity, vertical_gravity, vertical_terminal_velocity;
+    s16 falling_frames;
+    u16 unknown_362;
     fx32 default_vertical_launch_velocity;
     fx32 default_gravity;
     fx32 terminal_fall_velocity;
     u16 unknown_370, unknown_372;
     fx32 initial_vertical_launch_velocity, initial_gravity, initial_terminal_fall_velocity;
-    u8 unknown_380[0xC];
+    fx32 frame_delta_z;
+    s32 unknown_384;
+    fx32 vertical_start_z;
     union {
         u32 field_state_flags;
         FieldEntityFieldStateFlags field_state_flag_bits;

@@ -1,3 +1,4 @@
+#include <game/field_entity_motion.h>
 #include <game/field_linear.h>
 #include <game/field_orbit.h>
 extern "C" {
@@ -70,11 +71,6 @@ extern void func_ov000_020b26ac(
     int duration, int plane, int direction, int secondary_axis_scale,
     int stop_on_contact_mask, int stop_on_state_mask,
     int snap_to_final_angle, int reserved);
-extern void func_ov000_020b44ac(FieldEntity *entity, fx32 initial_velocity,
-                                fx32 gravity, fx32 terminal_velocity);
-extern void func_ov000_020b4414(FieldEntity *entity, fx32 height,
-                                fx32 gravity, fx32 terminal_velocity);
-extern void func_ov000_020b4300(FieldEntity *entity);
 extern void func_ov000_020b42c8(FieldEntity *entity, fx32 x, fx32 y,
                                 fx32 z);
 extern void func_ov000_020736a4(u8 *field_context, FieldEntity *entity,
@@ -2583,14 +2579,14 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_START_ENTITY_VERTICAL_MOTION:
-            func_ov000_020b44ac(
-                entity, FieldVm_DecodeWideArgument(command, 1),
+            FieldVertical_Start(
+                runtime_entity, FieldVm_DecodeWideArgument(command, 1),
                 FieldVm_DecodeWideArgument(command, 3), -1);
             break;
 
         case FIELD_VM_START_ENTITY_VERTICAL_MOTION_TO_HEIGHT:
-            func_ov000_020b4414(
-                entity, arguments[1] << FX32B_INT,
+            FieldVertical_StartToHeight(
+                runtime_entity, arguments[1] << FX32B_INT,
                 FieldVm_DecodeWideArgument(command, 2), -1);
             break;
 
@@ -2604,7 +2600,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_STOP_ENTITY_VERTICAL_MOTION:
-            func_ov000_020b4300(entity);
+            FieldVertical_Stop(runtime_entity);
             break;
 
         case FIELD_VM_SET_ENTITY_ROAMING_BOUNDS:

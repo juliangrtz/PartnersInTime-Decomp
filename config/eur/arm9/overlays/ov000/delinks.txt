@@ -85,3 +85,12 @@ src/field/field_entity_motion.cpp:
 
 src/field/field_spatial_linear_start.cpp:
     .text       start:0x020b39a8 end:0x020b4220
+
+src/field/field_vertical_motion.cpp:
+    .text       start:0x020b4300 end:0x020b451c
+
+src/field/field_locomotion_state.cpp:
+    .text       start:0x020a681c end:0x020a695c
+
+src/field/field_spatial_locomotion_state.cpp:
+    .text       start:0x020b4c78 end:0x020b4d7c

@@ -1975,3 +1975,39 @@ and build/runtime/eur_field_spatial_linear_start_boundaries. Matching C/C++ is
 375,744 of 1,563,700 bytes (24.03%). All module/symbol checks, 74 tests, generated
 progress and public-content checks pass. The rebuilt ROM retains SHA-1
 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.
+
+## Vertical motion and locomotion state
+
+Ten functions add 1,120 matching C++ bytes: vertical startup, height-based
+startup, gravity/landing update, stop, planar/spatial movement accumulation and
+locomotion selection/mapping. Named per-frame deltas, vertical parameters,
+falling-frame count and direction fields replace opaque storage. The previously
+unnamed virtual wrapper now resolves to UpdateLocomotionState. The height solver
+retains the original discrete acceleration sum and fractional overshoot
+correction; the update preserves landing correction and optional terminal speed.
+
+The supplied save collection contains 103 numbered story saves plus the earlier
+checkpoint. Six normal boot/load replays sample saves 1, 18, 43, 58, 80 and 103;
+each runs 2,293 frames followed by a separate 447-frame navigation replay. Across
+16,440 frames, read-only hooks observe ten natural vertical starts, 126 active
+vertical updates, 151 stops and thousands of calls to all six new locomotion
+functions. All decoded render lists have no structural errors. Some inputs open
+save menus beside save blocks; screenshots distinguish those valid menu states
+from field rendering, and a follow-up B/D-pad route returns the castle samples
+to the field. This is a six-checkpoint sample, not exhaustive story coverage.
+
+Eight controlled RAM cases independently verify ascent, descent, exact and
+overshooting landings, terminal speed enabled/disabled, pause and the apex at
+the native update's return. Six controlled Field VM cases verify explicit and
+default launch parameters, falling startup, height-based startup, zero height
+and default gravity against an independent integer solver. All fourteen pass.
+Injected decoded commands are restored in full at starter entry; ROM, script
+bytecode and supplied battery saves are unchanged. Loaded function bytes match
+the original overlay. Height-based startup is covered by controlled commands;
+it is not entered by the normal save sweep.
+
+Evidence remains private under build/runtime/eur_story_vertical_sweep,
+build/runtime/eur_field_vertical_boundaries and build/runtime/eur_field_vertical_start.
+Matching C/C++ is 376,864 of 1,563,700 bytes (24.10%). All module/symbol checks,
+74 tests, generated progress and public-content checks pass. The rebuilt ROM
+retains SHA-1 BA4EC2F99B4F2E0047601552BCCF00AA73E28701.

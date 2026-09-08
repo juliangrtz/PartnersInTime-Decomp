@@ -24,7 +24,7 @@ void FieldBlink_ShowRenderers(FieldEntity *base)
     FieldRuntimeEntity *entity = (FieldRuntimeEntity *)base;
     func_020093b4(entity->render_object, 1);
     if (entity->auxiliary_render_object && entity->field_state_flag_bits.shadow_enabled &&
-        (entity->unknown_2c0 > 0 || entity->field_state_flag_bits.unknown_16))
+        (entity->relative_height > 0 || entity->field_state_flag_bits.unknown_16))
         func_020093b4(entity->auxiliary_render_object, 1);
 }
 
@@ -33,6 +33,6 @@ void FieldBlink_HideRenderers(FieldEntity *base)
     FieldRuntimeEntity *entity = (FieldRuntimeEntity *)base;
     func_020093b4(entity->render_object, 0);
     if (entity->auxiliary_render_object && entity->field_state_flag_bits.shadow_enabled &&
-        (entity->unknown_2c0 > 0 || entity->field_state_flag_bits.unknown_16))
+        (entity->relative_height > 0 || entity->field_state_flag_bits.unknown_16))
         func_020093b4(entity->auxiliary_render_object, 0);
 }

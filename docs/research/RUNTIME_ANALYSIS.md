@@ -19,6 +19,21 @@ to advance a loaded state unless `--allow-state-advance` is supplied explicitly.
 
 ROMs, battery saves, savestates, screenshots, and RAM dumps stay outside Git. The existing ignore rules cover `*.nds`, `*.sav`, `PiT_*`, and `build/`.
 
+The local `PiT_SaveStates` collection now contains 103 numbered story checkpoints
+and the earlier Princess Shroob save. Each numbered file is an 8,192-byte raw
+battery save. Load each through the normal title screen and create a compatible
+0.9.12 state for further probing. A first sample covers checkpoints 1, 18, 43,
+58, 80 and 103; its private inventory, hashes, screenshots and traces are under
+`build/runtime/eur_story_vertical_sweep`. No save data is committed.
+
+Identical input scripts do not imply identical gameplay coverage: many saves
+start beside save blocks, so pressing A can open the save menu. Inspect the
+screens and recent execution hooks before treating an empty field render list
+as a fault. Use B to leave menus and the D-pad to move away before testing jumps.
+The active characters and selected actions also determine which face button
+jumps. Keep normal navigation evidence separate from controlled RAM or decoded
+command substitutions.
+
 ## Convert the battery save into a traceable state
 
 Use the supplied raw `.sav` with the interactive runner. Load the save in the

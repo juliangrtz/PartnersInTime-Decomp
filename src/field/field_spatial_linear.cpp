@@ -1,13 +1,13 @@
 extern "C" {
 #include <nitro/fx.h>
 }
+#include <game/field_entity_motion.h>
 #include <game/field_linear.h>
 #include <game/field_geometry.h>
 extern "C" {
 #define LINEAR_DEFAULT(entity) (&(entity)->linear_controller)
 extern void func_ov000_020be654(fx32, fx32, fx32, fx32 *, fx32 *);
 extern void func_ov000_020be4f0(fx32, fx32, fx32, fx32, fx32 *, fx32 *, fx32 *);
-extern void func_ov000_020b4c78(FieldRuntimeEntity *, fx32, fx32, fx32);
 
 void FieldLinear3D_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearController *movement)
 {
@@ -52,7 +52,7 @@ void FieldLinear3D_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearControl
             fx32 dx = movement->axes.x ? movement->velocity_x : 0;
             fx32 dy = movement->axes.y ? movement->velocity_y : 0;
             fx32 dz = movement->axes.z ? movement->velocity_z : 0;
-            func_ov000_020b4c78(entity, dx, dy, dz);
+            FieldEntity3D_AccumulateMotion(entity, dx, dy, dz);
             if (!movement->bits.fixed_duration && !movement->bits.braking && movement->acceleration > 0) {
                 if (movement->timing.speed < movement->maximum_speed) {
                     movement->timing.speed += movement->acceleration;

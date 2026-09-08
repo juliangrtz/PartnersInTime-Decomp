@@ -153,7 +153,7 @@ void FieldEntity3D_ResetMotionParameters(FieldRuntimeEntity *entity)
     entity->default_vertical_launch_velocity = entity->initial_vertical_launch_velocity;
     entity->default_gravity = entity->initial_gravity;
     entity->terminal_fall_velocity = entity->initial_terminal_fall_velocity;
-    entity->unknown_354 = 0;
+    entity->vertical_velocity = 0;
 }
 
 void FieldEntity_SetVerticalParameters(FieldRuntimeEntity *entity, fx32 launch_velocity, fx32 gravity, fx32 terminal_velocity)
@@ -161,7 +161,7 @@ void FieldEntity_SetVerticalParameters(FieldRuntimeEntity *entity, fx32 launch_v
     if (launch_velocity != -1) entity->default_vertical_launch_velocity = launch_velocity;
     if (gravity != -1) entity->default_gravity = gravity;
     if (terminal_velocity) entity->terminal_fall_velocity = terminal_velocity;
-    entity->unknown_354 = 0;
+    entity->vertical_velocity = 0;
 }
 
 void FieldEntity3D_AllocateRenderers(FieldRuntimeEntity *entity)

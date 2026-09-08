@@ -1,10 +1,10 @@
 extern "C" {
 #include <nitro/fx.h>
 }
+#include <game/field_entity_motion.h>
 #include <game/field_orbit.h>
 extern "C" {
 extern const s16 FX_SinCosTable_[];
-extern void func_ov000_020b4c78(FieldRuntimeEntity *, fx32, fx32, fx32);
 void FieldOrbit3D_CalculatePosition(FieldRuntimeEntity *entity, fx32 *x, fx32 *y, fx32 *z,
                                     FieldOrbitController *orbit);
 #define DEFAULT_ORBIT(entity) (&(entity)->orbit_controller)
@@ -39,7 +39,7 @@ void FieldOrbit3D_UpdatePosition(FieldRuntimeEntity *entity, FieldOrbitControlle
         orbit->angle += delta * orbit->bytes.direction;
         orbit->remaining_angle -= delta;
         FieldOrbit3D_CalculatePosition(entity, &x, &y, &z, orbit);
-        func_ov000_020b4c78(entity, x - entity->position_x, y - entity->position_y,
+        FieldEntity3D_AccumulateMotion(entity, x - entity->position_x, y - entity->position_y,
                             entity->field_state_flag_bits.track_ground ? 0 : z - entity->position_z);
         if (!orbit->bits.fixed_duration && !orbit->bits.braking && orbit->timing.acceleration > 0) {
             if (orbit->speed < orbit->maximum_speed) {
