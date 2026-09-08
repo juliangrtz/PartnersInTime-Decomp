@@ -580,3 +580,9 @@ src/overlay008/erase_resources.c
 src/overlay007/nawatobi_resources.cpp
 src/overlay007/nawatobi_lifecycle.cpp
 src/overlay007/nawatobi_irq_destroy.cpp
+src/overlay011/ov11_effects_are_finished.cpp
+src/overlay011/ov11_attack_get_travel_duration.cpp
+src/overlay011/ov11_support_schedule_intercept.cpp
+src/overlay011/ov11_projectile_is_ready.cpp
+src/overlay011/ov11_controller_initialize.cpp
+src/overlay011/ov11_attack_initialize.cpp

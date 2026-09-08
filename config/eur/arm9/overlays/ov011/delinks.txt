@@ -6,3 +6,21 @@
 src/overlay011/projectile_attack_helpers.c:
     .text       start:0x020c4968 end:0x020c4c2c
 
+
+src/overlay011/ov11_effects_are_finished.cpp:
+    .text start:0x020c2b88 end:0x020c2dc0
+
+src/overlay011/ov11_attack_get_travel_duration.cpp:
+    .text start:0x020c2e88 end:0x020c2f38
+
+src/overlay011/ov11_support_schedule_intercept.cpp:
+    .text start:0x020c303c end:0x020c3388
+
+src/overlay011/ov11_projectile_is_ready.cpp:
+    .text start:0x020c4228 end:0x020c426c
+
+src/overlay011/ov11_controller_initialize.cpp:
+    .text start:0x020c5380 end:0x020c54b4
+
+src/overlay011/ov11_attack_initialize.cpp:
+    .text start:0x020c5af8 end:0x020c5eec
