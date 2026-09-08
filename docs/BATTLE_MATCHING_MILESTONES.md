@@ -830,3 +830,29 @@ under `build/runtime/eur_area_state/`.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Field scaling, rotation and animation control (2026-09-09)
+
+Eleven functions add 1,752 matching C++ bytes, reaching
+518,676 / 1,563,700 bytes (33.17%). A checked 48-byte controller describes
+independent X/Y scaling and rotation, pause flags, signed steps, elapsed frames
+and destination values. Reconstruction covers frame advancement, completion
+and overshoot checks, timed rotation, both scaling start modes, scaling
+pause/resume, cancellation and the default blink animation callbacks. Existing
+VM and motion callers now share the typed interface. The adjacent speed-based
+rotation starter remains assembly: its private candidate has four instruction
+scheduling differences. No compiler-configuration search was used.
+
+A checkpoint-83 Start/B pause-menu roundtrip checks 2,112 returns each from
+advancement and completion against full controller and renderer views. A normal
+checkpoint-27 battery boot/load checks another 4,798 returns each and four
+scaling cancellations. All observed controllers are inactive, so active
+transforms, external controller storage, the start/pause/resume routines and
+blink callbacks remain statically verified only. No failures or pending
+callbacks occur, both replays reach the visible field, and the source battery
+saves are unchanged. Private evidence is `transform_pause83.json` and
+`transform_cold27.json` under `build/runtime/eur_field_transform/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

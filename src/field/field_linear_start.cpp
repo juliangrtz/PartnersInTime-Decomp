@@ -1,3 +1,4 @@
+#include <game/field_transform.h>
 extern "C" {
 #include <nitro/fx.h>
 extern u16 FX_Atan2Idx(fx32, fx32);
@@ -5,8 +6,6 @@ extern u16 FX_Atan2Idx(fx32, fx32);
 #include <game/field_linear.h>
 extern "C" {
 extern void func_ov000_020be654(fx32, fx32, fx32, fx32 *, fx32 *);
-extern void func_ov000_020a401c(FieldRuntimeEntity *, int);
-extern void func_ov000_020a3e38(FieldRuntimeEntity *, int);
 #define LINEAR_DEFAULT(entity) (&(entity)->linear_controller)
 
 int FieldLinear_Start(FieldRuntimeEntity *entity, int relative, fx32 x, fx32 y, fx32 speed, fx32 acceleration,

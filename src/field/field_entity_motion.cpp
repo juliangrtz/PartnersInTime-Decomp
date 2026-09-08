@@ -1,9 +1,8 @@
+#include <game/field_transform.h>
 #include <game/field_entity_motion.h>
 #include <game/field_entity_lifecycle.h>
 #include <game/field_presentation.h>
 extern "C" {
-extern void func_ov000_020a401c(FieldRuntimeEntity *, int);
-extern void func_ov000_020a3e38(FieldRuntimeEntity *, int);
 
 void FieldEntity2D_UpdateMotionAndAnimation(FieldRuntimeEntity *entity)
 {
@@ -18,8 +17,8 @@ void FieldEntity2D_UpdateMotionAndAnimation(FieldRuntimeEntity *entity)
             entity->base.advance_orbit_frame(0);
         }
         if (entity->base_state_flag_bits.animation_wait_enabled) {
-            func_ov000_020a401c(entity, 0);
-            func_ov000_020a3e38(entity, 0);
+            FieldTransform_Advance(entity, 0);
+            FieldTransform_CheckCompletion(entity, 0);
         }
     }
 }

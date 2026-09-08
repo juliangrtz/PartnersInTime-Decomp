@@ -1,7 +1,6 @@
+#include <game/field_transform.h>
 #include <game/field_blink.h>
 extern const s8 data_ov000_020c0b10[];
-extern void func_ov000_020a4608(FieldEntity *);
-extern void func_ov000_020a45f4(FieldEntity *);
 
 void FieldEntity_CopySortKeyToAnchor(FieldRuntimeEntity *entity)
 {
@@ -14,9 +13,9 @@ void FieldBlink_Start(FieldRuntimeEntity *entity, int mode, const s8 *durations,
 {
     if (mode) {
         if (!durations) { durations = data_ov000_020c0b10; length = 28; }
-        if (!first_phase) first_phase = func_ov000_020a4608;
+        if (!first_phase) first_phase = FieldEntity_DisableAnimation;
         entity->base_state_flag_bits.blink_mode = mode;
-        if (!second_phase) second_phase = func_ov000_020a45f4;
+        if (!second_phase) second_phase = FieldEntity_EnableAnimation;
         entity->base_state_flag_bits.blink_phase = 0;
         entity->base_state_flag_bits.blink_offset = mode == 3 ? 2 : length - 4;
         entity->blink_durations = durations;

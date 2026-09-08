@@ -193,3 +193,9 @@ src/field/field_render_snapshot.c:
 
 src/field/field_area_state.c:
     .text start:0x0206e4d8 end:0x0206ec68
+
+src/field/field_transform_update.cpp:
+    .text start:0x020a3e38 end:0x020a4214
+
+src/field/field_scaling.cpp:
+    .text start:0x020a4320 end:0x020a461c

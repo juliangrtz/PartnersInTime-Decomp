@@ -1,3 +1,4 @@
+#include <game/field_transform.h>
 #include <game/field_entity_motion.h>
 #include <game/field_linear.h>
 #include <game/field_orbit.h>
@@ -24,23 +25,9 @@ extern int func_ov000_02082240(FieldScriptState *target,
                                FieldScriptState *parent, int owner_type,
                                const u16 *script);
 extern void func_ov000_020a4e84(FieldEntity *entity);
-extern void func_ov000_020a4468(FieldEntity *entity, int scale_mode,
-                                s16 target_x, s16 target_y, s16 step_x,
-                                s16 step_y, int reserved);
-extern void func_ov000_020a439c(FieldEntity *entity, int scale_mode,
-                                s16 target_x, s16 target_y, int duration_x,
-                                int duration_y, int reserved);
-extern void func_ov000_020a4360(FieldEntity *entity, int snap_to_target,
-                                int reserved);
 extern void func_ov000_020a4214(FieldEntity *entity, int angle_mode,
                                 int target_angle, int angular_step,
                                 int signed_multiplier, int stop_at_target,
-                                int reserved);
-extern void func_ov000_020a412c(FieldEntity *entity, int angle_mode,
-                                int target_angle, int duration,
-                                int signed_multiplier, int stop_at_target,
-                                int reserved);
-extern void func_ov000_020a40f8(FieldEntity *entity, int snap_to_target,
                                 int reserved);
 extern void func_ov000_020ae520(FieldEntity *entity);
 extern void func_ov000_020b1394(FieldEntity *entity);
@@ -2011,8 +1998,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_START_ENTITY_SCALING:
-            func_ov000_020a4468(
-                entity, arguments[1],
+            FieldScaling_Start(
+                runtime_entity, arguments[1],
                 (s16)(arguments[2] / 16),
                 (s16)(arguments[3] / 16),
                 (s16)(arguments[4] / 16),
@@ -2020,8 +2007,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_START_ENTITY_TIMED_SCALING:
-            func_ov000_020a439c(
-                entity, arguments[1],
+            FieldScaling_StartTimed(
+                runtime_entity, arguments[1],
                 (s16)(arguments[2] / 16),
                 (s16)(arguments[3] / 16), arguments[4],
                 arguments[5], 0);
@@ -2036,7 +2023,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_STOP_ENTITY_SCALING:
-            func_ov000_020a4360(entity, 0, 0);
+            FieldScaling_Stop(runtime_entity, 0, 0);
             break;
 
         case FIELD_VM_START_ENTITY_ROTATION:
@@ -2049,8 +2036,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_START_ENTITY_TIMED_ROTATION:
-            func_ov000_020a412c(
-                entity, arguments[1],
+            FieldRotation_StartTimed(
+                runtime_entity, arguments[1],
                 FieldVm_DegreesToTurn16(arguments[2]),
                 arguments[3], arguments[4],
                 arguments[5] != 0, 0);
@@ -2065,7 +2052,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_STOP_ENTITY_ROTATION:
-            func_ov000_020a40f8(entity, 0, 0);
+            FieldRotation_Stop(runtime_entity, 0, 0);
             break;
 
         case FIELD_VM_SET_ENTITY_LOCOMOTION_PARAMETERS:

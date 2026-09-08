@@ -130,6 +130,33 @@ typedef struct FieldTransformFlags {
     u16 unknown_03_15 : 13;
 } FieldTransformFlags;
 
+/* Shared scale/rotation controller; angles use 65536 units per turn. */
+typedef struct FieldTransformController {
+    union {
+        u16 flags;
+        struct {
+            u16 scale_x_active : 1, scale_y_active : 1, rotation_active : 1;
+            u16 scaling_paused : 1, rotation_paused : 1;
+            u16 scaling_fixed_duration : 1, rotation_fixed_duration : 1;
+            u16 stop_rotation_at_destination : 1, unknown_08_15 : 8;
+        } bits;
+        struct { u16 scaling_active : 2, unknown_02_15 : 14; } scaling;
+        struct { u16 active : 3, unknown_03_15 : 13; } state;
+    };
+    union { u16 scale_x_duration; s16 scale_x_speed; } x;
+    union { u16 scale_y_duration; s16 scale_y_speed; } y;
+    u16 rotation_duration;
+    s32 rotation_speed;
+    s16 scale_x_step, scale_y_step;
+    s32 rotation_step, remaining_rotation;
+    s16 start_scale_x, start_scale_y;
+    s32 start_rotation;
+    s16 destination_scale_x, destination_scale_y;
+    s32 destination_rotation;
+    u32 scaling_elapsed, rotation_elapsed;
+} FieldTransformController;
+typedef char FieldTransformController_SizeCheck[sizeof(FieldTransformController) == 48 ? 1 : -1];
+
 typedef struct FieldRenderSortKey {
     u32 order : 28;
     u32 layer : 4;
@@ -574,6 +601,7 @@ struct FieldRuntimeEntity {
     FieldOrbitController orbit_controller;
     union {
         u8 transform_state[0x30];
+        FieldTransformController transform_controller;
         struct {
             union {
                 u16 transform_flags;
