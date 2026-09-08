@@ -1,3 +1,4 @@
+#include <game/field_display.h>
 #include <game/field_system.h>
 #include <game/heap.h>
 #include <game/rumble.h>
@@ -6,8 +7,6 @@ extern GameTaskVTable data_ov000_020c0de4;
 extern FieldPersistentSystems data_0205a01c;
 extern const GameRumblePattern data_ov000_020bf9b0[];
 extern void func_0202cbd4(void *, int, u32);
-extern void func_ov000_0206dc84(FieldSystem *);
-extern void func_ov000_0206dba4(FieldSystem *);
 extern GameTask *func_ov000_02065f30(GameTask *, u32, u32, void *);
 extern GameIrqTask *func_ov000_02065e34(GameIrqTask *, u32, u32, void *);
 extern void VBlankIntrWait(void);
@@ -25,8 +24,8 @@ FieldSystem *FieldSystem_Init(FieldSystem *system, u32 priority, u32 unused, voi
     func_0202cbd4(system->storage, 0, sizeof(system->storage));
     gSaveData[0x514] |= 0x20;
     GameRumble_SetPatterns(data_ov000_020bf9b0, 8);
-    func_ov000_0206dc84(system);
-    func_ov000_0206dba4(system);
+    FieldDisplay_InitializeVram(system);
+    FieldDisplay_InitializeGeometry(system);
     if (!data_0205a01c.flags.initialized) {
         timer = GameHeap_New(sizeof(FieldTimer), 1, 0, 0);
         if (timer)

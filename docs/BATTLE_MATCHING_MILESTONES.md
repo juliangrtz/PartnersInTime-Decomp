@@ -889,3 +889,34 @@ under `build/runtime/eur_field_system/`.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Field display setup and live palette backups (2026-09-09)
+
+Three contiguous functions add 1,180 matching C bytes, reaching
+521,452 / 1,563,700 bytes (33.35%). Display initialization clears VRAM and
+palette memory, assigns both engines' banks and establishes the 3D state.
+Palette backup captures the standard BG/OBJ palettes, three selected extended
+BG slots and the extended OBJ palettes into one checked 10,752-byte record per
+screen. It temporarily maps the relevant banks for CPU reads and restores their
+previous assignments. Both native swap-command writes are retained.
+
+A checkpoint-83 save-block interaction verifies all twelve copies directly
+against live palette RAM and the temporarily mapped VRAM, then compares both
+complete backup records. The main/sub records contain 3,109 and 1,912 nonzero
+bytes respectively. All 26 bytes of the bank-assignment state and both engines'
+extended-palette enable bits return to their entry values. Reinitialization
+checks the complete 671,744-byte VRAM clear and 2,048-byte palette clear, the
+eight configured bank assignments and display-mode bits. Guarded instruction
+hooks verify five 3D-control stores, both swap commands and the viewport command
+from their CPU operands, including write-only registers.
+
+A separate normal battery boot/load independently repeats both initialization
+checks and reaches the visible field. The save-block flow still has the already
+recorded black final screen; the palette-copy evidence does not assert successful
+menu completion. All checks pass with no pending callbacks, and the source
+battery save is unchanged. Private evidence is `display_save83.json` and
+`display_cold83.json` under `build/runtime/eur_field_display/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
