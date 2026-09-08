@@ -539,3 +539,29 @@ Private evidence is `scene_support_cold_verified83.json`,
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Title textures and orbit animation (2026-09-08)
+
+Fourteen functions add 1,472 matching C bytes, reaching 493,332 / 1,563,700
+bytes (31.55%). Two contiguous modules reconstruct texture/palette loading,
+release and metadata access, plus orbit initialization, reset, drawing,
+destruction and three animation transitions. Checked resource and animation
+layouts preserve the native fixed-point coordinates, model ownership and
+separate child-renderer position view.
+
+Two normal cold boots with checkpoint 83 exercise all fourteen functions.
+The complete intro checks 17,234 orbit draws across all four rendering phases,
+including 1,120 child draws, and all fourteen entry, expansion and pulse
+transitions. Pressing Start during the intro adds fourteen checked resets.
+Read-only hooks independently calculate coordinates, scales, timers and
+callback changes from live RAM. Texture checks include resource-loader and
+allocation arguments, actual file sizes, header metadata, image/palette
+addresses and release state. All five loaded images use compression; the
+uncompressed loader branch remains statically verified only. Both replays
+finish without failed checks or pending return hooks. The source battery save
+is unchanged. Private evidence is `title_effects_intro83.json` and
+`title_effects_skip83.json` under `build/runtime/eur_title_effects/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

@@ -35,3 +35,9 @@ src/overlay006/credits_irq_init.c:
 
 src/overlay006/title_panel_scroll.c:
     .text start:0x02074c18 end:0x02074c74
+
+src/overlay006/title_texture.c:
+    .text start:0x02071b8c end:0x02071d70
+
+src/overlay006/title_orbit.c:
+    .text start:0x02071d70 end:0x0207214c
