@@ -4,7 +4,7 @@ void Overlay16Participant_Initialize(Overlay16Participant *participant, BattleSc
                                      int variant, int component)
 {
     participant->object = object;
-    participant->unknown4 = 0;
+    participant->effect = 0;
     participant->unknown12 = 0;
     participant->component = component;
     participant->timer2 = 0;

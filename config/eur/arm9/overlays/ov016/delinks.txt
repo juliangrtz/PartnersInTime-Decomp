@@ -7,8 +7,6 @@
 src/overlay016/motion_table.c:
     .text       start:0x020c2ae0 end:0x020c2bbc
 
-src/overlay016/variant_object_state.c:
-    .text       start:0x020c2f1c end:0x020c3168
 
 
 src/overlay016/pair_effect_control.c:
@@ -20,14 +18,25 @@ src/overlay016/pair_effect_reset_request.c:
 src/overlay016/pair_effect_lifecycle.c:
     .text start:0x020c4e48 end:0x020c4f9c
 
-src/overlay016/participant_phase_eight.c:
-    .text start:0x020c50e8 end:0x020c51ac
 
-src/overlay016/participant_resource_phases.c:
-    .text start:0x020c52c0 end:0x020c53d0
 
 src/overlay016/participant_idle.c:
     .text start:0x020c5c38 end:0x020c5c50
 
 src/overlay016/participant_lifecycle.c:
     .text start:0x020c6560 end:0x020c65c4
+
+src/overlay016/variant_object_state.c:
+    .text start:0x020c2d20 end:0x020c32f8
+
+src/overlay016/pair_controller_geometry.c:
+    .text start:0x020c3378 end:0x020c34d0
+
+src/overlay016/pair_controller_scale.c:
+    .text start:0x020c36e0 end:0x020c374c
+
+src/overlay016/participant_effect_phases.c:
+    .text start:0x020c50e8 end:0x020c53d0
+
+src/overlay016/participant_effect_position.c:
+    .text start:0x020c5914 end:0x020c5988

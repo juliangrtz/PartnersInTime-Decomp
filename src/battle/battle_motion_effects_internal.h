@@ -49,7 +49,7 @@ int BattleMotion_StartPursuit(BattleSceneObject *object, int channel, int storag
                               BattleSceneObject *target, int speed);
 int BattleMotion_StartFollower(BattleSceneObject *object, BattleSceneObject *follower, int channel);
 void BattleMotion_UpdateFollower(BattleSceneObject *object, BattleMotionChannel *channel);
-int BattleMotion_StartSineMove(BattleSceneObject *object, int channel, s16 x, s16 y, int z, int start,
+int BattleMotion_StartSineMove(BattleSceneObject *object, int channel, int x, int y, int z, int start,
                                int end, int duration, int absolute);
 void BattleMotion_StartAppear(BattleSceneObject *object, int channel, int duration);
 void BattleMotion_UpdateAppear(BattleSceneObject *object, BattleMotionChannel *channel);

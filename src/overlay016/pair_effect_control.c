@@ -126,7 +126,7 @@ void Overlay16PairController_Initialize(Overlay16PairController *controller, int
     controller->unknown16 = 0;
     controller->position_z_q12 = 0;
     controller->unknown24 = 0;
-    controller->unknown28 = 0;
+    controller->radius = 0;
     controller->phase = 0;
     object = controller->primary;
     BattleSceneObject_AdjustPosition(object, x - object->x, y - object->y, y + 160 - object->z);

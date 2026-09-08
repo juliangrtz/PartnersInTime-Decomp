@@ -21,6 +21,7 @@ typedef struct Overlay16AttackObjectState {
     BattleSceneObject *object;
     union {
         u32 motion_flags;
+        struct BattleAITask *particle;
         struct {
             u32 motion_phase : 4;
             u32 unknown_motion_04_31 : 28;
@@ -33,7 +34,7 @@ typedef struct Overlay16AttackObjectState {
             u8 state : 4;
             u8 variant : 2;
             u8 unknown_06_07 : 2;
-            u8 unknown_09;
+            s8 particle_timer;
             u8 unknown_0a;
             u8 unknown_0b;
         } control_flag_bits;
@@ -65,15 +66,11 @@ typedef struct Overlay16AttackTargetOffset {
     Overlay16AttackTargetParameters parameters;
 } Overlay16AttackTargetOffset;
 
-typedef char Overlay16MotionPoint_SizeCheck[
-    sizeof(Overlay16MotionPoint) == 8 ? 1 : -1];
-typedef char Overlay16AttackObjectState_SizeCheck[
-    sizeof(Overlay16AttackObjectState) == 0xC ? 1 : -1];
+typedef char Overlay16MotionPoint_SizeCheck[sizeof(Overlay16MotionPoint) == 8 ? 1 : -1];
+typedef char Overlay16AttackObjectState_SizeCheck[sizeof(Overlay16AttackObjectState) == 0xC ? 1 : -1];
 
-extern Overlay16MotionPoint gOverlay16MotionTable[
-    OVERLAY16_MOTION_TABLE_COUNT];
-extern Overlay16MotionPoint gOverlay16MotionDeltas[
-    OVERLAY16_MOTION_TABLE_COUNT];
+extern Overlay16MotionPoint gOverlay16MotionTable[OVERLAY16_MOTION_TABLE_COUNT];
+extern Overlay16MotionPoint gOverlay16MotionDeltas[OVERLAY16_MOTION_TABLE_COUNT];
 extern int gOverlay16MotionTableOffset;
 extern Overlay16AttackTargetOffset gOverlay16AttackTargetOffsets[];
 

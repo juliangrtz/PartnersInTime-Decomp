@@ -288,3 +288,30 @@ exits with B and preserves the original battery save. Private evidence is
 Native linking, all 74 tests, progress consistency and the public-content
 audit pass. The ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+
+### Mix Flowers entry, particles and passing (2026-09-08)
+
+Twelve functions add 1,752 matching C bytes, reaching 476,600 / 1,563,700
+bytes (30.48%). They reconstruct entry-object updates, growing and shrinking
+particles, linked-object phases, participant scheduling and effect positioning,
+and the large-fireball controller's scale, motion-step and distance queries.
+Adjacent functions are consolidated into contiguous source units. Checked
+layouts cover the complete 17,292-byte attack work area and its nested records.
+Native signed loads identify the particle timer as a signed byte; the sine-move
+call also establishes full-width integer coordinate arguments. Correcting that
+shared prototype preserves the previously matching callee.
+
+A 4,270-frame checkpoint 83 replay checks all twelve new functions, alongside
+all twenty functions from the previous Mix Flowers batch. Automated ordinary
+button inputs follow the participant phases and variant buttons read from RAM;
+665 such inputs are supplied through frame 1,900, then the attack finishes and
+returns to Luigi's command wheel. Checks cover 34 participant handovers, 36,636
+distance queries, 666 effect placements, 560 shrinking-particle updates and
+208 growing-particle updates. Full native-byte guards and stack-matched return
+hooks protect the oracles. The source save remains unchanged, and the replay
+uses the previously documented controlled encounter. Private evidence is
+`build/runtime/eur_attack_helpers/ov16_extension_complete83.json`.
+
+Native linking, all 74 tests, progress consistency and the public-content
+audit pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

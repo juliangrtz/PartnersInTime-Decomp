@@ -1,7 +1,7 @@
 #include "battle_motion_effects_internal.h"
 
 extern "C" {
-int BattleMotion_StartSineMove(BattleSceneObject *object, int channel, s16 x, s16 y, int z, int start,
+int BattleMotion_StartSineMove(BattleSceneObject *object, int channel, int x, int y, int z, int start,
                                int end, int duration, int absolute)
 {
     BattleSineMotion *motion = (BattleSineMotion *)BattleSceneObject_BeginMotionChannel(
