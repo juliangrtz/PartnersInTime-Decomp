@@ -13,15 +13,7 @@ enum BattleObjectResourceConstant {
 
 extern void *gBattleObjectTextureComponents[3];
 
-BattleQueuedTask *BattleObjectData_QueueLoad(
-    BattleObjectDataLoadState *load_state, s32 resource_id) {
-    load_state->resource_id = resource_id;
-    load_state->component_08 = 0;
-    load_state->flags.bits.processing = 1;
-    load_state->flags.bits.load_pending = 0;
-    return BattleTaskQueue_Enqueue(
-        BattleObjectData_ResolveTextureMetadataTask, load_state);
-}
+
 
 void BattleObjectData_ResolveTextureMetadataTask(BattleQueuedTask *task) {
     BattleSceneResource *resource =

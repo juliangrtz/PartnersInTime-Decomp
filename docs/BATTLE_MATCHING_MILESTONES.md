@@ -4021,3 +4021,31 @@ blank line reported by the final whitespace check was removed; diff checking
 then passes. Canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701;
 public-content checks pass. Matching C/C++ is 654,220 / 1,563,700 bytes (41.84%);
 C/C++ plus ASM is 42.17%.
+
+
+## 2026-09-10 - Battle selection, resource queue and capture copy (+404 bytes)
+
+Freshly compiled C reproduces five formerly unlinked routines exactly:
+BattleObjectData_QueueLoad (0x02089EEC, 64 bytes), BattleTargetCursor_Update
+(0x02098B08, 60), BattleTargetCursor_TriggerBounce (0x02098B44, 76),
+BattleCommandWheel_TriggerEntryBounce (0x02099508, 144) and
+BattleCaptureSurface_CopyTask (0x020AD058, 60). Exact contiguous ranges are
+extracted from the unfinished surrounding modules. Checked command-wheel,
+cursor and copy-task layouts now live in shared headers.
+
+Runtime: build/runtime/eur_battle_remaining_helpers/evidence_ui103.json,
+evidence_cursor83.json and evidence_entry83.json. The first two use ordinary
+buttons in existing boss states (770 and 270 frames); the third enters a battle
+with the documented temporary decoded command 0x11C fixture (601 frames).
+All 1,570 cursor returns, two new wheel bounces and 31 resource enqueues match
+complete record models and exact helper arguments, including queue results.
+Visible/reset and hidden cursors are covered; rotating cursors, restarted or
+dismissed wheel entries, TriggerBounce and CopyTask remain static-only. No
+runtime claim is made for the independent copy-byte oracle, which was not hit.
+Screenshots for ui103 and the source cursor encounter were inspected. BG VRAM
+and palettes were saved and hashed; all 104 supplied saves retain their hashes.
+
+Validation: all 81 tests, public-content audit, whitespace checks and zero
+native relink differences pass. Canonical ROM SHA-1 remains
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
+654,624 / 1,563,700 bytes (41.86%); C/C++ plus ASM is 42.20%.

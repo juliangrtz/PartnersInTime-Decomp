@@ -751,3 +751,7 @@ src/field/field_message_window_slide.c
 src/field/field_message_window_clip.c
 src/overlay025/enemy_linked_damage.cpp
 src/battle/battle_enemy_removal.c
+src/battle/battle_command_wheel_bounce.c
+src/battle/battle_target_cursor_animation.c
+src/battle/battle_object_load_queue.c
+src/battle/battle_capture_copy.c

@@ -80,7 +80,7 @@ src/battle/battle_object_texture_setup.c:
     .text       start:0x020899f0 end:0x02089c78
 
 src/battle/battle_object_load.c:
-    .text       start:0x02089c78 end:0x02089f2c
+    .text       start:0x02089c78 end:0x02089eec
 
 src/battle/battle_ai_system.c:
     .text       start:0x0208ddd0 end:0x0208e10c
@@ -147,10 +147,10 @@ src/battle/battle_party_hp_panel.c:
     .text       start:0x02097f58 end:0x020988b0
 
 src/battle/battle_target_cursor.c:
-    .text       start:0x020988b0 end:0x02098b90
+    .text       start:0x020988b0 end:0x02098b08
 
 src/battle/battle_command_wheel.c:
-    .text       start:0x02098b90 end:0x02099598
+    .text       start:0x02098b90 end:0x02099508
 
 src/battle/battle_interface_render.c:
     .text       start:0x02099598 end:0x020999d8
@@ -472,3 +472,15 @@ src/battle/battle_model_afterimage.c:
 
 src/battle/battle_enemy_removal.c:
     .text start:0x020a9478 end:0x020a95cc
+
+src/battle/battle_command_wheel_bounce.c:
+    .text start:0x02099508 end:0x02099598
+
+src/battle/battle_target_cursor_animation.c:
+    .text start:0x02098b08 end:0x02098b90
+
+src/battle/battle_object_load_queue.c:
+    .text start:0x02089eec end:0x02089f2c
+
+src/battle/battle_capture_copy.c:
+    .text start:0x020ad058 end:0x020ad094

@@ -1,35 +1,7 @@
+#include <game/battle_selection_animation.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 #include <game/battle_scene.h>
-
-enum BattleTargetCursorConstant {
-    BATTLE_TARGET_CURSOR_OFFSET = 0x6568,
-    BATTLE_INTERFACE_BLOCKED_OFFSET = 0x12E,
-    BATTLE_TARGET_CURSOR_FRAME = 17,
-    BATTLE_TARGET_CURSOR_BOUNCE_FRAMES = 12
-};
-
-typedef union BattleTargetCursorAnimation {
-    u16 raw;
-    struct {
-        s8 bounce_timer;
-        u8 flags;
-    } bytes;
-    struct {
-        u16 unknown_00_07 : 8;
-        u16 uniform_targets : 1;
-        u16 unknown_09_15 : 7;
-    } bits;
-} BattleTargetCursorAnimation;
-
-typedef struct BattleTargetCursorState {
-    BattleSceneObject *focus_object;
-    s16 intensity;
-    s16 visible;
-    s16 unknown_08;
-    s16 rotation_angle;
-    BattleTargetCursorAnimation animation;
-} BattleTargetCursorState;
 
 typedef union BattleTargetCursorTransform {
     BattleSpriteTransform value;
@@ -51,26 +23,9 @@ static inline void BattleTargetCursor_StorePosition(
         object->flags.bits.use_alternate_model);
 }
 
-int BattleTargetCursor_TriggerBounce(void) {
-    if (((BattleTargetCursorAnimation *)(
-             gBattleContext + BATTLE_TARGET_CURSOR_OFFSET + 0x0C))->
-            bits.uniform_targets != 0) {
-        *(s8 *)(gBattleContext + BATTLE_TARGET_CURSOR_OFFSET + 0x0C) =
-            BATTLE_TARGET_CURSOR_BOUNCE_FRAMES;
-    }
-    return BattleSound_Play(3, 0, 0, 0);
-}
 
-void BattleTargetCursor_Update(BattleTargetCursorState *state) {
-    if (state->visible != 0 ||
-        state->animation.bytes.bounce_timer != 0) {
-        if (state->animation.bits.uniform_targets != 0) {
-            state->rotation_angle += 4;
-        } else {
-            state->rotation_angle = 0;
-        }
-    }
-}
+
+
 
 void BattleTargetCursor_Draw(BattleTargetCursorState *state) {
     BattlePosition position;

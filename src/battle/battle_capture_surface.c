@@ -1,3 +1,4 @@
+#include <game/battle_capture_surface.h>
 #include <game/battle_context.h>
 #include <game/battle_object.h>
 #include <game/battle_task_queue.h>
@@ -15,13 +16,6 @@ enum BattleCaptureSurfaceConstant {
     BATTLE_CAPTURE_TILE_SIZE = 8,
     BATTLE_CAPTURE_TILE_BYTES = 64
 };
-
-typedef struct BattleCaptureCopyTask {
-    int (*callback)(struct BattleCaptureCopyTask *task);
-    const void *source;
-    void *destination;
-    u32 size;
-} BattleCaptureCopyTask;
 
 typedef struct BattleCaptureSurfaceState {
     u8 tile_x;
@@ -188,15 +182,4 @@ void BattleCaptureSurface_DecodeRowTask(BattleQueuedTask *task) {
         destination_stride * 2);
     load_state->component_04 = destination + 2;
     ++load_state->texture_variant;
-}
-
-int BattleCaptureSurface_CopyTask(BattleCaptureCopyTask *task) {
-    u32 size = task->size;
-    void *destination = task->destination;
-    const void *source = task->source;
-
-    if (source < destination) {
-        return func_0202cd2c(source, destination, size);
-    }
-    return func_0202cc58(source, destination, size);
 }
