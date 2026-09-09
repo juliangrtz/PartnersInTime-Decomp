@@ -398,7 +398,7 @@ typedef struct FieldInteractionBounds {
     s8 minimum_x, maximum_y, width, height, vertical_extent;
 } FieldInteractionBounds;
 typedef struct FieldAnimationBoundsIndex {
-    u8 unknown_00[2];
+    union { u8 unknown_00[2]; struct { u8 body_index, unknown_01; }; };
     s8 bounds_index;
     u8 unknown_03[3];
 } FieldAnimationBoundsIndex;
@@ -536,9 +536,31 @@ typedef struct FieldRenderSnapshot {
 } FieldRenderSnapshot;
 typedef char FieldRenderSnapshot_SizeCheck[sizeof(FieldRenderSnapshot) == 36 ? 1 : -1];
 
-/* The spatial copy transfers this 260-byte payload as one aggregate. Its
- * internal controller layout is not yet identified. */
-typedef struct FieldEntityMotionState { u32 unknown_000[65]; } FieldEntityMotionState;
+typedef struct FieldPathPoint { s32 x, y; } FieldPathPoint;
+typedef char FieldPathPoint_SizeCheck[sizeof(FieldPathPoint) == 8 ? 1 : -1];
+typedef struct FieldRoamingOption {
+    struct { u16 enabled : 1, direction_mode : 3, delay : 12; } flags;
+    u16 unknown_02;
+    fx32 speed, distance;
+} FieldRoamingOption;
+typedef char FieldRoamingOption_SizeCheck[sizeof(FieldRoamingOption) == 12 ? 1 : -1];
+/* The spatial copy transfers this 260-byte payload as one aggregate. The
+ * path interpretation shares storage with the random roaming settings. */
+typedef struct FieldEntityMotionState {
+    union {
+        u32 unknown_000[65];
+        struct {
+            struct { u16 enabled : 1, bounce : 1, random_direction : 1, delay : 13; } flags;
+            u16 unknown_002;
+            union { FieldPathPoint points[32]; fx32 coordinates[64]; };
+        } path;
+        struct {
+            s32 bounds[4];
+            FieldRoamingOption options[4];
+            u8 unknown_040[196];
+        } roaming;
+    };
+} FieldEntityMotionState;
 typedef char FieldEntityMotionState_SizeCheck[sizeof(FieldEntityMotionState) == 260 ? 1 : -1];
 
 /*
@@ -631,7 +653,7 @@ struct FieldRuntimeEntity {
     fx32 previous_relative_height, previous_support_clearance;
     const FieldInteractionBounds *body_bounds, *navigation_bounds;
     const void *body_bounds_lookup, *navigation_bounds_lookup;
-    s8 unknown_2e4[4];
+    union { s8 unknown_2e4[4]; struct { s8 body_bounds_index, unknown_2e5[3]; }; };
     s32 body_corner_angles[4];
     fx32 body_min_x;
     fx32 body_max_x;
@@ -701,12 +723,20 @@ struct FieldRuntimeEntity {
     s16 unknown_3d4;
     struct { u16 unknown_00_01 : 2, unknown_02_15 : 14; } unknown_3d6_bits;
     u32 unknown_3d8;
-    u16 unknown_3dc, unknown_3de;
+    union {
+        u16 unknown_3dc;
+        struct { u16 path_mode : 1, active : 1, moving : 1, paused : 1, unknown_04_15 : 12; } roaming_state;
+    };
+    u16 unknown_3de;
     union {
         u32 roaming_flags;
         FieldRoamingFlags roaming_flag_bits;
+        struct { u32 unknown_00_01 : 2, count : 4, index : 2, unknown_08_31 : 24; } roaming_options;
     };
-    struct { u32 unknown_00_09 : 10, unknown_10_15 : 6, unknown_16_21 : 6, unknown_22_31 : 10; } unknown_3e4_bits;
+    union {
+        struct { u32 unknown_00_09 : 10, unknown_10_15 : 6, unknown_16_21 : 6, unknown_22_31 : 10; } unknown_3e4_bits;
+        struct { u32 index : 4, count : 5, backward : 1, stop_mask_a : 6, stop_mask_b : 6, unknown_22_31 : 10; } path_state;
+    };
     u32 unknown_3e8;
     FieldEntityMotionState unknown_3ec;
     void *unknown_4f0, *unknown_4f4;

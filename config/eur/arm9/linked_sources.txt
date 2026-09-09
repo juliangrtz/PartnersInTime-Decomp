@@ -680,3 +680,5 @@ src/overlay009/shop_inventory_panel.cpp
 src/overlay009/shop_inventory_list.cpp
 src/overlay008/save_menu_scroll.cpp
 src/field/field_party_baby_spin.cpp
+src/field/field_body_collision.c
+src/field/field_roaming_path.cpp

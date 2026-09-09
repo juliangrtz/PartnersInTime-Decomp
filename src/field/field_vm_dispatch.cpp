@@ -1,3 +1,4 @@
+#include <game/field_roaming.h>
 #include <game/field_party.h>
 #include <game/field_system.h>
 #include <game/field_transform.h>
@@ -32,7 +33,6 @@ extern void func_ov000_020a4214(FieldEntity *entity, int angle_mode,
                                 int signed_multiplier, int stop_at_target,
                                 int reserved);
 extern void func_ov000_020ae520(FieldEntity *entity);
-extern void func_ov000_020b1394(FieldEntity *entity);
 extern void func_ov000_020a6d68(FieldEntity *entity,
                                 const void *resource_record,
                                 int reserved_2, int reserved_3,
@@ -64,14 +64,9 @@ extern void func_ov000_020b2020(FieldEntity *entity, int minimum_x,
 extern void func_ov000_020b1efc(FieldEntity *entity, const void *profile,
                                 int reserved);
 extern void func_ov000_020b1b88(FieldEntity *entity);
-extern void func_ov000_020b172c(FieldEntity *entity);
-extern void func_ov000_020b16d4(FieldEntity *entity);
-extern void func_ov000_020b167c(FieldEntity *entity);
 extern void func_ov000_020b1e5c(FieldEntity *entity, int profile_slot);
 extern void func_ov000_020b1a24(FieldEntity *entity, const void *path,
                                 int path_size_halfwords);
-extern void func_ov000_020b18e4(FieldEntity *entity);
-extern void func_ov000_020b1a08(FieldEntity *entity);
 extern int func_ov000_0207133c(u8 *field_context, FieldEntity *entity);
 extern void func_ov000_020bc8e4(FieldEntity *entity, int enabled);
 extern void func_ov000_020bc7d0(FieldEntity *entity, int enabled);
@@ -2478,7 +2473,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_RESTORE_ENTITY_BODY_COLLISION_BOUNDS:
-            func_ov000_020b1394(entity);
+            FieldEntity_LoadBodyBounds((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_SET_ENTITY_RESERVED_COLLISION_FLAG: {
@@ -2588,15 +2583,15 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_STOP_ENTITY_RANDOM_ROAMING:
-            func_ov000_020b172c(entity);
+            FieldRoaming_Stop((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_PAUSE_ENTITY_RANDOM_ROAMING:
-            func_ov000_020b16d4(entity);
+            FieldRoaming_Pause((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_RESUME_ENTITY_RANDOM_ROAMING:
-            func_ov000_020b167c(entity);
+            FieldRoaming_Resume((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_CLEAR_ENTITY_ROAMING_PROFILES:
@@ -2619,23 +2614,23 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_START_ENTITY_WAYPOINT_PATH:
-            func_ov000_020b18e4(entity);
+            FieldPath_Start((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_STOP_ENTITY_WAYPOINT_PATH:
-            func_ov000_020b172c(entity);
+            FieldRoaming_Stop((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_PAUSE_ENTITY_WAYPOINT_PATH:
-            func_ov000_020b16d4(entity);
+            FieldRoaming_Pause((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_RESUME_ENTITY_WAYPOINT_PATH:
-            func_ov000_020b167c(entity);
+            FieldRoaming_Resume((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_CLEAR_ENTITY_WAYPOINT_PATH:
-            func_ov000_020b1a08(entity);
+            FieldPath_Clear((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_FACE_ENTITY_TOWARD_ENTITY:

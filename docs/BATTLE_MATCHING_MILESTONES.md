@@ -1359,3 +1359,40 @@ is used, and no callbacks remain pending. The alternate entry and restore
 functions are statically verified only. Native linking, all 74 tests, progress
 consistency and the public-content audit pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+
+### Field contact selection and roaming/path control (2026-09-09)
+
+Eleven functions add 2,100 matching C/C++ bytes, reaching
+549,704 / 1,563,700 bytes (35.15%). Two adjacent subsystem modules reconstruct
+body-contact selection, collision-flag groups, resource/default body bounds,
+roaming wait/update/pause/resume/stop, and waypoint start/advance/clear. Checked
+layouts expose the shared path/roaming payload, waypoint counters and four
+roaming options. The existing script interaction now uses the typed active
+flag. The path loader remains assembly: its private candidate still differs
+in register allocation and is not credited.
+
+Story save 1 provides an ordinary, reproducible NPC interaction. Live RAM
+identifies the roaming Toad and its coordinates; keypad movement approaches
+it, A opens its conversation, and further A presses close it. A cold boot and
+three continuation runs cover 2,812 frames. They check 8,893 whole 1,300-byte
+entity snapshots across 8,883 roaming updates and one pause, plus nine calls
+to the existing random-step helper. Observed paths include movement in
+progress, starting a wait, countdown, selecting another roaming step, and
+remaining paused during the conversation. The dialog and final field screen
+were inspected. The Toad resumes roaming after the dialog through existing
+script code; this does not establish coverage of the new Resume function.
+
+A separate 479-frame replay of the full approach/conversation verifies 1,572
+contact selections (1,179 accepted and 393 retained), plus 479 collision-flag
+updates, each against the complete entity buffer. A cold boot of checkpoint
+65 additionally verifies one collision-flag update. The bounds loader, masked
+flag setter, waypoint functions, Resume and Stop remain statically verified
+only. No RAM or script substitution is used. Supplied saves 1 and 65 retain
+SHA-1 `3fcc1ab79db3f829b7a45f0f234cffb7f608ae93` and
+`0844b75810855bc3a738122b29382ed5a6c9f983`, respectively; no callbacks remain
+pending. Private reports are the `roaming_load1*` JSON files under
+`build/runtime/eur_roaming_paths/`, excluding the two-frame position survey,
+and `body_contact_load1.json`/`body_load65.json` under
+`build/runtime/eur_body_bounds/`. All 74 tests, native linking, progress
+consistency and the public-content audit pass. The complete ROM retains
+SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.

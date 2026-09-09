@@ -229,3 +229,9 @@ src/field/field_party_transitions.cpp:
 
 src/field/field_party_baby_spin.cpp:
     .text start:0x0208c128 end:0x0208cd08
+
+src/field/field_body_collision.c:
+    .text start:0x020b11f0 end:0x020b1530
+
+src/field/field_roaming_path.cpp:
+    .text start:0x020b1530 end:0x020b1a24

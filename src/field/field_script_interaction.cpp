@@ -1,3 +1,4 @@
+#include <game/field_roaming.h>
 extern "C" {
 #include <nitro/fx.h>
 }
@@ -5,7 +6,6 @@ extern "C" {
 #include <game/field_presentation.h>
 #include <game/field_entity_motion.h>
 extern "C" {
-extern void func_ov000_020b16d4(FieldEntity *);
 
 void FieldScript_BeginInteraction(FieldVmRuntime *runtime, FieldRuntimeEntity *actor,
                                   FieldRuntimeEntity *target, FieldScriptState *state)
@@ -31,11 +31,8 @@ void FieldScript_BeginInteraction(FieldVmRuntime *runtime, FieldRuntimeEntity *a
         target->base.pause_script();
         target->base.state_flag_bits.unknown_flag_03 = 1;
     }
-    struct RoamingFlags {
-        u16 unknown_00 : 1, active : 1, reserved : 14;
-    };
-    if (((RoamingFlags *)((u8 *)target + 0x3DC))->active)
-        func_ov000_020b16d4(&target->base);
+    if (target->roaming_state.active)
+        FieldRoaming_Pause(target);
     target->field_state_flag_bits.unknown_08_10 = target->base_state_flag_bits.facing_direction;
     if (target->field_state_flag_bits.turn_to_interactor)
         FieldEntity_FaceTarget(target, actor);
