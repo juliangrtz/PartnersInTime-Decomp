@@ -6,6 +6,8 @@ extern "C" {
 #include <game/battle_hit.h>
 extern u8 *gBattleContext;
 #define OVERLAY25_PROJECTILE_COUNTS ((u32 *)(gBattleContext + 27108))
+/* This shared table holds actor IDs during projectile preparation. */
+#define OVERLAY25_PROJECTILE_TARGETS ((u32 *)(gBattleContext + 27108))
 extern void func_ov002_02076178(int);
 extern int func_ov002_0206c148(u16, BattleModel *, s16, s16, s16, int);
 extern void func_ov025_020c2ee4(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
@@ -13,7 +15,6 @@ extern void func_ov025_020c34c4(Overlay25Task *, BattleSceneObject *, Overlay25W
 extern void func_ov025_020c3a08(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c4084(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c4fd8(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
-extern void func_ov025_020c5ea8(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c6c4c(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c9580(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020ca858(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);

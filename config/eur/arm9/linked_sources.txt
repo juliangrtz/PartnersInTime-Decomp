@@ -547,7 +547,7 @@ src/overlay025/ov25_effect_sequence_begin_positioning.cpp
 src/overlay025/ov25_projectile_wait_all.cpp
 src/overlay025/ov25_projectile_update_trail.cpp
 src/overlay025/enemy_projectile_effects.cpp
-src/overlay025/ov25_enemy_wait_return.cpp
+src/overlay025/enemy_projectile_preparation.cpp
 src/overlay025/ov25_enemy_wait_attached_effect.cpp
 src/overlay025/ov25_enemy_wait_animation.cpp
 src/overlay025/ov25_enemy_finish_attached_effect.cpp

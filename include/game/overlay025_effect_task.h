@@ -103,6 +103,8 @@ void Overlay25Enemy_ResetStoppedAnimation(Overlay25Task *task, BattleSceneObject
 void Overlay25Enemy_BeginModelEffect(Overlay25Task *task, BattleSceneObject *object,
                                      Overlay25WorkPrefix *work);
 void Overlay25Enemy_WaitPair(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Enemy_PositionLoadedProjectiles(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Enemy_LoadProjectiles(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_WaitReturn(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_WaitAttachedEffect(Overlay25Task *task, BattleSceneObject *object,
                                        Overlay25WorkPrefix *work);

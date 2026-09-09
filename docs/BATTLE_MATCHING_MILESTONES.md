@@ -3618,3 +3618,51 @@ Validation: zero native relink differences, canonical ROM SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`, all 81 tests, progress, public-content
 and whitespace checks pass. Matching C/C++ is **644,308 / 1,563,700 bytes
 (41.20%)**; C/C++ plus ASM is **41.54%**.
+
+
+## 2026-09-09 - Boss projectile loading and positioning (+780 bytes)
+
+`Overlay25Enemy_LoadProjectiles` (224 bytes) and
+`Overlay25Enemy_PositionLoadedProjectiles` (556 bytes) are byte-exact C++.
+They are merged with the adjacent WaitReturn into the contiguous
+`enemy_projectile_preparation.cpp`, 0x020C5EA8..0x020C61E0. Typed actor/resource,
+scene/model and work layouts express the load flags, Q8 damage scale, paired
+slots, zero starting scales, positions and accelerated motion. The shared
+attack table contains actor IDs in this sequence; it is now explicitly named
+PROJECTILE_TARGETS at these accesses while other sequences retain their
+existing count interpretation. The integer distance helper reads the DS square
+root unit once and passes that result as both motion distance parameters.
+
+Runtime report: `build/runtime/eur_ov25_projectile_prepare/evidence_prepare103.json`.
+Original save 103 SHA-1 `c264e8a8b26cb4994da8a93b164979377b7b4090`; giant boss
+phase state SHA-1 `f83e3507a0e81de426d54c5da1d4593a365d5f8c`. The 600 frames
+use B/wait inputs and two explicit sequence-entry fixtures at frame 320:
+the first callback changes from 0x020CBE28 to 0x020C60D4, and the shared six-word
+table at 0x020D3A3C changes from [85,4,0,0,0,0] to [56,57,0,0,0,0]. The latter
+supplies valid Mario/Luigi target IDs for this initializer. The previous
+callback uses the shared storage differently; using its stale values yielded
+a null scene-object lookup. No executable code, object positions or models are
+patched. The 24-byte table is written once; only its first two words differ.
+
+This resolves the prerequisite behind the earlier launch probe's motion-gate
+bypass. With valid target IDs, the native motion gate completes after 58 calls
+and proceeds through BeginProjectileEffects, WaitProjectileEffectAnimation and
+ReleaseProjectileEffects without an intermediate callback substitution. This
+is controlled sequence coverage, not proof of a naturally selected complete
+attack or battle victory.
+
+There are 149 byte-guarded, SP-matched checked returns: Load once, Position four
+times (three resource waits), Begin once, WaitAnimation 22 and Release 121.
+Complete task/work/resource/actor/scene/model records agree at modeled
+boundaries; all helper arguments agree. Two starting positions and square-root
+distances, five view projections and three subsequent positions are checked
+independently. Helper side effects are refreshed at return. Slots 0/1 are active
+and 2..5 are empty in this probe. The final screenshot shows the ongoing giant
+boss attack. BG VRAM and palettes are dumped and hashed; all 104 supplied saves
+remain unchanged. No full attack completion is claimed.
+
+Validation: zero native relink differences, canonical ROM SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`, all 81 tests and progress,
+public-content and whitespace checks pass. Matching C/C++ is **645,088 /
+1,563,700 bytes (41.25%)**; C/C++ plus ASM is **41.59%**. A nearby travel starter
+still differs in four register-allocation words and remains private.

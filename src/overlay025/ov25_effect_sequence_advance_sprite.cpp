@@ -27,7 +27,7 @@ void Overlay25EffectSequence_StartModel(Overlay25Task *task, BattleSceneObject *
         parameters->effect = BattleModelEffect_Spawn(834, linked, 0, 0, 0, 256);
         parameters->effect->attached_script_flag = 1;
         if (parameters->mode == 1)
-            task->update = func_ov025_020c5ea8;
+            task->update = Overlay25Enemy_PositionLoadedProjectiles;
         if (parameters->mode == 2)
             task->update = Overlay25EffectSequence_StartSprite;
     }
