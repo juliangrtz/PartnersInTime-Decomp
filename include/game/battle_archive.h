@@ -13,6 +13,18 @@ int BattleArchive_Open(void *system, const u8 *source, u32 size, const void *des
 #ifdef __cplusplus
 extern "C" {
 #endif
+typedef struct BattleMapChannelRecord {
+    s8 fields[8];
+} BattleMapChannelRecord;
+typedef char BattleMapChannelRecord_SizeCheck[sizeof(BattleMapChannelRecord) == 8 ? 1 : -1];
+
+void BattleMap_UpdateReloadTask(BattleQueuedTask *task);
+void BattleMap_ReadReloadTask(BattleQueuedTask *task);
+void BattleMap_PrepareReloadTask(BattleQueuedTask *task);
+void BattleMap_ClearDisplays(void);
+void BattleMap_OpenReloadArchiveTask(BattleQueuedTask *task);
+BattleQueuedTask *BattleMap_QueueReload(BattleSceneResource *resource, int index);
+
 void BattleMap_OpenArchiveTask(BattleQueuedTask *task);
 BattleQueuedTask *BattleMap_QueueLoad(BattleSceneResource *resource, int index);
 int BattleMap_GetEncounterResourceIndex(int encounter_id);

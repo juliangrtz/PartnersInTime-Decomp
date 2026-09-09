@@ -3222,3 +3222,44 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **630,220 / 1,563,700 bytes (40.30%)**; C/C++ plus assembly: **40.64%**.
+
+### Battle map reload pipeline: 40.53% matching C/C++
+
+Six functions from `0x02089F2C` through `0x0208AD54` add **3,624 exact C
+bytes** to the contiguous battle map transfer module. The queue validates the
+resource index, opens its archive, computes sixteen section sizes and loading
+destinations, binds the map objects, resets scroll and animation state, clears
+both displays, and transfers palettes, tilemaps and animation streams. The
+eight-byte channel records have a checked layout. Native register data flow
+established that resource access and the conditional track-command loads must
+stay in their respective branches; no compiler permutation search was used.
+
+Runtime evidence: `build/runtime/eur_battle_map_reload/evidence_reload55.json`
+and `evidence_reload83.json`, using checkpoint 55/83 battle states with SHA-1
+`a8b485d4cc4b72586af611455830b5f89f67bc07` and
+`850ad8741a5474f336724f26698a502f1fb52457`. Each run injects one explicitly
+controlled decoded battle VM command `0xC1`: reload the current resource
+(352 or 576), extent 32, fade-out/in durations 8. It restores all 72 command
+bytes and 172 VM-state bytes at the native dispatcher return. The next native
+decode is checked to revisit the original script position. This is a fixture,
+not a claim that ordinary keypad input initiated the background transition.
+
+Across **602 frames**, all six functions return **34 times**, including all
+twelve normal reload states twice. Exact helper arguments and full task,
+resource, archive-request, section-table and map-control records pass checks.
+Copies verify **18,496 bytes** after execution; display clears verify
+**49,408 bytes**. Resource 576 also exercises both previous-track resets,
+palette-animation lookups and both new matrix-animation tracks. Screenshots
+show the restored forest battle and animated star-room battle; main/sub BG
+VRAM and palettes are dumped and hashed in the reports. All **104 original
+save hashes** remain unchanged.
+
+Coverage limits: invalid indices, empty resources, dispatch state 16, nonempty
+optional tilemap layers and reusing an already-existing track during the load
+remain statically verified. Adjacent initial-load routines are still deferred
+because their register allocation has not matched.
+
+Validation: native relink has zero differing bytes; all 74 tests, public-source
+audit and whitespace checks pass. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**633,844 / 1,563,700 bytes (40.53%)**; C/C++ plus assembly: **40.87%**.

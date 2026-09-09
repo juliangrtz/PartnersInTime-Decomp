@@ -44,8 +44,8 @@ extern void *func_ov002_020725a4(
     void (*callback)(void *task), void *argument_1,
     int argument_2, int argument_3);
 extern void BattleMap_SavePalette(void *task);
-extern void func_ov002_0208ace0(
-    BattleObjectDataLoadState *load_state, s16 value);
+extern struct BattleQueuedTask *BattleMap_QueueReload(
+    BattleObjectDataLoadState *load_state, int value);
 extern int func_ov002_020b05f0(s16 x, s16 y, int frame);
 extern int BattleRasterEffect_ApplyToTable(
     int value, int extent, int duration, int progress,
@@ -227,7 +227,7 @@ void BattleRasterResourceTransition_UpdateOut(BattleRasterEffectTask *task) {
         (s16)state->progress);
     if ((s16)state->progress >= (s16)state->extent) {
         state->progress = 0;
-        func_ov002_0208ace0(
+        BattleMap_QueueReload(
             BattleObjectData_GetLoadState(BATTLE_RASTER_OBJECT_DATA_ID),
             state->mode);
         task->callback = BattleRasterResourceTransition_UpdateIn;
