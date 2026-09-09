@@ -8,6 +8,16 @@
 typedef struct FieldVariablePlacement FieldVariablePlacement;
 struct FieldPaletteCrossfade;
 
+typedef struct FieldAreaTransition {
+    struct {
+        u32 pending:1, fading:1, party_mask:2, direction_0:3, direction_1:3, control_locked:1;
+        s32 bgm:8;
+        u32 movement_modes:8, unknown_27_31:5;
+    } flags;
+    u16 room;
+    s16 script, x[2], y[2], z[2];
+} FieldAreaTransition;
+typedef char FieldAreaTransition_SizeCheck[sizeof(FieldAreaTransition)==20?1:-1];
 typedef struct FieldAreaContext {
     const void *vtable;
     void *owner;
@@ -89,15 +99,15 @@ typedef struct FieldAreaContext {
         u8 unknown_24f4[8];
         struct { FieldQuadRegion *quad_regions; const FieldVariablePlacement *variable_records; };
     };
-    void *auxiliary;
+    union { void *auxiliary; struct FieldSystem *system; };
     FieldNavigationChangeManager *navigation_changes;
     u8 unknown_2504[8], unknown_250c[44], unknown_2538[40];
-    void *party_order;
+    union { void *party_order; struct FieldTimer *timer; };
     void *unknown_2564;
     void *unknown_2568;
     struct FieldPartyManager *party;
     FieldScriptManager scripts;
-    u8 unknown_29d4[4];
+    union { u8 unknown_29d4[4]; struct FieldAreaContext *paired_area; };
     struct FieldRuntimeEntity *entities[36];
     void *shared_resources;
     void *unknown_2a6c;
@@ -107,12 +117,16 @@ typedef struct FieldAreaContext {
     union {
         u16 state;
         struct {
-            u16 unknown_00_01 : 2, unknown_02_15 : 14;
+            u16 unknown_00_01 : 2, unknown_02_04 : 3, unknown_05 : 1, unknown_06 : 1, unknown_07_15 : 9;
         } state_bits;
     };
     union { u8 unknown_2b32[2]; struct { u8 entity_count, variable_count; }; };
     s8 special_resources[6];
-    u8 unknown_2b3a[34], unknown_2b5c[52], unknown_2b90[52], unknown_2bc4[8];
+    u8 unknown_2b3a[14];
+    FieldAreaTransition transition;
+    u8 unknown_2b5c[52];
+    union { u8 unknown_2b90[52]; struct { u16 state:2, unknown:14; } unknown_2b90_bits; };
+    u8 unknown_2bc4[8];
     struct FieldPaletteCrossfade *palette_crossfade;
 } FieldAreaContext;
 typedef char FieldAreaContext_SizeCheck[sizeof(FieldAreaContext) == 11216 ? 1 : -1];

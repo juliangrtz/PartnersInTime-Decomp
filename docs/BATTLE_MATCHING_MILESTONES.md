@@ -3363,3 +3363,62 @@ Validation: zero differing native relink bytes, all 74 tests, progress check,
 public-content audit and whitespace checks pass. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++ is
 **635,764 / 1,563,700 bytes (40.66%)**; C/C++ plus ASM is **40.99%**.
+
+
+## 2026-09-09 - Field room departure and transition requests (+3,600 bytes)
+
+`src/field/field_room_transition.cpp` reconstructs the contiguous region
+0x0207F4D0..0x020802E0 as four byte-identical C++ routines:
+FieldArea_PrepareRoomDeparture (1,352 bytes), FieldArea_QueueRoomChange (176),
+FieldArea_QueueBothPartyRoomChange (652), and FieldArea_QueuePartyRoomChange
+(1,420). These preserve groups left behind, detach outgoing actors, persist
+active variable entities, stop screen-owned effects, select music fade policy,
+prepare arrival coordinates/modes, reset special party actions and request a
+paired-screen room change when its native eligibility conditions hold.
+
+The checked field layout now contains the twenty-byte transition record,
+shared system/timer pointers and paired area. Room metadata and public request
+declarations are shared with existing VM/bounds callers. Narrow parameter types
+follow native stack loads; signed coordinates, unsigned locomotion state and
+the visibility expression reproduce the native code without compiler searches.
+Unknown state bits retain neutral names.
+
+Runtime reports are under `build/runtime/eur_field_room_transition/`:
+
+- `evidence_south83.json`: checkpoint 83, state SHA-1
+  `590c4bc2877e1f1781faf521ca2a8b87ea1f9258`. Ordinary right:20, down:90,
+  wait:180 inputs cross from room 459 to 458. The piggyback group requests a
+  room change with fade, both groups detach, and music policy -3 retains the
+  current track. No fixture or RAM mutation. 293 frames, two target returns.
+- `evidence_reload83.json`: the same state, 801 frames. Decoded D0 and D1 VM
+  fixtures reload current room 459 using live party coordinates. The D0 request
+  carries both groups; D1 carries neither, so departure snapshots both groups.
+  Music policies -1 and -2 respectively stop and retain music. Four returns.
+- `evidence_reload19.json`: checkpoint 19, room 63, state SHA-1
+  `1be5dcdb562896ed9359e48181353393fb1c985d`; the same fixtures exercise another
+  story location and room resources. 801 frames, four returns.
+
+The reload fixtures restore all 72 decoded-command bytes before their native
+wrappers. Native room reload destroys the room script, so these are controlled
+requests, with no claim of original-command replay or ordinary traversal.
+Across 1,895 frames all four routines return, ten returns total. Byte-guarded
+entry/call/SP-matched return checks cover complete 11,216-byte areas, 16,764-byte
+managers, 1,440-byte actors, forty-byte timers, 952-byte shared systems and
+variable entities where present. Arrival descriptors, direct memory writes and
+all called-helper arguments agree; helper side effects are refreshed explicitly.
+Eight party-state copies occur across the reload scenarios. Screenshots show
+normal field scenes after all three probes; OBJ VRAM/palettes are dumped and
+hashed. All 104 supplied saves remain unchanged. Save 19 and 83 SHA-1 values are
+`ee08102d192b97a70b787025fc791c8e3c474439` and
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b`.
+
+Coverage limits: non-piggyback single-party requests, special-action cleanup,
+eligible paired-screen synchronization, active timer hiding, entity-variable
+persistence and remaining music branches are statically verified, not claimed
+as runtime-covered. An exploratory X/right/down input entered the save menu
+and reached no target; it contributes no coverage.
+
+Validation: native relink has zero differing bytes; all 74 tests, progress,
+public-content and whitespace checks pass. ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++ is
+**639,364 / 1,563,700 bytes (40.89%)**; C/C++ plus ASM is **41.22%**.

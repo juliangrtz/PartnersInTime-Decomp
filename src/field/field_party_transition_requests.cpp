@@ -2,9 +2,8 @@ extern "C" {
 #include <nitro/fx.h>
 }
 #include <game/field_party_manager.h>
+#include <game/field_room_transition.h>
 extern "C" {
-void func_ov000_0207fa18(FieldAreaContext *, u16, int, int, int);
-extern const u16 data_02048f18[][2];
 void func_ov000_0209f644(FieldPartyManager *, int, int, int, int, int, int, u8, int, int, u8, u8);
 }
 extern "C" void FieldPartyManager_TransitionThroughBounds(FieldPartyManager *manager, int side,
@@ -88,5 +87,5 @@ extern "C" void FieldPartyManager_QueuePairedBounds(FieldPartyManager *manager, 
     manager->pending_bounds.active = 1;
     manager->pending_bounds.side = (u16)side;
     manager->pending_bounds_record = record;
-    func_ov000_0207fa18(manager->areas[1], data_02048f18[manager->areas[0]->room_id][1], -1, -1, 1);
+    FieldArea_QueueRoomChange(manager->areas[1], data_02048f18[manager->areas[0]->room_id].paired_room, -1, -1, 1);
 }

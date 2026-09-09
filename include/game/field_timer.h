@@ -12,7 +12,7 @@ typedef struct FieldTimerImage {
 } FieldTimerImage;
 
 typedef struct FieldTimer {
-    struct { u8 screen : 1, allocated : 1, paused : 1, unknown_3_7 : 5; } flags;
+    struct { u8 screen : 1, allocated : 1, paused : 1, unknown_3 : 1, unknown_4_7 : 4; } flags;
     s8 step, minutes, seconds, frames, hundredths;
     s16 x, y;
     u16 unknown_0a;

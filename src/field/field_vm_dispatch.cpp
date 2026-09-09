@@ -1,5 +1,6 @@
 #include <game/field_resources.h>
 #include <game/field_room_interaction.h>
+#include <game/field_room_transition.h>
 #include <game/field_roaming.h>
 #include <game/field_party.h>
 #include <game/field_party_manager.h>
@@ -78,20 +79,6 @@ extern void func_ov000_020a0c30(void *party_manager, int party_side,
                                 int instant, int reserved, int enabled);
 extern void func_ov000_0209cbfc(void *party_controller, int reserved);
 extern void func_ov000_0209cb90(void *party_controller, int reserved);
-extern void func_ov000_0207fd54(
-    u8 *field_context, int party_side, int destination_room_id, s16 x, s16 y,
-    s16 z, int facing_direction, int lock_control, s16 arrival_script_id,
-    int bgm_policy, int reserved_0, int synchronize_paired_field,
-    int reserved_1, int reserved_2);
-extern void func_ov000_0207fac8(
-    u8 *field_context, int destination_room_id, s16 party_0_x,
-    s16 party_0_y, s16 party_0_z, int party_0_facing, s16 party_1_x,
-    s16 party_1_y, s16 party_1_z, int party_1_facing,
-    s16 arrival_script_id, int bgm_policy, int reserved_0,
-    int synchronize_paired_field, int reserved_1, int reserved_2);
-extern void func_ov000_0207fa18(u8 *field_context, int destination_room_id,
-                                s16 arrival_script_id, int bgm_policy,
-                                int reserved);
 extern void func_ov000_0209f644(
     void *party_manager, int party_side, int destination_room_id, int x,
     int y, int z, int facing_direction, int animate_entry,
@@ -339,10 +326,6 @@ typedef struct FieldAsyncOperationFlags {
     u32 unknown_01_31 : 31;
 } FieldAsyncOperationFlags;
 
-typedef struct FieldMusicActivationFlags {
-    u8 disabled : 1;
-    u8 unknown_01_07 : 7;
-} FieldMusicActivationFlags;
 
 typedef struct FieldControlFlags {
     u16 unknown_00_02 : 3;
@@ -2674,8 +2657,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 arguments[0] = active_side;
             }
         }
-        func_ov000_0207fd54(
-            field_context, arguments[0],
+        FieldArea_QueuePartyRoomChange(
+            (FieldAreaContext *)field_context, arguments[0],
             arguments[1], (s16)arguments[2],
             (s16)arguments[3], (s16)arguments[4],
             arguments[5], arguments[6] != 0,
@@ -2685,8 +2668,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_CHANGE_FIELD_ROOM_FOR_BOTH_PARTIES:
-        func_ov000_0207fac8(
-            field_context, arguments[0],
+        FieldArea_QueueBothPartyRoomChange(
+            (FieldAreaContext *)field_context, arguments[0],
             (s16)arguments[1], (s16)arguments[2],
             (s16)arguments[3], arguments[4],
             (s16)arguments[5], (s16)arguments[6],
@@ -2697,8 +2680,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_CHANGE_FIELD_ROOM:
-        func_ov000_0207fa18(
-            field_context, arguments[0],
+        FieldArea_QueueRoomChange(
+            (FieldAreaContext *)field_context, arguments[0],
             (s16)arguments[1], arguments[2], 0);
         result = SCRIPT_VM_RETURNED;
         break;
