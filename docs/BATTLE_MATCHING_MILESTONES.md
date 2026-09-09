@@ -3804,3 +3804,48 @@ All 104 supplied saves retain their hashes.
 Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
 Matching C/C++ is 648,296 / 1,563,700 bytes (41.46%); C/C++ plus ASM is 41.79%.
+
+
+## 2026-09-10 - Boss chain preparation (+1,024 bytes)
+
+Overlay25Enemy_InitializeSegmentChains (0x020C6C4C, 692 bytes) and
+Overlay25Chain_BeginTracking (0x020C93D0, 332 bytes) are byte-exact C++.
+They extend the adjacent modules enemy_segment_chain_preparation.cpp and
+enemy_chain_tracking.cpp. Shared checked layouts describe the 836-byte chain
+state, its 12-byte joints and the 32-byte motion parameters. Preparation clears
+the second four chain states, binds scene objects and initializes collision
+status; tracking initializes fixed-point coordinates, binds the resource and
+snapshots the initial position before selecting the native movement callback.
+
+Runtime evidence: build/runtime/eur_ov25_chain_preparation/
+evidence_segments103.json and evidence_tracking103.json. Both probes compare
+complete task/work/scene/model/resource/hit records and external helper
+arguments. Helper side effects are refreshed at return. New independent
+checks include the 3,344 cleared bytes, initial positions and position snapshots.
+
+The 1,501-frame segment run starts from prepare103.dst (SHA-1
+c2c8c46bf017c3f5a9b048ecfbf536dc68170d17), including its documented target
+preparation fixture. It repeats the previous temporary 20-byte reflected-hit
+fixture and reaches chain initialization through subsequent native attacks.
+There are 22 checked initialization returns, two initialized scene objects
+(40/41), and 133 checked returns from the preceding projectile callbacks.
+
+The 970-frame tracking run starts from phase103.dst (SHA-1
+f83e3507a0e81de426d54c5da1d4593a365d5f8c). At frame 320 a controlled fixture
+changes the shared attack-table contact count from 85 to 1 and selects
+Overlay25Enemy_BeginModelEffect in task 0. Each change is four bytes. Native
+preparation selects chain indices 2/3 and reaches two checked BeginTracking
+returns. Subsequent native tracking, grab and unlock callbacks execute. This
+establishes isolated setup coverage, not natural attack selection or independent
+verification of the entire attack. The JSON template's generic fixture label
+does not describe the count's tracking-specific role; the actual edits are
+recorded there and described here.
+
+Both final images were inspected: the segment run reaches the player's Jump
+menu and the tracking run shows the active boss encounter. BG VRAM and palettes
+are dumped and hashed. All 104 supplied save hashes remain unchanged; source
+checkpoint 103 SHA-1 is c264e8a8b26cb4994da8a93b164979377b7b4090.
+
+Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
+Matching C/C++ is 649,320 / 1,563,700 bytes (41.52%); C/C++ plus ASM is 41.86%.

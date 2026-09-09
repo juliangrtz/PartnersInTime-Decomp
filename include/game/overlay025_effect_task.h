@@ -10,6 +10,27 @@ extern "C" {
 }
 #endif
 #include <game/battle_effect.h>
+typedef struct Overlay25ChainJoint { s16 x, y, z, unknown_06[3]; } Overlay25ChainJoint;
+typedef struct Overlay25ChainState {
+    Overlay25ChainJoint joints[64];
+    s16 unknown_300, unknown_302, unknown_304, countdown;
+    s16 unknown_308, amplitude_q8, unknown_30c;
+    s16 offset_x, offset_y, offset_z;
+    s16 unknown_314, counter, unknown_318, unknown_31a;
+    u16 object_id;
+    u8 unknown_31e[26];
+    s32 x_q8, y_q8, z_q8;
+} Overlay25ChainState;
+typedef char Overlay25ChainState_SizeCheck[sizeof(Overlay25ChainState)==836?1:-1];
+typedef struct Overlay25ChainMotionParameters {
+    u16 phase;
+    s16 phase_step, timer, angle;
+    u8 flags[4], unknown_0c[20];
+} Overlay25ChainMotionParameters;
+
+typedef char Overlay25ChainJoint_SizeCheck[sizeof(Overlay25ChainJoint) == 12 ? 1 : -1];
+typedef char Overlay25ChainMotionParameters_SizeCheck[sizeof(Overlay25ChainMotionParameters) == 32 ? 1 : -1];
+
 typedef struct Overlay25Task Overlay25Task;
 typedef struct Overlay25WorkPrefix Overlay25WorkPrefix;
 typedef void (*Overlay25Callback)(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
@@ -36,10 +57,12 @@ struct Overlay25Task {
     union {
         int sound_handle;
         Overlay25Parameters parameters;
+        Overlay25ChainMotionParameters chain_motion;
     };
 };
 struct Overlay25WorkPrefix {
-    u8 unknown000[6688];
+    /* Eight 836-byte chain workspaces; attack state chooses which half is used. */
+    union { u8 unknown000[6688]; Overlay25ChainState chains[8]; };
     BattleEffect *model_effect, *sprite_effect;
     u32 unknown1a28;
     s16 phase, unknown1a2e;
@@ -103,6 +126,8 @@ void Overlay25Enemy_ResetStoppedAnimation(Overlay25Task *task, BattleSceneObject
                                           Overlay25WorkPrefix *);
 void Overlay25Enemy_BeginModelEffect(Overlay25Task *task, BattleSceneObject *object,
                                      Overlay25WorkPrefix *work);
+void Overlay25Enemy_InitializeSegmentChains(Overlay25Task *task, BattleSceneObject *enemy, Overlay25WorkPrefix *work);
+void Overlay25Chain_BeginTracking(Overlay25Task *task, BattleSceneObject *enemy, Overlay25WorkPrefix *work);
 void Overlay25Enemy_WaitPair(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_PositionLoadedProjectiles(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_LoadProjectiles(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
