@@ -2614,3 +2614,42 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **607,716 / 1,563,700 bytes (38.86%)**; C/C++ plus assembly: **39.20%**.
+
+## Field-party manager reunion and scripted action entry points (2026-09-09)
+
+Reconstructed **2,880 bytes** across thirteen contiguous manager routines.
+The reunion implementation binds adult/baby partners, restores presentation,
+sets movement mode 6 and hides the carried members. Its starter supports an
+immediate placement or movement toward the other group's midpoint. The same
+module handles reunion cancellation, piggyback-mount requests/status, airborne
+completion and the script-facing drill, anchor, cannon and elevation wrappers.
+The Field VM now calls their typed public declarations.
+
+Controlled VM replays on supplied save 83 exercised moving reunion from side 0,
+immediate reunion from side 1, rejection after reunion, completion queries,
+mounting, cancellation and both airborne completions. Full 16,764-byte manager,
+1,440-byte member and 312-byte renderer comparisons checked each helper boundary
+and return. The immediate reunion also reached region 71's special indicator
+palette path. The observed queries reported completion; pending-query results
+and independent-member mounting remain statically verified.
+
+Seven separate 41-frame replays from the same unmodified checkpoint exercised
+all six thin script wrappers, including both anchor sides. These verify wrapper
+dispatch and argument forwarding; they do not claim complete cannon, drill or
+elevation story sequences. Every decoded-command fixture restored all 72 command
+bytes and the script cursor and checked the original command replay. Only the
+C8 completion case additionally prepared the documented caller states 57/58 on
+the two live members, as in the preceding transfer verification.
+
+Private reports: `build/runtime/eur_party_reunite/evidence_reunion83.json`,
+`evidence_instant83.json` and the eight `evidence_*.json` reports in
+`build/runtime/eur_party_manager_more/`. Together these cover **1,484 frames and
+19 checked returns**, with every new routine observed. Initial-state SHA-1:
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`; save-83 SHA-1:
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b`. No ROM code was patched and all
+**104 supplied saves** retained their hashes.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**610,596 / 1,563,700 bytes (39.05%)**; C/C++ plus assembly: **39.38%**.

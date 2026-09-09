@@ -33,9 +33,24 @@ typedef char FieldPartyManagerSnapshot_SizeCheck[sizeof(FieldPartyManagerSnapsho
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* Both groups must be in ordinary field mode before beginning reunion. */
+void FieldPartyManager_BeginReunion(FieldPartyManager *manager, int side, int instant);
+int FieldPartyManager_IsReuniting(FieldPartyManager *manager);
+void FieldPartyManager_CompleteReunion(FieldPartyManager *manager);
 void FieldPartyManager_SaveSnapshot(FieldPartyManager *manager, FieldPartyManagerSnapshot *snapshot);
 FieldPartyManager *FieldPartyManager_DestroyStorage(FieldPartyManager *manager);
 FieldPartyManager *FieldPartyManager_InitializeStorage(FieldPartyManager *manager);
+void FieldPartyManager_CompleteAirborneTransfers(FieldPartyManager *manager);
+void FieldPartyManager_BeginPiggybackMount(FieldPartyManager *manager);
+int FieldPartyManager_IsPiggybackMountActive(FieldPartyManager *manager);
+void FieldPartyManager_CancelReunion(FieldPartyManager *manager);
+void FieldPartyManager_PrepareBabyDrillMarker(FieldPartyManager *manager,int animation);
+void FieldPartyManager_MoveToAnchor(FieldPartyManager *manager,int side,int index);
+void FieldPartyManager_PrepareBrosBallLaunch(FieldPartyManager *manager);
+void FieldPartyManager_LaunchBrosBall(FieldPartyManager *manager,int direction);
+void FieldPartyManager_LaunchBabiesToElevation(FieldPartyManager *manager,fx32 height);
+void FieldPartyManager_DropBabies(FieldPartyManager *manager);
+
 #ifdef __cplusplus
 }
 #endif

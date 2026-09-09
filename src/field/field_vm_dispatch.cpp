@@ -1,5 +1,6 @@
 #include <game/field_roaming.h>
 #include <game/field_party.h>
+#include <game/field_party_manager.h>
 #include <game/field_system.h>
 #include <game/field_transform.h>
 #include <game/field_entity_motion.h>
@@ -71,11 +72,6 @@ extern void func_ov000_020b1a24(FieldEntity *entity, const void *path,
 extern int func_ov000_0207133c(u8 *field_context, FieldEntity *entity);
 extern void func_ov000_020bc8e4(FieldEntity *entity, int enabled);
 extern void func_ov000_020bc7d0(FieldEntity *entity, int enabled);
-extern void func_ov000_0209e720(void *party_manager, int party_side,
-                                int instant);
-extern int func_ov000_0209e6f4(void *party_manager);
-extern void func_ov000_0209dfd4(void *party_manager);
-extern int func_ov000_0209df70(void *party_manager);
 extern void func_ov000_0209ce44(void *party_controller, int member,
                                 int character_id);
 extern void func_ov000_0209ce00(void *party_controller);
@@ -89,17 +85,6 @@ extern void func_ov000_0209e8cc(void *party_manager, int party_side,
                                 u16 action_type_mask);
 extern int func_ov000_0209ebdc(void *party_manager, int party_side,
                                int present_party_mask);
-extern void func_ov000_0209de24(void *party_manager,
-                                int marker_animation_id);
-extern void func_ov000_0209dddc(void *party_manager, int party_side,
-                                int anchor_entity_slot);
-extern void func_ov000_0209ddcc(void *party_manager);
-extern void func_ov000_0209ddbc(void *party_manager,
-                                int legacy_parameter);
-extern void func_ov000_0209dda4(void *party_manager,
-                                fx32 target_elevation);
-extern void func_ov000_0209dd8c(void *party_manager);
-extern void func_ov000_0209e1a8(void *party_manager);
 extern void func_ov000_020a0c30(void *party_manager, int party_side,
                                 int instant, int reserved, int enabled);
 extern void func_ov000_0209cbfc(void *party_controller, int reserved);
@@ -3530,13 +3515,13 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             arguments[0] =
                 FieldVm_GetActivePartySide(party_manager);
         }
-        func_ov000_0209e720(
-            party_manager, arguments[0],
+        FieldPartyManager_BeginReunion(
+            (FieldPartyManager *)party_manager, arguments[0],
             arguments[1] != 0);
         break;
 
     case FIELD_VM_WAIT_SPLIT_PARTY_REUNION:
-        if (func_ov000_0209e6f4(party_manager)) {
+        if (FieldPartyManager_IsReuniting((FieldPartyManager *)party_manager)) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3544,11 +3529,11 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_BABY_PIGGYBACK_MOUNT:
-        func_ov000_0209dfd4(party_manager);
+        FieldPartyManager_BeginPiggybackMount((FieldPartyManager *)party_manager);
         break;
 
     case FIELD_VM_WAIT_BABY_PIGGYBACK_MOUNT:
-        if (func_ov000_0209df70(party_manager)) {
+        if (FieldPartyManager_IsPiggybackMountActive((FieldPartyManager *)party_manager)) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3669,35 +3654,35 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_PREPARE_BABY_DRILL_MARKER:
-        func_ov000_0209de24(party_manager, arguments[0]);
+        FieldPartyManager_PrepareBabyDrillMarker((FieldPartyManager *)party_manager, arguments[0]);
         break;
 
     case FIELD_VM_MOVE_PARTY_TO_GIMMICK_ANCHOR:
-        func_ov000_0209dddc(
-            party_manager, arguments[0],
+        FieldPartyManager_MoveToAnchor(
+            (FieldPartyManager *)party_manager, arguments[0],
             arguments[1]);
         break;
 
     case FIELD_VM_PREPARE_BROS_BALL_CANNON_LAUNCH:
-        func_ov000_0209ddcc(party_manager);
+        FieldPartyManager_PrepareBrosBallLaunch((FieldPartyManager *)party_manager);
         break;
 
     case FIELD_VM_LAUNCH_BROS_BALL_FROM_CANNON:
-        func_ov000_0209ddbc(party_manager, arguments[0]);
+        FieldPartyManager_LaunchBrosBall((FieldPartyManager *)party_manager, arguments[0]);
         break;
 
     case FIELD_VM_LAUNCH_BABY_PARTY_TO_ELEVATION:
-        func_ov000_0209dda4(
-            party_manager,
+        FieldPartyManager_LaunchBabiesToElevation(
+            (FieldPartyManager *)party_manager,
             arguments[0] << FX32B_INT);
         break;
 
     case FIELD_VM_DROP_BABY_PARTY_FROM_ELEVATION:
-        func_ov000_0209dd8c(party_manager);
+        FieldPartyManager_DropBabies((FieldPartyManager *)party_manager);
         break;
 
     case FIELD_VM_COMPLETE_AIRBORNE_BABY_TRANSFERS:
-        func_ov000_0209e1a8(party_manager);
+        FieldPartyManager_CompleteAirborneTransfers((FieldPartyManager *)party_manager);
         break;
 
     case FIELD_VM_GET_PARTY_CONTROLLER_PROPERTY:
