@@ -3014,3 +3014,36 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **625,352 / 1,563,700 bytes (39.99%)**; C/C++ plus assembly: **40.33%**.
+
+## Save-menu dialog dispatch and sprite controls (2026-09-09)
+
+Reconstructed four adjacent controls, **360 bytes**: dialog construction
+dispatch, task-group reset, dialog OBJ-VRAM clearing, and slot-choice drawing.
+The draw callback selects the enabled or disabled palette from the selected
+slot's occupancy. The shared, layout-checked 64-byte `Overlay5Sprite` record
+also replaces the identical private menu-item sprite definition.
+
+Four ordinary keypad runs covered **2,841 frames and 4,274 target returns**:
+4,256 choice draws and six returns each from construction, reset and clearing.
+They observed occupied slots (1,984 draws), empty slots (144), retained palettes
+on other rows (2,128), and dialog kinds 1, 3 and 4. Kinds 0, 2 and the default
+branch remain statically verified. The constructors reached by the dispatcher
+remain assembly; their complete text contexts are not claimed as newly modeled.
+
+Byte-guarded, SP-matched models checked full 72-byte tasks, 64-byte sprites,
+slot selection and occupancy, all dispatch/reset/draw helper arguments, and
+**36,864 bytes cleared in live OBJ-VRAM**. Reports and screenshots are in
+`build/runtime/eur_save_menu_dialog_control/`: `evidence_cold103.json`,
+`evidence_pack55.json`, `evidence_empty55.json` and `evidence_copy_menu55.json`.
+The latter three checkpoints have SHA-1 values
+`78e17c1fe46026d1115c27b212d6f0e39fa4948a`,
+`40767c169c83cce614cbf00c2f575050e398f706` and
+`2f0e7761766fc37095b4838693bd76764d5c35cf`. These runs used emulator working
+backup data without command or RAM fixtures. All **104 supplied saves** retained
+their hashes. Cold-load and save-confirmation final OBJ-VRAM/palette regions
+matched the preceding corresponding runs.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**625,712 / 1,563,700 bytes (40.01%)**; C/C++ plus assembly: **40.35%**.

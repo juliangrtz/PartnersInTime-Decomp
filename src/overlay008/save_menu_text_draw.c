@@ -1,4 +1,17 @@
 #include "save_menu_internal.h"
+#include <game/save_menu_write.h>
+#include <game/overlay005_resource.h>
+extern SaveMenuBufferHeader data_0205e32c;
+Overlay5Sprite *Overlay5ResourceB_Get(SaveMenuTransferTask *);
+void func_ov005_02069084(void *, int);
+void func_ov005_020663d8(int);
+void MIi_CpuClearFast(u32, void *, u32);
+void SaveMenuText_ClearDialogVram(SaveMenuTransferTask *);
+void func_ov008_02074f28(SaveMenuText *);
+void func_ov008_02074cfc(SaveMenuText *);
+void func_ov008_020748b0(SaveMenuText *);
+void func_ov008_020744d8(SaveMenuText *, int);
+void func_ov008_0207431c(SaveMenuText *, int);
 
 void MIi_CpuClear16(u16, void *, u32);
 
@@ -119,4 +132,48 @@ int SaveMenuText_DrawTextureRows(SaveMenuText *context, int *offset, int table, 
         *offset += 16 * width;
     }
     return lines;
+}
+
+void SaveMenuText_BuildDialog(SaveMenuText *text, int kind, int entry)
+{
+    switch (kind) {
+    case 0:
+        func_ov008_02074f28(text);
+        break;
+    case 1:
+        func_ov008_02074cfc(text);
+        break;
+    case 2:
+        func_ov008_020748b0(text);
+        break;
+    case 3:
+        func_ov008_020744d8(text, entry);
+        break;
+    case 4:
+        func_ov008_0207431c(text, entry);
+        break;
+    }
+}
+void SaveMenuText_ClearDialogVram(SaveMenuTransferTask *task)
+{
+    void *destination = Overlay5Display_GetObjVram(DISPLAY_ENGINE_MAIN);
+    volatile u32 clear = 0;
+    MIi_CpuClearFast(clear, destination, 6144);
+    func_ov005_0206650c(task);
+}
+void SaveMenuText_ResetDialogSprites(void)
+{
+    func_ov005_020663d8(3);
+    func_ov005_0206659c(SaveMenuText_ClearDialogVram, 11, 1);
+}
+void SaveMenuText_DrawSlotChoice(SaveMenuTransferTask *task)
+{
+    Overlay5Sprite *sprite = Overlay5ResourceB_Get(task);
+    if ((u32)(task->arguments[0] - 1) <= 1) {
+        if (data_0205e32c.settings.occupied_slots & (1 << ((s8 *)data_ov008_02078290)[0x19d]))
+            sprite->attributes_1 &= ~0xf000;
+        else
+            sprite->attributes_1 = (sprite->attributes_1 & ~0xf000) | 0x1000;
+    }
+    func_ov005_02069084(sprite, 60);
 }

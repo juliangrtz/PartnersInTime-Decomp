@@ -1,6 +1,6 @@
 #ifndef PIT_GAME_MENU_ITEM_EFFECT_H
 #define PIT_GAME_MENU_ITEM_EFFECT_H
-#include <nitro.h>
+#include <game/overlay005_resource.h>
 
 enum MenuItemHealState { MENU_HEAL_START, MENU_HEAL_APPLY, MENU_HEAL_WAIT };
 enum MenuItemGlowState { MENU_GLOW_DELAY, MENU_GLOW_FADE };
@@ -33,14 +33,7 @@ typedef struct MenuItemEffectTask {
         } owner;
     };
 } MenuItemEffectTask;
-typedef struct MenuItemEffectSprite {
-    u8 unknown_00[20];
-    u32 attributes_0, attributes_1;
-    int x, y, target_x, target_y;
-    s16 center_x, center_y;
-    u8 unknown_30[8];
-    s16 matrix[4];
-} MenuItemEffectSprite;
+typedef Overlay5Sprite MenuItemEffectSprite;
 typedef struct MenuItemStarFrames {
     u8 steps[5][2];
 } MenuItemStarFrames;

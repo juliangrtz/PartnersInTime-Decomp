@@ -83,6 +83,10 @@ int SaveMenuText_StreamObjectText(SaveMenuText *context, int engine, int *offset
 int SaveMenuText_DrawObjectRows(SaveMenuText *context, int engine, int *offset, int table, u16 entry, int width, int row);
 void SaveMenuText_DrawBackground(SaveMenuText *context, int engine, int background, int table, u16 entry,
                                  int x, int y);
+void SaveMenuText_BuildDialog(SaveMenuText *text, int kind, int entry);
+void SaveMenuText_ResetDialogSprites(void);
+void SaveMenuText_ClearDialogVram(SaveMenuTransferTask *task);
+void SaveMenuText_DrawSlotChoice(SaveMenuTransferTask *task);
 void SaveMenuText_QueueTextureRow(int offset, int width, int row);
 void SaveMenuText_QueueBackground(int engine, int background);
 void SaveMenuText_QueueObjectStrip(int engine, int offset, int row, int column, int width);

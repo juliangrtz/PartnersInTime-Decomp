@@ -47,7 +47,7 @@ src/overlay008/save_menu_summary.c:
     .text       start:0x02073ac4 end:0x02073f04
 
 src/overlay008/save_menu_text_draw.c:
-    .text       start:0x02075390 end:0x02075a90
+    .text       start:0x02075228 end:0x02075a90
 
 src/overlay008/save_menu_texture_row.c:
     .text       start:0x02075a90 end:0x02075ac8
