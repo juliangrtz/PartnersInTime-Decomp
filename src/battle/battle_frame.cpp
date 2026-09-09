@@ -8,10 +8,10 @@ extern "C" {
 #include <game/sprite_animation.h>
 #include <game/heap.h>
 #include <game/battle_frame.h>
+#include <game/battle_entry.h>
 extern u8 *gBattleContext;
 extern MtxFx44 data_ov002_020bea54;
 void func_ov002_0207707c(void);
-void func_ov002_02076124(const s16 *, int, const u16 *, u16 **);
 int BattleTurnState_Update(int);
 void func_ov002_0206a0f0(void *);
 void BattlePartyActor_UpdateCommandMovement(BattlePartyActor *);
@@ -57,10 +57,10 @@ void BattleMain_Update(void)
 {
     func_ov002_0207707c();
     if (BATTLE_FRAME->palette_commands[0])
-        func_ov002_02076124(BATTLE_FRAME->palette_commands[0], 256, BATTLE_FRAME->main_palette,
+        BattlePalette_Animate(BATTLE_FRAME->palette_commands[0], 256, BATTLE_FRAME->main_palette,
                             &BATTLE_FRAME->palette[0]);
     if (BATTLE_FRAME->palette_commands[1])
-        func_ov002_02076124(BATTLE_FRAME->palette_commands[1], 240, BATTLE_FRAME->sub_palette,
+        BattlePalette_Animate(BATTLE_FRAME->palette_commands[1], 240, BATTLE_FRAME->sub_palette,
                             &BATTLE_FRAME->palette[1]);
     BattleAI_UpdateAll();
     if (!BATTLE_FRAME->paused_turn_state || BATTLE_FRAME->paused_turn_state != BATTLE_FRAME->turn_state)

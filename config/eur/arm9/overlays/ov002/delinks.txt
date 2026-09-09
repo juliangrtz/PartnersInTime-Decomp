@@ -445,3 +445,12 @@ src/battle/battle_entry_resources.cpp:
 
 src/battle/battle_entry_tasks.cpp:
     .text start:0x02074724 end:0x02074ad4
+
+src/battle/battle_entry_graphics.cpp:
+    .text start:0x02075000 end:0x02075780
+
+src/battle/battle_entry_capture_wait.cpp:
+    .text start:0x020757fc end:0x02075818
+
+src/battle/battle_entry_transition.cpp:
+    .text start:0x02075910 end:0x02076178

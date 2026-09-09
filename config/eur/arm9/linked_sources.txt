@@ -708,3 +708,6 @@ src/battle/battle_attack_loader.cpp
 src/battle/battle_frame.cpp
 src/battle/battle_entry_resources.cpp
 src/battle/battle_entry_tasks.cpp
+src/battle/battle_entry_graphics.cpp
+src/battle/battle_entry_capture_wait.cpp
+src/battle/battle_entry_transition.cpp

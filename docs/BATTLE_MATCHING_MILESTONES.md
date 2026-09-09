@@ -1955,3 +1955,46 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **579,872 / 1,563,700 bytes (37.08%)**; C/C++ plus assembly: **37.42%**.
+
+## Battle display entry and capture pipeline (2026-09-09)
+
+Reconstructed fourteen functions, **4,100 bytes**, covering battle-context
+initialization, clock-based random seeding, field fading, display capture,
+transition sound selection, display/VRAM bank setup, the initial 3D command
+sequence, and palette-animation dispatch. Typed frame fields expose the native
+brightness levels, RTC time, texture/palette banks and VBlank callback.
+
+Direct instruction inspection recovered omitted blend and clear-color parameters,
+the repeated GPU vertex writes, and copy-direction comparisons retained even for
+fixed hardware addresses. The native signed-to-unsigned approach narrowing and
+materialized display-register snapshot are preserved. Two remaining capture/OAM
+loops retain their original assembly while their register-allocation differences
+are deferred.
+
+Two emulator replays covered **1,412 frames and 66 verified returns across 13 of
+the 14 functions**. Independent models checked all helper arguments, caller RAM
+writes and **136 direct MMIO/FIFO stores**, including their addresses, widths and
+values. They compared **313,344 copied bytes** against live source data: main/sub
+BG and OBJ VRAM, standard palette/OAM, and the relocated background and palette
+banks. They also verified 115,368 cleared context bytes and 2,048 cleared OAM bytes.
+Palette-animation dispatch retains static byte-matching evidence; these replays
+did not invoke it. Transition sound 4 and both display-selection paths were observed.
+
+Both runs used the documented Scene VM encounter fixture (`-32748`, room 306,
+offset `0x2926`), restoring the 72 decoded bytes and cursor at battle entry.
+The second run additionally set only bit 3 of the live encounter flags to exercise
+the sub-display transfer. That bit was restored after `BattleEntry_ShowBattleDisplay`,
+preserving other flags changed by normal game execution. This is controlled branch
+coverage, not a naturally played entry from the lower screen. The harness accounts
+for predicated ARM instructions skipped by the emulator's execution hooks.
+
+Private reports: `build/runtime/eur_battle_entry_display/evidence_entry55.json`
+and `evidence_sub_display55.json`. Input-state SHA-1:
+`e44df106d65e52df1ffc2b125538354f67cb1b22`.
+Supplied save 55 remained unchanged:
+`239ff9d26a5806eada7c1b73a95e27e38872681c`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**583,972 / 1,563,700 bytes (37.35%)**; C/C++ plus assembly: **37.68%**.

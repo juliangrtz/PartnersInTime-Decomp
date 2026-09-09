@@ -1,6 +1,7 @@
 #ifndef PIT_GAME_BATTLE_FRAME_H
 #define PIT_GAME_BATTLE_FRAME_H
 #include <game/battle_actor.h>
+#include <nitro/rtc.h>
 #include <game/battle_scene.h>
 #include <game/battle_ai.h>
 #include <game/sprite_animation.h>
@@ -11,13 +12,25 @@
 typedef struct BattleFrameContextView {
     u8 unknown_00000[4];
     void (*update)(void);
-    u8 unknown_00008[12];
+    void (*vblank)(void);
+    u8 unknown_0000c[8];
     u32 frame;
     int turn_state;
     int paused_turn_state;
-    u8 unknown_00020[0x8];
+    u8 unknown_00020[2];
+    /* Brightness level 0..32 maps to hardware -16..0. */
+    s16 main_brightness_level, sub_brightness_level;
+    u8 unknown_00026[2];
     s16 render_values_28[4];
-    u8 unknown_00030[0xea];
+    s16 render_values_30[4];
+    u8 unknown_00038[6];
+    u16 initial_state_3e;
+    u8 unknown_00040[16];
+    RtcTime clock;
+    u8 unknown_0005c[8];
+    u32 texture_banks[4];
+    u32 palette_banks[4];
+    u8 unknown_00084[0x96];
     s16 selected_command;
     u8 unknown_0011c[0xc];
     u16 command_state_128;
