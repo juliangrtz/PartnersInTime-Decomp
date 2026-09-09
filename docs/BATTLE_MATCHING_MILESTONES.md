@@ -2156,3 +2156,43 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **589,220 / 1,563,700 bytes (37.68%)**; C/C++ plus assembly: **38.02%**.
+
+## Save slot serialization and live-state restoration (2026-09-09)
+
+Reconstructed `SaveState_PackSlot` and `SaveState_UnpackSlot`, **1,716 bytes**,
+in one contiguous module. Checked views describe the 20-byte stored party
+record, 232-byte slot tail and 1,380-byte live-state prefix. Packing retains the
+944-byte persistent block, base stats, HP, experience, equipment, inventory and
+metadata. Unpacking reconstructs member IDs, remaining experience and equipment
+bonuses. Native signed inventory limits and asymmetric speed/stache bounds are
+preserved. Distinct traversal variables reproduce the original compiler's
+register lifetimes without assembly substitutions.
+
+Normal cold boots and keypad input loaded supplied saves **1, 55 and 103**.
+Independent models compared the complete live view and stored slot at each
+return, including preservation of untouched bytes. Adult Mario's observed level
+was 1, 18 and 31; experience to the next level was 6, 426 and 4,069. All twelve
+party records matched their growth tables and equipment data.
+
+The save-55 replay then used the actual save block and Save & Continue dialog.
+Selecting Yes reached the native packer and the visible Saved confirmation.
+The model checked the complete 1,176-byte slot and 848-byte extra area, including
+its **804-byte OAM-state copy**, while confirming that packing left the live view
+unchanged. There were no code, script or RAM fixtures. Slot 1, level 100 and
+out-of-range inventory clamps retain static matching evidence.
+
+Four verification reports total **6,627 frames and four checked returns**:
+`build/runtime/eur_save_state_transfer/evidence_load1.json`, `evidence_load55.json`,
+`evidence_load103.json`, `evidence_pack55.json`. Two additional keypad-only stages
+navigated from the loaded field to the confirmation prompt. The pack input-state
+SHA-1 is `78e17c1fe46026d1115c27b212d6f0e39fa4948a`. Supplied save SHA-1 values:
+`3fcc1ab79db3f829b7a45f0f234cffb7f608ae93` (1),
+`239ff9d26a5806eada7c1b73a95e27e38872681c` (55),
+`c264e8a8b26cb4994da8a93b164979377b7b4090` (103).
+All **104 supplied saves** were hashed before and after the runs and remained
+unchanged; emulator writes stayed in its working backup data.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**590,936 / 1,563,700 bytes (37.79%)**; C/C++ plus assembly: **38.13%**.
