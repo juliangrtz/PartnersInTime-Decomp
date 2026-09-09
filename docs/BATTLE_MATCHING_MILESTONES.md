@@ -1268,3 +1268,39 @@ up, no purchase occurs, all temporary command bytes are restored and the source
 battery save is unchanged. Native linking, all 74 tests, progress consistency
 and the public-content audit pass. The ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; no inline assembly was added.
+
+### Inventory panel selection, categories and price bonus (2026-09-09)
+
+Nine functions add 1,400 matching C++ bytes, reaching
+543,920 / 1,563,700 bytes (34.78%). The reconstructed methods hide and show
+inventory rows, retain the selection, cycle nonempty categories, rebuild the
+packed item list, report quantities and sellability, display the empty-list
+message, and calculate the difference between the displayed price and its
+quarter-price base. The common panel now exposes its inline item storage;
+the checked 848-byte selling-panel layout adds the four category offsets.
+The adjacent row callbacks and methods share one contiguous source module.
+The price and category-append functions between that module and the list
+rebuilder remain assembly because their C candidates differ in register use.
+
+The existing controlled shop entry, with all 72 decoded command bytes restored
+before the scene transition, was replayed from story checkpoints 86 and 65.
+Ordinary R input changes categories and B exits. Across 1,882 frames, eight of
+the nine new methods pass 16,364 complete panel-memory comparisons, including
+6,090 quantity queries, 6,090 sellability queries, two list rebuilds and two
+show/hide pairs. Both complete 8-KiB save-memory comparisons confirm the two
+selection-byte writes. There are 2,610 checked price-bonus returns; their base
+comes from the live item record and their displayed-price input is observed
+at the existing virtual helper's return. Rebuild checks derive the item list
+from inventory and equipment RAM, observing the badge-unlock VM result.
+The previous task, sprite, text, background VRAM and cleanup oracles also pass.
+
+Private reports are `evidence_086_01.json` and `evidence_065_01.json` under
+`build/runtime/eur_shop_inventory_panel/`. Neither replay performs a transaction
+or changes a supplied battery save, and both finish with complete scene cleanup
+and no pending callbacks. The empty-list message, removal-adjustment branch,
+and backward category wrap remain statically verified only. An exploratory
+checkpoint-30 replay reached an additional shop conversation and did not close
+the scene within its input sequence; it is excluded from these passing totals.
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`.

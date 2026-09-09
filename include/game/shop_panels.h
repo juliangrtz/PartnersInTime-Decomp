@@ -4,8 +4,9 @@
 #include <game/overlay005_display.h>
 /* Common item-panel prefix. The buying and selling panels extend this view. */
 typedef struct ShopItemPanel {
-    u8 unknown_00[5], visible_rows, use_inventory, unknown_07, count;
-    u8 unknown_09[795];
+    void *vtable;
+    u8 enabled, visible_rows, use_inventory, unknown_07, count, unknown_09;
+    u16 inline_items[396];
     u16 *items;
     s8 first, ring_first;
     union {
@@ -16,6 +17,14 @@ typedef struct ShopItemPanel {
     s32 x, y, unknown_334, unknown_338;
 } ShopItemPanel;
 typedef char ShopItemPanelSizeCheck[sizeof(ShopItemPanel) == 828 ? 1 : -1];
+/* Selling panel: category offsets refer to the packed inline inventory list. */
+typedef struct ShopInventoryPanel {
+    ShopItemPanel base;
+    s32 unknown_33c;
+    s32 category_first[4];
+} ShopInventoryPanel;
+typedef char ShopInventoryPanelSizeCheck[sizeof(ShopInventoryPanel) == 848 ? 1 : -1];
+
 typedef struct ShopStockPanel {
     u8 unknown_00, category, unknown_02, count;
     u16 items[100];
@@ -35,6 +44,15 @@ typedef char ShopTextSizeCheck[sizeof(ShopText) == 2096 ? 1 : -1];
 #ifdef __cplusplus
 extern "C" {
 #endif
+void ShopInventoryPanel_Hide(ShopInventoryPanel *panel, int adjust);
+void ShopInventoryPanel_Show(ShopInventoryPanel *panel);
+void ShopInventoryPanel_CycleCategory(ShopInventoryPanel *panel, s8 delta);
+int ShopInventoryPanel_GetCategory(ShopInventoryPanel *panel, int item);
+void ShopInventoryPanel_ShowEmptyMessage(ShopInventoryPanel *panel);
+int ShopInventoryPanel_CanSellRow(ShopInventoryPanel *panel, u16 row);
+s8 ShopInventoryPanel_GetRowQuantity(ShopInventoryPanel *panel, u16 row, u32 mode);
+u32 ShopInventoryPanel_GetPriceBonus(ShopInventoryPanel *panel, u16 row);
+void ShopInventoryPanel_RebuildList(ShopInventoryPanel *panel);
 u32 ShopItemPanel_GetSelectedTile(ShopItemPanel *panel);
 int ShopItemPanel_GetRingFirst(ShopItemPanel *panel);
 int ShopItemPanel_CanScroll(ShopItemPanel *panel);
