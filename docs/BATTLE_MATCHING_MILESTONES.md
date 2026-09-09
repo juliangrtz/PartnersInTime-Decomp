@@ -1182,3 +1182,31 @@ comparisons pass without pending callbacks or changes to the source battery
 save. Native linking, all 74 tests, progress consistency and the public-content
 audit pass; the ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Baby hammer entry, cleanup and active-state query (2026-09-09)
+
+Three functions add 1,568 matching C++ bytes, reaching
+540,404 / 1,563,700 bytes (34.56%). They start a member's hammer swing,
+restore movement and presentation afterward, and test the four hammer states.
+The shared state record exposes the flag and saved area value used by cleanup.
+The corresponding field VM commands now call the typed public functions.
+Closing this gap allows the adjacent collision, auxiliary and action transition
+sources to become one contiguous module, with the original function order.
+
+Normal X, wait and R inputs select the babies' hammer action from the existing
+checkpoint-83 setup. Another X press performs the swing. Entry and cleanup pass
+12 full-memory checkpoints, covering the controller, both party entities and
+state records, the selected auxiliary entity, its animation renderer and the
+active area. Ten helper calls have their arguments checked. The auxiliary
+resource, facing, overlap priorities, one-loop animation and sound request all
+agree; cleanup restores both saved behavior and the saved area value. A short
+replay visibly captures Baby Mario's hammer. Evidence is `hammer83.json` and
+`hammer_swing83.json` under `build/runtime/eur_party_hammer/`; the starting state
+has SHA-1 `cf09cafb85756ef83e5febafc8e0d89e20deea29`.
+
+The active-state query, member-one path and enabled-rumble branch were not
+observed and remain statically verified only. The source save remains unchanged
+and every probe finishes without failures or pending callbacks. Native linking,
+all 74 tests, progress checks and the public-content audit pass. The complete
+ROM remains byte-identical, with SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

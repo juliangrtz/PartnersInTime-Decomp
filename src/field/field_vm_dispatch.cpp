@@ -93,9 +93,6 @@ extern void func_ov000_0209e8cc(void *party_manager, int party_side,
                                 u16 action_type_mask);
 extern int func_ov000_0209ebdc(void *party_manager, int party_side,
                                int present_party_mask);
-extern void func_ov000_0208f1e0(void *baby_party_controller, int member);
-extern int func_ov000_0208efc4(void *baby_party_controller, int member);
-extern void func_ov000_0208efec(void *baby_party_controller, int member);
 extern void func_ov000_0209de24(void *party_manager,
                                 int marker_animation_id);
 extern void func_ov000_0209dddc(void *party_manager, int party_side,
@@ -3656,14 +3653,14 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_BABY_HAMMER_SWING:
-        func_ov000_0208f1e0(
-            FieldVm_GetPartyController(party_manager, 1),
+        FieldParty_BeginHammerSwing(
+            (FieldPartyController *)FieldVm_GetPartyController(party_manager, 1),
             arguments[0] & 1);
         break;
 
     case FIELD_VM_WAIT_BABY_HAMMER_SWING:
-        if (func_ov000_0208efc4(
-                FieldVm_GetPartyController(party_manager, 1),
+        if (FieldParty_IsHammerActive(
+                (FieldPartyController *)FieldVm_GetPartyController(party_manager, 1),
                 arguments[0] & 1)) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
@@ -3672,8 +3669,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_FINISH_BABY_HAMMER_SWING:
-        func_ov000_0208efec(
-            FieldVm_GetPartyController(party_manager, 1),
+        FieldParty_EndHammerSwing(
+            (FieldPartyController *)FieldVm_GetPartyController(party_manager, 1),
             arguments[0] & 1);
         break;
 

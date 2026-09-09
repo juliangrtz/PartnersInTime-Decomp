@@ -72,7 +72,9 @@ typedef struct FieldResourceContext {
     struct {
         u8 main : 4, temporary : 4;
     } heaps;
-    u8 unknown_23f7[0xE9];
+    u8 unknown_23f7[0x61];
+    u32 unknown_2458;
+    u8 unknown_245c[0x84];
     u8 *scripts[2];
     u8 unknown_24e8[0x10];
     void *room_resource;

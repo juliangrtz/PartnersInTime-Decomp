@@ -64,6 +64,12 @@ typedef struct FieldPartyStateRecord {
     union {
         u32 unknown_00[8];
         struct {
+            u32 unknown_00[2];
+            struct { u32 unknown_00_14 : 15, area_value_saved : 1, unknown_16_31 : 16; } flags;
+            u32 unknown_0c[3];
+            u32 saved_area_value, unknown_1c;
+        } member_action;
+        struct {
             fx32 velocity, acceleration, target_z;
             u16 angle, angular_speed;
             s16 unknown_10;
@@ -149,6 +155,9 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_BeginHammerSwing(FieldPartyController *party, int member);
+void FieldParty_EndHammerSwing(FieldPartyController *party, int member);
+int FieldParty_IsHammerActive(FieldPartyController *party, int member);
 void FieldParty_BeginBrosBallState23(FieldPartyController *party, int direction);
 void FieldParty_RestoreBrosBallRoll(FieldPartyController *party);
 void FieldParty_ResumeBrosBall(FieldPartyController *party, int preserve_state);
