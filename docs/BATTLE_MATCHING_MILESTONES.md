@@ -2914,3 +2914,39 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **622,688 / 1,563,700 bytes (39.82%)**; C/C++ plus assembly: **40.16%**.
+
+## Save-menu text streaming and VRAM uploads (2026-09-09)
+
+Reconstructed **1,372 bytes** across four functions: object-text streaming,
+object-row drawing, background upload and object-strip upload. The streaming
+path emits 256-byte blocks and rolls its glyph buffer at 256 pixels. The row
+path handles explicit newline controls before queuing the two 128-byte halves
+of each sprite strip. Native source alignment and background character-base
+selection are preserved. Larger dialog constructors and the adjacent texture
+upload callback remain private while their compiler allocation differs.
+
+Three ordinary keypad runs covered **2,959 frames and 92 target returns**:
+3 streamed strings, 12 row draws, 76 object-strip uploads and 1 background
+upload. A cold load of supplied save **103** covered 61 streamed blocks and
+6 buffer rolls. The established save-55 confirmation and copy-menu checkpoints
+covered 7 explicit newlines, multiline text and the copied-save message. These
+operations used emulator working backup data; no original save was modified
+and no command or RAM fixture was injected.
+
+Byte-guarded, SP-matched helper/return models compared complete 24,724-byte text
+contexts, 72-byte tasks and output offsets. All helper arguments were checked;
+independent snapshots verified **60,480 copied or cleared bytes** at actual RAM
+and VRAM destinations. Streaming was observed on the sub screen and object /
+background uploads on the main screen; the opposite screen combinations and
+zero-column rows remain statically verified. The final four OBJ-VRAM/palette
+regions of the cold run matched the preceding graphics-offset run. Screenshots
+and memory dumps accompany `build/runtime/eur_save_menu_object_text/` reports
+`evidence_cold103.json`, `evidence_pack55.json` and `evidence_copy55.json`.
+Checkpoint SHA-1 values: `78e17c1fe46026d1115c27b212d6f0e39fa4948a` (save),
+`b99ae49572f9d3d22933b903c66355958e3709f9` (copy). All **104 supplied saves**
+retained their hashes.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**624,060 / 1,563,700 bytes (39.91%)**; C/C++ plus assembly: **40.24%**.

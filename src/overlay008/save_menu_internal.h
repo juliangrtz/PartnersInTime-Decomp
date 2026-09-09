@@ -87,8 +87,8 @@ extern void func_ov005_02065eec(void);
 extern u8 data_ov008_02078290[];
 
 extern void func_ov008_02075ac8(SaveMenuTransferTask *);
-extern void func_ov008_02075b94(SaveMenuTransferTask *);
-extern void func_ov008_02075c38(SaveMenuTransferTask *);
+extern void SaveMenuText_UploadBackground(SaveMenuTransferTask *);
+extern void SaveMenuText_UploadObjectStrip(SaveMenuTransferTask *);
 extern GameTaskVTable data_ov008_02078264, data_ov008_02078250;
 extern SaveSceneTask *data_ov008_0207aa98;
 extern u8 data_02059f44, data_02059f48;

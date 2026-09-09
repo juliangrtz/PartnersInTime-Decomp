@@ -1,5 +1,84 @@
 #include "save_menu_internal.h"
 
+void MIi_CpuClear16(u16, void *, u32);
+
+static inline void ClearGlyphs(void *destination)
+{
+    volatile u16 clear = 0;
+    MIi_CpuClear16(clear, destination, 128);
+}
+
+int SaveMenuText_DrawObjectRows(SaveMenuText *context, int engine, int *offset, int table, u16 entry,
+                                int width, int row)
+{
+    int lines, i;
+    int columns;
+    GameText_Init(&context->text, context->fonts, context->pixels, 0, 0, (u8)(row * 16), 1, 4, 1, 6,
+                  (u8)(width / 2 - 1), 0, 255, 0);
+    context->text.text = SaveMenuText_GetString(context, table, entry);
+    context->text.style.bits.color = context->text.cursor.bits.base_color;
+    columns = (u8)(width / 8);
+    lines = 1;
+    for (;;) {
+        GameTextCursor *cursor = &context->text.cursor;
+        const u8 *text;
+        for (text = context->text.text; text[0] == 255 && text[1] == 0; text = context->text.text) {
+            cursor->bits.x = 0;
+            lines = (u8)(lines + 1);
+            cursor->bits.y += 16;
+            context->text.text += 2;
+        }
+        if (!*text)
+            break;
+        GameText_Next(&context->text, 0, 0);
+    }
+    for (i = 0; i < lines; ++i) {
+        int column;
+        for (column = 0; column < columns; ++column)
+            SaveMenuText_QueueObjectStrip(engine, *offset, row + i, column, width / 2);
+        *offset += 32 * width;
+    }
+    return lines;
+}
+
+int SaveMenuText_StreamObjectText(SaveMenuText *context, int engine, int *offset, int table, u16 entry)
+{
+    int first;
+    int width;
+    GameText_Init(&context->text, context->fonts, context->pixels, 0, 0, 0, 1, 0, 1, 6, 31, 0, 255, 0);
+    context->text.text = SaveMenuText_GetString(context, table, entry);
+    width = 0;
+    context->text.style.bits.color = context->text.cursor.bits.base_color;
+    first = context->text.cursor.bits.x / 8;
+    for (;;) {
+        const u8 *text = context->text.text;
+        int cursor = context->text.cursor.bits.x / 8;
+        if (first + 4 <= cursor || cursor < first || !*text) {
+            u8 *destination = (u8 *)Overlay5Display_GetObjVram(engine) + *offset;
+            GameResource_Move16(&context->pixels[32 * first / 4], destination, 128);
+            GameResource_Move16(&context->pixels[32 * (first + 32) / 4], destination + 128, 128);
+            *offset += 256;
+            ClearGlyphs(&context->pixels[32 * first / 4]);
+            ClearGlyphs(&context->pixels[32 * (first + 32) / 4]);
+            first = (first + 4) % 32;
+        }
+        if (!*text)
+            break;
+        {
+            u32 previous = context->text.cursor.bits.x;
+            GameText_Next(&context->text, 0, 0);
+            width += context->text.cursor.bits.x - previous;
+        }
+        if (context->text.cursor.bits.x >= 256) {
+            GameResource_Move16(context->pixels + 256, context->pixels, 128);
+            GameResource_Move16(context->pixels + 512, context->pixels + 256, 128);
+            ClearGlyphs(context->pixels + 512);
+            context->text.cursor.bits.x -= 256;
+        }
+    }
+    return (u16)width;
+}
+
 void SaveMenuText_DrawBackground(SaveMenuText *context, int engine, int background, int table, u16 entry,
                                  int x, int y)
 {

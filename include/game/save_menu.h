@@ -79,6 +79,8 @@ void SaveMenu_BuildStoredSummary(int slot, SaveMenuSummary *summary);
 void SaveMenu_BuildLiveSummary(SaveMenuSummary *summary);
 int SaveMenuText_DrawTextureRows(SaveMenuText *context, int *offset, int table, int entry, int width,
                                  int row);
+int SaveMenuText_StreamObjectText(SaveMenuText *context, int engine, int *offset, int table, u16 entry);
+int SaveMenuText_DrawObjectRows(SaveMenuText *context, int engine, int *offset, int table, u16 entry, int width, int row);
 void SaveMenuText_DrawBackground(SaveMenuText *context, int engine, int background, int table, u16 entry,
                                  int x, int y);
 void SaveMenuText_QueueTextureRow(int offset, int width, int row);
