@@ -698,3 +698,4 @@ src/field/field_party_entity_render.cpp
 src/field/field_party_entity_bounds.cpp
 src/field/field_party_entity_collision.cpp
 src/field/field_party_entity_navigation.cpp
+src/field/field_render_updates.cpp

@@ -1709,3 +1709,38 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **567,400 / 1,563,700 bytes (36.29%)**; C/C++ plus assembly: **36.62%**.
+
+## Shared field renderer updates: 36.38% matching C/C++
+
+Reconstructed four contiguous functions at `0x020A9778..0x020A9D1C`
+(1,444 bytes): screen projection and sort keys, shadow visibility/animation,
+and locomotion-dependent animation updates. Named views expose the four screen
+coordinate fields and the renderer's six-bit entity index / 22-bit vertical
+order. Capturing the renderer and Y coordinates before writing X preserves the
+original aliasing behavior. Animation speed remains an integer at the renderer
+helper boundary, avoiding an incorrect extra narrowing conversion.
+
+Two normal-input replays from saves 83 and 51 covered 775 frames and all four
+functions, with 45,956 returns. Independent models passed 74,476 complete
+1,300-byte entity comparisons, 58,798 complete 312-byte renderer comparisons,
+23,376 complete 316-byte animation-renderer comparisons, 28,520 helper argument
+checks and all 6,762 shadow predicate results. Observations included walking
+animation transitions, both shadow visibility outcomes, shadow styles 1/3,
+all three style-1 height bands, and direct screen-coordinate/sort-key updates.
+Support-entity sort inheritance and speed normalization through square root /
+division were not reached. Unobserved modes retain static matching evidence.
+
+Private reports: `build/runtime/eur_field_renderer_common/evidence_spin83.json`
+and `evidence_walking51.json`. Derived-state SHA-1:
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61` and
+`4648a623a447e9a682f4173e9a6d97d438baa0bc`; source save SHA-1:
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b` (83) and
+`459c9b510b361c4e800a396d8b56ddf847235c74` (51).
+No commands were injected and supplied saves remained unchanged. The following
+overlap-priority routine stays private because its initial C draft does not
+yet match.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**568,844 / 1,563,700 bytes (36.38%)**; C/C++ plus assembly: **36.71%**.

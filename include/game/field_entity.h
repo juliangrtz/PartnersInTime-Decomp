@@ -324,7 +324,7 @@ typedef struct FieldEntity {
     virtual void cancel_orbit_movement(FieldOrbitController *controller, int snap_to_destination);
     virtual void set_visible(int visible);
     virtual void unknown_64();
-    virtual void unknown_68();
+    virtual void update_animation(int mode, int restart);
     virtual void update_screen_position(s16 camera_x, s16 camera_y);
     virtual void unknown_70();
     virtual void start_blink(int mode, const s8 *durations, u8 length,
@@ -520,6 +520,7 @@ struct FieldRenderObject {
     union {
         u32 sort_key;
         FieldRenderSortKey sort_key_bits;
+        struct { u32 entity_index : 6, vertical_order : 22, layer : 4; } field_sort_key;
     };
     union {
         s8 overlap_priorities[4];
@@ -618,7 +619,11 @@ struct FieldRuntimeEntity {
     u16 saved_animation_id;
     u16 saved_model_animation;
     u16 saved_animation_frame;
-    s16 unknown_1a6[4], unknown_1ae[4];
+    union {
+        s16 unknown_1a6[4];
+        struct { s16 screen_x, screen_y, screen_offset_x, screen_offset_y; };
+    };
+    s16 unknown_1ae[4];
     u16 unknown_1b6;
     union {
         FieldRenderSnapshot render_snapshot;
@@ -771,6 +776,10 @@ void FieldEntity_RestoreRenderSnapshot(FieldRuntimeEntity *entity, const FieldRe
 FieldEntity *FieldEntity_CopyState(FieldEntity *entity, const FieldEntity *source);
 FieldRuntimeEntity *FieldEntity_CopyPlanarState(FieldRuntimeEntity *entity, const FieldRuntimeEntity *source);
 FieldRuntimeEntity *FieldEntity_CopySpatialState(FieldRuntimeEntity *entity, const FieldRuntimeEntity *source);
+void FieldEntity3D_UpdateScreenPosition(FieldRuntimeEntity *entity, s16 camera_x, s16 camera_y);
+void FieldEntity3D_UpdateShadow(FieldRuntimeEntity *entity);
+int FieldEntity3D_ShouldShowShadow(FieldRuntimeEntity *entity);
+void FieldEntity3D_UpdateAnimationState(FieldRuntimeEntity *entity);
 #ifdef __cplusplus
 }
 #endif

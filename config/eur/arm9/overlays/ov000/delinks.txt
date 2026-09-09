@@ -256,3 +256,6 @@ src/field/field_party_entity_collision.cpp:
 
 src/field/field_party_entity_navigation.cpp:
     .text start:0x020b8ca8 end:0x020b8e4c
+
+src/field/field_render_updates.cpp:
+    .text start:0x020a9778 end:0x020a9d1c
