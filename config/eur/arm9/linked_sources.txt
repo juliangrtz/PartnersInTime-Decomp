@@ -736,3 +736,6 @@ src/field/field_party_trail.cpp
 src/field/field_party_piggyback.cpp
 src/field/field_party_recovery.cpp
 src/field/field_party_manager_actions.cpp
+
+src/field/field_party_resource_override.cpp
+src/field/field_party_action_reset.cpp

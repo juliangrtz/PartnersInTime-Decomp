@@ -280,3 +280,10 @@ src/field/field_party_recovery.cpp:
 
 src/field/field_party_manager_actions.cpp:
     .text start:0x0209dd8c end:0x0209ef28
+
+
+src/field/field_party_resource_override.cpp:
+    .text start:0x02092f30 end:0x02093108
+
+src/field/field_party_action_reset.cpp:
+    .text start:0x0209336c end:0x02093e38

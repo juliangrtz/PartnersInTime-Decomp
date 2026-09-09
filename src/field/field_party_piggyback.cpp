@@ -22,8 +22,8 @@ extern "C" void FieldParty_BeginAirborneTransfer(FieldPartyController *party, in
     paired->state_record->bounds_snapshot.body_vertical_extent = paired->entity.body_vertical_extent;
     paired->state_record->bounds_snapshot.navigation_vertical_extent =
         paired->entity.navigation_vertical_extent;
-    func_ov000_02092f30(party, paired, member + 45, 256, 0);
-    func_ov000_02092f30(party, current, member + 16, 256, 0);
+    FieldParty_BindActionResource(party, paired, member + 45, 256, 0);
+    FieldParty_BindActionResource(party, current, member + 16, 256, 0);
     FieldGeometry_GetDirectionVector(paired->entity.base_state_flag_bits.facing_direction ^ 4, 16384,
                                      &offset_x, &offset_y);
     FieldEntity3D_SetPosition(&current->entity, paired->entity.position_x + offset_x,
@@ -87,7 +87,7 @@ extern "C" void FieldParty_FinishAirborneTransfer(FieldPartyController *party, i
     func_020093b4(current->entity.render_object, 0);
     current->entity.runtime_flag_bits.sync_horizontal = 1;
     current->entity.runtime_flag_bits.unknown_08 = 0;
-    func_ov000_02092f30(party, paired, member + 39, 256, 0);
+    FieldParty_BindActionResource(party, paired, member + 39, 256, 0);
 }
 extern "C" void FieldParty_BeginPiggybackMount(FieldPartyController *party, int member)
 {
@@ -130,7 +130,7 @@ extern "C" void FieldParty_BeginPiggybackMount(FieldPartyController *party, int 
     current->bits.movement_mode = 0;
     paired->bits.movement_mode = 0;
     party->paired->state_bits.movement_mode = 15;
-    func_ov000_02092f30(party, current, member + 43, 256, 0);
+    FieldParty_BindActionResource(party, current, member + 43, 256, 0);
     current->entity.render_object->state_flag_bits.behavior_state = 1;
     GameAudio_PlayEffectDelayed(222, 0, -1);
 }

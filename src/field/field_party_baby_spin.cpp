@@ -44,7 +44,7 @@ void FieldParty_BeginBabySpin(FieldPartyController *party, int member)
     party->members[member]->entity.saved_presentation_flag_bits.behavior_mode = 1;
     party->members[member]->entity.locomotion_state = 59;
     party->members[member]->bits.movement_mode = 7;
-    func_ov000_02092f30(party, party->members[member], member + 33, 256, 0);
+    FieldParty_BindActionResource(party, party->members[member], member + 33, 256, 0);
     if (party->members[member]->linked_member->bits.movement_mode != 7) {
         party->members[member]->linked_member->entity.locomotion_state = 60;
         party->members[member]->linked_member->bits.movement_mode = 7;
@@ -150,7 +150,7 @@ void FieldParty_ResumeState62Or74(FieldPartyController *party, int preserve_stat
         }
     }
     for (member = 0; member < 2; member++) {
-        func_ov000_02092f30(party, party->members[member], member + 33, 256, 0);
+        FieldParty_BindActionResource(party, party->members[member], member + 33, 256, 0);
         if (!party->members[member]->presentation.behavior_saved) {
             party->members[member]->presentation.saved_behavior =
                 (u16)party->members[member]->entity.saved_presentation_flag_bits.behavior_mode;
@@ -196,7 +196,7 @@ void FieldParty_BeginState68(FieldPartyController *party, int member)
     party->members[member]->entity.saved_presentation_flag_bits.behavior_mode = 1;
     party->members[member]->entity.locomotion_state = 68;
     party->members[member]->bits.movement_mode = 7;
-    func_ov000_02092f30(party, party->members[member], member + 33, 256, 0);
+    FieldParty_BindActionResource(party, party->members[member], member + 33, 256, 0);
     if (party->members[member]->linked_member->bits.movement_mode != 7) {
         party->members[member]->linked_member->entity.locomotion_state = 69;
         party->members[member]->linked_member->bits.movement_mode = 7;

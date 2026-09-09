@@ -131,7 +131,6 @@ extern void func_ov000_02072074(u8 *field_context, int axis,
 extern void func_ov000_02075c34(u8 *field_context, s16 start_brightness,
                                 s16 target_brightness, u16 duration);
 extern void func_ov000_0207c098(u8 *field_context);
-extern void func_ov000_02093c98(void *party_controller);
 extern void func_ov000_02075bc8(u8 *field_context);
 extern void func_ov000_02075814(
     u8 *field_context, int animation_slot, int direction_profile,
@@ -2981,7 +2980,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             func_ov000_0207c098(field_context);
         }
         if (control_context->flags.release_party_action) {
-            func_ov000_02093c98(FieldVm_GetPartyController(
+            FieldParty_BeginEntrySlide((FieldPartyController *)FieldVm_GetPartyController(
                 party_manager, control_context->flags.selected_party_side));
             control_context->flags.release_party_action = 0;
         }

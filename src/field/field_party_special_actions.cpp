@@ -3,7 +3,6 @@
 #include <game/field_auxiliary.h>
 #include <game/field_geometry.h>
 extern "C" {
-void func_ov000_0209336c(FieldPartyController *, int, int);
 void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
 extern const fx32 data_ov000_020c07f8[][2], data_ov000_020c07fc[][2];
 }
@@ -34,7 +33,7 @@ extern "C" void FieldParty_BeginState89(FieldPartyController *party)
         party->members[member]->entity.saved_presentation_flag_bits.behavior_mode = 1;
         party->members[member]->entity.locomotion_state = 89;
         party->members[member]->bits.movement_mode = 8;
-        func_ov000_02092f30(party, party->members[member], member + 51, 256, 0);
+        FieldParty_BindActionResource(party, party->members[member], member + 51, 256, 0);
         if (!party->members[member]->entity.field_state_flag_bits.vertical_motion_active)
             FieldVertical_Start(&party->members[member]->entity, 15772, 1076, 0);
     } while (++member < 2);
@@ -160,7 +159,7 @@ void FieldParty_BeginState76(FieldPartyController *party)
     party->follower->entity.movement_speed = 0;
     party->state.unknown_01 = 0;
     party->follower->entity.locomotion_state = 76;
-    func_ov000_02092f30(party, party->follower, 24, 256, 1);
+    FieldParty_BindActionResource(party, party->follower, 24, 256, 1);
     party->follower->entity.render_object->state_flag_bits.behavior_state = 1;
     follower = party->follower;
     if (!follower->presentation.behavior_saved) {
@@ -318,7 +317,7 @@ extern "C" void FieldParty_FinishAuxiliaryLaunch(FieldPartyController *party)
     party->flags.unknown_06 = 1;
     if (!party->unknown_054) {
         party->unknown_06c = 65536;
-        func_ov000_0209336c(party, 1, 0);
+        FieldParty_ResetActionState(party, 1, 0);
     } else {
         FieldResourceContext *area = PREVIOUS_AREA;
         int index = area->special_resources[0];

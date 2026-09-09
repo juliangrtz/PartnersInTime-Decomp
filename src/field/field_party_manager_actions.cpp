@@ -4,7 +4,6 @@
 #include <game/field_presentation.h>
 #include <game/field_linear.h>
 extern "C" {
-void func_ov000_0209336c(FieldPartyController *, int, int);
 void func_ov000_0208b208(FieldPartyController *, int);
 void func_ov000_0208bef4(FieldPartyController *, int);
 void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
@@ -25,18 +24,18 @@ extern "C" void FieldPartyManager_SetFieldMode(FieldPartyManager *manager, int s
         (!mode &&
          (PARTY.leader->entity.locomotion_state > 3U || PARTY.follower->entity.locomotion_state > 3U))) {
         if (!preserve && mode && PARTY.leader->bits.movement_mode)
-            func_ov000_0209336c(&PARTY, 1, 0);
+            FieldParty_ResetActionState(&PARTY, 1, 0);
         if (mode != 5)
             PARTY.unknown_054 = 0;
         switch (mode) {
         case 0:
-            func_ov000_0209336c(&PARTY, !preserve, preserve);
+            FieldParty_ResetActionState(&PARTY, !preserve, preserve);
             if (!preserve) {
                 if ((PAIRED.leader->entity.locomotion_state >= 41U &&
                      PAIRED.leader->entity.locomotion_state <= 58U) ||
                     (PAIRED.follower->entity.locomotion_state >= 41U &&
                      PAIRED.follower->entity.locomotion_state <= 58U))
-                    func_ov000_0209336c(&PAIRED, !preserve, preserve);
+                    FieldParty_ResetActionState(&PAIRED, !preserve, preserve);
             }
             break;
         case 1:

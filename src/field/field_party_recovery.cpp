@@ -53,7 +53,7 @@ extern "C" void FieldParty_BeginPairedStates82Or83(FieldPartyController *party, 
             if (!airborne) {
                 SaveBehavior(party, member);
                 party->members[member]->entity.saved_presentation_flag_bits.behavior_mode = 1;
-                func_ov000_02092f30(party, party->members[member], member + 37, 256, 1);
+                FieldParty_BindActionResource(party, party->members[member], member + 37, 256, 1);
                 party->members[member]->entity.render_object->state_flag_bits.behavior_state = 1;
                 party->members[member]->entity.render_object->state_flag_bits.animation_suppressed = 0;
                 party->members[member]->entity.locomotion_state = 82;
@@ -91,7 +91,7 @@ extern "C" void FieldParty_BeginState8(FieldPartyController *party)
         } else {
             party->members[member]->entity.saved_presentation_flag_bits.behavior_mode = 3;
         }
-        func_ov000_02092f30(party, party->members[member], member + 35, 256, 0);
+        FieldParty_BindActionResource(party, party->members[member], member + 35, 256, 0);
         party->members[member]->bits.movement_mode = 8;
         FieldEntity_SetLocomotionParameters(&party->members[member]->entity, 5734, 0, 5734, -5734, 0, 5734);
         FieldEntity_SetVerticalParameters(&party->members[member]->entity, 15792, 800, 0);

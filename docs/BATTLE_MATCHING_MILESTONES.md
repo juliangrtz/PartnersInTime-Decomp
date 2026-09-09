@@ -2762,3 +2762,41 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **616,336 / 1,563,700 bytes (39.42%)**; C/C++ plus assembly: **39.75%**.
+
+
+## Shared field-party action reset and resource overrides (2026-09-09)
+
+Reconstructed **3,236 bytes** across five routines in two contiguous modules.
+The shared action reset restores member presentation, independently saved
+collision flags, normal motion and follower placement. Resource overrides save
+animation speed and optionally restart animation; attached render priorities
+can be copied to both members. Two entry helpers align movement to facing and
+start the original fixed-point entry movement. Typed callers share declarations
+in the party header; the collision backup view retains the checked entity size.
+
+Three successful replays checked **1,486 frames and 78 returns**. Ordinary
+keypad input on supplied save 83 covered nine resource binds, animation restart,
+repeated speed-save guards, paired-group resource use and normal action reset.
+Two decoded-VM mode sequences covered resetting adult modes 3/4 and baby mode 1,
+restoring all eight independently saved collision bits and the collision-face
+flag, and the region-71 follower-position/navigation calculation. The priority
+helper was observed 60 times with no attached source; its copy branch and both
+entry helpers remain statically verified. Preserved-state reset and nested
+behavior restoration were not reached. No coverage is claimed for exploratory
+cold-load or screen-transfer attempts that did not complete.
+
+Byte-guarded, SP-matched helper/return models compared complete 8,356-byte
+parties, 1,440-byte members, 1,360-byte auxiliaries and 312-byte renderers, along
+with native helper arguments and calculated navigation bounds. VM preparations
+restored all 72 decoded-command bytes and the script cursor, and checked the
+original replay. No other RAM state or ROM code was patched; all **104 supplied
+saves** retained their hashes. Reports: `build/runtime/eur_party_reset/` files
+`evidence_keypad83.json`, `evidence_modes83.json`, `evidence_spin83.json`; the
+last was rerun after integration. Initial-state SHA-1:
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`; save-83 SHA-1:
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**619,572 / 1,563,700 bytes (39.62%)**; C/C++ plus assembly: **39.96%**.

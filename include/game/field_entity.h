@@ -338,7 +338,7 @@ typedef struct FieldEntity {
         int channel_0, int channel_1, int channel_2, int channel_3, int channel_4);
     virtual void set_collision_response_channels_masked(u16 channel_mask, int enabled);
     virtual void restore_collision_response_channels();
-    virtual void unknown_98();
+    virtual void unknown_98(void *argument);
     virtual void unknown_9c();
     virtual void update_overlap_priorities(u8 default_priority);
 #else

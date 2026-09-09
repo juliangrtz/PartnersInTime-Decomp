@@ -20,6 +20,11 @@ typedef struct FieldPartyEntity {
             u32 movement_mode : 4, unknown_22 : 1, unknown_23 : 1, unknown_24 : 1;
             u32 unknown_25_30 : 6, unknown_31 : 1;
         } bits;
+        struct {
+            u32 saved_00 : 1, saved_01 : 1, saved_02 : 1, saved_03 : 1, saved_04 : 1, saved_05 : 1, saved_06 : 1, saved_07 : 1;
+            u32 has_00 : 1, has_01 : 1, has_02 : 1, has_03 : 1, has_04 : 1, has_05 : 1, has_06 : 1, has_07 : 1;
+            u32 unknown_16_31 : 16;
+        } collision_backup;
         /* The auxiliary renderer uses the same word for its own state. */
         struct {
             u32 unknown_00 : 1, unknown_01 : 1, direction_mode : 2, unknown_04 : 1;
@@ -180,6 +185,12 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_ResetActionState(FieldPartyController *party, int immediate, int preserve_state);
+void FieldParty_BeginEntrySlide(FieldPartyController *party);
+void FieldParty_AlignMovementToFacing(FieldPartyController *party);
+void FieldParty_CopyAttachedRenderPriorities(FieldPartyController *party);
+void FieldParty_BindActionResource(FieldPartyController *party, FieldPartyEntity *member, int index,
+                                  int speed, u8 restart);
 void FieldParty_BeginAuxiliaryPlacement(FieldPartyController *party);
 void FieldParty_SetAttachedSpriteVisible(FieldPartyController *party, int visible);
 void FieldParty_FinishState76(FieldPartyController *party);

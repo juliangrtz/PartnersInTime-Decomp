@@ -37,7 +37,7 @@ void FieldParty_PrepareCollisionOverride(FieldPartyController *party, int preser
     party->leader->entity.field_state_flag_bits.body_collision_enabled = 0;
     party->leader->entity.render_object->sort_key =
         (party->leader->entity.render_object->sort_key & 0xf000003f) | 0x3ffffc0;
-    func_ov000_02092f30(party, party->leader, 30, 128, 0);
+    FieldParty_BindActionResource(party, party->leader, 30, 128, 0);
     func_ov000_0209ce44(party, 0, 5);
     func_ov000_0209ce44(party, 1, 5);
     party->follower->entity.base.property_00a |= 0x80;
@@ -112,7 +112,7 @@ void FieldParty_LinkPairedMember(FieldPartyController *party, int member)
     paired->bits.movement_mode = 6;
     entity->entity.base.map_locomotion_state();
     paired->entity.base.map_locomotion_state();
-    func_ov000_02092f30(party, entity, member + 39, 256, 0);
+    FieldParty_BindActionResource(party, entity, member + 39, 256, 0);
     FieldEntity_SetLocomotionParameters(&entity->entity, 8192, 0, 8192, -8192, 0, 8192);
     paired->entity.field_state_flag_bits.track_ground = 1;
     paired->entity.base.property_00a |= 0x80;
