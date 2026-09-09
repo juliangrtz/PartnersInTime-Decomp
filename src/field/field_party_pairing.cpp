@@ -43,7 +43,7 @@ void FieldParty_PrepareCollisionOverride(FieldPartyController *party, int preser
     party->follower->entity.base.property_00a |= 0x80;
     party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(party->follower->entity.render_object, 0);
-    func_ov000_020922a4(party, party->leader, 62, 0, 0, 5, 10);
+    FieldPartyTrail_StartEmitter(party, party->leader, 62, 0, 0, 5, 10);
 }
 
 void FieldParty_WaitForPairedFollowing(FieldPartyController *party)

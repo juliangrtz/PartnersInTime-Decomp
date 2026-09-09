@@ -14,7 +14,6 @@ void func_ov000_02092f30(FieldPartyController *, FieldPartyEntity *, int, int, u
 void func_ov000_0209ce18(FieldPartyController *);
 void func_ov000_0209ce44(FieldPartyController *, int, int);
 void func_020093b4(FieldRenderObject *, int);
-void func_ov000_020922a4(FieldPartyController *, FieldPartyEntity *, int, int, int, int, int);
 int func_ov000_020ae5fc(FieldRuntimeEntity *, FieldRuntimeEntity *);
 void func_ov000_020b46d4(FieldRuntimeEntity *);
 

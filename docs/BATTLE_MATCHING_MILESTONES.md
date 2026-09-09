@@ -2517,3 +2517,34 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **602,548 / 1,563,700 bytes (38.53%)**; C/C++ plus assembly: **38.87%**.
+
+## Field-party trail emitter and active-copy query (2026-09-09)
+
+Reconstructed **852 bytes** for configuring a timed auxiliary-copy emitter,
+placing its next copy and querying active copies in the stored trail. Checked
+layouts identify the twelve-byte emitter, eight-byte direction records and two
+1,540-byte history blocks within the existing party controller. The history
+interiors remain opaque while their update/initialization routines remain ASM.
+The emitter carries animation offsets, a start/count range, cyclic next slot
+and timer/interval; emitted copies inherit position, height, facing and overlap
+priorities, with table-driven position and render-order offsets.
+
+Three normal keypad replays on supplied save 83 exercised Bros-Ball rolling and
+spin jumping over **836 frames**. They verified **4 emitter starts, 143 updates
+and 8 active-copy queries** against independent full-record models (8,356-byte
+party, 1,440-byte owner, 1,360-byte auxiliary and 312-byte renderers). The runs
+observed all five emission slots, two range wraps, directions 0/2/6 and both
+active/inactive query results. Resource 61, five copies and a nine-frame interval
+were observed. The vertical-motion suppression branch remains statically
+verified rather than claimed as covered by these replays.
+
+Private reports: `build/runtime/eur_party_trail/evidence_roll83.json`,
+`evidence_long83.json` and `evidence_spin83.json`. Input-state SHA-1:
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`; save-83 SHA-1:
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b`. No code or RAM fixtures were
+used and all **104 supplied saves** retained their hashes.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**603,400 / 1,563,700 bytes (38.59%)**; C/C++ plus assembly: **38.92%**.

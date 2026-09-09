@@ -3,6 +3,7 @@
 
 #include <game/field_entity.h>
 #include <game/field_resources.h>
+#include <game/field_party_trail.h>
 
 /* Checked allocation layouts with unknown interiors retained as opaque fields.
  * The party entity extends FieldRuntimeEntity. The low flag bytes save collision state, while the
@@ -157,7 +158,8 @@ typedef struct FieldPartyController {
     FieldResourceContext **areas;
     struct FieldPartyController *paired;
     u8 *resources;
-    u8 unknown_944[3092];
+    FieldPartyTrailHistory histories[2];
+    FieldPartyTrailEmitter trail_emitter;
     struct {
         u32 active : 1, movement_state : 10, unknown_11 : 1, snapshot_backed : 1, unknown_13_31 : 19;
     } backup;

@@ -408,7 +408,7 @@ void FieldParty_StartBrosBallRoll(FieldPartyController *party, int fast)
     func_ov000_02092f30(party, party->leader, 20, 256, 0);
     if (fast)
         func_ov000_02093dec(party);
-    func_ov000_020922a4(party, party->leader, 61, 0, 0, 5, 9);
+    FieldPartyTrail_StartEmitter(party, party->leader, 61, 0, 0, 5, 9);
     GameAudio_PlayEffectDelayed(312, 0, -1);
 }
 void FieldParty_StopBrosBallRoll(FieldPartyController *party)
@@ -560,7 +560,7 @@ void FieldParty_ResumeBrosBall(FieldPartyController *party, int preserve_state)
     func_ov000_0209ce44(party, 0, 9);
     func_ov000_0209ce44(party, 1, 9);
     if (party->leader->entity.locomotion_state == 21) {
-        func_ov000_020922a4(party, party->leader, 61, 0, 0, 5, 9);
+        FieldPartyTrail_StartEmitter(party, party->leader, 61, 0, 0, 5, 9);
         GameAudio_PlayEffectDelayed(312, 0, -1);
     }
 }
@@ -585,7 +585,7 @@ void FieldParty_RestoreBrosBallRoll(FieldPartyController *party)
     }
     party->leader->entity.locomotion_state = 21;
     func_ov000_02091d34(party, party->leader);
-    func_ov000_020922a4(party, party->leader, 61, 0, 0, 5, 9);
+    FieldPartyTrail_StartEmitter(party, party->leader, 61, 0, 0, 5, 9);
     GameAudio_PlayEffectDelayed(312, 0, -1);
 }
 
@@ -1004,7 +1004,7 @@ void FieldParty_RestartCollisionOverride(FieldPartyController *party)
     FieldEntity_SetLocomotionParameters(&party->leader->entity, 4096, 0, 4096, -4096, 0, 4096);
     func_ov000_0209ce44(party, 0, 5);
     func_ov000_0209ce44(party, 1, 5);
-    func_ov000_020922a4(party, party->leader, 62, 0, 0, 5, 10);
+    FieldPartyTrail_StartEmitter(party, party->leader, 62, 0, 0, 5, 10);
 }
 
 void FieldParty_RestoreCollisionState(FieldPartyController *party, int check_contacts)
