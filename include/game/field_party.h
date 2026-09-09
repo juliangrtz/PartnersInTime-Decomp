@@ -158,6 +158,11 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_BeginBabyDrop(FieldPartyController *party);
+void FieldParty_LandBabyDrop(FieldPartyController *party,int member);
+void FieldParty_RestoreMode5(FieldPartyController *party,int preserve_state);
+void FieldParty_BeginState76(FieldPartyController *party);
+void FieldParty_BeginState78(FieldPartyController *party);
 void FieldParty_BeginState68(FieldPartyController *party, int member);
 void FieldParty_ResumeState62Or74(FieldPartyController *party, int preserve_state);
 void FieldParty_LandBabySpin(FieldPartyController *party, int member);

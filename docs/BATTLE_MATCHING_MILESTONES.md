@@ -1570,3 +1570,32 @@ Validation: all 74 tests, public-content audit, whitespace checks, and native
 zero-difference relink passed. ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **559,332 / 1,563,700 bytes (35.77%)**; C/C++ plus assembly: **36.11%**.
+
+## Field-party special actions: 35.91% matching C/C++
+
+Reconstructed five contiguous functions (2,204 bytes) at
+`0x0208A540..0x0208ADDC`: states 76/78 with an auxiliary renderer,
+mode-5 restoration, baby-party downward transfer and per-member landing.
+The existing checked party, entity, resource and renderer layouts are reused.
+Room VM opcode C2 identifies mode 5 with the drill/underground gimmick;
+the two intermediate states retain numeric names pending fuller observation.
+
+An 801-frame DeSmuME run from story save 51 reached restoration, downward
+transfer and both member landings. Independent models checked all direct writes
+against 16 complete 8,356-byte party snapshots, 64 complete 1,440-byte entity
+snapshots and 64 complete 312-byte renderer snapshots, plus 12 native helper
+argument lists. Resource slot 0 was resolved from live room 291 data. The
+controlled C2/C7 fixtures restored each full 72-byte decoded command and the
+pre-decode script cursor at the native wrapper; subsequent execution of the
+original command was verified. These fixtures are API coverage, not natural
+story-script coverage. States 76/78 have static matching evidence only.
+
+Private report: `build/runtime/eur_party_special/evidence_special51.json`.
+Source save SHA-1: `459c9b510b361c4e800a396d8b56ddf847235c74`;
+derived state SHA-1: `3d6b30e0af0e2bc4a5f80d821e3408fc9e7c431f`.
+The supplied battery save was unchanged.
+
+Validation: all 74 tests, public-content audit, whitespace checks and native
+zero-difference relink passed. ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**561,536 / 1,563,700 bytes (35.91%)**; C/C++ plus assembly: **36.25%**.

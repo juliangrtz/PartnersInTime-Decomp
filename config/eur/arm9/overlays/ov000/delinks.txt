@@ -235,3 +235,6 @@ src/field/field_body_collision.c:
 
 src/field/field_roaming_path.cpp:
     .text start:0x020b1530 end:0x020b1a24
+
+src/field/field_party_special_actions.cpp:
+    .text start:0x0208a540 end:0x0208addc
