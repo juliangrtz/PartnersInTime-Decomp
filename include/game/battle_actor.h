@@ -170,7 +170,10 @@ typedef struct BattlePartyActor {
     BattleActor actor;
     u8 unknown_070[4];
     BattlePartyStateFlags state_flags;
-    u8 unknown_076[8];
+    u8 unknown_076[2];
+    /* Current attack update; the overlay loader replaces it when ready. */
+    void (*attack_callback)(struct BattlePartyActor *actor);
+    u16 command_id;
     u16 formation_index;
     u16 linked_object_id;
 } BattlePartyActor;

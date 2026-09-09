@@ -1,4 +1,6 @@
 #include <game/battle_action.h>
+#include <game/battle_attack_loader.h>
+#include <game/linker_overlay_ids.h>
 #include <game/battle_ai.h>
 #include <game/battle_archive.h>
 #include <game/battle_context.h>
@@ -10,24 +12,10 @@ enum BattleActionScriptConstant {
     SAVE_CURRENT_MAP_ID_OFFSET = 0x55A,
     BATTLE_ACTION_SCRIPT_BUFFER_OFFSET = 0x25608,
     BATTLE_PARTY_SCRIPT_BUFFER_OFFSET = 0x35608,
-    BATTLE_SPECIAL_MAP_ID = 0x2028,
-    BATTLE_SPECIAL_STATE_OFFSET = 0x11344,
-    BATTLE_SPECIAL_HANDLE_OFFSET = 0x11348
+    BATTLE_SPECIAL_MAP_ID = 0x2028
 };
 
 extern void *gBattleSystem;
-
-typedef enum BattleSpecialMode {
-    BATTLE_SPECIAL_MODE_ACTION_LOAD = 25
-} BattleSpecialMode;
-
-typedef struct BattleSpecialState {
-    u8 unknown_00000[BATTLE_SPECIAL_STATE_OFFSET];
-    BattleSpecialMode state;
-    BattleSpecialMode handle;
-} BattleSpecialState;
-
-extern BattleSpecialState *data_ov002_020c0660;
 
 int ArchiveIO_FinishOverlay(void *system);
 void ArchiveIO_UnloadOverlay(void *handle, int argument);
@@ -42,26 +30,12 @@ BattleQueuedTask *BattleActionScript_RequestLoad(BattleActionState *action) {
     action->flags |= BATTLE_ACTION_FLAG_SCRIPT_LOAD_PENDING;
     if (*(s16 *)(gSaveData + SAVE_CURRENT_MAP_ID_OFFSET) ==
         BATTLE_SPECIAL_MAP_ID) {
-        if (data_ov002_020c0660->handle != 0) {
-            ArchiveIO_UnloadOverlay((void *)data_ov002_020c0660->handle, 0);
+        if (data_ov002_020c0660->active_overlay != 0) {
+            ArchiveIO_UnloadOverlay(data_ov002_020c0660->active_overlay, 0);
         }
-        /* MWCC otherwise selects MOV for this pointer-like mode value; keep
-         * the original literal load and register schedule localized here. */
-        asm {
-            ldr r2, =data_ov002_020c0660
-            ldr r3, =BATTLE_SPECIAL_MODE_ACTION_LOAD
-            ldr r0, [r2]
-            ldr r1, =BATTLE_SPECIAL_HANDLE_OFFSET
-            add r0, r0, #0x11000
-            str r3, [r0, #0x344]
-            ldr r0, [r2]
-            add r0, r0, #0x11000
-            ldr r3, [r0, #0x344]
-            str r3, [r0, #0x348]
-            ldr r0, [r2]
-            add r0, r0, r1
-            bl BattleSpecialHandle_QueueReload
-        }
+        data_ov002_020c0660->requested_overlay = OVERLAY_25_ID;
+        data_ov002_020c0660->active_overlay = data_ov002_020c0660->requested_overlay;
+        BattleSpecialHandle_QueueReload(&data_ov002_020c0660->active_overlay);
     }
     return BattleTaskQueue_Enqueue(BattleActionScript_LoadTask, action);
 }

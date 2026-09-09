@@ -704,3 +704,4 @@ src/battle/battle_window_lifecycle.cpp
 src/battle/battle_window_transfers.cpp
 src/battle/battle_animation_helpers.cpp
 src/battle/battle_feedback.cpp
+src/battle/battle_attack_loader.cpp

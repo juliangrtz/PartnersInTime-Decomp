@@ -1839,3 +1839,50 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **572,120 / 1,563,700 bytes (36.59%)**; C/C++ plus assembly: **36.92%**.
+
+
+## Attack overlay loading: 36.65% matching C/C++
+
+Reconstructed the four contiguous functions at `0x0206F56C..0x0206F948`
+(988 bytes): command-specific overlay selection, item-use dispatch, asynchronous
+load requests and callback handoff. The party actor layout now exposes its
+callback at `+0x78` and command ID at `+0x7C`. A checked prefix describes the
+shared allocation through its 16-byte overlay-load state.
+
+The original small overlay IDs are linker-resolved values. DSD already emits
+`OVERLAY_n_ID` absolute symbols; declaring and referencing those symbols
+reproduces the original literal loads without compiler workarounds. This also
+allowed the existing 176-byte `BattleActionScript_RequestLoad` function to lose
+its inline-assembly block while remaining exact. That function was already
+counted as C, so this cleanup adds no percentage credit. Its special encounter
+path deliberately queues the active-overlay slot, whereas the general attack
+loader queues the requested-overlay slot.
+
+Four headless replays from checkpoint-55 battle states covered 2,950 frames,
+all four new functions and 28 returns including the existing script requester.
+Models passed 44 complete 132-byte party-prefix comparisons, four 672-byte
+action-state comparisons and 48 complete 16-byte loader-state comparisons.
+All helper arguments, direct state writes, command/callback mappings and four
+callback handoffs matched. Jump and baby-hammer attacks loaded overlays 20
+and 21; using a mushroom loaded overlay 26. Repeated use exercised unloading
+an active overlay and reusing the common overlay. All six loader phases were
+observed, including both first-load and already-requested common-code paths.
+Input selection followed the displayed A/B/X prompts; item use was tested after
+normal enemy damage made Luigi a valid healing target.
+
+The replays used ordinary keypad input after loading their existing derived
+states; no RAM fields were substituted in this batch. Other Bros-item mappings
+and the special-encounter overlay-25 branch retain static matching evidence.
+Private reports under `build/runtime/eur_battle_attack_loader/`:
+`evidence_jump55.json`, `evidence_baby_hammer55.json`, `evidence_luigi55.json`,
+and `evidence_mushroom55.json`. Input-state SHA-1 values respectively:
+`496c6a6836f08c15e95655bb5d78c4cde65dc688`,
+`f38289316b42e48e93903aa758219b0b34b34a1e`,
+`55f6bef8d462a1fa15ee267bbb3a7963d54106da` (last two).
+Supplied save 55 remained unchanged:
+`239ff9d26a5806eada7c1b73a95e27e38872681c`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**573,108 / 1,563,700 bytes (36.65%)**; C/C++ plus assembly: **36.99%**.
