@@ -4,6 +4,7 @@
 #include <game/battle_ai.h>
 #include <game/battle_enemy_data.h>
 #include <game/battle_object.h>
+#include <game/graphics_resource.h>
 
 struct BattleActor;
 
@@ -142,9 +143,7 @@ typedef struct BattleTextureUploadRequest {
     u8 unknown_26[0x1A];
 } BattleTextureUploadRequest;
 
-typedef struct BattleTextureDecodeState {
-    u8 unknown_00[0x24];
-} BattleTextureDecodeState;
+typedef GameGraphicsOffsetDecoder BattleTextureDecodeState;
 
 typedef struct BattleRuntimeState {
     u8 unknown_000[0x3A0];

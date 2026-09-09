@@ -23,6 +23,26 @@ typedef struct GameGraphicsObject {
 typedef char GameGraphicsResourceSizeCheck[sizeof(GameGraphicsResource) == 24 ? 1 : -1];
 typedef char GameGraphicsObjectSizeCheck[sizeof(GameGraphicsObject) == 12 ? 1 : -1];
 
+typedef struct GameGraphicsOffsetDecoder {
+    u16 *output;
+    const GameGraphicsResource *resource;
+    const GameGraphicsObject *objects;
+    const GameGraphicsRange *groups;
+    s16 group, object, last_image;
+    u16 unknown_16;
+    u32 offset, output_count;
+    union {
+        struct { u16 boundary_mask, unknown_22; } halves;
+        struct { u32 unknown_00_15 : 16, boundary_shift : 7, alternate : 1, unknown_24_31 : 8; } bits;
+    } options;
+} GameGraphicsOffsetDecoder;
+typedef char GameGraphicsOffsetDecoder_SizeCheck[sizeof(GameGraphicsOffsetDecoder) == 36 ? 1 : -1];
+
+
+void GameGraphics_InitOffsetDecoder(GameGraphicsOffsetDecoder *state, int screen, int texture, int alternate,
+    u16 *output, const GameGraphicsResource *resource);
+void GameGraphics_BuildScreenTextureOffsets(int screen, u16 *output, const GameGraphicsResource *resource);
+
 const void *GameGraphics_GetSection(const GameGraphicsResource *resource, int section);
 u8 GameGraphics_GetTextureFormat(const GameGraphicsResource *resource);
 void GameGraphics_BuildTextureOffsets(u16 *output, const GameGraphicsResource *resource);

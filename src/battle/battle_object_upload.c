@@ -9,9 +9,6 @@ int func_0200b374(u32 destination, const void *resource,
                   const void *component, int component_index,
                   int end_index);
 int func_020096b0(BattleTextureDecodeState *state, int count);
-void func_02009d24(BattleTextureDecodeState *state, int texture_id,
-                   int unknown_2, int copy_flag, void *component_10,
-                   u8 *data);
 void ArchiveIO_QueueCompressedRead(u8 *system, BattleTextureUploadRequest *request,
                    void *destination);
 void *func_ov002_02072508(int (*callback)(BattleObjectUploadTask *task),
@@ -34,9 +31,9 @@ void BattleObjectData_BeginTailDecodeTask(BattleQueuedTask *task) {
     BattleSceneResource *resource =
         (BattleSceneResource *)task->argument;
 
-    func_02009d24(&context->texture_decode, 1, 0,
+    GameGraphics_InitOffsetDecoder(&context->texture_decode, 1, 0,
                   !resource->flags.bits.copy_flag,
-                  resource->component_10, resource->data);
+                  (u16 *)resource->component_10, (const GameGraphicsResource *)resource->data);
     task->callback = BattleObjectData_WaitTailDecodeTask;
 }
 

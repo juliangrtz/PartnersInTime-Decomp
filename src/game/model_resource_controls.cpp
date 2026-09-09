@@ -8,7 +8,6 @@ extern "C" {
 extern "C" {
 extern BattleModelVTable data_02050a24;
 void func_0200a45c(BattleModel *, const void *);
-void func_02009e38(int, const u16 *, const GameGraphicsResource *);
 void func_02009ffc(int, const u16 *, const GameGraphicsResource *, int);
 u32 func_02009498(const GameGraphicsResource *);
 void func_02009644(const void *, int, u32, int);
@@ -226,7 +225,7 @@ int BattleModel_InitializeSpriteResources(BattleModel *model, const ModelResourc
         model->texture_offsets = 0;
     if (model->texture_offsets && !descriptor->resource_flags.unknown_01) {
         if (model->resource_flag_bits.alternate_resource == 1)
-            func_02009e38(model->screen, model->texture_offsets, model->resource);
+            GameGraphics_BuildScreenTextureOffsets(model->screen, (u16 *)model->texture_offsets, model->resource);
         else
             func_02009ffc(model->screen, model->texture_offsets, model->resource, -1);
     } else if (!model->texture_offsets) {

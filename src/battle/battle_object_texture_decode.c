@@ -8,9 +8,6 @@ extern u8 *gBattleSystem;
 u32 ArchiveIO_PrepareCompressedRead(u8 *system, BattleTextureUploadRequest *request,
                   void *source, void *component);
 void func_0202cbd4(void *destination, int value, u32 size);
-void func_02009d24(BattleTextureDecodeState *state, int texture_id,
-                   int unknown_2, int copy_flag, void *component_10,
-                   u8 *data);
 
 void BattleObjectData_PrepareBodyDecodeTask(BattleQueuedTask *task) {
     BattleSceneResource *resource =
@@ -67,19 +64,19 @@ void BattleObjectData_PrepareBodyDecodeTask(BattleQueuedTask *task) {
     }
 
     if (resource->flags.bits.load_pending) {
-        func_02009d24(
+        GameGraphics_InitOffsetDecoder(
             &((BattleContext *)gBattleContext)->texture_decode,
-            0, 1, 1, resource->component_0c, resource->data);
+            0, 1, 1, (u16 *)resource->component_0c, (const GameGraphicsResource *)resource->data);
         resource->flags.bits.upload_complete = 0;
         resource->flags.bits.copy_flag = 0;
     } else {
         if (resource->allocation_size < total_size) {
             resource->component_14 = gBattleContext + 0x37608;
         }
-        func_02009d24(
+        GameGraphics_InitOffsetDecoder(
             &((BattleContext *)gBattleContext)->texture_decode,
             0, 1, !resource->flags.bits.upload_complete,
-            resource->component_0c, resource->data);
+            (u16 *)resource->component_0c, (const GameGraphicsResource *)resource->data);
     }
     task->callback = BattleObjectData_WaitBodyDecodeTask;
 }

@@ -739,3 +739,5 @@ src/field/field_party_manager_actions.cpp
 
 src/field/field_party_resource_override.cpp
 src/field/field_party_action_reset.cpp
+
+src/game/graphics_screen_offsets.c

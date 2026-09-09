@@ -2881,3 +2881,36 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **621,960 / 1,563,700 bytes (39.77%)**; C/C++ plus assembly: **40.11%**.
+
+## Graphics offset decoder setup and screen texture tables (2026-09-09)
+
+Reconstructed **728 bytes** in a contiguous graphics-resource module:
+`GameGraphics_InitOffsetDecoder` and `GameGraphics_BuildScreenTextureOffsets`.
+The shared, size-checked 36-byte decoder replaces the battle-only opaque view.
+The screen table builder preserves repeated image offsets and aligns new images
+using the hardware OBJ boundary and the native shape/size table. Existing model
+and battle callers now use the typed interfaces.
+
+Runtime verification covered **2,739 frames and 96 target returns**. An ordinary
+cold load of supplied save **103** exercised 62 screen-table builds on both
+screens, including **972 new aligned images and 1,151 reused image offsets**.
+A battle-entry fixture from the save-55 field checkpoint exercised 34 decoder
+initializations: 17 texture boundaries and 17 sub-screen OBJ boundaries, with
+both normal and alternate resources. The fixture temporarily supplied decoded
+command 0x11C from room 306, offset 0x2926 (encounter -32748); all 72 command bytes
+and the script cursor were restored at native battle entry. This establishes
+battle-entry coverage, not replay of the original command.
+
+Byte-guarded, SP-matched helper/return models checked complete decoder records,
+source headers, group records, object tables and generated output tables. The
+same-boundary direct-copy path, empty tables and repeated images with no earlier
+match remain statically verified. Screenshots and live main/sub OBJ-VRAM and
+palette dumps accompany `build/runtime/eur_graphics_offsets/` reports
+`evidence_cold103.json` and `evidence_entry55.json`. All **104 supplied saves**
+retained their hashes. Battle checkpoint SHA-1:
+`e44df106d65e52df1ffc2b125538354f67cb1b22`.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**622,688 / 1,563,700 bytes (39.82%)**; C/C++ plus assembly: **40.16%**.
