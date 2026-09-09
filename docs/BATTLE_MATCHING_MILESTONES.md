@@ -1886,3 +1886,34 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **573,108 / 1,563,700 bytes (36.65%)**; C/C++ plus assembly: **36.99%**.
+
+## Battle frame orchestration (2026-09-09)
+
+Reconstructed `BattleMain_Update` (2,464 bytes) in readable C++, with a checked
+context view for its task queues, UI storage, cameras, animation state and palette
+buffers. The function preserves the original helper order, signed scroll steps,
+one-frame camera offsets, animation matrix setup, and HP/equipment persistence
+when leaving battle. Shared pointers are re-read at the native call boundaries.
+
+Two ordinary keypad replays from existing derived save-55 battle states exercised
+jump attacks and mushroom use: **1,572 frames and 1,572 verified returns**.
+An independent caller-write model compared the context header and rendering
+control block, neighboring command state, complete 260-byte camera objects,
+64-byte matrix, 40-byte sprite animation and 100-byte matrix animation at helper
+boundaries and returns. All helper ordering and arguments matched, including
+3,144 camera projections, 12,576 signed scroll accumulations, and 100,608 bytes
+cleared in matrix parameter buffers. The GPU FIFO writes, palette-command and
+image-effect branches, and battle-exit persistence retain static byte-matching
+evidence; these replays did not establish runtime coverage of those branches.
+
+Private evidence: `build/runtime/eur_battle_frame/evidence_jump55.json` and
+`evidence_mushroom55.json`. Input-state SHA-1 values:
+`496c6a6836f08c15e95655bb5d78c4cde65dc688` and
+`55f6bef8d462a1fa15ee267bbb3a7963d54106da`.
+No RAM fixtures were applied. Supplied save 55 remained unchanged:
+`239ff9d26a5806eada7c1b73a95e27e38872681c`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**575,572 / 1,563,700 bytes (36.81%)**; C/C++ plus assembly: **37.14%**.
