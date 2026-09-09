@@ -733,3 +733,4 @@ src/overlay007/pause_background.cpp
 src/overlay007/pause_background_palette.cpp
 src/overlay007/pause_menu_cursor.cpp
 src/field/field_party_trail.cpp
+src/field/field_party_piggyback.cpp

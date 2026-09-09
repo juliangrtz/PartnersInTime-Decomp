@@ -271,3 +271,6 @@ src/field/field_palette_crossfade_transfer.c:
 
 src/field/field_party_trail.cpp:
     .text start:0x02092088 end:0x020923dc
+
+src/field/field_party_piggyback.cpp:
+    .text start:0x0208cd08 end:0x0208d17c

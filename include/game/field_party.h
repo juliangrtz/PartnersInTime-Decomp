@@ -256,6 +256,11 @@ void FieldPartyEntity_SetCollisionResponseChannels(FieldPartyEntity *member, int
 /* Type-3 queries return zero for an overlapping volume selected by bits 0/3 or 0/2. */
 int FieldPartyEntity_TestType3Volumes03(FieldPartyEntity *member);
 int FieldPartyEntity_TestType3Volumes02(FieldPartyEntity *member);
+
+void FieldParty_RestorePairedMember(FieldPartyController *party,int member);
+void FieldParty_BeginPiggybackMount(FieldPartyController *party,int member);
+void FieldParty_FinishAirborneTransfer(FieldPartyController *party,int member);
+
 #ifdef __cplusplus
 }
 #endif

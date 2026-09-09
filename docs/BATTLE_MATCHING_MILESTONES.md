@@ -2548,3 +2548,30 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **603,400 / 1,563,700 bytes (38.59%)**; C/C++ plus assembly: **38.92%**.
+
+## Field-party reunion, piggyback mount and transfer completion (2026-09-09)
+
+Reconstructed **1,140 bytes** for restoring the paired member, starting a
+piggyback mount and completing an airborne transfer. The mount preserves prior
+behavior, coordinates both party controllers and derives the second member's
+eight-way facing from its linked member. Completion stops vertical motion,
+hides the transferred entity and starts the paired animation.
+
+A controlled 685-frame Field VM replay on supplied save 83 checked both members
+in all three routines (**six returns**), including the linked-member angle path.
+Original-byte-guarded, SP-matched hooks verified helper arguments and complete
+8,356-byte party, 1,440-byte member and 312-byte renderer records. Reunion,
+cancellation and mount requests replaced decoded VM commands; all 72 command
+bytes and the script cursor were restored at wrapper entry and the original
+command replay was checked. The separate C8 completion fixture additionally
+prepared the two live members in the caller's documented states 57 and 58.
+This is controlled function coverage, not a normal story-transition replay.
+No ROM changes were used and all **104 supplied saves** retained their hashes.
+
+Private report: `build/runtime/eur_party_rejoin/evidence_fixture83.json`.
+Input-state SHA-1: `3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`.
+Save-83 SHA-1: `2cb577d3008975c390a2f00e2b2cd646e4005c1b`.
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**604,540 / 1,563,700 bytes (38.66%)**; C/C++ plus assembly: **39.00%**.
