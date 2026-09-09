@@ -41,9 +41,10 @@ struct PauseSceneWork {
     u8 initialized, tutorial, background_dirty, unknown087;
     void *owned88, *owned8c, *owned90, *owned94;
     GameSpritePalette palette98, paletteac;
-    void *ownedc0, *ownedc4[2], *ownedcc[2], *ownedd4[2], *number_glyph_tiles, *number_glyph_pixels, *number_scratch;
+    void *ownedc0, *background_tiles[2], *background_maps[2], *secondary_background_maps[2],
+        *number_glyph_tiles, *number_glyph_pixels, *number_scratch;
     GameSpritePalette palettee8, palettefc;
-    u8 unknown110[2];
+    u8 unknown110, active_background;
     s8 selected_menu;
     u8 unknown113;
     s8 menu_count;

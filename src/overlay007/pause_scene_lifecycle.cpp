@@ -166,17 +166,17 @@ PauseSceneTask *PauseScene_Destroy(PauseSceneTask *task)
     func_ov005_02067424(ARCHIVE, 2);
     func_ov005_02067424(ARCHIVE, 1);
     for (int j = 0; j < 2; ++j) {
-        if (WORK.ownedc4[j]) {
-            GameHeap_DeleteArray(WORK.ownedc4[j]);
-            WORK.ownedc4[j] = 0;
+        if (WORK.background_tiles[j]) {
+            GameHeap_DeleteArray(WORK.background_tiles[j]);
+            WORK.background_tiles[j] = 0;
         }
-        if (WORK.ownedcc[j]) {
-            GameHeap_DeleteArray(WORK.ownedcc[j]);
-            WORK.ownedcc[j] = 0;
+        if (WORK.background_maps[j]) {
+            GameHeap_DeleteArray(WORK.background_maps[j]);
+            WORK.background_maps[j] = 0;
         }
-        if (WORK.ownedd4[j]) {
-            GameHeap_DeleteArray(WORK.ownedd4[j]);
-            WORK.ownedd4[j] = 0;
+        if (WORK.secondary_background_maps[j]) {
+            GameHeap_DeleteArray(WORK.secondary_background_maps[j]);
+            WORK.secondary_background_maps[j] = 0;
         }
     }
     if (WORK.number_glyph_pixels) {

@@ -175,11 +175,11 @@ void PauseScene_LoadResources(PauseSceneTask *)
     WORK.owned88 = GameHeap_NewArray(49152, 0, 0, 0);
     WORK.owned8c = GameHeap_NewArray(17920, 0, 0, 0);
     for (int i = 0; i < 2; ++i) {
-        WORK.ownedc4[i] = GameHeap_NewArray(32768, 0, 0, 0);
-        WORK.ownedcc[i] = GameHeap_NewArray(2048, 0, 0, 0);
-        WORK.ownedd4[i] = GameHeap_NewArray(2048, 0, 0, 0);
-        Clear16(WORK.ownedcc[i], 2048);
-        Clear16(WORK.ownedd4[i], 2048);
+        WORK.background_tiles[i] = GameHeap_NewArray(32768, 0, 0, 0);
+        WORK.background_maps[i] = GameHeap_NewArray(2048, 0, 0, 0);
+        WORK.secondary_background_maps[i] = GameHeap_NewArray(2048, 0, 0, 0);
+        Clear16(WORK.background_maps[i], 2048);
+        Clear16(WORK.secondary_background_maps[i], 2048);
     }
     WORK.number_glyph_pixels = GameHeap_NewArray(2048, 0, 0, 0);
     Clear32(WORK.owned88, 49152);

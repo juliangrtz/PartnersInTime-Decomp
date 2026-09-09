@@ -2457,3 +2457,36 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **598,372 / 1,563,700 bytes (38.27%)**; C/C++ plus assembly: **38.60%**.
+
+## Pause-menu background loading and bank swaps (2026-09-09)
+
+Reconstructed **3,044 bytes** across thirteen routines: queued and immediate
+background bank selection, graphics uploads, page/alternate loader tasks and
+extended palette uploads. The checked 72-byte task names buffer ownership,
+loader state and parent completion counters. The scene work now names its two
+tile buffers, two map buffers, two secondary map buffers and active bank.
+The adjacent map-strip preparation routine remains assembly while its compiler
+register allocation differs; it is not included in the C total.
+
+Normal keypad navigation from supplied save 20 exercised every new routine,
+including Items, equipment, the remaining menu pages, both bank selections,
+both alternate loaders and all five page-loader states. Three replays totaled
+**2,485 frames and 68 checked returns**. SP-matched, original-byte-guarded
+hooks checked complete task records, parent counters and helper arguments.
+Independent LZ10 and tilemap models verified decompressed data and palette tags;
+VRAM comparisons covered **393,216 tile bytes**, **34,816 map bytes**,
+**67,264 directly decompressed tile bytes**, **4,096 direct map bytes**
+and **8,192 extended palette bytes**. The still-assembly map-strip
+helper was also checked against an independent copy/strip model. Coverage is
+normal menu navigation, not a claim to all resource rows or archive-wait branches.
+
+Private reports: `build/runtime/eur_pause_background/evidence_items20.json`,
+`evidence_pages20.json` and `evidence_submenu20.json`. The Items replay starts at
+menu state SHA-1 `bda7166108c11486ee60cef2753342bbf0a4634f`; the underlying
+save-20 SHA-1 is `e78faca7c148cb07941601554f06f279a29c4488`. No code or RAM
+fixtures were used and all **104 supplied saves** retained their hashes.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**601,416 / 1,563,700 bytes (38.46%)**; C/C++ plus assembly: **38.80%**.
