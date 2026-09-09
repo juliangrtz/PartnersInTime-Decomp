@@ -445,7 +445,6 @@ src/field/field_frame_snapshot.cpp
 src/field/field_spatial_frame_snapshot.cpp
 src/field/field_spatial_placement.cpp
 src/field/field_bounds_resources.cpp
-src/field/field_spatial_bounds_resources.cpp
 src/field/field_archive_lifecycle.c
 src/field/field_archive_lookup.c
 src/field/field_script_manager.cpp

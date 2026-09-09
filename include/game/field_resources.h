@@ -116,6 +116,9 @@ typedef char FieldSecondaryResource_SizeCheck[sizeof(FieldSecondaryResource) == 
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldEntity3D_ConfigureAuxiliaryResources(FieldRuntimeEntity *entity,
+    const FieldPrimaryResource *primary, const FieldSecondaryResource *secondary,
+    FieldPaletteResource *palette);
 void FieldEntity_RebindRendererResources(FieldRuntimeEntity *entity, const FieldPrimaryResource *primary,
                                          const FieldSecondaryResource *secondary,
                                          FieldPaletteResource *palette, int animation, u8 update_bounds,

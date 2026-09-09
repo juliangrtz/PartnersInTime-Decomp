@@ -12,7 +12,6 @@ typedef struct FieldPartyFollowerFlags { u16 enabled : 1, unknown_01_15 : 15; } 
 typedef char FieldPartyFollowerFlags_SizeCheck[sizeof(FieldPartyFollowerFlags) == 2 ? 1 : -1];
 typedef struct FieldPartyEntity {
     FieldRuntimeEntity entity;
-    u8 unknown_514[12];
     union {
         u32 flags;
         struct {

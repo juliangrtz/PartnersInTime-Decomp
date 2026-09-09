@@ -54,7 +54,7 @@ src/field/field_entity_lifecycle.cpp:
     .text       start:0x020a7310 end:0x020a79dc
 
 src/field/field_spatial_lifecycle.cpp:
-    .text       start:0x020b5608 end:0x020b64e8
+    .text       start:0x020b5364 end:0x020b64e8
 
 src/field/field_orbit.cpp:
     .text       start:0x020a4f88 end:0x020a5408
@@ -106,9 +106,6 @@ src/field/field_spatial_placement.cpp:
 
 src/field/field_bounds_resources.cpp:
     .text       start:0x020a6c14 end:0x020a7310
-
-src/field/field_spatial_bounds_resources.cpp:
-    .text       start:0x020b5364 end:0x020b5420
 
 src/field/field_archive_lifecycle.c:
     .text       start:0x020897d0 end:0x0208995c

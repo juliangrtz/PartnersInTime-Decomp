@@ -760,13 +760,16 @@ struct FieldRuntimeEntity {
     FieldRuntimeEntity *support_entity, *previous_support_entity;
     void *unknown_500, *unknown_504, *unknown_508, *unknown_50c;
     FieldRenderObject *auxiliary_render_object;
+    const struct FieldPrimaryResource *auxiliary_primary_resource;
+    const struct FieldSecondaryResource *auxiliary_secondary_resource;
+    struct FieldPaletteResource *auxiliary_palette_resource;
 };
 
 typedef char FieldEntity_SizeCheck[sizeof(FieldEntity) == 0xEC ? 1 : -1];
 typedef char FieldRenderObject_SizeCheck[
     sizeof(FieldRenderObject) == 0x138 ? 1 : -1];
 typedef char FieldRuntimeEntity_SizeCheck[
-    sizeof(FieldRuntimeEntity) == 0x514 ? 1 : -1];
+    sizeof(FieldRuntimeEntity) == 0x520 ? 1 : -1];
 
 /* Copy state while retaining the destination's vtable and renderer bindings. */
 #ifdef __cplusplus

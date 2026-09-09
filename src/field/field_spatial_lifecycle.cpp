@@ -1,6 +1,8 @@
 #include <game/field_entity_lifecycle.h>
 #include <game/field_entity.h>
 #include <game/field_timed_renderer.h>
+#include <game/field_resources.h>
+#include <game/battle_scene.h>
 extern "C" {
 #include <game/heap.h>
 extern FieldEntityVTable data_ov000_020c10b0;
@@ -189,5 +191,82 @@ void FieldEntity3D_ReleaseRenderers(FieldRuntimeEntity *entity)
             entity->auxiliary_render_object->delete_self();
         entity->auxiliary_render_object = 0;
     }
+}
+
+void FieldEntity3D_ConfigureAuxiliaryResources(FieldRuntimeEntity *entity, const FieldPrimaryResource *primary,
+                        const FieldSecondaryResource *secondary, FieldPaletteResource *palette)
+{
+    FieldResourceDescriptor descriptor;
+    entity->auxiliary_primary_resource = primary;
+    entity->auxiliary_secondary_resource = secondary;
+    entity->auxiliary_palette_resource = palette;
+    if (entity->auxiliary_render_object) {
+        BattleModel_InitDescriptor(&descriptor, 0);
+        int size = BattleModel_GetScreenTextureConversionSize(
+            (u8)entity->base.property_00a_bits.property_00a_unknown_01, 1,
+            (const GameGraphicsResource *)primary->animation);
+        if (size)
+            descriptor.conversion_buffer = GameHeap_NewArray(size, entity->base.property_00a_bits.heap, 0, 1);
+        descriptor.flags.resource_set = 1;
+        descriptor.flags.unknown_23 = 0;
+        descriptor.animation = primary->animation;
+        descriptor.graphics = primary->graphics;
+        descriptor.graphics_size = primary->bits.graphics_size;
+        descriptor.primary_id = primary->id;
+        /* The original writes this flag twice across primary-ID setup. */
+        descriptor.resource_flags.alternate = 1;
+        descriptor.resource_flags.alternate = 1;
+        descriptor.secondary_data = secondary->data;
+        descriptor.secondary_extent = secondary->bits.extent;
+        descriptor.secondary_id = secondary->id;
+        descriptor.resource_flags.unknown_00 = 1;
+        descriptor.flags.palette_allocation = palette->allocation_result;
+        descriptor.flags.unknown_16_18 = 1;
+        descriptor.first_texture_tile = 0;
+        descriptor.texture_tile_count = 0;
+        descriptor.palette = &palette->palette;
+        descriptor.resource_flags.screen = (u8)entity->base.property_00a_bits.property_00a_unknown_01;
+        descriptor.resource_animation = 0;
+        descriptor.animation_id = 0;
+        descriptor.animation_offset_x = 80;
+        descriptor.animation_offset_y = 80;
+        descriptor.animation_speed = 256;
+        descriptor.flags.animation_active = 0;
+        descriptor.flags.unknown_09 = 1;
+        descriptor.flags.behavior_state = 0;
+        descriptor.flags.unknown_10 = 0;
+        descriptor.flags.unknown_11 = 0;
+        descriptor.unknown_30 = 0;
+        descriptor.flags.unknown_05_07 = 0;
+        descriptor.scale_x = 256;
+        descriptor.scale_y = 256;
+        descriptor.rotation = 0;
+        entity->auxiliary_render_object->unknown_5c(&descriptor, 0, 0);
+        entity->auxiliary_render_object->unknown_24();
+    }
+}
+
+void FieldEntity3D_BindBoundsResource(FieldRuntimeEntity *entity, const u16 *resource)
+{
+    entity->bounds_resource = resource;
+    if (resource) {
+        entity->body_bounds = (const FieldInteractionBounds *)((const u8 *)resource + resource[0] + 1);
+        entity->navigation_bounds = (const FieldInteractionBounds *)((const u8 *)resource + resource[1] + 1);
+        entity->interaction_bounds = (const FieldInteractionBounds *)((const u8 *)resource + resource[2] + 1);
+        entity->body_bounds_lookup = (const u8 *)resource + resource[3] + 1;
+        entity->navigation_bounds_lookup = (const u8 *)resource + resource[4] + 1;
+        entity->animation_bounds =
+            (const FieldAnimationBoundsIndex *)((const u8 *)resource + resource[5] + 1);
+        entity->bounds_animation_count = *((const u8 *)resource + resource[5]);
+    } else {
+        entity->body_bounds = 0;
+        entity->navigation_bounds = 0;
+        entity->interaction_bounds = 0;
+        entity->body_bounds_lookup = 0;
+        entity->navigation_bounds_lookup = 0;
+        entity->animation_bounds = 0;
+        entity->bounds_animation_count = 0;
+    }
+    entity->base.update_bounds();
 }
 }

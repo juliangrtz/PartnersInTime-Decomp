@@ -21,7 +21,6 @@ typedef struct FieldVariableEntityState {
 } FieldVariableEntityState;
 typedef struct FieldVariableEntity {
     FieldRuntimeEntity entity;
-    u8 unknown_514[12];
     FieldVariableEntityState state;
 } FieldVariableEntity;
 typedef struct FieldVariablePlacement {

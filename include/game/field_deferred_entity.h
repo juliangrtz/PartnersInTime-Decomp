@@ -6,7 +6,6 @@
 
 typedef struct FieldDeferredEntity {
     FieldRuntimeEntity runtime;
-    u8 unknown_514[12];
     union {
         u32 raw;
         struct {

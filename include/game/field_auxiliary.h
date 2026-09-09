@@ -4,7 +4,6 @@
 #include <game/field_entity_motion.h>
 typedef struct FieldAuxiliaryEntity {
     FieldRuntimeEntity entity;
-    u8 unknown_514[12];
     union {
         u32 flags;
         struct {
