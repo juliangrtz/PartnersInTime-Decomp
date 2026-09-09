@@ -1153,3 +1153,32 @@ callbacks and the source battery save remains unchanged. Native linking, all
 74 tests, progress consistency and the public-content audit pass. The complete
 ROM retains SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
 No inline assembly was added.
+
+### Bros. Ball restoration, scripted movement and separation (2026-09-09)
+
+Five adjacent functions extend the party transition module by 3,000 matching
+C++ bytes, reaching 538,836 / 1,563,700 bytes (34.46%). They restore rolling
+parameters, resume idle or rolling presentation, separate the adults, freeze
+the idle animation, and start the directional movement used by state 23.
+The last state retains its numeric name. Native call setup establishes the
+eight-argument direction helper and the three-argument animation virtual call;
+the decompiler's apparent extra virtual-call argument was stale stack data.
+
+A checkpoint-83 replay enters Bros. Ball, rolls left and exits with A. It
+observes restoration from state 84 to rolling and separation of both adults,
+passing 17 full-memory checkpoints and all 15 helper-call argument checks.
+The probe compares the complete party controller, both entities, their aliased
+state records and both renderers. Live direction-six offsets, both 16-unit
+vertical movements, the 16-frame separation controllers, distinct leader and
+follower animations, and the sound requests agree with the reconstruction.
+The screenshot shows both adults standing separately. A second ordinary-input
+replay verifies separation again. Private evidence is `ball_roll_exit83.json`
+and `ball_pause83.json` under `build/runtime/eur_party_ball/`.
+
+State-23 entry, the resume branches and the scripted stop helper were not
+reached and remain statically verified only. Their VM callers explain why
+releasing the direction button does not exercise the scripted stop. Runtime
+comparisons pass without pending callbacks or changes to the source battery
+save. Native linking, all 74 tests, progress consistency and the public-content
+audit pass; the ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
