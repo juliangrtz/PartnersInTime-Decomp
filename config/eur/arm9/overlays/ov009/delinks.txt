@@ -56,3 +56,6 @@ src/overlay009/shop_text_lookup.c:
 
 src/overlay009/shop_resources.cpp:
     .text start:0x0206d160 end:0x0206e288
+
+src/overlay009/shop_rows.cpp:
+    .text start:0x020710b8 end:0x020715e0

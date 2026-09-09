@@ -622,6 +622,36 @@ Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
 
+### Shop row updates and sprite/model submission (2026-09-09)
+
+Six adjacent callbacks add 1,320 matching C++ bytes, reaching
+541,724 / 1,563,700 bytes (34.64%). A checked task layout describes the row's
+displayed value, palette, priority, scale, tile base and position. The callbacks
+update that state from the existing list, refresh changed numeric text, position
+the row and anchor models, configure sprite affine matrices, and submit the
+visible pieces. The preceding constructor is deferred with twelve register-only
+instruction differences; it contributes no matching-C credit.
+
+The established shop probe enters normal and equipment shops from story saves
+86 and 65. It temporarily substitutes the decoded Field VM shop command and
+restores all 72 bytes at the native helper before the scene transition. Ordinary
+inputs open the lists, move the selection, cancel and exit without a purchase.
+The two relevant runs cover 2,202 frames and all six new callbacks, including
+438 visible row-model submissions in the equipment shop. They pass 4,784 full
+row-task comparisons, 38,988 renderer-prefix comparisons, 32,669 affine-argument
+checks, 31,245 submission-argument checks and 13 numeric-refresh argument checks.
+The probe computes positions, scales, tile indices and visibility from live
+data; the existing virtual value/availability helpers are observed separately
+to check the caller's use of their returns. The previous list, panel, text and
+lifecycle checks also pass, including 196,608 background VRAM bytes in the
+equipment-shop run.
+
+Private reports are `evidence_086_00.json` and `evidence_065_02.json` under
+`build/runtime/eur_shop_rows/`. Both shops close completely, the temporary command
+is restored, and the supplied battery saves remain unchanged. Native linking,
+all 74 tests, progress checks and the public-content audit pass. The ROM retains
+SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; no inline assembly was added.
+
 ### Field party pairing and collision-state transitions (2026-09-08)
 
 Seven functions add 3,820 matching C++ bytes, reaching 499,104 / 1,563,700
