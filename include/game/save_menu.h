@@ -32,6 +32,17 @@ typedef struct SaveMenuTransferTask {
     int state, counter;
     int arguments[8];
 } SaveMenuTransferTask;
+typedef struct SaveMenuCursorTask {
+    u8 unknown_00[16];
+    SaveMenuTransferTask *parent;
+    u8 unknown_14[12];
+    int state, counter;
+    u8 selection, unknown_29[3];
+    int x, y;
+    u8 unknown_34[20];
+} SaveMenuCursorTask;
+typedef char SaveMenuCursorTaskSizeCheck[sizeof(SaveMenuCursorTask) == 72 ? 1 : -1];
+
 typedef struct SaveSceneTask {
     GameTask base;
     u8 unknown_18[16];
@@ -93,6 +104,13 @@ void SaveMenuText_QueueObjectStrip(int engine, int offset, int row, int column, 
 u16 SaveMenuText_MeasureWidth(SaveMenuText *context, int table, int entry);
 const u8 *SaveMenuText_GetString(SaveMenuText *context, int table, int entry);
 SaveMenuText *SaveMenuText_Init(SaveMenuText *context);
+void EraseMenu_ShowConfirmation(SaveMenuTransferTask *parent, int entry);
+void EraseMenu_EnableConfirmationPlanes(SaveMenuCursorTask *task);
+void EraseMenu_HideConfirmation(void);
+void EraseMenu_DisableConfirmationPlanes(SaveMenuCursorTask *task);
+void EraseMenu_CreateCursor(SaveMenuTransferTask *parent);
+void EraseMenu_DrawCursor(SaveMenuCursorTask *task);
+void GameOverMenu_CreateModels(int show_cursor);
 void SaveMenu_CreateModels(void);
 void LoadMenu_CreateModels(void);
 int LoadMenuMotion_Update(SaveMenuMotion *motion);

@@ -105,3 +105,9 @@ src/overlay008/save_state_transfer.cpp:
 
 src/overlay008/save_menu_write.cpp:
     .text start:0x02073f04 end:0x0207431c
+
+src/overlay008/erase_confirmation.cpp:
+    .text start:0x02076934 end:0x02076b38
+
+src/overlay008/game_over_models.cpp:
+    .text start:0x02070560 end:0x02070688

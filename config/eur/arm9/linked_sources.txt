@@ -739,3 +739,6 @@ src/field/field_party_resource_override.cpp
 src/field/field_party_action_reset.cpp
 
 src/game/graphics_screen_offsets.c
+
+src/overlay008/erase_confirmation.cpp
+src/overlay008/game_over_models.cpp

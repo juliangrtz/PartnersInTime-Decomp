@@ -3047,3 +3047,43 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **625,712 / 1,563,700 bytes (40.01%)**; C/C++ plus assembly: **40.35%**.
+
+## Erase-menu confirmation and Game Over models (2026-09-09)
+
+Reconstructed seven functions, **812 bytes**: the contiguous erase-menu
+confirmation controls at `0x02076934` through `0x02076B38`, plus
+`GameOverMenu_CreateModels`. They create and position the confirmation cursor,
+show/hide the dialog's display planes, queue its background text and configure
+the Game Over models. The 72-byte cursor task and menu-control prefix have
+checked layouts. The adjacent sprite-grid constructor and Game Over cursor
+update remain assembly.
+
+Two cold boots with supplied saves **1 and 103** used ordinary keypad input:
+hold **A+B+X+Y+L+R**, wait for the erase confirmation, optionally move left/right,
+and cancel with B. No session-state redirection was needed. They covered
+**1,884 frames and 676 returns**, including all six erase-menu functions,
+666 cursor callbacks (632 drawn, 34 hidden), both selections (30/636), and
+10 live display-plane checks. A guard confirmed `SaveStorage_Erase` never ran.
+The visible confirmation and both final OBJ-VRAM/palette sets were checked;
+the two runs ended with identical display-memory hashes.
+
+A separate save-86 checkpoint covered Game Over model creation in **481 frames**.
+The documented decoded-command fixture substitutes opcode `0x123` with fade 1
+at natural Field VM dispatch and restores all 72 command bytes at the native
+Game Over helper entry. This reaches the normal scene transition; it does not
+claim an ordinary gameplay defeat or replay of the replaced script command.
+The observed constructor enabled the cursor; the cursor-disabled branch remains
+statically verified. Initial checkpoint SHA-1:
+`23b87fbd8bca1084bc3016e55b3fb633f7856fa8`.
+
+Across the three runs, byte-guarded, SP-matched models checked complete 72-byte
+tasks and 128-byte sprite models at native helper boundaries, exact task/resource/
+animation arguments, parent links, positions, flags and display writes.
+Reports/screenshots: `build/runtime/eur_save_scene_cursors/`,
+`evidence_erase_keys1.json`, `evidence_erase_keys103.json` and
+`evidence_gameover86.json`. All **104 supplied saves** retained their hashes.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**626,524 / 1,563,700 bytes (40.07%)**; C/C++ plus assembly: **40.40%**.
