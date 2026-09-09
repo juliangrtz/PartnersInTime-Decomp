@@ -149,6 +149,9 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_StartBrosBallRoll(FieldPartyController *party, int fast);
+void FieldParty_BeginBrosBall(FieldPartyController *party);
+void FieldParty_TryFollowEntityAtHeight(FieldPartyController *party, int index);
 void FieldParty_StackFollower(FieldPartyController *party);
 void FieldParty_RestoreGroundMovementAndHideFollower(FieldPartyController *party);
 void FieldParty_SeparateFollower(FieldPartyController *party);

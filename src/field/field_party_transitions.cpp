@@ -3,6 +3,9 @@
  * The remaining state numbers retain neutral names. */
 extern "C" {
 void func_ov000_02093004(FieldPartyController *);
+void func_ov000_02093dec(FieldPartyController *);
+/* Interior labels for the X and Y lanes of the same interleaved table. */
+extern const fx32 data_ov000_020c0878[][2], data_ov000_020c087c[][2];
 void func_ov000_02092770(FieldPartyController *, FieldPartyEntity *, int, int, int, int);
 void FieldParty_StackFollower(FieldPartyController *party)
 {
@@ -296,5 +299,108 @@ void FieldParty_ResumeState11Or17(FieldPartyController *party, int preserve_stat
     func_ov000_02092770(party, party->leader, 2, 4, 1, 1);
     if (party->leader->entity.locomotion_state == 17)
         GameAudio_PlayEffectDelayed(216, 0, -1);
+}
+void FieldParty_TryFollowEntityAtHeight(FieldPartyController *party, int index)
+{
+    FieldPartyEntity *leader = party->leader;
+    if (leader->entity.locomotion_state == 11 || leader->entity.locomotion_state == 12 ||
+        leader->entity.locomotion_state == 18 || leader->entity.locomotion_state == 15) {
+        FieldRuntimeEntity *target = party->areas[party->flags.field_screen]->entities[index];
+        if (leader->entity.position_z <= target->position_z + 0x10000 &&
+            leader->entity.position_z >= target->position_z - 0x10000) {
+            party->flags.previous_field_screen = party->flags.field_screen;
+            party->unknown_055 = index;
+            party->flags.unknown_04 = 0;
+            party->flags.unknown_06 = 0;
+            party->flags.unknown_10_13 = 0;
+            party->leader->entity.movement_speed = 0;
+            party->follower->entity.movement_speed = 0;
+            party->state.unknown_00 = 0;
+            party->state.unknown_01 = 0;
+            party->flags.unknown_14 = 0;
+            FieldLinear3D_StartFollowing(&party->leader->entity, target, 0, 0, 0, 0, 0, 0, 1,
+                                         &party->leader->movement);
+            party->leader->entity.locomotion_state = 16;
+            func_ov000_02093004(party);
+            func_ov000_0209ce44(party, 0, 30);
+            func_ov000_0209ce44(party, 1, 30);
+            GameAudio_PlayEffectDelayed(216, 0, -1);
+        }
+    }
+}
+
+void FieldParty_BeginBrosBall(FieldPartyController *party)
+{
+    FieldPartyEntity *leader;
+    party->flags.previous_field_screen = party->flags.field_screen;
+    party->flags.unknown_04 = 0;
+    party->flags.unknown_14 = 0;
+    party->flags.unknown_06 = 0;
+    party->flags.unknown_10_13 = 0;
+    party->leader->entity.movement_speed = 0;
+    party->follower->entity.movement_speed = 0;
+    party->state.unknown_00 = 0;
+    party->state.unknown_01 = 0;
+    party->state_bits.unknown_01 = 0;
+    party->leader->state_record->unknown_00[0] &= ~1u;
+    party->leader->state_record->unknown_00[0] &= ~2u;
+    party->leader->entity.locomotion_state = 19;
+    party->leader->presentation.unknown_14 = 0;
+    party->leader->presentation.unknown_15 = 0;
+    party->follower->follower_flags->enabled = 0;
+    party->leader->entity.saved_presentation_flag_bits.unknown_15 = 0;
+    party->follower->entity.saved_presentation_flag_bits.unknown_15 = 0;
+    func_ov000_02092f30(party, party->leader, 19, 256, 0);
+    party->leader->entity.render_object->state_flag_bits.behavior_state = 1;
+    leader = party->leader;
+    if (!leader->presentation.behavior_saved) {
+        leader->presentation.saved_behavior = (u16)leader->entity.saved_presentation_flag_bits.behavior_mode;
+        party->leader->presentation.behavior_saved = 1;
+    }
+    party->leader->entity.saved_presentation_flag_bits.behavior_mode = 2;
+    leader = party->leader;
+    FieldEntity2D_SetPosition(
+        &leader->entity,
+        leader->entity.position_x +
+            data_ov000_020c0878[leader->entity.base_state_flag_bits.facing_direction][0],
+        leader->entity.position_y +
+            data_ov000_020c087c[leader->entity.base_state_flag_bits.facing_direction][0]);
+    func_ov000_02094140(party);
+    party->follower->entity.base.visibility_bits.unknown_07 = 1;
+    party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
+    func_020093b4(party->follower->entity.render_object, 0);
+    GameAudio_PlayEffectDelayed(311, 0, -1);
+}
+
+void FieldParty_StartBrosBallRoll(FieldPartyController *party, int fast)
+{
+    party->flags.previous_field_screen = party->flags.field_screen;
+    FieldEntity_SetLocomotionParameters(&party->leader->entity, !fast ? 1024 : 14336, 696, 14336, 0, -1024,
+                                        4096);
+    party->leader->entity.saved_presentation_flag_bits.unknown_15 = 1;
+    party->follower->entity.saved_presentation_flag_bits.unknown_15 = 1;
+    party->leader->entity.runtime_flag_bits.unknown_07 = 1;
+    party->leader->entity.runtime_flag_bits.unknown_21 = 0;
+    party->flags.unknown_06 = 1;
+    party->flags.unknown_04 = 0;
+    party->flags.unknown_05 = 1;
+    party->flags.unknown_14 = 1;
+    party->leader->unknown_594.unknown_01_07 = 50;
+    party->leader->state_record->unknown_00[0] &= ~1u;
+    party->leader->entity.unknown_3c8 = 0;
+    party->leader->entity.unknown_3c8 |= 4;
+    party->leader->entity.unknown_3c8 |= 0x40000;
+    party->follower->entity.unknown_3c8 = 0;
+    party->follower->entity.unknown_3c8 |= 4;
+    party->follower->entity.unknown_3c8 |= 0x40000;
+    party->leader->bits.movement_mode = 3;
+    party->follower->bits.movement_mode = 3;
+    party->leader->entity.locomotion_state = 21;
+    party->leader->presentation.unknown_15 = 1;
+    func_ov000_02092f30(party, party->leader, 20, 256, 0);
+    if (fast)
+        func_ov000_02093dec(party);
+    func_ov000_020922a4(party, party->leader, 61, 0, 0, 5, 9);
+    GameAudio_PlayEffectDelayed(312, 0, -1);
 }
 }

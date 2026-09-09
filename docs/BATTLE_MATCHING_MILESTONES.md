@@ -1125,3 +1125,31 @@ callbacks and the checkpoint-83 source battery save remains unchanged.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Bros. Ball entry, rolling and target-height following (2026-09-09)
+
+Three preceding functions extend the same transition module by 1,496 matching
+C++ bytes, reaching 535,836 / 1,563,700 bytes (34.27%). Bros. Ball entry resets
+movement and presentation flags, applies a facing-dependent position offset,
+and hides the partner. Rolling setup selects initial speed, acceleration,
+movement flags and an effect request. The third helper starts following an
+entity only in the accepted locomotion states and within a +/-16-unit height
+window. Its exact gameplay target has not been observed, so its name describes
+the verified condition rather than guessing a particular object.
+
+From the existing checkpoint-83 action state, normal `A`, wait, and left inputs
+enter Bros. Ball and begin rolling. Both new action routines pass nine full-memory
+checkpoints covering the party controller, entities, aliased state records and
+both renderers. The probe verifies the facing-six offset from the live table,
+normal initial speed, acceleration, renderer request and effect arguments.
+Expectations are rebased after existing helper calls as in the preceding batch.
+Screenshots show the active Bros. Ball and the adults standing separately after
+an ordinary `A` exit. Private evidence is `transitions_roll83.json` and
+`transitions_roll_exit83.json` under `build/runtime/eur_party_transitions/`.
+
+The fast rolling entry and target-height following helper were not reached and
+remain statically verified only. All runtime comparisons pass with no pending
+callbacks and the source battery save remains unchanged. Native linking, all
+74 tests, progress consistency and the public-content audit pass. The complete
+ROM retains SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+No inline assembly was added.
