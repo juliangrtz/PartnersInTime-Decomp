@@ -3187,3 +3187,38 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **629,176 / 1,563,700 bytes (40.24%)**; C/C++ plus assembly: **40.57%**.
+
+## Party transition requests and paired bounds (2026-09-09)
+
+Four adjacent functions add **1,044 matching C++ bytes**:
+`FieldPartyManager_QueuePairedBounds`, `FieldPartyManager_CheckRegion71Bounds`,
+`FieldPartyManager_ApplyPendingTransition` and
+`FieldPartyManager_TransitionThroughBounds`. They occupy one contiguous module
+at `0x0209F230`–`0x0209F644`. The manager now exposes its checked 12-byte pending
+transition (signed room, script, coordinates and BGM plus packed options), the
+pending paired-bound flags and the selected record pointer. Its 16,764-byte
+layout is unchanged. The bound-based transition interpolates the applicable
+axis using the leader's navigation extents, then passes the native screen and
+entry-slide options to the existing transition routine.
+
+Live RAM identified the south exit of room 459 at X=352–416, Y=764–768.
+Ordinary `right:20`, `down:90`, `wait:180` input from the verified checkpoint-83
+state entered room 458 in **293 frames** and reached
+`FieldPartyManager_CheckRegion71Bounds` once. Its missing-manager-flag return
+was checked against the complete manager record. Screenshots confirm the room
+change. Evidence: `build/runtime/eur_field_party_transition_requests/`
+`evidence_south_exit83.json`, source state SHA-1
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`.
+
+Coverage limit: the queue, pending-application and bound-interpolation functions,
+and the deeper branches of the region check, remain statically verified only.
+Additional keypad navigation on checkpoints 20/83 did not reach those paths;
+zero-return reports are navigation evidence, not runtime coverage. All four
+routines have byte-guarded full-record runtime models ready for a suitable
+cross-screen transition. No fixtures were used in these replays; all **104
+supplied save hashes** remain unchanged.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**630,220 / 1,563,700 bytes (40.30%)**; C/C++ plus assembly: **40.64%**.

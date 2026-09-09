@@ -743,3 +743,4 @@ src/overlay008/erase_confirmation.cpp
 src/overlay008/game_over_models.cpp
 
 src/overlay007/menu_springs.c
+src/field/field_party_transition_requests.cpp

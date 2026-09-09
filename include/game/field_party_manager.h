@@ -2,6 +2,14 @@
 #define PIT_GAME_FIELD_PARTY_MANAGER_H
 #include <game/field_party_snapshot.h>
 #include <game/field_area.h>
+typedef struct FieldPartyPendingTransition {
+    u16 active : 1, side : 1, direction : 3, entry_slide : 1;
+    s16 bgm : 8;
+    u16 option_9 : 1, option_10 : 1;
+    s16 room, script, x, y, z;
+} FieldPartyPendingTransition;
+typedef char FieldPartyPendingTransition_SizeCheck[sizeof(FieldPartyPendingTransition) == 12 ? 1 : -1];
+
 typedef struct FieldPartyManager {
     FieldAreaContext **areas;
     union {
@@ -17,7 +25,10 @@ typedef struct FieldPartyManager {
     void *owner;
     u32 unknown_1c;
     FieldPartyController parties[2];
-    u8 unknown_4168[20];
+    FieldPartyPendingTransition pending_transition;
+    struct { u16 active : 1, side : 1, unknown_02_15 : 14; } pending_bounds;
+    u16 unknown_4176;
+    const FieldPairedBoundsRuntime *pending_bounds_record;
 } FieldPartyManager;
 typedef char FieldPartyManager_SizeCheck[sizeof(FieldPartyManager) == 16764 ? 1 : -1];
 typedef struct FieldPartyManagerSnapshot {
@@ -50,6 +61,13 @@ void FieldPartyManager_PrepareBrosBallLaunch(FieldPartyManager *manager);
 void FieldPartyManager_LaunchBrosBall(FieldPartyManager *manager,int direction);
 void FieldPartyManager_LaunchBabiesToElevation(FieldPartyManager *manager,fx32 height);
 void FieldPartyManager_DropBabies(FieldPartyManager *manager);
+
+void FieldPartyManager_QueuePairedBounds(FieldPartyManager *manager, int side,
+    const FieldPairedBoundsRuntime *record);
+void FieldPartyManager_CheckRegion71Bounds(FieldPartyManager *manager, int side);
+void FieldPartyManager_ApplyPendingTransition(FieldPartyManager *manager);
+void FieldPartyManager_TransitionThroughBounds(FieldPartyManager *manager, int side,
+    const FieldPairedBoundsRuntime *record);
 
 void FieldPartyManager_SetFieldMode(FieldPartyManager *manager,int side,u16 mode,int force,int preserve);
 int FieldPartyManager_HasActiveActions(FieldPartyManager *manager,int side,int present_party_mask);
