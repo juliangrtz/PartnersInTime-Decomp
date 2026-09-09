@@ -1599,3 +1599,35 @@ Validation: all 74 tests, public-content audit, whitespace checks and native
 zero-difference relink passed. ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **561,536 / 1,563,700 bytes (35.91%)**; C/C++ plus assembly: **36.25%**.
+
+## Menu and shop particle updates: 35.95% matching C/C++
+
+Reconstructed the two particle update functions at `0x0207E4D0..0x0207E5E8`
+(overlay 7, 280 bytes) and `0x0207689C..0x020769BC` (overlay 9, 288 bytes).
+A shared checked 72-byte task and 64-byte sprite prefix expose delayed motion,
+velocity damping, animation frame selection and draw-list selection. The two
+tile-index calculations remain distinct. Constructors stay private because
+register allocation still differs.
+
+From story save 86, normal clothing-menu interaction and a purchase in the
+clothing shop each produced twelve particles. Across 2,730 frames, all 600
+update returns passed: 1,152 complete task and 1,152 complete sprite comparisons,
+576 division argument checks, 552 draw argument checks and actual render-list
+insertions, and 24 task-deletion argument checks. Delays and all eight image
+indices were reached in both overlays. Both runs then backed out of the menus.
+The shop was entered in a preparatory run with decoded Field VM command 0x121,
+ID 2, restoring all 72 command bytes at the existing scene-transfer helper.
+The particle replay itself used only normal keypad input. Purchase/equipment
+changes were confined to the derived emulator session; the supplied battery
+save was unchanged.
+
+Private reports: `build/runtime/eur_menu_particles/evidence_equip86.json`
+and `evidence_clothes86.json`. Source save SHA-1:
+`349b84f6004bffedfef94de4554f2d1679645e83`; menu/shop state SHA-1:
+`23b87fbd8bca1084bc3016e55b3fb633f7856fa8` /
+`1fefcb71d4077210b9fe16378752550145c9dee7`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**562,104 / 1,563,700 bytes (35.95%)**; C/C++ plus assembly: **36.28%**.

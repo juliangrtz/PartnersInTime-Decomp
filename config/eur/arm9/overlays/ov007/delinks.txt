@@ -132,3 +132,6 @@ src/overlay007/scene_menu_scroll.cpp:
 
 src/overlay007/scene_menu_blend.cpp:
     .text start:0x0207fb40 end:0x0207fe60
+
+src/overlay007/menu_particle.cpp:
+    .text start:0x0207e4d0 end:0x0207e5e8
