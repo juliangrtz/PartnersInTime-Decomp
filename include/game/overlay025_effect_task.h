@@ -74,6 +74,9 @@ void Overlay25Projectile_UpdateSpin(Overlay25Task *task, BattleSceneObject *, Ov
 void Overlay25Projectile_WaitAll(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *work);
 void Overlay25Projectile_UpdateTrail(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
 void Overlay25Projectile_WaitSpin(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
+void Overlay25Enemy_ReleaseProjectileEffects(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Enemy_WaitProjectileEffectAnimation(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Enemy_BeginProjectileEffects(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_ResetAnimation(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
 void Overlay25EffectSequence_Initialize(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
 void Overlay25Projectile_SpawnBurst798(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);

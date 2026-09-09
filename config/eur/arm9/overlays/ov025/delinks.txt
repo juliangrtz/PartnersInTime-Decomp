@@ -22,8 +22,8 @@ src/overlay025/ov25_projectile_wait_all.cpp:
 src/overlay025/ov25_projectile_update_trail.cpp:
     .text start:0x020c5260 end:0x020c5374
 
-src/overlay025/ov25_enemy_reset_animation.cpp:
-    .text start:0x020c5798 end:0x020c57f0
+src/overlay025/enemy_projectile_effects.cpp:
+    .text start:0x020c5798 end:0x020c5da4
 
 src/overlay025/ov25_enemy_wait_return.cpp:
     .text start:0x020c61b4 end:0x020c61e0

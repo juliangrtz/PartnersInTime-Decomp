@@ -3422,3 +3422,54 @@ Validation: native relink has zero differing bytes; all 74 tests, progress,
 public-content and whitespace checks pass. ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++ is
 **639,364 / 1,563,700 bytes (40.89%)**; C/C++ plus ASM is **41.22%**.
+
+
+## 2026-09-09 - Overlay 25 projectile effect launch (+1,460 bytes)
+
+`src/overlay025/enemy_projectile_effects.cpp` reconstructs three exact C++
+routines in 0x020C57F0..0x020C5DA4: ReleaseProjectileEffects (640 bytes),
+WaitProjectileEffectAnimation (376), and BeginProjectileEffects (444). The
+adjacent existing ResetAnimation (88) is merged into the same contiguous
+module. The sequence positions object 40 relative to the boss, projects into
+the selected view, spawns sprite/model effects 525..527 and 821..823, waits for
+the animation trigger and attached effect, releases two impact emitters, and
+prepares object 42 and the sibling animation-reset task. Shared checked task,
+work, object and model layouts retain neutral names for unknown fields.
+
+Runtime: checkpoint 103, original save SHA-1
+`c264e8a8b26cb4994da8a93b164979377b7b4090`. A decoded FieldVM 0x11C fixture
+uses encounter 8232 from room 583 offset 0x0536; the probe restores all 72
+command bytes and the original cursor at native battle entry. The normal first
+phase has overlay 25 loaded but executes none of its callbacks. A separate
+two-byte live-HP fixture (1800 to 1) followed by an ordinary Jump reaches the
+native giant second phase of Elder Princess Shroob. The resulting state is
+`build/runtime/eur_ov25_projectile_launch/phase103.dst`, SHA-1
+`f83e3507a0e81de426d54c5da1d4593a365d5f8c`. Ordinary inputs from that state
+exercise the native overlay-25 movement and other attacks, confirming the
+callback dispatcher at 0x020B6114 and its task/work pointers.
+
+`evidence_effects_fixture103.json` in the same directory covers all three new
+routines: Begin 1 return, Wait 22, Release 121 over 1,670 frames. At frame 320 a
+four-byte live task callback change selects native initializer 0x020C60D4
+before the dispatcher loads it. Native code initializes and loads the resources.
+At frame 500 a second four-byte callback change enters 0x020C5BE8 after that
+initialization, bypassing the preceding motion gate. The gate did not complete
+with this substituted attack, so this is explicitly isolated effect coverage,
+not validation of a complete natural attack or its script prerequisites.
+
+Byte-guarded entry/call/SP-matched return checks verify all direct writes to
+complete 36-byte tasks, 7,088-byte work records, 260-byte objects and 440-byte
+models, plus exact helper arguments. Five independently calculated projections
+and three final object positions agree. Both wait paths and both transitions
+are covered: 21 animation waits, one animation completion, 120 attached-effect
+waits and one release. External helper effects are refreshed explicitly. Raw
+position and alternate-view branches remain static-only. BG VRAM/palettes are
+dumped and hashed; screenshots show the giant battle scene, with no claim that
+the substituted attack reaches normal completion. All 104 supplied save hashes
+remain unchanged; executable code is never modified by the probes.
+
+Validation: zero native relink differences, canonical ROM SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`, 74 tests and progress/public-content/
+whitespace checks pass. Matching C/C++ is **640,824 / 1,563,700 bytes (40.98%)**;
+C/C++ plus ASM is **41.32%**. The adjacent projectile-growth callback remains
+private because its first readable draft still differs in register allocation.
