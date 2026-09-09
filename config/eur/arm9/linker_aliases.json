@@ -1,0 +1,8 @@
+[
+  {
+    "source": "src/overlay007/pause_scene_lifecycle.cpp",
+    "symbols": "overlays/ov007/symbols.txt",
+    "owner": "PauseScene_Delete",
+    "labels": ["func_ov007_020722d8", "func_ov007_020724b0"]
+  }
+]

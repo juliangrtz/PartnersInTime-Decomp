@@ -3526,3 +3526,51 @@ Validation: zero native relink differences, canonical ROM SHA-1
 and whitespace checks pass. Matching C/C++ is **642,428 / 1,563,700 bytes
 (41.08%)**; C/C++ plus ASM is **41.42%**. Drafts of the adjacent motion starter
 and loading/movement callback remain private because they still differ.
+
+
+## 2026-09-09 - Pause scene deleting destructor and interior labels (+1,036 bytes)
+
+`PauseScene_Delete` at 0x02072270 is now matching C++ in the existing contiguous
+`src/overlay007/pause_scene_lifecycle.cpp` module. Its typed cleanup mirrors the
+native non-deleting destructor and additionally frees the task allocation. It
+stops IRQ/DMA work, releases scene resources, all sprite slots and owned arrays,
+palette/sprite allocations and frontend systems, clears global owners, destroys
+the base task and frees the scene task itself. An audit of prior private objects
+identified this exact candidate; it was rebuilt against current shared headers
+before integration, rather than accepting an old object as evidence of progress.
+
+The original scene path callbacks refer to 0x020722D8 and 0x020724B0 inside this
+function. Compiled C does not export these assembly labels automatically.
+`config/eur/arm9/linker_aliases.json` records their owner and original symbol map;
+`tools/apply_linker_aliases.py` generates function-relative assignments at offsets
+0x68 and 0x240 after DSD generates the linker script. These assignments emit no
+bytes and preserve the shipped targets, including their unusual placement. The
+tool rejects unaligned/out-of-range entries, functions used as labels, duplicate
+definitions and missing/ambiguous object placements. Seven focused tests cover
+these constraints. This does not claim that the affected scene path commands
+were executed or that their original destinations should be reinterpreted.
+
+Runtime reports under `build/runtime/eur_pause_scene_delete/`:
+- `evidence_065.json`: story save 65, Thwomp Volcano after the eruption stops;
+  original save SHA-1 `0844b75810855bc3a738122b29382ed5a6c9f983`, derived state
+  `ece238ed785fda646a77cde5e886aa7da3e009d7`. 1,089 frames.
+- `evidence_103.json`: save 103, Peach's Castle before Shrowser, cold boot from
+  original save SHA-1 `c264e8a8b26cb4994da8a93b164979377b7b4090`. 3,382 frames.
+
+Both use ordinary Start/A/B/directional inputs to open the pause menu, visit
+submenus and return to the field. Each has one checked initialization and one
+checked deleting-destructor return. Full code bytes guard entry; return hooks
+match SP. All 48 sprite slots are populated after initialization and cleared
+after deletion. Each deletion clears all recorded owned-array slots and releases
+all seventeen non-null arrays, with the free-event set reset at destructor entry
+to exclude older allocations. The task allocation is also passed to scalar
+delete during that call; scene/party/global owners are cleared. This checks
+ownership outcomes, not every byte of the heap or every helper side effect.
+Final screenshots show normal field scenes. BG VRAM/palettes are dumped and
+hashed. No RAM fixtures are used and all 104 supplied saves remain unchanged.
+
+Validation: zero differing bytes in all native modules, original interior
+symbols resolve at their exact addresses, all 81 tests and progress/public-content/
+whitespace checks pass. ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++ is
+**643,464 / 1,563,700 bytes (41.15%)**; C/C++ plus ASM is **41.49%**.

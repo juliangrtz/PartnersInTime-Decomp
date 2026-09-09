@@ -24,6 +24,7 @@ extern "C" {
 GameIrqTask *PauseSceneIrq_Destroy(GameIrqTask *task);
 GameIrqTask *PauseSceneIrq_Delete(GameIrqTask *task);
 PauseSceneTask *PauseScene_Destroy(PauseSceneTask *task);
+PauseSceneTask *PauseScene_Delete(PauseSceneTask *task);
 void NawatobiScene_LoadResources(NawatobiSceneTask *);
 NawatobiSceneTask *NawatobiScene_Delete(NawatobiSceneTask *task);
 NawatobiSceneTask *NawatobiScene_Destroy(NawatobiSceneTask *task);

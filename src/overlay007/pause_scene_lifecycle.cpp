@@ -251,4 +251,121 @@ PauseSceneTask *PauseScene_Destroy(PauseSceneTask *task)
     GameTask_DestroyBase(&task->task);
     return task;
 }
+
+PauseSceneTask *PauseScene_Delete(PauseSceneTask *task)
+{
+
+    task->task.vtable = &data_ov007_0208d9b8;
+    func_ov005_020671e4(ARCHIVE);
+    if (task->irq) {
+        GameIrqTask_DeleteSafe(task->irq);
+        task->irq = 0;
+    }
+    MI_StopDma(2);
+    if (data_ov007_020a6b90) {
+        DeleteSceneManager(data_ov007_020a6b90);
+        data_ov007_020a6b90 = 0;
+    }
+    for (int i = 0; i < 48; ++i)
+        if (WORK.sprites[i]) {
+            func_ov005_020695cc(WORK.sprites[i]);
+            WORK.sprites[i] = 0;
+        }
+    if (WORK.renderer) {
+        func_ov005_02068c54(WORK.renderer);
+        WORK.renderer = 0;
+    }
+    if (WORK.palette_controller) {
+        DeletePausePanel((PausePanel *)WORK.palette_controller);
+        WORK.palette_controller = 0;
+    }
+    func_ov005_02067424(ARCHIVE, 2);
+    func_ov005_02067424(ARCHIVE, 1);
+    for (int j = 0; j < 2; ++j) {
+        if (WORK.background_tiles[j]) {
+            GameHeap_DeleteArray(WORK.background_tiles[j]);
+            WORK.background_tiles[j] = 0;
+        }
+        if (WORK.background_maps[j]) {
+            GameHeap_DeleteArray(WORK.background_maps[j]);
+            WORK.background_maps[j] = 0;
+        }
+        if (WORK.secondary_background_maps[j]) {
+            GameHeap_DeleteArray(WORK.secondary_background_maps[j]);
+            WORK.secondary_background_maps[j] = 0;
+        }
+    }
+    if (WORK.number_glyph_pixels) {
+        GameHeap_DeleteArray(WORK.number_glyph_pixels);
+        WORK.number_glyph_pixels = 0;
+    }
+    if (WORK.number_glyph_tiles) {
+        GameHeap_DeleteArray(WORK.number_glyph_tiles);
+        WORK.number_glyph_tiles = 0;
+    }
+    if (WORK.ownedc0) {
+        GameHeap_DeleteArray(WORK.ownedc0);
+        WORK.ownedc0 = 0;
+    }
+    if (WORK.owned94) {
+        GameHeap_DeleteArray(WORK.owned94);
+        WORK.owned94 = 0;
+    }
+    GameSpritePalette_Unlink(&WORK.palettee8);
+    GameSpritePalette_Unlink(&WORK.palettefc);
+    GameSpritePalette_Unlink(&WORK.palette98);
+    GameSpritePalette_Unlink(&WORK.paletteac);
+    if (WORK.owned90) {
+        GameHeap_DeleteArray(WORK.owned90);
+        WORK.owned90 = 0;
+    }
+    if (WORK.owned8c) {
+        GameHeap_DeleteArray(WORK.owned8c);
+        WORK.owned8c = 0;
+    }
+    if (WORK.owned88) {
+        GameHeap_DeleteArray(WORK.owned88);
+        WORK.owned88 = 0;
+    }
+    if (WORK.number_scratch) {
+        GameHeap_DeleteArray(WORK.number_scratch);
+        WORK.number_scratch = 0;
+    }
+    if (data_ov007_0208e1e4) {
+        DeleteParty(data_ov007_0208e1e4);
+        data_ov007_0208e1e4 = 0;
+    }
+    if (WORK.owned80) {
+        GameHeap_DeleteArray(WORK.owned80);
+        WORK.owned80 = 0;
+    }
+    if (WORK.owned28) {
+        GameHeap_DeleteArray(WORK.owned28);
+        WORK.owned28 = 0;
+    }
+    if (WORK.owned2c) {
+        GameHeap_DeleteArray(WORK.owned2c);
+        WORK.owned2c = 0;
+    }
+    GameSpriteAllocation_Unlink(&WORK.main_allocation);
+    GameSpriteAllocation_Unlink(&WORK.sub_allocation);
+    func_ov005_02065f10();
+    func_02009058(0);
+    func_02009058(1);
+    func_ov005_02069928();
+    func_ov005_02069660();
+    func_ov005_02068c94();
+    func_ov005_020699f0();
+    func_ov005_020690dc();
+    func_ov005_02066624();
+    Overlay5Display_ResetEngine(DISPLAY_ENGINE_MAIN);
+    Overlay5Display_ResetEngine(DISPLAY_ENGINE_SUB);
+    func_ov005_0206781c(2, 0);
+    if (data_0205a00c)
+        GameRumble_Stop();
+    data_ov007_0208e1e0 = 0;
+    GameTask_DestroyBase(&task->task);
+    GameHeap_Delete(task);
+    return task;
+}
 }

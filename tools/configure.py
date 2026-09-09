@@ -245,7 +245,8 @@ def main():
 
         n.rule(
             name="lcf",
-            command=f"{DSD} lcf -c $config_path --lcf-file $lcf_file --objects-file $objects_file"
+            command=(f"{PYTHON} tools/apply_linker_aliases.py --dsd {DSD} --config $config_path"
+                     " --objects $objects_file --lcf $lcf_file --config-root $config_root")
         )
         n.newline()
 
@@ -509,15 +510,18 @@ def add_delink_and_lcf_builds(n: ninja_syntax.Writer, project: Project):
     lcf_file = project.arm9_lcf()
     dsd_objects_file = project.arm9_dsd_objects_txt()
     objects_file = project.arm9_objects_txt()
+    alias_manifest = project.game_config / "arm9" / "linker_aliases.json"
+    alias_inputs = [str(alias_manifest)] if alias_manifest.exists() else []
     n.build(
-        inputs=project.delinks_files + [str(rom_config)],
-        implicit=DSD,
+        inputs=project.delinks_files + project.symbols_files + [str(rom_config)] + alias_inputs,
+        implicit=[DSD, "tools/apply_linker_aliases.py"],
         rule="lcf",
         outputs=[str(lcf_file), str(dsd_objects_file)],
         variables={
             "config_path": project.arm9_config_yaml(),
             "lcf_file": lcf_file,
             "objects_file": dsd_objects_file,
+            "config_root": project.game_config / "arm9",
         }
     )
     n.newline()

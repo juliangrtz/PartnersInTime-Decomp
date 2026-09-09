@@ -47,7 +47,7 @@ func_ov007_02070ae8 kind:function(arm,size=0x58) addr:0x02070ae8
 func_ov007_02070b40 kind:function(arm,size=0x10) addr:0x02070b40
 PauseScene_LoadResources kind:function(arm,size=0x1430) addr:0x02070b50
 func_ov007_02071f80 kind:function(arm,size=0x2f0) addr:0x02071f80
-func_ov007_02072270 kind:function(arm,size=0x40c) addr:0x02072270
+PauseScene_Delete kind:function(arm,size=0x40c) addr:0x02072270
 func_ov007_020722d8 kind:label(arm) addr:0x020722d8
 func_ov007_020724b0 kind:label(arm) addr:0x020724b0
 PauseScene_Destroy kind:function(arm,size=0x404) addr:0x0207267c

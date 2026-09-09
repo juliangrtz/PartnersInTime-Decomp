@@ -30,6 +30,16 @@ European ROM exactly. Neither requirement is optional.
 - Every C change must pass `ninja check`; milestone changes must also produce a
   native relink with zero differing bytes and pass the unit tests.
 
+## Interior entry labels
+
+Some shipped calls target labels inside another function. If that function is
+compiled from C/C++, preserve those addresses in `config/eur/arm9/linker_aliases.json`.
+`tools/apply_linker_aliases.py` derives each offset from the original symbol map
+and adds a function-relative linker assignment after its source object. These
+aliases emit no bytes. They must identify aligned interior labels of the named
+owner; the normal module and symbol checks still verify the complete output.
+Do not reinterpret such a target as a different routine without native evidence.
+
 ## Evidence levels
 
 Names and comments should distinguish three levels of knowledge:
