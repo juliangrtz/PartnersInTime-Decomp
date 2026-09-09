@@ -1240,3 +1240,31 @@ and every probe finishes without failures or pending callbacks. Native linking,
 all 74 tests, progress checks and the public-content audit pass. The complete
 ROM remains byte-identical, with SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Inventory row quantities, values and digit visibility (2026-09-09)
+
+Five adjacent callbacks add 796 matching C++ bytes, reaching
+542,520 / 1,563,700 bytes (34.69%). They update the inventory row's quantity,
+displayed value, palette, tile base and position, submit its text and value
+sprites, and suppress a zero tens digit while retaining the ones digit. A
+checked 72-byte layout describes the inventory task. Both row modules share
+the sprite prefix and common renderer declarations in an internal header.
+
+The existing controlled shop entry uses story save 86. The original 72-byte
+command is restored before scene entry. One replay opens and cancels the
+quantity view; another uses ordinary R inputs in the inventory list to reach
+other categories, including single-digit clothing quantities. The two runs
+cover 2,102 frames and pass 7,630 complete task comparisons, 68,670 sprite-prefix
+comparisons, 67,816 submission argument checks and 27 numeric-refresh checks.
+The category replay observes 854 suppressed tens digits and always retains the
+ones digit. Virtual quantity/value helpers and availability checks are observed
+separately; the probe validates how the reconstructed caller stores their
+results. Previous shop, list, panel and text checks pass as well.
+
+Private reports are `evidence_086_01.json` under
+`build/runtime/eur_shop_inventory_rows/` and
+`build/runtime/eur_shop_inventory_categories/`. Both scenes are fully cleaned
+up, no purchase occurs, all temporary command bytes are restored and the source
+battery save is unchanged. Native linking, all 74 tests, progress consistency
+and the public-content audit pass. The ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`; no inline assembly was added.

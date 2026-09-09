@@ -59,3 +59,6 @@ src/overlay009/shop_resources.cpp:
 
 src/overlay009/shop_rows.cpp:
     .text start:0x020710b8 end:0x020715e0
+
+src/overlay009/shop_inventory_rows.cpp:
+    .text start:0x020738a0 end:0x02073bbc

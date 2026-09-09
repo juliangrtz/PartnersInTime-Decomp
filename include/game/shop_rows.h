@@ -17,9 +17,28 @@ typedef struct ShopRowTask {
 } ShopRowTask;
 typedef char ShopRowTaskSizeCheck[sizeof(ShopRowTask) == 72 ? 1 : -1];
 
+typedef struct ShopInventoryRowTask {
+    u8 unknown_00[16];
+    struct ShopInventoryRowTask *parent;
+    u8 unknown_14[20];
+    union {
+        int part;
+        struct {
+            u16 row, quantity, value, palette, priority, unknown_32;
+            s32 tile, x, y, offset_x, offset_y;
+        };
+    };
+} ShopInventoryRowTask;
+typedef char ShopInventoryRowTaskSizeCheck[sizeof(ShopInventoryRowTask) == 72 ? 1 : -1];
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+void ShopInventoryRow_Update(ShopInventoryRowTask *task);
+void ShopInventoryRow_DrawTextSegment(ShopInventoryRowTask *task);
+void ShopInventoryRow_DrawInsetSprite(ShopInventoryRowTask *task);
+void ShopInventoryRow_DrawQuantityDigit(ShopInventoryRowTask *task);
+void ShopInventoryRow_DrawValueSprite(ShopInventoryRowTask *task);
 void ShopRow_Update(ShopRowTask *task);
 void ShopRow_DrawTextSegment(ShopRowTask *task);
 void ShopRow_DrawInsetSprite(ShopRowTask *task);
