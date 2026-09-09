@@ -55,13 +55,23 @@ typedef struct FieldPartyEntity {
     u8 unknown_595;
     s8 unknown_596, unknown_597, unknown_598, unknown_599;
     u8 unknown_59a[2];
-    u32 unknown_59c;
+    union { u32 unknown_59c; struct FieldPartyStateRecord *state_record; };
 } FieldPartyEntity;
 typedef char FieldPartyEntity_SizeCheck[sizeof(FieldPartyEntity) == 0x5a0 ? 1 : -1];
 
 typedef struct FieldPartySnapshot FieldPartySnapshot;
 typedef struct FieldPartyStateRecord {
-    u32 unknown_00[8];
+    union {
+        u32 unknown_00[8];
+        struct {
+            fx32 velocity, acceleration, target_z;
+            u16 angle, angular_speed;
+            s16 unknown_10;
+            struct { u16 facing_direction : 3, unknown_03 : 1, unknown_04_15 : 12; } flags;
+            s16 timer;
+            u8 unknown_16[10];
+        };
+    };
 } FieldPartyStateRecord;
 typedef char FieldPartyStateRecord_SizeCheck[sizeof(FieldPartyStateRecord) == 32 ? 1 : -1];
 
@@ -139,6 +149,16 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_StackFollower(FieldPartyController *party);
+void FieldParty_RestoreGroundMovementAndHideFollower(FieldPartyController *party);
+void FieldParty_SeparateFollower(FieldPartyController *party);
+void FieldParty_MoveFollowerToSeparationOffset(FieldPartyController *party);
+void FieldParty_ResumeGroundMovement(FieldPartyController *party, int preserve_state);
+void FieldParty_BeginSpinJump(FieldPartyController *party);
+void FieldParty_BeginState11(FieldPartyController *party);
+void FieldParty_BeginSpinJumpFall(FieldPartyController *party, u8 mode);
+void FieldParty_RestoreGroundMovement(FieldPartyController *party);
+void FieldParty_ResumeState11Or17(FieldPartyController *party, int preserve_state);
 void FieldParty_DisableFollowing(FieldPartyController *party);
 void FieldParty_ResetFollowingContacts(FieldPartyController *party);
 void FieldParty_InitializeFollowing(FieldPartyController *party, int argument);

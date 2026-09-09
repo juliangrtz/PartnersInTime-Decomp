@@ -1090,3 +1090,38 @@ under `build/runtime/eur_navigation/`.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Spin-jump and partner movement transitions (2026-09-09)
+
+Ten adjacent state-transition functions add 4,220 matching C++ bytes, reaching
+534,340 / 1,563,700 bytes (34.17%). The shared 32-byte party state record now
+exposes movement parameters, facing/rotation values and its timer, while keeping
+its original word-array view for existing callers. The reconstructed code covers
+spin-jump entry and falling, partner stacking/separation, timed following, ground
+movement restoration and state-specific resume paths. Unobserved states retain
+neutral numeric names. Virtual locomotion dispatch remains explicit C++.
+
+A reproducible checkpoint-83 control sequence moves away from the save block,
+sets the babies down, changes the adults' action mode, and performs their paired
+spin jump. Six new functions execute: stacking, restoring movement with the
+partner hidden, jump entry, falling, restoring ground movement, and separation.
+The probe checks the full 8,356-byte controller, both 1,440-byte entities and
+both aliased 32-byte state records at 23 checkpoints. Expectations are rebased
+after existing helper calls, so those helpers' changes are not attributed to
+the new caller. Movement, position, facing, renderer and timed-following call
+arguments are checked separately. All comparisons pass; the final frame shows
+the separated adults standing normally. A shorter replay captures the paired
+spin jump in midair. No save operation or RAM patch is used.
+
+The standalone state-11 timer setter, state-11/17 resume, ground resume and
+follower-offset starter were not reached and remain statically verified only.
+The ground restore used the saved-behavior branch; its default branch remains
+static. Private evidence is `transitions_spin83_verified.json` and
+`transitions_air83.json` under `build/runtime/eur_party_transitions/`; the common
+starting state `transitions_action_mode83.dst` has SHA-1
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`. Every probe finishes without pending
+callbacks and the checkpoint-83 source battery save remains unchanged.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
