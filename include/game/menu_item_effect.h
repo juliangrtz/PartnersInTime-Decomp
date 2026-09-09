@@ -33,7 +33,7 @@ typedef struct MenuItemEffectTask {
         } owner;
     };
 } MenuItemEffectTask;
-typedef Overlay5Sprite MenuItemEffectSprite;
+typedef Overlay5ObjectSprite MenuItemEffectSprite;
 typedef struct MenuItemStarFrames {
     u8 steps[5][2];
 } MenuItemStarFrames;

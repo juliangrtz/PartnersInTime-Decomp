@@ -2,7 +2,7 @@
 #include <game/save_menu_write.h>
 #include <game/overlay005_resource.h>
 extern SaveMenuBufferHeader data_0205e32c;
-Overlay5Sprite *Overlay5ResourceB_Get(SaveMenuTransferTask *);
+Overlay5ObjectSprite *Overlay5ResourceB_Get(SaveMenuTransferTask *);
 void func_ov005_02069084(void *, int);
 void func_ov005_020663d8(int);
 void MIi_CpuClearFast(u32, void *, u32);
@@ -168,7 +168,7 @@ void SaveMenuText_ResetDialogSprites(void)
 }
 void SaveMenuText_DrawSlotChoice(SaveMenuTransferTask *task)
 {
-    Overlay5Sprite *sprite = Overlay5ResourceB_Get(task);
+    Overlay5ObjectSprite *sprite = Overlay5ResourceB_Get(task);
     if ((u32)(task->arguments[0] - 1) <= 1) {
         if (data_0205e32c.settings.occupied_slots & (1 << ((s8 *)data_ov008_02078290)[0x19d]))
             sprite->attributes_1 &= ~0xf000;
