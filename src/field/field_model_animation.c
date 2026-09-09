@@ -2,7 +2,6 @@
 #include <game/heap.h>
 
 extern void func_0202cbd4(void *destination, int value, u32 size);
-extern void func_ov000_020bee20(FieldRenderObject *, FieldRenderObject *, GameModelAnimationContext *, MtxFx44 *);
 extern void func_02010e38(int, MtxFx44 *, GameMatrixAnimationTrack *);
 
 FieldModelAnimation *FieldModelAnimation_Init(FieldModelAnimation *state)
@@ -11,12 +10,14 @@ FieldModelAnimation *FieldModelAnimation_Init(FieldModelAnimation *state)
     GameModelAnimation *models;
     func_0202cbd4(state, 0, sizeof(*state));
     matrix = GameHeap_New(sizeof(*matrix), 1, 0, 0);
-    if (matrix) matrix = GameMatrixAnimation_Initialize(matrix, state, 32, 32);
+    if (matrix)
+        matrix = GameMatrixAnimation_Initialize(matrix, state, 32, 32);
     state->matrix_animation = matrix;
     /* The original reserves four bytes beyond the 24-byte pool. */
     models = GameHeap_New(28, 1, 0, 0);
-    if (models) models = GameModelAnimation_Initialize(models, state->matrix_animation,
-        state->contexts, 32, func_ov000_020bee20);
+    if (models)
+        models = GameModelAnimation_Initialize(models, state->matrix_animation, state->contexts, 32,
+                                               FieldModelAnimation_PrepareModel);
     state->model_animation = models;
     return state;
 }
@@ -39,8 +40,10 @@ FieldModelAnimation *FieldModelAnimation_Destroy(FieldModelAnimation *state)
 }
 
 GameMatrixAnimationTrack *FieldModelAnimation_Start(FieldModelAnimation *state, int index,
-    const s16 *commands, FieldRenderObject **models, FieldRenderObject *first, FieldRenderObject *second,
-    FieldRenderObject *third, FieldRenderObject *fourth, s16 x, s16 y, s16 z, int overlap_priority, int speed)
+                                                    const s16 *commands, FieldRenderObject **models,
+                                                    FieldRenderObject *first, FieldRenderObject *second,
+                                                    FieldRenderObject *third, FieldRenderObject *fourth,
+                                                    s16 x, s16 y, s16 z, int overlap_priority, int speed)
 {
     GameMatrixAnimationTrack *track;
     GameModelAnimationContext *context;
@@ -58,10 +61,46 @@ GameMatrixAnimationTrack *FieldModelAnimation_Start(FieldModelAnimation *state, 
 }
 
 void FieldModelAnimation_SetModels(FieldModelAnimation *state, FieldRenderObject **models,
-    FieldRenderObject *first, FieldRenderObject *second, FieldRenderObject *third, FieldRenderObject *fourth)
+                                   FieldRenderObject *first, FieldRenderObject *second,
+                                   FieldRenderObject *third, FieldRenderObject *fourth)
 {
-    if (first != (FieldRenderObject *)-1) models[0] = first;
-    if (second != (FieldRenderObject *)-1) models[1] = second;
-    if (third != (FieldRenderObject *)-1) models[2] = third;
-    if (fourth != (FieldRenderObject *)-1) models[3] = fourth;
+    if (first != (FieldRenderObject *)-1)
+        models[0] = first;
+    if (second != (FieldRenderObject *)-1)
+        models[1] = second;
+    if (third != (FieldRenderObject *)-1)
+        models[2] = third;
+    if (fourth != (FieldRenderObject *)-1)
+        models[3] = fourth;
+}
+
+void FieldModelAnimation_Update(FieldModelAnimation *state)
+{
+    GameMatrixAnimation_Update(state->matrix_animation);
+}
+
+void FieldModelAnimation_PrepareModel(FieldRenderObject *model, FieldRenderObject *parent,
+                                      GameModelAnimationContext *context, MtxFx44 *matrix)
+{
+    int x = matrix->_30 / 4096 + context->offset_x;
+    int y = matrix->_31 / 4096 + context->offset_y;
+    int z = matrix->_32 / 4096 + context->offset_z;
+    if (parent) {
+        x += parent->animation_offset_x;
+        y += parent->animation_offset_y;
+        z += parent->render_anchor_z;
+    }
+    model->animation_offset_x = x;
+    model->animation_offset_y = y;
+    model->render_anchor_z = z;
+    if (context->overlap_priority == -1) {
+        model->overlap_priority_bytes[0] = parent->overlap_priority_bytes[0];
+        model->overlap_priority_bytes[1] = parent->overlap_priority_bytes[1];
+        model->overlap_priority_bytes[2] = parent->overlap_priority_bytes[2];
+        model->overlap_priority_bytes[3] = parent->overlap_priority_bytes[3];
+    } else {
+        model->overlap_priority_bytes[0] = model->overlap_priority_bytes[1] =
+            model->overlap_priority_bytes[2] = model->overlap_priority_bytes[3] =
+                context->flags.overlap_priority;
+    }
 }

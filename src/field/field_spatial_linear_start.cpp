@@ -2,10 +2,10 @@ extern "C" {
 #include <nitro/fx.h>
 extern u16 FX_Atan2Idx(fx32, fx32);
 }
+#include <game/field_geometry.h>
 #include <game/field_linear.h>
 extern "C" {
 extern void func_ov000_020be654(fx32, fx32, fx32, fx32 *, fx32 *);
-extern void func_ov000_020be4f0(fx32, fx32, fx32, fx32, fx32 *, fx32 *, fx32 *);
 #define LINEAR_DEFAULT(entity) (&(entity)->linear_controller)
 
 int FieldLinear3D_Start(FieldRuntimeEntity *entity, int relative, fx32 x, fx32 y, fx32 z, fx32 speed,
@@ -62,7 +62,7 @@ int FieldLinear3D_Start(FieldRuntimeEntity *entity, int relative, fx32 x, fx32 y
         if (entity->field_state_flag_bits.track_ground)
             func_ov000_020be654(dx, dy, speed, &movement->velocity_x, &movement->velocity_y);
         else
-            func_ov000_020be4f0(dx, dy, dz, speed, &movement->velocity_x, &movement->velocity_y,
+            FieldGeometry_ScaleVector(dx, dy, dz, speed, &movement->velocity_x, &movement->velocity_y,
                                 &movement->velocity_z);
         if (movement->axes.x && !movement->velocity_x)
             movement->velocity_x = dx;

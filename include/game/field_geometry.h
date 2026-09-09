@@ -6,6 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldGeometry_ScaleVector(fx32 x, fx32 y, fx32 z, fx32 length, fx32 *out_x, fx32 *out_y, fx32 *out_z);
 fx32 FieldGeometry_GetVectorLength(fx32 x, fx32 y, fx32 z);
 fx32 FieldGeometry_GetOrbitLength(fx32 radius_x, fx32 radius_y);
 u32 FieldResource_GetSectionSize(const u32 *resource, int section);

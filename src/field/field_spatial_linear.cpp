@@ -7,7 +7,6 @@ extern "C" {
 extern "C" {
 #define LINEAR_DEFAULT(entity) (&(entity)->linear_controller)
 extern void func_ov000_020be654(fx32, fx32, fx32, fx32 *, fx32 *);
-extern void func_ov000_020be4f0(fx32, fx32, fx32, fx32, fx32 *, fx32 *, fx32 *);
 
 void FieldLinear3D_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearController *movement)
 {
@@ -46,7 +45,7 @@ void FieldLinear3D_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearControl
                     func_ov000_020be654(dx, dy, movement->timing.speed, &movement->velocity_x,
                                         &movement->velocity_y);
                 else
-                    func_ov000_020be4f0(dx, dy, dz, movement->timing.speed, &movement->velocity_x,
+                    FieldGeometry_ScaleVector(dx, dy, dz, movement->timing.speed, &movement->velocity_x,
                                         &movement->velocity_y, &movement->velocity_z);
             }
             fx32 dx = movement->axes.x ? movement->velocity_x : 0;
@@ -64,7 +63,7 @@ void FieldLinear3D_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearControl
                                             movement->timing.speed, &movement->velocity_x,
                                             &movement->velocity_y);
                     } else {
-                        func_ov000_020be4f0(movement->destination_x - entity->position_x,
+                        FieldGeometry_ScaleVector(movement->destination_x - entity->position_x,
                                             movement->destination_y - entity->position_y,
                                             movement->destination_z - entity->position_z,
                                             movement->timing.speed, &movement->velocity_x,

@@ -2394,3 +2394,36 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **596,968 / 1,563,700 bytes (38.18%)**; C/C++ plus assembly: **38.51%**.
+
+## Field vector scaling and model-animation placement (2026-09-09)
+
+Reconstructed **600 bytes**: the 3D vector scaler, the model-animation update
+wrapper and the callback that applies matrix translation, context offsets and
+parent-relative placement. The callback also copies all four parent overlap
+priorities or assigns the context's explicit priority. Closing the update gap
+allows both animation routines to join the existing contiguous module. The
+vector scaler reduces large components before squaring and restores the length
+scale before division; its callers now use the shared named declaration.
+
+The spatial-motion fixture exercised thirteen controlled decoded-command cases
+and checked eight native scaler returns against independent integer square-root
+and rounded signed-division calculations. All three input shifts (0, 4 and 8),
+positive and negative components, and default speed were observed. The
+nonpositive-scale fallback retains static matching evidence. Three additional
+controlled anchored-animation cases used live entity 9 and the native matrix
+animation engine. A minimal translation/draw script was placed in unused
+context storage; temporary bank pointers and all 72 decoded-command bytes were
+restored at starter entry. Complete 312-byte renderer comparisons checked
+parent-relative placement, inherited priorities and explicit priorities with
+and without a parent. These are RAM fixtures, not ordinary story navigation.
+
+Private reports: `build/runtime/eur_field_scale/evidence.json` and
+`build/runtime/eur_field_model_prepare/evidence.json`. Both reload the compatible
+spatial-motion checkpoint, SHA-1 `4eeb1538e58d43fe03dd2b994296afc28f4061b4`.
+All **104 supplied saves** retained their hashes. The nearby 2D scaler, line
+intersection and timer OAM renderer remain assembly pending compiler differences.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**597,568 / 1,563,700 bytes (38.22%)**; C/C++ plus assembly: **38.55%**.
