@@ -3087,3 +3087,38 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **626,524 / 1,563,700 bytes (40.07%)**; C/C++ plus assembly: **40.40%**.
+
+## Pause-menu spring chains (2026-09-09)
+
+Reconstructed six contiguous functions, **1,004 bytes**, at `0x02076374`
+through `0x02076760`. The menu's hanging character elements use four points
+and three distance constraints per chain. The new module initializes these
+links, integrates motion, applies minimum-Y limits and distance corrections,
+updates damped velocities, restores pinned points, and advances available
+chains' states. Shared point/link/chain layouts are checked at 44/12/236 bytes;
+positions use 12 fractional bits and gravity scale uses 8.
+
+Three ordinary pause-menu/input replays from supplied save **20** covered
+**1,900 frames and 61,892 returns**: 12 initializations, 4,760 full updates,
+4,760 integrations, 47,600 constraint passes and 4,760 velocity updates.
+They checked **142,800 link corrections**, pinned/free points and 307 minimum-Y
+clamps. All four chain indices and the normal ten solver iterations were
+observed. `MenuSpring_AdvanceActiveChains`, unavailable-party skipping,
+zero-length constraints, zero counts and other iteration counts remain
+statically verified; the additional item-menu replays did not reach the
+state-advance function and are not claimed to cover it.
+
+Byte-guarded, SP-matched models independently checked complete point, link and
+chain records, fixed-point arithmetic and exact `FX_Sqrt`/`FX_Div` arguments.
+They use those existing helpers' returned values when modeling corrections;
+the helpers themselves are not newly reconstructed in this batch. Screenshots
+and main/sub OBJ-VRAM/palette dumps accompany
+`build/runtime/eur_menu_springs/evidence_menu20.json`, `evidence_items20.json`
+and `evidence_select_item20.json`. Initial state SHA-1:
+`d2c8a01fd324265a80ade9948d2d5d397de5a314`. No command or RAM fixtures were used;
+all **104 supplied saves** retained their hashes.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**627,528 / 1,563,700 bytes (40.13%)**; C/C++ plus assembly: **40.47%**.

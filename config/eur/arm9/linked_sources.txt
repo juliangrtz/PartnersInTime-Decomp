@@ -742,3 +742,5 @@ src/game/graphics_screen_offsets.c
 
 src/overlay008/erase_confirmation.cpp
 src/overlay008/game_over_models.cpp
+
+src/overlay007/menu_springs.c
