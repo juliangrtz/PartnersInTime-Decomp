@@ -56,6 +56,7 @@ void BattleEntry_LoadResources(void);
 void BattleEntry_WaitArchives(void);
 void BattleEntry_LoadArchives(BattleQueuedTask *task);
 void BattleEntry_InitializeHeaps(BattleQueuedTask *task);
+void BattleEntry_InitializeObjects(BattleQueuedTask *task);
 #ifdef __cplusplus
 }
 #endif

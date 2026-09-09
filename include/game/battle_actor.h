@@ -176,7 +176,16 @@ typedef struct BattlePartyActor {
     u16 command_id;
     u16 formation_index;
     u16 linked_object_id;
+    u16 formation_value;
 } BattlePartyActor;
+
+/* Party slots reserve the actor plus the five native initialization parameters. */
+typedef struct BattlePartyActorStorage {
+    BattlePartyActor party;
+    u16 initial_parameters[5];
+    u8 unknown_08e[6];
+} BattlePartyActorStorage;
+typedef char BattlePartyActorStorageSizeCheck[sizeof(BattlePartyActorStorage) == 148 ? 1 : -1];
 
 typedef struct BattleEnemyActor {
     BattleActor actor;

@@ -6,6 +6,10 @@ extern "C" {
 #include <game/battle_task_queue.h>
 #include <game/battle_interface_assets.h>
 #include <game/heap.h>
+#include <game/save_data.h>
+extern s16 data_ov002_020be9a8[];
+void BattleItemList_RebuildActionItems(void);
+void BattleItemList_RebuildUsableItems(void);
 extern u8 *gBattleSystem;
 extern int data_ov002_020c071c;
 extern u8 data_ov002_020beaac[], data_ov002_020beabc[], data_ov002_020beacc[], data_ov002_020beadc[],
@@ -25,6 +29,98 @@ enum BattleEntryStorageOffset {
 
 #define FRAME ((BattleFrameContextView *)gBattleContext)
 #define HEAPS ((BattleEntryHeaps *)(gBattleContext + 0xE148))
+
+#define CONTEXT ((BattleContext *)gBattleContext)
+#define UI_OBJECT(storage) (*(BattleSceneObject **)(storage))
+
+static inline SavePartyMember *SavedParty(BattlePartyActorStorage *storage)
+{
+    return (SavePartyMember *)storage->party.actor.resource_slot;
+}
+
+extern "C" void BattleEntry_InitializeObjects(BattleQueuedTask *task)
+{
+    for (int i = 0; i < 72; ++i)
+        CONTEXT->runtime.object_data_load_states[i].object_data_id = i;
+    /* Bind UI storage to its shared scene objects; these interfaces own their layouts. */
+    UI_OBJECT(FRAME->target_marker) = &FRAME->scene[0];
+    FRAME->ui_scene_aliases[0] = UI_OBJECT(FRAME->target_marker);
+    FRAME->ui_scene_aliases[1] = FRAME->ui_scene_aliases[0];
+    UI_OBJECT(FRAME->target_marker + 8) = &FRAME->scene[1];
+    UI_OBJECT(FRAME->target_cursor) = &FRAME->scene[2];
+    UI_OBJECT(FRAME->command_wheel) = UI_OBJECT(FRAME->target_cursor);
+    UI_OBJECT(FRAME->hp_members[2]) = &FRAME->scene[3];
+    UI_OBJECT(FRAME->hp_members[0]) = UI_OBJECT(FRAME->hp_members[2]);
+    UI_OBJECT(FRAME->hp_members[3]) = &FRAME->scene[4];
+    UI_OBJECT(FRAME->hp_members[1]) = UI_OBJECT(FRAME->hp_members[3]);
+    UI_OBJECT(FRAME->hp_panel) = &FRAME->scene[5];
+    UI_OBJECT(FRAME->command_menu) = &FRAME->scene[6];
+    FRAME->ui_scene_aliases[3] = UI_OBJECT(FRAME->command_menu);
+    UI_OBJECT(FRAME->target_label) = &FRAME->scene[7];
+    FRAME->ui_scene_aliases[4] = UI_OBJECT(FRAME->target_label);
+    UI_OBJECT(FRAME->party_indicators[0]) = &FRAME->scene[10];
+    UI_OBJECT(FRAME->party_indicators[1]) = &FRAME->scene[11];
+    FRAME->ui_scene_aliases[2] = UI_OBJECT(FRAME->party_indicators[1]);
+    UI_OBJECT(FRAME->target_label + 84) = &FRAME->scene[12];
+    UI_OBJECT(FRAME->results) = UI_OBJECT(FRAME->target_label + 84);
+    *(u16 *)(FRAME->party_indicators[0] + 8) = 56;
+    *(u16 *)(FRAME->party_indicators[1] + 8) = 57;
+    *(s16 *)(FRAME->target_marker + 12) = -1;
+    /* Slots 56..59 are party members, 60..67 enemies, and 68..69 cameras. */
+    for (int i = 0; i < 70; ++i) {
+        FRAME->scene[i].actor_id = i;
+        FRAME->scene[i].linked_actor_id = FRAME->scene[i].actor_id;
+        FRAME->scene[i].render_state = 0x7fff;
+        if (i < 56)
+            FRAME->scene_table[i] = &FRAME->scene[i];
+        if (i >= 68)
+            FRAME->camera[i - 68] = &FRAME->scene[i];
+    }
+    for (int i = 0; i < 8; ++i)
+        *(u16 *)CONTEXT->enemy_data_requests[i].unknown_08 = 72 + i;
+    for (int i = 0; i < 4; ++i) {
+        BattlePartyActorStorage *storage = &FRAME->party_storage[i];
+        FRAME->party[i] = &storage->party;
+        /* Keep the party subarray as the base of the native scene traversal. */
+        storage->party.actor.scene_object = &FRAME->scene[56] + i;
+        storage->party.actor.resource_slot = &((SavePartyMember *)(gSaveData + 1016))[i];
+        storage->party.actor.current_hp = SavedParty(storage)->current_hp;
+        storage->party.actor.max_hp = SavedParty(storage)->max_hp;
+        storage->party.actor.speed = SavedParty(storage)->speed;
+        storage->party.actor.base_speed = storage->party.actor.speed;
+        storage->party.actor.power = SavedParty(storage)->power;
+        storage->party.actor.base_power = storage->party.actor.power;
+        storage->party.actor.defense = SavedParty(storage)->defense;
+        storage->party.actor.base_defense = storage->party.actor.defense;
+        storage->party.actor.unk_00e = SavedParty(storage)->stache;
+        storage->party.actor.unk_016 = storage->party.actor.unk_00e;
+        storage->party.actor.flag_bits.level = SavedParty(storage)->experience.fields.level;
+        storage->party.formation_index = i;
+        storage->party.linked_object_id = ((i & 1) ^ 1) + 56;
+        storage->party.formation_value = data_ov002_020be9a8[storage->party.formation_index];
+        storage->initial_parameters[0] = 1;
+        storage->initial_parameters[1] = 4096;
+        storage->initial_parameters[2] = 8192;
+        storage->initial_parameters[3] = 56;
+        storage->initial_parameters[4] = 60;
+    }
+    if (((BattleEntrySaveView *)(gSaveData + 0x558))->formation == 2) {
+        FRAME->party[0]->formation_index = 4;
+        FRAME->party[1]->formation_index = 5;
+    }
+    for (int i = 0; i < 8; ++i) {
+        BattleEnemyActor *actor = &FRAME->enemy_storage[i];
+        CONTEXT->enemy_actors[i] = &actor->actor;
+        actor->actor.scene_object = &FRAME->scene[60] + i;
+    }
+    FRAME->initial_ui_parameters[0] = 1;
+    FRAME->initial_ui_parameters[1] = 53;
+    FRAME->initial_ui_parameters[2] = 8;
+    FRAME->initial_ui_parameters[3] = 18;
+    BattleItemList_RebuildActionItems();
+    BattleItemList_RebuildUsableItems();
+    task->callback = BattleEntry_InitializeHeaps;
+}
 
 extern "C" void BattleEntry_InitializeHeaps(BattleQueuedTask *task)
 {

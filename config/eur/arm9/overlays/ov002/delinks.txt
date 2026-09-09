@@ -444,7 +444,7 @@ src/battle/battle_entry_resources.cpp:
     .text start:0x02073a08 end:0x02074724
 
 src/battle/battle_entry_tasks.cpp:
-    .text start:0x02074724 end:0x02074ad4
+    .text start:0x02074724 end:0x02075000
 
 src/battle/battle_entry_graphics.cpp:
     .text start:0x02075000 end:0x02075780

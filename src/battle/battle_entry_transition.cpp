@@ -27,7 +27,6 @@ void func_0202cbd4(void *, int, u32);
 int func_0202dca8(const s16 *, int, u16 *, int, const u16 *, int);
 void *func_ov002_02072508(void (*)(void), void *, int, int);
 void func_ov002_02075818(void);
-void func_ov002_02074ad4(BattleQueuedTask *);
 void GameAudio_StartStream(int);
 }
 #define REG32(address) (*(vu32 *)(address))
@@ -72,7 +71,7 @@ extern "C" void BattleMain_Initialize(void)
     FRAME->initial_state_3e = data_02059f58;
     data_02059f58 = 0;
     FRAME->main_brightness_level = 32;
-    BattleTaskQueue_Enqueue(func_ov002_02074ad4, 0);
+    BattleTaskQueue_Enqueue(BattleEntry_InitializeObjects, 0);
     func_ov002_02072508(BattleEntry_ApplyFieldBrightness, 0, 0, 0);
     FRAME->update = BattleEntry_FadeField;
 }

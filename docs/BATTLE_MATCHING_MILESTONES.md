@@ -2047,3 +2047,40 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **586,484 / 1,563,700 bytes (37.51%)**; C/C++ plus assembly: **37.84%**.
+
+## Battle object and party initialization (2026-09-09)
+
+Reconstructed `BattleEntry_InitializeObjects`, **1,324 bytes**, extending the
+existing contiguous entry-task module. The frame view now describes the 56-entry
+scene table, four 148-byte party slots, eight enemy slots and UI scene aliases.
+The party actor's former tail padding holds its initial formation value. Typed
+subarrays reproduce the original separate scene, actor and save-record strides;
+the linked partner calculation preserves its explicit parity XOR.
+
+Two 706-frame replays, using derived states from supplied saves **51 and 55**,
+verified both initializer returns against independent live-RAM models. Together
+they checked 140 complete scene objects, eight party slots, sixteen enemy slots,
+160 resource IDs, all UI bindings and both item-list rebuild calls per entry.
+The complete known initialization prefix was compared except for the twelve RTC
+bytes written by the asynchronous clock response. Both runs used formation 2;
+the other formation branch retains static matching evidence.
+
+Party values differed between the saves and matched their live sources: adult
+Mario initialized with HP 62 and level 17 in save 51, versus HP 64 and level 18
+in save 55; the baby slots likewise matched their different levels and stats.
+Both used the documented Scene VM encounter fixture (`-32748`, room 306 offset
+`0x2926`), restoring the decoded command and cursor at native battle entry. These
+are controlled encounter tests, not naturally triggered story battles.
+
+Private reports: `build/runtime/eur_battle_entry_objects/evidence_entry51.json`
+and `evidence_entry55.json`. Input-state SHA-1 values:
+`3d6b30e0af0e2bc4a5f80d821e3408fc9e7c431f` and
+`e44df106d65e52df1ffc2b125538354f67cb1b22`.
+All **104 supplied `.sav` files** were hashed before and after both runs and
+remained unchanged. Save 51 SHA-1: `459c9b510b361c4e800a396d8b56ddf847235c74`;
+save 55 SHA-1: `239ff9d26a5806eada7c1b73a95e27e38872681c`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**587,808 / 1,563,700 bytes (37.59%)**; C/C++ plus assembly: **37.93%**.
