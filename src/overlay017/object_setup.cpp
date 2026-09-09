@@ -13,9 +13,9 @@ enum Overlay17AttackObjectConstant {
 
 extern "C" {
 extern u16 data_ov017_020c6c90[];
-void func_ov002_0207179c(BattlePartyActor *actor,
+void BattleParty_RestoreIdleAnimation(BattlePartyActor *actor,
                          BattleSceneObject *object);
-void func_ov002_02071750(BattleSceneObject *object, int value);
+void BattleSceneObject_SetAnimationMode01(BattleSceneObject *object, int value);
 
 }
 
@@ -78,7 +78,7 @@ int Overlay17Attack_ConfigurePartyObjects(void) {
         model = BattleSceneObject_GetActiveModel(party_object);
         model->flags &= ~BATTLE_MODEL_FLAG_10;
         model->flags &= ~BATTLE_MODEL_FLAG_11;
-        func_ov002_02071750(party_object, 0);
+        BattleSceneObject_SetAnimationMode01(party_object, 0);
         ++party_index;
     } while (party_index < OVERLAY17_PARTY_OBJECT_COUNT);
 
@@ -108,7 +108,7 @@ int Overlay17Attack_UpdatePartyObjectReadiness(void) {
                     BattleActor_GetPartySlot(
                         data_ov017_020c6c90[party_index]);
 
-                func_ov002_0207179c(actor, object);
+                BattleParty_RestoreIdleAnimation(actor, object);
                 ++ready_count;
             }
         } else {

@@ -11,7 +11,7 @@ void Overlay13Attack_RestoreBattle(Overlay10ActionActor *user)
     }
     if (BattleSceneObject_IsAnimationChannelActive(BattleSceneObject_GetById(68), 3))
         return;
-    if (!func_ov002_020719a4())
+    if (!BattleFeedback_IsEffectComplete())
         return;
     for (int i = 40; i < 56; ++i)
         BattleSceneObject_GetById((u16)i)->effect_anchor_z = 0;
@@ -150,9 +150,9 @@ int Overlay13Attack_UpdateRetreat(BattleSceneObject *object, Overlay13Pair *pair
         // Variants 2 and 3 use baby animations; preserve the native 16-bit range test.
         const u16 first_baby_offset = (u16)-2;
         if ((u16)(pair->flags.bits.variant + first_baby_offset) <= 1)
-            func_ov002_02071750(object, 1);
+            BattleSceneObject_SetAnimationMode01(object, 1);
         else
-            func_ov002_02071750(object, 0);
+            BattleSceneObject_SetAnimationMode01(object, 0);
         if (trampoline->primary_model->get_animation_id() != 3) {
             func_ov002_02072004(object, 0, object->actor_id < 44 ? 14 : 15, 0, 0);
             BattleSceneObject_SetAnimation(object, 6, 0);

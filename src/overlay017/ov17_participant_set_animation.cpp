@@ -21,7 +21,7 @@ void Overlay17Participant_SetAnimation(Overlay17Participant *participant, int co
     }
     u16 saved = object->render_state;
     BattleSceneObject_SetAnimationFromComponent(object, (u8)command, 0, participant->state.animation_component);
-    func_ov002_02071750(object, value);
+    BattleSceneObject_SetAnimationMode01(object, value);
     func_0200940c(BattleSceneObject_GetActiveModel(object), 256);
     BattleModel *model = BattleSceneObject_GetActiveModel(object);
     if (command & 0x8000) {

@@ -13,7 +13,7 @@ enum {
 
 extern void func_ov020_020c2efc(Overlay20AttackState *state, int animation_command);
 extern void Overlay20Attack_FitAnimationDuration(BattleSceneObject *object, int value);
-extern void func_ov002_0207179c(BattlePartyActor *actor, BattleSceneObject *object);
+extern void BattleParty_RestoreIdleAnimation(BattlePartyActor *actor, BattleSceneObject *object);
 extern void Overlay10Motion_AdjustBounce(BattleSceneObject *object, BattleSceneObject *target,
                                          int *parameter_x, int *parameter_y);
 extern Overlay20AttackConfig data_ov020_020c4fd0[];
@@ -64,7 +64,7 @@ void Overlay20Attack_ResetActorPosition(Overlay20AttackState *state)
 
     BattleSceneObject_AdjustPosition(object, actor->actor.unk_018 - object->x,
                                      actor->actor.unk_01a - object->y, -object->z);
-    func_ov002_0207179c(actor, object);
+    BattleParty_RestoreIdleAnimation(actor, object);
 }
 
 void Overlay20Attack_Initialize(Overlay20AttackState *state, BattlePartyActor *actor)

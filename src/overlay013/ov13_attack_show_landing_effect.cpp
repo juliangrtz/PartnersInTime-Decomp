@@ -25,7 +25,7 @@ void Overlay13Attack_Initialize(Overlay10ActionActor *user)
     BattleObjectData_EnsureLoaded(56, 0xc000001a);
     BattleObjectData_EnsureLoaded(57, 0xc0000043);
     BattleObjectData_EnsureLoaded(58, 0xc0000044);
-    func_ov002_02071c44();
+    BattleFeedback_LoadResource();
     BattleEntity_BindResource(41, 4);
     work->background[2] = *(u16 *)(gBattleContext + 52);
     work->background[3] = *(u16 *)(gBattleContext + 54);

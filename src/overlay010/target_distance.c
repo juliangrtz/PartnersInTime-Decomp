@@ -3,7 +3,7 @@
 #include <game/battle_actor.h>
 #include <game/battle_enemy_data.h>
 #include <game/overlay010_enemy_state.h>
-extern int func_ov002_02071674(int), func_ov002_020718a0(u16);
+extern int BattleActor_IsDamageImmune(int), BattleActor_HasTrait1(u16);
 
 void Overlay10Enemy_AddScaleSteps(Overlay10EnemyState *state, int actor_id, int amount)
 {
@@ -17,7 +17,7 @@ void Overlay10Enemy_AddScaleSteps(Overlay10EnemyState *state, int actor_id, int 
 
 void Overlay10Enemy_ApplyProjectedDamage(Overlay10EnemyState *state, int actor_id, int damage)
 {
-    if (!func_ov002_02071674(actor_id)) {
+    if (!BattleActor_IsDamageImmune(actor_id)) {
         int hp = BattleActor_GetById(actor_id)->max_hp;
         int remaining = state->current_hp[actor_id - 60] - damage;
         if (remaining < -10000)

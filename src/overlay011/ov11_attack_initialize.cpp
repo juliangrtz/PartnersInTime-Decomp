@@ -62,7 +62,7 @@ void Overlay11Attack_Initialize(BattlePartyActor *user, int resource, int config
         BattleObjectData_ConfigureLoad(58, 2660, 0);
         effect = (int)func_ov002_02091fd8(58, 0xc1000050);
     }
-    func_ov002_02071c44(effect);
+    BattleFeedback_LoadResource(effect);
     *(u16 *)(gBattleContext + 52096) = 0;
     Overlay10Attack_BeginEntry(user, func_ov011_020c57cc);
     int i;

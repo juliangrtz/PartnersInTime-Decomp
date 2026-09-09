@@ -11,7 +11,7 @@ enum Overlay26ActionState {
 };
 
 extern void GameHeap_Delete(void *allocation);
-extern void func_ov002_0207179c(BattlePartyActor *actor,
+extern void BattleParty_RestoreIdleAnimation(BattlePartyActor *actor,
                                 BattleSceneObject *object);
 
 /* Metrowerks emits C functions in reverse source order. */
@@ -115,7 +115,7 @@ void Overlay26Attack_DestroyState(void *owner, int restore_party_objects) {
                             object_id);
 
                     object = BattleSceneObject_GetById(object_id);
-                    func_ov002_0207179c(actor, object);
+                    BattleParty_RestoreIdleAnimation(actor, object);
                 }
             }
             ++object_index;

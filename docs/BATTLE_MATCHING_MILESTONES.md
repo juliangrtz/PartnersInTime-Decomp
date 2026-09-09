@@ -1794,3 +1794,48 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **570,428 / 1,563,700 bytes (36.48%)**; C/C++ plus assembly: **36.81%**.
+
+
+## Battle animation and feedback: 36.59% matching C/C++
+
+Reconstructed 13 functions (1,692 bytes) at `0x0207157C..0x02071938` and
+`0x020719A4..0x02071C84`: animation durations and modes, restoration of party
+idle animations, formation-dependent sounds, actor flags, nonfatal damage
+feedback, rating-effect selection and placement, and shared resource loading.
+Named declarations replace the old address labels in the attack overlays.
+The effect structure now exposes its completion bit, and a checked 16-byte
+owner prefix describes the common effect pointer without imposing a complete
+layout on the different attack work objects. The original inclusive immunity
+range, narrowing conversions and upper-only screen clamps are preserved.
+
+Three headless replays from the derived checkpoint-55 battle state covered
+1,735 frames and 125 returns across eleven of the thirteen functions.
+Independent models checked complete scene objects (137 comparisons), models
+(60), party actors (29), enemy actors (8), effect/owner structures and graphics
+animation/frame ranges, together with helper arguments and direct writes.
+Ten animation-duration calculations and three quarter-HP predicates passed.
+Observed animation durations span 3, 4, 5 and 17 frames; both animation modes,
+normal idle restoration, resource readiness and effect completion were reached.
+
+The jump controller uses ordinary keypad input selected from the live input
+window and participant phase, with the loaded overlay identity checked first.
+Successful normal jumps select variant 1, which intentionally has no popup.
+A separate controlled replay substituted the valid variants 2 and 0 at the
+native feedback entry to exercise effect allocation, position projection,
+screen clamping, owner attachment and the effect's resource field. Each original
+two-byte selector was restored and verified at return. These substitutions are
+controlled branch coverage, not naturally earned ratings. Nonfatal damage and
+the immunity predicate were not reached and retain static matching evidence.
+
+Private reports: `build/runtime/eur_battle_animation_helpers/evidence_jump55.json`,
+`evidence_timed_jump55.json`, and `evidence_feedback55.json`.
+Input-state SHA-1: `496c6a6836f08c15e95655bb5d78c4cde65dc688`.
+Supplied save 55 remained unchanged:
+`239ff9d26a5806eada7c1b73a95e27e38872681c`.
+The two neighboring functions with unresolved code-generation differences
+remain private; they are not counted as matching C.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**572,120 / 1,563,700 bytes (36.59%)**; C/C++ plus assembly: **36.92%**.

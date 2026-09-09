@@ -87,7 +87,7 @@ void Overlay16Participant_EmitTrail(Overlay16Participant *participant);
 void Overlay16Particle_UpdateGrow(BattleAITask *task);
 void Overlay16Participant_PositionEffect(Overlay16Participant *participant);
 
-void func_ov002_02071750(BattleSceneObject *, int);
+void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 void func_ov002_02071938(BattleSceneObject *, BattleSceneObject *, int);
 void func_ov002_0206f1b8(BattleModel *);
 void func_ov002_0206f384(BattleModel *);

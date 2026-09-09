@@ -4,7 +4,7 @@ extern "C" {
 extern u8 *data_ov002_020c0710;
 extern s8 data_ov014_020c6180[][4], data_ov014_020c6204[];
 extern int Overlay14Attack_PickTarget(int);
-extern void func_ov002_02071750(BattleSceneObject *, int);
+extern void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 extern void func_0200940c(BattleModel *, s16);
 extern void func_ov002_0206f1b8(BattleModel *);
 extern void Overlay10Motion_StopAll(BattleSceneObject *);
@@ -21,7 +21,7 @@ void Overlay14Participant_BeginPrimaryThrow(Overlay14Participant *participant)
     if (Overlay14Attack_HasTarget()) {
         int level = participant->projectile ? participant->projectile->flags.level : 2;
         BattleSceneObject_SetAnimation(actor, 4, -1);
-        func_ov002_02071750(actor, 0);
+        BattleSceneObject_SetAnimationMode01(actor, 0);
         func_0200940c(model, 576);
         participant->animation_frame = data_ov014_020c6180[participant->actor->formation_index][level >= 2];
         participant->phase = 5;
@@ -35,7 +35,7 @@ void Overlay14Participant_BeginSecondaryThrow(Overlay14Participant *participant)
     if (Overlay14Attack_HasTarget()) {
         int level = participant->projectile ? participant->projectile->flags.level : 2;
         BattleSceneObject_SetAnimation(actor, level >= 2 ? 7 : 6, -1);
-        func_ov002_02071750(actor, 0);
+        BattleSceneObject_SetAnimationMode01(actor, 0);
         func_0200940c(model, 512);
         participant->animation_frame =
             data_ov014_020c6180[participant->actor->formation_index][level >= 2 ? 3 : 2];
@@ -48,7 +48,7 @@ void Overlay14Participant_BeginRecovery(Overlay14Participant *participant)
     BattleSceneObject *actor = participant->actor->actor.scene_object;
     if (BattleSceneObject_GetActiveModel(actor)->get_animation_id()) {
         BattleSceneObject_SetAnimation(actor, 0, -1);
-        func_ov002_02071750(actor, 1);
+        BattleSceneObject_SetAnimationMode01(actor, 1);
         func_0200940c(BattleSceneObject_GetActiveModel(actor), 256);
     }
     if (participant->projectile) {

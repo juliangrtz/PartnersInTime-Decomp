@@ -6,7 +6,7 @@ extern "C" {
 extern "C" {
 extern void func_ov002_02072004(BattleSceneObject *, int, int, int, int);
 extern void func_0200940c(BattleModel *, s16);
-extern void func_ov002_020718d0(BattlePartyActor *, int, int);
+extern void BattleParty_PlayFormationSound(BattlePartyActor *, int, int);
 u32 Overlay21Attack_FinishApproach(Overlay21AttackState *state)
 {
     Overlay21Attack_ConfigureAnimation(state, 4, 0);
@@ -73,7 +73,7 @@ u32 Overlay21Attack_BeginAdvance(Overlay21AttackState *state)
     int dy = target->y + target->property_101 - object->y;
     int distance = FX_Sqrt((dx * dx + dy * dy) << 12);
     BattleSceneObject_MoveBy(object, 2, dx, dy, 0, distance * config->advance_duration / 0x80000);
-    func_ov002_020718d0(state->actor, 38, 39);
+    BattleParty_PlayFormationSound(state->actor, 38, 39);
     state->timer = 0;
     u32 result = (state->flags & ~31) | 9;
     state->flags = result;

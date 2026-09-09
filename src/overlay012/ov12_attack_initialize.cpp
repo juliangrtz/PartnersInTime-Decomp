@@ -52,7 +52,7 @@ void Overlay12Attack_Initialize(BattlePartyActor *user)
     BattleObjectData_EnsureLoaded(58, data_ov012_020c5a1c[partner_formation & 1]);
     BattleObjectData_AllocateLoadBuffer(59, 4096);
     BattleObjectData_ConfigureLoad(59, 2576, 0);
-    func_ov002_02071c44((int)func_ov002_02091fd8(59, 0xc1000051));
+    BattleFeedback_LoadResource((int)func_ov002_02091fd8(59, 0xc1000051));
     *(u16 *)(gBattleContext + 54) = 0;
     *(u16 *)(gBattleContext + 52) = 63;
     *(u16 *)(gBattleContext + 50) = 6;

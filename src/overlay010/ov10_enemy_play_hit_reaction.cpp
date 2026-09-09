@@ -3,7 +3,7 @@
 extern "C" {
 void Overlay10Enemy_PlayHitReaction(int actor_id, int effect_id)
 {
-    int busy = func_ov002_02071674(actor_id);
+    int busy = BattleActor_IsDamageImmune(actor_id);
     BattleSceneObject *object = BattleSceneObject_GetById(actor_id);
     BattleEnemyActor *actor = (BattleEnemyActor *)BattleActor_GetEnemySlot(actor_id);
     if (!busy) {

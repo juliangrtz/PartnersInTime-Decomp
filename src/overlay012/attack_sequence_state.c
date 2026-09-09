@@ -8,7 +8,7 @@ enum {
     OVERLAY12_ANIMATION_STEP_DIVISOR = 30,
 };
 
-extern int func_ov002_020716bc(u8 *resource_data, int animation_id,
+extern int BattleAnimation_GetDurationThroughFrame(u8 *resource_data, int animation_id,
                                int animation_frame, int scale);
 extern void func_0200940c(BattleModel *model, int value);
 extern u32 Random_NextModulo(u32 modulus);
@@ -65,7 +65,7 @@ void Overlay12Attack_StartAnimationFour(Overlay12AttackState *state) {
     model = BattleSceneObject_GetActiveModel(object);
     model->flags |= BATTLE_MODEL_FLAG_09;
     state->animation_step =
-        (func_ov002_020716bc(object->resource->data, 4, -1, 0x100) << 8) /
+        (BattleAnimation_GetDurationThroughFrame(object->resource->data, 4, -1, 0x100) << 8) /
         OVERLAY12_ANIMATION_STEP_DIVISOR;
     model = BattleSceneObject_GetActiveModel(object);
     func_0200940c(model, (s16)state->animation_step);

@@ -2,7 +2,7 @@
 extern "C" {
 #include <game/battle_effect.h>
 extern u8 *data_ov002_020c0710;
-extern void func_ov002_0207179c(BattlePartyActor *, BattleSceneObject *);
+extern void BattleParty_RestoreIdleAnimation(BattlePartyActor *, BattleSceneObject *);
 void Overlay14Participant_Initialize(Overlay14Participant *participant, BattlePartyActor *actor, s16 resource,
                                      s8 side)
 {
@@ -18,6 +18,6 @@ void Overlay14Participant_Initialize(Overlay14Participant *participant, BattlePa
 void Overlay14Participant_RestoreActor(Overlay14Participant *participant)
 {
     if (participant->actor)
-        func_ov002_0207179c(participant->actor, participant->actor->actor.scene_object);
+        BattleParty_RestoreIdleAnimation(participant->actor, participant->actor->actor.scene_object);
 }
 }

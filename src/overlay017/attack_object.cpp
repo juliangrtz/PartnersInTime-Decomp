@@ -11,7 +11,7 @@ enum Overlay17AttackResourceConstant {
 };
 
 extern "C" {
-void func_ov002_02071750(BattleSceneObject *object, int value);
+void BattleSceneObject_SetAnimationMode01(BattleSceneObject *object, int value);
 void func_0200940c(BattleModel *model, int scale);
 int func_02009224(BattleModel *model, int animation_id);
 }
@@ -57,7 +57,7 @@ void Overlay17Attack_ConfigureObjectModel(
     BattleSceneObject_SetAnimationFromComponent(
         scene_object, animation_command & 0xFF, 0,
         object->animation_component);
-    func_ov002_02071750(scene_object, model_value);
+    BattleSceneObject_SetAnimationMode01(scene_object, model_value);
     model = BattleSceneObject_GetActiveModel(scene_object);
     func_0200940c(model, 0x100);
     model->flags = (model->flags & ~BATTLE_MODEL_FLAG_10) |

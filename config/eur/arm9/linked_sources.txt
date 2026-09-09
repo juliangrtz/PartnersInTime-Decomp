@@ -702,3 +702,5 @@ src/field/field_render_updates.cpp
 src/battle/battle_window_resources.cpp
 src/battle/battle_window_lifecycle.cpp
 src/battle/battle_window_transfers.cpp
+src/battle/battle_animation_helpers.cpp
+src/battle/battle_feedback.cpp

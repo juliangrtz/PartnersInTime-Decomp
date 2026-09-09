@@ -27,7 +27,7 @@ void Overlay20Attack_Create(BattlePartyActor *actor)
         BattleObjectData_EnsureLoaded(54, config->resources[2]);
         BattleObjectData_EnsureLoaded(55, config->resources[3]);
     }
-    func_ov002_02071c44();
+    BattleFeedback_LoadResource();
     *(u16 *)(gBattleContext + 0xcb80) = 0;
     func_ov002_020722ac(actor, Overlay20Attack_Update);
 }
@@ -40,7 +40,7 @@ void Overlay20Attack_Update(BattlePartyActor *actor)
     func_ov020_020c3eec(&work->main, &work->support);
     switch (work->phase) {
     case 0:
-        if (!func_ov002_02071c34())
+        if (!BattleFeedback_IsResourceLoadPending())
             work->phase = 1;
         break;
     case 1:
@@ -48,7 +48,7 @@ void Overlay20Attack_Update(BattlePartyActor *actor)
         work->phase = 2;
         break;
     case 2:
-        if (!work->main.flags.bits.state && !work->support.flags.bits.state && func_ov002_020719a4())
+        if (!work->main.flags.bits.state && !work->support.flags.bits.state && BattleFeedback_IsEffectComplete())
             work->phase = 3;
         break;
     case 3:

@@ -20,7 +20,7 @@ void Overlay16PairEffect_ChangeKind(Overlay16PairEffect *effect, int kind)
             effect->primary.flags.raw = (effect->primary.flags.raw & 0xff0fffff) | 0x200000;
             effect->control.bits.phase = 1;
         }
-        func_ov002_02071750(&effect->primary, 0);
+        BattleSceneObject_SetAnimationMode01(&effect->primary, 0);
         effect->control.bits.kind = kind;
     }
 }
@@ -58,7 +58,7 @@ void Overlay16PairEffect_ApplyKindAnimation(Overlay16PairEffect *effect, int act
             break;
         }
     }
-    func_ov002_02071750(&effect->primary, 1);
+    BattleSceneObject_SetAnimationMode01(&effect->primary, 1);
 }
 
 void Overlay16PairEffect_StartPursuit(Overlay16PairEffect *effect, BattleSceneObject **target)
@@ -79,8 +79,8 @@ void Overlay16PairEffect_SetAnimation(Overlay16PairEffect *effect, int animation
     effect->primary.render_state = effect->secondary.render_state;
     BattleSceneObject_SetAnimation(&effect->primary, animation, 0);
     BattleSceneObject_SetAnimation(&effect->secondary, animation, 1);
-    func_ov002_02071750(&effect->primary, argument);
-    func_ov002_02071750(&effect->secondary, argument);
+    BattleSceneObject_SetAnimationMode01(&effect->primary, argument);
+    BattleSceneObject_SetAnimationMode01(&effect->secondary, argument);
     func_ov002_02071938(&effect->secondary, &effect->primary, 76);
 }
 

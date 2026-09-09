@@ -26,7 +26,7 @@ void Overlay14Attack_UpdateEntry(Overlay10ActionActor *user)
     case 2:
         ++work->common.timer;
         if (work->common.timer >= 8) {
-            func_ov002_0207179c(user, user->party.actor.scene_object);
+            BattleParty_RestoreIdleAnimation(user, user->party.actor.scene_object);
             work->common.phase = 3;
         }
         break;

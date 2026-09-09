@@ -59,7 +59,7 @@ void Overlay12Attack_ShowHit(int actor_id, Overlay12AttackController *controller
         Overlay10Enemy_PlayHitReaction(actor_id, 408);
         BattleSound_Play(60, 0, 0, 0);
     }
-    func_ov002_020719e4(object, popup_x, popup_y, 1);
+    BattleFeedback_SpawnVariant(object, popup_x, popup_y, 1);
     if (!Overlay10Enemy_IsSelectable(actor_id))
         work->flags |= 2;
 }

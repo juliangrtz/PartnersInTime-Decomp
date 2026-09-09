@@ -7,7 +7,7 @@ enum {
     OVERLAY12_CONTROLLER_MODE_MASK = 3,
 };
 
-extern void func_ov002_0207179c(BattlePartyActor *actor,
+extern void BattleParty_RestoreIdleAnimation(BattlePartyActor *actor,
                                 BattleSceneObject *object);
 extern u16 data_ov012_020c5a2c[];
 
@@ -42,7 +42,7 @@ int Overlay12Attack_CleanupController(Overlay12AttackController *state) {
     BattleSceneObject *secondary_object = state->secondary_object;
 
     if (state->flags.bits.formation_variant <= 1) {
-        func_ov002_0207179c(state->actor, primary_object);
+        BattleParty_RestoreIdleAnimation(state->actor, primary_object);
     } else {
         BattleSceneObject_SetAnimation(primary_object, -1, -1);
     }

@@ -4,7 +4,7 @@
 #include <game/battle_enemy_data.h>
 #include <game/overlay010_enemy_state.h>
 extern int Overlay10Enemy_IsSelectable(u16);
-extern int func_ov002_02071674(int), func_ov002_020718a0(u16);
+extern int BattleActor_IsDamageImmune(int), BattleActor_HasTrait1(u16);
 extern int Random_NextModulo(int);
 
 int Overlay10Enemy_SelectProjectedSurvivor(Overlay10EnemyState *state)
@@ -24,7 +24,7 @@ int Overlay10Enemy_SelectReactionTarget(void)
     for (i = 0; i < 6; ++i) {
         if (Overlay10Enemy_IsSelectable((u16)(i + 60))) {
             BattleEnemy_GetStats((u16)(i + 60));
-            if (!func_ov002_020718a0((u16)(i + 60)))
+            if (!BattleActor_HasTrait1((u16)(i + 60)))
                 ids[count++] = i + 60;
         }
     }

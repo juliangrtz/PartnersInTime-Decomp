@@ -2,7 +2,7 @@
 extern "C" {
 #include <game/battle_effect.h>
 extern u8 *data_ov002_020c0710;
-extern void func_ov002_02071750(BattleSceneObject *, int);
+extern void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 void Overlay14Projectile_SetLevel(Overlay14Projectile *projectile, int level)
 {
     u32 previous = projectile->flags.level;
@@ -25,7 +25,7 @@ void Overlay14Projectile_SetLevel(Overlay14Projectile *projectile, int level)
             projectile->object.flags.bits.unk_20_23 = 2;
             projectile->phase = 1;
         }
-        func_ov002_02071750(&projectile->object, 0);
+        BattleSceneObject_SetAnimationMode01(&projectile->object, 0);
         projectile->flags.level = (u8)level;
     }
 }
@@ -63,6 +63,6 @@ void Overlay14Projectile_SelectAnimation(Overlay14Projectile *projectile, int ac
             break;
         }
     }
-    func_ov002_02071750(&projectile->object, 1);
+    BattleSceneObject_SetAnimationMode01(&projectile->object, 1);
 }
 }

@@ -12,7 +12,7 @@ enum Overlay15AttackObjectPairFlag {
     OVERLAY15_OBJECT_PAIR_FLAG_80 = 0x80,
 };
 
-extern void func_ov002_02071750(BattleSceneObject *object, int value);
+extern void BattleSceneObject_SetAnimationMode01(BattleSceneObject *object, int value);
 extern void func_0200940c(BattleModel *model, int scale);
 
 /* Metrowerks emits C functions in reverse source order. */
@@ -28,7 +28,7 @@ void Overlay15Attack_PrepareSecondaryActor(
                               state->secondary_resource_id);
     BattleSceneObject_SetAnimation(primary, 42, -1);
     BattleSceneObject_GetActiveModel(primary);
-    func_ov002_02071750(primary, 0);
+    BattleSceneObject_SetAnimationMode01(primary, 0);
     BattleSceneObject_SetAnimation(secondary, -1, -1);
     Overlay15Attack_ConfigureModelFlags(state);
     state->phase_flags.raw =
@@ -42,7 +42,7 @@ void Overlay15Attack_PreparePrimaryActor(
 
     BattleEntity_BindResource(object->actor_id, state->primary_resource_id);
     BattleSceneObject_SetAnimation(object, 0, -1);
-    func_ov002_02071750(object, 1);
+    BattleSceneObject_SetAnimationMode01(object, 1);
     func_0200940c(model, 0x100);
     Overlay15Attack_ConfigureModelFlags(state);
 }

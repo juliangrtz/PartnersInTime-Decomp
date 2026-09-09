@@ -96,7 +96,7 @@ void func_ov011_020c2ae0();
 void func_ov011_020c57cc(BattlePartyActor *);
 void Overlay10Attack_BeginEntry(BattlePartyActor *, void (*)(BattlePartyActor *));
 
-void func_ov002_02071c44(int);
+void BattleFeedback_LoadResource(int);
 
 int Overlay11Effects_AreFinished();
 void Overlay11Effects_UpdatePositions();

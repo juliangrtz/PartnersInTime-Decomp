@@ -15,8 +15,8 @@ int Overlay10Enemy_IsSelectable(int);
 int BattleDamage_CalculateAttack(BattlePartyActor *, int, int, int, int, int);
 void func_ov002_020722ac(Overlay10ActionActor *, void (*)(Overlay10ActionActor *));
 void func_ov010_020c1410(Overlay10ActionActor *);
-void func_ov002_02071ac4(int, BattleSceneObject *, int, int, int);
-int func_ov002_02071674(int);
+void BattleFeedback_SpawnAtObject(int, BattleSceneObject *, int, int, int);
+int BattleActor_IsDamageImmune(int);
 void func_ov010_020c1024(s16 *, const GameGraphicsResource *, int);
 extern u8 data_02049924[], data_02049918[];
 

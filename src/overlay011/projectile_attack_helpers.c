@@ -12,7 +12,7 @@ enum {
     OVERLAY11_CONTEXT_VARIANT_OFFSET = 0x1D8,
 };
 
-extern int func_ov002_020716bc(u8 *resource_data, int animation_id,
+extern int BattleAnimation_GetDurationThroughFrame(u8 *resource_data, int animation_id,
                                int animation_frame, int scale);
 extern int func_020108f0(int first_start, int first_end,
                          int second_start, int second_end);
@@ -112,7 +112,7 @@ int Overlay11Attack_GetAnimationDuration(Overlay11AttackProjectile *state) {
     BattleObjectDataLoadState *load_state =
         BattleObjectData_GetLoadState(state->object_data_id);
 
-    return func_ov002_020716bc(
+    return BattleAnimation_GetDurationThroughFrame(
         load_state->data, 5, animation_state->animation_frame,
         state->animation_scale);
 }

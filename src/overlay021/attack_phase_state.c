@@ -1,6 +1,6 @@
 #include <game/overlay021_attack_state.h>
 
-extern void func_ov002_02071750(BattleSceneObject *object, int value);
+extern void BattleSceneObject_SetAnimationMode01(BattleSceneObject *object, int value);
 extern void func_0200940c(BattleModel *model, int scale);
 
 /* Metrowerks emits C functions in reverse source order. */
@@ -42,7 +42,7 @@ void Overlay21Attack_ConfigureAnimation(Overlay21AttackState *state,
     BattleModel *model;
 
     BattleSceneObject_SetAnimation(object, animation_id, -1);
-    func_ov002_02071750(object, value);
+    BattleSceneObject_SetAnimationMode01(object, value);
     model = BattleSceneObject_GetActiveModel(object);
     func_0200940c(model, 0x100);
     model->flags &= ~BATTLE_MODEL_FLAG_10;

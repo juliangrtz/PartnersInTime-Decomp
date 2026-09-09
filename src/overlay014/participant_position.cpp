@@ -3,7 +3,7 @@ extern "C" {
 #include <game/battle_effect.h>
 extern u8 *data_ov002_020c0710;
 extern s8 data_ov014_020c6180[][4], data_ov014_020c6204[];
-extern void func_ov002_02071750(BattleSceneObject *, int);
+extern void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 extern void func_0200940c(BattleModel *, s16);
 extern void Overlay10Motion_StopAll(BattleSceneObject *);
 extern void func_ov002_0206e64c(BattleSceneObject *, int, int, int, int, int, int, int, int, u16);
@@ -21,7 +21,7 @@ void Overlay14Participant_SetProjectileMode(Overlay14Participant *participant, i
     if (participant->projectile->flags.level <= 1 && mode == 2) {
         if (model->get_animation_id() != 3) {
             BattleSceneObject_SetAnimation(actor, 2, -1);
-            func_ov002_02071750(actor, 0);
+            BattleSceneObject_SetAnimationMode01(actor, 0);
             func_0200940c(model, 256);
             offset = data_ov014_020c6204 + 10 * participant->actor->formation_index + 5;
             projectile = &participant->projectile->object;
@@ -34,7 +34,7 @@ void Overlay14Participant_SetProjectileMode(Overlay14Participant *participant, i
     } else if (mode == 2) {
         if (model->get_animation_id() != 3) {
             BattleSceneObject_SetAnimation(actor, 3, -1);
-            func_ov002_02071750(actor, 1);
+            BattleSceneObject_SetAnimationMode01(actor, 1);
             func_0200940c(model, 256);
             offset = data_ov014_020c6204 + 10 * participant->actor->formation_index + 5;
             projectile = &participant->projectile->object;
@@ -44,7 +44,7 @@ void Overlay14Participant_SetProjectileMode(Overlay14Participant *participant, i
         }
     } else if (model->get_animation_id()) {
         BattleSceneObject_SetAnimation(actor, 0, -1);
-        func_ov002_02071750(actor, 1);
+        BattleSceneObject_SetAnimationMode01(actor, 1);
         projectile = &participant->projectile->object;
         offset = data_ov014_020c6204 + 10 * participant->actor->formation_index;
         BattleSceneObject_AdjustPosition(projectile, actor->x + offset[0] - projectile->x,

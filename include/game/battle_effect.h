@@ -41,7 +41,9 @@ struct BattleEffect {
         u16 flags;
         struct {
             u16 attached_script_flag : 1;
-            u16 unknown_flags_01_15 : 15;
+            u16 unknown_flags_01_03 : 3;
+            u16 complete : 1;
+            u16 unknown_flags_05_15 : 11;
         };
     };
     u8 unknown_1c[4];
