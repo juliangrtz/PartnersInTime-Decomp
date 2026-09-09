@@ -126,3 +126,9 @@ src/overlay007/scene_sound.cpp:
 
 src/overlay007/scene_vm_state.cpp:
     .text start:0x020876e8 end:0x02087ba8
+
+src/overlay007/scene_menu_scroll.cpp:
+    .text start:0x0207f5f8 end:0x0207f868
+
+src/overlay007/scene_menu_blend.cpp:
+    .text start:0x0207fb40 end:0x0207fe60

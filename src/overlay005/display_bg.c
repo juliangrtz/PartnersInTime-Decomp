@@ -405,7 +405,7 @@ void Overlay5DisplayBg_SetOverflow(DisplayEngine engine, int background, u16 ena
     *control |= enabled << 13;
 }
 
-void Overlay5DisplayBg_SetOffset(DisplayEngine engine, int background, s16 x, s16 y) {
+void Overlay5DisplayBg_SetOffset(DisplayEngine engine, int background, int x, int y) {
     *(vu32 *)(REG_BG_OFFSET + (engine << 12) + (background << 2)) =
         (x & 0x1FF) | ((y & 0x1FF) << 16);
 }

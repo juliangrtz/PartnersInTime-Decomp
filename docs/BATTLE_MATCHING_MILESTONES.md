@@ -1522,3 +1522,51 @@ Validation: zero-difference native relink and canonical rebuilt ROM SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; all 74 tests, source audit,
 and whitespace checks passed. Matching C/C++: **557,908 / 1,563,700 bytes
 (35.68%)**; C/C++ plus assembly: **36.01%**.
+
+
+## Pause-menu scrolling and blending: 35.77% matching C/C++
+
+Reconstructed six functions (1,424 bytes): scroll creation, integration and
+background application at `0x0207F5F8..0x0207F868`; blend creation/update and zoom
+integration at `0x0207FB40..0x0207FE60`. Both 72-byte task layouts and the 44-byte
+parent prefix have size checks. Scroll coordinates use four fractional bits,
+zoom scale uses eight, and the blend progresses to 16/16 alpha before switching
+BG3 character data and rewriting its palette bits. The intervening 728-byte
+zoom constructor remains an assembly gap because of register-allocation
+mismatches. Background setup/reset candidates also remain private.
+
+`Overlay5DisplayBg_SetOffset` now takes full-width integer coordinates: native
+callers pass negated signed halfwords without a second narrowing conversion,
+and the callee applies the hardware's nine-bit coordinate mask. Its own code
+and all previously linked callers remain byte-identical after the declaration
+and definition correction.
+
+Read-only DeSmuME runs replayed normal Items/Clothing/Status navigation from
+story save 86, then entered and left the clothing list on saves 86 and 65. All
+six new functions were reached. Across 3,240 frames, independent models
+passed 6,328 complete task comparisons,
+5,974 full scroll-context comparisons,
+20 parent-prefix comparisons,
+30 full 1,536-byte live BG3 tilemap comparisons,
+and 90 blend-alpha register checks.
+The checks included every native helper argument, all nine affine-transform
+parameters, signed division results, and 1,966
+BG1 write addresses/values at the native store instruction. BG offsets are
+write-only registers, so their writes are inspected directly rather than
+using emulator register readback. Intermediate movement, terminal snapping,
+parent completion, both blend directions, and task deletion were observed.
+The original scroll-application behavior for target Y = 0 is preserved; its
+self-deletion branch was not reached by these menu paths.
+
+Private reports: `build/runtime/eur_scene_menu_motion/evidence_menu86.json`,
+`evidence_clothing86.json`, and `evidence_clothing65.json`. No RAM/script
+injection, equipment changes, purchases, or writes to supplied battery saves.
+Save 86/state SHA-1: `349b84f6004bffedfef94de4554f2d1679645e83` /
+`23b87fbd8bca1084bc3016e55b3fb633f7856fa8`; save 65/state SHA-1:
+`0844b75810855bc3a738122b29382ed5a6c9f983` /
+`ece238ed785fda646a77cde5e886aa7da3e009d7`.
+
+Validation: all 74 tests, public-content audit, whitespace checks, and native
+zero-difference relink passed. ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**559,332 / 1,563,700 bytes (35.77%)**; C/C++ plus assembly: **36.11%**.

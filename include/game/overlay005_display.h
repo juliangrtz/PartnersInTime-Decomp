@@ -106,7 +106,7 @@ void Overlay5Display_LoadObjTiles(
 );
 
 void Overlay5DisplayBg_SetVerticalOffset(DisplayEngine engine, int background, int y);
-void Overlay5DisplayBg_SetOffset(DisplayEngine engine, int background, s16 x, s16 y);
+void Overlay5DisplayBg_SetOffset(DisplayEngine engine, int background, int x, int y);
 void Overlay5DisplayBg_SetOverflow(DisplayEngine engine, int background, u16 enabled);
 void Overlay5DisplayBg_SetAreaOverflow(DisplayEngine engine, int background, u16 enabled);
 void Overlay5DisplayBg_SetCharacterBase(DisplayEngine engine, int background, u16 block);

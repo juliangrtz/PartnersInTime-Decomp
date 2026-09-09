@@ -687,3 +687,5 @@ src/overlay009/shop_list_navigation.cpp
 src/overlay007/scene_accelerated_motion.c
 src/overlay007/scene_sound.cpp
 src/overlay007/scene_vm_state.cpp
+src/overlay007/scene_menu_scroll.cpp
+src/overlay007/scene_menu_blend.cpp
