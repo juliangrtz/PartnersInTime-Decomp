@@ -3,6 +3,10 @@
 #include <game/sprite_output.h>
 struct BattleModel;
 struct GameGraphicsResource;
+
+enum ModelTextureResizePolicy {
+    MODEL_TEXTURE_EXACT_SIZE, MODEL_TEXTURE_GROW_ONLY, MODEL_TEXTURE_REALLOCATE
+};
 /* The 88-byte renderer descriptor used by sprite resource configuration.
  * Its final 44 bytes initialize the renderer presentation record. */
 typedef struct ModelResourceDescriptor {
@@ -35,6 +39,7 @@ typedef char ModelResourceDescriptor_SizeCheck[sizeof(ModelResourceDescriptor) =
 #ifdef __cplusplus
 extern "C" {
 #endif
+void BattleModel_UpdateSpriteResources(struct BattleModel *model, const ModelResourceDescriptor *descriptor);
 int BattleModel_InitializeSpriteResources(struct BattleModel *model,
                                           const ModelResourceDescriptor *descriptor);
 const u16 *BattleModel_FindTextureOffsets(int boundary, int alternate,

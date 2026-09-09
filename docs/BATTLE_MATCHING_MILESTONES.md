@@ -2950,3 +2950,38 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **624,060 / 1,563,700 bytes (39.91%)**; C/C++ plus assembly: **40.24%**.
+
+## Sprite resource replacement and allocation policy (2026-09-09)
+
+Reconstructed `BattleModel_UpdateSpriteResources`, **1,032 bytes**. It detaches
+the renderer, replaces graphics and conversion references, selects packed tile
+counts, and applies exact-size, grow-only or forced reallocation. It optionally
+replaces the palette, converts or looks up image offsets, resets animation and
+restores the render-list link. The hardware boundary value retains its native
+unsigned 32-bit working type. The shared model-resource module now also contains
+the formerly separate lifecycle functions, completing the contiguous region
+from `0x0200BA34` through `0x0200C5D8`. Its controller wrapper now has the void
+return type used by the virtual interface.
+
+Two ordinary movement/action replays from supplied saves **83 and 51** covered
+**595 frames and 19 checked returns**. They observed 18 texture reallocations
+and one retained allocation, normal resources on the main screen, header tile
+counts, palette replacement, texture-offset lookup and palette-index adjustment.
+Grow-only/forced policy, explicit tile counts, screen changes, retained palettes
+and conversion-buffer branches remain statically verified. The cold-load-only
+attempt did not reach this routine and is excluded from coverage.
+
+Byte-guarded, SP-matched helper/return models compared the full 128-byte model,
+88-byte descriptor, 24-byte graphics header and 20-byte palette record at every
+native helper boundary. They verified exact arguments, resource pointers,
+allocation results, flags and animation reset. Screenshots and main/sub
+OBJ-VRAM and palette dumps accompany `build/runtime/eur_model_resource_update/`
+reports `evidence_keypad83.json` and `evidence_split51.json`. Initial-state SHA-1:
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61` and
+`819304ed66859f343c2b324f49a84833d79c029c`. No code, command or RAM fixtures;
+all **104 supplied save hashes** remained unchanged.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**625,092 / 1,563,700 bytes (39.98%)**; C/C++ plus assembly: **40.31%**.

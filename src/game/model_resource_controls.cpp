@@ -6,6 +6,8 @@ extern "C" {
 #include <game/sprite_output.h>
 #include <game/palette_animation.h>
 extern "C" {
+#include <game/heap.h>
+void func_02009138(BattleModel *);
 extern BattleModelVTable data_02050a24;
 void func_0200a45c(BattleModel *, const void *);
 void func_02009ffc(int, const u16 *, const GameGraphicsResource *, int);
@@ -225,7 +227,8 @@ int BattleModel_InitializeSpriteResources(BattleModel *model, const ModelResourc
         model->texture_offsets = 0;
     if (model->texture_offsets && !descriptor->resource_flags.unknown_01) {
         if (model->resource_flag_bits.alternate_resource == 1)
-            GameGraphics_BuildScreenTextureOffsets(model->screen, (u16 *)model->texture_offsets, model->resource);
+            GameGraphics_BuildScreenTextureOffsets(model->screen, (u16 *)model->texture_offsets,
+                                                   model->resource);
         else
             func_02009ffc(model->screen, model->texture_offsets, model->resource, -1);
     } else if (!model->texture_offsets) {
@@ -248,5 +251,119 @@ int BattleModel_InitializeSpriteResources(BattleModel *model, const ModelResourc
         model->property_056 = 0;
     }
     return length;
+}
+BattleModel *BattleModel_DestroyResource(BattleModel *model)
+{
+    *(BattleModelVTable **)model = &data_02050a24;
+    model->unknown_1c();
+    func_02009138(model);
+    return model;
+}
+
+BattleModel *BattleModel_DeleteResource(BattleModel *model)
+{
+    *(BattleModelVTable **)model = &data_02050a24;
+    model->unknown_1c();
+    func_02009138(model);
+    GameHeap_Delete(model);
+    return model;
+}
+
+BattleModel *BattleModel_DestroyResourceBase(BattleModel *model)
+{
+    *(BattleModelVTable **)model = &data_02050a24;
+    model->unknown_1c();
+    func_02009138(model);
+    return model;
+}
+
+void BattleModel_UnlinkTexture(BattleModel *model)
+{
+    GameSpriteAllocation_Unlink(&model->texture);
+}
+
+void BattleModel_UpdateSpriteResources(BattleModel *model, const ModelResourceDescriptor *descriptor)
+{
+    model->unknown_2c();
+    int reallocate = 0;
+    if (model->screen != descriptor->resource_flags.screen) {
+        model->screen = descriptor->resource_flags.screen;
+        reallocate = 1;
+    }
+    *data_0204ff88[model->screen];
+    u32 boundary = GameSprite_ObjBoundaryShift(model->screen);
+    model->resource_flag_bits.alternate_resource = descriptor->flags.resource_set;
+    model->resource_flag_bits.unknown_23 = descriptor->flags.unknown_23;
+    func_0200a45c(model, descriptor->animation);
+    model->texture_offsets = (const u16 *)descriptor->conversion_buffer;
+    model->resource_pixels = descriptor->graphics;
+    model->resource_flag_bits.unknown_24 = descriptor->flags.unknown_24;
+    model->resource_flag_bits.unknown_25 = descriptor->flags.unknown_25;
+    u32 tiles = descriptor->texture_tile_count;
+    if (!tiles) {
+        if (model->resource_flag_bits.alternate_resource == 1)
+            tiles = model->resource->alternate_tile_counts;
+        else
+            tiles = model->resource->normal_tile_counts;
+        tiles >>= 10 * boundary;
+        tiles &= 1023;
+    }
+    u32 previous_tiles = model->texture.size >> (GameSprite_ObjBoundaryShift(model->screen) + 5);
+    switch (descriptor->unknown_1f & 15) {
+    case MODEL_TEXTURE_EXACT_SIZE:
+        if (tiles != previous_tiles)
+            reallocate = 1;
+        break;
+    case MODEL_TEXTURE_GROW_ONLY:
+        if (tiles > previous_tiles)
+            reallocate = 1;
+        break;
+    case MODEL_TEXTURE_REALLOCATE:
+        reallocate = 1;
+        break;
+    }
+    if (reallocate || descriptor->resource_flags.alternate) {
+        GameSpriteAllocation_Unlink(&model->texture);
+        model->flag_bits.texture_allocation_mode = descriptor->flags.unknown_16_18;
+        model->flag_bits.texture_allocation_mode = GameSpriteAllocation_Allocate(
+            &model->texture, model->screen, (u8)model->flag_bits.texture_allocation_mode, tiles,
+            descriptor->resource_flags.alternate, descriptor->primary_id,
+            (u8)model->resource_flag_bits.alternate_resource, descriptor->first_texture_tile);
+    }
+    if (model->flag_bits.texture_allocation_mode == 3)
+        model->texture.state &= ~16;
+    else
+        model->texture.state |= 16;
+    if (descriptor->palette) {
+        model->flag_bits.unknown_19_21 = descriptor->flags.palette_allocation;
+        model->palette = descriptor->palette;
+        model->palette_index =
+            model->resource->flags.bits.color256 ? model->palette->bank : model->palette->first;
+    }
+    if (model->texture_offsets && !descriptor->resource_flags.unknown_01) {
+        if (model->resource_flag_bits.alternate_resource == 1)
+            GameGraphics_BuildScreenTextureOffsets(model->screen, (u16 *)model->texture_offsets,
+                                                   model->resource);
+        else
+            func_02009ffc(model->screen, model->texture_offsets, model->resource, -1);
+    } else if (!model->texture_offsets) {
+        model->texture_offsets =
+            BattleModel_FindTextureOffsets(GameSprite_ObjBoundaryShift(model->screen) + 5,
+                                           model->resource_flag_bits.alternate_resource, model->resource);
+    }
+    if (model->resource->flags.bits.color256 == 1) {
+        if (model->resource_flag_bits.alternate_resource == 1 ||
+            model->resource_flag_bits.alternate_resource == 0 && !model->resource_flag_bits.unknown_24) {
+            u32 size = func_02009498(model->resource);
+            func_02009644(model->resource_pixels, 0, size, model->palette->first);
+        }
+    }
+
+    model->set_animation(0, 0);
+    int speed = model->effect_scale;
+    if (speed <= 0)
+        speed = -speed;
+    model->anchor_offset += speed;
+    model->unknown_30();
 }
 }

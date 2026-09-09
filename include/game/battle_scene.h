@@ -614,7 +614,7 @@ void BattleModelController_SetPrimaryAnimation(BattleModel *model, u8 animation,
 u32 BattleModelController_GetObjectSize(BattleModel *model);
 int BattleModelController_Configure(BattleModel *model, const void *descriptor, void *controller, s16 animation);
 int BattleModelController_Restore(BattleModel *model, const void *descriptor, void *controller, s16 animation);
-int BattleModelController_ConfigureResources(BattleModel *model, const void *descriptor);
+void BattleModelController_ConfigureResources(BattleModel *model, const void *descriptor);
 int BattleModelController_RestoreResources(BattleModel *model, const void *descriptor);
 BattleModel *BattleModelController_DestroyBase(BattleModel *model);
 BattleModel *BattleModelController_Delete(BattleModel *model);

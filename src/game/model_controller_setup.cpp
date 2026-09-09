@@ -6,7 +6,6 @@ extern BattleModelVTable data_02050aa4;
 extern void func_0202cbd4(void *, int, u32);
 extern BattleModel *BattleModel_InitResourceState(BattleModel *);
 extern BattleModel *BattleModel_DestroyResourceBase(BattleModel *);
-extern int func_0200ba34(BattleModel *, const void *);
 
 BattleModel *BattleModelController_Init(BattleModel *model)
 {
@@ -53,9 +52,9 @@ int BattleModelController_RestoreResources(BattleModel *model, const void *descr
     return BattleModel_InitializeSpriteResources(model, (const ModelResourceDescriptor *)descriptor);
 }
 
-int BattleModelController_ConfigureResources(BattleModel *model, const void *descriptor)
+void BattleModelController_ConfigureResources(BattleModel *model, const void *descriptor)
 {
-    return func_0200ba34(model, descriptor);
+    BattleModel_UpdateSpriteResources(model, (const ModelResourceDescriptor *)descriptor);
 }
 
 int BattleModelController_Restore(BattleModel *model, const void *descriptor, void *controller, s16 animation)
