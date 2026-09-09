@@ -14,6 +14,7 @@ void FieldEntity_SetInteractionBounds(FieldEntity *entity, s16 minimum_x, s16 ma
 /* Bounds resources contain six relative u16 offsets; each section begins with
  * a count byte followed by its records. Binding refreshes the entity bounds. */
 void FieldEntity2D_BindBoundsResource(FieldRuntimeEntity *entity, const u16 *resource);
+void FieldEntity3D_UpdateBounds(FieldRuntimeEntity *entity);
 void FieldEntity3D_BindBoundsResource(FieldRuntimeEntity *entity, const u16 *resource);
 void FieldEntity_SetResourceAnimation(FieldRuntimeEntity *entity, int resource_animation, int animation,
                                        int reset_control, u8 update_bounds);

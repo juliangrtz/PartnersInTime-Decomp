@@ -401,6 +401,15 @@ typedef char FieldRenderAnimationRange_SizeCheck[sizeof(FieldRenderAnimationRang
 typedef struct FieldInteractionBounds {
     s8 minimum_x, maximum_y, width, height, vertical_extent;
 } FieldInteractionBounds;
+typedef struct FieldBoundsRectangle {
+    fx32 min_x, max_x, min_y, max_y;
+} FieldBoundsRectangle;
+typedef struct FieldBoundsLookup {
+    s8 min_x, max_y, width, height;
+} FieldBoundsLookup;
+typedef char FieldBoundsRectangle_SizeCheck[sizeof(FieldBoundsRectangle) == 16 ? 1 : -1];
+typedef char FieldBoundsLookup_SizeCheck[sizeof(FieldBoundsLookup) == 4 ? 1 : -1];
+
 typedef struct FieldAnimationBoundsIndex {
     union { u8 unknown_00[2]; struct { u8 body_index, unknown_01; }; };
     s8 bounds_index;
@@ -670,21 +679,24 @@ struct FieldRuntimeEntity {
     fx32 previous_relative_height, previous_support_clearance;
     const FieldInteractionBounds *body_bounds, *navigation_bounds;
     const void *body_bounds_lookup, *navigation_bounds_lookup;
-    union { s8 unknown_2e4[4]; struct { s8 body_bounds_index, unknown_2e5[3]; }; };
+    union {
+        s8 unknown_2e4[4];
+        struct { s8 body_bounds_index, navigation_bounds_index, body_lookup_index, navigation_lookup_index; };
+    };
     s32 body_corner_angles[4];
     fx32 body_min_x;
     fx32 body_max_x;
     fx32 body_min_y;
     fx32 body_max_y;
     fx32 body_vertical_extent;
-    u8 unknown_30c[0x10];
+    union { u8 unknown_30c[0x10]; FieldBoundsRectangle body_lookup_bounds; };
     fx32 body_center_y;
     fx32 navigation_min_x;
     fx32 navigation_max_x;
     fx32 navigation_min_y;
     fx32 navigation_max_y;
     fx32 navigation_vertical_extent;
-    u8 unknown_334[0x10];
+    union { u8 unknown_334[0x10]; FieldBoundsRectangle navigation_lookup_bounds; };
     fx32 swept_min_x, swept_min_y, swept_max_x, swept_max_y;
     fx32 vertical_velocity, vertical_gravity, vertical_terminal_velocity;
     s16 falling_frames;

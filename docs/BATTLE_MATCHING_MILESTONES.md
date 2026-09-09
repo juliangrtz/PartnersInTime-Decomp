@@ -3156,3 +3156,34 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **628,016 / 1,563,700 bytes (40.16%)**; C/C++ plus assembly: **40.50%**.
+
+## Spatial field bounds update (2026-09-09)
+
+Reconstructed `FieldEntity3D_UpdateBounds`, **1,160 bytes**, and extended the
+contiguous spatial-lifecycle module to `0x020B4EDC`–`0x020B64E8`. The routine
+selects the five signed indices in each six-byte animation record, builds body,
+navigation and interaction extents, computes four corner angles and resolves
+optional four-byte lookup rectangles. Checked rectangle/lookup types and named
+cached indices replace opaque fields without changing entity layouts. Default
+bounds and navigation-change flags preserve the native behavior.
+
+Ordinary input on supplied saves **103** (cold load) and **83** (movement and
+jumping) covered **2,457 frames and 98 returns**. Independent full-entity models
+verified 70 resource-backed and 28 default updates, 40 default and 30 custom
+lookup selections for both rectangle groups, six changed-navigation updates,
+39 unchanged/unsynchronized updates and 25 skipped navigation updates. All 392
+angle-helper argument pairs and 98 interaction-bound updates were checked;
+the existing angle helper's returned values supply the corner-angle results.
+The out-of-range-animation fallback remains statically verified.
+
+Evidence, screenshots and display-memory dumps are in
+`build/runtime/eur_field_spatial_bounds/evidence_cold103.json` and
+`evidence_movement83.json`. The movement state SHA-1 is
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`; final cold-103 OBJ-VRAM/palette hashes
+match the previous verified resource-binding replay. No fixtures were used;
+all **104 supplied saves** retained their original hashes.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**629,176 / 1,563,700 bytes (40.24%)**; C/C++ plus assembly: **40.57%**.

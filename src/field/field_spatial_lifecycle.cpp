@@ -2,6 +2,8 @@
 #include <game/field_entity.h>
 #include <game/field_timed_renderer.h>
 #include <game/field_resources.h>
+#include <game/field_presentation.h>
+#include <nitro/fx_atan.h>
 #include <game/battle_scene.h>
 extern "C" {
 #include <game/heap.h>
@@ -268,5 +270,106 @@ void FieldEntity3D_BindBoundsResource(FieldRuntimeEntity *entity, const u16 *res
         entity->bounds_animation_count = 0;
     }
     entity->base.update_bounds();
+}
+
+static inline void SetBodyBounds(FieldRuntimeEntity *entity, int x, int y, int width, int height, int depth)
+{
+    entity->body_min_x = x << 12;
+    entity->body_max_x = entity->body_min_x + (width << 12);
+    entity->body_max_y = y << 12;
+    entity->body_min_y = entity->body_max_y - (height << 12);
+    entity->body_vertical_extent = depth << 12;
+}
+static inline void SetNavigationBounds(FieldRuntimeEntity *entity, int x, int y, int width, int height,
+                                       int depth)
+{
+    entity->navigation_min_x = x << 12;
+    entity->navigation_max_x = entity->navigation_min_x + (width << 12);
+    entity->navigation_max_y = y << 12;
+    entity->navigation_min_y = entity->navigation_max_y - (height << 12);
+    entity->navigation_vertical_extent = depth << 12;
+}
+static inline void SetBox(FieldBoundsRectangle *box, int x, int y, int width, int height)
+{
+    box->min_x = x << 12;
+    box->max_x = box->min_x + (width << 12);
+    box->max_y = y << 12;
+    box->min_y = box->max_y - (height << 12);
+}
+static inline void SetBodyAngles(FieldRuntimeEntity *entity)
+{
+    entity->body_center_y = (entity->body_min_y + entity->body_max_y) / 2;
+    entity->body_corner_angles[0] = FX_Atan2(entity->body_min_x, entity->body_center_y);
+    entity->body_corner_angles[1] = FX_Atan2(entity->body_min_x, -entity->body_center_y);
+    entity->body_corner_angles[2] = FX_Atan2(entity->body_max_x, -entity->body_center_y);
+    entity->body_corner_angles[3] = FX_Atan2(entity->body_max_x, entity->body_center_y);
+}
+void FieldEntity3D_UpdateBounds(FieldRuntimeEntity *entity)
+{
+    if (entity->bounds_resource) {
+        int animation = entity->animation_id;
+        /* Spatial bounds use signed indices in the six-byte animation record. */
+        const s8 *indices = (const s8 *)entity->animation_bounds;
+        int body_index, navigation_index, interaction_index, body_lookup, navigation_lookup;
+        const FieldInteractionBounds *body, *navigation, *interaction;
+        int previous_min_x, previous_max_x, previous_max_y, previous_min_y;
+        if (animation >= entity->bounds_animation_count)
+            animation = 0;
+        body_index = indices[animation * (int)sizeof(FieldAnimationBoundsIndex) + 0];
+        body = &entity->body_bounds[body_index];
+        navigation_index = indices[animation * (int)sizeof(FieldAnimationBoundsIndex) + 1];
+        interaction_index = indices[animation * (int)sizeof(FieldAnimationBoundsIndex) + 2];
+        previous_min_x = entity->navigation_min_x;
+        previous_max_x = entity->navigation_max_x;
+        previous_max_y = entity->navigation_max_y;
+        previous_min_y = entity->navigation_min_y;
+        body_lookup = indices[animation * (int)sizeof(FieldAnimationBoundsIndex) + 3];
+        navigation_lookup = indices[animation * (int)sizeof(FieldAnimationBoundsIndex) + 4];
+        navigation = &entity->navigation_bounds[navigation_index];
+        interaction = &entity->interaction_bounds[interaction_index];
+        SetBodyBounds(entity, body->minimum_x, body->maximum_y, body->width, body->height,
+                      body->vertical_extent);
+        SetBodyAngles(entity);
+        if (body_lookup == -1) {
+            SetBox(&entity->body_lookup_bounds, body->minimum_x, body->maximum_y, body->width, body->height);
+        } else {
+            const FieldBoundsLookup *bounds =
+                (const FieldBoundsLookup *)entity->body_bounds_lookup + body_lookup;
+            SetBox(&entity->body_lookup_bounds, bounds->min_x, bounds->max_y, bounds->width, bounds->height);
+        }
+        SetNavigationBounds(entity, navigation->minimum_x, navigation->maximum_y, navigation->width,
+                            navigation->height, navigation->vertical_extent);
+        if (navigation_lookup == -1) {
+            SetBox(&entity->navigation_lookup_bounds, navigation->minimum_x, navigation->maximum_y,
+                   navigation->width, navigation->height);
+        } else {
+            const FieldBoundsLookup *bounds =
+                (const FieldBoundsLookup *)entity->navigation_bounds_lookup + navigation_lookup;
+            SetBox(&entity->navigation_lookup_bounds, bounds->min_x, bounds->max_y, bounds->width,
+                   bounds->height);
+        }
+        FieldEntity_SetInteractionBounds(&entity->base, interaction->minimum_x, interaction->maximum_y,
+                                         (u16)interaction->width, interaction->height,
+                                         interaction->vertical_extent);
+        if (entity->navigation_surfaces && entity->base.property_00a_bits.subtype != 10) {
+            if (entity->runtime_flag_bits.sync_horizontal &&
+                (entity->navigation_min_x != previous_min_x || entity->navigation_min_y != previous_min_y ||
+                 entity->navigation_max_x != previous_max_x || entity->navigation_max_y != previous_max_y)) {
+                entity->collision_state_flags |= 0x200000;
+                entity->runtime_flags |= 0x40;
+            }
+            entity->runtime_flags |= 0x20;
+        }
+        entity->body_bounds_index = body_index;
+        entity->navigation_bounds_index = navigation_index;
+        entity->bounds_index = interaction_index;
+        entity->body_lookup_index = body_lookup;
+        entity->navigation_lookup_index = navigation_lookup;
+    } else {
+        SetBodyBounds(entity, -8, 0, 16, 8, 32);
+        SetBodyAngles(entity);
+        SetNavigationBounds(entity, -8, 0, 16, 8, 32);
+        FieldEntity_SetInteractionBounds(&entity->base, -8, 0, 16, 8, 32);
+    }
 }
 }
