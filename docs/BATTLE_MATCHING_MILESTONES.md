@@ -1330,3 +1330,32 @@ No ROM, script or RAM substitution is used, the supplied battery save is
 unchanged and no callbacks remain pending. Native linking, all 74 tests,
 progress consistency and the public-content audit pass. The ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+
+### Baby Spin entry, hovering, glide and cancellation (2026-09-09)
+
+Seven adjacent functions add 3,040 matching C++ bytes, reaching
+547,604 / 1,563,700 bytes (35.02%). The checked party layouts now expose the
+linked member at entity offset 0x570 and its delayed start at record offset
+0x18. Five functions start Baby Spin, hold both babies at their shared target
+height, begin gliding, join them on landing, and cancel into a fall. The
+alternate state-68 entry and state-62/74 restoration retain neutral names.
+
+The caller's collision conditions and live character coordinates determine a
+normal-input route from story checkpoint 83: stack the adults with B, start
+their spin with B again, then move left into the stationary babies. The
+observed babies rise to height 94 and hover. Right starts the glide; X instead
+cancels it. Two complete replays of 551 and 495 frames verify all five observed
+functions. Independent models check 36 complete party/entity/record/renderer
+memory checkpoints and 27 helper-call argument sets. Both first-member and
+linked-member target-height branches are observed, including the four-frame
+delayed start. The glide and cancellation finish with both babies grounded
+in ordinary movement mode. The hovering screenshot was inspected.
+
+Private evidence is `baby_spin_glide83.json` and `baby_spin_cancel83.json` in
+`build/runtime/eur_party_state7/`. The input state has SHA-1
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`; the supplied battery save retains
+SHA-1 `2cb577d3008975c390a2f00e2b2cd646e4005c1b`. No script or RAM substitution
+is used, and no callbacks remain pending. The alternate entry and restore
+functions are statically verified only. Native linking, all 74 tests, progress
+consistency and the public-content audit pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`.

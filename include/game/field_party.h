@@ -41,7 +41,8 @@ typedef struct FieldPartyEntity {
         } auxiliary_motion;
     };
     union { u16 *unknown_568; FieldPartyFollowerFlags *follower_flags; };
-    u8 unknown_56c[8];
+    u8 unknown_56c[4];
+    struct FieldPartyEntity *linked_member;
     struct FieldPartyEntity *partner;
     struct FieldPartyEntity *auxiliary;
     u8 unknown_57c[20];
@@ -75,7 +76,9 @@ typedef struct FieldPartyStateRecord {
             s16 unknown_10;
             struct { u16 facing_direction : 3, unknown_03 : 1, unknown_04_15 : 12; } flags;
             s16 timer;
-            u8 unknown_16[10];
+            u8 unknown_16[2];
+            u16 linked_member_delay;
+            u8 unknown_1a[6];
         };
     };
 } FieldPartyStateRecord;
@@ -155,6 +158,13 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_BeginState68(FieldPartyController *party, int member);
+void FieldParty_ResumeState62Or74(FieldPartyController *party, int preserve_state);
+void FieldParty_LandBabySpin(FieldPartyController *party, int member);
+void FieldParty_CancelBabySpin(FieldPartyController *party);
+void FieldParty_GlideBabySpin(FieldPartyController *party);
+void FieldParty_HoldBabySpin(FieldPartyController *party);
+void FieldParty_BeginBabySpin(FieldPartyController *party, int member);
 void FieldParty_BeginHammerSwing(FieldPartyController *party, int member);
 void FieldParty_EndHammerSwing(FieldPartyController *party, int member);
 int FieldParty_IsHammerActive(FieldPartyController *party, int member);

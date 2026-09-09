@@ -226,3 +226,6 @@ src/field/field_navigation_records.cpp:
 
 src/field/field_party_transitions.cpp:
     .text start:0x0208dc5c end:0x020917f0
+
+src/field/field_party_baby_spin.cpp:
+    .text start:0x0208c128 end:0x0208cd08
