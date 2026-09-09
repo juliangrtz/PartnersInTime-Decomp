@@ -135,3 +135,9 @@ src/overlay007/scene_menu_blend.cpp:
 
 src/overlay007/menu_particle.cpp:
     .text start:0x0207e4d0 end:0x0207e5e8
+
+src/overlay007/menu_item_effect.cpp:
+    .text start:0x02077a1c end:0x02077e84
+
+src/overlay007/menu_item_star.cpp:
+    .text start:0x02078040 end:0x02078294

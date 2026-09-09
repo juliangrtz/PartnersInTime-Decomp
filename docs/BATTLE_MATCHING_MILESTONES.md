@@ -2229,10 +2229,53 @@ Private reports: `build/runtime/eur_save_menu_write/evidence_pack55.json`,
 were reached through a normal cold boot and recorded keypad navigation; there
 were no code or RAM fixtures. All **104 supplied saves** were hashed before and
 after every run and remained unchanged. Deletion affected only the imported
-emulator working copy. The adjacent capture-tile converter remains unlinked
+emulator working copy. The battle capture-tile converter remains unlinked
 while its compiler register allocation differs.
 
 Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **591,984 / 1,563,700 bytes (37.86%)**; C/C++ plus assembly: **38.19%**.
+
+## Pause-menu healing, glow and star updates (2026-09-09)
+
+Reconstructed five routines, **1,724 bytes**, covering HP-item application, the
+combined effect request, glow creation/update and star update. Checked shared
+views describe 72-byte tasks, 64-byte sprites and the 10-byte animation sequence.
+Named phases preserve immediate transitions between star growth, hold and
+shrink; glow completion releases its parent's wait counter. Signed fixed-point
+arithmetic, unsigned affine arguments, animation wrapping and sprite attribute
+updates match the original. The intervening star-group constructor and preceding
+heal request still have compiler-allocation differences; the two C modules keep
+their verified contiguous ranges and can merge when that constructor matches.
+
+A normal cold boot of supplied save **20** reached the pause menu and Items.
+The save already had injured babies: a Mushroom restored Baby Mario from
+**21/23 to 23/23 HP**, and another restored Baby Luigi from **26/28 to 28/28 HP**.
+Both updates were independently checked against the live item record and maximum
+HP. Screenshots showed the star/glow animation and the final HP/item counts.
+No code or RAM fixtures were used.
+
+The two effect replays total **243 frames and 894 checked returns**: 42 healing
+updates, 2 effect requests, 2 glow constructors, 38 glow updates and 810 star
+updates. Independent models checked the complete task/sprite records before
+helper calls and at returns, the party record, trigonometric movement from the
+live sine table, all three star phases, four animation frames, delay counters,
+fade levels, parent completion and all 34 task releases. All helper targets and
+arguments were validated, including the nine-argument star-group requests.
+All five reconstructed functions were reached. The replays used the normal
+Mushroom effect parameters; other item effects and unusual glow duration inputs
+were not exercised.
+
+Private reports: `build/runtime/eur_menu_item_effect/evidence_heal20.json` and
+`evidence_heal_luigi20.json`. Input-state SHA-1:
+`84c9eda6208235f00d4f3e11eee0fad1c9817cc1` and
+`c2cf48910c782602604c48b2acbf11129840d982`, respectively. Supplied save SHA-1:
+`e78faca7c148cb07941601554f06f279a29c4488`. Preceding keypad-only stages retained
+cold-boot/menu screenshots and derived states. All **104 supplied saves** were
+hashed before and after each run and remained unchanged.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**593,708 / 1,563,700 bytes (37.97%)**; C/C++ plus assembly: **38.30%**.
