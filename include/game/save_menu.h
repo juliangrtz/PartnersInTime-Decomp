@@ -50,9 +50,31 @@ typedef char SaveMenuSummarySizeCheck[sizeof(SaveMenuSummary) == 160 ? 1 : -1];
 typedef char SaveMenuTextSizeCheck[sizeof(SaveMenuText) == 24724 ? 1 : -1];
 typedef char SaveSceneTaskSizeCheck[sizeof(SaveSceneTask) == 48 ? 1 : -1];
 
+typedef struct SaveMenuScrollTask {
+    u8 unknown_00[16];
+    struct SaveMenuScrollTask *parent;
+    u8 unknown_14[12];
+    int state, counter;
+    union {
+        struct {
+            s32 x, unknown_2c, width, source;
+            s8 direction;
+            u8 unknown_39[15];
+        };
+        struct {
+            s32 part, anchor_x, anchor_y;
+            u8 unknown_34[20];
+        };
+    };
+} SaveMenuScrollTask;
+typedef char SaveMenuScrollTaskSizeCheck[sizeof(SaveMenuScrollTask) == 72 ? 1 : -1];
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+void SaveMenuScroll_DrawArrow(SaveMenuScrollTask *task);
+void SaveMenuScroll_DrawTextSegment(SaveMenuScrollTask *task);
+void SaveMenuScroll_Update(SaveMenuScrollTask *task);
 void SaveMenu_BuildStoredSummary(int slot, SaveMenuSummary *summary);
 void SaveMenu_BuildLiveSummary(SaveMenuSummary *summary);
 int SaveMenuText_DrawTextureRows(SaveMenuText *context, int *offset, int table, int entry, int width,

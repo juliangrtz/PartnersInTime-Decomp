@@ -678,3 +678,4 @@ src/field/field_party_transitions.cpp
 src/overlay009/shop_rows.cpp
 src/overlay009/shop_inventory_panel.cpp
 src/overlay009/shop_inventory_list.cpp
+src/overlay008/save_menu_scroll.cpp

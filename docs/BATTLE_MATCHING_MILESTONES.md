@@ -1304,3 +1304,29 @@ the scene within its input sequence; it is excluded from these passing totals.
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+
+### Save/load menu scrolling text and direction arrows (2026-09-09)
+
+Three adjacent callbacks add 644 matching C++ bytes, reaching
+544,564 / 1,563,700 bytes (34.83%). The checked 72-byte task layout covers the
+scroll controller and its text/arrow children. The controller waits briefly,
+scrolls automatically, responds to L/R, wraps at both ends and requests a new
+strip when its source changes. The child callbacks position the text and
+animate the two direction arrows. The strip constructor and text-generation
+helper remain assembly; their private C++ candidates are not credited.
+
+A normal cold boot using story save 86 and keypad input reaches the load menu
+and exercises all three callbacks. The 3,057-frame replay checks 35,616 complete
+task buffers and 34,503 complete renderer buffers, plus every corresponding
+submission's object and priority arguments. This includes 1,113 controller
+updates, 32,277 text submissions and 2,226 arrow submissions. It observes the
+initial delay, 751 automatic updates, 120 R-directed updates, 180 L-directed
+updates, and one wrap at each end. The paused and source-replacement paths were
+not observed and remain statically verified only. The captured screen was
+inspected; the existing summary, localization, model and scene checks pass.
+
+Private evidence is `build/runtime/eur_save_scroll/evidence_086.json`.
+No ROM, script or RAM substitution is used, the supplied battery save is
+unchanged and no callbacks remain pending. Native linking, all 74 tests,
+progress consistency and the public-content audit pass. The ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
