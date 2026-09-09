@@ -2575,3 +2575,42 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **604,540 / 1,563,700 bytes (38.66%)**; C/C++ plus assembly: **39.00%**.
+
+## Field-party recovery, hit reactions and airborne transfer (2026-09-09)
+
+Reconstructed **3,176 bytes** across seven routines: paired hit reactions,
+rebound, movement-mode-8 setup, recovery blink entry/exit, sinusoidal hovering
+and airborne-transfer setup. Six routines form one contiguous recovery module;
+the transfer starter extends the existing piggyback module. Checked state records
+now expose saved speed/movement, hover phase and the paired vertical-bound
+snapshot. Unknown recovery subfields retain neutral names.
+
+Two normal keypad replays from supplied save 83 covered the Bros-Ball collision,
+paired reaction, subsequent movement setup and recovery of both members. These
+**1,285 frames** checked seven returns, including saved behavior, the rebound's
+midpoint movement, prior-blink cancellation and both recovery completions.
+A separate **578-frame replay** substituted one decoded B1 reunion request,
+restored all command bytes and the script cursor, and checked original-command
+replay. Subsequent A/X and B/Y keypad sequences produced **four airborne starts**,
+two per member. The oracle verified corner arrays, swept bounds, helper arguments
+and **76 scanned navigation records**. All observed collision tests allowed the
+transfer; the blocked-transfer branch remains statically verified.
+
+A **121-frame controlled RAM fixture** exercised 80 hover updates on the live
+second member, covering all 64 sine phases and two wraps. At the native party
+dispatcher, it prepared state 92, phase 62, the member-update enable and the
+sibling recovery substate. All four prepared fields were restored after 80
+frames. This is an explicitly prepared hover test, not normal story coverage.
+Every run used original-byte guards, SP-matched returns and independent complete
+8,356-byte party, 1,440-byte member and 312-byte renderer comparisons.
+All **104 supplied saves** retained their hashes; no ROM code was patched.
+
+Private reports: `build/runtime/eur_party_recovery/evidence_normal83.json`,
+`evidence_recovery83.json`, `evidence_airborne83.json` and
+`evidence_hover_fixture83.json` (**1,984 frames, 91 checked returns**).
+Initial-state SHA-1: `3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`;
+save-83 SHA-1: `2cb577d3008975c390a2f00e2b2cd646e4005c1b`.
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**607,716 / 1,563,700 bytes (38.86%)**; C/C++ plus assembly: **39.20%**.

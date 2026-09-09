@@ -273,4 +273,7 @@ src/field/field_party_trail.cpp:
     .text start:0x02092088 end:0x020923dc
 
 src/field/field_party_piggyback.cpp:
-    .text start:0x0208cd08 end:0x0208d17c
+    .text start:0x0208cd08 end:0x0208d4a4
+
+src/field/field_party_recovery.cpp:
+    .text start:0x0208b488 end:0x0208bdc8

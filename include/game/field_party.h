@@ -71,9 +71,17 @@ typedef struct FieldPartyStateRecord {
     union {
         u32 unknown_00[8];
         struct {
-            u32 unknown_00;
-            struct { u32 unknown_00_18 : 19, update_bounds : 1, unknown_20_31 : 12; } flags;
-            u8 unknown_08[16];
+            fx32 body_vertical_extent, navigation_vertical_extent;
+            u8 unknown_08[24];
+        } bounds_snapshot;
+        struct {
+            union { u32 unknown_00; fx32 saved_movement_speed; };
+            struct {
+                u32 unknown_00 : 1, unknown_01_14 : 14, saved_movement : 4, update_bounds : 1;
+                u32 unknown_20_21 : 2, unknown_22_31 : 10;
+            } flags;
+            u8 unknown_08[8];
+            u8 bob_phase, unknown_11[7];
             const void *resource_18, *resource_1c;
         } resources;
         struct {
@@ -260,6 +268,14 @@ int FieldPartyEntity_TestType3Volumes02(FieldPartyEntity *member);
 void FieldParty_RestorePairedMember(FieldPartyController *party,int member);
 void FieldParty_BeginPiggybackMount(FieldPartyController *party,int member);
 void FieldParty_FinishAirborneTransfer(FieldPartyController *party,int member);
+
+void FieldParty_FinishRecoveryBlink(FieldPartyController *party, int member);
+void FieldParty_BeginRecoveryBlink(FieldPartyController *party, int member);
+void FieldParty_UpdateHover(FieldPartyController *party, int member);
+void FieldParty_BeginState8(FieldPartyController *party);
+void FieldParty_BeginPairedStates82Or83(FieldPartyController *party, int member_mask, int airborne);
+void FieldParty_BeginState81(FieldPartyController *party, int airborne);
+void FieldParty_BeginAirborneTransfer(FieldPartyController *party, int member);
 
 #ifdef __cplusplus
 }

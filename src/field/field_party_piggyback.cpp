@@ -5,6 +5,77 @@ extern "C" {
 }
 #include "field_party_internal.h"
 
+extern "C" {
+void func_ov000_020b86ec(FieldPartyEntity *);
+int func_ov000_020aa5b0(FieldPartyEntity *, fx32 *, fx32 *);
+}
+
+#define MIN(a, b) ((a) <= (b) ? (a) : (b))
+#define MAX(a, b) ((a) >= (b) ? (a) : (b))
+
+extern "C" void FieldParty_BeginAirborneTransfer(FieldPartyController *party, int member)
+{
+    FieldPartyEntity *current = party->members[member];
+    FieldPartyEntity *paired = party->paired->members[member];
+    fx32 offset_x, offset_y, corner_x[4], corner_y[4];
+    party->flags.previous_field_screen = party->flags.field_screen;
+    paired->state_record->bounds_snapshot.body_vertical_extent = paired->entity.body_vertical_extent;
+    paired->state_record->bounds_snapshot.navigation_vertical_extent =
+        paired->entity.navigation_vertical_extent;
+    func_ov000_02092f30(party, paired, member + 45, 256, 0);
+    func_ov000_02092f30(party, current, member + 16, 256, 0);
+    FieldGeometry_GetDirectionVector(paired->entity.base_state_flag_bits.facing_direction ^ 4, 16384,
+                                     &offset_x, &offset_y);
+    FieldEntity3D_SetPosition(&current->entity, paired->entity.position_x + offset_x,
+                              paired->entity.position_y + offset_y, paired->entity.position_z + 95990);
+    FieldEntity_SetFacingDirection(&current->entity, 0, paired->entity.base_state_flag_bits.facing_direction,
+                                   1);
+    func_ov000_020b86ec(paired);
+    FieldPartyEntity_CopyPartnerPlanarBounds(current);
+    FieldNavigationSurface *surface = current->entity.navigation_surfaces;
+    if (surface) {
+        fx32 limit = current->entity.navigation_min_x +
+                     MIN(current->entity.position_x, current->entity.previous_position_x) - 524288 -
+                     current->entity.locomotion.starting_speed;
+        while (!surface->bits.end && surface->sort_x < limit)
+            ++surface;
+    }
+    current->entity.navigation_cursor = surface;
+    current->entity.navigation_scan_limit =
+        current->entity.navigation_max_x +
+        MAX(current->entity.position_x, current->entity.previous_position_x) + 65536;
+    current->entity.swept_min_x = current->entity.navigation_min_x +
+                                  MIN(current->entity.position_x, current->entity.previous_position_x) -
+                                  current->entity.locomotion.starting_speed;
+    current->entity.swept_min_y = current->entity.navigation_min_y +
+                                  MIN(current->entity.position_y, current->entity.previous_position_y) -
+                                  current->entity.locomotion.starting_speed;
+    current->entity.swept_max_x = current->entity.locomotion.starting_speed +
+                                  (current->entity.navigation_max_x +
+                                   MAX(current->entity.position_x, current->entity.previous_position_x));
+    current->entity.swept_max_y = current->entity.locomotion.starting_speed +
+                                  (current->entity.navigation_max_y +
+                                   MAX(current->entity.position_y, current->entity.previous_position_y));
+    corner_x[0] = corner_x[1] = current->entity.position_x + current->entity.navigation_min_x;
+    corner_x[2] = corner_x[3] = current->entity.position_x + current->entity.navigation_max_x;
+    corner_y[0] = corner_y[3] = current->entity.position_y + current->entity.navigation_min_y;
+    corner_y[1] = corner_y[2] = current->entity.position_y + current->entity.navigation_max_y;
+    if (func_ov000_020aa5b0(current, corner_x, corner_y)) {
+        FieldParty_FinishAirborneTransfer(party, member);
+        return;
+    }
+    current->entity.base.visibility_bits.unknown_07 = 0;
+    current->entity.saved_presentation_flag_bits.unknown_31 = 0;
+    func_020093b4(current->entity.render_object, 1);
+    current->entity.runtime_flag_bits.sync_horizontal = 0;
+    current->entity.runtime_flag_bits.unknown_08 = 1;
+    FieldEntity3D_SetPosition(&current->entity, paired->entity.position_x, paired->entity.position_y,
+                              paired->entity.position_z + 81920);
+    FieldVertical_Start(&current->entity, 14070, 1281, 0);
+    current->entity.locomotion_state = 57;
+    GameAudio_PlayEffectDelayed(218, 0, -1);
+}
+
 extern "C" void FieldParty_FinishAirborneTransfer(FieldPartyController *party, int member)
 {
     FieldPartyEntity *current = party->members[member];
