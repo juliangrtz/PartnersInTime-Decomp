@@ -179,6 +179,8 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_LaunchToElevation(FieldPartyController *party, fx32 height);
+void FieldParty_BeginState89(FieldPartyController *party);
 void FieldParty_BeginBabyDrop(FieldPartyController *party);
 void FieldParty_LandBabyDrop(FieldPartyController *party,int member);
 void FieldParty_RestoreMode5(FieldPartyController *party,int preserve_state);

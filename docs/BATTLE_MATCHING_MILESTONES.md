@@ -2687,3 +2687,38 @@ Validation: all 74 tests, public-content audit, whitespace checks and
 zero-difference native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **612,224 / 1,563,700 bytes (39.15%)**; C/C++ plus assembly: **39.49%**.
+
+
+## Field-party elevation launch and state-89 entry (2026-09-09)
+
+Reconstructed **1,068 bytes** across two contiguous routines, extending the
+special-actions module through `0x0208B208`. The elevation launcher validates
+both members' movement/recovery states and support heights, handles room 458's
+relative-height restriction, stops prior blink/vertical movement when needed
+and starts both linear movements toward the requested elevation. State-89 entry
+saves behavior, changes resources and starts vertical movement when inactive.
+
+A **181-frame decoded-VM fixture** on supplied save 83 requested baby mode 8
+then C6 elevation 120. Both members launched in room 459; complete party/member/
+renderer comparisons verified the two stop calls and both thirteen-argument
+linear movement calls. Original decoded-command bytes and script cursors were
+restored and original-command replay checked. Recovery and room-458 rejection
+branches remain statically verified.
+
+A separate **424-frame controlled RAM fixture** reached state 89 through the
+native Bros-Ball contact dispatcher. The test temporarily cleared only bit 9 at
+`gSaveData + 0x48` (VM variable `0x2009`), selecting the dispatcher's pre-ability
+fallback during normal keypad contact, then restored that bit before saving
+the private checkpoint. Both behavior saves, both resource selections and both
+vertical starts passed independent checks at every helper boundary and return.
+This explicitly prepared ability state is not ordinary story coverage.
+
+Reports: `build/runtime/eur_party_elevation/evidence_launch83.json` and
+`evidence_state89_fixture83.json` (**605 frames, two checked returns**).
+Initial-state SHA-1: `3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`;
+save-83 SHA-1: `2cb577d3008975c390a2f00e2b2cd646e4005c1b`.
+No ROM code was patched; all **104 supplied saves** retained their hashes.
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**613,292 / 1,563,700 bytes (39.22%)**; C/C++ plus assembly: **39.56%**.

@@ -1,4 +1,71 @@
 #include "field_party_internal.h"
+#include <game/field_blink.h>
+
+#define RECORD(member) party->members[member]->state_record->resources
+static inline void SaveBehavior(FieldPartyController *party, int member)
+{
+    if (!party->members[member]->presentation.behavior_saved) {
+        party->members[member]->presentation.saved_behavior =
+            (u16)party->members[member]->entity.saved_presentation_flag_bits.behavior_mode;
+        party->members[member]->presentation.behavior_saved = 1;
+    }
+}
+extern "C" void FieldParty_BeginState89(FieldPartyController *party)
+{
+    int member = 0;
+    party->flags.previous_field_screen = party->flags.field_screen;
+    party->flags.unknown_14 = 0;
+    party->flags.unknown_06 = 0;
+    party->flags.unknown_10_13 = 0;
+    party->leader->entity.movement_speed = 0;
+    party->follower->entity.movement_speed = 0;
+    party->state.unknown_00 = 0;
+    party->state.unknown_01 = 0;
+    party->state_bits.unknown_01 = 0;
+    do {
+        SaveBehavior(party, member);
+        party->members[member]->entity.saved_presentation_flag_bits.behavior_mode = 1;
+        party->members[member]->entity.locomotion_state = 89;
+        party->members[member]->bits.movement_mode = 8;
+        func_ov000_02092f30(party, party->members[member], member + 51, 256, 0);
+        if (!party->members[member]->entity.field_state_flag_bits.vertical_motion_active)
+            FieldVertical_Start(&party->members[member]->entity, 15772, 1076, 0);
+    } while (++member < 2);
+}
+extern "C" void FieldParty_LaunchToElevation(FieldPartyController *party, fx32 height)
+{
+    if (party->leader->bits.movement_mode == 8 && party->leader->entity.locomotion_state != 88 &&
+        RECORD(0).flags.unknown_20_21 != 2 && party->follower->bits.movement_mode == 8 &&
+        party->follower->entity.locomotion_state != 88 && RECORD(1).flags.unknown_20_21 != 2 &&
+        (party->leader->entity.previous_support_entity_index == -1 ||
+         party->leader->entity.position_z < height) &&
+        (party->follower->entity.previous_support_entity_index == -1 ||
+         party->follower->entity.position_z < height)) {
+        if (party->areas[party->flags.field_screen]->room_id != 458 ||
+            party->leader->entity.position_z - party->leader->entity.support_clearance <=
+                party->follower->entity.position_z - party->follower->entity.support_clearance) {
+            party->flags.previous_field_screen = party->flags.field_screen;
+            for (int member = 0; member < 2; ++member) {
+                if (RECORD(member).flags.unknown_20_21 == 1) {
+                    RECORD(member).flags.unknown_20_21 = 0;
+                    RECORD(member).flags.unknown_01_14 = 0;
+                    FieldBlink_Stop(&party->members[member]->entity, 1);
+                }
+                party->members[member]->entity.field_state_flag_bits.track_ground = 0;
+                FieldVertical_Stop(&party->members[member]->entity);
+                FieldLinear3D_Start(&party->members[member]->entity, 1, 0, 0,
+                                    height - party->members[member]->entity.position_z, 1024, 204, 16384,
+                                    -614, 32, 32, 1, &party->members[member]->movement);
+                party->members[member]->entity.locomotion_state = 91;
+            }
+            party->state.unknown_00 = 0;
+            party->state.unknown_01 = 0;
+        }
+    }
+}
+
+#undef RECORD
+
 extern "C" {
 void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
 void func_ov000_020931b0(FieldPartyController *, FieldPartyEntity *, int);

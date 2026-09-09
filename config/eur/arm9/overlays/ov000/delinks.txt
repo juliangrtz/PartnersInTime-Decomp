@@ -237,7 +237,7 @@ src/field/field_roaming_path.cpp:
     .text start:0x020b1530 end:0x020b1a24
 
 src/field/field_party_special_actions.cpp:
-    .text start:0x0208a540 end:0x0208addc
+    .text start:0x0208a540 end:0x0208b208
 
 src/field/field_auxiliary_updates.cpp:
     .text start:0x020b6744 end:0x020b6e98

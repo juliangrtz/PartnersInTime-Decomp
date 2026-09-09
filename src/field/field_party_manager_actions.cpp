@@ -8,7 +8,6 @@ void func_ov000_0209336c(FieldPartyController *, int, int);
 void func_ov000_0208995c(FieldPartyController *);
 void func_ov000_02089da8(FieldPartyController *, int);
 void func_ov000_0208b208(FieldPartyController *, int);
-void func_ov000_0208addc(FieldPartyController *, fx32);
 void func_ov000_0208bef4(FieldPartyController *, int);
 void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
 void func_ov000_0209cb90(FieldPartyController *, int);
@@ -336,7 +335,7 @@ extern "C" void FieldPartyManager_LaunchBrosBall(FieldPartyManager *manager, int
 }
 extern "C" void FieldPartyManager_LaunchBabiesToElevation(FieldPartyManager *manager, fx32 height)
 {
-    func_ov000_0208addc(&BABY, height);
+    FieldParty_LaunchToElevation(&BABY, height);
 }
 extern "C" void FieldPartyManager_DropBabies(FieldPartyManager *manager)
 {
