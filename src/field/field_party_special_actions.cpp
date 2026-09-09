@@ -102,7 +102,7 @@ void FieldParty_RestoreMode5(FieldPartyController *party, int preserve_state)
     if (!preserve_state) {
         party->flags.unknown_14 = 0;
         party->state_bits.unknown_01 = 0;
-        func_ov000_0209ce18(party);
+        FieldParty_RefreshActions(party);
         party->leader->entity.locomotion_state = 0;
         party->follower->entity.locomotion_state = 0;
         party->leader->bits.movement_mode = 5;
@@ -145,8 +145,8 @@ void FieldParty_RestoreMode5(FieldPartyController *party, int preserve_state)
         party->areas[party->flags.field_screen]->special_resources[0];
     if (party->flags.movement_active)
         party->follower->entity.animation_speed = 128;
-    func_ov000_0209ce44(party, 0, 30);
-    func_ov000_0209ce44(party, 1, 4);
+    FieldParty_SetMemberAction(party, 0, 30);
+    FieldParty_SetMemberAction(party, 1, 4);
 }
 void FieldParty_BeginState76(FieldPartyController *party)
 {

@@ -70,9 +70,6 @@ extern void func_ov000_020b1a24(FieldEntity *entity, const void *path,
 extern int func_ov000_0207133c(u8 *field_context, FieldEntity *entity);
 extern void func_ov000_020bc8e4(FieldEntity *entity, int enabled);
 extern void func_ov000_020bc7d0(FieldEntity *entity, int enabled);
-extern void func_ov000_0209ce44(void *party_controller, int member,
-                                int character_id);
-extern void func_ov000_0209ce00(void *party_controller);
 extern void func_ov000_02071a38(u8 *field_context, int layout_mode,
                                 int instant);
 extern void func_ov000_020a0c30(void *party_manager, int party_side,
@@ -3510,14 +3507,14 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_SET_PARTY_MEMBER_CHARACTER_ID:
-        func_ov000_0209ce44(
-            FieldVm_GetPartyController(
+        FieldParty_SetMemberAction(
+            (FieldPartyController *)FieldVm_GetPartyController(
                 party_manager, arguments[0] / 2),
             arguments[0] & 1, arguments[1]);
         break;
 
     case FIELD_VM_RESET_PARTY_MEMBER_CHARACTERS:
-        func_ov000_0209ce00(FieldVm_GetPartyController(
+        FieldParty_ResetActionSelection((FieldPartyController *)FieldVm_GetPartyController(
             party_manager, arguments[0]));
         break;
 

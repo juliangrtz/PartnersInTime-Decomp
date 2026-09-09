@@ -12,8 +12,6 @@ extern "C" {
 void func_ov000_02093108(FieldPartyController *, FieldPartyEntity *, fx32, fx32 *, fx32 *);
 
 int VM_ReadVariable(int, int, int);
-void func_ov000_0209ce18(FieldPartyController *);
-void func_ov000_0209ce44(FieldPartyController *, int, int);
 void func_020093b4(FieldRenderObject *, int);
 int func_ov000_020ae5fc(FieldRuntimeEntity *, FieldRuntimeEntity *);
 void func_ov000_020b46d4(FieldRuntimeEntity *);

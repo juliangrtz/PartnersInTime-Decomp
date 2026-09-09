@@ -8,8 +8,6 @@ extern "C" {
 void func_ov000_0208b208(FieldPartyController *, int);
 void func_ov000_0208bef4(FieldPartyController *, int);
 void func_ov000_0209cb90(FieldPartyController *, int);
-void func_ov000_0209ce18(FieldPartyController *);
-void func_ov000_0209ce44(FieldPartyController *, int, int);
 void func_020093b4(FieldRenderObject *, int);
 void func_ov000_020a0c30(FieldPartyManager *, int, int, int, int);
 }
@@ -241,9 +239,9 @@ extern "C" void FieldPartyManager_CompleteReunion(FieldPartyManager *manager)
             BABY.members[member]->entity.saved_presentation_flag_bits.behavior_mode = 3;
     } while (++member < 2);
     ADULT.state_bits.unknown_03_04 = 0;
-    func_ov000_0209ce18(&ADULT);
-    func_ov000_0209ce44(&BABY, 0, 8);
-    func_ov000_0209ce44(&BABY, 1, 8);
+    FieldParty_RefreshActions(&ADULT);
+    FieldParty_SetMemberAction(&BABY, 0, 8);
+    FieldParty_SetMemberAction(&BABY, 1, 8);
     if (manager->areas[BABY.flags.field_screen]->unknown_23f0 == 71) {
         BABY.state_bits.movement_mode = 14;
         BABY.unknown_08c->unknown_060 = (u8)BABY.state_bits.movement_mode;

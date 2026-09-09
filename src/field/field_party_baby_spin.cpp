@@ -61,8 +61,8 @@ void FieldParty_HoldBabySpin(FieldPartyController *party)
     party->flags.unknown_04 = 1;
     party->state.unknown_00 = 1;
     party->state.unknown_01 = 1;
-    func_ov000_0209ce44(party, 0, 9);
-    func_ov000_0209ce44(party, 1, 9);
+    FieldParty_SetMemberAction(party, 0, 9);
+    FieldParty_SetMemberAction(party, 1, 9);
     party->leader->entity.locomotion_state = 62;
     party->follower->entity.locomotion_state = 62;
 }
@@ -126,7 +126,7 @@ void FieldParty_ResumeState62Or74(FieldPartyController *party, int preserve_stat
         party->leader->entity.movement_speed = 0;
         party->follower->entity.movement_speed = 0;
         party->state_bits.unknown_01 = 0;
-        func_ov000_0209ce18(party);
+        FieldParty_RefreshActions(party);
         party->state.unknown_00 = 1;
         party->state.unknown_01 = 1;
         for (member = 0; member < 2; member++) {
@@ -163,11 +163,11 @@ void FieldParty_ResumeState62Or74(FieldPartyController *party, int preserve_stat
     if (VM_ReadVariable(8196, 0, 0)) {
         /* The native range test uses a wrapping 16-bit offset from state 73. */
         if ((u16)(party->leader->entity.locomotion_state + (u16)-73) <= 1) {
-            func_ov000_0209ce44(party, 0, 30);
-            func_ov000_0209ce44(party, 1, 30);
+            FieldParty_SetMemberAction(party, 0, 30);
+            FieldParty_SetMemberAction(party, 1, 30);
         } else {
-            func_ov000_0209ce44(party, 0, 9);
-            func_ov000_0209ce44(party, 1, 9);
+            FieldParty_SetMemberAction(party, 0, 9);
+            FieldParty_SetMemberAction(party, 1, 9);
         }
     }
 }

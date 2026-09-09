@@ -152,7 +152,7 @@ extern "C" void FieldParty_RestorePairedMember(FieldPartyController *party, int 
     paired->entity.locomotion_state = 0;
     func_ov000_02092e24(party, current);
     func_ov000_02092e24(party, paired);
-    func_ov000_0209ce18(party->paired);
+    FieldParty_RefreshActions(party->paired);
     party->paired->state_bits.movement_mode = 15;
     party->paired->unknown_08c->unknown_060 = (u8)party->paired->state_bits.movement_mode;
     party->paired->unknown_090->unknown_060 = (u8)party->paired->state_bits.movement_mode;

@@ -8,7 +8,7 @@ void FieldParty_PrepareCollisionOverride(FieldPartyController *party, int preser
         party->flags.unknown_14 = 0;
         party->state_bits.unknown_01 = 0;
         party->state_bits.unknown_03_04 = VM_ReadVariable(8194, 0, 0) | 2;
-        func_ov000_0209ce18(party);
+        FieldParty_RefreshActions(party);
         *party->follower->unknown_568 &= ~1;
         party->leader->entity.locomotion_state = 0;
         party->follower->entity.locomotion_state = 0;
@@ -38,8 +38,8 @@ void FieldParty_PrepareCollisionOverride(FieldPartyController *party, int preser
     party->leader->entity.render_object->sort_key =
         (party->leader->entity.render_object->sort_key & 0xf000003f) | 0x3ffffc0;
     FieldParty_BindActionResource(party, party->leader, 30, 128, 0);
-    func_ov000_0209ce44(party, 0, 5);
-    func_ov000_0209ce44(party, 1, 5);
+    FieldParty_SetMemberAction(party, 0, 5);
+    FieldParty_SetMemberAction(party, 1, 5);
     party->follower->entity.base.property_00a |= 0x80;
     party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(party->follower->entity.render_object, 0);
@@ -119,8 +119,8 @@ void FieldParty_LinkPairedMember(FieldPartyController *party, int member)
     paired->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(paired->entity.render_object, 0);
     party->state_bits.unknown_03_04 = 0;
-    func_ov000_0209ce18(party);
-    func_ov000_0209ce44(party->paired, member, 8);
+    FieldParty_RefreshActions(party);
+    FieldParty_SetMemberAction(party->paired, member, 8);
     party->paired->state_bits.movement_mode = 14;
     party->paired->unknown_08c->unknown_060 = (u8)party->paired->state_bits.movement_mode;
     party->paired->unknown_090->unknown_060 = (u8)party->paired->state_bits.movement_mode;

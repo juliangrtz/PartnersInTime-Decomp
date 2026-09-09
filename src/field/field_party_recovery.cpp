@@ -71,7 +71,7 @@ extern "C" void FieldParty_BeginPairedStates82Or83(FieldPartyController *party, 
     party->members[0]->state_record->resources.flags.unknown_00 = 0;
     party->state_bits.unknown_01 = 0;
     party->state_bits.unknown_03_04 = 0;
-    func_ov000_0209ce18(party);
+    FieldParty_RefreshActions(party);
     party->state.unknown_00 = 0;
     party->state.unknown_01 = 0;
     party->flags.unknown_04 = 0;

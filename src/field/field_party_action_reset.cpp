@@ -13,7 +13,6 @@ extern "C" {
 void func_ov000_02092e24(FieldPartyController *, FieldPartyEntity *);
 void func_ov000_02093108(FieldPartyController *, FieldPartyEntity *, fx32, fx32 *, fx32 *);
 void func_020093b4(FieldRenderObject *, int);
-void func_ov000_0209ce18(FieldPartyController *);
 extern const u8 data_ov000_020c0694[];
 void func_ov000_020b90b4(FieldPartyEntity *, void *, FieldPartyEntity *, int, fx32);
 }
@@ -235,5 +234,5 @@ extern "C" void FieldParty_ResetActionState(FieldPartyController *party, int imm
         else
             FieldParty_UpdateFollowing(party);
     }
-    func_ov000_0209ce18(party);
+    FieldParty_RefreshActions(party);
 }

@@ -3574,3 +3574,47 @@ symbols resolve at their exact addresses, all 81 tests and progress/public-conte
 whitespace checks pass. ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++ is
 **643,464 / 1,563,700 bytes (41.15%)**; C/C++ plus ASM is **41.49%**.
+
+
+## 2026-09-09 - Field party action selection and input gates (+844 bytes)
+
+Five byte-exact C functions now cover resetting and refreshing action selection,
+setting a member action, toggling unlocked actions and dispatching field input.
+The four adjacent selection routines occupy `field_party_action_selection.c`
+(0x0209CE00..0x0209D024); `field_party_input.c` starts the next still-incomplete
+contiguous region at 0x0209D12C. Shared declarations and existing callers use
+descriptive names. The neighboring indicator configuration helper remains
+private because three instruction scheduling differences remain. No inline
+assembly is counted in this gain.
+
+The reconstruction preserves native selection tables, VM unlock checks, the
+piggyback action override and action 9's save-byte variant. Unknown state bits
+retain neutral names. Room state, room identity, transition and party-active
+checks gate input; changing actions masks member buttons from the pressed set.
+
+Runtime reports are under `build/runtime/eur_field_party_actions/`:
+- `evidence_actions83.json`: checkpoint 83, state SHA-1
+  `590c4bc2877e1f1781faf521ca2a8b87ea1f9258`, 396 ordinary-input frames. The
+  original save SHA-1 is `2cb577d3008975c390a2f00e2b2cd646e4005c1b`. There are
+  478 checked input returns, including 32 suppressed-input cases during room
+  transition. This area's state blocks action toggles.
+- `evidence_actions65.json`: checkpoint 65, state SHA-1
+  `ece238ed785fda646a77cde5e886aa7da3e009d7`, original save SHA-1
+  `0844b75810855bc3a738122b29382ed5a6c9f983`, 276 ordinary-input frames. R/L/R
+  changes both members' actions three times, including unlock variables 8194
+  and 8195. Action-table results 0, 3 and 4, button masking, refresh and reset
+  are observed. All five new functions execute; the final A input opens the
+  Thwomp Volcano save-book menu. No save command is confirmed.
+
+Across both runs, 1,410 SP-matched returns pass full code guards, exact helper
+arguments and independent checks of complete party/area/leader records where
+used. External helper effects are refreshed at return and are not claimed as
+independently reconstructed. Piggyback overrides, locked unlock variables and
+save-byte action variants remain static-only. OBJ VRAM and palettes are dumped
+and hashed. Neither run changes game RAM; all 104 original saves retain their
+hashes.
+
+Validation: zero native relink differences, canonical ROM SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`, all 81 tests, progress, public-content
+and whitespace checks pass. Matching C/C++ is **644,308 / 1,563,700 bytes
+(41.20%)**; C/C++ plus ASM is **41.54%**.

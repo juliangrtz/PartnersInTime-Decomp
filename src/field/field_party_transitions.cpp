@@ -57,7 +57,7 @@ void FieldParty_RestoreGroundMovementAndHideFollower(FieldPartyController *party
     party->leader->entity.unknown_3c8 |= 0x10;
     party->follower->entity.unknown_3c8 = 0;
     party->follower->entity.unknown_3c8 |= 0x10;
-    func_ov000_0209ce44(party, 0, 9);
+    FieldParty_SetMemberAction(party, 0, 9);
     party->follower->entity.base.visibility_bits.unknown_07 = 1;
     party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(party->follower->entity.render_object, 0);
@@ -126,7 +126,7 @@ void FieldParty_ResumeGroundMovement(FieldPartyController *party, int preserve_s
         party->flags.unknown_14 = 0;
         party->state_bits.unknown_01 = 0;
         party->state_bits.unknown_03_04 = VM_ReadVariable(8193, 0, 0) | 2;
-        func_ov000_0209ce18(party);
+        FieldParty_RefreshActions(party);
         party->follower->follower_flags->enabled = 0;
         party->leader->entity.locomotion_state = 0;
         party->follower->entity.locomotion_state = 0;
@@ -144,8 +144,8 @@ void FieldParty_ResumeGroundMovement(FieldPartyController *party, int preserve_s
         party->follower->entity.unknown_3c8 |= 0x10;
     }
     FieldParty_BindActionResource(party, party->leader, 18, 128, 0);
-    func_ov000_0209ce44(party, 0, 9);
-    func_ov000_0209ce44(party, 1, 1);
+    FieldParty_SetMemberAction(party, 0, 9);
+    FieldParty_SetMemberAction(party, 1, 1);
     party->follower->entity.base.visibility_bits.unknown_07 = 1;
     party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(party->follower->entity.render_object, 0);
@@ -185,7 +185,7 @@ void FieldParty_BeginSpinJump(FieldPartyController *party)
     party->leader->entity.locomotion_state = 10;
     party->leader->bits.movement_mode = 2;
     party->leader->presentation.unknown_15 = 0;
-    func_ov000_0209ce44(party, 1, 9);
+    FieldParty_SetMemberAction(party, 1, 9);
     func_ov000_02092770(party, party->leader, 2, 4, 1, 1);
     GameAudio_PlayEffectDelayed(215, 0, -1);
 }
@@ -255,7 +255,7 @@ void FieldParty_ResumeState11Or17(FieldPartyController *party, int preserve_stat
         party->flags.unknown_14 = 1;
         party->state_bits.unknown_01 = 0;
         party->state_bits.unknown_03_04 = VM_ReadVariable(8193, 0, 0) | 2;
-        func_ov000_0209ce18(party);
+        FieldParty_RefreshActions(party);
         party->follower->follower_flags->enabled = 0;
         if (party->unknown_055 == -1) {
             party->leader->state_record->timer = 60;
@@ -300,8 +300,8 @@ void FieldParty_ResumeState11Or17(FieldPartyController *party, int preserve_stat
         party->leader->presentation.behavior_saved = 1;
     }
     party->leader->entity.saved_presentation_flag_bits.behavior_mode = 1;
-    func_ov000_0209ce44(party, 0, party->leader->entity.locomotion_state == 17 ? 30 : 9);
-    func_ov000_0209ce44(party, 1, party->leader->entity.locomotion_state == 17 ? 30 : 9);
+    FieldParty_SetMemberAction(party, 0, party->leader->entity.locomotion_state == 17 ? 30 : 9);
+    FieldParty_SetMemberAction(party, 1, party->leader->entity.locomotion_state == 17 ? 30 : 9);
     party->follower->entity.base.visibility_bits.unknown_07 = 1;
     party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(party->follower->entity.render_object, 0);
@@ -331,8 +331,8 @@ void FieldParty_TryFollowEntityAtHeight(FieldPartyController *party, int index)
                                          &party->leader->movement);
             party->leader->entity.locomotion_state = 16;
             FieldParty_CopyAttachedRenderPriorities(party);
-            func_ov000_0209ce44(party, 0, 30);
-            func_ov000_0209ce44(party, 1, 30);
+            FieldParty_SetMemberAction(party, 0, 30);
+            FieldParty_SetMemberAction(party, 1, 30);
             GameAudio_PlayEffectDelayed(216, 0, -1);
         }
     }
@@ -512,7 +512,7 @@ void FieldParty_ResumeBrosBall(FieldPartyController *party, int preserve_state)
         party->state.unknown_01 = 1;
         party->state_bits.unknown_01 = 0;
         party->state_bits.unknown_03_04 = (VM_ReadVariable(8192, 0, 0) << 1) | 1;
-        func_ov000_0209ce18(party);
+        FieldParty_RefreshActions(party);
         party->leader->unknown_594.unknown_01_07 = 50;
         party->leader->presentation.unknown_14 = 1;
         party->leader->entity.locomotion_state = 20;
@@ -558,8 +558,8 @@ void FieldParty_ResumeBrosBall(FieldPartyController *party, int preserve_state)
     party->follower->entity.base.visibility_bits.unknown_07 = 1;
     party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(party->follower->entity.render_object, 0);
-    func_ov000_0209ce44(party, 0, 9);
-    func_ov000_0209ce44(party, 1, 9);
+    FieldParty_SetMemberAction(party, 0, 9);
+    FieldParty_SetMemberAction(party, 1, 9);
     if (party->leader->entity.locomotion_state == 21) {
         FieldPartyTrail_StartEmitter(party, party->leader, 61, 0, 0, 5, 9);
         GameAudio_PlayEffectDelayed(312, 0, -1);
@@ -774,7 +774,7 @@ void FieldParty_RestartAuxiliary(FieldPartyController *party)
     party->follower->entity.locomotion_state = 0;
     FieldParty_BindActionResource(party, party->leader, 27, 128, 0);
     FieldEntity_SetLocomotionParameters(&party->leader->entity, 4096, 0, 4096, -4096, 0, 4096);
-    func_ov000_0209ce44(party, 0, 9);
+    FieldParty_SetMemberAction(party, 0, 9);
     party->follower->entity.base.property_00a |= 0x80;
     party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(party->follower->entity.render_object, 0);
@@ -888,7 +888,7 @@ void FieldParty_InitializeAuxiliary(FieldPartyController *party, int preserve_st
         party->flags.unknown_14 = 0;
         party->state_bits.unknown_01 = 0;
         party->state_bits.unknown_03_04 = VM_ReadVariable(8194, 0, 0) | 2;
-        func_ov000_0209ce18(party);
+        FieldParty_RefreshActions(party);
         *party->follower->unknown_568 &= ~1;
         party->leader->entity.locomotion_state = 0;
         party->follower->entity.locomotion_state = 0;
@@ -906,7 +906,7 @@ void FieldParty_InitializeAuxiliary(FieldPartyController *party, int preserve_st
         party->follower->entity.unknown_3c8 |= 16;
     }
     FieldParty_BindActionResource(party, party->leader, 27, 128, 0);
-    func_ov000_0209ce44(party, 0, 9);
+    FieldParty_SetMemberAction(party, 0, 9);
     party->follower->entity.base.property_00a |= 0x80;
     party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(party->follower->entity.render_object, 0);
@@ -1006,8 +1006,8 @@ void FieldParty_RestartCollisionOverride(FieldPartyController *party)
     FieldParty_BindActionResource(party, party->leader, 30, 128, 0);
     party->leader->entity.render_object->state_flag_bits.animation_suppressed = 1;
     FieldEntity_SetLocomotionParameters(&party->leader->entity, 4096, 0, 4096, -4096, 0, 4096);
-    func_ov000_0209ce44(party, 0, 5);
-    func_ov000_0209ce44(party, 1, 5);
+    FieldParty_SetMemberAction(party, 0, 5);
+    FieldParty_SetMemberAction(party, 1, 5);
     FieldPartyTrail_StartEmitter(party, party->leader, 62, 0, 0, 5, 10);
 }
 

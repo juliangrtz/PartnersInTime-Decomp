@@ -746,3 +746,5 @@ src/field/field_room_interaction.cpp
 src/field/field_room_transition.cpp
 src/overlay025/enemy_linked_effects.cpp
 src/overlay025/enemy_projectile_sequence.cpp
+src/field/field_party_action_selection.c
+src/field/field_party_input.c
