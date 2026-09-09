@@ -1,9 +1,9 @@
+#include <game/field_resources.h>
 #include "field_party_internal.h"
 #include <game/field_blink.h>
 #include <game/field_auxiliary.h>
 #include <game/field_geometry.h>
 extern "C" {
-void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
 extern const fx32 data_ov000_020c07f8[][2], data_ov000_020c07fc[][2];
 }
 
@@ -73,7 +73,6 @@ extern "C" void FieldParty_LaunchToElevation(FieldPartyController *party, fx32 h
 #undef RECORD
 
 extern "C" {
-void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
 void func_ov000_020931b0(FieldPartyController *, FieldPartyEntity *, int);
 
 void FieldParty_BeginBabyDrop(FieldPartyController *party)
@@ -139,7 +138,8 @@ void FieldParty_RestoreMode5(FieldPartyController *party, int preserve_state)
         leader->saved_animation_speed = leader->entity.animation_speed;
         party->leader->presentation.unknown_00 = 1;
     }
-    func_ov000_020a6d68(&party->leader->entity.base, resource, 0, 0, -1, 1, 128);
+    FieldEntity_RebindRendererResources(&party->leader->entity,
+        (const FieldPrimaryResource *)resource, 0, 0, -1, 1, 128);
     party->leader->presentation.unknown_05 = 1;
     party->leader->presentation.resource_index =
         party->areas[party->flags.field_screen]->special_resources[0];
@@ -196,8 +196,9 @@ void FieldParty_BeginState76(FieldPartyController *party)
     auxiliary->auxiliary_motion.unknown_540 = 0;
     auxiliary->auxiliary_motion.unknown_544 = 0;
     auxiliary->entity.animation_id = party->leader->entity.base_state_flag_bits.facing_direction;
-    func_ov000_020a7010(auxiliary, party->resources + 624, party->leader->entity.unknown_1e8,
-                        party->leader->entity.unknown_1ec, 256);
+    FieldEntity_ConfigureRendererResources(&auxiliary->entity,
+        (const FieldPrimaryResource *)(party->resources + 624), party->leader->entity.secondary_resource,
+                        party->leader->entity.palette_resource, 256);
     auxiliary->entity.render_object->state_flag_bits.behavior_state = 1;
     func_020093b4(auxiliary->entity.render_object, 1);
     auxiliary->entity.render_object->sort_key = party->follower->entity.render_object->sort_key;
@@ -223,7 +224,8 @@ void FieldParty_BeginState78(FieldPartyController *party)
     area = party->areas[party->flags.field_screen];
     index = area->special_resources[1];
     resource = index != -1 ? &area->primary[0][index] : 0;
-    func_ov000_020a6d68(&party->leader->entity.base, resource, 0, 0, -1, 1, 256);
+    FieldEntity_RebindRendererResources(&party->leader->entity,
+        (const FieldPrimaryResource *)resource, 0, 0, -1, 1, 256);
     party->leader->presentation.unknown_05 = 1;
     party->leader->presentation.resource_index =
         party->areas[party->flags.field_screen]->special_resources[1];
@@ -303,8 +305,9 @@ extern "C" void FieldParty_LaunchAuxiliary(FieldPartyController *party)
     aux->owner_offset_y = 0;
     aux->owner_offset_z = 0;
     aux->entity.animation_id = LEADER->entity.base_state_flag_bits.facing_direction;
-    func_ov000_020a7010((FieldPartyEntity *)aux, resource, LEADER->entity.unknown_1e8,
-                        LEADER->entity.unknown_1ec, 256);
+    FieldEntity_ConfigureRendererResources(&aux->entity,
+        (const FieldPrimaryResource *)resource, LEADER->entity.secondary_resource,
+                        LEADER->entity.palette_resource, 256);
     aux->entity.render_object->state_flag_bits.behavior_state = 0;
     func_020093b4(aux->entity.render_object, 1);
     FieldEntity_SetFacingDirection(&aux->entity, 0, LEADER->entity.base_state_flag_bits.facing_direction, 1);
@@ -322,7 +325,8 @@ extern "C" void FieldParty_FinishAuxiliaryLaunch(FieldPartyController *party)
         FieldResourceContext *area = PREVIOUS_AREA;
         int index = area->special_resources[0];
         const FieldPrimaryResource *resource = index != -1 ? &area->primary[0][index] : 0;
-        func_ov000_020a6d68(&LEADER->entity.base, resource, 0, 0, -1, 1, 128);
+        FieldEntity_RebindRendererResources(&LEADER->entity,
+            (const FieldPrimaryResource *)resource, 0, 0, -1, 1, 128);
         LEADER->presentation.unknown_05 = 1;
         LEADER->presentation.resource_index = PREVIOUS_AREA->special_resources[0];
         RestoreBehavior(party, 0);
@@ -395,7 +399,8 @@ extern "C" void FieldParty_BeginAuxiliaryPlacement(FieldPartyController *party)
     FieldResourceContext *area = CURRENT_AREA;
     int resource_index = area->special_resources[3];
     const FieldPrimaryResource *resource = resource_index == -1 ? 0 : &area->primary[0][resource_index];
-    func_ov000_020a6d68(&LEADER->entity.base, resource, 0, 0, -1, 1, 256);
+    FieldEntity_RebindRendererResources(&LEADER->entity,
+        (const FieldPrimaryResource *)resource, 0, 0, -1, 1, 256);
     LEADER->presentation.unknown_05 = 1;
     LEADER->presentation.resource_index = CURRENT_AREA->special_resources[3];
     LEADER->entity.render_object->state_flag_bits.behavior_state = 1;
@@ -437,8 +442,9 @@ extern "C" void FieldParty_BeginAuxiliaryPlacement(FieldPartyController *party)
     aux->owner_offset_y = data_ov000_020c07fc[LEADER->entity.base_state_flag_bits.facing_direction][0];
     aux->owner_offset_z = 0;
     aux->entity.animation_id = LEADER->entity.base_state_flag_bits.facing_direction;
-    func_ov000_020a7010((FieldPartyEntity *)aux, resource, LEADER->entity.unknown_1e8,
-                        LEADER->entity.unknown_1ec, 256);
+    FieldEntity_ConfigureRendererResources(&aux->entity,
+        (const FieldPrimaryResource *)resource, LEADER->entity.secondary_resource,
+                        LEADER->entity.palette_resource, 256);
     aux->entity.render_object->state_flag_bits.behavior_state = 1;
     func_020093b4(aux->entity.render_object, 1);
     LEADER->state_record->auxiliary_launch.auxiliary_index = index;

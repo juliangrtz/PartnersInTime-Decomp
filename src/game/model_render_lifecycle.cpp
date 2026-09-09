@@ -39,7 +39,7 @@ BattleModel *BattleRenderModel_Delete(BattleModel *model)
 
 void BattleRenderModel_InitDescriptor(ModelRenderDescriptor *descriptor, int mode)
 {
-    BattleModel_InitDescriptor(descriptor);
+    BattleModel_InitDescriptor(descriptor, mode);
     /* The original retains identical initialization paths for both modes. */
     if (!mode) {
         descriptor->flags &= ~0x380000;

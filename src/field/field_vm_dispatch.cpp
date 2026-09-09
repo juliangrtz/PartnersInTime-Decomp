@@ -1,3 +1,4 @@
+#include <game/field_resources.h>
 #include <game/field_roaming.h>
 #include <game/field_party.h>
 #include <game/field_party_manager.h>
@@ -35,11 +36,6 @@ extern void func_ov000_020a4214(FieldEntity *entity, int angle_mode,
                                 int signed_multiplier, int stop_at_target,
                                 int reserved);
 extern void func_ov000_020ae520(FieldEntity *entity);
-extern void func_ov000_020a6d68(FieldEntity *entity,
-                                const void *resource_record,
-                                int reserved_2, int reserved_3,
-                                int animation_id, int restart,
-                                int reserved_6);
 extern void func_ov000_020b2e9c(
     FieldEntity *entity, int relative_center, fx32 center_x, fx32 center_y,
     fx32 center_z, int relative_angle, int angle, int initial_speed,
@@ -1715,8 +1711,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                         1;
                 }
                 runtime_entity->resource_index = (u8)arguments[1];
-                func_ov000_020a6d68(
-                    &runtime_entity->base, resource_record, 0, 0,
+                FieldEntity_RebindRendererResources(
+                    runtime_entity, (const FieldPrimaryResource *)resource_record, 0, 0,
                     arguments[2] == -1 ? 0 : arguments[2], 1, 0);
             } else if (arguments[2] != -1) {
                 FieldEntity_SetResourceAnimation(
@@ -1793,8 +1789,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 } else {
                     animation_id = -1;
                 }
-                func_ov000_020a6d68(
-                    &runtime_entity->base, resource_record, 0, 0,
+                FieldEntity_RebindRendererResources(
+                    runtime_entity, (const FieldPrimaryResource *)resource_record, 0, 0,
                     animation_id, 1, 0);
             } else if (runtime_entity->saved_presentation_flag_bits.
                            has_saved_resource_animation != 0) {

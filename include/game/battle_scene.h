@@ -622,7 +622,8 @@ BattleModel *BattleModelController_Init(BattleModel *model);
 int BattleModel_GetTextureConversionSize(int boundary, int alternate, const GameGraphicsResource *resource);
 int BattleModel_GetScreenTextureConversionSize(int screen, int alternate, const GameGraphicsResource *resource);
 BattleModel *BattleModel_InitResourceState(BattleModel *model);
-void BattleModel_InitDescriptor(void *descriptor);
+/* The original callers pass a mode although this base initializer ignores it. */
+void BattleModel_InitDescriptor(void *descriptor, int unused_mode);
 u16 BattleModel_ReadSortKeyLow(const u16 *key, int unused);
 u16 BattleModel_ReadSortKeyHigh(const u16 *key, int unused);
 u16 BattleModel_ReadSortKeyOverride(const u16 *unused, int index);

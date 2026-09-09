@@ -107,7 +107,7 @@ u16 BattleModel_ReadSortKeyLow(const u16 *key, int unused)
     return key[2];
 }
 
-void BattleModel_InitDescriptor(void *descriptor)
+void BattleModel_InitDescriptor(void *descriptor, int unused_mode)
 {
     if ((const void *)data_020509c4 < descriptor) func_0202cd2c(data_020509c4, descriptor, 88);
     else func_0202cc58(data_020509c4, descriptor, 88);

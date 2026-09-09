@@ -1,5 +1,5 @@
+#include <game/field_resources.h>
 #include <game/field_party.h>
-extern "C" void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
 #define MEMBER party->members[member]
 #define ENTITY MEMBER->entity
 
@@ -36,7 +36,8 @@ extern "C" void FieldParty_BindActionResource(FieldPartyController *party, Field
         member->saved_animation_speed = member->entity.animation_speed;
         member->presentation.unknown_00 = 1;
     }
-    func_ov000_020a6d68(&member->entity.base, (FieldPrimaryResource *)party->resources + index, 0, 0, -1, 1,
+    FieldEntity_RebindRendererResources(&member->entity,
+        (const FieldPrimaryResource *)party->resources + index, 0, 0, -1, 1,
                         speed);
     if (restart)
         member->entity.render_object->set_animation((u8)member->entity.render_object->resource_animation, 0,

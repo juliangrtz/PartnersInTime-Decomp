@@ -1,3 +1,4 @@
+#include <game/field_resources.h>
 #include "field_party_internal.h"
 #include <game/field_timed_renderer.h>
 /* Spin jump, Bros. Ball, hammer swings and partner separation were observed in game.
@@ -669,9 +670,10 @@ void FieldParty_BeginHammerSwing(FieldPartyController *party, int member)
     auxiliary->auxiliary_motion.unknown_544 = 0;
     auxiliary->entity.animation_id = party->members[member]->entity.base_state_flag_bits.facing_direction;
     auxiliary->entity.saved_animation_frame = 0;
-    func_ov000_020a7010(auxiliary, party->resources + 24 * (member + 25),
-                        party->members[member]->entity.unknown_1e8,
-                        party->members[member]->entity.unknown_1ec, 256);
+    FieldEntity_ConfigureRendererResources(&auxiliary->entity,
+        (const FieldPrimaryResource *)(party->resources + 24 * (member + 25)),
+                        party->members[member]->entity.secondary_resource,
+                        party->members[member]->entity.palette_resource, 256);
     FieldTimedRenderer_SetLoopCount((FieldAnimationRenderer *)auxiliary->entity.render_object, 1);
     func_020093b4(auxiliary->entity.render_object, 1);
     auxiliary->entity.render_object->sort_key = party->members[member]->entity.render_object->sort_key;
@@ -804,8 +806,9 @@ void FieldParty_RestartAuxiliary(FieldPartyController *party)
     auxiliary->auxiliary_motion.unknown_540 = 0;
     auxiliary->auxiliary_motion.unknown_544 = 0;
     auxiliary->entity.animation_id = party->leader->entity.base_state_flag_bits.facing_direction;
-    func_ov000_020a7010(auxiliary, party->resources + 672, party->leader->entity.unknown_1e8,
-                        party->leader->entity.unknown_1ec, 128);
+    FieldEntity_ConfigureRendererResources(&auxiliary->entity,
+        (const FieldPrimaryResource *)(party->resources + 672), party->leader->entity.secondary_resource,
+                        party->leader->entity.palette_resource, 128);
     auxiliary->entity.render_object->state_flag_bits.behavior_state = 0;
     auxiliary->entity.render_object->state_flag_bits.animation_suppressed = 0;
     func_020093b4(auxiliary->entity.render_object, 1);
@@ -935,8 +938,9 @@ void FieldParty_InitializeAuxiliary(FieldPartyController *party, int preserve_st
     auxiliary->auxiliary_motion.unknown_540 = 0;
     auxiliary->auxiliary_motion.unknown_544 = 0;
     auxiliary->entity.animation_id = party->leader->entity.base_state_flag_bits.facing_direction;
-    func_ov000_020a7010(auxiliary, party->resources + 672, party->leader->entity.unknown_1e8,
-                        party->leader->entity.unknown_1ec, 128);
+    FieldEntity_ConfigureRendererResources(&auxiliary->entity,
+        (const FieldPrimaryResource *)(party->resources + 672), party->leader->entity.secondary_resource,
+                        party->leader->entity.palette_resource, 128);
     auxiliary->entity.render_object->state_flag_bits.behavior_state = 0;
     auxiliary->entity.render_object->state_flag_bits.animation_suppressed = 0;
     func_020093b4(auxiliary->entity.render_object, 1);

@@ -1,3 +1,4 @@
+#include <game/field_resources.h>
 #include <game/field_party_manager.h>
 #include <game/field_entity_lifecycle.h>
 #include <game/field_entity_motion.h>
@@ -6,7 +7,6 @@
 extern "C" {
 void func_ov000_0208b208(FieldPartyController *, int);
 void func_ov000_0208bef4(FieldPartyController *, int);
-void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
 void func_ov000_0209cb90(FieldPartyController *, int);
 void func_ov000_0209ce18(FieldPartyController *);
 void func_ov000_0209ce44(FieldPartyController *, int, int);
@@ -211,8 +211,8 @@ extern "C" void FieldPartyManager_CompleteReunion(FieldPartyManager *manager)
         BABY.follower->entity.movement_speed = 0;
         ADULT.members[member]->presentation.unknown_05 = 0;
         ADULT.members[member]->presentation.resource_index = (s16)(!member ? 39 : 40);
-        func_ov000_020a6d68(&ADULT.members[member]->entity.base,
-                            ADULT.resources + 24 * ADULT.members[member]->presentation.resource_index, 0, 0,
+        FieldEntity_RebindRendererResources(&ADULT.members[member]->entity,
+                            (const FieldPrimaryResource *)(ADULT.resources + 24 * ADULT.members[member]->presentation.resource_index), 0, 0,
                             -1, 1, 256);
         ADULT.members[member]->partner = BABY.members[member];
         BABY.members[member]->partner = ADULT.members[member];

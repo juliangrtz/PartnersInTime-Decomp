@@ -306,7 +306,7 @@ typedef struct FieldEntity {
     virtual void resume_script();
     virtual int get_property(int property_id);
     virtual void update_bounds();
-    virtual void unknown_20();
+    virtual void unknown_20(const void *resource);
     virtual void reset_motion_parameters();
     virtual void unknown_28();
     virtual void release_renderers();
@@ -463,16 +463,16 @@ struct FieldRenderObject {
     virtual void unknown_34();
     virtual void unknown_38();
     virtual void unknown_3c();
-    virtual void unknown_40();
+    virtual int unknown_40();
     virtual void unknown_44();
     virtual void unknown_48(int);
     virtual int check_linear_completion(FieldLinearController *controller);
     virtual void unknown_50();
     virtual void update_orbit_movement(FieldOrbitController *controller);
     virtual int advance_orbit_frame(FieldOrbitController *controller);
-    virtual void unknown_5c();
+    virtual void unknown_5c(const void *descriptor, void *controller, s16 animation);
     virtual void unknown_60();
-    virtual void unknown_64();
+    virtual void unknown_64(const void *descriptor, void *controller, s16 animation);
     virtual void set_animation(u8 resource_animation, s16 animation_id, int restart);
     virtual void unknown_6c();
     virtual void unknown_70();
@@ -642,9 +642,10 @@ struct FieldRuntimeEntity {
     };
     u8 unknown_1dc[4];
     FieldRenderObject *render_object;
-    u8 unknown_1e4[4];
-    void *unknown_1e8, *unknown_1ec;
-    u8 unknown_1f0[4];
+    union { u8 unknown_1e4[4]; const struct FieldPrimaryResource *primary_resource; };
+    union { void *unknown_1e8; const struct FieldSecondaryResource *secondary_resource; };
+    union { void *unknown_1ec; struct FieldPaletteResource *palette_resource; };
+    union { u8 unknown_1f0[4]; const struct FieldPrimaryResourceRecord *primary_resource_record; };
     FieldLinearController linear_controller;
     FieldOrbitController orbit_controller;
     union {

@@ -6,7 +6,13 @@
 
 typedef struct FieldPrimaryResourceRecord {
     u16 animation_entry, unknown_02, bounds_entry;
-    u8 unknown_06, flags;
+    u8 unknown_06;
+    union {
+        u8 flags;
+        struct {
+            u8 unknown_00 : 1, direction_mode : 2, unknown_03_07 : 5;
+        } flag_bits;
+    };
 } FieldPrimaryResourceRecord;
 
 typedef struct FieldSecondaryResourceRecord {
@@ -41,6 +47,43 @@ typedef struct FieldSecondaryResource {
     void *auxiliary;
     FieldSecondaryResourceRecord *record;
 } FieldSecondaryResource;
+
+/* Room palettes retain the native allocator result after the 20-byte palette. */
+typedef struct FieldPaletteResource {
+    GameSpritePalette palette;
+    u8 allocation_result;
+    u8 unknown_15[3];
+} FieldPaletteResource;
+
+typedef char FieldPaletteResource_SizeCheck[sizeof(FieldPaletteResource) == 24 ? 1 : -1];
+
+/* The 88-byte renderer descriptor used by field resource configuration.
+ * Its final 44 bytes initialize the renderer presentation record. */
+typedef struct FieldResourceDescriptor {
+    void *animation;
+    u32 primary_id, secondary_id;
+    void *graphics, *secondary_data, *conversion_buffer;
+    u32 graphics_size;
+    u16 secondary_extent;
+    struct {
+        u8 unknown_00 : 1, unknown_01 : 1, screen : 2, alternate : 1, unknown_05_07 : 3;
+    } resource_flags;
+    u8 unknown_1f;
+    u32 first_texture_tile, texture_tile_count;
+    FieldPaletteResource *palette;
+    u16 resource_animation, animation_id, unknown_30;
+    s16 animation_speed;
+    s16 animation_offset_x, animation_offset_y;
+    u8 unknown_38[0x14];
+    s16 scale_x, scale_y, rotation;
+    u16 unknown_52;
+    struct {
+        u32 unknown_00_04 : 5, unknown_05_07 : 3, animation_active : 1, unknown_09 : 1;
+        u32 unknown_10 : 1, unknown_11 : 1, behavior_state : 4;
+        u32 unknown_16_18 : 3, palette_allocation : 3, resource_set : 1, unknown_23 : 1, unknown_24_31 : 8;
+    } flags;
+} FieldResourceDescriptor;
+typedef char FieldResourceDescriptor_SizeCheck[sizeof(FieldResourceDescriptor) == 88 ? 1 : -1];
 
 /* Partial view of the field context used while loading room resources. */
 typedef struct FieldResourceContext {
@@ -89,12 +132,22 @@ typedef struct FieldResourceContext {
 
 typedef char FieldResourceContext_SizeCheck[sizeof(FieldResourceContext) == 11068 ? 1 : -1];
 
+typedef char FieldPrimaryResourceRecord_SizeCheck[sizeof(FieldPrimaryResourceRecord) == 8 ? 1 : -1];
+typedef char FieldSecondaryResourceRecord_SizeCheck[sizeof(FieldSecondaryResourceRecord) == 8 ? 1 : -1];
+
 typedef char FieldPrimaryResource_SizeCheck[sizeof(FieldPrimaryResource) == 24 ? 1 : -1];
 typedef char FieldSecondaryResource_SizeCheck[sizeof(FieldSecondaryResource) == 20 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldEntity_RebindRendererResources(FieldRuntimeEntity *entity, const FieldPrimaryResource *primary,
+                                         const FieldSecondaryResource *secondary,
+                                         FieldPaletteResource *palette, int animation, u8 update_bounds,
+                                         int speed);
+void FieldEntity_ConfigureRendererResources(FieldRuntimeEntity *entity, const FieldPrimaryResource *primary,
+                                            const FieldSecondaryResource *secondary,
+                                            FieldPaletteResource *palette, int speed);
 int FieldResources_UsesAlternateHeap(void *field_context, int set, int resource_index);
 FieldPrimaryResource *FieldResources_FindShared(void *field_context, u32 id);
 void FieldResources_LoadRoomScripts(void *field_context);

@@ -105,7 +105,7 @@ src/field/field_spatial_placement.cpp:
     .text       start:0x020b4220 end:0x020b4300
 
 src/field/field_bounds_resources.cpp:
-    .text       start:0x020a6c14 end:0x020a6d68
+    .text       start:0x020a6c14 end:0x020a7310
 
 src/field/field_spatial_bounds_resources.cpp:
     .text       start:0x020b5364 end:0x020b5420

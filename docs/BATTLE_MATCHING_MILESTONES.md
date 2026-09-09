@@ -2800,3 +2800,43 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **619,572 / 1,563,700 bytes (39.62%)**; C/C++ plus assembly: **39.96%**.
+
+
+## Field renderer resource configuration and rebinding (2026-09-09)
+
+Reconstructed **1,448 bytes** across two routines, extending the contiguous
+bounds/resource module through `0x020A7310`. They configure or replace graphics,
+secondary animation data and palettes, allocate conversion storage when needed,
+restore animation speed, normalize animation indices and refresh entity bounds.
+The common header now checks the 88-byte descriptor and the 24-byte room-palette
+record, including the allocator result after its 20-byte palette prefix.
+
+Native call analysis recovered the fourth renderer-controller argument omitted
+by the decompiler. The base descriptor initializer's ignored mode argument is
+now explicit in its shared declaration and callers. Existing reconstructed
+callers use checked resource types; the complete ROM remains byte-identical.
+
+Five read-only runs covered **8,556 frames and 110 target returns**: ordinary
+movement/action input from the save-83 field checkpoint, plus cold loads of
+supplied saves **1, 51, 83 and 103**. They observed both screens and resource
+sets, 55 conversion-buffer allocations, both direction modes (four/eight-way),
+retained facing, explicit/retained speed and two out-of-range animation resets.
+Configuration ran 94 times and rebinding 16 times. Rebinding with explicit
+secondary/palette replacements or with bounds refresh disabled remains
+statically verified; no decoded commands or RAM fixtures were used.
+
+Byte-guarded, SP-matched oracles checked complete 1,300-byte entities, 316-byte
+animation renderers, 88-byte descriptors and primary/secondary/palette records
+at native helper boundaries and returns. Descriptor defaults and every helper
+argument were checked, as were the renderer's resulting graphics, palette and
+controller pointers. Screenshots and live main/sub OBJ-VRAM and standard OBJ
+palette dumps accompany each report; these memory dumps preserve observations,
+not a separate pixel-equivalence claim. All **104 supplied save hashes** remain
+unchanged. Reports: `build/runtime/eur_field_resource_bind/evidence_keypad83.json`
+and `evidence_cold{1,51,83,103}.json`. Initial field-state SHA-1:
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**621,020 / 1,563,700 bytes (39.71%)**; C/C++ plus assembly: **40.05%**.

@@ -1,10 +1,10 @@
+#include <game/field_resources.h>
 #include <game/field_party.h>
 #include <game/field_auxiliary.h>
 #include <game/field_blink.h>
 
 extern "C" {
 void FieldEntity3D_UpdateScreenPosition(FieldRuntimeEntity *, s16, s16);
-void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
 void GameAudio_PlayEffectDelayed(int, int, int);
 
 void FieldPartyEntity_UpdateScreenPositions(FieldPartyEntity *member, s16 camera_x, s16 camera_y)
@@ -43,12 +43,14 @@ void FieldPartyEntity_HideBlinkRenderers(FieldEntity *entity)
 
 void FieldPartyEntity_BindStateResource18(FieldPartyEntity *member)
 {
-    func_ov000_020a6d68(&member->entity.base, member->state_record->resources.resource_18, 0, 0, -1, 0, 0);
+    FieldEntity_RebindRendererResources(&member->entity,
+        (const FieldPrimaryResource *)member->state_record->resources.resource_18, 0, 0, -1, 0, 0);
 }
 
 void FieldPartyEntity_BindStateResource1C(FieldPartyEntity *member)
 {
-    func_ov000_020a6d68(&member->entity.base, member->state_record->resources.resource_1c, 0, 0, -1,
+    FieldEntity_RebindRendererResources(&member->entity,
+        (const FieldPrimaryResource *)member->state_record->resources.resource_1c, 0, 0, -1,
                         member->state_record->resources.flags.update_bounds != 0, 0);
     member->state_record->resources.flags.update_bounds = 0;
 }
