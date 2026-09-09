@@ -714,3 +714,4 @@ src/battle/battle_entry_transition.cpp
 src/battle/battle_lifecycle.cpp
 src/battle/battle_callback_model.cpp
 src/battle/battle_window_upload.cpp
+src/battle/battle_text_controls.cpp

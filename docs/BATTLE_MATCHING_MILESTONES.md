@@ -2126,3 +2126,33 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **588,628 / 1,563,700 bytes (37.64%)**; C/C++ plus assembly: **37.98%**.
+
+## Battle text initialization and resource requests (2026-09-09)
+
+Reconstructed four contiguous functions, **592 bytes**, for the tiled and clipped
+battle text variants. Checked 72-byte and 92-byte views describe their text
+prefix, dimensions, alignment modes, upload flags, palette and destination;
+the clipped variant also stores horizontal clipping limits. Initializers clear
+the entire variant and bind its GameText state to the battle font table.
+Resource requests preserve the variants' different signedness for alignment
+modes and their distinct flag updates.
+
+Two restored encounter replays using save 55 totaled **1,642 frames**. Both
+reached the tiled initializer, checking all 72 cleared bytes, subsequent field
+assignments, all fourteen GameText initialization arguments and final font/buffer
+bindings. The observed dimensions were 32 by 8 tiles. The clipped initializer
+and both resource-request wrappers retain static byte-matching evidence; these
+particular replays did not reach them. The adjacent tile-copy routine remains
+unlinked while its loop code generation differs.
+
+Private reports: `build/runtime/eur_battle_text_controls/evidence_entry55.json`
+and `evidence_dialogue55.json`. Both began from input-state SHA-1
+`e44df106d65e52df1ffc2b125538354f67cb1b22`. Encounter fixtures were `-32748`
+(room 306, offset `0x2926`) and `8232` (room 583, offset `0x0536`), respectively;
+both restored the decoded command and cursor at battle entry. All **104 supplied
+saves** were hashed before and after both runs and remained unchanged.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**589,220 / 1,563,700 bytes (37.68%)**; C/C++ plus assembly: **38.02%**.

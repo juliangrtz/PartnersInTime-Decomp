@@ -463,3 +463,6 @@ src/battle/battle_callback_model.cpp:
 
 src/battle/battle_window_upload.cpp:
     .text start:0x0206faa4 end:0x0206fc7c
+
+src/battle/battle_text_controls.cpp:
+    .text start:0x02067014 end:0x02067264
