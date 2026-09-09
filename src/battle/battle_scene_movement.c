@@ -135,3 +135,19 @@ void BattleSceneObject_MoveTo(BattleSceneObject *object, int channel_index,
         parameters[2] = target_z;
     }
 }
+
+void BattleSceneObject_UpdateVerticalMotion(
+    BattleSceneObject *object, BattleMotionChannel *channel) {
+    BattleVerticalMotionParameters *parameters =
+        (BattleVerticalMotionParameters *)channel->parameters;
+    int frame = channel->elapsed_q8 / 256;
+
+    if (frame == channel->duration) {
+        object->z = parameters->target_z;
+    } else {
+        object->z = parameters->start_z +
+                    frame * (parameters->linear_term +
+                             parameters->quadratic_term * frame) /
+                        4096;
+    }
+}

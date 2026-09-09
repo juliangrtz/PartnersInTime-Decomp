@@ -99,6 +99,16 @@ struct BattleSceneRenderOverride {
     int (*render)(BattleSceneObject *object, int pass);
 };
 
+typedef struct BattleVerticalMotionParameters {
+    s32 quadratic_term;
+    s32 linear_term;
+    s16 start_z;
+    s16 target_z;
+} BattleVerticalMotionParameters;
+
+typedef char BattleVerticalMotionParameters_SizeCheck[
+    sizeof(BattleVerticalMotionParameters) == 0x0C ? 1 : -1];
+
 typedef union BattleSceneFlags {
     u32 raw;
     s8 shadow_delay;

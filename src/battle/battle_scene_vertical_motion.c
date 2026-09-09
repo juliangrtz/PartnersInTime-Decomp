@@ -3,33 +3,7 @@
 
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
 
-typedef struct BattleVerticalMotionParameters {
-    s32 quadratic_term;
-    s32 linear_term;
-    s16 start_z;
-    s16 target_z;
-} BattleVerticalMotionParameters;
-
-typedef char BattleVerticalMotionParameters_SizeCheck[
-    sizeof(BattleVerticalMotionParameters) == 0x0C ? 1 : -1];
-
 /* Functions in this translation unit are ordered for MWCC's reverse emission. */
-void BattleSceneObject_UpdateVerticalMotion(
-    BattleSceneObject *object, BattleMotionChannel *channel) {
-    BattleVerticalMotionParameters *parameters =
-        (BattleVerticalMotionParameters *)channel->parameters;
-    int frame = channel->elapsed_q8 / 256;
-
-    if (frame == channel->duration) {
-        object->z = parameters->target_z;
-    } else {
-        object->z = parameters->start_z +
-                    frame * (parameters->linear_term +
-                             parameters->quadratic_term * frame) /
-                        4096;
-    }
-}
-
 int BattleSceneObject_StartVerticalArc(
     BattleSceneObject *object, int channel_index,
     int duration_or_velocity, int curve_parameter, int target_z) {

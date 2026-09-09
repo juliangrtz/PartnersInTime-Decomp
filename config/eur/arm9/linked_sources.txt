@@ -750,3 +750,4 @@ src/field/field_window_sprites.c
 src/field/field_message_window_slide.c
 src/field/field_message_window_clip.c
 src/overlay025/enemy_linked_damage.cpp
+src/battle/battle_enemy_removal.c

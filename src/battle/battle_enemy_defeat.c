@@ -46,34 +46,14 @@ enum BattleEnemyDefeatEquipmentEffect {
     EQUIPMENT_EFFECT_GUARANTEED_ITEM_DROP = 0x301E
 };
 
-typedef struct BattleEnemyDefeatPayload {
-    BattleSceneObject *object;
-    s32 timer;
-} BattleEnemyDefeatPayload;
-
-typedef struct BattleEnemyDefeatTask {
-    BattleAITask *next;
-    void (*callback)(BattleAITask *task);
-    BattleAITask **owner_slot;
-    BattleEnemyDefeatPayload data;
-} BattleEnemyDefeatTask;
-
 typedef struct BattleEnemyRuntimeResource {
     BattleEnemyStatRecord *stats;
 } BattleEnemyRuntimeResource;
-
-typedef char BattleEnemyDefeatPayload_SizeCheck
-    [sizeof(BattleEnemyDefeatPayload) == 8 ? 1 : -1];
-typedef char
-    BattleEnemyDefeatTask_SizeCheck[sizeof(BattleEnemyDefeatTask) == 0x14 ? 1
-                                                                          : -1];
 
 extern u32 Random_NextModulo(u32 modulus);
 
 #define VOLATILE_BATTLE_CONTEXT (*(u8 *volatile *)&gBattleContext)
 
-void BattleEnemy_UpdateDefeatRemoval(BattleAITask *base_task);
-void BattleEnemy_UpdateDelayedDefeatRemoval(BattleAITask *base_task);
 
 BattleAITask *BattleEnemy_StartDefeat(BattleSceneObject *object) {
     BattleEnemyDefeatTask *task;
@@ -317,55 +297,6 @@ reward_collection_complete:
 
     enemy->actor.flags &= ~BATTLE_ACTOR_FLAG_RESOURCE_BOUND;
     return (BattleAITask *)task;
-}
-
-void BattleEnemy_UpdateDefeatRemoval(BattleAITask *base_task) {
-    BattleEnemyDefeatTask *task = (BattleEnemyDefeatTask *)base_task;
-    BattleEnemyDefeatPayload *payload = &task->data;
-    BattleSceneObject *object = payload->object;
-
-    *(u32 *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET) |= 1 << 2;
-    if (payload->timer > 0) {
-        payload->timer--;
-    }
-    if (payload->timer > 0) {
-        return;
-    }
-
-    BattleActor_GetById(object->actor_id)->current_hp = 0;
-    BattleSceneObject_SetAnimation(object, -1, -1);
-    {
-        BattleModel *model = BattleSceneObject_GetActiveModel(
-            BattleSceneObject_GetById(object->actor_id));
-
-        if (model != 0) {
-            model->flags &= ~BATTLE_MODEL_FLAG_10;
-            model->flags &= ~BATTLE_MODEL_FLAG_11;
-            model->scale_x = BATTLE_EFFECT_SCALE;
-            model->scale_y = BATTLE_EFFECT_SCALE;
-            model->rotation_z = 0;
-            model->animation_state_bits.state = 31;
-        }
-    }
-    task->callback = 0;
-}
-
-void BattleEnemy_UpdateDelayedDefeatRemoval(BattleAITask *base_task) {
-    BattleEnemyDefeatTask *task = (BattleEnemyDefeatTask *)base_task;
-    BattleEnemyDefeatPayload *payload = &task->data;
-    BattleSceneObject *object = payload->object;
-
-    *(u32 *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET) |= 1 << 2;
-    if (payload->timer > 0) {
-        payload->timer--;
-    }
-    if (payload->timer > 0) {
-        return;
-    }
-
-    BattleActor_GetById(object->actor_id)->current_hp = 0;
-    object->primary_model = 0;
-    task->callback = 0;
 }
 
 #undef VOLATILE_BATTLE_CONTEXT

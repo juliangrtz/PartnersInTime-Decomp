@@ -3985,3 +3985,39 @@ all 104 original saves retain their hashes.
 Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
 Matching C/C++ is 653,800 / 1,563,700 bytes (41.81%); C/C++ plus ASM is 42.15%.
+
+
+## 2026-09-10 - Enemy removal and vertical interpolation (+420 bytes)
+
+Fresh compilation identifies three exact routines in previously unlinked C:
+BattleEnemy_UpdateDelayedDefeatRemoval (0x020A9478, 120 bytes),
+BattleEnemy_UpdateDefeatRemoval (0x020A94F0, 220 bytes) and
+BattleSceneObject_UpdateVerticalMotion (0x020A47EC, 80 bytes).
+The removal callbacks now share battle_enemy_removal.c; their checked payload
+and task layouts move to battle_enemy_defeat.h. The vertical callback extends
+the adjacent battle_scene_movement.c module and its checked 12-byte parameter
+layout moves to battle_scene.h. The unfinished surrounding functions remain
+unlinked and do not count toward matching C progress.
+
+Runtime: build/runtime/eur_battle_removal_motion/evidence_removal103.json.
+From phase103.dst, one two-byte fixture changes the live boss HP at 0x020D2066
+from 2,000 to 1. Ordinary B inputs perform the attack; native battle code
+reaches one normal removal and five completed delayed removals, with 151 total
+removal returns. The model checks HP writes, timers, context flags, model
+detachment/reset and task termination. All 69 vertical-motion returns match
+independent polynomial calculations, including three final-position writes.
+Complete records and exact helper arguments agree; external helper side effects
+are refreshed at return. The normal-removal null-model branch is static-only.
+
+The 1,170-frame run ends on a black screen. A further 911 frames with wait/A
+(evidence_after_removal103.json) do not establish a story transition. Therefore
+this is callback/attack coverage in the derived boss state, not verification of
+natural boss completion or the following story scene. The limitation is kept
+explicit; the ROM is still byte-identical to the original. BG VRAM/palettes are
+dumped and hashed and all 104 original saves retain their hashes.
+
+Validation: all 81 tests and zero native relink differences pass. A trailing
+blank line reported by the final whitespace check was removed; diff checking
+then passes. Canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701;
+public-content checks pass. Matching C/C++ is 654,220 / 1,563,700 bytes (41.84%);
+C/C++ plus ASM is 42.17%.
