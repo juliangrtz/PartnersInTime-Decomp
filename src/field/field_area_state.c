@@ -1,4 +1,5 @@
 #include <game/field_area.h>
+#include <game/field_palette_crossfade.h>
 extern void func_0202cc58(const void *, void *, u32);
 extern void func_0202cd2c(const void *, void *, u32);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source)
@@ -122,7 +123,6 @@ FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaCo
 }
 
 extern void func_020090b8(int);
-extern void func_ov000_020751d8(FieldAreaContext *);
 extern void func_ov000_02073c54(FieldAreaContext *);
 void FieldArea_UpdateGraphics(FieldAreaContext *field)
 {
@@ -132,7 +132,7 @@ void FieldArea_UpdateGraphics(FieldAreaContext *field)
         field->flags.unknown_06 = 0;
     }
     if (field->unknown_23f0 == 71) {
-        func_ov000_020751d8(field);
+        FieldPaletteCrossfade_Transfer(field);
         func_ov000_02073c54(field);
     }
 }

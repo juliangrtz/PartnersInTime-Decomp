@@ -6,6 +6,7 @@
 #include <game/field_navigation.h>
 
 typedef struct FieldVariablePlacement FieldVariablePlacement;
+struct FieldPaletteCrossfade;
 
 typedef struct FieldAreaContext {
     const void *vtable;
@@ -111,7 +112,8 @@ typedef struct FieldAreaContext {
     };
     union { u8 unknown_2b32[2]; struct { u8 entity_count, variable_count; }; };
     s8 special_resources[6];
-    u8 unknown_2b3a[34], unknown_2b5c[52], unknown_2b90[52], unknown_2bc4[12];
+    u8 unknown_2b3a[34], unknown_2b5c[52], unknown_2b90[52], unknown_2bc4[8];
+    struct FieldPaletteCrossfade *palette_crossfade;
 } FieldAreaContext;
 typedef char FieldAreaContext_SizeCheck[sizeof(FieldAreaContext) == 11216 ? 1 : -1];
 typedef struct FieldAreaSnapshot {

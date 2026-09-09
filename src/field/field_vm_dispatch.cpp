@@ -10,6 +10,7 @@ extern "C" {
 #include <game/field_presentation.h>
 #include <game/field_entity_lifecycle.h>
 #include <game/field_timer.h>
+#include <game/field_palette_crossfade.h>
 #include <game/field_hud.h>
 #include <game/field_timed_renderer.h>
 #include <game/field_script.h>
@@ -164,9 +165,7 @@ extern int func_ov000_02075790(u8 *field_context, int animation_slot);
 extern void func_ov000_02075730(u8 *field_context, int animation_slot,
                                 int paused);
 extern void func_ov000_020756ac(u8 *field_context, int animation_slot);
-extern void func_ov000_02075600(u8 *field_context, int palette_region,
-                                int source_bank, int target_bank,
-                                int duration);
+
 extern void func_ov000_02074810(u8 *field_context, int wipe_type,
                                 const void *parameters);
 extern void func_02036988(volatile u32 *blend_control,
@@ -3117,8 +3116,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_PALETTE_BANK_CROSSFADE:
-        func_ov000_02075600(
-            field_context, arguments[0],
+        FieldPaletteCrossfade_Start(
+            (FieldAreaContext *)field_context, arguments[0],
             arguments[1], arguments[2],
             arguments[3]);
         break;

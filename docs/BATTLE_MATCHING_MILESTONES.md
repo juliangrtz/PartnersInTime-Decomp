@@ -2427,3 +2427,33 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **597,568 / 1,563,700 bytes (38.22%)**; C/C++ plus assembly: **38.55%**.
+
+## Field palette-bank crossfade setup and transfer (2026-09-09)
+
+Reconstructed **804 bytes** for starting a palette-bank crossfade and transferring
+its endpoint/result palettes. A checked 1,544-byte structure names the control
+bits, duration, elapsed time and three 256-color buffers. The field context now
+owns a typed pointer, and the VM and field graphics callers use shared names.
+The palette address table identifies standard/extended OBJ palettes, standard BG
+palettes and four extended BG regions for each screen. Extended-palette transfers
+temporarily restore CPU access through LCDC and then restore the bank assignment.
+
+Fourteen controlled Field VM starts cover all seven regions on both screens,
+using live mapped palette data and bank 0-to-1 transitions of four ticks. The
+84-frame replay checked **14 starts, 70 transfers and 84 copy calls**, totaling
+**31,488 copied bytes**, through completion. Complete 1,544-byte records were
+compared at returns; an independent RGB555 interpolation model also checked 84
+calls to the existing assembly updater. That 432-byte updater remains assembly
+while compiler differences are unresolved and is not counted as reconstructed C.
+
+Private report: `build/runtime/eur_field_palette_blend/evidence.json`.
+Input-state SHA-1: `4eeb1538e58d43fe03dd2b994296afc28f4061b4`. Each fixture
+restores the decoded command at starter entry and temporarily changes only the
+copier's screen-selection bit, restoring it at return. These runs establish
+transfer behavior, not normal story-event coverage. No ROM or supplied-save
+edits were made; all **104 supplied saves** retained their hashes.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**598,372 / 1,563,700 bytes (38.27%)**; C/C++ plus assembly: **38.60%**.

@@ -262,3 +262,9 @@ src/field/field_render_updates.cpp:
 
 src/field/field_vector_scale.c:
     .text start:0x020be4f0 end:0x020be654
+
+src/field/field_palette_crossfade_start.c:
+    .text start:0x02075600 end:0x020756ac
+
+src/field/field_palette_crossfade_transfer.c:
+    .text start:0x020751d8 end:0x02075450

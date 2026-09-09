@@ -727,3 +727,5 @@ src/overlay007/pause_menu_label.cpp
 src/overlay007/pause_menu_submenu_label.cpp
 src/overlay007/pause_menu_label_motion.cpp
 src/field/field_vector_scale.c
+src/field/field_palette_crossfade_start.c
+src/field/field_palette_crossfade_transfer.c
