@@ -3668,7 +3668,7 @@ public-content and whitespace checks pass. Matching C/C++ is **645,088 /
 still differs in four register-allocation words and remains private.
 
 
-## 2026-09-10 - Field window sprite preparation (+512 bytes)
+## 2026-09-09 - Field window sprite preparation (+512 bytes)
 
 FieldArea_LoadWindowSprites (0x02079B74..0x02079D74) is now byte-exact C in
 src/field/field_window_sprites.c. It derives the allocation size from the
@@ -3689,3 +3689,44 @@ their hashes. Checkpoint 65 SHA-1 is 0844b75810855bc3a738122b29382ed5a6c9f983.
 Validation: all 81 tests, zero native relink differences and canonical ROM SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
 645,600 / 1,563,700 bytes (41.29%); C/C++ plus ASM is 41.62%.
+
+
+## 2026-09-10 - Message-window slide and hardware clipping (+1040 bytes)
+
+Four byte-exact C routines cover slide advancement, starting a slide by speed,
+computing its hardware clip rectangle and enabling/disabling window 0. Their
+contiguous ranges are 0x0206F288..0x0206F378 and 0x0206F448..0x0206F768, in
+field_message_window_slide.c and field_message_window_clip.c. A checked 36-byte
+FieldMessageWindowSlide names the confirmed state at field offset 0x249C;
+the field snapshot copier and VM callers use the shared type/declarations.
+The timed initializer and completion checker remain assembly: their private
+drafts still have compiler differences. No inline assembly is included in the gain.
+
+The clip routine preserves signed halfword window indexing and edge arithmetic,
+fixed-point truncation, independent 0..255/0..192 limits and the original
+WININ/WINOUT/WIN0H/WIN0V writes on both display engines. The five layer bits and
+color-effect bit retain their original separate operations.
+
+Runtime evidence: build/runtime/eur_field_window_scroll/.
+- evidence_scroll65.json: 320 ordinary-input frames, 90 inactive update returns.
+- evidence_clip65.json: 301 frames, 682 checked returns across all four routines.
+  Four isolated decoded-VM commands start and later disable a slide on each
+  screen. Each 72-byte command and its original 4-byte cursor are restored at
+  dispatcher return. Native code initializes velocities and advances/completes
+  the movement: 72 moving updates, 74 independently computed rectangles,
+  68 clamped rectangles, and both enable states are checked.
+
+This controlled test uses the existing, currently empty slot 0 window records,
+including their native default dimensions. It establishes arithmetic, helper
+arguments, state writes and register packing, not a naturally selected story
+dialogue or visible scrolling text. Complete area, manager, selected window and
+display registers pass at each relevant helper boundary and SP-matched return.
+External helper effects are refreshed at return. The final image shows the
+ordinary Thwomp Volcano field after clipping is disabled. OBJ VRAM and palettes
+are dumped and hashed; all 104 original saves remain unchanged.
+State SHA-1: 9f9bbb7689b7c4322ef073d34d4c86b14e59bdff.
+Checkpoint 65 SHA-1: 0844b75810855bc3a738122b29382ed5a6c9f983.
+
+Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701, progress and public-content checks pass.
+Matching C/C++ is 646,640 / 1,563,700 bytes (41.35%); C/C++ plus ASM is 41.69%.

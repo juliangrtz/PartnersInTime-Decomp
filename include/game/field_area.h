@@ -18,6 +18,15 @@ typedef struct FieldAreaTransition {
     s16 script, x[2], y[2], z[2];
 } FieldAreaTransition;
 typedef char FieldAreaTransition_SizeCheck[sizeof(FieldAreaTransition)==20?1:-1];
+typedef struct FieldMessageWindowSlide {
+    struct {
+        u32 active : 1, fixed_duration : 1, window : 8;
+        u32 elapsed : 10, duration : 10, unknown_30_31 : 2;
+    } flags;
+    fx32 x, y, previous_x, previous_y, target_x, target_y, velocity_x, velocity_y;
+} FieldMessageWindowSlide;
+typedef char FieldMessageWindowSlide_SizeCheck[sizeof(FieldMessageWindowSlide) == 36 ? 1 : -1];
+
 typedef struct FieldAreaContext {
     const void *vtable;
     void *owner;
@@ -79,11 +88,7 @@ typedef struct FieldAreaContext {
     } unknown_2488;
     u16 unknown_248a;
     s32 unknown_248c[4];
-    struct {
-        u32 unknown_00 : 1, unknown_01 : 1, unknown_02_09 : 8;
-        u32 unknown_10_19 : 10, unknown_20_29 : 10, unknown_30_31 : 2;
-    } unknown_249c;
-    s32 unknown_24a0[8];
+    FieldMessageWindowSlide window_slide;
     u32 unknown_24c0;
     u16 input_masks[2];
     u8 unknown_24c8[16];
@@ -150,6 +155,11 @@ void FieldArea_CreateVariableEntities(FieldAreaContext *field);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source);
 void FieldArea_UpdateGraphics(FieldAreaContext *field);
 void FieldArea_LoadWindowSprites(FieldAreaContext *field);
+void FieldArea_UpdateMessageWindowSlide(FieldAreaContext *area);
+void FieldArea_StartMessageWindowSlideBySpeed(FieldAreaContext *area, int window, fx32 x, fx32 y, fx32 speed);
+void FieldArea_UpdateMessageWindowClip(FieldAreaContext *area, int window);
+void FieldArea_SetMessageWindowClipEnabled(FieldAreaContext *area, int window, int enabled);
+
 FieldAreaContext *FieldArea_Construct(FieldAreaContext *field);
 FieldAreaContext *FieldArea_Destroy(FieldAreaContext *field);
 void FieldArea_CaptureSnapshot(const FieldAreaContext *field, FieldAreaSnapshot *snapshot);

@@ -302,3 +302,9 @@ src/field/field_party_input.c:
 
 src/field/field_window_sprites.c:
     .text start:0x02079b74 end:0x02079d74
+
+src/field/field_message_window_slide.c:
+    .text start:0x0206f288 end:0x0206f378
+
+src/field/field_message_window_clip.c:
+    .text start:0x0206f448 end:0x0206f768

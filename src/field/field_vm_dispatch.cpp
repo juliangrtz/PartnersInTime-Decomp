@@ -205,10 +205,6 @@ extern int func_ov000_020700ec(
 extern int func_ov000_0206fb74(u8 *field_context, int message_slot);
 extern int func_ov000_0206fc50(u8 *field_context, int message_slot);
 extern void func_ov000_0206facc(u8 *field_context, int message_slot);
-extern void func_ov000_0206f6c0(u8 *field_context, int window_slot,
-                                int enabled);
-extern void func_ov000_0206f448(u8 *field_context, int window_slot,
-                                fx32 x, fx32 y, int speed);
 extern void func_ov000_0206f378(u8 *field_context, int window_slot,
                                 fx32 x, fx32 y, int duration);
 extern void GameAudio_PlayEffectDelayed(s16 sound_id, int playback_mode,
@@ -4068,14 +4064,14 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_SET_MESSAGE_WINDOW_SLIDE_MASK_ENABLED:
-        func_ov000_0206f6c0(
-            field_context, arguments[0],
+        FieldArea_SetMessageWindowClipEnabled(
+            (FieldAreaContext *)field_context, arguments[0],
             arguments[1] != 0);
         break;
 
     case FIELD_VM_START_MESSAGE_WINDOW_SLIDE_BY_SPEED:
-        func_ov000_0206f448(
-            field_context, arguments[0],
+        FieldArea_StartMessageWindowSlideBySpeed(
+            (FieldAreaContext *)field_context, arguments[0],
             arguments[1] << FX32B_INT,
             arguments[2] << FX32B_INT, arguments[3]);
         break;

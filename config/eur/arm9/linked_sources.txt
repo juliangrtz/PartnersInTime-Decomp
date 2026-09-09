@@ -749,3 +749,5 @@ src/overlay025/enemy_projectile_sequence.cpp
 src/field/field_party_action_selection.c
 src/field/field_party_input.c
 src/field/field_window_sprites.c
+src/field/field_message_window_slide.c
+src/field/field_message_window_clip.c
