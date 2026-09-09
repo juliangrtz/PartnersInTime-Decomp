@@ -658,7 +658,7 @@ src/field/field_spatial_copy.c
 src/field/field_party_storage.c
 src/field/field_variable_copy.c
 src/field/field_variable_lifecycle.c
-src/field/field_party_copy.c
+src/field/field_party_copy.cpp
 src/field/field_party_auxiliary_copy.c
 src/field/field_render_snapshot.c
 src/field/field_area_state.c
@@ -694,3 +694,7 @@ src/overlay007/menu_particle.cpp
 src/overlay009/shop_particle.cpp
 src/field/field_auxiliary_updates.cpp
 src/field/field_auxiliary_lifecycle.cpp
+src/field/field_party_entity_render.cpp
+src/field/field_party_entity_bounds.cpp
+src/field/field_party_entity_collision.cpp
+src/field/field_party_entity_navigation.cpp

@@ -82,14 +82,14 @@ void FieldAuxiliary_UpdateContactsAtOffset(FieldAuxiliaryEntity *aux)
     }
 }
 
-void FieldAuxiliary_UpdateRendererAtOffset(FieldAuxiliaryEntity *aux, u8 screen)
+void FieldAuxiliary_UpdateRendererAtOffset(FieldAuxiliaryEntity *aux, u8 default_priority)
 {
     if (aux->entity.base_state_flag_bits.animation_wait_enabled &&
         aux->entity.render_object->state_flag_bits.animation_active) {
         aux->entity.position_x += aux->offset_x;
         aux->entity.position_y += aux->offset_y;
         aux->entity.position_z += aux->offset_z;
-        func_ov000_020a9d1c(&aux->entity, screen);
+        func_ov000_020a9d1c(&aux->entity, default_priority);
         aux->entity.position_x -= aux->offset_x;
         aux->entity.position_y -= aux->offset_y;
         aux->entity.position_z -= aux->offset_z;

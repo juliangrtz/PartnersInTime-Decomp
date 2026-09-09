@@ -59,7 +59,7 @@ void FieldPartyEntity_SaveSnapshot(FieldPartyEntity *party, FieldPartySnapshot *
     snapshot->linked_index =
         party->entity.unknown_500 ? ((FieldEntity *)party->entity.unknown_500)->index : -1;
     snapshot->unknown_52 = party->unknown_596;
-    snapshot->unknown_53 = party->unknown_598;
+    snapshot->unknown_53 = party->paired_bounds_index;
     snapshot->locomotion_state = party->entity.locomotion_state;
     snapshot->unknown_56 = party->entity.unknown_370;
     snapshot->default_vertical_launch_velocity = party->entity.default_vertical_launch_velocity;
@@ -141,7 +141,7 @@ FieldPartyEntity *FieldPartyEntity_RestoreSnapshot(FieldPartyEntity *party,
     party->entity.previous_support_entity_index = snapshot->previous_support_index;
     party->entity.unknown_500 = snapshot->linked_index != -1 ? entities[snapshot->linked_index] : 0;
     party->unknown_596 = snapshot->unknown_52;
-    party->unknown_598 = snapshot->unknown_53;
+    party->paired_bounds_index = snapshot->unknown_53;
     party->entity.locomotion_state = snapshot->locomotion_state;
     party->entity.unknown_370 = snapshot->unknown_56;
     party->entity.default_vertical_launch_velocity = snapshot->default_vertical_launch_velocity;

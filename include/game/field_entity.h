@@ -46,6 +46,7 @@ enum FieldRenderObjectFlag {
 };
 
 typedef struct FieldEntity FieldEntity;
+typedef struct FieldRenderSnapshot FieldRenderSnapshot;
 typedef struct FieldEntityVTable FieldEntityVTable;
 typedef struct FieldRenderObject FieldRenderObject;
 typedef struct FieldRenderObjectVTable FieldRenderObjectVTable;
@@ -324,19 +325,22 @@ typedef struct FieldEntity {
     virtual void set_visible(int visible);
     virtual void unknown_64();
     virtual void unknown_68();
-    virtual void unknown_6c();
+    virtual void update_screen_position(s16 camera_x, s16 camera_y);
     virtual void unknown_70();
     virtual void start_blink(int mode, const s8 *durations, u8 length,
                              FieldEntityVisibilityCallback show, FieldEntityVisibilityCallback hide);
     virtual void unknown_78();
-    virtual void unknown_7c();
-    virtual void unknown_80();
+    virtual void save_render_snapshot(FieldRenderSnapshot *snapshot);
+    virtual void restore_render_snapshot(const FieldRenderSnapshot *snapshot);
     virtual void unknown_84();
     virtual void unknown_88();
     virtual void set_collision_response_channels(
         int channel_0, int channel_1, int channel_2, int channel_3, int channel_4);
     virtual void set_collision_response_channels_masked(u16 channel_mask, int enabled);
     virtual void restore_collision_response_channels();
+    virtual void unknown_98();
+    virtual void unknown_9c();
+    virtual void update_overlap_priorities(u8 default_priority);
 #else
     FieldEntityVTable *vtable;
 #endif
@@ -425,7 +429,14 @@ typedef struct FieldNavigationSurface {
             u32 vertex_count : 3, slope_axis : 2, unknown_28_31 : 4;
         } bits;
     };
-    u32 index, attributes;
+    u32 index;
+    union {
+        u32 attributes;
+        struct {
+            u32 unknown_00 : 1, unknown_01 : 1, unknown_02 : 1, unknown_03 : 1;
+            u32 unknown_04_15 : 12, unknown_16 : 1, unknown_17_31 : 15;
+        } attribute_bits;
+    };
     union {
         FieldNavigationVertex vertices[4];
         struct { fx32 sort_x; u8 unknown_10[60]; };

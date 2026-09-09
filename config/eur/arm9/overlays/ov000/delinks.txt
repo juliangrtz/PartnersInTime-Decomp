@@ -176,8 +176,8 @@ src/field/field_variable_copy.c:
 src/field/field_variable_lifecycle.c:
     .text start:0x020bcc1c end:0x020bd1ec
 
-src/field/field_party_copy.c:
-    .text start:0x020b756c end:0x020b780c
+src/field/field_party_copy.cpp:
+    .text start:0x020b756c end:0x020b7b68
 
 src/field/field_party_auxiliary_copy.c:
     .text start:0x020b6560 end:0x020b6744
@@ -244,3 +244,15 @@ src/field/field_auxiliary_updates.cpp:
 
 src/field/field_auxiliary_lifecycle.cpp:
     .text start:0x020b72e0 end:0x020b756c
+
+src/field/field_party_entity_render.cpp:
+    .text start:0x020b7ef8 end:0x020b80a4
+
+src/field/field_party_entity_bounds.cpp:
+    .text start:0x020b85f8 end:0x020b86ec
+
+src/field/field_party_entity_collision.cpp:
+    .text start:0x020b8760 end:0x020b8a90
+
+src/field/field_party_entity_navigation.cpp:
+    .text start:0x020b8ca8 end:0x020b8e4c

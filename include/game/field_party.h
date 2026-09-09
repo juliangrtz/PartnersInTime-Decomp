@@ -44,8 +44,13 @@ typedef struct FieldPartyEntity {
     u8 unknown_56c[4];
     struct FieldPartyEntity *linked_member;
     struct FieldPartyEntity *partner;
-    struct FieldPartyEntity *auxiliary;
-    u8 unknown_57c[20];
+    union {
+        struct {
+            struct FieldPartyEntity *auxiliary;
+            u8 unknown_57c[20];
+        };
+        struct FieldAuxiliaryEntity *auxiliaries[6];
+    };
     s16 saved_animation_speed;
     struct {
         u16 unknown_00 : 1, saved_behavior : 3, behavior_saved : 1, unknown_05 : 1;
@@ -54,7 +59,7 @@ typedef struct FieldPartyEntity {
     } presentation;
     struct { u8 unknown_00 : 1, unknown_01_07 : 7; } unknown_594;
     u8 unknown_595;
-    s8 unknown_596, unknown_597, unknown_598, unknown_599;
+    s8 unknown_596, unknown_597, paired_bounds_index, previous_paired_bounds_index;
     u8 unknown_59a[2];
     union { u32 unknown_59c; struct FieldPartyStateRecord *state_record; };
 } FieldPartyEntity;
@@ -64,6 +69,12 @@ typedef struct FieldPartySnapshot FieldPartySnapshot;
 typedef struct FieldPartyStateRecord {
     union {
         u32 unknown_00[8];
+        struct {
+            u32 unknown_00;
+            struct { u32 unknown_00_18 : 19, update_bounds : 1, unknown_20_31 : 12; } flags;
+            u8 unknown_08[16];
+            const void *resource_18, *resource_1c;
+        } resources;
         struct {
             u32 unknown_00[2];
             struct { u32 unknown_00_14 : 15, area_value_saved : 1, unknown_16_31 : 16; } flags;
@@ -222,6 +233,27 @@ void FieldParty_RestartAuxiliary(FieldPartyController *party);
 void FieldParty_RaiseFollowerToLeader(FieldPartyController *party);
 /* State 34's gameplay identity has not yet been observed. */
 void FieldParty_BeginState34(FieldPartyController *party);
+
+struct FieldPairedBoundsRuntime;
+int FieldPartyEntity_FindPairedBounds(FieldPartyEntity *member, const struct FieldPairedBoundsRuntime *records);
+int FieldPartyEntity_HasActiveAction(FieldPartyEntity *member);
+void FieldPartyEntity_RestoreRenderSnapshot(FieldPartyEntity *member, const FieldRenderSnapshot *snapshot);
+void FieldPartyEntity_SaveRenderSnapshot(FieldPartyEntity *member, FieldRenderSnapshot *snapshot);
+void FieldPartyEntity_BindStateResource1C(FieldPartyEntity *member);
+void FieldPartyEntity_BindStateResource18(FieldPartyEntity *member);
+void FieldPartyEntity_HideBlinkRenderers(FieldEntity *entity);
+void FieldPartyEntity_ShowBlinkRenderersWithSound(FieldEntity *entity);
+void FieldPartyEntity_CopySortKeysToAnchors(FieldPartyEntity *member);
+void FieldPartyEntity_UpdateAuxiliaryPriorities(FieldPartyEntity *member);
+void FieldPartyEntity_UpdateScreenPositions(FieldPartyEntity *member, s16 camera_x, s16 camera_y);
+void FieldPartyEntity_UpdateRenderers(FieldPartyEntity *member, u8 default_priority);
+void FieldPartyEntity_CopyPartnerPlanarBounds(FieldPartyEntity *member);
+void FieldPartyEntity_SetCollisionResponseChannelsMasked(FieldPartyEntity *member, u8 mask, u8 enabled);
+void FieldPartyEntity_SetCollisionResponseChannels(FieldPartyEntity *member, int first, int second, int third,
+                                                 int fourth, int fifth);
+/* Type-3 queries return zero for an overlapping volume selected by bits 0/3 or 0/2. */
+int FieldPartyEntity_TestType3Volumes03(FieldPartyEntity *member);
+int FieldPartyEntity_TestType3Volumes02(FieldPartyEntity *member);
 #ifdef __cplusplus
 }
 #endif

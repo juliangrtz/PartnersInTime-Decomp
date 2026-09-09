@@ -1665,3 +1665,47 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **564,632 / 1,563,700 bytes (36.11%)**; C/C++ plus assembly: **36.44%**.
+
+## Party render propagation and bounds queries: 36.29% matching C/C++
+
+Reconstructed seventeen functions (2,768 bytes) in five contiguous regions:
+`0x020B780C..0x020B7B68`, `0x020B7EF8..0x020B80A4`,
+`0x020B85F8..0x020B86EC`, `0x020B8760..0x020B8A90`, and
+`0x020B8CA8..0x020B8E4C`. The first region joins the existing party-copy
+module, now compiled as C++. The intervening unmatched routines remain raw.
+
+The checked party layout now exposes six auxiliary slots and a state-record
+resource view. New code forwards render snapshots, screen coordinates, sort
+anchors and priorities, binds stored resources, handles blink callbacks, copies
+partner bounds and configures collision channels. Two type-3 volume queries
+retain neutral attribute-bit names. A paired-bounds query selects the first
+record matching height, facing direction and the appropriate body edge, while
+preserving the previous selected index. The underlying renderer helper shows
+that its byte argument is a default overlap priority; affected parameter and
+virtual-method names were corrected accordingly.
+
+Three normal-input replays from story saves 51/83 covered 1,239 frames and seven
+new functions. A room transition restored four render snapshots; movement
+exercised screen positions, sort anchors and auxiliary priorities. Thirty
+paired-bounds queries included 29 misses and one successful direction-0 match.
+The type-3 query examined 26,931 navigation records over 441 calls, all returning
+clear; its blocking branch was not reached. Independent models passed 94,034
+complete party-member, 263,444 auxiliary and 357,478 renderer comparisons,
+plus 27,372 navigation-surface and 135 paired-record comparisons. All 77,409
+helper argument checks and 471 query returns passed. Native helper outputs were
+recaptured between direct-write checks. Unreached routines and branches retain
+static matching evidence only.
+
+Private reports: `build/runtime/eur_party_entity_helpers/evidence_spin83.json`,
+`evidence_rooms51.json`, and `evidence_bounds51.json`. Derived-state SHA-1:
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`,
+`a450b563a2ba4c96e2b21cbe9ecb96560f865572`, and
+`4648a623a447e9a682f4173e9a6d97d438baa0bc`. Source save hashes remain
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b` (83) and
+`459c9b510b361c4e800a396d8b56ddf847235c74` (51).
+No VM commands were injected and supplied saves were unchanged.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**567,400 / 1,563,700 bytes (36.29%)**; C/C++ plus assembly: **36.62%**.
