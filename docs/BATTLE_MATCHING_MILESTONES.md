@@ -3875,3 +3875,30 @@ all 104 original save hashes remain unchanged.
 Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
 Matching C/C++ is 649,904 / 1,563,700 bytes (41.56%); C/C++ plus ASM is 41.90%.
+
+
+## 2026-09-10 - Launch of the boss linked effect (+632 bytes)
+
+Overlay25Enemy_LaunchLinkedEffect (0x020CAD04..0x020CAF7C) is byte-exact C++.
+It closes the gap between the existing routines in enemy_linked_effects.cpp,
+which now also contains the adjacent BeginNextAnimation callback. Native
+disassembly establishes all ten arguments for each of the two impact emitters,
+including mode 3 and the distinct 16/8 dimensions omitted by the decompiler.
+The routine waits for the attached effect, starts the distance-based flight,
+emits a sprite and an enemy-relative model effect, and advances the callback.
+
+Runtime: build/runtime/eur_ov25_linked_launch/evidence_launch103.json. The
+970-frame phase103.dst run repeats the documented tracking attack selection
+fixture; the later native linked-effect attack needs no additional fixture.
+There are 121 checked launch returns (120 waiting, one launch), alongside 33
+checked selection/tracking returns. Independent checks reproduce two projected
+positions and the hardware square root used for motion; exact helper arguments
+and complete task/work/scene records agree at calls and returns. External
+motion/effect helper side effects are refreshed, rather than claimed as an
+independent model of those subsystems. The subsequent native attack continues.
+The inspected final image shows the boss encounter. BG VRAM/palettes are dumped
+and hashed, and all 104 supplied saves retain their hashes.
+
+Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
+Matching C/C++ is 650,536 / 1,563,700 bytes (41.60%); C/C++ plus ASM is 41.94%.

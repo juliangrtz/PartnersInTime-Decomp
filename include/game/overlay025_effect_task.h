@@ -86,6 +86,7 @@ typedef char Overlay25WorkPrefix_SizeCheck[sizeof(Overlay25WorkPrefix) == 7088 ?
 #ifdef __cplusplus
 extern "C" {
 #endif
+void Overlay25Enemy_LaunchLinkedEffect(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 void Overlay25Enemy_WaitLinkedEffectAnimation(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_InitializeLinkedEffects(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_BeginLinkedEffects(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);

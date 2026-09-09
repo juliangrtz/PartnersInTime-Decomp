@@ -1,7 +1,7 @@
 #include "effect_task_internal.h"
+#include <game/battle_impact_effect.h>
 
 extern "C" {
-void func_ov025_020cad04(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 
 void Overlay25Projectile_CheckHit(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *)
 {
@@ -124,7 +124,43 @@ void Overlay25Enemy_WaitLinkedEffectAnimation(Overlay25Task *task, BattleSceneOb
         Overlay25Object_GetViewPosition(&pos, linked);
         BattleSpriteEffect_Spawn(511, pos.x, pos.y, pos.z, 256);
         BattleModelEffect_SpawnAttached(&work->model_effect, 803, linked, 0, 0, 0, 256);
-        task->update = func_ov025_020cad04;
+        task->update = Overlay25Enemy_LaunchLinkedEffect;
     }
 }
+void Overlay25Enemy_LaunchLinkedEffect(Overlay25Task *task, BattleSceneObject *enemy, Overlay25WorkPrefix *work)
+{
+    BattleSceneObject *linked = BattleSceneObject_GetById(40);
+    if (!work->model_effect) {
+        BattleSceneObject_SetAnimation(enemy, 15, -1);
+        BattlePosition position;
+        Overlay25Object_GetViewPosition(&position, linked);
+        int target_z = 80 - position.y;
+        int dz = 224 - target_z;
+        int dx = 160 - linked->x;
+        *(vu16 *)0x40002B0 = 0;
+        *(vu32 *)0x40002B8 = dx * dx + dz * dz;
+        while (*(vu16 *)0x40002B0 & 0x8000) {
+        }
+        int distance = *(vu32 *)0x40002B4;
+        BattleSceneObject_StartMotionWithPeakDistance(linked, 2, dx, 0, dz, distance, distance, 2560, 1);
+        BattleImpactEmitter_Start(40, 0, 4096, 3, 1, 16, 16, 64, 64, 0);
+        BattleImpactEmitter_Start(41, 0, 4096, 3, 1, 8, 8, 64, 64, 0);
+        BattleSpriteEffect_Spawn(512, position.x, position.y, position.z, 256);
+        BattlePosition origin;
+        Overlay25Object_GetViewPosition(&origin, enemy);
+        BattleModelEffect_Spawn(804, enemy, (s16)(position.x-origin.x), (s16)(position.y-origin.y), (s16)(position.z-origin.z), 256);
+        task->update = Overlay25Enemy_BeginNextAnimation;
+        BattleSound_Play(122, 0, 0, 0);
+    }
+}
+
+void Overlay25Enemy_BeginNextAnimation(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *)
+{
+    BattleSceneObject_GetById(40);
+    if (!object->primary_model->flag_bits.panel_animation_trigger) {
+        BattleSceneObject_SetAnimation(object, 16, -1);
+        task->update = func_ov025_020ca858;
+    }
+}
+
 }

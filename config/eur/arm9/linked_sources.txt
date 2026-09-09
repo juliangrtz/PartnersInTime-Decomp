@@ -555,7 +555,6 @@ src/overlay025/ov25_party_unlock_after_task.cpp
 src/overlay025/ov25_task_wait_sibling.cpp
 src/overlay025/enemy_chain_tracking.cpp
 src/overlay025/ov25_enemy_reset_stopped_animation.cpp
-src/overlay025/ov25_enemy_begin_next_animation.cpp
 src/overlay025/ov25_enemy_begin_load_and_move.cpp
 src/overlay017/ov17_participant_get_travel_duration.cpp
 src/overlay017/ov17_participant_get_home_position.cpp
