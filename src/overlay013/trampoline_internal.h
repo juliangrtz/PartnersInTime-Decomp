@@ -45,8 +45,6 @@ void func_ov002_020b03b8(int, int, int, int);
 void func_ov002_02071f08(int, BattleSceneObject *, int, int, int, int, int);
 int BattleFeedback_IsEffectComplete();
 void func_ov002_0206b5f0(BattleAITask *);
-void func_ov002_0206bda4(BattleAITask *);
-BattleImpactParticleTask *func_ov002_0206bdf8(BattleSceneObject *, void (*)(BattleAITask *));
 void func_ov002_02072004(BattleSceneObject *, int, int, int, int);
 void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 extern int data_ov013_020c5b30[][3], data_ov013_020c5b14, data_ov013_020c5b08, data_ov013_020c5b0c,

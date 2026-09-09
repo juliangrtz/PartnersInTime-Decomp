@@ -1,7 +1,6 @@
 #include <game/battle_impact_effect.h>
 
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
-extern void func_ov002_0206bd74(BattleImpactParticlePayload *particle);
 
 #define DEFINE_IMPACT_PARTICLE_UPDATE(name, render_particle)                 \
     void name(BattleAITask *base_task) {                                     \
@@ -52,6 +51,6 @@ DEFINE_IMPACT_PARTICLE_UPDATE(BattleImpactParticle_UpdateResourceFrame,
                               BattleImpactParticle_RenderPrimary)
 
 DEFINE_IMPACT_PARTICLE_UPDATE(BattleImpactParticle_UpdateModelFrame,
-                              func_ov002_0206bd74)
+                              BattleImpactParticle_RenderAlternate)
 
 #undef DEFINE_IMPACT_PARTICLE_UPDATE

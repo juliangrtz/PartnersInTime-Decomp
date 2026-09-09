@@ -97,6 +97,10 @@ void BattleImpactParticle_UpdateResourceFrame(BattleAITask *task);
 void BattleImpactParticle_Render(BattleImpactParticlePayload *particle,
                                  BattleModel *model,
                                  int x, int y, int z);
+void BattleImpactParticle_RenderAlternate(BattleImpactParticlePayload *particle);
+void BattleImpactParticle_UpdateAlternateAfterimage(BattleAITask *task);
+BattleImpactParticleTask *BattleImpactParticle_CreateFromAlternateObject(
+    BattleSceneObject *object, void (*callback)(BattleAITask *task));
 void BattleImpactParticle_RenderPrimary(BattleImpactParticlePayload *particle);
 BattleImpactParticleTask *BattleImpactParticle_CreateFromObject(
     BattleSceneObject *object, void (*callback)(BattleAITask *task));

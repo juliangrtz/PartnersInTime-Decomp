@@ -3263,3 +3263,39 @@ Validation: native relink has zero differing bytes; all 74 tests, public-source
 audit and whitespace checks pass. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **633,844 / 1,563,700 bytes (40.53%)**; C/C++ plus assembly: **40.87%**.
+
+
+## Alternate battle model afterimages (40.56% C/C++)
+
+- Reconstructed the contiguous 0x0206BD74..0x0206BF3C region in
+  `src/battle/battle_model_afterimage.c`: capture the alternate model's animation,
+  frame, flip flags, scale, rotation and projected position; render that snapshot;
+  advance its depth and remove its callback when its signed lifetime expires.
+  The existing checked impact-particle layout is shared with these callers.
+  Three functions add 456 exact bytes: 634300 / 1563700 (40.56%) C/C++;
+  C/C++ plus ASM is 40.90%. No ASM is counted as C/C++.
+- Native relink has zero differing bytes; all 74 tests, progress consistency,
+  public-content audit and whitespace checks pass. Rebuilt ROM SHA-1 remains
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Runtime: save 83, Star Shrine before Petey Piranha. Existing cannon setup state
+  SHA-1 `850ad8741a5474f336724f26698a502f1fb52457`, A for eight frames, then
+  2200 frames with four RAM-timed ordinary A/B/X/Y presses: 531 snapshots,
+  2124 renders and 2655 lifetime updates, including all 531 expirations.
+  A second run selects the trampoline through the ordinary Bros-item menu from
+  state `21d2e64a24b389689627292539103880c6761b47`: 3190 frames, 295 snapshots,
+  1180 renders and 1475 lifetime updates, including all 295 expirations.
+  Both return to a usable battle screen, inspected visually. No command or RAM
+  fixture was injected in either probe; the initial states are existing battle
+  checkpoints, not fresh cold boots from the supplied save.
+- Byte-guarded entry/call/return hooks compare the complete 36-byte task record,
+  unchanged scene/model input records and exact pool/projection/draw arguments.
+  All 826 projected positions agree with an independent arithmetic oracle;
+  3304 renders restore the observed animation/frame, scale, rotation, flags and
+  position fields. Main/sub BG VRAM and palette dumps and hashes accompany
+  `build/runtime/eur_battle_model_afterimage/evidence_cannon83.json` and
+  `evidence_trampoline83.json`. All 104 supplied save hashes remain unchanged;
+  save 83 SHA-1 is `2cb577d3008975c390a2f00e2b2cd646e4005c1b`.
+- Coverage limits: these attacks used unflipped alternate models. Null-model
+  rejection, flipped inputs and signed-coordinate overflow are covered by the
+  exact native comparison, not claimed as observed runtime branches. The larger
+  alternate-model drawing routine remains assembly.

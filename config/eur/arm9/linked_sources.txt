@@ -744,3 +744,4 @@ src/overlay008/game_over_models.cpp
 
 src/overlay007/menu_springs.c
 src/field/field_party_transition_requests.cpp
+src/battle/battle_model_afterimage.c

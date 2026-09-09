@@ -466,3 +466,6 @@ src/battle/battle_window_upload.cpp:
 
 src/battle/battle_text_controls.cpp:
     .text start:0x02067014 end:0x02067264
+
+src/battle/battle_model_afterimage.c:
+    .text start:0x0206bd74 end:0x0206bf3c

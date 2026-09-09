@@ -128,7 +128,7 @@ int Overlay13Attack_UpdateArcEffects(BattleSceneObject *object, BattleSceneObjec
         copy->y = object->y;
         copy->z = object->y - angle;
         if (work->common.timer % 2 == 0) {
-            BattleImpactParticleTask *effect = func_ov002_0206bdf8(copy, func_ov002_0206bda4);
+            BattleImpactParticleTask *effect = BattleImpactParticle_CreateFromAlternateObject(copy, BattleImpactParticle_UpdateAlternateAfterimage);
             effect->data.frame = 4;
             work->effect = (BattleAITask *)effect;
         }
