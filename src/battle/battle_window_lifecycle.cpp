@@ -1,12 +1,11 @@
 extern "C" {
-#include <game/battle_window.h>
+#include <game/battle_window_upload.h>
 }
 extern "C" {
 extern void *data_ov002_020be8e0[];
 extern u8 *gBattleSystem;
 void func_0202cbd4(void *, int, u32);
 void func_ov002_0206fc7c(BattleWindowManager *);
-void func_ov002_0206fb64(BattleWindowManager *);
 }
 
 static inline u8 SubTileCount(const GameSpriteAnimationFile *file)
@@ -94,5 +93,5 @@ void BattleWindow_Update(BattleWindowManager *manager)
     animator->palette_offset = palette;
     GameWindow_Update(&manager->base);
     func_ov002_0206fc7c(manager);
-    func_ov002_0206fb64(manager);
+    BattleWindow_ScheduleSubUploads(manager);
 }

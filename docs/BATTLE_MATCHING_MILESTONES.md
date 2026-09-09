@@ -2084,3 +2084,45 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **587,808 / 1,563,700 bytes (37.59%)**; C/C++ plus assembly: **37.93%**.
+
+## Callback models and sub-window uploads (2026-09-09)
+
+Reconstructed fourteen functions in two contiguous modules, **820 bytes**:
+callback-model initialization, dispatch, palette binding and cleanup, plus
+sub-window upload scheduling, tilemap transfer, link flags and readiness.
+The callback subclass has a checked 320-byte view with its four-field extension
+at offset 304. The upload scheduler preserves the native packed count test,
+including its high main-count bit.
+
+Three replays totaled **1,088 frames and 2,942 verified returns across eleven
+functions**. Independent RAM models checked callback arguments, the sixteen-byte
+constructor clear, palette binding, both link-flag values and native deletion
+of the owned buffer and model. Prepare callbacks were null; draw and update
+callbacks ran 718 times each. The private tracer now distinguishes `BLX ip`
+from tail-call `BX ip`, validating the actual return path in both cases.
+
+The dialogue entry used the documented encounter 8232 from room 583, offset
+`0x0536`, restoring its decoded command and cursor at native battle entry.
+A separate native-exit-condition fixture was restored before destruction;
+the battle context was checked as cleared at the destructor return. This is
+cleanup evidence, not a naturally won battle.
+
+A controlled one-frame sub-count fixture exercised the otherwise inactive
+upload branch with the existing empty sub-window list. Native upload and reset
+tasks transferred **4,096 tilemap bytes**, compared against the complete source
+in live VRAM. Count, flags, blend state, OAM data, destination VRAM and scroll
+registers were restored; the second reset-task copy was also restored after its
+return. The non-deleting destructor, readiness query and individual sub-window
+upload retain static byte-matching evidence. Non-null prepare callbacks and
+null draw/update callbacks were not reached in these replays.
+
+Private reports: `build/runtime/eur_battle_callback_upload/evidence_dialogue55.json`,
+`evidence_exit55.json`, `evidence_upload55.json`. Initial dialogue input-state
+SHA-1: `e44df106d65e52df1ffc2b125538354f67cb1b22`; derived battle-state SHA-1:
+`61c13949eb320122c8d9e313809d7f605efa87ef`. All **104 supplied saves** were hashed
+before and after every successful run and remained unchanged.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**588,628 / 1,563,700 bytes (37.64%)**; C/C++ plus assembly: **37.98%**.

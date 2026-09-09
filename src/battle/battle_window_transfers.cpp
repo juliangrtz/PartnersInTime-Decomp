@@ -1,5 +1,5 @@
 extern "C" {
-#include <game/battle_window.h>
+#include <game/battle_window_upload.h>
 extern void (*data_ov002_020be8b0[])(GameSpriteAnimator *, GameSpriteAnimation *);
 /* The ITCM routine builds store-multiple instructions from two adjacent templates. */
 void GameImage_FillWordRectITCM(void *, u32, u32, u32);
@@ -7,8 +7,6 @@ void func_0202cbd4(void *, int, u32);
 void func_020106a4(const void *, u32, void *, u32);
 void func_0202cf80(const void *, void *, int, int);
 void func_02021654(GameSpriteAnimator *, GameSpriteAnimation *);
-void func_ov002_0206faec(BattleWindowManager *, const GameWindow *);
-void func_ov002_0206fb38(BattleWindowManager *);
 void func_ov002_02070cdc(BattleWindowAnimator *, GameSpriteAnimation *);
 }
 
@@ -21,12 +19,12 @@ void BattleWindow_UploadTextTilesTask(BattleWindowTransferTask *task)
 
 void BattleWindow_UploadSubTilemapTask(BattleWindowTransferTask *task)
 {
-    func_ov002_0206fb38((BattleWindowManager *)task->destination);
+    BattleWindow_UploadSubTilemap((BattleWindowManager *)task->destination);
 }
 
 void BattleWindow_UploadSubWindowTask(BattleWindowTransferTask *task)
 {
-    func_ov002_0206faec((BattleWindowManager *)task->destination, (const GameWindow *)task->source);
+    BattleWindow_UploadSubWindow((BattleWindowManager *)task->destination, (const GameWindow *)task->source);
 }
 
 void BattleWindow_ResetSubScrollTask(BattleWindowTransferTask *task)
