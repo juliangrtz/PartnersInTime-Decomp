@@ -684,3 +684,4 @@ src/field/field_body_collision.c
 src/field/field_roaming_path.cpp
 src/overlay009/shop_panel_navigation.cpp
 src/overlay009/shop_list_navigation.cpp
+src/overlay007/scene_accelerated_motion.c

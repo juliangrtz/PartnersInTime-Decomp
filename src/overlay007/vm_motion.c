@@ -1,4 +1,4 @@
-#include <game/scene_script.h>
+#include <game/scene_motion.h>
 
 /* Argument-mode bits: a clear bit means the pair of script words still has to
    be joined into one fixed-point value. */
@@ -11,17 +11,9 @@ enum {
     VM_MOTION_CURVE = 4
 };
 
-extern int func_ov007_02086124(void *object, u16 owner, s32 x, s32 y, s32 z,
-                               s32 speed, s32 target, s32 rate, u16 duration);
-extern int func_ov007_020861d4(void *object, u16 owner, s32 x, s32 y, s32 z,
-                               s32 speed, s32 target, s32 rate, u16 duration);
-extern int func_ov007_0208625c(void *object, u16 owner, s32 x, s32 y, s32 z,
-                               s32 speed, s32 target, s32 rate, u16 duration);
 extern int func_ov007_020866a0(void *object, u16 owner, s32 x, s32 y, s32 z,
                                int curve);
 extern int func_ov007_02086828(void *object, u16 owner, s32 x, s32 y, s32 z);
-extern void func_ov007_020869c4(void *object, int owner, int x, int y, int z,
-                                int duration);
 
 void func_ov007_020881d8(ScriptVm *vm, ScriptVmState *state,
                          ScriptVmCommand *command, int store_result)
@@ -86,7 +78,7 @@ void func_ov007_02087fdc(ScriptVm *vm, ScriptVmState *state,
                 command->arguments[7] / 16, command->arguments[9],
                 command->arguments[6]);
         }
-        func_ov007_020869c4(object, (u16)command->arguments[1],
+        SceneObject_MoveTo(object, (u16)command->arguments[1],
             command->arguments[4], command->arguments[5],
             command->arguments[6], result);
         VM_WriteVariable(command->result_variable, result, vm, state);
@@ -100,7 +92,7 @@ void func_ov007_02087fdc(ScriptVm *vm, ScriptVmState *state,
                 command->arguments[7] / 16, command->arguments[9],
                 command->arguments[6]);
         }
-        func_ov007_020869c4(object, (u16)command->arguments[1],
+        SceneObject_MoveTo(object, (u16)command->arguments[1],
             command->arguments[4], command->arguments[5],
             command->arguments[6], result);
     }
@@ -116,14 +108,14 @@ void func_ov007_02087ebc(ScriptVm *vm, ScriptVmState *state,
     }
     if (store_result) {
         VM_WriteVariable(command->result_variable,
-            func_ov007_020861d4(object, (u16)command->arguments[1],
+            SceneObject_StartMotionWithPeakDistance(object, (u16)command->arguments[1],
                 command->arguments[2], command->arguments[3],
                 command->arguments[4], command->arguments[5],
                 command->arguments[6], command->arguments[7],
                 (u16)command->arguments[9]),
             vm, state);
     } else {
-        func_ov007_020861d4(object, (u16)command->arguments[1],
+        SceneObject_StartMotionWithPeakDistance(object, (u16)command->arguments[1],
             command->arguments[2], command->arguments[3],
             command->arguments[4], command->arguments[5],
             command->arguments[6], command->arguments[7],
@@ -145,14 +137,14 @@ void func_ov007_02087d6c(ScriptVm *vm, ScriptVmState *state,
     }
     if (store_result) {
         VM_WriteVariable(command->result_variable,
-            func_ov007_0208625c(object, (u16)command->arguments[1],
+            SceneObject_StartScaledAcceleratedMotion(object, (u16)command->arguments[1],
                 command->arguments[2], command->arguments[3],
                 command->arguments[4], command->arguments[5],
                 command->arguments[6], command->arguments[8],
                 (u16)command->arguments[10]),
             vm, state);
     } else {
-        func_ov007_0208625c(object, (u16)command->arguments[1],
+        SceneObject_StartScaledAcceleratedMotion(object, (u16)command->arguments[1],
             command->arguments[2], command->arguments[3],
             command->arguments[4], command->arguments[5],
             command->arguments[6], command->arguments[8],
@@ -170,14 +162,14 @@ void func_ov007_02087c4c(ScriptVm *vm, ScriptVmState *state,
     }
     if (store_result) {
         VM_WriteVariable(command->result_variable,
-            func_ov007_02086124(object, (u16)command->arguments[1],
+            SceneMotion_StartBallistic(object, (u16)command->arguments[1],
                 command->arguments[2], command->arguments[3],
                 command->arguments[4], command->arguments[5],
                 command->arguments[6], command->arguments[8],
                 (u16)command->arguments[9]),
             vm, state);
     } else {
-        func_ov007_02086124(object, (u16)command->arguments[1],
+        SceneMotion_StartBallistic(object, (u16)command->arguments[1],
             command->arguments[2], command->arguments[3],
             command->arguments[4], command->arguments[5],
             command->arguments[6], command->arguments[8],

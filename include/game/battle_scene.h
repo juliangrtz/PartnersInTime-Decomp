@@ -495,6 +495,9 @@ void BattleSceneObject_MoveByImmediate(BattleSceneObject *object,
                                        int delta_x, int delta_y, int delta_z);
 void BattleSceneObject_AddPositionDelta(BattleSceneObject *object,
                                         int delta_x, int delta_y, int delta_z);
+void BattleSceneObject_MoveToObject(BattleSceneObject *, int, int, int, int, int, BattleSceneObject *);
+void BattleSceneObject_UpdateMoveToObject(BattleSceneObject *, BattleMotionChannel *);
+
 void BattleSceneObject_AdjustPosition(BattleSceneObject *object,
                                       int delta_x, int delta_y, int delta_z);
 void BattleSceneObject_MoveTo(BattleSceneObject *object, int channel_index,

@@ -44,9 +44,6 @@ extern void func_ov002_020a3928(BattleSceneObject *object, int channel_index,
                                 int x, int y, int z, int duration,
                                 int argument_7, int argument_8,
                                 int argument_9);
-extern void func_ov002_020a3b2c(BattleSceneObject *object, int channel_index,
-                                int x, int y, int z, int duration,
-                                BattleSceneObject *target);
 extern int func_ov002_020be478(BattleSceneObject *object, int channel_index,
                                int direction_x, int direction_y,
                                int direction_z, int distance, int duration,
@@ -1120,7 +1117,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         case 5:
             reference = BattleSceneObject_GetById(
                 (u16)command->arguments[7]);
-            func_ov002_020a3b2c(
+            BattleSceneObject_MoveToObject(
                 object, (u16)command->arguments[1],
                 command->arguments[3], command->arguments[4],
                 command->arguments[5], command->arguments[6], reference);
@@ -1209,7 +1206,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
                 FX_Sqrt((delta_x * delta_x + delta_y * delta_y +
                          delta_z * delta_z) << 12),
                 command->arguments[6]);
-            func_ov002_020a3b2c(
+            BattleSceneObject_MoveToObject(
                 reference, (u16)command->arguments[1], command->arguments[3],
                 command->arguments[4], command->arguments[5],
                 command->arguments[6],

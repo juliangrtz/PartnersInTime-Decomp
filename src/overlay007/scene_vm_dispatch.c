@@ -1,4 +1,4 @@
-#include <game/scene_script.h>
+#include <game/scene_motion.h>
 #include <game/save_data.h>
 
 /*
@@ -10,8 +10,6 @@
  * has to reproduce.  The named cases and small access macros keep the C
  * readable without changing that control-flow topology.
  */
-
-typedef void (*SceneMotionCallback)(SceneObject *object, void *motion);
 
 typedef union SceneResourceFlags {
     u32 raw;
@@ -150,23 +148,14 @@ extern void func_ov007_02089000(
     int argument_9
 );
 extern void func_ov007_020883a0();
-extern void func_ov007_02086d08();
-extern void func_ov007_02086abc();
-extern void func_ov007_020869c4();
-extern void func_ov007_02085cb4();
 extern void func_ov007_02085ab0();
 extern void func_ov007_020881d8();
 extern void func_ov007_02087fdc();
 extern void func_ov007_02087ebc();
 extern void func_ov007_02087d6c();
 extern void func_ov007_02087c4c();
-extern void func_ov007_02086044();
-extern void func_ov007_02085f60();
-extern void func_ov007_02085de4();
 extern void func_ov007_02085998();
 extern int SceneObject_IsMotionActiveById();
-extern void func_ov007_02087084();
-extern void *func_ov007_02086f74();
 extern void func_ov007_02087bf4();
 /* The shipped path command targets this interior overlay-7 entry. */
 extern void func_ov007_020724b0(
@@ -452,7 +441,7 @@ int SceneVm_DispatchCommand(
         }
         switch (ARG_U16(2)) {
         case 0:
-            func_ov007_02086d08(
+            SceneObject_AdjustPosition(
                 object,
                 ARG(3) - object->x,
                 ARG(4) - object->y,
@@ -460,18 +449,18 @@ int SceneVm_DispatchCommand(
             );
             break;
         case 1:
-            func_ov007_02086abc(
+            SceneObject_MoveBy(
                 object, ARG_U16(1), ARG(3), ARG(4), ARG(5), ARG(6)
             );
             break;
         case 2:
-            func_ov007_020869c4(
+            SceneObject_MoveTo(
                 object, ARG_U16(1), ARG(3), ARG(4), ARG(5), ARG(6)
             );
             break;
         case 5:
             other = SceneObject_GetById(ARG_U16(7));
-            func_ov007_02085cb4(
+            SceneObject_MoveToObject(
                 object,
                 ARG_U16(1),
                 ARG(3),
@@ -491,7 +480,7 @@ int SceneVm_DispatchCommand(
         void *motion;
 
         object = SceneObject_GetById(ARG_U16(0));
-        motion = func_ov007_02086f74(
+        motion = SceneObject_BeginMotionChannel(
             object, ARG_U16(1), 0, func_ov007_02087bf4
         );
         path_address = (u32)state->script + 2 * ARG(3);
@@ -550,7 +539,7 @@ int SceneVm_DispatchCommand(
             dz = ARG(5);
             value = FX_Sqrt((dx * dx + dy * dy + dz * dz) << 12);
             ARG(6) = _s32_div_f(value, ARG(6));
-            func_ov007_02086abc(
+            SceneObject_MoveBy(
                 object, ARG_U16(1), ARG(3), ARG(4), ARG(5), ARG(6)
             );
             break;
@@ -560,7 +549,7 @@ int SceneVm_DispatchCommand(
             dz = ARG(5) - object->base_y;
             value = FX_Sqrt((dx * dx + dy * dy + dz * dz) << 12);
             ARG(6) = _s32_div_f(value, ARG(6));
-            func_ov007_020869c4(
+            SceneObject_MoveTo(
                 object, ARG_U16(1), ARG(3), ARG(4), ARG(5), ARG(6)
             );
             break;
@@ -575,7 +564,7 @@ int SceneVm_DispatchCommand(
             value = FX_Sqrt((value * value + dy * dy + dz * dz) << 12);
             ARG(6) = _s32_div_f(value, ARG(6));
             object = SceneObject_GetById(ARG(7));
-            func_ov007_02085cb4(
+            SceneObject_MoveToObject(
                 other,
                 ARG_U16(1),
                 ARG(3),
@@ -625,7 +614,7 @@ int SceneVm_DispatchCommand(
             ARG(7) = SceneVm_PackArgumentPair(command, 7) / 16;
         }
         object = SceneObject_GetById(ARG_U16(0));
-        func_ov007_02086044(
+        SceneObject_StartMotionWithVelocityForDuration(
             object,
             ARG_U16(1),
             ARG(2),
@@ -642,7 +631,7 @@ int SceneVm_DispatchCommand(
             ARG(7) = SceneVm_PackArgumentPair(command, 7) / 16;
         }
         object = SceneObject_GetById(ARG_U16(0));
-        func_ov007_02085f60(
+        SceneObject_StartMotionWithAccelerationForDuration(
             object,
             ARG_U16(1),
             ARG(2),
@@ -656,7 +645,7 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_BALLISTIC_ROOT:
         object = SceneObject_GetById(ARG_U16(0));
-        func_ov007_02085de4(
+        SceneObject_StartAcceleratedMotionForDuration(
             object,
             ARG_U16(1),
             ARG(2),
@@ -693,7 +682,7 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_CANCEL_OBJECT_MOTION:
         object = SceneObject_GetById(ARG_U16(0));
-        func_ov007_02087084(object, ARG_U16(1), 0);
+        SceneObject_StopMotionChannel(object, ARG_U16(1), 0);
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_SET_SCREEN_EFFECT:

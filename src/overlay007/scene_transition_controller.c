@@ -1,4 +1,4 @@
-#include <game/scene_script.h>
+#include <game/scene_motion.h>
 
 typedef struct SceneTransitionTask {
     u8 unknown_00[0x20];
@@ -25,9 +25,6 @@ extern void func_ov005_02068908(
 extern void SceneScript_LoadSecondaryArchive(u8 *manager, u8 scene_id);
 extern void SceneObject_SetAnimation(
     SceneObject *object, int variant, int enabled);
-extern void func_ov007_02086d08(
-    SceneObject *object, int x, int y, int z);
-extern void func_ov007_0208701c(SceneObject *object);
 extern void SceneModel_Stop(void *renderable);
 
 static inline void SceneTransition_InitializeObject(
@@ -52,7 +49,7 @@ static inline void SceneTransition_InitializeObject(
         (((SceneRenderable *)object->secondary_renderable)->flags & ~3) | 1;
     SceneObject_SetAnimation(object, variant, 1);
     /* Existing secondary renderables keep their position on repeated updates. */
-    func_ov007_02086d08(
+    SceneObject_AdjustPosition(
         object, x - object->x, y - object->y, z - object->base_y);
 }
 
@@ -65,7 +62,7 @@ static inline void SceneTransition_DestroySecondaryObject(
             object->secondary_renderable = 0;
         }
     }
-    func_ov007_0208701c(object);
+    SceneObject_UnlinkMotion(object);
 }
 
 int SceneTransitionController_Update(SceneTransitionTask *task) {
@@ -119,12 +116,12 @@ int SceneTransitionController_Update(SceneTransitionTask *task) {
 
             object = (SceneObject *)SceneObject_GetById(16);
             SceneTransition_DestroySecondaryObject(object);
-            func_ov007_02086d08(
+            SceneObject_AdjustPosition(
                 object, -128 - object->x, -object->y, -object->base_y);
 
             object = (SceneObject *)SceneObject_GetById(17);
             SceneTransition_DestroySecondaryObject(object);
-            func_ov007_02086d08(
+            SceneObject_AdjustPosition(
                 object, -128 - object->x, -object->y, -object->base_y);
 
             result = 0;

@@ -1,4 +1,4 @@
-#include <game/scene_script.h>
+#include <game/scene_motion.h>
 
 typedef struct SceneManagerWork {
     u8 unknown_000[0x25C];
@@ -26,7 +26,6 @@ extern void func_0202cbd4(void *destination, u32 value, u32 size);
 extern void func_ov005_020663d8(int group);
 extern void func_ov005_02068c54(void *renderable);
 extern void func_ov005_020698f0(int slot);
-extern void func_ov007_0208701c(SceneObject *object);
 extern void SceneModel_Stop(void *renderable);
 extern SceneScriptState *SceneScript_GetObjectState(u32 object_id);
 
@@ -45,7 +44,7 @@ void SceneManager_ClearRuntime(void *manager_raw) {
 
     object = manager->work.first_object;
     for (object_id = 0; object_id < 56; object_id++) {
-        func_ov007_0208701c(object);
+        SceneObject_UnlinkMotion(object);
         if (object->primary_renderable != 0) {
             SceneModel_Stop(object->primary_renderable);
             if (object->primary_renderable != 0) {
@@ -87,7 +86,7 @@ void SceneObjects_ClearSecondaryRange(u8 *manager) {
     SceneScript_Stop(SCENE_SCRIPT_OWNER_SECONDARY);
     for (object_id = 40; object_id < 56; object_id++) {
         object = (SceneObject *)SceneObject_GetById(object_id);
-        func_ov007_0208701c(object);
+        SceneObject_UnlinkMotion(object);
         if (object->primary_renderable != 0) {
             SceneModel_Stop(object->primary_renderable);
             if (object->primary_renderable != 0) {

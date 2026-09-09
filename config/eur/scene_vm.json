@@ -544,7 +544,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "cancels the object's active movement scheduler and immediately moves it by the delta from its current logical position to the supplied absolute coordinates",
-      "evidence": "func_ov007_02081730 case 0x050; func_ov007_02089000 mode 0; func_ov007_02086d08"
+      "evidence": "func_ov007_02081730 case 0x050; func_ov007_02089000 mode 0; SceneObject_AdjustPosition"
     },
     "81": {
       "arguments": ["object_id", "coordinate_id"],
@@ -578,7 +578,7 @@
       "yield": "never",
       "effect": "starts object motion in modes 0, 1, 2, or 5: mode 0 applies an immediate absolute position, or a relative delta when reference_or_relative is nonzero; modes 1 and 2 schedule vector or absolute interpolation; mode 5 schedules motion relative to the referenced object",
       "motion_modes": {"0": "immediate_position", "1": "vector_interpolation", "2": "absolute_interpolation", "5": "reference_object_interpolation"},
-      "evidence": "func_ov007_02081730 case 0x056; func_ov007_02086d08; func_ov007_02086abc; func_ov007_020869c4; func_ov007_02085cb4"
+      "evidence": "func_ov007_02081730 case 0x056; SceneObject_AdjustPosition; SceneObject_MoveBy; SceneObject_MoveTo; SceneObject_MoveToObject"
     },
     "87": {
       "arguments": ["object_id", "motion_slot", "unused_mode", "x", "y", "z", "start_value", "end_value", "step_fixed", "terminal_value"],
@@ -595,7 +595,7 @@
       "yield": "never",
       "effect": "converts vector length to a duration from speed_fixed, then starts mode 1 vector, mode 2 absolute, or mode 5 reference-object interpolation; a nonpositive speed falls back to the object's field +0xDA",
       "motion_modes": {"1": "vector_interpolation", "2": "absolute_interpolation", "5": "reference_object_interpolation"},
-      "evidence": "func_ov007_02081730 case 0x058; func_ov007_02086abc; func_ov007_020869c4; func_ov007_02085cb4"
+      "evidence": "func_ov007_02081730 case 0x058; SceneObject_MoveBy; SceneObject_MoveTo; SceneObject_MoveToObject"
     },
     "89": {
       "arguments": ["object_id", "motion_slot", "axis2_profile", "axis2_target", "speed_fixed_low_or_variable", "speed_fixed_high", "acceleration", "unused"],
@@ -635,7 +635,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "normalizes the direction vector and starts fixed-distance motion through kinematic profile A; nonpositive solved duration cancels the slot and applies the displacement immediately",
-      "evidence": "func_ov007_02081730 cases 0x05D/0x060; func_ov007_02087ebc; func_ov007_020861d4; func_ov007_020862a4"
+      "evidence": "func_ov007_02081730 cases 0x05D/0x060; func_ov007_02087ebc; SceneObject_StartMotionWithPeakDistance; SceneObject_StartAcceleratedMotion"
     },
     "94": {
       "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "acceleration_fixed_low_or_variable", "acceleration_fixed_high", "root_selector"],
@@ -643,7 +643,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "normalizes the direction vector and starts fixed-distance motion using explicit fixed-point velocity and acceleration",
-      "evidence": "func_ov007_02081730 cases 0x05E/0x061; func_ov007_02087d6c; func_ov007_0208625c; func_ov007_020862a4"
+      "evidence": "func_ov007_02081730 cases 0x05E/0x061; func_ov007_02087d6c; SceneObject_StartScaledAcceleratedMotion; SceneObject_StartAcceleratedMotion"
     },
     "95": {
       "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "kinematic_parameter", "root_selector"],
@@ -651,7 +651,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "normalizes the direction vector and starts fixed-distance motion through kinematic profile C, deriving a scheduler parameter before solving duration",
-      "evidence": "func_ov007_02081730 cases 0x05F/0x062; func_ov007_02087c4c; func_ov007_02086124; func_ov007_020862a4"
+      "evidence": "func_ov007_02081730 cases 0x05F/0x062; func_ov007_02087c4c; SceneMotion_StartBallistic; SceneObject_StartAcceleratedMotion"
     },
     "96": {
       "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "profile_parameter", "kinematic_fixed_low_or_variable", "kinematic_fixed_high", "root_selector"],
@@ -683,7 +683,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts normalized directional ballistic motion, deriving acceleration from distance, duration, and terminal speed",
-      "evidence": "func_ov007_02081730 case 0x063; func_ov007_02086044; func_ov007_02086560"
+      "evidence": "func_ov007_02081730 case 0x063; SceneObject_StartMotionWithVelocityForDuration; func_ov007_02086560"
     },
     "100": {
       "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_frames", "acceleration_fixed_low_or_variable", "acceleration_fixed_high"],
@@ -691,7 +691,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts normalized directional ballistic motion, deriving initial speed from distance, duration, and acceleration",
-      "evidence": "func_ov007_02081730 case 0x064; func_ov007_02085f60; func_ov007_02086560"
+      "evidence": "func_ov007_02081730 case 0x064; SceneObject_StartMotionWithAccelerationForDuration; func_ov007_02086560"
     },
     "101": {
       "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_frames", "endpoint_speed", "root_selector"],
@@ -699,7 +699,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts normalized directional ballistic motion using a root selected from distance and endpoint-speed constraints; impossible constraints cancel motion",
-      "evidence": "func_ov007_02081730 case 0x065; func_ov007_02085de4; func_ov007_02086560"
+      "evidence": "func_ov007_02081730 case 0x065; SceneObject_StartAcceleratedMotionForDuration; func_ov007_02086560"
     },
     "105": {
       "arguments": ["object_id", "motion_slot"],
@@ -715,7 +715,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "cancels the selected object motion slot, applies its accumulated terminal displacement to the object's deferred position, clears scheduler state, and preserves any following active slot",
-      "evidence": "func_ov007_02081730 case 0x06A; func_ov007_02087084 with apply_to_position false"
+      "evidence": "func_ov007_02081730 case 0x06A; SceneObject_StopMotionChannel with apply_to_position false"
     },
     "107": {
       "arguments": ["object_id", "motion_slot", "unused_0", "path_relative_halfwords", "path_extent", "step_fixed_low_or_variable", "step_fixed_high"],

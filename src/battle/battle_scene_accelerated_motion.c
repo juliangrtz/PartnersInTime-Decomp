@@ -15,6 +15,13 @@ typedef struct BattleAcceleratedMotionParameters {
 typedef char BattleAcceleratedMotionParameters_SizeCheck[
     sizeof(BattleAcceleratedMotionParameters) == 0x10 ? 1 : -1];
 
+typedef struct BattleTrackingParameters {
+    s16 offset_x, offset_y, offset_z;
+    u16 unknown_06;
+    BattleSceneObject *target;
+} BattleTrackingParameters;
+typedef char BattleTrackingParameters_SizeCheck[sizeof(BattleTrackingParameters) == 12 ? 1 : -1];
+
 typedef int (*BattlePositionAdjustResult)(
     BattleSceneObject *object, int delta_x, int delta_y, int delta_z);
 
@@ -310,4 +317,33 @@ int BattleSceneObject_StartAcceleratedMotionForDuration(
             return result;
         }
     }
+}
+
+void BattleSceneObject_UpdateMoveToObject(BattleSceneObject *object, BattleMotionChannel *channel)
+{
+    BattleTrackingParameters *parameters = (BattleTrackingParameters *)channel->parameters;
+    BattleSceneObject *target = parameters->target;
+    int factor = _s32_div_f(channel->elapsed_q8 << 4, channel->duration);
+    object->x += factor * (target->x + parameters->offset_x - object->x) / 4096;
+    object->y += factor * (target->y + parameters->offset_y - object->y) / 4096;
+    object->z += factor * (target->z + parameters->offset_z - object->z) / 4096;
+}
+
+void BattleSceneObject_MoveToObject(BattleSceneObject *object, int channel, int offset_x, int offset_y,
+                                    int offset_z, int duration, BattleSceneObject *target)
+{
+    int x = offset_x;
+    int y = offset_y;
+    BattleTrackingParameters *parameters;
+    if (duration <= 0) {
+        BattleSceneObject_AdjustPosition(object, target->x + offset_x - object->x,
+                                         target->y + offset_y - object->y, target->z + offset_z - object->z);
+        return;
+    }
+    parameters = (BattleTrackingParameters *)BattleSceneObject_BeginMotionChannel(
+        object, channel, duration, BattleSceneObject_UpdateMoveToObject);
+    parameters->offset_x = x;
+    parameters->offset_y = y;
+    parameters->offset_z = offset_z;
+    parameters->target = target;
 }

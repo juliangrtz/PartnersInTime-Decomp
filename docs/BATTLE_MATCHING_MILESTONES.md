@@ -1427,3 +1427,54 @@ and `evidence_086_00.json` in `build/runtime/eur_shop_navigation/`. Native
 linking, all 74 tests, progress consistency and the public-content audit pass.
 The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+
+### Scene movement channels and accelerated paths (2026-09-09)
+
+This batch adds 3,772 matching bytes in 16 functions, reaching
+555,392 / 1,563,700 mapped ARM9 bytes (**35.52% matching C/C++**).
+The Scene VM gains nine contiguous tracking and accelerated-motion functions
+at `0x02085CB4..0x02086560`. Five scheduler functions at
+`0x02086D60..0x02087240` extend the existing point-motion module. The identical
+304-byte target-tracking pair at `0x020A3B2C..0x020A3C5C` is merged into the
+battle accelerated-motion module.
+
+The shared Scene object/channel header now names the linked list, pause and
+Q8 time-step fields, deferred deltas and per-channel frame deltas. Existing
+point-motion code uses the same checked 228-byte object and 40-byte channel
+layouts. Callers and VM evidence maps use the named declarations. The eight
+bytes at `0x02087228` are the scheduler stop routine's shared return epilogue,
+not a separate function: its predecessor branches there and the reconstructed
+428-byte routine reproduces the entire span exactly. Correcting that symbol
+boundary does not change the mapped-code denominator.
+
+The normal pause-menu route from story checkpoints 86 and 65 opens Bros.
+Items (Start, three Down presses, A), then advances through the animated item
+previews. The full nine-item replay for checkpoint 86 lasts 8,730 frames; the
+three-item checkpoint 65 replay lasts 2,010 frames. All five new scheduler
+functions are observed. Independent models pass 147,485 whole-object and
+103,651 list-head checkpoints. The scheduler additionally passes 19,443
+callback-argument, 14,523 distance-helper and 3,018 stop-helper checks. Completed
+motions, active-channel replacement, deferred motion storage, and removal of
+both list heads and interior nodes are observed. Each native callback effect
+is recaptured for the scheduler model; all callback kinds reached in these
+runs also have separate independent whole-object return models. No RAM or
+script substitution is used, and both supplied battery saves remain unchanged.
+
+The battle target-tracking pair is exercised against Elder Shrooboid using
+checkpoint 83's previously verified encounter state. Two B presses select and
+confirm Luigi's jump. Across 530 frames, the new constructor runs once and
+its callback runs eight times, including the terminal frame. The complete
+260-byte battle-object models pass 680 object and 570 list-head checkpoints,
+including the existing motion helpers. This replay uses no injection; the
+state's original encounter-entry probe had restored all 72 substituted decoded
+command bytes before entering battle. The Scene overlay's nine new tracking
+and acceleration functions remain static-only in this batch. Their original
+bytes, helper relocations and complete native relink all match; the runtime
+claim is deliberately limited to the observed scheduler and battle paths.
+
+Private evidence: `build/runtime/eur_scene_motion/evidence_previews86.json`,
+`evidence_previews65.json`, and
+`build/runtime/eur_battle_tracking/evidence_elder_cursor83.json`. The item
+preview and battle screens were inspected. Native linking, all 74 tests,
+progress consistency and the public-content audit pass. The complete ROM
+retains SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.

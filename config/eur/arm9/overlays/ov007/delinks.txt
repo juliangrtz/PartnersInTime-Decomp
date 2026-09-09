@@ -56,7 +56,7 @@ src/overlay007/party_navigation.c:
     .text start:0x02075400 end:0x020754d0
 
 src/overlay007/point_motion.c:
-    .text start:0x02086974 end:0x02086d60
+    .text start:0x02086974 end:0x02087240
 
 src/overlay007/items.c:
     .text start:0x02074a00 end:0x02074d48
@@ -117,3 +117,6 @@ src/overlay007/nawatobi_rope_constraints.c:
 
 src/overlay007/nawatobi_rope_integrate.c:
     .text start:0x0208b3a4 end:0x0208b420
+
+src/overlay007/scene_accelerated_motion.c:
+    .text start:0x02085cb4 end:0x02086560

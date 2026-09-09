@@ -237,7 +237,7 @@ src/battle/battle_scene_object.c:
     .text       start:0x020a32f4 end:0x020a33a4
 
 src/battle/battle_scene_accelerated_motion.c:
-    .text       start:0x020a3c5c end:0x020a43d8
+    .text       start:0x020a3b2c end:0x020a43d8
 
 src/battle/battle_scene_accelerated_motion_update.c:
     .text       start:0x020a43d8 end:0x020a4518

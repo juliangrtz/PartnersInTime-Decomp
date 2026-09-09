@@ -7,6 +7,8 @@ typedef struct SceneScriptState SceneScriptState;
 typedef struct SceneTask SceneTask;
 typedef struct SceneObject SceneObject;
 
+enum { SCENE_MOTION_CHANNEL_COUNT = 4 };
+
 typedef union SceneObjectFlags {
     u16 raw;
     struct {
@@ -64,22 +66,24 @@ typedef struct SceneMotionChannel {
     void (*callback)(SceneObject *, struct SceneMotionChannel *);
     s32 elapsed_q8;
     s16 duration;
-    u8 unknown_0a[14];
+    u16 has_deferred_delta;
+    s16 deferred_delta_x, deferred_delta_y, deferred_delta_z;
+    s16 frame_delta_x, frame_delta_y, frame_delta_z;
     s16 parameters[8];
 } SceneMotionChannel;
 typedef char SceneMotionChannel_SizeCheck[sizeof(SceneMotionChannel) == 40 ? 1 : -1];
 
 struct SceneObject {
-    u8 unknown_000[0x04];
+    SceneObject *motion_next;
     s16 x;
     s16 y;
     s16 base_y;
     s16 previous_x, previous_y, previous_z;
     s16 drawn_x, drawn_y, drawn_z;
-    s16 unknown_016;
+    s16 time_step_adjustment_q8;
     s16 distance;
-    u16 unknown_01a;
-    SceneMotionChannel motion[4];
+    u16 time_paused;
+    SceneMotionChannel motion[SCENE_MOTION_CHANNEL_COUNT];
     SceneObject *render_next;
     u16 resource_id;
     u16 unknown_0c2;

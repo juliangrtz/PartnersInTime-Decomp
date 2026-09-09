@@ -8,10 +8,6 @@ enum BattleTargetCursorMovementConstant {
     BATTLE_TARGET_CURSOR_ANIMATION_OFFSET = 0x6740
 };
 
-extern void func_ov002_020a3b2c(BattleSceneObject *object, int channel_index,
-                                int x, int y, int z, int duration,
-                                BattleSceneObject *target);
-
 void BattleTargetCursor_MoveToGroup(int duration, int x, int y,
                                     int animation_id) {
     if (animation_id >= 0) {
@@ -42,7 +38,7 @@ void BattleTargetCursor_MoveToActor(int duration, int actor_id,
             animation_id + *(u16 *)actor->actor.resource_slot;
     }
     target = BattleSceneObject_GetById(actor_id);
-    func_ov002_020a3b2c(
+    BattleSceneObject_MoveToObject(
         *(BattleSceneObject **)(gBattleContext +
                                 BATTLE_TARGET_CURSOR_OBJECT_OFFSET),
         3, target->property_0fc, target->property_0fd, target->property_0f8,

@@ -5,9 +5,6 @@ extern void func_ov002_020a3928(BattleSceneObject *object, int channel_index,
                                 int x, int y, int z, int duration,
                                 int argument_7, int argument_8,
                                 int argument_9);
-extern void func_ov002_020a3b2c(BattleSceneObject *object, int channel_index,
-                                int x, int y, int z, int duration,
-                                BattleSceneObject *target);
 enum BattleSceneMovementKind {
     BATTLE_SCENE_MOVEMENT_SET_POSITION,
     BATTLE_SCENE_MOVEMENT_MOVE_BY,
@@ -53,7 +50,7 @@ void BattleSceneObject_ApplyMovement(u32 object_id, int channel_index,
                 object, channel_index, duration, target_object_id, z, 1);
             return;
         case BATTLE_SCENE_MOVEMENT_TOWARD_OBJECT:
-            func_ov002_020a3b2c(
+            BattleSceneObject_MoveToObject(
                 object, channel_index, x, y, z, duration,
                 BattleSceneObject_GetById((u16)target_object_id));
             return;

@@ -1,4 +1,4 @@
-#include <game/scene_script.h>
+#include <game/scene_motion.h>
 
 typedef struct SceneRenderablePosition {
     u8 unknown_00[0x5C];
@@ -20,7 +20,6 @@ typedef struct SceneManager {
 
 extern void MIi_CpuClear16(u16 value, void *destination, u32 size);
 extern void func_ov005_02069084(void *renderable, int selector);
-extern void func_ov007_02086d60(void);
 extern void SceneObject_UpdateAnimationLimit(SceneObject *object);
 
 void SceneObjects_UpdateAndDraw(u8 *manager) {
@@ -34,7 +33,7 @@ void SceneObjects_UpdateAndDraw(u8 *manager) {
     int draw_row;
     volatile u16 clear_value;
 
-    func_ov007_02086d60();
+    SceneMotion_UpdateAll();
     clear_value = 0;
     MIi_CpuClear16(
         clear_value, scene->work.render_rows,
