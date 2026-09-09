@@ -279,4 +279,4 @@ src/field/field_party_recovery.cpp:
     .text start:0x0208b488 end:0x0208bdc8
 
 src/field/field_party_manager_actions.cpp:
-    .text start:0x0209dd8c end:0x0209e8cc
+    .text start:0x0209dd8c end:0x0209ef28

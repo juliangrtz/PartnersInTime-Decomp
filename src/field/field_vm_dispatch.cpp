@@ -78,13 +78,6 @@ extern void func_ov000_0209ce00(void *party_controller);
 extern void func_ov000_02071a38(u8 *field_context, int layout_mode,
                                 int instant);
 extern void func_ov000_02089da8(void *baby_party_controller, int visible);
-extern void func_ov000_0209ec48(void *party_manager, int party_side,
-                                u16 field_mode, int argument_3,
-                                int argument_4);
-extern void func_ov000_0209e8cc(void *party_manager, int party_side,
-                                u16 action_type_mask);
-extern int func_ov000_0209ebdc(void *party_manager, int party_side,
-                               int present_party_mask);
 extern void func_ov000_020a0c30(void *party_manager, int party_side,
                                 int instant, int reserved, int enabled);
 extern void func_ov000_0209cbfc(void *party_controller, int reserved);
@@ -3595,8 +3588,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_SET_PARTY_FIELD_MODE:
         if ((FieldVm_GetPresentPartyMask(field_context) &
              (1 << arguments[0])) != 0) {
-            func_ov000_0209ec48(
-                party_manager, arguments[0],
+            FieldPartyManager_SetFieldMode(
+                (FieldPartyManager *)party_manager, arguments[0],
                 (u16)arguments[1], 0, 0);
         }
         break;
@@ -3604,17 +3597,17 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_CANCEL_PARTY_ACTIONS:
         if (arguments[0] == -1) {
             if ((FieldVm_GetPresentPartyMask(field_context) & 1) != 0) {
-                func_ov000_0209e8cc(
-                    party_manager, 0, (u16)arguments[1]);
+                FieldPartyManager_CancelActions(
+                    (FieldPartyManager *)party_manager, 0, (u16)arguments[1]);
             }
             if ((FieldVm_GetPresentPartyMask(field_context) & 2) != 0) {
-                func_ov000_0209e8cc(
-                    party_manager, 1, (u16)arguments[1]);
+                FieldPartyManager_CancelActions(
+                    (FieldPartyManager *)party_manager, 1, (u16)arguments[1]);
             }
         } else if ((FieldVm_GetPresentPartyMask(field_context) &
                     (1 << arguments[0])) != 0) {
-            func_ov000_0209e8cc(
-                party_manager, arguments[0],
+            FieldPartyManager_CancelActions(
+                (FieldPartyManager *)party_manager, arguments[0],
                 (u16)arguments[1]);
         }
         break;
@@ -3622,8 +3615,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_WAIT_PARTY_ACTIONS_IDLE:
         if ((FieldVm_GetPresentPartyMask(field_context) &
              (1 << arguments[0])) != 0 &&
-            func_ov000_0209ebdc(
-                party_manager, arguments[0],
+            FieldPartyManager_HasActiveActions(
+                (FieldPartyManager *)party_manager, arguments[0],
                 FieldVm_GetPresentPartyMask(field_context))) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);

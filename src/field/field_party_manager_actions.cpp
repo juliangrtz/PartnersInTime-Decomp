@@ -4,6 +4,10 @@
 #include <game/field_presentation.h>
 #include <game/field_linear.h>
 extern "C" {
+void func_ov000_0209336c(FieldPartyController *, int, int);
+void func_ov000_0208995c(FieldPartyController *);
+void func_ov000_02089da8(FieldPartyController *, int);
+void func_ov000_0208b208(FieldPartyController *, int);
 void func_ov000_0208addc(FieldPartyController *, fx32);
 void func_ov000_0208bef4(FieldPartyController *, int);
 void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
@@ -15,6 +19,140 @@ void func_ov000_020a0c30(FieldPartyManager *, int, int, int, int);
 }
 #define ADULT manager->parties[0]
 #define BABY manager->parties[1]
+#define PARTY manager->parties[side]
+#define PAIRED manager->parties[side ^ 1]
+extern "C" void FieldPartyManager_SetFieldMode(FieldPartyManager *manager, int side, u16 mode, int force,
+                                               int preserve)
+{
+    if (force || mode != PARTY.leader->bits.movement_mode ||
+        (!mode &&
+         (PARTY.leader->entity.locomotion_state > 3U || PARTY.follower->entity.locomotion_state > 3U))) {
+        if (!preserve && mode && PARTY.leader->bits.movement_mode)
+            func_ov000_0209336c(&PARTY, 1, 0);
+        if (mode != 5)
+            PARTY.unknown_054 = 0;
+        switch (mode) {
+        case 0:
+            func_ov000_0209336c(&PARTY, !preserve, preserve);
+            if (!preserve) {
+                if ((PAIRED.leader->entity.locomotion_state >= 41U &&
+                     PAIRED.leader->entity.locomotion_state <= 58U) ||
+                    (PAIRED.follower->entity.locomotion_state >= 41U &&
+                     PAIRED.follower->entity.locomotion_state <= 58U))
+                    func_ov000_0209336c(&PAIRED, !preserve, preserve);
+            }
+            break;
+        case 1:
+            if (!side)
+                FieldParty_ResumeGroundMovement(&PARTY, preserve);
+            else
+                FieldParty_InitializeAuxiliary(&PARTY, preserve);
+            break;
+        case 2:
+            FieldParty_ResumeState11Or17(&PARTY, preserve);
+            break;
+        case 3:
+            FieldParty_ResumeBrosBall(&PARTY, preserve);
+            break;
+        case 4:
+            FieldParty_PrepareCollisionOverride(&PARTY, preserve);
+            break;
+        case 5:
+            FieldParty_RestoreMode5(&PARTY, preserve);
+            func_ov000_02089da8(&PARTY, 1);
+            break;
+        case 6:
+            FieldPartyManager_CompleteReunion(manager);
+            break;
+        case 7:
+            FieldParty_ResumeState62Or74(&PARTY, preserve);
+            break;
+        case 8:
+            func_ov000_0208b208(&PARTY, preserve);
+            break;
+        }
+    }
+}
+extern "C" int FieldPartyManager_HasActiveActions(FieldPartyManager *manager, int side,
+                                                  int present_party_mask)
+{
+    int idle = 1;
+    if (!PARTY.backup.active &&
+        (FieldPartyEntity_HasActiveAction(PARTY.leader) || FieldPartyEntity_HasActiveAction(PARTY.follower)))
+        idle = 0;
+    return idle == 0;
+}
+extern "C" void FieldPartyManager_CancelActions(FieldPartyManager *manager, int side, u16 mask)
+{
+    FieldPartyEntity *leader = PARTY.leader;
+    u32 mode = leader->bits.movement_mode;
+    if (mask & (1 << mode)) {
+        switch (mode) {
+        case 0:
+            switch (leader->entity.locomotion_state) {
+            case 4:
+            case 7:
+                FieldParty_MoveFollowerToSeparationOffset(&PARTY);
+                break;
+            case 28:
+            case 31:
+                FieldParty_ReverseFollowerOffset(&PARTY);
+                break;
+            case 19:
+                leader->state_record->unknown_00[0] |= 2;
+                break;
+            }
+            break;
+        case 1:
+            if (leader->entity.locomotion_state <= 3U) {
+                if (!side)
+                    FieldParty_SeparateFollower(&PARTY);
+                else
+                    FieldParty_ReturnFollowerToLeader(&PARTY);
+            }
+            break;
+        case 2:
+            if (leader->entity.locomotion_state <= 12U || leader->entity.locomotion_state >= 16U)
+                FieldParty_BeginSpinJumpFall(&PARTY, (mask & 2) != 0);
+            else
+                leader->state_record->flags.unknown_03 = (mask & 2) != 0;
+            break;
+        case 3:
+            if (leader->entity.locomotion_state >= 20U && leader->entity.locomotion_state <= 21U)
+                FieldParty_ExitBrosBall(&PARTY);
+            else if (leader->entity.locomotion_state >= 81U && leader->entity.locomotion_state <= 87U)
+                leader->state_record->resources.flags.unknown_00 = 1;
+            break;
+        case 4:
+            if (leader->entity.locomotion_state <= 3U)
+                FieldParty_RestoreCollisionState(&PARTY, 0);
+            break;
+        case 5:
+            if (leader->entity.locomotion_state <= 3U)
+                func_ov000_0208995c(&PARTY);
+            break;
+        case 6:
+            if (leader->entity.locomotion_state <= 3U)
+                FieldPartyManager_CancelReunion(manager);
+            break;
+        case 7:
+            if (VM_ReadVariable(8196, 0, 0))
+                FieldParty_CancelBabySpin(&PARTY);
+            break;
+        case 8:
+            if (VM_ReadVariable(8201, 0, 0)) {
+                FieldPartyController *party = &PARTY;
+                FieldParty_BeginRecoveryBlink(party, 0);
+                FieldParty_BeginRecoveryBlink(party, 1);
+            }
+            break;
+        }
+    }
+}
+
+#undef PARTY
+#undef PAIRED
+
 extern "C" void FieldPartyManager_BeginReunion(FieldPartyManager *manager, int side, int instant)
 {
     FieldPartyController *party = &manager->parties[side];

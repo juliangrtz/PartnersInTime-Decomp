@@ -51,6 +51,10 @@ void FieldPartyManager_LaunchBrosBall(FieldPartyManager *manager,int direction);
 void FieldPartyManager_LaunchBabiesToElevation(FieldPartyManager *manager,fx32 height);
 void FieldPartyManager_DropBabies(FieldPartyManager *manager);
 
+void FieldPartyManager_SetFieldMode(FieldPartyManager *manager,int side,u16 mode,int force,int preserve);
+int FieldPartyManager_HasActiveActions(FieldPartyManager *manager,int side,int present_party_mask);
+void FieldPartyManager_CancelActions(FieldPartyManager *manager,int side,u16 mask);
+
 #ifdef __cplusplus
 }
 #endif

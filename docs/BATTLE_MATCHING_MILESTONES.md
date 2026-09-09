@@ -2653,3 +2653,37 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **610,596 / 1,563,700 bytes (39.05%)**; C/C++ plus assembly: **39.38%**.
+
+
+## Field-party manager mode dispatch and action cancellation (2026-09-09)
+
+Reconstructed **1,628 bytes** across three contiguous routines, extending the
+existing manager module. Typed VM calls now select field modes, cancel the
+selected action types and query active member actions. The dispatcher preserves
+the original mode guards, paired-group reset, optional preservation arguments
+and recovery-state flag writes. The busy query retains the VM caller's unused
+third argument without inventing a role for it.
+
+Nineteen controlled decoded-command replays from supplied save 83 checked
+**3,019 frames and 35 returns**. They covered both group indices, the unchanged
+mode-0 guard, dispatch to modes 1 through 8, mode-dependent cancellation and
+both idle queries. Mode-5 entry was verified separately; its cancellation did
+not complete in this checkpoint, which lacks the associated area-specific
+resources. That branch and cancellation states not reached by these replays
+remain statically verified. These are explicit VM request fixtures, not claims
+of normal story progression through every special action.
+
+Original-byte guards and SP-matched helper/return checks compared the complete
+16,764-byte manager, four 1,440-byte members, renderers, helper arguments and
+returned busy values. All 72 substituted decoded-command bytes and the script
+cursor were restored at native wrapper entry, and original-command replay was
+checked. No additional state fields or ROM code were patched. All 104 supplied
+saves retained their hashes. Reports: the nineteen `evidence_*.json` files in
+`build/runtime/eur_party_manager_modes/`. Initial state SHA-1:
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`; save-83 SHA-1:
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b`.
+
+Validation: all 74 tests, public-content audit, whitespace checks and
+zero-difference native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**612,224 / 1,563,700 bytes (39.15%)**; C/C++ plus assembly: **39.49%**.
