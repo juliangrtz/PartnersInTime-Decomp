@@ -756,4 +756,6 @@ src/battle/battle_target_cursor_animation.c
 src/battle/battle_object_load_queue.c
 src/battle/battle_capture_copy.c
 src/overlay006/title_panel_motion.c
-src/overlay006/title_moving_sprite_lifecycle.c
+src/overlay006/title_moving_sprite.c
+src/overlay006/title_moving_sprite_orbit.c
+src/overlay006/title_panel_resources.c

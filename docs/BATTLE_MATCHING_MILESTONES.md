@@ -4090,3 +4090,39 @@ hashed. All 81 tests, public-content and whitespace checks pass; native relink
 has zero differences and ROM SHA-1 remains
 ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
 656,356 / 1,563,700 bytes (41.97%); C/C++ plus ASM is 42.31%.
+
+
+## 2026-09-10 - Title sprite rendering, orbit reset and panel release (+936 bytes)
+
+TitleMovingSprite_Draw (0x0206E7B8, 556 bytes) extends the adjacent lifecycle
+module, now named title_moving_sprite.c. TitleMovingSprite_ResetOrbit
+(0x0206EC20, 300 bytes) and TitlePanelResources_Release (0x0206E388, 80 bytes)
+occupy their separate exact ranges while the intervening functions remain
+unfinished. All three are readable C with no assembly. The 48-byte child view
+is checked and shared; moving-sprite offset 0x38 is now named angle, confirmed
+by native trigonometric lookup and rotation data flow. Original switches and
+repeated child-pointer loads are preserved rather than collapsing state checks
+or caching an alias across writes.
+
+Runtime: build/runtime/eur_title_panel_motion/evidence_draw83.json and
+evidence_release83.json, from ordinary cold boots with checkpoint 83 and no RAM
+fixtures. The first run waits 3,600 frames, presses Start and reaches the load
+menu (4,233 frames total). All 13,324 draw returns agree across states 0..3;
+9,848 child orbit positions and 4,736 temporary parent render offsets are
+independently checked. Rotation resets, depth, exact draw/animation helper
+arguments, complete 68-byte work, 48-byte child and 440-byte model records agree.
+All 29 orbit resets cover all four side/variant combinations: fourteen choose
+a random animation and fifteen read the paired model's animation through its
+actual virtual callback. Helper side effects are refreshed at return; this
+does not independently reimplement the external renderer or resource loader.
+
+The 1,533-frame release run reaches one normal panel-resource release: both
+owned buffers are freed, their pointers are cleared, and texture/palette lists
+are unlinked using the exact native helper sequence. Null-buffer release
+branches remain static-only. Title screenshots were inspected; the load-menu
+BG VRAM/palette hashes agree with the previously inspected normal boot. All
+104 supplied saves are unchanged and display-memory dumps are recorded.
+
+All 81 tests, whitespace and public-content checks pass. Native relink has zero
+differences; canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+Matching C/C++ is 657,292 / 1,563,700 bytes (42.03%); C/C++ plus ASM is 42.37%.

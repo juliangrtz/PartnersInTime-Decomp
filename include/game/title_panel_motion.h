@@ -46,6 +46,14 @@ typedef struct TitlePanelLayoutValue {
 } TitlePanelLayoutValue;
 typedef char TitlePanelTrail_SizeCheck[sizeof(TitlePanelTrail) == 8 ? 1 : -1];
 typedef char TitlePanelLayoutValue_SizeCheck[sizeof(TitlePanelLayoutValue) == 6 ? 1 : -1];
+typedef struct TitleMovingSpriteChild {
+    u8 unknown_00[12];
+    s32 x, y, depth;
+    u8 unknown_18[16];
+    BattleModel *sub_model, *main_model;
+} TitleMovingSpriteChild;
+typedef char TitleMovingSpriteChild_SizeCheck[sizeof(TitleMovingSpriteChild) == 48 ? 1 : -1];
+
 typedef struct TitleMovingSprite TitleMovingSprite;
 struct TitleMovingSprite {
     void *unknown_00;
@@ -59,7 +67,7 @@ struct TitleMovingSprite {
     BattleModel *sub_model, *main_model;
     void *child;
     void *parent;
-    s32 unknown_38, velocity;
+    s32 angle, velocity;
     struct {
         u8 side : 1, variant : 1, unknown_02_07 : 6;
     } flags;
@@ -76,11 +84,14 @@ void TitlePanel_StartFadeIn(TitlePanel *panel);
 void TitlePanel_StartPulse(TitlePanel *panel);
 void TitlePanel_TryStartTrail(TitlePanel *panel, int chance_denominator);
 void TitleElement_Append(TitleElementLink *element);
+void TitlePanelResources_Release(TitlePanelResources *resources);
 void TitlePanel_Init(TitlePanel *panel, TitlePanelResources *resources, int index);
 void TitlePanel_Update(TitlePanel *panel);
 int TitlePanel_DrainTrail(TitlePanel *panel);
 void TitlePanel_RecordTrail(TitlePanel *panel);
 void TitlePanel_ResetPulse(TitlePanel *panel);
+void TitleMovingSprite_Draw(TitleMovingSprite *work);
+void TitleMovingSprite_ResetOrbit(TitleMovingSprite *work);
 void TitleMovingSprite_Destroy(TitleMovingSprite *work);
 void TitleMovingSprite_StartOrbit(TitleMovingSprite *work);
 void TitleMovingSprite_StartEntry(TitleMovingSprite *work);
