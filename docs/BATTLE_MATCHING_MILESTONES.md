@@ -2359,3 +2359,38 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **596,480 / 1,563,700 bytes (38.15%)**; C/C++ plus assembly: **38.48%**.
+
+## Pause-menu label selection and row positioning (2026-09-09)
+
+Reconstructed five routines, **488 bytes**, for main-page and submenu labels,
+release of the label task group/allocation, and relative positioning of text
+and icon rows. A checked 72-byte row task holds integer-pixel offsets. The
+shared pause workspace now names the selected menu and label origin. Text
+sprites receive coordinates with twelve fractional bits; animated icons use
+integer halfwords. Both join draw list 40. The allocation/create gaps remain
+assembly pending compiler differences, so the small source regions can merge
+when those gaps are reconstructed.
+
+Normal navigation from supplied save **20** entered the pause menu, Equipment,
+its Clothing/Badges choice, returned to the main menu and visited the remaining
+available pages. Two replays total **680 frames and 1,029 checked returns**:
+seven main-page labels, one submenu label, 204 icon-row updates, 816 text-row
+updates and one release. Checks compared complete task/sprite records and the
+shared origin, and validated text entry arguments plus task-group/allocation
+release targets. Pages 0 through 4, party count 4 and submenu entry 0 were
+observed. Page 5, party counts 1/2 and other submenu indices retain static
+matching evidence. An additional run from early save 1 did not enter the
+pause menu and contributes no target coverage.
+
+Private reports: `build/runtime/eur_menu_label/evidence_menu20.json` and
+`evidence_pages20.json`; input-state SHA-1:
+`d2c8a01fd324265a80ade9948d2d5d397de5a314` and
+`31a76da9975161ba9520a0be73de41a7cf9ecbed`. Save 20 SHA-1:
+`e78faca7c148cb07941601554f06f279a29c4488`. Screenshots confirmed the label and
+submenu transitions. No code or RAM fixtures were used. All **104 supplied
+saves** retained their before/after hashes.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**596,968 / 1,563,700 bytes (38.18%)**; C/C++ plus assembly: **38.51%**.

@@ -153,3 +153,12 @@ src/overlay007/menu_equipment_display.cpp:
 
 src/overlay007/menu_equipment_motion.cpp:
     .text start:0x0207a81c end:0x0207ad1c
+
+src/overlay007/pause_menu_label.cpp:
+    .text start:0x0207ad1c end:0x0207ae0c
+
+src/overlay007/pause_menu_submenu_label.cpp:
+    .text start:0x0207aedc end:0x0207af44
+
+src/overlay007/pause_menu_label_motion.cpp:
+    .text start:0x0207b120 end:0x0207b1b0

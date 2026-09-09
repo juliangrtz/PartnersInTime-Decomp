@@ -723,3 +723,6 @@ src/overlay007/menu_number.cpp
 src/overlay007/menu_number_glyphs.cpp
 src/overlay007/menu_equipment_display.cpp
 src/overlay007/menu_equipment_motion.cpp
+src/overlay007/pause_menu_label.cpp
+src/overlay007/pause_menu_submenu_label.cpp
+src/overlay007/pause_menu_label_motion.cpp
