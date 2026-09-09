@@ -84,8 +84,10 @@ typedef struct FieldResourceContext {
     u8 unknown_2a6c[0xC6];
     u8 entity_count;
     u8 trailing_entity_count;
-    s8 special_resources[5];
+    s8 special_resources[6];
 } FieldResourceContext;
+
+typedef char FieldResourceContext_SizeCheck[sizeof(FieldResourceContext) == 11068 ? 1 : -1];
 
 typedef char FieldPrimaryResource_SizeCheck[sizeof(FieldPrimaryResource) == 24 ? 1 : -1];
 typedef char FieldSecondaryResource_SizeCheck[sizeof(FieldSecondaryResource) == 20 ? 1 : -1];

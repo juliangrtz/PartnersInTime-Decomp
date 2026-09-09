@@ -5,8 +5,6 @@
 #include <game/field_linear.h>
 extern "C" {
 void func_ov000_0209336c(FieldPartyController *, int, int);
-void func_ov000_0208995c(FieldPartyController *);
-void func_ov000_02089da8(FieldPartyController *, int);
 void func_ov000_0208b208(FieldPartyController *, int);
 void func_ov000_0208bef4(FieldPartyController *, int);
 void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
@@ -58,7 +56,7 @@ extern "C" void FieldPartyManager_SetFieldMode(FieldPartyManager *manager, int s
             break;
         case 5:
             FieldParty_RestoreMode5(&PARTY, preserve);
-            func_ov000_02089da8(&PARTY, 1);
+            FieldParty_SetAttachedSpriteVisible(&PARTY, 1);
             break;
         case 6:
             FieldPartyManager_CompleteReunion(manager);
@@ -128,7 +126,7 @@ extern "C" void FieldPartyManager_CancelActions(FieldPartyManager *manager, int 
             break;
         case 5:
             if (leader->entity.locomotion_state <= 3U)
-                func_ov000_0208995c(&PARTY);
+                FieldParty_BeginAuxiliaryPlacement(&PARTY);
             break;
         case 6:
             if (leader->entity.locomotion_state <= 3U)

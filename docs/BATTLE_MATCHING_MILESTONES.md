@@ -2722,3 +2722,43 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **613,292 / 1,563,700 bytes (39.22%)**; C/C++ plus assembly: **39.56%**.
+
+
+## Field-party auxiliary placement and launch (2026-09-09)
+
+Reconstructed **3,044 bytes** across six contiguous routines, extending the
+special-actions module back to `0x0208995C`. The functions manage auxiliary
+placement, attached-sprite visibility, state-76 cancellation, renderer cleanup
+and launching/finishing auxiliary objects. Checked shared layouts now expose
+the launch record and all six special-resource indices; resource-table size
+remains 11,068 bytes. Names remain neutral where the gameplay role is uncertain.
+
+Two post-integration replays checked **1,152 frames and 33 target returns**,
+observing all six functions. In room 284, decoded C2/CA/BB requests prepared the
+action and ordinary Y presses launched two objects, covering both remaining-
+count and empty-count finishes. In room 287, BD cancellation at native follower
+state 76 reached placement, interrupted-state cleanup and both resource binds.
+The saved-area-value restoration branch remains statically verified.
+
+Room 287 was selected from the actual FEvData resource lists and confirmed in
+live RAM: its primary resources include IDs 113/114 as well as 34/35/36. A
+separate **601-frame D0 preparation** used the native transition for both groups
+to establish room assets and party-presence flags; one incidental visibility
+return also passed its oracle. The room transition terminates the old script,
+so its 72 decoded bytes were restored without claiming original-script replay.
+Both subsequent action replays restored the 72 bytes and cursor and verified
+original-command replay. No additional RAM state or ROM code was patched.
+
+SP-matched helper/return models compared complete 8,356-byte parties, 1,440-byte
+members, 1,360-byte auxiliaries, 11,216-byte areas, 1,300-byte attached entities
+and 312-byte renderers, including helper arguments. All **104 supplied saves**
+retained their hashes. Reports: `build/runtime/eur_party_marker/` files
+`evidence_launch284.json`, `evidence_cancel287.json`, `evidence_both287.json`.
+Initial action states SHA-1: `011112768f64870262327dedb06dbecf1f6e223d` and
+`28477b36a7f040b7dded7e4e78f1e1ab83da8a24`; save-51 SHA-1:
+`459c9b510b361c4e800a396d8b56ddf847235c74`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**616,336 / 1,563,700 bytes (39.42%)**; C/C++ plus assembly: **39.75%**.

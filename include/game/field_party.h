@@ -70,6 +70,7 @@ typedef struct FieldPartySnapshot FieldPartySnapshot;
 typedef struct FieldPartyStateRecord {
     union {
         u32 unknown_00[8];
+        struct { u8 auxiliary_index, elapsed_frames, unknown_02[30]; } auxiliary_launch;
         struct {
             fx32 body_vertical_extent, navigation_vertical_extent;
             u8 unknown_08[24];
@@ -179,6 +180,11 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_BeginAuxiliaryPlacement(FieldPartyController *party);
+void FieldParty_SetAttachedSpriteVisible(FieldPartyController *party, int visible);
+void FieldParty_FinishState76(FieldPartyController *party);
+void FieldParty_FinishAuxiliaryLaunch(FieldPartyController *party);
+void FieldParty_LaunchAuxiliary(FieldPartyController *party);
 void FieldParty_LaunchToElevation(FieldPartyController *party, fx32 height);
 void FieldParty_BeginState89(FieldPartyController *party);
 void FieldParty_BeginBabyDrop(FieldPartyController *party);

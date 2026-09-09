@@ -32,6 +32,7 @@ typedef char FieldAuxiliaryAnimationInfo_SizeCheck[sizeof(FieldAuxiliaryAnimatio
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldAuxiliary_StopSpecialRenderer(FieldAuxiliaryEntity *aux);
 void FieldAuxiliary_UpdateRenderPriority(FieldAuxiliaryEntity *aux);
 void FieldAuxiliary_UpdateAnimation(FieldAuxiliaryEntity *aux, int mode, int restart);
 void FieldAuxiliary_UpdateRendererAtOffset(FieldAuxiliaryEntity *aux, u8 default_priority);

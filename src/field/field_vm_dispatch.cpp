@@ -77,7 +77,6 @@ extern void func_ov000_0209ce44(void *party_controller, int member,
 extern void func_ov000_0209ce00(void *party_controller);
 extern void func_ov000_02071a38(u8 *field_context, int layout_mode,
                                 int instant);
-extern void func_ov000_02089da8(void *baby_party_controller, int visible);
 extern void func_ov000_020a0c30(void *party_manager, int party_side,
                                 int instant, int reserved, int enabled);
 extern void func_ov000_0209cbfc(void *party_controller, int reserved);
@@ -3580,8 +3579,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_SET_PARTY_ATTACHED_SPRITE_VISIBLE:
-        func_ov000_02089da8(
-            FieldVm_GetPartyController(party_manager, 1),
+        FieldParty_SetAttachedSpriteVisible(
+            (FieldPartyController *)FieldVm_GetPartyController(party_manager, 1),
             arguments[0] != 0);
         break;
 

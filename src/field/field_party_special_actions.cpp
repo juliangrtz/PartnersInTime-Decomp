@@ -1,5 +1,12 @@
 #include "field_party_internal.h"
 #include <game/field_blink.h>
+#include <game/field_auxiliary.h>
+#include <game/field_geometry.h>
+extern "C" {
+void func_ov000_0209336c(FieldPartyController *, int, int);
+void func_ov000_020a6d68(FieldEntity *, const void *, int, int, int, int, int);
+extern const fx32 data_ov000_020c07f8[][2], data_ov000_020c07fc[][2];
+}
 
 #define RECORD(member) party->members[member]->state_record->resources
 static inline void SaveBehavior(FieldPartyController *party, int member)
@@ -231,3 +238,216 @@ void FieldParty_BeginState78(FieldPartyController *party)
     GameAudio_PlayEffectDelayed(211, 0, -1);
 }
 }
+
+#define LEADER party->leader
+#define FOLLOWER party->follower
+#define CURRENT_AREA party->areas[party->flags.field_screen]
+#define PREVIOUS_AREA party->areas[party->flags.previous_field_screen]
+static inline void RestoreBehavior(FieldPartyController *party, int member)
+{
+    if (party->members[member]->presentation.behavior_saved) {
+        party->members[member]->entity.saved_presentation_flag_bits.behavior_mode =
+            party->members[member]->presentation.saved_behavior;
+        party->members[member]->presentation.behavior_saved = 0;
+    } else
+        party->members[member]->entity.saved_presentation_flag_bits.behavior_mode = 3;
+}
+extern "C" void FieldParty_LaunchAuxiliary(FieldPartyController *party)
+{
+    int index = party->unknown_054 % 6;
+    --party->unknown_054;
+    if (party->unknown_054) {
+        if (party->unknown_094_render)
+            party->unknown_094_render->set_animation(party->unknown_054, 0, 1);
+    } else
+        FieldParty_SetAttachedSpriteVisible(party, 0);
+    FieldResourceContext *area = PREVIOUS_AREA;
+    int resource_index = area->special_resources[2];
+    const FieldPrimaryResource *resource = resource_index != -1 ? &area->primary[0][resource_index] : 0;
+    fx32 x, y;
+    FieldGeometry_GetDirectionVector(LEADER->entity.base_state_flag_bits.facing_direction, 40960, &x, &y);
+    FieldAuxiliaryEntity *aux = LEADER->auxiliaries[index];
+    aux->entity.base.property_00a_bits.property_00a_flag_00 = 1;
+    aux->entity.base_state_flag_bits.animation_wait_enabled = 1;
+    aux->entity.runtime_flag_bits.sync_horizontal = 1;
+    aux->entity.runtime_flag_bits.sync_vertical = 1;
+    aux->entity.runtime_flag_bits.unknown_02 = 1;
+    aux->entity.unknown_3c8 = 0;
+    aux->entity.unknown_3c8 |= 4096;
+    aux->entity.runtime_flag_bits.auto_priority_0 = 1;
+    aux->entity.collision_state_flag_bits.unknown_04 = 1;
+    aux->entity.collision_state_flag_bits.unknown_06 = 1;
+    aux->entity.collision_state_flag_bits.unknown_07 = 1;
+    aux->entity.field_state_flag_bits.body_collision_enabled = 1;
+    aux->bits.follow_position = 0;
+    aux->bits.follow_direction = 0;
+    aux->target = 0;
+    aux->bits.direction_mode = 0;
+    aux->bits.unknown_04 = 0;
+    aux->bits.unknown_05_06 = 0;
+    aux->bits.unknown_07_08 = 0;
+    aux->bits.follow_locomotion = 0;
+    aux->entity.collision_extra_bits.unknown_20 = 1;
+    aux->entity.locomotion_state = 94;
+    FieldEntity3D_SetPosition(&aux->entity, LEADER->entity.position_x, LEADER->entity.position_y,
+                              LEADER->entity.position_z);
+    aux->bits.unknown_19 = 1;
+    aux->bits.resource_index = PREVIOUS_AREA->special_resources[2];
+    aux->bits.unknown_28_31 = -1;
+    aux->offset_x = 0;
+    aux->offset_y = 0;
+    aux->offset_z = 0;
+    aux->previous_offset_x = 0;
+    aux->previous_offset_y = 0;
+    aux->previous_offset_z = 0;
+    aux->owner_offset_x = 0;
+    aux->owner_offset_y = 0;
+    aux->owner_offset_z = 0;
+    aux->entity.animation_id = LEADER->entity.base_state_flag_bits.facing_direction;
+    func_ov000_020a7010((FieldPartyEntity *)aux, resource, LEADER->entity.unknown_1e8,
+                        LEADER->entity.unknown_1ec, 256);
+    aux->entity.render_object->state_flag_bits.behavior_state = 0;
+    func_020093b4(aux->entity.render_object, 1);
+    FieldEntity_SetFacingDirection(&aux->entity, 0, LEADER->entity.base_state_flag_bits.facing_direction, 1);
+    FieldLinear3D_Start(&aux->entity, 1, 16 * x, 16 * y, 0, 18432, 0, 18432, -18432, 15, 15, 1, 0);
+}
+extern "C" void FieldParty_FinishAuxiliaryLaunch(FieldPartyController *party)
+{
+    party->state.unknown_01 = 1;
+    party->flags.unknown_04 = 1;
+    party->flags.unknown_06 = 1;
+    if (!party->unknown_054) {
+        party->unknown_06c = 65536;
+        func_ov000_0209336c(party, 1, 0);
+    } else {
+        FieldResourceContext *area = PREVIOUS_AREA;
+        int index = area->special_resources[0];
+        const FieldPrimaryResource *resource = index != -1 ? &area->primary[0][index] : 0;
+        func_ov000_020a6d68(&LEADER->entity.base, resource, 0, 0, -1, 1, 128);
+        LEADER->presentation.unknown_05 = 1;
+        LEADER->presentation.resource_index = PREVIOUS_AREA->special_resources[0];
+        RestoreBehavior(party, 0);
+        LEADER->entity.locomotion_state = 0;
+    }
+}
+extern "C" void FieldAuxiliary_StopSpecialRenderer(FieldAuxiliaryEntity *aux)
+{
+    aux->bits.resource_index = -1;
+    FieldEntity_StopRenderer(&aux->entity);
+}
+extern "C" void FieldParty_FinishState76(FieldPartyController *party)
+{
+    func_ov000_02092e24(party, FOLLOWER);
+    FOLLOWER->entity.locomotion_state = 3;
+    RestoreBehavior(party, 1);
+    FOLLOWER->entity.field_state_flag_bits.unknown_16 = 0;
+    FOLLOWER->auxiliary->entity.base.property_00a_bits.property_00a_flag_00 = 0;
+    FOLLOWER->auxiliary->entity.base.set_visible(0);
+    FOLLOWER->auxiliary->entity.base.unknown_30();
+    if (FOLLOWER->state_record->member_action.flags.area_value_saved) {
+        CURRENT_AREA->unknown_2458 = FOLLOWER->state_record->member_action.saved_area_value;
+        FOLLOWER->state_record->member_action.flags.area_value_saved = 0;
+    }
+    FOLLOWER->state_record->unknown_00[0] &= ~0x7ff;
+}
+extern "C" void FieldParty_SetAttachedSpriteVisible(FieldPartyController *party, int visible)
+{
+    if (visible) {
+        if (party->unknown_054) {
+            FieldResourceContext *area = party->areas[party->state_bits.unknown_05];
+            int index = area->special_resources[5];
+            FieldRuntimeEntity *entity = index != -1 ? area->entities[index] : 0;
+            entity->base.set_visible(0);
+            entity->base.property_00a_bits.property_00a_flag_00 = 0;
+            s16 x = party->indicator_x + party->indicator_offset_x;
+            s16 y = party->indicator_y + party->indicator_slide_y + party->indicator_offset_y;
+            party->unknown_094_render = entity->render_object;
+            party->unknown_094_render->set_animation(party->unknown_054, 0, 1);
+            party->unknown_094_render->unknown_060 =
+                (u8)(party->flags.unknown_03 ? party->state_bits.unknown_14_17
+                                             : party->state_bits.movement_mode);
+            FieldRenderObject *renderer = party->unknown_094_render;
+            renderer->animation_offset_x = x - 10;
+            renderer->animation_offset_y = y + 17;
+            func_020093b4(party->unknown_094_render, (u8)party->indicator_bits.visible);
+            party->state_bits.unknown_13 = 1;
+        }
+    } else if (party->unknown_094_render) {
+        func_020093b4(party->unknown_094_render, 0);
+        party->unknown_094_render->unknown_060 = (u8)party->state_bits.unknown_14_17;
+        party->unknown_094_render = 0;
+        party->state_bits.unknown_13 = 0;
+    }
+}
+extern "C" void FieldParty_BeginAuxiliaryPlacement(FieldPartyController *party)
+{
+    party->flags.previous_field_screen = party->flags.field_screen;
+    party->flags.unknown_04 = 0;
+    party->flags.unknown_06 = 0;
+    party->flags.unknown_10_13 = 0;
+    LEADER->entity.movement_speed = 0;
+    FOLLOWER->entity.movement_speed = 0;
+    party->state.unknown_01 = 0;
+    FieldParty_SetAttachedSpriteVisible(party, 0);
+    if (FOLLOWER->entity.locomotion_state >= 76U && FOLLOWER->entity.locomotion_state <= 77U)
+        FieldParty_FinishState76(party);
+    LEADER->state_record->auxiliary_launch.elapsed_frames = 0;
+    LEADER->entity.locomotion_state = 80;
+    FieldResourceContext *area = CURRENT_AREA;
+    int resource_index = area->special_resources[3];
+    const FieldPrimaryResource *resource = resource_index == -1 ? 0 : &area->primary[0][resource_index];
+    func_ov000_020a6d68(&LEADER->entity.base, resource, 0, 0, -1, 1, 256);
+    LEADER->presentation.unknown_05 = 1;
+    LEADER->presentation.resource_index = CURRENT_AREA->special_resources[3];
+    LEADER->entity.render_object->state_flag_bits.behavior_state = 1;
+    if (!LEADER->presentation.behavior_saved) {
+        LEADER->presentation.saved_behavior = (u16)LEADER->entity.saved_presentation_flag_bits.behavior_mode;
+        LEADER->presentation.behavior_saved = 1;
+    }
+    LEADER->entity.saved_presentation_flag_bits.behavior_mode = 1;
+    area = CURRENT_AREA;
+    resource_index = area->special_resources[3];
+    resource = resource_index != -1 ? &area->primary[0][area->special_resources[4]] : 0;
+    int index = party->unknown_054 % 6;
+    FieldAuxiliaryEntity *aux = LEADER->auxiliaries[index];
+    aux->entity.base.property_00a_bits.property_00a_flag_00 = 1;
+    aux->entity.base_state_flag_bits.animation_wait_enabled = 1;
+    aux->entity.runtime_flag_bits.sync_horizontal = 0;
+    aux->entity.runtime_flag_bits.sync_vertical = 0;
+    aux->entity.runtime_flag_bits.unknown_02 = 0;
+    aux->entity.unknown_3c8 = 0;
+    aux->entity.unknown_3c8 &= ~4096;
+    aux->entity.runtime_flag_bits.auto_priority_0 = 0;
+    aux->entity.collision_state_flag_bits.unknown_04 = 0;
+    aux->entity.collision_state_flag_bits.unknown_06 = 0;
+    aux->entity.collision_state_flag_bits.unknown_07 = 0;
+    aux->entity.field_state_flag_bits.body_collision_enabled = 1;
+    aux->bits.follow_position = 1;
+    aux->bits.follow_direction = 1;
+    aux->target = &LEADER->entity;
+    aux->bits.direction_mode = 1;
+    aux->bits.unknown_04 = 0;
+    aux->bits.unknown_05_06 = 0;
+    aux->bits.unknown_07_08 = 0;
+    aux->bits.follow_locomotion = 1;
+    aux->entity.locomotion_state = 80;
+    aux->bits.unknown_19 = 1;
+    aux->bits.resource_index = CURRENT_AREA->special_resources[4];
+    aux->bits.unknown_28_31 = -1;
+    aux->owner_offset_x = data_ov000_020c07f8[LEADER->entity.base_state_flag_bits.facing_direction][0];
+    aux->owner_offset_y = data_ov000_020c07fc[LEADER->entity.base_state_flag_bits.facing_direction][0];
+    aux->owner_offset_z = 0;
+    aux->entity.animation_id = LEADER->entity.base_state_flag_bits.facing_direction;
+    func_ov000_020a7010((FieldPartyEntity *)aux, resource, LEADER->entity.unknown_1e8,
+                        LEADER->entity.unknown_1ec, 256);
+    aux->entity.render_object->state_flag_bits.behavior_state = 1;
+    func_020093b4(aux->entity.render_object, 1);
+    LEADER->state_record->auxiliary_launch.auxiliary_index = index;
+    party->unknown_054 = 0;
+    GameAudio_PlayEffectDelayed(320, 0, -1);
+}
+
+#undef LEADER
+#undef FOLLOWER
+#undef CURRENT_AREA
+#undef PREVIOUS_AREA
