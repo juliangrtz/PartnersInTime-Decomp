@@ -454,3 +454,6 @@ src/battle/battle_entry_capture_wait.cpp:
 
 src/battle/battle_entry_transition.cpp:
     .text start:0x02075910 end:0x02076178
+
+src/battle/battle_lifecycle.cpp:
+    .text start:0x02077268 end:0x02077c38

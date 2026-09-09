@@ -711,3 +711,4 @@ src/battle/battle_entry_tasks.cpp
 src/battle/battle_entry_graphics.cpp
 src/battle/battle_entry_capture_wait.cpp
 src/battle/battle_entry_transition.cpp
+src/battle/battle_lifecycle.cpp

@@ -11,7 +11,6 @@ extern int data_ov002_020c071c;
 extern u8 data_ov002_020beaac[], data_ov002_020beabc[], data_ov002_020beacc[], data_ov002_020beadc[],
     data_ov002_020beaec[], data_ov002_020beafc[], data_ov002_020beb0c[], data_ov002_020beb14[];
 void func_ov002_0206a44c(void *);
-int func_ov002_02077268(void *);
 void *func_ov002_020725a4(int (*)(void *), void *, int, int);
 void func_02009078(int, void *, void *);
 void func_02037190(void);
@@ -69,7 +68,7 @@ extern "C" void BattleEntry_LoadArchives(BattleQueuedTask *task)
     BattleInterface_RequestScreenLoad(0);
     BattleInterface_RequestScreenLoad(1);
     BattleInterface_RequestLoad();
-    func_ov002_020725a4(func_ov002_02077268, 0, 0, 0);
+    func_ov002_020725a4(BattleMain_UploadTextures, 0, 0, 0);
     task->callback = 0;
 }
 

@@ -7,7 +7,7 @@
 #include <game/sprite_animation.h>
 #include <game/matrix_animation.h>
 
-/* Shared battle allocation through the palette buffers used by the frame loop.
+/* Shared battle allocation including the palette buffers used by the frame loop.
  * Interface storage stays opaque here; each UI subsystem owns its detailed view. */
 typedef struct BattleFrameContextView {
     u8 unknown_00000[4];
@@ -34,7 +34,9 @@ typedef struct BattleFrameContextView {
     s16 selected_command;
     u8 unknown_0011c[0xc];
     u16 command_state_128;
-    u8 unknown_0012a[0x4ece];
+    u8 unknown_0012a[0x486];
+    BattleSceneObject scene[70];
+    u8 unknown_04cc8[0x330];
     BattlePartyActor *party[4];
     u8 unknown_05008[0x1520];
     BattleSceneObject *camera[2];
@@ -47,7 +49,9 @@ typedef struct BattleFrameContextView {
     u8 target_marker[16];
     u8 party_indicators[2][12];
     u8 results[32];
-    u8 unknown_0677c[0x14c];
+    u8 unknown_0677c[24];
+    BattleModel *resource_models[72];
+    u8 unknown_068b4[20];
     BattleModel *party_animation_model;
     void *party_animation_data;
     u8 unknown_068d0[0x2274];
@@ -65,13 +69,13 @@ typedef struct BattleFrameContextView {
     u8 unknown_0c774[0x428];
     s16 view_position[4];
     s16 camera_offset[2];
-    u8 unknown_0cba8[0x8];
+    s8 parallax_scale[8];
     s8 scroll_step[8];
     s16 scroll_position[8];
     s16 image_effect_frames;
     s16 image_effect_period;
     u16 *palette[2];
-    u8 unknown_0cbd4[0x4];
+    u16 *sub_palette_tail;
     const s16 *palette_commands[2];
     u8 unknown_0cbe0[0x10];
     GameSpriteAnimation *sprite_animation;
@@ -86,6 +90,11 @@ typedef char BattleFrameContextViewSizeCheck[sizeof(BattleFrameContextView) == 4
 extern "C" {
 #endif
 void BattleMain_Update(void);
+BattleFrameContextView *BattleMain_Create(u32 heap_start);
+BattleFrameContextView *BattleMain_InitTask(BattleFrameContextView *battle, int priority);
+void *BattleMain_Destroy(void *task);
+void BattleMain_VBlank(void);
+int BattleMain_UploadTextures(void *task);
 #ifdef __cplusplus
 }
 #endif

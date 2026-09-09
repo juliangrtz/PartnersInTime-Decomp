@@ -1998,3 +1998,52 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **583,972 / 1,563,700 bytes (37.35%)**; C/C++ plus assembly: **37.68%**.
+
+## Battle lifecycle and VBlank uploads (2026-09-09)
+
+Reconstructed five contiguous functions, **2,512 bytes**, covering battle task
+creation, the recurring texture-upload callback, VBlank transfers and destruction.
+The checked context view now includes its seventy scene objects, seventy-two
+resource models, signed parallax scales and separate final sub-palette source.
+Native array access patterns reproduced the original induction variables directly;
+nullable inline cleanup retains the original virtual deletion guards.
+
+Four emulator replays covered **1,389 frames and 1,792 verified returns across all
+five functions**: 902 texture-upload callbacks, 886 VBlank calls, two destructors,
+one constructor and one allocation entry. Independent models checked helper targets
+and arguments, caller RAM changes, all **5,336 direct MMIO stores**, and **1,814,528
+bytes each of OAM upload and clearing**. The VBlank runs covered both settings of
+the sub-upload gate and changing brightness during entry. Destruction verified
+26 virtual model deletions, four animation finalizations/deletions, twelve heap
+destructions, and both native session-state requests (0 and 7).
+
+A one-VBlank fixture exercised negative and fractional parallax, odd brightness
+levels, all three pending palette sources (**1,024 bytes**) and captured-image
+conversion. A deterministic **24,576-byte** pattern in live LCDC VRAM was compared
+with the complete independently rearranged destination at `0x0621A000`. After the
+checks, all 50,254 bytes of modified input fields, image source/destination,
+palettes and scroll/brightness registers were restored and verified. The battle
+command wheel remained visible after this test. Hardware restoration uses halfword
+writes, preserving the DS palette/VRAM access semantics.
+
+Entry used the documented restored Scene VM encounter fixture (`-32748`). Exit
+tests temporarily set the native frame-end turn-state condition to zero and
+restored it before entering destruction. A second exit test additionally selected
+exit mode 1; native cleanup cleared the ten-byte encounter request and reached the
+retry/load menu through state 7. The state-0 test verified all cleanup operations
+but remained black after a further 601 frames, so it does **not** establish a
+complete natural return to the field. No naturally won/lost battle is claimed.
+Allocation failure, null-context VBlank and defeat-effect kind 4 retain static
+matching evidence only.
+
+Private reports: `build/runtime/eur_battle_lifecycle/evidence_entry55.json`,
+`evidence_exit55.json`, `evidence_exit_mode7_55.json`, `evidence_graphics55.json`.
+Entry input-state SHA-1: `e44df106d65e52df1ffc2b125538354f67cb1b22`;
+battle input-state SHA-1: `496c6a6836f08c15e95655bb5d78c4cde65dc688`.
+Supplied save 55 remained unchanged:
+`239ff9d26a5806eada7c1b73a95e27e38872681c`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**586,484 / 1,563,700 bytes (37.51%)**; C/C++ plus assembly: **37.84%**.

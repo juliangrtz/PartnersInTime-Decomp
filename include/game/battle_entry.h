@@ -7,7 +7,8 @@
  * nibble selects the entry animation; bit 8 selects the Luigi-side initiator. */
 typedef struct BattleEntrySaveView {
     s16 formation;
-    u8 unknown_02[6];
+    u8 unknown_02[4];
+    s16 exit_mode;
     union {
         s16 raw;
         struct {

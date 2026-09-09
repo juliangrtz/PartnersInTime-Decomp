@@ -23,7 +23,6 @@ void func_02036cc0(const MtxFx44 *);
 void func_0202cbd4(void *, int, u32);
 void BattleHitQueue_Update(void);
 void func_ov002_020ad5d0(void);
-void func_ov002_02077724(void *);
 void BattleTargetCursor_Update(void *);
 void BattlePartyHpPanel_UpdateMember(void *);
 void BattlePartyHpPanel_Update(void *);
@@ -189,7 +188,7 @@ void BattleMain_Update(void)
         }
         u8 *allocation = gBattleContext;
         if (allocation) {
-            func_ov002_02077724(allocation);
+            BattleMain_Destroy(allocation);
             GameHeap_Delete(allocation);
         }
     }

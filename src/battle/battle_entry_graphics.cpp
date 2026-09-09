@@ -32,7 +32,6 @@ void func_02036ee0(int, int, int, int, int);
 void func_02036f24(int, int, int, int);
 void func_02036cc0(const MtxFx44 *);
 void *func_ov002_02072508(void (*)(void), void *, int, int);
-void func_ov002_020772bc(void);
 void func_ov002_020b6038(void);
 }
 #define REG32(address) (*(vu32 *)(address))
@@ -154,7 +153,7 @@ extern "C" void BattleEntry_InitializeGraphics(void)
     func_ov002_02072508(BattleEntry_ShowBattleDisplay, 0, 0, 0);
     FRAME->main_brightness_level = 32;
     FRAME->sub_brightness_level = 0;
-    FRAME->vblank = func_ov002_020772bc;
+    FRAME->vblank = BattleMain_VBlank;
     FRAME->update = BattleEntry_WaitArchives;
 }
 
