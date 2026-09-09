@@ -3,8 +3,9 @@
  * with story save 83. The alternate state-68 and restore paths retain neutral
  * names until their gameplay behavior has been observed. */
 extern "C" {
+extern u16 FX_Atan2Idx(fx32, fx32);
+extern const s16 FX_SinCosTable_[];
 void func_ov000_02092770(FieldPartyController *, FieldPartyEntity *, int, int, int, int);
-void func_ov000_0208be88(FieldPartyController *, FieldPartyEntity *);
 
 void FieldParty_BeginBabySpin(FieldPartyController *party, int member)
 {
@@ -142,7 +143,7 @@ void FieldParty_ResumeState62Or74(FieldPartyController *party, int preserve_stat
             if (party->unknown_055 == -1)
                 party->members[member]->entity.locomotion_state = 62;
             else {
-                func_ov000_0208be88(party, party->members[member]);
+                FieldParty_InitializeBabySpinAnchorOrbit(party, party->members[member]);
                 party->members[member]->entity.locomotion_state = 74;
             }
             party->members[member]->bits.movement_mode = 7;
@@ -205,5 +206,69 @@ void FieldParty_BeginState68(FieldPartyController *party, int member)
     party->leader->presentation.unknown_15 = 0;
     party->follower->presentation.unknown_15 = 0;
     GameAudio_PlayEffectDelayed(220, 0, -1);
+}
+void FieldParty_TryAnchorBabySpin(FieldPartyController *party, int index)
+{
+    FieldPartyEntity *leader = party->leader;
+    int state = leader->entity.locomotion_state;
+    if (state == 61 || state == 62 || state == 63 || state == 75) {
+        FieldRuntimeEntity *target =
+            party->areas[party->flags.field_screen]->entities[index];
+        if (state == 61 || (leader->entity.position_z <= target->position_z + target->body_vertical_extent &&
+                            leader->entity.position_z >= target->position_z - 65536)) {
+            party->flags.previous_field_screen = party->flags.field_screen;
+            party->unknown_055 = index;
+            party->flags.unknown_04 = 0;
+            party->flags.unknown_06 = 0;
+            party->flags.unknown_10_13 = 0;
+            party->leader->entity.movement_speed = 0;
+            party->follower->entity.movement_speed = 0;
+            FieldVertical_Stop(&party->leader->entity);
+            FieldVertical_Stop(&party->follower->entity);
+            party->leader->entity.field_state_flag_bits.track_ground = 0;
+            party->follower->entity.field_state_flag_bits.track_ground = 0;
+            party->state.unknown_00 = 0;
+            party->state.unknown_01 = 0;
+            party->flags.unknown_14 = 0;
+            party->follower->follower_flags->enabled = 0;
+            FieldLinear3D_StartFollowing(&party->leader->entity, target, -32768, 0, 114688, 0, 0, 0, 1,
+                                         &party->leader->movement);
+            FieldLinear3D_StartFollowing(&party->follower->entity, target, 32768, 0, 114688, 0, 0, 0, 1,
+                                         &party->follower->movement);
+            party->leader->entity.locomotion_state = 73;
+            party->follower->entity.locomotion_state = 73;
+            FieldParty_CopyAttachedRenderPriorities(party);
+            FieldParty_SetMemberAction(party, 0, 30);
+            FieldParty_SetMemberAction(party, 1, 30);
+            GameAudio_PlayEffectDelayed(216, 0, -1);
+        }
+    }
+}
+
+void FieldParty_InitializeBabySpinAnchorOrbit(FieldPartyController *party, FieldPartyEntity *member)
+{
+    FieldRuntimeEntity *target =
+        party->areas[party->flags.previous_field_screen]->entities[party->unknown_055];
+    member->state_record->anchor_orbit.angle = FX_Atan2Idx(member->entity.position_y - target->position_y,
+                                                           member->entity.position_x - target->position_x) +
+                                               0x4000;
+    member->state_record->anchor_orbit.angular_speed = 3911;
+}
+
+void FieldParty_UpdateBabySpinAnchorOrbit(FieldPartyController *party, FieldPartyEntity *member)
+{
+    FieldRuntimeEntity *target =
+        party->areas[party->flags.previous_field_screen]->entities[party->unknown_055];
+    FieldPartyAnchorOrbit *orbit = &member->state_record->anchor_orbit;
+    orbit->angle += orbit->angular_speed;
+    FieldEntity3D_AccumulateMotion(
+        &member->entity,
+        target->position_x +
+            (FX_SinCosTable_[2 * (member->state_record->anchor_orbit.angle >> 4)] << 15) / 4096 -
+            member->entity.position_x,
+        target->position_y +
+            -32768 * FX_SinCosTable_[2 * (member->state_record->anchor_orbit.angle >> 4) + 1] / 4096 -
+            member->entity.position_y,
+        0);
 }
 }

@@ -6,7 +6,6 @@
 #include <game/field_linear.h>
 extern "C" {
 void func_ov000_0208b208(FieldPartyController *, int);
-void func_ov000_0208bef4(FieldPartyController *, int);
 void func_ov000_0209cb90(FieldPartyController *, int);
 void func_020093b4(FieldRenderObject *, int);
 void func_ov000_020a0c30(FieldPartyManager *, int, int, int, int);
@@ -318,7 +317,7 @@ extern "C" void FieldPartyManager_MoveToAnchor(FieldPartyManager *manager, int s
     if (!side)
         FieldParty_TryFollowEntityAtHeight(&ADULT, index);
     else
-        func_ov000_0208bef4(&BABY, index);
+        FieldParty_TryAnchorBabySpin(&BABY, index);
 }
 extern "C" void FieldPartyManager_PrepareBrosBallLaunch(FieldPartyManager *manager)
 {

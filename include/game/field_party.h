@@ -71,9 +71,17 @@ typedef struct FieldPartyEntity {
 typedef char FieldPartyEntity_SizeCheck[sizeof(FieldPartyEntity) == 0x5a0 ? 1 : -1];
 
 typedef struct FieldPartySnapshot FieldPartySnapshot;
+typedef struct FieldPartyAnchorOrbit {
+    u8 unknown_00[20];
+    u16 angle, angular_speed;
+    u8 unknown_18[8];
+} FieldPartyAnchorOrbit;
+typedef char FieldPartyAnchorOrbit_SizeCheck[sizeof(FieldPartyAnchorOrbit) == 32 ? 1 : -1];
+
 typedef struct FieldPartyStateRecord {
     union {
         u32 unknown_00[8];
+        FieldPartyAnchorOrbit anchor_orbit;
         struct { u8 auxiliary_index, elapsed_frames, unknown_02[30]; } auxiliary_launch;
         struct {
             fx32 body_vertical_extent, navigation_vertical_extent;
@@ -208,6 +216,9 @@ void FieldParty_LandBabySpin(FieldPartyController *party, int member);
 void FieldParty_CancelBabySpin(FieldPartyController *party);
 void FieldParty_GlideBabySpin(FieldPartyController *party);
 void FieldParty_HoldBabySpin(FieldPartyController *party);
+void FieldParty_UpdateBabySpinAnchorOrbit(FieldPartyController *party, FieldPartyEntity *member);
+void FieldParty_InitializeBabySpinAnchorOrbit(FieldPartyController *party, FieldPartyEntity *member);
+void FieldParty_TryAnchorBabySpin(FieldPartyController *party, int index);
 void FieldParty_BeginBabySpin(FieldPartyController *party, int member);
 void FieldParty_BeginHammerSwing(FieldPartyController *party, int member);
 void FieldParty_EndHammerSwing(FieldPartyController *party, int member);

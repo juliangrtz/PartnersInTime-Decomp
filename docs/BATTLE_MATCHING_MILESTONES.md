@@ -3730,3 +3730,38 @@ Checkpoint 65 SHA-1: 0844b75810855bc3a738122b29382ed5a6c9f983.
 Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701, progress and public-content checks pass.
 Matching C/C++ is 646,640 / 1,563,700 bytes (41.35%); C/C++ plus ASM is 41.69%.
+
+
+## 2026-09-10 - Baby Spin anchor following and orbit (+864 bytes)
+
+The three routines at 0x0208BDC8..0x0208C128 now match in C++ and extend the
+existing contiguous field_party_baby_spin.cpp module. They request following
+an existing field entity, initialize the orbit angle and advance a radius-eight
+orbit from the native sine/cosine table. FieldPartyAnchorOrbit provides a checked
+32-byte alternate view of the party state record. Shared prototypes replace
+raw names in the party manager and the existing state-74 restore path.
+
+Runtime evidence: build/runtime/eur_field_baby_spin_anchor/evidence_anchor83.json.
+The source is checkpoint 83's transitions_action_mode83.dst, SHA-1
+3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61; original save SHA-1 is
+2cb577d3008975c390a2f00e2b2cd646e4005c1b. The 551-frame ordinary-input sequence
+B/wait/B/wait/left/wait/right/wait starts Baby Spin. At frame 89, while the
+leader is in state 61, one controlled decoded C3(1, 0) command selects the
+nearest existing eligible field entity (area 0x0220788C, target 0x0220CA60).
+The original 72-byte command and four-byte cursor are restored at dispatcher
+return. No party state, position, resource or target record is directly changed.
+This is isolated anchor coverage, not a naturally selected story anchor.
+
+Native following proceeds into both members' orbit initializers and 322 orbit
+updates. All 325 SP-matched returns pass complete party/member/area/target/state
+records, full native code guards and exact helper arguments. Independent
+sine-table calculations check displacements in all four quadrants. The atan2
+helper result and other external-helper effects are accepted at their return;
+they are not claimed as independently reconstructed here. The state-61 path
+is covered; height acceptance/rejection in states 62/63/75 remains static-only.
+The final image is the ordinary Star Hill field. OBJ VRAM and palettes are
+dumped and hashed, and all 104 original battery saves retain their hashes.
+
+Validation: all 81 tests, zero native relink differences and canonical ROM SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
+647,504 / 1,563,700 bytes (41.41%); C/C++ plus ASM is 41.74%.
