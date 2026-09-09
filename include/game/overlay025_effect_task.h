@@ -43,8 +43,9 @@ struct Overlay25WorkPrefix {
     BattleEffect *model_effect, *sprite_effect;
     u32 unknown1a28;
     s16 phase, unknown1a2e;
-    s16 slots[7];
-    u8 unknown1a3e[82];
+    s16 slots[16];
+    s16 secondary_slots[16];
+    s16 slot_depth_offsets[16];
     Overlay25Task tasks[8];
 };
 typedef char Overlay25Parameters_SizeCheck[sizeof(Overlay25Parameters) == 32 ? 1 : -1];
@@ -55,6 +56,11 @@ typedef char Overlay25WorkPrefix_SizeCheck[sizeof(Overlay25WorkPrefix) == 7088 ?
 #ifdef __cplusplus
 extern "C" {
 #endif
+void Overlay25Enemy_WaitLinkedEffectAnimation(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Enemy_InitializeLinkedEffects(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Enemy_BeginLinkedEffects(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Projectile_CheckHit(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
+void Overlay25Enemy_EmitProjectile(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_BeginReturn(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
 void Overlay25EffectSequence_InitializeAlternate(Overlay25Task *task, BattleSceneObject *object,
                                                  Overlay25WorkPrefix *);

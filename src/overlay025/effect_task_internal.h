@@ -17,7 +17,6 @@ extern void func_ov025_020c5ea8(Overlay25Task *, BattleSceneObject *, Overlay25W
 extern void func_ov025_020c6c4c(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c9580(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020ca858(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
-extern void func_ov025_020cb8d4(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020cbbb0(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 static inline void Overlay25Object_GetViewPosition(BattlePosition *pos, BattleSceneObject *object)
 {

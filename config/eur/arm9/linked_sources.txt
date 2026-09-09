@@ -557,9 +557,6 @@ src/overlay025/ov25_enemy_wait_pair.cpp
 src/overlay025/ov25_enemy_begin_model_effect.cpp
 src/overlay025/ov25_enemy_reset_stopped_animation.cpp
 src/overlay025/ov25_enemy_begin_next_animation.cpp
-src/overlay025/ov25_projectile_spawn_burst799.cpp
-src/overlay025/ov25_enemy_wait_return_variant.cpp
-src/overlay025/ov25_enemy_begin_projectile_phase.cpp
 src/overlay025/ov25_enemy_begin_load_and_move.cpp
 src/overlay017/ov17_participant_get_travel_duration.cpp
 src/overlay017/ov17_participant_get_home_position.cpp
@@ -747,3 +744,5 @@ src/field/field_party_transition_requests.cpp
 src/battle/battle_model_afterimage.c
 src/field/field_room_interaction.cpp
 src/field/field_room_transition.cpp
+src/overlay025/enemy_linked_effects.cpp
+src/overlay025/enemy_projectile_sequence.cpp

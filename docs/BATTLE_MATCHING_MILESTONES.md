@@ -3473,3 +3473,56 @@ Validation: zero native relink differences, canonical ROM SHA-1
 whitespace checks pass. Matching C/C++ is **640,824 / 1,563,700 bytes (40.98%)**;
 C/C++ plus ASM is **41.32%**. The adjacent projectile-growth callback remains
 private because its first readable draft still differs in register allocation.
+
+
+## 2026-09-09 - Overlay 25 projectile emission, hits and linked effects (+1,604 bytes)
+
+Five more routines match exactly: Overlay25Enemy_EmitProjectile (464 bytes),
+Overlay25Projectile_CheckHit (208), Overlay25Enemy_BeginLinkedEffects (216),
+Overlay25Enemy_InitializeLinkedEffects (416), and
+Overlay25Enemy_WaitLinkedEffectAnimation (300). They join existing neighboring
+functions in two contiguous modules: `enemy_linked_effects.cpp`,
+0x020CAF7C..0x020CB664, and `enemy_projectile_sequence.cpp`,
+0x020CB838..0x020CBBB0. Three old small source files are consolidated. The
+checked 7,088-byte work layout now exposes all sixteen source slots, sixteen
+secondary slots and sixteen depth offsets used by native linked-object updates.
+
+The emission routine spaces shots by 54 frames, selects the party target from
+the current attack mask, and initializes sibling tasks. Hit checking scans the
+twenty-byte native collision records, distinguishing outgoing and incoming hits
+from a missed projectile. The linked-effect sequence selects an eligible party
+actor, loads resource 52, binds object pairs 40/41 and 42/43, and transitions
+through effects 510/511 and 802/803. Unknown scene bits retain neutral names.
+
+Runtime reports: `build/runtime/eur_ov25_projectile_burst/`.
+`evidence_ordinary103.json` runs 2,570 frames using ordinary B/wait inputs from
+the previously documented giant-phase state (SHA-1
+`f83e3507a0e81de426d54c5da1d4593a365d5f8c`). This probe makes no RAM changes:
+163 EmitProjectile returns include four shots, two targeting each party member,
+159 delay frames and the final-shot transition. The 224 CheckHit returns include
+220 movement waits and four outgoing collisions. The battle reaches Mario's
+next command wheel normally, with party HP 47/64.
+
+`evidence_linked_fixture103.json` uses one four-byte task callback substitution
+at frame 320, selecting 0x020CB248 immediately before the native dispatcher loads
+it. All resource loading and later transitions remain native. Its 1,170 frames
+cover BeginLinkedEffects once, InitializeLinkedEffects twice (including one
+load wait), and WaitLinkedEffectAnimation once. The target is Mario; the final
+screenshot shows the large purple/white orb and particles above the giant boss.
+This is controlled sequence-entry coverage, not a claim of a complete ordinary
+attack. Unlike the preceding launch probe, it needs no intermediate gate bypass.
+
+Across both reports, byte-guarded entries, calls and SP-matched returns validate
+391 completed calls to all five new routines. Full task/work/object/model,
+party-actor, effect and hit records agree at the relevant boundaries. Six
+independent view projections and one final object position agree with native
+results; called-helper arguments agree, while helper side effects are explicitly
+refreshed. Incoming collisions, missed projectiles, ineligible-party selection
+and the linked animation wait remain static-only. BG VRAM/palettes are dumped
+and hashed; all 104 original supplied saves remain unchanged.
+
+Validation: zero native relink differences, canonical ROM SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`, all 74 tests, progress/public-content
+and whitespace checks pass. Matching C/C++ is **642,428 / 1,563,700 bytes
+(41.08%)**; C/C++ plus ASM is **41.42%**. Drafts of the adjacent motion starter
+and loading/movement callback remain private because they still differ.
