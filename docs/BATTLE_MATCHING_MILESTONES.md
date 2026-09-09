@@ -4126,3 +4126,36 @@ BG VRAM/palette hashes agree with the previously inspected normal boot. All
 All 81 tests, whitespace and public-content checks pass. Native relink has zero
 differences; canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
 Matching C/C++ is 657,292 / 1,563,700 bytes (42.03%); C/C++ plus ASM is 42.37%.
+
+
+## 2026-09-10 - Battle particle sweep constructors (+368 bytes)
+
+BattleParticleSweep_CreateEmitter (0x020AF97C, 244 bytes) and
+BattleParticleSweep_CreateParticle (0x020AF57C, 124 bytes) are matching C.
+The shared header checks the 16/12-byte parameter and 28/24-byte task layouts.
+The battle VM uses the named emitter entry point for its two sweep commands.
+Native rendering data flow identifies the five-bit field as polygon alpha;
+the high bit records whether particles remain active. The surrounding emitter
+update and particle renderer remain unfinished and are not counted here.
+
+Runtime: build/runtime/eur_battle_particle_sweep/evidence_sweep103.json records
+571 frames from the existing checkpoint-103-derived boss fixture. One decoded
+battle VM command 0xA7 starts an emitter at the live camera-relative origin,
+with arguments [128, 136, 512, 0, 16912, 24, 0]. After native dispatch, all
+244 replaced command/state bytes are restored and the original command is
+confirmed to replay. The native emitter then creates all 63 particles.
+This is controlled effect coverage, not a naturally scripted attack.
+
+All 64 constructors agree with the independent record model: exact task-pool
+insertion arguments, complete allocated 28/24-byte records and returned
+pointers. Particle sizes 5 through 14 occur. Emitter update/render mathematics
+are not independently covered by this constructor check. Screenshots at
+frames 40 and 571 were inspected: the particle fan is visible and the battle
+continues. BG VRAM and palettes are dumped and hashed; all 104 supplied saves
+are unchanged.
+
+All 81 tests, whitespace and public-content checks pass. Native relink has zero
+differences; canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+Matching C/C++ is 657,660 / 1,563,700 bytes (42.06%); C/C++ plus ASM is 42.39%.
+Work stops after this block at the user's request; the 50% milestone remains
+unfinished.

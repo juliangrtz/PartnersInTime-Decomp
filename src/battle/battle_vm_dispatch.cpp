@@ -11,6 +11,7 @@ extern "C" {
 #include <game/battle_impact_effect.h>
 #include <game/battle_mesh.h>
 #include <game/battle_object.h>
+#include <game/battle_particle_sweep.h>
 #include <game/battle_raster_effects.h>
 #include <game/battle_scene.h>
 #include <game/battle_script_properties.h>
@@ -85,9 +86,7 @@ extern void func_ov002_020bccc4(u16 source_object_id, u16 target_object_id,
                                 u16 color, int enabled);
 extern void func_ov002_020bca68(void);
 extern void func_ov002_020bca44(void);
-extern BattleAITask *func_ov002_020af97c(
-    int origin_x, int origin_y, int initial_step, int acceleration,
-    u16 color, u8 color_range, u16 anchor_object_id);
+
 extern BattleAITask *func_ov002_020ae940(BattleSceneObject *object,
                                          int radius, int growth_frames,
                                          int hold_frames);
@@ -1937,7 +1936,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_SCREEN_PARTICLE_SWEEP:
-        func_ov002_020af97c(
+        BattleParticleSweep_CreateEmitter(
             command->arguments[0], command->arguments[1],
             command->arguments[2], command->arguments[3],
             (u16)command->arguments[4], (u8)command->arguments[5],
@@ -1954,7 +1953,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
             }
             slot_index++;
         }
-        task = func_ov002_020af97c(
+        task = BattleParticleSweep_CreateEmitter(
             command->arguments[0], command->arguments[1],
             command->arguments[2], command->arguments[3],
             (u16)command->arguments[4], (u8)command->arguments[5],

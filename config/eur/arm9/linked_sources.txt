@@ -759,3 +759,5 @@ src/overlay006/title_panel_motion.c
 src/overlay006/title_moving_sprite.c
 src/overlay006/title_moving_sprite_orbit.c
 src/overlay006/title_panel_resources.c
+src/battle/battle_particle_sweep_emitter.c
+src/battle/battle_particle_sweep_particle.c
