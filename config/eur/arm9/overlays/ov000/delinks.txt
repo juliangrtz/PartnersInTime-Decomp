@@ -287,3 +287,6 @@ src/field/field_party_action_reset.cpp:
 
 src/field/field_party_transition_requests.cpp:
     .text       start:0x0209f230 end:0x0209f644
+
+src/field/field_room_interaction.cpp:
+    .text start:0x0207ef18 end:0x0207f4d0

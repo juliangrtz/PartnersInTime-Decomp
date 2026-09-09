@@ -55,8 +55,8 @@ FieldVariableEntity *FieldVariableEntity_InitVariablePlacement(FieldVariableEnti
     entity->state.flags.unknown_05 = 0;
     entity->state.flags.unknown_06_13 = 0;
     entity->state.flags.unknown_14_21 = -1;
-    entity->state.unknown_06 = placement->flags.unknown_03_07;
-    entity->state.unknown_07 = placement->motion.unknown_00_04;
+    entity->state.remaining_uses = placement->flags.parameter;
+    entity->state.unknown_07 = placement->motion.amount_index;
     entity->state.motion.unknown_00 = 0;
     entity->state.motion.unknown_01_15 =
         entity->state.unknown_06 * data_ov000_020c0c64[placement->motion.direction];

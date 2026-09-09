@@ -15,8 +15,10 @@ typedef struct FieldVariableEntityState {
     struct {
         u16 unknown_00 : 1, unknown_01_15 : 15;
     } motion;
-    u8 unknown_06, unknown_07;
-    u16 unknown_08, variable;
+    union { u8 unknown_06, remaining_uses; };
+    union { u8 unknown_07, amount_index; };
+    union { u16 unknown_08, item; };
+    u16 variable;
     u16 saved_animation, unknown_0e;
 } FieldVariableEntityState;
 typedef struct FieldVariableEntity {
@@ -25,12 +27,13 @@ typedef struct FieldVariableEntity {
 } FieldVariableEntity;
 typedef struct FieldVariablePlacement {
     struct {
-        u8 last : 1, mode : 2, unknown_03_07 : 5;
+        u8 last : 1, mode : 2, parameter : 5;
     } flags;
     struct {
-        u8 unknown_00_04 : 5, direction : 1, unknown_06_07 : 2;
+        u8 amount_index : 5, direction : 1, unknown_06_07 : 2;
     } motion;
-    u16 unknown_02, variable;
+    union { u16 unknown_02, item; };
+    u16 variable;
     s16 x, y, z;
 } FieldVariablePlacement;
 typedef char FieldVariableEntityState_SizeCheck[sizeof(FieldVariableEntityState) == 16 ? 1 : -1];

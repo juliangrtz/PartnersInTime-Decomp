@@ -1,4 +1,5 @@
 #include <game/field_resources.h>
+#include <game/field_room_interaction.h>
 #include <game/field_roaming.h>
 #include <game/field_party.h>
 #include <game/field_party_manager.h>
@@ -96,8 +97,6 @@ extern void func_ov000_0209f644(
     int y, int z, int facing_direction, int animate_entry,
     s16 arrival_script_id, int bgm_policy, int preserve_field_0_anchor,
     int preserve_field_1_anchor);
-extern void func_ov000_0207f288(u8 *field_context, int party_side, s16 x,
-                                s16 y, s16 z, int facing_direction);
 extern void func_ov000_02073498(
     u8 *field_context, int coordinate_mode, fx32 x, fx32 y, int motion_3,
     int motion_4, int motion_5, int motion_6, int x_motion_flag,
@@ -2732,8 +2731,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             arguments[0] =
                 FieldVm_GetActivePartySide(party_manager) ^ 1;
         }
-        func_ov000_0207f288(
-            field_context, arguments[0],
+        FieldArea_EnsurePartyPresent(
+            (FieldAreaContext *)field_context, arguments[0],
             (s16)arguments[1], (s16)arguments[2],
             (s16)arguments[3], arguments[4]);
         break;

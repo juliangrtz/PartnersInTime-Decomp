@@ -95,7 +95,7 @@ typedef struct FieldAreaContext {
     void *party_order;
     void *unknown_2564;
     void *unknown_2568;
-    void *party;
+    struct FieldPartyManager *party;
     FieldScriptManager scripts;
     u8 unknown_29d4[4];
     struct FieldRuntimeEntity *entities[36];

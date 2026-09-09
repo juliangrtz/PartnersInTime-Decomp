@@ -1061,9 +1061,10 @@ void FieldParty_RestoreCollisionState(FieldPartyController *party, int check_con
                                      party->follower->entity.base_state_flag_bits.facing_direction, 0, 1, 1);
     party->follower->entity.render_object->state_flag_bits.behavior_state = 1;
     if (check_contacts) {
-        void *contact = func_ov000_0207f080(party->areas[party->flags.field_screen], party->leader);
+        const FieldVariablePlacement *contact = FieldArea_FindUncollectedPlacement(
+            (FieldAreaContext *)party->areas[party->flags.field_screen], &party->leader->entity);
         if (contact) {
-            func_ov000_0207ef18(party->areas[party->flags.field_screen], contact);
+            FieldArea_CollectPlacementItem((FieldAreaContext *)party->areas[party->flags.field_screen], contact);
         }
         func_ov000_0208dbd4(party, party->areas[party->flags.field_screen]->entities,
                             party->areas[party->flags.field_screen]->entity_count);

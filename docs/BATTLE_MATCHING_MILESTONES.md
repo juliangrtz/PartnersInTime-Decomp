@@ -3299,3 +3299,67 @@ audit and whitespace checks pass. Canonical ROM SHA-1 remains
   rejection, flipped inputs and signed-coordinate overflow are covered by the
   exact native comparison, not claimed as observed runtime branches. The larger
   alternate-model drawing routine remains assembly.
+
+
+### Room party placement and item collection: 40.66% matching C/C++
+
+Four contiguous functions at 0x0207EF18..0x0207F4D0 add **1,464 exact C++
+bytes** in `src/field/field_room_interaction.cpp`. They ensure a party is present
+in the current room, search uncollected mode-zero placements against the actor's
+navigation bounds, and collect items from placement records or runtime blocks.
+The field's manager pointer is typed. Checked placement/entity layouts now expose
+item, amount index and remaining uses; the shared five-bit placement parameter
+means a navigation change for mode zero and a use count for runtime blocks.
+Signed halfword coordinates, the wrapped variable-bank offset and the shared
+null/end return are retained from native evidence. No compiler search was used.
+
+Runtime reports live under `build/runtime/eur_field_room_interaction/`:
+
+- `evidence_block83.json`: checkpoint 83, room 459, state SHA-1
+  `590c4bc2877e1f1781faf521ca2a8b87ea1f9258`. A decoded D0 room-position fixture
+  uses a block's observed coordinates (168,320,64); the party stands at height
+  zero. Two D3 requests cover the backup-active and already-present branches.
+  An ordinary eight-frame A press hits the block: item 0x1003 goes **45 -> 47**,
+  its final use is consumed and its persistent variable is written. 811 frames.
+- `evidence_bean19.json`: checkpoint 19, state SHA-1
+  `1be5dcdb562896ed9359e48181353393fb1c985d`. The bean placement at (48,320,0) in
+  room 73 was read from live RAM. D0 loads that room; BC resets the original
+  adult piggyback mode; CA switches to the babies; D3 positions them; BC selects
+  their drill mode. An ordinary eight-frame X press surfaces, finds the
+  uncollected record and collects the bean: its separate counter goes **2 -> 3**.
+  Both persistent-variable writes and the navigation-change call are checked.
+  991 frames.
+- `evidence_bean20.json`: the same room/placement with checkpoint 20, state
+  SHA-1 `d2c8a01fd324265a80ade9948d2d5d397de5a314`. Its persistent collection
+  variable is already one, so the search returns null and no item is awarded.
+  991 frames.
+
+These are controlled setup fixtures followed by ordinary pickup input, not
+claims of uninterrupted navigation from the save point. The D3 restore cases
+explicitly set only the tested party's backup-active bit before entry; the
+native routine clears it. D3, BC and CA restore all 72 decoded-command and 172
+pre-decode state bytes and verify the next decode revisits the original script.
+D0 restores the 72 command bytes before its native wrapper and rebuilds the
+room scripts; no original-command replay is claimed for D0.
+
+Across **2,793 frames**, all four new routines return (eight returns total).
+Byte-guarded entry/call/SP-matched return hooks check complete 11,216-byte areas,
+16,764-byte managers, party entities and twelve-byte records. Exact helper
+arguments, independent inventory-cap arithmetic, resulting inventory counters
+and party coordinates agree. The checks include both party sides, successful
+and already-collected searches, the special bean counter and a block's final
+use. Screenshots of the resulting field scenes were inspected; OBJ VRAM and
+palette dumps are hashed in the reports. All **104 supplied save hashes** remain
+unchanged. Save 19/20/83 SHA-1 values are respectively
+`ee08102d192b97a70b787025fc791c8e3c474439`,
+`e78faca7c148cb07941601554f06f279a29c4488`, and
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b`.
+
+Coverage limits: null placement tables, multiple-record scans, full inventory,
+coin collection, ordinary non-bean placement rewards and multi-use blocks remain
+statically verified. No runtime claim is made for those branches.
+
+Validation: zero differing native relink bytes, all 74 tests, progress check,
+public-content audit and whitespace checks pass. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++ is
+**635,764 / 1,563,700 bytes (40.66%)**; C/C++ plus ASM is **40.99%**.
