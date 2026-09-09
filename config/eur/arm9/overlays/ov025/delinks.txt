@@ -37,8 +37,8 @@ src/overlay025/ov25_enemy_wait_animation.cpp:
 src/overlay025/ov25_enemy_finish_attached_effect.cpp:
     .text start:0x020c822c end:0x020c8268
 
-src/overlay025/ov25_party_unlock_after_task.cpp:
-    .text start:0x020c85f0 end:0x020c8634
+src/overlay025/enemy_chain_landing.cpp:
+    .text start:0x020c85f0 end:0x020c877c
 
 src/overlay025/ov25_task_wait_sibling.cpp:
     .text start:0x020c8ac8 end:0x020c8af4
@@ -57,3 +57,6 @@ src/overlay025/enemy_linked_effects.cpp:
 
 src/overlay025/enemy_projectile_sequence.cpp:
     .text start:0x020cb838 end:0x020cbbb0
+
+src/overlay025/enemy_linked_damage.cpp:
+    .text start:0x020c98d8 end:0x020c9be0

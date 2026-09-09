@@ -3944,3 +3944,44 @@ supplied saves retain their hashes.
 Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
 Matching C/C++ is 652,696 / 1,563,700 bytes (41.74%); C/C++ plus ASM is 42.08%.
+
+
+## 2026-09-10 - Boss attack landing and reflected damage (+1,104 bytes)
+
+Three byte-exact C++ callbacks complete damage application for two boss attacks:
+Overlay25Chain_ApplyLandingDamage (0x020C8634, 328 bytes),
+Overlay25LinkedEffect_ApplyPartyLandingDamage (0x020C98D8, 368 bytes) and
+Overlay25LinkedEffect_ApplyReflectedDamage (0x020C9A48, 408 bytes).
+The first extends the adjacent unlock routine in enemy_chain_landing.cpp;
+the latter two form the contiguous enemy_linked_damage.cpp module. Native
+instructions recover the complete damage/effect arguments and the distinct
+5/10 status magnitude and chance parameters. Landing clears the party lock and
+status-model suppression flags; the reflected branch applies equipment-adjusted
+damage to the boss, stops particles and clears the effect slots.
+
+Runtime: build/runtime/eur_ov25_attack_damage/evidence_damage103.json and
+build/runtime/eur_ov25_linked_reflection/evidence_reflected103.json. Both are
+1,470-frame runs from phase103.dst with the documented initial tracking attack
+fixture. The first reaches two actual chain landings (26 checked returns) and
+one linked-effect party landing (112 checked returns), including status-helper
+arguments and clearing the party flags/effect slots. The reflected run checks
+54 returns, including an actual enemy-damage application and particle cleanup.
+
+Reflection coverage adds two explicitly controlled contacts at frames 962 and
+1,042. At the native collision timer gate, each fills an empty 20-byte hit-record
+sentinel with the current target character (57 then 56), object 40 and its live
+coordinates. Native handling consumes the record, alternates the target and
+starts the bounce/return flight. All 20 original bytes are restored at each
+SP-matched handler return. No callback or position is directly changed for
+these reflections. This is isolated contact coverage, not a player-timed dodge.
+
+Complete task/work/scene/actor records, helper arguments and independently
+projected positions agree. Damage/status helpers are observed and refreshed at
+return; their probability and HP formulas are not independently established by
+these probes. Both runs continue into the following native segment attack,
+visible in the inspected final images. BG VRAM/palettes are dumped and hashed;
+all 104 original saves retain their hashes.
+
+Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
+Matching C/C++ is 653,800 / 1,563,700 bytes (41.81%); C/C++ plus ASM is 42.15%.

@@ -551,7 +551,7 @@ src/overlay025/enemy_projectile_preparation.cpp
 src/overlay025/enemy_segment_chain_preparation.cpp
 src/overlay025/ov25_enemy_wait_animation.cpp
 src/overlay025/ov25_enemy_finish_attached_effect.cpp
-src/overlay025/ov25_party_unlock_after_task.cpp
+src/overlay025/enemy_chain_landing.cpp
 src/overlay025/ov25_task_wait_sibling.cpp
 src/overlay025/enemy_chain_tracking.cpp
 src/overlay025/ov25_enemy_reset_stopped_animation.cpp
@@ -749,3 +749,4 @@ src/field/field_party_input.c
 src/field/field_window_sprites.c
 src/field/field_message_window_slide.c
 src/field/field_message_window_clip.c
+src/overlay025/enemy_linked_damage.cpp
