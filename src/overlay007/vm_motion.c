@@ -1,4 +1,8 @@
 #include <game/scene_motion.h>
+#include "scene_vm_state_internal.h"
+
+/* The shipped path callback calls this interior overlay entry. */
+extern int func_ov007_020722d8(s16 *, int *, int *);
 
 /* Argument-mode bits: a clear bit means the pair of script words still has to
    be joined into one fixed-point value. */
@@ -175,4 +179,20 @@ void func_ov007_02087c4c(ScriptVm *vm, ScriptVmState *state,
             command->arguments[6], command->arguments[8],
             (u16)command->arguments[9]);
     }
+}
+
+void SceneObject_UpdatePath(SceneObject *object, SceneMotionChannel *channel)
+{
+    int x, y;
+    int active = func_ov007_020722d8(channel->parameters, &x, &y);
+    object->x = x;
+    object->y = y;
+    object->drawn_x = object->x;
+    object->drawn_y = object->y;
+    if (!active)
+        channel->callback = 0;
+}
+void SceneInput_ClearPersistentMask(void)
+{
+    SCENE_MENU.persistent_input = 0;
 }

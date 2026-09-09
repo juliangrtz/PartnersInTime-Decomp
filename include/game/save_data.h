@@ -24,6 +24,10 @@ typedef union SavePartyExperienceToNextLevel {
         u32 value : 24;
         u32 unknown : 8;
     } fields;
+    struct {
+        u8 experience_bytes[3];
+        u8 clothing_id;
+    } equipment;
     u32 packed;
 } SavePartyExperienceToNextLevel;
 
@@ -42,7 +46,13 @@ typedef struct SavePartyMember {
     u16 stache;
     SavePartyExperience experience;
     SavePartyExperienceToNextLevel experience_to_next_level;
-    u8 unknown_020[4];
+    union {
+        u8 unknown_020[4];
+        struct {
+            u8 badge_id;
+            u8 unknown_021[3];
+        };
+    };
 } SavePartyMember;
 
 typedef char SavePartyMember_SizeCheck[

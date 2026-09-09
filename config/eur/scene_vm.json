@@ -723,7 +723,7 @@
       "control_flow": "fallthrough; reads path data at aligned PC + 2 * path_relative_halfwords",
       "yield": "never",
       "effect": "starts the object's table-driven path scheduler in the selected motion slot, using the path header and points at the relative target, path_extent minus one, and the supplied fixed-point step",
-      "evidence": "func_ov007_02081730 case 0x06B; scheduler callback func_ov007_02087bf4"
+      "evidence": "func_ov007_02081730 case 0x06B; scheduler callback SceneObject_UpdatePath"
     },
     "108": {
       "arguments": ["object_id", "motion_slot"],
@@ -756,7 +756,7 @@
       "yield": "never",
       "effect": "queries one of three scene state providers for state_id 0, 1, or 2; unsupported IDs return zero",
       "state_values": {"0": "scene_state_a", "1": "shared_scene_state", "2": "scene_state_c"},
-      "evidence": "func_ov007_02081730 case 0x06F; func_ov007_0208792c"
+      "evidence": "func_ov007_02081730 case 0x06F; SceneVM_GetMenuValue"
     },
     "112": {
       "arguments": [],
@@ -787,7 +787,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "reads a property from a 36-byte global scene record: property IDs 0-10 select consecutive 16-bit fields, 11 selects the low byte of the following word, 12 and 13 select its upper 24 bits and the next low 24 bits, 14 and 15 select two trailing bytes, and 16-17 select global values outside the indexed records",
-      "evidence": "func_ov007_02081730 case 0x073; func_ov007_020876e8"
+      "evidence": "func_ov007_02081730 case 0x073; SceneVM_GetSaveValue"
     },
     "159": {
       "arguments": [],
@@ -795,7 +795,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "clears the persistent synthetic scene-input mask; the one-frame mask is cleared automatically after each merge",
-      "evidence": "func_ov007_02081730 case 0x09F; func_ov007_02087be0; func_ov007_02071f80"
+      "evidence": "func_ov007_02081730 case 0x09F; SceneInput_ClearPersistentMask; func_ov007_02071f80"
     },
     "160": {
       "arguments": ["latch_mode", "key_mask"],
@@ -811,7 +811,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "sets the mask removed from all three real-input states before synthetic input is merged",
-      "evidence": "func_ov007_02081730 case 0x0A1; func_ov007_02087b98; func_ov007_02071f80"
+      "evidence": "func_ov007_02081730 case 0x0A1; SceneInput_SetDisabledMask; func_ov007_02071f80"
     },
     "162": {
       "arguments": ["key_mask"],
@@ -819,7 +819,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "stores an auxiliary scene-input mask; overlay 7 contains no reader of this word",
-      "evidence": "func_ov007_02081730 case 0x0A2; func_ov007_02087b88; exhaustive overlay-7 pseudocode search"
+      "evidence": "func_ov007_02081730 case 0x0A2; SceneInput_SetAuxiliaryMask; exhaustive overlay-7 pseudocode search"
     },
     "163": {
       "arguments": ["key_mask"],
@@ -827,7 +827,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "sets a second real-input rejection mask and plays sound 208 when newly pressed real keys intersect it",
-      "evidence": "func_ov007_02081730 case 0x0A3; func_ov007_02087b78; func_ov007_02071f80"
+      "evidence": "func_ov007_02081730 case 0x0A3; SceneInput_SetRejectedMask; func_ov007_02071f80"
     },
     "164": {
       "arguments": [],
@@ -835,7 +835,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "clears the real-input rejection-and-feedback mask",
-      "evidence": "func_ov007_02081730 case 0x0A4; func_ov007_02087b68"
+      "evidence": "func_ov007_02081730 case 0x0A4; SceneInput_ClearRejectedMask"
     },
     "165": {
       "arguments": ["object_id", "owner_id", "inline_size_halfwords"],
@@ -961,7 +961,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts a sound task in the first free one of 16 slots and returns its handle; when task_parameter is nonpositive and mode_parameter is zero, plays sound_id immediately and returns -1",
-      "evidence": "func_ov007_02081730 case 0x0B7; func_ov007_020875a0"
+      "evidence": "func_ov007_02081730 case 0x0B7; SceneSound_PlayRepeated"
     },
     "184": {
       "arguments": ["sound_id", "task_parameter"],
@@ -969,7 +969,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts the same sound operation as opcode 0x0B7 with mode_parameter zero and discards the task handle",
-      "evidence": "func_ov007_02081730 case 0x0B8; func_ov007_020875a0"
+      "evidence": "func_ov007_02081730 case 0x0B8; SceneSound_PlayRepeated"
     },
     "185": {
       "arguments": ["sound_task_handle"],
@@ -977,7 +977,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "cancels and frees the selected sound task when the handle is not -1 and is an active slot from 0 through 15",
-      "evidence": "func_ov007_02081730 case 0x0B9; func_ov007_02087240"
+      "evidence": "func_ov007_02081730 case 0x0B9; SceneSound_StopTask"
     },
     "186": {
       "arguments": [],
@@ -985,7 +985,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "cancels every active sound task in the 16-slot scene sound-task table",
-      "evidence": "func_ov007_02081730 case 0x0BA; func_ov007_02087240"
+      "evidence": "func_ov007_02081730 case 0x0BA; SceneSound_StopTask"
     },
     "187": {
       "arguments": ["sound_task_handle"],

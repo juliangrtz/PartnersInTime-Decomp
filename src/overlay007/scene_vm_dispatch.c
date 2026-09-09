@@ -1,3 +1,5 @@
+#include <game/scene_sound.h>
+#include <game/scene_vm_state.h>
 #include <game/scene_motion.h>
 #include <game/save_data.h>
 
@@ -156,25 +158,15 @@ extern void func_ov007_02087d6c();
 extern void func_ov007_02087c4c();
 extern void func_ov007_02085998();
 extern int SceneObject_IsMotionActiveById();
-extern void func_ov007_02087bf4();
 /* The shipped path command targets this interior overlay-7 entry. */
 extern void func_ov007_020724b0(
     void *motion, const void *path, u16 point_count,
     u32 end_time, s32 movement_scale
 );
 extern void func_ov007_0207e770();
-extern int func_ov007_0208792c();
 extern void func_ov007_02070ae8();
 extern void func_ov007_02077110();
-extern int func_ov007_020876e8();
-extern void func_ov007_02087be0();
 extern void func_ov007_02087ba8();
-extern void func_ov007_02087b98();
-extern void func_ov007_02087b88();
-extern void func_ov007_02087b78();
-extern void func_ov007_02087b68();
-extern int func_ov007_020875a0();
-extern void func_ov007_02087240();
 extern void func_ov007_02083c20(
     SceneObject *object, int tile_id, int palette, int x, int y
 );
@@ -481,7 +473,7 @@ int SceneVm_DispatchCommand(
 
         object = SceneObject_GetById(ARG_U16(0));
         motion = SceneObject_BeginMotionChannel(
-            object, ARG_U16(1), 0, func_ov007_02087bf4
+            object, ARG_U16(1), 0, SceneObject_UpdatePath
         );
         path_address = (u32)state->script + 2 * ARG(3);
         if ((path_address & 3) != 0) {
@@ -699,7 +691,7 @@ int SceneVm_DispatchCommand(
 
     case SCENE_OP_GET_SCENE_STATE:
         SceneVm_WriteResult(
-            vm, state, command, func_ov007_0208792c(ARG_U16(0))
+            vm, state, command, SceneVM_GetMenuValue(ARG_U16(0))
         );
         return SCRIPT_VM_CONTINUE;
 
@@ -722,7 +714,7 @@ int SceneVm_DispatchCommand(
             vm,
             state,
             command,
-            func_ov007_020876e8(ARG_U16(0), ARG_U16(1))
+            SceneVM_GetSaveValue(ARG_U16(0), ARG_U16(1))
         );
         return SCRIPT_VM_CONTINUE;
 
@@ -770,22 +762,22 @@ int SceneVm_DispatchCommand(
     case 0x09E: return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_CLEAR_PERSISTENT_INPUT:
-        func_ov007_02087be0();
+        SceneInput_ClearPersistentMask();
         return SCRIPT_VM_CONTINUE;
     case SCENE_OP_INJECT_INPUT_MASK:
         func_ov007_02087ba8(ARG_U16(0), ARG_U16(1));
         return SCRIPT_VM_CONTINUE;
     case SCENE_OP_SET_INPUT_DISABLE_MASK:
-        func_ov007_02087b98(ARG_U16(0));
+        SceneInput_SetDisabledMask(ARG_U16(0));
         return SCRIPT_VM_CONTINUE;
     case SCENE_OP_SET_INPUT_AUX_MASK:
-        func_ov007_02087b88(ARG_U16(0));
+        SceneInput_SetAuxiliaryMask(ARG_U16(0));
         return SCRIPT_VM_CONTINUE;
     case SCENE_OP_SET_REJECTED_INPUT_MASK:
-        func_ov007_02087b78(ARG_U16(0));
+        SceneInput_SetRejectedMask(ARG_U16(0));
         return SCRIPT_VM_CONTINUE;
     case SCENE_OP_CLEAR_REJECTED_INPUT_MASK:
-        func_ov007_02087b68();
+        SceneInput_ClearRejectedMask();
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_START_INLINE_OBJECT_SCRIPT:
@@ -1057,7 +1049,7 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_START_SOUND_TASK_WITH_HANDLE:
-        value = func_ov007_020875a0(
+        value = SceneSound_PlayRepeated(
             ARG_U16(0), ARG_S16(1), ARG_S16(2), 0
         );
         if (value != -1) {
@@ -1066,12 +1058,12 @@ int SceneVm_DispatchCommand(
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_START_SOUND_TASK:
-        func_ov007_020875a0(ARG_U16(0), ARG_S16(1), 0, 0);
+        SceneSound_PlayRepeated(ARG_U16(0), ARG_S16(1), 0, 0);
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_STOP_SOUND_TASK:
         if (ARG(0) != -1) {
-            func_ov007_02087240(ARG_U16(0));
+            SceneSound_StopTask(ARG_U16(0));
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -1079,7 +1071,7 @@ int SceneVm_DispatchCommand(
         i = 0;
         do {
             if (data_ov007_020a6b90->sound_tasks[i] != 0) {
-                func_ov007_02087240(i);
+                SceneSound_StopTask(i);
             }
             i++;
         } while (i < 16);

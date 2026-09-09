@@ -1478,3 +1478,47 @@ Private evidence: `build/runtime/eur_scene_motion/evidence_previews86.json`,
 preview and battle screens were inspected. Native linking, all 74 tests,
 progress consistency and the public-content audit pass. The complete ROM
 retains SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+
+
+## Scene sound scheduler and VM state access: 35.68% matching C/C++
+
+Reconstructed 17 functions (2,516 bytes): six Scene sound task functions at
+`0x02087240..0x020876E8`, nine save/menu/input accessors at
+`0x020876E8..0x02087BA8`, and the adjacent 108-byte path callback/input reset
+at `0x02087BE0..0x02087C4C`. The 56-byte input injection function between the
+ranges remains an assembly gap. The shared save-party layout now exposes the
+confirmed clothing and badge bytes without changing the existing views or size.
+
+The sound task has a checked 72-byte layout with 16 manager slots, a signed
+16-bit delay/interval, a 14-bit repeat count, and a two-bit audio handle. A
+negative interval measures the first sound's duration using the native audio
+handle mask; positive intervals schedule periodic playback. Finite playback
+and explicit cancellation clear the owned slot before deleting the task.
+
+Runtime verification used story save 86 and its derived HUD state. Normal
+Bros. Item preview navigation observed eight selected-item getter returns with
+complete 280-byte menu and 332-byte roster comparisons. A separate 2,350-frame
+controlled run exercised all six sound functions: four constructors, ten
+one-shot updates, 252 periodic updates, ten measured-playback starts, eighteen
+interval measurements, and one explicit stop. It passed 336 full 72-byte task
+comparisons, 344 complete 64-byte slot-table comparisons, and all 49 native
+helper argument checks. The cases covered delayed playback, finite completion,
+active/inactive audio handles, indefinite repetition, and cancellation.
+
+The controlled run inserts extra decoded Scene VM B8/B9 commands using the
+known menu sound effect 2. At the native helper, it restores the entire 72-byte
+command and pre-decode script cursor, then verifies that the original command
+is decoded again unchanged. Interval/count argument overrides are explicit API
+fixtures, not natural script coverage. The indefinite task is cancelled using
+its returned slot. Other newly linked state accessors and the path callback
+have static matching evidence only. Supplied battery saves were unchanged.
+
+Private reports: `build/runtime/eur_scene_sound_state/evidence_previews86.json`
+and `evidence_sound_fixtures86.json`. Source save SHA-1:
+`349b84f6004bffedfef94de4554f2d1679645e83`; derived state SHA-1:
+`23b87fbd8bca1084bc3016e55b3fb633f7856fa8`.
+
+Validation: zero-difference native relink and canonical rebuilt ROM SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`; all 74 tests, source audit,
+and whitespace checks passed. Matching C/C++: **557,908 / 1,563,700 bytes
+(35.68%)**; C/C++ plus assembly: **36.01%**.
