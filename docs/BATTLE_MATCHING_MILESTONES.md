@@ -4049,3 +4049,44 @@ Validation: all 81 tests, public-content audit, whitespace checks and zero
 native relink differences pass. Canonical ROM SHA-1 remains
 ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
 654,624 / 1,563,700 bytes (41.86%); C/C++ plus ASM is 42.20%.
+
+
+## 2026-09-10 - Title panels, trails and moving-sprite lifecycle (+1,732 bytes)
+
+Two contiguous modules now compile exactly: title_panel_motion.c covers
+0x0206DB4C..0x0206E09C (1,360 bytes) and title_moving_sprite_lifecycle.c covers
+0x0206E644..0x0206E7B8 (372 bytes). Fourteen routines handle the common element
+list, panel initialization, pulse/fade states, randomized trail starts,
+sine-based movement, overlapping trail copies, and moving-sprite setup/entry/
+orbit/destruction. Shared checked layouts include the 4-byte common list link,
+120-byte panel, 8-byte trail sample, 72-byte texture/palette resource set and
+68-byte moving sprite. Unknown fields retain neutral names.
+
+Native register data flow explains the remaining matching differences: branch
+body order follows the original state machine; x interpolation computes its
+start and delta before the sine lookup; moving-sprite entry first loads the
+base coordinate and then adds its signed displacement. No compiler-variant
+search or inline assembly is used.
+
+Runtime: build/runtime/eur_title_panel_motion/evidence_boot83.json and
+evidence_complete83.json. Both import original checkpoint 83 into a fresh
+emulator; there are no RAM fixtures. The 2,243-frame start/button run reaches
+the normal load menu. The 6,001-frame idle run exercises the animated title
+sequence, all panel states 0..5, both sprite sides/variants, and a native title
+sequence restart. The screenshots were inspected. All 43,552 panel update
+returns, 8,178 trail-start attempts and eight sprite initializations agree.
+Independent checks cover 680 sine-alpha calculations, 190 x/y interpolations,
+480 cleared trail bytes and 9,600 bytes copied in both overlap directions.
+Ten randomized trails start (six in one direction, four in the other), drain
+through 50 shifts, and terminate normally. Exact helper arguments, full records
+and return values are checked; external helper side effects are refreshed.
+The common list append has 118 returns, including two empty lists; the probe's
+earlier name TitlePanel_Append was subsequently refined to TitleElement_Append
+because native callers append several element types. The StartPulse forwarding
+entry remains static-only; its ResetPulse target is exercised 96 times.
+
+All 104 supplied saves retain their hashes. BG VRAM and palettes are dumped and
+hashed. All 81 tests, public-content and whitespace checks pass; native relink
+has zero differences and ROM SHA-1 remains
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
+656,356 / 1,563,700 bytes (41.97%); C/C++ plus ASM is 42.31%.
