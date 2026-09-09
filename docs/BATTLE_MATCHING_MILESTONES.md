@@ -1631,3 +1631,37 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **562,104 / 1,563,700 bytes (35.95%)**; C/C++ plus assembly: **36.28%**.
+
+## Field auxiliary entity updates and lifecycle: 36.11% matching C/C++
+
+Reconstructed fourteen functions in `0x020B6744..0x020B6E98` and
+`0x020B72E0..0x020B756C` (2,528 bytes). A checked 1,360-byte auxiliary entity
+layout exposes owner/target links, local and previous offsets, animation and
+render-priority settings. Spatial wrappers preserve all forwarded arguments;
+the native calls established two arguments omitted by the initial decompiler
+output. The intervening motion function remains private pending a register
+allocation match.
+
+Three normal-input DeSmuME replays from story saves 51 and 83 covered 1,139
+frames: field updates, a room transition, and baby spin animation. Ten of the
+fourteen functions ran. Independent models passed 113,453 full auxiliary
+object comparisons, 4,754 complete 312-byte renderer comparisons and 1,806
+8-byte resource record comparisons, with direct writes checked before helper
+calls and on return. Active animation states 10/59, 420 renderer updates,
+32 renderer allocations, 16 placement initializations and 16 deletions were
+observed. Helper arguments and 32 pointer returns were checked. Navigation,
+category mapping, standalone initialization/destruction, active contact and
+collision branches, and target-relative render priority retain static matching
+evidence only.
+
+Private reports: `build/runtime/eur_field_auxiliary/evidence_room51.json`,
+`evidence_spin83.json`, and `evidence_rooms51.json`. Source save SHA-1 values:
+`459c9b510b361c4e800a396d8b56ddf847235c74` (51) and
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b` (83). Derived-state hashes and
+the exact keypad sequences are recorded in each report. Supplied saves were
+unchanged; these replays did not inject VM commands.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**564,632 / 1,563,700 bytes (36.11%)**; C/C++ plus assembly: **36.44%**.
