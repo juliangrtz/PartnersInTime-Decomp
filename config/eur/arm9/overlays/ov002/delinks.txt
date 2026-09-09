@@ -418,3 +418,12 @@ src/battle/battle_mesh_rotation.c:
 
 src/battle/battle_interface_text.c:
     .text start:0x02093754 end:0x02093d30
+
+src/battle/battle_window_resources.cpp:
+    .text start:0x02070780 end:0x020708bc
+
+src/battle/battle_window_lifecycle.cpp:
+    .text start:0x020709b0 end:0x02070cdc
+
+src/battle/battle_window_transfers.cpp:
+    .text start:0x020713b4 end:0x0207157c

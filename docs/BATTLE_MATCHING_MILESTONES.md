@@ -1744,3 +1744,53 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **568,844 / 1,563,700 bytes (36.38%)**; C/C++ plus assembly: **36.71%**.
+
+## Battle window resources and transfers: 36.48% matching C/C++
+
+Reconstructed 16 functions (1,584 bytes) in three contiguous regions:
+`0x02070780..0x020708BC`, `0x020709B0..0x02070CDC`, and
+`0x020713B4..0x0207157C`. They cover the four-slot window pool, texture and
+sprite palettes, manager construction/update/destruction, animator setup,
+screen-dependent drawing, reverse OAM copying, and queued texture/text/tilemap
+transfers. Checked layouts describe the 5,608-byte manager, 132-byte animator,
+276-byte per-window state and 16-byte transfer request. The sprite file header
+now exposes its three ten-bit allocation counts for the OBJ boundary modes.
+
+The ITCM entry at `0x01FF86D0` was previously hidden inside a wrongly identified
+function beginning eight bytes earlier. Those eight bytes are two instruction
+templates read by the rectangle-fill routine when it builds its store-multiple
+sequence. They are now data, and the real function entry and overlay relocation
+are explicit. The implementation remains original assembly; this correction
+does not add matching C bytes or change the mapped-code denominator.
+
+Three runtime reports cover 2,783 frames and 6,656 returns across nine of the
+16 functions. Full-memory models passed 13,237 complete manager comparisons,
+13,668 animator comparisons, 4,930 transfer-request comparisons, 1,856 window
+state comparisons and 3,080 animation-entry comparisons. Independent transfer
+models verified **1,102,336 copied texture bytes** and **1,402,720 text-tile
+bytes** in RAM/VRAM; explicit clear checks covered another 1,355,688 bytes.
+Both constructors returned their original pointers, the two texture palettes
+and sprite palette had the expected resource/size fields, and both pool
+allocations produced four slots. Observed OBJ mode 2 selected 64 tiles.
+
+The entry replays use decoded battle-command fixtures from room 306
+(`0x2926`, encounter -32748) and room 583 (`0x0536`, encounter 8232).
+All 72 decoded-command bytes and the script cursor are restored and checked
+at the native battle wrapper. The room-583 fixture supplies the dialogue
+sequence; it is not a claim of natural story progression from checkpoint 55.
+Subsequent dialogue advancement uses ordinary A-button input. Destruction,
+the sub-screen paths, reverse OAM copying and texture filling were not reached
+and retain static matching evidence only. The text-clear and full 3D drawing
+implementations remain assembly gaps.
+
+Private reports: `build/runtime/eur_battle_windows/evidence_entry55.json`,
+`evidence_dialogue55.json`, and `evidence_dialogue_entry55.json`.
+Input-state SHA-1: `e44df106d65e52df1ffc2b125538354f67cb1b22` for both entries,
+`a8b485d4cc4b72586af611455830b5f89f67bc07` for the dialogue replay.
+Supplied save 55 remains unchanged:
+`239ff9d26a5806eada7c1b73a95e27e38872681c`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**570,428 / 1,563,700 bytes (36.48%)**; C/C++ plus assembly: **36.81%**.

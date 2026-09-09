@@ -10,4 +10,5 @@ func_01ff8520 kind:function(arm,size=0x38) addr:0x01ff8520
 func_01ff8558 kind:function(arm,size=0x74) addr:0x01ff8558
 MIi_DmaSetParams kind:function(arm,size=0x50) addr:0x01ff85cc
 func_01ff861c kind:function(arm,size=0xac) addr:0x01ff861c
-func_01ff86c8 kind:function(arm,size=0xcc) addr:0x01ff86c8
+data_01ff86c8 kind:data(word[2]) addr:0x01ff86c8
+GameImage_FillWordRectITCM kind:function(arm,size=0xc4) addr:0x01ff86d0

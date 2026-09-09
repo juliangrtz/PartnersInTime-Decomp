@@ -699,3 +699,6 @@ src/field/field_party_entity_bounds.cpp
 src/field/field_party_entity_collision.cpp
 src/field/field_party_entity_navigation.cpp
 src/field/field_render_updates.cpp
+src/battle/battle_window_resources.cpp
+src/battle/battle_window_lifecycle.cpp
+src/battle/battle_window_transfers.cpp

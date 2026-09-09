@@ -741,7 +741,7 @@ from:0x0207144c kind:arm_call to:0x0202cbd4 module:main
 from:0x0207145c kind:arm_call to:0x0202cbd4 module:main
 from:0x0207147c kind:arm_call to:0x020211fc module:main
 from:0x02071498 kind:load to:0x020be8b0 module:overlay(2)
-from:0x020714cc kind:arm_call to:0x01ff86d0 module:none
+from:0x020714cc kind:arm_call to:0x01ff86d0 module:itcm
 from:0x02071500 kind:load to:0x0202cf80 module:main
 from:0x0207151c kind:load to:0x02071538 module:overlay(2)
 from:0x02071534 kind:load to:0x0206faec module:overlay(2)

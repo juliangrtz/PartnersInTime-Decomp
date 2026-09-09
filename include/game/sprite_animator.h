@@ -8,7 +8,8 @@ typedef struct GameSpriteAnimationRange { u16 first, end; } GameSpriteAnimationR
 typedef struct GameSpriteAnimationFile {
     struct { u8 reserved0 : 4, tile_boundary : 2, reserved6 : 2; } flags0;
     struct { u8 reserved0 : 4, color256 : 1, reserved5 : 3; } flags1;
-    u8 reserved[10];
+    u8 reserved[6];
+    struct { u32 count_32 : 10, count_64 : 10, count_128 : 10, reserved : 2; } tile_counts;
     u16 animation_count, frame_count, group_count, object_count;
     GameSpriteAnimationRange animations[1];
 } GameSpriteAnimationFile;
@@ -19,6 +20,8 @@ typedef struct GameSpriteAnimationObject {
     u16 mapped_tile : 10, attr3 : 6;
     u16 reserved[2];
 } GameSpriteAnimationObject;
+
+typedef char GameSpriteAnimationFileSizeCheck[sizeof(GameSpriteAnimationFile) == 24 ? 1 : -1];
 
 typedef struct GameSpriteAnimator GameSpriteAnimator;
 typedef struct GameSpriteAnimation GameSpriteAnimation;
