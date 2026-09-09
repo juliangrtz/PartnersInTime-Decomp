@@ -748,3 +748,4 @@ src/overlay025/enemy_linked_effects.cpp
 src/overlay025/enemy_projectile_sequence.cpp
 src/field/field_party_action_selection.c
 src/field/field_party_input.c
+src/field/field_window_sprites.c

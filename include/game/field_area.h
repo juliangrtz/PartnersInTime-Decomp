@@ -149,6 +149,7 @@ void FieldArea_InitializeQuadRegions(FieldAreaContext *field);
 void FieldArea_CreateVariableEntities(FieldAreaContext *field);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source);
 void FieldArea_UpdateGraphics(FieldAreaContext *field);
+void FieldArea_LoadWindowSprites(FieldAreaContext *field);
 FieldAreaContext *FieldArea_Construct(FieldAreaContext *field);
 FieldAreaContext *FieldArea_Destroy(FieldAreaContext *field);
 void FieldArea_CaptureSnapshot(const FieldAreaContext *field, FieldAreaSnapshot *snapshot);

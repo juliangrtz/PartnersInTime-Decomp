@@ -3666,3 +3666,26 @@ Validation: zero native relink differences, canonical ROM SHA-1
 public-content and whitespace checks pass. Matching C/C++ is **645,088 /
 1,563,700 bytes (41.25%)**; C/C++ plus ASM is **41.59%**. A nearby travel starter
 still differs in four register-allocation words and remains private.
+
+
+## 2026-09-10 - Field window sprite preparation (+512 bytes)
+
+FieldArea_LoadWindowSprites (0x02079B74..0x02079D74) is now byte-exact C in
+src/field/field_window_sprites.c. It derives the allocation size from the
+sprite-file tile counts and the selected screen's OBJ boundary, allocates and
+loads that screen's animator, selects palette 15 and resets the window origin.
+Shared declarations and overlay linking use the descriptive name.
+
+Runtime: build/runtime/eur_field_window_sprites/evidence_cold65.json records
+2,033 ordinary-input frames from checkpoint 65 cold boot. Both screens execute
+the loader: boundary shift 2 selects 64 tiles on each. Full code guards,
+SP-matched returns, complete area/manager/animator records, independent tile
+count calculations and exact helper arguments pass. Effects of external helpers
+are refreshed on return; uploaded tile bytes are not independently modelled.
+The final image shows the ordinary Thwomp Volcano field. OBJ VRAM and palettes
+are dumped and hashed. There are no RAM fixtures; all 104 original saves retain
+their hashes. Checkpoint 65 SHA-1 is 0844b75810855bc3a738122b29382ed5a6c9f983.
+
+Validation: all 81 tests, zero native relink differences and canonical ROM SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
+645,600 / 1,563,700 bytes (41.29%); C/C++ plus ASM is 41.62%.
