@@ -46,7 +46,7 @@ struct PauseSceneWork {
     GameSpritePalette palettee8, palettefc;
     u8 unknown110, active_background;
     s8 selected_menu;
-    u8 unknown113;
+    s8 highlighted_menu;
     s8 menu_count;
     u8 unknown115;
     u8 available[4], displayed[4];

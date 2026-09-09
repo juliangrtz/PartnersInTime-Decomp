@@ -2490,3 +2490,30 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **601,416 / 1,563,700 bytes (38.46%)**; C/C++ plus assembly: **38.80%**.
+
+## Pause-menu icon highlighting and cursor shadow (2026-09-09)
+
+Reconstructed **1,132 bytes** for the selected menu icon and the cursor shadow.
+The icon task creates/releases its renderer as the selection changes, stretches
+vertically and horizontally, then alternates reverse/forward palette pulses.
+The shadow follows the parent cursor and draws on alternating frames. A checked
+72-byte task distinguishes cursor motion from icon scale fields, and the scene
+work now names the signed highlighted-menu index.
+
+A normal 890-frame replay opened the pause menu from supplied save 20, visited
+all five pages, opened a submenu and returned. It checked **3,115 icon returns
+and 623 shadow returns**, all seven icon states, both shadow frame parities,
+four icon releases and one immediate reactivation. Complete 72-byte tasks and
+336-byte sprite prefixes were compared against independent position, scale and
+lifetime expectations, including 919 draw calls and 24 virtual palette requests
+(14 reverse, 10 forward). No code or RAM fixtures were used; all **104 supplied
+saves** retained their hashes. The adjacent cursor constructor and motion
+callback remain assembly pending compiler register/scheduling differences.
+
+Private report: `build/runtime/eur_menu_cursor/evidence_menu20.json`.
+Input-state SHA-1: `d2c8a01fd324265a80ade9948d2d5d397de5a314`.
+Save-20 SHA-1: `e78faca7c148cb07941601554f06f279a29c4488`.
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**602,548 / 1,563,700 bytes (38.53%)**; C/C++ plus assembly: **38.87%**.

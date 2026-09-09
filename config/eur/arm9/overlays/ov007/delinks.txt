@@ -168,3 +168,6 @@ src/overlay007/pause_background.cpp:
 
 src/overlay007/pause_background_palette.cpp:
     .text start:0x02070a2c end:0x02070ae8
+
+src/overlay007/pause_menu_cursor.cpp:
+    .text start:0x02080078 end:0x020804e4
