@@ -1,6 +1,64 @@
 #include "effect_task_internal.h"
+#include <game/battle_context.h>
 
 extern "C" {
+void Overlay25Enemy_BeginModelEffect(Overlay25Task *task, BattleSceneObject *object,
+                                     Overlay25WorkPrefix *work)
+{
+    BattleGlobalProperty_Set(12, 1);
+    BattleSceneObject_SetAnimation(object, 18, -1);
+    BattlePosition pos;
+    Overlay25Object_GetViewPosition(&pos, object);
+    BattleSpriteEffect_Spawn(518, pos.x, pos.y, pos.z, 256);
+    BattleModelEffect_SpawnAttached(&work->model_effect, 814, object, 0, 0, 0, 256);
+    BattleActor_GetEnemySlot(object->actor_id)->damage_scale_q8 = 204;
+    BattleSound_Play(0, 0, 0, 0);
+    task->update = Overlay25Enemy_SelectTrackingTargets;
+}
+
+void Overlay25Enemy_SelectTrackingTargets(Overlay25Task *task, BattleSceneObject *enemy, Overlay25WorkPrefix *work)
+{
+    if (!work->model_effect) {
+        BattleSceneObject_SetAnimation(enemy, 19, -1);
+        if (BattleActor_CanReceiveStatus(BattleActor_GetById(56)) &&
+            BattleActor_CanReceiveStatus(BattleActor_GetById(57))) {
+            Overlay25ChainTrackingParameters *first = &work->tasks[3].chain_tracking;
+            first->target_id = 56;
+            first->index = 3;
+            first->angle = 0;
+            first->contact_count = OVERLAY25_PROJECTILE_COUNTS[0];
+            work->chains[first->index].object_id = 40;
+            work->tasks[3].update = Overlay25Chain_BeginTracking;
+            Overlay25ChainTrackingParameters *second = &work->tasks[2].chain_tracking;
+            second->target_id = 57;
+            second->index = 2;
+            second->angle = 0;
+            second->contact_count = OVERLAY25_PROJECTILE_COUNTS[0];
+            work->chains[second->index].object_id = 41;
+            work->tasks[2].update = Overlay25Chain_BeginTracking;
+        } else if (BattleActor_CanReceiveStatus(BattleActor_GetById(56))) {
+            int index = ((BattleRuntimeFlags *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET))->bits.alternate_formation ? 2 : 3;
+            Overlay25ChainTrackingParameters *parameters = &work->tasks[index].chain_tracking;
+            parameters->target_id = 56;
+            parameters->index = index;
+            parameters->angle = 0;
+            parameters->contact_count = OVERLAY25_PROJECTILE_COUNTS[0];
+            work->chains[parameters->index].object_id = 40;
+            work->tasks[index].update = Overlay25Chain_BeginTracking;
+        } else {
+            int index = ((BattleRuntimeFlags *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET))->bits.alternate_formation ? 3 : 2;
+            Overlay25ChainTrackingParameters *parameters = &work->tasks[index].chain_tracking;
+            parameters->target_id = 57;
+            parameters->index = index;
+            parameters->angle = 0;
+            parameters->contact_count = OVERLAY25_PROJECTILE_COUNTS[0];
+            work->chains[parameters->index].object_id = 40;
+            work->tasks[index].update = Overlay25Chain_BeginTracking;
+        }
+        task->update = Overlay25Enemy_WaitPair;
+    }
+}
+
 void func_ov025_020c8bf0(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 void Overlay25Enemy_WaitPair(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work)
 {

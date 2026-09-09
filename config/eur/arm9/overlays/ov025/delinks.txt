@@ -44,10 +44,7 @@ src/overlay025/ov25_task_wait_sibling.cpp:
     .text start:0x020c8ac8 end:0x020c8af4
 
 src/overlay025/enemy_chain_tracking.cpp:
-    .text start:0x020c93d0 end:0x020c9580
-
-src/overlay025/ov25_enemy_begin_model_effect.cpp:
-    .text start:0x020c97c8 end:0x020c98d8
+    .text start:0x020c93d0 end:0x020c98d8
 
 src/overlay025/ov25_enemy_reset_stopped_animation.cpp:
     .text start:0x020ca2f8 end:0x020ca350

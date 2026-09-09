@@ -31,6 +31,12 @@ typedef struct Overlay25ChainMotionParameters {
 typedef char Overlay25ChainJoint_SizeCheck[sizeof(Overlay25ChainJoint) == 12 ? 1 : -1];
 typedef char Overlay25ChainMotionParameters_SizeCheck[sizeof(Overlay25ChainMotionParameters) == 32 ? 1 : -1];
 
+typedef struct Overlay25ChainTrackingParameters {
+    s16 index, target_id, timer, angle, mode, unknown_0a;
+    u8 contact_count, unknown_0d[19];
+} Overlay25ChainTrackingParameters;
+typedef char Overlay25ChainTrackingParameters_SizeCheck[sizeof(Overlay25ChainTrackingParameters) == 32 ? 1 : -1];
+
 typedef struct Overlay25Task Overlay25Task;
 typedef struct Overlay25WorkPrefix Overlay25WorkPrefix;
 typedef void (*Overlay25Callback)(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
@@ -58,6 +64,7 @@ struct Overlay25Task {
         int sound_handle;
         Overlay25Parameters parameters;
         Overlay25ChainMotionParameters chain_motion;
+        Overlay25ChainTrackingParameters chain_tracking;
     };
 };
 struct Overlay25WorkPrefix {
@@ -128,6 +135,7 @@ void Overlay25Enemy_BeginModelEffect(Overlay25Task *task, BattleSceneObject *obj
                                      Overlay25WorkPrefix *work);
 void Overlay25Enemy_InitializeSegmentChains(Overlay25Task *task, BattleSceneObject *enemy, Overlay25WorkPrefix *work);
 void Overlay25Chain_BeginTracking(Overlay25Task *task, BattleSceneObject *enemy, Overlay25WorkPrefix *work);
+void Overlay25Enemy_SelectTrackingTargets(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 void Overlay25Enemy_WaitPair(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_PositionLoadedProjectiles(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_LoadProjectiles(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);

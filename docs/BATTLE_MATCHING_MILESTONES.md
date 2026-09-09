@@ -3849,3 +3849,29 @@ checkpoint 103 SHA-1 is c264e8a8b26cb4994da8a93b164979377b7b4090.
 Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
 Matching C/C++ is 649,320 / 1,563,700 bytes (41.52%); C/C++ plus ASM is 41.86%.
+
+
+## 2026-09-10 - Boss chain target selection (+584 bytes)
+
+Overlay25Enemy_SelectTrackingTargets (0x020C9580..0x020C97C8) is byte-exact
+C++. It joins the existing setup and tracking routines in the contiguous
+enemy_chain_tracking.cpp module. Its checked 32-byte parameter view names the
+target ID and contact count. The routine waits for the attached effect, chooses
+one or two eligible characters, accounts for alternate formation, assigns
+scene IDs 40/41 and starts the corresponding chain tasks.
+
+Runtime: build/runtime/eur_ov25_chain_selection/evidence_select103.json.
+The 970-frame run reuses the prior phase103.dst and the explicitly recorded
+four-byte contact-count/four-byte attack-callback fixture. No additional state
+changes are needed. It checks 31 selection returns (30 waiting and one two-target
+selection), two subsequent tracking setup returns, complete task/work/scene
+records and exact eligibility-helper arguments. External eligibility results
+are observed; their internal formula is not independently reimplemented here.
+Single-character/alternate-formation selection remains static-only.
+Native following/grab/unlock routines continue and the inspected final image
+shows the active boss encounter. BG VRAM and palettes are dumped and hashed;
+all 104 original save hashes remain unchanged.
+
+Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
+Matching C/C++ is 649,904 / 1,563,700 bytes (41.56%); C/C++ plus ASM is 41.90%.
