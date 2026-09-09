@@ -1,4 +1,5 @@
 #include <game/battle_scene.h>
+#include <game/model_resource.h>
 extern "C" {
 #include <game/heap.h>
 extern BattleModelVTable data_02050aa4;
@@ -6,7 +7,6 @@ extern void func_0202cbd4(void *, int, u32);
 extern BattleModel *BattleModel_InitResourceState(BattleModel *);
 extern BattleModel *BattleModel_DestroyResourceBase(BattleModel *);
 extern int func_0200ba34(BattleModel *, const void *);
-extern int func_0200bef0(BattleModel *, const void *);
 
 BattleModel *BattleModelController_Init(BattleModel *model)
 {
@@ -50,7 +50,7 @@ BattleModel *BattleModelController_DestroyBase(BattleModel *model)
 
 int BattleModelController_RestoreResources(BattleModel *model, const void *descriptor)
 {
-    return func_0200bef0(model, descriptor);
+    return BattleModel_InitializeSpriteResources(model, (const ModelResourceDescriptor *)descriptor);
 }
 
 int BattleModelController_ConfigureResources(BattleModel *model, const void *descriptor)

@@ -39,7 +39,7 @@ void FieldEntity_ConfigureRendererResources(FieldRuntimeEntity *entity, const Fi
     descriptor.secondary_id = secondary->id;
     descriptor.resource_flags.unknown_00 = 1;
     descriptor.flags.palette_allocation = palette->allocation_result;
-    descriptor.palette = palette;
+    descriptor.palette = &palette->palette;
     descriptor.flags.unknown_16_18 = entity->saved_presentation_flag_bits.resource_set == 1 ? 1 : 0;
     descriptor.first_texture_tile = 0;
     descriptor.texture_tile_count = 0;
@@ -107,7 +107,7 @@ void FieldEntity_RebindRendererResources(FieldRuntimeEntity *entity, const Field
     descriptor.secondary_id = secondary->id;
     descriptor.resource_flags.unknown_00 = 1;
     descriptor.flags.palette_allocation = palette->allocation_result;
-    descriptor.palette = palette;
+    descriptor.palette = &palette->palette;
     descriptor.flags.unknown_16_18 = entity->saved_presentation_flag_bits.resource_set == 1 ? 1 : 0;
     descriptor.first_texture_tile = 0;
     descriptor.texture_tile_count = 0;

@@ -7,9 +7,9 @@ typedef struct GameGraphicsResource {
     union { u16 raw; struct { u16 reserved0 : 4, alternate_boundary : 3, normal_boundary : 3,
         texture_format : 3, reserved13 : 1, color256 : 1, reserved15 : 1; } bits; } flags;
     u16 extra_count;
-    u8 reserved04[8];
+    union { u8 reserved04[8]; struct { u32 normal_tile_counts, alternate_tile_counts; }; };
     u16 animation_count, frame_count, group_count, object_count;
-    u8 reserved14[4];
+    union { u8 reserved14[4]; struct { u16 texture_offset_layouts, unknown_16; }; };
 } GameGraphicsResource;
 
 typedef struct GameGraphicsRange { u16 first, end; } GameGraphicsRange;

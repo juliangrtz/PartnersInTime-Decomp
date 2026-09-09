@@ -182,7 +182,7 @@ struct BattleModel {
     virtual int set_animation(u8 animation_id, int argument_2);
     virtual void unknown_38(BattleModel *source);
     virtual int get_animation_id();
-    virtual void unknown_40();
+    virtual int unknown_40();
     virtual u32 get_sort_key();
     virtual void unknown_48(int enabled);
     virtual int is_texture_dirty();
@@ -251,7 +251,7 @@ struct BattleModel {
     };
     s16 animation_offset_x;
     s16 animation_offset_y;
-    u8 unk_060[4];
+    union { u8 unk_060[4]; struct { s16 palette_index, unknown_062; }; };
     s32 anchor_offset;
     s32 render_anchor_z;
     u8 unk_06c[8];
@@ -261,6 +261,7 @@ struct BattleModel {
     u16 unk_07a;
     union {
         u32 flags;
+        struct { u32 unknown_00_21 : 22, alternate_resource : 1, unknown_23 : 1, unknown_24 : 1, unknown_25 : 1, unknown_26_31 : 6; } resource_flag_bits;
         struct {
             u32 unknown_00_01 : 2;
             u32 panel_animation_trigger : 1;
@@ -344,7 +345,7 @@ struct BattleModel {
     };
     s16 animation_offset_x;
     s16 animation_offset_y;
-    u8 unk_060[4];
+    union { u8 unk_060[4]; struct { s16 palette_index, unknown_062; }; };
     s32 anchor_offset;
     s32 render_anchor_z;
     u8 unk_06c[8];
@@ -354,6 +355,7 @@ struct BattleModel {
     u16 unk_07a;
     union {
         u32 flags;
+        struct { u32 unknown_00_21 : 22, alternate_resource : 1, unknown_23 : 1, unknown_24 : 1, unknown_25 : 1, unknown_26_31 : 6; } resource_flag_bits;
         struct {
             u32 unknown_00_01 : 2;
             u32 panel_animation_trigger : 1;

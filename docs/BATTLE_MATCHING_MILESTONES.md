@@ -2840,3 +2840,44 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **621,020 / 1,563,700 bytes (39.71%)**; C/C++ plus assembly: **40.05%**.
+
+
+## Shared sprite resource initialization and texture-offset lookup (2026-09-09)
+
+Reconstructed **940 bytes**, extending the contiguous model-resource module
+back to `0x0200BEF0`. Initialization copies the 44-byte presentation record,
+selects packed tile counts for the hardware OBJ boundary, allocates texture
+space, chooses palette indices, prepares or finds texture offsets and clamps
+animation/frame values. The four-entry texture-layout lookup is now C++ too.
+The checked 88-byte descriptor is shared by the model and field headers; the
+model and graphics-resource views expose the confirmed fields without changing
+any structure size. The adjacent resource-update routine remains private until
+its register allocation matches.
+
+Four read-only replays covered **6,523 frames and 1,117 target returns**:
+405 initializations and 712 layout searches. These used ordinary keypad input
+from the save-83 field state and cold loads of supplied saves **1, 51 and 103**.
+They covered both screens, normal/alternate resources, both color formats,
+allocation results 0/1/3, 195 alternate-offset conversions, 149 retained
+conversion buffers, and 349 palette-index adjustments. Layout searches observed
+the empty-list terminator; successful precomputed-layout lookup, explicit tile
+counts, normal-offset conversion and animation/frame clamps remain statically
+verified.
+
+SP-matched helper/return models compared the complete 128-byte base model,
+88-byte descriptor and graphics/palette records. They checked the graphics
+binding, copied presentation bytes, helper arguments, packed tile calculations,
+allocation flags and returned values. The fixed-state replay reproduced all
+three captured images exactly. Final main/sub OBJ-VRAM and standard palette
+regions matched the preceding resource-binding run for all four replays.
+Cold-run screenshots had differences in animated regions, so no full image-
+equivalence claim is made for those runs. All **104 supplied save hashes** were
+unchanged. Evidence: `build/runtime/eur_model_resource_init/` files
+`evidence_keypad83.json`, `evidence_cold{1,51,103}.json` and
+`display_comparison.json`. Initial field-state SHA-1:
+`3f4ab4244cfc7c6c8521ff54ebf7fdd096b92c61`.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**621,960 / 1,563,700 bytes (39.77%)**; C/C++ plus assembly: **40.11%**.
