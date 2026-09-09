@@ -719,3 +719,5 @@ src/overlay008/save_state_transfer.cpp
 src/overlay008/save_menu_write.cpp
 src/overlay007/menu_item_effect.cpp
 src/overlay007/menu_item_star.cpp
+src/overlay007/menu_number.cpp
+src/overlay007/menu_number_glyphs.cpp

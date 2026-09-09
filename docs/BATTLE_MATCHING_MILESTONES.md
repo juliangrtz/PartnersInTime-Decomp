@@ -2279,3 +2279,41 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **593,708 / 1,563,700 bytes (37.97%)**; C/C++ plus assembly: **38.30%**.
+
+## Equipment-menu number graphics (2026-09-09)
+
+Reconstructed three routines, **804 bytes**, for narrow/wide decimal values,
+unavailable-value markers and preparation of the two digit fonts. The number
+renderer suppresses leading zeroes while retaining the units digit, selects
+transparent blitting by pixel parity and converts each 32-by-16-pixel strip to
+OBJ tiles. Confirmed buffer roles now replace the three opaque pointer names
+in the shared pause workspace and its resource lifetime code. The two blitters
+between the reconstructed ranges retain assembly while their compiler output
+differs; both were nevertheless checked through their live callers.
+
+Normal keypad navigation on supplied save **20** opened the pause menu, Gear
+and Clothing. Browsing adult and baby clothing exercised both font widths,
+equal/decreased stat values and five unavailable-value markers. Independent
+pixel models checked all **2,048 prepared glyph bytes**, **43 complete scratch
+buffers** after transparent blits, and **4,864 bytes written to OBJ VRAM**.
+All helper targets/arguments, division results and glyph-source return pointers
+were checked. Screenshots showed the equipment comparisons and the five `---`
+markers for Starly Jeans selected for Mario. No code or RAM fixtures were used.
+The observed decimal values were two-digit values; zero, one-digit and
+three-digit values retain static matching evidence.
+
+The three substantive replays total **630 frames and 20 checked returns**:
+one preparation, fourteen value draws and five unavailable draws. Private
+reports: `build/runtime/eur_menu_number/evidence_menu20.json`,
+`evidence_clothing20.json` and `evidence_unavailable20.json`. Input-state SHA-1:
+`d2c8a01fd324265a80ade9948d2d5d397de5a314`,
+`6a1ea86baa3653c0c7e6364e1b07f8d2b096244d`, and
+`61373ecc7bc36608401e3d46a91fcf5637bf297d`, respectively. The intervening Gear
+navigation is retained separately. Save 20 SHA-1:
+`e78faca7c148cb07941601554f06f279a29c4488`. All **104 supplied saves** remained
+unchanged in before/after hash checks.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**594,512 / 1,563,700 bytes (38.02%)**; C/C++ plus assembly: **38.35%**.

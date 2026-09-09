@@ -47,7 +47,7 @@ extern void func_ov005_02067468(Overlay5Archive *, u8, const void *, int);
 extern void func_ov005_02067424(Overlay5Archive *, u8);
 extern Overlay5Asset *func_ov005_02066a7c(Overlay5Archive *, u16, u16, const AssetTable *, u8, int);
 extern void *func_ov005_0206687c(const char *, u32 *, int);
-extern void func_ov007_020778b8(void);
+#include <game/menu_number.h>
 extern void *func_ov007_02076308(void *, void *);
 extern void func_02007ebc(GameSpritePalette *, int, int, int, int, int, int, int, int, int);
 extern void MIi_CpuClear16(u16, void *, u32), MIi_CpuClearFast(u32, void *, u32),
@@ -171,7 +171,7 @@ void PauseScene_LoadResources(PauseSceneTask *)
             WORK.abilities[i] = 1;
     for (int i = 0; i < 48; ++i)
         WORK.sprites[i] = func_ov005_0206964c();
-    WORK.ownede4 = GameHeap_NewArray(12288, 0, 0, 0);
+    WORK.number_scratch = GameHeap_NewArray(12288, 0, 0, 0);
     WORK.owned88 = GameHeap_NewArray(49152, 0, 0, 0);
     WORK.owned8c = GameHeap_NewArray(17920, 0, 0, 0);
     for (int i = 0; i < 2; ++i) {
@@ -181,7 +181,7 @@ void PauseScene_LoadResources(PauseSceneTask *)
         Clear16(WORK.ownedcc[i], 2048);
         Clear16(WORK.ownedd4[i], 2048);
     }
-    WORK.ownede0 = GameHeap_NewArray(2048, 0, 0, 0);
+    WORK.number_glyph_pixels = GameHeap_NewArray(2048, 0, 0, 0);
     Clear32(WORK.owned88, 49152);
     WORK.background_dirty = 1;
     GameSpriteAllocation_Allocate(&DISPLAY.allocations[0], 0, 0, 220, 0, 65535, 1, 0);
@@ -302,10 +302,10 @@ void PauseScene_LoadResources(PauseSceneTask *)
         DeleteBuffer(buffer);
     }
     if (gSaveData[0x515] != 3 && gSaveData[0x515] != 5)
-        WORK.owneddc = func_ov005_02066f78(ARCHIVE, 1, 67, 0, 0);
+        WORK.number_glyph_tiles = func_ov005_02066f78(ARCHIVE, 1, 67, 0, 0);
     else
-        WORK.owneddc = func_ov005_02066f78(ARCHIVE, 1, 68, 0, 0);
-    func_ov007_020778b8();
+        WORK.number_glyph_tiles = func_ov005_02066f78(ARCHIVE, 1, 68, 0, 0);
+    MenuNumber_PrepareGlyphs();
     {
         void *buffer = Overlay5Archive_ReadEntry(ARCHIVE, 1, 65, 0, 0);
         Overlay5Display_LoadObjTilesLZ(DISPLAY_ENGINE_SUB, buffer, DISPLAY.allocations[1].offset + 4736);

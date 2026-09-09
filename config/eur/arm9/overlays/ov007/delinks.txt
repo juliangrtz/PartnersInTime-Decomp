@@ -141,3 +141,9 @@ src/overlay007/menu_item_effect.cpp:
 
 src/overlay007/menu_item_star.cpp:
     .text start:0x02078040 end:0x02078294
+
+src/overlay007/menu_number.cpp:
+    .text start:0x020774cc end:0x02077718
+
+src/overlay007/menu_number_glyphs.cpp:
+    .text start:0x020778b8 end:0x02077990

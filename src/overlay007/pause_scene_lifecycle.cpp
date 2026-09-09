@@ -179,13 +179,13 @@ PauseSceneTask *PauseScene_Destroy(PauseSceneTask *task)
             WORK.ownedd4[j] = 0;
         }
     }
-    if (WORK.ownede0) {
-        GameHeap_DeleteArray(WORK.ownede0);
-        WORK.ownede0 = 0;
+    if (WORK.number_glyph_pixels) {
+        GameHeap_DeleteArray(WORK.number_glyph_pixels);
+        WORK.number_glyph_pixels = 0;
     }
-    if (WORK.owneddc) {
-        GameHeap_DeleteArray(WORK.owneddc);
-        WORK.owneddc = 0;
+    if (WORK.number_glyph_tiles) {
+        GameHeap_DeleteArray(WORK.number_glyph_tiles);
+        WORK.number_glyph_tiles = 0;
     }
     if (WORK.ownedc0) {
         GameHeap_DeleteArray(WORK.ownedc0);
@@ -211,9 +211,9 @@ PauseSceneTask *PauseScene_Destroy(PauseSceneTask *task)
         GameHeap_DeleteArray(WORK.owned88);
         WORK.owned88 = 0;
     }
-    if (WORK.ownede4) {
-        GameHeap_DeleteArray(WORK.ownede4);
-        WORK.ownede4 = 0;
+    if (WORK.number_scratch) {
+        GameHeap_DeleteArray(WORK.number_scratch);
+        WORK.number_scratch = 0;
     }
     if (data_ov007_0208e1e4) {
         DeleteParty(data_ov007_0208e1e4);
