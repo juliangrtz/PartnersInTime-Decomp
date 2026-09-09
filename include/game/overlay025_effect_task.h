@@ -76,6 +76,7 @@ void Overlay25EffectSequence_StartSprite(Overlay25Task *task, BattleSceneObject 
 void Overlay25EffectSequence_StartModel(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *work);
 void Overlay25EffectSequence_PositionEffect(Overlay25Task *task, BattleSceneObject *object,
                                             Overlay25WorkPrefix *work);
+void Overlay25Projectile_UpdateReflectedImpact(Overlay25Task *task, BattleSceneObject *enemy, Overlay25WorkPrefix *work);
 void Overlay25Projectile_UpdateSpin(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);
 void Overlay25Projectile_WaitAll(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *work);
 void Overlay25Projectile_UpdateTrail(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *);

@@ -3765,3 +3765,42 @@ dumped and hashed, and all 104 original battery saves retain their hashes.
 Validation: all 81 tests, zero native relink differences and canonical ROM SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
 647,504 / 1,563,700 bytes (41.41%); C/C++ plus ASM is 41.74%.
+
+
+## 2026-09-10 - Reflected boss-projectile impact (+792 bytes)
+
+Overlay25Projectile_UpdateReflectedImpact (0x020C44B0..0x020C47C8) is byte-exact
+C++. It extends the adjacent initialization/spin module, now named
+src/overlay025/enemy_projectile_impact.cpp (0x020C4268..0x020C47C8). The routine
+emits trails, spins the returned projectile, waits for its movement to finish,
+calculates/applies enemy damage, emits impact effects and starts the final
+ballistic bounce. Its mode-2 variant offsets the damage popup by -32 pixels.
+Native disassembly recovers the damage and motion arguments omitted by the
+decompiler, including the returned ballistic duration used by the X channel.
+
+Runtime: build/runtime/eur_ov25_projectile_impact/evidence_reflect103.json.
+Source prepare103.dst SHA-1 c2c8c46bf017c3f5a9b048ecfbf536dc68170d17 already
+contains the documented two-target preparation fixture from the preceding
+projectile work. Checkpoint 103 SHA-1 is
+c264e8a8b26cb4994da8a93b164979377b7b4090. A 1,501-frame run continues that attack.
+At frame 150, one empty 20-byte hit-record sentinel is temporarily populated
+with contact source 56, target 44 and the live projectile coordinates. Native
+collision handling consumes the record, stops the old motion, starts the
+return flight and selects the reconstructed callback; all 20 original bytes
+are restored at handler return. This is isolated reflection coverage, not a
+timed player dodge or naturally selected attack.
+
+There are 22 checked returns from the new routine and 111 from the adjacent
+spin callback. The run covers two trail emissions, the mode-0 impact at frame
+172, damage-helper argument 32, four independently projected positions, the
+24-unit vertical adjustment, the ballistic/move arguments and two completed
+spin tasks. Complete task/work/scene/model records and native code guards pass.
+External damage and motion helpers are refreshed at return; this probe does
+not independently establish the HP formula. Mode 2 remains static-only.
+Subsequent native boss attacks proceed to the next player command menu, shown
+in the inspected final image. BG VRAM and palettes are dumped and hashed.
+All 104 supplied saves retain their hashes.
+
+Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
+Matching C/C++ is 648,296 / 1,563,700 bytes (41.46%); C/C++ plus ASM is 41.79%.

@@ -543,7 +543,7 @@ src/overlay018/support_entry.cpp
 src/overlay025/ov25_enemy_begin_return.cpp
 src/overlay025/ov25_effect_sequence_initialize_alternate.cpp
 src/overlay025/ov25_effect_sequence_advance_sprite.cpp
-src/overlay025/ov25_effect_sequence_begin_positioning.cpp
+src/overlay025/enemy_projectile_impact.cpp
 src/overlay025/ov25_projectile_wait_all.cpp
 src/overlay025/ov25_projectile_update_trail.cpp
 src/overlay025/enemy_projectile_effects.cpp

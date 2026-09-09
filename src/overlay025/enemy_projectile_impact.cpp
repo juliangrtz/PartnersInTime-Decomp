@@ -1,6 +1,45 @@
 #include "effect_task_internal.h"
 
 extern "C" {
+#include <game/battle_damage.h>
+
+void Overlay25Projectile_UpdateReflectedImpact(Overlay25Task *task, BattleSceneObject *enemy,
+                                               Overlay25WorkPrefix *)
+{
+    Overlay25Parameters *parameters = &task->parameters;
+    BattleSceneObject *object = BattleSceneObject_GetById((u16)(task->parameters.index + 44));
+    if (++parameters->timer > 8) {
+        parameters->timer = 0;
+        BattlePosition trail;
+        Overlay25Object_GetViewPosition(&trail, object);
+        BattleModelEffect_Spawn(830, 0, trail.x, trail.y, trail.z, 256);
+    }
+    object->primary_model->rotation_z += 4096;
+    if (!BattleSceneObject_IsAnimationChannelActive(object, 2)) {
+        BattlePosition impact;
+        BattleSound_Play(272, 0, 0, 0);
+        Overlay25Object_GetViewPosition(&impact, object);
+        BattleSpriteEffect_Spawn(452, impact.x, impact.y, impact.z, 256);
+        BattleModelEffect_Spawn(666, 0, impact.x, impact.y, impact.z, 256);
+        if (parameters->mode != 2) {
+            BattleDamage_ApplyToEnemy(
+                enemy, 0, 0, BattleDamage_CalculateByObject((u16)parameters->parameter, enemy->actor_id), 12,
+                7, 0);
+        } else {
+            BattleDamage_ApplyToEnemy(
+                enemy, -32, 0, BattleDamage_CalculateByObject((u16)parameters->parameter, enemy->actor_id),
+                12, 7, 0);
+        }
+        BattleSceneObject_SetAnimation(object, 14, -1);
+        object->property_103 = 0;
+        BattleSceneObject_AdjustPosition(object, 0, 0, 24);
+        Overlay25Object_GetViewPosition(&impact, object);
+        int duration = BattleMotion_StartBallistic(object, 2, 0, 0, -1, 216 - impact.y, 64, -32, 1);
+        BattleSceneObject_MoveBy(object, 1, (duration * 256) / 256, 0, 0, duration);
+        task->update = Overlay25Projectile_UpdateSpin;
+    }
+}
+
 void Overlay25Projectile_UpdateSpin(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *)
 {
     BattleSceneObject *object = BattleSceneObject_GetById((u16)(task->parameters.index + 44));
