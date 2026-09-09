@@ -3902,3 +3902,45 @@ and hashed, and all 104 supplied saves retain their hashes.
 Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
 Matching C/C++ is 650,536 / 1,563,700 bytes (41.60%); C/C++ plus ASM is 41.94%.
+
+
+## 2026-09-10 - Feeding and growing the linked boss effect (+2,160 bytes)
+
+Overlay25Enemy_FeedLinkedEffect (0x020CA858, 1,104 bytes) and
+Overlay25Enemy_UpdateLinkedEffectGrowth (0x020CA438, 1,056 bytes) are byte-exact
+C++, extending the contiguous enemy_linked_effects.cpp module. Weighted counters
+select an effect from either side of the boss; the next object moves toward the
+existing effect, which grows at stages 1/2/4/6/9. Once the counters are exhausted,
+the completed object accelerates toward the selected character and updates the
+enemy's damage scale. Scene offsets, particle-stop flags, emitter parameters
+and stage-dependent distances follow the native instructions.
+
+The declaration of func_ov002_0206c148 now accepts full-width effect index and
+X/Y coordinates. Native callee instructions use R0 directly as an archive index
+and store all 32 bits of R2/R3 in the animation state; only stack Z is loaded as
+a signed halfword. The older declaration incorrectly narrowed all these values.
+The existing trail caller retains its explicit actor-parameter truncation, and
+the full relink verifies that its output remains exact.
+
+Runtime: build/runtime/eur_ov25_linked_growth/evidence_growth103.json, following
+the earlier narrower evidence in eur_ov25_linked_feed/evidence_feed103.json.
+The 970-frame phase103.dst run reuses the documented tracking-selection fixture.
+The subsequent native linked attack needs no additional RAM edits. The new
+callbacks have 50 and 149 checked returns, respectively. Eight feed operations
+cover both sides (two/six), stages 0..7 and five distance margins. Growth covers
+stages 1..8, four size changes, positive/expired timers, seven repeated feeds
+and the final launch at the target. Stage 9 and the final feed-distance branch
+remain static-only. Random-helper results are observed without rewriting RNG.
+
+Independent checks reproduce eight feed positions, 24 projected positions,
+nine hardware-square-root results and four growth offsets. Complete task/work/
+scene/model/counter records, damage-scale writes and exact helper arguments
+agree at calls and returns. External motion/effect helper side effects are
+refreshed; these checks do not independently prove the entire attack or its
+damage application. The final frame has the same inspected battle image as
+the preceding probe. BG VRAM and palettes are dumped and hashed. All 104
+supplied saves retain their hashes.
+
+Validation: all 81 tests, zero native relink differences, canonical ROM SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701 and public-content checks pass.
+Matching C/C++ is 652,696 / 1,563,700 bytes (41.74%); C/C++ plus ASM is 42.08%.
