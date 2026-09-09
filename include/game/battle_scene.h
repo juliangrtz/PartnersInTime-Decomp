@@ -149,7 +149,8 @@ struct BattleModelVTable {
     u8 unknown_040[4];
     u32 (*get_sort_key)(BattleModel *model);
     void (*unknown_048)(BattleModel *model, int enabled);
-    u8 unknown_04c[0x1C];
+    int (*is_texture_dirty)(BattleModel *model);
+    u8 unknown_050[0x18];
     int (*set_primary_animation)(BattleModel *model, u8 animation_id,
                                  int argument_2, int enabled);
     u8 unknown_06c[0x1C];
@@ -639,6 +640,7 @@ const void *BattleModel_GetPaletteSource(BattleModel *model);
 int BattleModel_GetPaletteColorCount(BattleModel *model);
 void BattleModel_SetPaletteBuffered(BattleModel *model, int enabled);
 void BattleModel_SetPaletteMask(BattleModel *model, GamePaletteEffectController *table, int index, int enabled);
+void BattleModel_UpdateSpriteTexture(BattleModel *model, int unused_mode);
 void BattleModel_CopyAnimationLayers(BattleModel *source, BattleModel *destination);
 void BattleModel_RestoreSourcePalette(BattleModel *model);
 

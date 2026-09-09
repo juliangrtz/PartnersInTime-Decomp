@@ -372,7 +372,6 @@ src/battle/battle_model_state.cpp
 src/overlay007/vm_motion.c
 src/overlay007/properties.c
 src/overlay007/animation_layer.cpp
-src/game/model_render_links.c
 src/game/affine_inverse.c
 src/game/model_animation_pool.c
 src/game/field_background_transfers.c

@@ -11,7 +11,6 @@ extern void *data_ov005_0206a02c[];
 
 extern void MI_CpuFill8(void *destination, u8 value, u32 size);
 extern void func_0200c9c8(void *object, int mode);
-extern void func_0200b6c4(void *object, int mode);
 
 void func_ov005_02068758(void);
 void func_ov005_0206873c(int first, int second);
@@ -50,7 +49,7 @@ void func_ov005_02068894(void) {
 
 void func_ov005_02068868(Overlay5TextureObject *object) {
     if (!object->mode) return;
-    func_0200b6c4(object, object->mode);
+    BattleModel_UpdateSpriteTexture((BattleModel *)object, object->mode);
 }
 
 void func_ov005_0206883c(Overlay5TextureObject *object) {

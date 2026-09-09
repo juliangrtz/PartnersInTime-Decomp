@@ -2985,3 +2985,32 @@ Validation: all 74 tests, public-source audit, whitespace checks and native
 relink with zero differences passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **625,092 / 1,563,700 bytes (39.98%)**; C/C++ plus assembly: **40.31%**.
+
+## Sprite texture upload dispatch (2026-09-09)
+
+Reconstructed `BattleModel_UpdateSpriteTexture`, **260 bytes**. Dirty sprites
+upload either their current frame group or all alternate-resource images, using
+the screen's OBJ-VRAM base and hardware boundary. The texture dirty flag is
+cleared only after the upload. The render-list functions now share the contiguous
+C++ model-resource module (`0x0200B6C4` through `0x0200C5D8`); every moved function
+retains its exact native bytes. The C vtable view exposes the confirmed texture-
+dirty query slot, and the overlay-5 wrapper uses the typed upload interface.
+
+Ordinary field input from save **83** and a cold load of save **103** covered
+**2,457 frames and 94,179 returns**: 93,542 clean-texture skips and 637 uploads.
+Uploads reached both screens (513 main, 124 sub), normal/alternate resources
+(617/20) and OBJ boundary modes 1/2. Byte-guarded, SP-matched models checked full
+128-byte sprite states, graphics headers and animation/frame records, exact
+upload destinations and arguments, preservation of the model through the native
+uploader, and dirty-bit clearing afterward. The pixel converter itself remains
+assembly and is not claimed as newly reconstructed.
+
+Final main/sub OBJ-VRAM and standard palette dumps matched the preceding runs
+for both replays; screenshots accompany `build/runtime/eur_model_sprite_texture/`
+reports `evidence_keypad83.json` and `evidence_cold103.json`. No fixtures were
+used and all **104 supplied save hashes** remained unchanged.
+
+Validation: all 74 tests, public-source audit, whitespace checks and native
+relink with zero differences passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**625,352 / 1,563,700 bytes (39.99%)**; C/C++ plus assembly: **40.33%**.

@@ -8,6 +8,8 @@ extern "C" {
 extern "C" {
 #include <game/heap.h>
 void func_02009138(BattleModel *);
+extern const u32 data_02049910[2];
+void func_0200b374(u32, const GameGraphicsResource *, const void *, int, int);
 extern BattleModelVTable data_02050a24;
 void func_0200a45c(BattleModel *, const void *);
 void func_02009ffc(int, const u16 *, const GameGraphicsResource *, int);
@@ -365,5 +367,99 @@ void BattleModel_UpdateSpriteResources(BattleModel *model, const ModelResourceDe
         speed = -speed;
     model->anchor_offset += speed;
     model->unknown_30();
+}
+
+void BattleModel_AppendRenderList(BattleModel *model)
+{
+    if (!model->flag_bits.render_linked) {
+        if (gModelRenderList[model->screen] == 0) {
+            gModelRenderListTail[model->screen] = model;
+            gModelRenderList[model->screen] = gModelRenderListTail[model->screen];
+            model->render_previous = 0;
+            model->render_next = 0;
+        } else {
+            gModelRenderListTail[model->screen]->render_next = model;
+            model->render_previous = gModelRenderListTail[model->screen];
+            model->render_next = 0;
+            gModelRenderListTail[model->screen] = model;
+        }
+        model->flag_bits.render_linked = 1;
+    }
+}
+
+void BattleModel_UnlinkRenderList(BattleModel *model)
+{
+    if (model->flag_bits.render_linked) {
+        if (model->render_previous != 0)
+            model->render_previous->render_next = model->render_next;
+        if (gModelRenderList[model->screen] == model)
+            gModelRenderList[model->screen] = model->render_next;
+        if (model->render_next != 0)
+            model->render_next->render_previous = model->render_previous;
+        if (gModelRenderListTail[model->screen] == model)
+            gModelRenderListTail[model->screen] = model->render_previous;
+        model->render_next = 0;
+        model->render_previous = model->render_next;
+        model->flag_bits.render_linked = 0;
+    }
+}
+
+/* Detach without clearing the node's saved neighbours. */
+void BattleModel_DetachRenderList(BattleModel *model)
+{
+    if (model->flag_bits.render_linked) {
+        if (model->render_previous != 0)
+            model->render_previous->render_next = model->render_next;
+        if (gModelRenderList[model->screen] == model)
+            gModelRenderList[model->screen] = model->render_next;
+        if (model->render_next != 0)
+            model->render_next->render_previous = model->render_previous;
+        if (gModelRenderListTail[model->screen] == model)
+            gModelRenderListTail[model->screen] = model->render_previous;
+        model->flag_bits.render_linked = 0;
+    }
+}
+
+void BattleModel_RestoreRenderList(BattleModel *model)
+{
+    if (!model->flag_bits.render_linked) {
+        if (model->render_previous)
+            model->render_previous->render_next = model;
+        else
+            gModelRenderList[model->screen] = model;
+        if (model->render_next)
+            model->render_next->render_previous = model;
+        else
+            gModelRenderListTail[model->screen] = model;
+        model->flag_bits.render_linked = 1;
+    }
+}
+
+int BattleModel_ReleaseTexture(BattleModel *model, int force)
+{
+    if (force) {
+        GameSpriteAllocation_Unlink(&model->texture);
+        return 1;
+    } else {
+        if (model->flag_bits.texture_allocation_mode != 3)
+            return 0;
+        GameSpriteAllocation_Unlink(&model->texture);
+        return 1;
+    }
+}
+void BattleModel_UpdateSpriteTexture(BattleModel *model, int unused_mode)
+{
+    if (model->is_texture_dirty()) {
+        if (!model->resource_flag_bits.alternate_resource)
+            func_0200b374(
+                model->texture.offset + data_02049910[model->screen], model->resource, model->resource_pixels,
+                GameSprite_ObjBoundaryShift(model->screen),
+                model->frames[model->property_056 + model->animation_data[model->animation_id].start_frame]
+                    .unknown_00);
+        else
+            func_0200b374(model->texture.offset + data_02049910[model->screen], model->resource,
+                          model->resource_pixels, GameSprite_ObjBoundaryShift(model->screen), -1);
+        model->texture.state &= ~16;
+    }
 }
 }
