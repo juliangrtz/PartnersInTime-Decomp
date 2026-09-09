@@ -52,9 +52,12 @@ struct PauseSceneWork {
     u8 special_available, abilities[6];
     u8 unknown127[0x195];
     void *renderer;
-    u8 unknown2c0[4];
+    int equipment_active;
     s8 selected[4];
-    u8 unknown2c8[24];
+    s8 equipment_comparison[5], equipment_frames[3], equipment_switching;
+    u8 unknown2d1[3];
+    int equipment_heading_x, equipment_heading_y;
+    u8 unknown2dc[4];
     GameSpriteAllocation main_allocation, sub_allocation;
     void *sprites[48];
     GamePaletteEffectController *palette_controller;

@@ -12,7 +12,7 @@ static inline void ClearGlyphScratch(void)
     volatile u16 zero = 0;
     MIi_CpuClear16(zero, WORK.number_scratch, 512);
 }
-extern "C" void MenuNumber_DrawValue(int tile, u32 x, u16 value, int wide)
+extern "C" void MenuNumber_DrawValue(int tile, u32 x, int value, int wide)
 {
     ClearGlyphScratch();
     int visible = 0, divisor = 100;
@@ -40,7 +40,7 @@ extern "C" void MenuNumber_DrawValue(int tile, u32 x, u16 value, int wide)
             else
                 func_ov007_0207781c(glyphs + glyph_size * digit, destination, width, 16, 16);
         }
-        value %= divisor;
+        value = (u16)(value % divisor);
         divisor /= 10;
         x = (u16)(x + advance);
         if (divisor == 1)

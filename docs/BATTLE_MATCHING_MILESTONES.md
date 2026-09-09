@@ -2317,3 +2317,45 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **594,512 / 1,563,700 bytes (38.02%)**; C/C++ plus assembly: **38.35%**.
+
+## Equipment comparison displays and panel motion (2026-09-09)
+
+Reconstructed five routines, **1,968 bytes**: heading creation/update, the stat
+panel's horizontal motion, comparison-arrow animation and number-strip motion.
+Checked 72-byte task views distinguish heading interpolation from the stat
+panel's acceleration. Shared pause-workspace fields now describe active state,
+five comparison kinds, the three per-update animation-frame caches and heading
+position. The common animated-model interface reproduces the native virtual
+animation calls. The decimal renderer's value parameter is now `int`, with its
+16-bit remainder conversion explicit; caller evidence established this ABI and
+both already reconstructed number functions remain byte-identical.
+
+Normal Gear/Clothing navigation on supplied save **20** reached all five new
+routines. The main replays total **660 frames and 7,887 checked returns**: one
+heading constructor, 462 heading updates, 464 stat-panel updates, 2,320 arrow
+updates and 4,640 number-strip updates. Two rightward character changes reached
+Luigi and Baby Mario. Closing the submenu exercised all 17 releases: heading,
+stat panel, five arrows and ten strips. The model checks covered all six motion
+phases, the heading's delay counters, signed fixed-point coordinates, per-frame
+cache filling/reuse, unavailable-arrow suppression, parent closing and native
+helper targets/arguments. Complete tasks, 64-byte OBJ sprites, 128-byte animated
+model prefixes and 28 bytes of shared equipment state were compared at helper
+boundaries and returns. Screenshots confirmed the character and submenu changes.
+
+Private reports: `build/runtime/eur_menu_equipment/evidence_clothing20.json` and
+`evidence_switch20.json`. Input-state SHA-1:
+`6a1ea86baa3653c0c7e6364e1b07f8d2b096244d` and
+`34fa1984e24a4bb1d09444d48b18b16f14e6a78e`. Save SHA-1:
+`e78faca7c148cb07941601554f06f279a29c4488`. Supplementary clothing/character
+browsing is retained in `evidence_unarmed20.json` and
+`evidence_baby_comparison20.json`. No code or RAM fixtures were used, and all
+**104 supplied saves** retained their before/after hashes. The heading's
+single-member animation choice and the higher-stat arrow retain static evidence;
+equal, lower and unavailable comparisons were observed. The intervening stat
+calculation and digit-sprite renderer remain assembly while compiler differences
+are unresolved.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**596,480 / 1,563,700 bytes (38.15%)**; C/C++ plus assembly: **38.48%**.

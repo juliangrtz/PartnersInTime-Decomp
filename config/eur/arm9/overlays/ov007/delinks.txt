@@ -147,3 +147,9 @@ src/overlay007/menu_number.cpp:
 
 src/overlay007/menu_number_glyphs.cpp:
     .text start:0x020778b8 end:0x02077990
+
+src/overlay007/menu_equipment_display.cpp:
+    .text start:0x0207a0d8 end:0x0207a388
+
+src/overlay007/menu_equipment_motion.cpp:
+    .text start:0x0207a81c end:0x0207ad1c

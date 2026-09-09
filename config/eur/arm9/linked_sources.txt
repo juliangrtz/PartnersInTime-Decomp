@@ -721,3 +721,5 @@ src/overlay007/menu_item_effect.cpp
 src/overlay007/menu_item_star.cpp
 src/overlay007/menu_number.cpp
 src/overlay007/menu_number_glyphs.cpp
+src/overlay007/menu_equipment_display.cpp
+src/overlay007/menu_equipment_motion.cpp
