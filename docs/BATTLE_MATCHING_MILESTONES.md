@@ -1059,3 +1059,34 @@ statically verified only. Private evidence is `regions_cold83.json` and
 Native linking, all 74 tests, progress consistency and the public-content audit
 pass. The complete ROM retains SHA-1
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.
+
+### Navigation records, bounds and saved changes (2026-09-09)
+
+Six functions add 1,948 matching C++ bytes, reaching 530,120 / 1,563,700
+bytes (33.90%). They allocate the room's navigation and boundary arrays,
+expand checked 40-byte source records into 92-byte surfaces, compute vertex
+bounds, derive the dominant slope axis, and capture/restore per-screen change
+masks. The event application wrapper also marks eligible entities for position
+synchronization. Typed virtual methods reproduce the original dispatch order;
+packed flags with unresolved gameplay roles keep neutral names.
+
+Normal battery boots of checkpoints 83 and 27, followed by a checkpoint-83 pause
+round trip, verify all 374 expanded surfaces and their full output buffers,
+retained fields, terminators and source records. All four observed surface types
+are covered, with 128 triangles and 246 quadrilaterals. For 32 sloped records,
+96 native height queries receive the expected center/offset coordinates, and
+their returned heights produce the expected stored slope axis. Six allocation
+passes check the full area context, eight allocation requests, null resources,
+and each allocated buffer's initial terminator without modifying retained bytes.
+
+The pause round trip also verifies two save-mask calls over modes zero and three,
+and two restore calls with empty masks. Enabled saved changes, event application,
+negative coordinates, the other slope-axis result and allocation failures were
+not reached and remain statically verified only. Every probe passes with no
+pending callbacks; both source battery saves remain unchanged. Private evidence
+is `navigation_cold83.json`, `navigation_cold27.json` and `navigation_pause83.json`
+under `build/runtime/eur_navigation/`.
+
+Native linking, all 74 tests, progress consistency and the public-content audit
+pass. The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. No inline assembly was added.

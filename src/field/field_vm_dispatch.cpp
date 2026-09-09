@@ -132,7 +132,6 @@ extern void func_ov000_0209f644(
     int preserve_field_1_anchor);
 extern void func_ov000_0207f288(u8 *field_context, int party_side, s16 x,
                                 s16 y, s16 z, int facing_direction);
-extern void func_ov000_0207af94(u8 *field_context, int map_event_index);
 extern void func_ov000_02073498(
     u8 *field_context, int coordinate_mode, fx32 x, fx32 y, int motion_3,
     int motion_4, int motion_5, int motion_6, int x_motion_flag,
@@ -2777,8 +2776,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_ACTIVATE_FIELD_MAP_EVENT:
-        func_ov000_0207af94(
-            field_context, arguments[0]);
+        FieldArea_ApplyNavigationChange(
+            (FieldAreaContext *)field_context, arguments[0]);
         break;
 
     case FIELD_VM_START_MAP_TILE_ANIMATION:

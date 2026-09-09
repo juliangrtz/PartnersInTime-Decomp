@@ -412,14 +412,24 @@ typedef struct FieldLocomotionParameters {
 typedef char FieldLocomotionParameters_SizeCheck[sizeof(FieldLocomotionParameters) == 24 ? 1 : -1];
 
 /* The spatial update walks 92-byte navigation records ordered by sort_x. */
+typedef struct FieldNavigationVertex {
+    fx32 x, y, z, lower_z;
+} FieldNavigationVertex;
+typedef char FieldNavigationVertex_SizeCheck[sizeof(FieldNavigationVertex) == 16 ? 1 : -1];
 typedef struct FieldNavigationSurface {
     union {
         u32 flags;
-        struct { u32 unknown_00 : 1, end : 1, unknown_02_31 : 30; } bits;
+        struct {
+            u32 active : 1, end : 1, unknown_02 : 1, type : 4;
+            u32 edge_mask_a : 4, edge_mask_b : 4, edge_mask_c : 4, edge_mask_d : 4;
+            u32 vertex_count : 3, slope_axis : 2, unknown_28_31 : 4;
+        } bits;
     };
-    u8 unknown_04[8];
-    fx32 sort_x;
-    u8 unknown_10[0x3C];
+    u32 index, attributes;
+    union {
+        FieldNavigationVertex vertices[4];
+        struct { fx32 sort_x; u8 unknown_10[60]; };
+    };
     fx32 min_x, max_x, min_y, max_y;
 } FieldNavigationSurface;
 typedef char FieldNavigationSurface_SizeCheck[sizeof(FieldNavigationSurface) == 92 ? 1 : -1];

@@ -3,6 +3,7 @@
 
 #include <game/field_script_manager.h>
 #include <game/field_bounds_records.h>
+#include <game/field_navigation.h>
 
 typedef struct FieldVariablePlacement FieldVariablePlacement;
 
@@ -13,7 +14,16 @@ typedef struct FieldAreaContext {
     s8 unknown_2a;
     u8 unknown_002b[8913];
     const FieldQuadRegionRecord *quad_records;
-    u8 unknown_2300[236];
+    u8 unknown_2300[188];
+    const FieldNavigationResource *navigation_resource;
+    const FieldNavigationRecord *navigation_records;
+    FieldNavigationSurface *navigation_surfaces;
+    u32 navigation_surface_count;
+    const FieldBoundaryRecord *boundary_records;
+    FieldBoundaryRuntime *boundaries;
+    u32 boundary_count;
+    const FieldPairedBoundsRecord *paired_records;
+    u8 unknown_23dc[16];
     void *archive;
     u16 unknown_23f0, unknown_23f2;
     u16 room_id;
@@ -70,14 +80,17 @@ typedef struct FieldAreaContext {
         u16 unknown_00_13 : 14, visible : 1, moving : 1;
     } hud;
     s16 unknown_24da, unknown_24dc;
-    u8 unknown_24de[18];
+    u8 unknown_24de[10];
+    u32 paired_count;
+    FieldPairedBoundsRuntime *paired_bounds;
     union { u32 unknown_24f0; u32 quad_region_count; };
     union {
         u8 unknown_24f4[8];
         struct { FieldQuadRegion *quad_regions; const FieldVariablePlacement *variable_records; };
     };
     void *auxiliary;
-    u8 unknown_2500[4], unknown_2504[8], unknown_250c[44], unknown_2538[40];
+    FieldNavigationChangeManager *navigation_changes;
+    u8 unknown_2504[8], unknown_250c[44], unknown_2538[40];
     void *party_order;
     void *unknown_2564;
     void *unknown_2568;
