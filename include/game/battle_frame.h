@@ -9,7 +9,9 @@
 /* Shared battle allocation through the palette buffers used by the frame loop.
  * Interface storage stays opaque here; each UI subsystem owns its detailed view. */
 typedef struct BattleFrameContextView {
-    u8 unknown_00000[0x14];
+    u8 unknown_00000[4];
+    void (*update)(void);
+    u8 unknown_00008[12];
     u32 frame;
     int turn_state;
     int paused_turn_state;
@@ -32,7 +34,10 @@ typedef struct BattleFrameContextView {
     u8 target_marker[16];
     u8 party_indicators[2][12];
     u8 results[32];
-    u8 unknown_0677c[0x23c8];
+    u8 unknown_0677c[0x14c];
+    BattleModel *party_animation_model;
+    void *party_animation_data;
+    u8 unknown_068d0[0x2274];
     BattleTaskPool task_list_8b44;
     u8 unknown_08b4c[0x700];
     BattleTaskPool task_list_924c;

@@ -439,3 +439,9 @@ src/battle/battle_attack_loader.cpp:
 
 src/battle/battle_frame.cpp:
     .text start:0x02073068 end:0x02073a08
+
+src/battle/battle_entry_resources.cpp:
+    .text start:0x02073a08 end:0x02074724
+
+src/battle/battle_entry_tasks.cpp:
+    .text start:0x02074724 end:0x02074ad4

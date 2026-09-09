@@ -1917,3 +1917,41 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **575,572 / 1,563,700 bytes (36.81%)**; C/C++ plus assembly: **37.14%**.
+
+## Battle entry resources and task sequence (2026-09-09)
+
+Reconstructed five contiguous functions, **4,300 bytes**, covering battle heap
+and animation-storage initialization, archive requests and completion, formation
+and approach-dependent resource selection, and the final scene setup. Heap names
+follow the native allocation labels. A checked encounter view preserves the signed
+approach nibble and initiating party side. The two explicit empty `case -2`
+branches reproduce the original resource-selection jump tables.
+
+Scene setup preserves repeated resource bindings and position adjustments, UI
+coordinate modes, saved actor positions, the party animation-controller copy,
+and the handoff to `BattleMain_Update`. All five functions match their original
+machine code exactly.
+
+Two controlled encounters from the existing save-55 field state exercised the
+whole sequence: **1,412 frames, 100 verified function returns**, including pending
+resource and scene readiness paths. Independent models checked every helper call,
+all six heap assignments, task and frame callbacks, resource selection, complete
+132-byte party actors, 260-byte scene objects, 440-byte models and 48-byte resource
+records. The two 420-byte controller copies matched their live source data exactly.
+Formation 2 with approach 0 was observed; other formation/approach branches and
+allocation-failure paths retain static matching evidence.
+
+The encounter fixture used native Scene VM opcode `0x11C` with encounter `-32748`
+from room 306 offset `0x2926`, or `8232` from room 583 offset `0x0536`. At native
+battle entry, all 72 substituted decoded-command bytes and the script cursor were
+restored and verified. These are controlled entry tests, not naturally played
+story transitions. Private reports:
+`build/runtime/eur_battle_entry/evidence_entry55.json` and `evidence_dialogue55.json`.
+Input-state SHA-1: `e44df106d65e52df1ffc2b125538354f67cb1b22`.
+Supplied save 55 remained unchanged:
+`239ff9d26a5806eada7c1b73a95e27e38872681c`.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**579,872 / 1,563,700 bytes (37.08%)**; C/C++ plus assembly: **37.42%**.

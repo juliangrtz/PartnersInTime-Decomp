@@ -706,3 +706,5 @@ src/battle/battle_animation_helpers.cpp
 src/battle/battle_feedback.cpp
 src/battle/battle_attack_loader.cpp
 src/battle/battle_frame.cpp
+src/battle/battle_entry_resources.cpp
+src/battle/battle_entry_tasks.cpp
