@@ -102,3 +102,6 @@ src/overlay008/save_menu_scroll.cpp:
 
 src/overlay008/save_state_transfer.cpp:
     .text start:0x02073410 end:0x02073ac4
+
+src/overlay008/save_menu_write.cpp:
+    .text start:0x02073f04 end:0x0207431c

@@ -2196,3 +2196,43 @@ Validation: all 74 tests, source audit, whitespace checks and zero-difference
 native relink passed. Canonical ROM SHA-1 remains
 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
 **590,936 / 1,563,700 bytes (37.79%)**; C/C++ plus assembly: **38.13%**.
+
+## Save write task and menu messages (2026-09-09)
+
+Reconstructed four contiguous functions, **1,048 bytes**: the save-write request,
+its asynchronous state machine, and message show/hide wrappers. A checked
+72-byte task view exposes source/destination slots, checksum mode, selection
+mode, saved lock state, result and error flags. The writer updates the primary
+slot and its backup at destination + 2, then records occupancy and optionally
+selects the slot. Primary-write failure and settings failure retain their
+distinct result codes; backup failure alone does not block the settings update.
+Direct compound bitfield assignments reproduce the native settings operations.
+The message wrappers hide BG1/BG2, draw the requested background text, and enable
+both planes while updating the menu's visibility flag.
+
+Normal keypad input exercised **save, copy and delete** on emulator working
+copies of supplied save 55. These reached all four reconstructed functions,
+with **155 checked returns across 1,254 frames**: 3 requests, 146 writer updates,
+2 message displays and 4 hides. The three operations observed selection modes
++1, 0 and -1, both destination slots, six successful slot writes and three
+settings writes. Independent models compared complete task and parent records,
+lock bytes, live-save flag bit 5, occupancy/selection, storage-call arguments and
+state transitions driven by the actual storage results. Message checks covered
+entries 16 and 20, all text/helper arguments and the BG1/BG2 display bits. Error
+paths, a direct state-1 entry and null live-save pointers retain static evidence.
+
+Private reports: `build/runtime/eur_save_menu_write/evidence_pack55.json`,
+`evidence_copy55.json` and `evidence_delete_confirm55.json`. Input-state SHA-1:
+`78e17c1fe46026d1115c27b212d6f0e39fa4948a` (save),
+`b99ae49572f9d3d22933b903c66355958e3709f9` (copy),
+`95a6bc8106164f65635d6ee06e747bd7339d3904` (delete). The load-menu operations
+were reached through a normal cold boot and recorded keypad navigation; there
+were no code or RAM fixtures. All **104 supplied saves** were hashed before and
+after every run and remained unchanged. Deletion affected only the imported
+emulator working copy. The adjacent capture-tile converter remains unlinked
+while its compiler register allocation differs.
+
+Validation: all 74 tests, source audit, whitespace checks and zero-difference
+native relink passed. Canonical ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Matching C/C++:
+**591,984 / 1,563,700 bytes (37.86%)**; C/C++ plus assembly: **38.19%**.

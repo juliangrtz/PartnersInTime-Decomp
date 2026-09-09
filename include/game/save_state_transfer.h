@@ -40,7 +40,7 @@ typedef struct SaveLiveTransferView {
     union {
         u8 raw;
         struct {
-            u8 unknown_0 : 4, slot : 1, unknown_5 : 3;
+            u8 unknown_0 : 4, slot : 1, unknown_5 : 1, unknown_6 : 2;
         } bits;
     } slot_select;
     u8 language, unknown_516, unknown_517;
