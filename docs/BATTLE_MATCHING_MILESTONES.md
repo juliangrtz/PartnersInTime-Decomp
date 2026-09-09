@@ -1396,3 +1396,34 @@ and `body_contact_load1.json`/`body_load65.json` under
 `build/runtime/eur_body_bounds/`. All 74 tests, native linking, progress
 consistency and the public-content audit pass. The complete ROM retains
 SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+
+### Shop selection cursors and scroll-arrow models (2026-09-09)
+
+Eight functions add 1,916 matching C++ bytes, reaching
+551,620 / 1,563,700 bytes (35.28%). The ordinary panel and curved list each have
+readable construction, cursor rendering, arrow rendering and cleanup methods.
+They share the checked task/model layouts. Cursor coordinates follow the
+current selection; arrow animation and offscreen hiding depend on the window
+and selection edges. Signed-byte row offsets and the original fixed-point
+rounding are preserved.
+
+The established controlled shop-entry route is replayed from checkpoint 86
+for both shop 1 (selling) and shop 0 (buying). Every temporary decoded command
+byte is restored at the field helper before the shop transition. Across 941
+and 1,231 frames, all eight new functions are reached. Independent checks cover
+15,568 complete task/model memory checkpoints, 13,430 helper-call checkpoints,
+nine created models, 2,133 model submissions and four cleanup group arguments.
+This includes 1,176 ordinary-panel and 957 curved-list draw returns, plus 162
+hidden arrows. Animation choices 1, 2 and 9 are observed; the last-edge
+animation 10 and the non-scrolling/empty-list alternatives remain static-only.
+Allocator-owned list links and animation-helper effects are recaptured after
+those existing helpers; each reconstructed write and every animation and
+submission argument is checked before the next helper or return.
+
+The previous inventory, row, string, VRAM and complete scene cleanup oracles
+also pass. No transaction occurs and the supplied battery save is unchanged.
+The selling screen was inspected. Private reports are `evidence_086_01.json`
+and `evidence_086_00.json` in `build/runtime/eur_shop_navigation/`. Native
+linking, all 74 tests, progress consistency and the public-content audit pass.
+The complete ROM retains SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`.

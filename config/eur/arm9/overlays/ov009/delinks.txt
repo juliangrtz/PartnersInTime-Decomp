@@ -65,3 +65,9 @@ src/overlay009/shop_inventory_panel.cpp:
 
 src/overlay009/shop_inventory_list.cpp:
     .text start:0x020742c4 end:0x020743c0
+
+src/overlay009/shop_panel_navigation.cpp:
+    .text start:0x02079444 end:0x02079808
+
+src/overlay009/shop_list_navigation.cpp:
+    .text start:0x02079e20 end:0x0207a1d8
