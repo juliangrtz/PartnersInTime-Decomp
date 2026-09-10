@@ -24,6 +24,8 @@ typedef char TitleLocalizedSequence_SizeCheck[sizeof(TitleLocalizedSequence) == 
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* The draw callback also advances the localized animation. */
+void TitleLocalizedSequence_Draw(TitleLocalizedSequence *work);
 void TitleLocalizedSequence_Finish(TitleLocalizedSequence *work);
 void TitleLocalizedSequence_Start(TitleLocalizedSequence *work);
 void TitleLocalizedSequence_Release(TitleLocalizedSequence *work);

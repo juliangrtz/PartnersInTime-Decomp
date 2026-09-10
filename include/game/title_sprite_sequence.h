@@ -75,6 +75,11 @@ typedef char TitleSpriteSequence_SizeCheck[sizeof(TitleSpriteSequence) == 1928 ?
 #ifdef __cplusplus
 extern "C" {
 #endif
+s32 TitleSprite_EvaluateArc(int acceleration, int velocity, int elapsed);
+void TitleSprite_CalculateArc(s32 *acceleration, s32 *velocity, int peak_height, int target_height,
+                              int duration);
+void TitleSprite_StartDisappear(TitleSpriteHeader *work);
+void TitleSprite_Hide(TitleSpriteHeader *work);
 void TitleSequenceSprite_Update(TitleSequenceSprite *work);
 void TitleRotatingSprite_Update(TitleRotatingSprite *rotating);
 void TitleSequenceActor_Update(TitleSequenceActor *work);

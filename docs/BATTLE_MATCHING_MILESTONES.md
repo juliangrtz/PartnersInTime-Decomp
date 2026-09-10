@@ -4390,3 +4390,53 @@ tests and public-content/whitespace checks pass. The final inline-helper
 cleanup was recompiled: all 13 functions match, native link/check passes and
 canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
 Matching C/C++ is 667880 / 1563700 bytes (42.71%); C/C++ plus ASM is 43.04%.
+
+
+## 2026-09-10 - Complete localized title animation and arc math (+2812 bytes)
+
+TitleLocalizedSequence_Draw (0x02070ED8, 2596 bytes) now matches in C,
+completing the 3200-byte localized sequence module. Its draw callback also
+advances the native animation states: delayed actor entry, pulsing, the logo
+arc, shrinking actor, separating subtitle halves, final fade and rotating
+backdrop. Argument and fixed-point evaluation are explicit; native 32-bit
+temporaries preserve multiplication and truncation without inline assembly.
+
+The adjacent 216-byte helper range is also C: TitleSprite_EvaluateArc,
+TitleSprite_CalculateArc, TitleSprite_StartDisappear and TitleSprite_Hide.
+The shared sprite sequence module now contains 38 functions / 7984 bytes.
+Together with the localized sequence and texture module this completes the
+entire contiguous 0x0206ED4C..0x02071D70 region (12324 bytes). This is the
+title-animation region, not all of overlay 6 or the whole title scene.
+
+Eight runtime sessions use save 83 and produce evidence_complete_*.json
+under build/runtime/eur_title_localized_lifecycle. English, French, German,
+Italian and Spanish each run the complete 1783-frame title/Start/load path;
+Japanese runs 2083 frames. Separate English and Japanese skip sessions run
+1343 and 1403 frames. Non-English sessions change only the private archive
+language byte at the already byte-guarded pre-initialization hook. Fixtures
+record the original/new values; the live save context and all 104 original
+save files remain unchanged. German title output was visually inspected.
+
+Across 13744 frames, all 6946 localized draw returns and all twelve probed
+functions agree. Every normal localized state (0,1,2,3,5,6,7,8,9,10) is
+observed; reserved state 4 and unknown states remain static-only. Independent
+checks include 372 pulses, 234 arc positions, 114 shrinking fades, 133 split
+subtitle steps, 75 final fades and 3147 complete rotation matrices. Six
+localized square-root coefficient calculations and six shared arc-helper
+calculations agree with integer square-root/division models; 160 shared arc
+heights and 748 helper divisions also agree. Hide/disappear transitions and
+Finish with both null and live command tracks are covered.
+
+All 383146 direct graphics/SQRT stores are checked in native order and width.
+The complete quad model checks 15804 visible rectangles plus 11 zero-alpha
+returns. All 36 texture uploads, 379648 bytes, match live VRAM byte for byte.
+Full lifecycle, texture and track records are checked around helper calls and
+at SP-matched returns; external helper effects are refreshed after return.
+All final display hashes match the established load-menu output. Allocation
+failure and automatic translucent polygon ID 8 remain static-only.
+
+All 81 tests pass, native relink has zero differences and public-content and
+whitespace checks pass. Canonical ROM SHA-1 is unchanged:
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
+670692 / 1563700 bytes (42.89%); C/C++ plus ASM is 43.22%.
+Since resuming from e1c4416, 13032 additional bytes are matching C.

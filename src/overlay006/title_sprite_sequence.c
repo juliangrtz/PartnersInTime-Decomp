@@ -7,17 +7,13 @@ int _s32_div_f(int, int);
 int func_02035818(void);
 void func_02035c00(int);
 int func_ov006_02075120(TitleSequenceActor *);
-void func_ov006_02070c58(void *);
-void func_ov006_02070c70(void *);
 void MTX_RotZ44_(void *, int, int);
 void func_02036ca4(void *);
-void func_ov006_02070bd4(s32 *, s32 *, int, int, int);
 extern void *data_ov006_0207c4e4;
 extern const TitleSpriteLayout data_ov006_0207b2e4;
 extern const u8 data_ov006_0207aff8[];
 void *func_ov006_0206b77c(void *, int, int, int, int, int, u32 *);
 void func_02036cc0(const void *);
-int func_ov006_02070ba4(int, int, int);
 
 /* Preserve the native nullable deletion guard, as in battle lifecycle cleanup. */
 static inline void DeleteSpriteAnimation(GameSpriteAnimation *animation)
@@ -26,6 +22,41 @@ static inline void DeleteSpriteAnimation(GameSpriteAnimation *animation)
         GameSpriteAnimation_Finalize(animation);
         GameHeap_Delete(animation);
     }
+}
+
+#define REG16(address) (*(volatile u16 *)(address))
+
+void TitleSprite_Hide(TitleSpriteHeader *work)
+{
+    work->state = 0;
+}
+
+void TitleSprite_StartDisappear(TitleSpriteHeader *work)
+{
+    work->elapsed = 0;
+    work->duration = 0;
+    work->state = 16;
+}
+
+void TitleSprite_CalculateArc(s32 *acceleration, s32 *velocity, int peak_height, int target_height,
+                              int duration)
+{
+    int speed;
+    REG16(0x040002b0) = 0;
+    REG32(0x040002b8) = (peak_height * (peak_height - target_height)) << 10;
+    while (REG16(0x040002b0) & 0x8000) {
+    }
+    speed = REG32(0x040002b4) + (peak_height << 5);
+    *acceleration = _s32_div_f(((target_height << 4) - speed) << 13, duration * duration);
+    *velocity = _s32_div_f(speed << 13, duration);
+}
+
+int TitleSprite_EvaluateArc(int acceleration, int velocity, int elapsed)
+{
+    int displacement = (velocity + acceleration * elapsed) / 2;
+    displacement /= 16;
+    displacement *= elapsed;
+    return (displacement / 4096) << 12;
 }
 
 void TitleSequenceActor_Update(TitleSequenceActor *work)
@@ -187,8 +218,8 @@ void TitleSequenceSprite_StartEntry(TitleSequenceSprite *work)
     work->header.y = work->start_y << 12;
     work->header.elapsed = 0;
     work->header.duration = work->movement_frames;
-    func_ov006_02070bd4(&work->acceleration, &work->velocity, work->unknown_3c, work->unknown_40,
-                        work->header.duration);
+    TitleSprite_CalculateArc(&work->acceleration, &work->velocity, work->unknown_3c, work->unknown_40,
+                             work->header.duration);
     work->scale_y = 512;
     work->scale_x = work->scale_y;
     work->alpha = 0;
@@ -254,7 +285,7 @@ void TitleSequenceSprite_Update(TitleSequenceSprite *work)
             work->scale_y = 3584 * sine / 4096 + 512;
             work->scale_x = work->scale_y;
             work->vertical_offset =
-                func_ov006_02070ba4(work->acceleration, work->velocity, work->header.elapsed);
+                TitleSprite_EvaluateArc(work->acceleration, work->velocity, work->header.elapsed);
             work->header.y = (work->start_y << 12) - work->vertical_offset;
             start_x = work->start_x;
             sine = FX_SinCosTable_[2 * (_s32_div_f(work->header.elapsed << 14, work->header.duration) >> 4)];
@@ -411,8 +442,8 @@ void TitleRotatingSprite_StartArc(TitleRotatingSprite *work, int duration, int h
     work->sprite.hold_frames = hold_frames;
     work->sprite.unknown_3c = unknown_3c;
     work->sprite.unknown_40 = unknown_40;
-    func_ov006_02070bd4(&work->sprite.acceleration, &work->sprite.velocity, work->sprite.unknown_3c,
-                        work->sprite.unknown_40, work->sprite.header.duration);
+    TitleSprite_CalculateArc(&work->sprite.acceleration, &work->sprite.velocity, work->sprite.unknown_3c,
+                             work->sprite.unknown_40, work->sprite.header.duration);
     work->sprite.header.state = state;
 }
 
@@ -452,7 +483,7 @@ void TitleRotatingSprite_Update(TitleRotatingSprite *rotating)
         if (work->header.elapsed < work->header.duration) {
             int start_x, sine;
             work->vertical_offset =
-                func_ov006_02070ba4(work->acceleration, work->velocity, work->header.elapsed);
+                TitleSprite_EvaluateArc(work->acceleration, work->velocity, work->header.elapsed);
             work->header.y = (work->start_y << 12) - work->vertical_offset;
             start_x = work->start_x;
             sine = FX_SinCosTable_[2 * (_s32_div_f(work->header.elapsed << 14, work->header.duration) >> 4)];
@@ -490,7 +521,7 @@ void TitleRotatingSprite_Update(TitleRotatingSprite *rotating)
         if (work->header.elapsed < work->header.duration) {
             int start_x, sine;
             work->vertical_offset =
-                func_ov006_02070ba4(work->acceleration, work->velocity, work->header.elapsed);
+                TitleSprite_EvaluateArc(work->acceleration, work->velocity, work->header.elapsed);
             work->header.y = (work->start_y << 12) - work->vertical_offset;
             start_x = work->start_x;
             sine = FX_SinCosTable_[2 * (_s32_div_f(work->header.elapsed << 14, work->header.duration) >> 4)];
@@ -706,9 +737,9 @@ void TitleSpriteSequence_Update(TitleSpriteSequence *work)
         break;
     case 9:
         if (work->fade.header.state == 2) {
-            func_ov006_02070c58(&work->sprites[0]);
-            func_ov006_02070c58(&work->sprites[1]);
-            func_ov006_02070c58(&work->rotating);
+            TitleSprite_StartDisappear(&work->sprites[0].header);
+            TitleSprite_StartDisappear(&work->sprites[1].header);
+            TitleSprite_StartDisappear(&work->rotating.sprite.header);
             work->header.state = 0;
         }
         break;
@@ -758,9 +789,9 @@ void TitleSpriteSequence_Start(TitleSpriteSequence *work)
 void TitleSpriteSequence_Finish(TitleSpriteSequence *work)
 {
     TitleSequenceActor_Stop(&work->actor);
-    func_ov006_02070c70(&work->sprites[0]);
-    func_ov006_02070c70(&work->sprites[1]);
-    func_ov006_02070c70(&work->rotating);
+    TitleSprite_Hide(&work->sprites[0].header);
+    TitleSprite_Hide(&work->sprites[1].header);
+    TitleSprite_Hide(&work->rotating.sprite.header);
     TitleFadeSprite_Show(&work->fade);
     work->header.state = 0;
 }
