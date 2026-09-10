@@ -6,6 +6,10 @@ The code is generated with generative AI, but the process is directed, constrain
 
 If a function is wrong, does not behave correctly, does not compile, produces incorrect assembly, or otherwise fails the project's acceptance criteria, then it is not considered finished simply because an AI produced it.
 
+This decompilation is still in its early stages. Code quality, naming, structure, and documentation will undoubtedly improve as a more substantial portion of the game's codebase is recovered and the relationships between its systems become clearer.
+
+Early reconstructed code should therefore **not necessarily be treated as representative of the project's eventual quality**.
+
 ### "AI-generated code is unmaintainable."
 
 AI-generated code *can* be unmaintainable. So can human-written code.
