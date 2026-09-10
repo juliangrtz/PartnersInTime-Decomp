@@ -4159,3 +4159,48 @@ differences; canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
 Matching C/C++ is 657,660 / 1,563,700 bytes (42.06%); C/C++ plus ASM is 42.39%.
 Work stops after this block at the user's request; the 50% milestone remains
 unfinished.
+
+
+## 2026-09-10 - Japanese title sprite sequence and movement setup (+2432 bytes)
+
+Eighteen functions are matching readable C in three contiguous ranges:
+0x0206ED4C..0x0206F3F0 (sequence lifecycle/update/draw dispatch and fade setup),
+0x0206F4DC..0x0206F5CC (fade update and rotating-sprite initialization), and
+0x0206FBA4..0x0206FD90 (movement setup, state predicates and sprite initialization).
+The shared header checks the 40-byte common header, 1364-byte actor view,
+108/112/52-byte sprites and 1928-byte sequence. Unknown fields remain explicit.
+All helper arguments were recovered from native instructions, including
+depths, arc parameters and positions omitted by the decompiler. The two
+intervening render functions remain native and are not counted as C.
+
+Runtime evidence is in build/runtime/eur_title_sprite_sequence. Ordinary cold
+boot with save 83 reaches the English load menu in 1833 frames (boot83),
+checking the sequence release and its two texture releases plus actor release.
+Native title initialization selects the reconstructed sequence only when the
+archive language byte is zero. The Japanese runs set this one byte at
+0x0206C298, after copying the language and before loading title resources.
+Each JSON records the address, original byte and frame. This is a controlled
+language fixture confined to the private emulator session, not an ordinary
+English-language game path; the live save context and supplied saves are not
+modified.
+
+The 1801-frame japanese83 run completes the title animation. All used sequence
+states 0,1,2,3,4,5,7,8,9 occur: 1513 sequence/fade updates and 1512 draw-dispatch
+returns agree. All three predicates cover both Boolean outcomes (227 returns).
+Two arc starts cover states 1 and 3, followed by vertical movement, squash,
+and the 32-frame final fade. The 31 division and alpha interpolation results,
+vertical target and squash origin are independently checked. The 1293-frame
+skip83 run skips the opening with A, then presses Start and reaches the load
+menu, adding 742 sequence/fade updates, 742 draw dispatches, Show, Finish and
+Release. Combined runs observe all eighteen newly linked entry points.
+
+Complete 1928/112/108/52-byte records and exact helper/callback arguments are
+checked before helper calls and at SP-matched returns. External renderer,
+resource and child-update effects are refreshed after their native returns;
+this probe does not independently reimplement their behavior. Japanese title
+and both load-menu screenshots were inspected. BG VRAM/palette dumps and
+hashes are recorded. All 104 supplied save hashes remain unchanged.
+
+All 81 tests, whitespace and public-content checks pass. Native relink has zero
+differences; canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+Matching C/C++ is 660,092 / 1,563,700 bytes (42.21%); C/C++ plus ASM is 42.54%.
