@@ -23,7 +23,9 @@ typedef struct TitlePanel {
     s32 start_x, start_y, target_x, target_y;
     void *parent;
     TitlePanelTrail trail[6];
-    u8 variant, alpha, index, unknown_77;
+    u8 variant;
+    s8 alpha;
+    u8 index, unknown_77;
 } TitlePanel;
 typedef char TitlePanel_SizeCheck[sizeof(TitlePanel) == 120 ? 1 : -1];
 typedef struct TitleElementList {
@@ -79,6 +81,8 @@ typedef char TitleMovingSprite_SizeCheck[sizeof(TitleMovingSprite) == 68 ? 1 : -
 #ifdef __cplusplus
 extern "C" {
 #endif
+void TitlePanel_Draw(TitlePanel *panel);
+void TitlePanelResources_Load(TitlePanelResources *resources);
 void TitlePanel_Release(TitlePanel *panel);
 void TitlePanel_StartFadeIn(TitlePanel *panel);
 void TitlePanel_StartPulse(TitlePanel *panel);

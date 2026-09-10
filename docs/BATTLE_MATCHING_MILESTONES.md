@@ -4354,3 +4354,39 @@ the established load-menu hashes. All 81 tests, native zero-difference relink,
 public-content audit and whitespace checks pass. Canonical ROM SHA-1 remains
 ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is now
 666688 / 1563700 bytes (42.64%); C/C++ plus ASM is 42.97%.
+
+
+## 2026-09-10 - Complete title star-panel renderer and resources (+1192 bytes)
+
+TitlePanel_Draw (0x0206E09C, 748 bytes) and TitlePanelResources_Load
+(0x0206E3D8, 444 bytes) are matching C. All 13 functions in the contiguous
+0x0206DB4C..0x0206E594 range (2632 bytes) now live in title_panel.c, replacing
+the separate motion/resource modules. Shared geometry helpers now live in
+title_graphics_internal.h and are used by the panel, texture and sequence
+modules. A small inline quad function expresses the fixed vertex coordinates
+without a large rendering macro. The panel alpha field is confirmed signed
+by native LDRSB accesses; all existing panel functions still match exactly.
+The six trail alpha values use the native linear interpolation expression.
+
+Runtime: build/runtime/eur_title_panel_renderer/evidence_english83.json uses
+ordinary English boot with save 83, waits 1500 frames, presses Start and
+continues to the load menu (1783 frames total). All 9848 panel draw returns
+agree, covering states 0..5, zero/visible alpha and all five trail positions.
+There are 5919 independently checked quads and translations, including 267
+active trail slots and 93 skipped trail slots. All 208951 graphics-register
+stores agree in order: matrices, scale, translation, texture/palette offsets,
+UV coordinates, centered vertices, alpha and polygon IDs.
+
+Resource loading independently verifies the 512-byte image copy, its 512-byte
+VRAM upload and all six alpha values (24,20,16,12,8,4). The existing motion
+probes also pass: 9848 updates, 57 position interpolations and recorded trail
+entries, both trail directions, 175 division/alpha calculations, 2760 copied
+trail bytes, 4924 moving-sprite draws, and cleanup. Alternate copy direction
+and absent initial image remain static-only for the resource loader.
+
+All 104 original saves remain unchanged; final display hashes match the
+established load-menu output. Native relink has zero differences; all 81
+tests and public-content/whitespace checks pass. The final inline-helper
+cleanup was recompiled: all 13 functions match, native link/check passes and
+canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+Matching C/C++ is 667880 / 1563700 bytes (42.71%); C/C++ plus ASM is 43.04%.

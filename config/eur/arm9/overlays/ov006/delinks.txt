@@ -42,17 +42,14 @@ src/overlay006/title_texture.c:
 src/overlay006/title_orbit.c:
     .text start:0x02071d70 end:0x0207214c
 
-src/overlay006/title_panel_motion.c:
-    .text start:0x0206db4c end:0x0206e09c
+src/overlay006/title_panel.c:
+    .text start:0x0206db4c end:0x0206e594
 
 src/overlay006/title_moving_sprite.c:
     .text start:0x0206e644 end:0x0206e9e4
 
 src/overlay006/title_moving_sprite_orbit.c:
     .text start:0x0206ec20 end:0x0206ed4c
-
-src/overlay006/title_panel_resources.c:
-    .text start:0x0206e388 end:0x0206e3d8
 
 src/overlay006/title_sprite_sequence.c:
     .text start:0x0206ed4c end:0x02070ba4

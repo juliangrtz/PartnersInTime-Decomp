@@ -1,4 +1,5 @@
-#include "title_sprite_render_internal.h"
+#include <game/title_sprite_sequence.h>
+#include "title_graphics_internal.h"
 #include <game/heap.h>
 extern const TitleSpriteLayout data_ov006_0207b2a4[], data_ov006_0207b2c4[], data_ov006_0207b2d4[];
 extern const s16 FX_SinCosTable_[];
