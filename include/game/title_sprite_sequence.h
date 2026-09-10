@@ -1,6 +1,7 @@
 #ifndef PIT_GAME_TITLE_SPRITE_SEQUENCE_H
 #define PIT_GAME_TITLE_SPRITE_SEQUENCE_H
 #include <game/title_effects.h>
+#include <game/sprite_animation.h>
 
 typedef struct TitleSpriteHeader {
     void *unknown_00;
@@ -11,19 +12,35 @@ typedef struct TitleSpriteHeader {
     u8 state, unknown_25[3];
 } TitleSpriteHeader;
 
+typedef struct TitleSpriteLayout {
+    s32 unknown_00, unknown_04, unknown_08, height;
+} TitleSpriteLayout;
+typedef char TitleSpriteLayout_SizeCheck[sizeof(TitleSpriteLayout) == 16 ? 1 : -1];
+
 typedef struct TitleSequenceActor {
     TitleSpriteHeader header;
-    u8 unknown_28[1324];
+    TitleTextureResource texture;
+    const TitleSpriteLayout *layout;
+    const s16 *commands[2];
+    GameSpriteAnimationTrack *tracks[2];
+    GameSpriteAnimation *animation;
+    GameSpriteAnimationTrack track_storage[4];
+    u8 animation_buffer[1024];
+    s32 start_scale, current_scale;
+    u16 angle;
+    s8 alpha;
+    u8 unknown_54f;
+    s32 timing_scale;
 } TitleSequenceActor;
 
 typedef struct TitleSequenceSprite {
     TitleSpriteHeader header;
     TitleTextureResource *texture;
-    const void *layout;
+    const TitleSpriteLayout *layout;
     s32 acceleration, velocity, vertical_offset;
     s32 unknown_3c, unknown_40;
     s32 start_x, start_y, target_x, target_y;
-    s32 unknown_54, hold_frames;
+    s32 movement_frames, hold_frames;
     s32 scale_x, scale_y;
     u32 final_depth;
     s8 alpha;
@@ -38,7 +55,7 @@ typedef struct TitleRotatingSprite {
 typedef struct TitleFadeSprite {
     TitleSpriteHeader header;
     TitleTextureResource *texture;
-    const void *layout;
+    const TitleSpriteLayout *layout;
     s8 alpha;
     u8 unknown_31[3];
 } TitleFadeSprite;
@@ -63,6 +80,23 @@ typedef char TitleSpriteSequence_SizeCheck[sizeof(TitleSpriteSequence) == 1928 ?
 #ifdef __cplusplus
 extern "C" {
 #endif
+void TitleSequenceActor_Update(TitleSequenceActor *work);
+void TitleSequenceActor_Init(TitleSequenceActor *work);
+void TitleSequenceActor_Release(TitleSequenceActor *work);
+void TitleSequenceActor_Start(TitleSequenceActor *work, int x, int y, int timing_scale);
+void TitleSequenceActor_Stop(TitleSequenceActor *work);
+int TitleSequenceActor_IsHolding(TitleSequenceActor *work);
+void TitleSequenceSprite_StartEntry(TitleSequenceSprite *work);
+void TitleSequenceSprite_QueueEntry(TitleSequenceSprite *work, int delay, int movement_frames,
+                                    int hold_frames, int start_x, int start_y, int target_x, int target_y,
+                                    int unknown_3c, int unknown_40);
+void TitleSequenceSprite_StartMove(TitleSequenceSprite *work, int start_x, int start_y, int target_x,
+                                   int target_y, int duration);
+int TitleSequenceSprite_StartSquash(TitleSequenceSprite *work, int duration);
+void TitleSequenceActor_Draw(TitleSequenceActor *work);
+void TitleSequenceSprite_Draw(TitleSequenceSprite *work);
+void TitleRotatingSprite_Draw(TitleRotatingSprite *work);
+void TitleFadeSprite_Draw(TitleFadeSprite *work);
 void TitleRotatingSprite_Init(TitleRotatingSprite *work, TitleTextureResource *texture);
 void TitleFadeSprite_Update(TitleFadeSprite *work);
 void TitleFadeSprite_Init(TitleFadeSprite *work, TitleTextureResource *texture);

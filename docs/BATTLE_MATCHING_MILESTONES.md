@@ -4204,3 +4204,56 @@ hashes are recorded. All 104 supplied save hashes remain unchanged.
 All 81 tests, whitespace and public-content checks pass. Native relink has zero
 differences; canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
 Matching C/C++ is 660,092 / 1,563,700 bytes (42.21%); C/C++ plus ASM is 42.54%.
+
+
+## 2026-09-10 - Title sprite rendering and animation lifecycle (+2856 bytes)
+
+Fourteen further matching C functions complete the fade, rotating-sprite and
+sequence-sprite draw paths and reconstruct the actor's initialization, update,
+draw, start, stop, state predicate and release, plus four sprite movement
+setters. The checked actor layout now identifies its texture, two command
+streams, two track pointers, animation controller, four 48-byte track records,
+1024-byte animation buffer and pulse/fade fields. A checked 16-byte layout view
+names the independently consumed height; other unconfirmed entries remain
+unknown.
+
+Explicit inline Translate/Scale helpers preserve the native evaluation of all
+coordinates before FIFO writes. The nullable animation-deletion helper retains
+the original outer ownership check and inner deletion guard. No assembly is
+needed. The former title_sprite_callbacks.c is merged into the now-contiguous
+title_sprite_sequence.c (0x0206ED4C..0x0206F710); title_sprite_movement.c extends
+through 0x0206FEC4, and title_sprite_animation.c covers
+0x020703E0..0x02070BA4. The two remaining large sprite-update routines are still
+native and excluded from matching C coverage.
+
+Runtime evidence: build/runtime/eur_title_sprite_sequence/evidence_render83.json,
+evidence_render_skip83.json and evidence_render_english83.json. The first two
+use the documented one-byte archive-language fixture for Japanese title
+resources; the last is an ordinary English boot. All original saves and the
+live save context are untouched. Full animation: 2083 frames, followed by
+Start and the load menu; 1532 actor updates/draws and 3064 sprite draws agree.
+All four actor states occur. Its 18 fade steps, 60 pulse updates and division
+results are independently checked, along with the two animation-track starts
+and their speeds. All thirteen new functions used by this path agree.
+
+Late skip: 1403 frames, A after frame 760 and then Start. This additionally
+checks Stop with both live track command pointers cleared, completing coverage
+of all fourteen new functions. Across both runs, all 29,998 graphics register
+writes in the four linked draw routines agree in exact order, including
+matrix mode/identity/push/pop, color, translation and scale. This covers 1904
+translations, 634 scales and 113 independently checked 4x4 rotation matrices.
+The full 1928/1364/112/108/52-byte records and track contents are checked around
+helpers and at SP-matched returns. External unlinked rendering and resource
+helpers are checked for arguments but not independently reimplemented.
+
+Both allocated animation/command release branches occur in the Japanese runs.
+The 1783-frame ordinary English boot checks the null animation and null command
+release branches. Title-animation screenshots at frames 761 and 1801 were
+inspected; all three final display-memory hashes agree with the previously
+inspected English load menu. BG VRAM/palette dumps are recorded and all 104
+supplied saves are unchanged.
+
+All 81 tests, whitespace and public-content checks pass. Native relink has zero
+differences, including the ARM-to-Thumb matrix call; canonical ROM SHA-1 is
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
+662,948 / 1,563,700 bytes (42.40%); C/C++ plus ASM is 42.73%.

@@ -1,15 +1,38 @@
-#include <game/title_sprite_sequence.h>
-
-extern const u8 data_ov006_0207b2a4[];
+#include "title_sprite_render_internal.h"
+#include <game/heap.h>
+extern const TitleSpriteLayout data_ov006_0207b2a4[], data_ov006_0207b2c4[], data_ov006_0207b2d4[];
 void func_ov006_0206fec4(TitleSequenceSprite *);
-void func_ov006_0206fd90(TitleSequenceSprite *);
 void func_ov006_02070bd4(s32 *, s32 *, int, int, int);
+void func_ov006_0207193c(TitleTextureResource *, const void *, int, int);
+
+void TitleSequenceSprite_Draw(TitleSequenceSprite *work)
+{
+    if (!work->header.state)
+        return;
+    if (!work->scale_x)
+        return;
+    if (!work->scale_y)
+        return;
+    if (!work->alpha)
+        return;
+    REG32(0x04000440) = 3;
+    REG32(0x04000454) = 0;
+    REG32(0x04000440) = 2;
+    REG32(0x04000444) = 0;
+    REG32(0x04000454) = 0;
+    REG32(0x04000480) = 0x7fff;
+    REG32(0x04000444) = 0;
+    Translate(work->header.x / 16, work->header.y / 16, work->header.depth);
+    Scale(work->scale_x, work->scale_y, 4096);
+    func_ov006_0207193c(work->texture, work->layout, work->alpha, 16);
+    REG32(0x04000448) = 1;
+}
 
 void TitleSequenceSprite_Init(TitleSequenceSprite *work, TitleTextureResource *texture, int index, int depth,
                               int final_depth)
 {
     work->texture = texture;
-    work->layout = data_ov006_0207b2a4 + 16 * index;
+    work->layout = &data_ov006_0207b2a4[index];
     work->acceleration = 0;
     work->velocity = 0;
     work->vertical_offset = 0;
@@ -17,7 +40,7 @@ void TitleSequenceSprite_Init(TitleSequenceSprite *work, TitleTextureResource *t
     work->scale_y = 0;
     work->alpha = 0;
     work->header.update = (void (*)(void *))func_ov006_0206fec4;
-    work->header.draw = (void (*)(void *))func_ov006_0206fd90;
+    work->header.draw = (void (*)(void *))TitleSequenceSprite_Draw;
     work->header.x = 0;
     work->header.y = 0;
     work->header.depth = depth;

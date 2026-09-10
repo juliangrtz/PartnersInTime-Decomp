@@ -762,5 +762,5 @@ src/overlay006/title_panel_resources.c
 src/battle/battle_particle_sweep_emitter.c
 src/battle/battle_particle_sweep_particle.c
 src/overlay006/title_sprite_sequence.c
-src/overlay006/title_sprite_callbacks.c
 src/overlay006/title_sprite_movement.c
+src/overlay006/title_sprite_animation.c
