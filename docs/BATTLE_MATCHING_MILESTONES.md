@@ -4257,3 +4257,40 @@ All 81 tests, whitespace and public-content checks pass. Native relink has zero
 differences, including the ARM-to-Thumb matrix call; canonical ROM SHA-1 is
 ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
 662,948 / 1,563,700 bytes (42.40%); C/C++ plus ASM is 42.73%.
+
+
+## 2026-09-10 - Complete title sprite motion controllers (+2480 bytes)
+
+TitleSequenceSprite_Update (0x0206FEC4, 1308 bytes) and
+TitleRotatingSprite_Update (0x0206F710, 1172 bytes) are matching readable C.
+The formerly separate sequence, movement and actor modules are merged into
+title_sprite_sequence.c: all 34 functions in the contiguous
+0x0206ED4C..0x02070BA4 region, 7768 bytes, are now C. This completes this
+Japanese title-animation region, not the whole title overlay. Explicit idle
+cases preserve the native dispatch table; negation precedes multiplication
+where required by native fixed-point arithmetic. Adjacent arc-math helpers
+remain outside this range and are not counted here.
+
+Runtime: build/runtime/eur_title_sprite_sequence/evidence_motion83.json uses
+the same documented archive-language fixture and 2083-frame boot/Start/load
+sequence. All 3064 sprite-update returns and 1532 rotating-update returns agree,
+covering sprite states 0,1,2,3,4,5,6,16 and rotating states 0,1,2,3,4,8,16.
+Independent checks cover 130 arc heights and X positions, 46 interpolated
+positions, 114 squash/height compensations, 29 rotation-angle calculations,
+368 divisions and 38 transitions to the final drawing depth. The original
+integer truncation and signed 32-bit arithmetic are preserved. Both arc-start
+parameter sets and the chained movement/squash callbacks agree.
+
+All surrounding lifecycle and draw probes remain enabled, including the
+22,312 ordered graphics-register writes and 113 checked rotation matrices in
+this run. Full sprite/actor/sequence records agree around helpers and at
+SP-matched returns. State 16 is observed with immediate disappearance; its
+positive-duration interpolation branch remains static-only. Arc-height helper
+results are independently checked, while the separate hardware-square-root
+coefficient helper remains checked for inputs and refreshed after return.
+
+The final BG VRAM/palette hashes match the previously inspected load menu.
+All 104 original saves are unchanged. All 81 tests, whitespace and public
+content checks pass. Native relink has zero differences; canonical ROM SHA-1
+is ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
+665,428 / 1,563,700 bytes (42.55%); C/C++ plus ASM is 42.89%.

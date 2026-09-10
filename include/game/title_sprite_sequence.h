@@ -80,6 +80,8 @@ typedef char TitleSpriteSequence_SizeCheck[sizeof(TitleSpriteSequence) == 1928 ?
 #ifdef __cplusplus
 extern "C" {
 #endif
+void TitleSequenceSprite_Update(TitleSequenceSprite *work);
+void TitleRotatingSprite_Update(TitleRotatingSprite *rotating);
 void TitleSequenceActor_Update(TitleSequenceActor *work);
 void TitleSequenceActor_Init(TitleSequenceActor *work);
 void TitleSequenceActor_Release(TitleSequenceActor *work);
