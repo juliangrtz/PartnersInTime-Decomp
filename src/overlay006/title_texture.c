@@ -58,3 +58,81 @@ u32 TitleTexture_GetPaletteOffset(const TitleTextureResource *texture)
 {
     return texture->palette.offset;
 }
+
+#define REG32(address) (*(volatile u32 *)(address))
+
+static inline void PolygonAttributes(int lights, int mode, int cull, int polygon, int alpha, int flags)
+{
+    REG32(0x040004a4) = lights | (mode << 4) | (cull << 6) | (polygon << 24) | (alpha << 16) | flags;
+}
+
+static inline void TexCoord(int s, int t)
+{
+    REG32(0x04000488) = (u16)(s16)(s >> 8) | ((u16)(s16)(t >> 8) << 16);
+}
+static inline void Vertex(s16 x, s16 y, s16 z)
+{
+    REG32(0x0400048c) = (u16)x | ((u16)y << 16);
+    REG32(0x0400048c) = (u16)z;
+}
+static inline void VertexXY(s16 x, s16 y)
+{
+    REG32(0x04000494) = (u16)x | ((u16)y << 16);
+}
+
+void TitleTexture_DrawQuad(TitleTextureResource *texture, int x, int y, int width, int height, int alpha,
+                           int polygon_id)
+{
+    u32 format, image, width_code, height_code;
+    s16 left, top, right, bottom;
+    int s0, t0, s1, t1;
+    int polygon = polygon_id;
+    if (!alpha)
+        return;
+    if (polygon == -1)
+        polygon = alpha == 31 ? 0 : 8;
+    PolygonAttributes(0, 0, 3, polygon, alpha, 0);
+    format = TitleTexture_GetFormat(texture);
+    REG32(0x040004ac) = TitleTexture_GetPaletteOffset(texture) >> (4 - (format == 2));
+    image = TitleTexture_GetImageOffset(texture);
+    height_code = TitleTexture_GetHeightCode(texture);
+    width_code = TitleTexture_GetWidthCode(texture);
+    format = TitleTexture_GetFormat(texture);
+    REG32(0x040004a8) =
+        (image >> 3) | (format << 26) | 0x40000000 | (width_code << 20) | (height_code << 23) | 0x20000000;
+    left = (-width / 2) << 8;
+    top = (-height / 2) << 8;
+    right = (width / 2) << 8;
+    bottom = (height / 2) << 8;
+    s0 = x << 12;
+    t0 = y << 12;
+    s1 = (x + width) << 12;
+    t1 = (y + height) << 12;
+    REG32(0x04000500) = 1;
+    TexCoord(s0, t0);
+    Vertex(left, top, 0);
+    TexCoord(s0, t1);
+    VertexXY(left, bottom);
+    TexCoord(s1, t1);
+    VertexXY(right, bottom);
+    TexCoord(s1, t0);
+    VertexXY(right, top);
+    REG32(0x04000504) = 0;
+}
+
+extern u8 *data_ov006_0207b134;
+extern int data_02059d78;
+void func_0203b578(int, const void *, void *, u32);
+
+void TitleTexture_DrawLayout(TitleTextureResource *texture, const TitleSpriteLayout *layout, int alpha,
+                             int polygon_id)
+{
+    TitleTexture_DrawQuad(texture, layout->image_x, layout->image_y, layout->width, layout->height, alpha,
+                          polygon_id);
+}
+
+void TitleTexture_Upload(TitleTextureResource *texture)
+{
+    u32 offset = TitleTexture_GetImageOffset(texture);
+    func_0203b578(data_02059d78, texture->pixels, data_ov006_0207b134 + offset, texture->pixel_bytes);
+}

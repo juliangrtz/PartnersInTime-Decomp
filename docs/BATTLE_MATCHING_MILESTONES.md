@@ -4326,3 +4326,31 @@ all 104 original saves are unchanged. Native relink has zero differences;
 canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
 All 81 tests and public-content/whitespace checks pass. Matching C/C++ is
 666152 / 1563700 bytes (42.60%); C/C++ plus ASM is 42.93%.
+
+
+## 2026-09-10 - Complete title texture quad renderer (+536 bytes)
+
+TitleTexture_DrawQuad at 0x02071974 is readable matching C. The native
+geometry command interface is expressed through inline polygon, texture
+coordinate and vertex helpers, preserving signed fixed-point narrowing and
+argument evaluation. This closes the last gap in 0x020718FC..0x02071D70:
+all ten texture functions, 1140 bytes, now live in title_texture.c. The
+temporary title_texture_draw.c has been merged and removed.
+
+Runtime evidence in build/runtime/eur_title_localized_lifecycle:
+evidence_quad_english83.json (1783 frames) and evidence_quad_japanese83.json
+(2083 frames with the documented language fixture). There are 4071 checked
+DrawQuad returns, including two zero-alpha early exits. All 4069 visible
+rectangles agree with independent calculations of polygon attributes,
+texture and palette offsets, UV coordinates and centered vertices. All
+56966 graphics-register stores are checked in order. The checks cover
+explicit polygon IDs 16..21 and automatic opaque ID 0; automatic translucent
+ID 8 remains static-only. Texture getters are checked independently against
+the live headers and allocation records. Eight DMA uploads still agree byte
+for byte with 91264 source bytes. Original save hashes are unchanged.
+
+The English title screenshot was inspected; both final display dumps match
+the established load-menu hashes. All 81 tests, native zero-difference relink,
+public-content audit and whitespace checks pass. Canonical ROM SHA-1 remains
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is now
+666688 / 1563700 bytes (42.64%); C/C++ plus ASM is 42.97%.

@@ -68,6 +68,8 @@ u32 TitleTexture_GetHeightCode(const TitleTextureResource *texture);
 u32 TitleTexture_GetWidthCode(const TitleTextureResource *texture);
 u32 TitleTexture_GetFormat(const TitleTextureResource *texture);
 void TitleTexture_Release(TitleTextureResource *texture);
+void TitleTexture_DrawQuad(TitleTextureResource *texture, int x, int y, int width, int height, int alpha,
+                           int polygon_id);
 void TitleTexture_Upload(TitleTextureResource *texture);
 void TitleTexture_DrawLayout(TitleTextureResource *texture, const TitleSpriteLayout *layout, int alpha,
                              int polygon_id);

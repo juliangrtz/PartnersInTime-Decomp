@@ -763,4 +763,3 @@ src/battle/battle_particle_sweep_emitter.c
 src/battle/battle_particle_sweep_particle.c
 src/overlay006/title_sprite_sequence.c
 src/overlay006/title_localized_sequence.c
-src/overlay006/title_texture_draw.c
