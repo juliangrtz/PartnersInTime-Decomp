@@ -3,13 +3,11 @@
 extern const TitleSpriteLayout data_ov006_0207b2a4[], data_ov006_0207b2c4[], data_ov006_0207b2d4[];
 extern const s16 FX_SinCosTable_[];
 int _s32_div_f(int, int);
-void func_ov006_020718fc(TitleTextureResource *);
 int func_02035818(void);
 void func_02035c00(int);
 int func_ov006_02075120(TitleSequenceActor *);
 void func_ov006_02070c58(void *);
 void func_ov006_02070c70(void *);
-void func_ov006_0207193c(TitleTextureResource *, const void *, int, int);
 void MTX_RotZ44_(void *, int, int);
 void func_02036ca4(void *);
 void func_ov006_02070bd4(s32 *, s32 *, int, int, int);
@@ -113,7 +111,7 @@ void TitleSequenceActor_Draw(TitleSequenceActor *work)
     REG32(0x04000444) = 0;
     Translate(work->header.x / 16 + 0x8000, work->header.y / 16 + 0x5400, 2304);
     Scale(work->current_scale, 3072 * work->current_scale / 4096, 4096);
-    func_ov006_0207193c(&work->texture, work->layout, work->alpha, 18);
+    TitleTexture_DrawLayout(&work->texture, work->layout, work->alpha, 18);
     REG32(0x04000448) = 1;
 }
 
@@ -128,7 +126,7 @@ void TitleSequenceActor_Init(TitleSequenceActor *work)
     work->commands[1] = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 16, 0, 0, 1, 0);
     TitleTexture_Load(&work->texture, 13, 14, 1);
     bank = func_02035818();
-    func_ov006_020718fc(&work->texture);
+    TitleTexture_Upload(&work->texture);
     func_02035c00(bank);
     work->header.update = (void (*)(void *))TitleSequenceActor_Update;
     work->header.draw = (void (*)(void *))TitleSequenceActor_Draw;
@@ -363,7 +361,7 @@ void TitleSequenceSprite_Draw(TitleSequenceSprite *work)
     REG32(0x04000444) = 0;
     Translate(work->header.x / 16, work->header.y / 16, work->header.depth);
     Scale(work->scale_x, work->scale_y, 4096);
-    func_ov006_0207193c(work->texture, work->layout, work->alpha, 16);
+    TitleTexture_DrawLayout(work->texture, work->layout, work->alpha, 16);
     REG32(0x04000448) = 1;
 }
 
@@ -560,7 +558,7 @@ void TitleRotatingSprite_Draw(TitleRotatingSprite *work)
     REG32(0x0400046c) = 4096;
     MTX_RotZ44_(matrix, FX_SinCosTable_[2 * (work->angle >> 4)], FX_SinCosTable_[2 * (work->angle >> 4) + 1]);
     func_02036ca4(matrix);
-    func_ov006_0207193c(work->sprite.texture, work->sprite.layout, work->sprite.alpha, 16);
+    TitleTexture_DrawLayout(work->sprite.texture, work->sprite.layout, work->sprite.alpha, 16);
     REG32(0x04000448) = 1;
 }
 
@@ -615,7 +613,7 @@ void TitleFadeSprite_Draw(TitleFadeSprite *work)
     REG32(0x04000480) = 0x7fff;
     REG32(0x04000444) = 0;
     Translate(work->header.x / 16, work->header.y / 16, 1536);
-    func_ov006_0207193c(work->texture, work->layout, work->alpha, 17);
+    TitleTexture_DrawLayout(work->texture, work->layout, work->alpha, 17);
     REG32(0x04000448) = 1;
 }
 
@@ -731,8 +729,8 @@ void TitleSpriteSequence_Init(TitleSpriteSequence *work)
     TitleTexture_Load(&work->textures[0], 21, 23, 1);
     TitleTexture_Load(&work->textures[1], 22, 23, 1);
     bank = func_02035818();
-    func_ov006_020718fc(&work->textures[0]);
-    func_ov006_020718fc(&work->textures[1]);
+    TitleTexture_Upload(&work->textures[0]);
+    TitleTexture_Upload(&work->textures[1]);
     func_02035c00(bank);
     TitleSequenceActor_Init(&work->actor);
     TitleSequenceSprite_Init(&work->sprites[0], &work->textures[0], 0, 1584, 1584);

@@ -4294,3 +4294,35 @@ All 104 original saves are unchanged. All 81 tests, whitespace and public
 content checks pass. Native relink has zero differences; canonical ROM SHA-1
 is ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
 665,428 / 1,563,700 bytes (42.55%); C/C++ plus ASM is 42.89%.
+
+
+## 2026-09-10 - Localized title lifecycle and texture transfers (+724 bytes)
+
+Four contiguous functions at 0x02070C7C..0x02070ED8 are readable matching C:
+TitleLocalizedSequence_Finish, Start, Release and Init. Their checked 1644-byte
+record owns five textures, two command streams and four animation tracks.
+TitleTexture_Upload and TitleTexture_DrawLayout at 0x020718FC..0x02071974
+add the common transfer and rectangle-dispatch helpers. TitleSpriteLayout
+now names its confirmed image X/Y, width and height fields and lives with
+the shared texture declarations. The temporary title_texture_draw.c range
+will merge with title_texture.c when the intervening quad renderer matches.
+The large localized draw/state controller remains outside the C count.
+
+Runtime evidence: build/runtime/eur_title_localized_lifecycle/evidence_english83.json,
+evidence_english_skip83.json and evidence_japanese83.json. English boot uses
+save 83 without memory fixtures (1783 frames); a second run skips the active
+animation after 900 frames (1343 total), clearing both live track-command
+pointers. A 2083-frame run with the previously documented private archive
+language fixture exercises the Japanese path and nullable localized cleanup.
+Together these runs observe all six new C functions, 1460 layout dispatches,
+and 13 DMA transfers. All 140544 transferred bytes match their source buffers
+in live VRAM. Full lifecycle, texture, track and layout records agree around
+helpers and at SP-matched returns; external helper effects are refreshed.
+English allocated cleanup and Japanese null cleanup are both covered.
+Allocation failure and Finish with null tracks remain static-only.
+
+All final BG VRAM and palette hashes match the established load-menu output;
+all 104 original saves are unchanged. Native relink has zero differences;
+canonical ROM SHA-1 is ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+All 81 tests and public-content/whitespace checks pass. Matching C/C++ is
+666152 / 1563700 bytes (42.60%); C/C++ plus ASM is 42.93%.

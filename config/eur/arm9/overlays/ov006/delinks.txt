@@ -56,3 +56,9 @@ src/overlay006/title_panel_resources.c:
 
 src/overlay006/title_sprite_sequence.c:
     .text start:0x0206ed4c end:0x02070ba4
+
+src/overlay006/title_localized_sequence.c:
+    .text start:0x02070c7c end:0x02070ed8
+
+src/overlay006/title_texture_draw.c:
+    .text start:0x020718fc end:0x02071974

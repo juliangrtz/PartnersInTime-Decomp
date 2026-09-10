@@ -12,11 +12,6 @@ typedef struct TitleSpriteHeader {
     u8 state, unknown_25[3];
 } TitleSpriteHeader;
 
-typedef struct TitleSpriteLayout {
-    s32 unknown_00, unknown_04, unknown_08, height;
-} TitleSpriteLayout;
-typedef char TitleSpriteLayout_SizeCheck[sizeof(TitleSpriteLayout) == 16 ? 1 : -1];
-
 typedef struct TitleSequenceActor {
     TitleSpriteHeader header;
     TitleTextureResource texture;

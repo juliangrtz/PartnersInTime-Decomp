@@ -27,6 +27,11 @@ typedef struct TitleOrbitChild {
 } TitleOrbitChild;
 typedef char TitleOrbitChild_SizeCheck[sizeof(TitleOrbitChild) == 20 ? 1 : -1];
 
+typedef struct TitleSpriteLayout {
+    s32 image_x, image_y, width, height;
+} TitleSpriteLayout;
+typedef char TitleSpriteLayout_SizeCheck[sizeof(TitleSpriteLayout) == 16 ? 1 : -1];
+
 typedef struct TitleOrbitWork TitleOrbitWork;
 struct TitleOrbitWork {
     void *unknown_00;
@@ -63,6 +68,9 @@ u32 TitleTexture_GetHeightCode(const TitleTextureResource *texture);
 u32 TitleTexture_GetWidthCode(const TitleTextureResource *texture);
 u32 TitleTexture_GetFormat(const TitleTextureResource *texture);
 void TitleTexture_Release(TitleTextureResource *texture);
+void TitleTexture_Upload(TitleTextureResource *texture);
+void TitleTexture_DrawLayout(TitleTextureResource *texture, const TitleSpriteLayout *layout, int alpha,
+                             int polygon_id);
 void TitleTexture_Load(TitleTextureResource *texture, int image_id, u16 palette_id, int compressed);
 void TitleOrbit_Destroy(TitleOrbitWork *work);
 void TitleOrbit_Reset(TitleOrbitWork *work);
