@@ -14,7 +14,7 @@ Start with [checkout and resources](#start-with-the-current-checkout), then use
 [build commands](#toolchain-and-build), [reconstruction rules](#reconstructing-and-integrating-code),
 [runtime verification](#runtime-verification), [progress](#progress-and-documentation)
 and [Git checks](#private-files-checks-and-git) as needed. The runtime section
-includes the tested [Smash Eggs](#smash-eggs), [credits](#credits) and
+includes the tested [save menus](#save-menus), [Smash Eggs](#smash-eggs), [credits](#credits) and
 [Nawatobi](#nawatobi) entry routes.
 
 - Follow the current request. A documentation or research task does not start
@@ -31,6 +31,20 @@ includes the tested [Smash Eggs](#smash-eggs), [credits](#credits) and
 - Use subagents only when the user or applicable instructions explicitly
   authorize delegation. Old agent names in the session context do not authorize
   restarting their work.
+
+For a reconstruction block, use this sequence:
+
+1. Check the latest request, Git state, current link metadata and relevant handoff.
+2. Pick a coherent group with understood native behavior and a reachable runtime
+   route. Record and defer gaps that need new evidence.
+3. Recover readable source and shared types, then integrate only exact matches.
+4. Run the full matching check, package the unmodified ROM and verify its hash.
+   Use the native relink and unit suite as required below; regenerate progress
+   before tests when linked ranges changed.
+5. Replay the relevant save route and check independent RAM/graphics expectations.
+   Record artificial fixtures, observed helper outputs and unexercised branches.
+6. Update the map and evidence notes, stage owned files, audit the staged content,
+   then commit and push the verified block. Leave an accurate handoff at a stop.
 
 ## Start with the current checkout
 
@@ -116,6 +130,9 @@ On this workstation, private comparison helpers include
 ARM9. Inspect their inputs and relocation handling before reuse; they are local
 conveniences, not required public tools. Use current public build checks as the
 final authority.
+After a symbol rename, ensure the private checker resolves the new symbol in
+the candidate object. A fallback to an address-named symbol or original bytes
+must not turn a missing candidate function into a passing comparison.
 
 Candidate inventories are only discovery aids. Recheck each range against the
 current manifest before spending time on it: a previous candidate may already
@@ -596,6 +613,31 @@ The probe derives full task records, blend-register writes, timers and helper
 arguments, while affine-display and storage internals remain outside its oracle.
 Use the source-save hash checks for every replay, including runs that write to
 the emulator's battery-save copy.
+
+`build/analysis/probe_save_write_setup.py` extends this route to effect-task
+creation, rollback setup and menu exit. Its reports under
+`build/runtime/eur_save_write_setup/` separate ordinary Save & Continue
+(`evidence_continue55.json`) and Save & Quit (`evidence_quit55.json`) from the
+controlled error-status run (`evidence_rollback_status55.json`). These reports
+are runtime evidence, not proof that the corresponding source batch has been
+committed; check the current manifest and Git state separately.
+
+The error fixture uses EUR ARM9 main RAM with overlay 8 loaded. At guarded
+controller entry `0x0206B598`, `r0` is the task pointer. It requires the 32-bit
+phase at `r0 + 0x20` to be 201, timer at `r0 + 0x24` to be zero and completed-write
+result at `r0 + 0x3C` to be 1, then writes `02 00 00 00` to that result once.
+The native handler displays the failure message and starts rollback. This tests
+the response to an injected status after a completed write; it does not simulate
+a storage I/O failure. The observed heap address is not a universal patch.
+
+The setup oracle derives writes to the 384-byte workspace prefix, created
+72-byte tasks and their list links, plus blend and background registers. Initial
+constructor records and allocation addresses are observed helper outputs. Exit
+checks cover the 72-byte exit task and 48-byte scene task: `quit_to_title` is a
+32-bit field, and the native exit uses positive brightness for quit and negative
+brightness for continue. Text transitions, movement/fade callback internals and
+physical audio remain outside this oracle. Consult the source layout and probe
+before extending it; the workspace prefix does not describe the full allocation.
 
 ### Smash Eggs
 
