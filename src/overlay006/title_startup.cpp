@@ -8,11 +8,6 @@ extern "C" {
 #include "frontend_scene_internal.h"
 }
 
-struct MenuElement {
-    u8 unknown_00[32];
-    s32 state, counter;
-    s32 arguments[8];
-};
 /* Only the prefixes accessed by the frame task are described here. */
 struct TitleAnimationIrqView {
     u8 unknown_00[44];
@@ -24,7 +19,6 @@ struct TitleAnimationControllerView {
     u8 unknown_18[16];
     TitleAnimationIrqView *irq;
 };
-typedef char MenuElement_Size[sizeof(MenuElement) == 72 ? 1 : -1];
 typedef char TitleAnimationIrqView_Size[sizeof(TitleAnimationIrqView) == 48 ? 1 : -1];
 typedef char TitleAnimationControllerView_Size[sizeof(TitleAnimationControllerView) == 44 ? 1 : -1];
 

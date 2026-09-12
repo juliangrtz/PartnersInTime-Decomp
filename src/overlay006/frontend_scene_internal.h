@@ -17,6 +17,15 @@
 #define MENU_OAM_BUFFERS (*(u8 **)(data_ov005_0206a180 + 40))
 #define ARCHIVE MENU_ARCHIVE
 typedef struct MenuElement MenuElement;
+struct MenuElement {
+    u8 unknown_00[16];
+    MenuElement *parent;
+    u8 unknown_14[8];
+    void *resource;
+    s32 state, counter;
+    s32 arguments[8];
+};
+typedef char MenuElementSizeCheck[sizeof(MenuElement) == 72 ? 1 : -1];
 typedef struct CreditsLanguageEntries {
     u32 entries[6];
 } CreditsLanguageEntries;
@@ -35,7 +44,8 @@ typedef struct CreditsWorkspace {
     int layout, variant, screen, active;
     u32 unknown_2c;
     int polygon_alpha;
-    u8 unknown_34[0x8208];
+    u8 unknown_34[0x8204];
+    int image_loading;
 } CreditsWorkspace;
 typedef char CreditsWorkspaceSizeCheck[sizeof(CreditsWorkspace) == 0x823c ? 1 : -1];
 typedef struct SaveDirectoryView {

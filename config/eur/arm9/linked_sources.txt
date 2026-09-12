@@ -785,3 +785,5 @@ src/overlay006/title_brightness.c
 src/overlay006/credits_fade.c
 src/overlay006/credits_positions.c
 src/overlay006/credits_particle_transitions.c
+src/overlay006/credits_music.c
+src/overlay006/credits_image_loader.c

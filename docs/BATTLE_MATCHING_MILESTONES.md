@@ -5268,3 +5268,68 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **694,384 / 1,563,700 bytes (44.41%)**; C/C++ plus symbolic
   assembly is **44.74%**. Overlay 6 is **45,664 / 66,492 (68.68%)**.
   The project-wide 50% milestone still requires 87,466 matching bytes.
+
+
+## 2026-09-12: Credits spiral, image loading and music (+1,724 matching bytes)
+
+- Added `CreditsSpiralCollapse_Update` (748 bytes) at `0x02076B7C`, directly
+  extending the existing particle-transition module. Added the 84-byte delayed
+  music stop and 292-byte music sequence task in `credits_music.c`, and the
+  600-byte `CreditsImage_LoadNext` task in `credits_image_loader.c`.
+- The spiral contracts a Q4 radius around the previous illustration center,
+  advances an angle, then launches toward the next center and eases cells into
+  place. The shared motion record remains 84 bytes; its remaining parameter
+  words are signed and retain neutral names because other effects reuse them.
+- Consolidated the 72-byte `MenuElement` layout in the shared frontend header,
+  replacing the title-startup duplicate. Credits establish its parent pointer
+  at 16, resource slot at 28, phase/counter at 32/36 and arguments from 40.
+  The parent controller's argument 7 marks music completion. The workspace's
+  final word at 0x8238 is now named `image_loading`; its total size is unchanged.
+- The image task queues a texture read, waits for its archive key to disappear,
+  decompresses 32 KB, queues sixteen texture chunks, reads/copies a 512-byte
+  palette, queues its upload and clears the loading flag. Upload callbacks and
+  the particle renderer remain native; private matching of the 100-byte texture
+  callback is not counted until integrated. No inline ASM or compiler flags changed.
+- A successful 12,241-frame replay uses the compatible checkpoint-86 state and
+  the fully restored decoded-command fixture: wait 12,000 frames, press A for
+  one frame, then wait 240 frames. It reaches all four functions and returns to
+  the Nintendo/AlphaDream startup logos. This is controlled credits entry,
+  not verification of ordinary story completion. No drain frames were needed.
+- The independent spiral oracle checks 212,212 complete 84-byte records and
+  workspace/RNG snapshots, including all active phases on both screens,
+  84,304 polar positions, 98,304 motion ticks and 2,048 completed cells.
+  Both the minimum radius-step clamp (8 cells) and normal calculation (2,040)
+  are exercised. Idle phase 105 is checked 16 times; 51,980 further entries
+  are counted without snapshots.
+- The loader runs 330 times and completes all fifteen subsequent illustrations.
+  An independent LZ10 decoder verifies fifteen complete images; byte-copy
+  expectations verify fifteen palettes. All 240 texture upload indices and
+  fifteen palette jobs are checked, along with resource-pointer clearing and
+  deferred-removal flags. Archive completion is independently derived by walking
+  the pending-key list. Allocation addresses and freshly created child prefixes
+  are observed helper outputs; this does not independently verify the allocator
+  or the archive I/O implementation.
+- The music task runs 9,648 times through phases 0..3: it starts track 40, waits
+  for completion, waits 120 ticks, loads track 43 and starts it. The probe checks
+  9,272 music-state results and 74 loading-state results against live fields;
+  loading is busy on 73 checks. The exit task runs once and calls the 32-frame
+  music fade. Exact helper arguments and full task records are checked around
+  calls; audio mixing and physical output are not independently verified.
+- All 104 original save hashes remain unchanged. Fifty memory-capture lengths
+  and hashes and six PNG hashes were checked. All seven pre-exit graphics/register
+  dumps and the PNG match the preceding 12,000-frame replay byte for byte.
+  A spiral image and the post-exit startup image were visually inspected.
+  Evidence: `build/runtime/eur_credits_followup/evidence_story86_full.json`;
+  probe: `build/analysis/probe_credits_followup.py` (both private).
+- Unexercised branches include pending archive reads on the loader's polling
+  frames, music cancellation before completion, a nonzero delayed-stop counter,
+  exit before the completion flag, invalid states and allocation failures.
+  The initial probe read the loader's next-pointer slot at +28 as its active
+  flag; the native load establishes +32. That oracle error was corrected and
+  the complete replay rerun successfully. Failed attempts are not counted.
+- Final module/symbol checks, canonical packaging, 43-component native relink
+  with zero differing bytes, progress checks and all 81 tests pass. Both ROMs
+  retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **696,108 / 1,563,700 bytes (44.52%)**; C/C++ plus symbolic
+  assembly is **44.85%**. Overlay 6 is **47,388 / 66,492 (71.27%)**.
+  The 50% milestone still requires 85,742 matching bytes.

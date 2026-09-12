@@ -300,3 +300,70 @@ void CreditsColumnCollapse_InitAll(void)
 {
     ResetParticles(CreditsColumnCollapse_Update);
 }
+
+void CreditsSpiralCollapse_Update(CreditsMotion *particle)
+{
+    switch (particle->phase) {
+    /* This mode uses words 0x40/44/48 as angle, Q4 radius and angle step. */
+    case 0:
+        particle->unknown_4c = particle->unknown_44;
+        particle->ax = particle->unknown_44 / 40;
+        if (particle->ax < 2)
+            particle->ax = 2;
+        particle->phase = 100;
+        break;
+    case 100:
+        if (particle->counter) {
+            --particle->counter;
+        } else {
+            particle->unknown_40 += particle->unknown_48;
+            particle->unknown_44 -= particle->ax;
+            if (particle->scale_x > 819) {
+                particle->scale_x -= 81;
+                particle->scale_y -= 81;
+            }
+            if (particle->unknown_44 < 8) {
+                particle->unknown_44 = 0;
+                ++particle->phase;
+            }
+            particle->x = particle->vx + ((particle->unknown_44 *
+                FX_SinCosTable_[2 * ((particle->unknown_40 & 0xffff) >> 4) + 1]) >> 4);
+            particle->y = particle->vy + ((particle->unknown_44 *
+                FX_SinCosTable_[2 * ((particle->unknown_40 & 0xffff) >> 4)]) >> 4);
+        }
+        break;
+    case 101:
+        CreditsMotion_TargetLayoutCenter(particle, CREDITS_TRANSITION.layout, CREDITS_TRANSITION.screen);
+        particle->vx = ((Random_NextModulo(60) - 30) << 12) / 10;
+        particle->vy = ((Random_NextModulo(20) + 10) << 12) / 10;
+        if (!CREDITS_TRANSITION.screen)
+            particle->vy = -particle->vy;
+        CreditsMotion_SetAcceleration(particle, 24);
+        ++particle->phase;
+        break;
+    case 102:
+        if (func_ov006_02077ce8(particle))
+            ++particle->phase;
+        break;
+    case 103:
+        CreditsMotion_TargetLayoutCell(particle, CREDITS_TRANSITION.layout, CREDITS_TRANSITION.screen);
+        CreditsMotion_SetEaseOut(particle, 24);
+        particle->variant = CREDITS_TRANSITION.variant;
+        ++particle->phase;
+        break;
+    case 104:
+        particle->scale_x += 256;
+        particle->scale_y += 256;
+        if (particle->scale_x >= 4096)
+            particle->scale_x = 4096;
+        if (particle->scale_y >= 4096)
+            particle->scale_y = 4096;
+        if (func_ov006_02077ce8(particle)) {
+            particle->scale_x = 4096;
+            particle->scale_y = 4096;
+            if (CREDITS_TRANSITION.active) --CREDITS_TRANSITION.active;
+            ++particle->phase;
+        }
+        break;
+    }
+}
