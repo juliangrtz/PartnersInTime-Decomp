@@ -77,7 +77,7 @@ void Overlay15Attack_ConfigureModelFlags(
     Overlay15AttackModelController *state) {
     BattleModel *model;
 
-    if (state->primary->flags & 1) {
+    if (state->primary->formation_index & 1) {
         return;
     }
 

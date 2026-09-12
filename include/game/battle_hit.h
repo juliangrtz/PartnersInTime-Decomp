@@ -81,6 +81,10 @@ typedef char BattleHitRecord_SizeCheck[
 typedef char BattleCollisionBounds_SizeCheck[
     sizeof(BattleCollisionBounds) == 0x0C ? 1 : -1];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void BattleHitDescriptor_Disable(BattleHitDescriptor *descriptor);
 void BattleDamage_DispatchHit(BattleHitRecord *record);
 void BattleHitQueue_Update(void);
@@ -100,5 +104,9 @@ BattleHitDescriptor *BattleHitDescriptor_GetByActorId(u16 actor_id);
 BattleHitDescriptor *BattleHitDescriptor_Configure(
     u16 source_id, u16 target_id, BattleHitCallback callback,
     u16 linked_actor_id, int hit_kind);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

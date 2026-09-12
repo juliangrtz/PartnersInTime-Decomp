@@ -4,10 +4,11 @@
 #include <game/battle_hit.h>
 #include <game/battle_scene.h>
 
+/* Prefix of the party actor used by this attack, not its allocation size. */
 typedef struct Overlay15AttackModelOwner {
     BattleSceneObject *object;
     u8 unknown_04[0x7A];
-    u16 flags;
+    u16 formation_index;
 } Overlay15AttackModelOwner;
 
 typedef union Overlay15AttackPhaseFlags {
@@ -28,7 +29,9 @@ typedef union Overlay15AttackControllerFlags {
 
 typedef struct Overlay15AttackHitMotion {
     BattleSceneObject *object;
-    u8 unknown_04[0xC];
+    s32 animation_component;
+    s32 terminal_velocity_q8;
+    s32 duration_q8;
     s32 window_end_q8;
     s32 window_start_q8;
 } Overlay15AttackHitMotion;
@@ -39,12 +42,14 @@ typedef struct Overlay15AttackModelController {
     u16 secondary_resource_id;
     u16 primary_resource_id;
     s16 hit_timer;
-    u8 unknown_0e[2];
+    s16 unknown_0e;
     s8 hit_active;
     Overlay15AttackControllerFlags phase_flags;
     u8 unknown_12[2];
     s16 animation_scale;
-    u8 unknown_16[6];
+    s16 unknown_16;
+    s16 unknown_18;
+    u8 unknown_1a[2];
     Overlay15AttackHitMotion hit_motion;
 } Overlay15AttackModelController;
 
@@ -88,6 +93,16 @@ void Overlay15Attack_PreparePrimaryActor(
     Overlay15AttackModelController *state);
 void Overlay15Attack_PrepareSecondaryActor(
     Overlay15AttackModelController *state);
+void Overlay15Attack_UpdateHitWindow(Overlay15AttackModelController *state);
+void Overlay15Attack_BeginSecondaryLaunch(Overlay15AttackModelController *state);
+void Overlay15Attack_BeginSecondaryLaunchCallback(Overlay15AttackModelController *state);
+void Overlay15Attack_BeginReverseAnimation(Overlay15AttackModelController *state);
+int Overlay15Attack_IsIdle(Overlay15AttackModelController *state);
+void Overlay15Attack_RestoreActors(Overlay15AttackModelController *state);
+void Overlay15Attack_InitializeHitMotion(Overlay15AttackHitMotion *motion,
+    BattleSceneObject *object, int animation_component);
+void Overlay15Attack_InitializeActorController(Overlay15AttackModelController *state,
+    Overlay15AttackModelOwner *owner, int resource_id, int alternate);
 #ifdef __cplusplus
 }
 #endif

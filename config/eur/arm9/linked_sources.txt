@@ -141,7 +141,8 @@ src/overlay013/object_pair_setup.c
 src/overlay013/object_pair_motion.cpp
 src/overlay014/attack_object_state.c
 src/overlay015/pair_attack_helpers.c
-src/overlay015/actor_setup.c
+src/overlay015/actor_controller.cpp
+src/overlay015/actor_lifecycle.cpp
 src/overlay016/motion_table.c
 src/overlay017/attack_tuning.c
 src/overlay017/object_setup.cpp

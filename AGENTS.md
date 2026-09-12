@@ -495,8 +495,13 @@ Bros. item menu. Inspect the visible item list and trace the selected command;
 the filename does not prove which attack is currently selected. The native
 loader mapping recorded in `build/analysis/probe_battle_attack_loader.py` maps
 command 8 to overlay 15 and callback `0x020C5B4C`. This identifies a dispatch
-route, not the item's gameplay name. Check the current overlay map before
-assigning one. During battle, `gBattleContext` is the pointer stored in ARM9
+route. The subsequent `build/analysis/probe_ov15_actors.py` replay confirmed
+the visible Smash Eggs selection, actor command 8 and that callback together;
+its successful report is `build/runtime/eur_overlay15/evidence_final83.json`.
+At callback entry, check the actor's command halfword at `+0x7C` and callback
+pointer at `+0x78`. The menu field at battle-context `+0x11A` can still contain
+2 at this point; it does not identify the active attack. During battle,
+`gBattleContext` is the pointer stored in ARM9
 main RAM at `0x020C0718`; dereference it before reading object-relative fields.
 Verify snapshot provenance and byte guards before reusing this route, and
 distinguish a controlled encounter from normal story navigation.

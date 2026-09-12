@@ -5385,3 +5385,57 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **697,152 / 1,563,700 bytes (44.58%)**; C/C++ plus symbolic
   assembly is **44.91%**. Overlay 6 is **48,432 / 66,492 (72.84%)**.
   The 50% milestone still requires 84,698 matching bytes.
+
+
+## 2026-09-12: Smash Eggs actor initialization, launches and hit windows (+1,292 matching bytes)
+
+- Confirmed overlay 15 as Smash Eggs: the menu selection enters native callback
+  `0x020C5B4C` with actor command 8. The menu's battle-context field at `+0x11A`
+  still reads 2 there; active dispatch follows actor fields `+0x7C` and `+0x78`.
+- Linked eight new routines: `UpdateHitWindow` (240 bytes),
+  `BeginSecondaryLaunch` (508), its callback thunk (12), `BeginReverseAnimation`
+  (196), `IsIdle` (32), `RestoreActors` (100), `InitializeHitMotion` (44) and
+  `InitializeActorController` (160), all with the `Overlay15Attack_` prefix.
+  Actor setup is consolidated into `actor_controller.cpp`, preserving the full
+  `0x020C4028..0x020C4570` range. The lifecycle module covers
+  `0x020C5440..0x020C5570`; intervening native logic remains separate.
+- Recovered the embedded motion parameters and formation index in shared types.
+  The complete block matches with actual C++ virtual calls, correct C linkage,
+  a common motion pointer and native integer narrowing. No inline ASM or
+  compiler changes were needed. The three earlier setup routines still match
+  in the combined C++ module, and the battle-hit API now declares C linkage.
+- The compatible checkpoint-83 battle menu comes from the previously recorded
+  controlled Petey Piranha encounter (-32748, room 306, decoded opcode 0x11C).
+  Its 72 command bytes were restored before battle transfer. This replay uses
+  buttons only, including short A/B presses and X/Y support launches; it does
+  not demonstrate ordinary Star Shrine boss entry.
+- The final 2,110-frame replay reaches all eight new routines and the three
+  preceding setup routines. Its 230 completed calls check 227 full 52-byte
+  controller records, two full 24-byte motion records and one full 28-byte pair
+  prefix. All returns match the caller stack pointer; none need drain frames.
+- Both carrying formations initialize and restore. Six launches check 12 world
+  positions and six model-offset pairs. Hit windows open six times and close
+  five times across 113 updates with observed timer values from 10 to -11; one
+  support sequence is interrupted by the attack's native failure path.
+  The replay checks 82 idle results and one reverse animation, including its
+  independently derived frame count, last frame and signed animation speed.
+  There are 70 helper-argument checks and 22 direct object/model-field checks.
+- Object/model pointers and other external helper effects are observed, not
+  independently reconstructed by this oracle. A preliminary assertion wrongly
+  used the menu field as active command; another used a four-byte animation
+  stride. Current source/native loads establish the actor command and eight-byte
+  animation records. The entire successful replay was rerun after both fixes.
+- Selection, attack and final command-wheel screenshots were inspected. Captures
+  retain controller records, OBJ VRAM, palettes, OAM and display registers during
+  both support variants, plus final graphics dumps. All 104 original saves keep
+  their hashes. Private evidence: `build/runtime/eur_overlay15/evidence_final83.json`;
+  probe: `build/analysis/probe_ov15_actors.py`.
+- Unexercised: formations 0..3, absent support objects/models, phase-17 idle,
+  reverse animation for formation 4, and arithmetic outside the observed range.
+  These captures do not independently verify native rendering or hardware.
+- Full module/symbol checks, canonical packaging, the 43-component native relink
+  with zero differing bytes, progress checks and all 81 tests pass. Both ROMs
+  retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **698,444 / 1,563,700 bytes (44.67%)**; C/C++ plus symbolic
+  assembly is **45.00%**. Overlay 15 is **1,960 / 13,164 (14.89%)**.
+  The 50% milestone still requires 83,406 matching bytes.
