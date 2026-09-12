@@ -13,8 +13,8 @@ put batch results and temporary experiments in the appropriate research log.
 - Follow the current request. A documentation or research task does not start
   another decompilation batch. Honor requests to stop after the next block.
 - For continued decompilation, prioritize small, well-understood functions and
-  related groups with clear data flow. The current next milestone is 50%
-  matching C/C++, unless the user sets another target.
+  related groups with clear data flow. Use the latest user-requested milestone;
+  keep changing targets and coverage in the handoff and progress reports.
 - Work systematically from instructions, callers, types and runtime evidence.
   Do not brute-force source permutations or spend hours guessing at register
   allocation. Record a difficult gap and move to another useful target.
@@ -73,6 +73,10 @@ in the corresponding `src/overlayNNN/` directory. Use the overlay map to select
 a subsystem; do not infer a gameplay identity from an overlay number alone.
 Original ARM9 bytes are under `extract/eur/arm9/` and
 `extract/eur/arm9_overlays/`; derive load addresses from component metadata.
+Resident ARM9 metadata is directly in `config/eur/arm9/symbols.txt` and
+`config/eur/arm9/delinks.txt`. Overlay metadata is under
+`config/eur/arm9/overlays/ovNNN/`. The private pseudocode directory name
+`main_game` does not imply a corresponding metadata subdirectory.
 
 Private IDA databases live under `build/ida/`; previous pseudocode exports and
 candidate units live under `build/analysis/`, including
@@ -187,6 +191,8 @@ would dereference that number as an address.
 Prefer structured control flow and readable expressions. Add compile-time size
 checks for recovered structures. Keep casts and offset arithmetic only where
 the known layout or compiler behavior requires them.
+The project's integer typedefs are in `<nitro.h>`; inspect existing includes
+before assuming that a header such as `nitro/types.h` exists.
 
 When only an object's prefix is known, describe it explicitly as a prefix view;
 its `sizeof` does not establish the full allocation size. Two objects can share
@@ -205,8 +211,8 @@ lookup may use that full-width index before its low byte is stored elsewhere;
 preserve the lookup width and signedness separately from the destination field.
 
 Account for integer promotion and the exact point where values are rounded.
-A `u16` operand promotes to `int`; an explicit `u32` cast before a shift may be
-needed to reproduce a native logical shift. Signed division truncates toward
+A `u8` or `u16` operand promotes to `int`; an explicit `u32` cast before a shift
+may be needed to reproduce a native logical shift. Signed division truncates toward
 zero, which differs from an arithmetic right shift or Python's `//` for negative
 values. Preserve the native order of division and Q12 scaling, and model signed
 division explicitly in runtime oracles. See the verified examples in
@@ -264,6 +270,20 @@ signed 16-bit horizontal velocity and a four-bit group. Their four groups have
 current metadata before assuming that the scrolling callback or shared animation
 selector has also been reconstructed. Animation IDs alone do not identify the
 artwork or establish looping semantics.
+
+Credits use a different coordinate space from the title sequence: screen value
+0 adds 224 pixels to Y, before Q12 scaling. The illustration is divided into
+32x32 cells held in 1,024 records of 84 bytes. Cell centers add
+`(5*column+2, 4*row+2)` pixels to the layout origin; the illustration center
+adds `(80, 64)`.
+The X and Y table views have a 16-byte record stride. Preserve that stride and
+the actual typed workspace object; treating the workspace as a cast byte array
+changed the emitted address calculations. See
+[credits positions](src/overlay006/credits_positions.c),
+[shared declarations](src/overlay006/credits_transition_internal.h), and
+[motion setup](src/overlay006/credits_motion.c). Keep native integer operation
+order and narrowing when modeling acceleration or easing; floating-point
+interpolation is not an equivalent oracle.
 
 Small, explained inline-assembly fragments are authorized when a specific
 instruction sequence cannot reasonably be reproduced in C. Keep the surrounding
@@ -340,6 +360,9 @@ Use ordinary buttons and live RAM observations to navigate automatically.
 Inspect screenshots and active overlays before interpreting a trace: a save can
 start beside a save block, and A may open a menu instead of advancing the field.
 Selected actions and party formations also change which button performs a jump.
+Give each entry route a bounded deadline and verify that its dispatch hook ran.
+Waiting on an idle field save does not necessarily execute a decoded command;
+if it does not, inspect the state and choose an appropriate action or checkpoint.
 
 Guard hooks with the expected overlay/function bytes because overlays reuse
 addresses. For return hooks, track the caller and stack pointer so nested calls
@@ -403,6 +426,16 @@ Controlled RAM edits or temporary decoded-command substitutions are useful
 probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
+
+For credits, the private `build/analysis/probe_credits_transition.py` established
+a route from checkpoint 86 and the compatible state
+`build/runtime/states/eur_story_086_hud_verified.dst`. It substitutes one 72-byte
+decoded field command with opcode `0x122`, fade argument 1, and restores every
+original byte at the credits request helper before the scene transition.
+Inspect its guards and the recorded fixture before reuse. Successful reports
+are under `build/runtime/eur_credits_transition/`; the final illustration uses
+the fade transition, so an early capture alone does not cover it. This route
+verifies controlled credits entry, not ordinary completion of the story.
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
 dereferences, field offset, access width and timing. The tested EUR Nawatobi
