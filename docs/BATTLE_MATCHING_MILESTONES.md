@@ -5217,3 +5217,54 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **691,312 / 1,563,700 bytes (44.21%)**; C/C++ plus symbolic
   assembly is **44.54%**. Overlay 6 is **42,592 / 66,492 (64.06%)**.
   The project-wide 50% milestone still requires 90,538 matching bytes.
+
+
+## 2026-09-12: Credits collapse and scatter transitions (+3,072 matching bytes)
+
+- Added eight byte-identical functions at `0x02076E68..0x02077A68` in
+  `credits_particle_transitions.c`: four 92-byte initializers and their column
+  collapse (672), pattern-delay collapse (584), scatter (884), and random-delay
+  collapse (564) callbacks. The initializers share an inline array-reset helper.
+- Recovered the 84-byte motion record's texture coordinates and X/Y scales at
+  offsets 16..28 from the renderer and grid setup. Offset 64 remains neutrally
+  named because transitions reuse it for different parameters. The four effects
+  independently delay, move, reshape and retire 1,024 illustration cells.
+- Matching required preserving logical shifts after byte/halfword promotion,
+  the full-width atan result until its native narrowing point, and the order of
+  multiplication and Q12 scaling. No compiler flags or inline assembly changed.
+  The adjacent 244-byte grid initializer remains deferred: its private candidate
+  has a four-byte size gap and different induction-variable scheduling.
+- A successful 12,000-frame replay uses the compatible checkpoint-86 field state
+  and the previously verified credits-entry fixture. One decoded 72-byte command
+  becomes opcode 0x122/fade=1 and is fully restored before native scene entry.
+  This is controlled entry, not evidence of ordinary story completion.
+- `build/analysis/probe_credits_effects.py` and
+  `build/runtime/eur_credits_effects/evidence_story86_full.json` independently
+  verify all eight functions, twice per initializer, and phases 0/100/101/102/103/104
+  in both screen modes for each callback. The replay checks 812,589 complete
+  particle records, 812,597 complete workspace prefixes and RNG words, and eight
+  complete 86,016-byte arrays. It initializes and retires 8,192 cells, predicts
+  28,672 RNG results, 2,048 table-derived angles across all four quadrants,
+  8,192 acceleration setups, 6,144 ease-out setups and 520,050 motion ticks.
+- The oracle derives coordinates, RNG, angle quantization, integer arithmetic,
+  scales, frame counts and phase changes without refreshing helper results from
+  observed output. An initial probe used the wrong resident-image base for its
+  trig tables. The extracted image starts at 0x02004000; the corrected probe
+  derives that base from metadata and guards the tables against live RAM.
+  Failed probe attempts are not counted as successful runtime evidence.
+- All 104 original saves remain unchanged. Hashes and lengths were checked for
+  151 graphics/register/grid captures and 17 screenshots. Two transition images
+  were visually inspected. All seven final VRAM/palette/OAM/display-register
+  captures and the final PNG are byte-identical to the preceding full credits
+  replay. No return-drain frames were needed. Idle phase 105 is checked 16 times
+  per callback; 215,507 additional idle entries are counted without snapshots.
+- The replay covers both column-delay directions and scatter wait/growth phases.
+  Scatter's positive-X launch branch, an already-zero active count at retirement,
+  RNG zero-seed fallback, invalid layout/screen values and abnormal counters
+  remain unexercised. This does not claim physical-hardware testing.
+- Full module/symbol checks, canonical packaging, native relink of 43 components
+  with zero differing bytes, progress checks and all 81 tests pass. Both ROMs
+  retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **694,384 / 1,563,700 bytes (44.41%)**; C/C++ plus symbolic
+  assembly is **44.74%**. Overlay 6 is **45,664 / 66,492 (68.68%)**.
+  The project-wide 50% milestone still requires 87,466 matching bytes.

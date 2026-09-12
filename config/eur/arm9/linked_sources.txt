@@ -784,3 +784,4 @@ src/overlay006/title_model.cpp
 src/overlay006/title_brightness.c
 src/overlay006/credits_fade.c
 src/overlay006/credits_positions.c
+src/overlay006/credits_particle_transitions.c

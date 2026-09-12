@@ -77,6 +77,9 @@ Resident ARM9 metadata is directly in `config/eur/arm9/symbols.txt` and
 `config/eur/arm9/delinks.txt`. Overlay metadata is under
 `config/eur/arm9/overlays/ovNNN/`. The private pseudocode directory name
 `main_game` does not imply a corresponding metadata subdirectory.
+The extracted EUR resident `arm9.bin` starts at `0x02004000`, not the start of
+main RAM at `0x02000000`. Derive file offsets from the component's actual base;
+check lookup-table bytes against live RAM before relying on a runtime oracle.
 
 Private IDA databases live under `build/ida/`; previous pseudocode exports and
 candidate units live under `build/analysis/`, including

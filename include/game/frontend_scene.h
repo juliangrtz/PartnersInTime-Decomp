@@ -24,9 +24,10 @@ struct CreditsMotion {
     void (*update)(CreditsMotion *motion);
     u32 phase, counter;
     u8 variant, column, row, unknown_0f;
-    u8 unknown_10[16];
+    int texture_x, texture_y, scale_x, scale_y;
     int x, y, target_x, target_y, vx, vy, ax, ay;
-    u8 unknown_40[16];
+    s32 unknown_40;
+    u8 unknown_44[12];
     u16 frames, unknown_52;
 };
 
@@ -53,6 +54,14 @@ void CreditsMotion_TargetLayoutCell(CreditsMotion *motion, int layout, int scree
 void CreditsMotion_TargetLayoutOrigin(CreditsMotion *motion, int layout, int screen);
 void CreditsFade_InitAll(void);
 void CreditsFade_Update(CreditsMotion *motion);
+void CreditsColumnCollapse_InitAll(void);
+void CreditsColumnCollapse_Update(CreditsMotion *motion);
+void CreditsPatternCollapse_InitAll(void);
+void CreditsPatternCollapse_Update(CreditsMotion *motion);
+void CreditsScatter_InitAll(void);
+void CreditsScatter_Update(CreditsMotion *motion);
+void CreditsCollapse_InitAll(void);
+void CreditsCollapse_Update(CreditsMotion *motion);
 void CreditsScene_InitGeometry(CreditsSceneTask *unused);
 void CreditsScene_LoadResources(CreditsSceneTask *task);
 CreditsSceneTask *CreditsScene_Delete(CreditsSceneTask *task);

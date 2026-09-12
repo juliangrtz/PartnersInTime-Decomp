@@ -119,3 +119,6 @@ src/overlay006/credits_fade.c:
 
 src/overlay006/credits_positions.c:
     .text start:0x02078b8c end:0x02078c90
+
+src/overlay006/credits_particle_transitions.c:
+    .text start:0x02076e68 end:0x02077a68

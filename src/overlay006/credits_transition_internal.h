@@ -9,4 +9,6 @@ extern CreditsMotion data_ov006_020847d0[1024];
 /* X and Y views into the same table of 16-byte layout records. */
 extern const s32 data_ov006_0207bff0[][4], data_ov006_0207bff4[][4];
 
+int func_ov006_02077ce8(CreditsMotion *motion);
+
 #endif
