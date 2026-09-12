@@ -6,6 +6,7 @@
 #include <game/title_localized_sequence.h>
 #include <game/title_model.h>
 #include <game/title_startup.h>
+#include "title_trail_internal.h"
 enum TitleSequencePhase {
     TITLE_SEQUENCE_DELAY_MUSIC = 0,
     TITLE_SEQUENCE_DELAY_ENTRY = 1,
@@ -72,12 +73,13 @@ typedef struct TitleAnimationSequence {
     TitleSpriteSequence sprite_sequence;
     TitleMovingSpriteChild children[4];
     TitleMovingSprite moving[4];
-    u8 unknown_1b30[52], unknown_1b64[52];
+    TitleTrailBuffers trail_buffers;
+    TitleTrailStamp trail_stamp;
     TitlePanelResources panel_resources;
     TitlePanel panels[6], active_panels[2];
     s32 timer;
     u8 phase, unknown_1fa5[3];
-    u8 unknown_1fa8[49152];
+    u32 trail_pixels[2][6144];
     void *characters;
     u32 character_size;
     void *palette, *left_screen, *right_screen, *final_screen;
@@ -87,11 +89,11 @@ typedef struct TitleAnimationSequence {
 typedef char TitleSequenceModelElementSize[sizeof(TitleSequenceModelElement) == 48 ? 1 : -1];
 typedef char TitleSequenceAuxElementSize[sizeof(TitleSequenceAuxElement) == 52 ? 1 : -1];
 typedef char TitleSequencePrefixSize[sizeof(TitleAnimationSequence) == 57288 ? 1 : -1];
-/* The initializer clears the prefix, then copies 512 palette bytes into the tail. */
+/* The initializer clears the prefix, then copies the 32x32 4bpp trail stamp. */
 typedef struct TitleSequenceAllocation {
     TitleAnimationSequence sequence;
     u32 unknown_dfc8;
-    u8 color_data[512], unknown_e1cc[1536];
+    u8 trail_stamp_pixels[512], unknown_e1cc[1536];
 } TitleSequenceAllocation;
 typedef char TitleSequenceAllocationSize[sizeof(TitleSequenceAllocation) == 59340 ? 1 : -1];
 typedef char TitleSequencePromptSize[sizeof(TitleSequencePrompt) == 96 ? 1 : -1];

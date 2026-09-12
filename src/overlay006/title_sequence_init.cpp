@@ -14,8 +14,6 @@ void func_ov006_02073948(void *);
 void func_ov006_02072f44(void *, void *, const void *);
 void func_ov006_02072b0c(void *, void *, void *, int);
 void func_ov006_02073c08(void *);
-void func_ov006_0207280c(void *, void *, const void *, int, int, void *);
-void func_ov006_0207276c(void *, void *, void *);
 extern TitleAnimationController *data_ov006_0207c4e4;
 extern TitleAnimationSequence *data_ov006_0207c4e0;
 }
@@ -37,10 +35,10 @@ extern "C" void TitleAnimation_InitSequence(void)
 {
     SEQUENCE = (TitleAnimationSequence *)GameHeap_Allocate(1, sizeof(TitleSequenceAllocation), 0, 0);
     func_0202cbd4(SEQUENCE, 0, (u8 *)(SEQUENCE + 1) - (u8 *)SEQUENCE);
-    void *colors = TitleAnimation_ReadArchiveEntry(CONTROLLER, 2, 10, 0, 0, 0, 0);
-    CopyBytes((u8 *)colors + 16, ALLOCATION->color_data, 512);
-    if (colors)
-        GameHeap_Free(colors);
+    void *stamp_data = TitleAnimation_ReadArchiveEntry(CONTROLLER, 2, 10, 0, 0, 0, 0);
+    CopyBytes((u8 *)stamp_data + 16, ALLOCATION->trail_stamp_pixels, 512);
+    if (stamp_data)
+        GameHeap_Free(stamp_data);
     SEQUENCE->characters = TitleAnimation_ReadArchiveEntry(CONTROLLER, 2, 6, 1, 0, 1, &SEQUENCE->character_size);
     SEQUENCE->left_screen = TitleAnimation_ReadArchiveEntry(CONTROLLER, 2, 7, 1, 0, 1, 0);
     SEQUENCE->right_screen = TitleAnimation_ReadArchiveEntry(CONTROLLER, 2, 8, 1, 0, 1, 0);
@@ -90,12 +88,12 @@ extern "C" void TitleAnimation_InitSequence(void)
     for (int side = 0; side < 2; ++side) {
         for (int slot = 0; slot < 7; ++slot) {
             Append(&SEQUENCE->orbit[side][slot]);
-            TitleOrbit_Init(&SEQUENCE->orbit[side][slot], (TitleOrbitChild *)SEQUENCE->unknown_1b64, side, slot);
+            TitleOrbit_Init(&SEQUENCE->orbit[side][slot], (TitleOrbitChild *)&SEQUENCE->trail_stamp, side, slot);
         }
     }
-    func_ov006_0207280c(SEQUENCE->unknown_1b64, SEQUENCE->unknown_1b30, ALLOCATION->color_data, 4, 32, 0);
-    Append(SEQUENCE->unknown_1b30);
-    func_ov006_0207276c(SEQUENCE->unknown_1b30, SEQUENCE->unknown_1fa8, SEQUENCE->unknown_1fa8 + 24576);
+    TitleTrailStamp_Init(&SEQUENCE->trail_stamp, &SEQUENCE->trail_buffers, ALLOCATION->trail_stamp_pixels, 4, 32, 0);
+    Append(&SEQUENCE->trail_buffers);
+    TitleTrailBuffers_Init(&SEQUENCE->trail_buffers, SEQUENCE->trail_pixels[0], SEQUENCE->trail_pixels[1]);
     if (CONTROLLER->language) {
         Append(&SEQUENCE->localized_sequence);
         TitleLocalizedSequence_Init(&SEQUENCE->localized_sequence);

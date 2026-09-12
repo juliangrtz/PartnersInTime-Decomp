@@ -5,7 +5,6 @@
 extern TitleAnimationSequence *data_ov006_0207c4e0;
 void func_ov006_02073bfc(void *), func_ov006_0207393c(void *);
 void func_ov006_02072ae4(void *), func_ov006_02072ea8(void *);
-void func_ov006_02072768(void *), func_ov006_02072808(void *);
 #define SEQUENCE data_ov006_0207c4e0
 #define SAVE ((TitleSequenceSave *)gSaveData)
 static inline void StoreRumblePreference(u8 enabled)
@@ -54,8 +53,8 @@ void TitleAnimation_ReleaseSequence(void)
             TitleMovingSprite_Destroy(&SEQUENCE->moving[i]);
         }
     }
-    func_ov006_02072768(SEQUENCE->unknown_1b30);
-    func_ov006_02072808(SEQUENCE->unknown_1b64);
+    TitleTrailBuffers_Release(&SEQUENCE->trail_buffers);
+    TitleTrailStamp_Release(&SEQUENCE->trail_stamp);
     if (SEQUENCE->characters) {
         GameHeap_Free(SEQUENCE->characters);
         SEQUENCE->characters = 0;

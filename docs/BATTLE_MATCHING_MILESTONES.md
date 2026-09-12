@@ -4929,3 +4929,51 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **686,812 / 1,563,700 bytes (43.92%)**; C/C++ plus symbolic
   assembly is **44.25%**. Overlay 6 is **38,092 / 66,492 (57.29%)**.
   The project-wide 50% milestone still requires 95,038 matching bytes.
+
+
+## 2026-09-12: Title pixel trails (+544 matching C bytes)
+
+- Added the seven trail helpers at `0x02072768..0x02072988` in
+  `src/overlay006/title_trail.c`: buffer initialization, update, tiled upload
+  and empty release; stamp initialization, clipping/draw and empty release.
+  Six matched immediately. The 348-byte draw routine required an unsigned
+  height shift to reproduce the native logical shifts; the complete linked
+  region and symbol layout then matched. No assembly was added.
+- Native calls establish all eight rasterizer arguments, including source
+  dimensions, position, destination, stride and height. The first buffer uses
+  y-origin zero; the second uses 244. Clipping checks signed endpoints before
+  calling the native saturated 4bpp blitter.
+- Recovered two 52-byte trail records and two 24,576-byte pixel buffers in the
+  shared sequence layout. The sprite header now names its upload callback and
+  pass flags. Initialization, update, cleanup and orbit drawing use the typed
+  records and named helpers.
+- Correction to the preceding sequence-allocation notes: the 512-byte payload
+  at offset 57,292 is a 32x32 4bpp trail stamp, not palette data. Its use by the
+  pixel rasterizer establishes this directly; the allocation/source names now
+  reflect that role. The other tail bytes remain unknown.
+- Two ordinary cold-boot replays use save 83 with normal startup and save 1
+  with an A press after 500 frames: 2,776 frames, 546 buffer updates, 542 upload
+  passes, 2,008 stamp-draw calls, both initializers twice and four empty releases.
+  No RAM fixtures are used. Private evidence and captures are under
+  `build/runtime/eur_title_trail/`; probes and logs are under `build/analysis/`.
+- Independent oracles verify 26,836,992 faded bytes using a per-nibble lookup;
+  26,640,384 tiled upload bytes using a linear-to-tile mapping and destinations
+  derived from display registers; and 593,344 stamped pixels using clipped,
+  saturated addition. The 723 actual blits include 288 clipped and 435 unclipped
+  cases, both screens, all eight horizontal alignments and 10,432 saturated
+  pixels. Zero/nonzero buffers, rejected draw calls, callback/pointer stores and
+  unchanged empty-release records are checked. Other stamp dimensions and a
+  non-null stamp update callback remain unexercised.
+- All 104 original saves remain unchanged. Both final VRAM/palette hash sets
+  match their prior normal/early-skip captures, and the save-83 final load-menu
+  screenshot was visually inspected. Full module/symbol checks, canonical
+  packaging, native relink (43 components, zero differences), progress checks
+  and all 81 tests pass. Both ROMs retain SHA-1
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- The neighboring 176-byte tilemap/palette initializer remains unmatched; its
+  current C draft is 172 bytes with different loop scheduling. A separate
+  108-byte resident fade draft has register-operand differences. Neither is
+  linked or counted as progress; both are deferred without permutation searches.
+- Matching C/C++ is **687,356 / 1,563,700 bytes (43.96%)**; C/C++ plus symbolic
+  assembly is **44.29%**. Overlay 6 is **38,636 / 66,492 (58.11%)**.
+  The project-wide 50% milestone still requires 94,494 matching bytes.

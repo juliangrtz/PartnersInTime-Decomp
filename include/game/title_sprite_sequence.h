@@ -8,8 +8,8 @@ typedef struct TitleSpriteHeader {
     s32 elapsed, duration, x, y, depth;
     void (*update)(void *);
     void (*draw)(void *);
-    u32 unknown_20;
-    u8 state, unknown_25[3];
+    void (*upload)(void *);
+    u8 state, pass_flags, unknown_26[2];
 } TitleSpriteHeader;
 
 typedef struct TitleSequenceActor {

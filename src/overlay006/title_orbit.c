@@ -1,12 +1,12 @@
 #include <game/title_model.h>
 #include <game/title_effects.h>
+#include "title_trail_internal.h"
 
 extern const s16 FX_SinCosTable_[];
 extern const s16 data_ov006_0207b0dc[], data_ov006_0207b0d4[];
 extern const u8 data_ov006_0207b0b0[];
 extern const s16 data_ov006_0207af3c[2][7];
 void func_ov006_0207214c(TitleOrbitWork *);
-void func_ov006_0207282c(TitleOrbitChild *);
 void func_ov006_02073e6c(TitleOrbitWork *, int, int);
 
 void TitleOrbit_Draw(TitleOrbitWork *work)
@@ -25,7 +25,7 @@ void TitleOrbit_Draw(TitleOrbitWork *work)
         if (--work->countdown <= 0) {
             work->child->x = work->orbit_x;
             work->child->y = work->orbit_y;
-            func_ov006_0207282c(work->child);
+            TitleTrailStamp_Draw(work->child);
             work->countdown = 2;
         }
         break;

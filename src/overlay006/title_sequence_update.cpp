@@ -84,7 +84,7 @@ extern "C" void TitleAnimation_UpdateSequence(void)
         if (SEQUENCE->timer > 0) {
             --SEQUENCE->timer;
         } else {
-            SEQUENCE->unknown_1b30[37] = 255;
+            SEQUENCE->trail_buffers.header.pass_flags = 255;
             SEQUENCE->transition.draw_flags.value &= ~1;
             SEQUENCE->transition.draw_flags.value &= ~4;
             TitleMovingSprite_StartEntry(&SEQUENCE->moving[0]);
@@ -158,7 +158,7 @@ extern "C" void TitleAnimation_UpdateSequence(void)
                 if (SEQUENCE->participant_mask & (1 << i))
                     TitleMovingSprite_StartOrbit(&SEQUENCE->moving[i]);
             }
-            SEQUENCE->unknown_1b30[37] = 255;
+            SEQUENCE->trail_buffers.header.pass_flags = 255;
             for (int i = 0; i < 6; ++i)
                 TitlePanel_StartPulse(&SEQUENCE->panels[i]);
             GameAudio_SetMusic(38);
