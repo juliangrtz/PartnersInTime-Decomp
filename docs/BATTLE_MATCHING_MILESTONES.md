@@ -4553,3 +4553,44 @@ canonical package and native relink retain SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701; the native relink has zero differing
 bytes across 43 components. Matching C/C++ is 676092 / 1563700 bytes (43.24%);
 C/C++ plus maintained assembly is 43.57%. Overlay 6 is 27372 / 66492 bytes.
+
+
+## 2026-09-12 - Title animation controller lifecycle (+1580 bytes)
+
+Eight functions in 0x0206bd9c..0x0206c3c8 now match in
+src/overlay006/title_animation_lifecycle.cpp, adding 1580 C/C++ bytes. They
+load and release five archive-offset tables, locate their entry records, select
+localized resource pairs, construct the IRQ/archive/frame tasks, and clean up
+the controller while restoring input-repeat delays and sound-channel allocation.
+The recovered 1060-byte layout is explicitly a prefix of the 75304-byte object.
+The constructor clears only offsets 40..1059, matching the native pointer bounds.
+Both deleting and nondeleting destructors preserve the original virtual-call
+checks. Explicit language branches preserve the native conditional stores and
+resource call order without inline assembly.
+
+Runtime evidence in build/runtime/eur_title_animation_lifecycle/ contains
+three 1783-frame replays (5349 frames total): ordinary cold boots from saves
+83 and 6, and a separate save-83 language-zero probe. Each replay executes seven
+of the eight functions, including construction and deleting destruction.
+Independent checks cover helper arguments and ordering, six entry-table layouts,
+3060 cleared prefix bytes, 189 full 1060-byte snapshots, task ownership, resource
+release and three restorations of the input-repeat delays. Descriptor formats
+zero and one, present/absent table slots and resource entries 3, 4 and 8 run.
+
+The language-zero probe changes one byte in private ARM9 RAM at the native
+constructor's 0x0206c298 checkpoint: controller+1048 from 1 to 0, after checking
+the current controller pointer and native bytes. It is logged as a controlled
+fixture, not a normal language-selection route. The controller is subsequently
+destroyed by normal title progression; original saves and the live save context
+are unchanged. The nondeleting controller destructor, absent save context,
+allocation failure, empty descriptors, table formats other than zero/one and
+the music-busy loop remain unexercised. Their compiled bytes match exactly.
+
+The final load-menu screens were visually inspected; the ordinary save-83
+framebuffer and palette hashes match the preceding startup replay. All 104
+original save hashes are unchanged. Module and symbol checks, all 81 tests,
+progress consistency, public-content audit and whitespace checks pass. Canonical
+packaging and native relinking retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701 with zero differences across 43 components.
+Matching C/C++ is 677672 / 1563700 bytes (43.34%); C/C++ plus assembly is 43.67%.
+Overlay 6 is 28952 / 66492 matching C/C++ bytes (43.54%).

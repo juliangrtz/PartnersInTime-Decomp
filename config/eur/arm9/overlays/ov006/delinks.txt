@@ -6,6 +6,9 @@
     .bss        start:0x0207c4e0 end:0x020997e0 kind:bss align:32
 
 
+src/overlay006/title_animation_lifecycle.cpp:
+    .text       start:0x0206bd9c end:0x0206c3c8
+
 src/overlay006/title_startup.cpp:
     .text       start:0x02075014 end:0x020754e4
 

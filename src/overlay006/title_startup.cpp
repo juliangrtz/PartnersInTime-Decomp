@@ -2,6 +2,7 @@
 #include <game/battle_effect.h>
 #include <game/title_sprite_sequence.h>
 #include <game/title_startup.h>
+#include <game/title_animation.h>
 #include <game/title_model.h>
 extern "C" {
 #include "frontend_scene_internal.h"
@@ -30,7 +31,6 @@ typedef char TitleAnimationControllerView_Size[sizeof(TitleAnimationControllerVi
 extern "C" {
 extern BattleModelVTable data_ov006_0207b3c0;
 extern GameTaskVTable data_ov006_0207b38c;
-void *func_ov006_0206c234(void *, u8, u32, void *);
 void *func_ov005_020698dc(int);
 BattleModel *Overlay5ResourceA_Attach(void *, BattleModel *, int);
 void func_ov005_02068908(BattleModel *, int, void *, int, int);
@@ -136,9 +136,9 @@ int TitleElement_IsInactive(const void *element)
 }
 void *TitleAnimation_Create(void)
 {
-    void *controller = GameHeap_New(75304, 0, 0, 0);
+    TitleAnimationController *controller = (TitleAnimationController *)GameHeap_New(75304, 0, 0, 0);
     if (controller)
-        controller = func_ov006_0206c234(controller, 8, 0, 0);
+        controller = TitleAnimation_Init(controller, 8, 0, 0);
     return controller;
 }
 int TitleAnimation_GetParticipantMask(void)

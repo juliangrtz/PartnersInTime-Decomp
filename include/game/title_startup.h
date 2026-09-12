@@ -9,6 +9,7 @@ extern "C" {
 int TitleAnimation_GetParticipantMask(void);
 void *TitleAnimation_Create(void);
 int TitleElement_IsInactive(const void *element);
+GameTask *TitleAnimationFrameTask_Delete(GameTask *task);
 GameTask *TitleAnimationFrameTask_Destroy(GameTask *task);
 void TitleAnimationFrameTask_WaitVBlank(GameTask *task);
 void TitleStartup_UpdateGreeting(MenuElement *work);
