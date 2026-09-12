@@ -485,6 +485,8 @@ src/overlay006/title_sequence_init.cpp
 src/overlay006/title_sequence_model.c
 src/overlay006/title_trail.c
 src/overlay006/title_prompt.c
+src/overlay006/title_rumble_control.c
+src/overlay006/title_rumble_update.c
 src/overlay006/title_menu_selection.c
 src/overlay006/title_sequence_update.cpp
 src/overlay006/title_animation_display.cpp

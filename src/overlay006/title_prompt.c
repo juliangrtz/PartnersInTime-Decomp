@@ -11,7 +11,6 @@ extern u8 data_0205a00c;
 extern GameInput data_0206032c;
 void func_ov006_0207380c(void *);
 void func_ov006_02073818(void *, int);
-void func_ov006_02072ee8(void *);
 void func_ov006_02073e6c(void *, int, int);
 void TitlePrompt_Update(void *element)
 {
@@ -53,7 +52,7 @@ void TitlePrompt_Update(void *element)
                 work->menu.header.state = TITLE_PROMPT_EXITING;
                 break;
             case TITLE_PROMPT_OPTIONS:
-                func_ov006_02072ee8(work->rumble_prompt);
+                TitleRumblePrompt_Open(work->rumble_prompt);
                 work->menu.header.state = TITLE_PROMPT_WAIT_RUMBLE;
                 break;
             }

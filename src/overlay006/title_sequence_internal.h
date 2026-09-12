@@ -8,6 +8,7 @@
 #include <game/title_startup.h>
 #include "title_trail_internal.h"
 #include "title_menu_internal.h"
+#include <game/sprite_output.h>
 enum TitleSequencePhase {
     TITLE_SEQUENCE_DELAY_MUSIC = 0,
     TITLE_SEQUENCE_DELAY_ENTRY = 1,
@@ -68,10 +69,28 @@ typedef struct TitlePromptLayout {
 } TitlePromptLayout;
 struct TitleSequenceRumblePrompt {
     TitleMenuBase menu;
-    u8 unknown_3c[58];
+    GameSpriteAllocation text_tiles;
+    GameSpritePalette text_palette;
+    void *palette_data;
+    s32 return_cursor_x, return_cursor_y;
+    u16 first_tile;
     s8 selection_override;
     u8 unknown_77;
 };
+enum TitleRumbleState {
+    TITLE_RUMBLE_INACTIVE, TITLE_RUMBLE_ENTERING, TITLE_RUMBLE_ACTIVE,
+    TITLE_RUMBLE_WAIT_CURSOR, TITLE_RUMBLE_EXITING
+};
+#ifdef __cplusplus
+extern "C" {
+#endif
+void TitleRumblePrompt_Release(TitleSequenceRumblePrompt *work);
+void TitleRumblePrompt_Open(TitleSequenceRumblePrompt *work);
+void TitleRumblePrompt_Update(void *element);
+#ifdef __cplusplus
+}
+#endif
+
 typedef char TitlePromptLayoutSize[sizeof(TitlePromptLayout) == 8 ? 1 : -1];
 #ifdef __cplusplus
 extern "C" {

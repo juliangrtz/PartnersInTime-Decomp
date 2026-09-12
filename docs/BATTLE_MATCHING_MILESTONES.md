@@ -5032,3 +5032,53 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **688,524 / 1,563,700 bytes (44.03%)**; C/C++ plus symbolic
   assembly is **44.36%**. Overlay 6 is **39,804 / 66,492 (59.86%)**.
   The project-wide 50% milestone still requires 93,326 matching bytes.
+
+
+## 2026-09-12: Rumble menu opening, input and cleanup (+808 matching C bytes)
+
+- Added `TitleRumblePrompt_Release` (64 bytes) and `TitleRumblePrompt_Open`
+  (92 bytes) at `0x02072EA8..0x02072F44` in `title_rumble_control.c`, plus
+  `TitleRumblePrompt_Update` (652 bytes) at `0x02073580..0x0207380C` in
+  `title_rumble_update.c`. All three matched on the first private compile and
+  pass the complete linked module/symbol checks. No assembly was added.
+- The shared 120-byte rumble record now identifies its tile/palette allocations,
+  owned palette buffer, saved cursor coordinates and first tile. The native text
+  constructor and drawing routine remain between the two linked source ranges;
+  consolidate the temporary split once those intervening functions match.
+- Named states describe entry, active input, cursor waiting, exit and inactivity.
+  Opening preserves the cursor position; entry and exit each use eight updates
+  with the native signed sine-table calculation. Confirmation stores the selected
+  override, cancellation preserves it, and both restore the cursor. Selection
+  changes reset the idle timer and request or stop rumble as the native flags allow.
+  Cleanup unlinks both graphics allocations, frees the owned palette and clears it.
+- Three replays total 5,819 frames: ordinary unopened save-1 startup, save-83
+  confirmation of No, and save-83 cancellation/reopening/confirmation of Yes.
+  The latter two use the documented four-byte post-constructor layout fixture,
+  leaving hardware availability false. Private evidence is under
+  `build/runtime/eur_title_rumble/`; the independent oracle is in `build/analysis/`.
+- Four opens, 296 updates and three releases are checked through 359 full
+  120-byte snapshots. Oracles verify all seven intermediate entry/exit positions
+  four times (56 positions), four cursor moves, 16 cursor-readiness results,
+  four cursor restorations, both confirmed choices and two cancellations.
+  Cancellation preserves both the initial -1 override and an earlier confirmed
+  Yes override of 0. Reopening with No selected exercises entry without a rumble
+  request; four timed-rumble helper calls are observed with exact arguments.
+  These calls do not establish physical accessory support.
+- All 104 original saves and capture-file hashes remain unchanged/consistent.
+  Captures include OAM, both VRAM regions and palettes. Ordinary save-1 display
+  hashes agree with its earlier sequence-initialization replay, and its load-menu
+  screenshot was inspected along with the Yes selection and post-cancel menu.
+  The fixture routes are not claimed to share that baseline. No drain frames
+  were required. Inactive/unknown update states, disabled active input, hardware
+  stop, null owned palette and abnormal motion counters remain unexercised.
+- Full matching checks, canonical packaging, native relink of all 43 components
+  with zero differences, progress checks and all 81 tests pass. Both ROMs retain
+  SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Deferred private candidates: the 1,224-byte text constructor emits 1,188 bytes;
+  the 372-byte draw routine has the correct size but register/load scheduling
+  differences. Its initial extra 16 bytes were traced to premature tile, palette
+  and y-coordinate narrowing. No source-permutation search was performed, and
+  neither deferred function contributes to coverage.
+- Matching C/C++ is **689,332 / 1,563,700 bytes (44.08%)**; C/C++ plus symbolic
+  assembly is **44.41%**. Overlay 6 is **40,612 / 66,492 (61.08%)**.
+  The project-wide 50% milestone still requires 92,518 matching bytes.
