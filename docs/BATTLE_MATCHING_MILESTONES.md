@@ -5716,3 +5716,57 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
   than subjected to source permutations. The separate decimal formatter
   candidate is 384/384 with remaining initialization/register differences;
   recovering its post-store cursor increment fixed the original size gap only.
+
+
+## 2026-09-13: Save-write setup, rollback starter and menu exit (+612 matching bytes)
+
+- Linked `SaveMenuWrite_StartEffects` at `0x0206AD54` (292 bytes),
+  `SaveMenuWrite_StartRollback` at `0x0206ABD0` (68 bytes), and
+  `SaveMenu_UpdateExit` at `0x0206BCE0` (252 bytes). The first two matched their
+  first C drafts. Exit matched after preserving the native branch order: the
+  continue path applies negative brightness, the quit path positive brightness.
+  No compiler flags, source permutations or inline assembly were needed.
+- Shared declarations describe two 32-byte save-summary panels inside a verified
+  384-byte workspace prefix, plus the complete 72-byte exit task. The prefix is
+  not the full allocation. Unknown flags retain neutral names. Setup initializes
+  panel position/scale/opacity, creates four effect tasks and configures blend,
+  background priority, text and sound. The rollback starter belongs to the native
+  write-failure response, not successful save cleanup. Exit advances the scene
+  to continue or title after sixteen brightness updates.
+- Full Ninja module/symbol checks passed. The canonical wrapper with data mods
+  disabled and independent native relink both produced SHA-1
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Native validation covers 43
+  components, 31,138 known relocations and 1,577 ARM7 relocations, zero differing
+  bytes. Progress generation/check and all 81 tests passed. Logs are under
+  `build/analysis/save_write_setup_{configure,check,rom,native,tests}.log`.
+- `build/analysis/probe_save_write_setup.py` uses the compatible checkpoint-55
+  save-menu state. Ordinary Save & Continue and Save & Quit replays run for
+  708 and 1,046 frames. A separate 838-frame rollback fixture changes a completed
+  write result from 1 to 2 once at guarded controller `0x0206B598`, with phase
+  201 and timer zero. The changed 32-bit field is `r0 + 0x3C`; its observed heap
+  address is not a universal patch. This exercises the native error response
+  and rollback UI after a completed write, not an actual storage I/O failure.
+- Across the three runs, all 55 guarded root returns agree: three effect setups,
+  one rollback starter and 51 exit updates. Independent expectations check 55
+  complete workspace prefixes, 13 created task records/list appends, 61 task
+  records before subsequent helper calls, 51 exit/scene record pairs, 79 ordered
+  helper calls and the blend/background registers. Initial constructor records
+  and allocation addresses are observed helper outputs; later field and list
+  writes are independently derived. All sixteen brightness steps are covered
+  for each exit. SP-matched returns finish with no pending calls or drain frames.
+- Reports: `build/runtime/eur_save_write_setup/evidence_continue55.json`,
+  `evidence_quit55.json` and `evidence_rollback_status55.json`. The private
+  `verify_save_write_setup_artifacts.py` checks 31 PNGs, 279 graphics dumps,
+  ROM/state provenance and all 104 unchanged original saves. Continue graphics
+  equal the preceding verified effects replay. Visually inspected return to the
+  field, title animation after quitting, and the fixture's "Save failed." screen.
+  Nonzero initial exit delay and invalid phases remain unexercised. Native
+  movement/fade, text-transition, storage and physical-audio internals are
+  outside this oracle; child-task construction itself is observed output.
+- Matching C/C++ is **702,484 / 1,563,700 bytes (44.92%)**, or **45.26%** with
+  separately maintained assembly. Overlay 8 is **22,760 / 54,068 (42.09%)**.
+  There are **79,366 bytes** left to the 50% target. Adjacent panel fade
+  `0x0206AC14` (320/320) and movement `0x0206B37C` (540/540) remain private with
+  explained regions and remaining register/scheduling differences. A shared
+  workspace-alias experiment changed their sizes and was reverted; no arbitrary
+  lifetime or declaration permutations were pursued.

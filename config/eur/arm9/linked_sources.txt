@@ -802,3 +802,6 @@ src/overlay007/nawatobi_rope_subsprite.c
 src/overlay007/nawatobi_level.cpp
 src/overlay008/save_write_brightness.c
 src/overlay008/save_write_zoom.c
+src/overlay008/save_write_setup.c
+src/overlay008/save_write_rollback.c
+src/overlay008/save_menu_exit.c
