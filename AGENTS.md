@@ -46,6 +46,13 @@ Old milestone notes describe the state at the time they were written. Current
 source, `delinks.txt`, `symbols.txt`, the linked-source manifest and fresh checks
 take precedence over old counts or claims that a function is unfinished.
 
+Private IDA databases live under `build/ida/`; previous pseudocode exports and
+candidate units live under `build/analysis/`, including
+`build/analysis/local_decompiler/`. Recompile a candidate against current headers
+before trusting an old matching object. Abandoned drafts may contain incorrect
+experimental prototypes. Parse large JSON reports and select the relevant
+records instead of dumping entire reports into the conversation.
+
 ## Toolchain and build
 
 Use Python 3.11+, Ninja, and the compatible Metrowerks ARM compiler installed
@@ -110,6 +117,9 @@ and C++ mode are part of the original ABI.
 2. Recover field widths, signedness, offsets, virtual calls and ownership from
    those accesses. Preserve original behavior, including awkward edge cases.
    Use neutral names for unknown fields; do not guess item or enemy identities.
+   Check call sites and callee accesses before changing a prototype, including
+   apparently unused arguments. An incorrect prototype can cause the register
+   differences that otherwise look like a compiler-scheduling problem.
 3. Keep related contiguous functions in a subsystem module. Temporary isolated
    units are acceptable while an intervening assembly gap remains; consolidate
    once that gap is recovered. Shared declarations and layouts belong in headers.
@@ -135,6 +145,12 @@ Prefer structured control flow and readable expressions. Add compile-time size
 checks for recovered structures. Keep casts and offset arithmetic only where
 the known layout or compiler behavior requires them.
 
+When only an object's prefix is known, describe it explicitly as a prefix view;
+its `sizeof` does not establish the full allocation size. Decode literal pools
+as little-endian data, not as ARM instructions. Check ARM/Thumb state and
+interworking relocations when comparing calls; a private comparison script
+does not replace the full module and symbol checks.
+
 Small, explained inline-assembly fragments are authorized when a specific
 instruction sequence cannot reasonably be reproduced in C. Keep the surrounding
 logic readable and verify the entire function. Do not disguise raw instruction
@@ -155,6 +171,21 @@ The private `PiT_SaveStates/` directory contains story checkpoints from start to
 finish. Enumerate what is present and select an appropriate save. Keep originals
 unchanged and compare their hashes before and after a replay. Store new states,
 screenshots, dumps and reports under ignored `build/runtime/` paths.
+
+Useful title-startup checkpoints, confirmed by cold booting the supplied saves:
+
+| Save number | Checkpoint | Participant mask | Greeting stream ID |
+|---|---|---|---|
+| 1 | Peach's Castle, before the Refreshroom | 3 | 45 |
+| 6 | Koopa Cruiser | 12 | 46 |
+| 83 | Star Shrine, before the boss | 15 | 47 |
+
+The local evidence is under `build/runtime/eur_title_startup/`. These cover the
+three observed startup selections, not the whole story or empty-slot fallback.
+Choose saves from observed branch inputs rather than repeatedly replaying the
+same late-game checkpoint. Matching values at several offsets in a battery save
+can be duplicated records; verify the active runtime value before treating any
+file offset as a universal field location.
 
 - `tools/runtime_drive.py`: deterministic, headless DS input; supports battery
   saves or compatible states, repeated `--action` arguments and screenshots.
@@ -181,6 +212,12 @@ do not produce false observations. Check arguments, object fields and results
 against independently derived expectations. For graphics, compare the relevant
 RAM buffers, VRAM, palettes, OAM and display registers as well as screenshots.
 Log ROM/save/state hashes, inputs, entry/return counts and uncovered branches.
+Confirm that the evidence's ROM hash matches the current packaged artifact.
+Execution hooks fire before an instruction: account for ARM condition codes
+before counting a conditional store as a write. For VRAM uploads, derive the
+destination from the active bank mapping. Separate function coverage from branch
+coverage; an uncalled destructor or allocation-failure path remains unexercised
+even when every compiled byte matches.
 
 The debug menu can teleport without fully initializing the destination state.
 Controlled RAM edits or temporary decoded-command substitutions are useful
@@ -255,3 +292,8 @@ tree. Use the configured Git identity and descriptive commit messages. History
 rewriting and attribution changes are separate tasks, not routine batch cleanup.
 Finish with the commit ID, push status, changed coverage when applicable, and
 the checks that actually ran.
+
+At a stop or handoff, record the last pushed commit, task-owned pending files,
+completed checks, checks still due and difficult candidates deliberately deferred.
+Keep pending matching work distinct from committed and pushed progress so the
+next session can resume without rerunning old integration scripts.
