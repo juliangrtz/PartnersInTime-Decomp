@@ -137,3 +137,6 @@ src/overlay006/credits_star_blink.c:
 
 src/overlay006/credits_radial_delay.c:
     .text start:0x020762ec end:0x02076520
+
+src/overlay006/credits_background_gradient.c:
+    .text start:0x02079744 end:0x020798c8

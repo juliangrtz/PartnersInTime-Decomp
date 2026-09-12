@@ -40,7 +40,10 @@ typedef struct CreditsResourceEntry {
 } CreditsResourceEntry;
 /* Transition fields followed by the credits' remaining private workspace. */
 typedef struct CreditsWorkspace {
-    u8 unknown_00[28];
+    s32 draw_depth;
+    u32 polygon_id;
+    u8 unknown_08[16];
+    s32 background_variant;
     int layout, variant, screen, active;
     u32 unknown_2c;
     int polygon_alpha;

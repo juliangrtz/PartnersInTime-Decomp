@@ -5530,3 +5530,39 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **699,968 / 1,563,700 bytes (44.76%)**; C/C++ plus symbolic
   assembly is **45.09%**. Overlay 15 is **3,484 / 13,164 (26.47%)**.
   The 50% milestone still requires 81,882 matching bytes.
+
+
+## 2026-09-13: Credits gradient background (+388 matching bytes)
+
+- Linked `CreditsBackground_DrawGradient` at 0x02079744 (388 bytes) in
+  `credits_background_gradient.c`. The shared credits workspace now names its
+  depth, polygon ID and background variant fields. Its complete size and all
+  later offsets are unchanged. The following star/cloud sprite pass remains
+  native and is not included in this byte increase.
+- Recovered all repeated GPU FIFO writes from the instructions. An ordinary
+  depth local preserves the native input load before the translation writes.
+  Both color variants, matrix operations and four-vertex quad strip match
+  exactly; no inline ASM or compiler flag changes were needed.
+- Full Ninja module/symbol checks, canonical packaging with data mods disabled,
+  native relinking, progress regeneration/check and all 81 pytest tests pass.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`;
+  the native relink checks 43 components with zero differing bytes.
+- `build/analysis/probe_credits_gradient.py` replays 12,000 frames from the
+  compatible checkpoint-86 state. The one 72-byte decoded credits command is
+  restored at the request helper; this is controlled entry, not ordinary story
+  completion. There are 11,959 completed gradient calls: 5,980 variant-0 calls
+  and 5,979 variant-1 calls, with no variant override or drain frames.
+- Independent expectations verify 298,975 ordered 32-bit GPU/workspace stores,
+  complete 52-byte workspace records before the sprite helper and at return,
+  143,509 nested star/cloud calls and the helper's workspace counter effects.
+  Sprite/texture rendering internals remain outside the oracle. No incomplete
+  monitored calls were discarded.
+- Evidence: `build/runtime/eur_credits_gradient/evidence_story86_full.json`.
+  `build/analysis/verify_credits_gradient_artifacts.py` validates three PNGs,
+  27 memory dumps, state/ROM hashes, counter consistency and all 104 unchanged
+  original saves. Screenshots at frames 1,500, 6,000 and 12,000 were visually
+  inspected. The final PNG and all seven shared graphics buffers equal the
+  preceding `eur_credits_small` 12,000-frame replay byte for byte.
+- Matching C/C++ is **700,356 / 1,563,700 bytes (44.79%)**; C/C++ plus symbolic
+  assembly is **45.12%**. Overlay 6 is **48,820 / 66,492 (73.42%)**.
+  The 50% milestone still requires 81,494 matching bytes.

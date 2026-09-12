@@ -17,6 +17,8 @@ typedef char CreditsPaletteSizeCheck[sizeof(CreditsPalette) == 512 ? 1 : -1];
 extern u8 data_ov006_0207c5cc[32768];
 extern CreditsPalette data_ov006_020845cc;
 void CreditsCloud_Update(MenuElement *element);
+void CreditsBackground_DrawGradient(void);
+void func_ov006_020798c8(void);
 void CreditsStar_Update(MenuElement *element);
 void CreditsImage_LoadNext(MenuElement *element);
 void CreditsMusic_Update(MenuElement *element);
