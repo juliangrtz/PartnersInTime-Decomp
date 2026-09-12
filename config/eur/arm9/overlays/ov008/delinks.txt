@@ -111,3 +111,9 @@ src/overlay008/erase_confirmation.cpp:
 
 src/overlay008/game_over_models.cpp:
     .text start:0x02070560 end:0x02070688
+
+src/overlay008/save_write_brightness.c:
+    .text start:0x0206b0f8 end:0x0206b1d0
+
+src/overlay008/save_write_zoom.c:
+    .text start:0x0206b23c end:0x0206b37c

@@ -583,6 +583,20 @@ probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
 
+### Save menus
+
+The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized
+save menu derived from checkpoint 55, not the similarly named load-menu state.
+`build/analysis/probe_save_write_effects.py` records ordinary confirmation input
+from it and verifies the brightness and background-zoom callbacks. Its report
+is `build/runtime/eur_save_write_effects/evidence_save55.json`. The animation
+starts while saving is in progress, before the final "Saved!" message; keep
+that timing distinct from successful completion of the storage operation.
+The probe derives full task records, blend-register writes, timers and helper
+arguments, while affine-display and storage internals remain outside its oracle.
+Use the source-save hash checks for every replay, including runs that write to
+the emulator's battery-save copy.
+
 ### Smash Eggs
 
 For battle attack research, the compatible private snapshot

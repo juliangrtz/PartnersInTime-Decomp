@@ -5666,3 +5666,53 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
   The native selector at `0x0208C5BC` remains deferred: its 676-byte private
   candidate has eight register-operand word differences. No brute-force changes
   were attempted, and those bytes are not counted.
+
+
+## 2026-09-13: Save-write brightness and background zoom (+536 matching bytes)
+
+- Linked `SaveMenuWrite_UpdateBrightness` at `0x0206B0F8` (216 bytes) and
+  `SaveMenuWrite_UpdateBackgroundZoom` at `0x0206B23C` (320 bytes). Both matched
+  from their first C drafts. Shared 72-byte task views name phase, timer,
+  brightness amount, scale and blend while retaining unknown fields. The
+  temporary separate modules leave the intervening native palette upload intact.
+- Brightness waits twelve updates, then advances by 10,922 Q12 units per update
+  and clamps the converted amount to 16 before deferred task removal. Background
+  zoom starts at scale 8,192 and decreases by 256 toward 4,096 while alpha moves
+  through 1..16. Its first active update falls through from initialization;
+  completion resets the affine origin and BLDCNT before deferred removal.
+- The native caller starts these effects when saving begins. The code is named
+  for the save-write sequence, not successful storage completion. Full Ninja
+  checks exposed a stale private numeric helper name; the integrated code uses
+  the existing `Overlay5DisplayBg_SetAffine` declaration and named sub engine.
+  All modules and symbols then matched exactly.
+- The final canonical wrapper with data mods disabled and native relink both
+  produced SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Native checks cover
+  43 components, 31,138 known relocations and 1,577 ARM7 relocations, zero
+  differing bytes. Progress generation/check and all 81 tests passed. Final
+  logs: `build/analysis/save_write_effects_{check,rom,native,tests,runtime}.log`.
+- `build/analysis/probe_save_write_effects.py` starts at the compatible private
+  checkpoint-55 save-menu snapshot and uses ordinary confirmation buttons,
+  without code or RAM fixtures. The 708-frame replay executes 20 brightness
+  calls and 16 zoom calls. Both initialization/active phases, all twelve wait
+  updates, seven brightness adjustments including the final clamp, all sixteen
+  blend levels, affine reset and deferred removal are independently checked.
+- Each call checks its complete 72-byte task and the four BLDCNT/BLDALPHA bytes.
+  Seventeen ordered halfword stores and 26 ordered helper calls, including
+  all stack-passed affine arguments, agree with independent expectations.
+  Native byte guards and SP-matched returns finish without pending calls or
+  drain frames. The oracle never refreshes expected records from helper output.
+  Delayed zoom initialization, invalid phases and abnormal counters remain
+  unexercised; affine-helper and storage internals are outside this oracle.
+- Report: `build/runtime/eur_save_write_effects/evidence_save55.json`.
+  `verify_save_write_effects_artifacts.py` verifies both ROM hashes, snapshot
+  provenance, nine PNGs, 81 graphics dumps and all 104 unchanged source saves.
+  Visually inspected saving with the active zoom and the final "Saved!" screen.
+  The final replay's PNGs and dumps equal that visually inspected initial run.
+- Matching C/C++ is **701,872 / 1,563,700 bytes (44.89%)**, or **45.22%** with
+  separately maintained assembly. Overlay 8 is **22,148 / 54,068 (40.96%)**.
+  Adjacent palette blending/upload candidates remain private and uncounted:
+  `0x0206AE78` is 580/640 bytes; `0x0206B1D0` is 96/108 with repeated literal
+  reloads instead of the native retained pointer. They were deferred rather
+  than subjected to source permutations. The separate decimal formatter
+  candidate is 384/384 with remaining initialization/register differences;
+  recovering its post-store cursor increment fixed the original size gap only.
