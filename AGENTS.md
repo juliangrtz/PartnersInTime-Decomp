@@ -10,6 +10,13 @@ disclosure in the README and follow [the project policy](docs/AI_USAGE.md).
 This file applies throughout the repository. Keep durable instructions here;
 put batch results and temporary experiments in the appropriate research log.
 
+Start with [checkout and resources](#start-with-the-current-checkout), then use
+[build commands](#toolchain-and-build), [reconstruction rules](#reconstructing-and-integrating-code),
+[runtime verification](#runtime-verification), [progress](#progress-and-documentation)
+and [Git checks](#private-files-checks-and-git) as needed. The runtime section
+includes the tested [Smash Eggs](#smash-eggs), [credits](#credits) and
+[Nawatobi](#nawatobi) entry routes.
+
 - Follow the current request. A documentation or research task does not start
   another decompilation batch. Honor requests to stop after the next block.
 - For continued decompilation, prioritize small, well-understood functions and
@@ -95,6 +102,10 @@ candidate units live under `build/analysis/`, including
 before trusting an old matching object. Abandoned drafts may contain incorrect
 experimental prototypes. Parse large JSON reports and select the relevant
 records instead of dumping entire reports into the conversation.
+Keep each comparison associated with its exact source, language mode, object
+and current headers. A neighboring `.cpp` draft may predate the matching `.c`
+version. Private comparison scripts can overwrite address-named candidate dumps;
+do not treat an older disassembly listing as the output of the latest compile.
 
 On this workstation, private comparison helpers include
 `build/analysis/compile_private_unit.py`, `check_title_unit.py` for overlay 6,
@@ -161,6 +172,9 @@ Do not change compiler flags to force a match. Derive individual object builds
 and comparisons from the existing Ninja/objdiff configuration. The configured
 ARM946E target, signed `char`, enum width, software floating point, interworking
 and C++ mode are part of the original ABI.
+This compiler's configured C mode requires declarations at the start of a
+block. Use a justified nested scope when needed; do not switch a whole unit
+to C++ merely to accept declarations after statements.
 
 Absolute linker symbols such as `OVERLAY_5_ID` and `OVERLAY_6_ID` carry their
 numeric value in the symbol address. Resolve them from the generated
@@ -179,6 +193,10 @@ would dereference that number as an address.
    Check call sites and callee accesses before changing a prototype, including
    apparently unused arguments. An incorrect prototype can cause the register
    differences that otherwise look like a compiler-scheduling problem.
+   Recover stack-passed arguments from the instructions before the call;
+   pseudocode has omitted motion parameters and cached object loads. Check
+   `LDRSB` versus `LDRB` even for small phase counters: signedness affects their
+   increment and comparison behavior.
 3. Keep related contiguous functions in a subsystem module. Temporary isolated
    units are acceptable while an intervening assembly gap remains; consolidate
    once that gap is recovered. Shared declarations and layouts belong in headers.
@@ -215,6 +233,11 @@ constructor and consumers, even if a larger placeholder previously fit.
 Decode literal pools as little-endian data, not as ARM instructions. Check ARM/Thumb state and
 interworking relocations when comparing calls; a private comparison script
 does not replace the full module and symbol checks.
+When using Capstone, verify that the listing reaches every intended function's
+end. An undecodable literal-pool word can silently stop a combined disassembly
+before later functions. Split the input at known function boundaries or enable
+`skipdata`, then identify the actual code and data regions from metadata and
+references. Skipped bytes are not proof that the remaining code was inspected.
 
 Decompiler output can omit repeated writes to the same GPU FIFO address.
 Inspect every native store and preserve its width, value and order with volatile
@@ -238,9 +261,12 @@ introducing masks or casts to fix a size difference.
 Use the recovered C++ virtual interface when native calls go through a vtable.
 `BattleModel` and its virtual methods are declared in
 [battle_scene.h](include/game/battle_scene.h); there is no separate
-`battle_model.h`. A C function-pointer approximation can have the correct size
-while retaining different call/load ordering. When moving a unit to C++, check
-the linkage of every shared C declaration. Use guarded `extern "C"` declarations
+`battle_model.h`. Its `BattleModelAnimationData` rows are eight bytes: two
+frame halfwords followed by a four-byte unknown field. Use that stride when
+reading animation ranges in a probe. A C function-pointer approximation can have
+the correct size while retaining different call/load ordering. When moving a
+unit to C++, check the linkage of every shared C declaration. Use guarded
+`extern "C"` declarations
 for C APIs, keep C++ class declarations outside them, and verify exported names
 and relocations. Do not hide mangled-symbol errors in the comparison script.
 
@@ -489,6 +515,8 @@ probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
 
+### Smash Eggs
+
 For battle attack research, the compatible private snapshot
 `build/runtime/eur_attack_helpers/ov17_bros_menu83.dst` provides a checkpoint-83
 Bros. item menu. Inspect the visible item list and trace the selected command;
@@ -505,6 +533,28 @@ pointer at `+0x78`. The menu field at battle-context `+0x11A` can still contain
 main RAM at `0x020C0718`; dereference it before reading object-relative fields.
 Verify snapshot provenance and byte guards before reusing this route, and
 distinguish a controlled encounter from normal story navigation.
+
+The follow-up `build/analysis/probe_ov15_pair.py` adds targeting, RNG, retreat,
+visibility and badge-table checks. Its successful reports are
+`build/runtime/eur_overlay15/evidence_pair83.json` and `evidence_badge83.json`
+in the same directory. Enemy eligibility is observed helper output; candidate
+order, RNG state and target choice are independently derived. Both observed
+selections had one eligible enemy, so they do not cover empty or multi-enemy
+selection. The badge run overrides one predicate return register at caller
+`0x020C5D30`; it does not demonstrate ordinary badge-equipping coverage.
+
+The compatible `build/runtime/eur_overlay15/item_select83.dst` starts with
+Smash Eggs selected. Read the probe's input schedule before reuse: it adds
+timed A/B and X/Y pulses during the native attack update. Four `down:8` /
+`wait:30` pairs from the preceding item menu take 160 frames, including the
+released-input frame after each action. A successful attack replay returning
+to the command wheel does not establish that the item-reward branches ran.
+The public pair-state layout is a prefix; if it grows during reconstruction,
+update probes that currently compare only 28 bytes. Use the current shared
+[attack layout](include/game/overlay015_attack.h) and native allocation/caller
+evidence before interpreting fields beyond that prefix.
+
+### Credits
 
 For credits, the private `build/analysis/probe_credits_transition.py` established
 a route from checkpoint 86 and the compatible state
@@ -535,6 +585,8 @@ refreshing expectations from helper outputs. Consult its branch observations:
 positive-X radial launches and a zero RNG seed were not exercised. This is
 evidence for those update routines, not independent verification of every
 native graphics callback. Keep new probes equally explicit about their limits.
+
+### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
 dereferences, field offset, access width and timing. The tested EUR Nawatobi
