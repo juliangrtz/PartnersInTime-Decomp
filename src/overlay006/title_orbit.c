@@ -1,3 +1,4 @@
+#include <game/title_model.h>
 #include <game/title_effects.h>
 
 extern const s16 FX_SinCosTable_[];
@@ -7,9 +8,6 @@ extern const s16 data_ov006_0207af3c[2][7];
 void func_ov006_0207214c(TitleOrbitWork *);
 void func_ov006_0207282c(TitleOrbitChild *);
 void func_ov006_02073e6c(TitleOrbitWork *, int, int);
-void func_ov006_02073f20(TitleOrbitWork *);
-void func_ov006_020741a4(TitleOrbitWork *);
-void func_ov006_02074280(TitleOrbitWork *, u32, u8, int, int);
 
 void TitleOrbit_Draw(TitleOrbitWork *work)
 {
@@ -19,11 +17,11 @@ void TitleOrbit_Draw(TitleOrbitWork *work)
     switch (work->render_phase) {
     case 0:
         func_ov006_02073e6c(work, 0, 1);
-        func_ov006_02073f20(work);
+        TitleModel_Draw(work);
         break;
     case 1:
         func_ov006_02073e6c(work, 0, 1);
-        func_ov006_02073f20(work);
+        TitleModel_Draw(work);
         if (--work->countdown <= 0) {
             work->child->x = work->orbit_x;
             work->child->y = work->orbit_y;
@@ -35,14 +33,14 @@ void TitleOrbit_Draw(TitleOrbitWork *work)
     case 3: {
         int x, y;
         func_ov006_02073e6c(work, 0, 1);
-        func_ov006_02073f20(work);
+        TitleModel_Draw(work);
         x = work->x;
         y = work->y;
         work->x = work->orbit_x;
         work->y = work->orbit_y;
         work->depth = 1040;
         func_ov006_02073e6c(work, data_ov006_0207b0b0[work->flags.side], 1);
-        func_ov006_02073f20(work);
+        TitleModel_Draw(work);
         work->x = x;
         work->y = y;
         work->depth = 0;
@@ -53,7 +51,7 @@ void TitleOrbit_Draw(TitleOrbitWork *work)
 
 void TitleOrbit_Init(TitleOrbitWork *work, TitleOrbitChild *child, int side, int slot)
 {
-    func_ov006_02074280(work, 0xc2000033, 3, 0, 1);
+    TitleModel_Load(work, 0xc2000033, 3, 0, 1);
     work->child = child;
     work->x = data_ov006_0207b0d4[side] << 12;
     work->y = -262144;
@@ -110,5 +108,5 @@ void TitleOrbit_Reset(TitleOrbitWork *work)
 }
 void TitleOrbit_Destroy(TitleOrbitWork *work)
 {
-    func_ov006_020741a4(work);
+    TitleModel_Release(work);
 }

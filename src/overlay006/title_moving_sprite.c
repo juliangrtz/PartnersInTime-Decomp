@@ -1,15 +1,13 @@
+#include <game/title_model.h>
 #include <game/title_panel_motion.h>
 
-extern void func_ov006_02074280(TitleMovingSprite *, u32, u8, int, int);
 extern void func_ov006_0206e9e4(TitleMovingSprite *);
 extern void TitleMovingSprite_Draw(TitleMovingSprite *);
 extern void TitleMovingSprite_ResetOrbit(TitleMovingSprite *);
-extern void func_ov006_020741a4(TitleMovingSprite *);
 extern const s8 data_ov006_0207b0b8[];
 extern const s16 FX_SinCosTable_[], data_ov006_0207b0c8[];
 extern const u8 data_ov006_0207b0a0[], data_ov006_0207b0a4[], data_ov006_0207b0a8[];
 void func_ov006_02073e6c(void *, int, int);
-void func_ov006_02073f20(void *);
 extern const s16 data_ov006_0207b0cc[];
 
 void TitleMovingSprite_Draw(TitleMovingSprite *work)
@@ -18,7 +16,7 @@ void TitleMovingSprite_Draw(TitleMovingSprite *work)
     if (!work->flags.variant) {
         work->depth = 768;
         func_ov006_02073e6c(work, data_ov006_0207b0a4[side], 1);
-        func_ov006_02073f20(work);
+        TitleModel_Draw(work);
     }
     switch (work->state) {
     case 0:
@@ -31,7 +29,7 @@ void TitleMovingSprite_Draw(TitleMovingSprite *work)
         if (work->flags.variant) {
             work->depth = 832;
             func_ov006_02073e6c(work, data_ov006_0207b0a8[side], 1);
-            func_ov006_02073f20(work);
+            TitleModel_Draw(work);
         } else {
             int x = work->x;
             int y = work->y;
@@ -39,7 +37,7 @@ void TitleMovingSprite_Draw(TitleMovingSprite *work)
             work->y += -FX_SinCosTable_[2 * (rotation >> 4)] << 6;
             work->depth = 800;
             func_ov006_02073e6c(work, data_ov006_0207b0a0[side], 1);
-            func_ov006_02073f20(work);
+            TitleModel_Draw(work);
             work->x = x;
             work->y = y;
         }
@@ -51,7 +49,7 @@ void TitleMovingSprite_Draw(TitleMovingSprite *work)
             data_ov006_0207b0c8[work->flags.variant] * FX_SinCosTable_[2 * (work->angle >> 4)] + work->y;
         ((TitleMovingSpriteChild *)work->child)->y += 0x10000;
         ((TitleMovingSpriteChild *)work->child)->depth = work->flags.variant ? 816 : 784;
-        func_ov006_02073f20(work->child);
+        TitleModel_Draw(work->child);
         break;
     }
     }
@@ -60,7 +58,7 @@ void TitleMovingSprite_Draw(TitleMovingSprite *work)
 void TitleMovingSprite_Init(TitleMovingSprite *work, void *child, int side, int variant, void *parent)
 {
     int origin;
-    func_ov006_02074280(work, 0xc2000033, 3, 0, 1);
+    TitleModel_Load(work, 0xc2000033, 3, 0, 1);
     work->update = func_ov006_0206e9e4;
     work->draw = TitleMovingSprite_Draw;
     work->flags.side = (u8)side;
@@ -93,5 +91,5 @@ void TitleMovingSprite_StartOrbit(TitleMovingSprite *work)
 
 void TitleMovingSprite_Destroy(TitleMovingSprite *work)
 {
-    func_ov006_020741a4(work);
+    TitleModel_Release(work);
 }

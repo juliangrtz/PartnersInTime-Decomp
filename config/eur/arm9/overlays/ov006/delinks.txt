@@ -56,3 +56,9 @@ src/overlay006/title_sprite_sequence.c:
 
 src/overlay006/title_localized_sequence.c:
     .text start:0x02070c7c end:0x020718fc
+
+src/overlay006/title_model.cpp:
+    .text start:0x02073f20 end:0x02074320
+
+src/overlay006/title_brightness.c:
+    .text start:0x02074320 end:0x02074538

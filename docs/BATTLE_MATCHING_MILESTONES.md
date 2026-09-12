@@ -4440,3 +4440,37 @@ whitespace checks pass. Canonical ROM SHA-1 is unchanged:
 ba4ec2f99b4f2e0047601552bccf00aa73e28701. Matching C/C++ is
 670692 / 1563700 bytes (42.89%); C/C++ plus ASM is 43.22%.
 Since resuming from e1c4416, 13032 additional bytes are matching C.
+
+
+## 2026-09-12 - Shared title models and brightness fades (+1560 bytes)
+
+Twelve functions in the contiguous 0x02073F20..0x02074538 range are now
+matching C/C++: six title-model loading, drawing and cleanup functions
+(1024 bytes), and six brightness lifecycle/interpolation functions (536 bytes).
+The model helpers share declarations with the existing moving-sprite and orbit
+modules. Recovered 48-byte model-element and 44-byte brightness layouts have
+compile-time size checks. Readable matrix fields describe the main-screen
+transform; the sub-screen path tracks OAM counts and subtracts the native
+244-pixel vertical offset. No inline assembly was needed.
+
+The 1783-frame English cold boot with original save 83 uses ordinary inputs:
+wait:1500, start:30, wait:250. All twelve functions execute. Evidence in
+build/runtime/eur_title_model_brightness/evidence_english83.json records
+50 brightness interpolations, 100 master-brightness register checks, 108046
+model-position checks, 70276 OAM count/group checks, and 37770 rotation and
+identity-reset matrices. Resource construction and cleanup include 51 model
+loads/releases and both sub-only and combined-screen elements. Full object
+snapshots and SP-matched returns are checked around helper calls.
+
+The final load-menu screenshot was inspected; both display buffers and both
+palette hashes match the previous English replay. All 104 original save
+hashes remain unchanged. Sine-curve and negative brightness, matrix flip bits,
+and allocation failures were not reached and remain covered by byte matching.
+
+The canonical package retains SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Module and symbol checks pass.
+Native relinking also produces that hash with zero differences across all
+43 components, after correcting twelve stale external symbol references in
+the maintained assembly and patch manifest. All 81 tests, progress consistency,
+public-content audit and whitespace checks pass. Matching C/C++ is now
+672252 / 1563700 bytes (42.99%); C/C++ plus assembly is 43.32%.
