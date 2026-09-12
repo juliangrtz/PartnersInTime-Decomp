@@ -4894,3 +4894,38 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **686,464 / 1,563,700 bytes (43.90%)**; C/C++ plus symbolic
   assembly is **44.23%**. Overlay 6 is **37,744 / 66,492 (56.76%)**.
   The project-wide 50% milestone still requires 95,386 matching bytes.
+
+
+## 2026-09-12: Title sequence model entry (+348 matching C bytes)
+
+- Reconstructed `TitleSequenceModel_FinishEntry` (32 bytes), `StartEntry`
+  (20), `Init` (112) and `Update` (184) in the contiguous region
+  `0x02072988..0x02072AE4`, linked from `src/overlay006/title_sequence_model.c`.
+  All four private candidates matched on the first compile. The shared header
+  now declares the model helpers and names idle, delay and moving states;
+  sequence initialization/update use those declarations. No assembly was added.
+- The model waits eight updates, moves from y=500 to y=424 over 24 updates,
+  and holds x=128. Positions use Q12 values and preserve the native signed
+  division/truncation. The immediate-finish helper resets elapsed time and
+  places the model at the final coordinates; the initializer retains resource
+  `0xC2000033`, selector 15 and its native model-loading arguments.
+- Three ordinary button replays use save 83 and save 1: normal startup, skip
+  after 900 frames, and skip after 500 frames. Across 4,119 frames the probe
+  records three initializations, 2,463 updates, two entry starts and two forced
+  finishes. Independent 48-byte checks cover both delay completions, all 23
+  intermediate positions twice, both motion completions, callback assignment,
+  and exact initialization helper arguments. The 500-frame skip confirms an
+  actual y=500 to y=424 change before entry begins; the later skip observes
+  completion after landing. No RAM fixtures are used.
+- Unknown states, abnormal elapsed values and skipping partway through motion
+  remain unexercised. Evidence is under `build/runtime/eur_title_sequence_model/`,
+  with probes and logs under `build/analysis/`. All 104 original saves remain
+  unchanged. Both earlier routes match their prior VRAM/palette captures; the
+  two save-1 final load-menu screenshots were visually inspected. The additional
+  earlier-skip route is not claimed to share a prior display baseline.
+- Full module/symbol checks, canonical packaging, all 43 native components
+  with zero differences, progress consistency and all 81 tests pass. Both ROMs
+  retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **686,812 / 1,563,700 bytes (43.92%)**; C/C++ plus symbolic
+  assembly is **44.25%**. Overlay 6 is **38,092 / 66,492 (57.29%)**.
+  The project-wide 50% milestone still requires 95,038 matching bytes.

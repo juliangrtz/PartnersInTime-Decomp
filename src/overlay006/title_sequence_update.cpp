@@ -8,7 +8,6 @@ extern TitleAnimationSequence *data_ov006_0207c4e0;
 extern TitleAnimationController *data_ov006_0207c4e4;
 extern const u16 data_ov006_0207b0e8[][2], data_ov006_0207b0ea[][2];
 extern const s8 data_ov006_0207b0b4[];
-void func_ov006_020729a8(void *), func_ov006_02072988(void *);
 void func_ov006_02072af0(void *, int);
 void func_ov006_0206e594(TitleMovingSprite *);
 void func_ov006_02073bf8(void *);
@@ -106,7 +105,7 @@ extern "C" void TitleAnimation_UpdateSequence(void)
             for (int side = 0; side < 2; ++side)
                 for (int slot = 0; slot < 7; ++slot)
                     TitleOrbit_StartPulse(&SEQUENCE->orbit[side][slot]);
-            func_ov006_020729a8(&SEQUENCE->model);
+            TitleSequenceModel_StartEntry(&SEQUENCE->model);
             SEQUENCE->phase = TITLE_SEQUENCE_WAIT_MODELS;
         }
         break;
@@ -149,7 +148,7 @@ extern "C" void TitleAnimation_UpdateSequence(void)
         if (TitleElement_IsInactive(&SEQUENCE->brightness)) {
             for (int i = 0; i < 25; ++i)
                 func_ov006_02073bf8(&SEQUENCE->auxiliary[i]);
-            func_ov006_02072988(&SEQUENCE->model);
+            TitleSequenceModel_FinishEntry(&SEQUENCE->model);
             for (int side = 0; side < 2; ++side)
                 for (int slot = 0; slot < 7; ++slot)
                     TitleOrbit_Reset(&SEQUENCE->orbit[side][slot]);

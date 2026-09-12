@@ -10,7 +10,6 @@ void func_0202cc58(const void *, void *, unsigned);
 void func_0202cd2c(const void *, void *, unsigned);
 void func_ov006_020726b8(void);
 void func_ov006_0206b9ec(TitleAnimationController *, int, u32);
-void func_ov006_020729bc(void *);
 void func_ov006_02073948(void *);
 void func_ov006_02072f44(void *, void *, const void *);
 void func_ov006_02072b0c(void *, void *, void *, int);
@@ -71,7 +70,7 @@ extern "C" void TitleAnimation_InitSequence(void)
     Append(&SEQUENCE->brightness);
     TitleBrightness_Init(&SEQUENCE->brightness);
     TitleBrightness_Start(&SEQUENCE->brightness, 32, 16, 0, 0);
-    func_ov006_020729bc(&SEQUENCE->model);
+    TitleSequenceModel_Init(&SEQUENCE->model);
     Append(&SEQUENCE->model);
     func_ov006_02073948(SEQUENCE->unknown_5bc);
     Append(SEQUENCE->unknown_5bc);

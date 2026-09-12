@@ -26,6 +26,21 @@ typedef struct TitleSequenceModelElement {
     TitleSpriteHeader header;
     BattleModel *sub_model, *main_model;
 } TitleSequenceModelElement;
+enum TitleSequenceModelState {
+    TITLE_SEQUENCE_MODEL_IDLE,
+    TITLE_SEQUENCE_MODEL_DELAY,
+    TITLE_SEQUENCE_MODEL_MOVING
+};
+#ifdef __cplusplus
+extern "C" {
+#endif
+void TitleSequenceModel_FinishEntry(TitleSequenceModelElement *work);
+void TitleSequenceModel_StartEntry(TitleSequenceModelElement *work);
+void TitleSequenceModel_Init(TitleSequenceModelElement *work);
+void TitleSequenceModel_Update(void *element);
+#ifdef __cplusplus
+}
+#endif
 typedef struct TitleSequenceAuxElement {
     TitleSequenceModelElement model;
     u32 unknown_30;
