@@ -19,7 +19,6 @@ extern TitleAnimationController *data_ov006_0207c4e4;
 extern const TitleAnimationArchive data_ov006_0207b038[5];
 extern const GameRumblePattern data_ov006_0207af7c;
 void func_0202cbd4(void *, int, unsigned);
-void func_ov006_0206cf18(void);
 void func_ov006_0206d2b4(void);
 }
 
@@ -91,7 +90,7 @@ TitleAnimationController *TitleAnimation_Destroy(TitleAnimationController *work)
     TitleAnimation_ReleaseModelResources(work);
     TitleAnimation_ReleaseRenderState(work);
     TitleAnimation_ReleaseLocalizedResources(work);
-    func_ov006_0206cf18();
+    TitleAnimation_ReleaseSequence();
     data_0206032c.first_delay = work->previous_first_delay;
     data_0206032c.repeat_delay = work->previous_repeat_delay;
     GameTask_DestroyBase(&work->base);
@@ -121,7 +120,7 @@ TitleAnimationController *TitleAnimation_Delete(TitleAnimationController *work)
     TitleAnimation_ReleaseModelResources(work);
     TitleAnimation_ReleaseRenderState(work);
     TitleAnimation_ReleaseLocalizedResources(work);
-    func_ov006_0206cf18();
+    TitleAnimation_ReleaseSequence();
     data_0206032c.first_delay = work->previous_first_delay;
     data_0206032c.repeat_delay = work->previous_repeat_delay;
     GameTask_DestroyBase(&work->base);

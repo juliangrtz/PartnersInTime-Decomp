@@ -12,6 +12,9 @@ src/overlay006/title_animation_irq.c:
 src/overlay006/title_animation_update.cpp:
     .text       start:0x0206acb8 end:0x0206ae44
 
+src/overlay006/title_sequence_cleanup.c:
+    .text       start:0x0206cea0 end:0x0206d2b4
+
 src/overlay006/title_animation_elements.cpp:
     .text       start:0x0206c464 end:0x0206c534
 

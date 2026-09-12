@@ -4746,3 +4746,50 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
   `--check`, and `python -m pytest -q tests` passed (81 tests).
 - Matching C/C++ is now **680,652 / 1,563,700 bytes (43.53%)**; C/C++ plus
   symbolic assembly is **43.86%**. Overlay 6 is **31,932 / 66,492 (48.02%)**.
+
+
+## 2026-09-12: Title sequence cleanup and orbit readiness (+1,044 matching C bytes)
+
+- Added `TitleAnimation_ReleaseSequence` at `0x0206CF18` (924 bytes) and
+  `TitleAnimation_AreOrbitsInactive` at `0x0206CEA0` (120 bytes), together in
+  `src/overlay006/title_sequence_cleanup.c`. Their contiguous region is linked
+  and byte-identical. No inline assembly was added.
+- The shared internal header maps the existing brightness, transition, orbit,
+  localized/sprite sequence, moving-model and panel groups into a 57,288-byte
+  prefix of the 59,340-byte allocation. Unknown prompt fields retain neutral
+  names; the save setting at byte 1300, bit 6 is still not given a gameplay name.
+  Cleanup updates that bit, calls the native release sequence, clears five owned
+  resource pointers and frees/clears the sequence global. The six identical
+  calls to the first panel's empty release function are intentionally preserved.
+- A C++ draft emitted 916 bytes because it omitted two byte-mask instructions
+  after boolean comparisons. The same typed operation in C recovered those
+  masks. Giving each cleanup loop its own index scope then reproduced the
+  remaining native register assignments without source permutation searches.
+  Both functions passed the complete module and symbol checks after integration.
+- Runtime: saves 1 and 83 cold-booted with `wait:1500 start:30 wait:250`, plus
+  one separately labeled save-83 fixture that changed the signed override at
+  sequence offset 1746 from -1 to 1 immediately before cleanup. The object was
+  then freed normally; original battery saves were not edited. This fixture
+  establishes the alternate cleanup branch, not ordinary menu accessibility.
+- The three runs covered 5,349 frames, 804 orbit-query returns, 1,779 individual
+  state checks and three complete cleanups. Both query outcomes were observed:
+  798 early returns and six all-inactive results. Cleanup checks covered the
+  ordered calls for 75 auxiliary elements, 42 orbit elements and 12 moving/model
+  pairs; 18 repeated first-panel calls; 15 cleared resource pointers; three
+  sequence frees/global clears; and both saved-flag values. Full snapshots
+  checked the sequence prefix, save byte and global pointer around helper calls.
+  Null owned-resource and final-null-global branches were not observed; neither
+  were all possible early-return positions or every selection value.
+- Private evidence is under `build/runtime/eur_title_sequence_cleanup/` as
+  `evidence_early1.json`, `evidence_english83.json` and
+  `evidence_override1_fixture83.json`. Probe source and logs are in
+  `build/analysis/`. All 104 original save hashes are unchanged. All three final
+  VRAM/palette hash sets match the corresponding prior display-initialization
+  replay; the new ordinary save-83 load-menu screenshot was visually inspected.
+- Verification: `ninja check`, canonical ROM packaging with `-DisableDataMods`,
+  native relink of all 43 components with zero differing bytes, progress
+  generation/`--check`, and `python -m pytest -q tests` (81 passed). Canonical
+  and native ROM SHA-1: `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is now **681,696 / 1,563,700 bytes (43.60%)**; C/C++ plus
+  symbolic assembly is **43.93%**. Overlay 6 is **32,976 / 66,492 (49.59%)**.
+  The 50% project milestone still requires 100,154 additional matching bytes.

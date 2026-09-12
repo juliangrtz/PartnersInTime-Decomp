@@ -176,6 +176,12 @@ change `next`, and cleanup can change state. Do not cache those fields earlier
 merely to simplify the source. Distinguish deleting and non-deleting destructor
 entries when reconstructing virtual calls and reporting runtime coverage.
 
+C comparisons yield `int`, while C++ comparisons yield `bool`; this MWCC setup
+can emit different truncation masks for their results. The title sequence cleanup
+matches in C with byte-sized flag input and separately scoped loop indices.
+Use that type/lifetime evidence before attempting register-allocation changes;
+matching only a function's size is insufficient.
+
 Size request buffers from callee accesses, not just the apparent base type.
 `ArchiveReadRequest` is 40 bytes, but `BattleArchive_ReadAsync` also writes the
 halfword at offset 40, including on the raw-read path. The title loader uses a
