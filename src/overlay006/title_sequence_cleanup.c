@@ -3,7 +3,6 @@
 #include <game/heap.h>
 #include <game/save_data.h>
 extern TitleAnimationSequence *data_ov006_0207c4e0;
-void func_ov006_02073bfc(void *);
 #define SEQUENCE data_ov006_0207c4e0
 #define SAVE ((TitleSequenceSave *)gSaveData)
 static inline void StoreRumblePreference(u8 enabled)
@@ -28,7 +27,7 @@ void TitleAnimation_ReleaseSequence(void)
     {
         int i;
         for (i = 0; i < 25; ++i)
-            func_ov006_02073bfc(&SEQUENCE->auxiliary[i]);
+            TitleBackdrop_Release(&SEQUENCE->backdrops[i]);
     }
     TitlePanelTransition_Release(&SEQUENCE->transition);
     TitleModel_Release(&SEQUENCE->model);

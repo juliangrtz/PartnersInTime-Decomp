@@ -11,7 +11,6 @@ void func_0202cd2c(const void *, void *, unsigned);
 void func_ov006_020726b8(void);
 void func_ov006_0206b9ec(TitleAnimationController *, int, u32);
 void func_ov006_02072f44(void *, void *, const void *);
-void func_ov006_02073c08(void *);
 extern TitleAnimationController *data_ov006_0207c4e4;
 extern TitleAnimationSequence *data_ov006_0207c4e0;
 }
@@ -78,8 +77,8 @@ extern "C" void TitleAnimation_InitSequence(void)
     TitlePrompt_Init(&SEQUENCE->prompt, &SEQUENCE->cursor, &SEQUENCE->rumble_prompt, CONTROLLER->language);
     Append(&SEQUENCE->prompt);
     for (int i = 0; i < 25; ++i)
-        Append(&SEQUENCE->auxiliary[i]);
-    func_ov006_02073c08(SEQUENCE->auxiliary);
+        Append(&SEQUENCE->backdrops[i]);
+    TitleBackdrop_InitAll(SEQUENCE->backdrops);
     Append(&SEQUENCE->transition);
     TitlePanelTransition_Init(&SEQUENCE->transition, SEQUENCE->characters, SEQUENCE->character_size,
                               SEQUENCE->left_screen, SEQUENCE->right_screen, SEQUENCE->final_screen, SEQUENCE->palette);

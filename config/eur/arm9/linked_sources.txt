@@ -489,6 +489,7 @@ src/overlay006/title_rumble_control.c
 src/overlay006/title_rumble_update.c
 src/overlay006/title_menu_selection.c
 src/overlay006/title_menu_cursor.c
+src/overlay006/title_backdrop_init.c
 src/overlay006/title_sequence_update.cpp
 src/overlay006/title_animation_display.cpp
 src/overlay006/title_animation_renderer.cpp

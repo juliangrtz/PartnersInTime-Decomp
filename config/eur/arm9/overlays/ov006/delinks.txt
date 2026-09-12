@@ -110,3 +110,6 @@ src/overlay006/title_rumble_update.c:
 
 src/overlay006/title_menu_cursor.c:
     .text       start:0x0207393c end:0x02073bf8
+
+src/overlay006/title_backdrop_init.c:
+    .text       start:0x02073bf8 end:0x02073dc0

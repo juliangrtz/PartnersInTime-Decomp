@@ -5126,3 +5126,45 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **690,032 / 1,563,700 bytes (44.13%)**; C/C++ plus symbolic
   assembly is **44.46%**. Overlay 6 is **41,312 / 66,492 (62.13%)**.
   The project-wide 50% milestone still requires 91,818 matching bytes.
+
+
+## 2026-09-12: Title backdrop group construction (+456 matching C bytes)
+
+- Added `TitleBackdrop_OnSkip` (4 bytes), `TitleBackdrop_Release` (12) and
+  `TitleBackdrop_InitAll` (440) at `0x02073BF8..0x02073DC0` in
+  `src/overlay006/title_backdrop_init.c`. The contiguous region is linked and
+  byte-identical. The initializer constructs 25 model elements in four groups
+  of 4/5/8/8, with separate coordinates, velocities, animation IDs and depths.
+- Recovered the 52-byte backdrop layout: model prefix, signed horizontal velocity,
+  four-bit group and unknown remainder. The shared sequence now names its
+  backdrop array. Public names describe the rendering role without identifying
+  particular artwork from the animation IDs alone.
+- The first initializer candidate already had the native size. Restricting its
+  per-group variable lifetimes removed register-assignment differences; advancing
+  the point pointer alongside the loop counter then restored the last two
+  instruction positions. No brute-force permutations or assembly were used.
+- Two ordinary cold boots use save 83 (normal startup) and save 1 (A after
+  500 frames), totaling 2,776 frames. Independent checks verify 50 constructed
+  elements, original-ROM table coordinates, velocity/depth/group/callback stores,
+  model flags and exact helper arguments. The probe checks 102 full 1,300-byte
+  group snapshots, 1,250 model-flag words, 125 full 52-byte records, all 50 releases
+  with cleared model slots and 25 unchanged skip hooks.
+- Evidence is under `build/runtime/eur_title_backdrop/`; probe source and logs
+  are in `build/analysis/`. All 104 original saves are unchanged. OAM, VRAM and
+  palettes are captured, their file hashes checked, and both routes' final
+  VRAM/palette hashes agree with the prior trail replays. The new save-1 load-menu
+  screenshot was inspected. Neither run uses a RAM fixture or needs drain frames.
+  Allocation failure, missing models and alternate table data remain unexercised;
+  this batch does not reconstruct or independently verify the scrolling update.
+- Full module/symbol checks, canonical packaging, native relink of 43 components
+  with zero differences, progress checks and all 81 tests pass. Both ROMs retain
+  SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Deferred candidates: backdrop update `0x02073DC0` emits 188 versus 172 bytes,
+  with separately loaded endpoint literals where native code adds to each table
+  base. Model selector `0x02073E6C` has the native 180-byte size but differs in
+  conditional-value and mask scheduling. C++ boolean comparison initially omitted
+  two byte masks; preserving an integer conditional restored size but not all bytes.
+  Neither deferred function is linked or counted.
+- Matching C/C++ is **690,488 / 1,563,700 bytes (44.16%)**; C/C++ plus symbolic
+  assembly is **44.49%**. Overlay 6 is **41,768 / 66,492 (62.82%)**.
+  The 50% project milestone still requires 91,362 matching bytes.

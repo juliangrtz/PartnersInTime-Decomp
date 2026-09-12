@@ -44,10 +44,23 @@ void TitleSequenceModel_Update(void *element);
 #ifdef __cplusplus
 }
 #endif
-typedef struct TitleSequenceAuxElement {
+typedef struct TitleBackdrop {
     TitleSequenceModelElement model;
-    u32 unknown_30;
-} TitleSequenceAuxElement;
+    s16 velocity_x;
+    u8 group : 4, unknown_32 : 4;
+    u8 unknown_33;
+} TitleBackdrop;
+typedef struct TitleBackdropPoint { s16 x, y; } TitleBackdropPoint;
+typedef char TitleBackdropPointSize[sizeof(TitleBackdropPoint) == 4 ? 1 : -1];
+#ifdef __cplusplus
+extern "C" {
+#endif
+void TitleBackdrop_OnSkip(TitleBackdrop *work);
+void TitleBackdrop_Release(TitleBackdrop *work);
+void TitleBackdrop_InitAll(TitleBackdrop *work);
+#ifdef __cplusplus
+}
+#endif
 enum TitlePromptState {
     TITLE_PROMPT_INACTIVE, TITLE_PROMPT_DELAY, TITLE_PROMPT_APPEARING,
     TITLE_PROMPT_ACTIVE, TITLE_PROMPT_WAIT_CURSOR, TITLE_PROMPT_WAIT_RUMBLE,
@@ -108,7 +121,7 @@ void TitlePrompt_Update(void *element);
 typedef struct TitleAnimationSequence {
     TitleElementList list;
     TitleBrightness brightness;
-    TitleSequenceAuxElement auxiliary[25];
+    TitleBackdrop backdrops[25];
     TitlePanelTransition transition;
     TitleSequenceModelElement model;
     TitleMenuCursor cursor;
@@ -133,7 +146,7 @@ typedef struct TitleAnimationSequence {
     s32 idle_timer;
 } TitleAnimationSequence;
 typedef char TitleSequenceModelElementSize[sizeof(TitleSequenceModelElement) == 48 ? 1 : -1];
-typedef char TitleSequenceAuxElementSize[sizeof(TitleSequenceAuxElement) == 52 ? 1 : -1];
+typedef char TitleBackdropSize[sizeof(TitleBackdrop) == 52 ? 1 : -1];
 typedef char TitleSequencePrefixSize[sizeof(TitleAnimationSequence) == 57288 ? 1 : -1];
 /* The initializer clears the prefix, then copies the 32x32 4bpp trail stamp. */
 typedef struct TitleSequenceAllocation {

@@ -9,7 +9,6 @@ extern TitleAnimationController *data_ov006_0207c4e4;
 extern const u16 data_ov006_0207b0e8[][2], data_ov006_0207b0ea[][2];
 extern const s8 data_ov006_0207b0b4[];
 void func_ov006_0206e594(TitleMovingSprite *);
-void func_ov006_02073bf8(void *);
 }
 struct TitleSequencePassElement {
     TitleSequencePassElement *next;
@@ -146,7 +145,7 @@ extern "C" void TitleAnimation_UpdateSequence(void)
     case TITLE_SEQUENCE_SKIP_OUT:
         if (TitleElement_IsInactive(&SEQUENCE->brightness)) {
             for (int i = 0; i < 25; ++i)
-                func_ov006_02073bf8(&SEQUENCE->auxiliary[i]);
+                TitleBackdrop_OnSkip(&SEQUENCE->backdrops[i]);
             TitleSequenceModel_FinishEntry(&SEQUENCE->model);
             for (int side = 0; side < 2; ++side)
                 for (int slot = 0; slot < 7; ++slot)
