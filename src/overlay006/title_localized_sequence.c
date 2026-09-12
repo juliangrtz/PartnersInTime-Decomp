@@ -1,9 +1,9 @@
+#include <game/title_animation.h>
 #include <game/title_localized_sequence.h>
 #include <game/heap.h>
 #include "title_graphics_internal.h"
 #define REG16(address) (*(volatile u16 *)(address))
 extern u8 *data_ov006_0207c4e4;
-void *func_ov006_0206b77c(void *, int, int, int, int, int, u32 *);
 int func_02035818(void);
 void func_02035c00(int);
 extern const s16 data_ov006_0207b0f0[];
@@ -257,8 +257,8 @@ void TitleLocalizedSequence_Init(TitleLocalizedSequence *work)
     TitleTexture_Upload(&work->textures[4]);
     TitleTexture_Upload(&work->textures[1]);
     func_02035c00(bank);
-    work->commands[0] = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 15, 0, 0, 1, 0);
-    work->commands[1] = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 16, 0, 0, 1, 0);
+    work->commands[0] = TitleAnimation_ReadArchiveEntry((TitleAnimationController *)data_ov006_0207c4e4, 2, 15, 0, 0, 1, 0);
+    work->commands[1] = TitleAnimation_ReadArchiveEntry((TitleAnimationController *)data_ov006_0207c4e4, 2, 16, 0, 0, 1, 0);
     work->header.x = 0x80000;
     work->header.y = 0x38000;
     work->header.draw = (void (*)(void *))TitleLocalizedSequence_Draw;

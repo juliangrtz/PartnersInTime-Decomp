@@ -1,4 +1,4 @@
-#include <game/title_animation.h>
+#include "title_animation_internal.h"
 #include <game/title_startup.h>
 extern "C" {
 #include <game/heap.h>
@@ -11,31 +11,6 @@ extern "C" {
 #include <nns/snd.h>
 }
 
-/* Prefix of the 75304-byte animation controller, through its cleared fields. */
-struct TitleAnimationController {
-    GameTask base;
-    u8 unknown_18[16];
-    GameIrqTask *irq;
-    ArchiveCompressedIO *archive;
-    GameTask *frame_task;
-    const void *current_descriptor;
-    u32 *offsets[5];
-    u32 *tables[5];
-    u8 *entries[5];
-    u8 *entry_data[5];
-    u8 unknown_88[904];
-    void *localized_resource, *shared_resource;
-    u8 language, unknown_419, unknown_41a;
-    u8 previous_first_delay, previous_repeat_delay;
-    u8 unknown_41d[7];
-};
-struct TitleAnimationArchive {
-    const void *descriptor;
-    u32 unknown_04;
-    u8 table_format, unknown_09[7];
-};
-typedef char TitleAnimationController_PrefixSize[sizeof(TitleAnimationController) == 1060 ? 1 : -1];
-typedef char TitleAnimationArchive_Size[sizeof(TitleAnimationArchive) == 16 ? 1 : -1];
 
 extern "C" {
 extern GameInput data_0206032c;
@@ -45,11 +20,8 @@ extern const TitleAnimationArchive data_ov006_0207b038[5];
 extern const GameRumblePattern data_ov006_0207af7c;
 void func_0202cbd4(void *, int, unsigned);
 void func_ov006_0206b2c0(TitleAnimationController *);
-void func_ov006_0206b8b8(TitleAnimationController *);
-void func_ov006_0206b1dc(TitleAnimationController *);
 void func_ov006_0206cf18(void);
 void func_ov006_0206d2b4(void);
-void *func_ov006_0206b77c(TitleAnimationController *, int, u16, int, int, int, int *);
 }
 
 static inline void DeleteTask(void *object)
@@ -117,8 +89,8 @@ TitleAnimationController *TitleAnimation_Destroy(TitleAnimationController *work)
         work->frame_task = 0;
     }
     TitleAnimation_ReleaseArchiveTables(work);
-    func_ov006_0206b8b8(work);
-    func_ov006_0206b1dc(work);
+    TitleAnimation_ReleaseModelResources(work);
+    TitleAnimation_ReleaseRenderState(work);
     TitleAnimation_ReleaseLocalizedResources(work);
     func_ov006_0206cf18();
     data_0206032c.first_delay = work->previous_first_delay;
@@ -147,8 +119,8 @@ TitleAnimationController *TitleAnimation_Delete(TitleAnimationController *work)
         work->frame_task = 0;
     }
     TitleAnimation_ReleaseArchiveTables(work);
-    func_ov006_0206b8b8(work);
-    func_ov006_0206b1dc(work);
+    TitleAnimation_ReleaseModelResources(work);
+    TitleAnimation_ReleaseRenderState(work);
     TitleAnimation_ReleaseLocalizedResources(work);
     func_ov006_0206cf18();
     data_0206032c.first_delay = work->previous_first_delay;
@@ -175,7 +147,7 @@ void TitleAnimation_LoadArchiveTables(TitleAnimationController *work)
             BattleArchive_Open(work->archive, (const u8 *)work->offsets[i], size, 0);
             int format = data_ov006_0207b038[i].table_format;
             if (format) {
-                work->tables[i] = (u32 *)func_ov006_0206b77c(work, i, 0, 0, 0, 1, 0);
+                work->tables[i] = (u32 *)TitleAnimation_ReadArchiveEntry(work, i, 0, 0, 0, 1, 0);
                 work->entries[i] = (u8 *)(work->tables[i] + 2);
                 if (format == 1)
                     work->entry_data[i] = work->entries[i] + 20 * work->tables[i][0];
@@ -190,11 +162,11 @@ void TitleAnimation_LoadLocalizedResources(TitleAnimationController *work)
 {
     /* Keep each resource pair in its native language branch. */
     if (!work->language) {
-        work->localized_resource = func_ov006_0206b77c(work, 4, 3, 0, 0, 1, 0);
-        work->shared_resource = func_ov006_0206b77c(work, 4, 4, 0, 0, 1, 0);
+        work->localized_resource = TitleAnimation_ReadArchiveEntry(work, 4, 3, 0, 0, 1, 0);
+        work->shared_resource = TitleAnimation_ReadArchiveEntry(work, 4, 4, 0, 0, 1, 0);
     } else {
-        work->localized_resource = func_ov006_0206b77c(work, 4, 8, 0, 0, 1, 0);
-        work->shared_resource = func_ov006_0206b77c(work, 4, 4, 0, 0, 1, 0);
+        work->localized_resource = TitleAnimation_ReadArchiveEntry(work, 4, 8, 0, 0, 1, 0);
+        work->shared_resource = TitleAnimation_ReadArchiveEntry(work, 4, 4, 0, 0, 1, 0);
     }
 }
 

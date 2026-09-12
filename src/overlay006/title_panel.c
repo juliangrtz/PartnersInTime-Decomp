@@ -1,3 +1,4 @@
+#include <game/title_animation.h>
 #include <game/title_panel_motion.h>
 #include <game/random.h>
 #include <game/heap.h>
@@ -13,7 +14,6 @@ extern TitleElementList *data_ov006_0207c4e0;
 extern const u16 data_ov006_0207af38[];
 extern void *data_ov006_0207c4e4;
 extern u8 *data_ov006_0207b134;
-void *func_ov006_0206b77c(void *, int, int, int, int, int, u32 *);
 u32 func_02035818(void);
 void func_02035c00(u32);
 
@@ -38,7 +38,7 @@ void TitlePanelResources_Load(TitlePanelResources *resources)
     void *pixels, *source, *destination;
     u32 bank, size;
     int i;
-    resources->pixels = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 11, 0, 0, 0, &resources->pixel_bytes);
+    resources->pixels = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 11, 0, 0, 0, &resources->pixel_bytes);
     resources->pixel_bytes -= 16;
     pixels = GameHeap_Allocate(1, resources->pixel_bytes, 0, 0);
     source = (u8 *)resources->pixels + 16;
@@ -53,7 +53,7 @@ void TitlePanelResources_Load(TitlePanelResources *resources)
     }
     resources->pixels = pixels;
     resources->palette_data =
-        func_ov006_0206b77c(data_ov006_0207c4e4, 2, 12, 0, 0, 1, &resources->palette_bytes);
+        TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 12, 0, 0, 1, &resources->palette_bytes);
     GameTextureAllocation_Allocate(&resources->texture, 1, resources->pixel_bytes, 1, 467058, 0, 1, 0);
     GameTexturePalette_Allocate(&resources->palette, 0, 6, 8, 1, 1, 0, resources->palette_data, 467058, 0);
     bank = func_02035818();

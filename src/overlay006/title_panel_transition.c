@@ -1,3 +1,4 @@
+#include <game/title_animation.h>
 #include <game/title_panel_transition.h>
 #include <nitro.h>
 #include <nitro/gx_init.h>
@@ -8,7 +9,6 @@
 #define REG32(address) (*(vu32 *)(address))
 extern const s16 FX_SinCosTable_[];
 extern void *data_ov006_0207c4e4;
-void *func_ov006_0206b77c(void *, int, int, int, int, int, u32 *);
 void func_02036988(vu16 *, int, int, int, int);
 void func_02037fd0(const void *, u32, u32), func_02037f68(const void *, u32, u32);
 void func_02038310(const void *, u32, u32), func_020382a8(const void *, u32, u32);
@@ -57,9 +57,9 @@ void TitleScene_LoadBackgrounds(void)
     void *screen, *characters;
     u16 *palette;
     u16 main_color, sub_color;
-    screen = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 1, 1, 0, 0, &screen_size);
-    characters = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 0, 1, 0, 0, &character_size);
-    palette = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 2, 0, 0, 0, &palette_size);
+    screen = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 1, 1, 0, 0, &screen_size);
+    characters = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 0, 1, 0, 0, &character_size);
+    palette = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 2, 0, 0, 0, &palette_size);
     DC_FlushRange(characters, character_size);
     DC_FlushRange(screen, screen_size);
     DC_FlushRange(palette, palette_size);
@@ -72,9 +72,9 @@ void TitleScene_LoadBackgrounds(void)
     if (palette) GameHeap_Free(palette);
     if (characters) GameHeap_Free(characters);
     if (screen) GameHeap_Free(screen);
-    screen = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 4, 1, 0, 0, &screen_size);
-    characters = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 3, 1, 0, 0, &character_size);
-    palette = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 5, 0, 0, 0, &palette_size);
+    screen = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 4, 1, 0, 0, &screen_size);
+    characters = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 3, 1, 0, 0, &character_size);
+    palette = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 5, 0, 0, 0, &palette_size);
     DC_FlushRange(characters, character_size);
     DC_FlushRange(screen, screen_size);
     DC_FlushRange(palette, palette_size);

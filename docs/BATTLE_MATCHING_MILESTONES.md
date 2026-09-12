@@ -4624,3 +4624,47 @@ audit and whitespace checks pass. Both canonical packaging and native relinking
 retain SHA-1 ba4ec2f99b4f2e0047601552bccf00aa73e28701; the native relink has zero
 differences across 43 components. Matching C/C++ is 677984 / 1563700 bytes
 (43.36%); C/C++ plus assembly is 43.69%. Overlay 6 is 29264 / 66492 bytes (44.01%).
+
+
+## 2026-09-12 - Title archive reads and resource cleanup (+852 bytes)
+
+Three functions add 852 bytes of matching C/C++: the archive reader and model
+resource cleanup at 0x0206b77c..0x0206b9ec (624 bytes), and renderer cleanup at
+0x0206b1dc..0x0206b2c0 (228 bytes). Shared internal layouts describe sixteen
+48-byte resource records, their owned conversion buffers and two virtual cleanup
+objects. The existing controller lifecycle uses the same checked 1060-byte
+prefix. All title archive callers now use the shared declaration. The loader's
+entry argument is full-width and is truncated internally, matching the native
+calls and halfword stores. Ordinary reads use a 44-byte request because the
+queue also writes compressed_state at +40; compressed requests use 64 bytes.
+
+Three 1783-frame sessions (5349 frames) in build/runtime/eur_title_animation_resources/
+exercise all three functions: ordinary cold boots from saves 83 and 6, plus a
+separate save-83 language-zero controller fixture. The fixture changes only
+controller+1048 after the native constructor reaches 0x0206c298, as recorded in
+the evidence; it is not a normal language-selection route. Every source-save
+hash remains unchanged. All five archive families are used: BObjUI, BObjPc,
+TitleBG, option-menu messages and StatFontSet.
+
+Across 119 completed entry reads, the probe independently compares 67 ordinary
+payloads (80864 bytes) with the extracted archive entries and checks offsets,
+request fields, allocation arguments, returned pointers and optional sizes.
+The 52 compressed reads complete for 757132 output bytes; their request setup
+and completion are checked, but this probe does not independently decode the
+compressed payloads. Cleanup verifies 30 freed raw resources, 21 owned conversion
+arrays, 24 released VRAM-bank assignments, six blend-register resets and six
+display-control writes. The blend helper retains alpha mode with no first target
+planes and coefficients 8/8. Full controller and request snapshots are checked
+around helper calls.
+
+Descriptor reuse, malformed entries, allocation failures, absent renderer objects
+and owned screen-group offset buffers were not observed. The final screen was
+inspected, and all three framebuffer/palette hash sets agree with their previous
+lifecycle replays. Module/symbol checks, all 81 tests, progress consistency,
+public-content audit and whitespace checks pass. Canonical packaging and native
+relinking retain SHA-1 ba4ec2f99b4f2e0047601552bccf00aa73e28701 with zero differences
+across 43 components. Matching C/C++ is 678836 / 1563700 bytes (43.41%);
+C/C++ plus assembly is 43.74%. Overlay 6 is 30116 / 66492 bytes (45.29%).
+
+The adjacent 944-byte resource-selection candidate at 0x0206b9ec remains private:
+its loop still assigns two registers differently. It is excluded from coverage.

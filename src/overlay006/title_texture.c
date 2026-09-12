@@ -1,18 +1,17 @@
+#include <game/title_animation.h>
 #include <game/title_effects.h>
 #include "title_graphics_internal.h"
 #include <game/heap.h>
 
 extern void *data_ov006_0207c4e4;
-void *func_ov006_0206b77c(void *archive, int kind, int entry, int compressed, int argument_4, int heap,
-                          u32 *size);
 void DC_FlushRange(const void *address, u32 size);
 
 void TitleTexture_Load(TitleTextureResource *texture, int image_id, u16 palette_id, int compressed)
 {
     u32 image_size, palette_size;
     TitleTextureHeader *image =
-        func_ov006_0206b77c(data_ov006_0207c4e4, 2, image_id, compressed != 0, 0, 1, &image_size);
-    void *palette = func_ov006_0206b77c(data_ov006_0207c4e4, 2, palette_id, 0, 0, 1, &palette_size);
+        TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, image_id, compressed != 0, 0, 1, &image_size);
+    void *palette = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, palette_id, 0, 0, 1, &palette_size);
     DC_FlushRange(image, image_size);
     DC_FlushRange(palette, palette_size);
     texture->header = image;

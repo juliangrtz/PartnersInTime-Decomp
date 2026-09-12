@@ -1,3 +1,4 @@
+#include <game/title_animation.h>
 #include <game/title_sprite_sequence.h>
 #include <game/title_startup.h>
 #include "title_graphics_internal.h"
@@ -12,7 +13,6 @@ void func_02036ca4(void *);
 extern void *data_ov006_0207c4e4;
 extern const TitleSpriteLayout data_ov006_0207b2e4;
 extern const u8 data_ov006_0207aff8[];
-void *func_ov006_0206b77c(void *, int, int, int, int, int, u32 *);
 void func_02036cc0(const void *);
 
 /* Preserve the native nullable deletion guard, as in battle lifecycle cleanup. */
@@ -154,8 +154,8 @@ void TitleSequenceActor_Init(TitleSequenceActor *work)
     if (animation)
         animation = GameSpriteAnimation_Initialize(animation, work->track_storage, 4, 1024);
     work->animation = animation;
-    work->commands[0] = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 15, 0, 0, 1, 0);
-    work->commands[1] = func_ov006_0206b77c(data_ov006_0207c4e4, 2, 16, 0, 0, 1, 0);
+    work->commands[0] = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 15, 0, 0, 1, 0);
+    work->commands[1] = TitleAnimation_ReadArchiveEntry(data_ov006_0207c4e4, 2, 16, 0, 0, 1, 0);
     TitleTexture_Load(&work->texture, 13, 14, 1);
     bank = func_02035818();
     TitleTexture_Upload(&work->texture);
