@@ -103,7 +103,10 @@ A successful direct Ninja ROM build alone does not establish the final ROM hash.
 Keep `-DisableDataMods` for matching verification; omitting it can package an
 existing private `data/eur/project.json` mod.
 
-For a milestone, also verify the native relink and run the unit suite:
+For a milestone, also verify the native relink and run the unit suite. If linked
+code ranges changed, regenerate the progress files first using the commands
+under Progress and documentation below. The tests check those files against
+the current link metadata.
 
 ```powershell
 python tools/relink_native.py --version eur --rom extract/baserom_PiT_eur.nds --output-rom build/PiT_eur_native_relinked.nds --require-matching
@@ -170,8 +173,11 @@ does not replace the full module and symbol checks.
 
 A stored byte or halfword does not imply a narrow function parameter. Preserve
 the full-width argument and the native truncation point when callers pass an
-`int`; narrowing the prototype can change caller code and signedness. Preserve
-reads across callbacks in their original order: a linked-list callback can
+`int`; narrowing the prototype can change caller code and signedness. A table
+lookup may use that full-width index before its low byte is stored elsewhere;
+preserve the lookup width and signedness separately from the destination field.
+
+Preserve reads across callbacks in their original order: a linked-list callback can
 change `next`, and cleanup can change state. Do not cache those fields earlier
 merely to simplify the source. Distinguish deleting and non-deleting destructor
 entries when reconstructing virtual calls and reporting runtime coverage.
@@ -273,10 +279,27 @@ that the decoded bytes were independently verified.
 
 Keep probe work bounded. Check and release completed per-node snapshots during
 long list traversals instead of rechecking all earlier nodes after every call.
+An emulator frame boundary can fall inside a monitored function. At the end of
+a replay, stop accepting new outermost calls, keep observing pending calls and
+their nested helpers, and allow a bounded number of neutral frames for returns.
+Record these drain frames separately. Continuing to admit new calls can prevent
+the capture from ever becoming idle. Diagnose pending calls from the PC, stack
+and native instructions before treating a probe-end assertion as a game hang;
+do not discard unfinished calls to make validation pass.
+
 When using prior screenshots as a baseline, compare the relevant buffers and
 palettes and state explicitly whether a new image was visually inspected or
 only its hashes matched. Label language overrides and other artificial branch
 fixtures separately from ordinary save replays.
+
+Optional hardware can affect menu construction. With no Slot-2 accessory, the
+title's rumble options can be hidden; repeated button presses alone do not
+establish that the menu was reached. A controlled constructor-layout fixture
+can exercise its UI without enabling the hardware availability flag. Record
+the changed bytes, constructor timing and visible result, and distinguish UI
+coverage from physical rumble support. The save object's byte `+0x514`, bit 6
+is the rumble preference; see [rumble control](src/game/rumble_control.cpp).
+This is an object-relative RAM field, not a universal battery-save file offset.
 
 The debug menu can teleport without fully initializing the destination state.
 Controlled RAM edits or temporary decoded-command substitutions are useful
