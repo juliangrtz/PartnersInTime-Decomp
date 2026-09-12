@@ -6,7 +6,6 @@
 extern GameInput data_0206032c;
 extern const s16 FX_SinCosTable_[];
 extern u8 data_0205a00c;
-void func_ov006_020739f0(void *, int, int, int);
 
 void TitleRumblePrompt_Update(void *element)
 {
@@ -46,7 +45,7 @@ void TitleRumblePrompt_Update(void *element)
         }
         if (close) {
             TitleAnimation_ResetIdleTimer();
-            func_ov006_020739f0(work->menu.cursor, work->return_cursor_x, work->return_cursor_y, 8);
+            TitleMenuCursor_Move(work->menu.cursor, work->return_cursor_x, work->return_cursor_y, 8);
             work->menu.header.elapsed = 0;
             work->menu.header.state = TITLE_RUMBLE_EXITING;
         }

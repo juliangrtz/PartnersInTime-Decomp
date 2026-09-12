@@ -4,8 +4,8 @@ void func_ov006_0207380c(void *);
 
 void TitleRumblePrompt_Open(TitleSequenceRumblePrompt *work)
 {
-    work->return_cursor_x = ((TitleSpriteHeader *)work->menu.cursor)->x;
-    work->return_cursor_y = ((TitleSpriteHeader *)work->menu.cursor)->y;
+    work->return_cursor_x = work->menu.cursor->header.x;
+    work->return_cursor_y = work->menu.cursor->header.y;
     TitleMenuBase_MoveSelection(&work->menu, 0, 8, TITLE_RUMBLE_ENTERING);
     work->menu.header.x = 384 << 12;
     work->menu.header.y = 316 << 12;

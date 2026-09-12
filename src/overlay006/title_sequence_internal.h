@@ -111,7 +111,7 @@ typedef struct TitleAnimationSequence {
     TitleSequenceAuxElement auxiliary[25];
     TitlePanelTransition transition;
     TitleSequenceModelElement model;
-    u8 unknown_5bc[64];
+    TitleMenuCursor cursor;
     TitleSequencePrompt prompt;
     TitleSequenceRumblePrompt rumble_prompt;
     TitleOrbitWork orbit[2][7];

@@ -5082,3 +5082,47 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **689,332 / 1,563,700 bytes (44.08%)**; C/C++ plus symbolic
   assembly is **44.41%**. Overlay 6 is **40,612 / 66,492 (61.08%)**.
   The project-wide 50% milestone still requires 92,518 matching bytes.
+
+
+## 2026-09-12: Shared title menu cursor (+700 matching C bytes)
+
+- Added all six cursor helpers at `0x0207393C..0x02073BF8` in
+  `src/overlay006/title_menu_cursor.c`: release (12 bytes), initialization (100),
+  appearance (68), movement (72), drawing (12) and update (436). Every function
+  matched on its first private compile; the complete linked range and symbol
+  layout pass. No assembly was added.
+- A recovered 64-byte `TitleMenuCursor` replaces the sequence's opaque cursor
+  storage and types the shared menu pointer. It contains the model prefix,
+  initial coordinates and target coordinates. Callers use named cursor helpers;
+  states distinguish idle, movement and appearance.
+- Appearance starts 16 pixels left of the target with zero scale. Movement
+  snapshots the current position and requests the native cursor sound. Updates
+  preserve signed angle division, sine-table interpolation, coordinate rounding
+  before multiplication and signed scale conversion. Completion stores the
+  exact target and returns to idle; the appearance path restores both scales.
+- Two save-83 cold boots total 3,768 frames. Ordinary PRESS START startup only
+  initializes/releases this cursor; the absent-accessory layout never shows it.
+  A separate documented rumble-layout fixture exercises all six functions with
+  ordinary buttons after changing the four constructor-result bytes. This is
+  UI evidence, not proof of accessory detection or physical rumble support.
+- Runtime observes two initializers/releases, one appearance, seven moves,
+  731 draws and 730 updates. Independent checks cover 2,261 full 64-byte snapshots,
+  17 scale pairs, 44 division results/interpolated positions, all 15 intermediate
+  appearance frames, five four-frame moves and two eight-frame moves. Positive,
+  negative and zero coordinate deltas occur, and all eight animations complete.
+  Direct helper arguments and return values are checked; external model/audio
+  effects are refreshed rather than independently reimplemented.
+- Evidence and OAM/VRAM/palette captures are in `build/runtime/eur_title_cursor/`;
+  the probe is under `build/analysis/`. All 104 source saves are unchanged, captured
+  buffer hashes agree with the reports, and both routes' final VRAM/palette
+  hashes match their corresponding prompt-batch baselines. The new screenshot
+  after wrapping to Options was visually inspected. No drain frames were needed.
+- Unknown states, abnormal/zero durations, nonintegral coordinate deltas,
+  interrupted motion and missing-model cases remain unexercised. The ordinary
+  replay alone would not establish movement or rendering coverage.
+- Full module/symbol checks, canonical packaging, the 43-component native relink
+  with zero differences, progress checks and all 81 tests pass. Both ROMs retain
+  SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **690,032 / 1,563,700 bytes (44.13%)**; C/C++ plus symbolic
+  assembly is **44.46%**. Overlay 6 is **41,312 / 66,492 (62.13%)**.
+  The project-wide 50% milestone still requires 91,818 matching bytes.
