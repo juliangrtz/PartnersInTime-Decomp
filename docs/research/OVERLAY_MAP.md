@@ -2,7 +2,7 @@
 
 European overlay roles and the source currently linked into the matching build.
 Byte counts below come from [progress.json](../progress.json), checked against
-the source and link metadata on 2026-09-12.
+the source and link metadata on 2026-09-13.
 
 Each fraction is **matching C/C++ bytes / mapped code bytes**. The percentage
 uses that overlay's code size; separately maintained assembly is excluded.
@@ -17,7 +17,7 @@ The source links open each overlay's main source directory.
 | [2](../../src/battle/) | Battle engine | 160,216 / 362,436 | 44.21% | Both battle VM dispatchers; damage, status, targeting, rewards, UI, models, effects, resource loading and battle transitions. |
 | [5](../../src/overlay005/) | Shared scene, resource and display support | 13,800 / 16,760 | 82.34% | Scene tasks, archive queues, asset tables, sprite pools, draw lists, touch input and 2D display helpers. |
 | [6](../../src/overlay006/) | Title screen and credits | 48,820 / 66,492 | 73.42% | Display/VRAM initialization, scene and interrupt setup, title sequence construction and phases, model entry motion, scrolling backdrop setup, fading pixel trails, title prompt and cursor animation, menu selection and rumble controls, skipping and exit controls, sequence cleanup, startup greeting and participant selection, resources, title panels, split-screen transitions, backgrounds, sprite sequences, localized animation, texture/model drawing, brightness fades, credits illustration loading and music, gradient background drawing, cloud scrolling and star blinking, particle motion, positioning, grid fade, collapse, radial-delay, spiral and scatter transitions. |
-| [7](../../src/overlay007/) | Scene VM, pause menu and jump-rope minigame | 55,332 / 142,264 | 38.89% | Scene dispatcher and object management; menu text, equipment, cursors, backgrounds, effects and rope physics. |
+| [7](../../src/overlay007/) | Scene VM, pause menu and jump-rope minigame | 55,832 / 142,264 | 39.25% | Scene dispatcher and object management; menu text, equipment, cursors, backgrounds, effects, rope physics, minigame follower animation and rope sprites on both screens. |
 | [8](../../src/overlay008/) | Save, load, erase and game-over menus | 21,612 / 54,068 | 39.97% | Scene setup and cleanup, models, text, location previews, scrolling, save-state transfer, save writing and erase confirmation. |
 | [9](../../src/overlay009/) | Shops | 19,588 / 78,984 | 24.80% | Stock and inventory access, equipment/count queries, item panels, list navigation, resources, graphics transfers and particles. |
 | [10](../../src/overlay010/) | Shared battle-attack helpers | 4,032 / 6,820 | 59.12% | Enemy/target selection, party-stat averaging, badge checks, motion, hit reactions, background movement and attack ratings. |

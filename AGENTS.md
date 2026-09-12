@@ -513,6 +513,13 @@ State which results the oracle actually derives. For packed graphics, a simple
 per-pixel or per-nibble oracle is preferable to copying the native packed-word
 algorithm and potentially reproducing the same interpretation error.
 
+Task creation can change a source object's list links when the new task is
+inserted after it. Resource attachment also writes the owner's release callback
+and resource pointer. Account for these helper writes using the recovered
+[element list](src/overlay005/element_lists.c) and
+[resource owner](src/overlay005/resource_owner.c) behavior before asserting that
+the entire source or task record stayed unchanged.
+
 An oracle failure may be a wrong expectation. Inspect the native helper before
 changing matching game code: for example, `func_02036988` always sets blend-mode
 bit `0x40` and writes BLDCNT/BLDALPHA together as a 32-bit value. Read back the
@@ -679,6 +686,16 @@ remains unconfirmed.
 The private capture records are `build/runtime/eur_nawatobi/evidence_065.json`
 and `build/runtime/eur_nawatobi/rope_evidence_065.json`. Keep these local; cite
 the observed setup and its limits when sharing instructions with researchers.
+
+`build/analysis/probe_nawatobi_render.py` extends the route with follower/model
+and rope-sprite oracles. Its `menu65`, `level1_65` and `level2_65` reports are in
+`build/runtime/eur_nawatobi_render/`. From the selector, A starts Level 1;
+one Down selection followed by A starts Level 2. The recorded button schedules
+exercise all three follower animations on both screens and interior rope draw
+orders. They verify controlled entry followed by native level selection and
+updates, not successful level completion or a normal story entry route.
+Nawatobi's rope sprite copy adds 208 pixels between screens; this differs from
+the title sequence's 244 and the credits' 224. Use the subsystem's own layout.
 
 ## Progress and documentation
 

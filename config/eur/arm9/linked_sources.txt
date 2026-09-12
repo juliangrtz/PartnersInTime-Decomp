@@ -797,3 +797,5 @@ src/overlay006/credits_cloud_motion.c
 src/overlay006/credits_star_blink.c
 src/overlay006/credits_radial_delay.c
 src/overlay006/credits_background_gradient.c
+src/overlay007/nawatobi_render_tasks.cpp
+src/overlay007/nawatobi_rope_subsprite.c

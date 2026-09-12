@@ -5566,3 +5566,51 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **700,356 / 1,563,700 bytes (44.79%)**; C/C++ plus symbolic
   assembly is **45.12%**. Overlay 6 is **48,820 / 66,492 (73.42%)**.
   The 50% milestone still requires 81,494 matching bytes.
+
+
+## 2026-09-13: Nawatobi followers and rope sprites (+500 matching bytes)
+
+- Linked `NawatobiFollower_Create` (128 bytes), `NawatobiFollower_Update` (168),
+  `NawatobiRope_UpdateAndDraw` (44), and `NawatobiRope_UpdateSubSprite` (160).
+  The first three share the contiguous `nawatobi_render_tasks.cpp` region;
+  the sub-screen callback remains separate across the native primary callback.
+  Shared views describe the 60-byte participant position prefix, 72-byte tasks
+  and existing 64-byte overlay-5 sprite layout.
+- Follower animation uses three signed-height bands. Keeping the animation
+  temporary as int and narrowing at the virtual call preserves the native mask.
+  Ordered comparisons and the incremental screen adjustment match the native
+  branches and arithmetic. Rope sprite copies retain a 208-pixel screen offset,
+  clamped depth-derived draw list and source angle/scale. No inline ASM or
+  compiler flag changes were required.
+- Full module/symbol checks, canonical packaging, native relinking, progress
+  checks and all 81 pytest tests pass. Both ROMs retain SHA-1
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; the 43-component native relink has
+  zero differing bytes. Neighboring initializer, primary rope draw, depth selector
+  and scene update drafts remain unlinked with classified compiler differences.
+- `build/analysis/probe_nawatobi_render.py` uses the compatible checkpoint-65
+  pause state. Its sole RAM intervention changes the initialized pause task's
+  phase from 2 to 7 once. Ordinary buttons then exercise menu entry/exit, Level 1
+  and Level 2 in separate 491-, 1,351- and 1,619-frame replays. This verifies
+  controlled entry and native level selection/updates, not normal story access,
+  successful level completion or access to locked levels.
+- Across the three replays: 24 follower creations, 12,488 follower updates,
+  1,561 rope update/draw callbacks and 48,391 sub-screen sprite updates complete.
+  All three follower animations run on both screens. Rope draw lists include
+  both clamp results and interior values 1 through 51; values 52-62 remain
+  unexercised. There are 282,637 helper-argument checks and 60,879 verified
+  draw-list appends, with no pending calls discarded or drain frames needed.
+- Oracles independently derive follower coordinates/animation choices, task
+  fields, model flags, rope positions, depth values, fixed-point affine matrices
+  and queue links. They account for task-list insertion and resource-attachment
+  writes. Allocation/resource initialization, animation-helper side effects and
+  native rope physics are observed outputs. Bitmap rasterization and animation
+  internals remain outside this probe's oracle.
+- Reports: `build/runtime/eur_nawatobi_render/evidence_menu65.json`,
+  `evidence_level1_65.json`, and `evidence_level2_65.json`.
+  `build/analysis/verify_nawatobi_render_artifacts.py` validates 21 screenshots,
+  189 graphics dumps, ROM/state hashes, oracle totals and all 104 unchanged
+  source saves. Menu entry/exit PNGs match the preceding Nawatobi baseline.
+  Menu selection and both levels' moving-rope captures were visually inspected.
+- Matching C/C++ is **700,856 / 1,563,700 bytes (44.82%)**; C/C++ plus symbolic
+  assembly is **45.15%**. Overlay 7 is **55,832 / 142,264 (39.25%)**.
+  The 50% milestone still requires 80,994 matching bytes.

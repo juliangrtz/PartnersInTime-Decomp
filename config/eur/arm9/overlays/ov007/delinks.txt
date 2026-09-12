@@ -174,3 +174,9 @@ src/overlay007/pause_menu_cursor.cpp:
 
 src/overlay007/menu_springs.c:
     .text start:0x02076374 end:0x02076760
+
+src/overlay007/nawatobi_render_tasks.cpp:
+    .text start:0x0208b944 end:0x0208ba98
+
+src/overlay007/nawatobi_rope_subsprite.c:
+    .text start:0x0208c0e0 end:0x0208c180
