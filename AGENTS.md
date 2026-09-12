@@ -207,6 +207,14 @@ Decode literal pools as little-endian data, not as ARM instructions. Check ARM/T
 interworking relocations when comparing calls; a private comparison script
 does not replace the full module and symbol checks.
 
+Decompiler output can omit repeated writes to the same GPU FIFO address.
+Inspect every native store and preserve its width, value and order with volatile
+MMIO accesses. In the credits controller, `0x04000470` receives all three
+translation components, and `0x0400046C` receives all three scale components;
+the final store alone does not describe either operation. The same applies to
+texture-coordinate and vertex sequences. Recover missing writes before trying
+to explain a short candidate through compiler scheduling.
+
 A stored byte or halfword does not imply a narrow function parameter. Preserve
 the full-width argument and the native truncation point when callers pass an
 `int`; narrowing the prototype can change caller code and signedness. A table
@@ -226,6 +234,14 @@ Preserve reads across callbacks in their original order: a linked-list callback 
 change `next`, and cleanup can change state. Do not cache those fields earlier
 merely to simplify the source. Distinguish deleting and non-deleting destructor
 entries when reconstructing virtual calls and reporting runtime coverage.
+
+Overlay 5's `func_ov005_0206650c` requests deferred removal by setting mask
+`0x0002` in the element's 16-bit flags at offset `+0x08`. It does not immediately
+free the object. Model this write separately from later list cleanup; see
+[element lifecycle](src/overlay005/element_lists.c). Title and credits tasks
+share the 72-byte `MenuElement` view in
+[the frontend header](src/overlay006/frontend_scene_internal.h). Reuse it instead
+of copying private task definitions into each module or probe.
 
 C comparisons yield `int`, while C++ comparisons yield `bool`; this MWCC setup
 can emit different truncation masks for their results. The title sequence cleanup
@@ -287,6 +303,16 @@ changed the emitted address calculations. See
 [motion setup](src/overlay006/credits_motion.c). Keep native integer operation
 order and narrowing when modeling acceleration or easing; floating-point
 interpolation is not an equivalent oracle.
+
+Credits effects reuse the motion record's remaining parameter words for
+different purposes. Keep shared names neutral until all consumers justify a
+single meaning. Illustration loading uses a 32,768-byte texture staging buffer
+and a 512-byte palette; the task schedules sixteen texture chunks and a palette
+upload before clearing the workspace's `image_loading` field at `+0x8238`.
+The current layouts and buffer declarations are in the shared headers above;
+the state machine is in [credits image loading](src/overlay006/credits_image_loader.c).
+Checking those queued jobs does not establish coverage of the native upload
+callbacks themselves.
 
 Small, explained inline-assembly fragments are authorized when a specific
 instruction sequence cannot reasonably be reproduced in C. Keep the surrounding
@@ -397,6 +423,13 @@ actual register width. Validate raw archive payloads against the extracted
 archive; compressed-request completion and size checks alone do not establish
 that the decoded bytes were independently verified.
 
+Derive asynchronous completion from the actual queue or loader field. For
+example, `GameAudioLoader.active` is at `+0x20`; `+0x1C` is its next pointer.
+Check [the audio layout](include/game/audio.h) and the native access before using
+either in a probe. A nonzero pointer can look like a plausible busy flag.
+After correcting an oracle, rerun the full affected replay and retain the
+successful evidence separately; do not count the failed attempt as validation.
+
 Keep probe work bounded. Check and release completed per-node snapshots during
 long list traversals instead of rechecking all earlier nodes after every call.
 An emulator frame boundary can fall inside a monitored function. At the end of
@@ -439,6 +472,17 @@ Inspect its guards and the recorded fixture before reuse. Successful reports
 are under `build/runtime/eur_credits_transition/`; the final illustration uses
 the fade transition, so an early capture alone does not cover it. This route
 verifies controlled credits entry, not ordinary completion of the story.
+
+The subsequent private probes `build/analysis/probe_credits_effects.py` and
+`build/analysis/probe_credits_followup.py` reuse this route for particle effects,
+spiral motion, illustration loading and music. Their successful reports are
+`build/runtime/eur_credits_effects/evidence_story86_full.json` and
+`build/runtime/eur_credits_followup/evidence_story86_full.json`. They include
+full particle/task records, independently derived RNG and motion results,
+decoded image and palette checks, and graphics captures. Allocation addresses
+and newly constructed child prefixes are explicitly observed helper outputs.
+Read each report's uncovered branches before extending it; a successful music
+state sequence does not independently verify audio mixing or physical output.
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
 dereferences, field offset, access width and timing. The tested EUR Nawatobi
