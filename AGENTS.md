@@ -114,6 +114,15 @@ ARM9. Inspect their inputs and relocation handling before reuse; they are local
 conveniences, not required public tools. Use current public build checks as the
 final authority.
 
+Candidate inventories are only discovery aids. Recheck each range against the
+current manifest before spending time on it: a previous candidate may already
+be linked, or an old inventory may assign an overlay function to resident ARM9.
+Inspect the body before calling a target easy. An indirect jump represented by
+one line of pseudocode can hide a dispatcher, and a short graphics function can
+omit most of its FIFO writes. Prefer a coherent group with understood callers
+and a reproducible runtime route. Keep the next candidate independent of a
+deferred register-allocation problem.
+
 ## Toolchain and build
 
 Use Python 3.11+, Ninja, and the compatible Metrowerks ARM compiler installed
@@ -233,9 +242,15 @@ a prefix while having incompatible tails. The 96-byte primary title prompt and
 120-byte rumble prompt share only their first 60 bytes; do not embed the complete
 primary prompt as the rumble prompt's base. Check each tail against its own
 constructor and consumers, even if a larger placeholder previously fit.
-Decode literal pools as little-endian data, not as ARM instructions. Check ARM/Thumb state and
-interworking relocations when comparing calls; a private comparison script
-does not replace the full module and symbol checks.
+
+The same rule applies to runtime captures: a buffer read through a `BattleModel`
+pointer does not prove that the concrete allocation has the complete declared
+layout. Derive the capture extent from its constructor or the verified prefix;
+label a larger exploratory memory window separately from an object record.
+
+Decode literal pools as little-endian data, not as ARM instructions. Check
+ARM/Thumb state and interworking relocations when comparing calls; a private
+comparison script does not replace the full module and symbol checks.
 When using Capstone, verify that the listing reaches every intended function's
 end. An undecodable literal-pool word can silently stop a combined disassembly
 before later functions. Split the input at known function boundaries or enable
@@ -250,6 +265,12 @@ the final store alone does not describe either operation. The same applies to
 texture-coordinate and vertex sequences. Recover missing writes before trying
 to explain a short candidate through compiler scheduling.
 
+Preserve the input loads around those stores too. For a translation sequence,
+the native code can cache depth before sending the zero X/Y components. Loading
+depth only for the final FIFO write changes the instruction order even though
+the three intended values are unchanged. Follow the observed load/store order
+with an ordinary local variable; do not add volatile fields to force scheduling.
+
 A stored byte or halfword does not imply a narrow function parameter. Preserve
 the full-width argument and the native truncation point when callers pass an
 `int`; narrowing the prototype can change caller code and signedness. A table
@@ -260,6 +281,15 @@ arithmetic and narrowed only afterward. For example, `(s16)(last_frame - 1)`
 preserves a different truncation point from making `last_frame` an `s16` early.
 Check the native extension instructions and the callee's parameter type before
 introducing masks or casts to fix a size difference.
+
+Packed fields also need their native extraction semantics. Reuse a verified
+shared bitfield view when the instructions and consumers establish its layout;
+an apparently equivalent shift/mask expression can emit a different extension
+sequence. Check all users and the full linked module after changing a flags
+union. Keep arithmetic operations justified by the instructions: the Smash Eggs
+signed halfword angle step uses multiplication by -1 (`SMULBB`), whereas unary
+negation produces a different instruction. See
+[pair motion](src/overlay015/pair_motion.c) for the matching expression.
 
 Use the recovered C++ virtual interface when native calls go through a vtable.
 `BattleModel` and its virtual methods are declared in
@@ -308,6 +338,10 @@ A helper that reads both inputs before writing an aliased object can preserve
 native behavior that sequential field assignments do not express. Accept a
 source change only when its data flow explains the difference; defer remaining
 register-only mismatches instead of trying arbitrary declarations or casts.
+For transformed model drawing, compute the X and Y inputs before assigning
+either output field when that is the native order. `const` on an input pointer
+alone does not establish that its storage cannot overlap a mutable output.
+
 When several accesses share an embedded structure, recover that relationship
 with a typed pointer and retain the native order of dependent loads. Its lifetime
 can explain register use across helper calls without artificial register hints.
@@ -461,6 +495,14 @@ destination from the active bank mapping. Separate function coverage from branch
 coverage; an uncalled destructor or allocation-failure path remains unexercised
 even when every compiled byte matches.
 
+GPU FIFOs are ordered command streams; reading the register afterward cannot
+recover the sequence sent to it. At each guarded native store, check the actual
+destination, width and source-register value against an independently built
+command list. Verify workspace counters separately, including effects of nested
+draw helpers. This establishes the submitted commands, while screenshots and
+VRAM/OAM captures establish the observed rendering. State explicitly when a
+texture or sprite callback itself remains outside the oracle.
+
 When reusing a private probe, check its symbol names, structure offsets, hook
 guards and helper prototypes against the current checkout. A source rename or
 recovered common prefix can invalidate a previously successful probe. Track
@@ -558,6 +600,11 @@ update the probe's record size with it. The entry/launch extension in
 584-byte entry context. Its reward fixture changes the initialized pair's
 signed launch counter at `+0x17` once, after an enemy hit, then lets the native
 end transition run; the counter is distinct from the phase bits at `+0x16`.
+The final reward fixture also overrides one random-helper return to select the
+reward branch. Consult `build/runtime/eur_overlay15/evidence_reward_final83.json`
+for both interventions and the visible reward capture; do not describe that
+run as ordinary reward probability or completion of six natural launches.
+The ordinary entry replay is recorded separately in `evidence_entry83.json`.
 The older actor/pair probes retain their original 28-byte prefix checks.
 Use the current shared
 [attack layout](include/game/overlay015_attack.h) and native allocation/caller
@@ -595,6 +642,14 @@ positive-X radial launches and a zero RNG seed were not exercised. This is
 evidence for those update routines, not independent verification of every
 native graphics callback. Keep new probes equally explicit about their limits.
 
+`build/analysis/probe_credits_gradient.py` adds an ordered GPU/workspace store
+oracle and checks the full 52-byte workspace prefix around the native sprite
+pass. Its report is `build/runtime/eur_credits_gradient/evidence_story86_full.json`.
+It records both background variants, nested star/cloud call order and counter
+effects; the sprite and texture rendering internals remain outside its oracle.
+Before reusing captures as a baseline, verify their recorded sizes and hashes
+and compare the shared graphics buffers with the preceding credits replay.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
@@ -606,9 +661,15 @@ menu, break at pause update `0x02071F80` and perform this one-time edit
 ```text
 task = read32(0x0208E1E0)
 assert task == r0 and read32(task) == 0x0208D9B8
-assert read32(task + 0x30) == 2
-write32(task + 0x30, 7)
+phase_address = task + 0x30
+assert read32(phase_address) == 2
+write32(phase_address, 7)
 ```
+
+The edited word is at `read32(0x0208E1E0) + 0x30` in ARM9 main RAM.
+Its four bytes become `07 00 00 00`. `0x0208E1E0` stores the task pointer;
+do not overwrite that pointer or add the offset before dereferencing it.
+This is a runtime state field, not a VRAM address or a ROM patch.
 
 Disable the edit hook and resume so the native transition can advance the
 phase. The task is dynamically allocated; an observed task address is not a
