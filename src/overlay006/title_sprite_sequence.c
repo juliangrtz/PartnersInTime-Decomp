@@ -1,4 +1,5 @@
 #include <game/title_sprite_sequence.h>
+#include <game/title_startup.h>
 #include "title_graphics_internal.h"
 #include <game/heap.h>
 extern const TitleSpriteLayout data_ov006_0207b2a4[], data_ov006_0207b2c4[], data_ov006_0207b2d4[];
@@ -6,7 +7,6 @@ extern const s16 FX_SinCosTable_[];
 int _s32_div_f(int, int);
 int func_02035818(void);
 void func_02035c00(int);
-int func_ov006_02075120(TitleSequenceActor *);
 void MTX_RotZ44_(void *, int, int);
 void func_02036ca4(void *);
 extern void *data_ov006_0207c4e4;
@@ -707,7 +707,7 @@ void TitleSpriteSequence_Update(TitleSpriteSequence *work)
         break;
     case 4:
         if (TitleSequenceSprite_IsIdle(&work->sprites[0]) && TitleSequenceSprite_IsIdle(&work->sprites[1]) &&
-            func_ov006_02075120(&work->actor)) {
+            TitleElement_IsInactive(&work->actor)) {
             TitleRotatingSprite_StartArc(&work->rotating, 24, 0, 219, -64, 219, 40, 0, -104, 1);
             work->header.state = 5;
         }

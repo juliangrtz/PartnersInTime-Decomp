@@ -65,7 +65,7 @@ extern GameTaskVTable data_ov006_0207b51c;
 extern TitleSceneTask *data_ov006_0207c4e8;
 extern GameTaskVTable data_ov006_0207bc1c;
 extern CreditsSceneTask *data_ov006_0207c4f0;
-extern void func_ov006_020751f0(MenuElement *);
+extern void TitleStartup_UpdateGreeting(MenuElement *);
 extern void func_ov006_02077d5c(MenuElement *);
 extern void func_ov005_020671e4(Overlay5Archive *);
 extern void func_ov005_02067424(Overlay5Archive *, u8);

@@ -12,6 +12,7 @@ void TitleModel_DrawSub(BattleModel *model);
 void TitleModel_DrawMain(BattleModel *model);
 void TitleModel_Release(void *element);
 BattleModel *TitleModelController_Delete(BattleModel *model);
+BattleModel *TitleModelController_Destroy(BattleModel *model);
 void TitleModel_Load(void *element, u32 resource, u8 screens, int parameter, int mode);
 #ifdef __cplusplus
 }

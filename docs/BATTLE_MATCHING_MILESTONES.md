@@ -4515,3 +4515,41 @@ progress consistency, public-content audit and whitespace checks pass.
 Canonical packaging and the 43-component native relink both retain SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701, with zero differing bytes.
 Matching C/C++ is 674940 / 1563700 bytes (43.16%); C/C++ plus ASM is 43.49%.
+
+
+## 2026-09-12 - Title startup greeting and animation callbacks (+1152 bytes)
+
+Seven new functions add 1152 bytes of matching C/C++. The contiguous
+0x02075014..0x020754e4 range now lives in title_startup.cpp: nine functions /
+1232 bytes, including two previously reconstructed IRQ destructors. The code
+selects title participants from the save directory and story flags, allocates
+the animation controller, handles the greeting's waits and brightness fades,
+requests frame uploads, and restores base vtables during destruction. Partial
+controller and IRQ layouts are explicitly described as prefix views. No inline
+assembly is used. The greeting's release helper receives the element pointer;
+recovering that ABI resolved the remaining compiler register differences.
+
+Six cold-boot sessions use original story saves 1, 6, 30, 65, 83 and 103 with
+ordinary buttons and no RAM fixtures. Their evidence is under
+build/runtime/eur_title_startup/. Across 3888 frames, all greeting states
+(0, 1, 100, 101, 102, 1000) execute, with participant masks 3, 12 and 15 and
+greeting streams 45, 46 and 47. Save 6 (Koopa Cruiser) supplies the middle
+selection without modifying save data. Independent checks include 1374 greeting
+returns, 1886 frame requests, 1606 inactive-state queries, six controller
+constructions and six greeting sprite initializations/releases. Live object
+snapshots, helper arguments, brightness steps and display-register writes agree
+with the native behavior. Entry hooks guard the full function bytes and returns
+match the calling stack pointer.
+
+The two new nondeleting model/frame-task destructors were not reached; neither
+was the preexisting nondeleting IRQ destructor. Empty-slot fallback, allocation
+failure and invalid greeting states remain unexercised. Matching verifies their
+compiled bytes, not runtime branch coverage. All 104 original save hashes are
+unchanged; title animation was visually inspected, and the final save-83 display
+and palette hashes agree with the previous title-panel replay.
+
+Module and symbol checks, all 81 tests and progress consistency pass. The
+canonical package and native relink retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701; the native relink has zero differing
+bytes across 43 components. Matching C/C++ is 676092 / 1563700 bytes (43.24%);
+C/C++ plus maintained assembly is 43.57%. Overlay 6 is 27372 / 66492 bytes.
