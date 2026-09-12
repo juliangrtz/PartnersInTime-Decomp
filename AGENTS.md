@@ -54,6 +54,11 @@ identifies internally as 2.0 build 72. `tools/configure.py --compiler PATH eur`
 accepts another compiler root. LLVM's `llvm-mc`, `ld.lld` and `llvm-objcopy` are
 also needed for the native reassembly/relink workflow.
 
+If Ninja is missing from `PATH` on this workstation, the installed executable
+is `C:\Program Files\JetBrains\CLion 2023.2.2\bin\ninja\win\x64\ninja.exe`.
+Invoke a quoted executable path with PowerShell's `&` operator. Check tool
+availability before assuming that a command or an old workstation path works.
+
 The private input is `extract/baserom_PiT_eur.nds`, game code `ARMP`:
 
 ```text
@@ -84,8 +89,13 @@ For a milestone, also verify the native relink and run the unit suite:
 
 ```powershell
 python tools/relink_native.py --version eur --rom extract/baserom_PiT_eur.nds --output-rom build/PiT_eur_native_relinked.nds --require-matching
-python -m unittest discover -s tests
+python -m pytest -q tests
 ```
+
+The suite includes both unittest classes and pytest functions. Unittest-only
+discovery omits tests; keep the explicit `tests` directory so pytest does not
+collect duplicate suites from ignored private verification clones. Runtime
+input tests require the optional emulator dependency and otherwise skip.
 
 Do not change compiler flags to force a match. Derive individual object builds
 and comparisons from the existing Ninja/objdiff configuration. The configured
@@ -113,6 +123,10 @@ and C++ mode are part of the original ABI.
 6. Update the component metadata and affected declarations together. Preserve
    shipped interior entry points through `config/eur/arm9/linker_aliases.json`;
    do not silently turn an interior label into a different function.
+   When renaming a symbol, also check `reasm/eur/patches.json` and maintained
+   assembly references. Resolve names within the correct CPU and overlay;
+   a raw address alone is ambiguous. Keep external addresses and relocation
+   checks intact rather than weakening validation to accept stale names.
 7. Run `ninja check` for every C/C++ change, including shared-header changes.
    Verify the packaged ROM and relevant runtime behavior before reporting the
    batch complete. Record functions or branches that were not reached.
@@ -175,13 +189,23 @@ demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
-dereferences, field offset, access width and timing. For example, EUR Nawatobi
-entry was tested at pause update `0x02071F80`: `r0` equals the pointer at
-`0x0208E1E0`, its vtable is `0x0208D9B8`, and its 32-bit phase at `r0 + 0x30`
-is `2`. Writing `7` once there enters the native transition. The observed task
-address is not a universal address to patch. Its code is in `src/overlay007/nawatobi_*`;
-the selector and rope simulation were exercised, but a normal entry route remains
-unconfirmed.
+dereferences, field offset, access width and timing. The tested EUR Nawatobi
+entry uses ARM9 main RAM with overlay 7 loaded. From a fully initialized pause
+menu, break at pause update `0x02071F80` and perform this one-time edit
+(pseudocode; `read32` and `write32` use little-endian 32-bit accesses):
+
+```text
+task = read32(0x0208E1E0)
+assert task == r0 and read32(task) == 0x0208D9B8
+assert read32(task + 0x30) == 2
+write32(task + 0x30, 7)
+```
+
+Disable the edit hook and resume so the native transition can advance the
+phase. The task is dynamically allocated; an observed task address is not a
+universal address to patch. Its code is in `src/overlay007/nawatobi_*`;
+the selector and rope simulation were exercised, but a normal entry route
+remains unconfirmed.
 
 ## Progress and documentation
 
