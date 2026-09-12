@@ -49,7 +49,6 @@ void func_ov006_0206b8b8(TitleAnimationController *);
 void func_ov006_0206b1dc(TitleAnimationController *);
 void func_ov006_0206cf18(void);
 void func_ov006_0206d2b4(void);
-GameIrqTask *func_ov006_0206ac80(GameIrqTask *, u32, u32, void *);
 void *func_ov006_0206b77c(TitleAnimationController *, int, u16, int, int, int, int *);
 }
 
@@ -72,7 +71,7 @@ TitleAnimationController *TitleAnimation_Init(TitleAnimationController *work, u3
         work->language = 0;
     GameIrqTask *irq = (GameIrqTask *)GameHeap_New(52, 1, 0, 1);
     if (irq)
-        irq = func_ov006_0206ac80(irq, 8, 0, work);
+        irq = TitleAnimationIrq_Init(irq, 8, 0, work);
     work->irq = irq;
     ArchiveCompressedIO *archive = (ArchiveCompressedIO *)GameHeap_New(1088, 1, 0, 1);
     if (archive)

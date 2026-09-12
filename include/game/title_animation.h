@@ -6,6 +6,10 @@ typedef struct TitleAnimationController TitleAnimationController;
 #ifdef __cplusplus
 extern "C" {
 #endif
+void TitleAnimationIrq_UploadFrame(GameIrqTask *task);
+GameIrqTask *TitleAnimationIrq_Delete(GameIrqTask *task);
+GameIrqTask *TitleAnimationIrq_Destroy(GameIrqTask *task);
+GameIrqTask *TitleAnimationIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
 void TitleAnimation_ReleaseArchiveTables(TitleAnimationController *work);
 void TitleAnimation_ReleaseLocalizedResources(TitleAnimationController *work);
 void TitleAnimation_LoadLocalizedResources(TitleAnimationController *work);

@@ -1,7 +1,7 @@
-func_ov006_0206ab80 kind:function(arm,size=0xb0) addr:0x0206ab80
-func_ov006_0206ac30 kind:function(arm,size=0x2c) addr:0x0206ac30
-func_ov006_0206ac5c kind:function(arm,size=0x24) addr:0x0206ac5c
-func_ov006_0206ac80 kind:function(arm,size=0x38) addr:0x0206ac80
+TitleAnimationIrq_UploadFrame kind:function(arm,size=0xb0) addr:0x0206ab80
+TitleAnimationIrq_Delete kind:function(arm,size=0x2c) addr:0x0206ac30
+TitleAnimationIrq_Destroy kind:function(arm,size=0x24) addr:0x0206ac5c
+TitleAnimationIrq_Init kind:function(arm,size=0x38) addr:0x0206ac80
 func_ov006_0206acb8 kind:function(arm,size=0x18c) addr:0x0206acb8
 func_ov006_0206ae44 kind:function(arm,size=0x398) addr:0x0206ae44
 func_ov006_0206b1dc kind:function(arm,size=0xe4) addr:0x0206b1dc

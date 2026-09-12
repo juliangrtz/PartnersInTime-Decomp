@@ -4594,3 +4594,33 @@ packaging and native relinking retain SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701 with zero differences across 43 components.
 Matching C/C++ is 677672 / 1563700 bytes (43.34%); C/C++ plus assembly is 43.67%.
 Overlay 6 is 28952 / 66492 matching C/C++ bytes (43.54%).
+
+
+## 2026-09-12 - Title animation IRQ uploads (+312 bytes)
+
+Four functions in 0x0206ab80..0x0206acb8 now match in title_animation_irq.c:
+the frame-upload callback, initializer and two destructors. The recovered
+52-byte IRQ record contains an idle-frame counter and a frame-request bit.
+Initialization clears only offsets 40..47; the final unknown word is preserved.
+The callback counts idle frames until an upload is requested, temporarily maps
+texture and palette banks into LCDC space, performs the native upload callbacks,
+restores the bank assignments, copies/clears OAM and resets the request. The
+whole 312-byte module matches in C without inline assembly.
+
+Two normal cold-boot save-83 replays in build/runtime/eur_title_animation_irq/
+cover full title playback and its shorter A-button skip route: 1783 and 1343
+frames, respectively. The initializer and deleting destructor execute twice;
+the callback executes 2036 times, comprising 16 idle frames and 2020 uploads.
+Independent checks verify every helper argument, 28308 complete 52-byte
+snapshots, all 2020 texture/palette bank restorations, 4136960 OAM bytes against
+live source buffers, and the same number of cleared OAM-buffer bytes. No RAM
+fixtures are used. The nondeleting destructor and other VRAM-bank configurations
+remain unexercised; their compiled bytes match exactly.
+
+Final screens were inspected, and both framebuffer/palette hash sets match the
+corresponding established title replays. All 104 original save hashes remain
+unchanged. Module/symbol checks, all 81 tests, progress consistency, public-content
+audit and whitespace checks pass. Both canonical packaging and native relinking
+retain SHA-1 ba4ec2f99b4f2e0047601552bccf00aa73e28701; the native relink has zero
+differences across 43 components. Matching C/C++ is 677984 / 1563700 bytes
+(43.36%); C/C++ plus assembly is 43.69%. Overlay 6 is 29264 / 66492 bytes (44.01%).
