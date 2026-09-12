@@ -6,7 +6,7 @@
 .section .pit_BattleModelEffect_Spawn, "ax", %progbits
 .balign 4
 
-.extern func_02018af4
+.extern GameMatrixAnimation_Start
 .extern func_ov002_020aaac8
 .extern gBattleContext
 
@@ -26,7 +26,7 @@ BattleModelEffect_Spawn:
     add r1, ip, r3
     ldr r2, .L_update_callback
     mov r3, #0x1000
-    bl func_02018af4
+    bl GameMatrixAnimation_Start
     strh r5, [r0, #0x14]
     ldr r1, [sp, #0x14]
     ldrsh r2, [sp, #0x10]

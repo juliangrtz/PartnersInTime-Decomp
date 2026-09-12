@@ -12,7 +12,7 @@
 .extern BattleSceneObject_GetById
 .extern BattleSceneObject_SetAnimation
 .extern BattleStatus_TryApply
-.extern func_ov002_02090c18
+.extern BattleSceneObject_SwapSlots
 .extern gBattleContext
 .extern gSaveData
 
@@ -59,7 +59,7 @@ BattleParty_UpdateLuigiReloadFinish:
     ldrsh r2, [r0, #0x14]
     strh r2, [r0, #8]
     mov r0, #0x3b
-    bl func_ov002_02090c18
+    bl BattleSceneObject_SwapSlots
     mov r0, #0x39
     bl BattleActor_GetPartySlot
     ldrh r1, [r0, #0x24]

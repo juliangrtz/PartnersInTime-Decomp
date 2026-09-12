@@ -22,7 +22,7 @@
         "BattleScreenEffect_FindFreeDelaySlot": "0x02065FCC",
         "BattleScreenEffect_UpdateDelayed": "0x02065F58",
         "data_ov002_020c0660": "0x020C0660",
-        "func_020074bc": "0x020074BC"
+        "GameRumble_PlayRepeated": "0x020074BC"
       },
       "expected_sha256": "fbcf50f2a59d099793231aa1cdab4f044e41aa1198ca18bfec53217a20741b9e"
     },
@@ -36,7 +36,7 @@
         "BattleScreenEffect_FindFreeDelaySlot": "0x02065FCC",
         "BattleScreenEffect_UpdateDelayed": "0x02065F58",
         "data_ov002_020c0660": "0x020C0660",
-        "func_02007408": "0x02007408"
+        "GameRumble_PlayTimed": "0x02007408"
       },
       "expected_sha256": "8681911908ac39ccf68f36a30c32144edecd469184c6f41e24c57d3040264cfd"
     },
@@ -376,7 +376,7 @@
       "source": "battle/BattleObjectData_QueueLoad.s",
       "externals": {
         "BattleTaskQueue_Enqueue": "0x020726B0",
-        "func_ov002_02089c78": "0x02089C78"
+        "BattleObjectData_ResolveTextureMetadataTask": "0x02089C78"
       },
       "expected_sha256": "dbf146109c509ff1f7eb776af1725c36929266676284f4f5eec795352ce67291"
     },
@@ -440,7 +440,7 @@
         "BattleSceneObject_GetById": "0x02076FB4",
         "BattleSceneObject_SetAnimation": "0x02091198",
         "BattleStatus_TryApply": "0x0209C464",
-        "func_ov002_02090c18": "0x02090C18",
+        "BattleSceneObject_SwapSlots": "0x02090C18",
         "gBattleContext": "0x020C0718",
         "gSaveData": "0x02059FE8"
       },
@@ -459,7 +459,7 @@
         "BattleSceneObject_GetById": "0x02076FB4",
         "BattleSceneObject_SetAnimation": "0x02091198",
         "BattleStatus_TryApply": "0x0209C464",
-        "func_ov002_02090c18": "0x02090C18",
+        "BattleSceneObject_SwapSlots": "0x02090C18",
         "gBattleContext": "0x020C0718",
         "gSaveData": "0x02059FE8"
       },
@@ -1029,7 +1029,7 @@
       "externals": {
         "BattlePosition_StoreViewRelative": "0x02076B0C",
         "BattleSound_Play": "0x02076428",
-        "func_ov002_020ac904": "0x020AC904"
+        "BattleModelEffect_SpawnFromResource": "0x020AC904"
       },
       "expected_sha256": "ac9b40bb63dbc064789843bd81192c8b9eabe4f8ef8737749071dba34a8ed6bf"
     },
@@ -1051,7 +1051,7 @@
       "section": ".pit_BattleModelEffect_Spawn",
       "source": "battle/BattleModelEffect_Spawn.s",
       "externals": {
-        "func_02018af4": "0x02018AF4",
+        "GameMatrixAnimation_Start": "0x02018AF4",
         "func_ov002_020aaac8": "0x020AAAC8",
         "gBattleContext": "0x020C0718"
       },
@@ -1087,7 +1087,7 @@
       "section": ".pit_BattleSpriteEffect_Spawn",
       "source": "battle/BattleSpriteEffect_Spawn.s",
       "externals": {
-        "func_02017d38": "0x02017D38",
+        "GameSpriteAnimation_Start": "0x02017D38",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "a884ebbb8f3a0d7905c123e137457110f7d4b426cbc736a33e555c684147e306"
@@ -1108,7 +1108,7 @@
       "source": "battle/BattleEnemyData_LoadObjectData.s",
       "externals": {
         "BattleEnemyData_FixupObjectPointers": "0x02088EF4",
-        "func_0202c3d0": "0x0202C3D0",
+        "BattleArchive_ReadAsync": "0x0202C3D0",
         "BattleObjectData_ResolveSlot": "0x0209234C",
         "gBattleContext": "0x020C0718",
         "gBattleSystem": "0x020C0714"
@@ -1123,7 +1123,7 @@
       "source": "battle/BattleEnemyData_LoadStatRecord.s",
       "externals": {
         "BattleEnemyData_LoadObjectData": "0x02088F24",
-        "func_0202c3d0": "0x0202C3D0",
+        "BattleArchive_ReadAsync": "0x0202C3D0",
         "gBattleContext": "0x020C0718",
         "gBattleSystem": "0x020C0714",
         "gBattlePrimaryResourcePaths": "0x020BEBC4"
@@ -1180,8 +1180,8 @@
         "BattleSceneObject_GetActiveModel": "0x020A3370",
         "OS_Terminate": "0x0203AE78",
         "data_ov002_020bf718": "0x020BF718",
-        "func_02010634": "0x02010634",
-        "func_02029be0": "0x02029BE0",
+        "BattleRenderModel_Init": "0x02010634",
+        "GameHeap_New": "0x02029BE0",
         "func_ov002_020696f4": "0x020696F4",
         "func_ov002_0206f1b8": "0x0206F1B8",
         "func_ov002_0206f1f0": "0x0206F1F0",

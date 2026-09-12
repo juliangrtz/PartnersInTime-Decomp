@@ -15,7 +15,7 @@
 .equ BATTLE_ENEMY_STAT_RECORD_SIZE, 0x2C
 
 .extern BattleEnemyData_LoadObjectData
-.extern func_0202c3d0
+.extern BattleArchive_ReadAsync
 .extern gBattleContext
 .extern gBattleSystem
 .extern gBattlePrimaryResourcePaths
@@ -68,7 +68,7 @@ BattleEnemyData_LoadStatRecord:
     str r2, [sp, #4]
     ldr r0, [r12]
     ldr r3, [r3, #BATTLE_CONTEXT_READ_RANGE]
-    bl func_0202c3d0
+    bl BattleArchive_ReadAsync
 
     ldr r0, .L_next_callback
     str r0, [r4]

@@ -9,7 +9,7 @@
 .extern BattleScreenEffect_FindFreeDelaySlot
 .extern BattleScreenEffect_UpdateDelayed
 .extern data_ov002_020c0660
-.extern func_020074bc
+.extern GameRumble_PlayRepeated
 
 .global BattleScreenEffect_StartSecondary
 .type BattleScreenEffect_StartSecondary, %function
@@ -46,7 +46,7 @@ BattleScreenEffect_StartSecondary:
     pop {r4, r5, r6, lr}
     bx lr
 .L_start_now:
-    bl func_020074bc
+    bl GameRumble_PlayRepeated
     pop {r4, r5, r6, lr}
     bx lr
 .L_runtime_context:

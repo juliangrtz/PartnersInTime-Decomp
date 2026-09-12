@@ -13,8 +13,8 @@
 .extern BattleSceneObject_GetActiveModel
 .extern OS_Terminate
 .extern data_ov002_020bf718
-.extern func_02010634
-.extern func_02029be0
+.extern BattleRenderModel_Init
+.extern GameHeap_New
 .extern func_ov002_020696f4
 .extern func_ov002_0206f1b8
 .extern func_ov002_0206f1f0
@@ -69,10 +69,10 @@ BattleSceneObject_SetAnimation:
     add r1, r1, #0xE000
     ldr r1, [r1, #0x158]
     mov r3, #0
-    bl func_02029be0
+    bl GameHeap_New
     movs r6, r0
     beq .L_store_special_model
-    bl func_02010634
+    bl BattleRenderModel_Init
     mov r6, r0
 .L_store_special_model:
     str r6, [sb, #0xC0]
@@ -532,10 +532,10 @@ BattleSceneObject_SetAnimation:
     add r1, r1, #0xE000
     ldr r1, [r1, #0x158]
     mov r3, #0
-    bl func_02029be0
+    bl GameHeap_New
     movs r6, r0
     beq .L_store_model
-    bl func_02010634
+    bl BattleRenderModel_Init
     mov r6, r0
 .L_store_model:
     str r6, [sb, #0xC0]

@@ -8,7 +8,7 @@
 
 .extern BattlePosition_StoreViewRelative
 .extern BattleSound_Play
-.extern func_ov002_020ac904
+.extern BattleModelEffect_SpawnFromResource
 
 .global BattleParty_SpawnLaunchImpact
 .type BattleParty_SpawnLaunchImpact, %function
@@ -53,7 +53,7 @@ BattleParty_SpawnLaunchImpact:
     ldrsh r2, [sp, #8]
     ldrsh r3, [sp, #0x0A]
     mov r0, #0x13
-    bl func_ov002_020ac904
+    bl BattleModelEffect_SpawnFromResource
     mov r1, #0
     mov r2, r1
     mov r3, r1

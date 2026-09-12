@@ -13,7 +13,7 @@
 .equ BATTLE_CONTEXT_LOADED_OBJECT, 0x544
 
 .extern BattleEnemyData_FixupObjectPointers
-.extern func_0202c3d0
+.extern BattleArchive_ReadAsync
 .extern BattleObjectData_ResolveSlot
 .extern gBattleContext
 .extern gBattleSystem
@@ -49,7 +49,7 @@ BattleEnemyData_LoadObjectData:
     str r2, [sp, #4]
     ldr r0, [r0]
     ldr r3, [r1, #4]
-    bl func_0202c3d0
+    bl BattleArchive_ReadAsync
 
     ldr r0, .L_next_callback
     str r0, [r4]

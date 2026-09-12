@@ -7,7 +7,7 @@
 .balign 4
 
 .extern BattleTaskQueue_Enqueue
-.extern func_ov002_02089c78
+.extern BattleObjectData_ResolveTextureMetadataTask
 
 .global BattleObjectData_QueueLoad
 .type BattleObjectData_QueueLoad, %function
@@ -29,5 +29,5 @@ BattleObjectData_QueueLoad:
 .L_task_enqueue:
     .word BattleTaskQueue_Enqueue
 .L_load_callback:
-    .word func_ov002_02089c78
+    .word BattleObjectData_ResolveTextureMetadataTask
 .size BattleObjectData_QueueLoad, . - BattleObjectData_QueueLoad

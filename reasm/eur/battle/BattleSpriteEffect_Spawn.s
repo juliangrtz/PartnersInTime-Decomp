@@ -6,7 +6,7 @@
 .section .pit_BattleSpriteEffect_Spawn, "ax", %progbits
 .balign 4
 
-.extern func_02017d38
+.extern GameSpriteAnimation_Start
 .extern gBattleContext
 
 .global BattleSpriteEffect_Spawn
@@ -31,7 +31,7 @@ BattleSpriteEffect_Spawn:
     add r1, r4, r1
     add r2, r2, lr
     add r3, r5, ip
-    bl func_02017d38
+    bl GameSpriteAnimation_Start
     add sp, sp, #0x0C
     pop {r4, r5, lr}
     bx lr
