@@ -4848,3 +4848,49 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **684,264 / 1,563,700 bytes (43.76%)**; C/C++ plus symbolic
   assembly is **44.09%**. Overlay 6 is **35,544 / 66,492 (53.46%)**.
   The project-wide 50% milestone still requires 97,586 matching bytes.
+
+
+## 2026-09-12: Title sequence construction (+2,200 matching C++ bytes)
+
+- Added `TitleAnimation_InitSequence` at `0x0206D2B4` (2,200 bytes), linked
+  from `src/overlay006/title_sequence_init.cpp`. It allocates the sequence,
+  loads its graphics, combines two screen maps, constructs and links the title
+  elements, selects the language presentation and participants, enables the
+  rumble preference and completes both music loads. No assembly was added.
+- The shared allocation view preserves the 57,288-byte cleared prefix within
+  the full 59,340-byte object. Only 512 copied palette bytes at offset 57,292
+  are named in the tail; the preceding word and remaining 1,536 bytes stay
+  unknown. Cleanup still uses the prefix view.
+- The private draft produced the native size immediately. Twelve differing
+  words were limited to the screen-map interleave's pointer loads and register
+  operands. Preserving the native left/right/destination load order matched
+  all bytes. The public module and symbol checks passed after integration.
+- Four cold-boot replays use `wait:1500 start:30 wait:250`: ordinary story saves
+  1, 6 and 83, plus an explicitly labeled save-83 language-zero fixture. They
+  cover 7,132 frames and four complete initializer calls. The participant masks
+  3, 12 and 15 are checked against live save-directory and slot flags; both
+  localized and alternate sprite presentations execute.
+- Independent checks cover 229,152 cleared prefix bytes; 10,240 copied palette
+  and screen-map bytes; 128 interleaved rows; 16 owned archive-pointer stores;
+  20 cache-flush arguments; 232 element appends and the complete final lists;
+  56 orbit and 12 participant initializers; and eight completed music loads.
+  The probe checks full 59,340-byte snapshots around direct helper calls, exact
+  helper arguments, save preference and initial timers. External helper effects
+  are refreshed after return, with explicit result checks for the listed data.
+- All four runs have a save context and non-null resources. They observe the
+  rumble preference already enabled, so a false-to-true preference change is
+  not separately demonstrated. Null/failure cases, missing-slot fallback and
+  other languages remain unexercised. The language fixture changes only the
+  controller byte after language setup, leaving the original saves untouched.
+- Evidence: `build/runtime/eur_title_sequence_init/`; private probe/oracle source
+  and logs are under `build/analysis/`. All 104 source save hashes are unchanged.
+  Save 1, save 6 and the language fixture's final load-menu screenshots were
+  visually inspected. Ordinary save 1/83 VRAM and palette hashes agree with
+  their prior captures; all captured buffer files match their recorded hashes.
+- Verification: full module/symbol checks, canonical packaging, native relink
+  of 43 components with zero differing bytes, progress generation/consistency,
+  and all 81 tests passed. Canonical and native ROM SHA-1 remains
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`, matching all replay reports.
+- Matching C/C++ is **686,464 / 1,563,700 bytes (43.90%)**; C/C++ plus symbolic
+  assembly is **44.23%**. Overlay 6 is **37,744 / 66,492 (56.76%)**.
+  The project-wide 50% milestone still requires 95,386 matching bytes.

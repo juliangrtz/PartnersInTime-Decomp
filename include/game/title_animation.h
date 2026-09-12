@@ -12,6 +12,7 @@ void TitleAnimation_RequestExit(int kind);
 void TitleAnimation_Update(TitleAnimationController *work);
 void TitleAnimation_InitDisplay(TitleAnimationController *work);
 void TitleAnimation_ReleaseSequence(void);
+void TitleAnimation_InitSequence(void);
 void TitleAnimation_UpdateSequence(void);
 void TitleAnimation_BeginExit(int kind);
 void TitleAnimation_ResetIdleTimer(void);

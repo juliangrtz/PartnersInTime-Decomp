@@ -72,6 +72,13 @@ typedef struct TitleAnimationSequence {
 typedef char TitleSequenceModelElementSize[sizeof(TitleSequenceModelElement) == 48 ? 1 : -1];
 typedef char TitleSequenceAuxElementSize[sizeof(TitleSequenceAuxElement) == 52 ? 1 : -1];
 typedef char TitleSequencePrefixSize[sizeof(TitleAnimationSequence) == 57288 ? 1 : -1];
+/* The initializer clears the prefix, then copies 512 palette bytes into the tail. */
+typedef struct TitleSequenceAllocation {
+    TitleAnimationSequence sequence;
+    u32 unknown_dfc8;
+    u8 color_data[512], unknown_e1cc[1536];
+} TitleSequenceAllocation;
+typedef char TitleSequenceAllocationSize[sizeof(TitleSequenceAllocation) == 59340 ? 1 : -1];
 typedef char TitleSequencePromptSize[sizeof(TitleSequencePrompt) == 96 ? 1 : -1];
 typedef char TitleSequenceRumblePromptSize[sizeof(TitleSequenceRumblePrompt) == 120 ? 1 : -1];
 /* Save prefix through the rumble preference in byte 0x514. */

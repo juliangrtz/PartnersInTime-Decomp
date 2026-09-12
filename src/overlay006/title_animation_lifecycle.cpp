@@ -19,7 +19,6 @@ extern TitleAnimationController *data_ov006_0207c4e4;
 extern const TitleAnimationArchive data_ov006_0207b038[5];
 extern const GameRumblePattern data_ov006_0207af7c;
 void func_0202cbd4(void *, int, unsigned);
-void func_ov006_0206d2b4(void);
 }
 
 static inline void DeleteTask(void *object)
@@ -62,7 +61,7 @@ TitleAnimationController *TitleAnimation_Init(TitleAnimationController *work, u3
     data_0206032c.repeat_delay = 8;
     GameRumble_SetPatterns(&data_ov006_0207af7c, 1);
     NNS_SndPlayerSetAllocatableChannel(0, 65525);
-    func_ov006_0206d2b4();
+    TitleAnimation_InitSequence();
     GameIrqTask_Enable(work->irq);
     return work;
 }

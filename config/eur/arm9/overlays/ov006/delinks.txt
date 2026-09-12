@@ -15,6 +15,9 @@ src/overlay006/title_animation_update.cpp:
 src/overlay006/title_sequence_cleanup.c:
     .text       start:0x0206cea0 end:0x0206d2b4
 
+src/overlay006/title_sequence_init.cpp:
+    .text       start:0x0206d2b4 end:0x0206db4c
+
 src/overlay006/title_sequence_update.cpp:
     .text       start:0x0206c3c8 end:0x0206cea0
 
