@@ -4793,3 +4793,58 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is now **681,696 / 1,563,700 bytes (43.60%)**; C/C++ plus
   symbolic assembly is **43.93%**. Overlay 6 is **32,976 / 66,492 (49.59%)**.
   The 50% project milestone still requires 100,154 additional matching bytes.
+
+
+## 2026-09-12: Title sequence phases and exit controls (+2,568 matching C++ bytes)
+
+- Added `TitleAnimation_UpdateSequence` at `0x0206C534` (2,412 bytes),
+  `TitleAnimation_BeginExit` at `0x0206C3E4` (128 bytes), and
+  `TitleAnimation_ResetIdleTimer` at `0x0206C3C8` (28 bytes). They share
+  `src/overlay006/title_sequence_update.cpp` with the three previously matched
+  draw/upload/exit-request functions, replacing the temporary elements module.
+  The complete six-function, 2,776-byte region matches; no assembly was added.
+- The state machine preserves callback gating and reads the next link and phase
+  after callbacks. Named phases cover timed music/entry, orbit and panel motion,
+  presentation readiness, prompt activity, automatic exit, and skipping. Native
+  table references retain prompt delays and signed brightness targets. The exit
+  lookup uses the full-width argument before storing its low byte. An explicit
+  `localized == 1` comparison reproduces the native condition in the model wait.
+- Source and the observed menu confirm save-object byte `+0x514`, bit 6 as the
+  rumble preference. The sequence header and cleanup now use rumble/input names
+  for confirmed prompt fields; unknown fields remain neutral.
+- Five successful replays under `build/runtime/eur_title_sequence_update/`
+  cover 11,166 frames, 8,327 sequence updates, five begin-exit calls and two idle
+  resets. The probe independently checks state-owned writes, helper ordering
+  and arguments, 489,711 list visits, 449,390 update callbacks, 2,938 element
+  readiness results and 1,362 orbit-group results. All 14 implemented phases
+  execute across the runs; external helper effects are refreshed after return,
+  not independently reimplemented in full.
+- Ordinary save-83 startup and save-1 early skip use buttons only. An additional
+  save-83 attempt to enter options finds only PRESS START with Slot-2 absent;
+  it remains ordinary replay evidence, not proof of options accessibility.
+- A separate save-83 fixture changes four bytes of the initialized primary
+  prompt immediately after its native constructor: selection/min/max from
+  `[2,2,2]` to `[0,0,1]`, and layout from 1 to 0. This reproduces the rumble-menu
+  layout without changing hardware availability. Buttons then open the visible
+  Use Rumble Feature menu, select No, and exit. Both reset calls occur here;
+  the screenshot was inspected. This verifies UI behavior, not physical rumble.
+- A language-zero fixture changes only controller language byte `+1048` after
+  initialization. Its 4,202-frame replay exercises the alternate presentation,
+  music completion, the 32-frame auto-exit threshold, exit kind 1, and a fresh
+  normal title sequence. One final frame drains a pending monitored call.
+  Earlier probe-end assertions were traced to a normal buffer-processing loop;
+  stopping new outermost captures while completing pending calls resolved them.
+- Unexercised cases include the 1,800-frame rumble-prompt-seen timeout, resetting
+  a nonzero idle timer, empty lists, absent-and-disabled callbacks, unknown
+  phases, other skip participant masks, language-zero skipping and exit kinds
+  outside 0/1. Fixture setup and ordinary input are recorded separately.
+- All 104 original save hashes remain unchanged. The ordinary save-83 load-menu
+  screenshot was inspected; its four final VRAM/palette hashes match the prior
+  title-update replay. Distinct fixture routes are not claimed to share that
+  baseline. Current canonical and native ROM hashes match every replay's ROM.
+- Module/symbol checks, canonical packaging, native relink (43 components,
+  zero differences), progress consistency, and all 81 tests pass. Both ROMs
+  retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **684,264 / 1,563,700 bytes (43.76%)**; C/C++ plus symbolic
+  assembly is **44.09%**. Overlay 6 is **35,544 / 66,492 (53.46%)**.
+  The project-wide 50% milestone still requires 97,586 matching bytes.

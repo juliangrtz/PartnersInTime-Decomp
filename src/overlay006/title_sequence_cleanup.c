@@ -8,17 +8,17 @@ void func_ov006_02072ae4(void *), func_ov006_02072ea8(void *);
 void func_ov006_02072768(void *), func_ov006_02072808(void *);
 #define SEQUENCE data_ov006_0207c4e0
 #define SAVE ((TitleSequenceSave *)gSaveData)
-static inline void StoreSelectionFlag(u8 enabled)
+static inline void StoreRumblePreference(u8 enabled)
 {
     /* The native store truncates the input byte before updating bit 6. */
-    SAVE->unknown_06 = enabled;
+    SAVE->rumble_enabled = enabled;
 }
 void TitleAnimation_ReleaseSequence(void)
 {
-    if (SEQUENCE->secondary_prompt.selection_override >= 0)
-        StoreSelectionFlag(SEQUENCE->secondary_prompt.selection_override == 0);
+    if (SEQUENCE->rumble_prompt.selection_override >= 0)
+        StoreRumblePreference(SEQUENCE->rumble_prompt.selection_override == 0);
     else
-        StoreSelectionFlag(SEQUENCE->secondary_prompt.prompt.selection == 0);
+        StoreRumblePreference(SEQUENCE->rumble_prompt.prompt.selection == 0);
     TitlePanelResources_Release(&SEQUENCE->panel_resources);
     /* The native loop releases the first panel six times. */
     {
@@ -36,7 +36,7 @@ void TitleAnimation_ReleaseSequence(void)
     TitleModel_Release(&SEQUENCE->model);
     func_ov006_0207393c(SEQUENCE->unknown_5bc);
     func_ov006_02072ae4(&SEQUENCE->prompt);
-    func_ov006_02072ea8(&SEQUENCE->secondary_prompt);
+    func_ov006_02072ea8(&SEQUENCE->rumble_prompt);
     {
         int side;
         for (side = 0; side < 2; ++side) {

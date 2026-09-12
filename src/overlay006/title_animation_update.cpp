@@ -9,7 +9,6 @@ extern GameOamEntry data_02060740[128];
 /* Overlay IDs are absolute linker symbols. */
 extern int OVERLAY_5_ID, OVERLAY_6_ID;
 void func_02037108(void);
-void func_ov006_0206c534(void);
 void func_020090f8(int);
 void func_02009598(GameOamEntry *, int, u8);
 }
@@ -39,7 +38,7 @@ void TitleAnimation_Update(TitleAnimationController *work)
     *(vu32 *)0x040004c8 = 678250;
     switch (work->exit_state) {
     case 0:
-        func_ov006_0206c534();
+        TitleAnimation_UpdateSequence();
         break;
     case 1:
         if (data_ov006_0207c4e4) {
