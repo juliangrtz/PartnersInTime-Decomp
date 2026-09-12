@@ -28,6 +28,9 @@ includes the tested [Smash Eggs](#smash-eggs), [credits](#credits) and
 - Complete authorized work without repeatedly asking for confirmation. The
   user has authorized intermediate commits and pushes. Give concise updates
   and report actual results, remaining gaps and verification limits.
+- Use subagents only when the user or applicable instructions explicitly
+  authorize delegation. Old agent names in the session context do not authorize
+  restarting their work.
 
 ## Start with the current checkout
 
@@ -191,6 +194,14 @@ numeric value in the symbol address. Resolve them from the generated
 native literal relocation where required; reading such a symbol as a C variable
 would dereference that number as an address.
 
+A decompiler can fold a condition after resolving a linker value to a constant,
+even though both branches remain in the original instructions. The resident
+thread initializer at `0x020396D8` retains a stack-bound calculation conditional
+on a literal that is zero in the EUR binary. Recover the original relocation
+and linker expression before replacing such a value with a C constant; do not
+invent an SDK symbol name or add volatile accesses to recreate the missing
+branch. Until that evidence is available, defer the function.
+
 ## Reconstructing and integrating code
 
 1. Locate the original function and its boundaries in the component's
@@ -281,6 +292,11 @@ arithmetic and narrowed only afterward. For example, `(s16)(last_frame - 1)`
 preserves a different truncation point from making `last_frame` an `s16` early.
 Check the native extension instructions and the callee's parameter type before
 introducing masks or casts to fix a size difference.
+
+For example, the Nawatobi console caller passes full-width cursor coordinates;
+the console setter narrows them only when storing its byte fields. Declaring
+those parameters as `u8` inserts extra masks in the caller. Verify both caller
+and callee, plus existing users, when correcting the shared declaration.
 
 Packed fields also need their native extraction semantics. Reuse a verified
 shared bitfield view when the instructions and consumers establish its layout;
@@ -683,6 +699,9 @@ phase. The task is dynamically allocated; an observed task address is not a
 universal address to patch. Its code is in `src/overlay007/nawatobi_*`;
 the selector and rope simulation were exercised, but a normal entry route
 remains unconfirmed.
+The compatible private starting snapshot is
+`build/runtime/states/pause_subscene_menu65.dst`, derived from checkpoint 65.
+Verify its provenance and the pause-update byte guard before reusing it.
 The private capture records are `build/runtime/eur_nawatobi/evidence_065.json`
 and `build/runtime/eur_nawatobi/rope_evidence_065.json`. Keep these local; cite
 the observed setup and its limits when sharing instructions with researchers.
@@ -696,6 +715,32 @@ orders. They verify controlled entry followed by native level selection and
 updates, not successful level completion or a normal story entry route.
 Nawatobi's rope sprite copy adds 208 pixels between screens; this differs from
 the title sequence's 244 and the credits' 224. Use the subsystem's own layout.
+
+Several different fields are called a phase or state. These are the recovered
+EUR ARM9 access locations, with overlay 7 loaded; only the pause phase above is
+the tested one-time entry edit. `r0` below means the argument at the specified
+function's guarded entry, and `read32` dereferences a little-endian pointer.
+
+| Field | Address or pointer expression | Access |
+|---|---|---|
+| Pause scene phase | `read32(0x0208E1E0) + 0x30` | 32-bit word |
+| Nawatobi scene phase | `read32(0x020A6BBC) + 0x2C` | 32-bit word |
+| Selector / level task phase | `r0 + 0x20` at `0x0208C5BC` / `0x0208C4D0` | 32-bit word; timer at `r0 + 0x24` |
+| Active level / selected row | `0x020A6BCC` / `0x020A6BCD` | Bytes; selected row is read signed and is zero-based |
+| Menu initialized / script running flags | `0x020A6BCE` / `0x020A6BCF` | Bytes |
+| Scene script shared variable zero | `read32(0x020A6B90) + 0x37EC` | 32-bit level argument |
+| Primary script instruction pointer | `read32(0x020A6B90) + 0x386C` | 32-bit pointer; zero means stopped |
+
+The level callback copies the active level into shared variable zero before
+starting the primary script. The primary start clears its own `0xB8`-byte slot,
+preserving the shared variables; see
+[the script manager](src/overlay007/scene_script_manager.c). Its callback phases
+0, 1 and 2 mean start, wait for the script, and a 60-update return delay. These
+are code-derived meanings, not a claim that a runtime replay exercised every
+transition. The selector displays five rows but accepts ordinary confirmation
+only for the first two; the extra rows do not establish three playable levels.
+Check the current link metadata and probe reports before claiming the selector,
+menu renderer or level callback has completed matching and runtime verification.
 
 ## Progress and documentation
 
