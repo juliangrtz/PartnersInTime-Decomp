@@ -739,8 +739,18 @@ preserving the shared variables; see
 are code-derived meanings, not a claim that a runtime replay exercised every
 transition. The selector displays five rows but accepts ordinary confirmation
 only for the first two; the extra rows do not establish three playable levels.
-Check the current link metadata and probe reports before claiming the selector,
-menu renderer or level callback has completed matching and runtime verification.
+Check the current link metadata and probe reports before claiming a neighboring
+selector function is also reconstructed.
+
+`build/analysis/probe_nawatobi_menu.py` checks complete console records, level
+tasks, shared variables and primary script slots. Its reports are under
+`build/runtime/eur_nawatobi_menu/`. Ordinary menu and Level 1/2 runs are separate
+from `evidence_terminated_level1_65.json`: that fixture clears the initialized
+primary script pointer once at a guarded level-callback entry. It verifies the
+stopped-script branch, all 60 delay decrements and callback return to the selector;
+it does not establish natural level completion or the script's own cleanup.
+The ordinary level captures match the preceding rendering probe's graphics
+buffers. Use the recorded fixtures and uncovered branches when extending it.
 
 ## Progress and documentation
 

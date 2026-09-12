@@ -84,7 +84,7 @@ void GameConsole_Upload(GameConsole *console)
     }
 }
 
-void GameConsole_SetCursor(GameConsole *console, u8 x, u8 y)
+void GameConsole_SetCursor(GameConsole *console, int x, int y)
 {
     console->x = x;
     console->y = y;

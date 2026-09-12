@@ -98,7 +98,7 @@ src/overlay007/pause_resources.cpp:
     .text start:0x02070b50 end:0x02071f80
 
 src/overlay007/nawatobi_resources.cpp:
-    .text start:0x0208c954 end:0x0208cd88
+    .text start:0x0208c860 end:0x0208cd88
 
 src/overlay007/nawatobi_lifecycle.cpp:
     .text start:0x0208ceec end:0x0208d738
@@ -180,3 +180,6 @@ src/overlay007/nawatobi_render_tasks.cpp:
 
 src/overlay007/nawatobi_rope_subsprite.c:
     .text start:0x0208c0e0 end:0x0208c180
+
+src/overlay007/nawatobi_level.cpp:
+    .text start:0x0208c4d0 end:0x0208c5bc

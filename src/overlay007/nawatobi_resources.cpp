@@ -53,4 +53,26 @@ void NawatobiScene_LoadResources(NawatobiSceneTask *)
     }
     func_ov005_020671e4(ARCHIVE);
 }
+
+void NawatobiMenu_Draw(void)
+{
+    GameConsole_Clear(CONSOLE(1));
+    GameConsole_Clear(CONSOLE(0));
+    GameConsole_SetCursor(CONSOLE(1), 6, 10);
+    GameConsole_Printf(CONSOLE(1), data_ov007_0208e19c);
+    int level = 0;
+    int row = 8;
+    do {
+        if ((s8)data_ov007_020a6bcc[NAWATOBI_STATE_SELECTED_LEVEL] == level) {
+            GameConsole_SetCursor(CONSOLE(0), 8, row);
+            GameConsole_Printf(CONSOLE(0), data_ov007_0208e1b4);
+        }
+        GameConsole_SetCursor(CONSOLE(0), 12, row);
+        GameConsole_Printf(CONSOLE(0), data_ov007_0208e1b8, level + 1);
+        if (level >= 2)
+            GameConsole_Printf(CONSOLE(0), data_ov007_0208e1c4);
+        ++level;
+        row += 2;
+    } while (level < 5);
+}
 }

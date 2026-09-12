@@ -14,7 +14,32 @@ struct ThreeResources {
 struct ConsolePalette {
     u16 colors[16];
 };
+struct NawatobiMenuTask {
+    u8 unknown_00[32];
+    int phase, timer;
+    u8 unknown_28[32];
+};
+/* The global scene script reads its level argument from shared variable zero. */
+struct NawatobiScriptVariablesPrefix {
+    u8 unknown_0000[0x37ec];
+    u32 variables[32];
+};
+enum NawatobiStateOffset {
+    NAWATOBI_STATE_LEVEL = 0,
+    NAWATOBI_STATE_SELECTED_LEVEL = 1,
+    NAWATOBI_STATE_MENU_INITIALIZED = 2,
+    NAWATOBI_STATE_SCRIPT_RUNNING = 3
+};
+enum NawatobiLevelPhase {
+    NAWATOBI_LEVEL_START,
+    NAWATOBI_LEVEL_WAIT_SCRIPT,
+    NAWATOBI_LEVEL_RETURN_DELAY
+};
 extern "C" {
+void NawatobiMenu_Draw(void);
+void NawatobiLevel_Update(NawatobiMenuTask *task);
+extern const char data_ov007_0208e19c[], data_ov007_0208e1b4[];
+extern const char data_ov007_0208e1b8[], data_ov007_0208e1c4[];
 extern GameTaskVTable data_ov007_0208e0d0, data_ov007_0208e0bc;
 extern NawatobiSceneTask *data_ov007_020a6bbc;
 extern u8 *data_ov007_020a6bc0, *data_ov007_020a6bc4, *data_ov007_020a6bc8;
@@ -58,4 +83,7 @@ static inline void DeleteBuffer(void *p)
 typedef char FourResourcesSizeCheck[sizeof(FourResources) == 32 ? 1 : -1];
 typedef char ThreeResourcesSizeCheck[sizeof(ThreeResources) == 24 ? 1 : -1];
 typedef char ConsolePaletteSizeCheck[sizeof(ConsolePalette) == 32 ? 1 : -1];
+typedef char NawatobiMenuTaskSizeCheck[sizeof(NawatobiMenuTask) == 72 ? 1 : -1];
+typedef char NawatobiScriptVariablesPrefixSizeCheck[
+    sizeof(NawatobiScriptVariablesPrefix) == 0x386c ? 1 : -1];
 #endif

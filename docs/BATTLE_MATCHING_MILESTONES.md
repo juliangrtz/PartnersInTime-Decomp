@@ -5614,3 +5614,55 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **700,856 / 1,563,700 bytes (44.82%)**; C/C++ plus symbolic
   assembly is **45.15%**. Overlay 7 is **55,832 / 142,264 (39.25%)**.
   The 50% milestone still requires 80,994 matching bytes.
+
+
+## 2026-09-13: Nawatobi menu drawing and level script callback (+480 matching bytes)
+
+- Linked `NawatobiMenu_Draw` at `0x0208C860` (244 bytes) in the contiguous
+  `nawatobi_resources.cpp` range, and `NawatobiLevel_Update` at `0x0208C4D0`
+  (236 bytes) in a temporary separate unit across the native selector gap.
+  Added shared task/variable-prefix layouts with size checks. The menu uses
+  the original title, arrow, level and locked-row strings; the callback passes
+  the selected level into Scene VM shared variable zero, waits for its primary
+  script and returns to the selector after a 60-update delay.
+- Corrected `GameConsole_SetCursor` coordinates to full-width `int` parameters.
+  The native setter narrows at its byte stores. The earlier `u8` prototype
+  inserted two extra masks in the menu caller; correcting the shared declaration
+  preserved the existing console implementation and all linked modules exactly.
+- Full Ninja module/symbol checks passed. The canonical packaging wrapper with
+  data mods disabled and the native relink both produced SHA-1
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Native relinking validated 43
+  components, 31,138 known relocations and 1,577 ARM7 relocations with zero
+  differing bytes. Progress generation/check and all 81 tests passed.
+  Local logs: `build/analysis/nawatobi_menu_{check,rom,native,tests}.log`.
+- Private `build/analysis/probe_nawatobi_menu.py` uses the checkpoint-65
+  compatible pause snapshot, a guarded one-time pause phase 2-to-7 write and
+  recorded buttons. Reports `evidence_menu65.json`, `evidence_level1_65.json`,
+  `evidence_level2_65.json` and `evidence_terminated_level1_65.json` are under
+  `build/runtime/eur_nawatobi_menu/`. Together they check 575 menu draws and
+  1,461 level updates, with 12,326 ordered helper-argument assertions.
+- The menu oracle independently derives all 1,604 console bytes, including
+  tiles, scratch text, cursor and palette state, at each helper return and final
+  return. All five selected rows were exercised, including locked Level 3 and
+  wraparound. The level oracle checks complete 72-byte tasks, 128 shared-variable
+  bytes, the 184-byte primary slot and all 1,680 Nawatobi state bytes. Expected
+  primary-script entry pointers come from the archive header; running status
+  comes from the slot pointer. No helper-output refresh supplies expected data.
+- Ordinary Level 1/2 replays cover launch and a running primary script. The
+  separately labeled termination fixture clears only that initialized script's
+  instruction pointer once at frame 401. It reaches the stopped branch, all
+  60 countdown updates and native callback reassignment. This is controlled
+  termination, not natural level completion or verification of VM cleanup.
+  Invalid callback phases, natural script termination and console-upload/VM
+  execution internals remain outside this oracle.
+- Native byte guards and stack-pointer-matched returns completed without
+  discarded calls or drain frames. `verify_nawatobi_menu_artifacts.py` verified
+  40 PNGs, 360 graphics dumps, both ROM hashes, snapshot provenance and all 104
+  unchanged source saves. All 18 ordinary Level 1/2 screenshots and their 162
+  graphics dumps equal the preceding rendering probe. Visually inspected the
+  locked row, both active levels and the selector after controlled termination.
+- Matching C/C++ is **701,336 / 1,563,700 bytes (44.85%)**; with separately
+  maintained assembly it is **45.18%**. Overlay 7 is **56,312 / 142,264 (39.58%)**.
+  The native selector at `0x0208C5BC` remains deferred: its 676-byte private
+  candidate has eight register-operand word differences. No brute-force changes
+  were attempted, and those bytes are not counted.
