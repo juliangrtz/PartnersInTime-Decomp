@@ -8,7 +8,6 @@ extern TitleAnimationSequence *data_ov006_0207c4e0;
 extern TitleAnimationController *data_ov006_0207c4e4;
 extern const u16 data_ov006_0207b0e8[][2], data_ov006_0207b0ea[][2];
 extern const s8 data_ov006_0207b0b4[];
-void func_ov006_02072af0(void *, int);
 void func_ov006_0206e594(TitleMovingSprite *);
 void func_ov006_02073bf8(void *);
 }
@@ -113,7 +112,7 @@ extern "C" void TitleAnimation_UpdateSequence(void)
         if (TitleElement_IsInactive(&SEQUENCE->model)) {
             if ((localized == 1 && TitleElement_IsInactive(&SEQUENCE->localized_sequence)) ||
                 (!localized && TitleElement_IsInactive(&SEQUENCE->sprite_sequence))) {
-                func_ov006_02072af0(&SEQUENCE->prompt, data_ov006_0207b0e8[localized][0]);
+                TitlePrompt_Start(&SEQUENCE->prompt, data_ov006_0207b0e8[localized][0]);
                 SEQUENCE->phase = TITLE_SEQUENCE_ACTIVE;
             }
         }
@@ -172,7 +171,7 @@ extern "C" void TitleAnimation_UpdateSequence(void)
         break;
     case TITLE_SEQUENCE_SKIP_IN:
         if (TitleElement_IsInactive(&SEQUENCE->brightness)) {
-            func_ov006_02072af0(&SEQUENCE->prompt, data_ov006_0207b0ea[localized][0]);
+            TitlePrompt_Start(&SEQUENCE->prompt, data_ov006_0207b0ea[localized][0]);
             SEQUENCE->phase = TITLE_SEQUENCE_ACTIVE;
         }
         break;
@@ -211,8 +210,8 @@ void TitleAnimation_RequestExit(int kind)
 
 extern "C" void TitleAnimation_BeginExit(int kind)
 {
-    SEQUENCE->rumble_prompt.prompt.input_disabled = 1;
-    SEQUENCE->prompt.input_disabled = 1;
+    SEQUENCE->rumble_prompt.menu.input_disabled = 1;
+    SEQUENCE->prompt.menu.input_disabled = 1;
     TitleBrightness_Start(&SEQUENCE->brightness, 16, 0, data_ov006_0207b0b4[kind], 0);
     GameAudio_StopMusic(16);
     SEQUENCE->exit_kind = kind;

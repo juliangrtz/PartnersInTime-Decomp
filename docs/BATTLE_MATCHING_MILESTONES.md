@@ -4977,3 +4977,58 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **687,356 / 1,563,700 bytes (43.96%)**; C/C++ plus symbolic
   assembly is **44.29%**. Overlay 6 is **38,636 / 66,492 (58.11%)**.
   The project-wide 50% milestone still requires 94,494 matching bytes.
+
+
+## 2026-09-12: Title prompt and shared menu selection (+1,168 matching C bytes)
+
+- Added the five primary prompt helpers at `0x02072AE4..0x02072EA8`
+  (964 bytes) in `src/overlay006/title_prompt.c`, and shared menu initialization
+  and selection at `0x02073870..0x0207393C` (204 bytes) in
+  `src/overlay006/title_menu_selection.c`. Both contiguous regions are linked
+  and byte-identical; no assembly was added.
+- The prompt constructs language-specific item positions, waits for its delay,
+  scales into view over 16 updates, draws the selected entries, handles confirm
+  and direction inputs, and waits for the rumble prompt. Shared selection retains
+  signed-byte wrapping, fixed-selection no-ops, cursor coordinates and the
+  caller-supplied next state. Full-width parameters retain native truncation.
+- Recovered a 60-byte common menu prefix and distinct 96-byte primary and
+  120-byte rumble records. The rumble record does not contain the full primary
+  prompt; its unrecovered tail remains neutral. Shared declarations and sequence
+  callers use the corrected layouts and named prompt helpers.
+- Four prompt functions matched immediately. The draw helper's initial 180-byte
+  candidate became the native 176 bytes by preserving both scale loads before
+  stores and direct layout-table indexing. The two shared helpers also matched
+  without permutation searches. The neighboring cursor-show helper remains
+  native after a same-size private candidate retained register-operand differences.
+- Runtime: four cold boots, 7,371 frames, using ordinary save-83 startup,
+  save-1 fixed-selection inputs, a save-83 rumble-layout fixture, and a separate
+  save-83 language-zero fixture. Private reports, states and captures are under
+  `build/runtime/eur_title_prompt/`; the independent probe is in `build/analysis/`.
+- All seven functions execute: eight shared initializations, four prompt
+  initializations/starts/releases each, 2,614 draws, 2,610 updates and eight
+  selection calls. Oracles check 11,484 full prompt snapshots, 30 common-prefix
+  snapshots, 8,488 model-scale checks, 3,073 drawn items, all 15 intermediate
+  scales four times, both observed delays (32/80), two fixed-selection no-ops,
+  six cursor moves, wrapping in both directions and the complete rumble wait.
+  Exact direct-helper arguments and inactive-query results are verified;
+  other helper effects are observed by refreshing memory after return.
+- The rumble fixture changes four initialized primary-menu bytes, retaining
+  the absent-hardware flag. Screenshots confirm opening Use Rumble Feature and
+  moving from Yes to No before returning and choosing Start Game. This exercises
+  UI behavior, not the constructor's hardware-present branch or physical rumble.
+  The separate language fixture changes only the title controller language byte.
+- Unexercised paths include inactive state 0, cursor-wait state 4, disabled
+  active input, unsupported states/selections, hardware-present construction,
+  other language rows and abnormal counters. The normal move call supplies
+  next state 3, so it does not establish cursor-wait state coverage.
+- All 104 original save hashes and captured buffer-file hashes are verified.
+  Ordinary save-83 final VRAM/palette hashes match the preceding trail replay;
+  its load-menu screenshot and both rumble-choice screenshots were inspected.
+  The other routes are not claimed to share that baseline. No drain frames
+  were needed in these four runs.
+- Full module/symbol checks, canonical packaging, native relink of 43 components
+  with zero differences, progress checks and all 81 tests pass. Canonical and
+  native ROM SHA-1 remains `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **688,524 / 1,563,700 bytes (44.03%)**; C/C++ plus symbolic
+  assembly is **44.36%**. Overlay 6 is **39,804 / 66,492 (59.86%)**.
+  The project-wide 50% milestone still requires 93,326 matching bytes.

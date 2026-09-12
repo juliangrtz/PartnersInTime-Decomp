@@ -4,7 +4,7 @@
 #include <game/save_data.h>
 extern TitleAnimationSequence *data_ov006_0207c4e0;
 void func_ov006_02073bfc(void *), func_ov006_0207393c(void *);
-void func_ov006_02072ae4(void *), func_ov006_02072ea8(void *);
+void func_ov006_02072ea8(void *);
 #define SEQUENCE data_ov006_0207c4e0
 #define SAVE ((TitleSequenceSave *)gSaveData)
 static inline void StoreRumblePreference(u8 enabled)
@@ -17,7 +17,7 @@ void TitleAnimation_ReleaseSequence(void)
     if (SEQUENCE->rumble_prompt.selection_override >= 0)
         StoreRumblePreference(SEQUENCE->rumble_prompt.selection_override == 0);
     else
-        StoreRumblePreference(SEQUENCE->rumble_prompt.prompt.selection == 0);
+        StoreRumblePreference(SEQUENCE->rumble_prompt.menu.selection == 0);
     TitlePanelResources_Release(&SEQUENCE->panel_resources);
     /* The native loop releases the first panel six times. */
     {
@@ -34,7 +34,7 @@ void TitleAnimation_ReleaseSequence(void)
     TitlePanelTransition_Release(&SEQUENCE->transition);
     TitleModel_Release(&SEQUENCE->model);
     func_ov006_0207393c(SEQUENCE->unknown_5bc);
-    func_ov006_02072ae4(&SEQUENCE->prompt);
+    TitlePrompt_Release(&SEQUENCE->prompt);
     func_ov006_02072ea8(&SEQUENCE->rumble_prompt);
     {
         int side;

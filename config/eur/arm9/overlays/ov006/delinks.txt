@@ -24,6 +24,12 @@ src/overlay006/title_sequence_model.c:
 src/overlay006/title_trail.c:
     .text       start:0x02072768 end:0x02072988
 
+src/overlay006/title_prompt.c:
+    .text       start:0x02072ae4 end:0x02072ea8
+
+src/overlay006/title_menu_selection.c:
+    .text       start:0x02073870 end:0x0207393c
+
 src/overlay006/title_sequence_update.cpp:
     .text       start:0x0206c3c8 end:0x0206cea0
 

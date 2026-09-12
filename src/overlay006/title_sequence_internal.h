@@ -7,6 +7,7 @@
 #include <game/title_model.h>
 #include <game/title_startup.h>
 #include "title_trail_internal.h"
+#include "title_menu_internal.h"
 enum TitleSequencePhase {
     TITLE_SEQUENCE_DELAY_MUSIC = 0,
     TITLE_SEQUENCE_DELAY_ENTRY = 1,
@@ -46,18 +47,44 @@ typedef struct TitleSequenceAuxElement {
     TitleSequenceModelElement model;
     u32 unknown_30;
 } TitleSequenceAuxElement;
+enum TitlePromptState {
+    TITLE_PROMPT_INACTIVE, TITLE_PROMPT_DELAY, TITLE_PROMPT_APPEARING,
+    TITLE_PROMPT_ACTIVE, TITLE_PROMPT_WAIT_CURSOR, TITLE_PROMPT_WAIT_RUMBLE,
+    TITLE_PROMPT_EXITING
+};
+enum TitlePromptOption {
+    TITLE_PROMPT_START_GAME, TITLE_PROMPT_OPTIONS, TITLE_PROMPT_PRESS_START
+};
+typedef struct TitleSequenceRumblePrompt TitleSequenceRumblePrompt;
 typedef struct TitleSequencePrompt {
-    u8 unknown_00[56];
-    s8 selection;
-    u8 unknown_39[2], input_disabled;
-    u8 unknown_3c[36];
+    TitleMenuBase menu;
+    TitleSequenceRumblePrompt *rumble_prompt;
+    s16 scale_x, scale_y;
+    s32 item_x[3], item_y[3];
+    u8 layout, unknown_5d[3];
 } TitleSequencePrompt;
-typedef struct TitleSequenceRumblePrompt {
-    TitleSequencePrompt prompt;
-    u8 unknown_60[22];
+typedef struct TitlePromptLayout {
+    s16 x, y, layout, selector;
+} TitlePromptLayout;
+struct TitleSequenceRumblePrompt {
+    TitleMenuBase menu;
+    u8 unknown_3c[58];
     s8 selection_override;
     u8 unknown_77;
-} TitleSequenceRumblePrompt;
+};
+typedef char TitlePromptLayoutSize[sizeof(TitlePromptLayout) == 8 ? 1 : -1];
+#ifdef __cplusplus
+extern "C" {
+#endif
+void TitlePrompt_Release(TitleSequencePrompt *work);
+void TitlePrompt_Start(TitleSequencePrompt *work, int delay);
+void TitlePrompt_Init(TitleSequencePrompt *work, void *cursor,
+                      TitleSequenceRumblePrompt *rumble_prompt, int language);
+void TitlePrompt_Draw(void *element);
+void TitlePrompt_Update(void *element);
+#ifdef __cplusplus
+}
+#endif
 /* Prefix of the 59,340-byte sequence allocation, through its cleared state. */
 typedef struct TitleAnimationSequence {
     TitleElementList list;

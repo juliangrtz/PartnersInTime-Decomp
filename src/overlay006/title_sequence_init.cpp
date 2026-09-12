@@ -12,7 +12,6 @@ void func_ov006_020726b8(void);
 void func_ov006_0206b9ec(TitleAnimationController *, int, u32);
 void func_ov006_02073948(void *);
 void func_ov006_02072f44(void *, void *, const void *);
-void func_ov006_02072b0c(void *, void *, void *, int);
 void func_ov006_02073c08(void *);
 extern TitleAnimationController *data_ov006_0207c4e4;
 extern TitleAnimationSequence *data_ov006_0207c4e0;
@@ -77,7 +76,7 @@ extern "C" void TitleAnimation_InitSequence(void)
     Append(&SEQUENCE->rumble_prompt);
     if (prompt_data)
         GameHeap_Free(prompt_data);
-    func_ov006_02072b0c(&SEQUENCE->prompt, SEQUENCE->unknown_5bc, &SEQUENCE->rumble_prompt, CONTROLLER->language);
+    TitlePrompt_Init(&SEQUENCE->prompt, SEQUENCE->unknown_5bc, &SEQUENCE->rumble_prompt, CONTROLLER->language);
     Append(&SEQUENCE->prompt);
     for (int i = 0; i < 25; ++i)
         Append(&SEQUENCE->auxiliary[i]);
