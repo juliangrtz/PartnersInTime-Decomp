@@ -10,6 +10,7 @@ void TitleAnimation_DrawElements(void);
 void TitleAnimation_UploadElements(void);
 void TitleAnimation_RequestExit(int kind);
 void TitleAnimation_Update(TitleAnimationController *work);
+void TitleAnimation_InitDisplay(TitleAnimationController *work);
 void TitleAnimationIrq_UploadFrame(GameIrqTask *task);
 GameIrqTask *TitleAnimationIrq_Delete(GameIrqTask *task);
 GameIrqTask *TitleAnimationIrq_Destroy(GameIrqTask *task);

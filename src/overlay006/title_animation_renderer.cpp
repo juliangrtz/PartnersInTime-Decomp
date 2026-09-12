@@ -12,21 +12,21 @@ u32 GX_ResetBankForSubOBJExtPltt(void);
 void func_02036988(vu32 *, int, int, int, int);
 }
 
-static inline void DeleteTask(GameTaskDispatch *task)
+static inline void DeleteTask(GamePaletteEffectController *task)
 {
     if (task)
-        task->delete_task();
+        ((GameTaskDispatch *)task)->delete_task();
 }
 
 extern "C" void TitleAnimation_ReleaseRenderState(TitleAnimationController *work)
 {
-    if (work->unknown_388) {
-        DeleteTask(work->unknown_388);
-        work->unknown_388 = 0;
+    if (work->palette_effects[0]) {
+        DeleteTask(work->palette_effects[0]);
+        work->palette_effects[0] = 0;
     }
-    if (work->unknown_38c) {
-        DeleteTask(work->unknown_38c);
-        work->unknown_38c = 0;
+    if (work->palette_effects[1]) {
+        DeleteTask(work->palette_effects[1]);
+        work->palette_effects[1] = 0;
     }
     GX_ResetBankForTex();
     GX_ResetBankForBG();

@@ -15,6 +15,9 @@ src/overlay006/title_animation_update.cpp:
 src/overlay006/title_animation_elements.cpp:
     .text       start:0x0206c464 end:0x0206c534
 
+src/overlay006/title_animation_display.cpp:
+    .text       start:0x0206b2c0 end:0x0206b77c
+
 src/overlay006/title_animation_renderer.cpp:
     .text       start:0x0206b1dc end:0x0206b2c0
 

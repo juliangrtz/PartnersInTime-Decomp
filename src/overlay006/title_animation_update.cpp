@@ -58,8 +58,8 @@ void TitleAnimation_Update(TitleAnimationController *work)
     func_02009598(data_02060740, 0, data_0205a060[1]);
     GameOam_SortGroups(1);
     GameOam_BuildSorted(1, data_02060740, data_02060740);
-    ((TitleRenderDispatch *)work->unknown_388)->pass_0c();
-    ((TitleRenderDispatch *)work->unknown_38c)->pass_08();
+    ((TitleRenderDispatch *)work->palette_effects[0])->pass_0c();
+    ((TitleRenderDispatch *)work->palette_effects[1])->pass_08();
     *(vu32 *)0x04000540 = 1;
 }
 }

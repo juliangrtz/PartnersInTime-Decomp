@@ -1,6 +1,7 @@
 #ifndef PIT_TITLE_ANIMATION_INTERNAL_H
 #define PIT_TITLE_ANIMATION_INTERNAL_H
 #include <game/title_animation.h>
+#include <game/palette_animation.h>
 extern "C" {
 #include <game/graphics_resource.h>
 #include <game/archive_io.h>
@@ -46,8 +47,9 @@ struct TitleAnimationController {
     u8 *entries[5];
     u8 *entry_data[5];
     TitleAnimationResource resources[16];
-    GameTaskDispatch *unknown_388, *unknown_38c;
-    u8 unknown_390[128];
+    GamePaletteEffectController *palette_effects[2];
+    GamePaletteEffectEntry palette_entries[2][2];
+    u8 unknown_3e0[48];
     void *localized_resource, *shared_resource;
     u8 language, exit_state, exit_kind;
     u8 previous_first_delay, previous_repeat_delay;

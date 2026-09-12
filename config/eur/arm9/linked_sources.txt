@@ -481,6 +481,7 @@ src/overlay008/save_menu_text_init.c
 src/overlay006/title_animation_irq.c
 src/overlay006/title_animation_update.cpp
 src/overlay006/title_animation_elements.cpp
+src/overlay006/title_animation_display.cpp
 src/overlay006/title_animation_renderer.cpp
 src/overlay006/title_animation_resources.cpp
 src/overlay006/title_animation_lifecycle.cpp

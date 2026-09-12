@@ -4706,3 +4706,43 @@ whitespace checks pass. Canonical packaging and native relinking retain SHA-1
 ba4ec2f99b4f2e0047601552bccf00aa73e28701, with zero differences across 43 components.
 Matching C/C++ is 679440 / 1563700 bytes (43.45%); C/C++ plus assembly is 43.78%.
 Overlay 6 is 30720 / 66492 bytes (46.20%).
+
+
+## 2026-09-12: Title display initialization (+1,212 matching C++ bytes)
+
+- Reconstructed `TitleAnimation_InitDisplay` at `0x0206B2C0` (1,212 bytes),
+  linked from `src/overlay006/title_animation_display.cpp`. It clears VRAM,
+  palettes and OAM; configures geometry, bank assignments and backgrounds;
+  assigns sprite/texture palette buffers; creates palette-effect controllers;
+  and enables the displays after VBlank. No inline assembly was added.
+- Recovered the two controller pointers at offsets 904/908 and two pairs of
+  20-byte palette entries at 912/952 in the shared controller header. A separate
+  42,536-byte prefix view describes the extended/sub sprite and texture palette
+  buffers at 1064, 9256 and 9768; this does not redefine the full 75,304-byte
+  controller allocation. Existing lifecycle, render cleanup and update callers
+  now use the confirmed field names and public initializer declaration.
+- The private candidate matched in size immediately. The only byte difference
+  was the 32-bit literal for the DISP3DCNT mask: the native `~0x3002` retains
+  upper set bits, whereas `0xCFFD` did not. Correcting that expression matched
+  the literal pool; the complete linked module and symbol checks then passed.
+- Cold-booted original story saves 1 (Peach's Castle) and 83 (Star Shrine),
+  each with `wait:1500 start:30 wait:250`: 3,566 frames and two completed
+  initializer calls. Both were ordinary input routes without RAM fixtures.
+  Independent checks covered 1,347,584 cleared VRAM/palette bytes, 4,096 OAM
+  buffer bytes and their 4,096 uploaded bytes, all nine bank mappings on both
+  runs, 16 bank-state fields, four blend pairs, sprite/texture buffer pointers,
+  four palette controllers and 160 bytes of default entries. Every direct MMIO
+  store was checked for address, width and value; 78 full controller-prefix
+  snapshots bracketed helper calls and returns. Allocation failure and the
+  display-mode-1 single-screen helper branches were not exercised.
+- Evidence: ignored `build/runtime/eur_title_animation_display/`, with
+  `evidence_early1.json` and `evidence_english83.json`; corresponding probes and
+  logs are under `build/analysis/`. All 104 original save hashes remain unchanged.
+  Both final screenshots were visually inspected at the load menu. Save 83's
+  four final VRAM/palette buffer hashes also match the previous title replay.
+- Verification: `ninja check`, canonical `build_nds.ps1 -DisableDataMods`, and
+  native relink (43 components, zero differing bytes) passed. Both ROM SHA-1s
+  are `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Regenerated progress, its
+  `--check`, and `python -m pytest -q tests` passed (81 tests).
+- Matching C/C++ is now **680,652 / 1,563,700 bytes (43.53%)**; C/C++ plus
+  symbolic assembly is **43.86%**. Overlay 6 is **31,932 / 66,492 (48.02%)**.
