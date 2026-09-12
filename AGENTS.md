@@ -7,6 +7,8 @@ Nintendo DS. The primary target is the European ROM. The intended result is
 readable, editable source that reproduces the original game byte for byte.
 The decompilation is generated with AI under human direction; preserve the
 disclosure in the README and follow [the project policy](docs/AI_USAGE.md).
+This file applies throughout the repository. Keep durable instructions here;
+put batch results and temporary experiments in the appropriate research log.
 
 - Follow the current request. A documentation or research task does not start
   another decompilation batch. Honor requests to stop after the next block.
@@ -31,6 +33,8 @@ Read `git status --short`, the recent log and the relevant source before editing
 Preserve unrelated changes, including changes left by the user or another tool.
 Use `rg` for searches. Keep independent reads parallel where useful, but run
 shared build and source-metadata changes sequentially.
+In PowerShell, filter files with `rg PATTERN src/overlay006 -g 'title*.c'`
+rather than passing an unexpanded wildcard as a directory argument.
 
 Read these as needed rather than loading every research log:
 
@@ -45,6 +49,13 @@ Read these as needed rather than loading every research log:
 Old milestone notes describe the state at the time they were written. Current
 source, `delinks.txt`, `symbols.txt`, the linked-source manifest and fresh checks
 take precedence over old counts or claims that a function is unfinished.
+
+Resident game helpers are in `src/game/`, SDK routines in `src/nitro/`, field
+code in `src/field/`, battle code in `src/battle/`, and scene/menu/attack code
+in the corresponding `src/overlayNNN/` directory. Use the overlay map to select
+a subsystem; do not infer a gameplay identity from an overlay number alone.
+Original ARM9 bytes are under `extract/eur/arm9/` and
+`extract/eur/arm9_overlays/`; derive load addresses from component metadata.
 
 Private IDA databases live under `build/ida/`; previous pseudocode exports and
 candidate units live under `build/analysis/`, including
@@ -109,6 +120,12 @@ and comparisons from the existing Ninja/objdiff configuration. The configured
 ARM946E target, signed `char`, enum width, software floating point, interworking
 and C++ mode are part of the original ABI.
 
+Absolute linker symbols such as `OVERLAY_5_ID` and `OVERLAY_6_ID` carry their
+numeric value in the symbol address. Resolve them from the generated
+`build/eur/linker_script.lcf` when checking private objects. Preserve the
+native literal relocation where required; reading such a symbol as a C variable
+would dereference that number as an address.
+
 ## Reconstructing and integrating code
 
 1. Locate the original function and its boundaries in the component's
@@ -151,6 +168,24 @@ as little-endian data, not as ARM instructions. Check ARM/Thumb state and
 interworking relocations when comparing calls; a private comparison script
 does not replace the full module and symbol checks.
 
+A stored byte or halfword does not imply a narrow function parameter. Preserve
+the full-width argument and the native truncation point when callers pass an
+`int`; narrowing the prototype can change caller code and signedness. Preserve
+reads across callbacks in their original order: a linked-list callback can
+change `next`, and cleanup can change state. Do not cache those fields earlier
+merely to simplify the source. Distinguish deleting and non-deleting destructor
+entries when reconstructing virtual calls and reporting runtime coverage.
+
+Size request buffers from callee accesses, not just the apparent base type.
+`ArchiveReadRequest` is 40 bytes, but `BattleArchive_ReadAsync` also writes the
+halfword at offset 40, including on the raw-read path. The title loader uses a
+44-byte extended raw request; a full `ArchiveCompressedRequest` is 64 bytes.
+See [the shared layout](include/game/archive_io.h),
+[the callee](src/game/archive_compressed.c), and
+[the title loader](src/overlay006/title_animation_resources.cpp).
+Preserve ownership flags and the native allocator/free pairing for converted
+resource tables; a non-null pointer alone does not establish ownership.
+
 Small, explained inline-assembly fragments are authorized when a specific
 instruction sequence cannot reasonably be reproduced in C. Keep the surrounding
 logic readable and verify the entire function. Do not disguise raw instruction
@@ -171,6 +206,10 @@ The private `PiT_SaveStates/` directory contains story checkpoints from start to
 finish. Enumerate what is present and select an appropriate save. Keep originals
 unchanged and compare their hashes before and after a replay. Store new states,
 screenshots, dumps and reports under ignored `build/runtime/` paths.
+Use `--battery-save` with a selected `.sav` to cold boot through
+`tools/runtime_drive.py`; `--state` loads an emulator snapshot instead. Old
+messages mention `PiT/_SaveStates`, but the current checkout uses
+`PiT_SaveStates/`. Check the filesystem rather than assuming either path exists.
 
 Useful title-startup checkpoints, confirmed by cold booting the supplied saves:
 
@@ -219,6 +258,20 @@ destination from the active bank mapping. Separate function coverage from branch
 coverage; an uncalled destructor or allocation-failure path remains unexercised
 even when every compiled byte matches.
 
+An oracle failure may be a wrong expectation. Inspect the native helper before
+changing matching game code: for example, `func_02036988` always sets blend-mode
+bit `0x40` and writes BLDCNT/BLDALPHA together as a 32-bit value. Read back the
+actual register width. Validate raw archive payloads against the extracted
+archive; compressed-request completion and size checks alone do not establish
+that the decoded bytes were independently verified.
+
+Keep probe work bounded. Check and release completed per-node snapshots during
+long list traversals instead of rechecking all earlier nodes after every call.
+When using prior screenshots as a baseline, compare the relevant buffers and
+palettes and state explicitly whether a new image was visually inspected or
+only its hashes matched. Label language overrides and other artificial branch
+fixtures separately from ordinary save replays.
+
 The debug menu can teleport without fully initializing the destination state.
 Controlled RAM edits or temporary decoded-command substitutions are useful
 probes, but record exactly what changed and when it was restored. They do not
@@ -243,6 +296,9 @@ phase. The task is dynamically allocated; an observed task address is not a
 universal address to patch. Its code is in `src/overlay007/nawatobi_*`;
 the selector and rope simulation were exercised, but a normal entry route
 remains unconfirmed.
+The private capture records are `build/runtime/eur_nawatobi/evidence_065.json`
+and `build/runtime/eur_nawatobi/rope_evidence_065.json`. Keep these local; cite
+the observed setup and its limits when sharing instructions with researchers.
 
 ## Progress and documentation
 
@@ -284,6 +340,9 @@ Before committing, run `git diff --check` and
 changes, also complete the matching and runtime checks above. Tool changes need
 relevant unit tests. Documentation-only changes need link/content checks, not
 a full ROM build or emulator run. Report unavailable checks explicitly.
+The public-content audit reads Git's index, so run it after staging new files
+as well. Check `git diff --cached --check` and the staged path list before
+committing; an audit run before staging cannot inspect an untracked new file.
 
 Commit coherent, verified intermediate blocks and push them to `origin` without
 asking again. The current working branch is `main`; verify the checkout and
