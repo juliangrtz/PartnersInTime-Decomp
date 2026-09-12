@@ -4474,3 +4474,44 @@ Native relinking also produces that hash with zero differences across all
 the maintained assembly and patch manifest. All 81 tests, progress consistency,
 public-content audit and whitespace checks pass. Matching C/C++ is now
 672252 / 1563700 bytes (42.99%); C/C++ plus assembly is 43.32%.
+
+
+## 2026-09-12 - Complete title panel transition and backgrounds (+2688 bytes)
+
+The contiguous 0x02074538..0x02075014 range now matches in C: thirteen
+functions / 2780 bytes, including the existing 92-byte panel-scroll routine.
+The old single-function scroll file is merged into title_panel_transition.c.
+Twelve newly reconstructed functions add 2688 bytes of matching C. The shared
+header describes the 68-byte transition record and its four states; confirmed
+HBlank/resource flags have names, while other bits retain neutral labels.
+
+The code loads and releases the two background resource sets, uploads the
+panel characters, screens and palettes, configures windows and blending,
+interpolates the panel displacement, and selects display layers at scanlines
+128 and 140. Original bitfield widths, repeated resource-pointer loads and
+an unsigned interpolation intermediate preserve native instruction order.
+The complete module matches without inline assembly.
+
+Runtime evidence is in build/runtime/eur_title_panel_transition:
+evidence_english83.json (1783 frames) and evidence_english_skip83.json
+(1343 frames). Both start from cold boot with original save 83 and ordinary
+buttons; no RAM or language fixtures are used. All thirteen functions run,
+including the skip callback. All four upload states and the upper-screen,
+main-only, both-screen and VBlank scanline cases are observed. The finish
+branch that loads previously absent assets and resource allocation failures
+remain unexercised.
+
+Independent checks cover 78 displacement interpolations, 83 scroll updates,
+166 blend-register results, 13744 direct register stores, 3084 complete
+68-byte record snapshots, and 20258 HBlank/scanline returns each. All 38 VRAM
+uploads match 335360 live source bytes; screen clears verify 12288 zero bytes,
+and four background-color writes agree with their loaded palette entries.
+The probe respects ARM conditions when observing conditional register stores.
+
+The title screenshot was inspected. Both final display buffers and both
+palette hashes agree with the corresponding established load-menu replays;
+all 104 original save hashes are unchanged. Module/symbol checks, all 81 tests,
+progress consistency, public-content audit and whitespace checks pass.
+Canonical packaging and the 43-component native relink both retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701, with zero differing bytes.
+Matching C/C++ is 674940 / 1563700 bytes (43.16%); C/C++ plus ASM is 43.49%.

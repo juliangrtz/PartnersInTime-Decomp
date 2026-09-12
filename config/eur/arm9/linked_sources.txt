@@ -636,7 +636,7 @@ src/battle/battle_mesh_hit_task.c
 src/battle/battle_mesh_fade_task.c
 src/battle/battle_mesh_rotation.c
 src/field/field_area_lifecycle.c
-src/overlay006/title_panel_scroll.c
+src/overlay006/title_panel_transition.c
 src/overlay006/title_texture.c
 src/overlay006/title_orbit.c
 src/battle/battle_interface_text.c
