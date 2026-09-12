@@ -5333,3 +5333,55 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **696,108 / 1,563,700 bytes (44.52%)**; C/C++ plus symbolic
   assembly is **44.85%**. Overlay 6 is **47,388 / 66,492 (71.27%)**.
   The 50% milestone still requires 85,742 matching bytes.
+
+
+## 2026-09-12: Credits background animation, grid fade and radial delay (+1,044 matching bytes)
+
+- Linked `CreditsCloud_Update` (96 bytes, `0x02079B98`) and
+  `CreditsStar_Update` (220 bytes, `0x02079DAC`). Clouds advance by their stored
+  horizontal velocity and wrap at the variant-specific boundary. Stars display
+  their bright frame for four updates, then wait for an independently randomized
+  interval. The neighboring draw routines remain native.
+- Linked `CreditsRadialDelay_Update` (564 bytes, `0x020762EC`): cells wait, move
+  toward the next illustration center, shrink, wait according to their stored
+  radius and ease into their new grid positions. Its initializer remains native.
+- Added `CreditsGridFade_Update` (164 bytes, `0x02077B5C`) to the adjacent motion
+  module. The first cell advances the shared illustration alpha; the other cells
+  retire immediately. The combined module preserves the original contiguous
+  range `0x02077B5C..0x02077CE8`. Shared declarations were updated; no inline ASM
+  or compiler flags changed. The isolated callbacks can be consolidated when
+  their intervening native routines are recovered.
+- The checkpoint-86 probe repeats the compatible field-state route, replacing
+  and restoring all 72 bytes of one decoded credits command before transition.
+  This is controlled credits entry, not evidence of ordinary story completion.
+  It runs 12,000 frames with no pending returns or extra drain frames.
+- Independent expectations pass for 556,586 returns: 155,467 cloud updates,
+  131,549 star updates, 1,102 grid-fade calls and 268,468 radial-delay calls.
+  Every recorded return checks the full 72-byte task or 84-byte particle,
+  52-byte workspace and RNG word; helper results are not refreshed from observed
+  output. Native function bytes and the original layout table are guarded.
+- The replay covers both cloud variants, including 169 wraps (97/72), and 567
+  complete blink cycles with 1,134 independently predicted RNG results. The
+  initial fade visits alpha 0 through 31 and retires all 1,024 cells.
+- Radial motion visits every active phase on both screens. It checks 2,048
+  center targets, acceleration setups, radius delays, grid targets, easing
+  setups and completed cells, plus 184,320 motion ticks. Signed division,
+  fixed-point order and 32-bit wrapping are modeled explicitly. Idle phases
+  are checked 16 times per callback; 63,410 additional grid-fade and 22,348
+  radial idle entries are counted without snapshots.
+- All 104 original save hashes remain unchanged. All 52 memory-capture lengths
+  and hashes and six PNG hashes were verified. The final seven graphics/register dumps and
+  PNG are byte-identical to the preceding full-credits baseline. The radial
+  phase-103/screen-0 image and final credits image were visually inspected.
+  Private evidence: `build/runtime/eur_credits_small/evidence_story86_full.json`;
+  probe: `build/analysis/probe_credits_small.py`.
+- Unexercised cases include radial launch with positive X velocity, an already
+  zero active count at retirement, zero RNG seed, invalid states/layouts and
+  overflow outside the observed input range. The captures do not independently
+  verify the native drawing callbacks or physical hardware.
+- Final module/symbol checks, canonical ROM packaging, 43-component native
+  relink with zero differing bytes, progress checks and all 81 tests pass.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **697,152 / 1,563,700 bytes (44.58%)**; C/C++ plus symbolic
+  assembly is **44.91%**. Overlay 6 is **48,432 / 66,492 (72.84%)**.
+  The 50% milestone still requires 84,698 matching bytes.

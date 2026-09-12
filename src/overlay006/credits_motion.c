@@ -19,3 +19,27 @@ void CreditsMotion_SetAcceleration(CreditsMotion *motion, int frames)
     motion->ay = 2 * (dy - motion->vy * frames) / (frames * frames);
     motion->frames = frames;
 }
+
+/* Only the first cell advances the shared illustration fade-in. */
+void CreditsGridFade_Update(CreditsMotion *particle)
+{
+    switch (particle->phase) {
+    case 0:
+        particle->counter = 0;
+        ++particle->phase;
+        break;
+    case 1:
+        particle->counter += 2116;
+        if (particle->counter >= 0x1f000)
+            particle->phase = 100;
+        data_ov006_0207c594.polygon_alpha = particle->counter >> 12;
+        if (data_ov006_0207c594.polygon_alpha > 31)
+            data_ov006_0207c594.polygon_alpha = 31;
+        break;
+    case 100:
+        if (data_ov006_0207c594.active)
+            --data_ov006_0207c594.active;
+        ++particle->phase;
+        break;
+    }
+}

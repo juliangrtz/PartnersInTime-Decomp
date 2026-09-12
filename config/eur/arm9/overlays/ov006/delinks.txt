@@ -61,7 +61,7 @@ src/overlay006/credits_irq_destroy.c:
     .text       start:0x02075f44 end:0x02075f94
 
 src/overlay006/credits_motion.c:
-    .text       start:0x02077c00 end:0x02077ce8
+    .text       start:0x02077b5c end:0x02077ce8
 
 src/overlay006/credits_resources.c:
     .text       start:0x0207a1dc end:0x0207a788
@@ -128,3 +128,12 @@ src/overlay006/credits_music.c:
 
 src/overlay006/credits_image_loader.c:
     .text start:0x020786e0 end:0x02078938
+
+src/overlay006/credits_cloud_motion.c:
+    .text start:0x02079b98 end:0x02079bf8
+
+src/overlay006/credits_star_blink.c:
+    .text start:0x02079dac end:0x02079e88
+
+src/overlay006/credits_radial_delay.c:
+    .text start:0x020762ec end:0x02076520

@@ -51,6 +51,8 @@ void CreditsMotion_SetEaseOut(CreditsMotion *motion, int frames);
 void CreditsMotion_TargetLayoutCenter(CreditsMotion *motion, int layout, int screen);
 void CreditsMotion_TargetLayoutCell(CreditsMotion *motion, int layout, int screen);
 void CreditsMotion_TargetLayoutOrigin(CreditsMotion *motion, int layout, int screen);
+void CreditsGridFade_Update(CreditsMotion *motion);
+void CreditsRadialDelay_Update(CreditsMotion *motion);
 void CreditsFade_InitAll(void);
 void CreditsFade_Update(CreditsMotion *motion);
 void CreditsSpiralCollapse_Update(CreditsMotion *motion);

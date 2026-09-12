@@ -787,3 +787,6 @@ src/overlay006/credits_positions.c
 src/overlay006/credits_particle_transitions.c
 src/overlay006/credits_music.c
 src/overlay006/credits_image_loader.c
+src/overlay006/credits_cloud_motion.c
+src/overlay006/credits_star_blink.c
+src/overlay006/credits_radial_delay.c
