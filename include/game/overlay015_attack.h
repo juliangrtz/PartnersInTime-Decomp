@@ -15,7 +15,8 @@ typedef union Overlay15AttackPhaseFlags {
     u8 raw;
     struct {
         u8 phase : 4;
-        u8 unknown_4_7 : 4;
+        u8 alternate_actor : 1;
+        u8 unknown_5_7 : 3;
     } bits;
 } Overlay15AttackPhaseFlags;
 
@@ -58,15 +59,28 @@ typedef struct Overlay15AttackPhaseState {
     Overlay15AttackPhaseFlags flags;
 } Overlay15AttackPhaseState;
 
+/* Prefix of the pair state; later native code also accesses offset 0x24. */
 typedef struct Overlay15AttackObjectPairState {
     BattleSceneObject *primary;
     BattleSceneObject *secondary;
     u8 unknown_08[0xE];
-    u8 flags;
-    u8 phase;
+    Overlay15AttackPhaseFlags flags;
+    s8 launch_count;
     u16 target_actor_id;
     s16 pending_damage;
+    s16 hit_count;
+    u16 angle;
+    s16 angle_step;
 } Overlay15AttackObjectPairState;
+
+/* Shared prefix of the item records accepted by the reward display. */
+typedef struct Overlay15AttackRewardItemPrefix {
+    u16 item_id;
+    u16 name_id;
+    u8 unknown_04[4];
+    u8 kind;
+    u8 animation_id;
+} Overlay15AttackRewardItemPrefix;
 
 typedef char Overlay15AttackModelOwner_SizeCheck[
     sizeof(Overlay15AttackModelOwner) == 0x80 ? 1 : -1];
@@ -75,7 +89,9 @@ typedef char Overlay15AttackModelController_SizeCheck[
 typedef char Overlay15AttackHitMotion_SizeCheck[
     sizeof(Overlay15AttackHitMotion) == 0x18 ? 1 : -1];
 typedef char Overlay15AttackObjectPairState_SizeCheck[
-    sizeof(Overlay15AttackObjectPairState) == 0x1C ? 1 : -1];
+    sizeof(Overlay15AttackObjectPairState) == 0x24 ? 1 : -1];
+typedef char Overlay15AttackRewardItemPrefix_SizeCheck[
+    sizeof(Overlay15AttackRewardItemPrefix) == 10 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
@@ -108,6 +124,10 @@ int Overlay15Attack_SelectRandomEnemy(void);
 void Overlay15Attack_BeginPairRetreat(Overlay15AttackObjectPairState *state,
     Overlay15AttackModelController *actor);
 void Overlay15Attack_HideAttackObjects(Overlay15AttackObjectPairState *state);
+void Overlay15Attack_BeginPairLaunch(Overlay15AttackObjectPairState *state,
+    int target_id, int damage, int alternate, int index_offset);
+void Overlay15Attack_ShowRewardItem(const Overlay15AttackRewardItemPrefix *item,
+    int message_width);
 #ifdef __cplusplus
 }
 #endif

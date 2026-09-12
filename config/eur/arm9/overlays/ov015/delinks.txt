@@ -6,17 +6,23 @@
 src/overlay015/attack_selection.c:
     .text       start:0x020c2ae0 end:0x020c2bb8
 
+src/overlay015/reward_display.c:
+    .text       start:0x020c2e78 end:0x020c2f20
+
 src/overlay015/pair_attack_helpers.c:
     .text       start:0x020c30ac end:0x020c31dc
 
 src/overlay015/pair_retreat.c:
     .text       start:0x020c3278 end:0x020c337c
 
-src/overlay015/pair_visibility.c:
-    .text       start:0x020c3744 end:0x020c37b0
+src/overlay015/pair_motion.c:
+    .text       start:0x020c3610 end:0x020c37b0
 
 src/overlay015/actor_controller.cpp:
     .text       start:0x020c4028 end:0x020c4570
 
 src/overlay015/actor_lifecycle.cpp:
     .text       start:0x020c5440 end:0x020c5570
+
+src/overlay015/smash_eggs_entry.c:
+    .text       start:0x020c597c end:0x020c5b4c

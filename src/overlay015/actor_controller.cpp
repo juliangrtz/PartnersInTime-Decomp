@@ -146,14 +146,14 @@ void Overlay15Attack_PreparePrimaryActor(
 
 void Overlay15Attack_InitializeObjectPair(
     Overlay15AttackObjectPairState *state) {
-    state->flags &= ~OVERLAY15_OBJECT_PAIR_FLAG_10;
-    state->phase = 0;
+    state->flags.raw &= ~OVERLAY15_OBJECT_PAIR_FLAG_10;
+    state->launch_count = 0;
     state->target_actor_id = 0;
     state->primary = BattleSceneObject_GetById(OVERLAY15_PRIMARY_OBJECT_ID);
     state->secondary = BattleSceneObject_GetById(OVERLAY15_SECONDARY_OBJECT_ID);
-    state->flags &= ~OVERLAY15_OBJECT_PAIR_FLAG_20;
+    state->flags.raw &= ~OVERLAY15_OBJECT_PAIR_FLAG_20;
     state->pending_damage = 0;
-    state->flags |= OVERLAY15_OBJECT_PAIR_FLAG_80;
+    state->flags.raw |= OVERLAY15_OBJECT_PAIR_FLAG_80;
     state->primary->effect_anchor_z = -16;
 }
 }

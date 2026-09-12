@@ -1,7 +1,7 @@
 Overlay15Attack_ApplyBadgeMotionAdjustments kind:function(arm,size=0x60) addr:0x020c2ae0
 Overlay15Attack_SelectRandomEnemy kind:function(arm,size=0x78) addr:0x020c2b40
 func_ov015_020c2bb8 kind:function(arm,size=0x2c0) addr:0x020c2bb8
-func_ov015_020c2e78 kind:function(arm,size=0xa8) addr:0x020c2e78
+Overlay15Attack_ShowRewardItem kind:function(arm,size=0xa8) addr:0x020c2e78
 func_ov015_020c2f20 kind:function(arm,size=0x18c) addr:0x020c2f20
 Overlay15Attack_ConfigureModelFlags kind:function(arm,size=0x84) addr:0x020c30ac
 Overlay15Attack_ClampContextIndex kind:function(arm,size=0x28) addr:0x020c3130
@@ -11,7 +11,7 @@ Overlay15Attack_IsLinkedPhase kind:function(arm,size=0x24) addr:0x020c31b8
 func_ov015_020c31dc kind:function(arm,size=0x9c) addr:0x020c31dc
 Overlay15Attack_BeginPairRetreat kind:function(arm,size=0x104) addr:0x020c3278
 func_ov015_020c337c kind:function(arm,size=0x294) addr:0x020c337c
-func_ov015_020c3610 kind:function(arm,size=0x134) addr:0x020c3610
+Overlay15Attack_BeginPairLaunch kind:function(arm,size=0x134) addr:0x020c3610
 Overlay15Attack_HideAttackObjects kind:function(arm,size=0x6c) addr:0x020c3744
 func_ov015_020c37b0 kind:function(arm,size=0x878) addr:0x020c37b0
 Overlay15Attack_InitializeObjectPair kind:function(arm,size=0x6c) addr:0x020c4028
@@ -29,7 +29,7 @@ Overlay15Attack_RestoreActors kind:function(arm,size=0x64) addr:0x020c5440
 Overlay15Attack_InitializeHitMotion kind:function(arm,size=0x2c) addr:0x020c54a4
 Overlay15Attack_InitializeActorController kind:function(arm,size=0xa0) addr:0x020c54d0
 func_ov015_020c5570 kind:function(arm,size=0x40c) addr:0x020c5570
-func_ov015_020c597c kind:function(arm,size=0x1d0) addr:0x020c597c
+Overlay15Attack_UpdateEntry kind:function(arm,size=0x1d0) addr:0x020c597c
 func_ov015_020c5b4c kind:function(arm,size=0x300) addr:0x020c5b4c
 data_ov015_020c5e60 kind:data(any) addr:0x020c5e60
 data_ov015_020c5e61 kind:data(any) addr:0x020c5e61

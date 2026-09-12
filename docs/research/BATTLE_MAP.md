@@ -1549,7 +1549,7 @@ checks cover the observed values, not every overflow or invalid-state input.
 The next block adds 584 matching bytes in
 [targeting and badge adjustments](../../src/overlay015/attack_selection.c),
 [pair retreat](../../src/overlay015/pair_retreat.c) and
-[object hiding](../../src/overlay015/pair_visibility.c). The pair's halfwords
+[object hiding](../../src/overlay015/pair_motion.c). The pair's halfwords
 at `+0x18` and `+0x1A` hold the target actor ID and pending damage in the attack
 path; their earlier timer/rotation names were corrected. The rotation update
 itself remains native.
@@ -1567,3 +1567,40 @@ Reports are `build/runtime/eur_overlay15/evidence_pair83.json` and
 `evidence_badge83.json`; probe: `build/analysis/probe_ov15_pair.py`.
 Multiple/no eligible enemies, zero RNG seed, table overflow and retreat for an
 even formation remain unexercised.
+
+The entry and reward block adds another 940 matching bytes:
+[entry update](../../src/overlay015/smash_eggs_entry.c) (464),
+[egg launch](../../src/overlay015/pair_motion.c) (308), and
+[reward icon display](../../src/overlay015/reward_display.c) (168). Launch and
+hiding share a contiguous module. The common attack context now describes its
+584-byte allocation, including both 52-byte actor controllers and the pair at
+`+0x198`. The pair view extends to 36 bytes but remains a prefix; native code
+also accesses its word at `+0x24`. Its signed byte at `+0x17` counts launches,
+separately from the phase bits at `+0x16`. Halfwords at `+0x1C`, `+0x1E` and
+`+0x20` hold support-hit count, angle and angle step.
+
+`build/analysis/probe_ov15_entry.py` verifies all 32 entry updates through the
+callback handoff, one egg launch and the previously covered controller paths.
+Each entry return is checked against a complete 584-byte expected context;
+pair checks now cover 36 bytes. Launch distance and initial arc duration are
+observed helper results. The caller's timing arithmetic, coordinate arguments,
+counter, flags, target, damage and rotation step are independently checked.
+The ordinary replay's graphics captures match the preceding baseline exactly.
+
+A controlled reward replay changes the initialized launch counter from 1 to 6
+at frame 373, after the enemy hit, to exercise the native six-launch limit.
+It then changes one eligible drop roll from 92 to 0 at frame 496. Native code
+performs the end transition, drop selection, message creation, icon display
+and return to the command wheel. The icon routine runs at frame 574 with
+message width 79; its object flags, origin, anchor and model offsets are checked.
+Frame 584 retains object/model records, VRAM, palettes, OAM, display registers
+and a visually inspected icon screenshot. The final command wheel was also
+visually inspected. This fixture does not demonstrate an ordinary six-hit
+sequence or the natural drop probability.
+
+Both 2,110-frame replays preserve all 104 original save hashes. Reports are
+`build/runtime/eur_overlay15/evidence_entry83.json` and
+`evidence_reward_final83.json`. Invalid entry phases, other reward widths/items,
+alternate launch damage, positive rotation and ordinary six-launch completion
+remain unexercised. Reward message construction and selection, the main attack
+updates, pair return and rotation still use native code.

@@ -7,10 +7,41 @@
 #include <game/battle_context.h>
 #include <game/overlay010_motion.h>
 
+/* The native attack constructor allocates 584 bytes. */
+typedef struct Overlay15AttackContext {
+    s32 timer;
+    u8 unknown_004[12];
+    u8 flags;
+    s8 phase;
+    u8 unknown_012[22];
+    BattlePartyActor *user;
+    u8 unknown_02c[160];
+    s32 index;
+    u8 unknown_0d0[96];
+    Overlay15AttackModelController actors[2];
+    Overlay15AttackObjectPairState pair;
+    u8 unknown_1bc[4];
+    const Overlay15AttackRewardItemPrefix *item;
+    s16 message_handle;
+    s16 message_width;
+    u8 message[128];
+} Overlay15AttackContext;
+
+typedef char Overlay15AttackContext_SizeCheck[
+    sizeof(Overlay15AttackContext) == 584 ? 1 : -1];
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 #include <game/random.h>
+extern Overlay15AttackContext *data_ov002_020c0710;
+
+void Overlay15Attack_UpdateEntry(BattlePartyActor *actor);
+void func_ov015_020c31dc(Overlay15AttackObjectPairState *pair);
+void func_ov015_020c5570(BattlePartyActor *actor);
+void func_ov002_020722ac(BattlePartyActor *actor,
+    void (*callback)(BattlePartyActor *));
+
 /* Interleaved X/Y offsets; each actor's entry occupies two bytes. */
 extern s8 data_ov015_020c5e60[][2];
 extern s8 data_ov015_020c5e61[][2];
@@ -32,6 +63,7 @@ u16 func_02009224(BattleModel *model, s16 animation_id);
 void func_0200940c(BattleModel *model, s16 speed_q8);
 int BattleMotion_StartFollower(BattleSceneObject *object,
     BattleSceneObject *follower, int channel);
+void BattleMotion_StartAppear(BattleSceneObject *object, int channel, int duration);
 #ifdef __cplusplus
 }
 #endif

@@ -200,6 +200,9 @@ would dereference that number as an address.
 3. Keep related contiguous functions in a subsystem module. Temporary isolated
    units are acceptable while an intervening assembly gap remains; consolidate
    once that gap is recovered. Shared declarations and layouts belong in headers.
+   Check source basenames across all components before adding a unit. The MW
+   linker script selects objects by basename, so `attack_entry.c` would collide
+   with `src/overlay021/attack_entry.cpp` even in a different directory.
 4. Preserve native function order. This MWCC setup generally emits the separate
    function sections in reverse source order, so definitions usually descend
    by original address. Verify the emitted order instead of assuming it.
@@ -550,7 +553,13 @@ timed A/B and X/Y pulses during the native attack update. Four `down:8` /
 released-input frame after each action. A successful attack replay returning
 to the command wheel does not establish that the item-reward branches ran.
 The public pair-state layout is a prefix; if it grows during reconstruction,
-update probes that currently compare only 28 bytes. Use the current shared
+update the probe's record size with it. The entry/launch extension in
+`build/analysis/probe_ov15_entry.py` checks 36-byte pairs and the complete
+584-byte entry context. Its reward fixture changes the initialized pair's
+signed launch counter at `+0x17` once, after an enemy hit, then lets the native
+end transition run; the counter is distinct from the phase bits at `+0x16`.
+The older actor/pair probes retain their original 28-byte prefix checks.
+Use the current shared
 [attack layout](include/game/overlay015_attack.h) and native allocation/caller
 evidence before interpreting fields beyond that prefix.
 

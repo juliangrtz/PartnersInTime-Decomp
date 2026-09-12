@@ -5481,3 +5481,52 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **699,028 / 1,563,700 bytes (44.70%)**; C/C++ plus symbolic
   assembly is **45.03%**. Overlay 15 is **2,544 / 13,164 (19.33%)**.
   The 50% milestone still requires 82,822 matching bytes.
+
+
+## 2026-09-12: Smash Eggs entry, egg launch and reward icon (+940 matching bytes)
+
+- Linked `Overlay15Attack_UpdateEntry` (464 bytes), `BeginPairLaunch` (308)
+  and `ShowRewardItem` (168). Pair launch and hiding now share `pair_motion.c`;
+  the entry and reward display remain isolated across native gaps.
+- Replaced the old private context views with one shared 584-byte layout.
+  Extended the pair prefix to 36 bytes, keeping its later tail explicitly
+  unknown. Its signed byte at +0x17 counts launches; phase/alternate-actor
+  bits are at +0x16. Recovered hit count, angle and angle step at +0x1C/+0x1E/+0x20.
+  The existing initializer, targeting, retreat and actor functions still match.
+- Native stack arguments establish the entry movement call and launch timing.
+  Reusing the duration variable preserves the native conversion order; compound
+  negation of the signed angle step reproduces SMULBB. Shared bitfield access
+  preserves the original alternate-actor extraction. No inline ASM or compiler
+  flag changes were needed. The entry object is named `smash_eggs_entry.o` to
+  avoid the linker's existing overlay-21 `attack_entry.o` basename.
+- Full Ninja module/symbol checks pass. Canonical packaging with data mods
+  disabled and the 43-component native relink both produce SHA-1
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`, with zero differing bytes.
+  Progress regeneration/check and all 81 pytest tests pass.
+- `build/analysis/probe_ov15_entry.py` extends the existing replay. The ordinary
+  2,110-frame run checks 32 complete 584-byte entry contexts, one egg launch,
+  five complete 36-byte pair records and the prior actor/motion paths.
+  It verifies callback handoff, helper arguments, launch timing and coordinates,
+  target/damage fields, flags and signed rotation. Distance and initial arc
+  duration remain observed helper outputs, rather than independently verified
+  helper algorithms. All 22 screenshots, nine final graphics dumps and both
+  support-launch captures match the earlier baseline exactly.
+- A second replay changes the initialized pair launch counter from 1 to 6 at
+  frame 373 after a completed enemy hit. It changes one native reward-selection
+  roll from 92 to 0 at caller 0x020C2F60, frame 496. Native transitions then
+  create and display the reward. The icon routine runs at frame 574 with width
+  79; flags, origin, anchor and model offsets pass their checks. Frame 584 has
+  eight object/model and graphics captures plus a visually inspected screenshot.
+  The final command wheel was also visually inspected. This is controlled
+  end/reward coverage, not an ordinary six-launch sequence or natural drop odds.
+- Successful reports: `build/runtime/eur_overlay15/evidence_entry83.json` and
+  `evidence_reward_final83.json`; artifact checks in
+  `build/analysis/verify_ov15_artifacts.py`. Both replays preserve all 104 source
+  saves. Invalid entry phases, other reward widths/items, alternate launch
+  damage, positive rotation and ordinary six-launch completion remain uncovered.
+- Deferred: reward-message construction, drop selection, pair return/rotation
+  and the main state machines. The separate reward-selection and failure-motion
+  drafts still have classified mismatches and are not counted.
+- Matching C/C++ is **699,968 / 1,563,700 bytes (44.76%)**; C/C++ plus symbolic
+  assembly is **45.09%**. Overlay 15 is **3,484 / 13,164 (26.47%)**.
+  The 50% milestone still requires 81,882 matching bytes.

@@ -19,8 +19,8 @@ void Overlay15Attack_BeginPairRetreat(Overlay15AttackObjectPairState *state,
         x += 400;
     }
     BattleSceneObject_MoveTo(object, 2, x, object->y, 0, duration);
-    state->flags = (state->flags & ~15) | 4;
-    state->flags &= ~32;
+    state->flags.raw = (state->flags.raw & ~15) | 4;
+    state->flags.raw &= ~32;
     state->pending_damage = 0;
     state->target_actor_id = 0;
 }
