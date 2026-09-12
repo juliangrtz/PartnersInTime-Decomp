@@ -22,7 +22,6 @@ u32 func_02035818(void);
 u32 func_02035804(void);
 void func_02035b0c(u32);
 void func_02035c00(u32);
-void func_ov006_0206c484(void);
 void func_020090b8(int);
 
 GameIrqTask *TitleAnimationIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent)
@@ -63,7 +62,7 @@ void TitleAnimationIrq_UploadFrame(GameIrqTask *task)
     GameTexturePalette_Upload(data_ov006_0207b1e8);
     func_02035b0c(palette_banks);
     func_02035c00(texture_banks);
-    func_ov006_0206c484();
+    TitleAnimation_UploadElements();
     func_020090b8(0);
     func_020090b8(1);
     GameSpritePalette_UploadScreen(0);

@@ -49,7 +49,7 @@ struct TitleAnimationController {
     GameTaskDispatch *unknown_388, *unknown_38c;
     u8 unknown_390[128];
     void *localized_resource, *shared_resource;
-    u8 language, unknown_419, unknown_41a;
+    u8 language, exit_state, exit_kind;
     u8 previous_first_delay, previous_repeat_delay;
     u8 unknown_41d[7];
 };

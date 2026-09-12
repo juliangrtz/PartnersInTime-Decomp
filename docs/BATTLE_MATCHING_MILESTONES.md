@@ -4668,3 +4668,41 @@ C/C++ plus assembly is 43.74%. Overlay 6 is 30116 / 66492 bytes (45.29%).
 
 The adjacent 944-byte resource-selection candidate at 0x0206b9ec remains private:
 its loop still assigns two registers differently. It is excluded from coverage.
+
+
+## 2026-09-12 - Title frame passes and exit transition (+604 bytes)
+
+Four functions add 604 matching C/C++ bytes: the 396-byte main callback at
+0x0206acb8..0x0206ae44 and the 208-byte exit/draw/upload group at
+0x0206c464..0x0206c534. The main callback reads input, initializes per-frame
+geometry registers, advances the title sequence, prepares and sorts the sub-screen
+OAM, dispatches two renderer passes and submits the frame. Exit state 1 deletes
+the controller, unloads overlays 6 and 5, then requests session state 8 or 2.
+The native post-deletion read of exit_kind is preserved and documented.
+The element passes traverse the live list, checking each callback and its
+individual disable bit. All functions match without inline assembly.
+
+Two original save-83 cold boots use normal title playback and the shorter
+A-button skip route (1783 and 1343 frames). Evidence in
+build/runtime/eur_title_animation_update/ records all four functions executing:
+2024 main updates, 2022 draw passes, 2020 upload passes and two exit requests.
+Across 3126 frames, the probe checks 119298 draw-list visits and 119180 upload-list
+visits, including present/absent callbacks and both disabled/enabled cases.
+It verifies 107889 dispatched draw callbacks and 2155 upload callbacks with exact
+arguments and SP-matched returns. Geometry-register writes, both renderer task
+passes, exit field writes, overlay unload order and the final state-8 request
+are checked independently of the reconstructed code.
+
+No RAM fixtures are used. Exit states 0 and 1 are observed; nonzero exit kinds,
+the state-2 destination, empty element lists and other exit-state values remain
+unexercised. The second replay releases each visited node snapshot after checking
+its callback and next link, avoiding repeated reads of earlier nodes. This keeps
+the same traversal checks while reducing probe overhead.
+
+Both framebuffer/palette hash sets match the established IRQ replays, whose
+screens were visually verified. All 104 source saves remain unchanged. Module
+and symbol checks, all 81 tests, progress consistency, public-content audit and
+whitespace checks pass. Canonical packaging and native relinking retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701, with zero differences across 43 components.
+Matching C/C++ is 679440 / 1563700 bytes (43.45%); C/C++ plus assembly is 43.78%.
+Overlay 6 is 30720 / 66492 bytes (46.20%).
