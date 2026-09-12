@@ -49,6 +49,10 @@ Read these as needed rather than loading every research log:
 Old milestone notes describe the state at the time they were written. Current
 source, `delinks.txt`, `symbols.txt`, the linked-source manifest and fresh checks
 take precedence over old counts or claims that a function is unfinished.
+Distinguish the working tree, committed code and pushed code. A pending source
+integration can leave the checked-in progress files behind the local metadata;
+do not publish its extra bytes before completing the batch's verification.
+Read the latest request before following a handoff's suggested next action.
 
 Resident game helpers are in `src/game/`, SDK routines in `src/nitro/`, field
 code in `src/field/`, battle code in `src/battle/`, and scene/menu/attack code
@@ -166,8 +170,12 @@ checks for recovered structures. Keep casts and offset arithmetic only where
 the known layout or compiler behavior requires them.
 
 When only an object's prefix is known, describe it explicitly as a prefix view;
-its `sizeof` does not establish the full allocation size. Decode literal pools
-as little-endian data, not as ARM instructions. Check ARM/Thumb state and
+its `sizeof` does not establish the full allocation size. Two objects can share
+a prefix while having incompatible tails. The 96-byte primary title prompt and
+120-byte rumble prompt share only their first 60 bytes; do not embed the complete
+primary prompt as the rumble prompt's base. Check each tail against its own
+constructor and consumers, even if a larger placeholder previously fit.
+Decode literal pools as little-endian data, not as ARM instructions. Check ARM/Thumb state and
 interworking relocations when comparing calls; a private comparison script
 does not replace the full module and symbol checks.
 
@@ -176,6 +184,15 @@ the full-width argument and the native truncation point when callers pass an
 `int`; narrowing the prototype can change caller code and signedness. A table
 lookup may use that full-width index before its low byte is stored elsewhere;
 preserve the lookup width and signedness separately from the destination field.
+
+Account for integer promotion and the exact point where values are rounded.
+A `u16` operand promotes to `int`; an explicit `u32` cast before a shift may be
+needed to reproduce a native logical shift. Signed division truncates toward
+zero, which differs from an arithmetic right shift or Python's `//` for negative
+values. Preserve the native order of division and Q12 scaling, and model signed
+division explicitly in runtime oracles. See the verified examples in
+[title model entry](src/overlay006/title_sequence_model.c) and
+[trail drawing](src/overlay006/title_trail.c).
 
 Preserve reads across callbacks in their original order: a linked-list callback can
 change `next`, and cleanup can change state. Do not cache those fields earlier
@@ -188,6 +205,14 @@ matches in C with byte-sized flag input and separately scoped loop indices.
 Use that type/lifetime evidence before attempting register-allocation changes;
 matching only a function's size is insufficient.
 
+For a same-size mismatch, classify the differing words before editing: changed
+instructions, register operands, literal values or relocations require different
+explanations. Check native load order, expression lifetime and aliasing first.
+A helper that reads both inputs before writing an aliased object can preserve
+native behavior that sequential field assignments do not express. Accept a
+source change only when its data flow explains the difference; defer remaining
+register-only mismatches instead of trying arbitrary declarations or casts.
+
 Size request buffers from callee accesses, not just the apparent base type.
 `ArchiveReadRequest` is 40 bytes, but `BattleArchive_ReadAsync` also writes the
 halfword at offset 40, including on the raw-read path. The title loader uses a
@@ -197,6 +222,15 @@ See [the shared layout](include/game/archive_io.h),
 [the title loader](src/overlay006/title_animation_resources.cpp).
 Preserve ownership flags and the native allocator/free pairing for converted
 resource tables; a non-null pointer alone does not establish ownership.
+
+The title sequence allocates 59,340 bytes but clears only its 57,288-byte prefix.
+The 512 bytes at allocation offset 57,292 are a 32x32 4bpp trail stamp; older
+initializer notes incorrectly called them palette data. The rasterizer establishes
+their purpose. Its two 24,576-byte destination buffers are linear pixels before
+tiled VRAM upload, and the second screen uses a sequence-space y-origin of 244.
+Do not infer a 192-pixel screen separation from the display height. Refer to
+[the sequence layout](src/overlay006/title_sequence_internal.h) and the trail
+module when interpreting these captures; the remaining allocation tail is unknown.
 
 Small, explained inline-assembly fragments are authorized when a specific
 instruction sequence cannot reasonably be reproduced in C. Keep the surrounding
@@ -222,6 +256,9 @@ Use `--battery-save` with a selected `.sav` to cold boot through
 `tools/runtime_drive.py`; `--state` loads an emulator snapshot instead. Old
 messages mention `PiT/_SaveStates`, but the current checkout uses
 `PiT_SaveStates/`. Check the filesystem rather than assuming either path exists.
+Run emulator replays sequentially when they share a ROM path or battery-save
+backup. Parallel instances can overwrite the same emulator save sidecar. A
+different output report directory alone does not isolate that shared state.
 
 Useful title-startup checkpoints, confirmed by cold booting the supplied saves:
 
@@ -270,6 +307,16 @@ destination from the active bank mapping. Separate function coverage from branch
 coverage; an uncalled destructor or allocation-failure path remains unexercised
 even when every compiled byte matches.
 
+When reusing a private probe, check its symbol names, structure offsets, hook
+guards and helper prototypes against the current checkout. A source rename or
+recovered common prefix can invalidate a previously successful probe. Track
+nested monitored calls separately. Refresh memory after an external helper
+returns before resuming the caller's expected writes; that refresh observes
+the helper's effect but does not independently verify its implementation.
+State which results the oracle actually derives. For packed graphics, a simple
+per-pixel or per-nibble oracle is preferable to copying the native packed-word
+algorithm and potentially reproducing the same interpretation error.
+
 An oracle failure may be a wrong expectation. Inspect the native helper before
 changing matching game code: for example, `func_02036988` always sets blend-mode
 bit `0x40` and writes BLDCNT/BLDALPHA together as a 32-bit value. Read back the
@@ -297,8 +344,11 @@ title's rumble options can be hidden; repeated button presses alone do not
 establish that the menu was reached. A controlled constructor-layout fixture
 can exercise its UI without enabling the hardware availability flag. Record
 the changed bytes, constructor timing and visible result, and distinguish UI
-coverage from physical rumble support. The save object's byte `+0x514`, bit 6
-is the rumble preference; see [rumble control](src/game/rumble_control.cpp).
+coverage from physical rumble support. Editing the layout after construction
+does not exercise the constructor's hardware-present branch. Likewise, visiting
+a phase does not establish that every condition or transition within it ran.
+The save object's byte `+0x514`, bit 6 is the rumble preference; see
+[rumble control](src/game/rumble_control.cpp).
 This is an object-relative RAM field, not a universal battery-save file offset.
 
 The debug menu can teleport without fully initializing the destination state.
@@ -385,3 +435,6 @@ At a stop or handoff, record the last pushed commit, task-owned pending files,
 completed checks, checks still due and difficult candidates deliberately deferred.
 Keep pending matching work distinct from committed and pushed progress so the
 next session can resume without rerunning old integration scripts.
+Record deferred candidates with their component/address, native and candidate
+sizes, remaining mismatch class and the evidence needed to justify another
+attempt. Keep these changing details in the handoff or research log, not here.
