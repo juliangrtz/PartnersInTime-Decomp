@@ -5439,3 +5439,45 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **698,444 / 1,563,700 bytes (44.67%)**; C/C++ plus symbolic
   assembly is **45.00%**. Overlay 15 is **1,960 / 13,164 (14.89%)**.
   The 50% milestone still requires 83,406 matching bytes.
+
+
+## 2026-09-12: Smash Eggs targeting, badge motion and pair retreat (+584 matching bytes)
+
+- Linked `Overlay15Attack_ApplyBadgeMotionAdjustments` (96 bytes),
+  `SelectRandomEnemy` (120), `BeginPairRetreat` (260) and `HideAttackObjects`
+  (108), all with the same prefix. The first two share the contiguous range
+  `0x020C2AE0..0x020C2BB8`; retreat and hiding remain isolated across native gaps.
+  Shared declarations support C and C++. The pair fields at +0x18/+0x1A are now
+  named target actor ID/pending damage, as established by their attack consumers.
+  No inline ASM or compiler flags changed.
+- The neighboring rotation update at `0x020C31DC` remains deferred. Its 148-byte
+  candidate still folds the Z-position addition/subtraction; the native function
+  has 156 bytes. Keep the unlinked candidate separate from reported progress.
+- Ordinary checkpoint-83 input replay: two target selections, two retreats and
+  one hiding call, with 235 completed monitored calls including the preceding
+  actor block. Full records, helper arguments, targeting order, RNG result/seed,
+  direct object fields and formation-5 retreat parameters pass. Eligibility is
+  observed helper output; only one enemy is selectable in this encounter.
+- A second replay overrides the native `Overlay10Party_HasBadgeTwo` result in
+  ARM9 R0 from 0 to 1 when returning to `0x020C5D30`. This single recorded
+  register fixture enables the constructor's optional table update. All 60
+  halfwords of the resulting 120-byte table are checked independently. The run
+  completes 279 monitored calls, including that modifier and all other new helpers.
+  This is not evidence of ordinary badge-equipping behavior.
+- Both runs advance 2,110 frames, drain no pending calls and return to the
+  command wheel. All 104 original save hashes remain unchanged. The ordinary
+  run's 22 PNGs, nine final graphics dumps and two launch captures match the
+  prior actor-batch baseline exactly. The badge run's 19 PNGs and corresponding
+  dumps were hash/size checked; its attack and final images were inspected.
+- Private probe: `build/analysis/probe_ov15_pair.py`; reports:
+  `build/runtime/eur_overlay15/evidence_pair83.json` and `evidence_badge83.json`.
+  Both retain the previous controlled encounter provenance; ordinary replay
+  has no additional edits, and the badge report records its one register override.
+  Unexercised: multiple/no eligible targets, zero RNG seed, 16-bit table overflow,
+  retreat for even formations, and invalid/out-of-range inputs.
+- Full module/symbol checks, canonical ROM packaging, the 43-component native
+  relink with zero differing bytes, progress checks and all 81 tests pass.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **699,028 / 1,563,700 bytes (44.70%)**; C/C++ plus symbolic
+  assembly is **45.03%**. Overlay 15 is **2,544 / 13,164 (19.33%)**.
+  The 50% milestone still requires 82,822 matching bytes.

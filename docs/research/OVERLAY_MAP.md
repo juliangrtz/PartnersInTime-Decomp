@@ -30,7 +30,7 @@ The source links open each overlay's main source directory.
 | [12](../../src/overlay012/) | Cannonballers | 3,628 / 12,032 | 30.15% | Party order, resource and object setup, launch scheduling, airborne motion, hit effects and cleanup. |
 | [13](../../src/overlay013/) | Trampolines | 4,272 / 12,316 | 34.69% | Paired objects, resource setup, jump and bounce motion, retreat, landing effects and battle restoration. |
 | [14](../../src/overlay014/) | Bro Flowers and Ice Flowers | 6,536 / 13,860 | 47.16% | Attack sequencing, target selection, participant throws, projectile levels, fades and enemy-effect allocation and cleanup. |
-| [15](../../src/overlay015/) | Smash Eggs | 1,960 / 13,164 | 14.89% | Actor and motion initialization, support launches, hit-window timing, reverse animation, idle checks, model flags and battle restoration. |
+| [15](../../src/overlay015/) | Smash Eggs | 2,544 / 13,164 | 19.33% | Actor and motion initialization, support launches, hit-window timing, random targeting, badge motion adjustments, pair retreat, reverse animation, idle checks and battle restoration. |
 | [16](../../src/overlay016/) | Mix Flowers | 4,880 / 18,324 | 26.63% | Motion tables, paired effects, participant phases, resource changes, controller geometry, scaling and cleanup. |
 | [17](../../src/overlay017/) | Copy Flowers | 4,604 / 16,784 | 27.43% | Tuning tables, participant entry/return, home positions, animation, effect objects, display setup and model cleanup. |
 | [18](../../src/overlay018/) | Pocket Chomps | 5,896 / 18,036 | 32.69% | Tuning tables, Chomp entry/exit, animation, support attachment and attacks, anchor offsets and tether setup. |

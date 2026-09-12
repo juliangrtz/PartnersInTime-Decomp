@@ -1545,3 +1545,25 @@ during both support variants. Private evidence is
 Unexercised cases include formations 0 through 3, missing support objects/models,
 the phase-17 idle result and reverse animation for formation 4. The integer
 checks cover the observed values, not every overflow or invalid-state input.
+
+The next block adds 584 matching bytes in
+[targeting and badge adjustments](../../src/overlay015/attack_selection.c),
+[pair retreat](../../src/overlay015/pair_retreat.c) and
+[object hiding](../../src/overlay015/pair_visibility.c). The pair's halfwords
+at `+0x18` and `+0x1A` hold the target actor ID and pending damage in the attack
+path; their earlier timer/rotation names were corrected. The rotation update
+itself remains native.
+
+The ordinary replay checks target selection twice, retreat twice and hiding
+once. Enemy eligibility is observed from the existing helper, while the RNG,
+candidate order, result and seed are independently checked. The scene and
+graphics captures match the preceding actor replay exactly. A second replay
+forces one `Overlay10Party_HasBadgeTwo` return from 0 to 1 at caller
+`0x020C5D30`, before the constructor continues. It verifies every halfword in
+the 120-byte adjusted motion table. This tests the badge-enabled path through
+a controlled register edit, not through a normally equipped badge. Both replays
+run 2,110 frames and return to the command wheel with the original saves unchanged.
+Reports are `build/runtime/eur_overlay15/evidence_pair83.json` and
+`evidence_badge83.json`; probe: `build/analysis/probe_ov15_pair.py`.
+Multiple/no eligible enemies, zero RNG seed, table overflow and retreat for an
+even formation remain unexercised.

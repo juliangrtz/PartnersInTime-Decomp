@@ -64,8 +64,8 @@ typedef struct Overlay15AttackObjectPairState {
     u8 unknown_08[0xE];
     u8 flags;
     u8 phase;
-    u16 timer;
-    u16 rotation;
+    u16 target_actor_id;
+    s16 pending_damage;
 } Overlay15AttackObjectPairState;
 
 typedef char Overlay15AttackModelOwner_SizeCheck[
@@ -103,6 +103,11 @@ void Overlay15Attack_InitializeHitMotion(Overlay15AttackHitMotion *motion,
     BattleSceneObject *object, int animation_component);
 void Overlay15Attack_InitializeActorController(Overlay15AttackModelController *state,
     Overlay15AttackModelOwner *owner, int resource_id, int alternate);
+void Overlay15Attack_ApplyBadgeMotionAdjustments(void);
+int Overlay15Attack_SelectRandomEnemy(void);
+void Overlay15Attack_BeginPairRetreat(Overlay15AttackObjectPairState *state,
+    Overlay15AttackModelController *actor);
+void Overlay15Attack_HideAttackObjects(Overlay15AttackObjectPairState *state);
 #ifdef __cplusplus
 }
 #endif
