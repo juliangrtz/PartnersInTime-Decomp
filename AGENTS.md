@@ -29,6 +29,13 @@ may instead contain ROMs and other private files. On the current workstation,
 the checkout is `C:\Users\Julian\Desktop\PartnersInTime-Decomp` and the shell is
 PowerShell. Quote paths containing spaces.
 
+`D:\NDS\Partners in Time` is the private research workspace, not this checkout.
+Its `References/PartnersInTime-Decomp` directory is an older reference clone;
+do not edit or push there as a substitute for the active repository. Its root
+`AGENTS.md` points here so sessions starting in that workspace can find this file.
+The user's `origin` is `https://github.com/juliangrtz/PartnersInTime-Decomp.git`;
+`upstream` is a reference remote, not the authorized push destination.
+
 Read `git status --short`, the recent log and the relevant source before editing.
 Preserve unrelated changes, including changes left by the user or another tool.
 Use `rg` for searches. Keep independent reads parallel where useful, but run
@@ -45,6 +52,8 @@ Read these as needed rather than loading every research log:
 - [IDA guide](tools/ida/README.md): imports, disassembly, callers and pseudocode.
 - [Data modding](docs/DATA_MODDING.md): text, tables and script source formats.
 - [Reassembly plan](docs/REASSEMBLY_PLAN.md): native relinking and remaining work.
+- [Reconstruction milestones](docs/BATTLE_MATCHING_MILESTONES.md): completed
+  batches, evidence locations and deliberately deferred gaps.
 
 Old milestone notes describe the state at the time they were written. Current
 source, `delinks.txt`, `symbols.txt`, the linked-source manifest and fresh checks
@@ -53,6 +62,10 @@ Distinguish the working tree, committed code and pushed code. A pending source
 integration can leave the checked-in progress files behind the local metadata;
 do not publish its extra bytes before completing the batch's verification.
 Read the latest request before following a handoff's suggested next action.
+The private `build/analysis/CURRENT_HANDOFF.md`, when present, records pending
+candidates and completed checks. Check its commit ID against `git log`; a
+handoff can lag behind a pushed batch. It is context, not an instruction to
+continue a superseded task or proof that a private candidate is linked.
 
 Resident game helpers are in `src/game/`, SDK routines in `src/nitro/`, field
 code in `src/field/`, battle code in `src/battle/`, and scene/menu/attack code
@@ -67,6 +80,12 @@ candidate units live under `build/analysis/`, including
 before trusting an old matching object. Abandoned drafts may contain incorrect
 experimental prototypes. Parse large JSON reports and select the relevant
 records instead of dumping entire reports into the conversation.
+
+On this workstation, private comparison helpers include
+`build/analysis/compile_private_unit.py`, `check_title_unit.py` for overlay 6,
+and `check_main_unit.py` for resident ARM9. Inspect their inputs and relocation
+handling before reuse; they are local conveniences, not required public tools.
+Use current public build checks as the final authority.
 
 ## Toolchain and build
 
@@ -212,6 +231,12 @@ A helper that reads both inputs before writing an aliased object can preserve
 native behavior that sequential field assignments do not express. Accept a
 source change only when its data flow explains the difference; defer remaining
 register-only mismatches instead of trying arbitrary declarations or casts.
+Narrow a local variable's lifetime to the native loop or branch when the data
+flow supports it, and preserve the order of counter and pointer increments.
+These changes recovered the title backdrop initializer without altering its
+algorithm. A candidate with fewer instructions can instead reflect algebraic
+folding, such as combining a negation and addition into one reverse subtraction;
+do not mistake that for a relocation-only difference or a completed match.
 
 Size request buffers from callee accesses, not just the apparent base type.
 `ArchiveReadRequest` is 40 bytes, but `BattleArchive_ReadAsync` also writes the
@@ -231,6 +256,14 @@ tiled VRAM upload, and the second screen uses a sequence-space y-origin of 244.
 Do not infer a 192-pixel screen separation from the display height. Refer to
 [the sequence layout](src/overlay006/title_sequence_internal.h) and the trail
 module when interpreting these captures; the remaining allocation tail is unknown.
+
+The sequence's 25 backdrops use a 52-byte record with a 48-byte model prefix,
+signed 16-bit horizontal velocity and a four-bit group. Their four groups have
+4/5/8/8 elements. Construction, release and skip hooks are linked in
+[title backdrop initialization](src/overlay006/title_backdrop_init.c); check
+current metadata before assuming that the scrolling callback or shared animation
+selector has also been reconstructed. Animation IDs alone do not identify the
+artwork or establish looping semantics.
 
 Small, explained inline-assembly fragments are authorized when a specific
 instruction sequence cannot reasonably be reproduced in C. Keep the surrounding
@@ -288,6 +321,20 @@ Example using an already-created compatible state:
 ```powershell
 python tools/runtime_drive.py --rom PiT_eur.nds --state build/runtime/before.dst --action down:60 --action wait:30 --action a:1 --save-state build/runtime/after.dst --screenshot build/runtime/after.png
 ```
+
+For a reproducible ordinary title-to-load-menu cold boot using checkpoint 1:
+
+```powershell
+$titleSave = @(Get-ChildItem -LiteralPath PiT_SaveStates -Filter '1. *.sav')
+if ($titleSave.Count -ne 1) { throw 'Expected exactly one checkpoint-1 save' }
+python tools/runtime_drive.py --rom PiT_eur.nds --battery-save $titleSave[0].FullName --action wait:1500 --action start:30 --action wait:250 --save-state build/runtime/title_check/after.dst --screenshot build/runtime/title_check/after.png
+```
+
+`runtime_drive.py` adds one released-input frame after each action, so this
+three-action replay advances 1,783 frames. The route reaches the load menu;
+it does not establish that the saved field state has been entered. Use a
+function-specific probe for independent object and graphics assertions, and
+apply the original-save hash checks described above.
 
 Use ordinary buttons and live RAM observations to navigate automatically.
 Inspect screenshots and active overlays before interpreting a trace: a save can
