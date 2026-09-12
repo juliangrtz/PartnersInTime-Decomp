@@ -29,6 +29,15 @@ typedef struct TitleResourceTable {
 typedef struct CreditsResourceEntry {
     u16 entry, unused;
 } CreditsResourceEntry;
+/* Transition fields followed by the credits' remaining private workspace. */
+typedef struct CreditsWorkspace {
+    u8 unknown_00[28];
+    int layout, variant, screen, active;
+    u32 unknown_2c;
+    int polygon_alpha;
+    u8 unknown_34[0x8208];
+} CreditsWorkspace;
+typedef char CreditsWorkspaceSizeCheck[sizeof(CreditsWorkspace) == 0x823c ? 1 : -1];
 typedef struct SaveDirectoryView {
     u8 unknown[8];
     u8 selected : 4;
@@ -104,7 +113,7 @@ extern const void *data_ov006_0207b490[2];
 extern const TitleResourceTable data_ov006_0207b4a4;
 extern const void *data_ov006_0207b5e4[3];
 extern const CreditsLanguageEntries data_ov006_0207bd00, data_ov006_0207bd18;
-extern u8 data_ov006_0207c594[0x823C];
+extern CreditsWorkspace data_ov006_0207c594;
 extern s8 data_ov006_0207bfe8;
 extern CreditsResourceEntry data_ov006_0207bed8[], data_ov006_0207beda[];
 

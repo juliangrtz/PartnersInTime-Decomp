@@ -7,7 +7,7 @@ void CreditsScene_LoadResources(CreditsSceneTask *task)
     CreditsLanguageEntries palette_entries = data_ov006_0207bd18;
     void *resource;
     int variant;
-    MI_CpuFill8(data_ov006_0207c594, 0, sizeof(data_ov006_0207c594));
+    MI_CpuFill8(&data_ov006_0207c594, 0, sizeof(data_ov006_0207c594));
     func_ov005_02067468(ARCHIVE, 1, data_ov006_0207b5e4[1], 1);
     resource = Overlay5Archive_ReadEntry(ARCHIVE, 1, 193, &length, 0);
     Overlay5Display_LoadObjPalette(0, resource, 0, length);

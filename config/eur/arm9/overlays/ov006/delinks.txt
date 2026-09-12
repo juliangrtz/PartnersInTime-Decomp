@@ -113,3 +113,9 @@ src/overlay006/title_menu_cursor.c:
 
 src/overlay006/title_backdrop_init.c:
     .text       start:0x02073bf8 end:0x02073dc0
+
+src/overlay006/credits_fade.c:
+    .text start:0x02075f94 end:0x020761c8
+
+src/overlay006/credits_positions.c:
+    .text start:0x02078b8c end:0x02078c90

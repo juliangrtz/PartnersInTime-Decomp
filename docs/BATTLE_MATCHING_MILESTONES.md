@@ -5168,3 +5168,52 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **690,488 / 1,563,700 bytes (44.16%)**; C/C++ plus symbolic
   assembly is **44.49%**. Overlay 6 is **41,768 / 66,492 (62.82%)**.
   The 50% project milestone still requires 91,362 matching bytes.
+
+
+## 2026-09-12: Credits illustration placement and fade transition (+824 matching C bytes)
+
+- Added five byte-identical functions: `CreditsFade_InitAll` (100 bytes) and
+  `CreditsFade_Update` (464) at `0x02075F94..0x020761C8`, plus the layout-center
+  (68), cell (132) and origin (60) target helpers at `0x02078B8C..0x02078C90`.
+  Related functions are grouped in `credits_fade.c` and `credits_positions.c`.
+- Recovered the 84-byte credits motion record's callback, unsigned phase/counter
+  and variant/column/row bytes. The existing motion fields retain their offsets.
+  The shared 0x823C-byte workspace now has typed layout, variant, screen,
+  active-count and polygon-alpha fields, with the remaining storage left unknown.
+  Both layouts have compile-time size checks.
+- Native unsigned switch dispatch established the phase type. Sixteen-byte
+  layout records require a correspondingly typed table view; this removed an
+  extra index shift. Declaring the workspace as its actual object type preserved
+  the original accesses where a cast from a byte array added instructions.
+  No compiler flags or inline assembly were needed.
+- The position helpers derive Q12 coordinates from the layout table, with
+  5/4-pixel cell spacing, an 80/64-pixel center offset and a 224-pixel origin
+  offset for the second screen. The fade retires all but the first of 1,024
+  cells, fades polygon alpha down, replaces the grid, waits 120 frames and fades
+  the final illustration back in. The original layout table selects this fade
+  for illustration 15; an initial 5,000-frame replay had not reached it.
+- Two successful replays from the compatible checkpoint-86 Shroob Castle state
+  total 17,000 frames. A decoded field command is temporarily replaced with
+  opcode 0x122/fade=1 and all 72 bytes are restored at the credits helper before
+  native scene initialization. This verifies controlled credits entry and the
+  subsequent native sequence, not ordinary story completion. Evidence and probe
+  source are local under `build/runtime/eur_credits_transition/` and `build/analysis/`.
+- The extended 12,000-frame run reaches all five functions, all fade phases
+  (0/1/2/3/4/100/101), all 16 layouts and both screen modes for every position
+  helper. Together the runs independently verify 51,823 coordinate pairs,
+  53,167 complete 84-byte records, two full 86,016-byte grids and 1,346 complete
+  52-byte workspace prefixes. Initialization and replacement each check all
+  1,024 cells. The fade has 61 fade-out, 121 wait and 121 fade-in updates.
+- All 104 original save hashes remain unchanged. Fourteen VRAM/palette/OAM/display
+  register dumps and nine screenshots have verified file hashes. Fade-out,
+  replacement and final credits screenshots were inspected. Neither successful
+  replay needed drain frames. Idle phase 101 was independently checked 16 times;
+  311,999 further idle entries were counted without snapshots. Invalid layouts,
+  other screen values, abnormal counters and phase-100 entry with an already-zero
+  active count remain unexercised. The native motion-advance helper remains unlinked.
+- Full module/symbol checks, canonical packaging, native relink of 43 components
+  with zero differing bytes, generated-progress checks and all 81 tests pass.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+- Matching C/C++ is **691,312 / 1,563,700 bytes (44.21%)**; C/C++ plus symbolic
+  assembly is **44.54%**. Overlay 6 is **42,592 / 66,492 (64.06%)**.
+  The project-wide 50% milestone still requires 90,538 matching bytes.

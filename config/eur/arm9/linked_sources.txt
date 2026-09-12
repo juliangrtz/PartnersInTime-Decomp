@@ -782,3 +782,5 @@ src/overlay006/title_localized_sequence.c
 
 src/overlay006/title_model.cpp
 src/overlay006/title_brightness.c
+src/overlay006/credits_fade.c
+src/overlay006/credits_positions.c

@@ -19,15 +19,20 @@ typedef struct CreditsSceneTask {
     u8 pixels[4096];
     u32 unknown_1064;
 } CreditsSceneTask;
-typedef struct CreditsMotion {
-    u8 unknown_00[32];
+typedef struct CreditsMotion CreditsMotion;
+struct CreditsMotion {
+    void (*update)(CreditsMotion *motion);
+    u32 phase, counter;
+    u8 variant, column, row, unknown_0f;
+    u8 unknown_10[16];
     int x, y, target_x, target_y, vx, vy, ax, ay;
     u8 unknown_40[16];
-    u16 frames;
-} CreditsMotion;
+    u16 frames, unknown_52;
+};
 
 typedef char TitleSceneTaskSizeCheck[sizeof(TitleSceneTask) == 48 ? 1 : -1];
 typedef char CreditsSceneTaskSizeCheck[sizeof(CreditsSceneTask) == 4200 ? 1 : -1];
+typedef char CreditsMotionSizeCheck[sizeof(CreditsMotion) == 84 ? 1 : -1];
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -43,6 +48,11 @@ GameIrqTask *CreditsSceneIrq_Destroy(GameIrqTask *task);
 GameIrqTask *CreditsSceneIrq_Delete(GameIrqTask *task);
 void CreditsMotion_SetAcceleration(CreditsMotion *motion, int frames);
 void CreditsMotion_SetEaseOut(CreditsMotion *motion, int frames);
+void CreditsMotion_TargetLayoutCenter(CreditsMotion *motion, int layout, int screen);
+void CreditsMotion_TargetLayoutCell(CreditsMotion *motion, int layout, int screen);
+void CreditsMotion_TargetLayoutOrigin(CreditsMotion *motion, int layout, int screen);
+void CreditsFade_InitAll(void);
+void CreditsFade_Update(CreditsMotion *motion);
 void CreditsScene_InitGeometry(CreditsSceneTask *unused);
 void CreditsScene_LoadResources(CreditsSceneTask *task);
 CreditsSceneTask *CreditsScene_Delete(CreditsSceneTask *task);
