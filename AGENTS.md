@@ -42,6 +42,10 @@ Use `rg` for searches. Keep independent reads parallel where useful, but run
 shared build and source-metadata changes sequentially.
 In PowerShell, filter files with `rg PATTERN src/overlay006 -g 'title*.c'`
 rather than passing an unexpanded wildcard as a directory argument.
+Use `rg --files` to locate a header before guessing its name. Keep searches
+scoped to the intended file types: positive `-g` patterns admit alternatives,
+so adding `-g '*audio*'` alongside C/C++ patterns can also admit enormous private
+JSON reports. Use `rg -l` when only filenames are needed.
 
 Read these as needed rather than loading every research log:
 
@@ -49,6 +53,10 @@ Read these as needed rather than loading every research log:
 - [Overlay map](docs/research/OVERLAY_MAP.md): subsystem roles and source links.
 - [Progress guide](docs/PROGRESS.md): what counts as matching C/C++.
 - [Runtime guide](docs/research/RUNTIME_ANALYSIS.md): saves, inputs and RAM probes.
+- [Battle map](docs/research/BATTLE_MAP.md): battle objects and subsystem evidence.
+- [VM reference](docs/research/SCRIPT_VM_SEMANTICS.md): decoded commands and
+  dispatcher semantics; [Scene VM notes](docs/research/SCENE_VM_MATCHING.md)
+  explain its remaining inline-assembly fragment.
 - [IDA guide](tools/ida/README.md): imports, disassembly, callers and pseudocode.
 - [Data modding](docs/DATA_MODDING.md): text, tables and script source formats.
 - [Reassembly plan](docs/REASSEMBLY_PLAN.md): native relinking and remaining work.
@@ -90,9 +98,10 @@ records instead of dumping entire reports into the conversation.
 
 On this workstation, private comparison helpers include
 `build/analysis/compile_private_unit.py`, `check_title_unit.py` for overlay 6,
-and `check_main_unit.py` for resident ARM9. Inspect their inputs and relocation
-handling before reuse; they are local conveniences, not required public tools.
-Use current public build checks as the final authority.
+`check_overlay15_unit.py` for overlay 15, and `check_main_unit.py` for resident
+ARM9. Inspect their inputs and relocation handling before reuse; they are local
+conveniences, not required public tools. Use current public build checks as the
+final authority.
 
 ## Toolchain and build
 
@@ -220,6 +229,20 @@ the full-width argument and the native truncation point when callers pass an
 `int`; narrowing the prototype can change caller code and signedness. A table
 lookup may use that full-width index before its low byte is stored elsewhere;
 preserve the lookup width and signedness separately from the destination field.
+The same applies to temporaries: a halfword result can be promoted to `int` for
+arithmetic and narrowed only afterward. For example, `(s16)(last_frame - 1)`
+preserves a different truncation point from making `last_frame` an `s16` early.
+Check the native extension instructions and the callee's parameter type before
+introducing masks or casts to fix a size difference.
+
+Use the recovered C++ virtual interface when native calls go through a vtable.
+`BattleModel` and its virtual methods are declared in
+[battle_scene.h](include/game/battle_scene.h); there is no separate
+`battle_model.h`. A C function-pointer approximation can have the correct size
+while retaining different call/load ordering. When moving a unit to C++, check
+the linkage of every shared C declaration. Use guarded `extern "C"` declarations
+for C APIs, keep C++ class declarations outside them, and verify exported names
+and relocations. Do not hide mangled-symbol errors in the comparison script.
 
 Account for integer promotion and the exact point where values are rounded.
 A `u8` or `u16` operand promotes to `int`; an explicit `u32` cast before a shift
@@ -256,6 +279,9 @@ A helper that reads both inputs before writing an aliased object can preserve
 native behavior that sequential field assignments do not express. Accept a
 source change only when its data flow explains the difference; defer remaining
 register-only mismatches instead of trying arbitrary declarations or casts.
+When several accesses share an embedded structure, recover that relationship
+with a typed pointer and retain the native order of dependent loads. Its lifetime
+can explain register use across helper calls without artificial register hints.
 Narrow a local variable's lifetime to the native loop or branch when the data
 flow supports it, and preserve the order of counter and pointer increments.
 These changes recovered the title backdrop initializer without altering its
@@ -463,6 +489,18 @@ probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
 
+For battle attack research, the compatible private snapshot
+`build/runtime/eur_attack_helpers/ov17_bros_menu83.dst` provides a checkpoint-83
+Bros. item menu. Inspect the visible item list and trace the selected command;
+the filename does not prove which attack is currently selected. The native
+loader mapping recorded in `build/analysis/probe_battle_attack_loader.py` maps
+command 8 to overlay 15 and callback `0x020C5B4C`. This identifies a dispatch
+route, not the item's gameplay name. Check the current overlay map before
+assigning one. During battle, `gBattleContext` is the pointer stored in ARM9
+main RAM at `0x020C0718`; dereference it before reading object-relative fields.
+Verify snapshot provenance and byte guards before reusing this route, and
+distinguish a controlled encounter from normal story navigation.
+
 For credits, the private `build/analysis/probe_credits_transition.py` established
 a route from checkpoint 86 and the compatible state
 `build/runtime/states/eur_story_086_hud_verified.dst`. It substitutes one 72-byte
@@ -483,6 +521,15 @@ decoded image and palette checks, and graphics captures. Allocation addresses
 and newly constructed child prefixes are explicitly observed helper outputs.
 Read each report's uncovered branches before extending it; a successful music
 state sequence does not independently verify audio mixing or physical output.
+
+`build/analysis/probe_credits_small.py` extends that route to cloud movement,
+star blinking, grid fade and radial delay. Its successful report is
+`build/runtime/eur_credits_small/evidence_story86_full.json`. It derives complete
+task/particle records, the shared workspace fields and RNG state without
+refreshing expectations from helper outputs. Consult its branch observations:
+positive-X radial launches and a zero RNG seed were not exercised. This is
+evidence for those update routines, not independent verification of every
+native graphics callback. Keep new probes equally explicit about their limits.
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
 dereferences, field offset, access width and timing. The tested EUR Nawatobi
