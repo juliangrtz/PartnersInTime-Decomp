@@ -676,6 +676,28 @@ branch. Controlled shop entry and purchase fixtures remain distinct from normal
 NPC navigation. Neighboring bitmap and number helpers still contain native gaps;
 do not count an entire private candidate file because one function matches.
 
+The adjacent scale-task creator/updater are in `shop_list_scale.cpp`, with
+`shop_list_point_model.cpp` on the far side of the remaining model-initializer
+gap. Scale tasks store duration/current/target/step/delay at offsets 36/40/44/48/52
+in the shared 72-byte task pool. After a nonzero delay expires they request sound
+234; scaling starts on the following update. The last scaling update writes the
+exact target before calling the clamping setter and marking the task for deferred
+removal. The point-model callback uses the list's compressed X coordinate and
+workspace-relative Y, rounds each Q12 value toward zero, then stores halfwords.
+The last point's draw priority decreases by two while entering or in a nonzero
+list phase. Preserve the native subtraction rather than replacing it with a
+constant assignment solely because the preceding offset starts at zero.
+
+`probe_shop_list_effects.py` with `shop_list_effects_oracles.py` verifies these
+fields and tracks every created scale task through its complete update sequence.
+It derives clamped scale, model coordinates, priorities and draw-list appends,
+checking 72-byte tasks, 656-byte lists, 1,380-byte saves and 128-byte model prefixes.
+Allocation and sound-queue internals remain observed helper outputs; their call
+arguments and the caller's writes are checked independently. Reports and capture
+comparisons are in `build/runtime/eur_shop_list_effects/`. Use the recorded branch
+counts when extending the routes; ordinary positive scaling does not establish
+negative-step, division-by-zero or clamp-boundary coverage.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

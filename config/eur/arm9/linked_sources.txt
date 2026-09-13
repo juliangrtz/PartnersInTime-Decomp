@@ -823,3 +823,5 @@ src/overlay009/shop_bitmap_placeholder.c
 src/overlay009/shop_bitmap_value.c
 src/overlay009/shop_number_placeholder.cpp
 src/overlay009/shop_glyph_expand.cpp
+src/overlay009/shop_list_scale.cpp
+src/overlay009/shop_list_point_model.cpp

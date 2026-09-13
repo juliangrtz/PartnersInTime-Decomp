@@ -21,11 +21,16 @@ typedef struct ShopList {
 } ShopList;
 typedef char ShopListSizeCheck[sizeof(ShopList) == 656 ? 1 : -1];
 typedef char ShopListPointSizeCheck[sizeof(ShopListPoint) == 28 ? 1 : -1];
+typedef struct ShopListScaleTask ShopListScaleTask;
+typedef struct ShopListPointTask ShopListPointTask;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 u16 ShopList_GetPhase(ShopList *list);
+void ShopList_AnimateScale(s32 initial, s32 target, int frames, int delay);
+void ShopListScale_Update(ShopListScaleTask *task);
+void ShopListPoint_DrawModel(ShopListPointTask *task);
 void ShopList_Simulate(ShopList *list, int iterations);
 void ShopList_RestorePinnedPoints(ShopList *list, ShopListPoint *point, int count);
 void ShopList_UpdateVelocities(ShopList *list, ShopListPoint *point, int count);

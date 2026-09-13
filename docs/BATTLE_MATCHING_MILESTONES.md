@@ -6376,3 +6376,41 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **712,820 / 1,563,700 bytes (45.59%)**, or **45.92%**
   with separate assembly. Overlay 9 reaches **24,492 / 78,984 (31.01%)**.
   **69,030 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop list scale animation and point-model drawing
+
+- Reconstruct **460 matching C/C++ bytes**: `ShopList_AnimateScale` at
+  `0x0207CEB0` (112), `ShopListScale_Update` at `0x0207CF20` (168), and
+  `ShopListPoint_DrawModel` at `0x0207D164` (180). The creator/updater share a
+  contiguous module; the point callback remains separate around the native
+  initializer gap. Both task layouts have checked 72-byte sizes.
+- The point callback's initial one-word mismatch was `MVN #1` versus native
+  `SUB #2`. Expressing the priority-offset decrement directly matches the native
+  arithmetic. The larger point-model initializer and scanline IRQ were deferred
+  with register differences; their private drafts are not linked progress.
+- Full Ninja checks, canonical packaging, native relinking and **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701` and native
+  relinking reports zero differing bytes across 43 components and 31,138
+  relocations, including 1,577 ARM7 relocations. Logs: `build/analysis/shop_list_effects_`.
+- Four routes pass: **6,528 frames and 49,732 checked returns**, including
+  **49,198 through the new functions**: eight creators, 48 updates and 49,142
+  model draws. All eight created tasks are tracked through exactly their
+  delay-plus-duration update counts to the deferred-removal flag. Four delayed
+  sound requests and all eight exact-target writes are verified.
+- Independent expectations cover signed division, task payloads, scale setting,
+  point coordinates, signed Q12 rounding, model halfwords, priority adjustment
+  and draw-list appends. Full 72-byte tasks, 656-byte lists, 1,380-byte saves and
+  128-byte model prefixes are checked at relevant call boundaries. Allocation
+  and sound-queue internals are observed helper outputs with checked arguments.
+- Coverage includes delayed/immediate starts, intermediate/final updates,
+  entering/settled points, list phases 0/1000/1001 and both priority outcomes.
+  Negative/zero scale steps, zero-duration division, values outside the setter's
+  clamp bounds and invalid point indices remain unexercised.
+- All **68 screenshots, 612 graphics dumps and 104 original saves** validate;
+  **680 artifact pairs** match the preceding shop-graphics routes. No pending
+  calls, unfinished scale tasks or drain frames remain. Reports:
+  `build/runtime/eur_shop_list_effects/`.
+- Matching C/C++ reaches **713,280 / 1,563,700 bytes (45.61%)**, or **45.95%**
+  with separate assembly. Overlay 9 reaches **24,952 / 78,984 (31.59%)**.
+  **68,570 bytes** remain to the 50% goal.
