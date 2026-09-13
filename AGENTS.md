@@ -74,6 +74,10 @@ native bytes, source, link metadata and fresh checks take precedence over old
 notes. Private candidates are not linked progress; an old successful probe is
 not proof that today's source or artifact was tested. Keep changing percentages,
 milestones and candidate status in generated reports and the private handoff.
+Private probes, saves, snapshots and analysis scripts are local resources, not
+dependencies supplied by a fresh clone. Check that they exist and inspect their
+inputs before invoking them. If an artifact is absent, state which evidence is
+unavailable and use the public runtime tools to establish a reproducible route.
 When resuming a partially integrated batch, inventory its pending files and
 completed checks first. Associate each check with the source and ROM it tested.
 A handoff can be stale even when its recorded `HEAD` still matches: the next
@@ -117,6 +121,10 @@ the printed instruction listing alone does not prove that range was inspected.
    Prefer the actual shared workspace type over casting a raw byte global to a
    partial structure. Preserve existing byte views when naming newly understood
    fields, check offsets and size, and rebuild every affected caller.
+   Use existing typed records when native indexing establishes their stride and
+   field offset. Flattening a record table to words, or replacing record pointers
+   with preloaded scalar fields, can change address calculation and load order.
+   Explain the specific native difference before changing the source form.
    Recover virtual slot signatures from both callers and implementations. Keep
    caller-side narrowing at the native instruction; a narrow implementation's
    return declaration alone does not describe every caller's register use.
@@ -239,15 +247,22 @@ and compatible snapshots. Optional dependencies are in
   Finish every matching pending record, innermost first, at that hook before
   processing the next instruction; handling only one record leaves a false
   unfinished call. The shop confirmation cursor probe is a verified example.
+  Execution hooks run before the addressed instruction. At a helper's return
+  address, its caller has not yet executed the following store or arithmetic.
+  Check the helper's result and effects at that boundary; apply caller-owned
+  expected writes only at a later boundary where those instructions have run.
+  A Python callback named `after` does not advance emulation. Honor ARM condition
+  codes before counting an instruction hook as an executed conditional store.
 - For constructors, snapshot the actual allocation before entry and derive only
   the fields the native code initializes; preserve untouched bytes and padding.
   A base constructor may run inside a larger derived allocation. Propagate a
   nested constructor's independently expected changes into the parent's oracle,
   rather than accepting a fresh RAM snapshot as the expected result.
   For pooled objects, establish the slot size, base, count and free-list links
-  from the allocator. Check alignment and the complete live slot. Shop models
-  use 336-byte slots; the shared shop tasks use 72 bytes. Do not substitute the
-  size of a convenient public prefix for either allocation.
+  from the allocator. Check alignment and the complete live slot. Shop ResourceA
+  models use 336-byte slots, ResourceB sprites use 64-byte slots, and the shared
+  shop tasks use 72 bytes. Identify the attached resource's allocator before
+  selecting the extent; a public structure can describe a prefix or a full slot.
 - Distinguish allocation size, initialized extent and transfer size. When the
   allocation is known, check the complete buffer and preserve untouched tails,
   padding and transparent pixels. Shop help pixels allocate 6,144 bytes, clear
@@ -261,6 +276,8 @@ and compatible snapshots. Optional dependencies are in
   virtual delete does not establish coverage of every destructor wrapper.
   Task removal can be deferred: setting the removal flag is a separate event
   from unlinking and freeing. Check the actual helper before assigning lifetimes.
+  Both events can occur in the same frame; use hook order to establish their
+  sequence rather than requiring a strictly larger removal-frame number.
   Follow newly created tasks through their updates to the expected completion.
   For a pool return, verify release callbacks, task fields and neighbor links
   before return to the pool. Afterward, inspect only still-live pool/list records
@@ -369,6 +386,10 @@ output directory. Resume or inspect that process before launching a duplicate;
 elapsed time or a populated output directory is not a successful exit status.
 Separate the latest documentation commit from the last verified code batch;
 existing build logs are historical evidence, not checks run by the current turn.
+For a failed replay, preserve its command, exit status, log, failure report,
+frame and assertion. Mark the batch's runtime checks incomplete even if its
+build and tests passed. Keep a suspected oracle correction separate from a
+confirmed diagnosis and from a successfully rerun check.
 Inspect old integration scripts before reuse; many are not safe to replay.
 Keep durable rules here and detailed findings in the linked reference, rather
 than appending every batch's history to this entry point.
