@@ -6236,3 +6236,40 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **710,420 / 1,563,700 bytes (45.43%)**, or **45.76%**
   with separate assembly. Overlay 9 reaches **22,092 / 78,984 (27.97%)**.
   **71,430 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop item-name and description indices
+
+- Reconstructed `ShopText_GetDescriptionIndex` at `0x02074950` (292 bytes) and
+  `ShopText_GetNameIndex` at `0x02074A74` (264 bytes): **556 new matching C++
+  bytes**. They join the existing string lookup and measurement functions in
+  `shop_text_lookup.cpp`, a contiguous 836-byte module.
+- Both helpers use the shared item-record lookup. Native instructions require
+  a full-width accumulator and final `u16` narrowing; a halfword local placed
+  the name increment's narrowing inside the conditional or omitted the final
+  description narrowing. Correcting that data flow makes both functions exact.
+  Existing lookup callers also match in the combined unit with their C linkage
+  and explicit conversion from the text resource API's `const void *` result.
+- Full Ninja checks, canonical packaging, native relinking and **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+  Native verification covers 43 components and 31,138 relocations, including
+  1,577 ARM7 relocations, with zero differing bytes. Logs use the prefix
+  `build/analysis/shop_text_indices_`.
+- The focused probe replays the preceding three shop routes and bounded coin
+  purchase fixture: **4,551 frames and 278 checked returns**, including **153
+  returns through the two new helpers**. It checks 102 name and 51 description
+  lookups across consumables, clothing and badges. Original item records,
+  quantity and live selector bytes independently determine each result.
+  All 153 calls preserve the renderer, save, parameters, selector and item record.
+- Coverage includes 48 singular and 54 plural name lookups, 25 alternate and
+  26 default description selections. Show/hide, queued text and icon checks
+  also pass. The previously verified broad price API replay is not repeated.
+  Invalid item records, index wraparound and physical audio remain unexercised.
+- The artifact checker validates **42 screenshots, 378 graphics dumps and all
+  104 source saves**. All 420 artifacts match the preceding text-task batch.
+  The singular/plural purchase display was visually inspected. Every route
+  returns visibly to the field with no pending calls or drain frames. Reports:
+  `build/runtime/eur_shop_text_indices/`.
+- Matching C/C++ reaches **710,976 / 1,563,700 bytes (45.47%)**, or **45.80%**
+  with separate assembly. Overlay 9 reaches **22,648 / 78,984 (28.67%)**.
+  **70,874 bytes** remain to the 50% goal.

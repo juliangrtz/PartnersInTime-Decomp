@@ -107,6 +107,8 @@ void ShopStockPanel_Destroy(ShopStockPanel *panel);
 ShopStockPanel *ShopStockPanel_Init(ShopStockPanel *panel);
 u8 ShopText_GetItemIcon(ShopText *renderer, u16 item);
 void ShopText_CopyIcon(ShopText *renderer, DisplayEngine engine, int offset, int icon);
+u16 ShopText_GetDescriptionIndex(ShopText *renderer, u16 item, int unused, int quantity);
+u16 ShopText_GetNameIndex(ShopText *renderer, u16 item, int quantity);
 u16 ShopText_MeasureLine(ShopText *renderer, int kind, u16 item, u8 quantity);
 const u8 *ShopText_GetString(ShopText *renderer, int kind, u16 item, u8 quantity);
 #ifdef __cplusplus

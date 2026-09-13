@@ -51,8 +51,8 @@ src/overlay009/shop_stock_panel_lifecycle.c:
 src/overlay009/shop_icons.cpp:
     .text       start:0x02074464 end:0x0207459c
 
-src/overlay009/shop_text_lookup.c:
-    .text       start:0x02074838 end:0x02074950
+src/overlay009/shop_text_lookup.cpp:
+    .text       start:0x02074838 end:0x02074b7c
 
 src/overlay009/shop_resources.cpp:
     .text start:0x0206d160 end:0x0206e288

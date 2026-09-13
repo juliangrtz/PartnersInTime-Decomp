@@ -585,6 +585,18 @@ deletion, before field return. The equipment
 and bean routes have no purchase fixture. Reports and captures are under
 `build/runtime/eur_shop_text_tasks/`; source battery saves retain their hashes.
 
+The focused `probe_shop_text_indices.py` reuses those inputs and fixtures. Name
+indices use record halfword `+2`, adding one when quantity is not one; description
+indices use halfword `+4` or `+6` according to the live category byte in
+`data_ov009_0207e28c`. Both native functions retain a full-width accumulator and
+narrow to `u16` at return. A `u16` local can instead move narrowing into the
+conditional increment. Preserve the native null-record behavior too: the name
+helper still adds the plural offset to zero. The three routes exercise singular,
+plural and both description selectors; invalid records and index wraparound
+remain unexercised. Reports under `build/runtime/eur_shop_text_indices/` check
+unchanged renderer/save/selector records and compare every capture with the
+preceding text-task batch. The broader buying-price API checks are not repeated.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized
