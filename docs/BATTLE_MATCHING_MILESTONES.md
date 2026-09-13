@@ -6874,3 +6874,37 @@ slice and full allocation; the equipment route was rerun successfully.
 Zero HP, saturation, explicit leading zeroes and non-three-place formatting
 remain unexercised. Final GPU output/screenshots are observed. The neighboring
 low-HP callbacks and pixel-copy drafts remain unlinked and do not count here.
+
+
+## 2026-09-13: pause clock separator
+
+Reconstructed PauseClock_UpdateSeparator at 0x02080ef4 (164 bytes) in
+src/overlay007/pause_clock.cpp. The 72-byte task increments its timer,
+subtracts 30 at each blink, toggles visibility, and draws or clears the
+clock separator. The first draft matches exactly without assembly.
+
+Matching C/C++ reaches 721,984 / 1,563,700 bytes (46.17%); with separate
+assembly, 46.50%. Overlay 7 reaches 57,228 / 142,264 (40.23%).
+59,866 matching C/C++ bytes remain to the 50% goal.
+
+Full configure/Ninja checks, no-data-mod packaging, native relink, generated
+progress checks and 81 tests pass. Both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink checks 43 components,
+420 section units, 31,138 relocations and 1,577 ARM7 relocations with zero
+differing bytes. Logs: build/analysis/pause_clock_*.log.
+
+The focused checkpoint-65 runtime probe uses normal waiting and B exit.
+In 406 frames it checks 235 callbacks: 227 wait returns, four show transitions
+and four hide transitions. Every consecutive toggle is exactly 30 callbacks
+apart. Independent expectations cover the complete task and live pool record,
+49,152-byte bitmap and heap header, font allocation/header, 90,600-byte
+workspace, 1,380-byte save and pointer. The oracle derives the transparent
+glyph pixels, rectangular clear and dirty flag at native helper boundaries.
+
+All nine screenshots, 81 graphics dumps and 104 unchanged original saves
+validate; no fixture, pending call or drain frame remains. Task creation and
+destruction, invalid timer states and final GPU output are outside this
+callback check. The graphics helpers remain unlinked; their pixel effects
+are checked without claiming those private drafts as matching C/C++.
+Reports: build/runtime/eur_pause_clock/; probe_pause_clock.py and
+verify_pause_clock_artifacts.py remain private in build/analysis/.

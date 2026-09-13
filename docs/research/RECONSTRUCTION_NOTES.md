@@ -1401,6 +1401,26 @@ saves. Both routes finish with no pending calls. Final GPU output and screenshot
 are observed, not independently rendered by the oracle. These results do not
 verify the still-private low-HP callbacks or their lifecycle and threshold cases.
 
+The linked [clock separator callback](../../src/overlay007/pause_clock.cpp),
+`PauseClock_UpdateSeparator` at `0x02080EF4` (164 bytes), increments its signed
+timer at task `+0x24`. At 30 it subtracts 30, toggles the word at `+0x28`, and
+either draws tile 268 at (72, 161) or clears the 4-by-8 rectangle at (74, 165).
+The existing overlay-5 element pool establishes the complete task slot as
+72 bytes. The callback does not allocate or release the slot itself.
+
+`build/analysis/probe_pause_clock.py` checks 235 callbacks during 406 frames of
+normal waiting and B exit from the checkpoint-65 pause snapshot. It verifies
+227 wait returns, four show transitions and four hide transitions, with exactly
+30 callback updates between toggles. Expectations cover the full task and pool
+record, 49,152-byte bitmap and heap header, font allocation/header, workspace,
+save and pointer. Helper arguments, per-pixel transparent glyph copies, rectangle
+clears and the background-dirty flag are independently checked. The focused
+artifact verifier validates nine screenshots, 81 graphics dumps and all 104
+unchanged source saves under `build/runtime/eur_pause_clock/`. No fixtures or
+pending calls remain. Task creation/destruction, invalid timer states and final
+GPU output are outside this callback oracle; the two graphics helpers remain
+unlinked even though their effects are checked here.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
