@@ -87,6 +87,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Equipment list models | [Equipped-item markers](docs/research/RECONSTRUCTION_NOTES.md#pause-equipped-item-markers), [empty-equipment row sprites and ResourceA lifetime](docs/research/RECONSTRUCTION_NOTES.md#pause-empty-equipment-row-sprites) |
 | Category and list selection sprites | [Task layouts, Q12 coordinates, model attachments and tested scrolling routes](docs/research/RECONSTRUCTION_NOTES.md#pause-selection-sprites) |
 | Equipment member-selection arrows | [Heading-switch inputs, failed routes and verified updater](docs/research/RECONSTRUCTION_NOTES.md#pause-member-selection-arrows) |
+| Equipment stat comparisons | [Save-field addressing, cached rows, numeric helper ABI and runtime counts](docs/research/RECONSTRUCTION_NOTES.md#pause-equipment-stat-comparison-rows) |
 | Party status and low-HP warnings | [Bitmap and status fields](docs/research/RECONSTRUCTION_NOTES.md#pause-party-status), [bitmap transitions and spring workspace](docs/research/RECONSTRUCTION_NOTES.md#pause-party-bitmap-transitions), [warning modes, threshold fixtures and lifetime checks](docs/research/RECONSTRUCTION_NOTES.md#pause-low-hp-warnings) |
 | Unused Nawatobi minigame | [Guarded entry, exact RAM edit and research limits](docs/research/RECONSTRUCTION_NOTES.md#nawatobi) |
 | Earlier batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md); private reports linked there |
@@ -130,6 +131,8 @@ or counting it; historical `EXACT` records are only discovery leads.
    call is not an argument unless the next callee consumes its incoming value.
    A later mask or narrow store also does not establish a narrow parameter;
    a full-word stack load followed by truncation may require a full-width type.
+   Derive display-coordinate offsets from the native drawing code; physical
+   screen dimensions do not establish the engine's coordinate convention.
 3. Preserve load/store order, short-circuit calls, possible aliasing and accesses
    across callbacks. `const` does not establish non-overlap. Keep native masked
    and unmasked stores, packed-field truncation and neighboring bits. Do not
@@ -247,6 +250,9 @@ compatible snapshots. Read their arguments and
   helpers. The driver inserts one released frame after every action. Bound entry,
   assert that the target dispatch ran, and confirm the final scene from live state.
   A missed route is a coverage gap; do not remove its assertion to obtain a pass.
+  Check the save's actual entry conditions first. For example, a fully healed
+  party can prevent a healing item's recipient-selection path. Use another
+  suitable save or a guarded, reversible fixture and label that evidence accordingly.
   Establish required branch coverage before running. Inherited visibility or
   draw-count assumptions can depend on the save and menu; justify corrections
   from the native predicate and live inputs, retain per-call checks and reconcile
@@ -314,9 +320,14 @@ compatible snapshots. Read their arguments and
 - Record per-function/branch counts, ROM/save/state hashes, inputs and explicit
   limits. Separate ordinary routes from RAM fixtures and document restoration.
   For a per-call fixture, preserve the exact bytes, edit only at a guarded live
-  boundary, restore and verify before the callback returns, and provide cleanup
-  on failure. Test zero, below, equal and above a threshold where relevant;
-  preserve native operand widths and signedness instead of rounding percentages.
+  boundary, verify the expected outputs, then restore at the guarded return
+  boundary before the caller resumes. Provide cleanup on failure. For a fixture
+  spanning navigation, specify and verify its later restoration boundary too.
+  A temporary removal-flag fixture proves the marking branch; a later ordinary
+  group cleanup is separate evidence of release. Do not attribute it to a flag
+  that was already restored. Test zero, below, equal and above a threshold where
+  relevant; preserve native operand widths and signedness instead of rounding
+  percentages.
   Keep generic helper checks and checks performed inside watched creators
   distinguishable in reports, with no double counting of the same call.
   A route reaching every visible row can still miss a setup flag's other branch;
@@ -325,13 +336,21 @@ compatible snapshots. Read their arguments and
   the rule; track lifetimes independently. Screenshots alone do not prove execution.
 - Validate referenced artifacts: existence, hashes, image dimensions, memory
   extents and report totals. Compare baselines only for identical state, fixture,
-  input and capture prefixes. Distinguish visual inspection from hash equality
-  and observed rasterization from an independent graphics oracle.
+  input and capture prefixes; stop at the earliest differing fixture, including
+  a callback edit that occurs before a later navigation fixture.
+  Distinguish visual inspection from hash equality and observed rasterization
+  from an independent graphics oracle.
   A verified draw-list insertion does not prove a visible sprite: clipping can
   suppress it. State whether the evidence checks submission or rendered pixels.
   Associate every route with the exact probe source/version that produced it,
   including generated or composed copies. Preserve separate variants when the
   probe changes between routes; the current script cannot stand in for all of them.
+- Confirm visible scene readiness as well as overlay ownership. Field code can
+  already be loaded while a fade still renders black. Use a bounded neutral-frame
+  extension and inspect the final capture before claiming a visible return.
+  A focused replay used only to finish that transition must reproduce the prior
+  inputs, fixtures and capture hashes. Keep its report separate from the original
+  callback oracle; observing the extension does not repeat those independent checks.
 - At replay end, stop admitting new outer calls and drain pending/nested calls
   for bounded neutral frames. Keep failures and rerun corrected oracles; do not
   discard pending calls or change matching game code to satisfy a faulty model.
