@@ -12,6 +12,7 @@ provenance before reuse. Evidence from a controlled fixture does not establish
 ordinary gameplay accessibility or coverage of unexercised branches.
 
 - [Locating evidence and comparing candidates](#locating-evidence-and-comparing-candidates)
+- [EUR memory reference](#eur-memory-reference)
 - [Compiler and linker behavior](#compiler-and-linker-behavior)
 - [Reconstructing and integrating code](#reconstructing-and-integrating-code)
 - [Runtime verification](#runtime-verification)
@@ -81,6 +82,61 @@ one line of pseudocode can hide a dispatcher, and a short graphics function can
 omit most of its FIFO writes. Prefer a coherent group with understood callers
 and a reproducible runtime route. Keep the next candidate independent of a
 deferred register-allocation problem.
+
+## EUR memory reference
+
+These locations are for the European game (`ARMP`), using the ARM9's address
+space. `read32(address)` means a little-endian 32-bit dereference. Require the
+owning overlay and a live allocation before inspecting a record; overlays can
+reuse addresses, and constructors can run before their global is assigned.
+The sizes below are recovered record or allocation extents, not permission to
+read a freed object. See the [Nawatobi procedure](#nawatobi) for the guarded
+one-time state edit; the remaining entries are inspection references.
+
+| Record | Address expression | Extent and ownership |
+|---|---|---|
+| Pause scene task | `read32(0x0208E1E0)` | 56 bytes, overlay 7; signed 32-bit phase at `+0x30`, menu pointer at `+0x34` |
+| Pause workspace | `0x020905F0` | 90,600-byte object, overlay 7; do not dereference its first word as a pointer |
+| Pause party | `read32(0x0208E1E4)` | 4,428-byte allocation, overlay 7; `Overlay7Party` describes the first 332 bytes, followed by 4,096 bytes of scratch |
+| Live save record | `read32(0x02059FE8)` | 1,380-byte record used by the probes; this is distinct from the on-disk battery-save size |
+| Display resources | `0x0206A180` | 176-byte object, overlay 5; archive pointer at `+0x2C` |
+| Menu element pool | `0x0206A240` | 20-byte object, overlay 5; element array, link array, free list, taken list and count at offsets 0, 4, 8, 12 and 16 |
+| Menu element lists | `0x0206A254` | Twelve 16-byte list records, overlay 5; each contains two eight-byte sentinel records |
+| Active menu element count | `0x0206A230` | Unsigned 16-bit value, overlay 5 |
+
+The shared source layouts are in
+[pause_scene.h](../../include/game/pause_scene.h),
+[pause_scene_internal.h](../../src/overlay007/pause_scene_internal.h),
+[overlay007_party.h](../../include/game/overlay007_party.h) and
+[element_lists.c](../../src/overlay005/element_lists.c).
+The menu factory at `0x0206659C` takes `(callback, list, marker)` and allocates
+a 72-byte slot. It initializes the common fields through offset `0x20`, leaving
+the payload at `+0x24` onward unchanged. The caller initializes its own payload.
+Marking at `0x0206650C`, removal at `0x020664A8` and pool return at `0x020667B0`
+are distinct boundaries. Check the release callback and slot before pool return,
+then check only still-live pool, list and counter records.
+
+The pause and shop probes commonly retain the following graphics ranges.
+These are **capture extents**, not a universal map of all available video memory;
+interpret them with the captured VRAM-bank and display configuration.
+
+| Capture | ARM9 address | Bytes captured |
+|---|---|---|
+| Main / sub BG | `0x06000000` / `0x06200000` | 131,072 each |
+| Main / sub OBJ | `0x06400000` / `0x06600000` | 65,536 each |
+| Palettes / OAM | `0x05000000` / `0x07000000` | 2,048 each |
+| Main / sub display registers | `0x04000000` / `0x04001000` | 112 each |
+| VRAM-bank registers | `0x04000240` | 10 |
+
+That is nine dumps per capture, alongside a 256 by 384 screenshot of both
+screens. Validate the specific probe's manifest rather than assuming it used
+these defaults. Register snapshots supplement ordered GPU-write checks; a
+scroll-register readback need not reproduce the submitted value.
+
+EUR ARM9 stack outputs can reside in DTCM at `0x027E0000..0x027E4000`.
+Read that CPU-visible range directly in a focused probe. The current
+`runtime_probe.py` command-line capture-range validator does not include DTCM;
+do not redirect such an address to a main-RAM mirror to bypass that limitation.
 
 ## Compiler and linker behavior
 

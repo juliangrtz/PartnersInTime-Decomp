@@ -6,6 +6,15 @@ The decompilation is fully generated with generative AI under human direction.
 Preserve the README disclosure and [AI policy](docs/AI_USAGE.md).
 These instructions apply throughout the repository.
 
+Quick links: [checkout](#start-in-the-correct-checkout),
+[evidence and resources](#find-the-relevant-evidence),
+[reconstruction](#reconstruct-and-integrate),
+[build commands](#build-and-verification),
+[runtime checks](#runtime-verification),
+[publication and handoff](#documentation-git-and-handoff).
+For addresses, use the [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference)
+and the guarded [Nawatobi entry procedure](docs/research/RECONSTRUCTION_NOTES.md#nawatobi).
+
 ## Start here
 
 1. Read the latest user request and **Priorities and scope** below. Establish
@@ -86,6 +95,7 @@ Parse large JSON reports and print selected records, not entire diff dumps.
 | VM semantics and remaining assembly | [Script VM reference](docs/research/SCRIPT_VM_SEMANTICS.md), [Scene VM notes](docs/research/SCENE_VM_MATCHING.md) |
 | Native inspection and relinking | [IDA guide](tools/ida/README.md), [reassembly plan](docs/REASSEMBLY_PLAN.md) |
 | Runtime tools and save navigation | [Runtime guide](docs/research/RUNTIME_ANALYSIS.md) |
+| RAM roots, allocation extents and graphics capture ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference); addresses are CPU- and overlay-specific |
 | Detailed matching lessons and tested scene routes | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md) |
 | Previous batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md) and its private reports |
 | Assets, script editing and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
@@ -121,6 +131,19 @@ committed coverage and inspect the verified remote-tracking revision for pushed
 coverage. A local remote-tracking ref can be stale; confirm a push before calling
 new bytes published. A progress target from an earlier task remains context
 until the latest request actually asks to resume reconstruction.
+
+Use these separate evidence fields in a batch report or handoff:
+
+| Stage | Evidence required |
+|---|---|
+| Exact candidate | Identified source/object, whole native range including pools, and resolved relocations; inspect the comparison text as well as its exit code |
+| Integrated | Public source and current headers pass the full build checks with the intended manifest and component ownership |
+| Runtime checked | Completed route reports, function/branch counts, allocation lifetimes, validated artifacts and explicit coverage limits |
+| Published | Task-owned files committed, push successful, and remote revision confirmed |
+
+Write `pending`, `failed` or `not run` where applicable. One stage cannot stand
+in for another. Keep an exact but incompletely exercised batch out of a
+documentation-only commit, even if its generated percentage has already risen.
 
 Private original bytes are in `extract/eur/arm9/` and
 `extract/eur/arm9_overlays/`; IDA databases are in `build/ida/` and experiments
@@ -164,6 +187,11 @@ the printed instruction listing alone does not prove that range was inspected.
    field offset. Flattening a record table to words, or replacing record pointers
    with preloaded scalar fields, can change address calculation and load order.
    Explain the specific native difference before changing the source form.
+   Preserve genuine interior data aliases when the native code loads their
+   literal addresses. An address such as workspace base plus an offset can be
+   a distinct linker symbol for another view of the same object. Confirm it in
+   symbols and relocations before replacing it with base-pointer arithmetic;
+   preserve overlapping raw and typed views without changing the object layout.
    Search all declarations before adding a typed table extern to a shared header.
    Legacy callers may still declare that symbol as a raw byte array. Keep the
    recovered record type shared, but its extern local until those callers can be
@@ -421,7 +449,11 @@ and compatible snapshots. Optional dependencies are in
 - Check per-function and per-branch counts across the route set. A valid replay
   can miss a helper entirely; retained screenshots and equal artifact hashes do
   not establish execution coverage. Report deliberate RAM fixtures separately
-  and distinguish historical helper evidence from checks repeated in this batch.
+  from normal inputs. A route that reaches the menu but never starts the target
+  task has a coverage gap; inspect its selections and native caller conditions
+  before designing a replacement route. Do not remove its execution assertion
+  or classify the missed entry alone as a defect in matching game code.
+  Keep historical helper evidence distinct from checks repeated in this batch.
   Exercise independent limits separately: an inventory-capacity stop does not
   establish the affordability branch. Prefer ordinary inputs and suitable story
   saves; record any initial inventory or currency fixture and its restoration.
