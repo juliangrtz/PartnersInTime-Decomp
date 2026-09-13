@@ -7370,3 +7370,34 @@ progress checks and all 81 tests pass. Logs:build/analysis/pause_exit_
 build/runtime/eur_pause_exit/. Details in RECONSTRUCTION_NOTES.md.
 Matching C/C++: 730,384 / 1,563,700 (46.71%); with symbolic ASM: 47.04%.
 Overlay 7: 65,628 / 142,264 (46.13%). Remaining to 50%: 51,466 bytes.
+
+
+## 2026-09-13 - Pause transition panels, controllers and projection (+3,180 bytes)
+
+Consolidate six new callbacks with the existing 260-byte exit subset in
+pause_transition_tasks.cpp (0x0206D418..0x0206E0D4), and add the 180-byte
+projection at 0x0206E1C8. The 244-byte affine-row gap remains native. The shared
+64-byte sprite gains a named screen byte while retaining its raw prefix view.
+All seven new functions match, with no assembly or compiler-flag changes.
+
+Four completed routes use story saves 65/86 and repeated pause entry/exit:
+3,960 frames, every observed transition callback, 6,204/71,652 projections,
+684 ordered GPU stores, 955 task factories and 546 ResourceB attachments.
+60 task returns and 44 sprite returns are independently checked; the alternate
+fade-in's callback lifetime ends by retargeting. Its chooser fixture changes
+save-record byte +0x55D once and restores it at the same-frame return.
+All 52 screenshots, 468 dumps and 104 unchanged source saves validate;
+39 images/351 dumps match earlier common input/state prefixes.
+
+The host memory reader optionally loops over the same emulator byte-reader in
+a private native helper; all 4,608,234 bytes across RAM, DTCM and graphics ranges
+match the original reader on each accelerated route. Earlier probe failures,
+their causes and corrected replays are retained. Row-producer and fade-in setup
+helper effects remain observed; natural alternate entry, unvisited branches
+and unsampled projections remain outside this coverage.
+
+Full matching checks, golden packaged ROM, zero-difference native relink,
+progress validation and all 81 tests pass. Evidence:build/runtime/eur_pause_transitions/;
+logs:build/analysis/pause_transitions_{configure,check,rom,native,tests,artifacts}.log.
+Matching C/C++: 733,564 / 1,563,700 (46.91%); with symbolic ASM: 47.24%.
+Overlay 7: 68,808 / 142,264 (48.37%). Remaining to 50%: 48,286 bytes.

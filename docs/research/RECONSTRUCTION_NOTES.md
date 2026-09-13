@@ -2201,8 +2201,8 @@ progress checks and all 81 tests passed for this source and shared-header revisi
 
 ### Pause exit tasks and transition state
 
-[pause_exit_tasks.cpp](../../src/overlay007/pause_exit_tasks.cpp) owns
-`0x0206D418..0x0206D51C` (260 bytes): `PauseScene_PrepareExitTask` drains the
+The exit subset in [pause_transition_tasks.cpp](../../src/overlay007/pause_transition_tasks.cpp)
+is `0x0206D418..0x0206D51C` (260 bytes): `PauseScene_PrepareExitTask` drains the
 archive queue and requests exit; `PauseScene_FadeOutTask` darkens both screens
 and advances the scene to cleanup. The latter matched immediately. Preparation's
 only differing instruction was `MOV 255` where the original materializes -1
@@ -2260,17 +2260,96 @@ Unvisited phases, nonempty archive queues, unsampled getter bodies and natural
 entry to mode 0 remain uncovered. Full matching checks, golden packaged ROM,
 zero-difference native relink, progress checks and all 81 tests pass.
 
+### Pause transition panels and controllers
+
+[pause_transition_tasks.cpp](../../src/overlay007/pause_transition_tasks.cpp)
+owns `0x0206D418..0x0206E0D4`: the existing 260-byte exit subset and 3,000 new
+bytes for six callbacks. Entry/exit panels use the shared 64-byte sprite,
+progress controllers coordinate the screen transition, the window callback
+clips the main screen, and the alternate entry callback fades into the menu.
+[pause_transition_projection.cpp](../../src/overlay007/pause_transition_projection.cpp)
+adds the 180-byte projection at `0x0206E1C8..0x0206E27C`; its separate unit is
+temporary while the intervening 244-byte affine-row producer remains native.
+Only the 3,180 new bytes count toward progress. The shared sprite's named
+`screen` byte preserves its raw 20-byte prefix view and 64-byte size.
+
+All seven functions match completely. The 532-, 396-, 856- and 380-byte bodies
+matched their first drafts; the 676-byte controller matched after using the
+existing factory declaration. The previously exact 160-byte callback and
+180-byte projection remain exact against current headers. No assembly or
+compiler-flag changes were used. Preserve the controller's phase-1 fallthrough
+to phase 10, signed counters and separate masked/unmasked stores.
+
+Four completed routes in private `build/runtime/eur_pause_transitions/` cover
+3,960 frames: `normal65_regs`, `normal86_reader`, `fadein65_reader` and
+`repeat65_reader`. Ordinary routes use story checkpoints 65 and 86; the repeated
+route opens and closes pause three times and ends in the field. Every observed
+transition callback is checked: 820 entry-panel, 408 exit-panel, 210 entry-progress,
+102 exit-progress, 125 window and 18 alternate fade-in calls. Nested projections
+are all checked. Other projection calls check the first occurrence of each
+X/Y/angle tuple and every call on each sixtieth frame: 6,204 of 71,652 total
+projection entries are independently verified.
+
+The oracle derives wrapped signed arithmetic, packed sprite fields, all four
+projection outputs, draw-list allocation, task/owner counters and window/blend
+effects. It checks 684 ordered conditional GPU stores, 955 task factories,
+546 ResourceB attachments, 60 actual task returns, 44 associated sprite returns
+and 12 bulk-pool cleanup calls. All 61 watched callback lifetimes close: 60 by
+removal and one by retargeting the alternate fade-in task to the normal menu
+callback. Retargeting ends callback coverage, not the task allocation. Task and
+sprite records are checked before their respective pool returns.
+
+Alternate entry uses a controlled fixture at chooser `0x0206E918`, frame 42:
+change the byte at `read32(0x02059FE8) + 0x55D` from 0 to 1, then restore it to 0
+at the chooser's return in the same frame, after checking that the selected
+callback is `0x0206DF58`. This exercises the native fade-in and subsequent normal
+inputs; it does not establish a story checkpoint that naturally selects this
+mode. The callback reaches scene phase 2 and retargets itself after 16 brightness
+steps. Original battery saves remain unchanged.
+
+All 52 PNGs and 468 graphics dumps pass the artifact verifier; 39 images and
+351 dumps equal earlier captures with matching state/input prefixes. Fixture
+comparisons stop before the edit. Exit frame 529, alternate menu frame 100 and
+repeated-route final field frame 1,650 were inspected. No pending calls, watched
+tasks or drain frames remain, and all 104 source-save hashes are unchanged.
+Full matching checks, golden packaged ROM, zero-difference native relink,
+generated-progress validation and all 81 tests pass.
+
+The first probe failed at frame 44 because DISPSTAT/VCOUNT were treated as
+immutable across a long helper call. Those scanline-dependent values, and
+IRQ-driven affine registers, remain in captures but are excluded from immutable
+record comparisons. A later benchmark variable shadowed the probe's `start`
+function; that frame-44 failure and the corrected successful replay are retained.
+The original slow replay completed before a proposed stop was issued; its
+session returned exit 0 and its full report is retained.
+
+Private `desmume_copy_bytes.c` and `fast_desmume_memory.py` move the loop over
+DeSmuME's existing exported byte-reader into native host code. Every address and
+byte access is preserved; the helper does not read emulator host RAM directly.
+Boundary checks passed. Each accelerated route then compared all 4 MiB of main
+RAM, 16 KiB of DTCM and the nine graphics capture ranges with the original reader
+while paused: 4,608,234 identical bytes per route. Measured reads took about
+0.012 seconds versus 0.66 seconds. This changes probe overhead only and remains
+an optional local tool, not a fresh-clone dependency or matching-game progress.
+
+Affine-row producer outputs and alternate fade-in setup-helper effects are
+observed, not independently derived here. Final rasterization, unvisited task
+phases, unsampled external projections, arbitrary angle/step ranges and natural
+alternate-entry selection remain coverage limits. The generator, body and
+composed probe under `build/analysis/` are `make_pause_transitions_probe.py`,
+`pause_transitions_probe_body.py` and `probe_pause_transitions.py`; the dedicated
+verifier is `verify_pause_transitions_artifacts.py` in the same directory.
+
 ### Pause transition projection and callback ABI
 
-These are code-derived EUR overlay-7 findings from complete native ranges and
-their callers. They do not extend the exit replay's runtime coverage. Check the
-current manifest and private handoff before describing these functions as
-integrated, runtime-verified or published.
+These EUR overlay-7 ABI findings explain the source and focused transition
+replays above. The earlier exit-only replay did not independently verify these
+bodies. Use the current manifest and recorded route evidence for their status.
 
 The projection at `0x0206E1C8` takes seven arguments:
 
 ```c
-void func_ov007_0206e1c8(int x, int y, int angle,
+void PauseTransition_Project(int x, int y, int angle,
                        int *out_x, int *out_y,
                        int *out_width, int *out_height);
 ```
@@ -2303,10 +2382,10 @@ The panel's packed tile field is ten bits wide, and its affine call explicitly
 narrows width and height to unsigned halfwords. Preserve neighboring attribute
 bits and caller-side narrowing without changing the full-width callee signature.
 
-Existing exit reports independently check the progress getter and exit task
-effects. They do not independently check these projection or panel bodies, the
-affine-row producer at `0x0206E0D4`, or every resource-release branch. A focused
-extension needs its own arithmetic, output, GPU-store and lifetime assertions.
+The focused transition reports add arithmetic, output, GPU-store and lifetime
+assertions to the earlier exit-only evidence. The affine-row producer at
+`0x0206E0D4` still has observed outputs rather than an independent body oracle;
+keep that distinction when extending the adjacent code.
 
 ### Nawatobi
 

@@ -13,7 +13,14 @@ typedef struct Overlay5ResourceOwner {
 
 /* Shared 64-byte sprite used by overlay-5 draw lists. */
 typedef struct Overlay5ObjectSprite {
-    u8 unknown_00[20];
+    union {
+        u8 unknown_00[20];
+        struct {
+            u8 unknown_00_before_screen[16];
+            u8 screen;
+            u8 unknown_11[3];
+        };
+    };
     u32 attributes_0;
     union {
         u32 attributes_1;

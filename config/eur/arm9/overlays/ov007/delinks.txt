@@ -223,8 +223,11 @@ src/overlay007/pause_party_lifecycle.cpp:
 src/overlay007/pause_equipment_highlight.cpp:
     .text start:0x02077164 end:0x020774cc
 
-src/overlay007/pause_exit_tasks.cpp:
-    .text start:0x0206d418 end:0x0206d51c
+src/overlay007/pause_transition_tasks.cpp:
+    .text start:0x0206d418 end:0x0206e0d4
+
+src/overlay007/pause_transition_projection.cpp:
+    .text start:0x0206e1c8 end:0x0206e27c
 
 src/overlay007/pause_scene_control.cpp:
     .text start:0x02070ae8 end:0x02070b50
