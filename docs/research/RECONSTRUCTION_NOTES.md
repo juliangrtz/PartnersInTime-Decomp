@@ -247,6 +247,18 @@ unit to C++, check the linkage of every shared C declaration. Use guarded
 `extern "C"` declarations
 for C APIs, keep C++ class declarations outside them, and verify exported names
 and relocations. Do not hide mangled-symbol errors in the comparison script.
+Headers without their own C++ linkage guard must first be included inside
+`extern "C"`. If another header has already included them outside that block,
+their include guard prevents a later wrapped include from fixing the linkage.
+
+Use the actual recovered global type when exposing workspace fields. In the
+shop panel callbacks, casting a raw byte-array global to a structure prefix
+still produced extra loads; declaring the global with the shared `ShopSceneWork`
+type reproduced the native accesses. Its named fields must coexist with the
+existing byte-array view used by background setup. Check both field offsets and
+the complete workspace size, then run the full matching build for all consumers.
+This is evidence about that shared layout, not permission to change aliasing
+rules or enumerate arbitrary type casts until one happens to match.
 
 Account for integer promotion and the exact point where values are rounded.
 A `u8` or `u16` operand promotes to `int`; an explicit `u32` cast before a shift
@@ -256,6 +268,25 @@ values. Preserve the native order of division and Q12 scaling, and model signed
 division explicitly in runtime oracles. See the verified examples in
 [title model entry](../../src/overlay006/title_sequence_model.c) and
 [trail drawing](../../src/overlay006/title_trail.c).
+
+Python oracles must also reproduce the native width of intermediate arithmetic.
+The [display affine helper](../../src/overlay005/display_bg.c) takes nine
+arguments: engine, background, horizontal scale, vertical scale, rotation,
+center X/Y and origin X/Y. Pseudocode that omits the final stack arguments is
+not a complete prototype. For zero vertical scale it substitutes `0x100000`;
+at zero rotation, cosine is 4096, and the native low-32-bit product wraps to
+zero before the arithmetic right shift by eight. An independent oracle needs
+`s32(inverse * 4096) >> 8`, where `s32` wraps to a signed 32-bit value, rather
+than the unbounded equivalent `inverse * 16`. This explains the zero matrix
+coefficient without changing already matching game code. Validate the native
+lookup-table values and ordered hardware stores as well as the resulting
+coefficient bytes; affine origin readbacks can change during rendering.
+
+Similarly, derive task completion from the actual integer recurrence. A close
+animation starting at Q12 scale 4096 with step `4096 / 6 == 682` needs seven
+scaling updates to reach its clamped zero, plus its one delayed update. A probe
+that expects six updates would reject the native behavior. Track the created
+task through its terminal flag write and distinguish that from the later free.
 
 Preserve reads across callbacks in their original order: a linked-list callback can
 change `next`, and cleanup can change state. Do not cache those fields earlier

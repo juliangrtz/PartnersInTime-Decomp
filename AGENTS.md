@@ -56,7 +56,7 @@ Parse large JSON reports and print selected records, not entire diff dumps.
 
 | Need | Resource |
 |---|---|
-| Current coverage | [Generated progress](docs/progress.json), [counting rules](docs/PROGRESS.md) |
+| Working-tree coverage | [Generated progress](docs/progress.json), [counting rules](docs/PROGRESS.md); check Git for unpublished changes |
 | Current pending work | Private `build/analysis/CURRENT_HANDOFF.md`; compare its commit with Git |
 | What is actually linked | `config/eur/arm9/linked_sources.txt` |
 | Function boundaries and load addresses | Resident `config/eur/arm9/{symbols,delinks}.txt`; overlays `config/eur/arm9/overlays/ovNNN/` |
@@ -77,6 +77,11 @@ When resuming a partially integrated batch, inventory its pending files and
 completed checks first. Associate each check with the source and ROM it tested.
 A documentation commit must not include pending source or regenerate progress
 to claim bytes whose verification is still incomplete.
+If the generated reports are dirty, use `git show HEAD:docs/progress.json` for
+committed coverage and inspect the verified remote-tracking revision for pushed
+coverage. A local remote-tracking ref can be stale; confirm a push before calling
+new bytes published. A progress target from an earlier task remains context
+until the latest request actually asks to resume reconstruction.
 
 Private original bytes are in `extract/eur/arm9/` and
 `extract/eur/arm9_overlays/`; IDA databases are in `build/ida/` and experiments
@@ -101,12 +106,17 @@ start of main RAM. CPU and overlay identity matter because addresses are reused.
    divisor uses unsigned division, while that divisor's own `/= 10` stays signed.
    Preserve repeated source reads around destination writes when the pointers
    can alias; `const` does not establish non-overlap.
+   Prefer the actual shared workspace type over casting a raw byte global to a
+   partial structure. Preserve existing byte views when naming newly understood
+   fields, check offsets and size, and rebuild every affected caller.
 3. Keep related contiguous functions in one subsystem module. Temporary isolated
    units are acceptable around native gaps; consolidate when those gaps close.
    Source basenames must be globally unique because MW's linker selects by
    basename. This compiler usually emits functions in reverse source order;
    verify the resulting order. Keep C declarations at block starts and C APIs
    guarded by `extern "C"` when called from C++.
+   For C headers without their own linkage guard, their first inclusion must be
+   inside `extern "C"`; wrapping a later include cannot undo an include guard.
 4. Compare sizes, every instruction, relocations and symbol layout. Classify
    differences before editing. Do not change compiler flags, weaken checkers or
    add arbitrary casts/volatile accesses to obtain a match. Recompile private
@@ -216,10 +226,23 @@ and compatible snapshots. Optional dependencies are in
   virtual delete does not establish coverage of every destructor wrapper.
   Task removal can be deferred: setting the removal flag is a separate event
   from unlinking and freeing. Check the actual helper before assigning lifetimes.
+  Follow newly created tasks through their updates to the expected completion.
+  Derive update counts from integer step, delay and clamping; division by six
+  does not guarantee six updates when truncation leaves a remainder.
 - Verify RAM, mapped VRAM, palettes, OAM, ordered GPU stores and visible behavior
   as appropriate. A screenshot or passing ROM hash alone is insufficient.
   Hardware register readback need not equal the earlier submitted FIFO command
   or affine origin. Record ROM/save/state hashes, inputs and uncovered branches.
+- Model native arithmetic widths in Python oracles. Wrap a native 32-bit
+  intermediate before its signed shift; Python integers do not overflow.
+  In the zero-scale affine path, `0x100000 * 4096` wraps to zero before `>> 8`.
+  Recover all stack arguments as well as register arguments: the display affine
+  helper takes nine arguments. Use its verified zero-scale behavior, not an
+  idealized mathematical transform. See the reconstruction reference for details.
+- Check per-function and per-branch counts across the route set. A valid replay
+  can miss a helper entirely; retained screenshots and equal artifact hashes do
+  not establish execution coverage. Report deliberate RAM fixtures separately
+  and distinguish historical helper evidence from checks repeated in this batch.
 - At replay end, stop admitting new outermost calls and drain pending calls and
   their nested helpers for a bounded number of neutral frames. Do not discard
   unfinished calls to make a probe pass. After correcting an oracle, rerun it.
@@ -275,6 +298,8 @@ needed for another attempt. Distinguish pending, committed and pushed work.
 For private units containing several functions, record exactness per function;
 one matching helper does not validate its neighbors. Keep proposed names and
 planned runtime checks explicitly provisional until their evidence exists.
+Record each replay's completion separately, including corrected oracle failures
+and the successful rerun. One passing route does not complete a planned suite.
 Separate the latest documentation commit from the last verified code batch;
 existing build logs are historical evidence, not checks run by the current turn.
 Inspect old integration scripts before reuse; many are not safe to replay.
