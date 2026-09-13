@@ -7757,3 +7757,28 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
 - Matching C/C++: **742,252 / 1,563,700 bytes (47.47%)**; including symbolic
   assembly: **47.80%**. Overlay 7: **77,496 / 142,264 (54.47%)**.
   **39,598 bytes remain to reach 50% matching C/C++.**
+
+## 2026-09-14 - Item-selection quantity sprites (+512 bytes)
+
+- Reconstructed the adjacent quantity callback and extended the shared sprite
+  module to 1,136 exact bytes. The owner quantity and child digit/tile-base roles
+  have explicit fields and offset checks. No assembly or compiler-flag changes.
+- Full matching check, golden EUR ROM, zero-difference native relink, generated
+  progress and all 81 tests pass.
+- Checkpoints 65 and 86: all 1,080 quantity calls checked, 810 draw submissions,
+  270 hidden tens and eight complete quantity-task lifetimes. All 246 watched
+  tasks return. Cached quantities 4 and 50 exercise ordinary one/two-digit display;
+  32 per-call fixtures cover 0, 9, 10 and 99 across both screens/digits, including
+  negative status. All cached-field edits and inherited entry fixtures are restored.
+- The 6,190-frame replays include visible field return after a 180-frame neutral
+  extension per route. All 132 images and 1,188 graphics dumps validate; 81 images
+  and 729 dumps match before the first fixture. All 104 source saves are unchanged.
+- The first probe failed on a wrapper-name collision at frame 43. It is preserved;
+  both corrected replays and artifact validation pass. No game-code correction.
+  Rasterization, creators and inputs absent from the branch counters remain outside
+  the independent oracle. Evidence: `build/runtime/eur_pause_item_quantity/` and
+  the [reconstruction reference](research/RECONSTRUCTION_NOTES.md#pause-item-selection-quantity-sprites).
+- Matching C/C++: **742,764 / 1,563,700 bytes (47.50%)**;
+  including symbolic assembly: **47.83%**.
+  Overlay 7: **78,008 / 142,264 (54.83%)**.
+  **39,086 bytes remain to reach 50% matching C/C++.**

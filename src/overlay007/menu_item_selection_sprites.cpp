@@ -64,3 +64,36 @@ extern "C" void MenuItemSelection_UpdateOffsetSprite(MenuItemSelectionTask *task
         sprite->attributes_0 &= ~0xc00;
     func_ov005_02069084(sprite, 5);
 }
+
+extern "C" void MenuItemSelection_UpdateQuantitySprite(MenuItemSelectionTask *task)
+{
+    MenuItemSelectionOwner *parent = task->parent;
+    MenuItemEffectSprite *sprite = Overlay5ResourceB_Get(task);
+    sprite->x = (parent->x + 16 * parent->offset_x) / 4096;
+    sprite->y = (parent->y + 16 * parent->offset_y) / 4096;
+    sprite->x -= 4 - 8 * (task->digit + 13);
+    sprite->y -= 24;
+    if (task->sub_screen)
+        sprite->y += 240;
+    sprite->x <<= 12;
+    sprite->y <<= 12;
+    if (SelectionBlend())
+        sprite->attributes_0 = (sprite->attributes_0 & ~0xc00) | 0x400;
+    else
+        sprite->attributes_0 &= ~0xc00;
+    if (!task->digit) {
+        unsigned int quantity = parent->quantity;
+        if (quantity < 10)
+            return;
+        sprite->attributes_1 = (sprite->attributes_1 & ~0x3ff)
+            | ((task->tile_base + (int)quantity / 10) & 0x3ff);
+    } else {
+        sprite->attributes_1 = (sprite->attributes_1 & ~0x3ff)
+            | ((task->tile_base + parent->quantity % 10) & 0x3ff);
+    }
+    if (parent->status >= 0)
+        sprite->attributes_1_bits.palette = data_ov005_0206a1f1[sprite->screen].bank & 15;
+    else
+        sprite->attributes_1_bits.palette = (data_ov005_0206a1f1[sprite->screen].bank + 1) & 15;
+    func_ov005_02069084(sprite, 5);
+}

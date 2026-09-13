@@ -3038,8 +3038,8 @@ nor artifact validation needed an oracle correction or a rerun.
 
 [menu_item_selection_sprites.cpp](../../src/overlay007/menu_item_selection_sprites.cpp)
 reconstructs `MenuItemSelection_UpdateOffsetSprite` at `0x0207D8B0` (212 bytes)
-and `MenuItemSelection_UpdateLabelStrip` at `0x0207D984` (412 bytes). The contiguous
-624-byte unit uses the shared 64-byte sprite and
+and `MenuItemSelection_UpdateLabelStrip` at `0x0207D984` (412 bytes). These two callbacks cover
+624 contiguous bytes and use the shared 64-byte sprite and
 [72-byte owner/child views](../../include/game/menu_item_selection.h), with size
 and offset checks. The neighboring model callbacks remain private candidates.
 
@@ -3121,6 +3121,60 @@ generated progress and all 81 tests pass. Reports are under
 Their exact probe paths/hashes are recorded in the reports. Private build and
 replay logs use the `pause_item_selection_` prefix; candidate/probe provenance
 is pinned in `build/analysis/pause_item_selection_batch_provenance.json`.
+
+### Pause item-selection quantity sprites
+
+`MenuItemSelection_UpdateQuantitySprite` at `0x0207D6B0..0x0207D8B0`
+adds 512 bytes to [menu_item_selection_sprites.cpp](../../src/overlay007/menu_item_selection_sprites.cpp).
+The complete 1,136-byte unit remains exact. The quantity callback matched on its
+first private compilation; naming the shared fields and integrating it preserved
+all three functions' matches. No assembly or compiler-flag changes were needed.
+
+The owner's quantity is an unsigned byte at `+43`. The 72-byte child uses the
+same slots as label offsets: `+44` is digit 0 for tens or 1 for units, and `+48`
+is the base tile. The [shared header](../../include/game/menu_item_selection.h)
+expresses these roles as unions and checks the field offsets and allocation sizes.
+Position conversion, second-screen translation and blend attributes follow the
+adjacent offset sprite; the horizontal adjustment is `8 * (digit + 13) - 4` pixels.
+
+Tens are hidden below 10, after position and blend-attribute writes but before
+changing the tile or palette or submitting a draw. Otherwise the callback selects
+the quotient or remainder by 10, adds the tile base and masks to ten tile bits.
+Signed negative owner status selects the next palette bank. Preserve the other
+attribute bits, the native palette masks and draw order 5.
+
+The checkpoint-65 and checkpoint-86 routes from the label-sprite batch each
+exercise both quantity digits on both screens. The independent oracle checks
+all 1,080 calls: 810 draw submissions and 270 hidden tens. The ordinary cached
+quantities are 4 and 50, respectively. Sixteen additional per-call fixtures per
+route cover 0, 9, 10 and 99 for every screen/digit pair; the 99 cases also set
+negative status. They edit only the owner's cached quantity/status, verify the
+complete callback result, then restore both bytes before the caller resumes.
+The earlier one-HP entry fixture and three label fixtures remain separately
+recorded. These are fixture-assisted routes, not unmodified full-health entry.
+
+All eight quantity-task lifetimes complete; all 246 watched tasks return. The
+replays cover 6,190 frames, including 180 neutral field frames per route after
+HP restoration. Full field-code guards and final captures confirm visible return.
+The selected quantities 4 and 50 and both final field scenes were inspected.
+All 132 screenshots and 1,188 graphics dumps validate; pre-fixture baseline
+equality covers 81 images and 729 dumps. All 104 original saves are unchanged.
+Every target call checks full live task, owner, sprite and game records, getter
+arguments, expected stores, draw-list insertion and actual resource/task release.
+Graphics captures and the surrounding controller checks remain in place.
+There are no pending calls, live watched tasks or drain frames. Rasterization,
+the creator, quantities above 99, nonzero tile bases and invalid digit/screen
+fields are outside this runtime coverage.
+
+The initial composed probe failed at frame 43 because its wrapper name collided
+with an inherited wrapper. The corrected probe uses a distinct name; both full
+replays and artifact validation pass. The failed probe/log remain separate.
+Full matching checks, golden EUR ROM packaging, zero-difference native relinking,
+generated progress and all 81 tests pass. Evidence is under
+`build/runtime/eur_pause_item_quantity/`: `clothing_scroll/evidence_quantity65_v2.json`,
+`clothing_arrows/evidence_quantity86_v2.json` and `artifact_validation.json`.
+The reports identify `build/analysis/probe_pause_item_quantity_v2.py` by hash;
+build/probe provenance is in `build/analysis/pause_item_quantity_batch_provenance.json`.
 
 ### Nawatobi
 
