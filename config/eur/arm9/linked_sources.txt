@@ -828,3 +828,4 @@ src/overlay009/shop_list_point_model.cpp
 src/overlay009/shop_display_control.cpp
 src/overlay009/shop_panel_zoom.cpp
 src/overlay009/shop_panel_zoom_start.cpp
+src/overlay009/shop_quantity.cpp

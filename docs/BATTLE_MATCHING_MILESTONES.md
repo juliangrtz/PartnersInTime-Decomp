@@ -6456,3 +6456,47 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **714,404 / 1,563,700 bytes (45.69%)**, or **46.02%**
   with separate assembly. Overlay 9 reaches **26,076 / 78,984 (33.01%)**.
   **67,446 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop quantity-popup digits, names and sprite drawing
+
+- Reconstruct **1,288 matching C/C++ bytes** in one contiguous `shop_quantity.cpp`
+  module from `0x02077D50` to `0x02078258`: total-price drawing (200), quantity
+  digits (392), selected-icon copying (72), item-name rendering/mirroring (168),
+  positioned sprites (172), scaled sprites (132) and sliding sprites (152).
+  Shared declarations and the checked 72-byte task layout live in headers.
+- All seven bodies matched the initial evidence-based draft. The display C header
+  needed to be included inside `extern "C"` before other headers could include it;
+  the initial private comparison correctly rejected its mangled VRAM getter.
+  No compiler-flag changes, assembly fragments or source permutation search.
+- Full Ninja checks, canonical packaging, native relinking and **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; native
+  relinking reports zero differing bytes across 43 components and 31,138
+  relocations, including 1,577 ARM7 relocations. Logs: `build/analysis/shop_quantity_`.
+- Four baseline routes pass: **6,528 frames and 5,298 checked returns**, including
+  **4,764 through the new functions**. An additional ordinary-button quantity
+  selection route passes **2,073 frames and 6,172 checked returns**, including
+  **5,968 through the new functions**. It visits 50 distinct quantities from 1
+  through 66, exercises visible tens digits and both name transitions, then
+  selects one before the verified seven-coin purchase. Held inputs skip some
+  intermediate quantities; not every integer in that interval was exercised.
+- Independent oracles check full task/save/work/panel records, 64-byte sprite
+  prefixes, signed scaling, tile indices, cached totals/digits, **9,876 sprite
+  matrices and draw-list appends**, and **42 deferred-removal flag writes**.
+  Three selected-icon copies and five name mirrors preserve complete main/sub
+  OBJ buffers. All **369 numeric renders** are checked per nibble and tiled copy.
+  The five name-renderer outputs are observed helper results, followed by
+  independently checked argument handling and 1,152-byte mirroring.
+- Coverage includes both sides of every draw threshold, both digit positions,
+  leading-zero suppression, changed/unchanged totals, singular/plural updates
+  and panel-hidden removal. Special-shop mirroring bypass, negative quantities
+  or prices, invalid panel indices and out-of-range scales remain unexercised.
+- All **90 screenshots, 810 graphics dumps and 104 original saves** validate.
+  The four identical routes provide **680 matching artifact pairs**; the six
+  unchanged starting captures of the extra route provide another **60**. Later
+  extra-route captures are new timing/input evidence. The 66-item/462-coin popup
+  was visually inspected. No pending calls or drain frames remain. Reports:
+  `build/runtime/eur_shop_quantity/` and `eur_shop_quantity_selection/`.
+- Matching C/C++ reaches **715,692 / 1,563,700 bytes (45.77%)**, or **46.10%**
+  with separate assembly. Overlay 9 reaches **27,364 / 78,984 (34.64%)**.
+  **66,158 bytes** remain to the 50% goal.

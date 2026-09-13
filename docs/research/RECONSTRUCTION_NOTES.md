@@ -761,6 +761,38 @@ party initialization, both zoom directions, delays and final clamps. Currency
 changes cover a seven-coin decrease with duration one; increases, cap enforcement,
 longer animations and special-shop initialization remain unexercised.
 
+`shop_quantity.cpp` owns seven adjacent helpers for the quantity popup: total
+price and decimal digits, selected-icon copying, item-name rendering, and three
+sprite callbacks. The 72-byte task view names part/vertical offset at +40,
+cached total/base tile at +44, previous quantity at +48 and item at +52. Workspace
+unit price is a signed word at +0xA8 and quantity a signed halfword at +0xAC.
+The digit callback updates the name only when changing to or from quantity one,
+and suppresses a zero tens digit. Visibility and scale thresholds control drawing;
+closed panels mark their remaining tasks for deferred removal. Sprite roles that
+have not been identified from their art retain generic behavioral names.
+
+`probe_shop_quantity.py` and `shop_quantity_oracles.py` repeat the four preceding
+routes with focused quantity checks. They derive full task records, sprite
+prefixes, matrix halfwords, draw-list appends, total/digit caches and removal
+flags. Selected icons copy 128 bytes from the current row into main OBJ VRAM;
+item names mirror 1,152 bytes to sub OBJ unless the special-shop flag is set.
+These copies preserve the complete 65,536-byte buffers. Name-renderer pixels are
+observed helper output with independently checked arguments and subsequent copy;
+numeric rendering remains independently checked per nibble and tiled transfer.
+All 680 artifacts from identical routes match the display/zoom batch.
+
+The additional `probe_shop_quantity_selection.py` uses ordinary Up/Down holds
+before confirming one purchase. Its 2,073-frame report under
+`build/runtime/eur_shop_quantity_selection/` records 50 distinct quantities from
+1 through 66, including visible tens digits and both singular/plural transitions.
+Held-input acceleration skips some intermediate values; this is not coverage of
+every integer in that interval. The six captures before the added inputs match
+the ordinary purchase baseline. Later captures have different input/timing and
+are separate evidence. All five runs total 8,601 frames, preserve all original
+saves and return to the field without pending calls. Special-shop mirroring bypass,
+invalid panel indices, negative quantities/prices and out-of-range scales remain
+unexercised. Earlier currency/zoom checks remain in their own reports.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

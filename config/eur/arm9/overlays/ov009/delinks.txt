@@ -125,3 +125,6 @@ src/overlay009/shop_panel_zoom.cpp:
 
 src/overlay009/shop_panel_zoom_start.cpp:
     .text start:0x020770a4 end:0x020770fc
+
+src/overlay009/shop_quantity.cpp:
+    .text start:0x02077d50 end:0x02078258
