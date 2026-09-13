@@ -6,6 +6,12 @@ The decompilation is fully generated with generative AI under human direction.
 Preserve the README disclosure and [AI policy](docs/AI_USAGE.md).
 These instructions apply throughout the repository.
 
+Start with **Priorities and scope**, verify the checkout, then use the resource
+table to read the reference for the current subsystem. The build and runtime
+sections define what a reconstruction batch must establish; documentation-only
+work uses the lighter checks described below. Keep session-specific candidate
+lists and measurements in the private handoff, not in this guide.
+
 ## Priorities and scope
 
 - Follow the latest user request and requested stopping point. Documentation or
@@ -59,8 +65,8 @@ Parse large JSON reports and print selected records, not entire diff dumps.
 
 | Need | Resource |
 |---|---|
-| Working-tree coverage | [Generated progress](docs/progress.json), [counting rules](docs/PROGRESS.md); check Git for unpublished changes |
-| Current pending work | Private `build/analysis/CURRENT_HANDOFF.md`; compare its commit with Git |
+| Recorded coverage | [Generated progress](docs/progress.json), [counting rules](docs/PROGRESS.md); compare report, manifest and Git revisions |
+| Current pending work | Private `build/analysis/CURRENT_HANDOFF.md`; compare its commit, pending paths and check provenance with the working tree |
 | What is actually linked | `config/eur/arm9/linked_sources.txt` |
 | Function boundaries and load addresses | Resident `config/eur/arm9/{symbols,delinks}.txt`; overlays `config/eur/arm9/overlays/ovNNN/` |
 | Calls, literal references and data ownership | Component `relocs.txt`, `symbols.txt`, `delinks.txt` and the compiled object's symbol/relocation tables |
@@ -87,6 +93,12 @@ A handoff can be stale even when its recorded `HEAD` still matches: the next
 batch may have changed the working tree without a commit. Compare its pending
 file list and report timestamps with actual files before trusting completion
 claims or replaying an integration script.
+Record candidate status in separate fields: exact object comparison, build
+integration, runtime coverage, commit and push. For example, an exact function
+in the working manifest can still await runtime verification and publication.
+The progress generator reads metadata; it does not run those checks. When
+merging a new pair around an already linked helper, count only the new ranges,
+not the whole replacement module or duplicate copies left in private drafts.
 A documentation commit must not include pending source or regenerate progress
 to claim bytes whose verification is still incomplete.
 If the generated reports are dirty, use `git show HEAD:docs/progress.json` for
@@ -134,6 +146,9 @@ the printed instruction listing alone does not prove that range was inspected.
    The same applies to parameters: a callee storing a halfword does not prove
    that its caller narrowed the argument before the call. Recover stack arguments
    from instructions and stack offsets, not a decompiler's inferred call arity.
+   Bitfield assignments can truncate again after an explicit byte cast and
+   preserve other bits in the same byte. Check the complete storage byte and
+   assignment order; do not replace packed fields with separate flags.
    Check load/store order explicitly. A callback can change shared state, and
    native code may cache both coordinates before writing either destination.
    Derive array dimensions from element widths and row/column strides. A local
@@ -166,6 +181,11 @@ the printed instruction listing alone does not prove that range was inspected.
    postincrements, and keeping a returned structure versus discarding it, can
    change this compiler's instructions or stack layout. These are evidence to
    explain a specific difference, not a recipe for enumerating source variants.
+   Preserve separate switch arms when the native jump table distinguishes their
+   targets, even if their assignments look identical. Likewise, a few reordered
+   constant loads can come from local initialization order. Use the instructions
+   to explain that order before changing declarations. Do not invent a default
+   result for a switch whose native callers establish a restricted input range.
    Resolve local data symbols only after checking their section, size, contents
    and native destination. Mapping a symbol to an address is not a comparison
    of its data. Unknown relocations or missing candidate sections must fail.
@@ -272,6 +292,10 @@ and compatible snapshots. Optional dependencies are in
   models use 336-byte slots, ResourceB sprites use 64-byte slots, and the shared
   shop tasks use 72 bytes. Identify the attached resource's allocator before
   selecting the extent; a public structure can describe a prefix or a full slot.
+  Do not assume a pooled factory zeroes the payload. Derive the selected slot
+  from the free list before allocation, model the factory's list/counter writes,
+  then apply the constructor's writes. Reuse of an address starts a new object
+  lifetime; untouched timer, interpolation and padding bytes can survive reuse.
 - Distinguish allocation size, initialized extent and transfer size. When the
   allocation is known, check the complete buffer and preserve untouched tails,
   padding and transparent pixels. Shop help pixels allocate 6,144 bytes, clear
@@ -316,6 +340,12 @@ and compatible snapshots. Optional dependencies are in
   some stop on NUL alone, while others also stop on the two bytes `FF 00`.
   Verify its full scratch allocation, used extent and text-state padding; do not
   assume neighboring text routines share their termination or buffer sizes.
+- For numeric displays, distinguish the source value, fixed-point interpolation,
+  cached integer and width-limited rendered value. Native code can cache before
+  clamping; checking only drawn digits misses a wrong cache or update sequence.
+  Verify signed quotient and remainder, leading zeroes, unchanged-value returns
+  and both interpolation directions when exercised. Time limits and unusual
+  widths need their own coverage; ordinary HP draws do not establish them.
 - Check per-function and per-branch counts across the route set. A valid replay
   can miss a helper entirely; retained screenshots and equal artifact hashes do
   not establish execution coverage. Report deliberate RAM fixtures separately
