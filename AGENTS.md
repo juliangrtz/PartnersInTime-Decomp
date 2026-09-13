@@ -73,7 +73,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Emulator tooling and navigation | [Runtime guide](docs/research/RUNTIME_ANALYSIS.md), [tested routes](docs/research/RECONSTRUCTION_NOTES.md#runtime-verification) |
 | RAM roots, object extents and graphics ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference) |
 | ABI and compiler lessons | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md#reconstructing-and-integrating-code) |
-| Recent pause work | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
+| Recent pause work | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls), [page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return) |
 | Earlier batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md); private reports linked there |
 | Assets and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
 
@@ -128,6 +128,9 @@ claim that a shared prototype needs changing.
    Unknown relocations, missing candidate sections or unresolved functions must
    fail; never substitute original bytes for a missing candidate. Validate local
    data contents and ownership before mapping its symbol to a native address.
+   A checker may resolve an address-named helper that has since been renamed.
+   Use its current public declaration; address resolution does not prove the
+   public linker can resolve that obsolete name.
 8. Integrate exact functions into the manifest and component metadata. Update
    declarations and maintained ASM references together. Preserve interior entry
    points through `config/eur/arm9/linker_aliases.json`; check
@@ -207,6 +210,11 @@ compatible snapshots. Read their arguments and
   using entry SP and LR; tail calls can share both, so finish all matching pending
   records innermost first. Read ARM9 DTCM at `0x027E0000..0x027E4000` directly;
   do not fold stack outputs into main-RAM mirrors.
+- Check whether changing a callback invokes it synchronously. The EUR overlay-5
+  setter at `0x02066358` installs the callback and resets task phase to zero;
+  its third argument means invoke immediately. A nonzero value can run the new
+  callback before the setter returns. Model that nested call and its writes;
+  do not treat the argument as a phase or assume one update per frame.
 - Derive expected changes independently, including native integer wrapping and
   signed division. A fresh snapshot after a helper observes its effects; it does
   not verify that helper. Check full live allocations, padding and overlapping
@@ -224,6 +232,9 @@ compatible snapshots. Read their arguments and
   as appropriate. Allocation, initialized extent and transfer size can differ.
   Hardware/FIFO readback is not the submitted sequence. Keep changing scanline
   and IRQ-driven registers in captures without asserting that they are immutable.
+  Decode each hooked store's effective address, including shifted register
+  indices, and reject unsupported forms. Check write-only BG scroll registers
+  through the ordered stores rather than expecting readable register values.
 - Record per-function/branch counts, ROM/save/state hashes, inputs and explicit
   limits. Separate ordinary routes from RAM fixtures and document restoration.
   For deterministic sampling, report observed versus fully checked calls and
