@@ -1024,6 +1024,40 @@ the preceding cursor replay. Both highlighted portrait groups were visually
 inspected. One-member clearing, unavailable party groups, early fade interruption
 and successful purchases remain outside these routes' coverage.
 
+The stock-row group adds 1,008 matching bytes: caption placement at `0x0207218C`,
+quantity digits, icons, text segments and row updates at `0x02072470` through
+`0x02072788`, followed by stock-panel hide/show through `0x02072818`.
+The 72-byte task stores its row, quantity, palette and priority as halfwords at
++40/+42/+44/+46, and tile/position/offset words at +48 through +64. ResourceB
+sprites occupy complete 64-byte slots, unlike ResourceA models' 336-byte slots.
+The panel's 224-byte layout preserves its old byte views while naming enabled,
+filter mode and filter item at +0/+210/+212. Row positioning uses the signed ring
+index and global vertical offset; filtering compares the exact item or bits
+24 through 30 of its usable-item record. Two typed 20-byte record pointers
+preserve native address calculation and field-load order in the matching update.
+
+Private `probe_shop_stock_rows.py` and `verify_shop_stock_rows_artifacts.py`
+validate checkpoint 30 and 86 routes under `build/runtime/eur_shop_stock_rows/`:
+1,362 frames, 46,449 new-function returns, 5,199 row updates, 39,860 independently
+derived sprite submissions and 134 deferred task removals. All 28 screenshots,
+252 graphics dumps and 104 unchanged source saves validate. The routes exercise
+six versus nine rows, hidden and already-enabled show paths, filter modes zero
+and one, both palette results and suppression of 1,384 leading-zero digits.
+Full task/parent/sprite, workspace, save and panel allocations are compared at
+helper boundaries. Panel setup and row/caption factory outputs remain observed
+helpers. Sprite attributes, positions and draw-list links are independently
+derived; captured native-renderer pixels are observations, not a pixel oracle.
+Filter mode two, empty stock and successful purchases were not exercised.
+
+The first oracle checked the caller's x store at the X helper's return address,
+before that store executed. Moving caller-owned expectations to later helper
+boundaries fixed the replay. Requiring leading-zero suppression in every route
+also failed for checkpoint 86's two-digit stock; the successful suite checks it
+on checkpoint 30. Despite its filename, `eur_story_030_hud_verified.dst` opens in
+the save menu. Its tested prelude is `wait:180 b:8 wait:240`, which cancels the
+menu and reaches the guarded FieldVM shop entry. Both final replays finish shop
+cleanup with no pending hooks; no inventory fixture or purchase is needed.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

@@ -6743,3 +6743,52 @@ Scene entry uses the existing guarded decoded FieldVM command fixture, restored
 before the native shop request. All later navigation uses ordinary buttons.
 One-member clearing, unavailable groups, early fade interruption and successful
 purchases were not exercised. No inventory or currency fixture was added.
+
+
+## 2026-09-13: shop stock rows and panel visibility
+
+Reconstructed 1,008 matching C++ bytes across the stock caption and row modules:
+- ShopStockCaption_DrawSegment at 0x0207218C: 72 bytes.
+- ShopStockRow_DrawQuantityDigit at 0x02072470: 192 bytes.
+- ShopStockRow_DrawIcon at 0x02072530: 96 bytes.
+- ShopStockRow_DrawTextSegment at 0x02072590: 156 bytes.
+- ShopStockRow_Update at 0x0207262C: 348 bytes.
+- ShopStockPanel_Hide at 0x02072788: 24 bytes.
+- ShopStockPanel_Show at 0x020727A0: 120 bytes.
+
+Matching C/C++ reaches 720,712 / 1,563,700 bytes (46.09%); with separate
+assembly, 46.42%. Overlay 9 reaches 32,384 / 78,984 (41.00%).
+61,138 matching C/C++ bytes remain to the 50% goal.
+
+The shared 72-byte task and 224-byte panel layouts preserve their byte views.
+A common 64-byte ResourceB sprite header avoids conflicting workspace types.
+Typed 20-byte usable-item records reproduce the filter's native address and
+load order. No inline assembly, compiler changes or source permutations were
+used for these seven functions.
+
+Full configure/Ninja checks, no-data-mod packaging, native relink, generated
+progress checks and 81 tests pass. Both ROM outputs have SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink checks 43 components,
+420 section units, 31,138 relocations and 1,577 ARM7 relocations with zero
+differing bytes. Logs: build/analysis/shop_stock_rows_*.log.
+
+Runtime reports: build/runtime/eur_shop_stock_rows/.
+- Checkpoint 30: 833 frames, six rows and single-digit quantities.
+- Checkpoint 86: 529 frames and the full nine-row list.
+- Combined: 46,449 new-function returns, 5,199 row updates, 39,860 independently
+  expected sprite submissions and 134 actual deferred task removals.
+- All 28 screenshots, 252 graphics dumps and 104 unchanged source saves validate.
+
+The routes cover hidden/already-enabled show paths, hide/rebuild, filter modes
+zero/one, both palette results and 1,384 suppressed leading-zero digits. Full
+live task, parent, sprite, panel, workspace and save records are checked at
+helper boundaries. Panel setup and factory outputs are observed helpers.
+Native-renderer captures are not independently calculated pixel output.
+
+The initial oracle applied caller writes before their instructions executed at
+helper-return hooks; this was corrected and both final replays pass. Leading
+zero coverage is required across the suite rather than in the all-two-digit
+late-game route. Checkpoint 30's snapshot actually starts in the save menu;
+ordinary B cancellation precedes the controlled, restored FieldVM shop entry.
+Both routes finish cleanup with no pending calls. Filter mode two, empty stock
+and successful purchases remain unexercised. No inventory fixture was used.

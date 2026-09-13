@@ -835,3 +835,5 @@ src/overlay009/shop_subscreen_text.c
 src/overlay009/shop_party_bitmap.cpp
 src/overlay009/shop_confirmation_cursor.cpp
 src/overlay009/shop_equipment_highlight.cpp
+src/overlay009/shop_stock_caption.cpp
+src/overlay009/shop_stock_rows.cpp
