@@ -105,6 +105,9 @@ A handoff can be stale even when its recorded `HEAD` still matches: the next
 batch may have changed the working tree without a commit. Compare its pending
 file list and report timestamps with actual files before trusting completion
 claims or replaying an integration script.
+Check reported blockers against the current declarations and implementation.
+A handoff's claim that a shared function has the wrong argument count is not
+enough to justify a header refactor; inspect the actual signature and callers.
 Record candidate status in separate fields: exact object comparison, build
 integration, runtime coverage, commit and push. For example, an exact function
 in the working manifest can still await runtime verification and publication.
@@ -326,6 +329,10 @@ and compatible snapshots. Optional dependencies are in
   A base constructor may run inside a larger derived allocation. Propagate a
   nested constructor's independently expected changes into the parent's oracle,
   rather than accepting a fresh RAM snapshot as the expected result.
+  Construction can precede assignment to the scene's global pointer. Use the
+  actual argument allocation at entry and check global publication at its
+  caller's later store. An incoming pointer field can contain allocation residue;
+  a constructor clearing that field does not imply that it releases an old object.
   For pooled objects, establish the slot size, base, count and free-list links
   from the allocator. Check alignment and the complete live slot. Shop ResourceA
   models use 336-byte slots, ResourceB sprites use 64-byte slots, and the shared
@@ -354,6 +361,10 @@ and compatible snapshots. Optional dependencies are in
   Both events can occur in the same frame; use hook order to establish their
   sequence rather than requiring a strictly larger removal-frame number.
   Follow newly created tasks through their updates to the expected completion.
+  Confirm a route's final scene instead of assuming its last Start press exits.
+  Clothing and badge routes have reopened pause after earlier B presses already
+  returned to the field. Track each new lifetime even if the heap address repeats;
+  close it when cleanup coverage is required and check the final field state.
   For a pool return, verify release callbacks, task fields and neighbor links
   before return to the pool. Afterward, inspect only still-live pool/list records
   and counters; a readable address does not mean the old object is still alive.
@@ -452,6 +463,10 @@ The signed first-item byte at party offset 264 and signed tile-row byte at 266
 serve different rotations. `Overlay7Party` describes a 332-byte prefix of a
 4,428-byte allocation; its saved-first and saved-selection arrays each contain
 five elements. Check the full live allocation when validating its mutations.
+The [party lifecycle findings](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup)
+document construction before global publication, retained text-state bytes and
+menu re-entry. The recorded cleanup calls all had null image pointers; that
+evidence does not cover image-array deletion or the outer party heap free.
 
 Consult tested routes for [shops](docs/research/RECONSTRUCTION_NOTES.md#shops),
 [save/load menus](docs/research/RECONSTRUCTION_NOTES.md#save-menus),
