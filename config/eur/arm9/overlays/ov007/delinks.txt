@@ -59,7 +59,7 @@ src/overlay007/pause_list_prepare.cpp:
     .text start:0x02075f6c end:0x0207616c
 
 src/overlay007/party_navigation.c:
-    .text start:0x02075400 end:0x020754d0
+    .text start:0x02075400 end:0x0207567c
 
 src/overlay007/point_motion.c:
     .text start:0x02086974 end:0x02087240
@@ -218,4 +218,4 @@ src/overlay007/pause_item_text.cpp:
     .text start:0x02075b04 end:0x02075e10
 
 src/overlay007/pause_party_lifecycle.cpp:
-    .text start:0x020762dc end:0x02076374
+    .text start:0x0207616c end:0x02076374

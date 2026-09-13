@@ -7284,3 +7284,32 @@ oracle. No fixtures, pending calls or drain frames. Exact matching build,
 packaged original EUR hash, native zero-byte difference, progress check and
 81 tests pass. Details: docs/research/RECONSTRUCTION_NOTES.md. Private evidence:
 build/runtime/eur_pause_list_prepare/.
+
+
+## Pause list movement and graphics initialization - 2026-09-13
+
+Added 796 matching C/C++ bytes: PauseList_MoveSelection (428) in the existing
+party_navigation.c and PauseList_InitGraphics (368) in pause_party_lifecycle.cpp.
+The already linked neighbors remain exact. Conditional-store structure and
+inline clear-wrapper stack layout explain the two corrected draft differences;
+no register permutations, assembly or compiler-flag changes were used.
+
+Five movement routes observe 4,717 calls and fully check 728, including every
+nonzero movement. All five categories, short/long wrapping and held-input clamps
+run; 24 scrolls and 90 sound/description calls are verified. Two graphics routes
+check all four initializations, 40 digit renders and 160 independent tile copies
+across both OBJ screens. Text renderer output is observed rather than derived.
+All seven final routes pass (12,562 frames), with no fixtures or pending calls.
+All 237 screenshots, 2,133 dumps and 104 unchanged source saves validate; 143
+images and 1,287 dumps equal prior matching input prefixes. The initial movement
+failure was a probe's overlay-0 assumption during save-menu entry; full native
+bytes identify the overlay-8 owner. Failed evidence is retained separately.
+
+Full configure/ninja check, golden packaged ROM, zero-difference native relink,
+progress generation/check, all 81 tests, and artifact verification pass. Logs:
+build/analysis/pause_list_graphics_{configure,check,rom,native,tests,artifacts}.log.
+Private reports: build/runtime/eur_pause_list_navigation/ and
+build/runtime/eur_pause_list_digit_tiles/. Detailed limitations and source
+organization are recorded in docs/research/RECONSTRUCTION_NOTES.md.
+Matching C/C++: 729,148 / 1,563,700 (46.63%); C/C++ plus symbolic ASM: 46.96%.
+Overlay 7: 64,392 / 142,264 (45.26%). Remaining to 50%: 52,702 bytes.

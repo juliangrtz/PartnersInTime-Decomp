@@ -1978,6 +1978,94 @@ invalid submenu/default cases and empty inventory remain uncovered. Both ROM
 build paths reproduce the original hash, native relinking reports zero
 differing bytes, and all 81 tests pass.
 
+### Pause list movement
+
+`PauseList_MoveSelection` at `0x020754D0..0x0207567C` adds 428 bytes to
+`party_navigation.c`, alongside its four already linked neighbors (208 bytes).
+It updates the signed selection byte, clamps or wraps short lists, and scrolls
+a nine-row window for longer lists. Cursor sound 231 depends on the absolute
+index changing; description drawing depends on the selected item changing.
+The getter uses the unsigned view of the selection byte, while the index
+arithmetic uses its signed view. Keep those access-site distinctions.
+
+Two ternary assignments in the first draft produced one unconditional byte
+store each instead of the native pairs of conditional stores. Explicit if/else
+assignments recovered the missing eight bytes and matched the complete function.
+Consolidation into the existing C module preserved assignment order while moving
+local declarations to block starts. All five functions remain exact; no assembly
+or compiler-flag changes were needed.
+
+The private movement probe checks five routes from story checkpoints 65 and 86:
+clothing and badge scrolling, consumables, Key Items and Bros. Items. Across
+8,822 frames it observes 4,717 entries and fully checks 728 calls. Every nonzero
+movement call is checked. Idle calls are sampled deterministically: the first
+two per observed constructor lifetime, arguments, list and selection tuple,
+plus every sixtieth frame. Branch counts describe checked calls. The callers
+invoke movement every frame, including direction zero; held input drives repeat
+movement while fresh presses enable wrapping.
+
+All five item categories run, with short/long lists, wrapping and held-input
+clamps in both directions. The oracle verifies 1,456 getter results, 1,532 signed
+divisions, 90 sound/description calls and 24 scrolls (20 queued-row scrolls and
+four full refreshes). It independently models control-byte changes, selection
+and helper arguments while checking the complete 4,428-byte party and header,
+90,600-byte workspace, save, display, globals and both entire OBJ buffers.
+Wrapped redraw and description-renderer output are observed, not independently
+derived pixels. Constructor entry identifies lifetimes; this probe does not
+verify constructor bodies, audio internals or queued-task allocation/removal.
+
+The original consumables replay failed at frame 1,348 because its foreign-owner
+fallback assumed overlay 0. The corrected replay identifies the complete
+336-byte overlay-8 owner at `0x02075390` by exact native bytes. Its final capture
+shows the save menu after the route's extra field inputs. Key Item and Bros.
+Items routes also encounter that owner. The old failure log/report remain
+preserved; all five final routes pass with no pending calls, fixtures or drain.
+No threshold-based byte comparison was accepted as proof of ownership.
+
+Private evidence is under `build/runtime/eur_pause_list_navigation/`; its focused
+generator/body/probe and the shared `verify_pause_list_graphics_artifacts.py`
+are in `build/analysis/`. All 189 screenshots and 1,701 graphics dumps validate,
+with 95 images and 855 dumps equal to matching input prefixes of prior routes.
+All 104 original saves retain their hashes. Unsampled idle bodies, invalid
+inputs and unvisited branches remain outside this runtime coverage.
+
+### Pause list graphics initialization
+
+`PauseList_InitGraphics` at `0x0207616C..0x020762DC` adds 368 bytes to
+`pause_party_lifecycle.cpp`; its 152 neighboring initialization/cleanup bytes
+were already linked. It resets both five-byte saved-position arrays and the
+list control bytes, clears 4,224 main-OBJ bytes, and builds digits 0 through 9.
+Each digit is rendered into scratch tiles at party offsets 332 and 1,356, then
+copied as two 32-byte tiles to both screens' OBJ buffers.
+
+The first draft already had the correct size and instructions apart from ten
+stack references. Explicit clear blocks allocated their local zero values in
+different slots from the native code. The inline clear wrappers already used
+in nearby pause-resource code reproduce the native separation of caller text
+buffer, hidden `GameTextToken` return temporary and wrapper locals. Using that
+same structure yields an exact 368-byte match, including the literal pool;
+all three functions in the consolidated module match. The volatile zero accesses
+are supported by native stack stores/loads, not a register-allocation workaround.
+
+Two ordinary clothing/badge routes at checkpoints 65/86 exercise four complete
+initializations across separate pause lifetimes over 3,740 frames. The probe
+checks every initializer, all ten digit strings, the hidden result-pointer ABI,
+cursor masks, saved-position/control resets, all zero fills, OBJ address results
+and all 160 tile transfers. It checks complete party/header/work/save/display/
+global/OBJ records. The text decoder's state, scratch pixels and token result
+are observed; copies from those pixels to both screens are independently
+verified. Constructor and allocator bodies are not checked by this probe.
+
+Private reports are under `build/runtime/eur_pause_list_digit_tiles/`, with
+`make_pause_list_digit_tiles_probe.py`, its body and composed probe in
+`build/analysis/`. All 48 screenshots and 432 graphics dumps validate and equal
+the prior routes, all original saves remain unchanged, and no calls are pending.
+The complete movement/graphics batch adds 796 bytes, passes full `ninja check`,
+reproduces the EUR ROM hash through packaging and native relinking, reports zero
+native differences, and passes all 81 tests. The working total at publication is
+729,148 / 1,563,700 matching C/C++ bytes (46.63%); overlay 7 is 64,392 / 142,264
+(45.26%). Matching C/C++ plus symbolic assembly is 46.96%.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

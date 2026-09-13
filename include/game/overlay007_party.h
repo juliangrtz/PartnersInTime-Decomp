@@ -59,7 +59,9 @@ typedef char Overlay7ItemSizeCheck[sizeof(Overlay7Item) == 0x1c ? 1 : -1];
 extern const Overlay7Item data_020505c4[];
 
 u16 PauseList_MeasureRowWidth(Overlay7Party *party, int row, int plural);
+void PauseList_InitGraphics(Overlay7Party *party);
 void PauseList_Prepare(Overlay7Party *party, int menu);
+void PauseList_MoveSelection(Overlay7Party *party, int direction, int wrap);
 void PauseList_Hide(Overlay7Party *party);
 void PauseList_Show(Overlay7Party *party);
 int PauseList_GetTileRow(Overlay7Party *party);
