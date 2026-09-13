@@ -948,6 +948,40 @@ Each route closes three scene instances, with no pending calls or drain frames.
 Earlier caption, slide and quantity/adjustment oracles are not repeated here.
 Reports: `build/runtime/eur_shop_party_bitmap/`.
 
+`shop_confirmation_cursor.cpp` covers the contiguous 232-byte clear/create/draw
+group at `0x02076FBC` through `0x020770A4`. The shared 72-byte row task now names
+its cursor coordinates at +40/+44. Creation sets (86,112), attaches a model,
+starts animation zero and sets the low two model flag bits to one. Drawing adds
+80 pixels per Yes/No selection from the signed workspace byte +0x9F and submits
+at priority 10. The clear routine preserves an indirect tail call to group 3's
+deferred-removal helper. The nearby 68-byte prompt-label callback is a separate
+unlinked gap; this cursor group does not establish its execution coverage.
+
+The ordinary confirmation route opens an equipment item with two A presses,
+moves right/left between Yes and No and cancels with B; the bean route moves to
+No and confirms with A. Neither purchases an item or changes inventory through
+a fixture. `probe_shop_confirmation_cursor.py` checks 2,742 frames and 532 root
+returns, including 486 new-function calls (two creates, 482 draws, two clears).
+It derives task fields, attachment/pool changes, flags, (86/166,112) positions,
+draw-list appends and deferred removal. Allocator, resource initialization and
+animation outputs are explicitly observed helpers.
+
+Models occupy complete 336-byte slots in the shared pool, established by native
+`0x02068CE4` allocation and `0x02068DF0` selection. Check each slot, full tasks,
+workspace and save at helper boundaries. The task's removal flag is set one
+frame before its unlink/resource release and pool return. Check the last task
+fields before the pool return, then only still-live list/pool records. A tail
+call can put several pending returns at the same address and SP; finish their
+nested records in order before processing the caller's next instruction.
+
+Reports under `build/runtime/eur_shop_confirmation_cursor/` validate 30 screenshots,
+270 graphics dumps and 104 unchanged saves. All 160 equipment-route artifacts
+match the earlier discovery replay; the bean route uses a different cancellation
+sequence. Both confirmation positions were visually inspected. The retained
+numeric oracle verifies 17 renders; broader buying, bitmap and selling checks
+remain in their earlier reports. Successful purchases, post-purchase equipment
+prompts and empty-group clearing are outside this route's coverage.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

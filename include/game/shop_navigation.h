@@ -15,6 +15,9 @@ void ShopListNavigation_DrawCursor(ShopRowTask *task);
 void ShopMenuNavigation_Clear(void);
 void ShopMenuNavigation_Create(void);
 void ShopMenuNavigation_DrawCursor(ShopRowTask *task);
+void ShopConfirmationCursor_Clear(void);
+void ShopConfirmationCursor_Create(void);
+void ShopConfirmationCursor_Draw(ShopRowTask *task);
 void ShopMenuOptions_DrawModel(ShopRowTask *task);
 void ShopMenuOptions_DrawText(ShopRowTask *task);
 #ifdef __cplusplus

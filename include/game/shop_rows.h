@@ -10,6 +10,9 @@ typedef struct ShopRowTask {
     union {
         int part;
         struct {
+            s32 cursor_x, cursor_y;
+        };
+        struct {
             u16 row, value, palette, priority, scale, unknown_32;
             s32 tile, x, y, offset_x, offset_y;
         };

@@ -6661,3 +6661,41 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **718,300 / 1,563,700 bytes (45.94%)**, or **46.27%**
   with separate assembly. Overlay 9 reaches **29,972 / 78,984 (37.95%)**.
   **63,550 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop purchase-confirmation cursor
+
+- Reconstruct **232 matching C++ bytes** in `shop_confirmation_cursor.cpp`,
+  `0x02076FBC` through `0x020770A4`: clear, create and draw the Yes/No cursor.
+  The shared 72-byte row task names cursor coordinates at +40/+44. Native
+  indirect tail calling, signed selection and model flags are preserved.
+  The separate 68-byte prompt-label callback remains unlinked and untested.
+- Full Ninja module/symbol checks, canonical packaging, native relinking,
+  generated-progress checks and **81 tests pass**. Both ROM SHA-1s remain
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; native relinking reports zero
+  differing bytes across 43 components and 31,138 relocations (1,577 ARM7).
+  Logs: `build/analysis/shop_confirmation_`.
+- Ordinary equipment/bean confirmation routes pass **2,742 frames and 532 root
+  returns**, including **486 new-function calls**: two creates, 482 draws and
+  two clears. Equipment uses B to cancel after visiting both choices; the bean
+  shop selects No with A. No purchase or inventory fixture is involved.
+- Independently derive task coordinates, resource pointer/attachment changes,
+  model-pool selection, model flags, Yes/No positions (86/166,112), draw-list
+  nodes and deferred group removal. Check **full 72-byte tasks and 336-byte
+  model slots**, workspace and save. Allocator, model initialization and
+  animation helper outputs remain explicitly observed.
+- Each cursor is flagged one frame before actual removal. Check resource
+  release and unlink before its pool return; afterward check only still-live
+  pool/list records and the task count. The probe handles nested tail returns
+  sharing the same return address and SP. Both scenes close with no pending
+  calls or drain frames. Empty-group clearing and successful purchases remain
+  unexercised; the post-purchase equipment prompt is a separate flow.
+- All **30 screenshots, 270 graphics dumps and 104 source saves** validate.
+  All **160 equipment-route artifact pairs** match the discovery replay;
+  bean inputs differ. Both cursor positions were visually inspected. The
+  retained numeric oracle checks 17 renders; older bitmap/selling/quantity
+  oracles are not claimed as repeated. Reports:
+  `build/runtime/eur_shop_confirmation_cursor/`.
+- Matching C/C++ reaches **718,532 / 1,563,700 bytes (45.95%)**, or **46.28%**
+  with separate assembly. Overlay 9 reaches **30,204 / 78,984 (38.24%)**.
+  **63,318 bytes** remain to the 50% goal.
