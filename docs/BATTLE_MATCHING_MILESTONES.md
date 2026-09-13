@@ -7569,3 +7569,32 @@ Logs: build/analysis/pause_empty_row_{configure,check,rom,native,tests,artifacts
 The reconstruction reference records helper and branch limits.
 Matching C/C++: 739,096 / 1,563,700 (47.27%); with symbolic ASM: 47.60%.
 Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
+
+
+### 2026-09-13 - Equipment category and list selection sprites (+568 bytes)
+
+- Reconstructed category cursor creation/update (0207b1b0/200, 0207b278/80)
+  and list selection marker/cursor updates (0207f4d8/156, 0207f574/132).
+  Shared 72-byte task layout; native Q12 conversions and virtual calls retained.
+  Two contiguous source units; no assembly or compiler-flag changes.
+- Matching C/C++: 739,664/1,563,700
+  (47.30%); including symbolic ASM: 47.63%.
+  Overlay 7: 74,908/142,264 (52.65%).
+- Full matching checks, golden packaged EUR ROM, zero-difference native relink,
+  generated progress and all 81 tests pass. Final unused-declaration cleanup
+  also passes full matching checks. Initial duplicate .text section failure
+  fixed by splitting the two disjoint ranges; failed log preserved.
+- Clothing and badges story-save replays: 4,060 frames, four creations and
+  5,084 selection-sprite updates/draw insertions, all independently checked.
+  All nine visible rows, both equipment kinds and category rows; 4,360 index
+  lookups, 2,180 animation-call arguments, complete live task/model records.
+- All 40 watched tasks removed, including ten actual model returns. Both final
+  field guards pass; no pending calls, live tasks, drain or RAM fixtures.
+  All 124 PNGs and 1,116 graphics dumps equal previous complete routes;
+  category/list/final-field screens inspected, all 104 original saves unchanged.
+- Category origin with flag clear, other menus/item kinds, invalid inputs,
+  initialization/animation internals and rasterization remain outside independent
+  coverage. Existing row, equipped-marker and page checks remain enabled.
+- Private evidence: build/runtime/eur_pause_selection_sprites/artifact_validation.json
+  and per-route evidence; source-identified probe and build/analysis/
+  pause_selection_sprites_* logs. See the reconstruction reference for details.

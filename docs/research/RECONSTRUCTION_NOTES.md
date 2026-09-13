@@ -2754,6 +2754,52 @@ in other rows, invalid indices, model-helper internals and rasterization remain
 outside this independent coverage. The bean-display drafts are separate private
 work; their presence does not add linked coverage.
 
+### Pause selection sprites
+
+[pause_category_cursor.cpp](../../src/overlay007/pause_category_cursor.cpp)
+reconstructs the equipment category cursor's creator at `0x0207B1B0` (200 bytes)
+and updater at `0x0207B278` (80). It loads model asset 75 and positions the hand
+beside the selected Clothing/Badges row. The shared
+[task layout](../../include/game/pause_selection_sprites.h) is 72 bytes, with
+pixel origins at offsets 40 and 44. The page-opening caller uses the public
+no-argument creator declaration; the incoming register value is not consumed.
+[pause_list_cursor.cpp](../../src/overlay007/pause_list_cursor.cpp) owns the
+selection marker at `0x0207F4D8` (156 bytes) and cursor at `0x0207F574` (132).
+Both follow the selected list row, retaining the native Q12 conversion and
+signed division before storing pixel halfwords. All 568 bytes match without
+assembly or compiler changes.
+
+Two ordinary-input scrolling replays at story checkpoints 65 and 86 cover
+4,060 frames: four category cursor creations, 724 category updates, 2,180 list
+cursor updates and 2,180 selection-marker updates. All nine visible list rows,
+both equipment kinds and both category rows are covered. The oracles derive
+origins, selected indices, Q12 truncation and all 5,084 draw-list insertions;
+4,360 selection-index lookups are independently checked. They validate arguments
+for 2,180 marker animation calls and observe animation internals at return.
+Complete live task and 336-byte model records are checked at call boundaries.
+Generic ResourceA attachment checks cover 65 calls, plus six attachments derived
+inside the category and empty-row creators. All 40 watched tasks are removed,
+including ten actual model-pool returns. Existing row, marker and page checks
+remain active; both routes end in the field with full overlay-0 byte guards,
+no pending calls, watched tasks, drain frames or RAM fixtures.
+
+All 124 screenshots and 1,116 graphics dumps match the previous complete
+scrolling routes. Category selection, both scrolled lists and both final field
+screens were inspected; all 104 original saves are unchanged. Full module and
+symbol checks, golden ROM packaging, zero-difference native relinking, generated
+progress and 81 tests pass. The final declaration cleanup also passes the full
+matching check. DSD requires separate source units for these two disjoint text
+ranges; the initial combined-section failure remains in the private build log.
+
+Private evidence is under `build/runtime/eur_pause_selection_sprites/`; scripts
+are `make_pause_selection_sprites_probe.py`, `pause_selection_sprites_flow.py`,
+composed `probe_pause_selection_sprites.py` and
+`verify_pause_selection_sprites_artifacts.py`. Each report records its actual
+probe source and hash. The category creator's alternate-origin flag was always
+set; the other origin, other menus/item kinds, invalid indices, animation/model
+initialization internals and final rasterization are outside independent runtime
+coverage. Adjacent scroll-arrow and controller drafts are not linked progress.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

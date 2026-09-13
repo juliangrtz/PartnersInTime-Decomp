@@ -1,4 +1,5 @@
 #include "pause_scene_internal.h"
+#include <game/pause_selection_sprites.h>
 #include <game/pause_navigation.h>
 #include <game/pause_transition.h>
 #include <game/pause_menu_label.h>
@@ -33,7 +34,6 @@ void func_ov007_0207ae0c(void);
 void func_ov007_020784a0(void);
 void func_ov007_020782a4(void);
 void func_ov007_0207ea4c(PausePageTask *, int);
-void func_ov007_0207b1b0(int);
 void func_ov007_0206c6a0(PauseMenuElement *);
 void func_ov007_0206c0e4(PauseMenuElement *);
 }
@@ -149,7 +149,7 @@ extern "C" void PausePage_OpenTask(PausePageTask *task)
                 func_ov005_02066358((PauseMenuElement *)task, func_ov007_0206c6a0, 0);
                 break;
             case 1:
-                func_ov007_0207b1b0(menu);
+                PauseEquipment_CreateCategoryCursor();
                 func_ov005_02066358((PauseMenuElement *)task, func_ov007_0206c0e4, 0);
                 break;
             case 2:

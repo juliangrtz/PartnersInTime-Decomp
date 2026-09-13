@@ -246,3 +246,9 @@ src/overlay007/pause_transition_projection.cpp:
 
 src/overlay007/pause_scene_control.cpp:
     .text start:0x02070ae8 end:0x02070b50
+
+src/overlay007/pause_category_cursor.cpp:
+    .text start:0x0207b1b0 end:0x0207b2c8
+
+src/overlay007/pause_list_cursor.cpp:
+    .text start:0x0207f4d8 end:0x0207f5f8
