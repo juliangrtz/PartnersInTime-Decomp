@@ -22,6 +22,13 @@ typedef struct PauseListSpriteTask {
     u8 unknown_2c[28];
 } PauseListSpriteTask;
 
+/* One equipped-item indicator for a displayed party member. */
+typedef struct PauseEquippedMarkerTask {
+    u8 unknown_00[40];
+    int member;
+    u8 unknown_2c[28];
+} PauseEquippedMarkerTask;
+
 /* A queued text/marker upload; the callback marks it for later removal. */
 typedef struct PauseItemRowDrawTask {
     u8 unknown_00[40];
@@ -32,6 +39,7 @@ typedef struct PauseItemRowDrawTask {
 typedef char PauseItemRowDrawTaskSizeCheck[sizeof(PauseItemRowDrawTask) == 72 ? 1 : -1];
 typedef char PauseListRowTaskSizeCheck[sizeof(PauseListRowTask) == 72 ? 1 : -1];
 typedef char PauseListSpriteTaskSizeCheck[sizeof(PauseListSpriteTask) == 72 ? 1 : -1];
+typedef char PauseEquippedMarkerTaskSizeCheck[sizeof(PauseEquippedMarkerTask) == 72 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,6 +50,7 @@ void PauseListRow_Refresh(PauseListRowTask *task);
 void PauseListRow_UpdateDigitSprite(PauseListSpriteTask *task);
 void PauseListRow_UpdateMarkerSprite(PauseListSpriteTask *task);
 void PauseListRow_UpdateTextSprite(PauseListSpriteTask *task);
+void PauseEquippedMarker_Update(PauseEquippedMarkerTask *task);
 #ifdef __cplusplus
 }
 #endif

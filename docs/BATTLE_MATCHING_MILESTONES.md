@@ -7517,3 +7517,29 @@ progress validation and all 81 tests pass. Evidence: build/runtime/eur_pause_row
 Logs: build/analysis/pause_row_refresh_{configure,check,rom,native,tests,artifacts}.log.
 Matching C/C++: 738,372 / 1,563,700 (47.22%); with symbolic ASM: 47.55%.
 Overlay 7: 73,616 / 142,264 (51.75%). Remaining to 50%: 43,478 bytes.
+
+
+## Pause equipped-item markers
+
+Added 416 exact C++ bytes at 0x02073AF4 in pause_equipped_markers.cpp, using
+shared task/sprite layouts and named SavePartyMember equipment fields. The
+callback finds visible equipped items and positions clothing/badge indicators,
+preserving native arithmetic and partner sharing. No new ASM or compiler flags.
+
+Three ordinary-input routes at checkpoints 65/86 cover 5,650 frames and all
+10,908 marker updates. Independent checks include 77,382 item lookups and 5,454
+draw-pool/list insertions. All four members, both categories, scrolling, off-screen
+items, the nine-row clamp, both unshared adjustments and 100 shared-badge updates
+run. Existing controller/row checks remain; all 45 watched lifetimes, including
+12 marker sprites, end in actual removal. Every route returns to the field.
+
+All 123 images, 1,107 dumps and 104 unchanged saves validate; 71 images/639 dumps
+match earlier common prefixes. Relevant lists and every final field screen
+inspected. No pending calls, watched tasks, drain or fixtures. See the research
+reference for observed helper effects and uncovered inputs/branches.
+
+Full matching checks, golden packaged ROM, zero-difference native relink,
+progress validation and all 81 tests pass. Evidence: build/runtime/eur_pause_equipped_markers/.
+Logs: build/analysis/pause_equipped_markers_{configure,check,rom,native,tests,artifacts}.log.
+Matching C/C++: 738,788 / 1,563,700 (47.25%); with symbolic ASM: 47.58%.
+Overlay 7: 74,032 / 142,264 (52.04%). Remaining to 50%: 43,062 bytes.

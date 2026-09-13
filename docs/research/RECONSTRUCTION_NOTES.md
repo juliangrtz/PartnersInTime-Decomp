@@ -2662,6 +2662,51 @@ tile-row states, quantity/availability helper internals and rasterization are
 outside this callback's independent coverage. The equipment-category and map
 decoder drafts remain private with classified differences.
 
+### Pause equipped-item markers
+
+[pause_equipped_markers.cpp](../../src/overlay007/pause_equipped_markers.cpp)
+owns `PauseEquippedMarker_Update` at `0x02073AF4` (416 bytes). It finds each
+displayed member's equipped clothing or badge among the first nine visible
+inventory rows. A missing or off-screen item produces no draw entry. Badge
+partners keep separate vertical offsets when sharing an item; an unshared badge
+cancels that offset and uses a one-pixel adjustment. The task uses the shared
+72-byte [row-task header](../../include/game/pause_list_row.h) and existing
+`SavePartyMember` fields. Native addition order is preserved; no assembly or
+compiler-flag changes are needed.
+
+Three ordinary-input replays at checkpoints 65 and 86 cover 5,650 frames and
+every observed marker call: 10,908 updates, 77,382 independently checked item
+lookups and 5,454 draw-list insertions. They cover all four members, clothing,
+badges, list scrolling, the nine-row clamp, off-screen equipped items, both
+unshared-badge adjustments and 100 shared-badge updates. Full task, sprite and
+game-data records are checked at call boundaries. Draw-pool allocation, linked
+list insertion and helper return values are independently derived. Initial
+marker setup is observed before the updater runs.
+
+Existing row, menu, page and member-selection checks remain active, including
+24,543 row refreshes. All 45 watched lifetimes end in actual removal, including
+12 equipped-marker tasks with their sprite resources returned. All three routes
+finish in the field with full native overlay-0 guards and no pending call,
+watched task, drain frame or RAM fixture. The suite checks 813 task factories,
+472 ResourceB attachments, six pool cleanups and 171 controller GPU stores.
+Pure data callbacks use focused task/game records; controller graphics checks
+and per-action captures remain enabled.
+
+All 123 screenshots, 1,107 graphics dumps and 104 unchanged original saves
+validate. Seventy-one images and 639 dumps match earlier common input prefixes.
+Clothing, badge and scrolled-list screens and all three final field screens
+were inspected. Full matching checks, the golden packaged ROM, zero-difference
+native relink, generated progress and all 81 tests pass.
+
+Private evidence is under `build/runtime/eur_pause_equipped_markers/`. Tools:
+`make_pause_equipped_markers_probe.py`, `pause_equipped_markers_flow.py`, composed
+`probe_pause_equipped_markers.py` and `verify_pause_equipped_markers_artifacts.py`.
+Each report identifies the probe source and hash. Unequipped members, lists of
+nine or fewer entries, a partner not displayed, invalid IDs/categories and final
+rasterization are outside this runtime coverage. Row quantity/eligibility and
+opaque controller helpers retain their earlier stated limits. The neighboring
+marker and row creators remain private drafts with classified differences.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
