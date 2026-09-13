@@ -6342,3 +6342,37 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **712,064 / 1,563,700 bytes (45.54%)**, or **45.87%**
   with separate assembly. Overlay 9 reaches **23,736 / 78,984 (30.05%)**.
   **69,786 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop party labels, bitmap values and glyph expansion
+
+- Reconstruct five helpers in matching C/C++, **756 bytes**: party-label drawing
+  at `0x0207B4F0` (132), bitmap placeholders at `0x0207C230` (124), bitmap values
+  at `0x0207C384` (224), OBJ placeholders at `0x0207C5D4` (208), and glyph
+  expansion at `0x0207CDD8` (68). Temporary units preserve intervening native gaps;
+  shared declarations and the recovered 72-byte parent layout live in headers.
+- Full Ninja checks, canonical packaging, native relinking and **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; native
+  relinking reports zero differing bytes across 43 components and 31,138
+  relocations, including 1,577 ARM7 relocations. Logs: `build/analysis/shop_graphics_`.
+- Four shop routes pass: **6,528 frames and 42,662 checked returns**, including
+  **42,128 through the new functions**: 41,760 label callbacks, 150 bitmap values,
+  110 bitmap placeholders, 20 OBJ placeholders and 88 glyph expansions.
+  Full function guards, ordered helper arguments and SP-matched returns support
+  independently derived pixel/nibble output, sprite fields and draw-list appends.
+- The probe checks full 53,248-byte bitmap, 2,816/5,632-byte font, 5,120-byte
+  scratch/strip and 65,536-byte sub-OBJ buffers where used, preserving untouched
+  tails, source bytes and transparent pixels. Label records cover full 72-byte
+  tasks/parents and a known 64-byte sprite prefix. Live glyph data and the
+  equipment screenshot confirm placeholder dashes beside unchanged stats.
+- Two-/three-digit values, shown/hidden callbacks, even-X placeholders and
+  32-/128-byte expansion are covered. Zero/one-digit values, odd-X placeholders,
+  overlapping buffers, zero-length expansion and invalid coordinates are not.
+  Mirror/visibility counts do not establish all combined branches. These are
+  controlled shop-entry routes, not evidence of normal NPC navigation.
+- All **68 screenshots, 612 graphics dumps and 104 source saves** validate;
+  **680 artifact pairs** match the prior help-text routes. No pending calls or
+  drain frames remain. Reports: `build/runtime/eur_shop_graphics/`.
+- Matching C/C++ reaches **712,820 / 1,563,700 bytes (45.59%)**, or **45.92%**
+  with separate assembly. Overlay 9 reaches **24,492 / 78,984 (31.01%)**.
+  **69,030 bytes** remain to the 50% goal.

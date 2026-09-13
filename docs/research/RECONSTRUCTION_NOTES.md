@@ -648,6 +648,34 @@ and kind-2 menu messages; kind-0 names, empty strings, alternate languages and
 invalid entries remain unexercised by the new functions. Every capture matches
 the preceding menu-batch route, and all source saves retain their hashes.
 
+`probe_shop_graphics.py` and `shop_graphics_oracles.py` extend the text-index
+routes with the party-label callback, bitmap values and placeholder dashes,
+packed OBJ placeholders and 4bpp-to-8bpp glyph expansion. The four reports in
+`build/runtime/eur_shop_graphics/` exercise every new entry point. They derive
+pixels/nibbles independently, including transparent pixels, palette offsets,
+linear-to-tiled copying, sprite coordinates and draw-list appends. All captures
+match the preceding help-text batch. Earlier help-token checks are retained in
+their own reports, not repeated by this graphics probe.
+
+Derive buffer sizes from `shop_resources.cpp`: bitmap pixels allocate 53,248
+bytes, of which 49,152 are initialized and transferred; packed and expanded
+glyph allocations are 2,816 and 5,632 bytes; scratch and strip buffers are each
+5,120 bytes. The OBJ placeholder clears 512 scratch bytes but transfers only
+256. Help text uses a separate 6,144-byte allocation. Check each full allocation
+and preserve unused tails rather than assuming that a clear or upload covers it.
+The bitmap value routine mixes unsigned value division with signed divisor
+reduction. Glyph expansion reads the source again after the low-nibble store;
+`const` does not rule out aliasing. Preserve these native operations.
+
+This replay exercises two- and three-digit bitmap values, visible and hidden
+label callbacks, even-X OBJ placeholders and 32-/128-byte glyph expansions.
+Zero/one-digit values, odd-X placeholders, overlapping glyph buffers, zero-length
+expansion and invalid coordinates remain unexercised. Visibility and mirror
+flags are counted separately; those counts alone do not establish every combined
+branch. Controlled shop entry and purchase fixtures remain distinct from normal
+NPC navigation. Neighboring bitmap and number helpers still contain native gaps;
+do not count an entire private candidate file because one function matches.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized
