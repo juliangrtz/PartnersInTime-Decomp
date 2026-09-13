@@ -6306,3 +6306,39 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **711,708 / 1,563,700 bytes (45.51%)**, or **45.85%**
   with separate assembly. Overlay 9 reaches **23,380 / 78,984 (29.60%)**.
   **70,142 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop help text and background setup
+
+- Reconstructed `ShopHelpText_Draw` at `0x0207A844` (264 bytes) and
+  `ShopHelpText_InitBackground` at `0x0207A94C` (92 bytes) in one contiguous
+  `shop_help_text.c` module: **356 new matching C bytes**. The existing empty
+  inventory-message caller now uses the public name.
+- Native loop structure requires a head-tested text loop and separate tilemap
+  pointer increment. C with an explicit `GameTextToken` result preserves the
+  original stack slots; the discarded-result and C++ drafts differed at three
+  stack offsets. The fill values retain their native stack store/load.
+- Full Ninja checks, canonical packaging, native relinking and **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; native
+  relinking reports zero differing bytes across 43 components and 31,138
+  relocations, including 1,577 ARM7 relocations. Logs: `build/analysis/shop_help_`.
+- Four story-save routes pass: **6,528 frames and 622 checked returns**, including
+  **84 help-text draws and four background initializations**. The probe derives
+  VRAM addresses, localized message pointers, all 14 initialization arguments,
+  full 48-byte text-state initialization, 5,120/24,576-byte clears, 1,024 sequential
+  tilemap halfwords and 4,096-byte VRAM copies. It checks complete surrounding
+  buffers, renderer/save records, fonts and resource pointers.
+- The 3,143 text-token calls and their rasterized pixels are observed helper
+  output, followed by independently checked transfers. Coverage includes 76
+  item-description and eight menu-message calls. The initial message-only probe
+  assumption was corrected and the full route rerun; no matching game code was
+  changed to satisfy that failed expectation. Names, empty strings, alternate
+  languages and invalid entries remain unexercised by these new functions.
+- All **68 screenshots, 612 graphics dumps and 104 original saves** validate.
+  All **680 artifact pairs** match the preceding menu batch, including the extra
+  navigation route. The purchase description screen was visually inspected.
+  All routes return to the field without pending calls or drain frames. Reports:
+  `build/runtime/eur_shop_help_text/`.
+- Matching C/C++ reaches **712,064 / 1,563,700 bytes (45.54%)**, or **45.87%**
+  with separate assembly. Overlay 9 reaches **23,736 / 78,984 (30.05%)**.
+  **69,786 bytes** remain to the 50% goal.

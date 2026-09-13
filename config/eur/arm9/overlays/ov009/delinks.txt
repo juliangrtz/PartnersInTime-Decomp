@@ -92,3 +92,6 @@ src/overlay009/shop_menu_navigation.cpp:
 
 src/overlay009/shop_menu_option_draw.cpp:
     .text start:0x0207a6a4 end:0x0207a844
+
+src/overlay009/shop_help_text.c:
+    .text start:0x0207a844 end:0x0207a9a8

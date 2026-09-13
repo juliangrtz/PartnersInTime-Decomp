@@ -626,6 +626,28 @@ verifier checks all captures and compares identical routes and unchanged startin
 captures with the preceding text-index reports; later navigation frames are new
 evidence, not an identical-input baseline.
 
+`shop_help_text.c` owns the adjacent help-text draw and background initialization
+functions. MWCC C with a named `GameTextToken` result reproduces the native
+return-buffer slot; discarding the result or using the C++ draft changes three
+stack offsets. The draw loop tests termination at its head, and the tilemap loop
+increments its pointer separately from the store. Preserve the explicit stack
+loads for the fill value rather than replacing them with a constant argument.
+
+`probe_shop_help_text.py` repeats all four menu routes while replacing the prior
+per-frame menu oracle with focused help-text checks. Derive character and map
+VRAM addresses from main DISPCNT/BG0CNT, message pointers from the current language
+table and original item records, all fourteen text-init arguments and the full
+48-byte initialized text state, preserving reserved bits and padding. It checks
+24,576-byte character clears, 1,024 sequential tilemap halfwords, 5,120-byte pixel
+clears and 4,096-byte copies at character base + 20,480. Text-token rasterization
+remains observed helper output; the copy and final VRAM buffers are independently
+compared. The initial message-only oracle missed kind-1 item descriptions and
+was corrected from the native lookup before rerunning the full affected route.
+The final reports in `build/runtime/eur_shop_help_text/` cover kind-1 descriptions
+and kind-2 menu messages; kind-0 names, empty strings, alternate languages and
+invalid entries remain unexercised by the new functions. Every capture matches
+the preceding menu-batch route, and all source saves retain their hashes.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

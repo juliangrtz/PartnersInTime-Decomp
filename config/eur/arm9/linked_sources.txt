@@ -817,3 +817,4 @@ src/overlay009/shop_buy_panel_lifecycle.cpp
 src/overlay009/shop_item_panel_text.c
 src/overlay009/shop_menu_navigation.cpp
 src/overlay009/shop_menu_option_draw.cpp
+src/overlay009/shop_help_text.c

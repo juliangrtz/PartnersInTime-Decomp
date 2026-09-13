@@ -14,7 +14,6 @@ void func_ov005_02069bcc(int, int, int, int);
 void func_ov009_02073538(int);
 void func_ov009_02073228(int);
 void func_ov009_02070764(ShopInventoryPanel *);
-void func_ov009_0207a844(int, u16);
 }
 extern "C" {
 u32 ShopInventoryPanel_GetPriceBonus(ShopInventoryPanel *panel, u16 row)
@@ -39,7 +38,7 @@ int ShopInventoryPanel_CanSellRow(ShopInventoryPanel *panel, u16 row)
 void ShopInventoryPanel_ShowEmptyMessage(ShopInventoryPanel *panel)
 {
     ShopEmptyMessages messages = data_ov009_0207e238;
-    func_ov009_0207a844(2, messages.entries[data_ov009_0207ea3c[0x97]]);
+    ShopHelpText_Draw(2, messages.entries[data_ov009_0207ea3c[0x97]]);
 }
 int ShopInventoryPanel_GetCategory(ShopInventoryPanel *panel, int item)
 {

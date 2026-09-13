@@ -111,6 +111,8 @@ u16 ShopText_GetDescriptionIndex(ShopText *renderer, u16 item, int unused, int q
 u16 ShopText_GetNameIndex(ShopText *renderer, u16 item, int quantity);
 u16 ShopText_MeasureLine(ShopText *renderer, int kind, u16 item, u8 quantity);
 const u8 *ShopText_GetString(ShopText *renderer, int kind, u16 item, u8 quantity);
+void ShopHelpText_Draw(int kind, u16 entry);
+void ShopHelpText_InitBackground(void);
 #ifdef __cplusplus
 }
 #endif
