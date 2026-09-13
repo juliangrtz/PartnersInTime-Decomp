@@ -11,11 +11,11 @@
 #include <nitro/gx_init.h>
 #include <nitro/gx_projection.h>
 typedef SaveMenuTransferTask MenuElement;
-/* Prefix through the panel selection used during save-menu entry. */
+/* Shared save/load workspace prefix through the panel selection. */
 typedef struct SaveMenuEntryWorkPrefix {
     SaveMenuSummary summaries[2];
     u8 unknown_140[0x50];
-    u8 confirmation_mode, unknown_191[7], scroll_locked;
+    u8 menu_mode, exit_mode, unknown_192[6], scroll_locked;
     s8 selection, previous_selection;
     u8 message_visible;
     s8 input_locked, selected_panel;
@@ -77,6 +77,8 @@ extern SaveSceneTask *data_ov008_02078284;
 extern void func_ov008_0206f588(SaveSceneTask *);
 extern void func_ov008_0206e9a0(MenuElement *);
 void LoadMenu_InitializePanels(void);
+void LoadMenu_UpdateSelection(MenuElement *);
+void LoadMenu_UpdateExit(MenuElement *);
 extern GameTaskVTable data_ov008_02077ff0;
 extern SaveSceneTask *data_ov008_02078288;
 extern void func_ov008_02070858(SaveSceneTask *);

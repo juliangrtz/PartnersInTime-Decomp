@@ -5945,3 +5945,51 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **705,428 / 1,563,700 bytes (45.11%)**, or **45.44%** with
   separate assembly. Overlay 8 is **25,704 / 54,068 (47.54%)**. There are
   **76,422 bytes** left to the 50% target.
+
+## 2026-09-13: Load-menu file selection and exit
+
+- Reconstructed `LoadMenu_UpdateSelection` at `0x0206E7F4` (428 bytes) and
+  `LoadMenu_UpdateExit` at `0x0206D728` (260 bytes): **688 new matching C bytes**.
+  They occupy separate modules while the intervening native controllers remain
+  unfinished. Selection preserves the signed panel load before input masks and
+  the later byte-sized comparison. Exit preserves its delay, signed fade and
+  distinct field/title scene phases.
+- The shared 416-byte save/load workspace now names `menu_mode` and `exit_mode`.
+  The former replaces the save-only name `confirmation_mode`; the latter remains
+  a byte, preserving native behavior for values other than zero and one. Existing
+  save controllers use the renamed field and still match byte for byte.
+- Full Ninja module/symbol checks, regenerated progress/check and all 81 tests
+  pass. Canonical packaging with data mods disabled and the independent native
+  relink retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Native checks cover
+  43 components, 31,138 known relocations and 1,577 ARM7 relocations with zero
+  differing bytes. Logs: `build/analysis/load_menu_control_{configure,check,rom,
+  native,tests}.log`.
+- `build/analysis/probe_load_menu_control.py` cold boots checkpoint 55 twice.
+  `start55` loads the stored field after navigating both files and cancelling/
+  reopening the action submenu; `cancel55` returns to the visible title screen.
+  The final runs total 4,986 frames, 1,058 selection returns and 34 exit returns.
+  They cover 56 input-locked calls, six file changes, both wrapping directions,
+  one simultaneous Up/Down input with no change, and A taking priority over B
+  when both are pressed. Four callback resets and both 16-update exit fades pass.
+- At 1,092 root returns and around 54 ordered helper calls, the oracle checks
+  complete 72-byte tasks and the 416-byte workspace. Exit additionally checks its
+  48-byte scene and both master-brightness halfwords, including all 32 signed fade
+  updates. Four dialog-workspace results are observed helper outputs; the
+  controller's own mode store is checked independently. Other task/workspace
+  expectations are not refreshed from helper output. No RAM fixtures, pending
+  calls or drain frames were needed.
+- Reports are under `build/runtime/eur_load_menu_control/`. The private artifact
+  verifier checks 34 PNGs, 306 graphics dumps, canonical ROM provenance and 104
+  unchanged original saves. Visually inspected the final field and title screens.
+  Common input prefixes agree with the earlier motion replay in 10 screenshots
+  and 106 dumps. Two pre-Start title samples differ in the screenshot and
+  sub-screen OAM; these are recorded outside load-menu verification, not counted
+  as equal. The remaining common-path captures agree after Start.
+- An initial positive exit delay, invalid task phases/exit modes, X/Y button
+  alternatives and physical audio output remain unexercised. The adjoining
+  action controller has a private 1252/1252-byte candidate with 14 differing words
+  in register allocation; the clear-slot helper has a private 168/168-byte
+  candidate with scheduling differences. Neither is linked or counted.
+- Matching C/C++ is **706,116 / 1,563,700 bytes (45.16%)**, or **45.49%** with
+  separate assembly. Overlay 8 is **26,392 / 54,068 (48.81%)**. There are
+  **75,734 bytes** left to the 50% target.

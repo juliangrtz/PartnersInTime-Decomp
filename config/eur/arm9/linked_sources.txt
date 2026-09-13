@@ -806,3 +806,6 @@ src/overlay008/save_write_setup.c
 src/overlay008/save_write_rollback.c
 src/overlay008/save_menu_control.c
 src/overlay008/save_menu_panel_text.c
+
+src/overlay008/load_menu_control.c
+src/overlay008/load_menu_exit.c

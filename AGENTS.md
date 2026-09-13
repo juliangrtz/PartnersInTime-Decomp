@@ -715,6 +715,17 @@ The motion structure's checked 68-byte size describes only its prefix; the pool
 allocates 72-byte tasks. Do not infer a two-entry text-width array from the save
 menu alone: the load entry calls panel 2, and the shared array has three entries.
 
+For load-menu file selection and exit, use the private
+`build/analysis/probe_load_menu_control.py` and its `start55`/`cancel55` reports
+under `build/runtime/eur_load_menu_control/`. Ordinary input covers both fade
+signs and scene destinations, signed file-index wrapping, opposing directions,
+and A/X taking priority over B/Y in this selector. Other menus use different
+input priorities; recover each controller's order. The oracle derives complete
+task/workspace/scene records, callback resets and both master-brightness registers;
+dialog workspace effects are observed outputs with the caller's mode write
+checked separately. A pre-Start title-animation frame varied in sub-screen OAM;
+record that difference rather than claiming all cold-boot screenshots are equal.
+
 ### Smash Eggs
 
 For battle attack research, the compatible private snapshot

@@ -15,7 +15,7 @@ void SaveMenu_UpdateEntry(MenuElement *task)
 {
     switch (task->state) {
     case 0:
-        ENTRY_WORK.confirmation_mode = 0;
+        ENTRY_WORK.menu_mode = 0;
         ENTRY_WORK.previous_selection = 0;
         ENTRY_WORK.selection = 0;
         task->counter = 0;
@@ -84,7 +84,7 @@ void SaveMenu_UpdateSelection(MenuElement *task)
 {
     switch (task->state) {
     case 0:
-        ENTRY_WORK.confirmation_mode = 0;
+        ENTRY_WORK.menu_mode = 0;
         ENTRY_WORK.selection = ENTRY_WORK.previous_selection;
         SaveMenuText_BuildDialog(data_ov008_0207828c, 0, 0);
         task->state = 100;
@@ -132,7 +132,7 @@ void SaveMenu_UpdateConfirmation(SaveMenuConfirmTask *task)
     switch (task->state) {
     case 0: {
         int previous_selection = ENTRY_WORK.selection;
-        ENTRY_WORK.confirmation_mode = 1;
+        ENTRY_WORK.menu_mode = 1;
         ENTRY_WORK.previous_selection = previous_selection;
         ENTRY_WORK.selection = 1;
         if (!ENTRY_WORK.previous_selection)

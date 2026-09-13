@@ -129,3 +129,9 @@ src/overlay008/save_menu_control.c:
 
 src/overlay008/save_menu_panel_text.c:
     .text start:0x02071964 end:0x02071a50
+
+src/overlay008/load_menu_control.c:
+    .text start:0x0206e7f4 end:0x0206e9a0
+
+src/overlay008/load_menu_exit.c:
+    .text start:0x0206d728 end:0x0206d82c
