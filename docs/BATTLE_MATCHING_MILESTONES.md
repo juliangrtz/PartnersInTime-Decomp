@@ -6828,3 +6828,49 @@ its coverage assertion; it is excluded from the passing suite. Clothing/badge
 branches and empty inventory remain unexercised. The initial text-renderer
 internals and captured graphics are observed outputs, not a pixel oracle.
 Reports: build/runtime/eur_shop_stock_setup/.
+
+
+## 2026-09-13: pause party HP and level bitmaps
+
+Reconstructed PausePartyBitmap_Rebuild at 0x0207923c (356 bytes) and
+PausePartyBitmap_DrawValue at 0x020793a0 (396 bytes), a contiguous 752-byte
+module in src/overlay007/pause_party_bitmap.cpp. It clears a member's bitmap,
+draws HP/level labels, selects the saved party value, caps its decimal width
+and suppresses leading zeroes. It uses the existing SavePartyMember layout;
+the native clear wrapper explains the scoped volatile halfword zero.
+
+Matching C/C++ reaches 721,820 / 1,563,700 bytes (46.16%); with separate
+assembly, 46.49%. Overlay 7 reaches 57,064 / 142,264 (40.11%).
+60,030 matching C/C++ bytes remain to the 50% goal.
+
+Full Ninja checks, no-data-mod packaging, native relink, generated progress
+checks and 81 tests pass. Both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. The final source was rebuilt after
+replacing literal value kinds with enum names. Native relink checks 43
+components, 420 section units, 31,138 relocations and 1,577 ARM7 relocations,
+with zero differing bytes. Logs: build/analysis/pause_party_bitmap_*.log.
+
+Ordinary equipment-menu routes on story saves 65 and 86 make eight rebuilds
+and 24 value draws in 2,350 frames, covering all four members and all three
+value kinds. The focused probe checks the full 17,920-byte allocation and
+heap header, font allocation/header, 90,600-byte workspace, 1,380-byte save,
+pointers and coordinate table at helper boundaries. Nested calls share the
+independently derived memory expectations. Padded decimal strings determine
+digit selection and position; per-pixel tile coordinates independently model
+76 native glyph copies. All 144 signed divisions check quotient and remainder.
+
+The suite covers two/three-digit values, 52 drawn digits, 20 leading blanks,
+zero-clearing and transparent-pixel preservation. Both routes finish with no
+pending calls or drain frames. All 34 screenshots, 306 graphics dumps and 104
+unchanged source saves validate. No RAM, inventory or code fixture was used.
+Reports: build/runtime/eur_pause_party_bitmap/; probe and artifact verifier
+remain private in build/analysis/.
+
+Earlier Cobalt Star and item-list routes made no target calls and failed
+coverage. The first equipment replay exposed an oracle assumption: the HP
+label starts at X=-6 and writes linearly into its member slice without X
+clipping. The corrected oracle checks each actual destination against the
+slice and full allocation; the equipment route was rerun successfully.
+Zero HP, saturation, explicit leading zeroes and non-three-place formatting
+remain unexercised. Final GPU output/screenshots are observed. The neighboring
+low-HP callbacks and pixel-copy drafts remain unlinked and do not count here.

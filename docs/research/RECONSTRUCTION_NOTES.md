@@ -1311,9 +1311,9 @@ and compare the shared graphics buffers with the preceding credits replay.
 ### Pause party status
 
 These findings come from EUR overlay 7 instructions and current shared types.
-They are code-derived, not runtime evidence for the new party-status group.
-Check the linked-source manifest and private handoff for its current integration
-and verification status; do not count a matching private object as linked code.
+The party bitmap pair below is linked and runtime-verified; the low-HP control
+findings remain code-derived. Check the manifest and private handoff for the
+other candidates' status; do not count a matching private object as linked code.
 Private evidence includes `build/analysis/pause_party_status.cpp` and the complete
 instruction and literal-pool listing `build/analysis/pause_party_status_native.txt`.
 
@@ -1351,20 +1351,55 @@ halfwords. The task's member index is at `+0x28`. The private task layout is
 complete 336-byte slot when adding a runtime oracle. In particular, check the
 threshold equality case, suppression/control paths and eventual pool return.
 
-The party bitmap routine at `0x0207923C` clears 4,480 bytes per member through
-the pointer in workspace `owned8c` at `+0x8C`, then draws level/current/max HP
-labels and values. This per-member stride does not establish the total buffer
-allocation: derive that from its allocator before checking the whole buffer.
-Its native stack halfword store/load explains the draft's scoped volatile zero.
+The linked [party bitmap pair](../../src/overlay007/pause_party_bitmap.cpp)
+comprises `PausePartyBitmap_Rebuild` at `0x0207923C` (356 bytes) and
+`PausePartyBitmap_DrawValue` at `0x020793A0` (396 bytes). Rebuild clears a
+4,480-byte member slice through workspace `owned8c` at `+0x8C`, then draws
+level/current/max HP labels and values. The formatter caps the value to its
+requested decimal width and optionally suppresses leading zeroes.
+[Pause resource initialization](../../src/overlay007/pause_resources.cpp)
+establishes the complete allocation as 17,920 bytes: four 112-by-40 member
+slices. Its other bitmap, `owned88`, has a separate 49,152-byte allocation.
+The clear wrapper's native stack halfword store/load explains its scoped
+volatile zero. Both functions match without assembly or compiler flag changes.
 Call instructions establish eight arguments to `0x0207952C`, six to
 `0x020793A0`, and seven each to `0x02081334` and `0x02080DEC`. Pseudocode can
 omit arguments, infer an extra reused stack value, or infer narrow parameters
 from callee stores; retain the caller's actual full-width argument behavior.
 
-Existing private pause probes and `build/runtime/states/pause_subscene_menu65.dst`
-can help establish a route. Inspect their inputs, guards, allocation extents and
-snapshot provenance first. Earlier pause or Nawatobi evidence does not verify
-these new callbacks, their HP branches or their helper-generated pixels.
+`build/analysis/probe_pause_party_bitmap.py` verifies the linked pair through
+normal equipment-menu navigation on checkpoints 65 and 86. Returning from
+equipment comparison rebuilds all four HP/level slices. The starting snapshot
+`build/runtime/states/pause_subscene_menu65.dst` selects Cobalt Star: press Down
+twice, with released frames and animation waits, to reach equipment. The
+checkpoint-86 HUD state uses Start to open the menu, then one Down selection.
+Each route enters equipment, opens the comparison, switches the character with
+Right, and backs out. The reports retain the precise input schedules.
+
+The two passing reports under `build/runtime/eur_pause_party_bitmap/` contain
+eight rebuilds and 24 value draws in 2,350 frames. The probe checks the complete
+bitmap allocation and heap header, font allocation and header, 90,600-byte
+workspace, 1,380-byte save, pointers and offset table at helper boundaries.
+Nested calls share independently derived expectations. Decimal formatting is
+checked against padded strings; each destination pixel is derived from tile
+coordinates, source glyph bytes, palette offset and transparency. The native
+glyph-copy helper remains unlinked, but its 76 calls have this pixel oracle.
+All 144 signed-division calls are checked for quotient and remainder.
+
+The HP label starts at X = -6 on later rows. Native code uses linear addresses
+without horizontal clipping, and all these writes remain within the member
+slice. An initial oracle incorrectly required nonnegative X; correcting it to
+check each linear destination address produced a passing rerun. The earlier
+Cobalt Star and item-list discovery routes made no calls and failed coverage;
+they are not passing evidence. No game-code correction or RAM fixture was used.
+
+The suite covers two/three-digit values, 52 drawn digits, 20 leading blanks,
+zero-clearing and transparent preservation. It does not exercise zero HP, value
+saturation, explicit leading zeroes or a non-three-digit width. The artifact
+verifier checks 34 screenshots, 306 graphics dumps and all 104 unchanged source
+saves. Both routes finish with no pending calls. Final GPU output and screenshots
+are observed, not independently rendered by the oracle. These results do not
+verify the still-private low-HP callbacks or their lifecycle and threshold cases.
 
 ### Nawatobi
 
