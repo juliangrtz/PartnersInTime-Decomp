@@ -7313,3 +7313,31 @@ build/runtime/eur_pause_list_digit_tiles/. Detailed limitations and source
 organization are recorded in docs/research/RECONSTRUCTION_NOTES.md.
 Matching C/C++: 729,148 / 1,563,700 (46.63%); C/C++ plus symbolic ASM: 46.96%.
 Overlay 7: 64,392 / 142,264 (45.26%). Remaining to 50%: 52,702 bytes.
+
+
+## Pause clothing highlight: 872 matching bytes
+
+Reconstruct PauseEquipmentHighlight_Stop/Start/Update at
+0x02077164..0x020774CC. All three first drafts matched. The shared workspace
+preserves its raw view alongside the signed control byte and item halfword;
+the native interior data alias is retained. No assembly or flag changes.
+
+Four routes cover 6,520 frames: clothing, scrolling, immediate Start exit and
+inactive badges. All four starts, four stops, four actual task pool returns and
+113 of 1,812 observed updates are checked. Both eligibility results, ordinary
+fade-out and immediate cancellation run; 252 ordered GPU stores are verified.
+Stable hold bodies are sampled; control fields are checked across every entry.
+Native callers gate creation on clothing. The original badge route's positive
+coverage assertion failed; separate negative coverage now verifies its inactive
+stop and absence of allocation/update. Original failure evidence is preserved.
+
+All 120 screenshots, 1,080 dumps and 104 unchanged source saves validate;
+118 images and 1,062 dumps equal earlier common input/state prefixes.
+No fixtures, pending calls, live tracked tasks or drain frames remain.
+Full configure/check, golden packaged ROM, zero-difference native relink,
+progress generation/check and all 81 tests pass. Logs:
+build/analysis/pause_equipment_highlight_{configure,check,rom,native,tests,artifacts}.log.
+Reports and coverage limits: build/runtime/eur_pause_equipment_highlight/
+and docs/research/RECONSTRUCTION_NOTES.md#pause-equipment-highlight.
+Matching C/C++: 730,020 / 1,563,700 (46.69%); with symbolic ASM: 47.02%.
+Overlay 7: 65,264 / 142,264 (45.88%). Remaining to 50%: 51,830 bytes.

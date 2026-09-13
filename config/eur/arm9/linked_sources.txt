@@ -850,3 +850,4 @@ src/overlay007/pause_list_selection.cpp
 src/overlay007/pause_item_lookup.cpp
 src/overlay007/pause_item_text.cpp
 src/overlay007/pause_party_lifecycle.cpp
+src/overlay007/pause_equipment_highlight.cpp

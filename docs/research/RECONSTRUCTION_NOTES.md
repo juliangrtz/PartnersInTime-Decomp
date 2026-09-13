@@ -2122,6 +2122,63 @@ native differences, and passes all 81 tests. The working total at publication is
 729,148 / 1,563,700 matching C/C++ bytes (46.63%); overlay 7 is 64,392 / 142,264
 (45.26%). Matching C/C++ plus symbolic assembly is 46.96%.
 
+### Pause equipment highlight
+
+`PauseEquipmentHighlight_Stop`, `Start` and `Update` own the contiguous
+`0x02077164..0x020774CC` range (872 bytes) in
+[pause_equipment_highlight.cpp](../../src/overlay007/pause_equipment_highlight.cpp).
+All three matched their first private draft. The state machine parallels the
+already reconstructed shop highlight, with pause-specific SUB BG1 selection
+and item eligibility. No compiler flags or assembly fragments changed.
+
+The signed control byte is at workspace `+0x2DC`: 1 keeps the task active,
+0 requests a fade-out and -1 cancels immediately. The selected item is an
+unsigned halfword at `+0x2DE`, accessed through the native interior alias
+`0x020907F0 + 0xDE`. It is an inventory index, not a bitmask. The shared workspace
+keeps the old four-byte view alongside these named fields without changing size.
+The 72-byte task holds phase at `+0x20`, alpha at `+0x28`, target at `+0x2C`
+and step at `+0x30`; the factory and constructor leave other payload bytes intact.
+The fade step divides by six, but integer truncation requires seven updates to
+clamp between 0 and 32,768. The native code reloads the party global between
+category lookup and eligibility checking.
+
+All four native start call sites are guarded by category equal to 2 (clothing):
+`0x0206BB48`, `0x0206C5B0`, `0x0207CB70` and `0x0207CD74`. A badge-menu replay
+therefore does not exercise the update function's category-3 fallback. The
+initial `badges86` replay failed its positive execution assertion after observing
+only an inactive stop; its log and failure report are retained. The separate
+`badges_inactive86` replay verifies the observed inactive stop and absence of
+creation/update on that route. This is a corrected coverage expectation derived
+from the callers, not a change to the matching game code.
+
+Private `make_pause_equipment_highlight_probe.py` composes a focused probe from
+`pause_equipment_highlight_probe_body.py`; reports are under
+`build/runtime/eur_pause_equipment_highlight/`. Clothing, clothing scrolling,
+immediate exit and inactive badges cover 6,520 frames. They observe four starts,
+1,812 updates, four stops and four removals; all starts/stops/removals and 113
+updates are fully checked. Stable phase-2 updates sample the first two per task
+lifetime/control state/item/availability/category tuple and every sixtieth frame.
+Control fields are checked across every callback entry, independently of sampling.
+
+The four task lifetimes verify factory free-list selection, complete slots,
+list/counter writes, deferred marks, unlinking and actual pool return. Both
+eligibility results run during clothing scrolling. Three tasks fade out; pressing
+Start with the clothing list open cancels the fourth immediately and returns
+to the field. The probe independently checks 252 ordered blend, display-enable,
+vertical-offset and direct blend-clear stores, plus full party/workspace/save,
+display-resource and both BG/OBJ records. Party constructor/free hooks establish
+readable lifetimes; their bodies are not newly verified here.
+
+The dedicated artifact verifier passes all 120 screenshots, 1,080 graphics dumps
+and 104 unchanged source saves. Common input/state prefixes equal 118 images
+and 1,062 dumps from the earlier preparation routes. No fixtures, pending calls,
+live tracked tasks or drain frames remain. The scrolling highlight and final
+field capture were inspected. Native guards positively identify foreign overlay-0
+owners after pause exits. Start-while-active, unavailable-party branches,
+unvisited task phases and unsampled stable bodies remain uncovered; final GPU
+rasterization is observed. Full public build checks, both golden ROM build paths,
+progress checks and all 81 tests passed for this source and shared-header revision.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
