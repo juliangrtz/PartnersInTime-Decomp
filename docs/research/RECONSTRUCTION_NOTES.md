@@ -2566,6 +2566,56 @@ label, palette-reset and sound helpers are observed at return. Main-menu phases
 member IDs, non-equipment availability and final rasterization remain outside
 this runtime coverage. The preferred-member and shutter setup gaps are private.
 
+### Pause status and Cobalt Star pages
+
+[pause_page_control.cpp](../../src/overlay007/pause_page_control.cpp) owns
+`PauseStarPage_UpdateTask` at `0x0206ABD0` (208 bytes) and
+`PauseStatusPage_UpdateTask` at `0x0206ACA0` (992). All 1,200 bytes match without
+assembly or compiler-flag changes. The page-opening dispatcher uses these names;
+the status task's 72-byte view is shared in
+[pause_navigation.h](../../include/game/pause_navigation.h).
+
+Both controllers enter phase 100 by falling through from phase zero. They handle
+Start as a direct exit, and B or a previously queued cancellation as a return to
+the main pause menu. Status selection preserves its signed member byte and wraps
+across four slots, checking availability before accepting a member. Offset +48
+changes meaning from queued direction to blend step during phases 501 onward;
++52 retains the previous member. Each of the two Q12 fades updates the accumulator
+before increasing its step by 2,048, then divides by 4,096 with signed truncation.
+From the tested initial state each fade takes nine callback invocations.
+
+Six ordinary-input replays at checkpoints 65 and 86 cover 7,086 frames: all five
+pages, status member switching, direct exits from both target pages, and B queued
+during each opening fade. Every observed target call is checked: 998 status and
+339 Cobalt Star updates. The routes cover all four members, both selection
+directions, both wrap boundaries, seven complete pairs of fades, normal return,
+direct exit and queued cancellation. All six end in the field, with positive
+overlay-0 native guards, no pending calls and no watched task left alive.
+
+Independent checks include 14,336 BG-map copy bytes, the separate four-byte member
+mode array at `0x020A6B8C`, and both ordered halfword stores in each BG screen-base
+and character-base update. Tilemap buffers `0x06001800` and `0x06002000` both
+belong to main BG. The suite checks 725 GPU stores, 26,432 total copied bytes,
+1,081 task factories, 520 ResourceB attachments, 12 pool cleanups and 12 watched
+task lifetimes through actual removal. Full live records are checked at 7,463
+boundaries. The existing page/main-menu checks remain active, including 45
+callback installations and ten synchronous page openings.
+
+All 116 screenshots, 1,044 graphics dumps and 104 unchanged original saves
+validate. Forty-seven images and 423 dumps equal earlier common input/state
+prefixes. All four status displays, the Cobalt Star display and every final
+field screen were inspected. Full matching checks, the golden packaged ROM,
+zero-difference native relink, progress validation and all 81 tests pass.
+
+Private evidence is under `build/runtime/eur_pause_page_control/`. Tooling:
+`make_pause_page_control_probe.py`, `pause_page_control_flow.py`, composed
+`probe_pause_page_control.py` and `verify_pause_page_control_artifacts.py`.
+Equipment setup/show/hide, background, label and sound helpers remain observed
+where their operations are not independently derived above. Partial-party
+availability skips, conflicting simultaneous inputs, invalid phases and final
+rasterization are not covered. The tilemap-frame and preferred-member drafts
+remain private; their presence does not add matching coverage.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

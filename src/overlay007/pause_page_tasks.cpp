@@ -36,8 +36,6 @@ void func_ov007_0207ea4c(PausePageTask *, int);
 void func_ov007_0207b1b0(int);
 void func_ov007_0206c6a0(PauseMenuElement *);
 void func_ov007_0206c0e4(PauseMenuElement *);
-void func_ov007_0206aca0(PauseMenuElement *);
-void func_ov007_0206abd0(PauseMenuElement *);
 }
 
 extern "C" int PauseMenu_CanSelectMember(int x, int y)
@@ -155,10 +153,10 @@ extern "C" void PausePage_OpenTask(PausePageTask *task)
                 func_ov005_02066358((PauseMenuElement *)task, func_ov007_0206c0e4, 0);
                 break;
             case 2:
-                func_ov005_02066358((PauseMenuElement *)task, func_ov007_0206aca0, 0);
+                func_ov005_02066358((PauseMenuElement *)task, (void (*)(PauseMenuElement *))PauseStatusPage_UpdateTask, 0);
                 break;
             case 4:
-                func_ov005_02066358((PauseMenuElement *)task, func_ov007_0206abd0, 0);
+                func_ov005_02066358((PauseMenuElement *)task, (void (*)(PauseMenuElement *))PauseStarPage_UpdateTask, 0);
                 break;
             }
         }

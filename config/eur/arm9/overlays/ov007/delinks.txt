@@ -88,6 +88,9 @@ src/overlay007/scene_window_close.cpp:
 src/overlay007/scene_window_open.cpp:
     .text start:0x02089670 end:0x02089980
 
+src/overlay007/pause_page_control.cpp:
+    .text start:0x0206abd0 end:0x0206b080
+
 src/overlay007/pause_irq_destroy.cpp:
     .text start:0x0206ab80 end:0x0206abd0
 

@@ -7461,3 +7461,29 @@ Logs: build/analysis/pause_menu_core_{configure,check,rom,native,tests,artifacts
 See the reconstruction reference for exact runtime limits and private probes.
 Matching C/C++: 736,920 / 1,563,700 (47.13%); with symbolic ASM: 47.46%.
 Overlay 7: 72,164 / 142,264 (50.73%). Remaining to 50%: 44,930 bytes.
+
+
+## Pause status and Cobalt Star page controllers
+
+Added 1,200 exact C++ bytes in src/overlay007/pause_page_control.cpp: status
+member selection and fades, plus Cobalt Star page control. Both support normal
+return, direct exit and cancellation queued during page opening. Shared task
+layout preserves the phase-dependent queued-direction/blend-step word. No new
+assembly or compiler flags; private tilemap-frame drafts remain deferred.
+
+Six ordinary-input routes at checkpoints 65/86 cover 7,086 frames, checking all
+998 status and 339 Cobalt Star callbacks. All four members, both directions and
+wrap boundaries, seven complete pairs of fades and all exit paths above run.
+Independent checks cover 14,336 BG-map copy bytes, separate member-mode bytes,
+ordered BG screen/character-base writes, 725 GPU stores, 1,081 factories, 520
+ResourceB attachments and 12 actual watched-task removals. Every route returns
+to the field with no pending call or watched task. All 116 images, 1,044 dumps
+and 104 unchanged source saves validate; 47 images/423 dumps match earlier
+common prefixes. Relevant page displays and all final field images inspected.
+
+Full matching checks, golden packaged ROM, zero-difference native relink,
+progress validation and all 81 tests pass. Evidence: build/runtime/eur_pause_page_control/.
+Logs: build/analysis/pause_page_control_{configure,check,rom,native,tests,artifacts}.log.
+See the reconstruction reference for exact scope and helper/branch limits.
+Matching C/C++: 738,120 / 1,563,700 (47.20%); with symbolic ASM: 47.53%.
+Overlay 7: 73,364 / 142,264 (51.57%). Remaining to 50%: 43,730 bytes.

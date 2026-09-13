@@ -24,6 +24,15 @@ typedef struct PauseMainMenuTask {
 } PauseMainMenuTask;
 typedef char PauseMainMenuTaskSize[sizeof(PauseMainMenuTask) == 72 ? 1 : -1];
 
+typedef struct PauseStatusPageTask {
+    u8 unknown_00[32];
+    s32 phase, blend, unknown_28, unknown_2c;
+    union { s32 queued_direction, blend_step; };
+    s32 previous_member;
+    u8 unknown_38[16];
+} PauseStatusPageTask;
+typedef char StatusPageTaskSize[sizeof(PauseStatusPageTask) == 72 ? 1 : -1];
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,6 +43,8 @@ void PausePage_OpenTask(PausePageTask *task);
 void PauseMenu_UpdateTask(PauseMainMenuTask *task);
 void PauseMenu_GetMemberPosition(int member, int *x, int *y);
 int PauseMenu_CanSelectMember(int x, int y);
+void PauseStatusPage_UpdateTask(PauseStatusPageTask *task);
+void PauseStarPage_UpdateTask(PausePageTask *task);
 #ifdef __cplusplus
 }
 #endif
