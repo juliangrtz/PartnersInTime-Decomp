@@ -60,6 +60,31 @@ do not edit or push there as a substitute for the active repository. Its root
 The user's `origin` is `https://github.com/juliangrtz/PartnersInTime-Decomp.git`;
 `upstream` is a reference remote, not the authorized push destination.
 
+Start a session with these read-only checks:
+
+```powershell
+Set-Location -LiteralPath 'C:\Users\Julian\Desktop\PartnersInTime-Decomp'
+git status --short
+git branch --show-current
+git log -5 --oneline
+git remote -v
+```
+
+Then choose the evidence for the current request:
+
+| Need | Read first |
+|---|---|
+| Current matching coverage | `docs/progress.json` and `config/eur/arm9/linked_sources.txt` |
+| Pending work and deferred candidates | Private `build/analysis/CURRENT_HANDOFF.md`, checked against the current commit |
+| Native function, load address and linked range | The component's `symbols.txt` and `delinks.txt`, then original bytes |
+| Types, ownership and parameter contracts | Current shared headers, native callers and callee accesses |
+| A reproducible gameplay route | The runtime guide and the relevant tested route below |
+| A completed batch's evidence | The milestone log and its referenced private probe report |
+
+Do not hard-code the current milestone or percentage into this file. The user's
+latest request sets the task; generated coverage describes linked code, and a
+private candidate or handoff describes work that may still need integration.
+
 Read `git status --short`, the recent log and the relevant source before editing.
 Preserve unrelated changes, including changes left by the user or another tool.
 Use `rg` for searches. Keep independent reads parallel where useful, but run
@@ -153,6 +178,8 @@ also needed for the native reassembly/relink workflow.
 
 If Ninja is missing from `PATH` on this workstation, the installed executable
 is `C:\Program Files\JetBrains\CLion 2023.2.2\bin\ninja\win\x64\ninja.exe`.
+The known Python executable is
+`C:\Users\Julian\AppData\Local\Programs\Python\Python312\python.exe`.
 Invoke a quoted executable path with PowerShell's `&` operator. Check tool
 availability before assuming that a command or an old workstation path works.
 
@@ -314,6 +341,19 @@ For example, the Nawatobi console caller passes full-width cursor coordinates;
 the console setter narrows them only when storing its byte fields. Declaring
 those parameters as `u8` inserts extra masks in the caller. Verify both caller
 and callee, plus existing users, when correcting the shared declaration.
+
+Recover return contracts with the same care. A constant left in `r0` at return
+does not by itself establish an `int` result: it may be the value of the final
+store. Inspect whether callers consume that register and how the callee produces
+it. Do not copy an invented `return 1` from an old draft, or change a function to
+`void` merely because one caller ignores its result. Correct shared declarations
+and verify every affected linked caller when the evidence supports a change.
+
+Check array bounds across all consumers, including adjacent scenes that share a
+workspace. A save-menu replay using two panels does not establish that a shared
+table has only two entries; the load menu may use another index. Establish the
+extent from native data and consumers before declaring the array. Matching bytes
+alone do not prove that a reconstructed C access is within its declared object.
 
 Packed fields also need their native extraction semantics. Reuse a verified
 shared bitfield view when the instructions and consumers establish its layout;
