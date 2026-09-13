@@ -206,7 +206,7 @@ src/overlay007/pause_mode_sprite.cpp:
     .text start:0x0207e93c end:0x0207ea4c
 
 src/overlay007/pause_list_row.cpp:
-    .text start:0x02073fa0 end:0x020741e4
+    .text start:0x02073fa0 end:0x020742e0
 
 src/overlay007/pause_list_control.cpp:
     .text start:0x020742e0 end:0x0207452c

@@ -1,12 +1,30 @@
 #include "pause_scene_internal.h"
 #include <game/overlay005_resource.h>
 #include <game/pause_list_row.h>
+#include <game/overlay007_party.h>
+#include <game/scene_menu_motion.h>
 
-struct Overlay7Party;
 extern "C" {
 void *Overlay5ResourceB_Get(Overlay5ResourceOwner *owner);
 void func_ov005_02069084(void *sprite, u8 list);
 u8 func_ov007_02075400(Overlay7Party *party);
+u8 func_ov007_02075324(Overlay7Party *, int);
+u16 func_ov007_02075180(Overlay7Party *, int, int);
+}
+
+extern "C" void PauseListRow_Refresh(PauseListRowTask *task)
+{
+    int row = PauseList_GetTileRow((Overlay7Party *)data_ov007_0208e1e4);
+    row = (row + task->row) % 9;
+    task->x = task->origin_x + (data_ov007_020906f0.x << 12);
+    task->y = task->origin_y + (data_ov007_020906f0.y << 12);
+    task->tile = (34 * row + (WORK.main_allocation.offset >> 5)) >> 1;
+    task->item = func_ov007_02075324((Overlay7Party *)data_ov007_0208e1e4, (u8)task->row);
+    task->quantity = func_ov007_02075180((Overlay7Party *)data_ov007_0208e1e4, (u8)task->row, 0);
+    if (PauseList_CheckRowAvailability((Overlay7Party *)data_ov007_0208e1e4, (u8)task->row, 4, 0) >= 0)
+        task->palette_offset = 0;
+    else
+        task->palette_offset = 1;
 }
 
 extern "C" void PauseListRow_UpdateTextSprite(PauseListSpriteTask *task)

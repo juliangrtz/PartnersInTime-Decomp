@@ -7487,3 +7487,33 @@ Logs: build/analysis/pause_page_control_{configure,check,rom,native,tests,artifa
 See the reconstruction reference for exact scope and helper/branch limits.
 Matching C/C++: 738,120 / 1,563,700 (47.20%); with symbolic ASM: 47.53%.
 Overlay 7: 73,364 / 142,264 (51.57%). Remaining to 50%: 43,730 bytes.
+
+
+## Pause list-row state refresh
+
+Added 252 matching C++ bytes at 0x020741E4 in src/overlay007/pause_list_row.cpp.
+The callback derives row coordinates, tile, item, quantity and availability
+palette using the existing shared task layout. Native modulo and conditional
+store order reproduced without assembly or compiler-flag changes.
+
+Four ordinary-input routes at checkpoints 65/86 cover 7,624 frames and all
+20,817 observed row callbacks: all five item categories, nine row slots/tile
+positions and both palettes. All 53 watched task lifetimes end in actual removal;
+every route returns to the field without pending calls or watched tasks. All
+112 images, 1,008 graphics dumps and 104 unchanged saves validate; 95 images and
+855 dumps equal earlier common prefixes. Relevant list displays and every final
+field image were inspected.
+
+Quantity/availability helper results are observed; the callback's own updates
+and tile/item getters are independently derived. Full graphics checks remain
+on pages/clothing rows; badges/key items retain full row/game-data records,
+controller GPU checks and frame graphics captures. Probe versions are recorded.
+An extra B after field return entered the save menu in the first key-item run;
+its failure is preserved, and the corrected keys65_field route passes with the
+same final field guard. See the reconstruction reference for scope and limits.
+
+Full matching checks, golden packaged ROM, zero-difference native relink,
+progress validation and all 81 tests pass. Evidence: build/runtime/eur_pause_row_refresh/.
+Logs: build/analysis/pause_row_refresh_{configure,check,rom,native,tests,artifacts}.log.
+Matching C/C++: 738,372 / 1,563,700 (47.22%); with symbolic ASM: 47.55%.
+Overlay 7: 73,616 / 142,264 (51.75%). Remaining to 50%: 43,478 bytes.

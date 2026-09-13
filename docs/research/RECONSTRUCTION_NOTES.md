@@ -2616,6 +2616,52 @@ availability skips, conflicting simultaneous inputs, invalid phases and final
 rasterization are not covered. The tilemap-frame and preferred-member drafts
 remain private; their presence does not add matching coverage.
 
+### Pause list-row refresh
+
+`PauseListRow_Refresh` at `0x020741E4` adds 252 exact bytes to
+[pause_list_row.cpp](../../src/overlay007/pause_list_row.cpp), completing the gap
+before the list-control module. It uses the existing 72-byte
+[row task](../../include/game/pause_list_row.h). The callback wraps the tile-row
+index modulo nine before applying scroll offsets, derives the OBJ tile number,
+updates the item and quantity, and selects the normal or unavailable palette.
+Preserving that arithmetic order and the native conditional-store order resolved
+the comparison without assembly or compiler changes.
+
+Four ordinary-input replays at checkpoints 65 and 86 check every observed row
+callback: 20,817 updates across 7,624 frames. They cover consumables, key items,
+clothing, badges and Bros. Items, all nine row slots/tile positions, and both
+palette outcomes. Tile-row and item getter results, coordinate/tile calculations
+and full row records are independently derived; quantity and availability helper
+results are observed before checking their use by this callback. All 53 watched
+task lifetimes end in actual removal. Existing menu/page/member checks remain
+active, and all four routes return to the field with positive native guards,
+no pending call and no watched task remaining.
+
+The pages and clothing routes retain full graphics checks at every row call.
+The badge and key-item routes check the row's full live task and game-data
+records at call boundaries; this callback writes no graphics memory. Existing
+controller GPU checks and frame graphics captures remain enabled on all routes.
+The host probe skips Python's changed-byte counting loop when native byte equality
+already proves a captured block unchanged. Probe versions and their hashes are
+recorded separately; none of these host changes affects game matching coverage.
+
+All 112 screenshots, 1,008 graphics dumps and 104 unchanged original saves
+validate; 95 images and 855 dumps equal earlier common input/state prefixes.
+Item, clothing, badge and key-item displays and every final field screen were
+inspected. An initial key-item route made one extra B press after reaching the
+field, jumping into the save block and opening the save menu. Its frame-1,674
+failure is preserved. Removing that extra input produced the passing
+`keys65_field` replay ending at frame 1,484; the field guard was retained.
+
+Full matching checks, the golden packaged ROM, zero-difference native relink,
+progress validation and all 81 tests pass. Private evidence is under
+`build/runtime/eur_pause_row_refresh/`; tools are `make_pause_row_refresh_probe.py`,
+`pause_row_refresh_flow.py`, composed `probe_pause_row_refresh.py` and
+`verify_pause_row_refresh_artifacts.py`. Invalid row/count inputs, negative
+tile-row states, quantity/availability helper internals and rasterization are
+outside this callback's independent coverage. The equipment-category and map
+decoder drafts remain private with classified differences.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

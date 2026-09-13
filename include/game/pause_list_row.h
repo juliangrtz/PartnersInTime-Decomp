@@ -38,6 +38,7 @@ extern "C" {
 #endif
 PauseMenuElement *PauseList_QueueRowDraw(int row, int item);
 void PauseList_DrawRowTask(PauseMenuElement *element);
+void PauseListRow_Refresh(PauseListRowTask *task);
 void PauseListRow_UpdateDigitSprite(PauseListSpriteTask *task);
 void PauseListRow_UpdateMarkerSprite(PauseListSpriteTask *task);
 void PauseListRow_UpdateTextSprite(PauseListSpriteTask *task);
