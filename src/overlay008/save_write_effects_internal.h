@@ -32,11 +32,20 @@ typedef struct SaveMenuExitTask {
     u8 unknown_2c[28];
 } SaveMenuExitTask;
 
+typedef struct SaveMenuConfirmTask {
+    u8 unknown_00[32];
+    int state, counter, quit_to_title;
+    u8 unknown_2c[16];
+    int result;
+    u8 unknown_40[8];
+} SaveMenuConfirmTask;
+
 #define WRITE_WORK (*(SaveWriteWorkPrefix *)data_ov008_02078290)
 
 void SaveMenuWrite_StartEffects(void);
 void SaveMenuWrite_StartRollback(void);
 void SaveMenu_UpdateExit(SaveMenuExitTask *task);
+void SaveMenu_UpdateConfirmation(SaveMenuConfirmTask *task);
 extern void func_ov008_0206b37c(SaveMenuTransferTask *);
 extern void func_ov008_0206ac14(SaveMenuTransferTask *);
 extern void func_ov008_0206ae78(SaveMenuTransferTask *);
@@ -46,6 +55,7 @@ extern void func_ov005_02069bcc(int, int, int, int);
 typedef char SaveWritePanelSizeCheck[sizeof(SaveWritePanel) == 32 ? 1 : -1];
 typedef char SaveWriteWorkPrefixSizeCheck[sizeof(SaveWriteWorkPrefix) == 0x180 ? 1 : -1];
 typedef char SaveMenuExitTaskSizeCheck[sizeof(SaveMenuExitTask) == 72 ? 1 : -1];
+typedef char SaveMenuConfirmTaskSizeCheck[sizeof(SaveMenuConfirmTask) == 72 ? 1 : -1];
 
 void SaveMenuWrite_UpdateBrightness(SaveWriteBrightnessTask *task);
 void SaveMenuWrite_UpdateBackgroundZoom(SaveWriteZoomTask *task);

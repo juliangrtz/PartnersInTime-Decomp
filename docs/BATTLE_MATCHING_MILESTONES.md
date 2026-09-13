@@ -5828,3 +5828,72 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
   There are **78,354 bytes** left to the 50% target. The adjacent write-confirmation
   controller and panel movement/fade gaps remain native; the completed controller
   module does not count those bytes as reconstructed.
+
+
+## 2026-09-13: Save confirmation and write-result controller (+1,364 matching bytes)
+
+- Linked `SaveMenu_UpdateConfirmation` at `0x0206B598` (1,364 bytes), extending
+  the existing `save_menu_control.c` range to `0x0206B598..0x0206BF64`. The four
+  contiguous confirmation, selection, exit and entry callbacks now occupy one
+  2,508-byte C module. No new function-only source unit or inline assembly was
+  needed. Existing linked bytes are not counted again.
+- The first C draft had the correct size with five differing register operands
+  in initialization. Explicitly capturing the signed selected row before the
+  initialization stores preserves the native input lifetime and produces an
+  exact match. Sparse state dispatch, input lock, Yes/No wrapping, cancellation
+  precedence, save delays, success/error messages and callback transitions all
+  remain structured C.
+- Native instructions supply the write starter's omitted checksum and selection
+  arguments, both 1, and identify the task's 32-bit result at offset 60. The new
+  checked 72-byte confirmation-task view names state, counter, quit destination
+  and result. The 416-byte workspace prefix now names confirmation mode, scroll
+  lock and message visibility where their consumers establish those roles.
+- Corrected `SaveMenuMessage_Hide` to retain its unused text-object parameter.
+  Native callers pass that pointer even though its body does not read it. Both
+  the existing message-show caller and new controller use the shared declaration;
+  full matching checks verify the callee and all linked callers. The field VM's
+  save-route evidence now uses the controller's recovered name.
+- Full Ninja module/symbol checks, progress generation/check and all 81 tests
+  passed. The canonical wrapper with data mods disabled and independent native
+  relink both produced SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+  Native verification covers 43 components, 31,138 known relocations and 1,577
+  ARM7 relocations with zero differing bytes. Logs:
+  `build/analysis/save_confirmation_{configure,check,rom,native,tests}.log`.
+- The private `build/analysis/probe_save_confirmation.py` runs seven checkpoint-55
+  replays totaling 4,910 frames and 3,041 guarded controller returns. Ordinary
+  continue and quit paths each check 518 calls; No-selection cancellation checks
+  262 and B-cancellation 190. They cover both confirmation messages, Yes/No
+  movement and wrapping, 49 input-locked updates across the full set of runs,
+  240 save-delay decrements, successful completion and both exit destinations.
+- Three separately labeled fixtures test error responses. At phase 201 with
+  timer zero, two runs change the completed-write result at `r0 + 0x3C` from
+  1 to 2 or 3 once. The observed address `0x0207AF8C` is not universal. Result 2
+  starts rollback and returns to selection synchronously; result 3 exits after
+  the error acknowledgement. Together they cover all 60 error-delay decrements.
+  A third fixture replaces a successful `SaveStorage_Probe` return with zero,
+  reaching phases 1000 and 1001 and the persistent write-error message. These
+  interventions test controller reactions after successful underlying operations,
+  not natural slot/settings I/O failures or a physically removed game card.
+- Each controller return checks the complete 72-byte task, 416-byte workspace,
+  1,380-byte live save and two lock/busy bytes. The same records are checked on
+  both sides of 63 ordered direct helper calls. Own field/input/state writes,
+  write-starter parent-result/lock effects, message-visible changes and all six
+  callback resets are independently derived. The synchronous selection callback's
+  entry and final state are checked too. Five storage-probe returns and eighteen
+  text/effect workspace updates are explicitly observed helper outputs; rendering,
+  storage and physical-audio internals remain outside the controller oracle.
+- Reports are `build/runtime/eur_save_confirmation/evidence_{continue55,quit55,
+  cancel_no55,cancel_button55,rollback_status55,settings_status55,probe_failed55}.json`.
+  The private artifact verifier checks 69 PNGs, 621 graphics dumps, canonical
+  ROM/state provenance and all 104 unchanged source saves. Continue, quit and
+  rollback captures equal their preceding setup replays. Visually inspected the
+  probe-failure write-error message and result-3 data-error message. All calls
+  finish with SP-matched returns, no pending calls and no drain frames.
+- Result zero at the end of the save delay, nonstandard result values, slot one,
+  simultaneous opposing buttons and artificial invalid phases remain unexercised.
+  Phase 1001's ordinary no-op behavior was observed after the probe-return fixture;
+  this does not establish a normal recovery route from that error screen.
+- Matching C/C++ is **704,860 / 1,563,700 bytes (45.08%)**, or **45.41%** with
+  separately maintained assembly. Overlay 8 is **25,136 / 54,068 (46.49%)**.
+  There are **76,990 bytes** left to the 50% target. Adjacent native movement,
+  fade and palette gaps remain uncounted.

@@ -13,7 +13,7 @@ void func_ov005_0206650c(SaveMenuWriteTask *);
 #define LIVE ((SaveLiveTransferView *)gSaveData)
 enum { SAVE_MENU_MESSAGE_VISIBLE_OFFSET = 411 };
 
-extern "C" void SaveMenuMessage_Hide(void)
+extern "C" void SaveMenuMessage_Hide(SaveMenuText *text)
 {
     data_ov008_02078290[SAVE_MENU_MESSAGE_VISIBLE_OFFSET] = 0;
     Overlay5Display_DisablePlanes(DISPLAY_ENGINE_MAIN, DISPLAY_PLANE_BG1);
@@ -21,7 +21,7 @@ extern "C" void SaveMenuMessage_Hide(void)
 }
 extern "C" void SaveMenuMessage_Show(SaveMenuText *text, u16 entry)
 {
-    SaveMenuMessage_Hide();
+    SaveMenuMessage_Hide(text);
     SaveMenuText_DrawBackground(text, 0, 2, 0, entry, 0, 0);
     data_ov008_02078290[SAVE_MENU_MESSAGE_VISIBLE_OFFSET] = 1;
     Overlay5Display_EnablePlanes(DISPLAY_ENGINE_MAIN, DISPLAY_PLANE_BG1);

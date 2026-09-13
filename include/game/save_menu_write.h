@@ -52,7 +52,7 @@ extern "C" {
 int SaveMenuWrite_Start(SaveMenuWriteTask *parent, s8 source, s8 destination, s8 checksum, s8 selection_mode);
 void SaveMenuWrite_Update(SaveMenuWriteTask *task);
 void SaveMenuMessage_Show(SaveMenuText *text, u16 entry);
-void SaveMenuMessage_Hide(void);
+void SaveMenuMessage_Hide(SaveMenuText *text);
 #ifdef __cplusplus
 }
 #endif

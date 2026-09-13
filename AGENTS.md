@@ -649,6 +649,17 @@ changes inside model/dialog/scroll helpers are explicitly observed outputs;
 do not describe those helper internals as independently verified by this probe.
 The tested entry uses occupied slot zero; the empty-slot fallback remains untested.
 
+`build/analysis/probe_save_confirmation.py` checks the adjoining confirmation and
+write controller. Its seven reports under `build/runtime/eur_save_confirmation/`
+separate normal continue/quit/Yes/No/B input from three error-response fixtures:
+completed-write results 1 to 2 or 3, and a successful storage-probe return changed
+to zero. They check complete task, workspace, live-save and lock/busy records;
+the probe result and selected text/effect workspace changes are observed helper
+outputs. The result-2 path invokes the selection callback synchronously, so model
+its immediate state and workspace changes before checking the parent's return.
+The probe-failure response reaches phase 1001 and remains on its error message.
+These fixtures verify the controller's responses, not physical storage failures.
+
 ### Smash Eggs
 
 For battle attack research, the compatible private snapshot

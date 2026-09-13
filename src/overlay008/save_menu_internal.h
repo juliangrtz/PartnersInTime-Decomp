@@ -15,9 +15,9 @@ typedef SaveMenuTransferTask MenuElement;
 typedef struct SaveMenuEntryWorkPrefix {
     SaveMenuSummary summaries[2];
     u8 unknown_140[0x50];
-    u8 unknown_190, unknown_191[8];
+    u8 confirmation_mode, unknown_191[7], scroll_locked;
     s8 selection, previous_selection;
-    u8 unknown_19b;
+    u8 message_visible;
     s8 input_locked, selected_panel;
     u8 unknown_19e[2];
 } SaveMenuEntryWorkPrefix;

@@ -2578,7 +2578,7 @@
       "control_flow": "hands the field task back to the resident scene manager with result 5, which loads the overlay-8 save-menu scene",
       "yield": "until the save menu returns to the field scene",
       "effect": "clears and fills the ten-byte scene-transfer header at save data +0x558: party_context_or_minus_one is resolved to the active field party configuration when -1, the saved location byte comes from opcode 0x11F, and return_screen_flag becomes transfer bit 15. Both field resource owners are released, both screens optionally fade from white to black over 16 frames, and the field scene is suspended for the save menu. Every shipped invocation uses arguments -1, 1, 1",
-      "evidence": "func_ov000_020823f8 case 0x120, handoff initializer func_ov000_0206aeb0, field transition update func_ov000_02069eb0 states 5/6, resident scene dispatcher func_02005da4 result 5, overlay-8 entry func_ov008_0206ca4c, and save-menu data/save paths func_ov008_02073d54, func_ov008_0206b598, and func_02028ca0"
+      "evidence": "func_ov000_020823f8 case 0x120, handoff initializer func_ov000_0206aeb0, field transition update func_ov000_02069eb0 states 5/6, resident scene dispatcher func_02005da4 result 5, overlay-8 entry func_ov008_0206ca4c, and save-menu data/save paths func_ov008_02073d54, SaveMenu_UpdateConfirmation, and func_02028ca0"
     },
     "289": {
       "arguments": ["shop_scene_id", "fade_to_black", "return_screen_flag"],

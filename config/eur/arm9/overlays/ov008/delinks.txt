@@ -122,7 +122,7 @@ src/overlay008/save_write_rollback.c:
     .text start:0x0206abd0 end:0x0206ac14
 
 src/overlay008/save_menu_control.c:
-    .text start:0x0206baec end:0x0206bf64
+    .text start:0x0206b598 end:0x0206bf64
 
 src/overlay008/save_menu_panel_text.c:
     .text start:0x02071964 end:0x02071a50
