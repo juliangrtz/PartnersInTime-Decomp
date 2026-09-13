@@ -7100,3 +7100,49 @@ consumables; bros_right65 reached the visually identified Key Items tab and
 was rerun under the correct tag. Discovery runs are excluded from suite totals.
 Reports:build/runtime/eur_pause_list_control/; private probe/artifact verifier
 in build/analysis/.
+
+
+## 2026-09-13: pause list selection and row copies
+
+Five contiguous functions at0x0207452C through0x020747E0 add692 matching bytes:
+tile-row query12, selected label160, selected-row redraw220, row copy140 and
+availability wrapper160. Shared signed tile-row view preserves the original
+byte view and332-byte party prefix. The two row rotations, signed division,
+stack arguments and full-width returns match without ASM or compiler changes.
+Matching C/C++:725,564 /1,563,700 bytes(46.40%); with assembly46.73%.
+Overlay7:60,808 /142,264(42.74%). Remaining to50%:56,286 bytes.
+
+Configure/full Ninja, no-data-mod packaging, native relink, progress checks
+and81 tests pass. Both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink:43 components,
+420 section units,31,138 relocations,1,577 ARM7 relocations,zero differences.
+Logs:build/analysis/pause_list_selection_*.log.
+
+Five routes cover6310 frames and observe49,335 target entries. The oracle
+checks988 complete calls:434 tile-row,549 availability,2 label,1 copy,2 redraw.
+All label/copy/redraw calls are checked; frequent tile-row/availability calls
+sample the first2 occurrences per party/arguments/list/row state and every
+sixtieth frame. Verified samples cover kinds0/1/2/3,318 positive and221 negative
+availability results plus10 disabled-category returns. Four signed divisions,
+item/tile selection, argument order, return forwarding and five1088-byte copies
+are checked. Full party4428/header16/work90600/save1380/display176 and both
+complete65536-byte OBJ buffers are checked at the relevant boundaries.
+Renderer/width mutations and quantity/predicate results are observed helper
+output; their internals and final rendering are not independently verified.
+
+Ordinary clothing65,badges86,items65,key_items65 routes are separate from
+consume65. The latter sets four current-HP halfwords to1 once at guarded
+EUR ARM9 callback0x0206C6A0 phase100:read32(0x02059FE8)+0x406+0x24*member.
+All four originals are restored at frame1450 before emulator destruction.
+Normal A presses then use Mushrooms; row redraw runs at quantities1 and0.
+The native0x0206CF44 call is missing from the old controller pseudocode.
+Kind4,zero-quantity early returns and redraw without copying remain uncovered.
+
+All91 screenshots,819 graphics dumps and104 unchanged source saves validate;
+the four ordinary routes match the preceding70 screenshots/630 dumps.
+No pending call or drain remains. Initial clothing replay failed because the
+probe incorrectly treated width-helper party-text changes as unchanged state.
+The corrected oracle records those known helper effects separately and passes;
+no matching game-code change was needed. Failure log/report are retained.
+Reports:build/runtime/eur_pause_list_selection/; private generator, probe and
+artifact verifier in build/analysis/.

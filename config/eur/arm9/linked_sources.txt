@@ -844,3 +844,4 @@ src/overlay007/scene_menu_background.cpp
 src/overlay007/pause_mode_sprite.cpp
 src/overlay007/pause_list_row.cpp
 src/overlay007/pause_list_control.cpp
+src/overlay007/pause_list_selection.cpp

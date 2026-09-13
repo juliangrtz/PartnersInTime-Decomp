@@ -18,7 +18,7 @@ typedef struct Overlay7Party {
     u8 unknown_88[128];
     s8 first;
     u8 count;
-    u8 unknown_10a;
+    union { u8 unknown_10a; s8 tile_row; };
     union { s8 offset; u8 index; } span;
     union {
         /* Preserve the existing view used by the rotating-order helpers. */
@@ -58,6 +58,11 @@ extern const Overlay7Item data_020505c4[];
 u16 PauseList_MeasureRowWidth(Overlay7Party *party, int row, int plural);
 void PauseList_Hide(Overlay7Party *party);
 void PauseList_Show(Overlay7Party *party);
+int PauseList_GetTileRow(Overlay7Party *party);
+u16 PauseList_DrawSelectedLabel(Overlay7Party *party);
+void PauseList_RedrawSelectedRow(Overlay7Party *party, int copy);
+u32 PauseList_CopySelectedRow(Overlay7Party *party);
+int PauseList_CheckRowAvailability(Overlay7Party *party, int row, int member, int allow_other);
 
 #ifdef __cplusplus
 }
