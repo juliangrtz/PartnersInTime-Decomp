@@ -50,6 +50,7 @@ Use `rg --files` to locate files, then scoped `rg` searches. In PowerShell, quot
 paths with spaces and use `-g 'pattern'` rather than passing an unexpanded wildcard
 as a directory. Batch independent reads where useful; serialize shared builds,
 metadata edits and emulator runs that share a ROM/save sidecar.
+Parse large JSON reports and print selected records, not entire diff dumps.
 
 ## Find the relevant evidence
 
@@ -93,7 +94,9 @@ start of main RAM. CPU and overlay identity matter because addresses are reused.
    Put shared layouts/prototypes in headers; use neutral names for unknowns and
    compile-time size checks. A known prefix's size does not prove allocation size.
    Preserve integer promotion, signed division toward zero, overflow behavior,
-   Q12 operation order and reads across callbacks.
+   Q12 operation order and reads across callbacks. A narrow return type does not
+   imply a narrow accumulator; preserve where the native code truncates. Check
+   null-record paths before replacing them with early returns.
 3. Keep related contiguous functions in one subsystem module. Temporary isolated
    units are acceptable around native gaps; consolidate when those gaps close.
    Source basenames must be globally unique because MW's linker selects by
@@ -105,6 +108,8 @@ start of main RAM. CPU and overlay identity matter because addresses are reused.
    add arbitrary casts/volatile accesses to obtain a match. Recompile private
    drafts against current headers; a missing symbol must never fall back to
    original bytes and count as a passing candidate.
+   Associate comparisons with the exact source, language mode and object:
+   private checkers can overwrite address-named dumps from an earlier candidate.
 5. Integrate exact matches into `linked_sources.txt` and the component metadata.
    Update affected declarations and maintained assembly references together.
    Preserve interior entry points with `config/eur/arm9/linker_aliases.json`;
@@ -152,6 +157,8 @@ private data mod. Native relinking must report zero differing bytes. Regenerate
 progress before tests when linked ranges changed. Use pytest with the explicit
 `tests` directory; unittest-only discovery misses tests and unrestricted pytest
 can collect ignored private clones. Report skipped or unavailable checks.
+Do not rebuild or replace a ROM while an emulator is reading that path. A native
+relink to a separate output path can run alongside a replay of the packaged ROM.
 
 Documentation-only changes need content/link and Git checks, not a ROM build
 or emulator replay. Tool changes need the relevant tests. Repeat checks only
@@ -172,6 +179,11 @@ and compatible snapshots. Optional dependencies are in
   saves to make compatible states; do not keep advancing a known-bad snapshot.
 - Store reports, snapshots and captures under ignored `build/runtime/`. Run
   replays sequentially when they share ROM or battery-backup paths.
+- Reuse a tested route, but monitor the current function group and the helpers
+  needed to verify it. Avoid retaining every earlier per-frame oracle in each
+  new probe. Keep prior evidence and state which checks were actually repeated.
+  Read the driver's action semantics: `runtime_drive.py` inserts one released
+  frame after each action. Bound scene entry and confirm its dispatch hook ran.
 - Guard hooks with native bytes and the loaded overlay. Match nested returns
   using caller and stack pointer. Derive expected memory changes independently;
   label helper outputs that are merely observed. Do not read freed objects or
@@ -193,6 +205,8 @@ and compatible snapshots. Optional dependencies are in
 - At replay end, stop admitting new outermost calls and drain pending calls and
   their nested helpers for a bounded number of neutral frames. Do not discard
   unfinished calls to make a probe pass. After correcting an oracle, rerun it.
+  An oracle failure can be a wrong expectation; inspect native instructions and
+  helper effects before changing already matching game code.
 - The debug menu teleports without necessarily initializing a complete state.
   Separate normal navigation from controlled RAM/decoded-command fixtures.
   Memory instructions must give ROM region, CPU/address space, dereferences,
@@ -240,6 +254,8 @@ At a stop, leave the last pushed commit, owned pending files, completed/due chec
 and deferred candidates in private `build/analysis/CURRENT_HANDOFF.md`. For each
 gap record component/address, native/candidate sizes, mismatch class and evidence
 needed for another attempt. Distinguish pending, committed and pushed work.
+Separate the latest documentation commit from the last verified code batch;
+existing build logs are historical evidence, not checks run by the current turn.
 Inspect old integration scripts before reuse; many are not safe to replay.
 Keep durable rules here and detailed findings in the linked reference, rather
 than appending every batch's history to this entry point.

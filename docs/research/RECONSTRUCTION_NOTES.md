@@ -59,7 +59,8 @@ do not treat an older disassembly listing as the output of the latest compile.
 
 On this workstation, private comparison helpers include
 `build/analysis/compile_private_unit.py`, `check_title_unit.py` for overlay 6,
-`check_overlay8_unit.py` for overlay 8, `check_overlay15_unit.py` for overlay 15,
+`check_overlay8_unit.py` for overlay 8, `check_overlay9_unit.py` for overlay 9,
+`check_overlay15_unit.py` for overlay 15,
 and `check_main_unit.py` for resident ARM9. Inspect their inputs and relocation
 handling before reuse; they are local conveniences, not required public tools.
 Use current public build checks as the final authority. Private paths in this
@@ -489,6 +490,13 @@ successful evidence separately; do not count the failed attempt as validation.
 
 Keep probe work bounded. Check and release completed per-node snapshots during
 long list traversals instead of rechecking all earlier nodes after every call.
+Reuse the route and guards without automatically retaining every previous
+per-frame oracle. The shop text-index probe retains show/hide, queued-text and
+icon checks, but leaves the broader buying-price checks in their earlier probe;
+this substantially reduces replay time without dropping checks for the new
+index helpers. Preserve those earlier reports and identify checks that were
+not repeated. Do not rebuild a ROM at the path an active emulator is reading;
+a separate native-relink output does not replace that input file.
 An emulator frame boundary can fall inside a monitored function. At the end of
 a replay, stop accepting new outermost calls, keep observing pending calls and
 their nested helpers, and allow a bounded number of neutral frames for returns.
