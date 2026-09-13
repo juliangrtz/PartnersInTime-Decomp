@@ -35,6 +35,15 @@ typedef char SceneMenuBlendTask_SizeCheck[sizeof(SceneMenuBlendTask) == 72 ? 1 :
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* This view starts at the native scroll-state anchor inside the menu work. */
+typedef struct SceneMenuScrollState {
+    u8 unknown_00[50];
+    s16 x, y;
+    u8 unknown_36[2];
+} SceneMenuScrollState;
+typedef char SceneMenuScrollState_SizeCheck[sizeof(SceneMenuScrollState) == 56 ? 1 : -1];
+extern SceneMenuScrollState data_ov007_020906f0;
+
 void SceneMenu_UpdateZoom(SceneMenuTweenTask *task);
 void SceneMenu_UpdateBlend(SceneMenuBlendTask *task);
 void SceneMenu_StartBlend(int shrinking, int duration);

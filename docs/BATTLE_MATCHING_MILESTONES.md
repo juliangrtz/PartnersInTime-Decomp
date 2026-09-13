@@ -7401,3 +7401,34 @@ progress validation and all 81 tests pass. Evidence:build/runtime/eur_pause_tran
 logs:build/analysis/pause_transitions_{configure,check,rom,native,tests,artifacts}.log.
 Matching C/C++: 733,564 / 1,563,700 (46.91%); with symbolic ASM: 47.24%.
 Overlay 7: 68,808 / 142,264 (48.37%). Remaining to 50%: 48,286 bytes.
+
+
+## Pause page transitions and entry selection
+
+Reconstructed four contiguous callbacks (1,904 new bytes) in
+src/overlay007/pause_page_tasks.cpp: delayed rumble, entry-mode choice, page
+closing and page opening. The existing interior scroll-state view is now shared;
+all functions match without assembly or compiler-flag changes. Two larger shutter
+setup drafts remain private with classified register-only differences.
+
+Four replays cover 8,260 frames: all five pages at checkpoints 65 and 86, the
+restored alternate-entry chooser fixture, and ordinary A/B input queued during
+the opening fade. Every observed target body is checked: 320 opens, 208 closes,
+four choosers and 15 delayed-rumble updates. Independent checks cover 720 ordered
+GPU stores, 14,592 OBJ-upload bytes, 1,536 factories, 871 ResourceB attachments,
+eight pool cleanups and seven complete watched task lifetimes. All routes end
+in the field, with no pending calls or watched tasks.
+
+All 109 screenshots, 981 graphics dumps and 104 unchanged source-save hashes
+validate. Ten images and 90 dumps match earlier common input/state prefixes.
+The two frame-204 oracle failures and corrected replays are preserved. Setup,
+list, menu, sound and rumble helper effects remain observed except for the
+independently derived operations above; rendering, physical rumble and unvisited
+input/flag combinations are not claimed as covered. See the reconstruction
+reference's pause page entry and return section for exact scope and tooling.
+
+Full matching checks, golden packaged ROM, zero-difference native relink,
+progress validation and all 81 tests pass. Evidence: build/runtime/eur_pause_pages/.
+Logs: build/analysis/pause_pages_{configure,check,rom,native,tests,artifacts}.log.
+Matching C/C++: 735,468 / 1,563,700 (47.03%); with symbolic ASM: 47.37%.
+Overlay 7: 70,712 / 142,264 (49.70%). Remaining to 50%: 46,382 bytes.

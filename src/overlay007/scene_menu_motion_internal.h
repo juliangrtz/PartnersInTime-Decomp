@@ -3,14 +3,6 @@
 #include <game/scene_menu_motion.h>
 extern "C" {
 #include <game/overlay005_display.h>
-/* This view starts at the native scroll-state anchor inside the menu work. */
-typedef struct SceneMenuScrollState {
-    u8 unknown_00[50];
-    s16 x, y;
-    u8 unknown_36[2];
-} SceneMenuScrollState;
-typedef char SceneMenuScrollState_SizeCheck[sizeof(SceneMenuScrollState) == 56 ? 1 : -1];
-extern SceneMenuScrollState data_ov007_020906f0;
 extern void *func_ov005_0206659c(void *, int, int);
 extern void func_ov005_0206650c(void *);
 extern int _s32_div_f(int, int);

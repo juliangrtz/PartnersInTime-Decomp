@@ -95,7 +95,7 @@ extern void *SceneManager_LoadResources(void *);
 extern void SceneManager_Shutdown(void *), SceneController_Create(u8 *), SceneTask_LoadArchiveMember(u8 *);
 extern void SceneScript_LoadPrimaryArchive(u8 *, int, u16);
 extern void func_ov007_02081664(int), func_ov007_0208a918(void);
-extern void func_ov007_0206e918(PauseMenuElement *);
+extern void PauseScene_ChooseEntryTask(PauseMenuElement *);
 extern void *PauseParty_Init(void *storage, void *fonts), *PauseParty_Destroy(void *storage);
 extern void func_ov005_02068c54(void *);
 

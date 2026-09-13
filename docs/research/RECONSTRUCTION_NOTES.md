@@ -2424,11 +2424,72 @@ free the task. This differs from timed callbacks whose zero means indefinite.
 The chooser at `0x0206E918` first calls `0x02080AE4`, then reads the unsigned
 save byte at `read32(0x02059FE8) + 0x55D` once. If nonzero, it stores byte minus
 one in `WORK.selected_menu` and selects `PauseScene_FadeInTask`; otherwise it
-selects the entry setup at `0x0206E594`. Both callback changes pass phase 0,
-then the chooser sets the pause scene's phase word at
+selects the entry setup at `0x0206E594`. Both callback changes pass `invoke = 0`;
+the callback setter resets the task's phase to zero. The chooser then sets the phase at
 `read32(0x0208E1E0) + 0x30` to 1. Earlier alternate-entry evidence observes this
 selection; it does not independently check the chooser's complete body or the
-preceding setup helper.
+preceding setup helper. The focused page-transition checks below now cover the
+chooser itself; the preceding setup helper remains observed.
+
+### Pause page entry and return
+
+[pause_page_tasks.cpp](../../src/overlay007/pause_page_tasks.cpp) owns the
+contiguous `0x0206E8DC..0x0206F04C` range: delayed rumble (60 bytes), entry
+selection (124), page closing (532) and page opening (1,188), totaling 1,904
+new matching C++ bytes. Shared task layouts are in
+[pause_navigation.h](../../include/game/pause_navigation.h). The existing
+scroll-state view at `0x020906F0` is now shared through
+[scene_menu_motion.h](../../include/game/scene_menu_motion.h), preserving its
+interior anchor and layout.
+
+Closing fades for four updates, hides the selected page, waits for dependent
+tasks, restores background priorities and returns to the main menu callback.
+Opening creates the selected page, waits for dependencies, uploads glyph tiles
+where needed and fades for eight updates. The final callback depends on page
+0 through 4. During that fade, forward/back button presses update the queued
+direction; these writes are checked separately from the subsequent dispatch.
+
+The setter at `0x02066358` always installs the callback and resets task phase
+to zero. Its third argument is **invoke immediately**, not an initial phase.
+With a nonzero argument it calls the new callback before returning. This explains
+the phase-0 and phase-1 opening calls observed in the same frame. Do not give
+that parameter phase semantics when reconstructing callers or building an oracle.
+
+Four completed private replays under `build/runtime/eur_pause_pages/` cover
+8,260 frames. `pages65_stores` and `pages86_stores` open and close all five pages
+using ordinary inputs at story checkpoints 65 and 86. `alternate65_stores`
+repeats them with the guarded chooser-byte fixture described above, restored at
+the chooser return in frame 42. `queued65` presses A then B during the opening
+fade and covers both queued-direction writes. All four routes end in the field.
+
+Every observed target call is checked: 320 openings, 208 closings, four choosers
+and 15 delayed-rumble updates. The oracle derives direct task/workspace writes,
+callback arguments, 720 ordered GPU stores and 14,592 OBJ-upload bytes. It checks
+1,536 factories, 871 ResourceB attachments, eight pool cleanups and seven watched
+task lifetimes through actual removal. Callback changes do not end allocation
+tracking. Full live task, work, party, scene, save and graphics records are checked
+at 4,049 boundaries; there are no pending calls, live watched tasks or drain frames.
+
+All 109 screenshots and 981 graphics dumps pass artifact validation, and all
+104 original save hashes remain unchanged. Ten screenshots and 90 dumps equal
+earlier captures over identical state/input prefixes. Checkpoint-65 page screens
+at frames 1,240 and 2,100 and each route's final field image were inspected.
+The optional host reader matched the original reader across 4,608,234 paused
+RAM/DTCM/graphics bytes on each route. Full matching checks, golden packaged ROM,
+zero-difference native relink, generated-progress validation and all 81 tests pass.
+
+Two initial probes failed at frame 204: the store hook omitted register-indexed
+addressing, then the oracle incorrectly expected scroll-register readback to
+equal the submitted value. The corrected probe checks the indexed store and
+its ordered value directly. Full display captures remain available; write-only
+scroll values are excluded from immutable readback expectations. Both failures
+and successful reruns are retained. No game-code correction was needed.
+
+Setup/list/menu/sound/rumble helper effects are observed at return unless explicitly
+derived above. The native renderer, physical rumble, other input/flag combinations
+and unvisited states remain outside this coverage. Probe sources are private
+`make_pause_pages_probe.py`, `pause_pages_flow.py` and composed
+`probe_pause_pages.py`; `verify_pause_pages_artifacts.py` validates the reports.
 
 ### Nawatobi
 
