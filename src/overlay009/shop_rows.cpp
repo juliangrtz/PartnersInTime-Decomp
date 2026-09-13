@@ -21,7 +21,7 @@ void ShopRow_Update(ShopRowTask *task)
     task->value = ((ShopRowPanelInterface *)data_ov009_0207ea34)->get_row_value(task->row);
     if (old_value != task->value)
         func_ov009_0207c8f0(16 * task->row + 520, 30, task->value, 4);
-    if (func_ov009_02071748(data_ov009_0207ea34, task->row))
+    if (ShopBuyPanel_CanBuyRow((ShopBuyPanel *)data_ov009_0207ea34, task->row))
         task->palette = 0;
     else
         task->palette = 1;
@@ -89,7 +89,7 @@ void ShopRow_DrawRowModel(ShopRowTask *task)
 {
     BattleModel *model = Overlay5ResourceA_Get(task);
     ShopRowTask *row = task->parent;
-    if (func_ov009_0207171c(data_ov009_0207ea34, row->row)) {
+    if (ShopBuyPanel_IsRowNew((ShopBuyPanel *)data_ov009_0207ea34, row->row)) {
         u32 scale = row->scale;
         if (scale > 409) {
             model->scale_x = 256;

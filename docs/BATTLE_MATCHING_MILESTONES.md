@@ -6098,3 +6098,60 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **707,916 / 1,563,700 bytes (45.27%)**, or **45.60%** with
   separate assembly. Overlay 8 is **28,192 / 54,068 (52.14%)**. There are
   **73,934 bytes** left to the 50% target.
+
+
+## 2026-09-13 - Buying-panel prices, availability and display controls
+
+- Reconstructed eight contiguous functions at `0x020715E0..0x02071AF0` in
+  `src/overlay009/shop_buy_panel.cpp`: **1,296 new matching C++ bytes** for
+  show/hide, new-item flags, affordability, quantity, price discount, price and
+  category queries. Coin prices retain the native discount and minimum-price
+  behavior; bean prices retain their rounding to multiples of five.
+- Added the 936-byte buying-panel view, backed by the scene's allocation and
+  native constructor accesses. Shared price-record lookup now lives in
+  `shop_price_internal.h`, preserving the four table strides and tag checks
+  already used by the selling panel. The row callers use the recovered public
+  interfaces, including the halfword row argument on affordability queries.
+- Native data flow explains the remaining first-draft differences: retain the
+  zero result unless a nonzero base price requires the minimum of one; apply
+  the saved-selection index to the save pointer before the fixed field offset;
+  preserve the original +255 byte arithmetic in the show controller. The separate
+  selling-price candidate remains private with register/scheduling differences.
+- Full Ninja checks, canonical packaging, native relink and all **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+  Native verification reports 43 components, 31,138 known relocations, 1,577
+  ARM7 relocations and zero differing bytes. Logs are under
+  `build/analysis/shop_buy_{configure,check,rom,native,tests}.log`.
+- `build/analysis/probe_shop_buy_panel.py` uses compatible story-86/story-65
+  snapshots and original battery saves. It temporarily substitutes decoded field
+  opcode `0x121` with shop IDs 0, 2 or 14, fade 1 and return-screen flag 1,
+  restoring all 72 original command bytes at the guarded native request helper.
+  Ordinary buttons enter the panel, select rows, cancel and return visibly to
+  Shroob Castle or Star Shrine. This is controlled entry, not an ordinary NPC route.
+- Five replays total **5,375 frames and 62,788 checked function returns**. All
+  eight functions execute. Independent checks cover full 936-byte panels and
+  1,380-byte live saves, original-ROM item records, coin/bean arithmetic, stache
+  discounts, inventory limits, equipment quantities, new flags and hide-selection
+  writes. Return hooks match stack pointers; ordered arguments include the
+  list initializer's stack argument. Native setup is explicitly observed panel
+  output; rendering and setup internals remain outside this oracle.
+- Separate coin/bean limit fixtures temporarily clear currency at one guarded
+  affordability call and fill an item's inventory to 99 or 9 at another. Each
+  edit is restored at that same call's return. Both rejection paths are checked
+  without purchases or persistent save changes. Ordinary runs cover both
+  new-item flag values and quantity modes 0 and 1.
+- The first probe's terminal assertion read an old shop global after the field
+  overlay had reused its address. Cleanup is now checked at the native destructor
+  return, before unload. The old entry fixture also passed return-screen flag 0;
+  the corrected flag-1 replays restore visible field screens. The earlier failed
+  attempt is not counted as validation.
+- `build/analysis/verify_shop_buy_artifacts.py` verifies **58 PNGs, 522 graphics
+  dumps and all 104 source-save hashes**. All 240 paired artifacts from the
+  ordinary and limit-fixture coin/bean routes are identical. Relevant shop,
+  quantity-selector and final-field images were visually inspected. No pending
+  calls or drain frames remain. Action-item rows, invalid records, zero base
+  prices, showing an already-enabled panel and hiding an already-hidden panel
+  were not exercised; no physical audio claim is made.
+- Matching C/C++ is **709,212 / 1,563,700 bytes (45.35%)**, or **45.69%** with
+  separate assembly. Overlay 9 is **20,884 / 78,984 (26.44%)**. There are
+  **72,638 bytes** left to the 50% target.

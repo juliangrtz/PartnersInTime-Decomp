@@ -811,3 +811,4 @@ src/overlay008/load_menu_control.c
 src/overlay008/load_menu_exit.c
 src/overlay008/game_over_control.c
 src/overlay008/game_over_resources.c
+src/overlay009/shop_buy_panel.cpp

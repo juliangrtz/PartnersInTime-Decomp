@@ -1,16 +1,9 @@
 #include "shop_rows_internal.h"
 #include <game/save_data.h>
-#include <game/item.h>
+#include "shop_price_internal.h"
 
-/* Shared record prefix used by all four item categories in the shop. */
-struct PriceRecord {
-    u8 unknown_00[12];
-    u16 price;
-    u8 bonus_class;
-};
-typedef char PriceRecordSizeCheck[sizeof(PriceRecord) == 16 ? 1 : -1];
 extern "C" {
-extern u8 data_02050290[], data_020505c4[], data_ov009_0207ea3c[];
+extern u8 data_ov009_0207ea3c[];
 struct ShopEmptyMessages {
     u16 entries[4];
 };
@@ -23,49 +16,10 @@ void func_ov009_02073228(int);
 void func_ov009_02070764(ShopInventoryPanel *);
 void func_ov009_0207a844(int, u16);
 }
-static inline const PriceRecord *GetActionRecord(u16 item)
-{
-    if ((item & ITEM_ID_ACTION_TAG) != ITEM_ID_ACTION_TAG)
-        return 0;
-    return (const PriceRecord *)&gActionItemRecords[item & ITEM_ID_INDEX_MASK];
-}
-static inline const PriceRecord *GetUsableRecord(u16 item)
-{
-    if ((item & ITEM_ID_USABLE_TAG) != ITEM_ID_USABLE_TAG)
-        return 0;
-    return (const PriceRecord *)&gItemRecords[item & ITEM_ID_INDEX_MASK];
-}
-static inline const PriceRecord *GetBadgeRecord(u16 item)
-{
-    if ((item & ITEM_ID_BADGE_TAG) != ITEM_ID_BADGE_TAG)
-        return 0;
-    return (const PriceRecord *)&data_02050290[20 * (item & ITEM_ID_INDEX_MASK)];
-}
-static inline const PriceRecord *GetClothingRecord(u16 item)
-{
-    if ((item & ITEM_ID_CLOTHING_TAG) != ITEM_ID_CLOTHING_TAG)
-        return 0;
-    return (const PriceRecord *)&data_020505c4[28 * (item & ITEM_ID_INDEX_MASK)];
-}
-static inline const PriceRecord *GetRecord(u16 item)
-{
-    switch (item & ITEM_ID_TAG_MASK) {
-    case ITEM_ID_ACTION_TAG:
-        return GetActionRecord(item);
-    case ITEM_ID_USABLE_TAG:
-        return GetUsableRecord(item);
-    case ITEM_ID_BADGE_TAG:
-        return GetBadgeRecord(item);
-    case ITEM_ID_CLOTHING_TAG:
-        return GetClothingRecord(item);
-    default:
-        return 0;
-    }
-}
 extern "C" {
 u32 ShopInventoryPanel_GetPriceBonus(ShopInventoryPanel *panel, u16 row)
 {
-    const PriceRecord *record = GetRecord(ShopItemPanel_GetRowItem((ShopItemPanel *)panel, row));
+    const ShopPriceRecord *record = ShopPrice_GetRecord(ShopItemPanel_GetRowItem((ShopItemPanel *)panel, row));
     if (record) {
         int base = 25 * record->price / 100;
         if (!base && record->price)

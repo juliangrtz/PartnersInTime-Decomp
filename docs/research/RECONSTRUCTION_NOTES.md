@@ -15,7 +15,7 @@ ordinary gameplay accessibility or coverage of unexercised branches.
 - [Compiler and linker behavior](#compiler-and-linker-behavior)
 - [Reconstructing and integrating code](#reconstructing-and-integrating-code)
 - [Runtime verification](#runtime-verification)
-- Tested routes: [save menus](#save-menus), [Game Over](#game-over),
+- Tested routes: [shops](#shops), [save menus](#save-menus), [Game Over](#game-over),
   [Smash Eggs](#smash-eggs), [credits](#credits), [Nawatobi](#nawatobi)
 
 ## Locating evidence and comparing candidates
@@ -519,6 +519,38 @@ Controlled RAM edits or temporary decoded-command substitutions are useful
 probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
+
+### Shops
+
+The private `build/analysis/probe_shop_buy_panel.py` checks the buying panel's
+prices, discounts, affordability, quantities, new-item flags and show/hide behavior.
+It uses compatible story-86 or story-65 HUD states and the corresponding original
+battery saves. Its `coin86`, `equipment65` and `beans65` reports are under
+`build/runtime/eur_shop_buy_panel/`; the selected shop IDs are 0, 2 and 14.
+
+Entry substitutes one 72-byte decoded command at guarded EUR ARM9 field dispatch
+`0x020823F8`, using opcode `0x121` with the shop ID, fade 1 and return-screen flag 1.
+All original command bytes are restored at guarded request helper `0x0206ACF8`.
+Ordinary buttons then select items, cancel quantity selection and leave the shop.
+This establishes controlled scene entry, not interaction with the shopkeeper
+through a normal story script. Older private shop probes used return-screen flag
+0 and could finish with black screens; retain flag 1 for the tested visible return.
+
+The oracle checks complete 936-byte buying panels and 1,380-byte live saves,
+original-ROM item records, price arithmetic and ordered helper arguments with
+SP-matched nested returns. Panel setup is observed helper output; the caller's
+enable flag, row/list/category calls and hide-selection writes are derived.
+Capture RAM/VRAM, palettes, OAM and both screens. Verify scene/panel pointer cleanup
+at the destructor return, before the field overlay reloads and reuses those
+addresses; a later nonzero value at the old shop global is not evidence of a leak.
+
+The separate `coin86_limits` and `beans65_limits` fixtures temporarily set funds
+to zero and inventory to the native limit at two guarded affordability calls.
+Each edit is restored at that call's SP-matched return. They exercise rejection
+branches, not real purchases or persistent changes to saves. The artifact verifier
+checks source-save hashes and compares their captures with the ordinary routes.
+Read each report's actual coverage before extending it; item setup, rendering
+internals and unexercised controller branches remain outside this oracle.
 
 ### Save menus
 

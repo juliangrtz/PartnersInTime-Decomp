@@ -184,7 +184,8 @@ and compatible snapshots. Optional dependencies are in
   Memory instructions must give ROM region, CPU/address space, dereferences,
   field offset, access width, guard, timing and whether/when to restore the edit.
 
-Consult tested routes for [save/load menus](docs/research/RECONSTRUCTION_NOTES.md#save-menus),
+Consult tested routes for [shops](docs/research/RECONSTRUCTION_NOTES.md#shops),
+[save/load menus](docs/research/RECONSTRUCTION_NOTES.md#save-menus),
 [Game Over](docs/research/RECONSTRUCTION_NOTES.md#game-over),
 [Smash Eggs](docs/research/RECONSTRUCTION_NOTES.md#smash-eggs),
 [credits](docs/research/RECONSTRUCTION_NOTES.md#credits) and

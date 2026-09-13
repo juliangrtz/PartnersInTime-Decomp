@@ -17,6 +17,16 @@ typedef struct ShopItemPanel {
     s32 x, y, unknown_334, unknown_338;
 } ShopItemPanel;
 typedef char ShopItemPanelSizeCheck[sizeof(ShopItemPanel) == 828 ? 1 : -1];
+/* Buying panel. The scene allocates 936 bytes; only the used tail is named. */
+typedef struct ShopBuyPanel {
+    ShopItemPanel base;
+    u8 category;
+    u8 new_items[99];
+    u8 saved_selection;
+    u8 unknown_3a1[4];
+} ShopBuyPanel;
+typedef char ShopBuyPanelSizeCheck[sizeof(ShopBuyPanel) == 936 ? 1 : -1];
+
 /* Selling panel: category offsets refer to the packed inline inventory list. */
 typedef struct ShopInventoryPanel {
     ShopItemPanel base;
@@ -44,6 +54,14 @@ typedef char ShopTextSizeCheck[sizeof(ShopText) == 2096 ? 1 : -1];
 #ifdef __cplusplus
 extern "C" {
 #endif
+void ShopBuyPanel_Hide(ShopBuyPanel *panel);
+void ShopBuyPanel_Show(ShopBuyPanel *panel, u8 selection);
+int ShopBuyPanel_IsRowNew(ShopBuyPanel *panel, int row);
+int ShopBuyPanel_CanBuyRow(ShopBuyPanel *panel, u16 row);
+s8 ShopBuyPanel_GetRowQuantity(ShopBuyPanel *panel, u16 row, u32 mode);
+u32 ShopBuyPanel_GetPriceDiscount(ShopBuyPanel *panel, u16 row);
+u32 ShopBuyPanel_GetRowPrice(ShopBuyPanel *panel, u16 row);
+u8 ShopBuyPanel_GetCategory(ShopBuyPanel *panel);
 void ShopInventoryPanel_Hide(ShopInventoryPanel *panel, int adjust);
 void ShopInventoryPanel_Show(ShopInventoryPanel *panel);
 void ShopInventoryPanel_CycleCategory(ShopInventoryPanel *panel, s8 delta);

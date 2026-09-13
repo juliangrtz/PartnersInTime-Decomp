@@ -74,3 +74,6 @@ src/overlay009/shop_list_navigation.cpp:
 
 src/overlay009/shop_particle.cpp:
     .text start:0x0207689c end:0x020769bc
+
+src/overlay009/shop_buy_panel.cpp:
+    .text start:0x020715e0 end:0x02071af0
