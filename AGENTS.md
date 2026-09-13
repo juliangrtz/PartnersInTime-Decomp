@@ -75,6 +75,10 @@ not proof that today's source or artifact was tested. Keep changing percentages,
 milestones and candidate status in generated reports and the private handoff.
 When resuming a partially integrated batch, inventory its pending files and
 completed checks first. Associate each check with the source and ROM it tested.
+A handoff can be stale even when its recorded `HEAD` still matches: the next
+batch may have changed the working tree without a commit. Compare its pending
+file list and report timestamps with actual files before trusting completion
+claims or replaying an integration script.
 A documentation commit must not include pending source or regenerate progress
 to claim bytes whose verification is still incomplete.
 If the generated reports are dirty, use `git show HEAD:docs/progress.json` for
@@ -109,6 +113,11 @@ start of main RAM. CPU and overlay identity matter because addresses are reused.
    Prefer the actual shared workspace type over casting a raw byte global to a
    partial structure. Preserve existing byte views when naming newly understood
    fields, check offsets and size, and rebuild every affected caller.
+   Recover virtual slot signatures from both callers and implementations. Keep
+   caller-side narrowing at the native instruction; a narrow implementation's
+   return declaration alone does not describe every caller's register use.
+   Check load/store order explicitly. A callback can change shared state, and
+   native code may cache both coordinates before writing either destination.
 3. Keep related contiguous functions in one subsystem module. Temporary isolated
    units are acceptable around native gaps; consolidate when those gaps close.
    Source basenames must be globally unique because MW's linker selects by
@@ -243,6 +252,17 @@ and compatible snapshots. Optional dependencies are in
   can miss a helper entirely; retained screenshots and equal artifact hashes do
   not establish execution coverage. Report deliberate RAM fixtures separately
   and distinguish historical helper evidence from checks repeated in this batch.
+  Exercise independent limits separately: an inventory-capacity stop does not
+  establish the affordability branch. Prefer ordinary inputs and suitable story
+  saves; record any initial inventory or currency fixture and its restoration.
+  Held-input acceleration can skip values, so report observed selections rather
+  than claiming every value between the minimum and maximum was exercised.
+- Keep supplemental routes in separate output directories. Compare captures
+  with a baseline only where save state, fixtures, input history and capture
+  timing agree. Hash equality establishes equality of those artifacts; hashing
+  a native renderer's output does not independently verify its pixels.
+  Check which module a probe actually imports before correcting an oracle:
+  some private probes use a composed file rather than its editable body copy.
 - At replay end, stop admitting new outermost calls and drain pending calls and
   their nested helpers for a bounded number of neutral frames. Do not discard
   unfinished calls to make a probe pass. After correcting an oracle, rerun it.
@@ -300,6 +320,9 @@ one matching helper does not validate its neighbors. Keep proposed names and
 planned runtime checks explicitly provisional until their evidence exists.
 Record each replay's completion separately, including corrected oracle failures
 and the successful rerun. One passing route does not complete a planned suite.
+If a process is still running, record its tool session ID, command, log and
+output directory. Resume or inspect that process before launching a duplicate;
+elapsed time or a populated output directory is not a successful exit status.
 Separate the latest documentation commit from the last verified code batch;
 existing build logs are historical evidence, not checks run by the current turn.
 Inspect old integration scripts before reuse; many are not safe to replay.
