@@ -6,11 +6,23 @@ The decompilation is fully generated with generative AI under human direction.
 Preserve the README disclosure and [AI policy](docs/AI_USAGE.md).
 These instructions apply throughout the repository.
 
-Start with **Priorities and scope**, verify the checkout, then use the resource
-table to read the reference for the current subsystem. The build and runtime
-sections define what a reconstruction batch must establish; documentation-only
-work uses the lighter checks described below. Keep session-specific candidate
-lists and measurements in the private handoff, not in this guide.
+## Start here
+
+1. Read the latest user request and **Priorities and scope** below. Establish
+   whether this task is reconstruction, research or documentation.
+2. Verify the checkout, branch, remote and existing changes before editing.
+3. Read the private handoff if present, then check its claims against current
+   source, metadata and artifacts. Use the resource table for subsystem details.
+4. For reconstruction, choose a coherent group whose native behavior is
+   understood. Establish exact object matching, build integration and relevant
+   runtime coverage separately before publishing its progress.
+5. Review and stage only task-owned changes, run the index content audit, then
+   commit and push to the verified user remote. Leave an accurate handoff at a
+   stopping point.
+
+Documentation-only work uses content/link and Git checks. Keep changing
+percentages, candidate inventories and individual replay results in generated
+reports and the private handoff, not in this guide.
 
 ## Priorities and scope
 
@@ -131,6 +143,9 @@ the printed instruction listing alone does not prove that range was inspected.
    null-record paths before replacing them with early returns.
    Track signedness per expression: an unsigned value divided by an `int`
    divisor uses unsigned division, while that divisor's own `/= 10` stays signed.
+   A shared byte can be read with `LDRB` in one caller and `LDRSB` in another.
+   Preserve the signed interpretation at the actual access site; changing the
+   shared field's type globally can alter otherwise matching callers.
    Preserve repeated source reads around destination writes when the pointers
    can alias; `const` does not establish non-overlap.
    Prefer the actual shared workspace type over casting a raw byte global to a
@@ -151,6 +166,10 @@ the printed instruction listing alone does not prove that range was inspected.
    assignment order; do not replace packed fields with separate flags.
    Check load/store order explicitly. A callback can change shared state, and
    native code may cache both coordinates before writing either destination.
+   Follow the arithmetic data flow too: preparing both signed Q12 divisions
+   before the destination assignments can reproduce interleaved sign-correction
+   instructions that caching only the raw coordinates does not. Explain that
+   dependency from the native listing instead of trying register permutations.
    Derive array dimensions from element widths and row/column strides. A local
    aggregate initializer can explain a native stack copy; a handwritten copy or
    flattened table can introduce different instructions. Use the existing shop
@@ -292,6 +311,9 @@ and compatible snapshots. Optional dependencies are in
   models use 336-byte slots, ResourceB sprites use 64-byte slots, and the shared
   shop tasks use 72 bytes. Identify the attached resource's allocator before
   selecting the extent; a public structure can describe a prefix or a full slot.
+  ResourceA is also used outside shops. Its concrete sprite layout is in
+  [sprite_pool.cpp](src/overlay005/sprite_pool.cpp); accessing its common fields
+  through `BattleModel *` does not make it a full `BattleModel` allocation.
   Do not assume a pooled factory zeroes the payload. Derive the selected slot
   from the free list before allocation, model the factory's list/counter writes,
   then apply the constructor's writes. Reuse of an address starts a new object
@@ -317,6 +339,9 @@ and compatible snapshots. Optional dependencies are in
   and counters; a readable address does not mean the old object is still alive.
   Derive update counts from integer step, delay and clamping; division by six
   does not guarantee six updates when truncation leaves a remainder.
+  Read a timer's entry guard before assigning meaning to zero. A callback that
+  decrements only a nonzero counter and removes on the transition to zero treats
+  an initial zero as indefinite. Cover that path separately from expiration.
 - Verify RAM, mapped VRAM, palettes, OAM, ordered GPU stores and visible behavior
   as appropriate. A screenshot or passing ROM hash alone is insufficient.
   Hardware register readback need not equal the earlier submitted FIFO command
@@ -324,6 +349,11 @@ and compatible snapshots. Optional dependencies are in
   Expected-memory snapshots can overlap: an empty draw list's sentinel can be
   part of its header. Apply each independently derived store to every overlapping
   expected view in native order before comparing, including sentinel updates.
+  For draw-list submission, derive the selected node from the pool's free list
+  before the helper runs. Check the pool, moved link, node, list header and old
+  tail against independently expected writes; observing the returned node alone
+  does not verify allocation. The linked implementation is
+  [draw_lists.cpp](src/overlay005/draw_lists.cpp).
 - Preserve threshold comparisons in their native integer form. For example,
   `100 * current_hp > 25 * max_hp` must not become rounded percentage division
   or floating point. Verify equality and both sides of the threshold separately
