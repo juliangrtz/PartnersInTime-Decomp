@@ -114,12 +114,6 @@ void ShopInventoryPanel_Hide(ShopInventoryPanel *panel, int adjust)
     func_ov005_020663d8(2);
 }
 }
-class ShopInventoryPanelInterface : public ShopRowPanelInterface
-{
-  public:
-    virtual void unknown_0c();
-    virtual u32 get_row_quantity(u16 row, int mode);
-};
 extern "C" {
 extern ShopItemPanel *data_ov009_0207ea24;
 void ShopInventoryRow_Update(ShopInventoryRowTask *task)
@@ -132,9 +126,9 @@ void ShopInventoryRow_Update(ShopInventoryRowTask *task)
     task->y = task->offset_y + ShopItemPanel_GetY(data_ov009_0207ea24);
     task->priority = 60;
     task->tile = (36 * slot + 76) / 4;
-    task->quantity = ((ShopInventoryPanelInterface *)data_ov009_0207ea24)->get_row_quantity(task->row, 0);
+    task->quantity = ((ShopRowPanelInterface *)data_ov009_0207ea24)->get_row_quantity(task->row, 0);
     old_value = task->value;
-    task->value = ((ShopInventoryPanelInterface *)data_ov009_0207ea24)->get_row_value(task->row);
+    task->value = ((ShopRowPanelInterface *)data_ov009_0207ea24)->get_row_value(task->row);
     if (old_value != task->value)
         func_ov009_0207c8f0(16 * task->row + 520, 30, task->value, 4);
     if (ShopInventoryPanel_CanSellRow((ShopInventoryPanel *)data_ov009_0207ea24, task->row))

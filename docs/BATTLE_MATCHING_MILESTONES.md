@@ -6500,3 +6500,53 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **715,692 / 1,563,700 bytes (45.77%)**, or **46.10%**
   with separate assembly. Overlay 9 reaches **27,364 / 78,984 (34.64%)**.
   **66,158 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop quantity availability arrows and price adjustments
+
+- Reconstruct **1,328 matching C/C++ bytes**: the quantity-arrow callback
+  (520 bytes) extends `shop_quantity.cpp` through `0x02078460`; the adjacent
+  mode/value-marker/value/symbol helpers (112/272/304/120) form
+  `shop_price_adjustment.cpp` at `0x020789D8` through `0x02078D00`.
+  Shared 72-byte task views and the panel's adjustment/quantity virtual slots
+  replace redundant local interfaces. No inline assembly or compiler changes.
+- Native instructions resolved the remaining differences: cache both coordinates
+  before storing either, preserve quantity reads after the virtual callback,
+  and reread scale before the model scale stores. All five complete functions
+  match; the neighboring 612-byte percentage renderer remains deferred after
+  one 596-byte draft rather than repeated register guesses.
+- Full Ninja checks, canonical packaging, native relinking, progress checks and
+  **81 tests pass**. Both ROM SHA-1 values remain
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; native relinking validates
+  43 components, 420 section units, 31,138 relocations and 1,577 ARM7 relocations
+  with zero differing bytes. Logs: `build/analysis/shop_adjustment_`.
+- Four baseline routes and two supplementary routes pass **10,282 frames**,
+  **34,535 checked returns**, including **33,740 through the new functions**.
+  Ordinary buttons reach 98 Mushrooms with one owned and 38 Ultra Mushrooms
+  at 32 coins each with 1,235 coins. This separately covers **95 capacity-only**
+  and **176 funds-only** blocked upper-arrow updates, plus available upper and
+  hidden/visible lower arrows. The funds route cancels without changing stock
+  or currency; the capacity route retains the existing restored purchase fixture.
+- Independent expectations check full 72-byte tasks/parents, actual panel
+  allocations, 1,380-byte saves, workspace fields, model/sprite prefixes, cached
+  values, positions, scales, deferred flags and **26,170 draw-list appends**.
+  All **416 ordinary numeric renders** are derived per nibble and tiled copy.
+  **187 styled-number outputs** remain observed helper pixels with checked
+  five-argument calls and preserved font data; do not claim independent rendering.
+- The first funds replay failed a final coverage assertion that wrongly assumed
+  every list with more rows than fit onscreen must scroll. This route selects
+  only the third visible row. The corrected route-specific assertion and full
+  rerun pass; game code and memory oracles were unchanged.
+- All **108 screenshots, 972 graphics dumps and 104 original saves** validate.
+  **750 artifact pairs** compare equal where starting state/input/timing agree.
+  Later supplementary captures are separate evidence. Both limit popups were
+  visually inspected; all routes clean up before overlay reuse without pending
+  calls or drain frames. Reports: `build/runtime/eur_shop_adjustment/`,
+  `eur_shop_adjustment_capacity/` and `eur_shop_adjustment_funds/`.
+- Covered adjustment modes are 1/2/3/4, enabled/disabled panels, one/two/three
+  decimal digits and changed/unchanged caches. Selling, bean-funded quantity
+  arrows, zero-count panels, mode zero, missing tasks and invalid modes remain
+  unexercised. Controlled scene entry is distinct from ordinary NPC navigation.
+- Matching C/C++ reaches **717,020 / 1,563,700 bytes (45.85%)**, or **46.19%**
+  with separate assembly. Overlay 9 reaches **28,692 / 78,984 (36.33%)**.
+  **64,830 bytes** remain to the 50% goal.

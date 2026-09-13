@@ -27,6 +27,8 @@ class ShopRowPanelInterface
     virtual void destroy();
     virtual void deleteInstance();
     virtual u32 get_row_value(u16 row);
+    virtual u32 get_row_adjustment(u16 row);
+    virtual u32 get_row_quantity(u16 row, int mode);
 };
 extern "C" {
 extern ShopItemPanel *data_ov009_0207ea34;

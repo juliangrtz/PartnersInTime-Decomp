@@ -761,9 +761,9 @@ party initialization, both zoom directions, delays and final clamps. Currency
 changes cover a seven-coin decrease with duration one; increases, cap enforcement,
 longer animations and special-shop initialization remain unexercised.
 
-`shop_quantity.cpp` owns seven adjacent helpers for the quantity popup: total
-price and decimal digits, selected-icon copying, item-name rendering, and three
-sprite callbacks. The 72-byte task view names part/vertical offset at +40,
+`shop_quantity.cpp` owns eight adjacent helpers for the quantity popup: total
+price and decimal digits, selected-icon copying, item-name rendering, three
+sprite callbacks and quantity arrows. The 72-byte task view names part/vertical offset at +40,
 cached total/base tile at +44, previous quantity at +48 and item at +52. Workspace
 unit price is a signed word at +0xA8 and quantity a signed halfword at +0xAC.
 The digit callback updates the name only when changing to or from quantity one,
@@ -792,6 +792,52 @@ are separate evidence. All five runs total 8,601 frames, preserve all original
 saves and return to the field without pending calls. Special-shop mirroring bypass,
 invalid panel indices, negative quantities/prices and out-of-range scales remain
 unexercised. Earlier currency/zoom checks remain in their own reports.
+
+
+The quantity-arrow callback uses a model resource at task offset +28 and a
+selling-mode alias at +44. The upper arrow independently checks stock capacity
+and funds when buying, or available quantity when selling; the lower arrow is
+hidden at quantity one. Hidden arrows move to (-128, -128) but still enter the
+draw list. The shared panel virtual interface names adjustment at slot +12 and
+quantity at +16. Preserve the caller's explicit halfword narrowing of quantity,
+load order around callbacks, and the scale read before model scale stores.
+
+`shop_price_adjustment.cpp` owns mode setting and three adjacent draw callbacks.
+The task pointer is at workspace +0x8BC; modes 0 through 4 map to task phases
+0, 100, 200, 300 and 400. The 72-byte task shares parent/part/cache fields with
+its children. Value and marker widths derive from the virtual adjustment times
+selected quantity; coordinates use signed Q12 division toward zero. The symbol
+only requires a nonempty panel, while value/marker also require an enabled panel.
+Both model coordinates are computed before either is stored, matching the
+native cached loads. The styled numeric helper takes five arguments, including
+the stack argument; its rasterized pixels remain observed helper output.
+
+`probe_shop_adjustment.py` and `shop_adjustment_oracles.py` cover these five new
+functions on the four preceding routes. Supplemental capacity and funds probes
+use separate directories under `build/runtime/eur_shop_adjustment_capacity/`
+and `eur_shop_adjustment_funds/`. Ordinary Up/Down holds reach 98 Mushrooms with
+one already owned (99-item capacity), or 38 Ultra Mushrooms at 32 coins each
+with 1,235 coins (the next quantity would cost 1,248). The capacity route returns
+to one and buys one using the existing restored fixture. The funds route uses
+unchanged inventory/currency and cancels without a purchase. The six runs total
+10,282 frames and 33,740 returns through the new functions, with 95 capacity-only
+and 176 funds-only blocked upper-arrow updates. They independently derive full
+tasks/parents/panels/saves, model/sprite writes and 26,170 draw-list appends;
+416 ordinary numeric renders are checked independently, while 187 styled-number
+outputs are recorded with checked arguments and unchanged font data.
+
+The funds route's initial final-coverage assertion incorrectly equated a list
+longer than seven rows with scrolling callbacks. Two Down presses remain within
+the initial visible rows; native selection code queues replacement text only
+when scrolling across an edge. Correcting that route-specific assertion and
+rerunning the full replay passed, without changing game code. All 108 screenshots,
+972 graphics dumps and 104 source saves validate. Baseline comparisons cover
+750 artifact pairs with identical starting state/input/timing; later supplementary
+captures are separate evidence. The capacity and affordability popups were
+visually inspected. Selling, bean-funded quantity arrows, zero-count panels,
+mode zero, missing mode tasks and invalid mode inputs remain unexercised.
+The nearby percentage renderer is still a native gap; do not infer its matching
+status from these callbacks or their runtime helper observations.
 
 ### Save menus
 

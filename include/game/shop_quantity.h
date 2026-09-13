@@ -5,6 +5,7 @@ typedef struct ShopQuantityTask ShopQuantityTask;
 #ifdef __cplusplus
 extern "C" {
 #endif
+void ShopQuantity_DrawArrow(ShopQuantityTask *task);
 void ShopQuantity_DrawTotal(ShopQuantityTask *task);
 void ShopQuantity_DrawDigit(ShopQuantityTask *task);
 void ShopQuantity_CopySelectedIcon(void);

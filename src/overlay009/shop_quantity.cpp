@@ -1,5 +1,56 @@
 #include "shop_quantity_internal.h"
 
+extern "C" void ShopQuantity_DrawArrow(ShopQuantityTask *task)
+{
+    BattleModel *model = Overlay5ResourceA_Get((ShopRowTask *)task);
+    if (!VISIBLE) {
+        func_ov005_0206650c(task);
+        return;
+    }
+    if (SCALE <= 1024) return;
+    int y;
+    if (!task->part) {
+        y = 84;
+        int unavailable = 0;
+        u16 available = ((ShopRowPanelInterface *)data_ov009_0207ea20)->get_row_quantity(
+            ShopItemPanel_GetSelection(data_ov009_0207ea20), 1);
+        if (!task->selling) {
+            u16 maximum = func_ov009_0207ddac(ShopItemPanel_GetRowItem(
+                data_ov009_0207ea20, ShopItemPanel_GetSelection(data_ov009_0207ea20)));
+            if (available + QUANTITY + 1 > maximum) unavailable = 1;
+            u32 currency;
+            if (!SPECIAL && data_ov009_0207ea3c[0x98] == 2)
+                currency = *(u16 *)(gSaveData + 1164);
+            else
+                currency = *(u32 *)(gSaveData + 1160);
+            if (currency < PRICE * (QUANTITY + 1)) unavailable = 1;
+        } else {
+            if (available < QUANTITY + 1) unavailable = 1;
+        }
+        if (unavailable) {
+            model->animation_offset_x = -128;
+            model->animation_offset_y = -128;
+            func_ov005_02069084(model, 10);
+            return;
+        }
+    } else {
+        y = 106;
+        if (QUANTITY == 1) {
+            model->animation_offset_x = -128;
+            model->animation_offset_y = -128;
+            func_ov005_02069084(model, 10);
+            return;
+        }
+    }
+    int position = (y - 96) * SCALE + 393216;
+    model->animation_offset_x = 168;
+    model->animation_offset_y = position / 4096;
+    int scale = SCALE;
+    model->scale_x = 256;
+    model->scale_y = scale / 16;
+    func_ov005_02069084(model, 10);
+}
+
 extern "C" void ShopQuantity_DrawSlidingSprite(ShopQuantityTask *task)
 {
     ShopRowSprite *sprite = Overlay5ResourceB_Get(task);
