@@ -293,12 +293,24 @@ the console setter narrows them only when storing its byte fields. Declaring
 those parameters as `u8` inserts extra masks in the caller. Verify both caller
 and callee, plus existing users, when correcting the shared declaration.
 
+The same caution applies to a narrow load from a stack argument. A callee's
+`LDRH` can consume the low half of a word passed without caller-side narrowing;
+declaring that parameter `u16` can add extension instructions to the caller.
+Follow both sides of the ABI and preserve the callee's truncation point. Keep
+experimental private declarations separate from a verified shared API change.
+
 Recover return contracts with the same care. A constant left in `r0` at return
 does not by itself establish an `int` result: it may be the value of the final
 store. Inspect whether callers consume that register and how the callee produces
 it. Do not copy an invented `return 1` from an old draft, or change a function to
 `void` merely because one caller ignores its result. Correct shared declarations
 and verify every affected linked caller when the evidence supports a change.
+
+Likewise, a value left in `r0` by one call does not establish an argument to the
+next call. Follow the next callee's incoming register uses before accepting a
+decompiler's apparent result-forwarding expression. This matters in the pause
+status controller: the helper at `0x020784A0` does not consume incoming `r0`,
+although pseudocode can connect it to the preceding call at `0x02077110`.
 
 Check array bounds across all consumers, including adjacent scenes that share a
 workspace. A save-menu replay using two panels does not establish that a shared

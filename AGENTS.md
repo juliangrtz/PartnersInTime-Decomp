@@ -73,7 +73,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Emulator tooling and navigation | [Runtime guide](docs/research/RUNTIME_ANALYSIS.md), [tested routes](docs/research/RECONSTRUCTION_NOTES.md#runtime-verification) |
 | RAM roots, object extents and graphics ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference) |
 | ABI and compiler lessons | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md#reconstructing-and-integrating-code) |
-| Recent pause work | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls), [page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return) |
+| Recent pause work | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls), [page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return), [main menu and member selection](docs/research/RECONSTRUCTION_NOTES.md#pause-main-menu-and-member-selection) |
 | Earlier batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md); private reports linked there |
 | Assets and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
 
@@ -99,8 +99,10 @@ claim that a shared prototype needs changing.
 2. Recover field widths, signedness, offsets, allocation sizes, ownership and
    virtual interfaces. Preserve arithmetic widths, integer promotion, division
    toward zero, Q12 operation order and exact truncation points. Derive each
-   comparison's signedness separately. A byte/halfword store does not establish
-   a narrow parameter; check caller-side extensions, stack and hidden ABI arguments.
+   comparison's signedness separately. A byte/halfword access, including a load
+   from a stack argument, does not establish a narrow parameter. Check caller-side
+   extensions, stack and hidden ABI arguments. A register left over from a previous
+   call is not an argument unless the next callee consumes its incoming value.
 3. Preserve load/store order, short-circuit calls, possible aliasing and accesses
    across callbacks. `const` does not establish non-overlap. Keep native masked
    and unmasked stores, packed-field truncation and neighboring bits. Do not
@@ -109,7 +111,9 @@ claim that a shared prototype needs changing.
    Add size/offset checks and neutral names for unknowns. A prefix's `sizeof`
    does not prove the allocation size. Search all declarations before changing
    shared layouts or signatures, then migrate and rebuild affected callers together.
-   Preserve verified interior data aliases and native table strides.
+   Preserve verified interior data aliases and native table strides. Task payloads
+   can reuse one offset for different phases; model that reuse explicitly and
+   check every transition's initialization before giving the field one meaning.
 5. Keep related contiguous functions in a subsystem module. Temporary isolated
    units are acceptable around native gaps; consolidate when those gaps close.
    Basenames must be globally unique because MW's linker selects by basename.
@@ -218,7 +222,10 @@ compatible snapshots. Read their arguments and
 - Derive expected changes independently, including native integer wrapping and
   signed division. A fresh snapshot after a helper observes its effects; it does
   not verify that helper. Check full live allocations, padding and overlapping
-  views. Constructor arguments can be valid before a scene global is published.
+  views, plus separate globals touched by the call. Constructor arguments can be
+  valid before a scene global is published. An exact ROM replay confirms executed
+  behavior; also review the C types and bounds, which matching bytes alone cannot
+  establish as valid.
 - Track allocation, initialization, updates and actual release separately. Derive
   pool slots and list writes from the allocator; do not assume payloads are zeroed.
   Removal flags, callback retargeting and pool returns are different events.
@@ -227,11 +234,15 @@ compatible snapshots. Read their arguments and
 - Derive timer behavior from its actual entry guard and recurrence. An initial
   zero may trigger now, persist indefinitely or have another meaning; integer
   truncation can add updates. Check the relevant paths instead of importing a
-  neighboring callback's timing assumption.
+  neighboring callback's timing assumption. Count callback invocations separately
+  from emulator frames, and preserve phase fallthrough within a single call.
 - Verify RAM, mapped VRAM, palettes, OAM, ordered GPU stores and visible behavior
   as appropriate. Allocation, initialized extent and transfer size can differ.
   Hardware/FIFO readback is not the submitted sequence. Keep changing scanline
   and IRQ-driven registers in captures without asserting that they are immutable.
+  Derive display engine, BG layer and tilemap buffer separately; a buffer index
+  does not identify the main or sub screen. Verify both writes in a register
+  clear-then-set operation, even when the final register value would be identical.
   Decode each hooked store's effective address, including shifted register
   indices, and reject unsupported forms. Check write-only BG scroll registers
   through the ordered stores rather than expecting readable register values.
