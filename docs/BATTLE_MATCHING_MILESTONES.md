@@ -7723,3 +7723,37 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
 - Evidence: build/runtime/eur_pause_equipment_stat_row/artifact_validation.json,
   clothing_scroll/evidence_scroll65.json, clothing_arrows/evidence_arrows86.json,
   source-identified probe and build/analysis/pause_equipment_stat_row_* logs.
+
+## 2026-09-14 - Item-selection label and offset sprites (+624 bytes)
+
+- Reconstructed the adjacent 212-byte offset-sprite and 412-byte label-strip
+  callbacks as readable C++, sharing the verified task, owner, sprite and palette
+  layouts. Native draw-order branches and signed coordinate conversions are
+  preserved. No assembly or compiler-flag changes.
+- Full matching check, golden EUR ROM, zero-difference native relink, generated
+  progress and all 81 tests pass.
+- Checkpoints 65 and 86: 5,830 frames, all 6,260
+  new callback invocations checked, 28 new sprite-task
+  lifetimes completed, 238 watched tasks and
+  66 model slots returned. No pending/live watched tasks.
+- Each run temporarily lowers Mario's RAM HP by one to permit item selection;
+  three per-call fixtures check negative palette status, alternate order and the
+  removal flag. All edits are restored. The transient flag is restored before
+  ordinary group cleanup independently releases the tasks. No item is consumed.
+  Original saves remain unchanged; these are explicitly fixture-assisted routes.
+- All 126 screenshots and 1134 graphics dumps validate;
+  pre-fixture baseline equality covers 81 images and
+  729 dumps. Render submission is verified; rasterization
+  and unreconstructed neighboring callbacks remain outside the independent oracle.
+- The failed full-health entry and subsequent missed local-removal branch are
+  preserved separately from the passing replays. Reports and probe hashes:
+  `build/runtime/eur_pause_item_selection/`; detailed limits in the
+  [reconstruction reference](research/RECONSTRUCTION_NOTES.md#pause-item-selection-label-sprites).
+- Focused visual replays reproduce all original captures, restore HP and add
+  180 neutral frames per route. Both final field images were inspected after the
+  fade; six new images, 54 graphics dumps and two field snapshots validate.
+  Reports: `build/runtime/eur_pause_item_selection_visual/`. This follow-up checks
+  visible return separately from the original callback oracle.
+- Matching C/C++: **742,252 / 1,563,700 bytes (47.47%)**; including symbolic
+  assembly: **47.80%**. Overlay 7: **77,496 / 142,264 (54.47%)**.
+  **39,598 bytes remain to reach 50% matching C/C++.**

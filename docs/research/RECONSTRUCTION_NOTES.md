@@ -3034,6 +3034,94 @@ its generator composes the preserved transition probe with the new row oracle.
 Build and replay logs use the `pause_equipment_stat_row_` prefix. Neither replay
 nor artifact validation needed an oracle correction or a rerun.
 
+### Pause item-selection label sprites
+
+[menu_item_selection_sprites.cpp](../../src/overlay007/menu_item_selection_sprites.cpp)
+reconstructs `MenuItemSelection_UpdateOffsetSprite` at `0x0207D8B0` (212 bytes)
+and `MenuItemSelection_UpdateLabelStrip` at `0x0207D984` (412 bytes). The contiguous
+624-byte unit uses the shared 64-byte sprite and
+[72-byte owner/child views](../../include/game/menu_item_selection.h), with size
+and offset checks. The neighboring model callbacks remain private candidates.
+
+Both callbacks add signed Q8 owner offsets, multiplied by 16, to Q12 positions,
+divide toward zero to obtain pixels, apply their pixel offsets and convert back
+to Q12. The offset sprite subtracts 4 horizontally and 24 vertically. Label strips
+use the owner's half-width and each child's offsets. The second screen adds 240
+pixels here; this is a subsystem-specific translation. Preserve the native
+readbacks between stores and the arithmetic widths.
+
+The workspace byte at `WORK + 0x12D` selects the packed attribute mode. The label
+callback reads `WORK + 0x12E`: values above 1 mark the task for removal; otherwise,
+zero uses draw order 5 and nonzero uses 59. A negative signed owner status selects
+the next palette bank. Its interior bank-byte alias starts at `0x0206A1F1`, with
+the verified 20-byte palette stride. The offset sprite always uses order 5.
+Native inspection recovered the final order branch omitted by the old pseudocode.
+The offset callback matched directly; preserving the native positive-status arm
+first made the label callback exact. The existing palette bitfield retains both
+native low-four-bit masks. No assembly or compiler-flag changes were needed.
+
+The checkpoint-65 equipment-scroll route and checkpoint-86 member-arrow route
+each continue by opening the item menu, selecting a mushroom and cancelling.
+Their successful replays cover 5,830 frames and independently check all
+540 offset-sprite and 5,720 label-strip calls on both
+screens. They verify full live task, parent, sprite, workspace, party, save and
+display records, position/attribute/palette writes, helper arguments, draw-list
+allocation and insertion, and actual resource/task return. There are
+6,258 new draw submissions and
+2 checked label-removal flags. Rasterization and the
+unreconstructed creators/model callbacks are not independent oracles here.
+
+Both snapshots start at full HP, which the native eligibility predicate rejects
+for healing-item selection. At the second guarded pause-entry chooser, each run
+temporarily lowers Mario's current HP by one, then restores the exact halfword
+after cancellation and the final field guard. Three additional, separate
+single-call fixtures check negative status, draw order 59 and the state-2 removal
+branch. Inputs are restored at callback return; the removal flag is checked and
+then restored before the caller resumes. Actual task release is subsequently
+verified through ordinary group cleanup, not attributed to that transient flag.
+These fixtures do not establish ordinary access from the unmodified full-health
+snapshots. Reports separate their branches from the naturally exercised paths.
+
+All 28 new sprite-task lifetimes finish; all
+238 watched tasks and 66 model slots return.
+Both runs finish with full overlay-0 field guards, no pending calls or live watched
+tasks, and all fixture inputs restored. All 104 original saves remain unchanged.
+All 126 screenshots and 1134 graphics dumps validate;
+81 images and 729 dumps equal the
+preceding equipment baselines before each run's first fixture. The checkpoint-86
+route also executes label callbacks during equipment selection, so its comparison
+stops at the earlier per-call fixture. Selected-item rendering was inspected.
+No sampling is used for the new callbacks.
+
+The original final capture was still black despite the loaded field overlay.
+Separate focused replays reproduced all 126 original screenshot hashes and
+1,134 graphics-buffer hashes with the same inputs and fixtures, restored HP at
+the original end, then advanced 180 neutral frames per route. Three captures at
+60-frame intervals retain full field-code guards and all nine graphics ranges.
+Both final images, at frames 2,910 and 3,280, were visually inspected and show the
+party in the field. The six new images, 54 dumps and two compatible field snapshots
+validate; all 104 source saves remain unchanged. This follow-up observes fade
+completion; it does not repeat the independent callback checks above or establish
+an exact fade duration. Its separate reports are under
+`build/runtime/eur_pause_item_selection_visual/`, using the same route/report
+names, and record the source report and focused probe hashes.
+
+The first checkpoint-65 attempt correctly failed its entry assertion at full HP.
+The next attempt exercised both callbacks but failed the required local-removal
+coverage: cancellation destroys the group instead. Both failed reports and probe
+versions remain private. The passing version adds the documented fixtures and
+retains every per-call check. The checkpoint-86 probe separately requires all six
+member-arrow lifetimes created across equipment entry, item entry and cancellation;
+its source is preserved separately from the first route's probe.
+
+Full matching checks, golden EUR ROM packaging, zero-difference native relinking,
+generated progress and all 81 tests pass. Reports are under
+`build/runtime/eur_pause_item_selection/`: `clothing_scroll/evidence_scroll65_v3.json`,
+`clothing_arrows/evidence_arrows86.json` and `artifact_validation.json`.
+Their exact probe paths/hashes are recorded in the reports. Private build and
+replay logs use the `pause_item_selection_` prefix; candidate/probe provenance
+is pinned in `build/analysis/pause_item_selection_batch_provenance.json`.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
