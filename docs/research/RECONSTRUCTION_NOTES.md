@@ -1925,6 +1925,59 @@ these routes produced no foreign-overlay hits. Invalid inputs and unobserved
 marker IDs remain uncovered. Both ROM build paths retain the original SHA-1,
 native relinking reports zero differing bytes, and all 81 tests pass.
 
+### Pause inventory-list preparation
+
+`PauseList_Prepare` at `0x02075F6C..0x0207616C` contributes 512 bytes in
+`pause_list_prepare.cpp`. It selects the category from the main menu and its
+submenu, captures the selected member, gets the live inventory pointer and
+byte-sized limit, restores saved positions, and clears/rebuilds the slot list.
+Only items with a nonzero available quantity enter the list. Clothing and
+badges append the empty-equipment entry last. The function then constrains
+the saved window/selection to the resulting count and requests a full redraw.
+
+`Overlay7Party` now names bytes 2/3 as `item_limit` and `member`, preserving
+the old raw view and the 332-byte prefix layout. The submenu array is the
+existing `gSceneMenuSubmenus` alias at `0x02090717`, within the pause workspace
+at +0x127. Resolve literal-pool references from their words and relocation
+metadata; their appearance in an instruction listing is not a decoded address.
+The initial matching-size draft differed around initialization order. Native
+code evaluates the equipment start before resetting the count; the already
+matching rotating-order helper uses that order too. Moving the count reset
+after the category test produced the complete match, with no assembly or
+compiler-flag changes.
+
+Private `make_pause_list_prepare_probe.py` composes the focused probe from
+`pause_list_prepare_probe_body.py`. Eight final routes under
+`build/runtime/eur_pause_list_prepare/` check all ten observed preparations
+over 11,660 frames. All five categories run. The oracle checks all 249
+quantity results independently from inventory bytes and equipped-member
+records, including signed truncation, unavailable-equipment subtraction and
+the empty-gear quantity. It verifies 149 kept items, 94 excluded items, six
+empty-gear appends, seven retained windows, two short-list clamps and one
+full-window clamp. All party fields, padding and unused slot bytes remain
+checked across the helper calls, together with the complete allocation/header,
+workspace, save, display, globals and both OBJ buffers.
+
+The original seven routes did not cover a restored full window, which the
+artifact audit detected. Exiting pause entirely and reopening it also missed
+that branch: the new party instance resets its saved positions. Both failed
+coverage checks remain in the private `_full_window_assumption` and
+`_field_exit` logs/reports. The final supplemental route scrolls to Unequip,
+closes only the clothing list with B, waits, then reopens it with A in the
+same pause instance. The second preparation restores first item 9 and
+selection 8; its visible Unequip row and final return to the field were
+inspected. All eight final replays and the artifact verifier pass.
+
+All 234 screenshots, 2,106 graphics dumps and 104 unchanged source saves
+validate; common input prefixes equal 226 prior images and 2,034 dumps.
+There are no fixtures, pending calls or drain frames. The 15,828 hits after
+overlay replacement were excluded only after matching the complete overlay-0
+owner at `0x02075D28`. Full redraw arguments and its resulting party/main-OBJ
+changes are observed, not an independent renderer check. Selection reduction,
+invalid submenu/default cases and empty inventory remain uncovered. Both ROM
+build paths reproduce the original hash, native relinking reports zero
+differing bytes, and all 81 tests pass.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

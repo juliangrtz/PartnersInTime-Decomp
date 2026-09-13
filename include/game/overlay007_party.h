@@ -12,7 +12,10 @@ extern "C" {
 typedef struct Overlay7Party {
     union { u8 unknown_00; u8 visible; };
     u8 kind;
-    u8 unknown_02[2];
+    union {
+        u8 unknown_02[2];
+        struct { u8 item_limit, member; };
+    };
     u8 slots[128];
     s8 *values;
     u8 unknown_88[128];
@@ -56,6 +59,7 @@ typedef char Overlay7ItemSizeCheck[sizeof(Overlay7Item) == 0x1c ? 1 : -1];
 extern const Overlay7Item data_020505c4[];
 
 u16 PauseList_MeasureRowWidth(Overlay7Party *party, int row, int plural);
+void PauseList_Prepare(Overlay7Party *party, int menu);
 void PauseList_Hide(Overlay7Party *party);
 void PauseList_Show(Overlay7Party *party);
 int PauseList_GetTileRow(Overlay7Party *party);

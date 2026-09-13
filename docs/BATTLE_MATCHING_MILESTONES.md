@@ -7255,3 +7255,32 @@ build, packaged EUR hash, native relink (zero differing bytes), generated
 progress check and 81 tests pass. Detailed provenance and coverage limits
 are in docs/research/RECONSTRUCTION_NOTES.md under queued row drawing.
 Private evidence: build/runtime/eur_pause_item_row_draw/.
+
+
+## 2026-09-13: Pause inventory-list preparation (+512 bytes)
+
+Reconstructed PauseList_Prepare at 0x02075F6C..0x0207616C in
+pause_list_prepare.cpp. It selects the category, restores saved positions,
+filters the inventory into visible slots, appends empty equipment, constrains
+the selection and requests a redraw. Shared member/item-limit aliases retain
+the old raw layout. Matching C/C++ reaches 728,352 / 1,563,700 (46.58%);
+overlay 7 reaches 63,596 / 142,264 (44.70%). C/C++ plus ASM is 46.91%.
+There are 53,498 bytes left to the full 50% goal.
+
+Eight final story-save routes check ten preparations in 11,660 frames,
+covering all five categories and all 249 quantity results. Independent
+checks cover 149 kept/94 excluded items, six empty-gear appends, seven
+retained windows, two short-list clamps and one full-window clamp. The last
+branch requires closing and reopening the clothing list within the same
+pause instance; exiting pause destroys its saved positions. The original
+coverage failures remain private, and all eight final replays pass.
+
+All 234 images, 2,106 graphics dumps and 104 unchanged source-save hashes
+validate; matching input prefixes equal 226 prior images and 2,034 dumps.
+The restored Unequip selection and final field exit were visually inspected.
+Full allocation and helper-boundary checks pass. Redraw mutations are observed;
+its renderer and unobserved selection/default branches remain outside this
+oracle. No fixtures, pending calls or drain frames. Exact matching build,
+packaged original EUR hash, native zero-byte difference, progress check and
+81 tests pass. Details: docs/research/RECONSTRUCTION_NOTES.md. Private evidence:
+build/runtime/eur_pause_list_prepare/.

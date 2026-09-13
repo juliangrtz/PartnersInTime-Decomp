@@ -5,7 +5,6 @@ extern "C" {
 u8 func_ov007_02075324(Overlay7Party *, int);
 u8 func_ov007_020750bc(Overlay7Party *);
 void func_ov005_020663d8(int);
-void func_ov007_02075f6c(Overlay7Party *, int);
 void func_ov007_02073c94(int);
 void func_ov007_02073994(int);
 void func_ov007_02073428(void);
@@ -19,7 +18,7 @@ extern "C" void PauseList_Show(Overlay7Party *party)
 {
     party->visible = 1;
     GameSpriteAllocation_Allocate(&WORK.main_allocation, 0, 0, 340, 0, 65535, 1, 0);
-    func_ov007_02075f6c(party, WORK.selected_menu);
+    PauseList_Prepare(party, WORK.selected_menu);
     for (int row = 0; row < 9; ++row) {
         u32 count = party->count;
         if (count < 9 && party->first + row >= (int)count)
