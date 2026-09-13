@@ -8,7 +8,7 @@ src/overlay008/save_irq_destroy.c:
     .text       start:0x0206ab80 end:0x0206abd0
 
 src/overlay008/save_menu_motion.c:
-    .text       start:0x0206c290 end:0x0206c300
+    .text       start:0x0206c290 end:0x0206c378
 
 src/overlay008/save_geometry.c:
     .text       start:0x0206c378 end:0x0206c474
@@ -21,6 +21,9 @@ src/overlay008/save_irq_init.c:
 
 src/overlay008/load_irq_destroy.c:
     .text       start:0x0206d038 end:0x0206d088
+
+src/overlay008/load_menu_panels.c:
+    .text start:0x0206d088 end:0x0206d1d0
 
 src/overlay008/load_geometry.c:
     .text       start:0x0206f48c end:0x0206f588
@@ -92,7 +95,7 @@ src/overlay008/load_menu_models.cpp:
     .text start:0x0206ed44 end:0x0206ee58
 
 src/overlay008/load_menu_motion.c:
-    .text start:0x0206f3a4 end:0x0206f414
+    .text start:0x0206f3a4 end:0x0206f48c
 
 src/overlay008/save_menu_scroll.cpp:
     .text start:0x020716e0 end:0x02071964

@@ -5897,3 +5897,51 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
   separately maintained assembly. Overlay 8 is **25,136 / 54,068 (46.49%)**.
   There are **76,990 bytes** left to the 50% target. Adjacent native movement,
   fade and palette gaps remain uncounted.
+
+## 2026-09-13: Save/load cursor acceleration and load-panel initialization
+
+- Reconstructed `SaveMenuMotion_Initialize` at `0x0206C300` (120 bytes),
+  `LoadMenuMotion_Initialize` at `0x0206F414` (120 bytes), and
+  `LoadMenu_InitializePanels` at `0x0206D088` (328 bytes): **568 new matching C
+  bytes**. Each motion initializer joins its existing contiguous 112-byte update
+  in the same module; the intervening cursor/controller gaps remain native.
+- The motion routines initialize acceleration and lock input. Caller/native
+  evidence supports `void` results; the old private drafts invented `return 1`
+  from the final byte-store value and produced a scheduling mismatch. Added a
+  size check identifying the 68-byte motion view as a prefix of a 72-byte task.
+  The panel initializer uses the recovered shared layout, creates four tasks,
+  and sets the two background priorities. Unknown panel fields remain neutral.
+- Corrected the shared panel-text width declaration to three halfwords. Native
+  load entry calls panel 2, and the next symbol starts six bytes after the array;
+  the earlier two-entry declaration was based only on the save-menu route.
+- Full Ninja module/symbol checks and all 81 tests pass. Progress generation/check
+  passes. The canonical wrapper with data mods disabled and independent native
+  relink both produce SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+  Native verification covers 43 components, 31,138 known relocations and 1,577
+  ARM7 relocations with zero differing bytes. Logs are under
+  `build/analysis/save_load_motion_{configure,check,rom,native,tests}.log`.
+- `build/analysis/probe_save_load_motion.py` replays ordinary checkpoint-55 input
+  from the initialized save menu (530 frames) and a cold-boot load menu (2,303
+  frames). The 76 guarded returns include nine acceleration initializations,
+  their 63 motion updates, one panel initialization and three text-panel calls.
+  Each motion follows remaining counts 7 through 1 and releases input once.
+  Save/load menu and confirmation transitions cover positive/negative X and Y
+  deltas, upward initial velocity, and load-file changes with leftward velocity.
+- The oracle derives full 72-byte motion tasks, the 416-byte workspace, 18 signed
+  divisions, four created-task field/list updates and both BG priority writes.
+  All 30 direct helper calls have ordered argument checks. Initial constructor
+  records and the three text-stream outputs are observed helper results; panel
+  width writes are derived from their returned values. There are no RAM fixtures,
+  unfinished calls or drain frames. Reports and captures are under
+  `build/runtime/eur_save_load_motion/`; the artifact verifier checks 40 PNGs,
+  360 graphics dumps and all 104 unchanged source saves. Visually inspected Save
+  & Continue confirmation, the empty second file, and the final field state.
+  The initial load-menu screenshot equals the earlier state-transfer baseline.
+- Zero denominators, arithmetic overflow, allocation failure and nonzero initial
+  panel selection remain unexercised. The motion oracle does not independently
+  verify downstream rendering helpers. A larger load-entry candidate remains
+  776 bytes against 764 native bytes; it is private and uncounted, as is the
+  save cursor's same-size coordinate-conversion scheduling gap.
+- Matching C/C++ is **705,428 / 1,563,700 bytes (45.11%)**, or **45.44%** with
+  separate assembly. Overlay 8 is **25,704 / 54,068 (47.54%)**. There are
+  **76,422 bytes** left to the 50% target.

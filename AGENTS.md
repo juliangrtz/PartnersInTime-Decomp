@@ -643,7 +643,10 @@ the controlled setup. Never infer complete branch coverage from a matching ROM.
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized
-save menu derived from checkpoint 55, not the similarly named load-menu state.
+save menu derived from checkpoint 55. The similarly named `load55.dst` was
+recorded after choosing Start and entering the field; its name does not establish
+an initialized load menu. Use a cold boot and the recorded input schedule when
+you need the load menu's construction or entry callbacks.
 `build/analysis/probe_save_write_effects.py` records ordinary confirmation input
 from it and verifies the brightness and background-zoom callbacks. Its report
 is `build/runtime/eur_save_write_effects/evidence_save55.json`. The animation
@@ -699,6 +702,18 @@ outputs. The result-2 path invokes the selection callback synchronously, so mode
 its immediate state and workspace changes before checking the parent's return.
 The probe-failure response reaches phase 1001 and remains on its error message.
 These fixtures verify the controller's responses, not physical storage failures.
+
+The private `build/analysis/probe_save_load_motion.py` checks save/load cursor
+acceleration and updates, load-panel setup and all three panel-text widths.
+Its reports are under `build/runtime/eur_save_load_motion/`. The save run starts
+from the compatible menu snapshot; the load run cold boots checkpoint 55 and
+navigates both file panels and the Start/Copy/Delete submenu before entering the
+field. It independently derives signed division, complete 72-byte motion tasks,
+the 416-byte workspace, input locks, created-task fields/list writes and BG
+priorities. Constructor records and text-stream results are observed outputs.
+The motion structure's checked 68-byte size describes only its prefix; the pool
+allocates 72-byte tasks. Do not infer a two-entry text-width array from the save
+menu alone: the load entry calls panel 2, and the shared array has three entries.
 
 ### Smash Eggs
 

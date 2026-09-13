@@ -76,6 +76,7 @@ extern GameTaskVTable data_ov008_02077f8c;
 extern SaveSceneTask *data_ov008_02078284;
 extern void func_ov008_0206f588(SaveSceneTask *);
 extern void func_ov008_0206e9a0(MenuElement *);
+void LoadMenu_InitializePanels(void);
 extern GameTaskVTable data_ov008_02077ff0;
 extern SaveSceneTask *data_ov008_02078288;
 extern void func_ov008_02070858(SaveSceneTask *);

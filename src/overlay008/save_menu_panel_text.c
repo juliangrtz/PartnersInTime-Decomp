@@ -1,6 +1,6 @@
 #include "save_menu_internal.h"
 
-extern u16 data_ov008_0207aa66[2];
+extern u16 data_ov008_0207aa66[3];
 
 typedef struct MenuLocationEntry {
     u16 value, unused;

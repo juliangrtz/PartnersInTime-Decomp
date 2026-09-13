@@ -49,12 +49,14 @@ typedef struct SaveSceneTask {
     GameIrqTask *irq;
     int phase;
 } SaveSceneTask;
+/* Motion prefix of a 72-byte menu task; the final word is not used here. */
 typedef struct SaveMenuMotion {
     u8 unknown_00[36];
     int remaining;
     int unknown_28;
     int x, y, velocity_x, velocity_y, acceleration_x, acceleration_y;
 } SaveMenuMotion;
+typedef char SaveMenuMotionPrefixSizeCheck[sizeof(SaveMenuMotion) == 68 ? 1 : -1];
 
 typedef char SaveMenuPartyMemberSizeCheck[sizeof(SaveMenuPartyMember) == 36 ? 1 : -1];
 typedef char SaveMenuSummarySizeCheck[sizeof(SaveMenuSummary) == 160 ? 1 : -1];
@@ -116,6 +118,8 @@ void SaveMenu_CreateModels(void);
 void LoadMenu_CreateModels(void);
 int LoadMenuMotion_Update(SaveMenuMotion *motion);
 int SaveMenuMotion_Update(SaveMenuMotion *motion);
+void LoadMenuMotion_Initialize(SaveMenuMotion *motion, int x, int y);
+void SaveMenuMotion_Initialize(SaveMenuMotion *motion, int x, int y);
 SaveSceneTask *SaveScene_Init(SaveSceneTask *task, u32 priority, u32 unused);
 SaveSceneTask *LoadScene_Init(SaveSceneTask *task, u32 priority, u32 unused);
 SaveSceneTask *GameOverScene_Init(SaveSceneTask *task, u32 priority, u32 unused);
