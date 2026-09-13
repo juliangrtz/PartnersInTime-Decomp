@@ -194,6 +194,10 @@ the printed instruction listing alone does not prove that range was inspected.
    basename. This compiler usually emits functions in reverse source order;
    verify the resulting order. Keep C declarations at block starts and C APIs
    guarded by `extern "C"` when called from C++.
+   When consolidating a private C++ draft into an existing C module, preserve
+   the module's language and the original evaluation order. Move declarations
+   to block starts while leaving assignments at their native sequence points;
+   hoisting an initializer can move a load or call across a required store.
    For C headers without their own linkage guard, their first inclusion must be
    inside `extern "C"`; wrapping a later include cannot undo an include guard.
 4. Compare sizes, every instruction, relocations and symbol layout. Classify
@@ -219,6 +223,10 @@ the printed instruction listing alone does not prove that range was inspected.
    constant loads can come from local initialization order. Use the instructions
    to explain that order before changing declarations. Do not invent a default
    result for a switch whose native callers establish a restricted input range.
+   Separate conditional stores can require explicit `if`/`else` assignments:
+   a ternary may select a value and emit one unconditional store instead.
+   Confirm that difference in the instructions before changing the source form;
+   do not treat syntax changes as register-allocation experiments.
    Resolve local data symbols only after checking their section, size, contents
    and native destination. Mapping a symbol to an address is not a comparison
    of its data. Unknown relocations or missing candidate sections must fail.
@@ -310,6 +318,9 @@ and compatible snapshots. Optional dependencies are in
   an unexplained byte mismatch must remain a failure. `compare_overlays` and
   `is_overlay_active` currently use a 90% identification threshold: they help
   locate a candidate overlay but do not replace the exact function-byte guard.
+  Do not assume every scene exit loads overlay 0. Derive the current owner from
+  component metadata and live bytes, including its complete containing function.
+  A prior route's accepted owner does not establish ownership on a new route.
   Tail-called helpers can share their caller's return address and stack pointer.
   Finish every matching pending record, innermost first, at that hook before
   processing the next instruction; handling only one record leaves a false
@@ -425,6 +436,11 @@ and compatible snapshots. Optional dependencies are in
   only checked samples. Include changed inputs and distinct object lifetimes
   in the sampling rule; track removals independently of body sampling. If
   tracking starts at the first callback, do not claim the allocation was checked.
+  Inspect the caller before designing an input route: movement helpers can run
+  every frame with direction zero, and held input can enable repeat movement
+  without the wrap flag set by a fresh press. Check movement calls separately
+  from sampled idle calls. Observing a constructor to identify a new lifetime
+  does not by itself verify the constructor or its allocator.
   List unsampled bodies and unobserved branches as coverage limits.
 - Keep supplemental routes in separate output directories. Compare captures
   with a baseline only where save state, fixtures, input history and capture
@@ -467,6 +483,12 @@ The [party lifecycle findings](docs/research/RECONSTRUCTION_NOTES.md#pause-party
 document construction before global publication, retained text-state bytes and
 menu re-entry. The recorded cleanup calls all had null image pointers; that
 evidence does not cover image-array deletion or the outer party heap free.
+The [row-task findings](docs/research/RECONSTRUCTION_NOTES.md#pause-queued-row-drawing-and-markers)
+cover deferred text drawing, marker transfers and actual task removal. For
+saved list positions, use the [preparation findings](docs/research/RECONSTRUCTION_NOTES.md#pause-inventory-list-preparation):
+close and reopen the list within the same pause instance. Leaving pause and
+constructing another party resets those saved positions and tests a different
+path. Verify this distinction with constructor and preparation hooks.
 
 Consult tested routes for [shops](docs/research/RECONSTRUCTION_NOTES.md#shops),
 [save/load menus](docs/research/RECONSTRUCTION_NOTES.md#save-menus),
