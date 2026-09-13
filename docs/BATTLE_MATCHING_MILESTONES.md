@@ -7543,3 +7543,29 @@ progress validation and all 81 tests pass. Evidence: build/runtime/eur_pause_equ
 Logs: build/analysis/pause_equipped_markers_{configure,check,rom,native,tests,artifacts}.log.
 Matching C/C++: 738,788 / 1,563,700 (47.25%); with symbolic ASM: 47.58%.
 Overlay 7: 74,032 / 142,264 (52.04%). Remaining to 50%: 43,062 bytes.
+
+
+## Pause empty-equipment row sprites
+
+Added 308 exact C++ bytes in pause_empty_row.cpp: creation at 0x02073428 (136)
+and update at 0x020734B0 (172). Reuses BattleModel and the menu task API; the
+list-show caller uses the public name. No assembly or compiler-flag changes.
+
+Two ordinary clothing/badge scrolling routes at checkpoints 65/86 cover 4,060
+frames, both creators and all 2,204 updater calls. Independent 19,836 item lookups,
+99 empty-row draw insertions and 2,105 hidden updates. Full 336-byte models checked;
+initialization, animation and virtual cleanup internals observed. ResourceA pool
+slot, attachment and actual return independently verified at 0x0206A3D8. All 32
+watched tasks complete removal; both routes return to the field without pending
+calls, live tasks, drain or fixtures. All 104 original saves remain unchanged.
+
+All 124 images and 1,116 dumps validate; 72 images and 648 dumps equal earlier
+common prefixes. Scrolled lists and both final field screens inspected. Full
+matching checks, golden packaged ROM, zero-difference native relink, progress
+and all 81 tests pass. Initial undefined-symbol build failure preserved; the
+remaining caller was migrated and the full checks rerun.
+Evidence: build/runtime/eur_pause_empty_row/.
+Logs: build/analysis/pause_empty_row_{configure,check,rom,native,tests,artifacts}.log.
+The reconstruction reference records helper and branch limits.
+Matching C/C++: 739,096 / 1,563,700 (47.27%); with symbolic ASM: 47.60%.
+Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.

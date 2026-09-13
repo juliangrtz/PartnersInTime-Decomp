@@ -51,6 +51,8 @@ void PauseListRow_UpdateDigitSprite(PauseListSpriteTask *task);
 void PauseListRow_UpdateMarkerSprite(PauseListSpriteTask *task);
 void PauseListRow_UpdateTextSprite(PauseListSpriteTask *task);
 void PauseEquippedMarker_Update(PauseEquippedMarkerTask *task);
+void PauseList_CreateEmptyRowSprite(void);
+void PauseList_UpdateEmptyRowSprite(PauseMenuElement *task);
 #ifdef __cplusplus
 }
 #endif

@@ -108,6 +108,7 @@ one-time state edit; the remaining entries are inspection references.
 | Menu element lists | `0x0206A254` | Twelve 16-byte list records, overlay 5; each contains two eight-byte sentinel records |
 | Active menu element count | `0x0206A230` | Unsigned 16-bit value, overlay 5 |
 | ResourceB sprite pool | `0x0206AA18` | 20-byte pool object, overlay 5; 64-byte item slots and eight-byte links |
+| ResourceA model pool | `0x0206A3D8` | 20-byte pool object, overlay 5; 336-byte model slots and eight-byte links |
 | Draw-node pool | `0x0206A3F8` | 20-byte pool object, overlay 5; eight-byte nodes and eight-byte links |
 | Draw lists | `0x0206A40C` | Two screens of 64 twelve-byte list records, overlay 5; distinct from the menu element lists |
 
@@ -124,6 +125,7 @@ are distinct boundaries. Check the release callback and slot before pool return,
 then check only still-live pool, list and counter records.
 
 For sprite and draw allocation, use the actual layouts in
+[sprite_pool.cpp](../../src/overlay005/sprite_pool.cpp),
 [item_pool.c](../../src/overlay005/item_pool.c),
 [overlay005_resource.h](../../include/game/overlay005_resource.h) and
 [draw_lists.cpp](../../src/overlay005/draw_lists.cpp).
@@ -2706,6 +2708,51 @@ nine or fewer entries, a partner not displayed, invalid IDs/categories and final
 rasterization are outside this runtime coverage. Row quantity/eligibility and
 opaque controller helpers retain their earlier stated limits. The neighboring
 marker and row creators remain private drafts with classified differences.
+
+### Pause empty-equipment row sprites
+
+[pause_empty_row.cpp](../../src/overlay007/pause_empty_row.cpp) owns
+`PauseList_CreateEmptyRowSprite` at `0x02073428` (136 bytes) and
+`PauseList_UpdateEmptyRowSprite` at `0x020734B0` (172). The creator attaches a
+ResourceA model to a list task, loads asset slot 82, starts animation zero and
+sets the model's low two flag bits to 2. The updater finds item ID zero within
+the first nine visible rows, writes the model's pixel coordinates and submits
+it to draw list 39. Otherwise it submits no entry. The existing list-show caller
+uses the new public declaration. All 308 bytes match without assembly or changed
+compiler flags.
+
+Two ordinary scrolling routes at checkpoints 65 and 86 cover clothing and
+badges across 4,060 frames. Both creators and every one of the 2,204 updater
+calls are checked, including 19,836 item lookups, 99 empty-row draw insertions
+and 2,105 hidden updates. The tested empty entry is at row index eight. Pool slot and
+link selection, owner attachment, asset-table lookup, final flags, row lookup,
+halfword coordinates and draw-list insertion are independently derived.
+Full 336-byte model records remain checked while allocated. Model initialization,
+animation and virtual cleanup effects are observed at helper boundaries.
+
+ResourceA uses the pool at `0x0206A3D8`; its return helper is `0x02068E14`.
+The probe verifies the pool is unchanged by virtual cleanup before independently
+deriving the return's link writes. It stops reading the model after pool return.
+Both models and their tasks complete their lifetimes. Existing row, equipped
+marker and controller checks remain active: 19,836 row refreshes, 8,816 equipped
+marker updates, 503 task factories, 282 ResourceB attachments and 114 controller
+GPU stores. All 32 watched tasks are removed, and both routes finish in the field
+with full native guards and no pending calls, live tasks, drain or RAM fixture.
+
+All 124 screenshots, 1,116 graphics dumps and 104 unchanged original saves
+validate; 72 images and 648 dumps equal earlier common input prefixes. Scrolled
+clothing/badge lists and both final field screens were inspected. Full matching
+checks, the golden packaged ROM, zero-difference native relink, generated progress
+and all 81 tests pass. An initial link check found the list-show caller still
+using the old name; migrating that reference fixed the build.
+
+Private evidence is under `build/runtime/eur_pause_empty_row/`. Tools:
+`make_pause_empty_row_probe.py`, `pause_empty_row_flow.py`, composed
+`probe_pause_empty_row.py` and `verify_pause_empty_row_artifacts.py`. Reports
+identify the exact probe source. Lists of nine or fewer entries, empty entries
+in other rows, invalid indices, model-helper internals and rasterization remain
+outside this independent coverage. The bean-display drafts are separate private
+work; their presence does not add linked coverage.
 
 ### Nawatobi
 

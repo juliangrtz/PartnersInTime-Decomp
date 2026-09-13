@@ -1,5 +1,6 @@
 #include "pause_scene_internal.h"
 #include <game/overlay007_party.h>
+#include <game/pause_list_row.h>
 
 extern "C" {
 u8 func_ov007_02075324(Overlay7Party *, int);
@@ -7,7 +8,6 @@ u8 func_ov007_020750bc(Overlay7Party *);
 void func_ov005_020663d8(int);
 void func_ov007_02073c94(int);
 void func_ov007_02073994(int);
-void func_ov007_02073428(void);
 void func_ov007_0207355c(void);
 extern const void *data_ov007_0208dad0[];
 void func_ov005_02067468(Overlay5Archive *, u8, const void *, int);
@@ -28,7 +28,7 @@ extern "C" void PauseList_Show(Overlay7Party *party)
     int kind = party->kind;
     if ((u8)(kind + 0xfe) <= 1) {
         func_ov007_02073994(kind);
-        func_ov007_02073428();
+        PauseList_CreateEmptyRowSprite();
     }
     if (party->kind == 1 && func_ov007_020750bc(party)) {
         func_ov005_02067468(ARCHIVE, 3, data_ov007_0208dad0[0], 1);
