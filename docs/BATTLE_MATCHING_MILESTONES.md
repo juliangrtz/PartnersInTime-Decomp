@@ -7432,3 +7432,32 @@ progress validation and all 81 tests pass. Evidence: build/runtime/eur_pause_pag
 Logs: build/analysis/pause_pages_{configure,check,rom,native,tests,artifacts}.log.
 Matching C/C++: 735,468 / 1,563,700 (47.03%); with symbolic ASM: 47.37%.
 Overlay 7: 70,712 / 142,264 (49.70%). Remaining to 50%: 46,382 bytes.
+
+## Pause main menu and member selection
+
+Added 1,452 exact C++ bytes: main-menu updates and reverse member-grid lookup
+in src/overlay007/pause_menu_control.cpp, plus recipient availability adjacent
+to the page callbacks. Main-menu task and highlighted-item views are shared;
+existing callers use the new callback name. No new assembly or flag changes.
+The preferred-member helper and shutter setup gaps remain native.
+
+Six ordinary-input replays use checkpoints 65/86 across 8,494 frames. Every
+observed new body is checked: 2,838 main-menu calls, 14 reverse lookups and eight
+availability queries. Coverage includes all four member positions, clothing
+acceptance/rejection, badge recipients, held wrapping/clamping and queued
+confirm/cancel. Twelve lookups write to DTCM stack outputs. The callback setter
+is independently modelled, including eight immediate page-opening calls.
+
+Checks cover 256 palette-copy bytes, 12,544 OBJ-upload bytes, 360 ordered GPU
+stores, 1,258 factories, 689 ResourceB attachments and 12 actual watched-task
+removals. All routes return to the field with no pending calls or watched tasks.
+All 122 screenshots, 1,098 dumps and 104 unchanged saves validate; 46 images
+and 414 dumps match earlier common input/state prefixes. The incomplete first
+clothing route is preserved separately from the successful exit replay.
+
+Full matching checks, golden packaged ROM, zero-difference native relink,
+progress validation and all 81 tests pass. Evidence: build/runtime/eur_pause_menu_core/.
+Logs: build/analysis/pause_menu_core_{configure,check,rom,native,tests,artifacts}.log.
+See the reconstruction reference for exact runtime limits and private probes.
+Matching C/C++: 736,920 / 1,563,700 (47.13%); with symbolic ASM: 47.46%.
+Overlay 7: 72,164 / 142,264 (50.73%). Remaining to 50%: 44,930 bytes.

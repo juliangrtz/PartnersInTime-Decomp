@@ -8,6 +8,11 @@
 #include <game/pause_background.h>
 
 extern "C" {
+extern const int data_ov007_0208d964[2][2];
+extern u8 data_ov007_02090706[4];
+extern HighlightItemView data_ov007_020907f0;
+u8 func_ov007_02075400(Overlay7Party *);
+int func_ov007_02074b44(Overlay7Party *, int, int, u32);
 void func_ov007_02080ae4(void);
 void func_ov007_0206e594(PauseMenuElement *);
 void func_ov005_0206650c(void *);
@@ -18,7 +23,6 @@ void func_ov007_02078478(void);
 void func_ov007_02078294(void);
 void func_ov007_0207f868(PausePageTask *, int);
 void func_ov007_0207fe90(int);
-void func_ov007_0206f2a0(PauseMenuElement *);
 void func_ov005_02066358(PauseMenuElement *, void (*)(PauseMenuElement *), int);
 void func_ov007_0206faf4(int, int, int);
 void func_ov007_0206f754(int);
@@ -34,6 +38,18 @@ void func_ov007_0206c6a0(PauseMenuElement *);
 void func_ov007_0206c0e4(PauseMenuElement *);
 void func_ov007_0206aca0(PauseMenuElement *);
 void func_ov007_0206abd0(PauseMenuElement *);
+}
+
+extern "C" int PauseMenu_CanSelectMember(int x, int y)
+{
+    int member = (u8)data_ov007_0208d964[y][x];
+    if (!data_ov007_02090706[member]) return 0;
+    if (WORK.selected_menu == 1) {
+        int kind = func_ov007_02075400((Overlay7Party *)data_ov007_0208e1e4);
+        if (!func_ov007_02074b44((Overlay7Party *)data_ov007_0208e1e4, kind,
+                                data_ov007_020907f0.item, member)) return 0;
+    }
+    return 1;
 }
 
 extern "C" void PausePage_OpenTask(PausePageTask *task)
@@ -196,7 +212,7 @@ extern "C" void PausePage_CloseTask(PausePageTask *task)
         Overlay5DisplayBg_SetPriority(DISPLAY_ENGINE_MAIN, 1, 2);
         Overlay5DisplayBg_SetPriority(DISPLAY_ENGINE_MAIN, 2, 1);
         data_ov007_0208e1e0->phase = 2;
-        func_ov005_02066358((PauseMenuElement *)task, func_ov007_0206f2a0, 0);
+        func_ov005_02066358((PauseMenuElement *)task, (void (*)(PauseMenuElement *))PauseMenu_UpdateTask, 0);
         break;
     }
 }

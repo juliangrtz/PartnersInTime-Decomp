@@ -77,6 +77,10 @@ struct PauseSceneWork {
     u8 unknown_de8[90600 - 0xde8];
 };
 typedef char PauseSceneWorkSize[sizeof(PauseSceneWork) == 90600 ? 1 : -1];
+/* Native alias of WORK + 0x200; item is the halfword at WORK + 0x2DE. */
+struct HighlightItemView { u8 unknown_00[222]; u16 item; };
+typedef char HighlightItemViewSize[sizeof(HighlightItemView) == 224 ? 1 : -1];
+
 struct PauseSavedState {
     u8 unknown[1370];
     s16 tutorial;

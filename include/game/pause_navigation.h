@@ -16,6 +16,14 @@ typedef struct PausePageTask {
 
 typedef char PauseRumbleDelayTaskSize[sizeof(PauseRumbleDelayTask) == 72 ? 1 : -1];
 typedef char PausePageTaskSize[sizeof(PausePageTask) == 72 ? 1 : -1];
+typedef struct PauseMainMenuTask {
+    u8 unknown_00[32];
+    s32 phase, brightness, unknown_28, selection_delay;
+    s32 queued_action, queued_movement, unknown_38, background_pending;
+    u8 unknown_40[8];
+} PauseMainMenuTask;
+typedef char PauseMainMenuTaskSize[sizeof(PauseMainMenuTask) == 72 ? 1 : -1];
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -23,6 +31,9 @@ void PauseScene_DelayedRumbleTask(PauseRumbleDelayTask *task);
 void PauseScene_ChooseEntryTask(PauseMenuElement *task);
 void PausePage_CloseTask(PausePageTask *task);
 void PausePage_OpenTask(PausePageTask *task);
+void PauseMenu_UpdateTask(PauseMainMenuTask *task);
+void PauseMenu_GetMemberPosition(int member, int *x, int *y);
+int PauseMenu_CanSelectMember(int x, int y);
 #ifdef __cplusplus
 }
 #endif

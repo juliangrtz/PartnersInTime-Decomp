@@ -854,4 +854,5 @@ src/overlay007/pause_equipment_highlight.cpp
 src/overlay007/pause_transition_tasks.cpp
 src/overlay007/pause_transition_projection.cpp
 src/overlay007/pause_page_tasks.cpp
+src/overlay007/pause_menu_control.cpp
 src/overlay007/pause_scene_control.cpp

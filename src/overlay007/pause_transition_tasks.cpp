@@ -1,5 +1,6 @@
 #include "pause_scene_internal.h"
 #include <game/pause_transition.h>
+#include <game/pause_navigation.h>
 #include <game/overlay005_resource.h>
 extern "C" {
 #include <game/overlay007_party.h>
@@ -64,7 +65,6 @@ void func_ov007_02076e30(int);
 void func_ov007_0207fe90(int);
 void func_ov007_02080c40(void);
 void func_ov007_0207b2dc(int, int);
-void func_ov007_0206f2a0(PauseMenuElement *);
 void func_ov005_02066358(PauseMenuElement *, void (*)(PauseMenuElement *), int);
 int SceneScript_StartPrimary(u8 *);
 }
@@ -108,7 +108,7 @@ extern "C" void PauseScene_FadeInTask(PauseFadeInTask *task)
         if (task->brightness >= 16) {
             if (WORK.tutorial) SceneScript_StartPrimary(data_ov007_020a6b90);
             data_ov007_0208e1e0->phase = 2;
-            func_ov005_02066358((PauseMenuElement *)task, func_ov007_0206f2a0, 0);
+            func_ov005_02066358((PauseMenuElement *)task, (void (*)(PauseMenuElement *))PauseMenu_UpdateTask, 0);
             task->unknown_2c = 0;
             task->unknown_30 = 0;
             task->unknown_34 = 0;

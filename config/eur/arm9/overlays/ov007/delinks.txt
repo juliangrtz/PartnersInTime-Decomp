@@ -227,7 +227,10 @@ src/overlay007/pause_transition_tasks.cpp:
     .text start:0x0206d418 end:0x0206e0d4
 
 src/overlay007/pause_page_tasks.cpp:
-    .text start:0x0206e8dc end:0x0206f04c
+    .text start:0x0206e8dc end:0x0206f0e4
+
+src/overlay007/pause_menu_control.cpp:
+    .text start:0x0206f240 end:0x0206f754
 
 src/overlay007/pause_transition_projection.cpp:
     .text start:0x0206e1c8 end:0x0206e27c

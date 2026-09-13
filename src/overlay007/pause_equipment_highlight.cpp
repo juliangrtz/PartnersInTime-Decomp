@@ -10,10 +10,6 @@ struct PauseEquipmentHighlightTask {
 };
 typedef char HighlightTaskSize[sizeof(PauseEquipmentHighlightTask) == 72 ? 1 : -1];
 
-/* Native alias of WORK + 0x200. The item halfword is at WORK + 0x2DE. */
-struct HighlightItemView { u8 unknown_00[222]; u16 item; };
-typedef char HighlightItemViewSize[sizeof(HighlightItemView) == 224 ? 1 : -1];
-
 extern "C" {
 extern HighlightItemView data_ov007_020907f0;
 void func_02036988(vu32 *, int, int, int, int);

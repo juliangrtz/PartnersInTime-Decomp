@@ -2433,8 +2433,8 @@ chooser itself; the preceding setup helper remains observed.
 
 ### Pause page entry and return
 
-[pause_page_tasks.cpp](../../src/overlay007/pause_page_tasks.cpp) owns the
-contiguous `0x0206E8DC..0x0206F04C` range: delayed rumble (60 bytes), entry
+The page-transition batch added the contiguous `0x0206E8DC..0x0206F04C` range
+to [pause_page_tasks.cpp](../../src/overlay007/pause_page_tasks.cpp): delayed rumble (60 bytes), entry
 selection (124), page closing (532) and page opening (1,188), totaling 1,904
 new matching C++ bytes. Shared task layouts are in
 [pause_navigation.h](../../include/game/pause_navigation.h). The existing
@@ -2490,6 +2490,69 @@ derived above. The native renderer, physical rumble, other input/flag combinatio
 and unvisited states remain outside this coverage. Probe sources are private
 `make_pause_pages_probe.py`, `pause_pages_flow.py` and composed
 `probe_pause_pages.py`; `verify_pause_pages_artifacts.py` validates the reports.
+
+### Pause main menu and member selection
+
+[pause_menu_control.cpp](../../src/overlay007/pause_menu_control.cpp) adds
+`PauseMenu_GetMemberPosition` at `0x0206F240` (96 bytes) and
+`PauseMenu_UpdateTask` at `0x0206F2A0` (1,204). The adjacent
+`PauseMenu_CanSelectMember` at `0x0206F04C` (152) extends
+[pause_page_tasks.cpp](../../src/overlay007/pause_page_tasks.cpp). All 1,452
+new bytes match without assembly or compiler-flag changes. The intervening
+preferred-member function at `0x0206F0E4` remains native.
+
+The main-menu task has a five-update selection delay and separate queued
+action/movement words. Fresh presses can wrap at the first/last menu entry;
+held repeats clamp there. Confirmation waits for the background task, copies
+32 bytes from main OBJ palette +384 to sub OBJ palette +384, then installs and
+immediately invokes the page-opening callback. The two cached input halfwords
+at workspace +2/+4 retain separate native reads. Its 72-byte view is shared in
+[pause_navigation.h](../../include/game/pause_navigation.h).
+
+The member grid at `0x0208D964` is `[[3, 2], [1, 0]]`: babies above adults,
+Luigi on the left and Mario on the right. Reverse lookup writes two full-width
+coordinates and defaults to `(0, 0)` when no entry matches; callers consume
+the pointer outputs, not an inferred return value. Availability reads the
+four-byte alias at `0x02090706`. Equipment selection also checks the highlighted
+item and party category. The existing item view at `0x020907F0` is now shared
+through the pause internal header, preserving its halfword at workspace +0x2DE.
+
+Six ordinary-input replays under `build/runtime/eur_pause_menu_core/` cover
+8,494 frames: five-page entry/return at checkpoint 65; clothing recipients at
+65; badge recipients at 86; held-input and boundary movement; queued confirmation;
+and queued cancellation. Every observed target call is checked, including
+2,838 main-menu calls, 14 reverse lookups and eight availability calls. All four
+member positions run; clothing accepts both adults and rejects both babies,
+while badge selection accepts all four. Twelve reverse lookups write into
+ARM9 DTCM stack storage, with neighboring bytes preserved. Both boundary wrap
+and clamp paths run, as do queued up/down repeats and confirm/cancel actions.
+
+The probe independently models 36 callback installations, including eight
+synchronous page openings. Existing page/chooser/rumble checks remain active:
+160 opens, 104 closes, six choosers and 30 rumble updates. It verifies 256 copied
+palette bytes, 12,544 OBJ-upload bytes, 360 ordered GPU stores, 1,258 factories,
+689 ResourceB attachments and 12 complete watched task lifetimes through actual
+removal. Full live records are checked at 6,059 boundaries. No pending call,
+watched task or drain frame remains. Final overlay-0 native guards and inspected
+screens show the field on every route.
+
+All 122 screenshots, 1,098 graphics dumps and 104 unchanged source-save hashes
+validate; 46 images and 414 dumps equal earlier common input/state prefixes.
+Both recipient-selection screens and every final field image were inspected.
+The first clothing route stopped at the main menu with a watched task still
+live. Its failure report is preserved; adding the missing ordinary exit input
+produced the passing `clothing65_exit` replay. Earlier discovery reports are
+excluded from the six-route totals. The final probe checks field code ownership
+instead of interpreting the former pause BSS after overlay 0 replaces it.
+
+Private tooling: `make_pause_menu_core_probe.py`, `pause_menu_core_flow.py`,
+composed `probe_pause_menu_core.py`, and `verify_pause_menu_core_artifacts.py`.
+Full matching checks, the golden packaged ROM, zero-difference native relink,
+generated-progress validation and all 81 tests pass. Opaque setup/background,
+label, palette-reset and sound helpers are observed at return. Main-menu phases
+1000/1001, doubled queued movement, unavailable-member early return, invalid
+member IDs, non-equipment availability and final rasterization remain outside
+this runtime coverage. The preferred-member and shutter setup gaps are private.
 
 ### Nawatobi
 
