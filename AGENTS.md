@@ -1,67 +1,42 @@
 # Working on Partners in Time
 
-This repository reconstructs Mario & Luigi: Partners in Time as readable,
-editable C/C++ that reproduces the European Nintendo DS game byte for byte.
-The decompilation is fully generated with generative AI under human direction.
-Preserve the README disclosure and [AI policy](docs/AI_USAGE.md).
-These instructions apply throughout the repository.
+Reconstruct Mario & Luigi: Partners in Time as readable, editable C/C++ that
+reproduces the European Nintendo DS game byte for byte. This decompilation is
+fully generated with generative AI under human direction. Preserve the README
+disclosure and [AI policy](docs/AI_USAGE.md).
 
-Quick links: [checkout](#start-in-the-correct-checkout),
-[evidence and resources](#find-the-relevant-evidence),
-[reconstruction](#reconstruct-and-integrate),
-[build commands](#build-and-verification),
-[runtime checks](#runtime-verification),
-[publication and handoff](#documentation-git-and-handoff).
-For addresses, use the [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference)
-and the guarded [Nawatobi entry procedure](docs/research/RECONSTRUCTION_NOTES.md#nawatobi).
-
-## Start here
-
-1. Read the latest user request and **Priorities and scope** below. Establish
-   whether this task is reconstruction, research or documentation.
-2. Verify the checkout, branch, remote and existing changes before editing.
-3. Read the private handoff if present, then check its claims against current
-   source, metadata and artifacts. Use the resource table for subsystem details.
-4. For reconstruction, choose a coherent group whose native behavior is
-   understood. Establish exact object matching, build integration and relevant
-   runtime coverage separately before publishing its progress.
-5. Review and stage only task-owned changes, run the index content audit, then
-   commit and push to the verified user remote. Leave an accurate handoff at a
-   stopping point.
-
-Documentation-only work uses content/link and Git checks. Keep changing
-percentages, candidate inventories and individual replay results in generated
-reports and the private handoff, not in this guide.
+These instructions apply throughout the repository. Detailed addresses, compiler
+examples and tested routes live in the
+[reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md).
 
 ## Priorities and scope
 
-- Follow the latest user request and requested stopping point. Documentation or
-  research requests do not start another decompilation batch. A handoff is
-  context, not permission to resume a superseded task.
-- For decompilation, prefer fast, well-understood progress in coherent groups.
-  Readability and exact matching both matter. Use instructions, callers, shared
-  types and runtime evidence; do not brute-force source permutations or spend
-  hours guessing at register allocation. Record hard gaps and move on.
-  Before another attempt at a deferred function, identify the new evidence that
-  explains its remaining difference. An untested neighboring function is a
-  separate candidate, even when another function in the same private object matches.
-- Small, explained inline-assembly fragments are authorized where necessary.
-  Verify the complete function and disclose the fragment. Coverage follows
-  [the existing metric](docs/PROGRESS.md), which tracks symbolic assembly separately.
-- Complete authorized work without repeated confirmation requests. Intermediate
-  commits and pushes to the user's `origin` are authorized. Give concise progress
-  updates and state what was actually verified.
-- Use subagents only when the user or applicable instructions explicitly authorize
-  delegation. Old agent names in session context do not authorize restarting them.
+- Follow the latest user request and requested stopping point. Research or
+  documentation requests do not start another reconstruction batch. A handoff
+  provides context; it does not authorize resuming a superseded task.
+- Prefer fast, well-understood progress in coherent groups. Readability and
+  exact matching both matter. Use native instructions, callers, shared types
+  and runtime evidence. Do not brute-force source permutations or spend hours
+  guessing at register allocation. Record difficult gaps and move on; revisit
+  them only when new evidence explains the remaining difference.
+- Small, explained inline-assembly fragments are authorized when necessary.
+  Verify the whole function and disclose the fragment. Do not wrap machine-code
+  dumps in C to inflate progress or mix symbolic ASM into the C/C++ percentage.
+- Complete authorized work without repeated permission requests. Verified
+  intermediate commits and pushes to the user's `origin` are authorized.
+  Give concise progress updates and report what was actually checked.
+- Use subagents only when the user or applicable instructions explicitly
+  authorize delegation. Old agent names in session context are not authorization.
 
 ## Start in the correct checkout
 
-The current checkout is `C:\Users\Julian\Desktop\PartnersInTime-Decomp`.
-`D:\NDS\Partners in Time` is the private research workspace; its root `AGENTS.md`
-points here. Its `References/PartnersInTime-Decomp` is an older reference clone,
-not the active source or push destination. Verify paths on a different machine.
+The active checkout on this workstation is:
+`C:\Users\Julian\Desktop\PartnersInTime-Decomp`.
+`D:\NDS\Partners in Time` holds private research and points here through its
+own `AGENTS.md`. Its `References/PartnersInTime-Decomp` is an older reference
+clone. Verify these paths on another machine.
 
-Run these read-only checks before editing:
+Before editing:
 
 ```powershell
 Set-Location -LiteralPath 'C:\Users\Julian\Desktop\PartnersInTime-Decomp'
@@ -71,233 +46,117 @@ git log -5 --oneline
 git remote -v
 ```
 
-The user's remote is `https://github.com/juliangrtz/PartnersInTime-Decomp.git`.
-`upstream` is for reference. Verify the branch before pushing; work has used `main`.
-Preserve unrelated changes and use the configured Git identity. Do not rewrite
-history or change attribution as routine housekeeping.
+The user's remote is `https://github.com/juliangrtz/PartnersInTime-Decomp.git`;
+work has used `main`. `upstream` is for reference. Preserve unrelated changes,
+use the configured Git identity, and stage explicit task-owned paths. History
+rewriting and attribution changes are separate tasks, not routine housekeeping.
 
-Use `rg --files` to locate files, then scoped `rg` searches. In PowerShell, quote
-paths with spaces and use `-g 'pattern'` rather than passing an unexpanded wildcard
-as a directory. Batch independent reads where useful; serialize shared builds,
-metadata edits and emulator runs that share a ROM/save sidecar.
-Parse large JSON reports and print selected records, not entire diff dumps.
+Read private `build/analysis/CURRENT_HANDOFF.md` if present, then verify its
+claims against Git, source and artifacts. It can be stale even at the same
+`HEAD`: another private draft or uncommitted batch may have appeared afterward.
+Inventory pending files and check provenance before reusing an integration script.
+
+Use `rg --files` and scoped `rg` searches. Quote PowerShell paths containing
+spaces; use `-g 'pattern'` for file globs. Parse large reports and print selected
+records. Serialize builds, metadata edits and replays that share ROM/save paths.
 
 ## Find the relevant evidence
 
 | Need | Resource |
 |---|---|
-| Recorded coverage | [Generated progress](docs/progress.json), [counting rules](docs/PROGRESS.md); compare report, manifest and Git revisions |
-| Current pending work | Private `build/analysis/CURRENT_HANDOFF.md`; compare its commit, pending paths and check provenance with the working tree |
-| What is actually linked | `config/eur/arm9/linked_sources.txt` |
-| Function boundaries and load addresses | Resident `config/eur/arm9/{symbols,delinks}.txt`; overlays `config/eur/arm9/overlays/ovNNN/` |
-| Calls, literal references and data ownership | Component `relocs.txt`, `symbols.txt`, `delinks.txt` and the compiled object's symbol/relocation tables |
-| Source organization and confirmed subsystem roles | [Source policy](docs/DECOMPILATION_STYLE.md), [overlay map](docs/research/OVERLAY_MAP.md), [battle map](docs/research/BATTLE_MAP.md) |
-| VM semantics and remaining assembly | [Script VM reference](docs/research/SCRIPT_VM_SEMANTICS.md), [Scene VM notes](docs/research/SCENE_VM_MATCHING.md) |
+| Coverage and counting rules | [Progress JSON](docs/progress.json), [metric](docs/PROGRESS.md) |
+| Source actually used in the ROM | `config/eur/arm9/linked_sources.txt` |
+| Boundaries, load addresses and references | Resident `config/eur/arm9/{symbols,delinks,relocs}.txt`; overlays `config/eur/arm9/overlays/ovNNN/`; candidate object symbols and relocations |
+| Source organization and subsystem roles | [Source policy](docs/DECOMPILATION_STYLE.md), [overlay map](docs/research/OVERLAY_MAP.md), [battle map](docs/research/BATTLE_MAP.md) |
+| VMs | [Script VM semantics](docs/research/SCRIPT_VM_SEMANTICS.md), [Scene VM matching](docs/research/SCENE_VM_MATCHING.md) |
 | Native inspection and relinking | [IDA guide](tools/ida/README.md), [reassembly plan](docs/REASSEMBLY_PLAN.md) |
-| Runtime tools and save navigation | [Runtime guide](docs/research/RUNTIME_ANALYSIS.md) |
-| RAM roots, allocation extents and graphics capture ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference); addresses are CPU- and overlay-specific |
-| Detailed matching lessons and tested scene routes | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md) |
-| Pause transition ABI and resource ownership | [Exit evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-exit-tasks-and-transition-state), [projection findings](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi); distinguish code-derived behavior from replay coverage |
-| Previous batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md) and its private reports |
-| Assets, script editing and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
+| Emulator tooling and navigation | [Runtime guide](docs/research/RUNTIME_ANALYSIS.md), [tested routes](docs/research/RECONSTRUCTION_NOTES.md#runtime-verification) |
+| RAM roots, object extents and graphics ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference) |
+| ABI and compiler lessons | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md#reconstructing-and-integrating-code) |
+| Recent pause work | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
+| Earlier batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md); private reports linked there |
+| Assets and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
 
-Read the relevant reference section before working on its subsystem. Current
-native bytes, source, link metadata and fresh checks take precedence over old
-notes. Private candidates are not linked progress; an old successful probe is
-not proof that today's source or artifact was tested. Keep changing percentages,
-milestones and candidate status in generated reports and the private handoff.
-Private probes, saves, snapshots and analysis scripts are local resources, not
-dependencies supplied by a fresh clone. Check that they exist and inspect their
-inputs before invoking them. If an artifact is absent, state which evidence is
-unavailable and use the public runtime tools to establish a reproducible route.
-When resuming a partially integrated batch, inventory its pending files and
-completed checks first. Associate each check with the source and ROM it tested.
-A handoff can be stale even when its recorded `HEAD` still matches: the next
-batch may have changed the working tree without a commit. Compare its pending
-file list and report timestamps with actual files before trusting completion
-claims or replaying an integration script.
-Check reported blockers against the current declarations and implementation.
-A handoff's claim that a shared function has the wrong argument count is not
-enough to justify a header refactor; inspect the actual signature and callers.
-Record candidate status in separate fields: exact object comparison, build
-integration, runtime coverage, commit and push. For example, an exact function
-in the working manifest can still await runtime verification and publication.
-The progress generator reads metadata; it does not run those checks. When
-merging a new pair around an already linked helper, count only the new ranges,
-not the whole replacement module or duplicate copies left in private drafts.
-A documentation commit must not include pending source or regenerate progress
-to claim bytes whose verification is still incomplete.
-If the generated reports are dirty, use `git show HEAD:docs/progress.json` for
-committed coverage and inspect the verified remote-tracking revision for pushed
-coverage. A local remote-tracking ref can be stale; confirm a push before calling
-new bytes published. A progress target from an earlier task remains context
-until the latest request actually asks to resume reconstruction.
-
-Use these separate evidence fields in a batch report or handoff:
-
-| Stage | Evidence required |
-|---|---|
-| Exact candidate | Identified source/object, whole native range including pools, and resolved relocations; inspect the comparison text as well as its exit code |
-| Integrated | Public source and current headers pass the full build checks with the intended manifest and component ownership |
-| Runtime checked | Completed route reports, function/branch counts, allocation lifetimes, validated artifacts and explicit coverage limits |
-| Published | Task-owned files committed, push successful, and remote revision confirmed |
-
-Write `pending`, `failed` or `not run` where applicable. One stage cannot stand
-in for another. Keep an exact but incompletely exercised batch out of a
-documentation-only commit, even if its generated percentage has already risen.
-
-Private original bytes are in `extract/eur/arm9/` and
-`extract/eur/arm9_overlays/`; IDA databases are in `build/ida/` and experiments
+Native bytes are private under `extract/eur/arm9/` and
+`extract/eur/arm9_overlays/`; IDA databases live in `build/ida/`, and experiments
 in `build/analysis/`, including `local_decompiler/`. The EUR resident `arm9.bin`
-starts at `0x02004000`. Derive offsets from component metadata, not from the
-start of main RAM. CPU and overlay identity matter because addresses are reused.
-Disassemblers can stop at embedded literal-pool data or decode it as instructions.
-Check the complete metadata range, including trailing pool bytes and relocations;
-the printed instruction listing alone does not prove that range was inspected.
+loads at `0x02004000`, not the start of main RAM. Derive offsets from component
+metadata and identify the CPU and overlay before interpreting an address.
+
+Private scripts, snapshots and reports are local conveniences, not fresh-clone
+dependencies. Check availability, inputs and source/ROM provenance before reuse.
+If absent, establish the needed evidence with public tools and user-supplied
+ROM/saves. Current native bytes, source, metadata and fresh checks take precedence
+over historical notes. Check existing declarations before accepting a handoff's
+claim that a shared prototype needs changing.
 
 ## Reconstruct and integrate
 
-1. Check boundaries, original instructions, callers and neighbors. Treat
-   pseudocode as a hypothesis: it can omit stack arguments, FIFO stores and
-   cached loads, or invent return values. Pick targets with understood data flow
-   and a reproducible runtime route.
-2. Recover widths, signedness, truncation points, ownership and virtual interfaces.
-   Put shared layouts/prototypes in headers; use neutral names for unknowns and
-   compile-time size checks. A known prefix's size does not prove allocation size.
-   Preserve integer promotion, signed division toward zero, overflow behavior,
-   Q12 operation order and reads across callbacks. A narrow return type does not
-   imply a narrow accumulator; preserve where the native code truncates. Check
-   null-record paths before replacing them with early returns.
-   Track signedness per expression: an unsigned value divided by an `int`
-   divisor uses unsigned division, while that divisor's own `/= 10` stays signed.
-   A shared byte can be read with `LDRB` in one caller and `LDRSB` in another.
-   Preserve the signed interpretation at the actual access site; changing the
-   shared field's type globally can alter otherwise matching callers.
-   Even within one function, native comparisons of the same count can use
-   different signedness. Recover each comparison from its condition code and
-   operands instead of applying one interpretation to the whole function.
-   Preserve repeated getter calls and their short-circuit order until the
-   native code proves a cached result; an identical return value in one replay
-   does not justify replacing two calls with one.
-   Preserve repeated source reads around destination writes when the pointers
-   can alias; `const` does not establish non-overlap.
-   Prefer the actual shared workspace type over casting a raw byte global to a
-   partial structure. Preserve existing byte views when naming newly understood
-   fields, check offsets and size, and rebuild every affected caller.
-   Use existing typed records when native indexing establishes their stride and
-   field offset. Flattening a record table to words, or replacing record pointers
-   with preloaded scalar fields, can change address calculation and load order.
-   Explain the specific native difference before changing the source form.
-   Preserve genuine interior data aliases when the native code loads their
-   literal addresses. An address such as workspace base plus an offset can be
-   a distinct linker symbol for another view of the same object. Confirm it in
-   symbols and relocations before replacing it with base-pointer arithmetic;
-   preserve overlapping raw and typed views without changing the object layout.
-   Search all declarations before adding a typed table extern to a shared header.
-   Legacy callers may still declare that symbol as a raw byte array. Keep the
-   recovered record type shared, but its extern local until those callers can be
-   migrated coherently. Preserve existing field names and raw views with layout-
-   preserving aliases where the same bytes have another verified interpretation.
-   Recover virtual slot signatures from both callers and implementations. Keep
-   caller-side narrowing at the native instruction; a narrow implementation's
-   return declaration alone does not describe every caller's register use.
-   The same applies to parameters: a callee storing a halfword does not prove
-   that its caller narrowed the argument before the call. Recover stack arguments
-   from instructions and stack offsets, not a decompiler's inferred call arity.
-   The pause projection has seven arguments, including output pointers on the
-   stack. A full-width angle masked with `0xFFFF` can compile differently from
-   a `u16` parameter or cast. Preserve the native mask and caller-side narrowing
-   separately; see the linked projection findings before reusing its signature.
-   Bitfield assignments can truncate again after an explicit byte cast and
-   preserve other bits in the same byte. Check the complete storage byte and
-   assignment order; do not replace packed fields with separate flags.
-   Check load/store order explicitly. A callback can change shared state, and
-   native code may cache both coordinates before writing either destination.
-   It can also store both an unmasked sum and its masked value, then reuse the
-   cached value. Preserve both stores without introducing extra global reloads;
-   apparent redundancy alone is not evidence for a source simplification.
-   Follow the arithmetic data flow too: preparing both signed Q12 divisions
-   before the destination assignments can reproduce interleaved sign-correction
-   instructions that caching only the raw coordinates does not. Explain that
-   dependency from the native listing instead of trying register permutations.
-   Derive array dimensions from element widths and row/column strides. A local
-   aggregate initializer can explain a native stack copy; a handwritten copy or
-   flattened table can introduce different instructions. Use the existing shop
-   selling-message initializer as a verified example, not a universal template.
-3. Keep related contiguous functions in one subsystem module. Temporary isolated
+1. Inspect the complete native range, callers and neighbors. Pseudocode can
+   omit stack arguments, repeated FIFO stores and cached loads, or invent return
+   values. Check literal pools too: disassemblers can stop at data or decode it
+   as instructions. Choose a group with understood behavior and a usable route.
+2. Recover field widths, signedness, offsets, allocation sizes, ownership and
+   virtual interfaces. Preserve arithmetic widths, integer promotion, division
+   toward zero, Q12 operation order and exact truncation points. Derive each
+   comparison's signedness separately. A byte/halfword store does not establish
+   a narrow parameter; check caller-side extensions, stack and hidden ABI arguments.
+3. Preserve load/store order, short-circuit calls, possible aliasing and accesses
+   across callbacks. `const` does not establish non-overlap. Keep native masked
+   and unmasked stores, packed-field truncation and neighboring bits. Do not
+   simplify apparently redundant operations without explaining the instructions.
+4. Use existing shared records and workspace types; retain compatible raw views.
+   Add size/offset checks and neutral names for unknowns. A prefix's `sizeof`
+   does not prove the allocation size. Search all declarations before changing
+   shared layouts or signatures, then migrate and rebuild affected callers together.
+   Preserve verified interior data aliases and native table strides.
+5. Keep related contiguous functions in a subsystem module. Temporary isolated
    units are acceptable around native gaps; consolidate when those gaps close.
-   Source basenames must be globally unique because MW's linker selects by
-   basename. This compiler usually emits functions in reverse source order;
-   verify the resulting order. Keep C declarations at block starts and C APIs
-   guarded by `extern "C"` when called from C++.
-   When consolidating a private C++ draft into an existing C module, preserve
-   the module's language and the original evaluation order. Move declarations
-   to block starts while leaving assignments at their native sequence points;
-   hoisting an initializer can move a load or call across a required store.
-   For C headers without their own linkage guard, their first inclusion must be
-   inside `extern "C"`; wrapping a later include cannot undo an include guard.
-4. Compare sizes, every instruction, relocations and symbol layout. Classify
-   differences before editing. Do not change compiler flags, weaken checkers or
-   add arbitrary casts/volatile accesses to obtain a match. Recompile private
-   drafts against current headers; a missing symbol must never fall back to
-   original bytes and count as a passing candidate.
-   A scoped volatile zero is justified only where native stack stores and loads
-   establish that access pattern, as in some CPU-clear wrappers. Document that
-   evidence; do not apply volatile to an unrelated register-allocation mismatch.
-   Inspect the actual comparison result: some private checkers exit successfully
-   while reporting differences. Equal function sizes also do not establish a
-   match. Only fully checked, integrated functions count toward progress.
-   Associate comparisons with the exact source, language mode and object:
-   private checkers can overwrite address-named dumps from an earlier candidate.
-   Compare an already matching counterpart when one exists before changing
-   declaration lifetimes or pointer increments. Separate increments versus
-   postincrements, and keeping a returned structure versus discarding it, can
-   change this compiler's instructions or stack layout. These are evidence to
-   explain a specific difference, not a recipe for enumerating source variants.
-   Preserve separate switch arms when the native jump table distinguishes their
-   targets, even if their assignments look identical. Likewise, a few reordered
-   constant loads can come from local initialization order. Use the instructions
-   to explain that order before changing declarations. Do not invent a default
-   result for a switch whose native callers establish a restricted input range.
-   Separate conditional stores can require explicit `if`/`else` assignments:
-   a ternary may select a value and emit one unconditional store instead.
-   Confirm that difference in the instructions before changing the source form;
-   do not treat syntax changes as register-allocation experiments.
-   Resolve local data symbols only after checking their section, size, contents
-   and native destination. Mapping a symbol to an address is not a comparison
-   of its data. Unknown relocations or missing candidate sections must fail.
-5. Integrate exact matches into `linked_sources.txt` and the component metadata.
-   Update affected declarations and maintained assembly references together.
-   Preserve interior entry points with `config/eur/arm9/linker_aliases.json`;
-   check `reasm/eur/patches.json` when renaming symbols.
-   Include any compiler-emitted local data in the module's ownership ranges and
-   metadata, using the actual symbol and local binding. Anonymous names such as
-   `@312` can change with includes; inspect the new object instead of adding a
-   linker workaround. Data bytes do not count toward matching code coverage.
-6. Complete the checks below, update evidence/progress/map, then commit and push
-   the coherent batch. Record deferred gaps instead of repeatedly retrying the
-   same register mismatch without new evidence.
+   Basenames must be globally unique because MW's linker selects by basename.
+   This compiler generally emits functions in reverse source order; verify it.
+   Keep C declarations at block starts without hoisting assignments across native
+   sequence points. Guard C APIs with `extern "C"` in C++; a header without its
+   own linkage guard must first be included inside that block.
+6. Compare size, every instruction, pools, relocations and symbol layout.
+   Classify the difference before editing. Keep compiler flags and ABI fixed;
+   do not weaken checks or introduce arbitrary casts/volatile accesses to match.
+   A scoped volatile access requires evidence of that native access pattern.
+   Recompile drafts against current headers and associate each comparison with
+   the actual source, language mode and object. Address-named dumps may be overwritten.
+7. Inspect comparison text as well as exit status: some private checkers return
+   success while reporting `DIFFERENT`. Equal sizes do not establish a match.
+   Unknown relocations, missing candidate sections or unresolved functions must
+   fail; never substitute original bytes for a missing candidate. Validate local
+   data contents and ownership before mapping its symbol to a native address.
+8. Integrate exact functions into the manifest and component metadata. Update
+   declarations and maintained ASM references together. Preserve interior entry
+   points through `config/eur/arm9/linker_aliases.json`; check
+   `reasm/eur/patches.json` when renaming symbols. Include compiler-emitted local
+   data with its actual binding and ownership, but do not count it as code.
+9. Complete the build and relevant runtime checks, update progress/evidence/map,
+   then publish the coherent batch. A matching private neighbor is not linked
+   progress, and an already linked helper contributes no new bytes when moved.
 
-See the [detailed matching lessons](docs/research/RECONSTRUCTION_NOTES.md#reconstructing-and-integrating-code)
-for concrete ABI, layout, aliasing, graphics and compiler examples.
+See the reference's compiler examples before attempting syntax or declaration
+changes. Separate switch arms, initialization order, bitfields and pointer
+increments can explain a specific mismatch; they are not a search space to enumerate.
 
 ## Build and verification
 
-Use Python 3.11+, Ninja and the compatible Metrowerks tools in
-`tools/mwccarm/1.2/base/` (internally 2.0 build 72). LLVM's `llvm-mc`, `ld.lld`
-and `llvm-objcopy` support native relinking. Keep the configured ABI and flags.
-On this workstation, known executable paths are:
+Use Python 3.11+, Ninja and compatible Metrowerks tools in
+`tools/mwccarm/1.2/base/` (internally 2.0 build 72). Native relinking also uses
+LLVM's `llvm-mc`, `ld.lld` and `llvm-objcopy`. Known workstation executables:
 
 ```text
 C:\Users\Julian\AppData\Local\Programs\Python\Python312\python.exe
 C:\Program Files\JetBrains\CLion 2023.2.2\bin\ninja\win\x64\ninja.exe
 ```
 
-If a tool is absent from `PATH`, verify and invoke its quoted path with
-PowerShell's `&` operator. The private ROM is `extract/baserom_PiT_eur.nds`,
-game code `ARMP`, SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+If missing from `PATH`, verify the path and invoke it with PowerShell's `&`.
+The private EUR ROM is `extract/baserom_PiT_eur.nds`, game code `ARMP`, SHA-1
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
 
-For a completed reconstruction batch, run from the repository root:
+For a completed reconstruction batch, from the repository root:
 
 ```powershell
 python tools/configure.py eur
@@ -312,296 +171,140 @@ python -m pytest -q tests
 
 Every C/C++ or shared-header change needs the full `ninja check`. The packaging
 wrapper restores checksum fields omitted by direct packaging; verify the final
-ROM hash, not just Ninja's exit status. Keep `-DisableDataMods` to exclude a
-private data mod. Native relinking must report zero differing bytes. Regenerate
-progress before tests when linked ranges changed. Use pytest with the explicit
-`tests` directory; unittest-only discovery misses tests and unrestricted pytest
-can collect ignored private clones. Report skipped or unavailable checks.
-Do not rebuild or replace a ROM while an emulator is reading that path. A native
-relink to a separate output path can run alongside a replay of the packaged ROM.
+ROM hash. Keep `-DisableDataMods` to exclude private data modifications. Native
+relinking must report zero differing bytes. Regenerate progress before tests
+when linked ranges change; use the explicit `tests` directory to avoid private
+clones and incomplete unittest-only discovery.
 
-Documentation-only changes need content/link and Git checks, not a ROM build
-or emulator replay. Tool changes need the relevant tests. Repeat checks only
-when new changes, failures or unresolved concerns justify it.
+Do not replace a ROM while an emulator reads that path. A native relink to a
+separate output can run beside a replay. Documentation-only work needs content,
+link and Git checks; tool changes need relevant tests. Repeat checks when changes,
+failures or unresolved concerns warrant it. Report unavailable/skipped checks.
 
 ## Runtime verification
 
-Use `tools/runtime_drive.py` for deterministic DS inputs, `runtime_probe.py` for
-hooks/registers/memory/overlays and `runtime_session.py` for interactive navigation
-and compatible snapshots. Optional dependencies are in
-`tools/runtime_requirements.txt`. Read the tools' arguments before reuse.
+Use `tools/runtime_drive.py` for deterministic inputs, `runtime_probe.py` for
+hooks/registers/memory/overlays, and `runtime_session.py` for navigation and
+compatible snapshots. Read their arguments and
+[runtime guidance](docs/research/RECONSTRUCTION_NOTES.md#runtime-verification).
 
-- The current story collection is `PiT_SaveStates/`; old messages mention
-  `PiT/_SaveStates`. Enumerate actual files. A `.sav` is a battery save, not an
-  emulator snapshot. Preserve originals and compare their hashes before/after.
-- `py-desmume==0.0.9` embeds DeSmuME 0.9.12. Supplied 0.9.13 snapshots can show
-  plausible RAM but hang or render incorrectly when advanced. Cold boot battery
-  saves to make compatible states; do not keep advancing a known-bad snapshot.
-- Store reports, snapshots and captures under ignored `build/runtime/`. Run
-  replays sequentially when they share ROM or battery-backup paths.
-- Reuse a tested route, but monitor the current function group and the helpers
-  needed to verify it. Avoid retaining every earlier per-frame oracle in each
-  new probe. Keep prior evidence and state which checks were actually repeated.
-  Read the driver's action semantics: `runtime_drive.py` inserts one released
-  frame after each action. Bound scene entry and confirm its dispatch hook ran.
-- Guard each hooked function's complete native range and the loaded overlay;
-  a matching prologue alone is insufficient. Match nested returns using the
-  return address and entry stack pointer. Derive expected memory changes
-  independently; label helper outputs that are merely observed. Do not read
-  freed objects or interpret unloaded overlay addresses as the previous function.
-  Hooks can survive a scene transition and fire on another overlay at the same
-  address. Positively identify that owner before excluding a foreign-overlay hit;
-  an unexplained byte mismatch must remain a failure. `compare_overlays` and
-  `is_overlay_active` currently use a 90% identification threshold: they help
-  locate a candidate overlay but do not replace the exact function-byte guard.
-  Do not assume every scene exit loads overlay 0. Derive the current owner from
-  component metadata and live bytes, including its complete containing function.
-  A prior route's accepted owner does not establish ownership on a new route.
-  Tail-called helpers can share their caller's return address and stack pointer.
-  Finish every matching pending record, innermost first, at that hook before
-  processing the next instruction; handling only one record leaves a false
-  unfinished call. The shop confirmation cursor probe is a verified example.
-  Execution hooks run before the addressed instruction. At a helper's return
-  address, its caller has not yet executed the following store or arithmetic.
-  Check the helper's result and effects at that boundary; apply caller-owned
-  expected writes only at a later boundary where those instructions have run.
-  A Python callback named `after` does not advance emulation. Honor ARM condition
-  codes before counting an instruction hook as an executed conditional store.
-  Stack outputs can be in EUR ARM9 DTCM at `0x027E0000..0x027E4000`.
-  Read that CPU-visible range directly and check neighboring bytes; do not fold
-  it into a main-RAM mirror. Use the component metadata and caller's stack
-  extent to identify the region before changing a probe's address bounds.
-- For constructors, snapshot the actual allocation before entry and derive only
-  the fields the native code initializes; preserve untouched bytes and padding.
-  A base constructor may run inside a larger derived allocation. Propagate a
-  nested constructor's independently expected changes into the parent's oracle,
-  rather than accepting a fresh RAM snapshot as the expected result.
-  Construction can precede assignment to the scene's global pointer. Use the
-  actual argument allocation at entry and check global publication at its
-  caller's later store. An incoming pointer field can contain allocation residue;
-  a constructor clearing that field does not imply that it releases an old object.
-  For pooled objects, establish the slot size, base, count and free-list links
-  from the allocator. Check alignment and the complete live slot. Shop ResourceA
-  models use 336-byte slots, ResourceB sprites use 64-byte slots, and the shared
-  shop tasks use 72 bytes. Identify the attached resource's allocator before
-  selecting the extent; a public structure can describe a prefix or a full slot.
-  ResourceA is also used outside shops. Its concrete sprite layout is in
-  [sprite_pool.cpp](src/overlay005/sprite_pool.cpp); accessing its common fields
-  through `BattleModel *` does not make it a full `BattleModel` allocation.
-  Do not assume a pooled factory zeroes the payload. Derive the selected slot
-  from the free list before allocation, model the factory's list/counter writes,
-  then apply the constructor's writes. Reuse of an address starts a new object
-  lifetime; untouched timer, interpolation and padding bytes can survive reuse.
-- Distinguish allocation size, initialized extent and transfer size. When the
-  allocation is known, check the complete buffer and preserve untouched tails,
-  padding and transparent pixels. Shop help pixels allocate 6,144 bytes, clear
-  5,120 and upload 4,096; derive these extents from the allocator and consumers.
-  For graphics, derive expected pixels or nibbles independently of the native
-  packed-word loops, including stride, palette offset and linear/tiled layout.
-- Distinguish base destruction, derived destruction and deleting entry points.
-  Check the final object state before the heap free; after release, check only
-  return values and still-live records. Check cleared scene globals before the
-  next overlay reuses their addresses. Record each exercised entry point; a
-  virtual delete does not establish coverage of every destructor wrapper.
-  Task removal can be deferred: setting the removal flag is a separate event
-  from unlinking and freeing. Check the actual helper before assigning lifetimes.
-  Both events can occur in the same frame; use hook order to establish their
-  sequence rather than requiring a strictly larger removal-frame number.
-  Follow newly created tasks through their updates to the expected completion.
-  Confirm a route's final scene instead of assuming its last Start press exits.
-  Clothing and badge routes have reopened pause after earlier B presses already
-  returned to the field. Track each new lifetime even if the heap address repeats;
-  close it when cleanup coverage is required and check the final field state.
-  For a pool return, verify release callbacks, task fields and neighbor links
-  before return to the pool. Afterward, inspect only still-live pool/list records
-  and counters; a readable address does not mean the old object is still alive.
-  Track whole-pool destruction as well as individual returns. Verify the cleared
-  pool records and close the destroyed allocations before accepting reused
-  addresses. Do not use bulk cleanup to bypass required per-task removal checks.
-  A previous task's null release callback is not a template for resource-owning
-  tasks: ResourceB attachment can install a callback that returns its 64-byte
-  sprite to a separate pool. Follow both lifetimes and their actual release order.
-  Derive update counts from integer step, delay and clamping; division by six
-  does not guarantee six updates when truncation leaves a remainder.
-  Read a timer's entry guard before assigning meaning to zero. A callback that
-  decrements only a nonzero counter and removes on the transition to zero treats
-  an initial zero as indefinite. Cover that path separately from expiration.
+- Enumerate `PiT_SaveStates/`; older messages call it `PiT/_SaveStates`. `.sav`
+  files are battery saves, not emulator snapshots. Protect originals and compare
+  their hashes before/after. Keep new artifacts under ignored `build/runtime/`.
+- Optional `py-desmume==0.0.9` embeds DeSmuME 0.9.12. Supplied 0.9.13 snapshots
+  can show plausible RAM but hang or render incorrectly. Cold boot battery saves
+  to create compatible states; do not repeatedly advance a known-bad snapshot.
+- Reuse tested routes with focused checks for the current functions and required
+  helpers. The driver inserts one released frame after every action. Bound entry,
+  assert that the target dispatch ran, and confirm the final scene from live state.
+  A missed route is a coverage gap; do not remove its assertion to obtain a pass.
+- Guard the complete native function range and owning overlay. Addresses are
+  reused after transitions; positively identify a foreign owner before excluding
+  a hit. The runtime tool's 90% overlay-identification threshold is only a locator,
+  not an exact guard. Unexplained byte mismatches remain failures.
+- Hooks fire before the addressed instruction. Respect ARM condition codes and
+  distinguish helper effects from subsequent caller stores. Pair nested returns
+  using entry SP and LR; tail calls can share both, so finish all matching pending
+  records innermost first. Read ARM9 DTCM at `0x027E0000..0x027E4000` directly;
+  do not fold stack outputs into main-RAM mirrors.
+- Derive expected changes independently, including native integer wrapping and
+  signed division. A fresh snapshot after a helper observes its effects; it does
+  not verify that helper. Check full live allocations, padding and overlapping
+  views. Constructor arguments can be valid before a scene global is published.
+- Track allocation, initialization, updates and actual release separately. Derive
+  pool slots and list writes from the allocator; do not assume payloads are zeroed.
+  Removal flags, callback retargeting and pool returns are different events.
+  Track attached resources and bulk-pool destruction too. Check records before
+  release, then only still-live pool/list state. Address reuse starts a new lifetime.
+- Derive timer behavior from its actual entry guard and recurrence. An initial
+  zero may trigger now, persist indefinitely or have another meaning; integer
+  truncation can add updates. Check the relevant paths instead of importing a
+  neighboring callback's timing assumption.
 - Verify RAM, mapped VRAM, palettes, OAM, ordered GPU stores and visible behavior
-  as appropriate. A screenshot or passing ROM hash alone is insufficient.
-  Hardware register readback need not equal the earlier submitted FIFO command
-  or affine origin. Record ROM/save/state hashes, inputs and uncovered branches.
-  Expected-memory snapshots can overlap: an empty draw list's sentinel can be
-  part of its header. Apply each independently derived store to every overlapping
-  expected view in native order before comparing, including sentinel updates.
-  For draw-list submission, derive the selected node from the pool's free list
-  before the helper runs. Check the pool, moved link, node, list header and old
-  tail against independently expected writes; observing the returned node alone
-  does not verify allocation. The linked implementation is
-  [draw_lists.cpp](src/overlay005/draw_lists.cpp).
-- Preserve threshold comparisons in their native integer form. For example,
-  `100 * current_hp > 25 * max_hp` must not become rounded percentage division
-  or floating point. Verify equality and both sides of the threshold separately
-  when reachable; ordinary draws alone do not cover a low-HP indicator's branches.
-- Model native arithmetic widths in Python oracles. Wrap a native 32-bit
-  intermediate before its signed shift; Python integers do not overflow.
-  In the zero-scale affine path, `0x100000 * 4096` wraps to zero before `>> 8`.
-  Recover all stack arguments as well as register arguments: the display affine
-  helper takes nine arguments. Use its verified zero-scale behavior, not an
-  idealized mathematical transform. See the reconstruction reference for details.
-- Account for hidden ABI arguments as well as explicit parameters. The eight-byte
-  `GameTextToken` return uses a result pointer before the text-state argument at
-  the native `GameText_Next` entry. Check a text caller's actual stop condition:
-  some stop on NUL alone, while others also stop on the two bytes `FF 00`.
-  Verify its full scratch allocation, used extent and text-state padding; do not
-  assume neighboring text routines share their termination or buffer sizes.
-- For numeric displays, distinguish the source value, fixed-point interpolation,
-  cached integer and width-limited rendered value. Native code can cache before
-  clamping; checking only drawn digits misses a wrong cache or update sequence.
-  Verify signed quotient and remainder, leading zeroes, unchanged-value returns
-  and both interpolation directions when exercised. Time limits and unusual
-  widths need their own coverage; ordinary HP draws do not establish them.
-- Check per-function and per-branch counts across the route set. A valid replay
-  can miss a helper entirely; retained screenshots and equal artifact hashes do
-  not establish execution coverage. Report deliberate RAM fixtures separately
-  from normal inputs. A route that reaches the menu but never starts the target
-  task has a coverage gap; inspect its selections and native caller conditions
-  before designing a replacement route. Do not remove its execution assertion
-  or classify the missed entry alone as a defect in matching game code.
-  Keep historical helper evidence distinct from checks repeated in this batch.
-  Exercise independent limits separately: an inventory-capacity stop does not
-  establish the affordability branch. Prefer ordinary inputs and suitable story
-  saves; record any initial inventory or currency fixture and its restoration.
-  Held-input acceleration can skip values, so report observed selections rather
-  than claiming every value between the minimum and maximum was exercised.
-  A list longer than its visible rows does not prove that scrolling or queued
-  text rendering ran. Check the actual input route and callback counts. Canceling
-  a purchase likewise does not cover successful-purchase or later prompt helpers.
-- For frequently called functions, a documented deterministic sample can keep
-  focused replays practical. Report all observed entries separately from calls
-  whose complete effects were checked, and say whether branch counts describe
-  only checked samples. Include changed inputs and distinct object lifetimes
-  in the sampling rule; track removals independently of body sampling. If
-  tracking starts at the first callback, do not claim the allocation was checked.
-  Inspect the caller before designing an input route: movement helpers can run
-  every frame with direction zero, and held input can enable repeat movement
-  without the wrap flag set by a fresh press. Check movement calls separately
-  from sampled idle calls. Observing a constructor to identify a new lifetime
-  does not by itself verify the constructor or its allocator.
-  List unsampled bodies and unobserved branches as coverage limits.
-- Keep supplemental routes in separate output directories. Compare captures
-  with a baseline only where save state, fixtures, input history and capture
-  timing agree. Hash equality establishes equality of those artifacts; hashing
-  a native renderer's output does not independently verify its pixels.
-  Check which module a probe actually imports before correcting an oracle:
-  some private probes use a composed file rather than its editable body copy.
-  Before publishing a replay result, validate that referenced artifacts exist,
-  match their recorded hashes, and have the expected dimensions or memory
-  extents. Reconcile per-route totals, pending calls and object lifetimes with
-  the report. A verifier script that has only been written has not passed.
-- At replay end, stop admitting new outermost calls and drain pending calls and
-  their nested helpers for a bounded number of neutral frames. Do not discard
-  unfinished calls to make a probe pass. After correcting an oracle, rerun it.
-  An oracle failure can be a wrong expectation; inspect native instructions and
-  helper effects before changing already matching game code.
-- The debug menu teleports without necessarily initializing a complete state.
-  Separate normal navigation from controlled RAM/decoded-command fixtures.
-  Memory instructions must give ROM region, CPU/address space, dereferences,
-  field offset, access width, guard, timing and whether/when to restore the edit.
+  as appropriate. Allocation, initialized extent and transfer size can differ.
+  Hardware/FIFO readback is not the submitted sequence. Keep changing scanline
+  and IRQ-driven registers in captures without asserting that they are immutable.
+- Record per-function/branch counts, ROM/save/state hashes, inputs and explicit
+  limits. Separate ordinary routes from RAM fixtures and document restoration.
+  For deterministic sampling, report observed versus fully checked calls and
+  the rule; track lifetimes independently. Screenshots alone do not prove execution.
+- Validate referenced artifacts: existence, hashes, image dimensions, memory
+  extents and report totals. Compare baselines only for identical state, fixture,
+  input and capture prefixes. Distinguish visual inspection from hash equality
+  and observed rasterization from an independent graphics oracle.
+- At replay end, stop admitting new outer calls and drain pending/nested calls
+  for bounded neutral frames. Keep failures and rerun corrected oracles; do not
+  discard pending calls or change matching game code to satisfy a faulty model.
+  Check whether the active probe imports its editable body or a composed copy.
 
-Read the code-derived [pause party-status findings](docs/research/RECONSTRUCTION_NOTES.md#pause-party-status)
-before extending that group; check the manifest and handoff for which functions
-have been integrated and runtime-verified. Reuse the actual pause workspace and
-save-member types. A field at workspace base plus an offset is part of that
-object, not automatically a separately named global or a pointer to dereference.
+An optional private fast reader moves the existing DeSmuME byte-read loop into
+host C without changing accesses. Before reuse, validate it against the original
+reader on paused RAM, DTCM and graphics ranges; see
+[transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers).
+Host probe code does not contribute to matching-game coverage.
 
-For pause lists, read the [visibility](docs/research/RECONSTRUCTION_NOTES.md#pause-list-visibility-and-row-measurement)
-and [selection](docs/research/RECONSTRUCTION_NOTES.md#pause-list-selection-and-row-copies)
-findings. The category values are 0 consumables, 1 Key Items, 2 clothing,
-3 badges and 4 Bros. Items; kind 1 was previously mislabeled in private probes.
-The original visibility/selection probes did not cover kind 4; the later
-[text/table probe](docs/research/RECONSTRUCTION_NOTES.md#pause-item-text-and-inventory-tables)
-includes a normal-input Bros. Items route.
-The signed first-item byte at party offset 264 and signed tile-row byte at 266
-serve different rotations. `Overlay7Party` describes a 332-byte prefix of a
-4,428-byte allocation; its saved-first and saved-selection arrays each contain
-five elements. Check the full live allocation when validating its mutations.
-The [party lifecycle findings](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup)
-document construction before global publication, retained text-state bytes and
-menu re-entry. The recorded cleanup calls all had null image pointers; that
-evidence does not cover image-array deletion or the outer party heap free.
-The [row-task findings](docs/research/RECONSTRUCTION_NOTES.md#pause-queued-row-drawing-and-markers)
-cover deferred text drawing, marker transfers and actual task removal. For
-saved list positions, use the [preparation findings](docs/research/RECONSTRUCTION_NOTES.md#pause-inventory-list-preparation):
-close and reopen the list within the same pause instance. Leaving pause and
-constructing another party resets those saved positions and tests a different
-path. Verify this distinction with constructor and preparation hooks.
+### Debug menu and Nawatobi
 
-Before extending pause transitions, read the
-[exit evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-exit-tasks-and-transition-state)
-and [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi).
-An exit replay that checks a progress getter does not verify the projection,
-panel callbacks or affine-row producer merely because they ran during that route.
-Use the handoff and manifest for their current integration and verification status.
+The debug menu teleports without necessarily initializing a complete game state.
+Use the reference's tested routes for shops, save menus, Game Over, Smash Eggs,
+credits and pause. Controlled access does not establish a normal story entry.
+For RAM instructions, specify region, CPU/address space, dereferences, offset,
+width, guard, timing and restoration; never give an unexplained dynamic address.
 
-Consult tested routes for [shops](docs/research/RECONSTRUCTION_NOTES.md#shops),
-[save/load menus](docs/research/RECONSTRUCTION_NOTES.md#save-menus),
-[Game Over](docs/research/RECONSTRUCTION_NOTES.md#game-over),
-[Smash Eggs](docs/research/RECONSTRUCTION_NOTES.md#smash-eggs),
-[credits](docs/research/RECONSTRUCTION_NOTES.md#credits) and
-[Nawatobi](docs/research/RECONSTRUCTION_NOTES.md#nawatobi).
-For the tested EUR Nawatobi entry, the phase is the little-endian 32-bit word
-at `read32(0x0208E1E0) + 0x30` in ARM9 main RAM, with overlay 7 loaded.
-At pause update `0x02071F80`, require a fully initialized pause menu, the native
-byte guard, `read32(0x0208E1E0) == r0`, vtable `read32(r0) == 0x0208D9B8`
-and phase 2; write 7 once, disable the hook and resume. Do not overwrite the
-pointer at `0x0208E1E0` or freeze the phase. The four bytes at the dereferenced
-task's `+0x30` field become `07 00 00 00`; this is neither VRAM nor a ROM patch.
-The task address is dynamic, so never publish one observed allocation as a
-universal cheat address. The linked reference explains the
-snapshot and evidence; controlled access does not establish a normal story
-entry or natural completion.
+The tested EUR Nawatobi edit is the little-endian 32-bit phase word at
+`read32(0x0208E1E0) + 0x30` in ARM9 main RAM, with overlay 7 loaded. At pause
+update `0x02071F80`, require the full native-byte guard, a fully initialized pause
+menu, `read32(0x0208E1E0) == r0`, vtable `read32(r0) == 0x0208D9B8` and phase 2.
+Write 7 once, disable the hook and resume. The field becomes `07 00 00 00`;
+do not overwrite the pointer at `0x0208E1E0` or freeze the phase. This is not
+VRAM or a ROM patch. See the [procedure and coverage limits](docs/research/RECONSTRUCTION_NOTES.md#nawatobi).
 
 ## Documentation, Git and handoff
 
-Keep the README short and human-readable. Update the overlay map when linked
-coverage or confirmed subsystem roles change. Separate matching C/C++ from
-maintained symbolic assembly; a byte-identical reassembly is not 100%
-decompilation. Avoid vague similarity claims, inflated completion language and
-speculative names. Distinguish code-derived facts, observations and unknowns.
+Keep the README short and human-readable, including the user's AI disclosure
+and tone. Update the overlay map when linked coverage or confirmed roles change.
+Avoid vague similarity claims, inflated completion language and speculative names.
+Keep detailed findings in the reference and changing candidate status in the
+private handoff, rather than continually extending this guide.
 
-`docs/BATTLE_MATCHING_MILESTONES.md` has a legacy non-UTF-8 byte and mixed CRLF/LF.
-Preserve existing bytes and append as bytes; account for Git line-ending
-normalization when comparing blobs. Do not decode with replacement and rewrite
-it. The similarly named file under `docs/research/` is an older, different log.
+Track these stages separately:
 
-Keep ROMs, assets, saves, proprietary tools, IDA databases, machine-code dumps
-and captures out of Git. Use the ignored private directories; never force-add
-private material. Before committing:
+| Stage | Evidence |
+|---|---|
+| Exact candidate | Identified source/object; full native comparison including pools and resolved relocations |
+| Integrated | Current public source, headers, manifest and ownership pass build checks |
+| Runtime checked | Completed route reports, function/branch counts, lifetimes, validated artifacts and stated limits |
+| Published | Task-owned commit, successful push and confirmed remote revision |
 
-1. Review `git diff --check` and stage explicit task-owned paths only.
-2. Inspect `git diff --cached`, `git diff --cached --check` and the staged path list.
-3. Run `python tools/check_public_content.py` after staging: it audits the index.
-4. Commit with a descriptive message and push to the verified user remote.
-   Report the commit, push status, actual checks and coverage change if applicable.
+Use `pending`, `failed` or `not run` where appropriate. The progress generator
+reads metadata; it does not perform matching or runtime checks. If reports are
+dirty, use `git show HEAD:docs/progress.json` for committed coverage. Confirm the
+live remote before calling bytes published. Count only new code ranges; ARM7,
+data and symbolic ASM follow the separate categories in the metric. Documentation
+commits must not include pending source or claim unverified progress.
 
-At a stop, leave the last pushed commit, owned pending files, completed/due checks
-and deferred candidates in private `build/analysis/CURRENT_HANDOFF.md`. For each
-gap record component/address, native/candidate sizes, mismatch class and evidence
-needed for another attempt. Distinguish pending, committed and pushed work.
-For private units containing several functions, record exactness per function;
-one matching helper does not validate its neighbors. Keep proposed names and
-planned runtime checks explicitly provisional until their evidence exists.
-Record each replay's completion separately, including corrected oracle failures
-and the successful rerun. One passing route does not complete a planned suite.
-If a process is still running, record its tool session ID, command, log and
-output directory. Resume or inspect that process before launching a duplicate;
-elapsed time or a populated output directory is not a successful exit status.
-Separate the latest documentation commit from the last verified code batch;
-existing build logs are historical evidence, not checks run by the current turn.
-For a failed replay, preserve its command, exit status, log, failure report,
-frame and assertion. Mark the batch's runtime checks incomplete even if its
-build and tests passed. Keep a suspected oracle correction separate from a
-confirmed diagnosis and from a successfully rerun check.
-Inspect old integration scripts before reuse; many are not safe to replay.
-Keep durable rules here and detailed findings in the linked reference, rather
-than appending every batch's history to this entry point.
+`docs/BATTLE_MATCHING_MILESTONES.md` has a legacy non-UTF-8 byte and mixed line
+endings. Append bytes while preserving the existing prefix, including when
+checking the staged Git blob. Do not decode with replacement and rewrite it.
+The similarly named file under `docs/research/` is an older, different log.
+
+Keep ROMs, extracted assets, saves, proprietary tools, IDA databases, machine-code
+dumps and captures private. Never force-add ignored material. Before publication:
+
+1. Review `git diff --check`; stage explicit task-owned paths only.
+2. Review staged paths, `git diff --cached` and `git diff --cached --check`.
+3. Run `python tools/check_public_content.py` **after staging**; it audits the index.
+4. Commit descriptively, push to the verified user remote and confirm its revision.
+   Report the commit, push status, checks and any actual coverage change.
+
+At a stop, update private `build/analysis/CURRENT_HANDOFF.md` with the latest
+request, pushed revision, last verified code batch, pending paths and checks.
+For every gap, record component/address, native/candidate sizes, mismatch class
+and evidence needed to retry. Record exactness per function, including mixed
+private units; preserve unfinished drafts during documentation work.
+
+Keep failed replay commands, exit status, logs, frame/assertion and successful
+reruns distinct. A suspected oracle correction is not a verified fix. Record
+any live process's session ID, command and output path; inspect it before starting
+a duplicate. Populated artifacts or elapsed time do not establish successful
+completion. Historical build logs are not checks run by the current task.

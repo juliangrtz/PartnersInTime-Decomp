@@ -18,7 +18,8 @@ ordinary gameplay accessibility or coverage of unexercised branches.
 - [Runtime verification](#runtime-verification)
 - Code-derived findings: [pause party status](#pause-party-status)
 - Pause transitions: [verified exit tasks](#pause-exit-tasks-and-transition-state),
-  [projection and callback ABI](#pause-transition-projection-and-callback-abi)
+  [projection and callback ABI](#pause-transition-projection-and-callback-abi),
+  [entry/exit setup calls](#pause-transition-setup-calls)
 - Tested routes: [shops](#shops), [save menus](#save-menus), [Game Over](#game-over),
   [Smash Eggs](#smash-eggs), [credits](#credits), [Nawatobi](#nawatobi)
 
@@ -2386,6 +2387,48 @@ The focused transition reports add arithmetic, output, GPU-store and lifetime
 assertions to the earlier exit-only evidence. The affine-row producer at
 `0x0206E0D4` still has observed outputs rather than an independent body oracle;
 keep that distinction when extending the adjacent code.
+
+### Pause transition setup calls
+
+These are code-derived EUR overlay-7 findings from the native callers and
+existing shared headers. They do not establish independent runtime verification
+of the setup bodies. Check the manifest and private handoff for integration status.
+
+The exit setup at `0x0206E27C` and entry setup at `0x0206E594` both call
+`GameSpriteAllocation_Allocate` at `0x0200856C`. Its existing declaration in
+[sprite_output.h](../../include/game/sprite_output.h) has eight arguments:
+
+```c
+int GameSpriteAllocation_Allocate(GameSpriteAllocation *allocation,
+    int screen, int mode, u32 tiles, u8 shared, u32 resource,
+    u8 dirty, u32 first_tile);
+```
+
+Both callers pass `&WORK.sub_allocation`, screen 1, mode 0, 384 tiles, shared 0,
+dirty 1 and first tile 0. The resource argument differs: exit passes `0xFFFF`,
+while entry passes `0xFF00`. At callee entry the four stack arguments are
+shared, resource, dirty and first tile at `sp + 0`, `+4`, `+8` and `+12`.
+The following `Overlay5Display_LoadObjTiles` at `0x02068220` takes four
+arguments: sub-screen engine, `WORK.owned94`, `WORK.sub_allocation.offset` and
+12,288 bytes. Its existing [display declaration](../../include/game/overlay005_display.h)
+already matches this call. Do not copy omitted or invented pseudocode arguments
+into a shared-header refactor.
+
+The delay callback at `0x0206E8DC` reads the 32-bit counter at task `+0x24`.
+A nonzero value is decremented and the callback returns, even when that decrement
+reaches zero. A value already zero at entry calls `GameRumble_PlayRepeated(0, 2)`
+and requests deferred task removal. Thus an initial delay of four triggers on
+the fifth callback; an initial zero triggers immediately. The request does not
+free the task. This differs from timed callbacks whose zero means indefinite.
+
+The chooser at `0x0206E918` first calls `0x02080AE4`, then reads the unsigned
+save byte at `read32(0x02059FE8) + 0x55D` once. If nonzero, it stores byte minus
+one in `WORK.selected_menu` and selects `PauseScene_FadeInTask`; otherwise it
+selects the entry setup at `0x0206E594`. Both callback changes pass phase 0,
+then the chooser sets the pause scene's phase word at
+`read32(0x0208E1E0) + 0x30` to 1. Earlier alternate-entry evidence observes this
+selection; it does not independently check the chooser's complete body or the
+preceding setup helper.
 
 ### Nawatobi
 
