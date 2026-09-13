@@ -1505,6 +1505,51 @@ only recognized unconditional `strh`, omitting the native mosaic helper's
 ARM condition flags before counting a write. Both final routes pass after
 that oracle correction; no game-code change was required.
 
+### Pause sprite positions and lifetime
+
+The linked [sprite callbacks](../../src/overlay007/pause_mode_sprite.cpp) are
+`PauseModeSprite_Update` at `0x0207E93C` (112 bytes) and
+`PauseModeSprite_UpdateTimed` at `0x0207E9AC` (160 bytes). Their
+[task layout](../../include/game/pause_mode_sprite.h) is a 72-byte pool slot.
+Both obtain their ResourceA sprite before comparing task mode (`s16`, `+0x28`)
+with the signed byte at `PauseSceneWork +0x110`. A mismatch requests removal.
+Otherwise they convert both signed Q12 coordinates to pixels with division
+toward zero, store the two sprite halfwords at `+0x5C/+0x5E`, and submit to
+draw list 5. The timed version first decrements a nonzero 32-bit counter at
+task `+0x24`; reaching zero requests removal without drawing. An initial zero
+leaves the timer inactive. Preparing both coordinate divisions before the
+assignments reproduces the native interleaved sign corrections without assembly
+or compiler changes. ResourceA's concrete sprite slot is 336 bytes; the common
+`BattleModel` interface does not establish a larger allocation.
+
+Private `build/analysis/probe_pause_mode_sprite.py` follows clothing selection
+from checkpoint 65 and badge selection from checkpoint 86. Enter Equipment,
+select Clothing or Badges, choose a character, confirm an item, then back out
+and close the pause menu. The reports `evidence_clothing65.json` and
+`evidence_badges86.json` under `build/runtime/eur_pause_mode_sprite/` record
+3,360 frames, 960 ordinary and 720 timed callbacks, 1,668 submissions, six timer
+expirations and six removals caused by a mode change. Each timed sprite starts
+at 120 and receives exactly 120 updates. All 12 tracked tasks are actually
+unlinked, release their resources and return to their pools. No fixture,
+unfinished call, remaining task or drain frame is present.
+
+The independent oracle checks full tasks, sprite slots, workspace and save,
+signed arithmetic, helper arguments, and draw-pool selection before submission.
+It derives the free/taken link changes, node, list header and old tail writes,
+including overlapping sentinel views. It also checks task unlinking, cleared
+resource/release fields, counters and both pool returns without reading freed
+slots. Tracking begins at the first callback; creator bodies, virtual sprite
+cleanup and final graphics are observed rather than independently verified.
+The artifact verifier validates 44 screenshots, 396 graphics dumps and all
+104 unchanged source saves. Negative coordinates, an initial zero timer, and
+the timed callback's mode-mismatch path remain unexercised. Both ordinary
+routes use the 120-update timer; badge selection does not add zero-timer coverage.
+
+The earlier `equipment65` and `items65` discovery routes completed navigation
+but failed the final coverage assertion: neither reached these callbacks.
+Their failure reports and logs are retained. The deeper clothing/badge routes
+establish execution coverage; no oracle or game-code correction was needed.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

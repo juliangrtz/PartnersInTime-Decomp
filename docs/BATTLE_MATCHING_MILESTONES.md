@@ -6981,3 +6981,40 @@ and respecting ARM condition flags fixes the oracle. The corrected checkpoint
 65 route and checkpoint 86 pass without changing matching game code.
 Reports: build/runtime/eur_scene_menu_background/; probe and artifact verifier
 are private in build/analysis/.
+
+
+## 2026-09-13: pause sprite positions and lifetime
+
+Reconstructed PauseModeSprite_Update at 0x0207E93C (112 bytes) and
+PauseModeSprite_UpdateTimed at 0x0207E9AC (160 bytes). Both convert signed Q12
+positions and draw while their mode matches the scene; the second expires
+after a nonzero counter reaches zero. Shared task72 layout, exact signed byte
+loads and division ordering; no assembly or compiler flag changes.
+Matching C/C++: 723,704 / 1,563,700 bytes (46.28%); with assembly, 46.61%.
+Overlay 7: 58,948 / 142,264 (41.44%). Remaining to 50%: 58,146 bytes.
+
+Full configure/Ninja, no-data-mod ROM packaging, native relink, generated
+progress checks and 81 tests pass. Both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink checks 43 components,
+420 section units, 31,138 relocations and 1,577 ARM7 relocations with zero
+differing bytes. Logs: build/analysis/pause_mode_sprite_*.log.
+
+Ordinary clothing selection on checkpoint 65 and badge selection on 86 cover
+3,360 frames, 960 ordinary and 720 timed updates, 1,668 draw submissions,
+six expirations at exactly 120 updates and six mode-mismatch removals.
+Independent expectations check full task72/sprite336/work90600/save1380,
+signed coordinate/mode/timer calculations, helper arguments, draw-pool
+free/taken links, selected node, list header and old tail including overlap.
+All 12 tracked tasks complete resource release, unlinking and both pool
+returns; still-live records/counters are checked after release, not freed slots.
+Tracking starts at the first callback. Creator bodies, virtual sprite cleanup
+and final rendering are observed, not independently verified.
+
+All 44 screenshots, 396 graphics dumps and 104 unchanged source saves validate.
+No fixtures, pending calls, live tracked tasks or drain frames remain.
+Initial zero timers, negative coordinates and timed mode-mismatch remain
+unexercised. Both tested routes use counter120, including badge selection.
+Initial shallow equipment65 and items65 routes failed only their final
+coverage assertion because no target ran; logs and failure reports remain.
+Reports: build/runtime/eur_pause_mode_sprite/; probe and artifact verifier
+are private under build/analysis/.
