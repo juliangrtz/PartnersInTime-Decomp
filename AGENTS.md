@@ -55,6 +55,9 @@ Read private `build/analysis/CURRENT_HANDOFF.md` if present, then verify its
 claims against Git, source and artifacts. It can be stale even at the same
 `HEAD`: another private draft or uncommitted batch may have appeared afterward.
 Inventory pending files and check provenance before reusing an integration script.
+An object file's existence or timestamp does not prove its comparison passed.
+If the previous command's output was lost, record its result as unverified until
+the relevant check is recovered or rerun; preserve the draft in the meantime.
 
 Use `rg --files` and scoped `rg` searches. Quote PowerShell paths containing
 spaces; use `-g 'pattern'` for file globs. Parse large reports and print selected
@@ -73,7 +76,9 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Emulator tooling and navigation | [Runtime guide](docs/research/RUNTIME_ANALYSIS.md), [tested routes](docs/research/RECONSTRUCTION_NOTES.md#runtime-verification) |
 | RAM roots, object extents and graphics ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference) |
 | ABI and compiler lessons | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md#reconstructing-and-integrating-code) |
-| Recent pause work | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls), [page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return), [main menu and member selection](docs/research/RECONSTRUCTION_NOTES.md#pause-main-menu-and-member-selection) |
+| Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
+| Pause navigation | [Page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return), [main menu and member selection](docs/research/RECONSTRUCTION_NOTES.md#pause-main-menu-and-member-selection), [status and Cobalt Star pages](docs/research/RECONSTRUCTION_NOTES.md#pause-status-and-cobalt-star-pages) |
+| Pause list rendering | [Row sprites](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-sprites), [queued drawing and markers](docs/research/RECONSTRUCTION_NOTES.md#pause-queued-row-drawing-and-markers), [row refresh](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-refresh) |
 | Earlier batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md); private reports linked there |
 | Assets and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
 
@@ -89,6 +94,13 @@ If absent, establish the needed evidence with public tools and user-supplied
 ROM/saves. Current native bytes, source, metadata and fresh checks take precedence
 over historical notes. Check existing declarations before accepting a handoff's
 claim that a shared prototype needs changing.
+
+When checking candidate inventories, compare component and address ranges against
+the current linked manifest and delinks. Accept variable whitespace in metadata;
+ignore blank/comment manifest entries and unnamed component-wide section headings.
+Otherwise an inventory can silently miss linked ranges or count the entire
+component as owned. Confirm a proposed new range directly before reconstructing
+or counting it; historical `EXACT` records are only discovery leads.
 
 ## Reconstruct and integrate
 
@@ -246,6 +258,12 @@ compatible snapshots. Read their arguments and
   Decode each hooked store's effective address, including shifted register
   indices, and reject unsupported forms. Check write-only BG scroll registers
   through the ordered stores rather than expecting readable register values.
+- Keep verification proportional to what the target and its callees can touch.
+  For a pure data callback, check full relevant live task/game records at each
+  call; avoid copying all graphics memory on every invocation without a reason.
+  Retain surrounding controller graphics checks and route captures where needed.
+  Document the checked ranges and any sampling. Speed up host-side inspection
+  only when the same expected results and assertions are preserved.
 - Record per-function/branch counts, ROM/save/state hashes, inputs and explicit
   limits. Separate ordinary routes from RAM fixtures and document restoration.
   For deterministic sampling, report observed versus fully checked calls and
@@ -254,6 +272,9 @@ compatible snapshots. Read their arguments and
   extents and report totals. Compare baselines only for identical state, fixture,
   input and capture prefixes. Distinguish visual inspection from hash equality
   and observed rasterization from an independent graphics oracle.
+  Associate every route with the exact probe source/version that produced it,
+  including generated or composed copies. Preserve separate variants when the
+  probe changes between routes; the current script cannot stand in for all of them.
 - At replay end, stop admitting new outer calls and drain pending/nested calls
   for bounded neutral frames. Keep failures and rerun corrected oracles; do not
   discard pending calls or change matching game code to satisfy a faulty model.
@@ -304,6 +325,10 @@ dirty, use `git show HEAD:docs/progress.json` for committed coverage. Confirm th
 live remote before calling bytes published. Count only new code ranges; ARM7,
 data and symbolic ASM follow the separate categories in the metric. Documentation
 commits must not include pending source or claim unverified progress.
+Read changing totals and milestone targets from current reports and the latest
+user request; do not hardcode a moving percentage or candidate queue into this
+guide. A byte-exact ROM rebuild and a successful route do not establish complete
+C/C++ reconstruction or coverage of every branch.
 
 `docs/BATTLE_MATCHING_MILESTONES.md` has a legacy non-UTF-8 byte and mixed line
 endings. Append bytes while preserving the existing prefix, including when
