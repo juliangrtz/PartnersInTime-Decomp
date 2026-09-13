@@ -5,7 +5,6 @@ extern "C" {
 #include <game/item.h>
 extern const BadgeItemRecord data_02050290[];
 extern const u8 data_ov007_0208dae4[];
-s8 *func_ov007_02075d60(Overlay7Party *, int, u8 *);
 u16 func_ov007_020751b4(Overlay7Party *, int, int, int);
 int func_ov007_020747e0(Overlay7Party *, int, u32, int, u16, u8, u8);
 
@@ -14,7 +13,7 @@ int PauseItem_RebuildRotatingOrder(Overlay7Party *party, int kind)
     u8 limit;
     if (kind == party->kind)
         party->saved_first[party->kind] = party->first;
-    func_ov007_02075d60(party, kind, &limit);
+    PauseItem_GetValues(party, kind, &limit);
     int equipment = 0;
     if ((u8)(kind + 0xfe) <= 1)
         equipment = 1;
@@ -36,7 +35,7 @@ int PauseItem_CheckRotatedAvailability(Overlay7Party *party, int kind, u32 membe
     if (!data_ov007_0208dae4[kind])
         return 0;
     int item = party->unknown_88[index];
-    u16 quantity = func_ov007_02075d60(party, kind, 0)[item];
+    u16 quantity = PauseItem_GetValues(party, kind, 0)[item];
     if (!quantity)
         return -1;
     return func_ov007_020747e0(party, kind, member, item, quantity, 4, 0);

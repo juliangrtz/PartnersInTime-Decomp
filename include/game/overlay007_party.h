@@ -63,6 +63,11 @@ u16 PauseList_DrawSelectedLabel(Overlay7Party *party);
 void PauseList_RedrawSelectedRow(Overlay7Party *party, int copy);
 u32 PauseList_CopySelectedRow(Overlay7Party *party);
 int PauseList_CheckRowAvailability(Overlay7Party *party, int row, int member, int allow_other);
+/* The plural argument stays full-width where existing native callers use it. */
+const u8 *PauseItem_GetText(Overlay7Party *party, int kind, int mode, int item, int plural);
+s8 *PauseItem_GetValues(Overlay7Party *party, int kind, u8 *limit);
+void PauseItem_DrawText(Overlay7Party *party, u32 offset, int mode, int item,
+                       int width, int height, u8 plural);
 u16 PauseItem_GetDescriptionId(Overlay7Party *party, int kind, u16 item);
 u16 PauseItem_GetNameId(Overlay7Party *party, int kind, u16 item);
 int PauseItem_CheckRotatedAvailability(Overlay7Party *party, int kind, u32 member, int row, u16 count);

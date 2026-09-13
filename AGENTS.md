@@ -317,6 +317,10 @@ and compatible snapshots. Optional dependencies are in
   expected writes only at a later boundary where those instructions have run.
   A Python callback named `after` does not advance emulation. Honor ARM condition
   codes before counting an instruction hook as an executed conditional store.
+  Stack outputs can be in EUR ARM9 DTCM at `0x027E0000..0x027E4000`.
+  Read that CPU-visible range directly and check neighboring bytes; do not fold
+  it into a main-RAM mirror. Use the component metadata and caller's stack
+  extent to identify the region before changing a probe's address bounds.
 - For constructors, snapshot the actual allocation before entry and derive only
   the fields the native code initializes; preserve untouched bytes and padding.
   A base constructor may run inside a larger derived allocation. Propagate a
@@ -441,7 +445,9 @@ For pause lists, read the [visibility](docs/research/RECONSTRUCTION_NOTES.md#pau
 and [selection](docs/research/RECONSTRUCTION_NOTES.md#pause-list-selection-and-row-copies)
 findings. The category values are 0 consumables, 1 Key Items, 2 clothing,
 3 badges and 4 Bros. Items; kind 1 was previously mislabeled in private probes.
-Kind 4 has code-derived meaning but is not covered by the recorded list replays.
+The original visibility/selection probes did not cover kind 4; the later
+[text/table probe](docs/research/RECONSTRUCTION_NOTES.md#pause-item-text-and-inventory-tables)
+includes a normal-input Bros. Items route.
 The signed first-item byte at party offset 264 and signed tile-row byte at 266
 serve different rotations. `Overlay7Party` describes a 332-byte prefix of a
 4,428-byte allocation; its saved-first and saved-selection arrays each contain

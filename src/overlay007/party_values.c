@@ -7,7 +7,6 @@ extern u8 data_ov007_020905f0[];
 extern const u8 data_ov007_0208dad4[];
 extern const u8 data_ov007_0208daf4[], data_ov007_0208daf5[];
 
-extern s8 *func_ov007_02075d60(Overlay7Party *party, int kind, int mode);
 
 int func_ov007_02075244(Overlay7Party *party, int kind, int slot);
 int func_ov007_020752b4(Overlay7Party *party, int kind, int slot);
@@ -48,7 +47,7 @@ int func_ov007_02075244(Overlay7Party *party, int kind, int slot) {
 }
 
 u16 func_ov007_020751b4(Overlay7Party *party, u8 kind, int slot, int subtract) {
-    s8 value = func_ov007_02075d60(party, kind, 0)[slot];
+    s8 value = PauseItem_GetValues(party, kind, 0)[slot];
     if ((u8)(kind + 0xfe) <= 1) {
         value = value - func_ov007_02075244(party, kind, slot);
         if (subtract) value = value - func_ov007_020752b4(party, kind, slot);

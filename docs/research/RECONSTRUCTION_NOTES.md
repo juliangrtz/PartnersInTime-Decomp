@@ -1762,6 +1762,72 @@ kinds, zero-quantity rotated early return, count wrap and other unobserved
 branches remain uncovered; equal native-renderer captures do not independently
 verify its rendering algorithm.
 
+### Pause item text and inventory tables
+
+`src/overlay007/pause_item_text.cpp` owns `0x02075B04..0x02075E10`
+(780 bytes): `PauseItem_DrawText`, `PauseItem_GetText` and
+`PauseItem_GetValues`. Drawing selects name, description or built-in menu text,
+including the empty-clothing/badge fallback labels, then forwards all eight
+renderer arguments. Text lookup handles singular/plural names, Beans and the
+other Key Items, description resource tables and localized menu-table offsets.
+The values helper returns the live category array and optionally writes one
+byte of capacity. Its Key Items capacity source is a halfword at `0x020A6B98`;
+the output truncates only at the byte store. The native fallback returns null
+but does not define a capacity for unsupported categories.
+
+Full-width temporaries followed by explicit narrowing reproduce name-index
+increments and the capacity store. The draw fallback uses the same mode-first
+initialization order as the already reconstructed row-width helper. Shared
+prototypes replace earlier local declarations. `PauseItem_GetText` retains a
+full-width plural argument because existing native callers pass a word; the
+callee reads its low stack byte through a character view. Changing the shared
+parameter to a byte would add narrowing instructions to those callers. The
+draw wrapper's byte parameter already matches its callers. Every affected
+caller passes the full matching build; no compiler flag or assembly change.
+
+Private `make_pause_item_text_probe.py` generates `probe_pause_item_text.py`.
+Reports live in `build/runtime/eur_pause_item_text/`. The four ordinary routes
+are joined by `empty_clothing/` and `bros_items/` supplemental routes, both
+using normal inputs from checkpoint 65. From an initialized main pause menu,
+three separate Down presses followed by A open Bros. Items (menu index 3,
+category 4). Its capture shows the Green Shell tutorial and attack-item list.
+From the first clothing-list row, Up wraps to the final Unequip entry; both
+its name and description fallbacks run. These routes use no RAM fixture.
+
+Across 6,880 frames the probe observes 37,287 target entries and checks 1,107:
+all 229 text lookups and 74 draw wrappers, plus 804 inventory getters out of
+36,984. Standalone getters are sampled on the first two calls for each
+party/category/output/save/count tuple and every sixtieth frame; getters
+nested inside checked text calls are all checked. Each function runs for all
+five categories. Checks cover 16 capacity-byte writes, 788 null-output getters,
+94 plural and 36 singular name selections, two plural Beans names, two Key
+Item remaps, one empty-gear name and two empty-gear descriptions. Resource
+results are derived independently from the save's table pointers, language
+offsets and entry offsets. Complete party/header, workspace/save/display and
+the relevant pointer records remain checked; drawing also checks both entire
+OBJ buffers, with the renderer's party/main-OBJ mutations labeled observed.
+The renderer's pixel algorithm is outside this probe's independent oracle.
+
+The initial clothing replay failed at frame 341 on output pointer
+`0x027E3A84`. This is inside the EUR ARM9 DTCM range
+`0x027E0000..0x027E4000`, not a main-RAM allocation. An attempted main-RAM
+mirror interpretation was rejected by unequal reads. The corrected probe
+retains the DTCM address, verifies that it lies in the caller's stack extent,
+and checks all four output/neighbor bytes there. Nine DTCM snapshots cover
+three stack addresses. Both initial failures remain under `_stack_mirror`
+and `_mirror_assumption` suffixes; all six corrected replays pass. Do not
+normalize CPU-visible TCM addresses into ordinary main RAM.
+
+All 104 screenshots, 936 graphics dumps and 104 unchanged source-save hashes
+validate. The four unchanged input routes equal the preceding 70 images and
+630 dumps; supplemental routes have separate directories. The Bros. Items
+and Unequip captures were visually inspected. There are no fixtures, pending
+calls or drain frames. All 252 foreign-overlay hits were excluded only after
+exact full owner-function guards. Unsampled getter bodies, singular Beans,
+other unobserved fallback cases and invalid-mode behavior remain uncovered.
+Mode 2 also ran with an otherwise unused category value of 96; do not require
+an inventory category when that mode only reads the menu-text table.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

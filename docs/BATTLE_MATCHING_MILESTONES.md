@@ -7174,3 +7174,31 @@ Exact comparison with the complete overlay0 owner now identifies 8 foreign
 hits; the corrected four-route suite passes, with the original failure retained.
 Reports and artifact validation: build/runtime/eur_pause_item_lookup/.
 See the reconstruction reference for exact fields, coverage and probe details.
+
+## 2026-09-13: Pause text selection and inventory tables (+780 bytes)
+
+Matching C/C++ reaches 727,228 / 1,563,700 bytes (46.51%); C/C++ plus symbolic
+assembly is 46.84%. Overlay 7 reaches 62,472 / 142,264 (43.91%).
+PauseItem_DrawText/GetText/GetValues own 0x02075B04..0x02075E10. The helpers
+recover name/description/menu text modes, plural names, Key Item remapping,
+empty-equipment labels, localized table offsets and inventory pointers/limits.
+Shared declarations preserve caller widths; native full-width temporaries and
+mode initialization order explain the matching source. No inline ASM or flags.
+
+Configure, full Ninja, no-data-mod packaging, zero-difference native relink,
+progress/check and 81 tests pass. ROM SHA-1 remains
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Six ordinary-input replays cover all
+five inventory categories, including Bros. Items and Unequip supplemental
+routes. Across6,880 frames:37,287 observed entries;1,107 fully checked calls
+(229 text,74 draw,804 sampled/nested getters out of36,984 getter entries).
+The oracle independently checks resource-pointer offsets, plural/mode decisions,
+renderer arguments and16 byte-output writes, preserving neighboring bytes.
+Renderer party/main-OBJ mutations are observed outputs, not pixel verification.
+
+All104 screenshots,936 dumps and104 unchanged saves validate; ordinary routes
+match70 prior screenshots/630 dumps. No fixture, pending call or drain remains.
+A frame341 stack-output check required the actual ARM9 DTCM address range;
+the rejected mirror assumption and both original failures are retained. Nine
+DTCM output snapshots pass, and252 foreign-overlay hits have exact owner guards.
+Reports:build/runtime/eur_pause_item_text/, including supplemental subdirectories.
+See the reconstruction reference for sampling, route details and uncovered cases.

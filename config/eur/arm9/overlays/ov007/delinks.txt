@@ -207,3 +207,6 @@ src/overlay007/pause_list_selection.cpp:
 
 src/overlay007/pause_item_lookup.cpp:
     .text start:0x02074d48 end:0x020750bc
+
+src/overlay007/pause_item_text.cpp:
+    .text start:0x02075b04 end:0x02075e10

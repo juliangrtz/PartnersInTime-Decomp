@@ -4,8 +4,6 @@
 
 extern u8 data_ov007_020905f0[];
 
-extern const u8 *func_ov007_02075bbc(Overlay7Party *party, int kind, int mode, int value,
-                                     int flag);
 
 u16 func_ov007_02074d14(Overlay7Party *party, u8 kind, int base, int span);
 u16 func_ov007_02074c60(Overlay7Party *party, u8 kind, int base, int span);
@@ -26,7 +24,7 @@ u16 func_ov007_02074c60(Overlay7Party *party, u8 kind, int base, int span)
         mode = 2;
         entry = kind == 2 ? 11 : 13;
     }
-    party->text.text = func_ov007_02075bbc(party, kind, mode, entry, 1);
+    party->text.text = PauseItem_GetText(party, kind, mode, entry, 1);
     party->text.cursor.bits.x = 0;
     party->text.cursor.bits.y = 0;
     return GameText_MeasureLine(&party->text);
@@ -34,7 +32,7 @@ u16 func_ov007_02074c60(Overlay7Party *party, u8 kind, int base, int span)
 
 u16 func_ov007_02074c04(Overlay7Party *party, int kind, int value, int flag)
 {
-    party->text.text = func_ov007_02075bbc(party, kind, 0, value, flag);
+    party->text.text = PauseItem_GetText(party, kind, 0, value, flag);
     party->text.cursor.bits.x = 0;
     party->text.cursor.bits.y = 0;
     return GameText_MeasureLine(&party->text);
@@ -42,7 +40,7 @@ u16 func_ov007_02074c04(Overlay7Party *party, int kind, int value, int flag)
 
 u16 func_ov007_02074b9c(Overlay7Party *party, int mode, int value)
 {
-    party->text.text = func_ov007_02075bbc(party, party->kind, mode, value, 1);
+    party->text.text = PauseItem_GetText(party, party->kind, mode, value, 1);
     party->text.cursor.bits.x = 0;
     party->text.cursor.bits.y = 0;
     return GameText_MeasureLine(&party->text);

@@ -6,7 +6,6 @@ u16 func_ov007_02075180(Overlay7Party *, int, int);
 u8 func_ov007_02075324(Overlay7Party *, int);
 int func_ov007_020747e0(Overlay7Party *, int, int, int, int, int, int);
 extern const u8 data_ov007_0208dae4[];
-void func_ov007_02075b04(Overlay7Party *, u32, int, int, int, int, int);
 void func_ov007_020758f0(Overlay7Party *, u32, int, int, int, int, int, int);
 void MIi_CpuCopy16(const void *, void *, u32);
 
@@ -50,7 +49,7 @@ u16 PauseList_DrawSelectedLabel(Overlay7Party *party)
 {
     u32 offset = WORK.main_allocation.offset + 9792;
     int item = party->slots[(party->first + party->span.offset) % party->count];
-    func_ov007_02075b04(party, offset, 0, item, 4, 1, 0);
+    PauseItem_DrawText(party, offset, 0, item, 4, 1, 0);
     u8 *source = (u8 *)Overlay5Display_GetObjVram(DISPLAY_ENGINE_MAIN) + offset;
     u8 *destination = (u8 *)Overlay5Display_GetObjVram(DISPLAY_ENGINE_SUB) + 640;
     MIi_CpuCopy16(source, destination, 1088);

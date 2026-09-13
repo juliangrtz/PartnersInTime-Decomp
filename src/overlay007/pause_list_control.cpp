@@ -4,7 +4,6 @@
 extern "C" {
 u8 func_ov007_02075324(Overlay7Party *, int);
 u8 func_ov007_020750bc(Overlay7Party *);
-const u8 *func_ov007_02075bbc(Overlay7Party *, int, int, int, int);
 void func_ov005_020663d8(int);
 void func_ov007_02075f6c(Overlay7Party *, int);
 void func_ov007_02073c94(int);
@@ -68,7 +67,7 @@ extern "C" u16 PauseList_MeasureRowWidth(Overlay7Party *party, int row, int plur
                 item = 13;
         }
     }
-    party->text.text = func_ov007_02075bbc(party, party->kind, mode, item, plural);
+    party->text.text = PauseItem_GetText(party, party->kind, mode, item, plural);
     party->text.cursor.bits.x = 0;
     party->text.cursor.bits.y = 0;
     return GameText_MeasureLine(&party->text);

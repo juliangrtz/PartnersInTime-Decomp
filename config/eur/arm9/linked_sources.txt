@@ -846,3 +846,4 @@ src/overlay007/pause_list_row.cpp
 src/overlay007/pause_list_control.cpp
 src/overlay007/pause_list_selection.cpp
 src/overlay007/pause_item_lookup.cpp
+src/overlay007/pause_item_text.cpp
