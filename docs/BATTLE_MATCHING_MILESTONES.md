@@ -6947,3 +6947,37 @@ and 104 unchanged source saves validate. Time/display saturation and other
 widths remain uncovered; final GPU output is observed. The clock callback's
 previous oracle was not rerun. Reports: build/runtime/eur_pause_numbers/;
 probe_pause_numbers.py and verify_pause_numbers_artifacts.py remain private.
+
+
+## 2026-09-13: pause blend-background setup
+
+Reconstructed SceneMenu_PrepareBlendBackground at 0x02081560 (260 bytes),
+configuring main BG0, fixed window scroll and 768 tile indices. It uses the
+existing GameWindowManager and display APIs. Character bank/tile bias use
+halfword parameters; both constant-bank callers retain their exact code.
+No assembly or compiler flag changes. Matching C/C++ is now
+723,432 / 1,563,700 bytes (46.26%); with separate assembly, 46.60%.
+Overlay 7 reaches 58,676 / 142,264 (41.24%); 58,418 bytes remain to 50%.
+
+Full configure/Ninja checks, no-data-mod packaging, native relink, generated
+progress checks and 81 tests pass. Both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink covers 43 components,
+420 section units, 31,138 relocations and 1,577 ARM7 relocations with zero
+differing bytes. Logs: build/analysis/scene_menu_background_*.log.
+
+Ordinary equipment/comparison/back/exit routes on checkpoints 65 and 86
+verify four setup calls in 2,060 frames, both bank/bias pairs (12/4096,8/0),
+60 ordered register writes and 3,072 ordered tile writes. Independent checks
+cover fixed_main_scroll, BG masks, map addresses, full mapped BG VRAM,
+3,908-byte window and 43,056-byte scene allocations and heap headers,
+workspace/save, palettes/OAM and stable GPU fields. All 30 screenshots,
+270 graphics dumps and 104 unchanged original saves validate. No fixture,
+pending call or drain frame remains. Reset-disabled calls/other parameters
+and final renderer internals remain outside this oracle.
+
+The first checkpoint-65 attempt failed at frame 143: the probe omitted the
+mosaic helper's conditional STRH instructions. Collecting stores by opcode
+and respecting ARM condition flags fixes the oracle. The corrected checkpoint
+65 route and checkpoint 86 pass without changing matching game code.
+Reports: build/runtime/eur_scene_menu_background/; probe and artifact verifier
+are private in build/analysis/.

@@ -71,8 +71,8 @@ void SceneMenu_StartBlend(int shrinking, int duration)
         task->palette_bits = 4096;
     func_02036988(0x4000050, 1, 8, 0, 16);
     if (!shrinking)
-        func_ov007_02081560(1, 12, (u16)task->palette_bits);
+        SceneMenu_PrepareBlendBackground(1, 12, (u16)task->palette_bits);
     else
-        func_ov007_02081560(1, 8, (u16)task->palette_bits);
+        SceneMenu_PrepareBlendBackground(1, 8, (u16)task->palette_bits);
 }
 }

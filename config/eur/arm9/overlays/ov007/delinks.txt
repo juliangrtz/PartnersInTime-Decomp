@@ -189,3 +189,6 @@ src/overlay007/pause_party_bitmap.cpp:
 
 src/overlay007/pause_numbers.cpp:
     .text start:0x02080dec end:0x02081334
+
+src/overlay007/scene_menu_background.cpp:
+    .text start:0x02081560 end:0x02081664

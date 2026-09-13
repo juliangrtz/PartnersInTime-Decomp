@@ -15,7 +15,6 @@ extern void *func_ov005_0206659c(void *, int, int);
 extern void func_ov005_0206650c(void *);
 extern int _s32_div_f(int, int);
 extern void func_02036988(int, int, int, int, int);
-extern void func_ov007_02081560(int, int, u16);
 extern void func_ov007_02081664(int);
 }
 #endif

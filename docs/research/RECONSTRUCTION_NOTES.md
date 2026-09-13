@@ -1468,6 +1468,43 @@ no pending calls or drain frames. The artifact verifier checks 12 screenshots,
 unsupported kinds and other widths remain unexercised; final GPU output is
 observed. The clock's previous callback oracle was not rerun for this batch.
 
+### Pause blend background
+
+`SceneMenu_PrepareBlendBackground` at `0x02081560` (260 bytes) is linked in
+[scene_menu_background.cpp](../../src/overlay007/scene_menu_background.cpp).
+It configures main BG0, optionally clears its scroll and sets the existing
+window manager's `display.bits.fixed_main_scroll`, then masks and adds a tile
+bias to the visible 32-by-24 map. The flag belongs to the complete 3,908-byte
+`GameWindowManager` pointed to by the scene manager's first word; it is not an
+unidentified scene-controller field. The scene manager allocation is 43,056
+bytes. Its initialization and heap headers confirm these separate extents.
+
+Both calls in `SceneMenu_StartBlend` pass character bank 8 or 12 and explicitly
+narrow the tile bias to a halfword. The shared setup declaration now uses
+`u16` for the bank and bias, matching the register setter's parameter type and
+the native setup body without redundant narrowing. Full module checks also
+verify both callers. The final source uses existing window/display types and
+matches without assembly or compiler flag changes.
+
+Private `build/analysis/probe_scene_menu_background.py` follows ordinary
+equipment/comparison/back/exit routes from checkpoints 65 and 86. Passing
+reports `evidence_equipment65_verified.json` and `evidence_equipment86.json`
+under `build/runtime/eur_scene_menu_background/` cover four setup calls in
+2,060 frames. They independently check the fixed-scroll flag, BG field masks,
+60 ordered GPU stores, derived VRAM map pointers, all 3,072 ordered tile writes
+and full main/sub mapped BG VRAM. Complete window/scene allocations and heap
+headers, workspace, save, palettes, OAM and stable GPU fields are checked.
+Both bank/bias pairs (12/4096 and 8/0) run on each save. Thirty screenshots,
+270 graphics dumps and all 104 unchanged source saves validate; no fixture,
+pending call or drain frame remains. Reset-disabled calls and other parameters
+remain unexercised; final rendered output is observed.
+
+The first checkpoint-65 probe stopped at frame 143 because its store collector
+only recognized unconditional `strh`, omitting the native mosaic helper's
+`strheq` and `strhne`. The corrected collector uses instruction IDs and checks
+ARM condition flags before counting a write. Both final routes pass after
+that oracle correction; no game-code change was required.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

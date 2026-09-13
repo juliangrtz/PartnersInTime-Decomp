@@ -38,6 +38,8 @@ extern "C" {
 void SceneMenu_UpdateZoom(SceneMenuTweenTask *task);
 void SceneMenu_UpdateBlend(SceneMenuBlendTask *task);
 void SceneMenu_StartBlend(int shrinking, int duration);
+/* Configure BG0 and apply a tile bias to its 32-by-24 visible map. */
+void SceneMenu_PrepareBlendBackground(int reset_offset, u16 character_base, u16 tile_bias);
 void SceneMenu_ApplyScroll(SceneMenuTweenTask *task);
 void SceneMenu_UpdateScroll(SceneMenuTweenTask *task);
 void SceneMenu_StartScroll(int x, int y, int duration);

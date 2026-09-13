@@ -840,3 +840,4 @@ src/overlay009/shop_stock_rows.cpp
 src/overlay009/shop_stock_setup.cpp
 src/overlay007/pause_party_bitmap.cpp
 src/overlay007/pause_numbers.cpp
+src/overlay007/scene_menu_background.cpp
