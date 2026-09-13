@@ -7627,3 +7627,36 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
 - Private evidence: build/runtime/eur_pause_member_arrows/artifact_validation.json
   and clothing_arrows/evidence_clothing65.json; build/analysis/pause_member_arrows_*
   logs and source-identified probe. See the reconstruction reference for limits.
+
+
+### 2026-09-13 - Low-HP warning control and updates (+180 bytes)
+
+- Reconstructed the stop routine at 02080c2c (20 bytes) and updater at 02080d4c
+  (160 bytes), with shared task/mode definitions and the existing workspace byte.
+  Preserves unsigned HP loads, signed products/comparison, coordinate snapshots,
+  draw order and removal. The creator remains private, between two source units.
+- Matching C/C++: 740,132/1,563,700 (47.33%); with symbolic ASM: 47.66%.
+  Overlay 7: 75,376/142,264 (52.98%). Remaining to 50%: 41,718 bytes.
+- Full matching checks, golden EUR ROM packaging, zero-difference native relink,
+  generated progress and all 81 tests pass. No assembly or compiler changes.
+- Two story-save replays, 4,760 frames: all 16,344 warning callbacks and two stop
+  calls checked; 4,848 independent draws, 11,488 suspended returns, eight removal
+  marks. All eight warning lifetimes complete; all 248 watched tasks and 62 model
+  slots returned. Final field guards pass, with no pending calls, live tasks or
+  drain frames. All 104 original saves are unchanged.
+- Checkpoint 65 uses ordinary input. Checkpoint 86 separately tests current HP
+  values 0/24/25/26 against maximum 100 for each member, restoring each of 16 RAM
+  edits before callback return. Equality and both threshold sides are verified;
+  no claim of natural story values or independent warning-icon rasterization.
+- All 82 PNGs and 738 graphics dumps validate. The ordinary route's 41 images and
+  369 dumps equal the previous member-arrow replay; fixture baseline comparison
+  is limited to two images and 18 dumps before the first edit. The pause screen
+  and final field were inspected.
+- Both runtime processes pass. An inherited artifact assertion expected equipped
+  marker draws at checkpoint 86, whose equipped items are outside the first nine
+  rows. The corrected validator preserves independent visibility/count checks;
+  the failed artifact log remains separate. Model helper internals and
+  rasterization are observed rather than independently derived.
+- Evidence: build/runtime/eur_pause_hp_warning/artifact_validation.json and
+  clothing_arrows/evidence_{normal65,thresholds86}.json; source-identified probe
+  and build/analysis/pause_hp_warning_* logs. See the reconstruction reference.

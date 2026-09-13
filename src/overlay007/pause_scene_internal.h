@@ -66,7 +66,7 @@ struct PauseSceneWork {
         u8 unknown2dc[4];
         struct {
             s8 equipment_highlight_state;
-            u8 unknown2dd;
+            union { u8 unknown2dd, hp_warning_mode; };
             u16 equipment_highlight_item;
         };
     };

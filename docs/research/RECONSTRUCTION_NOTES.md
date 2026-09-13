@@ -1402,8 +1402,8 @@ and compare the shared graphics buffers with the preceding credits replay.
 ### Pause party status
 
 These findings come from EUR overlay 7 instructions and current shared types.
-The party bitmap pair below is linked and runtime-verified; the low-HP control
-findings remain code-derived. Check the manifest and private handoff for the
+The party bitmap pair and low-HP stop/update routines are linked and have runtime
+verification; the low-HP creator remains private. Check the manifest and handoff for the
 other candidates' status; do not count a matching private object as linked code.
 Private evidence includes `build/analysis/pause_party_status.cpp` and the complete
 instruction and literal-pool listing `build/analysis/pause_party_status_native.txt`.
@@ -1412,7 +1412,8 @@ The existing [pause workspace](../../src/overlay007/pause_scene_internal.h)
 is a 90,600-byte `PauseSceneWork` at ARM9 RAM `0x020905F0` while overlay 7 is
 loaded. It is an object at that address, not a pointer stored there.
 The party-availability bytes start at `+0x116`. The indicator control byte is
-`unknown2dc[1]`, at `+0x2DD` (`0x020908CD`); reuse that field rather than
+`hp_warning_mode`, at `+0x2DD` (`0x020908CD`), with the existing raw aliases
+retained; reuse that field rather than
 inventing a separate global for the same storage. This byte is distinct from
 the 32-bit pause phase used by the Nawatobi entry procedure below.
 
@@ -1421,8 +1422,8 @@ examining the control byte. Zero requests deferred task removal; two returns
 without submitting the model. Other values take the HP-dependent path, then
 submit the model with argument 60. The stop helper at `0x02080C2C` clears the
 byte. The creator at `0x02080C40` sets it to one and creates an indicator for
-each available party member. These control-flow meanings do not establish
-which ordinary menu routes exercise all three cases.
+each available party member. The separate low-HP replay below exercises all
+three control cases through ordinary menu navigation.
 
 For the callback's HP check, `gSaveData` is the pointer stored at `0x02059FE8`.
 Member `i` is at `read32(0x02059FE8) + 0x3F8 + 0x24 * i`, using the existing
@@ -1490,7 +1491,8 @@ saturation, explicit leading zeroes or a non-three-digit width. The artifact
 verifier checks 34 screenshots, 306 graphics dumps and all 104 unchanged source
 saves. Both routes finish with no pending calls. Final GPU output and screenshots
 are observed, not independently rendered by the oracle. These results do not
-verify the still-private low-HP callbacks or their lifecycle and threshold cases.
+verify the low-HP callbacks; their lifecycle and threshold checks are recorded
+separately below.
 
 The linked [clock separator callback](../../src/overlay007/pause_numbers.cpp),
 `PauseClock_UpdateSeparator` at `0x02080EF4` (164 bytes), increments its signed
@@ -1511,6 +1513,55 @@ unchanged source saves under `build/runtime/eur_pause_clock/`. No fixtures or
 pending calls remain. Task creation/destruction, invalid timer states and final
 GPU output are outside this callback oracle; the two graphics helpers remain
 unlinked even though their effects are checked here.
+
+### Pause low-HP warnings
+
+[pause_hp_warning_stop.cpp](../../src/overlay007/pause_hp_warning_stop.cpp) and
+[pause_hp_warning_update.cpp](../../src/overlay007/pause_hp_warning_update.cpp)
+reconstruct the 20-byte stop routine at `0x02080C2C` and 160-byte updater at
+`0x02080D4C`. The shared [task and mode definitions](../../include/game/pause_hp_warning.h)
+preserve the complete 72-byte task and the existing workspace byte. The stop
+routine takes no arguments; its caller overwrites the return register before
+using it. The two source units remain separate around the unreconstructed
+268-byte creator. All 180 bytes match without assembly or changed compiler flags.
+
+Two `clothing_arrows` replays at story checkpoints 65 and 86 run 4,760 frames.
+Every one of the 16,344 warning updates and both stop calls is independently
+checked: 4,848 model draw insertions, 11,488 suspended returns and eight removal
+marks. The checks cover complete live task/model/game records, initial member
+and coordinate fields, unsigned HP reads, signed products, threshold comparisons,
+pixel stores and actual resource/task pool returns. All eight warning tasks
+finish their lifetimes. Across the retained surrounding checks, all 248 watched
+tasks and 62 model slots are returned. Both routes finish in the field with full
+overlay-0 guards, no pending calls and no live watched tasks.
+
+Checkpoint 65 uses ordinary inputs and no RAM fixture. At checkpoint 86, the
+probe temporarily sets maximum HP to 100 and current HP to 0, 24, 25 and 26 for
+each member, one guarded callback at a time. All 16 four-byte edits at member
+offset `+0x0C` are restored and verified before that callback returns, during
+frames 85 through 88. This establishes zero, below-threshold, equality and
+above-threshold behavior independently of naturally occurring save values.
+The ordinary route only exercises HP above the threshold. The fixtures do not
+establish a story encounter or independently verify the rendered warning icon.
+
+All 82 screenshots and 738 graphics dumps validate, and all 104 original saves
+remain unchanged. The complete ordinary route's 41 images and 369 dumps equal
+the earlier member-arrow replay. For the fixture route, only its two images
+and 18 dumps before the first RAM edit are compared with the earlier checkpoint-
+86 route. The ordinary pause screen and fixture route's final field were inspected.
+Model initialization/animation internals and rasterization are observed rather
+than independently derived. Full matching checks, golden EUR ROM packaging,
+zero-difference native relinking, generated progress and all 81 tests pass.
+
+Private reports are under `build/runtime/eur_pause_hp_warning/`, with
+`clothing_arrows/evidence_normal65.json`, `evidence_thresholds86.json` and
+`artifact_validation.json`. Reports identify the composed
+`build/analysis/probe_pause_hp_warning.py` and its hash. Both replay processes
+completed successfully. An inherited artifact assertion initially expected
+equipped markers to be drawn on both saves; checkpoint 86's equipped items are
+outside its first nine rows, so all 5,496 marker updates correctly omit drawing.
+The corrected validator retains the independent lookup/visibility oracle and
+count reconciliation. The failed artifact log is preserved separately.
 
 ### Pause numeric displays
 
