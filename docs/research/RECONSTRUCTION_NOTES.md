@@ -552,6 +552,20 @@ checks source-save hashes and compares their captures with the ordinary routes.
 Read each report's actual coverage before extending it; item setup, rendering
 internals and unexercised controller branches remain outside this oracle.
 
+`build/analysis/probe_shop_panel_lifecycle.py` extends those three ordinary-button
+routes with constructor and destructor checks. It snapshots the full buying
+allocation (936 bytes) and inventory allocation (848 bytes), including nested
+base calls. The base prefix is 828 bytes. Buying initialization writes two
+parallel two-byte arrays at offsets 929 and 931; inventory initialization writes
+only the low two bytes of the word at offset 828. Preserve the remaining bytes.
+Expected vtables, initialized fields and position-helper writes are derived;
+parent oracles inherit child expectations, not observed constructor output.
+Validate the object before the heap free and never read it after release.
+The routes exercise base initialization/destruction and both derived initializers
+and deleting entries, but not the four other destructor wrappers. Reports in
+`build/runtime/eur_shop_panel_lifecycle/` and the private
+`verify_shop_lifecycle_artifacts.py` compare captures with the buying-panel batch.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

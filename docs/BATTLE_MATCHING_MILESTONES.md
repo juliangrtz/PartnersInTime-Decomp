@@ -6155,3 +6155,41 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **709,212 / 1,563,700 bytes (45.35%)**, or **45.69%** with
   separate assembly. Overlay 9 is **20,884 / 78,984 (26.44%)**. There are
   **72,638 bytes** left to the 50% target.
+
+
+## 2026-09-13 - Shop item-panel constructors and destructors
+
+- Added ten matching C++ functions, **460 bytes**, covering the common item
+  panel and the buying/inventory panel lifecycles. Ranges are
+  `0x020708F0..0x02070978`, `0x02071FE0..0x02072080` and
+  `0x020743C0..0x02074464`. The inventory functions extend its existing module;
+  public scene callers now use the recovered typed constructors.
+- Native allocation and stores establish the 936-byte buying and 848-byte
+  inventory layouts. The buying tail contains two parallel two-byte arrays;
+  inventory initialization changes only two bytes of its first extension word.
+  The source preserves all untouched fields and padding.
+- Full Ninja checks, canonical packaging, native relinking and **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+  The native check covers 43 components and 31,138 relocations, including 1,577
+  ARM7 relocations, with zero differing bytes. Logs:
+  `build/analysis/shop_lifecycle_{configure,check,rom,native,tests}.log`.
+- The lifecycle probe replays coin shop 0 from story save 86 and equipment shop
+  2 / bean shop 14 from save 65. Controlled decoded-command entry is restored
+  before ordinary menu inputs; every run visibly returns to the field.
+  **3,173 frames and 36,093 checked returns** include 24 lifecycle returns.
+  Full allocation/save snapshots, independently derived constructor fields,
+  vtable changes and ordered position/free calls pass. Expected child state is
+  propagated into parent checks; released objects are never read. Scene globals
+  are checked before overlay unload.
+- Six of the ten lifecycle entry points execute: base initialization and base
+  destruction, plus each derived initializer and deleting entry. Base standalone
+  destruction/deletion and derived non-deleting wrappers remain unexercised;
+  their complete native bytes still match. Existing buying-panel checks also pass.
+- `build/analysis/verify_shop_lifecycle_artifacts.py` validates **34 screenshots,
+  306 graphics dumps and all 104 source saves**. All 340 captures/dumps match
+  the previous verified routes. Shop, quantity and field screens were visually
+  inspected. Reports: `build/runtime/eur_shop_panel_lifecycle/`. No pending
+  calls or drain frames remain; physical audio is outside these checks.
+- Matching C/C++ reaches **709,672 / 1,563,700 bytes (45.38%)**, or **45.72%**
+  with separate assembly. Overlay 9 reaches **21,344 / 78,984 (27.02%)**.
+  **72,178 bytes** remain to the 50% goal.

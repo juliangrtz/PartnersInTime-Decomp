@@ -64,7 +64,7 @@ src/overlay009/shop_inventory_panel.cpp:
     .text start:0x020738a0 end:0x02074038
 
 src/overlay009/shop_inventory_list.cpp:
-    .text start:0x020742c4 end:0x020743c0
+    .text start:0x020742c4 end:0x02074464
 
 src/overlay009/shop_panel_navigation.cpp:
     .text start:0x02079444 end:0x02079808
@@ -77,3 +77,9 @@ src/overlay009/shop_particle.cpp:
 
 src/overlay009/shop_buy_panel.cpp:
     .text start:0x020715e0 end:0x02071af0
+
+src/overlay009/shop_item_panel_lifecycle.cpp:
+    .text start:0x020708f0 end:0x02070978
+
+src/overlay009/shop_buy_panel_lifecycle.cpp:
+    .text start:0x02071fe0 end:0x02072080

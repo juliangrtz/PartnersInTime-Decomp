@@ -23,7 +23,7 @@ typedef struct ShopBuyPanel {
     u8 category;
     u8 new_items[99];
     u8 saved_selection;
-    u8 unknown_3a1[4];
+    u8 unknown_3a1[2], unknown_3a3[2];
 } ShopBuyPanel;
 typedef char ShopBuyPanelSizeCheck[sizeof(ShopBuyPanel) == 936 ? 1 : -1];
 
@@ -54,6 +54,16 @@ typedef char ShopTextSizeCheck[sizeof(ShopText) == 2096 ? 1 : -1];
 #ifdef __cplusplus
 extern "C" {
 #endif
+ShopItemPanel *ShopItemPanel_DestroyBase(ShopItemPanel *panel);
+ShopItemPanel *ShopItemPanel_Delete(ShopItemPanel *panel);
+ShopItemPanel *ShopItemPanel_Destroy(ShopItemPanel *panel);
+ShopItemPanel *ShopItemPanel_Init(ShopItemPanel *panel);
+ShopBuyPanel *ShopBuyPanel_Delete(ShopBuyPanel *panel);
+ShopBuyPanel *ShopBuyPanel_Destroy(ShopBuyPanel *panel);
+ShopBuyPanel *ShopBuyPanel_Init(ShopBuyPanel *panel);
+ShopInventoryPanel *ShopInventoryPanel_Delete(ShopInventoryPanel *panel);
+ShopInventoryPanel *ShopInventoryPanel_Destroy(ShopInventoryPanel *panel);
+ShopInventoryPanel *ShopInventoryPanel_Init(ShopInventoryPanel *panel);
 void ShopBuyPanel_Hide(ShopBuyPanel *panel);
 void ShopBuyPanel_Show(ShopBuyPanel *panel, u8 selection);
 int ShopBuyPanel_IsRowNew(ShopBuyPanel *panel, int row);

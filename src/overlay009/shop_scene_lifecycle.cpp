@@ -132,7 +132,7 @@ ShopSceneTask *ShopScene_Init(ShopSceneTask *task, u32 priority, u32 unused)
     data_ov009_0207ea30 = object;
     object = GameHeap_New(936, 0, 0, 0);
     if (object)
-        object = func_ov009_02072030(object);
+        object = ShopBuyPanel_Init((ShopBuyPanel *)object);
     data_ov009_0207ea34 = (ShopPanel *)object;
     object = GameHeap_New(224, 0, 0, 0);
     if (object)
@@ -140,7 +140,7 @@ ShopSceneTask *ShopScene_Init(ShopSceneTask *task, u32 priority, u32 unused)
     data_ov009_0207ea28 = object;
     object = GameHeap_New(848, 0, 0, 0);
     if (object)
-        object = func_ov009_02074410(object);
+        object = ShopInventoryPanel_Init((ShopInventoryPanel *)object);
     data_ov009_0207ea24 = (ShopPanel *)object;
     object = GameHeap_New(656, 0, 0, 0);
     if (object)
