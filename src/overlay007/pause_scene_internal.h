@@ -88,7 +88,8 @@ extern void *SceneManager_LoadResources(void *);
 extern void SceneManager_Shutdown(void *), SceneController_Create(u8 *), SceneTask_LoadArchiveMember(u8 *);
 extern void SceneScript_LoadPrimaryArchive(u8 *, int, u16);
 extern void func_ov007_02081664(int), func_ov007_0208a918(void);
-extern void func_ov007_0206e918(PauseMenuElement *), func_ov007_020762dc(void *);
+extern void func_ov007_0206e918(PauseMenuElement *);
+extern void *PauseParty_Init(void *storage, void *fonts), *PauseParty_Destroy(void *storage);
 extern void func_ov005_02068c54(void *);
 
 extern void MI_StopDma(int);
@@ -104,7 +105,7 @@ static inline void DeleteSceneManager(void *p)
 static inline void DeleteParty(void *p)
 {
     if (p) {
-        func_ov007_020762dc(p);
+        PauseParty_Destroy(p);
         GameHeap_Delete(p);
     }
 }

@@ -48,7 +48,6 @@ extern void func_ov005_02067424(Overlay5Archive *, u8);
 extern Overlay5Asset *func_ov005_02066a7c(Overlay5Archive *, u16, u16, const AssetTable *, u8, int);
 extern void *func_ov005_0206687c(const char *, u32 *, int);
 #include <game/menu_number.h>
-extern void *func_ov007_02076308(void *, void *);
 extern void func_02007ebc(GameSpritePalette *, int, int, int, int, int, int, int, int, int);
 extern void MIi_CpuClear16(u16, void *, u32), MIi_CpuClearFast(u32, void *, u32),
     func_0203b7a0(u32, void *, u32);
@@ -372,7 +371,7 @@ void PauseScene_LoadResources(PauseSceneTask *)
     }
     void *party = GameHeap_New(4428, 0, 0, 0);
     if (party)
-        party = func_ov007_02076308(party, &WORK.image30);
+        party = PauseParty_Init(party, &WORK.image30);
     data_ov007_0208e1e4 = party;
 }
 }

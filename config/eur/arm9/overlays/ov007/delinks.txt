@@ -210,3 +210,6 @@ src/overlay007/pause_item_lookup.cpp:
 
 src/overlay007/pause_item_text.cpp:
     .text start:0x02075b04 end:0x02075e10
+
+src/overlay007/pause_party_lifecycle.cpp:
+    .text start:0x020762dc end:0x02076374

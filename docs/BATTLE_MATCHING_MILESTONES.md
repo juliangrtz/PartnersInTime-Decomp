@@ -7202,3 +7202,28 @@ the rejected mirror assumption and both original failures are retained. Nine
 DTCM output snapshots pass, and252 foreign-overlay hits have exact owner guards.
 Reports:build/runtime/eur_pause_item_text/, including supplemental subdirectories.
 See the reconstruction reference for sampling, route details and uncovered cases.
+
+## 2026-09-13: Pause party initialization and cleanup (+152 bytes)
+
+Matching C/C++ reaches 727,380 / 1,563,700 bytes (46.52%); with symbolic
+assembly,46.85%. Overlay7 reaches62,624 /142,264 (44.02%).
+PauseParty_Init/Destroy own0x020762DC..0x02076374 and matched their first
+compiled draft. The initializer clears the image pointer and sets the embedded
+text state with fourteen native arguments; cleanup frees owned images when
+present and returns the party pointer. The caller owns the party's own release.
+No inline assembly or compiler flag changes.
+
+Configure, full Ninja, no-data-mod packaging, zero-difference native relink,
+progress/check and81 tests pass. ROM SHA-1 remains
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Four routes check six initialization/
+cleanup pairs over5,240 frames, including every field of the full4428-byte
+allocation. Text masks/fields are derived independently; padding, reserved bits
+and unused scratch stay intact. The constructor runs before global publication.
+
+The first artifact verifier missed the final menu reopening in clothing/badge
+routes. Their additional normal Start exits now check the second cleanup too;
+the prior successful replays and verifier failure are retained. All74 images,
+666 dumps and104 unchanged source saves validate; common prefixes equal70/630
+prior captures. No fixture, pending call or drain remains. All six cleanup
+calls have null image pointers; the nonnull branch and outer heap lifecycle
+remain uncovered. Reports:build/runtime/eur_pause_party_lifecycle/.

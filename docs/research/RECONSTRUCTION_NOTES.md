@@ -1828,6 +1828,47 @@ other unobserved fallback cases and invalid-mode behavior remain uncovered.
 Mode 2 also ran with an otherwise unused category value of 96; do not require
 an inventory category when that mode only reads the menu-text table.
 
+### Pause party initialization and cleanup
+
+`src/overlay007/pause_party_lifecycle.cpp` owns the contiguous 152 bytes at
+`0x020762DC..0x02076374`. Both functions matched their first compiled draft.
+`PauseParty_Init` clears the image pointer and initializes the embedded
+48-byte `GameText` using the caller's font table and the scratch buffer at
+party +332. Its fourteen arguments set x/y 0, spacing 1, leading 3, color 1,
+space width 6, tile pitch 31, unused 0, alignment sentinel 255 and margin 0.
+`PauseParty_Destroy` deletes a nonnull image array, clears that pointer and
+returns the party address. It does not free the party allocation itself;
+the surrounding resource code owns that later operation.
+
+Private `make_pause_party_lifecycle_probe.py` generates the focused probe;
+reports and the artifact verifier are under the corresponding private
+analysis/runtime names. Four routes check six initializers and six cleanup
+calls over 5,240 frames. Each checks the complete 4,428-byte live allocation,
+its 16-byte header, workspace, save, display and globals. The text oracle
+independently derives all initialized fields and reset masks, including
+language, fonts, scales, cursor/style/bounds and retained reserved bits.
+Uninitialized payload, text padding and unused scratch bytes stay unchanged.
+The constructor runs before the global party pointer is assigned; check its
+argument allocation, not an assumed nonnull global. An incoming image-pointer
+field contained allocation residue and was correctly cleared without freeing it.
+
+The first artifact verifier assumed one initialization/cleanup pair per route.
+The successful clothing/badge replays instead showed the final Start reopening
+the menu, reusing the same heap address for a second object. The corrected
+routes add another Start and wait to close that menu as well. Each now checks
+two complete initialization/cleanup pairs; item and Key Item routes check one.
+The initial reports/logs remain under `_reopened_menu`, with the original
+artifact-verifier failure retained. This was a route-coverage correction, not
+a game-code or per-call oracle failure.
+
+All 74 screenshots, 666 graphics dumps and 104 unchanged source saves validate.
+The common input prefixes equal 70 prior screenshots and 630 dumps; the four
+additional captures cover the final exits. The final clothing capture shows
+the field. No fixture, pending call or drain is present, and 3,164 foreign-overlay
+hits have exact owner guards. All six cleanup calls saw a null image pointer;
+nonnull image cleanup and the surrounding heap allocation/free internals are
+not claimed as covered by this probe.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
