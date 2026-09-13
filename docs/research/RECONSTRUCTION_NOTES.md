@@ -1401,7 +1401,7 @@ saves. Both routes finish with no pending calls. Final GPU output and screenshot
 are observed, not independently rendered by the oracle. These results do not
 verify the still-private low-HP callbacks or their lifecycle and threshold cases.
 
-The linked [clock separator callback](../../src/overlay007/pause_clock.cpp),
+The linked [clock separator callback](../../src/overlay007/pause_numbers.cpp),
 `PauseClock_UpdateSeparator` at `0x02080EF4` (164 bytes), increments its signed
 timer at task `+0x24`. At 30 it subtracts 30, toggles the word at `+0x28`, and
 either draws tile 268 at (72, 161) or clears the 4-by-8 rectangle at (74, 165).
@@ -1420,6 +1420,53 @@ unchanged source saves under `build/runtime/eur_pause_clock/`. No fixtures or
 pending calls remain. Task creation/destruction, invalid timer states and final
 GPU output are outside this callback oracle; the two graphics helpers remain
 unlinked even though their effects are checked here.
+
+### Pause numeric displays
+
+The linked [number module](../../src/overlay007/pause_numbers.cpp) contains
+`PauseNumber_Create` at `0x02080DEC` (264 bytes), the existing 164-byte clock
+callback, and `PauseNumber_Update` at `0x02080F98` (924 bytes). Consolidation
+adds 1,188 matching bytes; the clock is not counted again. The
+[72-byte task layout](../../include/game/pause_numbers.h) packs the member index
+and leading-zero flag into one byte. Its six kinds select level, current HP,
+maximum HP, coins, hours and minutes. Creation preserves payload fields that
+the native factory and constructor leave untouched. All seven creator arguments
+retain the callers' full-width behavior before the native narrowing stores.
+
+The updater uses Q8 interpolation, signed division, states 0/10/11 and a cached
+integer value. It caches before limiting the rendered value to its digit width.
+Party/coin interpolation divides the difference by eight; time updates divide
+by one. The save pointer is at `0x02059FE8`, coins at save `+0x488` and the 60 Hz
+play-time counter at `+0x518`. Hours divide frames by 216,000; minutes use the
+within-hour count and cap at 59 from 21,596,400 frames onward. These time
+calculations and cap comparisons use unsigned values, unlike digit division.
+The source save view is a 1,308-byte prefix, not the full 1,380-byte allocation.
+Separate identical palette switch arms and native constant-initialization order
+explain the final instruction layout; no assembly or compiler flag change is used.
+
+Private `build/analysis/probe_pause_numbers.py` starts from the checkpoint-65
+HUD state, opens the pause menu with Start, waits and exits with Start. Two
+421-frame reports under `build/runtime/eur_pause_numbers/` verify 30 creations
+and 6,240 updates in total. Each route reaches all six kinds, all four party
+members, widths two/three/six, leading-zero drawing/suppression and cached
+no-redraw returns. The oracle derives factory slots, list links and counters,
+full task contents, interpolation/cache changes and decimal glyph selections.
+It checks 270 signed quotient/remainder calls, 92 pixel-derived glyph copies,
+44 rectangle clears, complete bitmap/font allocations and heap headers,
+the workspace and save. All 30 tasks remain live until whole-pool shutdown;
+the replay checks live payloads before shutdown and cleared pool pointers
+afterward. It does not claim the individual removal path was exercised.
+
+`evidence_ordinary65.json` uses no fixture. `evidence_hp_fixture65.json` changes
+member-zero current HP from 77 to 70 once at a guarded idle update, then restores
+77 after 12 callbacks. The two native interpolation sequences each take eight
+updates. This controlled RAM edit is separate from ordinary gameplay and is
+recorded with its pointer, halfword address, guard and restoration. Subsequent
+screenshots and graphics dumps match the ordinary route. Both runs finish with
+no pending calls or drain frames. The artifact verifier checks 12 screenshots,
+108 graphics dumps and all 104 unchanged source saves. Time/display saturation,
+unsupported kinds and other widths remain unexercised; final GPU output is
+observed. The clock's previous callback oracle was not rerun for this batch.
 
 ### Nawatobi
 

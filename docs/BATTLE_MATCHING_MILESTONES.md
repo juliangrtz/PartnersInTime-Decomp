@@ -6908,3 +6908,42 @@ callback check. The graphics helpers remain unlinked; their pixel effects
 are checked without claiming those private drafts as matching C/C++.
 Reports: build/runtime/eur_pause_clock/; probe_pause_clock.py and
 verify_pause_clock_artifacts.py remain private in build/analysis/.
+
+
+## 2026-09-13: pause numeric displays
+
+Reconstructed PauseNumber_Create at 0x02080dec (264 bytes) and
+PauseNumber_Update at 0x02080f98 (924 bytes). The existing 164-byte clock
+callback between them is consolidated into pause_numbers.cpp. Only 1,188
+bytes are new. Packed task fields, untouched factory payload, signed Q8
+interpolation, cached-before-clamped values, decimal formatting and unsigned
+play-time calculations match without assembly or compiler flag changes.
+
+Matching C/C++ reaches 723,172 / 1,563,700 bytes (46.25%); with separately
+tracked assembly, 46.58%. Overlay 7 reaches 58,416 / 142,264 (41.06%).
+58,678 matching C/C++ bytes remain to the 50% goal.
+
+Full configure/Ninja checks, no-data-mod packaging, native relink, generated
+progress checks and 81 tests pass on the final source. Both ROMs have SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink checks 43 components,
+420 section units, 31,138 relocations and 1,577 ARM7 relocations with zero
+changed bytes. Logs: build/analysis/pause_numbers_final_*.log.
+
+Two 421-frame checkpoint-65 replays verify 30 creations and 6,240 updates,
+all six kinds, all four members, two/three/six-digit widths, leading-zero
+modes and cache skips. The oracle derives full task records, factory slots,
+list links/counters, signed interpolation/cache changes, 270 signed divisions,
+92 glyph copies and 44 clears. Full bitmap/font allocations and heap headers,
+90,600-byte workspace and 1,380-byte save are checked at helper boundaries.
+All 30 tracked tasks survive until whole-pool shutdown, whose cleared pointers
+are checked without reading freed tasks. Individual removal is not covered.
+
+The ordinary route uses Start entry, waits and Start exit. A separate guarded
+HP halfword fixture changes member-zero HP from 77 to 70 at frame 44 and
+restores 77 at frame 56. Native animation takes eight updates down and eight
+up; later screenshots and graphics buffers match the ordinary route. No
+pending calls or drain frames remain. All 12 screenshots, 108 graphics dumps
+and 104 unchanged source saves validate. Time/display saturation and other
+widths remain uncovered; final GPU output is observed. The clock callback's
+previous oracle was not rerun. Reports: build/runtime/eur_pause_numbers/;
+probe_pause_numbers.py and verify_pause_numbers_artifacts.py remain private.
