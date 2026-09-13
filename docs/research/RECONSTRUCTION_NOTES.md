@@ -916,6 +916,38 @@ The ordinary numeric oracle checks 150 renders; slide and quantity/adjustment
 oracles are retained in their earlier reports rather than repeated here.
 Reports: `build/runtime/eur_shop_subscreen_text/`.
 
+`shop_party_bitmap.cpp` draws a member's equipped item name and icon into the
+shop bitmap. Its complete 484-byte C++ function at `0x0207BF1C` matches using the
+shared `ShopSceneWork` type. The original top-tested token loop stops on NUL or
+`FF 00`; the coordinate tables contain four pairs of halfwords. Flattening those
+pairs introduced an extra address calculation in the initial private draft.
+The native halfword stack clear and eight-byte token return storage are retained.
+
+`probe_shop_party_bitmap.py` and `shop_party_bitmap_oracles.py` repeat the same
+three Sell/return routes. Equipment and bean shops exercise 24 renderer calls,
+covering all four members, both item categories and both native callers. The
+oracle derives localized names from the original item records/category selector
+and live language tables, all 14 text-init arguments and the padding-preserving
+48-byte text state, the 832-byte scratch clear, 104-by-12 bitmap clear, centered
+4bpp-to-8bpp tile copy with palette offset 16 and 8bpp icon copy with offset 80.
+Independent pixel coordinates preserve transparent pixels and untouched tails.
+
+Live `GameHeapBlock` headers establish complete allocations: bitmap 53,248 bytes,
+scratch 5,120 and icons 1,536. The oracle also preserves their headers, the
+complete localized string allocation, workspace, renderer and live save. The
+346 text tokens' state and first 832 scratch bytes remain observed renderer
+output; subsequent bitmap copies are independently derived. These runs use
+English, NUL termination, no clipping and an already-set dirty flag. `FF 00`,
+other languages, clipped names and an initially-clear dirty flag remain untested.
+
+All three replays pass 5,981 frames and 377 checked root returns; the retained
+numeric oracle verifies 150 renders. All 58 screenshots, 522 graphics dumps and
+104 source saves validate, with all 580 artifact pairs identical to the preceding
+selling-message batch. Equipment names and party icons were visually inspected.
+Each route closes three scene instances, with no pending calls or drain frames.
+Earlier caption, slide and quantity/adjustment oracles are not repeated here.
+Reports: `build/runtime/eur_shop_party_bitmap/`.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

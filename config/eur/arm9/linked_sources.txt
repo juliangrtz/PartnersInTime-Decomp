@@ -832,3 +832,4 @@ src/overlay009/shop_quantity.cpp
 src/overlay009/shop_price_adjustment.cpp
 src/overlay009/shop_panel_slide.cpp
 src/overlay009/shop_subscreen_text.c
+src/overlay009/shop_party_bitmap.cpp

@@ -7,6 +7,7 @@ typedef struct ShopCurrencyTask ShopCurrencyTask;
 extern "C" {
 #endif
 void ShopPartyDisplay_DrawLabel(ShopRowTask *task);
+void ShopPartyBitmap_DrawItemName(int member, u16 item);
 void ShopCurrency_Draw(ShopCurrencyTask *task);
 void ShopDisplay_Init(void);
 void ShopSubscreenText_Init(void);

@@ -138,3 +138,6 @@ src/overlay009/shop_panel_slide.cpp:
 src/overlay009/shop_subscreen_text.c:
     .text start:0x0207bbe0 end:0x0207bd84
     .data start:0x0207e31c end:0x0207e334
+
+src/overlay009/shop_party_bitmap.cpp:
+    .text start:0x0207bf1c end:0x0207c100

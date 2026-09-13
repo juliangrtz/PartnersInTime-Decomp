@@ -6625,3 +6625,39 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **717,816 / 1,563,700 bytes (45.90%)**, or **46.24%**
   with separate assembly. Overlay 9 reaches **29,488 / 78,984 (37.33%)**.
   **64,034 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Equipped-item name and party-icon bitmaps
+
+- Reconstruct **484 matching C++ bytes** in `shop_party_bitmap.cpp`,
+  `0x0207BF1C` through `0x0207C100`. The function uses the shared shop workspace,
+  paired halfword coordinates, a top-tested NUL/FF00 text loop and the native
+  halfword clear/token-return stack storage. No assembly or compiler changes.
+- Full Ninja module/symbol checks, canonical packaging, native relinking,
+  generated-progress checks and **81 tests pass**. Both ROMs retain SHA-1
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; native relinking reports zero
+  differing bytes across 43 components and 31,138 relocations, including 1,577
+  ARM7 relocations. Logs: `build/analysis/shop_party_bitmap_`.
+- Three Sell/return routes pass **5,981 frames and 377 checked root returns**,
+  including **24 new-function calls** in the equipment and bean shops. These
+  cover four party members, clothing/badge names and both native callers.
+  Independently derive the localized name, all 14 text-init arguments and full
+  48-byte initialized state, 832-byte scratch clear, 104-by-12 rectangle clear,
+  centered tiled 4bpp-to-8bpp text copy and tiled 8bpp icon copy, and dirty flag.
+- Live heap headers establish **53,248-byte bitmap, 5,120-byte scratch and
+  1,536-byte icon allocations**. Preserve complete buffers and headers, localized
+  string allocations, workspace, renderer and save. Transparent pixels and tails
+  are independently checked. **346 text tokens** supply observed rasterizer
+  state/pixels; subsequent copies are independently verified. The retained
+  numeric oracle checks 150 renders; prior caption/slide/quantity oracles are
+  not claimed as repeated.
+- All **58 screenshots, 522 graphics dumps and 104 source saves** validate;
+  **580 artifact pairs** match the preceding selling-message routes. Names and
+  party icons were visually inspected. All nine scene cleanups finish before
+  overlay reuse; no pending calls or drain frames. English/NUL/unclipped names
+  and an already-set dirty flag are covered; other languages, FF00 termination,
+  clipped names and an initially-clear flag remain unexercised. Reports:
+  `build/runtime/eur_shop_party_bitmap/`.
+- Matching C/C++ reaches **718,300 / 1,563,700 bytes (45.94%)**, or **46.27%**
+  with separate assembly. Overlay 9 reaches **29,972 / 78,984 (37.95%)**.
+  **63,550 bytes** remain to the 50% goal.
