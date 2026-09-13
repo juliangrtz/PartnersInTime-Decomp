@@ -839,6 +839,44 @@ mode zero, missing mode tasks and invalid mode inputs remain unexercised.
 The nearby percentage renderer is still a native gap; do not infer its matching
 status from these callbacks or their runtime helper observations.
 
+
+`shop_panel_slide.cpp` owns the 20-update vertical transition used between
+buying and selling scenes. Its 72-byte task stores remaining updates/current/
+target/velocity/acceleration at +36/+40/+44/+48/+52. `ShopSceneWork` names
+`panel_offset_y` at +0x8C8, consumed by the panel Y query. Entry starts at
+-112 pixels and targets zero; exit starts at zero and targets -112 pixels,
+snapping there when it reaches -80. The native update reuses the loaded target
+when clamping the zero-target case. Preserving that load and the creator's
+branch layout resolves the old draft's four-byte/register differences.
+
+The earlier B-to-close routes do not execute these functions. At the category
+menu, Up from Items wraps to Sell; A enters selling, B returns to buying, and
+B closes the shop. For the purchase route this sequence replaces the final
+four actions, beginning at frame 1,317; replacing only the last two acts after
+the shop has already closed. Regular equipment/bean routes replace the last two
+actions at frame 1,057. No extra RAM fixture is needed for this transition.
+
+`probe_shop_panel_slide.py`, `shop_panel_slide_oracles.py` and their artifact
+verifier cover those three routes. Twelve allocated tasks finish 240 updates,
+with both directions and clamps. Expected positions and velocities use the
+arithmetic-series formula from the initial state, independently of the native
+recurrence; complete 72-byte tasks, 2,492-byte workspace and 1,380-byte live saves
+are checked at each boundary. Allocation internals remain observed helper output.
+Removal is deferred, and all three scene instances per route are checked before
+overlay reuse. Twenty updates need not occupy exactly twenty emulator frames:
+one bean-shop entry had an extra frame before completing its update sequence.
+The verifier checks all twenty ordered updates and their recorded completion.
+
+The three passing replays total 5,981 frames and 605 checked returns, including
+252 through the new functions. All 58 screenshots, 522 graphics dumps and 104
+source saves validate; 340 unchanged starting artifact pairs match the previous
+batch. Later Sell transitions have different inputs and are separate evidence.
+The moving panel and selling scene were visually inspected. The original numeric
+oracle verifies 150 renders, while quantity/adjustment callback oracles remain
+in the preceding batch's reports. Initial no-coverage routes are retained as
+failed discovery attempts; they are not included in these passing totals.
+Reports: `build/runtime/eur_shop_panel_slide/`.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

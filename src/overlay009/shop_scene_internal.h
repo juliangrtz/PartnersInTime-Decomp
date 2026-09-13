@@ -2,6 +2,7 @@
 #define PIT_SHOP_SCENE_INTERNAL_H
 extern "C" {
 #include <game/shop_scene.h>
+#include <game/shop_panel_slide.h>
 #include <game/shop_list.h>
 #include <game/shop_panels.h>
 #include <game/heap.h>
@@ -38,7 +39,8 @@ typedef struct ShopSceneWork {
         };
     };
     u8 unknown_8c0, unknown_8c1, selected_member;
-    u8 unknown_8c3[9];
+    u8 unknown_8c3[5];
+    s32 panel_offset_y;
     void *sprites[60];
 } ShopSceneWork;
 typedef char ShopSceneWorkSizeCheck[sizeof(ShopSceneWork) == 2492 ? 1 : -1];
@@ -73,7 +75,7 @@ extern void func_ov005_02065f10(void), func_ov005_02069928(void), func_ov005_020
 extern void func_02035fd0(int), func_0203613c(int), func_02035e04(int), func_02035ebc(int),
     func_020359c4(int), func_02035a40(int), func_020358ac(int), func_02035938(int);
 extern void MI_CpuFill8(void *, u8, u32);
-extern void ShopScene_LoadResources(ShopSceneTask *), func_ov009_02074ea8(int);
+extern void ShopScene_LoadResources(ShopSceneTask *);
 extern ShopMenuElement *func_ov005_0206659c(void (*)(ShopMenuElement *), int, int);
 extern void func_ov009_0206abd0(ShopMenuElement *), func_ov009_0206ca78(ShopMenuElement *);
 extern void func_ov009_0207ce1c(void);

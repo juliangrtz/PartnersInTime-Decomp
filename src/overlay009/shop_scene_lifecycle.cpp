@@ -158,7 +158,7 @@ ShopSceneTask *ShopScene_Init(ShopSceneTask *task, u32 priority, u32 unused)
         task->phase = 0;
     }
     if (((ShopSavedState *)gSaveData)->shop)
-        func_ov009_02074ea8(1);
+        ShopPanelSlide_Begin(1);
     func_ov005_020679fc(0, 0, 31, 1);
     func_ov005_020679fc(1, 0, 31, 1);
     func_ov005_020679a4(0, 0, 1);

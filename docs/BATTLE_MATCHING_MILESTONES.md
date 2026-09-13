@@ -6550,3 +6550,39 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **717,020 / 1,563,700 bytes (45.85%)**, or **46.19%**
   with separate assembly. Overlay 9 reaches **28,692 / 78,984 (36.33%)**.
   **64,830 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop panel slides between buying and selling
+
+- Reconstruct **376 matching C/C++ bytes** in contiguous `shop_panel_slide.cpp`:
+  creator `0x02074EA8` (224) and update `0x02074F88` (152). Name the shared
+  workspace's +0x8C8 vertical offset and declare the complete 72-byte task in
+  a header. The native branch order and cached-target clamp explain the old
+  draft's differences; no compiler changes, assembly or source permutation search.
+- Full Ninja, canonical packaging, native relink, generated-progress checks and
+  **81 tests pass**. Both ROMs retain SHA-1
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; native relinking reports zero
+  differing bytes across 43 components and 31,138 relocations, including
+  1,577 ARM7 relocations. Logs: `build/analysis/shop_panel_slide_`.
+- Three ordinary-button Sell/return routes pass **5,981 frames and 605 checked
+  returns**, including **252 through the new functions**. All **12 created
+  slide tasks complete 240 updates**, covering entry/exit and both clamp paths.
+  Independently derive motion from the arithmetic-series formula and check full
+  task/workspace/live-save records, allocator arguments and deferred removal.
+  Allocator internals remain observed output. No additional RAM fixture is used.
+- The original B-to-close routes missed the functions. In the purchase route,
+  the Sell sequence starts at the category menu before the penultimate B press;
+  changing only the last B acts after shop closure. Those failed discovery
+  attempts are excluded. The successful routes select Sell, return to buying,
+  then close, checking cleanup of all three scene instances before overlay reuse.
+- Twenty updates are checked individually; one entry spans an extra emulator
+  frame. Correcting the artifact verifier's overly strict elapsed-frame
+  assumption required no game/oracle changes or new replay. All **58 screenshots,
+  522 graphics dumps and 104 source saves** validate, with **340 identical
+  starting artifact pairs**. Later transitions are separate input/timing evidence.
+  The moving panel and selling scene were visually inspected. The retained
+  numeric oracle verifies **150 renders**; older quantity/adjustment checks are
+  not claimed as repeated. No pending calls or drain frames remain.
+- Matching C/C++ reaches **717,396 / 1,563,700 bytes (45.88%)**, or **46.21%**
+  with separate assembly. Overlay 9 reaches **29,068 / 78,984 (36.80%)**.
+  **64,454 bytes** remain to the 50% goal.
