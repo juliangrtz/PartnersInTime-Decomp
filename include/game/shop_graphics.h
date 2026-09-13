@@ -1,11 +1,14 @@
 #ifndef PIT_GAME_SHOP_GRAPHICS_H
 #define PIT_GAME_SHOP_GRAPHICS_H
 #include <game/shop_rows.h>
+typedef struct ShopCurrencyTask ShopCurrencyTask;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 void ShopPartyDisplay_DrawLabel(ShopRowTask *task);
+void ShopCurrency_Draw(ShopCurrencyTask *task);
+void ShopDisplay_Init(void);
 void ShopBitmap_DrawPlaceholder(int x, int y);
 void ShopBitmap_DrawValue(int x, int y, u32 value);
 void ShopNumber_DrawPlaceholder(int tile, u32 x);

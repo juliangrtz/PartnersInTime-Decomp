@@ -6414,3 +6414,45 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **713,280 / 1,563,700 bytes (45.61%)**, or **45.95%**
   with separate assembly. Overlay 9 reaches **24,952 / 78,984 (31.59%)**.
   **68,570 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop currency drawing and panel zoom
+
+- Reconstruct **1,124 matching C/C++ bytes**: `ShopCurrency_Draw` at
+  `0x0207B9D0` (432), `ShopDisplay_Init` at `0x0207BB80` (96),
+  `ShopPanelZoom_BeginClose` at `0x020770A4` (88), and open/close updates at
+  `0x02078560` (252) and `0x02078460` (256). Contiguous functions share modules;
+  the creator remains separate around the native gap. Task layouts are 72 bytes.
+- The numeric-renderer argument is a full 32-bit value, allowing six-digit
+  currency; correcting its old halfword declaration preserves existing callers.
+  Named zoom fields use the actual shared workspace type while retaining its
+  background byte view. The affine call has nine arguments, including its center
+  and origin stack arguments; the earlier pseudocode omitted four of them.
+- Full Ninja checks, canonical packaging, native relinking and **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701` and native
+  relinking reports zero differing bytes across 43 components and 31,138
+  relocations, including 1,577 ARM7 relocations. Logs: `build/analysis/shop_display_zoom_`.
+- Four routes pass: **6,528 frames and 10,284 checked returns**, including
+  **9,750 through the new functions**: 9,712 currency callbacks, four display
+  initializations, two close-task creations and 16 updates in each direction.
+  Both created close tasks complete after one delay and seven scaling updates;
+  integer division by six leaves a remainder before the final clamp.
+- Independent expectations cover task/save/work/panel records, 64-byte sprite
+  prefixes, currency animation, draw-list appends, 217 numeric renders and 112
+  ordered affine stores with intermediate matrix checks. Full font/scratch/strip
+  and main OBJ buffers preserve unused tails and transparent pixels. The oracle's
+  initial zero-scale expectation missed native 32-bit multiplication overflow;
+  correcting the oracle and rerunning the full route passed without code changes.
+- Coins/beans, both task parts, optional party initialization, zoom delays,
+  intermediate/final states and both clamp endpoints are covered. Currency
+  changes exercise a seven-coin decrease with duration one; increases, caps,
+  longer animations and special-shop initialization remain unexercised.
+  Initializer helper outputs, allocation and sound internals are observed with
+  checked call arguments. Controlled scene entry remains distinct from NPC entry.
+- All **68 screenshots, 612 graphics dumps and 104 original saves** validate;
+  **680 artifact pairs** match the preceding list-effects batch. The purchase
+  quantity panel was visually inspected. No pending calls, close tasks or drain
+  frames remain. Reports: `build/runtime/eur_shop_display_zoom/`.
+- Matching C/C++ reaches **714,404 / 1,563,700 bytes (45.69%)**, or **46.02%**
+  with separate assembly. Overlay 9 reaches **26,076 / 78,984 (33.01%)**.
+  **67,446 bytes** remain to the 50% goal.

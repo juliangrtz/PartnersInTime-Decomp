@@ -29,7 +29,14 @@ typedef struct ShopSceneWork {
     u8 variant, animated_background, special_shop;
     u8 unknown_9a[4], initialized;
     u8 selected_category;
-    u8 unknown_a0[0x8c0 - 0xa0];
+    union {
+        u8 unknown_a0[0x8c0 - 0xa0];
+        struct {
+            u8 unknown_a0_byte, panel_zooming, panel_visible, unknown_a3;
+            s32 panel_scale_y;
+            u8 unknown_a8[0x8c0 - 0xa8];
+        };
+    };
     u8 unknown_8c0, unknown_8c1, selected_member;
     u8 unknown_8c3[9];
     void *sprites[60];

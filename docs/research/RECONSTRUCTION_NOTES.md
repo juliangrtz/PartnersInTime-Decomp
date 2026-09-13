@@ -729,6 +729,38 @@ comparisons are in `build/runtime/eur_shop_list_effects/`. Use the recorded bran
 counts when extending the routes; ordinary positive scaling does not establish
 negative-step, division-by-zero or clamp-boundary coverage.
 
+The currency callback and display-initialization wrapper are adjacent in
+`shop_display_control.cpp`. Currency uses 72-byte tasks, with animation fields
+at offsets 32 through 60. Only part zero updates the value; the other part still
+submits its sprite. Coins are a signed word at live-save offset 1160, beans an
+unsigned halfword at 1164, capped at 999,999 and 999 respectively. The animation
+uses Q8 values and durations 1/8/16/32. Its six-digit renderer accepts a full
+32-bit value; the older `u16` prototype incorrectly narrowed currency arguments.
+The corrected prototype preserves the bytes of existing linked callers.
+
+`shop_panel_zoom.cpp` owns open/close updates; `shop_panel_zoom_start.cpp` owns
+the separate close-task creator. `ShopSceneWork` names the busy/visible bytes
+at offsets `0xA1/0xA2` and signed Q12 scale at `0xA4`, preserving the background
+code's byte view. The 72-byte tasks hold step/delay at offsets 40/44. Updates
+derive panel coordinates around Y=96, submit the full nine-argument affine
+transform, and change BG2 visibility and deferred-removal flags at completion.
+
+`probe_shop_display_zoom.py`, `shop_display_zoom_oracles.py` and
+`verify_shop_display_zoom_artifacts.py` cover all five functions across four
+routes in `build/runtime/eur_shop_display_zoom/`. They derive full task records,
+64-byte sprite prefixes, live-save/work/panel fields, draw-list appends and 217
+numeric renders using per-nibble font decoding and independent tiled copies.
+Checks preserve the full 2,816-byte packed font, 5,120-byte scratch/strip buffers
+and 65,536-byte main OBJ VRAM. Both created close tasks complete after eight
+updates. Nested affine checks derive the matrices and all 112 ordered hardware
+stores; the corrected zero-scale overflow expectation was rerun successfully.
+All captures match the preceding list-effects routes and all source saves remain
+unchanged. Initializer helper outputs, allocation and sound internals are observed
+with checked call arguments. The routes cover coins/beans, part zero/one, optional
+party initialization, both zoom directions, delays and final clamps. Currency
+changes cover a seven-coin decrease with duration one; increases, cap enforcement,
+longer animations and special-shop initialization remain unexercised.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

@@ -36,6 +36,6 @@ BattleModel *Overlay5ResourceA_Get(ShopRowTask *);
 ShopRowSprite *Overlay5ResourceB_Get(void *);
 void func_ov005_020692c0(ShopRowSprite *, u16, u16, u16);
 void func_ov005_02069084(void *, u8);
-void func_ov009_0207c8f0(int, int, u16, int);
+void func_ov009_0207c8f0(int, int, u32, int);
 }
 #endif

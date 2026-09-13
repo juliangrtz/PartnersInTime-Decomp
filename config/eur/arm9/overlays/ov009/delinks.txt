@@ -116,3 +116,12 @@ src/overlay009/shop_list_scale.cpp:
 
 src/overlay009/shop_list_point_model.cpp:
     .text start:0x0207d164 end:0x0207d218
+
+src/overlay009/shop_display_control.cpp:
+    .text start:0x0207b9d0 end:0x0207bbe0
+
+src/overlay009/shop_panel_zoom.cpp:
+    .text start:0x02078460 end:0x0207865c
+
+src/overlay009/shop_panel_zoom_start.cpp:
+    .text start:0x020770a4 end:0x020770fc
