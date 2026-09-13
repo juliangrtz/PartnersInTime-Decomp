@@ -37,7 +37,9 @@ typedef char ShopInventoryPanelSizeCheck[sizeof(ShopInventoryPanel) == 848 ? 1 :
 
 typedef struct ShopStockPanel {
     union { u8 enabled, unknown_00; };
-    u8 category, unknown_02, count;
+    u8 category;
+    union { u8 item_limit, unknown_02; };
+    u8 count;
     u16 items[100];
     s8 *quantities;
     s8 first, ring_first;
@@ -105,6 +107,7 @@ int ShopItemPanel_IsSelectionAtEdge(ShopItemPanel *panel, int last);
 int ShopItemPanel_IsWindowAtEdge(ShopItemPanel *panel, int last);
 void ShopStockPanel_Hide(ShopStockPanel *panel);
 void ShopStockPanel_Show(ShopStockPanel *panel, int selection);
+void ShopStockPanel_RebuildList(ShopStockPanel *panel, int selection);
 int ShopStockPanel_GetRingFirst(ShopStockPanel *panel);
 s32 ShopStockPanel_GetY(ShopStockPanel *panel);
 s32 ShopStockPanel_GetX(ShopStockPanel *panel);

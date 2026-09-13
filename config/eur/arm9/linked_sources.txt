@@ -837,3 +837,4 @@ src/overlay009/shop_confirmation_cursor.cpp
 src/overlay009/shop_equipment_highlight.cpp
 src/overlay009/shop_stock_caption.cpp
 src/overlay009/shop_stock_rows.cpp
+src/overlay009/shop_stock_setup.cpp

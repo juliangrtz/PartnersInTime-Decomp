@@ -6792,3 +6792,39 @@ late-game route. Checkpoint 30's snapshot actually starts in the save menu;
 ordinary B cancellation precedes the controlled, restored FieldVM shop entry.
 Both routes finish cleanup with no pending calls. Filter mode two, empty stock
 and successful purchases remain unexercised. No inventory fixture was used.
+
+
+## 2026-09-13: owned-stock list initialization
+
+Reconstructed ShopStockPanel_RebuildList at 0x02073098 (356 bytes) in
+src/overlay009/shop_stock_setup.cpp. The native call forwards both the menu
+selector and submenu selection; the pseudocode omitted the second argument.
+The routine chooses its inventory/tag, packs nonzero quantities, clears exactly
+99 of 100 item slots, and resets filter and ring state. The shared 224-byte
+panel now names its item limit at +2 while preserving the old byte view.
+
+Matching C/C++ reaches 721,068 / 1,563,700 bytes (46.11%); with separate
+assembly, 46.44%. Overlay 9 reaches 32,740 / 78,984 (41.45%).
+60,782 matching C/C++ bytes remain to the 50% goal.
+
+Full configure/Ninja checks, no-data-mod packaging, native relink, generated
+progress checks and 81 tests pass. Both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink checks 43 components,
+420 section units, 31,138 relocations and 1,577 ARM7 relocations with zero
+differing bytes. Logs: build/analysis/shop_stock_setup_*.log.
+
+The focused runtime suite uses checkpoints 30 and 86, normal category changes
+and B exit after the guarded, restored FieldVM shop command. In 1,152 frames,
+four initializer calls build usable/Bros. lists with counts 6/5 and 13/10.
+Independent full-allocation expectations cover category mapping, inventory
+pointers, item tags/order, skipped zero quantities, the 198-byte clear, filter
+and ring resets, and all untouched fields. The final item slot contains 00 EA
+and remains unchanged. Workspace/save/heap-header records are protected at all
+helper boundaries. All 14 screenshots, 126 graphics dumps and 104 source-save
+hashes validate. Both successful routes finish cleanup with no pending calls.
+
+The equipment-menu discovery route made no calls to this function and failed
+its coverage assertion; it is excluded from the passing suite. Clothing/badge
+branches and empty inventory remain unexercised. The initial text-renderer
+internals and captured graphics are observed outputs, not a pixel oracle.
+Reports: build/runtime/eur_shop_stock_setup/.

@@ -153,3 +153,6 @@ src/overlay009/shop_stock_caption.cpp:
 
 src/overlay009/shop_stock_rows.cpp:
     .text start:0x02072470 end:0x02072818
+
+src/overlay009/shop_stock_setup.cpp:
+    .text start:0x02073098 end:0x020731fc

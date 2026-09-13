@@ -4,7 +4,7 @@ extern "C" void ShopStockPanel_Show(ShopStockPanel *panel, int selection)
 {
     if (panel->enabled) ShopStockPanel_Hide(panel);
     panel->enabled = 1;
-    func_ov009_02073098(panel, selection);
+    ShopStockPanel_RebuildList(panel, selection);
     for (int row = 0; row < 9; ++row) {
         if (panel->count < 9 && panel->first + row >= panel->count) break;
         func_ov009_020721d4(row);

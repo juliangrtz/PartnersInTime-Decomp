@@ -1058,6 +1058,28 @@ the save menu. Its tested prelude is `wait:180 b:8 wait:240`, which cancels the
 menu and reaches the guarded FieldVM shop entry. Both final replays finish shop
 cleanup with no pending hooks; no inventory fixture or purchase is needed.
 
+`ShopStockPanel_RebuildList` subsequently reconstructs the 356-byte initializer
+at `0x02073098`. It forwards both the workspace menu selector at +0x98 and the
+caller's selection to `ShopStock_MapMenuCategoryToItemClass`; the pseudocode
+omitted that second argument. It selects the inventory array and item tag,
+packs entries whose signed quantity byte is nonzero, and resets the filter and
+ring indices. The native clear is 198 bytes: it clears 99 of the 100 item slots
+and preserves the final slot. The shared panel now names its item limit at +2.
+
+Private `probe_shop_stock_setup.py` and `verify_shop_stock_setup_artifacts.py`
+check checkpoint 30 and 86 category changes and exit in 1,152 frames. Four
+initializer calls produce usable/Bros. item counts of 6/5 and 13/10 respectively.
+The probes independently derive the full panel allocation at mapping, clear,
+initial-renderer and return boundaries, including omitted zero-count entries,
+item tags, pointers, resets, untouched fields and the nonzero final slot `00 EA`.
+The workspace, save, pointers and heap header remain unchanged across the call.
+All 14 screenshots, 126 graphics dumps and 104 source-save hashes validate.
+The initial text renderer remains an observed helper. A separate ordinary
+equipment-menu route did not call this initializer and failed its coverage
+assertion; it is not counted as a successful replay. Clothing and badge branches,
+empty inventory and independently calculated renderer pixels remain unexercised.
+Reports are under `build/runtime/eur_shop_stock_setup/`.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

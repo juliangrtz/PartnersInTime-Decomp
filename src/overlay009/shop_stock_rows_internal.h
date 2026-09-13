@@ -8,7 +8,6 @@ extern "C" {
 ShopRowSprite *Overlay5ResourceB_Get(void *);
 void func_ov005_02069084(void *, u8);
 void func_ov005_020663d8(int);
-void func_ov009_02073098(ShopStockPanel *, int);
 void func_ov009_020721d4(int);
 void func_ov009_02072080(void);
 }
