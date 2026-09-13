@@ -161,6 +161,11 @@ the printed instruction listing alone does not prove that range was inspected.
    field offset. Flattening a record table to words, or replacing record pointers
    with preloaded scalar fields, can change address calculation and load order.
    Explain the specific native difference before changing the source form.
+   Search all declarations before adding a typed table extern to a shared header.
+   Legacy callers may still declare that symbol as a raw byte array. Keep the
+   recovered record type shared, but its extern local until those callers can be
+   migrated coherently. Preserve existing field names and raw views with layout-
+   preserving aliases where the same bytes have another verified interpretation.
    Recover virtual slot signatures from both callers and implementations. Keep
    caller-side narrowing at the native instruction; a narrow implementation's
    return declaration alone does not describe every caller's register use.
@@ -297,6 +302,11 @@ and compatible snapshots. Optional dependencies are in
   return address and entry stack pointer. Derive expected memory changes
   independently; label helper outputs that are merely observed. Do not read
   freed objects or interpret unloaded overlay addresses as the previous function.
+  Hooks can survive a scene transition and fire on another overlay at the same
+  address. Positively identify that owner before excluding a foreign-overlay hit;
+  an unexplained byte mismatch must remain a failure. `compare_overlays` and
+  `is_overlay_active` currently use a 90% identification threshold: they help
+  locate a candidate overlay but do not replace the exact function-byte guard.
   Tail-called helpers can share their caller's return address and stack pointer.
   Finish every matching pending record, innermost first, at that hook before
   processing the next instruction; handling only one record leaves a false
@@ -426,6 +436,16 @@ before extending that group; check the manifest and handoff for which functions
 have been integrated and runtime-verified. Reuse the actual pause workspace and
 save-member types. A field at workspace base plus an offset is part of that
 object, not automatically a separately named global or a pointer to dereference.
+
+For pause lists, read the [visibility](docs/research/RECONSTRUCTION_NOTES.md#pause-list-visibility-and-row-measurement)
+and [selection](docs/research/RECONSTRUCTION_NOTES.md#pause-list-selection-and-row-copies)
+findings. The category values are 0 consumables, 1 Key Items, 2 clothing,
+3 badges and 4 Bros. Items; kind 1 was previously mislabeled in private probes.
+Kind 4 has code-derived meaning but is not covered by the recorded list replays.
+The signed first-item byte at party offset 264 and signed tile-row byte at 266
+serve different rotations. `Overlay7Party` describes a 332-byte prefix of a
+4,428-byte allocation; its saved-first and saved-selection arrays each contain
+five elements. Check the full live allocation when validating its mutations.
 
 Consult tested routes for [shops](docs/research/RECONSTRUCTION_NOTES.md#shops),
 [save/load menus](docs/research/RECONSTRUCTION_NOTES.md#save-menus),
