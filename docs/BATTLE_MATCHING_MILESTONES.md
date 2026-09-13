@@ -5993,3 +5993,57 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **706,116 / 1,563,700 bytes (45.16%)**, or **45.49%** with
   separate assembly. Overlay 8 is **26,392 / 54,068 (48.81%)**. There are
   **75,734 bytes** left to the 50% target.
+
+## 2026-09-13: Game Over entry, selection and exit
+
+- Reconstructed the contiguous controllers at `0x02070028` (544 bytes),
+  `0x02070248` (236 bytes) and `0x02070334` (556 bytes) in
+  `src/overlay008/game_over_control.c`: **1,336 new matching C bytes**.
+  They retain the native choice count, signed selection, saved-game/alternate
+  paths, no-choice title return and signed fades. Shared declarations include
+  a checked 72-byte task and the summary's `available` byte at offset `0x9F`.
+- Native loads establish that `0x0207832F` belongs to the workspace beginning
+  at `0x02078290`. Replacing a separate global reference with that shared field
+  removes an extra load/literal. The entry conditional follows the native
+  no-choice fallthrough, and selection narrows after subtracting from the
+  full-width choice count. These explained changes produce exact code without
+  source permutations or inline assembly.
+- Full Ninja module/symbol checks, progress generation/check and all 81 tests
+  pass. Packaging with data mods disabled and independent native relinking
+  retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`. Native verification covers
+  43 components, 31,138 known relocations and 1,577 ARM7 relocations with zero
+  differing bytes. Logs: `build/analysis/game_over_control_{configure,check,rom,
+  native,tests}.log`.
+- The private `build/analysis/probe_game_over_control.py` uses compatible story
+  checkpoint 86. Each run substitutes decoded field opcode `0x123` once and
+  restores all 72 command bytes at the guarded native request helper. This is
+  controlled Game Over entry, not a natural battle defeat. `saved86` selects
+  the saved-game option and visibly returns to Shroob Castle; `castle86` selects
+  the alternate option and visibly returns to Peach's Castle.
+- The separate `no_choices86` fixture clears workspace byte `+0x9F` and live-save
+  byte `+0x516` at entry phase 0, after scene resources initialize. It checks the
+  no-choice dialog and X-triggered title return. These bytes are not restored
+  before the native transition; original saves remain unchanged. This tests
+  unavailable choices, not an empty stored slot or ordinary gameplay access.
+- The three runs total **3,623 frames and 1,769 guarded controller returns**:
+  494 entry, 1,224 selection and 51 exit. Stack-pointer-matched return hooks
+  compare complete 72-byte tasks, a 416-byte workspace prefix, a 1,380-byte
+  live-save view and 48-byte scenes at every root return and both sides of
+  130 ordered helper calls. The oracle derives 96 dual-screen brightness
+  updates and five callback resets. Text/model/scroll workspace effects and
+  one unpacked live-save payload are observed helper outputs; the controller's
+  saved-game flags are checked separately. No calls remain pending or require
+  drain frames.
+- Selection checks include both wraps, simultaneous Up/Down without a change,
+  ignored B input and A+B confirmation. Reports under
+  `build/runtime/eur_game_over_control/` include 23 PNGs and 207 graphics dumps.
+  The private artifact verifier checks their sizes/hashes and all 104 unchanged
+  original saves. The initial menu PNG equals the historical entry capture;
+  both normal-choice runs agree in the initial PNG and nine graphics buffers.
+  Visually inspected both field destinations, the no-choice dialog and title.
+- Single-choice menus, empty-slot panel preparation, input-locked selection,
+  an initial exit delay, invalid phases and physical audio output remain
+  unexercised. The adjacent cursor and resource initializer remain native.
+- Matching C/C++ is **707,452 / 1,563,700 bytes (45.24%)**, or **45.57%** with
+  separate assembly. Overlay 8 is **27,728 / 54,068 (51.28%)**. There are
+  **74,398 bytes** left to the 50% target.

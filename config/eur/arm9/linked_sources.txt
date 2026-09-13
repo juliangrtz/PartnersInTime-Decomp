@@ -809,3 +809,4 @@ src/overlay008/save_menu_panel_text.c
 
 src/overlay008/load_menu_control.c
 src/overlay008/load_menu_exit.c
+src/overlay008/game_over_control.c

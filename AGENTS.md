@@ -759,6 +759,18 @@ an appropriate oracle. Before extending it, explicitly select monitored function
 guard the request helper as well as the dispatcher, track nested returns by stack
 pointer and derive expectations for each newly checked task/workspace field.
 
+For the reconstructed entry, selection and exit controllers, use the newer
+`build/analysis/probe_game_over_control.py`. Its `saved86` and `castle86` reports
+under `build/runtime/eur_game_over_control/` cover ordinary menu input after the
+controlled entry, returning to Shroob Castle and Peach's Castle respectively.
+The `no_choices86` run additionally clears the byte at workspace `0x02078290 +
+0x9F` and live-save `read32(0x02059FE8) + 0x516` once at guarded entry phase 0.
+It verifies the no-choice dialog and X-triggered title return, not a naturally
+empty save. The probe derives task/selection/flag/callback/fade/scene changes;
+text/model/scroll workspace effects and the unpacked save payload are observed
+helper outputs. Its return hooks track stack pointers. Check the report and
+artifact verifier for actual branch coverage before extending the route.
+
 ### Smash Eggs
 
 For battle attack research, the compatible private snapshot

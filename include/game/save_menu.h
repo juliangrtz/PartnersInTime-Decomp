@@ -18,7 +18,7 @@ typedef struct SaveMenuSummary {
     SaveMenuPartyMember party[4];
     u8 present[4];
     u32 coins, play_time;
-    u8 unknown_9c, unknown_9d, location, padding;
+    u8 unknown_9c, unknown_9d, location, available;
 } SaveMenuSummary;
 typedef struct SaveMenuText {
     GameText text;
@@ -32,6 +32,15 @@ typedef struct SaveMenuTransferTask {
     int state, counter;
     int arguments[8];
 } SaveMenuTransferTask;
+/* The selection count is reused as the exit destination flag. */
+typedef struct GameOverMenuTask {
+    u8 unknown_00[32];
+    int state, counter;
+    union { int choice_count; int quit_to_title; };
+    u8 unknown_2c[28];
+} GameOverMenuTask;
+typedef char GameOverMenuTaskSizeCheck[sizeof(GameOverMenuTask) == 72 ? 1 : -1];
+
 typedef struct SaveMenuCursorTask {
     u8 unknown_00[16];
     SaveMenuTransferTask *parent;
