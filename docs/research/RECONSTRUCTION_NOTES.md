@@ -605,6 +605,27 @@ remain unexercised. Reports under `build/runtime/eur_shop_text_indices/` check
 unchanged renderer/save/selector records and compare every capture with the
 preceding text-task batch. The broader buying-price API checks are not repeated.
 
+`probe_shop_menu.py` adds cursor creation/drawing, option model/text drawing and
+menu-task removal checks to those same routes. The separate
+`probe_shop_menu_navigation.py coin86_menu_purchase` pass uses ordinary down/up
+buttons to visit all three choices before continuing the purchase route.
+Reports are under `build/runtime/eur_shop_menu/`. Menu rows use every second
+point in the shared list; preserve the signed selection byte and narrowing to
+an unsigned row argument. Model offsets are signed halfwords, sprite coordinates
+are Q12 words, and option drawing requires a list scale greater than 409.
+The probe derives row geometry, draw priorities, zero-angle matrices, draw-list
+appends and full 72-byte task records; model checks cover a 128-byte prefix and
+sprite checks cover a 64-byte prefix, not an inferred full allocation.
+Model initialization and virtual animation internals remain observed helper
+outputs. `ShopMenuNavigation_Clear` marks groups 3 and 5 for deferred removal;
+it does not free them during that call. Check each live task's flag change and
+unchanged links before the later cleanup. The four final routes cover all five
+new entry points, all three selected rows and both sides of the draw threshold.
+Negative coordinate and invalid-row branches remain unexercised. The artifact
+verifier checks all captures and compares identical routes and unchanged starting
+captures with the preceding text-index reports; later navigation frames are new
+evidence, not an identical-input baseline.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

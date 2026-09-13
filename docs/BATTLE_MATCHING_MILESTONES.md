@@ -6273,3 +6273,36 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **710,976 / 1,563,700 bytes (45.47%)**, or **45.80%**
   with separate assembly. Overlay 9 reaches **22,648 / 78,984 (28.67%)**.
   **70,874 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Shop menu cursor and option drawing
+
+- Reconstructed five functions in `shop_menu_navigation.cpp` and
+  `shop_menu_option_draw.cpp`: cursor task creation, cursor drawing, deferred
+  removal of menu tasks, option model drawing and option text-sprite drawing.
+  The two contiguous ranges contribute **732 new matching C++ bytes**. Native
+  code between them remains deferred; no register-allocation guesses were added.
+- Full Ninja checks, canonical packaging, native relinking and **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+  Native verification covers 43 components and 31,138 relocations, including
+  1,577 ARM7 relocations, with zero differing bytes. Logs use
+  `build/analysis/shop_menu_` and reports use `build/runtime/eur_shop_menu/`.
+- Four story-save routes pass: coin purchase, equipment, beans, and an additional
+  coin-shop pass that moves through all three top-level choices with ordinary
+  buttons. They cover **6,528 frames and 25,721 checked returns**, including
+  **25,187 returns through the five new functions**. Both drawing thresholds,
+  creation and deferred-removal calls run. No pending calls or drain frames remain.
+- Independent checks derive row coordinates with signed division, model offsets
+  and scales, sprite positions and affine matrices, draw priorities/list appends,
+  resource attachment fields and deferred task flags. They check 72-byte tasks,
+  128-byte model prefixes, 64-byte sprite prefixes and unchanged list/save/work
+  records. Model initialization/animation internals remain observed helper
+  output; negative coordinates and invalid rows remain unexercised.
+- All **68 screenshots, 612 graphics dumps and 104 original saves** validate.
+  All 420 artifacts from the three identical routes match the preceding batch;
+  20 unchanged starting artifacts from the navigation pass also match. Menu
+  cursor and Sell-selection screens were visually inspected. The original
+  purchase quantity and currency are restored before visible field return.
+- Matching C/C++ reaches **711,708 / 1,563,700 bytes (45.51%)**, or **45.85%**
+  with separate assembly. Overlay 9 reaches **23,380 / 78,984 (29.60%)**.
+  **70,142 bytes** remain to the 50% goal.

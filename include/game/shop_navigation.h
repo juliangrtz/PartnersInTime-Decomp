@@ -12,6 +12,11 @@ void ShopListNavigation_Clear(void);
 void ShopListNavigation_Create(void);
 void ShopListNavigation_DrawArrow(ShopRowTask *task);
 void ShopListNavigation_DrawCursor(ShopRowTask *task);
+void ShopMenuNavigation_Clear(void);
+void ShopMenuNavigation_Create(void);
+void ShopMenuNavigation_DrawCursor(ShopRowTask *task);
+void ShopMenuOptions_DrawModel(ShopRowTask *task);
+void ShopMenuOptions_DrawText(ShopRowTask *task);
 #ifdef __cplusplus
 }
 #endif
