@@ -72,6 +72,10 @@ native bytes, source, link metadata and fresh checks take precedence over old
 notes. Private candidates are not linked progress; an old successful probe is
 not proof that today's source or artifact was tested. Keep changing percentages,
 milestones and candidate status in generated reports and the private handoff.
+When resuming a partially integrated batch, inventory its pending files and
+completed checks first. Associate each check with the source and ROM it tested.
+A documentation commit must not include pending source or regenerate progress
+to claim bytes whose verification is still incomplete.
 
 Private original bytes are in `extract/eur/arm9/` and
 `extract/eur/arm9_overlays/`; IDA databases are in `build/ida/` and experiments
@@ -172,6 +176,16 @@ and compatible snapshots. Optional dependencies are in
   using caller and stack pointer. Derive expected memory changes independently;
   label helper outputs that are merely observed. Do not read freed objects or
   continue interpreting unloaded overlay addresses as the previous function.
+- For constructors, snapshot the actual allocation before entry and derive only
+  the fields the native code initializes; preserve untouched bytes and padding.
+  A base constructor may run inside a larger derived allocation. Propagate a
+  nested constructor's independently expected changes into the parent's oracle,
+  rather than accepting a fresh RAM snapshot as the expected result.
+- Distinguish base destruction, derived destruction and deleting entry points.
+  Check the final object state before the heap free; after release, check only
+  return values and still-live records. Check cleared scene globals before the
+  next overlay reuses their addresses. Record each exercised entry point; a
+  virtual delete does not establish coverage of every destructor wrapper.
 - Verify RAM, mapped VRAM, palettes, OAM, ordered GPU stores and visible behavior
   as appropriate. A screenshot or passing ROM hash alone is insufficient.
   Hardware register readback need not equal the earlier submitted FIFO command
@@ -190,8 +204,14 @@ Consult tested routes for [shops](docs/research/RECONSTRUCTION_NOTES.md#shops),
 [Smash Eggs](docs/research/RECONSTRUCTION_NOTES.md#smash-eggs),
 [credits](docs/research/RECONSTRUCTION_NOTES.md#credits) and
 [Nawatobi](docs/research/RECONSTRUCTION_NOTES.md#nawatobi).
-The Nawatobi reference includes the exact one-time EUR ARM9 pause-phase edit;
-controlled access does not establish a normal story entry or natural completion.
+For the tested EUR Nawatobi entry, the phase is the little-endian 32-bit word
+at `read32(0x0208E1E0) + 0x30` in ARM9 main RAM, with overlay 7 loaded.
+At pause update `0x02071F80`, require a fully initialized pause menu, the native
+byte guard, `read32(0x0208E1E0) == r0`, vtable `read32(r0) == 0x0208D9B8`
+and phase 2; write 7 once, disable the hook and resume. Do not overwrite the
+pointer at `0x0208E1E0` or freeze the phase. The linked reference explains the
+snapshot and evidence; controlled access does not establish a normal story
+entry or natural completion.
 
 ## Documentation, Git and handoff
 
