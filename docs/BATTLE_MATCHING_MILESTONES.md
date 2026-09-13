@@ -7018,3 +7018,41 @@ Initial shallow equipment65 and items65 routes failed only their final
 coverage assertion because no target ran; logs and failure reports remain.
 Reports: build/runtime/eur_pause_mode_sprite/; probe and artifact verifier
 are private under build/analysis/.
+
+
+## 2026-09-13: pause list-row sprites
+
+Reconstructed text, marker and quantity-digit callbacks at 0x02073FA0 through
+0x020741E4: 580 new matching bytes. Shared task72 and sprite64 layouts preserve
+packed attributes, signed digit arithmetic and repeated kind-query calls.
+Matching C/C++: 724,284 / 1,563,700 bytes (46.32%); with assembly, 46.65%.
+Overlay 7: 59,528 / 142,264 (41.84%). Remaining to 50%: 57,566 bytes.
+
+Full configure/Ninja, no-data-mod ROM packaging, native relink, generated
+progress checks and 81 tests pass. Both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink checks 43 components,
+420 section units, 31,138 relocations and 1,577 ARM7 relocations with zero
+differing bytes. Build logs: build/analysis/pause_list_row_*.log.
+
+Ordinary clothing65, badges86 and items65 routes cover 4,080 frames. Of 80,343
+observed target calls, 1,770 complete samples are independently checked: text
+1,132, marker283, digit355. Sampling selects the first two calls per lifetime,
+selector and row-input configuration, plus all calls on frames divisible by60.
+Verified samples cover four text segments, kinds0/2/3, units/tens divisors,
+315 drawn digits, 40 leading-zero suppressions, 710 signed divisions and
+1,730 draw submissions. Counts of observed calls are not oracle coverage.
+
+Checks cover task72, parent72, sprite64, actual party4428 plus heap header,
+work90600, save1380, display resources, packed writes and independently derived
+draw-pool/list mutations. All171 tracked tasks release their ResourceB sprites,
+unlink and return to both pools; lifetimes are tracked independently of body
+sampling from first callback, not allocation. No fixture, pending call, live
+tracked task or drain remains. No replay failure occurred in these three runs.
+
+All57 screenshots, 513 graphics dumps and104 unchanged saves validate. The44
+clothing/badge screenshots and396 dumps match the preceding mode-sprite probe
+at identical boundaries; selected captures were visually inspected. Unsampled
+bodies, constructors/parent updates, final renderer internals, unsupported
+segments/divisors and unobserved kinds/empty-item branches remain unverified.
+Reports: build/runtime/eur_pause_list_row/; probe and artifact verifier are
+private under build/analysis/.

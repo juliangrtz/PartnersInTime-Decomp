@@ -842,3 +842,4 @@ src/overlay007/pause_party_bitmap.cpp
 src/overlay007/pause_numbers.cpp
 src/overlay007/scene_menu_background.cpp
 src/overlay007/pause_mode_sprite.cpp
+src/overlay007/pause_list_row.cpp

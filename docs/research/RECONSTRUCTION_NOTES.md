@@ -1550,6 +1550,48 @@ but failed the final coverage assertion: neither reached these callbacks.
 Their failure reports and logs are retained. The deeper clothing/badge routes
 establish execution coverage; no oracle or game-code correction was needed.
 
+### Pause list-row sprites
+
+The linked [row callbacks](../../src/overlay007/pause_list_row.cpp) cover
+`PauseListRow_UpdateDigitSprite` at `0x02073FA0` (252 bytes),
+`PauseListRow_UpdateMarkerSprite` at `0x0207409C` (176 bytes), and
+`PauseListRow_UpdateTextSprite` at `0x0207414C` (152 bytes). The parent and child
+[tasks](../../include/game/pause_list_row.h) occupy 72-byte slots; their attached
+ResourceB sprite occupies 64 bytes. Text uses four segments and copies the
+parent's position, tile selection and palette bank. The marker uses parent
+tile +16. Quantity digits preserve two signed divisions and suppress a leading
+zero except in the units position. Clothing/badge eligibility retains the
+native repeated kind queries and short-circuit order. The shared sprite union
+preserves raw attribute access while naming tile, priority and palette bits.
+
+Private `build/analysis/probe_pause_list_row.py` uses ordinary clothing selection
+on checkpoint 65, badge selection on 86, and consumable items on 65. The three
+reports under `build/runtime/eur_pause_list_row/` cover 4,080 frames and observe
+80,343 target calls. They independently check 1,770 complete callback samples:
+1,132 text, 283 marker and 355 digit calls. The deterministic sample includes
+the first two calls per object lifetime/selector/row-input configuration and
+all calls on frames divisible by 60. Branch counts describe checked samples:
+all four text segments, list kinds 0/2/3, divisors 1/10, 315 drawn digits and
+40 leading-zero suppressions. The oracle checks 710 signed divisions and
+1,730 draw-list submissions.
+
+Checks include full parent/child tasks, sprite slots, the actual 4,428-byte
+party allocation and heap header, 90,600-byte workspace, 1,380-byte save,
+display resources, helper arguments/results and unchanged padding. Expected
+digits, packed attribute writes and draw-pool/list changes are derived
+independently. Lifetime tracking runs independently of body sampling: all
+171 tracked tasks release their ResourceB sprites, unlink and return to their
+task pools. Tracking starts at the first callback, not allocation. No fixture,
+pending call, live tracked task or drain frame remains.
+
+The artifact audit validates 57 screenshots, 513 graphics dumps and 104
+unchanged source saves. The 44 clothing/badge screenshots and 396 corresponding
+graphics dumps equal the preceding sprite-lifetime probe at identical input
+and capture boundaries. Visual inspection confirms readable lists and quantities;
+these captures are observed output, not an independent pixel oracle. Unsampled
+bodies, row creation/parent updates, final GPU rendering, unsupported divisors
+or segments, and unobserved kinds/empty-item eligibility remain outside coverage.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
