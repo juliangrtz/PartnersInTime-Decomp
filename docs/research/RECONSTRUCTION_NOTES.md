@@ -15,6 +15,7 @@ ordinary gameplay accessibility or coverage of unexercised branches.
 - [Compiler and linker behavior](#compiler-and-linker-behavior)
 - [Reconstructing and integrating code](#reconstructing-and-integrating-code)
 - [Runtime verification](#runtime-verification)
+- Code-derived findings: [pause party status](#pause-party-status)
 - Tested routes: [shops](#shops), [save menus](#save-menus), [Game Over](#game-over),
   [Smash Eggs](#smash-eggs), [credits](#credits), [Nawatobi](#nawatobi)
 
@@ -59,6 +60,7 @@ do not treat an older disassembly listing as the output of the latest compile.
 
 On this workstation, private comparison helpers include
 `build/analysis/compile_private_unit.py`, `check_title_unit.py` for overlay 6,
+`check_nawatobi_unit.py` for overlay 7 (also used for pause-menu candidates),
 `check_overlay8_unit.py` for overlay 8, `check_overlay9_unit.py` for overlay 9,
 `check_overlay15_unit.py` for overlay 15,
 and `check_main_unit.py` for resident ARM9. Inspect their inputs and relocation
@@ -1305,6 +1307,64 @@ It records both background variants, nested star/cloud call order and counter
 effects; the sprite and texture rendering internals remain outside its oracle.
 Before reusing captures as a baseline, verify their recorded sizes and hashes
 and compare the shared graphics buffers with the preceding credits replay.
+
+### Pause party status
+
+These findings come from EUR overlay 7 instructions and current shared types.
+They are code-derived, not runtime evidence for the new party-status group.
+Check the linked-source manifest and private handoff for its current integration
+and verification status; do not count a matching private object as linked code.
+Private evidence includes `build/analysis/pause_party_status.cpp` and the complete
+instruction and literal-pool listing `build/analysis/pause_party_status_native.txt`.
+
+The existing [pause workspace](../../src/overlay007/pause_scene_internal.h)
+is a 90,600-byte `PauseSceneWork` at ARM9 RAM `0x020905F0` while overlay 7 is
+loaded. It is an object at that address, not a pointer stored there.
+The party-availability bytes start at `+0x116`. The indicator control byte is
+`unknown2dc[1]`, at `+0x2DD` (`0x020908CD`); reuse that field rather than
+inventing a separate global for the same storage. This byte is distinct from
+the 32-bit pause phase used by the Nawatobi entry procedure below.
+
+The native callback at `0x02080D4C` gets its attached ResourceA model before
+examining the control byte. Zero requests deferred task removal; two returns
+without submitting the model. Other values take the HP-dependent path, then
+submit the model with argument 60. The stop helper at `0x02080C2C` clears the
+byte. The creator at `0x02080C40` sets it to one and creates an indicator for
+each available party member. These control-flow meanings do not establish
+which ordinary menu routes exercise all three cases.
+
+For the callback's HP check, `gSaveData` is the pointer stored at `0x02059FE8`.
+Member `i` is at `read32(0x02059FE8) + 0x3F8 + 0x24 * i`, using the existing
+[SavePartyMember](../../include/game/save_data.h). Maximum HP is the unsigned
+16-bit field at member `+0x0C`; current HP is at `+0x0E`; level is the byte
+at `+0x18`. These are live RAM offsets, not offsets to edit blindly in a `.sav`.
+The callback compares `100 * current_hp > 25 * max_hp` with signed 32-bit
+products after unsigned halfword loads. The products fit in a signed 32-bit
+integer. Preserve this multiplication and comparison rather than introducing
+division, rounding or floating point.
+
+Above the threshold, the callback stores -256 into both model animation offsets
+at `+0x5C` and `+0x5E`. At or below it, the callback loads the task's 32-bit Y
+and X fields at `+0x30` and `+0x2C`, respectively, before writing X and Y as
+halfwords. The task's member index is at `+0x28`. The private task layout is
+72 bytes; independently confirm the actual allocator and attached model's
+complete 336-byte slot when adding a runtime oracle. In particular, check the
+threshold equality case, suppression/control paths and eventual pool return.
+
+The party bitmap routine at `0x0207923C` clears 4,480 bytes per member through
+the pointer in workspace `owned8c` at `+0x8C`, then draws level/current/max HP
+labels and values. This per-member stride does not establish the total buffer
+allocation: derive that from its allocator before checking the whole buffer.
+Its native stack halfword store/load explains the draft's scoped volatile zero.
+Call instructions establish eight arguments to `0x0207952C`, six to
+`0x020793A0`, and seven each to `0x02081334` and `0x02080DEC`. Pseudocode can
+omit arguments, infer an extra reused stack value, or infer narrow parameters
+from callee stores; retain the caller's actual full-width argument behavior.
+
+Existing private pause probes and `build/runtime/states/pause_subscene_menu65.dst`
+can help establish a route. Inspect their inputs, guards, allocation extents and
+snapshot provenance first. Earlier pause or Nawatobi evidence does not verify
+these new callbacks, their HP branches or their helper-generated pixels.
 
 ### Nawatobi
 

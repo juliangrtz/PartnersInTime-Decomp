@@ -15,6 +15,9 @@ These instructions apply throughout the repository.
   Readability and exact matching both matter. Use instructions, callers, shared
   types and runtime evidence; do not brute-force source permutations or spend
   hours guessing at register allocation. Record hard gaps and move on.
+  Before another attempt at a deferred function, identify the new evidence that
+  explains its remaining difference. An untested neighboring function is a
+  separate candidate, even when another function in the same private object matches.
 - Small, explained inline-assembly fragments are authorized where necessary.
   Verify the complete function and disclose the fragment. Coverage follows
   [the existing metric](docs/PROGRESS.md), which tracks symbolic assembly separately.
@@ -128,6 +131,9 @@ the printed instruction listing alone does not prove that range was inspected.
    Recover virtual slot signatures from both callers and implementations. Keep
    caller-side narrowing at the native instruction; a narrow implementation's
    return declaration alone does not describe every caller's register use.
+   The same applies to parameters: a callee storing a halfword does not prove
+   that its caller narrowed the argument before the call. Recover stack arguments
+   from instructions and stack offsets, not a decompiler's inferred call arity.
    Check load/store order explicitly. A callback can change shared state, and
    native code may cache both coordinates before writing either destination.
    Derive array dimensions from element widths and row/column strides. A local
@@ -147,6 +153,9 @@ the printed instruction listing alone does not prove that range was inspected.
    add arbitrary casts/volatile accesses to obtain a match. Recompile private
    drafts against current headers; a missing symbol must never fall back to
    original bytes and count as a passing candidate.
+   A scoped volatile zero is justified only where native stack stores and loads
+   establish that access pattern, as in some CPU-clear wrappers. Document that
+   evidence; do not apply volatile to an unrelated register-allocation mismatch.
    Inspect the actual comparison result: some private checkers exit successfully
    while reporting differences. Equal function sizes also do not establish a
    match. Only fully checked, integrated functions count toward progress.
@@ -291,6 +300,10 @@ and compatible snapshots. Optional dependencies are in
   Expected-memory snapshots can overlap: an empty draw list's sentinel can be
   part of its header. Apply each independently derived store to every overlapping
   expected view in native order before comparing, including sentinel updates.
+- Preserve threshold comparisons in their native integer form. For example,
+  `100 * current_hp > 25 * max_hp` must not become rounded percentage division
+  or floating point. Verify equality and both sides of the threshold separately
+  when reachable; ordinary draws alone do not cover a low-HP indicator's branches.
 - Model native arithmetic widths in Python oracles. Wrap a native 32-bit
   intermediate before its signed shift; Python integers do not overflow.
   In the zero-scale affine path, `0x100000 * 4096` wraps to zero before `>> 8`.
@@ -330,6 +343,12 @@ and compatible snapshots. Optional dependencies are in
   Separate normal navigation from controlled RAM/decoded-command fixtures.
   Memory instructions must give ROM region, CPU/address space, dereferences,
   field offset, access width, guard, timing and whether/when to restore the edit.
+
+Read the code-derived [pause party-status findings](docs/research/RECONSTRUCTION_NOTES.md#pause-party-status)
+before extending that group; check the manifest and handoff for which functions
+have been integrated and runtime-verified. Reuse the actual pause workspace and
+save-member types. A field at workspace base plus an offset is part of that
+object, not automatically a separately named global or a pointer to dereference.
 
 Consult tested routes for [shops](docs/research/RECONSTRUCTION_NOTES.md#shops),
 [save/load menus](docs/research/RECONSTRUCTION_NOTES.md#save-menus),
