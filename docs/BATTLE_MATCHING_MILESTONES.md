@@ -6586,3 +6586,42 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **717,396 / 1,563,700 bytes (45.88%)**, or **46.21%**
   with separate assembly. Overlay 9 reaches **29,068 / 78,984 (36.80%)**.
   **64,454 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Selling-message background and text initialization
+
+- Reconstruct **420 matching C bytes** in `shop_subscreen_text.c` at
+  `0x0207BBE0` through `0x0207BD84`. The module also owns the native 24-byte
+  local message table at `0x0207E31C`; data does not inflate code coverage.
+  A local 4-by-3 halfword initializer reproduces the compiler's table copy and
+  separate row/column addressing. The native stack clear values and C token
+  return storage are preserved. No assembly or compiler-flag changes.
+- The first full build matched every module but rejected the old global table
+  name. Naming the compiler's actual local `@312` symbol in metadata, following
+  the existing local-initializer convention, makes full Ninja checks pass.
+  Canonical packaging, native relinking, generated-progress checks and **81
+  tests pass**. Both ROMs retain SHA-1
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; native relinking reports zero
+  differing bytes across 43 components and 31,138 relocations, including
+  1,577 ARM7 relocations. Logs: `build/analysis/shop_subscreen_text_`.
+- Three identical Sell/return routes pass **5,981 frames and 356 checked
+  returns**, including three calls to the new initializer. Independent checks
+  derive the local ID table, localized string pointer, sub-BG pointers,
+  **24,576/10,240-byte clears**, 1,024 tilemap halfwords, BG0 enable, all 14
+  text-init arguments and the full 48-byte initialized state, and the
+  **10,240-byte VRAM copy**. Full 14,336-byte allocations, 131,072-byte sub BG
+  VRAM, workspace, renderer and live-save records preserve untouched tails.
+- **316 text tokens** produce observed renderer state/pixels, followed by
+  independently verified copies. The separate ordinary numeric oracle verifies
+  150 renders. Prior slide and quantity/adjustment callback checks are not
+  claimed as repeated. Tested variant/mode pairs are (0,0), (0,1), (3,2),
+  with English language index 1 and messages 40/41/46. Other variants/languages,
+  empty messages and already-enabled BG0 remain unexercised.
+- All **58 screenshots, 522 graphics dumps and 104 original saves** validate;
+  **580 artifact pairs** match the slide batch. The bean-shop selling message
+  was visually inspected. Each route cleans up three scene instances before
+  overlay reuse, without pending calls or drain frames. Reports:
+  `build/runtime/eur_shop_subscreen_text/`.
+- Matching C/C++ reaches **717,816 / 1,563,700 bytes (45.90%)**, or **46.24%**
+  with separate assembly. Overlay 9 reaches **29,488 / 78,984 (37.33%)**.
+  **64,034 bytes** remain to the 50% goal.

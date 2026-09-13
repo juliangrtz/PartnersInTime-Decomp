@@ -877,6 +877,45 @@ in the preceding batch's reports. Initial no-coverage routes are retained as
 failed discovery attempts; they are not included in these passing totals.
 Reports: `build/runtime/eur_shop_panel_slide/`.
 
+
+`shop_subscreen_text.c` initializes sub-engine BG0 and draws the selling message.
+The native 24-byte local initializer is a 4-by-3 halfword table, selected by
+workspace variant/mode at +0x97/+0x98. An explicit manual copy produced different
+instructions; a local aggregate initializer reproduces the native halfword copy,
+and the two-dimensional declaration reproduces the separate row/column address
+calculation. The module owns both its 420-byte code range and the 24-byte data
+range at `0x0207E31C`; the latter does not count toward matching code coverage.
+The compiled table is local `@312`. Metadata must describe the actual local
+symbol, as with the existing overlay-2 initializer; the first full build matched
+all module bytes but correctly rejected the old global table name. Reconfiguring
+with the local symbol made the complete module/symbol checks pass. Verify the
+emitted symbol again if future includes change the compiler's anonymous labels.
+
+The message buffer at workspace +0x70 allocates 14,336 bytes, while this function
+clears and copies 10,240. It clears 24,576 character bytes, writes 1,024 sequential
+tilemap halfwords and enables BG0 before drawing. The VRAM copy begins 6,144 bytes
+into the character region. The shared native VRAM getters read main DISPCNT bank
+offsets even when selecting the sub engine; preserve their actual behavior.
+Both clear values use native stack loads, as in the earlier help-text functions.
+
+`probe_shop_subscreen_text.py` and `shop_subscreen_text_oracles.py` repeat the
+three Sell/return routes. They check the native/local 24-byte tables, localized
+message pointer, all 14 text-init arguments and the complete 48-byte initialized
+text state, clears, tilemap, BG0 flag and VRAM transfer. Checks preserve the full
+14,336-byte allocation, 131,072-byte sub BG VRAM, workspace, renderer and live
+save. The 316 text tokens' pixels/state are observed helper output, followed by
+an independently checked copy; the allocation tail remains protected.
+
+The three runs total 5,981 frames and 356 checked returns, including three
+initializer calls. They cover variant/mode pairs (0,0), (0,1), (3,2), English
+language index 1 and message IDs 40/41/46. Other variants, languages, empty
+messages and already-enabled BG0 remain unexercised. All 58 screenshots, 522
+graphics dumps and 104 source saves validate; all 580 artifact pairs match the
+preceding slide routes. The bean-shop selling message was visually inspected.
+The ordinary numeric oracle checks 150 renders; slide and quantity/adjustment
+oracles are retained in their earlier reports rather than repeated here.
+Reports: `build/runtime/eur_shop_subscreen_text/`.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

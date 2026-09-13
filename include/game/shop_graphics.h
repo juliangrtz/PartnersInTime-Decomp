@@ -9,6 +9,7 @@ extern "C" {
 void ShopPartyDisplay_DrawLabel(ShopRowTask *task);
 void ShopCurrency_Draw(ShopCurrencyTask *task);
 void ShopDisplay_Init(void);
+void ShopSubscreenText_Init(void);
 void ShopBitmap_DrawPlaceholder(int x, int y);
 void ShopBitmap_DrawValue(int x, int y, u32 value);
 void ShopNumber_DrawPlaceholder(int tile, u32 x);

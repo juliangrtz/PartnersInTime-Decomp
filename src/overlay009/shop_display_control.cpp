@@ -10,7 +10,7 @@ extern "C" void ShopDisplay_Init(void)
         func_ov009_0207865c(0);
     } else {
         func_ov009_0207865c(1);
-        func_ov009_0207bbe0();
+        ShopSubscreenText_Init();
     }
 }
 

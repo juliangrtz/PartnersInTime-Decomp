@@ -10,7 +10,6 @@ void func_ov009_0207b854(void);
 void ShopHelpText_InitBackground(void);
 void func_ov009_0207a9b8(void);
 void func_ov009_0207865c(int);
-void func_ov009_0207bbe0(void);
 }
 
 struct ShopCurrencyTask {

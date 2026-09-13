@@ -193,7 +193,7 @@ func_ov009_0207b574 kind:function(arm,size=0x2e0) addr:0x0207b574
 func_ov009_0207b854 kind:function(arm,size=0x17c) addr:0x0207b854
 ShopCurrency_Draw kind:function(arm,size=0x1b0) addr:0x0207b9d0
 ShopDisplay_Init kind:function(arm,size=0x60) addr:0x0207bb80
-func_ov009_0207bbe0 kind:function(arm,size=0x1a4) addr:0x0207bbe0
+ShopSubscreenText_Init kind:function(arm,size=0x1a4) addr:0x0207bbe0
 func_ov009_0207bd84 kind:function(arm,size=0x198) addr:0x0207bd84
 func_ov009_0207bf1c kind:function(arm,size=0x1e4) addr:0x0207bf1c
 func_ov009_0207c100 kind:function(arm,size=0x130) addr:0x0207c100
@@ -292,7 +292,7 @@ data_ov009_0207e2e0 kind:data(any) addr:0x0207e2e0
 data_ov009_0207e2e2 kind:data(any) addr:0x0207e2e2
 data_ov009_0207e2f0 kind:data(any) addr:0x0207e2f0
 data_ov009_0207e304 kind:data(any) addr:0x0207e304
-data_ov009_0207e31c kind:data(any) addr:0x0207e31c
+@312 kind:data(any) addr:0x0207e31c local
 data_ov009_0207e334 kind:data(any) addr:0x0207e334
 data_ov009_0207e336 kind:data(any) addr:0x0207e336
 data_ov009_0207e338 kind:data(any) addr:0x0207e338
