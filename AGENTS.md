@@ -146,6 +146,12 @@ the printed instruction listing alone does not prove that range was inspected.
    A shared byte can be read with `LDRB` in one caller and `LDRSB` in another.
    Preserve the signed interpretation at the actual access site; changing the
    shared field's type globally can alter otherwise matching callers.
+   Even within one function, native comparisons of the same count can use
+   different signedness. Recover each comparison from its condition code and
+   operands instead of applying one interpretation to the whole function.
+   Preserve repeated getter calls and their short-circuit order until the
+   native code proves a cached result; an identical return value in one replay
+   does not justify replacing two calls with one.
    Preserve repeated source reads around destination writes when the pointers
    can alias; `const` does not establish non-overlap.
    Prefer the actual shared workspace type over casting a raw byte global to a
@@ -388,12 +394,23 @@ and compatible snapshots. Optional dependencies are in
   A list longer than its visible rows does not prove that scrolling or queued
   text rendering ran. Check the actual input route and callback counts. Canceling
   a purchase likewise does not cover successful-purchase or later prompt helpers.
+- For frequently called functions, a documented deterministic sample can keep
+  focused replays practical. Report all observed entries separately from calls
+  whose complete effects were checked, and say whether branch counts describe
+  only checked samples. Include changed inputs and distinct object lifetimes
+  in the sampling rule; track removals independently of body sampling. If
+  tracking starts at the first callback, do not claim the allocation was checked.
+  List unsampled bodies and unobserved branches as coverage limits.
 - Keep supplemental routes in separate output directories. Compare captures
   with a baseline only where save state, fixtures, input history and capture
   timing agree. Hash equality establishes equality of those artifacts; hashing
   a native renderer's output does not independently verify its pixels.
   Check which module a probe actually imports before correcting an oracle:
   some private probes use a composed file rather than its editable body copy.
+  Before publishing a replay result, validate that referenced artifacts exist,
+  match their recorded hashes, and have the expected dimensions or memory
+  extents. Reconcile per-route totals, pending calls and object lifetimes with
+  the report. A verifier script that has only been written has not passed.
 - At replay end, stop admitting new outermost calls and drain pending calls and
   their nested helpers for a bounded number of neutral frames. Do not discard
   unfinished calls to make a probe pass. After correcting an oracle, rerun it.
