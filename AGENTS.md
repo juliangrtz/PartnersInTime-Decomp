@@ -60,6 +60,7 @@ Parse large JSON reports and print selected records, not entire diff dumps.
 | Current pending work | Private `build/analysis/CURRENT_HANDOFF.md`; compare its commit with Git |
 | What is actually linked | `config/eur/arm9/linked_sources.txt` |
 | Function boundaries and load addresses | Resident `config/eur/arm9/{symbols,delinks}.txt`; overlays `config/eur/arm9/overlays/ovNNN/` |
+| Calls, literal references and data ownership | Component `relocs.txt`, `symbols.txt`, `delinks.txt` and the compiled object's symbol/relocation tables |
 | Source organization and confirmed subsystem roles | [Source policy](docs/DECOMPILATION_STYLE.md), [overlay map](docs/research/OVERLAY_MAP.md), [battle map](docs/research/BATTLE_MAP.md) |
 | VM semantics and remaining assembly | [Script VM reference](docs/research/SCRIPT_VM_SEMANTICS.md), [Scene VM notes](docs/research/SCENE_VM_MATCHING.md) |
 | Native inspection and relinking | [IDA guide](tools/ida/README.md), [reassembly plan](docs/REASSEMBLY_PLAN.md) |
@@ -92,6 +93,9 @@ Private original bytes are in `extract/eur/arm9/` and
 in `build/analysis/`, including `local_decompiler/`. The EUR resident `arm9.bin`
 starts at `0x02004000`. Derive offsets from component metadata, not from the
 start of main RAM. CPU and overlay identity matter because addresses are reused.
+Disassemblers can stop at embedded literal-pool data or decode it as instructions.
+Check the complete metadata range, including trailing pool bytes and relocations;
+the printed instruction listing alone does not prove that range was inspected.
 
 ## Reconstruct and integrate
 
@@ -118,6 +122,10 @@ start of main RAM. CPU and overlay identity matter because addresses are reused.
    return declaration alone does not describe every caller's register use.
    Check load/store order explicitly. A callback can change shared state, and
    native code may cache both coordinates before writing either destination.
+   Derive array dimensions from element widths and row/column strides. A local
+   aggregate initializer can explain a native stack copy; a handwritten copy or
+   flattened table can introduce different instructions. Use the existing shop
+   selling-message initializer as a verified example, not a universal template.
 3. Keep related contiguous functions in one subsystem module. Temporary isolated
    units are acceptable around native gaps; consolidate when those gaps close.
    Source basenames must be globally unique because MW's linker selects by
@@ -138,10 +146,17 @@ start of main RAM. CPU and overlay identity matter because addresses are reused.
    postincrements, and keeping a returned structure versus discarding it, can
    change this compiler's instructions or stack layout. These are evidence to
    explain a specific difference, not a recipe for enumerating source variants.
+   Resolve local data symbols only after checking their section, size, contents
+   and native destination. Mapping a symbol to an address is not a comparison
+   of its data. Unknown relocations or missing candidate sections must fail.
 5. Integrate exact matches into `linked_sources.txt` and the component metadata.
    Update affected declarations and maintained assembly references together.
    Preserve interior entry points with `config/eur/arm9/linker_aliases.json`;
    check `reasm/eur/patches.json` when renaming symbols.
+   Include any compiler-emitted local data in the module's ownership ranges and
+   metadata, using the actual symbol and local binding. Anonymous names such as
+   `@312` can change with includes; inspect the new object instead of adding a
+   linker workaround. Data bytes do not count toward matching code coverage.
 6. Complete the checks below, update evidence/progress/map, then commit and push
    the coherent batch. Record deferred gaps instead of repeatedly retrying the
    same register mismatch without new evidence.
@@ -248,6 +263,12 @@ and compatible snapshots. Optional dependencies are in
   Recover all stack arguments as well as register arguments: the display affine
   helper takes nine arguments. Use its verified zero-scale behavior, not an
   idealized mathematical transform. See the reconstruction reference for details.
+- Account for hidden ABI arguments as well as explicit parameters. The eight-byte
+  `GameTextToken` return uses a result pointer before the text-state argument at
+  the native `GameText_Next` entry. Check a text caller's actual stop condition:
+  some stop on NUL alone, while others also stop on the two bytes `FF 00`.
+  Verify its full scratch allocation, used extent and text-state padding; do not
+  assume neighboring text routines share their termination or buffer sizes.
 - Check per-function and per-branch counts across the route set. A valid replay
   can miss a helper entirely; retained screenshots and equal artifact hashes do
   not establish execution coverage. Report deliberate RAM fixtures separately
@@ -284,7 +305,10 @@ at `read32(0x0208E1E0) + 0x30` in ARM9 main RAM, with overlay 7 loaded.
 At pause update `0x02071F80`, require a fully initialized pause menu, the native
 byte guard, `read32(0x0208E1E0) == r0`, vtable `read32(r0) == 0x0208D9B8`
 and phase 2; write 7 once, disable the hook and resume. Do not overwrite the
-pointer at `0x0208E1E0` or freeze the phase. The linked reference explains the
+pointer at `0x0208E1E0` or freeze the phase. The four bytes at the dereferenced
+task's `+0x30` field become `07 00 00 00`; this is neither VRAM nor a ROM patch.
+The task address is dynamic, so never publish one observed allocation as a
+universal cheat address. The linked reference explains the
 snapshot and evidence; controlled access does not establish a normal story
 entry or natural completion.
 
