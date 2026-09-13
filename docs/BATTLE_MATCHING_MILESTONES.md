@@ -6193,3 +6193,46 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **709,672 / 1,563,700 bytes (45.38%)**, or **45.72%**
   with separate assembly. Overlay 9 reaches **21,344 / 78,984 (27.02%)**.
   **72,178 bytes** remain to the 50% goal.
+
+
+## 2026-09-13 - Queued shop text updates and item icons
+
+- Reconstructed five functions, **748 new matching C/C++ bytes**: item-text
+  queue/update at `0x0207065C..0x02070764`, stock-text queue/update at
+  `0x02072DF0..0x02072EDC`, and icon lookup at `0x020744A4..0x0207459C`.
+  Stock tasks join the adjacent queries in `shop_stock_panel.c`; icon lookup
+  joins its transfer helper in `shop_icons.cpp`. Shared task views preserve the
+  72-byte pool layout and full-width payloads until the callback narrows them.
+- The four task routines matched on their first compile. Icon lookup reuses
+  the recovered item-record lookup and reads byte 9. Its adjacent transfer
+  helper also matches in the combined C++ unit with the proper C linkage for
+  the shared display API. No compiler flag changes or assembly fragments were used.
+- Full Ninja checks, canonical packaging, native relinking and **81 tests pass**.
+  Both ROMs retain SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+  Native verification covers 43 components and 31,138 relocations, including
+  1,577 ARM7 relocations, with zero differing bytes. Logs use the prefix
+  `build/analysis/shop_text_tasks_`.
+- Three final replays cover coin shop 0 from save 86 and equipment/bean shops
+  2/14 from save 65: **4,551 frames, 84,308 checked returns**, including **119
+  returns through the five new functions**. There are 14 item-text callbacks,
+  one stock-text callback and 89 icon lookups across consumables, clothing and
+  badges. Checks derive complete task payloads, all eleven draw arguments,
+  icon results and 128-byte copies, and the deferred-removal flag. Native text
+  rendering and allocation internals are explicitly observed helper outputs.
+- The coin fixture changes the live Mushroom count to one before shop entry.
+  Ordinary buttons buy one; the seven-coin cost and count change from one to two
+  pass independent checks and exercise stock-text refresh. Original quantity
+  and currency are restored before leaving. The other routes only navigate.
+  All runs visibly return to the field and preserve all 104 source saves.
+- An initial equipment replay failed an incorrect probe assertion requiring a
+  scroll callback. Its six-item list fits in the seven-row panel. The corrected
+  probe derives that expectation from live list sizes; all final runs pass.
+  No unfinished calls or drain frames remain.
+- The private artifact checker validates **42 screenshots and 378 graphics
+  dumps**. All 90 comparable artifacts from unchanged starting sections match
+  the previous verified shop routes. Purchase/stock, scrolled badge and field
+  screens were visually inspected. Reports: `build/runtime/eur_shop_text_tasks/`.
+  Action-item icons, invalid item IDs and physical audio remain unexercised.
+- Matching C/C++ reaches **710,420 / 1,563,700 bytes (45.43%)**, or **45.76%**
+  with separate assembly. Overlay 9 reaches **22,092 / 78,984 (27.97%)**.
+  **71,430 bytes** remain to the 50% goal.

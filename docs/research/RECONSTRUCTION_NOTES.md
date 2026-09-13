@@ -566,6 +566,25 @@ and deleting entries, but not the four other destructor wrappers. Reports in
 `build/runtime/eur_shop_panel_lifecycle/` and the private
 `verify_shop_lifecycle_artifacts.py` compare captures with the buying-panel batch.
 
+`build/analysis/probe_shop_text_tasks.py` checks queued item/stock text updates
+and item-icon lookup. Tasks use the shared 72-byte pool; full-width arguments
+at offset 40 are narrowed only when the callback calls the renderer. The checks
+derive all eleven text-call arguments, icon indices from original item records,
+128-byte icon copies and the deferred-removal flag at task offset 8. Allocation
+and text-renderer internals remain observed helper outputs. Icon lookup leaves
+the renderer and live save unchanged. Scrolling exercises the item callbacks;
+a six-item equipment list fits without scrolling and does not queue those tasks.
+
+The `coin86_purchase` fixture changes the live Mushroom inventory byte to one
+at byte-guarded EUR ARM9 field request `0x0206ACF8`, before scene construction:
+`write8(read32(0x02059FE8) + 0x48E, 1)` in ARM9 main RAM. Ordinary buttons
+buy one Mushroom; independent checks verify the seven-coin cost, quantity change
+from one to two and stock-text callback. It restores the original inventory byte
+and little-endian currency word at `read32(0x02059FE8) + 0x488` at guarded shop
+deletion, before field return. The equipment
+and bean routes have no purchase fixture. Reports and captures are under
+`build/runtime/eur_shop_text_tasks/`; source battery saves retain their hashes.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized

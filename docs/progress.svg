@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
 <title id="title">Mario &amp; Luigi: Partners in Time decompilation progress</title>
-<desc id="desc">A treemap of mapped ARM9 code. 45.38 percent is matching C/C++ and 45.72 percent has matching C/C++ or maintained symbolic assembly.</desc>
+<desc id="desc">A treemap of mapped ARM9 code. 45.43 percent is matching C/C++ and 45.76 percent has matching C/C++ or maintained symbolic assembly.</desc>
 <style>
 .bg{fill:#0d1117}.title{fill:#f0f6fc;font:700 27px system-ui,sans-serif}
 .eyebrow{fill:#8b949e;font:600 12px system-ui,sans-serif;letter-spacing:1.5px}
@@ -15,17 +15,17 @@
 <text x="28.0" y="68.0" class="title">Mario &amp; Luigi: Partners in Time</text>
 <text x="28.0" y="113.0" class="percent">45.4%</text>
 <text x="145.0" y="110.0" class="subtitle">matching C/C++</text>
-<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">45.72% source-understood</text>
+<text x="1172.0" y="63.0" class="subtitle" text-anchor="end">45.76% source-understood</text>
 <text x="1172.0" y="88.0" class="subtitle" text-anchor="end">1.49 MiB mapped ARM9 code</text>
 <rect x="28" y="130" width="1144" height="22" rx="5" fill="#263244"/>
-<rect x="28" y="130" width="519.195" height="22" rx="5" fill="#2dd4a0"/>
-<rect x="547.195" y="130" width="3.790" height="22" fill="#38bdf8"/>
+<rect x="28" y="130" width="519.742" height="22" rx="5" fill="#2dd4a0"/>
+<rect x="547.742" y="130" width="3.790" height="22" fill="#38bdf8"/>
 <rect x="28" y="170" width="12" height="12" rx="2" fill="#2dd4a0"/>
-<text x="47.0" y="181.0" class="legend">Matching C/C++  693.0 KiB</text>
+<text x="47.0" y="181.0" class="legend">Matching C/C++  693.8 KiB</text>
 <rect x="248" y="170" width="12" height="12" rx="2" fill="#38bdf8"/>
 <text x="267.0" y="181.0" class="legend">Symbolic ASM  5.1 KiB</text>
 <rect x="468" y="170" width="12" height="12" rx="2" fill="#263244"/>
-<text x="487.0" y="181.0" class="legend">Remaining  829.0 KiB</text>
+<text x="487.0" y="181.0" class="legend">Remaining  828.2 KiB</text>
 <text x="1172.0" y="181.0" class="legend" text-anchor="end">Rectangle area = code bytes</text>
 <rect class="cell" x="30.00" y="226.00" width="119.37" height="80.75" fill="#263244"><title>Overlay 00 · func_ov000_0209418c · 27.8 KiB · remaining</title></rect>
 <rect class="cell" x="149.37" y="226.00" width="98.54" height="80.75" fill="#2dd4a0"><title>Overlay 00 · field_vm_dispatch · 22.9 KiB · matching C/C++</title></rect>
@@ -3711,7 +3711,7 @@
 <rect class="cell" x="960.78" y="329.00" width="9.15" height="9.10" fill="#2dd4a0"><title>Overlay 09 · shop_rows · 252 B · matching C/C++</title></rect>
 <rect class="cell" x="960.78" y="338.09" width="9.15" height="9.10" fill="#2dd4a0"><title>Overlay 09 · shop_inventory_list · 252 B · matching C/C++</title></rect>
 <rect class="cell" x="960.78" y="347.19" width="9.15" height="9.10" fill="#263244"><title>Overlay 09 · func_ov009_02078560 · 252 B · remaining</title></rect>
-<rect class="cell" x="960.78" y="356.29" width="9.15" height="8.95" fill="#263244"><title>Overlay 09 · func_ov009_020744a4 · 248 B · remaining</title></rect>
+<rect class="cell" x="960.78" y="356.29" width="9.15" height="8.95" fill="#2dd4a0"><title>Overlay 09 · shop_icons · 248 B · matching C/C++</title></rect>
 <rect class="cell" x="960.78" y="365.24" width="9.15" height="8.81" fill="#263244"><title>Overlay 09 · func_ov009_0207c464 · 244 B · remaining</title></rect>
 <rect class="cell" x="960.78" y="374.05" width="9.15" height="8.09" fill="#263244"><title>Overlay 09 · func_ov009_02074ea8 · 224 B · remaining</title></rect>
 <rect class="cell" x="960.78" y="382.13" width="9.15" height="8.09" fill="#263244"><title>Overlay 09 · func_ov009_0207c384 · 224 B · remaining</title></rect>
@@ -3729,10 +3729,10 @@
 <rect class="cell" x="969.93" y="359.30" width="8.33" height="7.77" fill="#263244"><title>Overlay 09 · func_ov009_02072818 · 196 B · remaining</title></rect>
 <rect class="cell" x="969.93" y="367.07" width="8.33" height="7.77" fill="#2dd4a0"><title>Overlay 09 · shop_inventory_panel · 196 B · matching C/C++</title></rect>
 <rect class="cell" x="969.93" y="374.84" width="8.33" height="7.77" fill="#263244"><title>Overlay 09 · func_ov009_0207b1d8 · 196 B · remaining</title></rect>
-<rect class="cell" x="969.93" y="382.61" width="8.33" height="7.61" fill="#263244"><title>Overlay 09 · func_ov009_020706a4 · 192 B · remaining</title></rect>
+<rect class="cell" x="969.93" y="382.61" width="8.33" height="7.61" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_text · 192 B · matching C/C++</title></rect>
 <rect class="cell" x="978.26" y="327.59" width="8.44" height="7.51" fill="#263244"><title>Overlay 09 · func_ov009_02072470 · 192 B · remaining</title></rect>
 <rect class="cell" x="986.70" y="327.59" width="7.91" height="7.51" fill="#2dd4a0"><title>Overlay 09 · shop_buy_panel · 180 B · matching C/C++</title></rect>
-<rect class="cell" x="994.61" y="327.59" width="7.91" height="7.51" fill="#263244"><title>Overlay 09 · func_ov009_02072e28 · 180 B · remaining</title></rect>
+<rect class="cell" x="994.61" y="327.59" width="7.91" height="7.51" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 180 B · matching C/C++</title></rect>
 <rect class="cell" x="1002.52" y="327.59" width="7.91" height="7.51" fill="#263244"><title>Overlay 09 · func_ov009_0207d164 · 180 B · remaining</title></rect>
 <rect class="cell" x="1010.43" y="327.59" width="7.56" height="7.51" fill="#2dd4a0"><title>Overlay 09 · shop_rows · 172 B · matching C/C++</title></rect>
 <rect class="cell" x="1017.99" y="327.59" width="7.56" height="7.51" fill="#263244"><title>Overlay 09 · func_ov009_02078090 · 172 B · remaining</title></rect>
@@ -3790,22 +3790,22 @@
 <rect class="cell" x="1023.54" y="355.62" width="4.81" height="5.77" fill="#2dd4a0"><title>Overlay 09 · shop_stock · 84 B · matching C/C++</title></rect>
 <rect class="cell" x="1028.35" y="355.62" width="4.58" height="5.77" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 80 B · matching C/C++</title></rect>
 <rect class="cell" x="1003.62" y="361.38" width="5.04" height="5.24" fill="#2dd4a0"><title>Overlay 09 · shop_buy_panel_lifecycle · 80 B · matching C/C++</title></rect>
-<rect class="cell" x="1003.62" y="366.63" width="5.04" height="4.72" fill="#263244"><title>Overlay 09 · func_ov009_0207065c · 72 B · remaining</title></rect>
+<rect class="cell" x="1003.62" y="366.63" width="5.04" height="4.72" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_text · 72 B · matching C/C++</title></rect>
 <rect class="cell" x="1003.62" y="371.35" width="5.04" height="4.72" fill="#263244"><title>Overlay 09 · func_ov009_0207218c · 72 B · remaining</title></rect>
 <rect class="cell" x="1003.62" y="376.06" width="5.04" height="4.72" fill="#2dd4a0"><title>Overlay 09 · shop_text_lookup · 72 B · matching C/C++</title></rect>
 <rect class="cell" x="1003.62" y="380.78" width="5.04" height="4.72" fill="#263244"><title>Overlay 09 · func_ov009_02077fa0 · 72 B · remaining</title></rect>
 <rect class="cell" x="1003.62" y="385.50" width="5.04" height="4.72" fill="#2dd4a0"><title>Overlay 09 · shop_inventory_equipment · 72 B · matching C/C++</title></rect>
 <rect class="cell" x="1008.65" y="361.38" width="5.08" height="4.68" fill="#263244"><title>Overlay 09 · func_ov009_0207ddac · 72 B · remaining</title></rect>
 <rect class="cell" x="1013.74" y="361.38" width="4.80" height="4.68" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_lifecycle · 68 B · matching C/C++</title></rect>
-<rect class="cell" x="1018.53" y="361.38" width="4.80" height="4.68" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_queries · 68 B · matching C/C++</title></rect>
+<rect class="cell" x="1018.53" y="361.38" width="4.80" height="4.68" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 68 B · matching C/C++</title></rect>
 <rect class="cell" x="1023.33" y="361.38" width="4.80" height="4.68" fill="#263244"><title>Overlay 09 · func_ov009_02076ae4 · 68 B · remaining</title></rect>
 <rect class="cell" x="1028.13" y="361.38" width="4.80" height="4.68" fill="#263244"><title>Overlay 09 · func_ov009_0207cdd8 · 68 B · remaining</title></rect>
-<rect class="cell" x="1008.65" y="366.06" width="4.10" height="5.15" fill="#2dd4a0"><title>Overlay 09 · shop_icon_transfer · 64 B · matching C/C++</title></rect>
+<rect class="cell" x="1008.65" y="366.06" width="4.10" height="5.15" fill="#2dd4a0"><title>Overlay 09 · shop_icons · 64 B · matching C/C++</title></rect>
 <rect class="cell" x="1008.65" y="371.22" width="4.10" height="5.15" fill="#263244"><title>Overlay 09 · func_ov009_02077064 · 64 B · remaining</title></rect>
 <rect class="cell" x="1008.65" y="376.37" width="4.10" height="4.83" fill="#263244"><title>Overlay 09 · func_ov009_0207662c · 60 B · remaining</title></rect>
 <rect class="cell" x="1008.65" y="381.20" width="4.10" height="4.51" fill="#263244"><title>Overlay 09 · func_ov009_0206d084 · 56 B · remaining</title></rect>
 <rect class="cell" x="1008.65" y="385.71" width="4.10" height="4.51" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 56 B · matching C/C++</title></rect>
-<rect class="cell" x="1012.76" y="366.06" width="4.41" height="4.19" fill="#263244"><title>Overlay 09 · func_ov009_02072df0 · 56 B · remaining</title></rect>
+<rect class="cell" x="1012.76" y="366.06" width="4.41" height="4.19" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 56 B · matching C/C++</title></rect>
 <rect class="cell" x="1017.17" y="366.06" width="4.10" height="4.19" fill="#2dd4a0"><title>Overlay 09 · shop_inventory_panel · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="1021.27" y="366.06" width="4.10" height="4.19" fill="#2dd4a0"><title>Overlay 09 · shop_list_positions · 52 B · matching C/C++</title></rect>
 <rect class="cell" x="1025.36" y="366.06" width="3.78" height="4.19" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 48 B · matching C/C++</title></rect>
@@ -3814,7 +3814,7 @@
 <rect class="cell" x="1012.76" y="374.32" width="3.57" height="4.07" fill="#2dd4a0"><title>Overlay 09 · shop_buy_panel · 44 B · matching C/C++</title></rect>
 <rect class="cell" x="1012.76" y="378.39" width="3.57" height="4.07" fill="#2dd4a0"><title>Overlay 09 · shop_buy_panel_lifecycle · 44 B · matching C/C++</title></rect>
 <rect class="cell" x="1012.76" y="382.46" width="3.57" height="4.07" fill="#2dd4a0"><title>Overlay 09 · shop_inventory_list · 44 B · matching C/C++</title></rect>
-<rect class="cell" x="1012.76" y="386.52" width="3.57" height="3.70" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_queries · 40 B · matching C/C++</title></rect>
+<rect class="cell" x="1012.76" y="386.52" width="3.57" height="3.70" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 40 B · matching C/C++</title></rect>
 <rect class="cell" x="1016.33" y="370.25" width="3.53" height="3.74" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_lifecycle · 40 B · matching C/C++</title></rect>
 <rect class="cell" x="1019.86" y="370.25" width="3.53" height="3.74" fill="#2dd4a0"><title>Overlay 09 · shop_list_positions · 40 B · matching C/C++</title></rect>
 <rect class="cell" x="1023.39" y="370.25" width="3.18" height="3.74" fill="#2dd4a0"><title>Overlay 09 · shop_irq_destroy · 36 B · matching C/C++</title></rect>
@@ -3849,17 +3849,17 @@
 <rect class="cell" x="1024.87" y="386.92" width="2.40" height="1.65" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 12 B · matching C/C++</title></rect>
 <rect class="cell" x="1024.87" y="388.57" width="2.40" height="1.65" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 12 B · matching C/C++</title></rect>
 <rect class="cell" x="1027.27" y="382.52" width="2.12" height="1.87" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 12 B · matching C/C++</title></rect>
-<rect class="cell" x="1029.39" y="382.52" width="2.12" height="1.87" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_queries · 12 B · matching C/C++</title></rect>
+<rect class="cell" x="1029.39" y="382.52" width="2.12" height="1.87" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 12 B · matching C/C++</title></rect>
 <rect class="cell" x="1031.51" y="382.52" width="1.42" height="1.87" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 8 B · matching C/C++</title></rect>
 <rect class="cell" x="1027.27" y="384.39" width="1.42" height="1.87" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 8 B · matching C/C++</title></rect>
 <rect class="cell" x="1028.68" y="384.39" width="1.42" height="1.87" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 8 B · matching C/C++</title></rect>
 <rect class="cell" x="1030.10" y="384.39" width="1.42" height="1.87" fill="#2dd4a0"><title>Overlay 09 · shop_item_panel_queries · 8 B · matching C/C++</title></rect>
 <rect class="cell" x="1031.51" y="384.39" width="1.42" height="1.87" fill="#2dd4a0"><title>Overlay 09 · shop_buy_panel · 8 B · matching C/C++</title></rect>
-<rect class="cell" x="1027.27" y="386.25" width="1.33" height="1.98" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_queries · 8 B · matching C/C++</title></rect>
-<rect class="cell" x="1027.27" y="388.24" width="1.33" height="1.98" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_queries · 8 B · matching C/C++</title></rect>
-<rect class="cell" x="1028.60" y="386.25" width="1.33" height="1.98" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_queries · 8 B · matching C/C++</title></rect>
-<rect class="cell" x="1028.60" y="388.24" width="1.33" height="1.98" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_queries · 8 B · matching C/C++</title></rect>
-<rect class="cell" x="1029.93" y="386.25" width="1.50" height="1.76" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_queries · 8 B · matching C/C++</title></rect>
+<rect class="cell" x="1027.27" y="386.25" width="1.33" height="1.98" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 8 B · matching C/C++</title></rect>
+<rect class="cell" x="1027.27" y="388.24" width="1.33" height="1.98" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 8 B · matching C/C++</title></rect>
+<rect class="cell" x="1028.60" y="386.25" width="1.33" height="1.98" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 8 B · matching C/C++</title></rect>
+<rect class="cell" x="1028.60" y="388.24" width="1.33" height="1.98" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 8 B · matching C/C++</title></rect>
+<rect class="cell" x="1029.93" y="386.25" width="1.50" height="1.76" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel · 8 B · matching C/C++</title></rect>
 <rect class="cell" x="1031.43" y="386.25" width="1.50" height="1.76" fill="#2dd4a0"><title>Overlay 09 · shop_list_phase · 8 B · matching C/C++</title></rect>
 <rect class="cell" x="1029.93" y="388.02" width="1.20" height="2.20" fill="#2dd4a0"><title>Overlay 09 · shop_list_positions · 8 B · matching C/C++</title></rect>
 <rect class="cell" x="1031.13" y="388.02" width="0.90" height="1.47" fill="#2dd4a0"><title>Overlay 09 · shop_stock_panel_lifecycle · 4 B · matching C/C++</title></rect>
