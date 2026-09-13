@@ -97,6 +97,7 @@ Parse large JSON reports and print selected records, not entire diff dumps.
 | Runtime tools and save navigation | [Runtime guide](docs/research/RUNTIME_ANALYSIS.md) |
 | RAM roots, allocation extents and graphics capture ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference); addresses are CPU- and overlay-specific |
 | Detailed matching lessons and tested scene routes | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md) |
+| Pause transition ABI and resource ownership | [Exit evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-exit-tasks-and-transition-state), [projection findings](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi); distinguish code-derived behavior from replay coverage |
 | Previous batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md) and its private reports |
 | Assets, script editing and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
 
@@ -203,11 +204,18 @@ the printed instruction listing alone does not prove that range was inspected.
    The same applies to parameters: a callee storing a halfword does not prove
    that its caller narrowed the argument before the call. Recover stack arguments
    from instructions and stack offsets, not a decompiler's inferred call arity.
+   The pause projection has seven arguments, including output pointers on the
+   stack. A full-width angle masked with `0xFFFF` can compile differently from
+   a `u16` parameter or cast. Preserve the native mask and caller-side narrowing
+   separately; see the linked projection findings before reusing its signature.
    Bitfield assignments can truncate again after an explicit byte cast and
    preserve other bits in the same byte. Check the complete storage byte and
    assignment order; do not replace packed fields with separate flags.
    Check load/store order explicitly. A callback can change shared state, and
    native code may cache both coordinates before writing either destination.
+   It can also store both an unmasked sum and its masked value, then reuse the
+   cached value. Preserve both stores without introducing extra global reloads;
+   apparent redundancy alone is not evidence for a source simplification.
    Follow the arithmetic data flow too: preparing both signed Q12 divisions
    before the destination assignments can reproduce interleaved sign-correction
    instructions that caching only the raw coordinates does not. Explain that
@@ -407,6 +415,12 @@ and compatible snapshots. Optional dependencies are in
   For a pool return, verify release callbacks, task fields and neighbor links
   before return to the pool. Afterward, inspect only still-live pool/list records
   and counters; a readable address does not mean the old object is still alive.
+  Track whole-pool destruction as well as individual returns. Verify the cleared
+  pool records and close the destroyed allocations before accepting reused
+  addresses. Do not use bulk cleanup to bypass required per-task removal checks.
+  A previous task's null release callback is not a template for resource-owning
+  tasks: ResourceB attachment can install a callback that returns its 64-byte
+  sprite to a separate pool. Follow both lifetimes and their actual release order.
   Derive update counts from integer step, delay and clamping; division by six
   does not guarantee six updates when truncation leaves a remainder.
   Read a timer's entry guard before assigning meaning to zero. A callback that
@@ -521,6 +535,13 @@ saved list positions, use the [preparation findings](docs/research/RECONSTRUCTIO
 close and reopen the list within the same pause instance. Leaving pause and
 constructing another party resets those saved positions and tests a different
 path. Verify this distinction with constructor and preparation hooks.
+
+Before extending pause transitions, read the
+[exit evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-exit-tasks-and-transition-state)
+and [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi).
+An exit replay that checks a progress getter does not verify the projection,
+panel callbacks or affine-row producer merely because they ran during that route.
+Use the handoff and manifest for their current integration and verification status.
 
 Consult tested routes for [shops](docs/research/RECONSTRUCTION_NOTES.md#shops),
 [save/load menus](docs/research/RECONSTRUCTION_NOTES.md#save-menus),

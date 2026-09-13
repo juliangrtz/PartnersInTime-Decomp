@@ -17,6 +17,8 @@ ordinary gameplay accessibility or coverage of unexercised branches.
 - [Reconstructing and integrating code](#reconstructing-and-integrating-code)
 - [Runtime verification](#runtime-verification)
 - Code-derived findings: [pause party status](#pause-party-status)
+- Pause transitions: [verified exit tasks](#pause-exit-tasks-and-transition-state),
+  [projection and callback ABI](#pause-transition-projection-and-callback-abi)
 - Tested routes: [shops](#shops), [save menus](#save-menus), [Game Over](#game-over),
   [Smash Eggs](#smash-eggs), [credits](#credits), [Nawatobi](#nawatobi)
 
@@ -97,12 +99,16 @@ one-time state edit; the remaining entries are inspection references.
 |---|---|---|
 | Pause scene task | `read32(0x0208E1E0)` | 56 bytes, overlay 7; signed 32-bit phase at `+0x30`, menu pointer at `+0x34` |
 | Pause workspace | `0x020905F0` | 90,600-byte object, overlay 7; do not dereference its first word as a pointer |
+| Pause transition workspace | `0x0208E1E8` | 9,224-byte object, overlay 7; signed 32-bit progress at offset 0, not a pointer to another allocation |
 | Pause party | `read32(0x0208E1E4)` | 4,428-byte allocation, overlay 7; `Overlay7Party` describes the first 332 bytes, followed by 4,096 bytes of scratch |
 | Live save record | `read32(0x02059FE8)` | 1,380-byte record used by the probes; this is distinct from the on-disk battery-save size |
 | Display resources | `0x0206A180` | 176-byte object, overlay 5; archive pointer at `+0x2C` |
 | Menu element pool | `0x0206A240` | 20-byte object, overlay 5; element array, link array, free list, taken list and count at offsets 0, 4, 8, 12 and 16 |
 | Menu element lists | `0x0206A254` | Twelve 16-byte list records, overlay 5; each contains two eight-byte sentinel records |
 | Active menu element count | `0x0206A230` | Unsigned 16-bit value, overlay 5 |
+| ResourceB sprite pool | `0x0206AA18` | 20-byte pool object, overlay 5; 64-byte item slots and eight-byte links |
+| Draw-node pool | `0x0206A3F8` | 20-byte pool object, overlay 5; eight-byte nodes and eight-byte links |
+| Draw lists | `0x0206A40C` | Two screens of 64 twelve-byte list records, overlay 5; distinct from the menu element lists |
 
 The shared source layouts are in
 [pause_scene.h](../../include/game/pause_scene.h),
@@ -115,6 +121,20 @@ the payload at `+0x24` onward unchanged. The caller initializes its own payload.
 Marking at `0x0206650C`, removal at `0x020664A8` and pool return at `0x020667B0`
 are distinct boundaries. Check the release callback and slot before pool return,
 then check only still-live pool, list and counter records.
+
+For sprite and draw allocation, use the actual layouts in
+[item_pool.c](../../src/overlay005/item_pool.c),
+[overlay005_resource.h](../../include/game/overlay005_resource.h) and
+[draw_lists.cpp](../../src/overlay005/draw_lists.cpp).
+`Overlay5ResourceOwner` has its release callback at `+0x18` and resource pointer
+at `+0x1C`; these fields belong to the owner, not the attached sprite.
+ResourceB attachment can install `Overlay5ResourceB_Release`, which releases the
+sprite and clears the owner's resource pointer. Track the task and sprite as
+separate lifetimes, using [resource_owner.c](../../src/overlay005/resource_owner.c)
+and the removal helper to establish the actual sequence.
+Whole-pool destruction also ends allocations: verify the cleared pool pointers
+before discarding their allocation records. Retain any outstanding per-task
+removal assertion; a bulk free does not prove that callback completed normally.
 
 The pause and shop probes commonly retain the following graphics ranges.
 These are **capture extents**, not a universal map of all available video memory;
@@ -2239,6 +2259,54 @@ were inspected. No pending calls, live watched tasks or drain frames remain.
 Unvisited phases, nonempty archive queues, unsampled getter bodies and natural
 entry to mode 0 remain uncovered. Full matching checks, golden packaged ROM,
 zero-difference native relink, progress checks and all 81 tests pass.
+
+### Pause transition projection and callback ABI
+
+These are code-derived EUR overlay-7 findings from complete native ranges and
+their callers. They do not extend the exit replay's runtime coverage. Check the
+current manifest and private handoff before describing these functions as
+integrated, runtime-verified or published.
+
+The projection at `0x0206E1C8` takes seven arguments:
+
+```c
+void func_ov007_0206e1c8(int x, int y, int angle,
+                       int *out_x, int *out_y,
+                       int *out_width, int *out_height);
+```
+
+At entry, `r0..r3` hold `x`, `y`, `angle` and `out_x`; the other three pointers
+are at entry `sp + 0`, `sp + 4` and `sp + 8`. Account for the prologue before
+interpreting later stack loads. The function explicitly masks the full-width
+angle with `0xFFFF` before shifting by four to index the interleaved sine/cosine
+table. A halfword parameter or cast does not reproduce that same instruction
+sequence with this compiler.
+
+Outputs are stored in the order Y, height, width, X. The stored width is read
+back before calculating X; preserve that read and possible output aliasing.
+The perspective calculation needs signed 32-bit wrapping before arithmetic
+shifts and division toward zero. An unbounded Python integer model can produce
+the wrong expectation even when a formula looks equivalent.
+
+The progress callback at `0x0206D730` reads its signed step from task `+0x2C`.
+In phase 1 it computes a sum and its `0xFFFF`-masked value, stores both in that
+order to the transition workspace's first word, then compares and passes the
+cached masked value. Re-reading the global after each store introduces extra
+loads; deleting the first store also changes the native sequence.
+
+The panel callback at `0x0206D51C` projects directly into the attached
+`Overlay5ObjectSprite` coordinates, with width and height in stack locals.
+The window callback at `0x0206D7D0` instead supplies four stack-local outputs.
+A probe must check the actual live destination extents, including DTCM where
+applicable, rather than assuming every output points into the transition object.
+The panel's packed tile field is ten bits wide, and its affine call explicitly
+narrows width and height to unsigned halfwords. Preserve neighboring attribute
+bits and caller-side narrowing without changing the full-width callee signature.
+
+Existing exit reports independently check the progress getter and exit task
+effects. They do not independently check these projection or panel bodies, the
+affine-row producer at `0x0206E0D4`, or every resource-release branch. A focused
+extension needs its own arithmetic, output, GPU-store and lifetime assertions.
 
 ### Nawatobi
 
