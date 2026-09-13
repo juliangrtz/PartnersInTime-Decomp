@@ -514,7 +514,6 @@ src/overlay008/erase_scene_lifecycle.c
 src/overlay008/erase_irq_destroy.c
 src/overlay008/erase_irq_init.c
 src/overlay008/save_menu_resource_cleanup.c
-src/overlay008/save_menu_location_name.c
 src/overlay008/save_menu_location_image.c
 src/overlay009/shop_irq_destroy.cpp
 src/overlay009/shop_scene_lifecycle.cpp
@@ -804,4 +803,5 @@ src/overlay008/save_write_brightness.c
 src/overlay008/save_write_zoom.c
 src/overlay008/save_write_setup.c
 src/overlay008/save_write_rollback.c
-src/overlay008/save_menu_exit.c
+src/overlay008/save_menu_control.c
+src/overlay008/save_menu_panel_text.c

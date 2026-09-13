@@ -5770,3 +5770,61 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
   explained regions and remaining register/scheduling differences. A shared
   workspace-alias experiment changed their sizes and was reverted; no arbitrary
   lifetime or declaration permutations were pursued.
+
+
+## 2026-09-13: Save-menu entry, selection and panel text (+1,012 matching bytes)
+
+- Linked `SaveMenu_UpdateEntry` at `0x0206BDDC` (392 bytes),
+  `SaveMenu_UpdateSelection` at `0x0206BAEC` (500 bytes), and
+  `SaveMenuText_PreparePanel` at `0x02071964` (120 bytes). Entry, selection
+  and the previously linked 252-byte exit callback now share the contiguous
+  `save_menu_control.c` range `0x0206BAEC..0x0206BF64`, replacing the temporary
+  exit-only unit. Panel preparation and the already linked location-label loader
+  share `save_menu_panel_text.c` at `0x02071964..0x02071A50`, replacing the
+  location-name-only unit. Previously linked bytes are not counted again.
+- Entry matched its first C draft. Panel preparation uses the existing volatile
+  zero pattern for the native buffer-clear call and a 16-bit text-entry argument;
+  the initially wider argument inserted two extra caller masks. Selection keeps
+  the signed original row for movement, then narrows it for the change comparison.
+  An unsigned-only temporary caused an early byte load and a second signed load.
+  Preserving these native data-flow and truncation points produced exact matches.
+- A checked 416-byte workspace prefix includes two existing summary records,
+  signed selection/previous-selection/input-lock fields and panel selection.
+  Unknown fields retain neutral names; this is not the full workspace allocation.
+  Entry clears flags, prepares both panel labels, creates models/dialogue and
+  fades from -15 through zero before selecting the input callback. Selection
+  wraps on fresh directional presses but clamps at an edge during held repeats;
+  cancellation takes precedence over confirmation.
+- Full Ninja module/symbol checks, progress generation/check and all 81 tests
+  passed. The canonical wrapper with data mods disabled and independent native
+  relink both produced SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+  Native validation covered 43 components, 31,138 known relocations and 1,577
+  ARM7 relocations with zero differing bytes. Final logs are
+  `build/analysis/save_menu_control_{configure,check,rom,native,tests}.log`.
+- The private `build/analysis/probe_save_menu_control.py` reuses the compatible
+  checkpoint-55 save menu. Two normal-input replays run for 570 and 842 frames,
+  with no code/RAM fixtures. Together they check 504 selection calls, 40 entry
+  calls and four panel preparations. All four entry phases, both panels and all
+  sixteen brightness steps are exercised in each run. Navigation covers all
+  three rows, wrapping in both directions, 25 held-key clamps at each edge,
+  cancellation by B and by confirming Cancel, and both save-choice confirmations.
+- Independent expectations check 544 complete 72-byte task records, 548 complete
+  416-byte workspace prefixes, 70 ordered helper calls, four complete 24,724-byte
+  text records around buffer clearing, panel upload offsets, width-result stores
+  and six callback/state resets. Native byte guards and SP-matched returns finish
+  with no pending calls or drain frames. Text-stream records/return values and
+  eight workspace observations after model/dialog/scroll helpers are explicitly
+  observed outputs. Their internal rendering, uploads, resource behavior and
+  physical audio are outside this oracle.
+- Reports: `build/runtime/eur_save_menu_control/evidence_confirm55.json` and
+  `evidence_navigation55.json`. The private artifact verifier checks 26 PNGs,
+  234 graphics dumps, both canonical ROM hashes, state provenance and all 104
+  unchanged source saves. Confirm-run graphics equal the earlier entry replay.
+  Visually inspected the restored save menu, selection wrapping to Cancel and
+  the "Save & quit?" confirmation. Empty-slot entry, slot one, locked input,
+  invalid phases and simultaneous opposing buttons remain unexercised.
+- Matching C/C++ is **703,496 / 1,563,700 bytes (44.99%)**, or **45.32%** with
+  separately maintained assembly. Overlay 8 is **23,772 / 54,068 (43.97%)**.
+  There are **78,354 bytes** left to the 50% target. The adjacent write-confirmation
+  controller and panel movement/fade gaps remain native; the completed controller
+  module does not count those bytes as reconstructed.

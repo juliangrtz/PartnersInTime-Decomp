@@ -11,6 +11,18 @@
 #include <nitro/gx_init.h>
 #include <nitro/gx_projection.h>
 typedef SaveMenuTransferTask MenuElement;
+/* Prefix through the panel selection used during save-menu entry. */
+typedef struct SaveMenuEntryWorkPrefix {
+    SaveMenuSummary summaries[2];
+    u8 unknown_140[0x50];
+    u8 unknown_190, unknown_191[8];
+    s8 selection, previous_selection;
+    u8 unknown_19b;
+    s8 input_locked, selected_panel;
+    u8 unknown_19e[2];
+} SaveMenuEntryWorkPrefix;
+typedef char SaveMenuEntryWorkPrefixSizeCheck[
+    sizeof(SaveMenuEntryWorkPrefix) == 0x1a0 ? 1 : -1];
 #define REG16(address) (*(vu16 *)(address))
 #define REG32(address) (*(vu32 *)(address))
 #define MENU_ARCHIVE (*(Overlay5Archive **)(data_ov005_0206a180 + 44))
@@ -58,7 +70,8 @@ extern void func_02035938(int);
 extern GameTaskVTable data_ov008_02077f24;
 extern SaveSceneTask *data_ov008_02078280;
 extern void func_ov008_0206c474(SaveSceneTask *);
-extern void func_ov008_0206bddc(MenuElement *);
+extern void SaveMenu_UpdateEntry(MenuElement *);
+extern void SaveMenu_UpdateSelection(MenuElement *);
 extern GameTaskVTable data_ov008_02077f8c;
 extern SaveSceneTask *data_ov008_02078284;
 extern void func_ov008_0206f588(SaveSceneTask *);

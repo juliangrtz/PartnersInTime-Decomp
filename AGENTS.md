@@ -639,6 +639,16 @@ brightness for continue. Text transitions, movement/fade callback internals and
 physical audio remain outside this oracle. Consult the source layout and probe
 before extending it; the workspace prefix does not describe the full allocation.
 
+For normal save-menu entry and selection, `build/analysis/probe_save_menu_control.py`
+leaves that initialized menu with B and re-enters by jumping at the save block.
+Its `confirm55` and `navigation55` reports under `build/runtime/eur_save_menu_control/`
+cover entry, both panel texts, directional wrapping on fresh presses, clamping
+while holding a direction, cancellation and both save choices. They check complete
+task records and a 416-byte workspace prefix. Text-stream results and workspace
+changes inside model/dialog/scroll helpers are explicitly observed outputs;
+do not describe those helper internals as independently verified by this probe.
+The tested entry uses occupied slot zero; the empty-slot fallback remains untested.
+
 ### Smash Eggs
 
 For battle attack research, the compatible private snapshot
