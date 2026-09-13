@@ -7660,3 +7660,34 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
 - Evidence: build/runtime/eur_pause_hp_warning/artifact_validation.json and
   clothing_arrows/evidence_{normal65,thresholds86}.json; source-identified probe
   and build/analysis/pause_hp_warning_* logs. See the reconstruction reference.
+
+
+### 2026-09-13 - Party equipment/status bitmap transitions (+736 bytes)
+
+- Reconstructed creator 02078f5c/100 and controller 02078fc0/636, with a shared
+  72-byte task and named modes. Preserves two-member preparation, six phases,
+  signed strip positions, final clamps, warning modes and spring-state updates.
+  Both functions match without assembly or compiler-flag changes.
+- Matching C/C++: 740,868/1,563,700 (47.38%); with symbolic ASM: 47.71%.
+  Overlay 7: 76,112/142,264 (53.50%). Remaining to 50%: 40,982 bytes.
+- Full matching checks, golden EUR ROM packaging, zero-difference native relink,
+  generated progress and all 81 tests pass. The packaging wrapper's first
+  Windows PowerShell invocation failed at Get-FileHash; the same wrapper passes
+  under the available PowerShell runtime. Initial failure log retained.
+- Ordinary clothing and badge routes at checkpoints 65/86: 4,200 frames, four
+  creators, all 84 updates and 76 independently derived strip copies (72,320
+  bytes). All modes/phases, group marks, 16 spring-state increments and final
+  clamps checked; all four transition tasks finish their actual lifetimes.
+- All 154 watched tasks and 42 model slots return. Final field guards pass,
+  with no pending calls, live tasks, drain or RAM fixture. All 104 saves unchanged.
+  All 72 PNGs and 648 graphics dumps validate and match complete prior ordinary
+  routes. Clothing bitmap display and final field inspected.
+- The initial probe stopped at frame 334: 832 bytes is scratch usage, while the
+  allocation is 12,288 bytes. Source and live heap header establish the full
+  extent; corrected replay checks it. Original probe and failure preserved.
+  Text/status producers, numeric setup and final rasterization are observed;
+  unavailable-member and invalid-mode/phase branches are not claimed as covered.
+- Evidence: build/runtime/eur_pause_party_transition/artifact_validation.json,
+  clothing_arrows/evidence_clothing65_v2.json, badge_members/evidence_badges86.json,
+  source-identified probe and build/analysis/pause_party_transition_* logs.
+  The separate strip-copy helper remains nonmatching and adds no new coverage.

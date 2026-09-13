@@ -1514,6 +1514,71 @@ pending calls remain. Task creation/destruction, invalid timer states and final
 GPU output are outside this callback oracle; the two graphics helpers remain
 unlinked even though their effects are checked here.
 
+### Pause party bitmap transitions
+
+[pause_party_transition.cpp](../../src/overlay007/pause_party_transition.cpp)
+reconstructs the creator at `0x02078F5C` (100 bytes) and controller at
+`0x02078FC0` (636 bytes). Both match without assembly or compiler changes.
+The shared [task and mode definitions](../../include/game/pause_party_bitmap.h)
+preserve the 72-byte task: phase at +32, equipment kind at +40, column at +44
+and step at +48. Creator modes 0 and 1 select clothing and badges; mode 2
+restores the ordinary party status. Its first argument is a scalar mode.
+
+The controller prepares members 0/1 and 2/3 in separate updates, then copies
+six-column strips across the 112-by-40 member bitmaps. Forward phases 0/1/2
+end with a four-column strip at column 108. Reverse phases 100/101/102 start
+at column 106; the last strip starts at zero and leaves the signed column at
+-6. The last reverse strip overlaps the preceding strip by two columns.
+Equipment preparation suspends HP warnings; completion of the reverse path
+restores them and creates the ordinary numeric displays. Preserve helper-call
+order and task-field readbacks; there is no fallthrough between these phases.
+
+The creator marks group 9, allocates its controller on list 5, then calls the
+already linked `MenuSpring_AdvanceActiveChains`. Its four 236-byte records start
+at `0x020A67DC`, four bytes after the spring workspace base `0x020A67D8`.
+Capture 948 bytes from that base, independently of the pause workspace, which
+ends there. Each available member advances the signed state at the corresponding
+chain's offset zero. Do not count the existing spring helper as new code.
+
+Two ordinary routes use story checkpoints 65 (`clothing_arrows`, 2,380 frames)
+and 86 (`badge_members`, 1,820 frames). All four creators and 84 updates pass
+independent checks for group removal flags, task allocation, 16 spring-state
+increments, all three modes and six phases, helper arguments, warning modes,
+clamps and actual task returns. The strip-copy oracle independently derives
+all 72,320 destination-byte writes across 76 calls and 12,160 member rows.
+It checks both complete bitmap allocations (49,152 and 17,920 bytes), their
+heap headers, the live task/game records and the separate spring workspace.
+The unreconstructed text/status producers are observed at return, not claimed
+as independently verified by this transition probe.
+
+The first replay stopped at frame 334 because the probe incorrectly equated
+832 bytes of text scratch use with the allocation size. The linked resource
+initializer and live heap header establish 12,288 bytes; the corrected probe
+checks that entire allocation. The failed report and original probe are kept
+separately. No game-code change was needed. Both corrected replay processes
+pass, with all four transition lifetimes complete; all 154 watched tasks and
+42 model slots return, with no pending calls, live watched tasks or drain frames.
+Final overlay-0 guards pass. All 104 original saves remain unchanged.
+
+All 72 screenshots and 648 graphics dumps validate and equal the complete
+ordinary-input baselines. The clothing bitmap display and final checkpoint-86
+field were inspected. No RAM fixtures were used. Unavailable-member branches,
+invalid modes/phases, producer internals and independent final rasterization
+remain outside this coverage. Full matching checks, golden EUR ROM packaging,
+zero-difference native relinking, generated progress and all 81 tests pass.
+An initial Windows PowerShell packaging invocation failed to resolve its final
+`Get-FileHash` command; invoking the same wrapper with the available PowerShell
+runtime completed successfully and confirmed the golden hash.
+
+Private reports are under `build/runtime/eur_pause_party_transition/`, with
+`clothing_arrows/evidence_clothing65_v2.json`,
+`badge_members/evidence_badges86.json` and `artifact_validation.json`.
+They identify `build/analysis/probe_pause_party_transition.py` and its hash;
+its generator composes the existing low-HP checks without overwriting that
+probe. Build/replay logs use the `pause_party_transition_` prefix. The strip-copy
+helper at `0x020796F4` remains private and nonmatching; its independent runtime
+oracle does not add its native bytes to the C/C++ total.
+
 ### Pause low-HP warnings
 
 [pause_hp_warning_stop.cpp](../../src/overlay007/pause_hp_warning_stop.cpp) and
