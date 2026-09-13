@@ -139,6 +139,9 @@ the printed instruction listing alone does not prove that range was inspected.
    add arbitrary casts/volatile accesses to obtain a match. Recompile private
    drafts against current headers; a missing symbol must never fall back to
    original bytes and count as a passing candidate.
+   Inspect the actual comparison result: some private checkers exit successfully
+   while reporting differences. Equal function sizes also do not establish a
+   match. Only fully checked, integrated functions count toward progress.
    Associate comparisons with the exact source, language mode and object:
    private checkers can overwrite address-named dumps from an earlier candidate.
    Compare an already matching counterpart when one exists before changing
@@ -232,11 +235,19 @@ and compatible snapshots. Optional dependencies are in
   return address and entry stack pointer. Derive expected memory changes
   independently; label helper outputs that are merely observed. Do not read
   freed objects or interpret unloaded overlay addresses as the previous function.
+  Tail-called helpers can share their caller's return address and stack pointer.
+  Finish every matching pending record, innermost first, at that hook before
+  processing the next instruction; handling only one record leaves a false
+  unfinished call. The shop confirmation cursor probe is a verified example.
 - For constructors, snapshot the actual allocation before entry and derive only
   the fields the native code initializes; preserve untouched bytes and padding.
   A base constructor may run inside a larger derived allocation. Propagate a
   nested constructor's independently expected changes into the parent's oracle,
   rather than accepting a fresh RAM snapshot as the expected result.
+  For pooled objects, establish the slot size, base, count and free-list links
+  from the allocator. Check alignment and the complete live slot. Shop models
+  use 336-byte slots; the shared shop tasks use 72 bytes. Do not substitute the
+  size of a convenient public prefix for either allocation.
 - Distinguish allocation size, initialized extent and transfer size. When the
   allocation is known, check the complete buffer and preserve untouched tails,
   padding and transparent pixels. Shop help pixels allocate 6,144 bytes, clear
@@ -251,12 +262,18 @@ and compatible snapshots. Optional dependencies are in
   Task removal can be deferred: setting the removal flag is a separate event
   from unlinking and freeing. Check the actual helper before assigning lifetimes.
   Follow newly created tasks through their updates to the expected completion.
+  For a pool return, verify release callbacks, task fields and neighbor links
+  before return to the pool. Afterward, inspect only still-live pool/list records
+  and counters; a readable address does not mean the old object is still alive.
   Derive update counts from integer step, delay and clamping; division by six
   does not guarantee six updates when truncation leaves a remainder.
 - Verify RAM, mapped VRAM, palettes, OAM, ordered GPU stores and visible behavior
   as appropriate. A screenshot or passing ROM hash alone is insufficient.
   Hardware register readback need not equal the earlier submitted FIFO command
   or affine origin. Record ROM/save/state hashes, inputs and uncovered branches.
+  Expected-memory snapshots can overlap: an empty draw list's sentinel can be
+  part of its header. Apply each independently derived store to every overlapping
+  expected view in native order before comparing, including sentinel updates.
 - Model native arithmetic widths in Python oracles. Wrap a native 32-bit
   intermediate before its signed shift; Python integers do not overflow.
   In the zero-scale affine path, `0x100000 * 4096` wraps to zero before `>> 8`.
@@ -278,6 +295,9 @@ and compatible snapshots. Optional dependencies are in
   saves; record any initial inventory or currency fixture and its restoration.
   Held-input acceleration can skip values, so report observed selections rather
   than claiming every value between the minimum and maximum was exercised.
+  A list longer than its visible rows does not prove that scrolling or queued
+  text rendering ran. Check the actual input route and callback counts. Canceling
+  a purchase likewise does not cover successful-purchase or later prompt helpers.
 - Keep supplemental routes in separate output directories. Compare captures
   with a baseline only where save state, fixtures, input history and capture
   timing agree. Hash equality establishes equality of those artifacts; hashing
