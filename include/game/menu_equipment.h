@@ -56,6 +56,8 @@ extern "C" {
 void MenuEquipment_CreateHeading(void);
 void MenuEquipment_UpdateComparisonArrow(MenuEquipmentTask *task);
 void MenuEquipment_UpdateNumberStrip(MenuEquipmentTask *task);
+/* stat must be 0..4: HP, power, defense, speed or stache. */
+void MenuEquipment_UpdateStatRow(MenuEquipmentTask *task);
 void MenuEquipment_UpdateStatsPanel(MenuEquipmentTask *task);
 void MenuEquipment_UpdateHeading(MenuEquipmentTask *task);
 void MenuEquipment_UpdateMemberArrow(MenuEquipmentTask *task);

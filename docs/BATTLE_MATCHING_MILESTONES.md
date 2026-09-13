@@ -7691,3 +7691,35 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
   clothing_arrows/evidence_clothing65_v2.json, badge_members/evidence_badges86.json,
   source-identified probe and build/analysis/pause_party_transition_* logs.
   The separate strip-copy helper remains nonmatching and adds no new coverage.
+
+
+### 2026-09-14 - Equipment stat comparison rows (+760 bytes)
+
+- Reconstructed 0207a388/760 in the existing equipment-display unit. The shared
+  task tracks parent/member, five stat kinds and cached current/preview values.
+  Preserves eligibility, signed bonuses, unsigned save fields, 16-bit preview
+  truncation, comparison markers and conditional redraws. No assembly or flag
+  changes; all three existing functions in the unit still match.
+- Native addressing applies the member stride before save-field offsets. A
+  bounded prefix using SavePartyMember corrects the old draft's address order;
+  the initial 748-byte body now matches all 760 bytes.
+- Matching C/C++: 741,628/1,563,700 (47.43%); with symbolic ASM: 47.76%.
+  Overlay 7: 76,872/142,264 (54.03%). Remaining to 50%: 40,222 bytes.
+- Full matching checks, golden EUR ROM packaging, zero-difference native relink,
+  generated progress and all 81 tests pass.
+- Two ordinary story-save routes, 4,390 frames: all 12,570 row callbacks, 12,452
+  unchanged returns, 108 redraws and ten removal marks checked. The 157 numeric
+  helper calls comprise 49 current, 89 preview and 19 unavailable draws.
+  Comparisons: 50 equal, 22 higher, 17 lower. All five stats and four members
+  exercised; 62,800 bonus outputs independently derived from item data.
+- All ten row lifetimes complete; all 164 watched tasks and 42 model slots return.
+  Full final field guards; no pending/live tasks, drain or RAM fixtures. All 104
+  original saves unchanged. All 102 PNGs and 918 graphics dumps validate; 63 images
+  and 567 dumps equal eligible baseline prefixes. Checkpoint 86 comparison stops
+  before the older baseline's HP fixtures. Unavailable preview and field inspected.
+- Numeric glyph/transfer internals and final rasterization observed; invalid
+  task fields and preview overflow/wrap not exercised. Both replay processes
+  and artifact validation pass without oracle corrections or reruns.
+- Evidence: build/runtime/eur_pause_equipment_stat_row/artifact_validation.json,
+  clothing_scroll/evidence_scroll65.json, clothing_arrows/evidence_arrows86.json,
+  source-identified probe and build/analysis/pause_equipment_stat_row_* logs.

@@ -2967,6 +2967,73 @@ all 1,374 empty-row updates correctly remain hidden. The correction retains
 the per-call item lookup, hide/draw oracle and count reconciliation, and does
 not claim that this route covers the empty-row drawing branch.
 
+### Pause equipment stat comparison rows
+
+[menu_equipment_display.cpp](../../src/overlay007/menu_equipment_display.cpp)
+now includes the 760-byte `MenuEquipment_UpdateStatRow` at `0x0207A388`.
+It extends the existing contiguous display unit; the heading creator, comparison
+arrow and number-strip updater continue to match. The existing
+[72-byte equipment task](../../include/game/menu_equipment.h) carries the parent
+pointer at +16, stat index at +41 and cached current/preview values at +56/+60.
+Valid stat indices are HP, power, defense, speed and stache (0 through 4).
+The HP row compares maximum HP.
+
+The callback reads the parent's member as unsigned and its closing flag as signed.
+Closing marks the row for removal. Otherwise, five initialized signed halfwords
+receive the clothing bonuses. Current values are unsigned save halfwords; the
+preview adds the signed bonus to the base stat and truncates to 16 bits. An
+ineligible item substitutes 65535. If both cached values are unchanged, no redraw
+occurs. Changed values select equal/higher/lower comparison markers or the
+unavailable marker, then call the existing numeric-strip helpers. Preserve the
+separate comparisons and the stat-index readbacks across rendering calls.
+
+The old private draft addressed a member inside the save array before reading
+its fields, compiling to 748 bytes. Native instructions apply the 36-byte member
+stride before the fixed save offsets. A 1,052-byte prefix containing the existing
+`SavePartyMember` preserves that addressing; even for member 3, the full
+prefix ends at save offset 1,160, within the 1,380-byte live record. That change
+produces the exact 760 bytes without assembly or compiler-flag changes. The old
+private comparison unit also contains already linked functions and is not an
+additional coverage source.
+
+Two ordinary replays use checkpoint 65's `clothing_scroll` route (2,010 frames)
+and checkpoint 86's `clothing_arrows` route (2,380 frames). All 12,570 row calls
+are checked independently: 12,452 cached-value returns, 108 redraws and ten
+removal marks. The 157 numeric-helper calls comprise 49 current-value draws,
+89 preview draws and 19 unavailable displays. Preview comparisons cover 50 equal,
+22 higher and 17 lower results. All five stats and all four members are exercised.
+The eligibility checks cover 10,060 allowed and 2,500 disallowed active callbacks.
+
+At the first helper boundary, the probe checks all five initialized halfwords
+at entry SP minus 44 through minus 35, after the native prologue has run. It
+independently derives 62,800 bonus outputs from guarded 28-byte clothing records,
+checks native widths and truncation, helper arguments, cached values and comparison
+bytes, and retains full live task/parent/work/party/save records. The locals are
+no longer inspected after their stack frame ends. Numeric rendering helpers are
+observed with the full 12,288-byte scratch allocation, heap header and 65,536-byte
+main OBJ range; their glyph conversion/transfer internals are not independently
+verified by this row probe.
+
+Both emulator processes pass, as does artifact validation. All ten comparison
+rows complete their lifetimes; all 164 watched tasks and 42 model slots return.
+Both routes finish with full overlay-0 field guards, no pending calls, live
+watched tasks, drain frames or RAM fixtures. All 104 original saves remain
+unchanged. All 102 screenshots and 918 graphics dumps validate. The first route's
+61 images and 549 dumps equal its complete ordinary baseline. For checkpoint 86,
+the older baseline used HP fixtures, so comparison is limited to two images and
+18 dumps before its first edit. The unavailable preview and final field were
+inspected. Preview overflow/wrap, invalid task fields and independent final
+rasterization remain outside the exercised coverage.
+
+Full matching checks, golden EUR ROM packaging, zero-difference native relinking,
+generated progress and all 81 tests pass. Private evidence is under
+`build/runtime/eur_pause_equipment_stat_row/`: `clothing_scroll/evidence_scroll65.json`,
+`clothing_arrows/evidence_arrows86.json` and `artifact_validation.json`.
+Reports identify `build/analysis/probe_pause_equipment_stat_row.py` and its hash;
+its generator composes the preserved transition probe with the new row oracle.
+Build and replay logs use the `pause_equipment_stat_row_` prefix. Neither replay
+nor artifact validation needed an oracle correction or a rerun.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
