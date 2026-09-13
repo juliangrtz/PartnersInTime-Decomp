@@ -861,3 +861,4 @@ src/overlay007/pause_menu_control.cpp
 src/overlay007/pause_scene_control.cpp
 src/overlay007/pause_category_cursor.cpp
 src/overlay007/pause_list_cursor.cpp
+src/overlay007/menu_equipment_member_arrow.cpp

@@ -42,6 +42,10 @@ typedef struct MenuEquipmentTask {
             u32 current, preview;
             u8 unknown_40[8];
         } row;
+        struct {
+            int x, y, amplitude, angle, direction;
+            u8 unknown_3c[12];
+        } member_arrow;
     };
 } MenuEquipmentTask;
 
@@ -54,6 +58,7 @@ void MenuEquipment_UpdateComparisonArrow(MenuEquipmentTask *task);
 void MenuEquipment_UpdateNumberStrip(MenuEquipmentTask *task);
 void MenuEquipment_UpdateStatsPanel(MenuEquipmentTask *task);
 void MenuEquipment_UpdateHeading(MenuEquipmentTask *task);
+void MenuEquipment_UpdateMemberArrow(MenuEquipmentTask *task);
 #ifdef __cplusplus
 }
 #endif

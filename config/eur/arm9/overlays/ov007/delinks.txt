@@ -252,3 +252,6 @@ src/overlay007/pause_category_cursor.cpp:
 
 src/overlay007/pause_list_cursor.cpp:
     .text start:0x0207f4d8 end:0x0207f5f8
+
+src/overlay007/menu_equipment_member_arrow.cpp:
+    .text start:0x0207f268 end:0x0207f388

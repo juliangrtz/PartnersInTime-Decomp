@@ -2800,6 +2800,57 @@ set; the other origin, other menus/item kinds, invalid indices, animation/model
 initialization internals and final rasterization are outside independent runtime
 coverage. Adjacent scroll-arrow and controller drafts are not linked progress.
 
+### Pause member-selection arrows
+
+[menu_equipment_member_arrow.cpp](../../src/overlay007/menu_equipment_member_arrow.cpp)
+reconstructs the 288-byte updater at `0x0207F268`. Its 72-byte task uses the
+`member_arrow` view in [menu_equipment.h](../../include/game/menu_equipment.h):
+Q12 offsets at 40/44, sine amplitude at 48, accumulated angle at 52 and signed
+direction at 56. The updater follows the equipment heading, selects animation
+7 for the arrow matching the switch direction and animation 1 otherwise, and
+bobs horizontally while idle. Only the sine lookup masks the angle to 16 bits;
+pixel conversion uses signed division by 4096. Closing the heading marks the
+task for removal. The neighboring 332-byte creator remains unreconstructed;
+its private draft differs in register allocation and scheduling.
+
+The ordinary `clothing_arrows` route from story checkpoint 65 runs 2,380 frames
+and checks all 2,804 updater calls: 2,802 independent draw-list insertions and
+two removal marks. It visits all four members, both switch directions, both
+animations, 2,658 sine lookups and 62 angle wraps. Initial task/model fields are
+checked at each arrow's first update. Complete live task, model and game records
+remain checked, including the actual model and task pool returns. Across all
+watched callbacks, 120 tasks are removed and 27 model slots are returned; both
+arrows finish their lifetimes. The route returns to the field with complete
+overlay-0 guards and no pending calls, live watched tasks, drain or RAM fixtures.
+
+The first clothing member-grid route completed 1,780 frames but failed the
+required switching-coverage assertion: that grid never sets the heading's
+switch byte. The corrected route inserts four Right presses, then Left and
+Right, while the clothing list is open, waiting 90 frames after each eight-frame
+press. The native input block at `0x0206B5D0..0x0206B698` requires equipment
+kind 2 and accepts Left/L or Right/R. The subsequent badge member-grid attempt
+completed 1,820 frames but created no member-arrow tasks and failed its target
+count assertion. These failed routes are preserved and excluded from coverage.
+
+All 41 screenshots and 369 graphics dumps validate. Nine images and 81 dumps
+match the unchanged prefix of the earlier clothing member-grid route; the new
+switching inputs have no prior full-route baseline. The changing heading and
+final field were inspected, and all 104 original saves remain unchanged. Full
+matching checks, golden EUR ROM packaging, zero-difference native relinking,
+generated progress and all 81 tests pass. Animation internals and rasterization
+are observed, not independently derived; other menu contexts and signed angle
+accumulator overflow remain untested.
+
+Private evidence is `build/runtime/eur_pause_member_arrows/artifact_validation.json`
+and `clothing_arrows/evidence_clothing65.json`. The report identifies the composed
+`build/analysis/probe_pause_member_arrows.py` and its hash; the initial grid-only
+probe is preserved separately. Logs use the `pause_member_arrows_` prefix.
+The artifact validator initially inherited a requirement to draw an empty row
+from a scrolling route. This route's nine visible entries are all nonempty:
+all 1,374 empty-row updates correctly remain hidden. The correction retains
+the per-call item lookup, hide/draw oracle and count reconciliation, and does
+not claim that this route covers the empty-row drawing branch.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

@@ -7598,3 +7598,32 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
 - Private evidence: build/runtime/eur_pause_selection_sprites/artifact_validation.json
   and per-route evidence; source-identified probe and build/analysis/
   pause_selection_sprites_* logs. See the reconstruction reference for details.
+
+
+### 2026-09-13 - Equipment member-selection arrow updates (+288 bytes)
+
+- Reconstructed 0207f268/288 using the shared 72-byte equipment task layout.
+  Preserves heading offsets, signed switch matching, sine-table indexing,
+  angle masking, Q12 truncation, animation calls, draw insertion and removal.
+  No assembly or compiler-flag changes; neighboring creator remains deferred.
+- Matching C/C++: 739,952/1,563,700 (47.32%); including symbolic ASM: 47.65%.
+  Overlay 7: 75,196/142,264 (52.86%). Remaining to 50%: 41,898 bytes.
+- Full matching checks, golden EUR ROM packaging, zero-difference native relink,
+  generated progress and all 81 tests pass.
+- One ordinary clothing-list route at checkpoint 65: 2,380 frames, all 2,804
+  updater calls checked, 2,802 draw insertions, 2,658 sine lookups, 62 angle
+  wraps, both switch directions/animations and all four members. Both arrows
+  finish their actual model/task lifetimes. All 120 watched tasks and 27 model
+  slots returned; final field guards pass, with no pending calls or fixtures.
+- All 41 screenshots and 369 graphics dumps validate; nine images and 81 dumps
+  match the earlier unchanged input prefix. Heading and final field inspected;
+  all 104 original saves unchanged. Animation internals/rasterization observed.
+- Clothing grid-only and badge routes failed target-coverage assertions and are
+  not counted as passing verification. Corrected clothing route uses native
+  left/right heading input before entering the grid. An inherited artifact
+  assertion incorrectly required an empty-row draw; full per-call checks
+  establish that every visible entry is nonempty on this route. Failure logs
+  and corrected validation are retained separately.
+- Private evidence: build/runtime/eur_pause_member_arrows/artifact_validation.json
+  and clothing_arrows/evidence_clothing65.json; build/analysis/pause_member_arrows_*
+  logs and source-identified probe. See the reconstruction reference for limits.
