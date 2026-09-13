@@ -7341,3 +7341,32 @@ Reports and coverage limits: build/runtime/eur_pause_equipment_highlight/
 and docs/research/RECONSTRUCTION_NOTES.md#pause-equipment-highlight.
 Matching C/C++: 730,020 / 1,563,700 (46.69%); with symbolic ASM: 47.02%.
 Overlay 7: 65,264 / 142,264 (45.88%). Remaining to 50%: 51,830 bytes.
+
+
+## Pause exit callbacks and state access: 364 matching bytes
+
+Reconstruct preparation/fade callbacks at 0x0206D418..0x0206D51C and exit
+request/progress getter at 0x02070AE8..0x02070B50 in two coherent units.
+A signed-byte access fixes the sole preparation mismatch; the other three
+functions matched their first drafts. The Scene VM uses the recovered typed
+request prototype and preserves its caller-side byte narrowing. No ASM/flags.
+
+Three final routes cover 3,190 frames: ordinary clothing-list exit, a one-time
+mode-0 argument fixture, and repeated pause open/close cycles. All six
+preparations, three requests, 17 fade updates and three watched pool returns
+are checked, plus 998 of 54,464 observed progress reads. Both screens receive
+the expected 16 brightness steps (32 ordered conditional GPU stores).
+The probe checks 749 factories and ten pool-cleanup calls; initial failures
+from missing bulk-pool tracking and a route without exit-entry coverage are
+preserved. All final routes pass, with no pending calls or live watched tasks.
+
+All 41 screenshots, 369 dumps and 104 unchanged source saves validate.
+31 images/279 dumps match common baseline prefixes; fixture comparison stops
+before the argument edit. Natural mode-0 entry, nonempty archive queues,
+unsampled getters and other unvisited branches remain uncovered.
+Full configure/check, golden packaged ROM, zero-difference native relink,
+progress checks and all 81 tests pass. Logs:build/analysis/pause_exit_
+{configure,check,rom,native,tests,artifacts}.log. Runtime evidence:
+build/runtime/eur_pause_exit/. Details in RECONSTRUCTION_NOTES.md.
+Matching C/C++: 730,384 / 1,563,700 (46.71%); with symbolic ASM: 47.04%.
+Overlay 7: 65,628 / 142,264 (46.13%). Remaining to 50%: 51,466 bytes.

@@ -2179,6 +2179,67 @@ unvisited task phases and unsampled stable bodies remain uncovered; final GPU
 rasterization is observed. Full public build checks, both golden ROM build paths,
 progress checks and all 81 tests passed for this source and shared-header revision.
 
+### Pause exit tasks and transition state
+
+[pause_exit_tasks.cpp](../../src/overlay007/pause_exit_tasks.cpp) owns
+`0x0206D418..0x0206D51C` (260 bytes): `PauseScene_PrepareExitTask` drains the
+archive queue and requests exit; `PauseScene_FadeOutTask` darkens both screens
+and advances the scene to cleanup. The latter matched immediately. Preparation's
+only differing instruction was `MOV 255` where the original materializes -1
+with `MVN`; a local signed-byte access preserves that value without changing
+the shared workspace's existing unsigned view.
+
+[pause_scene_control.cpp](../../src/overlay007/pause_scene_control.cpp) owns
+`0x02070AE8..0x02070B50` (104 bytes): `PauseScene_RequestExit` sets scene phase 5
+and resets the menu callback's phase, selecting the simple fade for mode 0
+and the existing shutter transition otherwise. `PauseTransition_GetProgress`
+returns the first signed word of the 9,224-byte transition workspace at
+`0x0208E1E8`. Both functions matched their first drafts. The Scene VM now uses
+the recovered exit prototype and scene-pointer type; its native byte output
+remains exact. The native dispatcher narrows the decoded mode to a byte before
+the call, while the request function accepts a full-width integer.
+
+Private `make_pause_exit_probe.py` and `pause_exit_probe_body.py` produce
+`probe_pause_exit.py`; reports are under `build/runtime/eur_pause_exit/`.
+The final routes are `normal_exit65_pool`, `fade_exit65_pool` and `repeat_exit65`,
+covering 3,190 frames. They check every preparation (six), request (three), fade
+update (17) and watched removal (three). The progress getter is observed 54,464
+times and fully checked 998 times: the first two calls per distinct value and
+all calls on every sixtieth frame. All 17 observed values from 0 through 16,384
+in increments of 1,024 are represented in the checked samples.
+
+The ordinary route exits the clothing list with Start. The alternate route
+verifies the normal caller's arguments, then changes `r1` from 1 to 0 once at
+the guarded `PauseScene_RequestExit` entry (`0x02070AE8`, frame 522). The native
+callback reset, initialization, all 16 brightness decrements, scene phase 6 and
+actual pool return then run. This verifies the alternate mode with a controlled
+argument fixture; it does not establish a natural script route to that mode.
+Both screens' 32 conditional brightness stores are checked in order, including
+ARM condition flags. No RAM value is frozen and no battery save is modified.
+
+Full task, scene, transition, workspace, save, display, BG/OBJ and brightness
+records are checked at the relevant boundaries. Expected effects of the nested
+request are composed into its caller's expected record. All three archive
+flushes had empty queues; nonempty request processing is not newly verified.
+The probe also checks 749 menu factories and ten pool-cleanup calls, including
+repeat calls on already empty pools. It closes the three watched task lifetimes
+at their actual pool return and avoids reading their slots after release.
+
+The first long clothing replay exposed missing bulk-pool destruction tracking
+when pause reopened. Its failure at frame 1,512 is retained. After that correction,
+the same route failed its exit-entry coverage assertion: it exercised the getter,
+but never entered preparation/request. The final repeated-exit route starts with
+the known clothing-list exit and adds two ordinary pause open/close cycles; it
+checks reuse across the pool lifetimes and ends in the field.
+
+All 41 screenshots, 369 dumps and 104 unchanged source saves pass the dedicated
+artifact verifier. Common input/state prefixes match 31 images and 279 dumps;
+fixture comparisons stop before the argument edit. Fade and final field captures
+were inspected. No pending calls, live watched tasks or drain frames remain.
+Unvisited phases, nonempty archive queues, unsampled getter bodies and natural
+entry to mode 0 remain uncovered. Full matching checks, golden packaged ROM,
+zero-difference native relink, progress checks and all 81 tests pass.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

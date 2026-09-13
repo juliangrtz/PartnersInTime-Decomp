@@ -851,3 +851,5 @@ src/overlay007/pause_item_lookup.cpp
 src/overlay007/pause_item_text.cpp
 src/overlay007/pause_party_lifecycle.cpp
 src/overlay007/pause_equipment_highlight.cpp
+src/overlay007/pause_exit_tasks.cpp
+src/overlay007/pause_scene_control.cpp

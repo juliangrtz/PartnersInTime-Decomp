@@ -2,6 +2,7 @@
 #include <game/scene_vm_state.h>
 #include <game/scene_motion.h>
 #include <game/save_data.h>
+#include <game/pause_scene.h>
 
 /*
  * Scene/object command dispatcher (overlay 7, 0x02081730-0x02083B1C).
@@ -123,7 +124,7 @@ enum SceneVmOpcode {
 };
 
 extern SceneVmManagerLayout *data_ov007_020a6b90;
-extern u8 *data_ov007_0208e1e0;
+extern PauseSceneTask *data_ov007_0208e1e0;
 extern u8 data_ov007_020905f0[];
 
 extern SceneScriptState *SceneScript_GetObjectState(u32 object_id);
@@ -164,7 +165,6 @@ extern void func_ov007_020724b0(
     u32 end_time, s32 movement_scale
 );
 extern void func_ov007_0207e770();
-extern void func_ov007_02070ae8();
 extern void func_ov007_02077110();
 extern void func_ov007_02087ba8();
 extern void func_ov007_02083c20(
@@ -702,7 +702,7 @@ int SceneVm_DispatchCommand(
         return SceneVm_RewindAndYield(vm, state, SCENE_OP_WAIT_SCENE_READY);
 
     case SCENE_OP_SET_SCENE_MODE:
-        func_ov007_02070ae8(data_ov007_0208e1e0, (u8)ARG_U16(0));
+        PauseScene_RequestExit(data_ov007_0208e1e0, (u8)ARG_U16(0));
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_SET_SCENE_FLAG:

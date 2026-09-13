@@ -2,6 +2,7 @@
 #define PIT_GAME_PAUSE_SCENE_H
 #include <game/task.h>
 typedef struct PauseMenuElement PauseMenuElement;
+typedef struct PauseExitTask PauseExitTask;
 typedef struct PauseSceneTask {
     GameTask task;
     u8 unknown18[20];
@@ -34,6 +35,10 @@ GameIrqTask *NawatobiSceneIrq_Destroy(GameIrqTask *task);
 GameIrqTask *NawatobiSceneIrq_Delete(GameIrqTask *task);
 GameIrqTask *NawatobiSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
 void PauseScene_LoadResources(PauseSceneTask *task);
+void PauseScene_PrepareExitTask(PauseExitTask *task);
+void PauseScene_FadeOutTask(PauseExitTask *task);
+void PauseScene_RequestExit(PauseSceneTask *scene, int mode);
+s32 PauseTransition_GetProgress(void);
 PauseSceneTask *PauseScene_Init(PauseSceneTask *task, u32 priority, u32 unused);
 GameIrqTask *PauseSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
 #ifdef __cplusplus
