@@ -87,7 +87,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Equipment list models | [Equipped-item markers](docs/research/RECONSTRUCTION_NOTES.md#pause-equipped-item-markers), [empty-equipment row sprites and ResourceA lifetime](docs/research/RECONSTRUCTION_NOTES.md#pause-empty-equipment-row-sprites) |
 | Category and list selection sprites | [Task layouts, Q12 coordinates, model attachments and tested scrolling routes](docs/research/RECONSTRUCTION_NOTES.md#pause-selection-sprites) |
 | Equipment member-selection arrows | [Heading-switch inputs, failed routes and verified updater](docs/research/RECONSTRUCTION_NOTES.md#pause-member-selection-arrows) |
-| Party status and low-HP warnings | [Bitmap and status fields](docs/research/RECONSTRUCTION_NOTES.md#pause-party-status), [warning modes, threshold fixtures and lifetime checks](docs/research/RECONSTRUCTION_NOTES.md#pause-low-hp-warnings) |
+| Party status and low-HP warnings | [Bitmap and status fields](docs/research/RECONSTRUCTION_NOTES.md#pause-party-status), [bitmap transitions and spring workspace](docs/research/RECONSTRUCTION_NOTES.md#pause-party-bitmap-transitions), [warning modes, threshold fixtures and lifetime checks](docs/research/RECONSTRUCTION_NOTES.md#pause-low-hp-warnings) |
 | Unused Nawatobi minigame | [Guarded entry, exact RAM edit and research limits](docs/research/RECONSTRUCTION_NOTES.md#nawatobi) |
 | Earlier batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md); private reports linked there |
 | Assets and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
@@ -118,6 +118,9 @@ or counting it; historical `EXACT` records are only discovery leads.
    omit stack arguments, repeated FIFO stores and cached loads, or invent return
    values. Check literal pools too: disassemblers can stop at data or decode it
    as instructions. Choose a group with understood behavior and a usable route.
+   Read sizes from current symbol metadata and compute the end-exclusive range;
+   preserve both hexadecimal and decimal sizes in candidate records. Recalculate
+   inherited sizes rather than treating a handoff's rounded estimate as a boundary.
 2. Recover field widths, signedness, offsets, allocation sizes, ownership and
    virtual interfaces. Preserve arithmetic widths, integer promotion, division
    toward zero, Q12 operation order and exact truncation points. Derive each
@@ -125,6 +128,8 @@ or counting it; historical `EXACT` records are only discovery leads.
    from a stack argument, does not establish a narrow parameter. Check caller-side
    extensions, stack and hidden ABI arguments. A register left over from a previous
    call is not an argument unless the next callee consumes its incoming value.
+   A later mask or narrow store also does not establish a narrow parameter;
+   a full-word stack load followed by truncation may require a full-width type.
 3. Preserve load/store order, short-circuit calls, possible aliasing and accesses
    across callbacks. `const` does not establish non-overlap. Keep native masked
    and unmasked stores, packed-field truncation and neighboring bits. Do not
@@ -136,6 +141,10 @@ or counting it; historical `EXACT` records are only discovery leads.
    Preserve verified interior data aliases and native table strides. Task payloads
    can reuse one offset for different phases; model that reuse explicitly and
    check every transition's initialization before giving the field one meaning.
+   For a view based at an indexed interior address, check alignment and prove
+   `view_offset + sizeof(view) <= allocation_size` for every valid index.
+   Preserve whether native addressing applies the stride before the fixed field
+   offset; a bounded prefix view can express that order using existing field types.
 5. Keep related contiguous functions in a subsystem module. Temporary isolated
    units are acceptable around native gaps; consolidate when those gaps close.
    DSD rejects repeated section names within one unit. Keep disjoint native
@@ -184,6 +193,7 @@ LLVM's `llvm-mc`, `ld.lld` and `llvm-objcopy`. Known workstation executables:
 ```text
 C:\Users\Julian\AppData\Local\Programs\Python\Python312\python.exe
 C:\Program Files\JetBrains\CLion 2023.2.2\bin\ninja\win\x64\ninja.exe
+C:\Users\Julian\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.exe
 ```
 
 If missing from `PATH`, verify the path and invoke it with PowerShell's `&`.
@@ -195,7 +205,7 @@ For a completed reconstruction batch, from the repository root:
 ```powershell
 python tools/configure.py eur
 ninja check
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\build_nds.ps1 -DisableDataMods
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\build_nds.ps1 -DisableDataMods
 Get-FileHash -Algorithm SHA1 .\PiT_eur.nds
 python tools/relink_native.py --version eur --rom extract/baserom_PiT_eur.nds --output-rom build/PiT_eur_native_relinked.nds --require-matching
 python tools/generate_progress.py
@@ -209,6 +219,11 @@ ROM hash. Keep `-DisableDataMods` to exclude private data modifications. Native
 relinking must report zero differing bytes. Regenerate progress before tests
 when linked ranges change; use the explicit `tests` directory to avoid private
 clones and incomplete unittest-only discovery.
+
+On this workstation the wrapper has passed under the bundled PowerShell above.
+An earlier Windows PowerShell subprocess failed to resolve its final
+`Get-FileHash`; check the shell and command availability when diagnosing that
+failure, and retain the failed log separately from a successful rerun.
 
 Do not replace a ROM while an emulator reads that path. A native relink to a
 separate output can run beside a replay. Documentation-only work needs content,
@@ -245,6 +260,10 @@ compatible snapshots. Read their arguments and
   using entry SP and LR; tail calls can share both, so finish all matching pending
   records innermost first. Read ARM9 DTCM at `0x027E0000..0x027E4000` directly;
   do not fold stack outputs into main-RAM mirrors.
+  Check initialized stack locals after the prologue and initialization stores,
+  at a guarded boundary such as the first helper entry. Derive offsets from the
+  saved entry SP and native frame layout. Verify output-pointer writes at the
+  helper boundary and stop inspecting locals when their stack frame ends.
 - Check whether changing a callback invokes it synchronously. The EUR overlay-5
   setter at `0x02066358` installs the callback and resets task phase to zero;
   its third argument means invoke immediately. A nonzero value can run the new
@@ -273,6 +292,9 @@ compatible snapshots. Read their arguments and
   truncation can add updates. Check the relevant paths instead of importing a
   neighboring callback's timing assumption. Count callback invocations separately
   from emulator frames, and preserve phase fallthrough within a single call.
+  For cached display updates, distinguish unchanged returns, redraws and removal
+  paths. One redraw can call several numeric helpers. Derive totals from report
+  counters and reconcile each partition before quoting them in documentation.
 - Verify RAM, mapped VRAM, palettes, OAM, ordered GPU stores and visible behavior
   as appropriate. Allocation, initialized extent and transfer size can differ.
   Hardware/FIFO readback is not the submitted sequence. Keep changing scanline
@@ -336,6 +358,8 @@ menu, `read32(0x0208E1E0) == r0`, vtable `read32(r0) == 0x0208D9B8` and phase 2.
 Write 7 once, disable the hook and resume. The field becomes `07 00 00 00`;
 do not overwrite the pointer at `0x0208E1E0` or freeze the phase. This is not
 VRAM or a ROM patch. See the [procedure and coverage limits](docs/research/RECONSTRUCTION_NOTES.md#nawatobi).
+The Nawatobi scene's own phase is a separate word at
+`read32(0x020A6BBC) + 0x2C`; it is not the tested pause-entry edit above.
 
 ## Documentation, Git and handoff
 
@@ -378,6 +402,12 @@ dumps and captures private. Never force-add ignored material. Before publication
 3. Run `python tools/check_public_content.py` **after staging**; it audits the index.
 4. Commit descriptively, push to the verified user remote and confirm its revision.
    Report the commit, push status, checks and any actual coverage change.
+
+For documentation work with an existing staged reconstruction batch, preserve
+its file hashes and index entries. Commit only the reviewed documentation paths
+(for example, `git commit --only -- AGENTS.md`), then verify that the earlier
+staged entries remain unchanged. Check documentation links against the tree being
+published as well as the working tree; an uncommitted anchor can hide a broken link.
 
 At a stop, update private `build/analysis/CURRENT_HANDOFF.md` with the latest
 request, pushed revision, last verified code batch, pending paths and checks.
