@@ -80,6 +80,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Pause navigation | [Page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return), [main menu and member selection](docs/research/RECONSTRUCTION_NOTES.md#pause-main-menu-and-member-selection), [status and Cobalt Star pages](docs/research/RECONSTRUCTION_NOTES.md#pause-status-and-cobalt-star-pages) |
 | Pause list rendering | [Row sprites](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-sprites), [queued drawing and markers](docs/research/RECONSTRUCTION_NOTES.md#pause-queued-row-drawing-and-markers), [row refresh](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-refresh) |
 | Equipment list models | [Equipped-item markers](docs/research/RECONSTRUCTION_NOTES.md#pause-equipped-item-markers), [empty-equipment row sprites and ResourceA lifetime](docs/research/RECONSTRUCTION_NOTES.md#pause-empty-equipment-row-sprites) |
+| Category and list selection sprites | [Task layouts, Q12 coordinates, model attachments and tested scrolling routes](docs/research/RECONSTRUCTION_NOTES.md#pause-selection-sprites) |
 | Unused Nawatobi minigame | [Guarded entry, exact RAM edit and research limits](docs/research/RECONSTRUCTION_NOTES.md#nawatobi) |
 | Earlier batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md); private reports linked there |
 | Assets and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
@@ -130,6 +131,9 @@ or counting it; historical `EXACT` records are only discovery leads.
    check every transition's initialization before giving the field one meaning.
 5. Keep related contiguous functions in a subsystem module. Temporary isolated
    units are acceptable around native gaps; consolidate when those gaps close.
+   DSD rejects repeated section names within one unit. Keep disjoint native
+   `.text` ranges in separate units while the intervening gap remains; do not
+   add duplicate `.text` entries or linker workarounds to force them together.
    Basenames must be globally unique because MW's linker selects by basename.
    This compiler generally emits functions in reverse source order; verify it.
    Keep C declarations at block starts without hoisting assignments across native
@@ -272,6 +276,10 @@ compatible snapshots. Read their arguments and
   only when the same expected results and assertions are preserved.
 - Record per-function/branch counts, ROM/save/state hashes, inputs and explicit
   limits. Separate ordinary routes from RAM fixtures and document restoration.
+  Keep generic helper checks and checks performed inside watched creators
+  distinguishable in reports, with no double counting of the same call.
+  A route reaching every visible row can still miss a setup flag's other branch;
+  inspect the actual branch coverage before claiming a whole function is covered.
   For deterministic sampling, report observed versus fully checked calls and
   the rule; track lifetimes independently. Screenshots alone do not prove execution.
 - Validate referenced artifacts: existence, hashes, image dimensions, memory
