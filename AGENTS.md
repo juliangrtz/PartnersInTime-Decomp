@@ -9,6 +9,11 @@ These instructions apply throughout the repository. Detailed addresses, compiler
 examples and tested routes live in the
 [reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md).
 
+Start with [checkout and handoff](#start-in-the-correct-checkout), then use
+[reconstruction](#reconstruct-and-integrate), [build checks](#build-and-verification),
+[runtime checks](#runtime-verification) and [publication](#documentation-git-and-handoff)
+for the current task.
+
 ## Priorities and scope
 
 - Follow the latest user request and requested stopping point. Research or
@@ -81,6 +86,8 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Pause list rendering | [Row sprites](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-sprites), [queued drawing and markers](docs/research/RECONSTRUCTION_NOTES.md#pause-queued-row-drawing-and-markers), [row refresh](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-refresh) |
 | Equipment list models | [Equipped-item markers](docs/research/RECONSTRUCTION_NOTES.md#pause-equipped-item-markers), [empty-equipment row sprites and ResourceA lifetime](docs/research/RECONSTRUCTION_NOTES.md#pause-empty-equipment-row-sprites) |
 | Category and list selection sprites | [Task layouts, Q12 coordinates, model attachments and tested scrolling routes](docs/research/RECONSTRUCTION_NOTES.md#pause-selection-sprites) |
+| Equipment member-selection arrows | [Heading-switch inputs, failed routes and verified updater](docs/research/RECONSTRUCTION_NOTES.md#pause-member-selection-arrows) |
+| Party status and low-HP warnings | [Bitmap and status fields](docs/research/RECONSTRUCTION_NOTES.md#pause-party-status), [warning modes, threshold fixtures and lifetime checks](docs/research/RECONSTRUCTION_NOTES.md#pause-low-hp-warnings) |
 | Unused Nawatobi minigame | [Guarded entry, exact RAM edit and research limits](docs/research/RECONSTRUCTION_NOTES.md#nawatobi) |
 | Earlier batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md); private reports linked there |
 | Assets and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
@@ -143,6 +150,8 @@ or counting it; historical `EXACT` records are only discovery leads.
    Classify the difference before editing. Keep compiler flags and ABI fixed;
    do not weaken checks or introduce arbitrary casts/volatile accesses to match.
    A scoped volatile access requires evidence of that native access pattern.
+   If only register assignments differ, record the mapping and defer the target
+   unless native dataflow or a demonstrated compiler rule suggests a correction.
    Recompile drafts against current headers and associate each comparison with
    the actual source, language mode and object. Address-named dumps may be overwritten.
 7. Inspect comparison text as well as exit status: some private checkers return
@@ -223,6 +232,10 @@ compatible snapshots. Read their arguments and
   helpers. The driver inserts one released frame after every action. Bound entry,
   assert that the target dispatch ran, and confirm the final scene from live state.
   A missed route is a coverage gap; do not remove its assertion to obtain a pass.
+  Establish required branch coverage before running. Inherited visibility or
+  draw-count assumptions can depend on the save and menu; justify corrections
+  from the native predicate and live inputs, retain per-call checks and reconcile
+  every hidden/drawn outcome. A correctly hidden object adds no drawing coverage.
 - Guard the complete native function range and owning overlay. Addresses are
   reused after transitions; positively identify a foreign owner before excluding
   a hit. The runtime tool's 90% overlay-identification threshold is only a locator,
@@ -241,7 +254,9 @@ compatible snapshots. Read their arguments and
   signed division. A fresh snapshot after a helper observes its effects; it does
   not verify that helper. Check full live allocations, padding and overlapping
   views, plus separate globals touched by the call. Constructor arguments can be
-  valid before a scene global is published. An exact ROM replay confirms executed
+  valid before a scene global is published. Decode each entry point's actual ABI:
+  a creator's first argument may be a mode integer, not a task pointer. Track the
+  allocated task at its factory boundary. An exact ROM replay confirms executed
   behavior; also review the C types and bounds, which matching bytes alone cannot
   establish as valid.
 - Track allocation, initialization, updates and actual release separately. Derive
@@ -276,6 +291,10 @@ compatible snapshots. Read their arguments and
   only when the same expected results and assertions are preserved.
 - Record per-function/branch counts, ROM/save/state hashes, inputs and explicit
   limits. Separate ordinary routes from RAM fixtures and document restoration.
+  For a per-call fixture, preserve the exact bytes, edit only at a guarded live
+  boundary, restore and verify before the callback returns, and provide cleanup
+  on failure. Test zero, below, equal and above a threshold where relevant;
+  preserve native operand widths and signedness instead of rounding percentages.
   Keep generic helper checks and checks performed inside watched creators
   distinguishable in reports, with no double counting of the same call.
   A route reaching every visible row can still miss a setup flag's other branch;
