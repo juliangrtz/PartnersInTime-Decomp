@@ -7146,3 +7146,31 @@ The corrected oracle records those known helper effects separately and passes;
 no matching game-code change was needed. Failure log/report are retained.
 Reports:build/runtime/eur_pause_list_selection/; private generator, probe and
 artifact verifier in build/analysis/.
+
+## 2026-09-13: Pause item lookup and rotating inventory order (+884 bytes)
+
+Matching C/C++ reaches 726,448 / 1,563,700 bytes (46.46%); with maintained
+symbolic assembly, 46.79%. Overlay 7 reaches 61,692 / 142,264 (43.36%).
+The four contiguous functions at 0x02074D48..0x020750BC recover item name and
+description IDs, rotated availability and inventory ordering. Shared record
+aliases preserve existing callers. Full-width lookup results, explicit halfword
+truncations, separate switch arms and post-increment stores reproduce every
+instruction and literal pool. No inline assembly or compiler flag changes.
+
+Configure, full Ninja check, no-data-mod packaging, native relinking with zero
+differing bytes, generated progress/check and 81 tests pass. Both packaged and
+native ROM SHA-1: ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+Four ordinary story-save routes check all 175 calls over 4,860 frames:
+106 names, 6 descriptions, 7 rebuilds and 56 rotated queries, covering kinds
+0/1/2/3 for every function. The oracle checks full live objects, record lookups,
+quantity filtering, untouched array tails, division and stack output widths.
+The final availability predicate's 15 positive/39 negative results are observed;
+its internals and unobserved branches are not claimed as independently checked.
+
+All 70 screenshots and 630 graphics dumps validate and equal the prior matching
+routes; all 104 source saves stay unchanged. No fixture or pending call remains.
+The first clothing replay exposed a hook surviving overlay reuse at frame1347.
+Exact comparison with the complete overlay0 owner now identifies 8 foreign
+hits; the corrected four-route suite passes, with the original failure retained.
+Reports and artifact validation: build/runtime/eur_pause_item_lookup/.
+See the reconstruction reference for exact fields, coverage and probe details.

@@ -13,8 +13,11 @@ enum ItemIdTag {
 };
 
 typedef struct UsableItemRecord {
-    u8 unknown_00[6];
-    u16 interface_resource_id;
+    union {
+        u8 unknown_00[6];
+        struct { u16 unknown_00_word, name_id, unknown_04; };
+    };
+    union { u16 interface_resource_id, description_id; };
     u8 unknown_08[4];
     u32 effect_flags;
     u8 unknown_10[4];
@@ -29,12 +32,22 @@ typedef union ActionItemTargetFlags {
 } ActionItemTargetFlags;
 
 typedef struct ActionItemRecord {
-    u8 unknown_00[6];
-    u16 interface_resource_id;
+    union {
+        u8 unknown_00[6];
+        struct { u16 unknown_00_word, name_id, unknown_04; };
+    };
+    union { u16 interface_resource_id, description_id; };
     u8 unknown_08[8];
     ActionItemTargetFlags target_flags;
     u8 unknown_11[11];
 } ActionItemRecord;
+
+typedef struct BadgeItemRecord {
+    u16 unknown_00, name_id, description_id;
+    u8 unknown_06[14];
+} BadgeItemRecord;
+
+typedef char BadgeItemRecord_SizeCheck[sizeof(BadgeItemRecord) == 20 ? 1 : -1];
 
 typedef char UsableItemRecord_SizeCheck[
     sizeof(UsableItemRecord) == 20 ? 1 : -1

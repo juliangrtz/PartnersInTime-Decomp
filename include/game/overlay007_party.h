@@ -39,8 +39,8 @@ typedef char Overlay7PartySizeCheck[sizeof(Overlay7Party) == 0x14c ? 1 : -1];
    five stat deltas the gear rows contribute. */
 typedef struct Overlay7Item {
     u16 id;
-    u16 unknown_02;
-    u16 unknown_04;
+    union { u16 unknown_02; u16 name_id; };
+    union { u16 unknown_04; u16 description_id; };
     u16 unknown_06;
     u8 unknown_08[4];
     union {
@@ -63,6 +63,10 @@ u16 PauseList_DrawSelectedLabel(Overlay7Party *party);
 void PauseList_RedrawSelectedRow(Overlay7Party *party, int copy);
 u32 PauseList_CopySelectedRow(Overlay7Party *party);
 int PauseList_CheckRowAvailability(Overlay7Party *party, int row, int member, int allow_other);
+u16 PauseItem_GetDescriptionId(Overlay7Party *party, int kind, u16 item);
+u16 PauseItem_GetNameId(Overlay7Party *party, int kind, u16 item);
+int PauseItem_CheckRotatedAvailability(Overlay7Party *party, int kind, u32 member, int row, u16 count);
+int PauseItem_RebuildRotatingOrder(Overlay7Party *party, int kind);
 
 #ifdef __cplusplus
 }

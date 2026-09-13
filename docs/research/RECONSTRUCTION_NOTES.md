@@ -1706,6 +1706,62 @@ All 91 screenshots, 819 graphics dumps and 104 unchanged source saves validate.
 The four ordinary routes equal the prior control probe's 70 screenshots and
 630 dumps. No pending call or drain frame remains; the fixture is restored.
 
+### Pause item lookup and rotating inventory order
+
+`src/overlay007/pause_item_lookup.cpp` owns four contiguous functions at
+`0x02074D48..0x020750BC` (884 bytes): description ID, name ID, rotated
+availability and rotating-order rebuilding. The lookup record strides are 20
+bytes for consumables/badges and 28 for clothing/Bros. Items. Names use halfword
++2; descriptions use +4 for equipment and +6 for consumables/Bros. Items.
+Key Items names use the consumable table, but their description ID is the
+masked item index directly. Unsupported kinds return zero in the native code.
+The full-width result accumulator and explicit halfword truncations matter;
+the old pseudocode's apparent pointer-derived default return is incorrect.
+
+Shared records retain their raw byte views and earlier interface-resource names
+through aliases. The badge record type is shared, while its typed table extern
+remains local: existing battle/shop users still declare the symbol as bytes.
+Moving that extern to the shared header failed the full build; the corrected
+local declaration passes every affected caller. Separate switch arms, the
+native equipment-range check and post-increment array stores reproduce the
+complete instructions and literal pools without assembly or flag changes.
+
+The rebuilt order includes only entries with available quantity. Equipment
+starts at item 1 and appends the empty-gear entry 0 at the end. Its returned
+count is byte-sized, and the unused array tail stays unchanged. Rotated lookup
+uses the signed saved-first byte for that category, performs signed division
+before the category-enabled check, and forwards the availability predicate's
+full integer result. These fields differ from the visible tile-row rotation.
+
+The focused private probe and generator are `probe_pause_item_lookup.py` and
+`make_pause_item_lookup_probe.py`; reports are in
+`build/runtime/eur_pause_item_lookup/`. Four ordinary clothing65, badges86,
+items65 and key_items65 routes check every one of 175 calls over 4,860 frames:
+106 names, 6 descriptions, 7 order rebuilds and 56 rotated queries. Every
+function runs for kinds 0/1/2/3. Checks include 56 signed divisions, 7 one-byte
+stack outputs with neighboring bytes preserved, 100 retained/32 excluded
+inventory entries, 2 empty-gear append operations and 2 disabled-category
+returns. Full live party allocation/header, workspace, save, display and item
+records are checked at the relevant boundaries. Quantity calculations use
+save/equipment/displayed flags independently; the final availability predicate
+has 15 positive and 39 negative observed returns, with its internals uncovered.
+
+The first clothing replay stopped at frame 1347 because the hook at
+`0x02074F20` survived the return to field. That address is then inside overlay
+0's function at `0x02074F18`. The corrected probe excludes such entries only
+when its entire native owner function matches and no checked call is pending;
+all 8 foreign-overlay hits satisfy that guard. Arbitrary byte mismatches still
+fail. The original log/report remain under the `_overlay_reuse` suffix, and all
+four corrected routes pass. No matching game code changed for this correction.
+
+Artifact validation passes for 70 screenshots, 630 graphics dumps and all 104
+unchanged source saves. Every capture matches the prior ordinary list-control
+route at the same input/state/time. Clothing and Key Items images were visually
+inspected. No RAM fixture, pending call or drain is present. Kind 4, unsupported
+kinds, zero-quantity rotated early return, count wrap and other unobserved
+branches remain uncovered; equal native-renderer captures do not independently
+verify its rendering algorithm.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
