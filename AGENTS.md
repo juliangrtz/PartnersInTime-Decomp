@@ -97,6 +97,10 @@ start of main RAM. CPU and overlay identity matter because addresses are reused.
    Q12 operation order and reads across callbacks. A narrow return type does not
    imply a narrow accumulator; preserve where the native code truncates. Check
    null-record paths before replacing them with early returns.
+   Track signedness per expression: an unsigned value divided by an `int`
+   divisor uses unsigned division, while that divisor's own `/= 10` stays signed.
+   Preserve repeated source reads around destination writes when the pointers
+   can alias; `const` does not establish non-overlap.
 3. Keep related contiguous functions in one subsystem module. Temporary isolated
    units are acceptable around native gaps; consolidate when those gaps close.
    Source basenames must be globally unique because MW's linker selects by
@@ -110,6 +114,11 @@ start of main RAM. CPU and overlay identity matter because addresses are reused.
    original bytes and count as a passing candidate.
    Associate comparisons with the exact source, language mode and object:
    private checkers can overwrite address-named dumps from an earlier candidate.
+   Compare an already matching counterpart when one exists before changing
+   declaration lifetimes or pointer increments. Separate increments versus
+   postincrements, and keeping a returned structure versus discarding it, can
+   change this compiler's instructions or stack layout. These are evidence to
+   explain a specific difference, not a recipe for enumerating source variants.
 5. Integrate exact matches into `linked_sources.txt` and the component metadata.
    Update affected declarations and maintained assembly references together.
    Preserve interior entry points with `config/eur/arm9/linker_aliases.json`;
@@ -184,20 +193,29 @@ and compatible snapshots. Optional dependencies are in
   new probe. Keep prior evidence and state which checks were actually repeated.
   Read the driver's action semantics: `runtime_drive.py` inserts one released
   frame after each action. Bound scene entry and confirm its dispatch hook ran.
-- Guard hooks with native bytes and the loaded overlay. Match nested returns
-  using caller and stack pointer. Derive expected memory changes independently;
-  label helper outputs that are merely observed. Do not read freed objects or
-  continue interpreting unloaded overlay addresses as the previous function.
+- Guard each hooked function's complete native range and the loaded overlay;
+  a matching prologue alone is insufficient. Match nested returns using the
+  return address and entry stack pointer. Derive expected memory changes
+  independently; label helper outputs that are merely observed. Do not read
+  freed objects or interpret unloaded overlay addresses as the previous function.
 - For constructors, snapshot the actual allocation before entry and derive only
   the fields the native code initializes; preserve untouched bytes and padding.
   A base constructor may run inside a larger derived allocation. Propagate a
   nested constructor's independently expected changes into the parent's oracle,
   rather than accepting a fresh RAM snapshot as the expected result.
+- Distinguish allocation size, initialized extent and transfer size. When the
+  allocation is known, check the complete buffer and preserve untouched tails,
+  padding and transparent pixels. Shop help pixels allocate 6,144 bytes, clear
+  5,120 and upload 4,096; derive these extents from the allocator and consumers.
+  For graphics, derive expected pixels or nibbles independently of the native
+  packed-word loops, including stride, palette offset and linear/tiled layout.
 - Distinguish base destruction, derived destruction and deleting entry points.
   Check the final object state before the heap free; after release, check only
   return values and still-live records. Check cleared scene globals before the
   next overlay reuses their addresses. Record each exercised entry point; a
   virtual delete does not establish coverage of every destructor wrapper.
+  Task removal can be deferred: setting the removal flag is a separate event
+  from unlinking and freeing. Check the actual helper before assigning lifetimes.
 - Verify RAM, mapped VRAM, palettes, OAM, ordered GPU stores and visible behavior
   as appropriate. A screenshot or passing ROM hash alone is insufficient.
   Hardware register readback need not equal the earlier submitted FIFO command
@@ -254,6 +272,9 @@ At a stop, leave the last pushed commit, owned pending files, completed/due chec
 and deferred candidates in private `build/analysis/CURRENT_HANDOFF.md`. For each
 gap record component/address, native/candidate sizes, mismatch class and evidence
 needed for another attempt. Distinguish pending, committed and pushed work.
+For private units containing several functions, record exactness per function;
+one matching helper does not validate its neighbors. Keep proposed names and
+planned runtime checks explicitly provisional until their evidence exists.
 Separate the latest documentation commit from the last verified code batch;
 existing build logs are historical evidence, not checks run by the current turn.
 Inspect old integration scripts before reuse; many are not safe to replay.
