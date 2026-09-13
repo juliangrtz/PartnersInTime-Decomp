@@ -35,7 +35,9 @@ typedef struct ShopSceneWork {
         struct {
             u8 unknown_a0_byte, panel_zooming, panel_visible, unknown_a3;
             s32 panel_scale_y;
-            u8 unknown_a8[0x8c0 - 0xa8];
+            u8 unknown_a8[7];
+            s8 equipment_highlight_active;
+            u8 unknown_b0[0x8c0 - 0xb0];
         };
     };
     u8 unknown_8c0, unknown_8c1, selected_member;

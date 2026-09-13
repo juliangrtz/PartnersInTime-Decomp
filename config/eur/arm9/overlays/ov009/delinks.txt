@@ -144,3 +144,6 @@ src/overlay009/shop_party_bitmap.cpp:
 
 src/overlay009/shop_confirmation_cursor.cpp:
     .text start:0x02076fbc end:0x020770a4
+
+src/overlay009/shop_equipment_highlight.cpp:
+    .text start:0x02076b28 end:0x02076fbc

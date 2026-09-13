@@ -6699,3 +6699,47 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ reaches **718,532 / 1,563,700 bytes (45.95%)**, or **46.28%**
   with separate assembly. Overlay 9 reaches **30,204 / 78,984 (38.24%)**.
   **63,318 bytes** remain to the 50% goal.
+
+
+## 2026-09-13: shop equipment highlight tilemaps and fades
+
+Reconstructed 1,172 bytes in `src/overlay009/shop_equipment_highlight.cpp`:
+- `ShopEquipmentHighlight_Stop` at 0x02076B28: 20 bytes.
+- `ShopEquipmentHighlight_Start` at 0x02076B3C: 220 bytes.
+- `ShopEquipmentHighlight_Update` at 0x02076C18: 932 bytes.
+
+The shared shop workspace now names its signed highlight flag at +0xAF while
+preserving all existing byte views. The native map alias at +0xB6 retains the
+literal reference. Ordinary two-dimensional indexing, supported by the matching
+pause-resource counterpart, and column-before-tile increment order reproduce the
+native loops. No inline assembly or compiler-setting changes were needed.
+
+Matching C/C++ rises from 718,532 to 719,704 of 1,563,700 bytes (46.03%).
+C/C++ plus maintained assembly is 46.36%. Overlay 9 is 31,376 / 78,984 (39.72%).
+The remaining distance to 50% matching C/C++ is 62,146 bytes.
+
+Full configure/Ninja module and symbol checks, no-data-mod packaging, native
+relink, generated-progress validation and 81 tests pass. Both ROM outputs have
+SHA-1 ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink validates
+43 components, 420 section units, 31,138 relocations and 1,577 ARM7 relocations
+with zero differing bytes. Logs: build/analysis/shop_highlight_*.log.
+
+Runtime reports under build/runtime/eur_shop_highlight/:
+- equipment65: 1,391 frames, one start/stop, 625 update returns.
+- equipment65_scroll: 1,091 frames, one start/stop, 325 update returns; ordinary
+  up/down input exercises four items and both eligible-group highlight patterns.
+Combined: 954 new-function returns, 1,928 ordered GPU stores, 948 tilemap updates,
+32 screenshots, 288 graphics dumps and all 104 source saves preserved.
+All 160 confirmation-route artifact pairs match the preceding cursor baseline.
+Both portrait groups were visually inspected. Full task/workspace/save/panel
+allocations and complete sub BG memory are checked at helper boundaries.
+Fade-in and fade-out each take seven updates; actual unlink and pool return are
+verified without reading freed tasks. Allocator results remain observed outputs.
+The artifact verifier's initial next-frame-removal assumption was corrected:
+these tasks return to the pool later in the same scheduler pass. Both successful
+replay reports then pass the independent artifact verifier.
+
+Scene entry uses the existing guarded decoded FieldVM command fixture, restored
+before the native shop request. All later navigation uses ordinary buttons.
+One-member clearing, unavailable groups, early fade interruption and successful
+purchases were not exercised. No inventory or currency fixture was added.

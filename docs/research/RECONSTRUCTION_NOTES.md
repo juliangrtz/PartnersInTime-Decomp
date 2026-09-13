@@ -982,6 +982,48 @@ numeric oracle verifies 17 renders; broader buying, bitmap and selling checks
 remain in their earlier reports. Successful purchases, post-purchase equipment
 prompts and empty-group clearing are outside this route's coverage.
 
+`shop_equipment_highlight.cpp` reconstructs the contiguous 1,172-byte group at
+`0x02076B28` through `0x02076FBC`: stop, start and per-frame update. The signed
+workspace flag at +0xAF controls the fade. Start copies the 2 KiB map at +0xB6,
+clears the left half for a one-member party, initializes sub-screen blending and
+creates a 72-byte task. Update selects the eligible party group, writes two
+2-by-3 tile patterns and switches the background's vertical offset between zero
+and -88. Its Q12 alpha fades between zero and eight; division by six leaves a
+remainder, so both complete transitions take seven updates before clamping.
+The separate `data_ov009_0207eaf2` symbol is the native alias of that map inside
+the workspace. Loading it directly preserves the original literal reference.
+
+The matching pause-resource code supplied the tile-loop counterpart: write
+`map[32 * row + column]`, allowing the compiler to derive the row stride, instead
+of manually introducing the decompiler's cached index. Incrementing the column
+before the 16-bit tile counter preserves the native induction-update/truncation
+order. This resolved both register and scheduling differences without inline
+assembly, compiler changes or source permutations. All three complete functions
+match, including their literal pools.
+
+Private `probe_shop_highlight.py` checks the ordinary confirmation and short
+scrolling routes after the established controlled shop entry from checkpoint 65.
+Reports under `build/runtime/eur_shop_highlight/` cover 2,482 frames, 954 new
+function returns, 1,928 independently expected GPU stores and 948 twelve-entry
+map updates. The four selected clothing items exercise both eligible-group
+results and both vertical offsets. Oracles preserve the full 2,492-byte workspace,
+1,380-byte save, 72-byte task, selected-panel allocation and 128 KiB sub BG memory
+at helper boundaries; item flags are checked against original resident records.
+Allocator output is explicitly observed; initialized task fields, fade state,
+map changes, helper results and register writes are independently derived.
+
+Both tasks reach removal after fade-out. Here marking and pool return occur
+later in the same scheduler pass, unlike the confirmation cursor's next-frame
+removal. Hook ordering establishes the lifetime even when frame numbers tie.
+The artifact verifier initially assumed a later frame; that assumption was
+corrected and the verifier passed against both successful replay reports.
+Full task contents and neighbor links are checked before pool return, then only
+live pool records and counters are read. All 32 screenshots, 288 graphics dumps
+and 104 source saves validate; all 160 confirmation-route artifact pairs match
+the preceding cursor replay. Both highlighted portrait groups were visually
+inspected. One-member clearing, unavailable party groups, early fade interruption
+and successful purchases remain outside these routes' coverage.
+
 ### Save menus
 
 The private `build/runtime/eur_save_state_transfer/save55.dst` is an initialized
