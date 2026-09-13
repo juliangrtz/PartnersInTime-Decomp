@@ -14,8 +14,8 @@ Start with [checkout and resources](#start-with-the-current-checkout), then use
 [build commands](#toolchain-and-build), [reconstruction rules](#reconstructing-and-integrating-code),
 [runtime verification](#runtime-verification), [progress](#progress-and-documentation)
 and [Git checks](#private-files-checks-and-git) as needed. The runtime section
-includes the tested [save menus](#save-menus), [Smash Eggs](#smash-eggs), [credits](#credits) and
-[Nawatobi](#nawatobi) entry routes.
+includes the tested [save menus](#save-menus), [Game Over](#game-over),
+[Smash Eggs](#smash-eggs), [credits](#credits) and [Nawatobi](#nawatobi) entry routes.
 
 - Follow the current request. A documentation or research task does not start
   another decompilation batch. Honor requests to stop after the next block.
@@ -151,10 +151,13 @@ do not treat an older disassembly listing as the output of the latest compile.
 
 On this workstation, private comparison helpers include
 `build/analysis/compile_private_unit.py`, `check_title_unit.py` for overlay 6,
-`check_overlay15_unit.py` for overlay 15, and `check_main_unit.py` for resident
-ARM9. Inspect their inputs and relocation handling before reuse; they are local
-conveniences, not required public tools. Use current public build checks as the
-final authority.
+`check_overlay8_unit.py` for overlay 8, `check_overlay15_unit.py` for overlay 15,
+and `check_main_unit.py` for resident ARM9. Inspect their inputs and relocation
+handling before reuse; they are local conveniences, not required public tools.
+Use current public build checks as the final authority. Private paths in this
+file are research references, not files supplied by a fresh clone. If one is
+absent, reconstruct the needed evidence from the public tooling, native bytes
+and user-supplied ROM/saves rather than treating an old report as a fresh check.
 After a symbol rename, ensure the private checker resolves the new symbol in
 the candidate object. A fallback to an address-named symbol or original bytes
 must not turn a missing candidate function into a passing comparison.
@@ -424,6 +427,15 @@ These changes recovered the title backdrop initializer without altering its
 algorithm. A candidate with fewer instructions can instead reflect algebraic
 folding, such as combining a negation and addition into one reverse subtraction;
 do not mistake that for a relocation-only difference or a completed match.
+
+An address-named data symbol may label an interior field of that same workspace,
+not a separate global object. Check the native base load and field offset before
+declaring another `extern`. In overlay 8, `0x0207832F` is workspace base
+`0x02078290 + 0x9F`; the Game Over controllers read it through the workspace
+base also used for selection fields. A separate global reference introduces an
+extra literal/load and loses that relationship. Recover the shared field from
+its consumers; a decompiler's separate label or an old `padding` name does not
+establish independent storage or prove that the byte is unused.
 
 Size request buffers from callee accesses, not just the apparent base type.
 `ArchiveReadRequest` is 40 bytes, but `BattleArchive_ReadAsync` also writes the
@@ -726,6 +738,27 @@ dialog workspace effects are observed outputs with the caller's mode write
 checked separately. A pre-Start title-animation frame varied in sub-screen OAM;
 record that difference rather than claiming all cold-boot screenshots are equal.
 
+### Game Over
+
+The private `build/analysis/probe_game_over_entry.py` records a controlled entry
+from checkpoint 86 using
+`build/runtime/states/eur_story_086_hud_verified.dst`. At guarded EUR ARM9 field
+dispatch `0x020823F8`, `r0` is the VM pointer and `r2` points to a 72-byte decoded
+command. The fixture saves that record, substitutes opcode `0x123` with fade
+argument 1, then restores all 72 bytes at native request helper `0x0206A9A4`,
+before the transition. It changes decoded RAM once, not the ROM or stored script.
+Validate the loaded code bytes and both pointer ranges before any substitution;
+do not reuse an observed heap or command-buffer address as a fixed patch.
+
+The historical report `build/runtime/eur_game_over_entry/evidence_086.json`
+records scene initialization after 481 frames. It establishes a controlled
+entry route, not a natural battle defeat or coverage of selection and exit.
+Treat the old script as a route reference: its return hooks predate stack-pointer
+matching and its name-prefix discovery can select newly linked functions without
+an appropriate oracle. Before extending it, explicitly select monitored functions,
+guard the request helper as well as the dispatcher, track nested returns by stack
+pointer and derive expectations for each newly checked task/workspace field.
+
 ### Smash Eggs
 
 For battle attack research, the compatible private snapshot
@@ -917,10 +950,12 @@ Distinguish code-derived facts, runtime observations and unresolved questions.
 
 `docs/BATTLE_MATCHING_MILESTONES.md` contains a legacy non-UTF-8 byte. Inspect its
 encoding before editing and preserve existing bytes; do not decode with replacement
-and rewrite the entire file. The similarly named document under `docs/research/`
-is a different, older log. Reuse private probe scripts as references, but inspect
-old integration scripts before running them: many already-applied scripts are
-not safe to replay.
+and rewrite the entire file. It also has mixed CRLF/LF line endings. Append new
+entries as bytes; when checking preservation against a Git blob, account for
+Git's line-ending normalization without decoding or replacing legacy bytes.
+The similarly named document under `docs/research/` is a different, older log.
+Reuse private probe scripts as references, but inspect old integration scripts
+before running them: many already-applied scripts are not safe to replay.
 
 ## Private files, checks and Git
 
