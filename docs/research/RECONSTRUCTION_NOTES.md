@@ -1592,6 +1592,61 @@ these captures are observed output, not an independent pixel oracle. Unsampled
 bodies, row creation/parent updates, final GPU rendering, unsupported divisors
 or segments, and unobserved kinds/empty-item eligibility remain outside coverage.
 
+### Pause list visibility and row measurement
+
+The linked [list controls](../../src/overlay007/pause_list_control.cpp) cover
+`PauseList_MeasureRowWidth` at `0x020742E0` (148 bytes), `PauseList_Hide` at
+`0x02074374` (132 bytes), and `PauseList_Show` at `0x020743F8` (308 bytes).
+Show allocates 340 OBJ tile units, prepares the current list, creates up to
+nine visible rows and adds category-specific tasks. Hide remembers the first
+row and selection by list kind, marks task group 2 for removal, frees the
+Key Items image buffer when present, and unlinks the sprite allocation.
+Measurement resolves the selected entry's name, clears both packed cursor
+coordinates and forwards the text helper's width. Empty clothing/badge entries
+use the native fallback-name path. That path matches statically but was not
+exercised by these replays.
+
+The shared [party prefix](../../include/game/overlay007_party.h) retains its
+332-byte layout and existing byte views while naming visibility, five saved
+first-row/selection pairs and the owned image pointer at +280. The allocation
+is still 4,428 bytes. Raw workspace declarations remain with the existing raw
+consumers so the new module can use the actual `PauseSceneWork` declaration.
+Native branch conditions require an unsigned `count < 9` and a signed
+`first + row >= count` within the same loop. Assignment order explains the
+fallback-name conditional instructions; no compiler changes or assembly are used.
+
+Private `build/analysis/probe_pause_list_control.py` checks every target call
+on clothing65, badges86, items65 and key_items65 routes. The reports in
+`build/runtime/eur_pause_list_control/` record 4,860 frames, five show calls,
+five hide calls and two width calls. Kinds 0/1/2/3 are consumables, Key Items,
+clothing and badges in these observed menus. From an open consumable list,
+Right switches to Key Items; its two rows show Beans and Toadbert's Drawing.
+The route checks the short-list stop and a 6,144-byte image buffer whose
+contents match between load and the last live snapshot before deletion.
+The other lists exercise nine-row creation; 38 row-creation calls and 294
+task-removal flag writes are checked across the suite.
+
+The oracle checks full party/work/save/display records and pointer/heap
+headers at helper boundaries, native direct writes, getter results, item
+selection, argument order including stack parameters, width forwarding,
+group-2 flags, and allocation unlinking with neighbor/head/tail changes.
+Preparation, allocation and category-helper mutations are explicitly observed
+helper output. Text/heap/IO internals, row constructors and final rendering
+are outside the independent oracle. Marking tasks is not proof of their later
+removal. Kind 4, empty lists, null image buffers and plural/fallback width
+branches remain unexercised. No fixture, pending call or drain frame remains.
+
+All 70 screenshots, 630 graphics dumps and 104 unchanged saves validate.
+The three unchanged routes equal the previous row probe's 57 screenshots and
+513 dumps; visual inspection identifies the Key Items menu. The first clothing
+attempt rejected an uninitialized kind before the preparation helper ran;
+moving that guard to actual kind consumers corrected the oracle. The first
+items attempt failed only its final assertion demanding a width call on every
+route; width coverage belongs to the clothing/badge routes. Corrected reruns
+pass. Earlier `bros65` and `bros_right65` discovery tags are retained but
+excluded from these totals: the former stayed on consumables, and the latter's
+second tab was visually identified as Key Items before the final named rerun.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

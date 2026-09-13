@@ -2,12 +2,15 @@
 #define PIT_GAME_OVERLAY007_PARTY_H
 
 #include <nitro.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <game/text.h>
 
 /* The scene's party roster: the rotating display order, the per-slot values the
    interface shows and the text object the captions are measured with. */
 typedef struct Overlay7Party {
-    u8 unknown_00;
+    union { u8 unknown_00; u8 visible; };
     u8 kind;
     u8 unknown_02[2];
     u8 slots[128];
@@ -17,9 +20,15 @@ typedef struct Overlay7Party {
     u8 count;
     u8 unknown_10a;
     union { s8 offset; u8 index; } span;
-    /* Per-kind starting offset into the rotating order. */
-    s8 offsets[4];
-    u8 unknown_110[12];
+    union {
+        /* Preserve the existing view used by the rotating-order helpers. */
+        struct { s8 offsets[4]; u8 unknown_110[12]; };
+        struct {
+            s8 saved_first[5], saved_selected[5];
+            u8 unknown_116[2];
+            void *list_images;
+        };
+    };
     GameText text;
 } Overlay7Party;
 
@@ -45,6 +54,13 @@ typedef struct Overlay7Item {
 typedef char Overlay7ItemSizeCheck[sizeof(Overlay7Item) == 0x1c ? 1 : -1];
 
 extern const Overlay7Item data_020505c4[];
-extern u8 data_ov007_020905f0[];
+
+u16 PauseList_MeasureRowWidth(Overlay7Party *party, int row, int plural);
+void PauseList_Hide(Overlay7Party *party);
+void PauseList_Show(Overlay7Party *party);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

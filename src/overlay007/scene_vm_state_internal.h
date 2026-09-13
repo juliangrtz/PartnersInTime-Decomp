@@ -26,6 +26,7 @@ typedef struct SceneMenuContext {
 } SceneMenuContext;
 typedef char SceneMenuContext_SizeCheck[sizeof(SceneMenuContext) == 0x118 ? 1 : -1];
 extern u8 gSceneMenuSubmenus[];
+extern u8 data_ov007_020905f0[];
 #define SCENE_MENU (*(SceneMenuContext *)data_ov007_020905f0)
 #define SCENE_SAVE_VALUES (*(SceneSaveValues *)gSaveData)
 extern Overlay7Party *data_ov007_0208e1e4;

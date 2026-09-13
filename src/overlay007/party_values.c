@@ -1,6 +1,8 @@
 #include <game/overlay007_party.h>
 #include <game/save_data.h>
 
+extern u8 data_ov007_020905f0[];
+
 /* Per-kind limits, stored as two interleaved columns. */
 extern const u8 data_ov007_0208dad4[];
 extern const u8 data_ov007_0208daf4[], data_ov007_0208daf5[];

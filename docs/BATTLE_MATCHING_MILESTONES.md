@@ -7056,3 +7056,47 @@ bodies, constructors/parent updates, final renderer internals, unsupported
 segments/divisors and unobserved kinds/empty-item branches remain unverified.
 Reports: build/runtime/eur_pause_list_row/; probe and artifact verifier are
 private under build/analysis/.
+
+
+## 2026-09-13: pause list visibility and row measurement
+
+Reconstructed PauseList_MeasureRowWidth (148 bytes), PauseList_Hide (132) and
+PauseList_Show (308), contiguous 0x020742E0 through 0x0207452C: +588 bytes.
+Shared party332 prefix names visibility, saved selection/first-row arrays and
+owned list images, preserving existing byte views. Actual allocation4428 is
+checked at runtime. Native signedness and assignment order match without ASM.
+Matching C/C++: 724,872 / 1,563,700 bytes (46.36%); with assembly, 46.69%.
+Overlay7: 60,116 /142,264 (42.26%). Remaining to50%:56,978 bytes.
+
+Configure/full Ninja, no-data-mod packaging, native relink, progress checks
+and81 tests pass. Both ROM SHA-1 values are
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Native relink:43 components,
+420 section units,31,138 relocations,1,577 ARM7 relocations,zero differing bytes.
+Logs:build/analysis/pause_list_control_*.log.
+
+Four ordinary clothing65, badges86, items65 and key_items65 routes run4860
+frames and check all5 show,5 hide and2 width calls. Kinds0/1/2/3 cover
+consumables, Key Items, clothing and badges. Right from the consumable list
+opens Key Items (Beans and Toadbert's Drawing):two rows cover the short-list
+stop and one6144-byte image load/free pair, with identical live buffer hashes.
+The suite checks38 row calls,294 task-marking writes, direct party/text fields,
+getter results, helper/stack arguments, width forwarding and allocation unlink
+neighbors/heads/tails. Full party4428/header16/work90600/save1380/display176
+records and pointers are checked at boundaries. Helper-owned preparation,
+allocation and category effects are observed, not independent predictions.
+No claim of actual task freeing follows from marking alone.
+
+All70 screenshots,630 graphics dumps and104 unchanged saves validate; the57
+screenshots and513 dumps of the three unchanged routes equal the previous
+row probe. No fixtures,pending calls or drain frames remain. Kind4,empty lists,
+null buffers and fallback/plural measurement branches remain unexercised;
+text/heap/IO internals,row constructors and final GPU rendering are unverified.
+
+First clothing attempt failed an oracle guard on the uninitialized pre-show
+kind; preparation initializes that field. First items attempt failed its final
+coverage assertion because width calls occur only on clothing/badge routes.
+Corrected reruns pass without game-code changes. Earlier bros65 stayed on
+consumables; bros_right65 reached the visually identified Key Items tab and
+was rerun under the correct tag. Discovery runs are excluded from suite totals.
+Reports:build/runtime/eur_pause_list_control/; private probe/artifact verifier
+in build/analysis/.

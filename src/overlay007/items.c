@@ -2,6 +2,8 @@
 #include <game/save_data.h>
 #include <game/text.h>
 
+extern u8 data_ov007_020905f0[];
+
 extern const u8 *func_ov007_02075bbc(Overlay7Party *party, int kind, int mode, int value,
                                      int flag);
 
