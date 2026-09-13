@@ -23,6 +23,15 @@ typedef struct SaveMenuEntryWorkPrefix {
 } SaveMenuEntryWorkPrefix;
 typedef char SaveMenuEntryWorkPrefixSizeCheck[
     sizeof(SaveMenuEntryWorkPrefix) == 0x1a0 ? 1 : -1];
+/* Prefix through the two 14-byte panel rows at workspace offset 0x27E2. */
+typedef struct SaveMenuPanelValuesWorkPrefix {
+    SaveMenuEntryWorkPrefix menu;
+    u8 unknown_1a0[0x2642];
+    u8 panel_values[2][14];
+} SaveMenuPanelValuesWorkPrefix;
+typedef char SaveMenuPanelValuesWorkPrefixSizeCheck[
+    sizeof(SaveMenuPanelValuesWorkPrefix) == 0x2800 ? 1 : -1];
+
 #define REG16(address) (*(vu16 *)(address))
 #define REG32(address) (*(vu32 *)(address))
 #define MENU_ARCHIVE (*(Overlay5Archive **)(data_ov005_0206a180 + 44))
@@ -81,7 +90,7 @@ void LoadMenu_UpdateSelection(MenuElement *);
 void LoadMenu_UpdateExit(MenuElement *);
 extern GameTaskVTable data_ov008_02077ff0;
 extern SaveSceneTask *data_ov008_02078288;
-extern void func_ov008_02070858(SaveSceneTask *);
+extern void GameOverScene_LoadResources(SaveSceneTask *);
 void GameOverMenu_UpdateEntry(MenuElement *);
 void GameOverMenu_UpdateSelection(MenuElement *);
 void GameOverMenu_UpdateExit(MenuElement *);

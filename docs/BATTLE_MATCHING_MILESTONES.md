@@ -6047,3 +6047,54 @@ Overlay 6 is 30720 / 66492 bytes (46.20%).
 - Matching C/C++ is **707,452 / 1,563,700 bytes (45.24%)**, or **45.57%** with
   separate assembly. Overlay 8 is **27,728 / 54,068 (51.28%)**. There are
   **74,398 bytes** left to the 50% target.
+
+## 2026-09-13: Game Over resource and panel setup
+
+- Reconstructed `GameOverScene_LoadResources` at `0x02070858`: **464 new matching
+  C bytes** in `src/overlay008/game_over_resources.c`. It initializes common
+  resources, stored/empty location previews, the availability flag, panel row,
+  both panel records and identity affine transforms. The checked shared prefix
+  through the panel rows is `0x2800` bytes; the existing complete resource
+  workspace is `0x2808` bytes. The scene-update gap still separates this function
+  from the lifecycle module; consolidate when that gap is reconstructed.
+- The first candidate had the correct size with register differences in the
+  panel loop. Native instructions load the live-save pointer once before that
+  loop and reread its slot byte for each panel. An explicit cached pointer and
+  separate loop scope reproduce that data flow and match exactly. The adjacent
+  cursor still has six coordinate-conversion scheduling differences; it remains
+  private and uncounted, with no further source permutations attempted.
+- Full Ninja checks, canonical packaging, native relink, regenerated progress
+  and all 81 tests pass. Both ROMs retain SHA-1
+  `ba4ec2f99b4f2e0047601552bccf00aa73e28701`; native verification reports 43
+  components, 31,138 known relocations, 1,577 ARM7 relocations and zero differing
+  bytes. Logs: `build/analysis/game_over_resources_{configure,check,rom,native,
+  tests}.log`.
+- `build/analysis/probe_game_over_resources.py` extends the preceding three
+  controlled story-86 routes and adds `empty_slot86`. The extra fixture clears
+  only the active slot's occupancy bit in RAM header `0x0205E334` at guarded
+  resource entry. It leaves that header changed for the transition and preserves
+  all original saves. This verifies the empty-slot response and one-choice menu,
+  not a storage deletion. Visually inspected its empty preview, single option
+  and final Peach's Castle state.
+- Four runs total **4,614 frames**, four resource returns and 2,342 controller
+  returns. Resource checks cover the full 10,248-byte workspace and 27 direct
+  helper calls, four 24,576-byte text clears, both panel records and their row
+  values, and 32 ordered affine stores. All nine affine arguments, including
+  five stack values, are checked. Initial common-resource output, three stored
+  summaries and image/text helper buffers remain observed helper results;
+  the caller's own availability and panel writes are independently derived.
+- The initial oracle incorrectly assumed affine origin readbacks stayed constant
+  during text setup. BG2Y advanced by `0x1100` without a CPU write in that span.
+  DeSmuME's renderer advances affine coordinates by scanline. The corrected
+  probe verifies the actual native store destinations, widths, values and order
+  for both identity transforms, plus coefficient readbacks. All four complete
+  replays pass with that oracle; the earlier failed runs are not validation.
+- Reports under `build/runtime/eur_game_over_resources/` include 30 PNGs and
+  270 graphics dumps, verified by the private artifact checker. All 23 PNGs and
+  207 dumps on the preceding three routes are byte-identical to the controller
+  batch. All 104 supplied saves retain their hashes. No pending calls or drain
+  frames remain. Alternate slot 1, resource allocation failure, input-locked
+  selection and physical audio remain unexercised.
+- Matching C/C++ is **707,916 / 1,563,700 bytes (45.27%)**, or **45.60%** with
+  separate assembly. Overlay 8 is **28,192 / 54,068 (52.14%)**. There are
+  **73,934 bytes** left to the 50% target.

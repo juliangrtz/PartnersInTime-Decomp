@@ -771,6 +771,23 @@ text/model/scroll workspace effects and the unpacked save payload are observed
 helper outputs. Its return hooks track stack pointers. Check the report and
 artifact verifier for actual branch coverage before extending the route.
 
+`build/analysis/probe_game_over_resources.py` extends those runs to resource
+initialization, checking the full `0x2808`-byte workspace, the text-pixel clear,
+panel setup and ordered affine stores. Its `empty_slot86` fixture clears only
+the active slot's occupancy bit in the RAM header at `0x0205E334`, once at
+guarded resource entry `0x02070858`. This covers empty-slot setup and the
+single-choice response; it does not delete a supplied save. Initial common
+resources, stored summaries and image/text helper results are observed outputs.
+Reports and the artifact verifier are under the corresponding private paths.
+
+Do not assume affine origin readbacks stay constant across rendering. The
+resource probe observed BG2Y advance without a CPU write during text setup;
+DeSmuME's [renderer updates affine coordinates per scanline](https://github.com/TASEmulators/desmume/blob/master/desmume/src/GPU.cpp).
+For this initializer, check the four ordered stores per background at guarded
+`G2x_SetBGyAffine_` instructions, including destination, width and source-register
+value. Check the coefficients separately. Record the submitted origins rather
+than refreshing an expected origin from a later readback and calling it derived.
+
 ### Smash Eggs
 
 For battle attack research, the compatible private snapshot
