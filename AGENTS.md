@@ -79,6 +79,8 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
 | Pause navigation | [Page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return), [main menu and member selection](docs/research/RECONSTRUCTION_NOTES.md#pause-main-menu-and-member-selection), [status and Cobalt Star pages](docs/research/RECONSTRUCTION_NOTES.md#pause-status-and-cobalt-star-pages) |
 | Pause list rendering | [Row sprites](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-sprites), [queued drawing and markers](docs/research/RECONSTRUCTION_NOTES.md#pause-queued-row-drawing-and-markers), [row refresh](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-refresh) |
+| Equipment list models | [Equipped-item markers](docs/research/RECONSTRUCTION_NOTES.md#pause-equipped-item-markers), [empty-equipment row sprites and ResourceA lifetime](docs/research/RECONSTRUCTION_NOTES.md#pause-empty-equipment-row-sprites) |
+| Unused Nawatobi minigame | [Guarded entry, exact RAM edit and research limits](docs/research/RECONSTRUCTION_NOTES.md#nawatobi) |
 | Earlier batch evidence | [Milestone log](docs/BATTLE_MATCHING_MILESTONES.md); private reports linked there |
 | Assets and publication boundaries | [Data modding](docs/DATA_MODDING.md), [private-content rules](docs/LOCAL_PRIVATE_CONTENT.md) |
 
@@ -243,6 +245,10 @@ compatible snapshots. Read their arguments and
   Removal flags, callback retargeting and pool returns are different events.
   Track attached resources and bulk-pool destruction too. Check records before
   release, then only still-live pool/list state. Address reuse starts a new lifetime.
+  Virtual cleanup can release a model's internal allocations before its pool slot
+  is returned. Check those boundaries separately. ResourceA and ResourceB use
+  different pools and slot sizes; verify each against the current shared source
+  and memory reference before extending an inherited probe.
 - Derive timer behavior from its actual entry guard and recurrence. An initial
   zero may trigger now, persist indefinitely or have another meaning; integer
   truncation can add updates. Check the relevant paths instead of importing a
@@ -272,6 +278,8 @@ compatible snapshots. Read their arguments and
   extents and report totals. Compare baselines only for identical state, fixture,
   input and capture prefixes. Distinguish visual inspection from hash equality
   and observed rasterization from an independent graphics oracle.
+  A verified draw-list insertion does not prove a visible sprite: clipping can
+  suppress it. State whether the evidence checks submission or rendered pixels.
   Associate every route with the exact probe source/version that produced it,
   including generated or composed copies. Preserve separate variants when the
   probe changes between routes; the current script cannot stand in for all of them.
