@@ -7227,3 +7227,31 @@ the prior successful replays and verifier failure are retained. All74 images,
 prior captures. No fixture, pending call or drain remains. All six cleanup
 calls have null image pointers; the nonnull branch and outer heap lifecycle
 remain uncovered. Reports:build/runtime/eur_pause_party_lifecycle/.
+
+
+## 2026-09-13: Pause queued row drawing and markers (+460 bytes)
+
+Reconstructed the 72-byte row-draw task creator/callback and marker copying
+in pause_item_row_draw.cpp (300 bytes), plus marker-ID selection in
+party_values.c (160 new bytes). Matching C/C++ reaches 727,840 / 1,563,700
+bytes (46.55%); overlay 7 reaches 63,084 / 142,264 (44.34%). C/C++ plus
+symbolic assembly is 46.88%. The full 50% objective remains incomplete.
+
+Seven story-save routes cover 9,270 frames and check every observed target
+call: 105 ID selections, 87 copies, six creators and six callbacks, plus six
+removals. A dedicated clothing route scrolls across the nine-row boundary
+in both directions; the ordinary route did not exercise queued tasks.
+All five categories run through ID/copy helpers, including two negative-ID
+skips and two empty-clothing/member-0 selections. Factory/list/pool lifetime
+writes and all 85 executed 64-byte transfers are independently checked;
+text-renderer mutations are observed. Callback category coverage is clothing
+only. No fixtures, pending calls or live tracked tasks remain.
+
+All 169 screenshots, 1,521 graphics dumps and 104 unchanged source-save
+hashes validate; shared input prefixes equal 113 prior images/1,017 dumps.
+The final scrolling exit was visually checked. The original no-scroll
+coverage failure is retained; all seven final replays pass. Full matching
+build, packaged EUR hash, native relink (zero differing bytes), generated
+progress check and 81 tests pass. Detailed provenance and coverage limits
+are in docs/research/RECONSTRUCTION_NOTES.md under queued row drawing.
+Private evidence: build/runtime/eur_pause_item_row_draw/.

@@ -1869,6 +1869,62 @@ hits have exact owner guards. All six cleanup calls saw a null image pointer;
 nonnull image cleanup and the surrounding heap allocation/free internals are
 not claimed as covered by this probe.
 
+### Pause queued row drawing and markers
+
+`PauseList_QueueRowDraw`, `PauseList_DrawRowTask` and `PauseItem_CopyMarker`
+own `0x020757C4..0x020758F0` in `pause_item_row_draw.cpp` (300 bytes).
+`PauseItem_GetMarkerId` extends `party_values.c` through `0x02075400`
+with 160 new bytes; its existing neighbors are not new coverage. The creator
+allocates a 72-byte element in list 11 before marker 1, then stores the row
+and item as words at offsets 40 and 44. The callback draws four text segments,
+copies the marker at row offset +1024, and sets the deferred-removal flag.
+It reloads the global party pointer between helpers, as the native code does.
+
+Marker selection reads byte 9 of the existing typed item records: 20-byte
+consumable/badge records and 28-byte clothing/Bros. Item records. Key Items
+return -1. Empty clothing selects 11 for member values 0/1 and 12 otherwise
+using an unsigned shift. The copy helper skips negative IDs; otherwise it
+copies 64 bytes from the archive-1/entry-69 buffer at workspace offset 192
+to main OBJ memory. The sampled live allocation is 1,280 bytes. The term
+marker describes its row-graphics role; individual glyph meanings remain
+unassigned. No compiler flags or assembly fragments were changed.
+
+Private `make_pause_item_row_draw_probe.py` composes the focused probe from
+`pause_item_row_draw_probe_body.py`. Reports and their artifact verifier are
+under `build/runtime/eur_pause_item_row_draw/` and `build/analysis/`.
+Seven routes cover 9,270 frames: clothing, badges, consumables, Key Items,
+empty clothing, Bros. Items and a separate clothing-scrolling route.
+All 105 ID selections, 87 copy calls, six creators and six callbacks are
+checked, plus all six task removals. ID/copy coverage includes all five
+categories, two skipped negative IDs and two empty-clothing selections for
+member 0. The other empty-clothing member cases remain uncovered.
+
+The first clothing route reached only ID selection and copying, so its
+all-functions coverage assertion failed after the replay. Its `_no_scroll`
+log/report remain private. Native callers establish that lists longer than
+nine rows queue a task only when scrolling across a visible edge. The added
+route opens clothing, presses Down eleven times and Up twelve times, then
+exits with three B presses; each direction press is followed by a 30-frame
+wait. It checks three forward and three backward queued updates. The final
+field capture was inspected. All seven final routes pass.
+
+The oracle derives factory free-list selection and complete slot/list/link/
+counter writes before allocation. It checks row arguments, the removal flag,
+unlinking and pool return as separate events, with no freed-slot reads.
+All 85 transfers independently check the selected 64 atlas bytes, both full
+OBJ buffers and the untouched atlas allocation. Full party/header, workspace,
+save, display and globals are also checked. The text renderer's arguments and
+resulting party/main-OBJ changes are observed; its pixel algorithm and atlas
+decompression are outside this oracle. Queued callbacks ran for clothing only.
+
+All 169 screenshots, 1,521 graphics dumps and 104 unchanged source saves
+validate. Matching input prefixes equal 113 prior images and 1,017 dumps;
+the scrolling route has its own directory. There are no fixtures, pending
+calls, live tracked tasks or drain frames. Full native guards remain active;
+these routes produced no foreign-overlay hits. Invalid inputs and unobserved
+marker IDs remain uncovered. Both ROM build paths retain the original SHA-1,
+native relinking reports zero differing bytes, and all 81 tests pass.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer

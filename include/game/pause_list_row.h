@@ -2,6 +2,8 @@
 #define PIT_GAME_PAUSE_LIST_ROW_H
 
 #include <nitro.h>
+#include <nitro/fx.h>
+#include <game/pause_scene.h>
 
 /* The parent task supplies a list row's text tiles, quantity and position. */
 typedef struct PauseListRowTask {
@@ -20,12 +22,22 @@ typedef struct PauseListSpriteTask {
     u8 unknown_2c[28];
 } PauseListSpriteTask;
 
+/* A queued text/marker upload; the callback marks it for later removal. */
+typedef struct PauseItemRowDrawTask {
+    u8 unknown_00[40];
+    int row, item;
+    u8 unknown_30[24];
+} PauseItemRowDrawTask;
+
+typedef char PauseItemRowDrawTaskSizeCheck[sizeof(PauseItemRowDrawTask) == 72 ? 1 : -1];
 typedef char PauseListRowTaskSizeCheck[sizeof(PauseListRowTask) == 72 ? 1 : -1];
 typedef char PauseListSpriteTaskSizeCheck[sizeof(PauseListSpriteTask) == 72 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+PauseMenuElement *PauseList_QueueRowDraw(int row, int item);
+void PauseList_DrawRowTask(PauseMenuElement *element);
 void PauseListRow_UpdateDigitSprite(PauseListSpriteTask *task);
 void PauseListRow_UpdateMarkerSprite(PauseListSpriteTask *task);
 void PauseListRow_UpdateTextSprite(PauseListSpriteTask *task);

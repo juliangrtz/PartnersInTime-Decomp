@@ -68,6 +68,8 @@ const u8 *PauseItem_GetText(Overlay7Party *party, int kind, int mode, int item, 
 s8 *PauseItem_GetValues(Overlay7Party *party, int kind, u8 *limit);
 void PauseItem_DrawText(Overlay7Party *party, u32 offset, int mode, int item,
                        int width, int height, u8 plural);
+int PauseItem_GetMarkerId(Overlay7Party *party, int kind, int item, u32 member);
+void PauseItem_CopyMarker(Overlay7Party *party, u32 offset, int marker);
 u16 PauseItem_GetDescriptionId(Overlay7Party *party, int kind, u16 item);
 u16 PauseItem_GetNameId(Overlay7Party *party, int kind, u16 item);
 int PauseItem_CheckRotatedAvailability(Overlay7Party *party, int kind, u32 member, int row, u16 count);

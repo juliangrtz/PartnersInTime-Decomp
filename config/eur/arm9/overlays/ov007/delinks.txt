@@ -50,7 +50,10 @@ src/overlay007/scene_transition_controller.c:
     .text       start:0x02085168 end:0x0208552c
 
 src/overlay007/party_values.c:
-    .text start:0x020750bc end:0x02075360
+    .text start:0x020750bc end:0x02075400
+
+src/overlay007/pause_item_row_draw.cpp:
+    .text start:0x020757c4 end:0x020758f0
 
 src/overlay007/party_navigation.c:
     .text start:0x02075400 end:0x020754d0
