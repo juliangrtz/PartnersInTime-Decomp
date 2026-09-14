@@ -930,6 +930,34 @@ remains unestablished. Earlier entry/idle probes reached no targets; V3 used an
 incorrect descriptor address despite obtaining the same rewind. Keep those
 attempts as historical artifacts, not accepted coverage. The accepted run is V4.
 
+### Battle dialogue controls
+
+[Dialogue controls](../../src/battle/battle_dialogue_control.cpp) and
+[teardown](../../src/battle/battle_dialogue_destroy.cpp) add 624 matching C++
+bytes at `0x020660FC..0x02066314` and `0x02066B6C..0x02066BC4`.
+The controller is `read32(read32(0x020C0660) + 0x208)`; its four 204-byte
+window records start at `read32(controller + 0xF00)`. Allocation tests the
+front-buffer pointer at record `+0x74`; the open-state check only tests the
+closing bit at `+0x68`, even for an unallocated slot. Negative control indices
+scan/close all four slots; nonnegative ones narrow to signed 16 bits.
+The visual-property query instead uses a full-width index and the pointer at
+record `+0xC4`: property 0 tests byte `+0xD0 >= 2`, property 1 adds signed
+halfwords `+4` and `+0x10`, and other properties return zero. Visuals occupy
+276 bytes within the manager; texture-upload fields reuse their later bytes.
+
+Private `eur_battle_dialogue/evidence_battle_start55_v1.json` checks 411 live
+frames from the existing controlled dialogue checkpoint: 197 allocation tests,
+197 open-state tests and three close-all calls, each invoking slots 0 through 3.
+Dialogues close and gameplay continues; all 104 original saves retain their hashes.
+`isolated_v3.json` adds 28 native ARM946 cases using copied live RAM, covering
+query boundaries, index narrowing, empty/full scans and both teardown branches.
+Predicates preserve all captured memory. Teardown also checks normal/IRQ task
+and sprite-allocation list roots and neighbors. Native UI callbacks, renderer
+internals and freed heap headers remain bounded observations. Visual-property
+queries and manager teardown have isolated coverage only; captures are not an
+independent rasterizer. The later dialogue checkpoint produced zero target calls;
+isolated v1/v2 exposed incomplete list modeling and are retained as failed attempts.
+
 ### Battle transition dispatch and resource slots
 
 The matching build includes two more overlay-2 helpers:

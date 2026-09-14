@@ -8130,3 +8130,21 @@ ARM946 calls on copied state. All 104 saves are unchanged. Renderer internals
 remain bounded observations; no natural script entry or rasterization proof.
 See the alternate-effects section in docs/research/RECONSTRUCTION_NOTES.md and
 private build/runtime/eur_battle_alternate_effects/ reports for scopes/failures.
+
+## Battle dialogue controls and teardown - 2026-09-14
+
+Five functions add 624 matching C++ bytes: visual-property queries (96),
+close control (124), allocation tests (184), open-state tests (132), and
+manager teardown (88). Total: 750,480 / 1,563,700 matching C/C++ bytes (47.9939%).
+Symbolic ASM remains separate. The complete 1,844-byte common VM dispatcher
+still matches after adopting the shared declarations.
+
+All seven build checks pass, including 81 tests; both packaged and native-relinked
+ROMs retain SHA-1 ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+Private eur_battle_dialogue/evidence_battle_start55_v1.json checks 411 live frames,
+197 allocation tests, 197 open-state tests and three ordered close-all calls.
+isolated_v3.json passes 28 copied-state ARM946 cases, including property boundaries,
+signed-index narrowing and both manager teardown branches. All 104 saves are unchanged.
+Query/teardown branches outside that live route are isolated coverage; native UI and
+allocator effects are bounded observations, with task/sprite unlink neighbors checked.
+See the reconstruction reference for pointers, failed attempts and coverage limits.

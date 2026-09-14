@@ -1,4 +1,5 @@
 #include <game/battle_ai.h>
+#include <game/battle_dialogue.h>
 #include <game/battle_common_assets.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
@@ -27,9 +28,6 @@ extern void func_ov002_020687ec(BattleSceneObject *object, int property_id,
                                 int value, int unused);
 extern int func_ov002_02068770(BattleSceneObject *object, int property_id,
                                int element_index, int unused);
-extern int func_ov002_020661d8(int effect_handle);
-extern int func_ov002_02066290(int effect_handle);
-extern void func_ov002_0206615c(int effect_handle);
 extern int func_ov002_02066314(
     int content_id, int horizontal_flip, int x, int y, int style_id,
     int variant, int auto_vertical, int auto_horizontal, int priority_flag,
@@ -42,7 +40,6 @@ extern int func_ov002_020665cc(
     int x_offset_or_auto, int content_width, int content_height,
     int invert_flag, int task_parameter, int resource_parameter,
     int save_word_40, void *save_words);
-extern int func_ov002_020660fc(int attached_effect_id, int property_id);
 extern void func_ov002_02066004(int owner_object_id, int alignment_mode,
                                 int reference_object_id, int view_offset,
                                 int unused_4, int unused_5);
@@ -217,20 +214,20 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_WAIT_EFFECT_PAIR:
-        if (func_ov002_020661d8(arguments[0]) != 0 &&
-            func_ov002_02066290(arguments[0]) != 0) {
+        if (BattleDialogue_IsAllocated(arguments[0]) != 0 &&
+            BattleDialogue_IsOpen(arguments[0]) != 0) {
             return BattleVm_RetryCommonCommand(vm, state, command);
         }
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_WAIT_EFFECT:
-        if (func_ov002_020661d8(arguments[0]) != 0) {
+        if (BattleDialogue_IsAllocated(arguments[0]) != 0) {
             return BattleVm_RetryCommonCommand(vm, state, command);
         }
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_STOP_EFFECT:
-        func_ov002_0206615c(arguments[0]);
+        BattleDialogue_Close(arguments[0]);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_LEGACY_NOOP_0FC:
@@ -276,7 +273,7 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
         return BattleVm_RetryCommonCommand(vm, state, command);
 
     case BATTLE_VM_GET_ATTACHED_EFFECT_PROPERTY:
-        value = func_ov002_020660fc(arguments[0], arguments[1]);
+        value = BattleDialogue_GetVisualProperty(arguments[0], arguments[1]);
         BattleVm_WriteCommonResult(vm, state, command, value);
         return SCRIPT_VM_CONTINUE;
 
