@@ -8166,3 +8166,18 @@ and additional boundary branches have isolated coverage. Ordered target I/O,
 RNG steps, queue insertion and full effect records are checked, with stated
 limits for resource-pool internals, pixel rendering and asynchronous IRQ timing.
 All 104 original saves are unchanged. Failed probe versions remain preserved.
+
+## Battle render-override reservation and mesh queries - 2026-09-14
+
+Two functions add 272 matching C bytes: render-override reservation (176) and
+mesh-task classification (96). Total: 752,184 / 1,563,700 matching C/C++ bytes
+(48.1028%); symbolic ASM remains separate. The 1,432-byte sprite-grid module and
+19,168-byte Battle VM dispatcher remain exact after shared declaration updates.
+
+All seven build checks pass, including 81 tests; both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Private
+eur_battle_render_control/evidence_brat50_round_v1.json checks the native
+reservation and the prior capture effect over 2,820 frames, with identical
+screenshots. isolated_v1.json passes 26 alignment/reuse/ownership and mesh-query
+cases, each checking full mapped memory and ordered writes. Mesh queries and
+reuse branches have isolated coverage only. All 104 saves are unchanged.

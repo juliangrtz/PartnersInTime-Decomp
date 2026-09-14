@@ -37,7 +37,6 @@ extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 OS_EnableIrqMask(u32 mask);
 extern void OS_SetIrqFunction(u32 mask, void (*callback)(void));
 extern BattleTransferTask *BattleTransfer_EnqueueAfterMapping(BattleTransferCallback, int, int, int);
-extern GridCaptureOverride *func_ov002_020bb1c4(BattleSceneObject *, int);
 extern int func_ov002_020b8ca4(BattleSceneObject *, int);
 extern void func_0202cbd4(void *, int, int);
 void BattleSpriteGridCapture_OnVCountInterrupt(void);
@@ -53,7 +52,8 @@ typedef char GridCaptureOverride_SizeCheck[sizeof(GridCaptureOverride) == 8 ? 1 
 
 /* Metrowerks emits functions in reverse source order. */
 void BattleSpriteGridCapture_Initialize(BattleSceneObject *object) {
-    GridCaptureOverride *capture = func_ov002_020bb1c4(object, 1028);
+    GridCaptureOverride *capture = (GridCaptureOverride *)
+        BattleSceneObject_ReserveRenderOverride(object, 1028);
     func_0202cbd4(capture->state, 0, 1028);
     data_ov002_020c0dc8 = capture;
     capture->render = func_ov002_020b8ca4;

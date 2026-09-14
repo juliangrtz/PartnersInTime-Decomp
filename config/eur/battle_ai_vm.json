@@ -1840,7 +1840,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "returns 0 when the object is not in the required model-part render mode, 1 when that mode has no controller task, 2 during the falling crush sequence, 3 during model-part scatter, and 4 for any other controller callback",
-      "evidence": "BattleAI_DispatchOpcode case 0x0AE; func_ov002_020bb274; 22 shipped state checks in BAI_mon_ji"
+      "evidence": "BattleAI_DispatchOpcode case 0x0AE; BattleMesh_GetTaskState; 22 shipped state checks in BAI_mon_ji"
     },
     "175": {
       "arguments": ["object_id", "axis", "angle"],

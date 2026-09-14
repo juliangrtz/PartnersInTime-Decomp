@@ -54,6 +54,8 @@ extern "C" {
 #endif
 
 BattleMeshTask *BattleMesh_CreateHitTask(struct BattleSceneObject *object, int target_id, int hits);
+/* 0: not a mesh; 1: idle; 2: hit task; 3: fade task; 4: another task. */
+int BattleMesh_GetTaskState(struct BattleSceneObject *object);
 void BattleMesh_UpdateFadeTask(BattleMeshTask *task);
 void BattleMesh_RotateAndNormalize(struct BattleSceneObject *object, int axis, int angle, int scale);
 

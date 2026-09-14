@@ -930,6 +930,33 @@ remains unestablished. Earlier entry/idle probes reached no targets; V3 used an
 incorrect descriptor address despite obtaining the same rewind. Keep those
 attempts as historical artifacts, not accepted coverage. The accepted run is V4.
 
+### Battle render-override reservation and mesh queries
+
+[Render control](../../src/battle/battle_scene_render_control.c) reconstructs
+`0x020BB1C4..0x020BB2D4` (272 C bytes). ReserveRenderOverride rounds the requested
+state size up to four bytes. The arena at `object->resource->stream_state`
+contains a cursor followed by twelve-byte slots: render callback, state pointer,
+16-bit state size and 16-bit owner ID. A current slot of the same size is retained;
+otherwise the function scans for an unused matching slot, checking its recorded
+owner through GetById. The first null state pointer ends the scan and receives
+new storage from the cursor. Binding clears the callback, records the caller's
+ID and sets its render-override pointer. The state bytes are not initialized here.
+
+The mesh query returns 0 for other render modes, 1 without a task, 2 for the hit
+callback, 3 for the fade callback and 4 for another callback. Battle VM opcode
+`0xAE` uses this query.
+
+Private `eur_battle_render_control/evidence_brat50_round_v1.json` repeats the
+2,820-frame Shrooboid Brat route and independently verifies its 1,028-byte
+reservation, including slot/cursor writes and untouched state storage. The
+previous capture-control checks also pass, and every screenshot matches the
+earlier replay. `isolated_v1.json` passes 26 ARM946 cases covering alignment,
+retained slots, stale ownership, occupied slots, size mismatches, scan termination
+and all mesh results. Every case checks all mapped RAM/DTCM/MMIO, ordered writes,
+return values and preserved registers. Mesh queries and reservation reuse have
+isolated coverage only. Synthetic records stay within copied RAM; the live route
+uses normal inputs and preserves all 104 original saves.
+
 ### Battle sprite-grid capture controls
 
 [Sprite-grid capture](../../src/battle/battle_sprite_grid_capture.c) adds seven

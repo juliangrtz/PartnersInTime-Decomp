@@ -84,7 +84,6 @@ extern BattleAITask *func_ov002_020ae940(BattleSceneObject *object,
 extern int func_ov002_020ae9c0(int center_x, int center_y, int radius,
                                int band_width, int phase, int cutoff);
 extern void func_ov002_020bba60(BattleSceneObject *object);
-extern int func_ov002_020bb274(BattleSceneObject *object);
 extern void func_ov002_020bb00c(BattleSceneObject *primary,
                                 BattleSceneObject *secondary,
                                 int solver_parameter, int link_parameter,
@@ -1988,7 +1987,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     case BATTLE_VM_GET_MODEL_PART_EFFECT_STATE:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
         BattleVm_WriteResult(
-            vm, state, command, func_ov002_020bb274(object));
+            vm, state, command, BattleMesh_GetTaskState(object));
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_TRANSFORM_MODEL_EFFECT_BASIS:

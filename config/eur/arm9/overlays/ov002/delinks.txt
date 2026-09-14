@@ -526,3 +526,6 @@ src/battle/battle_dialogue_destroy.cpp:
 
 src/battle/battle_sprite_grid_capture.c:
     .text       start:0x020b9424 end:0x020b99bc
+
+src/battle/battle_scene_render_control.c:
+    .text       start:0x020bb1c4 end:0x020bb2d4
