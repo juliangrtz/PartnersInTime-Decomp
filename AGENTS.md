@@ -99,6 +99,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Emulator tooling and navigation | [Runtime guide](docs/research/RUNTIME_ANALYSIS.md), [tested routes](docs/research/RECONSTRUCTION_NOTES.md#runtime-verification) |
 | RAM roots, object extents and graphics ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference) |
 | ABI and compiler lessons | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md#reconstructing-and-integrating-code) |
+| Battle effect wrappers and scene-object ownership | [Projection, returned handles and embedded object records](docs/research/RECONSTRUCTION_NOTES.md#battle-relative-effect-spawning) |
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
 | Pause navigation | [Page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return), [main menu and member selection](docs/research/RECONSTRUCTION_NOTES.md#pause-main-menu-and-member-selection), [status and Cobalt Star pages](docs/research/RECONSTRUCTION_NOTES.md#pause-status-and-cobalt-star-pages) |
 | Pause list rendering | [Row sprites](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-sprites), [queued drawing and markers](docs/research/RECONSTRUCTION_NOTES.md#pause-queued-row-drawing-and-markers), [row refresh](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-refresh) |
@@ -159,6 +160,9 @@ or counting it; historical `EXACT` records are only discovery leads.
    A caller ignoring `r0` does not establish a `void` return type. Check the
    callee's return paths and consumers before correcting a shared declaration;
    preserve the actual helper instead of substituting a similarly named API.
+   Compiler runtime helpers also have distinct signed and unsigned contracts.
+   Identify their native conversion and return ABI before resolving a compiler
+   symbol; a symbol rename alone contributes no reconstructed code bytes.
    Derive display-coordinate offsets from the native drawing code; physical
    screen dimensions do not establish the engine's coordinate convention.
 3. Preserve load/store order, short-circuit calls, possible aliasing and accesses
@@ -176,6 +180,9 @@ or counting it; historical `EXACT` records are only discovery leads.
    Give owner, panel and child roles explicit views or a named union; verify the
    creator's links and each live allocation instead of applying one layout to
    every object in the chain.
+   A common returned handle does not establish a common record layout. For
+   example, battle sprite and model effects occupy 48 and 56 bytes respectively;
+   recover the actual factory type before interpreting fields beyond the handle.
    For a view based at an indexed interior address, check alignment and prove
    `view_offset + sizeof(view) <= allocation_size` for every valid index.
    Preserve whether native addressing applies the stride before the fixed field
@@ -342,6 +349,9 @@ compatible snapshots. Read their arguments and
   allocated task at its factory boundary. An exact ROM replay confirms executed
   behavior; also review the C types and bounds, which matching bytes alone cannot
   establish as valid.
+  For floating-point arithmetic, preserve intermediate conversions and truncation.
+  An integer oracle is valid only after proving that every modeled operation is
+  exact over the input domain; powers-of-two constants alone do not prove this.
 - Track allocation, initialization, updates and actual release separately. Derive
   pool slots and list writes from the allocator; do not assume payloads are zeroed.
   Removal flags, callback retargeting and pool returns are different events.
@@ -351,6 +361,10 @@ compatible snapshots. Read their arguments and
   is returned. Check those boundaries separately. ResourceA and ResourceB use
   different pools and slot sizes; verify each against the current shared source
   and memory reference before extending an inherited probe.
+  Some live objects are embedded array slots, with no individual heap header.
+  Derive their base, count and stride from the initializer and check current
+  slot ownership. Battle scene objects use 70 embedded 260-byte records; see
+  the [effect replay](docs/research/RECONSTRUCTION_NOTES.md#battle-relative-effect-spawning).
 - Derive timer behavior from its actual entry guard and recurrence. An initial
   zero may trigger now, persist indefinitely or have another meaning; integer
   truncation can add updates. Check the relevant paths instead of importing a
@@ -391,6 +405,10 @@ compatible snapshots. Read their arguments and
   Restoring the input alone may leave induced state behind, such as a cleared
   readiness flag. Define which induced outputs must also be restored, check them
   before restoration, and record the restored bytes separately from natural writes.
+  For random-dependent fixtures, derive both the fixture's expected RNG steps
+  and the ordinary call's result/state. Restore the latter before the caller
+  resumes when continuation must follow the ordinary route, including return
+  registers it consumes. Verify skipped RNG calls and strict threshold equality.
   A temporary removal-flag fixture proves the marking branch; a later ordinary
   group cleanup is separate evidence of release. Do not attribute it to a flag
   that was already restored. Test zero, below, equal and above a threshold where
