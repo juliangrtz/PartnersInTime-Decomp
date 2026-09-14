@@ -11,12 +11,6 @@ enum Overlay14AttackObjectPhase {
 extern int func_ov002_0206f0bc(BattleSceneObject *object, int argument_1,
                                int argument_2, int argument_3,
                                int argument_4, int argument_5);
-extern int func_ov002_02071e40(int effect_id, BattleSceneObject *object,
-                               int offset_x, int offset_y,
-                               int offset_z, int scale);
-extern int func_ov002_02071f08(int effect_id, BattleSceneObject *object,
-                               int offset_x, int offset_y, int offset_z,
-                               int argument_5, int scale);
 
 typedef struct Overlay14AttackTargetParameters {
     u8 unknown_00[2];
@@ -101,8 +95,8 @@ int Overlay14Attack_StartApproach(Overlay14AttackObjectState *state) {
 int Overlay14Attack_FinishWithEffects(Overlay14AttackObjectState *state) {
     BattleSceneObject *object = state->object;
 
-    func_ov002_02071e40(538, object, 0, -12, 0, 0x100);
-    func_ov002_02071f08(844, object, 0, 0, -12, 0, 0x100);
+    BattleSpriteEffect_SpawnRelative(538, object, 0, -12, 0, 0x100);
+    BattleModelEffect_SpawnRelative(844, object, 0, 0, -12, 0, 0x100);
     BattleSceneObject_SetAnimation(object, -1, -1);
     BattleSound_Play(154, 0, 0, 0);
     state->state = OVERLAY14_OBJECT_PHASE_IDLE;

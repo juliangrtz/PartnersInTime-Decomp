@@ -111,6 +111,7 @@ one-time state edit; the remaining entries are inspection references.
 | ResourceA model pool | `0x0206A3D8` | 20-byte pool object, overlay 5; 336-byte model slots and eight-byte links |
 | Draw-node pool | `0x0206A3F8` | 20-byte pool object, overlay 5; eight-byte nodes and eight-byte links |
 | Draw lists | `0x0206A40C` | Two screens of 64 twelve-byte list records, overlay 5; distinct from the menu element lists |
+| Battle scene objects | `read32(0x020C0718) + 0x5B0 + 0x104 * index` | Overlay 2; 70 embedded 260-byte records, indices 0 through 69. Verify live slot/actor ownership; these are not separate heap allocations. See [relative effects](#battle-relative-effect-spawning). |
 
 The shared source layouts are in
 [pause_scene.h](../../include/game/pause_scene.h),
@@ -651,6 +652,78 @@ Controlled RAM edits or temporary decoded-command substitutions are useful
 probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
+
+### Battle relative-effect spawning
+
+[battle_relative_effects.c](../../src/battle/battle_relative_effects.c) contains
+`BattleSpriteEffect_SpawnRelative` at `0x02071E40` (200 bytes) and
+`BattleModelEffect_SpawnRelative` at `0x02071F08` (252 bytes). The contiguous
+range ends at `0x02072004`. Both the isolated public object and the actual build
+object match every byte, including relocations and the model helper's literal
+pool. The shared [effect API](../../include/game/battle_effect.h) replaces the
+inconsistent local declarations in overlays 12, 13, 14 and 18. The native model
+wrapper forwards its factory's returned pointer in `r0`; ignored returns in
+other callers had obscured that contract.
+
+Both helpers optionally project a reference object's position through
+`BattlePosition_StoreViewRelative`. They add the resulting x/y/z to full-width
+offsets and narrow to signed halfwords only when calling the spawn factory.
+The model helper takes a separate optional parent. Without a parent, it adds
+the main view origin at battle-context offsets `+0xCB9C/+0xCB9E` before spawning.
+The first draft followed scheduled machine instructions by updating x/z/y;
+using the coordinate tuple's x/y/z source order recovered the native register
+allocation in both helpers. No assembly, flags or parameter-width changes were
+needed to obtain the match.
+
+The Cannonballers replay uses the existing checkpoint-83 battle snapshot
+`build/runtime/eur_attack_helpers/cannon_setup83.dst`, whose SHA-1 is
+`850ad8741a5474f336724f26698a502f1fb52457`. Its source save is
+`83. Star Shrine - Third area (Before boss).sav`, SHA-1
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b`. After `a:8`, `wait:2200`, and the
+driver's released frames, the replay has advanced 2,210 frames. Ordinary A/B/X/Y
+inputs at frames 417/447/477/507 exercise the four launch windows. This run
+does not inject battle commands or modify RAM; the prior battle snapshot's
+setup is documented in `build/runtime/eur_attack_helpers/cannon_setup83.json`.
+
+All 13 new helper calls return: six sprite calls with a reference, one model
+call with a reference and no parent, and six model calls with a parent and no
+reference. Seven independent projection checks cover raw-position flag 0,
+view 0 and nonnegative projected depth. They verify the output's six bytes and
+unchanged two-byte padding, exact helper arguments and all relevant object
+records at call/return boundaries. The model factory's coordinate, parent and
+scale fields are checked, and each returned handle is forwarded unchanged.
+Other factory internals and the remaining bytes of the 48-byte sprite or
+56-byte model effect record are observed, not independently reconstructed by
+this probe. Effect cleanup, sprite-factory internals, alternate/raw views,
+negative-depth clamping, sprite calls without a reference and extreme offsets
+remain outside this runtime coverage.
+
+The initial probe incorrectly assumed each scene object had its own heap
+header and failed at frame 33. `BattleEntry_InitializeObjects` at `0x02074AD4`
+instead establishes 70 records at `context + 0x5B0`, each 260 bytes. Its loop
+at `0x02074CB0..0x02074D34` assigns object IDs and lookup pointers, advances by
+`0x104`, and stops at 70. The corrected probe checks that full native initializer
+range, record alignment and current slot/actor ownership, then compares the
+entire 260-byte record. This corrects the oracle's ownership model; it does
+not relax the per-call checks or change game code. The failed probe and report
+are retained separately.
+
+The successful report is
+`build/runtime/eur_battle_relative_effects/evidence_cannon83_v2.json`, produced
+by `build/analysis/probe_battle_relative_effects.py`; its source hash is pinned
+in the report. `artifact_validation.json` verifies five 256-by-384 captures,
+four graphics dumps and all 104 unchanged source saves. The final screenshot,
+both 128 KiB BG buffers and each display's 512-byte palette prefix match the
+earlier afterimage replay with identical inputs. The attack and final battle
+menu were visually inspected. Full OAM and the remaining palette bytes have
+validated capture extents/hashes, without a matching earlier baseline. No calls
+remain pending and no drain frames were required.
+
+Full `ninja check`, golden EUR ROM packaging, zero-difference native relinking,
+generated progress and all 81 tests pass. Build logs and source hashes are in
+`build/analysis/battle_relative_effects_build_validation.json`. The private
+launch-controller and adjacent resource-effect drafts remain unmatched; their
+bytes are excluded from this 452-byte addition.
 
 ### Shops
 

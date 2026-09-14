@@ -7809,3 +7809,30 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
   including symbolic assembly: **47.87%**.
   Overlay 7: **78,616 / 142,264 (55.26%)**.
   **38,478 bytes remain to reach 50% matching C/C++.**
+
+## 2026-09-14 - Object-relative battle effects (+452 bytes)
+
+- Reconstructed the contiguous sprite/model effect wrappers with full-width
+  offset arithmetic, native projection order and a separate optional parent.
+  Shared declarations replace inconsistent local return and parameter types.
+  Both functions match completely; no assembly or compiler-option changes.
+- Full matching check, golden packaged ROM, zero-difference native relink,
+  generated progress and all 81 tests pass. The actual build object also matches.
+- Checkpoint 83 Cannonballers: 2,210 frames, 13 checked returns (six sprite,
+  seven model), seven independent projections, exact spawn arguments and model
+  fields, complete input-object records and unchanged returned effect handles.
+  All 104 original saves remain unchanged; no RAM fixtures or pending calls.
+- The first probe mistook embedded battle objects for heap allocations and
+  failed at frame 33. Native initialization proves 70 records of 260 bytes;
+  the corrected ownership model preserves all per-call checks and passes.
+- Five screenshots and four graphics dumps validate. The final screenshot,
+  both BG buffers and both 512-byte palette prefixes match the earlier replay.
+  Attack and final battle menu inspected. Other factory internals, effect cleanup,
+  alternate/raw views, negative depth, reference-free sprite calls and extreme
+  offsets are not independently covered. See the
+  [reference](research/RECONSTRUCTION_NOTES.md#battle-relative-effect-spawning)
+  and private `build/runtime/eur_battle_relative_effects/` reports.
+- Matching C/C++: **743,824 / 1,563,700 bytes (47.57%)**;
+  including symbolic assembly: **47.90%**.
+  Overlay 2: **160,668 / 362,436 (44.33%)**.
+  **38,026 bytes remain to reach 50% matching C/C++.**

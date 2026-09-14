@@ -112,6 +112,14 @@ BattleSceneObject *BattleSceneObject_StretchBetweenAnchors(
     int second_anchor_z,
     u16 longitudinal_scale, u16 lateral_scale,
     u16 flatten);
+/* Optional reference object supplies the initial view-relative position.
+ * Offsets use full ABI words and narrow to signed halfwords at the spawn. */
+BattleEffect *BattleSpriteEffect_SpawnRelative(
+    int effect_id, BattleSceneObject *reference,
+    int offset_x, int offset_y, int offset_z, int scale);
+BattleEffect *BattleModelEffect_SpawnRelative(
+    int effect_id, BattleSceneObject *reference, BattleSceneObject *parent,
+    int offset_x, int offset_y, int offset_z, int scale);
 BattleEffect *BattleSpriteEffect_Spawn(int effect_id, int x, int y, int z,
                                        int scale);
 BattleEffect *BattleSpriteEffect_SpawnAttached(BattleEffect **owner_slot,

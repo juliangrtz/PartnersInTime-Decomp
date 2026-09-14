@@ -26,7 +26,7 @@ u32 PocketChomp_BeginEntry(PocketChomp *center, BattleSceneObject *target)
 u32 PocketChomp_BeginSmallBounce(PocketChomp *center)
 {
     BattleSceneObject *object = center->object;
-    func_ov002_02071f08(118, object, 0, 0, 0, 0, 256);
+    BattleModelEffect_SpawnRelative(118, object, 0, 0, 0, 0, 256);
     BattleMotion_StartBallistic(object, 1, 0, 0, 1, 38, -96, 38, 0);
     BattleSound_Play(71, 0, 0, 0);
     center->timer = 8;
@@ -39,8 +39,8 @@ void PocketChomp_Reveal(PocketChomp *center)
 {
     BattleSceneObject *object = center->object;
     s16 offset[4];
-    func_ov002_02071e40(13, object, 0, -8, 0, 256);
-    func_ov002_02071f08(28, object, 0, 0, -8, 0, 256);
+    BattleSpriteEffect_SpawnRelative(13, object, 0, -8, 0, 256);
+    BattleModelEffect_SpawnRelative(28, object, 0, 0, -8, 0, 256);
     if ((u32)Random_NextModulo(100) < 5)
         center->flags |= 0x400;
     else
@@ -77,7 +77,7 @@ void PocketChomp_BeginRun(PocketChomp *center)
 {
     BattleSceneObject *object = center->object;
     PocketChompAttackWorkPrefix *work = data_ov002_020c0710;
-    func_ov002_02071f08(396, object, 0, 0, 0, 0, 256);
+    BattleModelEffect_SpawnRelative(396, object, 0, 0, 0, 0, 256);
     BattleScreenEffect_StartPrimary(1, 50, 0);
     int speed = Overlay18Attack_GetTravelSpeedQ8(work->progress);
     int dx = work->horizontal_offset - 144 - object->x;

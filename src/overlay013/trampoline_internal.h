@@ -3,6 +3,7 @@
 #include "../overlay010/attack_common_internal.h"
 #include <game/overlay013_attack.h>
 extern "C" {
+#include <game/battle_effect.h>
 #include <game/battle_object.h>
 #include <game/battle_impact_effect.h>
 }
@@ -42,7 +43,6 @@ void func_ov013_020c5210(Overlay10ActionActor *);
 void func_ov013_020c4228(Overlay10ActionActor *);
 void BattleFeedback_LoadResource();
 void func_ov002_020b03b8(int, int, int, int);
-void func_ov002_02071f08(int, BattleSceneObject *, int, int, int, int, int);
 int BattleFeedback_IsEffectComplete();
 void func_ov002_0206b5f0(BattleAITask *);
 void func_ov002_02072004(BattleSceneObject *, int, int, int, int);

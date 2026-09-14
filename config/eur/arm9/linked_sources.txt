@@ -868,3 +868,4 @@ src/overlay007/pause_party_transition.cpp
 
 src/overlay007/menu_item_selection_sprites.cpp
 src/overlay007/menu_badge_description.cpp
+src/battle/battle_relative_effects.c

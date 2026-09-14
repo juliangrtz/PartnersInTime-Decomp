@@ -15,8 +15,8 @@ void PocketChompSupport_SpawnImpact(PocketChompSupport *support)
 {
     BattleSceneObject *object = support->object;
     if (object) {
-        func_ov002_02071e40(8, object, 0, 0, 0, 256);
-        func_ov002_02071f08(11, object, 0, 0, 0, 0, 256);
+        BattleSpriteEffect_SpawnRelative(8, object, 0, 0, 0, 256);
+        BattleModelEffect_SpawnRelative(11, object, 0, 0, 0, 0, 256);
         BattleSound_Play(51, 0, 0, 0);
     }
 }
@@ -51,7 +51,7 @@ int PocketChompSupport_UpdateParticles(PocketChompSupport *support)
 {
     int result = --support->particle_timer;
     if (result <= 0) {
-        func_ov002_02071f08(data_ov018_020c7180[support->bits.direction], support->linked_object, 0, 0, 0, 0,
+        BattleModelEffect_SpawnRelative(data_ov018_020c7180[support->bits.direction], support->linked_object, 0, 0, 0, 0,
                             256);
         support->particle_timer = 4;
         return 4;

@@ -49,7 +49,7 @@ void Overlay13Attack_ShowLandingEffect()
 {
     BattleSceneObject *object = BattleSceneObject_GetById(40);
     if (object->motion_origin_z && !object->z) {
-        func_ov002_02071f08(419, object, 0, 0, 0, 0, 256);
+        BattleModelEffect_SpawnRelative(419, object, 0, 0, 0, 0, 256);
         BattleSound_Play(57, 0, 0, 0);
     }
 }

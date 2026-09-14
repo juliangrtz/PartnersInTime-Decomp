@@ -25,8 +25,6 @@ extern PocketChompAttackWorkPrefix *data_ov002_020c0710;
 extern s16 FX_SinCosTable_[];
 extern int data_ov018_020c7180[];
 extern int Random_NextModulo(int), _s32_div_f(int, int);
-extern int func_ov002_02071f08(int, BattleSceneObject *, int, int, int, int, int);
-extern int func_ov002_02071e40(int, BattleSceneObject *, int, int, int, int);
 extern void func_ov002_020b8a58(BattleSceneObject *, int);
 extern void func_ov002_020b8a3c(BattleSceneObject *, int);
 extern void func_ov002_020b8a18(BattleSceneObject *, int);
