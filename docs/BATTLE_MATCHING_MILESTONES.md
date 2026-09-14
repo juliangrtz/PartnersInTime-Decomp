@@ -8315,3 +8315,12 @@ combined 1,288-byte renderer unit match. Seven build checks pass, including
 1,440 live number/summary calls plus 6,660 quad calls and 45 isolated cases.
 The capture and graphics dumps match the preceding route. No live fixtures
 or isolated helper stubs; all 104 saves remain unchanged.
+
+## Touchscreen, card DMA and arenas - 2026-09-14
+
+Six functions add 1,236 matching C bytes. Total: 766,152 / 1,563,700
+(48.9961%); symbolic ASM is separate. All four actual source objects match;
+both ROM comparisons and 81 tests pass. Private eur_nitro_input_arenas
+records 21 live arena/console calls and 136 isolated ARM946 cases. Touch/DMA
+coverage is isolated, with detector/callback stubs and modeled DMA I/O as
+specified in the reconstruction reference. All 104 saves are unchanged.

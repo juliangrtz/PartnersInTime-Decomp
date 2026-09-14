@@ -959,6 +959,18 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Touchscreen replies, card DMA and memory arenas
+
+Six functions add 1,236 matching C bytes: the touch FIFO callback, card DMA
+wrapper, console-type cache and three arena helpers. Private
+`eur_nitro_input_arenas/evidence_boot55_v2.json` checks 21 arena/console calls
+on a cold boot to the title screen. That route does not reach touch replies
+or card DMA. `isolated_v2.json` checks 136 ARM946 cases using copied live memory,
+including touch ring wrapping/errors and ordered DMA register writes. It uses
+explicit console-detector results and a no-effect touch callback; invalid replies
+trap at termination. DMA transfers and asynchronous timing remain outside that
+model. Both ROMs match, all 81 tests pass and all 104 saves are unchanged.
+
 ### Save-menu number and time drawing
 
 Two functions add 860 matching C bytes alongside the existing quad renderer.

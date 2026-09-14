@@ -912,3 +912,8 @@ src/field/field_party_story_presence.c
 
 src/overlay006/credits_textured_quad.c
 src/overlay008/save_menu_textured_quad.c
+
+src/nitro/tp/tp_fifo.c
+src/nitro/mi/mi_card_dma.c
+src/nitro/os/os_console_type.c
+src/nitro/os/os_arena_low.c

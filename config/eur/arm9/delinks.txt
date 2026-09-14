@@ -747,3 +747,15 @@ src/game/item_effect_value.c:
 
 src/game/interval.c:
     .text start:0x020108f0 end:0x02010960
+
+src/nitro/tp/tp_fifo.c:
+    .text start:0x02040fb0 end:0x02041270
+
+src/nitro/mi/mi_card_dma.c:
+    .text start:0x0203bcbc end:0x0203bd48
+
+src/nitro/os/os_console_type.c:
+    .text start:0x02039b34 end:0x02039bac
+
+src/nitro/os/os_arena_low.c:
+    .text start:0x0203a0b4 end:0x0203a1c4
