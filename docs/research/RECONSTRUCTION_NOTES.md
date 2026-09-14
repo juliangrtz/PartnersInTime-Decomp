@@ -959,6 +959,23 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Save-menu number and time drawing
+
+Two functions add 860 matching C bytes alongside the existing quad renderer.
+Decimal drawing clips overflow to the requested digit width, suppresses leading
+zeros when requested and advances the draw depth for each submitted digit.
+The summary display caps coins at 999,999 and time at 99:59.
+
+Private `eur_save_menu_numbers/evidence_save55_v1.json` checks 1,260 number calls,
+180 summary calls and 6,660 quad calls over 180 frames in initialized save menu
+55. It checks child arguments, depth counters, the complete 10,248-byte menu
+workspace and ordered GPU writes. Forty-five isolated ARM946 cases cover digit
+and time boundaries, leading zeros and alpha zero with native division/quad
+helpers and full mapped-memory comparison except 256 stack bytes. There are no
+helper stubs or live fixtures. The final capture and all four graphics dumps
+match the preceding quad replay. Both ROMs match, 81 tests pass and 104 saves
+are unchanged. GPU submission is checked; rasterization remains observational.
+
 ### Credits and menu textured quads
 
 Two functions add 856 matching C bytes. Both accept ten full-word arguments

@@ -8305,3 +8305,13 @@ Seven build checks pass, including 81 tests and both ROM comparisons. Private
 eur_frontend_quads records 26,020 fully checked live calls, 48 isolated cases,
 ordered GPU writes and visible save-menu/credits captures. Credits entry uses
 one restored command fixture; source saves remain unchanged.
+
+## Save-menu numbers and play time - 2026-09-14
+
+Two functions add 860 matching C bytes. Total: 764,916 / 1,563,700
+(48.9171%); symbolic ASM is separate. All three functions in the
+combined 1,288-byte renderer unit match. Seven build checks pass, including
+81 tests and both ROM comparisons. Private eur_save_menu_numbers checks
+1,440 live number/summary calls plus 6,660 quad calls and 45 isolated cases.
+The capture and graphics dumps match the preceding route. No live fixtures
+or isolated helper stubs; all 104 saves remain unchanged.
