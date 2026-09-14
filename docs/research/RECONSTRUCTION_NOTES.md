@@ -680,8 +680,8 @@ native producers, VBlank consumer at `0x0207282C`, main consumer at `0x020729D4`
 and constructor at `0x02072FB0`. `BattleMain_Create` allocates 3,584 bytes for the
 scheduler; its constructor clears 2,492 bytes starting at offset 1,088. The final
 four padding bytes therefore remain outside that clearing operation.
-The VBlank consumer is now also reconstructed; see the follow-up below. The
-main frame driver at `0x020729D4` remains native code.
+The VBlank consumer and [scheduler lifecycle](#battle-scheduler-lifecycle) are
+also reconstructed. The main frame driver at `0x020729D4` remains native code.
 
 All offsets below are from `read32(0x020C0714)` in ARM9 main RAM:
 
@@ -810,6 +810,87 @@ matching build, both golden ROM hashes, zero-difference native relink, generated
 progress and all 81 tests. Source and log hashes were rechecked after the intervening
 documentation commit; no source changes followed that full build. Final ten-function
 object comparisons are pinned by `battle_scheduler_vblank_object_provenance.json`.
+
+### Battle scheduler lifecycle
+
+[battle_scheduler_lifecycle.cpp](../../src/battle/battle_scheduler_lifecycle.cpp)
+reconstructs six contiguous routines at `0x02072D90..0x02073068`, adding 728 C/C++
+bytes. Each first draft matched; final build objects also match all six routines
+and the ten neighboring queue functions. The 956-byte main-driver gap keeps these
+two modules separate. No assembly or compiler-flag changes were needed.
+
+| Entry | Routine | Bytes |
+|---|---|---:|
+| `0x02072D90` | `BattleSchedulerIrq_Delete` | 44 |
+| `0x02072DBC` | `BattleSchedulerIrq_Destroy` | 36 |
+| `0x02072DE0` | `BattleSchedulerIrq_Init` | 48 |
+| `0x02072E10` | `BattleScheduler_Delete` | 212 |
+| `0x02072EE4` | `BattleScheduler_Destroy` | 204 |
+| `0x02072FB0` | `BattleScheduler_Init` | 184 |
+
+Initialization constructs the archive/task prefix, disables the normal task,
+resets texture/model lists, clears the scheduler workspace, publishes its global
+and allocates the IRQ task. The scheduler occupies 3,584 bytes; its final four
+padding bytes remain untouched. The IRQ allocation is 40 bytes despite its
+24-byte shared task prefix, and its trailing sixteen bytes are not initialized.
+The fifth archive-constructor argument is the full stack word `0xFFFF7F7F`.
+
+Both destruction variants unlink the IRQ task, release nodes and optional
+buffers, clear the scheduler global, reset lists and destroy the archive prefix.
+Only the deleting variant frees the scheduler itself. The native node loop reads
+its successor after the custom allocator releases the block; that allocator
+retains payload bytes. Preserve this order without treating the released payload
+as a live allocation. Multi-node cleanup remains outside the runtime cases below.
+
+Private `build/analysis/probe_battle_scheduler_lifecycle.py` and
+`battle_scheduler_lifecycle_oracle.py` check ordered caller stores and helper
+arguments, returns, full live allocations, save data, task-list neighbors, heap
+metadata and texture/render roots. Open-file destruction additionally checks
+`FS_CloseFile` entry/return, the complete 68-byte file and 80-byte archive records,
+and success under the observed idle-ROM archive preconditions. Hardware lock
+internals, asynchronous IRQ timing and helper MMIO-store order are not independent
+oracles here; final IE/IME are checked.
+
+Four checkpoint-55 replays total 3,214 frames: `entry55_v4`, `exit55_v4`,
+`retry55_v4` and `entry55_v4_repeat`, with reports under
+`build/runtime/eur_battle_scheduler_lifecycle/`. Each constructor and each
+deleting destructor completes twice. No calls or input fixtures remain pending.
+Entry restores the temporary 72-byte field-VM encounter command and its cursor
+before battle proceeds. Exit restores the turn-state word before destruction.
+The retry variant temporarily selects exit mode 1, verifies native clearing of
+the ten-byte encounter request, then restores the original mode at the context
+destructor's return. It reaches an active two-choice retry/load menu.
+
+The controlled state-0 exit verifies cleanup and complete field-overlay text and
+read-only data, but remains black, as did the historical route. It does not prove
+a natural field return. An earlier final-zero assertion failed because the field
+overlay reuses `0x020C0714` for read-only data. The corrected check verifies both
+battle roots while overlay 2 still owns them, before checking the destination
+overlay. The earlier missing-file-close oracle and failed exit reports remain
+preserved; neither failure required changing the matching game source.
+
+`check_battle_scheduler_lifecycle_arm.py` adds nine native ARM946 cases on copied
+live RAM/DTCM. All six routines execute, including non-deleting destruction,
+exhausted-heap allocation failure, and a single node with two optional buffers.
+Native helpers run without stubs. Independent predictions cover all four MiB of
+main RAM, the modeled I/O page, caller stores/calls, returns, SP and r4-r11.
+DTCM outside the observed stack extent is preserved; helper stack contents inside
+that extent are observational. Copied closed-file fixtures are separate from the
+live open-file checks. Null-IRQ teardown and multi-node cleanup retain static
+matching evidence only. See `isolated_arm_cases_v1.json` in the runtime directory.
+
+`artifact_validation_v4.json` validates six images, sixteen graphics dumps,
+twelve RAM/DTCM snapshot pairs and all 104 unchanged saves. The battle command
+wheel and retry menu were visually inspected. Final battle animation pixels vary
+even when repeating the unchanged probe; the cause is unconfirmed. Constructor
+inputs, complete lifecycle records, captured BG VRAM, palettes and OAM agree.
+This is not a claim of deterministic final rendering or an independent rasterizer.
+
+`build/analysis/battle_scheduler_lifecycle_build_validation.json` records full
+matching, golden packaged/native ROMs, zero-difference relinking, progress checks
+and 81 passing tests. `battle_scheduler_lifecycle_object_provenance.json` pins the
+final objects and source. Their hashes and the build logs were revalidated after
+the documentation interlude; subsequent work changed private probes and docs only.
 
 ### Battle hit-bonus roll
 

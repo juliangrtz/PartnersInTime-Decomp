@@ -68,6 +68,9 @@ extern "C" {
 extern BattleScheduler *gBattleSystem;
 void BattleScheduler_Idle(void);
 void BattleScheduler_VBlank(void);
+BattleScheduler *BattleScheduler_Init(BattleScheduler *system, u32 priority, u32 unused);
+BattleScheduler *BattleScheduler_Destroy(BattleScheduler *system);
+BattleScheduler *BattleScheduler_Delete(BattleScheduler *system);
 BattleSchedulerNode *BattleSchedulerNode_Insert(BattleSchedulerNode *node, int priority);
 BattleSchedulerNode *BattleSchedulerNode_Unlink(BattleSchedulerNode *node);
 BattleSchedulerNode *BattleSchedulerNode_UnlinkForCleanup(BattleSchedulerNode *node);

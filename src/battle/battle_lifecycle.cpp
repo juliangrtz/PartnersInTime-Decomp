@@ -22,7 +22,6 @@ void func_ov002_0206a184(u8 *);
 void func_ov002_0206f384(BattleModel *);
 void func_ov002_0206f1b8(BattleModel *);
 void *BattleTransfer_EnqueueBeforeMapping(int (*)(void *), void *, int, int);
-void func_ov002_02072fb0(void *, int, const void *);
 extern GameSessionTask *data_02059ffc;
 extern int data_ov002_020c071c;
 extern u8 data_ov002_020beb24[], data_ov002_020beb30[];
@@ -79,9 +78,9 @@ extern "C" BattleFrameContextView *BattleMain_Create(u32 heap_start)
     if (heap_start < 0x020CBFE0)
         heap_start = 0x020CBFE0;
     func_0202974c(heap_start);
-    void *system = GameHeap_New(3584, 0, data_ov002_020beb24, 0);
+    BattleScheduler *system = (BattleScheduler *)GameHeap_New(sizeof(BattleScheduler), 0, data_ov002_020beb24, 0);
     if (system)
-        func_ov002_02072fb0(system, 8, data_ov002_020beb24);
+        BattleScheduler_Init(system, 8, (u32)data_ov002_020beb24);
     BattleFrameContextView *battle =
         (BattleFrameContextView *)GameHeap_New(sizeof(BattleFrameContextView), 0, data_ov002_020beb30, 0);
     if (battle)

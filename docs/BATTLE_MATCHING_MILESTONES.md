@@ -7925,3 +7925,35 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
   including symbolic assembly: **48.00%**.
   Overlay 2: **162,392 / 362,436 (44.81%)**.
   **36,302 bytes remain to reach 50% matching C/C++.**
+
+
+## 2026-09-14 - Battle scheduler lifecycle (+728 C/C++ bytes)
+
+- Reconstructed six constructor/destructor routines at 0x02072D90..0x02073068.
+  Initial drafts and final build objects match; all ten neighboring queue
+  functions remain exact. No assembly or compiler-flag changes.
+- Preserved 3,584-byte scheduler and 40-byte IRQ allocations, untouched padding,
+  task-list/heap effects, optional-buffer cleanup, native retained-link reads,
+  archive destruction and the distinction between destruction and deletion.
+- Full matching build, both golden ROMs, zero-difference native relink, generated
+  progress and 81 tests pass. Final source/object/log hashes revalidated.
+- Four controlled checkpoint-55 replays cover 3,214 frames and eight completed
+  lifecycle calls, including two open-file closes. Entry reaches the battle wheel;
+  the retry exit reaches its active two-choice menu. Input fixtures are restored.
+  The state-0 exit verifies destruction and field-overlay reload but remains black;
+  a natural visible field return is not established.
+- Nine isolated ARM946 cases cover all six routines, non-deleting variants,
+  allocation failure and one node with two buffers. Native helpers execute without
+  stubs; complete copied main RAM, modeled I/O, caller stores/calls, returns and
+  preserved registers agree. Stack contents within the observed frame extent,
+  asynchronous IRQ timing and multi-node cleanup are outside those checks.
+- Artifact integrity passes for six images, sixteen graphics dumps and twelve
+  RAM/DTCM snapshot pairs; all 104 original saves remain unchanged. Repeated final
+  battle captures differ in animation pixels despite equal constructor inputs,
+  lifecycle records and captured BG/palette/OAM buffers. No rendering-equality claim.
+  See the [reference](research/RECONSTRUCTION_NOTES.md#battle-scheduler-lifecycle)
+  and private build/runtime/eur_battle_scheduler_lifecycle/ reports for limits.
+- Matching C/C++: **746,276 / 1,563,700 bytes (47.73%)**;
+  including symbolic assembly: **48.05%**.
+  Overlay 2: **163,120 / 362,436 (45.01%)**.
+  **35,574 bytes remain to reach 50% matching C/C++.**
