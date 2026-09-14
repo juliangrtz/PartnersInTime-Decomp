@@ -948,3 +948,8 @@ src/battle/battle_object_link_follow.c
 src/battle/battle_object_link_segments.c
 src/battle/battle_flexible_link_reset.c
 src/battle/battle_flexible_link_actor.c
+
+src/field/field_effect_controls.cpp
+src/field/field_layer_motion_stop.c
+src/field/field_camera_motion_stop.c
+src/field/field_common_input_mask.c

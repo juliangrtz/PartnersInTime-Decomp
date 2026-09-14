@@ -7,6 +7,7 @@
 
 typedef struct FieldVariablePlacement FieldVariablePlacement;
 struct FieldPaletteCrossfade;
+struct FieldLayerMotion;
 
 typedef struct FieldAreaTransition {
     struct {
@@ -131,7 +132,7 @@ typedef struct FieldAreaContext {
     FieldAreaTransition transition;
     u8 unknown_2b5c[52];
     union { u8 unknown_2b90[52]; struct { u16 state:2, unknown:14; } unknown_2b90_bits; };
-    u8 unknown_2bc4[8];
+    union { u8 unknown_2bc4[8]; struct { struct FieldLayerMotion *layer_motion; void *unknown_2bc8; }; };
     struct FieldPaletteCrossfade *palette_crossfade;
 } FieldAreaContext;
 typedef char FieldAreaContext_SizeCheck[sizeof(FieldAreaContext) == 11216 ? 1 : -1];
@@ -150,6 +151,10 @@ typedef char FieldAreaSnapshot_SizeCheck[sizeof(FieldAreaSnapshot) == 16 ? 1 : -
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldArea_ReverseEffects(FieldAreaContext *area,int index);
+void FieldArea_SetEffectsPaused(FieldAreaContext *area,int index,u8 paused);
+int FieldArea_AreEffectsActive(FieldAreaContext *area,int index);
+int FieldArea_GetCommonInputMask(FieldAreaContext *area);
 void FieldArea_OffsetCameraOrigin(FieldAreaContext *area, fx32 x, fx32 y);
 void FieldArea_UpdateAlphaBlend(FieldAreaContext *area);
 void FieldArea_UpdateBrightness(FieldAreaContext *area);

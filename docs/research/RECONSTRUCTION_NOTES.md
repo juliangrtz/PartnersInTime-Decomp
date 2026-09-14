@@ -959,6 +959,26 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Field palette controls, camera stops and input masks
+
+Seven functions add 560 matching bytes. Field palette controls share the existing
+20-byte object-palette and 24-byte background-palette records. The background
+pointer uses the resident vtable at 0x02050D60; slot 0xBC reverses an effect at
+0x02011C58. Its complete object is 1,936 bytes. Camera stop reads a 52-byte
+record and optionally copies its target coordinates; layer stop uses three
+56-byte records. The input helper intersects the two party input masks.
+
+Private `eur_field_effect_motion_controls/evidence_walk55_v2.json` checks 778
+input-mask calls during ordinary walking and pause/return from checkpoint 55.
+The other six functions are covered only by the 265 cases in `isolated_v2.json`.
+These compare full copied RAM/DTCM/MMIO outside 256 stack bytes, helper arguments
+and results, SP and r4-r11. Native palette-reversal helpers execute completely.
+Sixteen general-angle cases stub positive fixed-point division; nine axis,
+diagonal and zero-vector cases execute without that stub. Hardware timing and
+raster output are outside the isolated checks. The final field capture was
+visually inspected, and all 104 original saves remain unchanged. Four actual
+source objects, both byte-identical ROM builds and 81 tests pass.
+
 ### Battle object links and Pocket Chomp
 
 Sixteen functions add 1,216 matching bytes: link state creation, offsets, following

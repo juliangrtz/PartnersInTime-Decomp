@@ -12,6 +12,7 @@
 #include <game/field_linear.h>
 #include <game/field_orbit.h>
 extern "C" {
+#include <game/field_area_motion.h>
 #include <game/field_entity.h>
 #include <game/field_presentation.h>
 #include <game/field_entity_lifecycle.h>
@@ -93,8 +94,6 @@ extern void func_ov000_020731bc(
 extern void func_ov000_02073110(
     u8 *field_context, FieldEntity *entity, fx32 x_offset, fx32 y_offset,
     int duration, int x_motion_flag, int y_motion_flag, int reserved);
-extern void func_ov000_02072a58(u8 *field_context, int argument_1,
-                                int argument_2);
 extern void func_ov000_020727fc(
     u8 *field_context, int bg_layer, fx32 x_delta, fx32 y_delta,
     int motion_3, int motion_4, int motion_5, int motion_6,
@@ -102,7 +101,6 @@ extern void func_ov000_020727fc(
 extern void func_ov000_02072660(u8 *field_context, int bg_layer,
                                 fx32 x_delta, fx32 y_delta, int duration,
                                 int motion_flag);
-extern void func_ov000_020721c0(u8 *field_context, int bg_layer);
 extern void func_ov000_02072074(u8 *field_context, int axis,
                                 fx32 amplitude, int step, int half_cycles,
                                 int rumble_pattern);
@@ -112,10 +110,6 @@ extern void func_ov000_02075814(
     u16 object_mask_high, u16 object_mask_low, u16 standard_bg_mask,
     u16 extended_bg_mask_0, u16 extended_bg_mask_1,
     u16 extended_bg_mask_2, s16 duration, u16 color);
-extern int func_ov000_02075790(u8 *field_context, int animation_slot);
-extern void func_ov000_02075730(u8 *field_context, int animation_slot,
-                                int paused);
-extern void func_ov000_020756ac(u8 *field_context, int animation_slot);
 
 extern void func_ov000_02074810(u8 *field_context, int wipe_type,
                                 const void *parameters);
@@ -2808,7 +2802,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_STOP_CAMERA_MOVEMENT:
-        func_ov000_02072a58(field_context, 0, 0);
+        FieldArea_StopCameraMotion((FieldAreaContext *)field_context, 0, 0);
         break;
 
     case FIELD_VM_START_BG_LAYER_PROFILED_SCROLL:
@@ -2843,8 +2837,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_STOP_BG_LAYER_SCROLL:
-        func_ov000_020721c0(
-            field_context, arguments[0]);
+        FieldArea_StopLayerMotion((FieldAreaContext *)field_context, arguments[0]);
         break;
 
     case FIELD_VM_START_CAMERA_SHAKE:
@@ -2976,15 +2969,13 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
             for (animation_slot = 0; animation_slot < 2;
                  animation_slot++) {
-                if (func_ov000_02075790(
-                        field_context, animation_slot)) {
+                if (FieldArea_AreEffectsActive((FieldAreaContext *)field_context, animation_slot)) {
                     result = FieldVm_RetryCurrentCommand(
                         vm, state, command->opcode);
                     break;
                 }
             }
-        } else if (func_ov000_02075790(
-                       field_context, arguments[0])) {
+        } else if (FieldArea_AreEffectsActive((FieldAreaContext *)field_context, arguments[0])) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -2997,12 +2988,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
             for (animation_slot = 0; animation_slot < 2;
                  animation_slot++) {
-                func_ov000_02075730(
-                    field_context, animation_slot, 1);
+                FieldArea_SetEffectsPaused((FieldAreaContext *)field_context, animation_slot, 1);
             }
         } else {
-            func_ov000_02075730(
-                field_context, arguments[0], 1);
+            FieldArea_SetEffectsPaused((FieldAreaContext *)field_context, arguments[0], 1);
         }
         break;
 
@@ -3012,12 +3001,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
             for (animation_slot = 0; animation_slot < 2;
                  animation_slot++) {
-                func_ov000_02075730(
-                    field_context, animation_slot, 0);
+                FieldArea_SetEffectsPaused((FieldAreaContext *)field_context, animation_slot, 0);
             }
         } else {
-            func_ov000_02075730(
-                field_context, arguments[0], 0);
+            FieldArea_SetEffectsPaused((FieldAreaContext *)field_context, arguments[0], 0);
         }
         break;
 
@@ -3027,12 +3014,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
             for (animation_slot = 0; animation_slot < 2;
                  animation_slot++) {
-                func_ov000_020756ac(
-                    field_context, animation_slot);
+                FieldArea_ReverseEffects((FieldAreaContext *)field_context, animation_slot);
             }
         } else {
-            func_ov000_020756ac(
-                field_context, arguments[0]);
+            FieldArea_ReverseEffects((FieldAreaContext *)field_context, arguments[0]);
         }
         break;
 

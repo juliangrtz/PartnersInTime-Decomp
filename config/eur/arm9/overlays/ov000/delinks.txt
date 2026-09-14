@@ -389,3 +389,15 @@ src/field/field_camera_origin.c:
 
 src/field/field_screen_fades.c:
     .text start:0x02075968 end:0x02075d28
+
+src/field/field_effect_controls.cpp:
+    .text start:0x020756ac end:0x02075814
+
+src/field/field_layer_motion_stop.c:
+    .text start:0x020721c0 end:0x020721ec
+
+src/field/field_camera_motion_stop.c:
+    .text start:0x02072a30 end:0x02072a9c
+
+src/field/field_common_input_mask.c:
+    .text start:0x0207ec3c end:0x0207ec6c

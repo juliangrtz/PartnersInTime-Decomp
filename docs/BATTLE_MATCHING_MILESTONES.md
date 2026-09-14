@@ -8360,3 +8360,12 @@ and 81 tests pass. Private eur_battle_object_links records 146 Pocket Chomp
 calls with automatic inputs and no RAM fixtures, plus 144 isolated ARM946 cases
 without helper stubs. Allocation sizes and live/isolated coverage are detailed
 in the reconstruction reference. All 104 original saves remain unchanged.
+
+## Field palette controls, camera stops and input masks - 2026-09-14
+
+Seven functions add 560 matching bytes: 772,632 / 1,563,700
+(49.4105%). Four actual source objects, two byte-identical ROMs
+and 81 tests pass. Private eur_field_effect_motion_controls records 778 natural
+input-mask calls and 265 isolated ARM946 cases. The other six functions have
+isolated coverage only; 16 angle cases stub fixed-point division. Both native
+palette-reversal helpers execute completely. All 104 saves remain unchanged.
