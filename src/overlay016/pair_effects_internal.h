@@ -6,6 +6,7 @@
 #include <game/battle_actor.h>
 #include <game/battle_impact_effect.h>
 #include <game/overlay016_attack.h>
+#include <game/battle_model_animation.h>
 #include "attack_state.h"
 
 typedef union Overlay16PairControl {
@@ -23,7 +24,13 @@ typedef struct Overlay16PairEffect {
 } Overlay16PairEffect;
 typedef struct Overlay16PairController {
     BattleSceneObject *primary, *secondary;
-    u8 unknown8[8];
+    union {
+        u8 unknown8[8];
+        struct {
+            GameMatrixAnimationTrack *animation;
+            u8 unknown12[4];
+        };
+    };
     int unknown16, position_z_q12, unknown24;
     u16 radius;
     u8 phase : 5, unknown30 : 3;
@@ -83,6 +90,7 @@ void Overlay16Attack_ScheduleParticipant(Overlay16Participant *participant);
 int Overlay16PairController_IsWithinRadius(Overlay16PairController *controller, BattleSceneObject *object);
 int Overlay16PairController_GetMotionStep(Overlay16PairController *controller);
 void Overlay16PairController_UpdateScale(Overlay16PairController *controller);
+void Overlay16PairController_StartAnimation(Overlay16PairController *controller);
 void Overlay16Participant_EmitTrail(Overlay16Participant *participant);
 void Overlay16Particle_UpdateGrow(BattleAITask *task);
 void Overlay16Participant_PositionEffect(Overlay16Participant *participant);

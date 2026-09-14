@@ -8012,3 +8012,31 @@ final capture remains black; no natural victory or visible field return is claim
 See [the reconstruction reference](research/RECONSTRUCTION_NOTES.md#battle-transition-dispatch-and-resource-slots)
 for native addresses, inputs, the preserved failed ownership assertion and the
 corrected replay, artifact hashes, coverage and explicit limits.
+
+
+## 2026-09-14 - Shared model animations and Mix Flowers controller
+
+Added 488 matching C bytes: `BattleModelAnimation_StartAttached` (68),
+`BattleModelAnimation_Start` (156), and `Overlay16PairController_StartAnimation`
+(264). The contiguous controller unit retains its exact 108-byte scale updater.
+Shared declarations and overlay-25 callers now use the animation-track API.
+
+Matching C/C++: **747,248 / 1,563,700 bytes (47.7872%)**. Symbolic assembly:
+5,012 bytes; combined coverage 48.1077%. Both rebuilt ROMs retain the original
+EUR SHA-1; all 81 tests pass. Final source objects contain four exact functions
+covering 596 bytes, including the existing neighbor.
+
+The 4,270-frame checkpoint-83 Mix Flowers replay verifies each new function,
+context release and owner clearing, ordered controller stores, helper arguments,
+full relevant work allocations and caller stack. Twelve additional native ARM946
+cases check coordinate widths, signed/zero/truncated speeds, owner replacement,
+null models and preserved fields against all 4 MiB of copied main RAM. All 104
+original saves remain unchanged. The final screen shows the battle command menu.
+
+A failed first replay exposed a palette-list insertion omitted by the oracle;
+its native write was traced, and the corrected check derives the neighbor links.
+Alternate renderer observations use the native 304-byte allocation. The failed
+reports remain separate from passing v4/v5 evidence. Palette-placement choice,
+animation-setter internals, sound and rasterization remain observational.
+See [the reconstruction reference](research/RECONSTRUCTION_NOTES.md#battle-model-animation-starts)
+for addresses, routes, private reports, provenance and coverage limits.

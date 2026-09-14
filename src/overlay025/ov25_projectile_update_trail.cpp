@@ -27,7 +27,7 @@ void Overlay25Projectile_UpdateTrail(Overlay25Task *task, BattleSceneObject *, O
         parameters->timer = 0;
         BattleModel *model =
             BattleSceneObject_GetActiveModel(BattleSceneObject_GetById((u16)(parameters->index + 50)));
-        func_ov002_0206c148((u16)parameters->parameter, model, 0, 0, 0, 256);
+        BattleModelAnimation_Start((u16)parameters->parameter, model, 0, 0, 0, 256);
     }
 }
 }

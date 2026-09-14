@@ -32,8 +32,8 @@ src/overlay016/variant_object_state.c:
 src/overlay016/pair_controller_geometry.c:
     .text start:0x020c3378 end:0x020c34d0
 
-src/overlay016/pair_controller_scale.c:
-    .text start:0x020c36e0 end:0x020c374c
+src/overlay016/pair_controller_animation.c:
+    .text start:0x020c36e0 end:0x020c3854
 
 src/overlay016/participant_effect_phases.c:
     .text start:0x020c50e8 end:0x020c53d0

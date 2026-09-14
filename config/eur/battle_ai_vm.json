@@ -1510,7 +1510,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "creates an archive-backed effect at the supplied world position and optionally associates it with the positive owner's attached model",
-      "evidence": "BattleAI_DispatchOpcode case 0x0BD passes mode 0x11 to func_ov002_02078bb4; func_ov002_0206c148"
+      "evidence": "BattleAI_DispatchOpcode case 0x0BD passes mode 0x11 to func_ov002_02078bb4; BattleModelAnimation_Start"
     },
     "190": {
       "arguments": ["owner_object_id_or_nonpositive", "archive_effect_id", "anchor_object_id_or_x", "offset_x_or_y", "offset_y_or_z", "offset_z_or_depth", "scale_fixed"],
@@ -1518,7 +1518,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "creates an archive-backed effect in owner-local coordinates, or at an anchor object's transformed position plus offsets when the owner is nonpositive",
-      "evidence": "BattleAI_DispatchOpcode case 0x0BE passes mode 0x12 to func_ov002_02078bb4; func_ov002_0206c148"
+      "evidence": "BattleAI_DispatchOpcode case 0x0BE passes mode 0x12 to func_ov002_02078bb4; BattleModelAnimation_Start"
     },
     "191": {
       "arguments": ["owner_object_id_or_nonpositive", "archive_effect_id", "world_x", "world_y", "world_z", "world_depth", "scale_fixed"],

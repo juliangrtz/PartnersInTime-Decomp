@@ -258,7 +258,7 @@ void Overlay25Enemy_UpdateLinkedEffectGrowth(Overlay25Task *task, BattleSceneObj
             effect_id = 812;
         else
             effect_id = 813;
-        func_ov002_0206c148(effect_id, 0, position.x, position.y, position.z, 256);
+        BattleModelAnimation_Start(effect_id, 0, position.x, position.y, position.z, 256);
         BattleSound_Play(270, 0, 0, 0);
         BattleSceneObject_SetAnimation(next, -1, -1);
         int animation = 0;

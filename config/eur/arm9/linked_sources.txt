@@ -641,7 +641,7 @@ src/overlay016/participant_idle.c
 src/overlay016/participant_lifecycle.c
 src/overlay016/variant_object_state.c
 src/overlay016/pair_controller_geometry.c
-src/overlay016/pair_controller_scale.c
+src/overlay016/pair_controller_animation.c
 src/overlay016/participant_effect_phases.c
 src/overlay016/participant_effect_position.c
 src/overlay020/animation_duration.cpp
@@ -873,3 +873,4 @@ src/battle/battle_hit_bonus.c
 src/battle/battle_scheduler_queues.c
 
 src/battle/battle_scheduler_lifecycle.cpp
+src/battle/battle_model_animation.c

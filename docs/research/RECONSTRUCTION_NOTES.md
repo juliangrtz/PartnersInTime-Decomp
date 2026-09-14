@@ -18,6 +18,7 @@ ordinary gameplay accessibility or coverage of unexercised branches.
 - [Runtime verification](#runtime-verification)
 - Shared sprite helpers: [OAM wrapper ABI and pooled initialization](#overlay-5-sprite-collection-and-initialization)
 - Battle exit: [transition dispatch and resource-slot selection](#battle-transition-dispatch-and-resource-slots)
+- Battle model animations: [shared track creation and Mix Flowers](#battle-model-animation-starts)
 - Code-derived findings: [pause party status](#pause-party-status)
 - Pause transitions: [verified exit tasks](#pause-exit-tasks-and-transition-state),
   [projection and callback ABI](#pause-transition-projection-and-callback-abi),
@@ -655,6 +656,74 @@ Controlled RAM edits or temporary decoded-command substitutions are useful
 probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
+
+### Battle model animation starts
+
+The shared [battle model-animation unit](../../src/battle/battle_model_animation.c)
+reconstructs `BattleModelAnimation_StartAttached` at `0x0206C104` (68 bytes) and
+`BattleModelAnimation_Start` at `0x0206C148` (156). The
+[Mix Flowers controller unit](../../src/overlay016/pair_controller_animation.c)
+adds `Overlay16PairController_StartAnimation` at `0x020C374C` (264), beside the
+existing 108-byte scale updater. All four functions in the final build objects
+match, including their literals and relocations; the new contribution is 488 bytes.
+
+The factory reads the animation archive through `gBattleContext + 0x48`. Its
+index selects a 32-bit archive-relative offset to signed-halfword commands.
+The workspace pointer at `0x020C0660` owns the model-animation pool pointer at
+`+0xD214` and a four-pointer model table at `+0x1131C`. Only the first table entry
+is replaced. The returned 56-byte `GameMatrixAnimationTrack` owns a 40-byte
+context with X/Y/Z offsets and four model pointers; its owner pointer is at
+track offset `+52`. It is a different record from a 56-byte battle model effect.
+
+The attached wrapper accepts full-width X and signed-halfword Y/Z; the factory
+accepts full-width X/Y and signed-halfword Z. Both take a full-width speed.
+The factory creates the track with that speed, then stores `speed << 4` into
+its signed-halfword speed field. These are separate operations, including for
+negative and zero speeds. The attached wrapper stores the track into the owner's
+slot and sets its backlink. The shared declaration also serves overlay-25 callers.
+
+The controller binds resource 52 to its two scene objects, sets their animations
+and packed flags, positions the secondary object, and attaches animation 849 to
+the track slot at controller `+8`. It initializes the Q12 Z position, radius 20,
+motion step and phase 1, preserving the phase byte's upper bits.
+
+The private replay `build/runtime/eur_battle_model_animation/evidence_mix83_v5.json`
+starts from `build/runtime/eur_attack_helpers/ov17_bros_menu83.dst`, SHA-1
+`21d2e64a24b389689627292539103880c6761b47`, derived from story save 83, SHA-1
+`2cb577d3008975c390a2f00e2b2cd646e4005c1b`. Nine `down:8, wait:30` pairs, then
+`a:8, wait:100, a:8, wait:180, a:8, wait:3600`, plus each action's released frame,
+take 4,270 frames. Guarded participant state drives 665 automatic button inputs
+through frame 1,900. This replay uses no RAM edits; its starting battle checkpoint
+has a controlled origin and does not establish natural story encounter entry.
+
+Each new function runs once at frame 754. Independent checks cover track/context
+creation, owner writes, the full 401,416-byte battle and 70,976-byte common-work
+allocations, the 17,292-byte attack work, helper arguments, ordered controller
+stores and caller stack. The track's context is unlinked and its owner cleared
+at frame 775. No watched calls or tracks remain at the end. The final capture
+shows the battle command menu against Petey; all 104 original save hashes are
+unchanged. The six captures, six RAM/DTCM snapshots and four graphics dumps are
+validated. Graphics are observations, not an independent rasterization proof.
+
+The first replay exposed an omitted palette-list insertion during secondary
+animation setup. The guarded native write links the new embedded palette record
+at scene object `+0xCC` between existing nodes. The corrected oracle observes the
+chosen palette position, independently derives both neighbor/root changes and
+checks the other 37 existing records. It preserves the failing v1 and diagnostic
+v2/v3 reports and their producer variants. Passing v4/v5 runs have identical
+inputs, target records and capture/snapshot bytes. Renderer observations use the
+actual 440-byte primary-model and 304-byte alternate-renderer allocations;
+`sizeof(BattleModel)` does not establish the alternate allocation's extent.
+Animation-setter internals, palette-placement choice, sound and later matrix-slot
+return remain outside the independent checks described here.
+
+`isolated_arm_cases_v1.json` adds 12 native ARM946 cases on copied live RAM, with
+no helper stubs. They cover signed coordinate boundaries, full-width factory Y,
+positive/negative/zero speeds, halfword speed truncation, null model pointers,
+owner replacement and preserved reserved bytes/bits. All 4 MiB of main RAM,
+the caller's stack, return value and SP/r4-r11 are checked; lower helper-stack
+contents are observational within the recorded bounds. These cases supplement
+the live route and do not establish asynchronous behavior or rendering coverage.
 
 ### Battle transition dispatch and resource slots
 
