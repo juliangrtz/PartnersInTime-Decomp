@@ -988,6 +988,27 @@ and IRQ timing are not simulated. Live transition initializer payloads are
 observed within their 28-byte slots. Both ROMs match the original; 104 saves
 remain unchanged.
 
+### Common frame callbacks and reward-controller setup
+
+Shared battle resources now include frame callback dispatch, OAM reset and graphics
+cleanup. Four 12-byte task slots start at workspace offset 70484; their callbacks
+are at +8. The OAM callback at +428 changes from ResetOam to OamReady after the
+screen-1 counters are cleared. Reward items use a 1344-byte allocation: callbacks
+at +0/+4, packed flags at +1240, fade at +1244 and eight 12-byte item entries at +1248.
+The frame callbacks reread shared roots after calls. Closing sets phase 7 only
+when the item count is nonzero.
+
+Private `eur_battle_common_frame/evidence_entry55_v1.json` and
+`evidence_exit55_v1.json` pass 706/901-frame controlled routes with 2,851 calls.
+Checks cover caller stores and callback arguments, OAM counters, cleared graphics
+roots and preserved registers. Renderer/destructor internals remain observations.
+`isolated_v1.json` adds 15 status, callback and constructor cases. Status/callback
+cases check full mapped memory except 256 stack bytes; construction checks native
+allocation/zeroing and the complete payload, with actor binding explicitly skipped.
+No natural reward route is established. Both ROMs remain byte-identical; 104 saves
+are unchanged. The first build failed due to C++ linkage on heap declarations;
+including their C declaration before the internal graphics headers fixed it.
+
 ### Common battle-resource initialization and loading
 
 [Common resources](../../src/battle/battle_common_resources.cpp) reconstructs

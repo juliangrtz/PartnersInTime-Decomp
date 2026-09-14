@@ -1,3 +1,4 @@
+#include <game/battle_common_resources.h>
 extern "C" {
 #include <game/battle_frame.h>
 #include "battle_scheduler_internal.h"
@@ -18,7 +19,6 @@ void func_0202ce08(const void *, void *, int, int);
 void *func_02036650(void);
 void func_02036988(vu32 *, int, int, int, int);
 void func_ov002_0206a008(u8 *);
-void func_ov002_0206a184(u8 *);
 void BattleModel_StopAlternate(BattleModel *);
 void BattleModel_StopPrimary(BattleModel *);
 void *BattleTransfer_EnqueueBeforeMapping(int (*)(void *), void *, int, int);
@@ -101,7 +101,7 @@ extern "C" void *BattleMain_Destroy(void *task)
     func_02009058(0);
     func_02009058(1);
     GameTexturePalette_ReleaseBuffer(0);
-    func_ov002_0206a184(gBattleContext);
+    BattleCommonResources_ReleaseGraphics(gBattleContext);
     if (gBattleContext) {
         BattleObjectData_ResetAll();
         for (u16 id = 60; id < 68; ++id) {

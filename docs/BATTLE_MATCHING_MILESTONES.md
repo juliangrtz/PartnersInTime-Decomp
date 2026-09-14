@@ -8241,3 +8241,15 @@ Draw/capture fade branches have isolated coverage only; live initializer task
 payloads are bounded observations. No visible field return is claimed for the
 black exit capture. All 104 saves are unchanged; artifact_validation_v1.json
 validates reports, source versions, captures, memory and actual source objects.
+
+## Common battle frame and reward helpers - 2026-09-14
+
+Nine routines add 832 matching C/C++ bytes: frame update/graphics cleanup (336),
+OAM callbacks (108), reward callback dispatch (96), close/readiness (164) and
+reward initialization (128). Total: 755,724 / 1,563,700 bytes (48.3292%).
+All new and modified source objects match. Seven build checks pass, including
+81 tests; both ROMs retain SHA-1 ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+Private eur_battle_common_frame reports retain 2,851 live calls and 15 isolated
+cases, along with source hashes, native guards, graphics captures and untouched
+104 saves. Runtime limits and the corrected initial C++ linkage failure are
+recorded in the reconstruction reference; artifact_validation_v1.json passes.

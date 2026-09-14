@@ -1,3 +1,4 @@
+#include <game/battle_common_resources.h>
 #include <game/battle_transition.h>
 extern "C" {
 #include <game/battle_actor.h>
@@ -14,7 +15,6 @@ extern u8 *gBattleContext;
 extern MtxFx44 data_ov002_020bea54;
 void func_ov002_0207707c(void);
 int BattleTurnState_Update(int);
-void func_ov002_0206a0f0(void *);
 void BattlePartyActor_UpdateCommandMovement(BattlePartyActor *);
 void BattleCommandWheel_Update(void *, int);
 void func_ov002_020afb94(int);
@@ -64,7 +64,7 @@ void BattleMain_Update(void)
     BattleAI_UpdateAll();
     if (!BATTLE_FRAME->paused_turn_state || BATTLE_FRAME->paused_turn_state != BATTLE_FRAME->turn_state)
         BATTLE_FRAME->turn_state = BattleTurnState_Update(BATTLE_FRAME->turn_state);
-    func_ov002_0206a0f0(gBattleContext);
+    BattleCommonResources_Update(gBattleContext);
     BattleTaskList_Update(&BATTLE_FRAME->task_list_8b44);
     BattleTaskList_Update(&BATTLE_FRAME->task_list_c76c);
     BATTLE_FRAME->command_state_128 = 0;

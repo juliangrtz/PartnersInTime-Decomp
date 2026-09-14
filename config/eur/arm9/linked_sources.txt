@@ -889,3 +889,6 @@ src/battle/battle_common_resources.cpp
 src/battle/battle_transition_prepare.c
 src/battle/battle_transition_start.c
 src/battle/battle_capture_fade.c
+src/battle/battle_reward_items_update.c
+src/battle/battle_reward_items_status.c
+src/battle/battle_reward_items_initialize.c
