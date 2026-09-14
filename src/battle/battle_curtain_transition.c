@@ -9,7 +9,6 @@ enum BattleCurtainTransitionFlag {
     BATTLE_CURTAIN_ACTIVE = 1 << 6
 };
 
-extern void BattleCurtainTransition_Draw(int progress);
 
 void BattleCurtainTransition_UpdateTask(BattleCurtainTransitionTask *task);
 

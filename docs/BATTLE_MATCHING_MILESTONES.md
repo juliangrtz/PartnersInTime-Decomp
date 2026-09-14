@@ -8431,3 +8431,12 @@ All source objects and both ROMs match; 81 tests pass. Private
  eur_field_camera_setup checks 193 isolated ARM946 cases, with explicit fixed
 point division and profile-vector stubs. The save-1 replay reaches none of the
 new functions; coverage is isolated-only. All 104 original saves are unchanged.
+
+## Battle point chains and ring transition drawing - 2026-09-14
+
+Four functions add 1,348 matching bytes: 780,440 / 1,563,700 (49.9098%).
+All source objects and both ROMs match; 81 tests pass. Private
+ eur_battle_links_curtain checks 327 isolated ARM946 cases with full ordered
+ring GPU writes. Chain solver/draw calls and resource allocation are explicit
+stubs. The Chomp route did not reach the resource-slot wrapper; coverage of
+this batch is isolated-only. All 104 original saves are unchanged.

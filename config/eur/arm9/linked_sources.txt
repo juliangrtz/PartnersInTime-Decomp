@@ -980,3 +980,8 @@ src/overlay018/chomp_visibility.cpp
 src/battle/battle_motion_velocity_ratio.c
 
 src/field/field_camera_setup.cpp
+
+src/battle/battle_curtain_draw.c
+src/battle/battle_resource_model_slots.c
+src/battle/battle_link_effect_update.c
+src/battle/battle_link_effect_simulate.c

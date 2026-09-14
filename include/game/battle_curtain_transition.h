@@ -17,4 +17,6 @@ typedef char BattleCurtainTransitionTask_SizeCheck[
 BattleCurtainTransitionTask *BattleCurtainTransition_InitializeTask(
     BattleCurtainTransitionTask *task);
 
+void BattleCurtainTransition_Draw(int progress);
+
 #endif

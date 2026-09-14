@@ -601,3 +601,15 @@ src/battle/battle_interface_quad.c:
 
 src/battle/battle_motion_velocity_ratio.c:
     .text start:0x020be478 end:0x020be504
+
+src/battle/battle_curtain_draw.c:
+    .text start:0x020b42e0 end:0x020b44d0
+
+src/battle/battle_resource_model_slots.c:
+    .text start:0x020ac740 end:0x020ac7d4
+
+src/battle/battle_link_effect_update.c:
+    .text start:0x020bcaa8 end:0x020bccc4
+
+src/battle/battle_link_effect_simulate.c:
+    .text start:0x020be30c end:0x020be3b0

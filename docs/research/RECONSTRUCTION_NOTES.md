@@ -985,6 +985,29 @@ is stubbed. Checks include mapped memory outside 512 stack bytes and the named
 observational regions, ordered calls, results, SP and r4-r11. Both ROM builds,
 both source objects and 81 tests pass; all 104 original saves are unchanged.
 
+### Battle point chains and ring transition drawing
+
+Four functions add 1,348 matching bytes. The ring transition emits concentric
+ellipses using the original trigonometry and alpha tables. Point-chain update
+anchors Q8 particles to projected scene objects, adjusts an attached endpoint
+and invokes five solver steps before drawing. Resource model effects use the
+shared 64-slot task table; their y coordinate is a signed halfword, consistent
+with the attached factory and the VM's projected position record.
+
+Private `eur_battle_links_curtain/isolated_v1.json` checks 327 ARM946 cases:
+38 ring phases, all 65 slot-search outcomes, 32 solver-wrapper combinations and
+192 chain-anchor cases. Original lookup, projection, matrix upload and immediate
+or deferred object adjustment execute. All ordered ring GPU writes are compared
+against independent calculations. Full battle context, 28-byte task records,
+16-byte particles, scene slots and mapped RAM/DTCM/MMIO outside 256 stack bytes
+are checked with arguments, returns and SP/r4-r11. Unreconstructed chain solver
+and drawing calls are explicit no-op stubs; the slot wrapper uses a synthetic
+44-byte task with owner binding. These checks do not model rasterization or
+hardware timing. The normal 3,110-frame Chomp route did not invoke the resource
+slot wrapper; its failed coverage assertion is retained. No live coverage for
+these four functions is claimed. Both ROM builds and 81 tests pass; all 104
+original saves are unchanged. No inline assembly was added.
+
 ### Field camera motion setup
 
 Four C++ functions add 1,428 matching bytes: timed and speed-based entity
