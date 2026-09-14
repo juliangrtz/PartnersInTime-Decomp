@@ -107,6 +107,7 @@ that share ROM/save paths.
 | Battle scheduler construction and teardown | [Heap/file contracts, overlay transitions and replay limits](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-lifecycle) |
 | Shared sprite collection and initialization | [Renderer arguments, pool layouts and live versus isolated coverage](docs/research/RECONSTRUCTION_NOTES.md#overlay-5-sprite-collection-and-initialization) |
 | Battle exit and resource slots | [Dispatch boundaries, overlay replacement and coverage limits](docs/research/RECONSTRUCTION_NOTES.md#battle-transition-dispatch-and-resource-slots) |
+| Battle model animations and Mix Flowers | [Track/context ownership, wrapper ABI, palette-list writes and renderer extents](docs/research/RECONSTRUCTION_NOTES.md#battle-model-animation-starts) |
 | Task, heap and archive lifecycle | [Normal tasks](src/game/task.cpp), [IRQ tasks](src/game/irq_task.cpp), [allocator](src/game/heap.c), [archive base](src/game/archive_lifecycle.c), [compressed archive](src/game/archive_compressed_lifecycle.c) |
 | Hit-bonus arithmetic and RNG fixtures | [Conversion ABI, truncation and restoration](docs/research/RECONSTRUCTION_NOTES.md#battle-hit-bonus-roll) |
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
@@ -224,6 +225,10 @@ or count initialization data merely to make the remaining inventory smaller.
    a matrix-animation track also occupies 56 bytes but has its own context and
    owner fields. Recover the actual factory and release contracts before choosing
    a shared type or interpreting fields beyond the handle.
+   Likewise, the common battle-model interface can refer to a 440-byte primary
+   model or a 304-byte alternate renderer. Use the allocation's actual extent in
+   probes; reading `sizeof(BattleModel)` through every returned handle overreads
+   the smaller object. See the [animation evidence](docs/research/RECONSTRUCTION_NOTES.md#battle-model-animation-starts).
    For a view based at an indexed interior address, check alignment and prove
    `view_offset + sizeof(view) <= allocation_size` for every valid index.
    Preserve whether native addressing applies the stride before the fixed field
@@ -296,6 +301,14 @@ variable namespaces and script containers. Consult the
 do not transfer an opcode's argument contract from one VM to another. Preserve
 instruction-pointer advancement, operand decoding, yield/rewind behavior and
 the order of variable reads and writes when changing handlers.
+
+For packed battle operands, derive the expression from native instructions and
+literal masks. The existing `BattleVm_PackHalfwords` combines
+`((u32)low & 0xFFFF) | ((u32)high << 16)`; misleading pseudocode can describe a
+64-bit shift instead. A following signed division by 16 truncates toward zero
+and is not interchangeable with an arithmetic right shift. Preserve mode-bit
+tests, in-place argument writes and their order relative to object lookup.
+Check full-word versus halfword comparisons separately, even in related handlers.
 
 The Scene dispatcher's opcode `0x04E` uses a documented 16-instruction inline-ASM
 height calculation. The remaining C-only discrepancy was a demonstrated compiler
@@ -378,6 +391,10 @@ compatible snapshots. Read their arguments and
   can create different callbacks. Derive child counts from the creator's loops
   and reconcile them with distinct task lifetimes, not just callback totals.
   A missed route is a coverage gap; do not remove its assertion to obtain a pass.
+  Keep call discovery separate from output verification. A completed replay with
+  zero target calls provides no coverage for those functions. Use actual callers,
+  script opcodes and save conditions to select another route before repeating it;
+  a neighboring native attack helper does not prove that a VM wrapper executes.
   Check the save's actual entry conditions first. For example, a fully healed
   party can prevent a healing item's recipient-selection path. Use another
   suitable save or a guarded, reversible fixture and label that evidence accordingly.
@@ -393,8 +410,11 @@ compatible snapshots. Read their arguments and
   at the guarded destruction boundary while that overlay owns the address.
   After a transition, establish the new owner before interpreting that address;
   verify the destination scene using its own live state and visible readiness.
-- Hooks fire before the addressed instruction. Respect ARM condition codes and
-  distinguish helper effects from subsequent caller stores. Pair nested returns
+- Execution hooks fire before the addressed instruction. Establish memory-write
+  hook timing separately: a value read in that callback or labeled `before` in
+  a diagnostic report is not necessarily the pre-store value. Respect ARM
+  condition codes and distinguish helper effects from subsequent caller stores.
+  Pair nested returns
   using entry SP and LR; tail calls can share both, so finish all matching pending
   records innermost first. Read ARM9 DTCM at `0x027E0000..0x027E4000` directly;
   do not fold stack outputs into main-RAM mirrors.
@@ -475,6 +495,9 @@ compatible snapshots. Read their arguments and
   only within explicitly bounded ranges at its return. Continue independently
   checking the caller's decisions, arguments, stores and surrounding memory;
   do not replace the entire expected state with a fresh snapshot.
+  Include linked-list neighbors and roots outside the receiving object. An
+  animation setter can insert an embedded palette record into a shared list;
+  derive those pointer changes even when the placement choice is observational.
 - Record per-function/branch counts, ROM/save/state hashes, inputs and explicit
   limits. Separate ordinary routes from RAM fixtures and document restoration.
   For a per-call fixture, preserve the exact bytes, edit only at a guarded live
