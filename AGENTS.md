@@ -107,7 +107,7 @@ that share ROM/save paths.
 | Battle scheduler construction and teardown | [Heap/file contracts, overlay transitions and replay limits](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-lifecycle) |
 | Shared sprite collection and initialization | [Renderer arguments, pool layouts and live versus isolated coverage](docs/research/RECONSTRUCTION_NOTES.md#overlay-5-sprite-collection-and-initialization) |
 | Battle exit and resource slots | [Dispatch boundaries, overlay replacement and coverage limits](docs/research/RECONSTRUCTION_NOTES.md#battle-transition-dispatch-and-resource-slots) |
-| Battle model animations and Mix Flowers | [Track/context ownership, wrapper ABI, palette-list writes and renderer extents](docs/research/RECONSTRUCTION_NOTES.md#battle-model-animation-starts) |
+| Battle model animations and Mix Flowers | [Track/context ownership, model-table sentinels, wrapper ABI and renderer extents](docs/research/RECONSTRUCTION_NOTES.md#battle-model-animation-starts) |
 | Task, heap and archive lifecycle | [Normal tasks](src/game/task.cpp), [IRQ tasks](src/game/irq_task.cpp), [allocator](src/game/heap.c), [archive base](src/game/archive_lifecycle.c), [compressed archive](src/game/archive_compressed_lifecycle.c) |
 | Hit-bonus arithmetic and RNG fixtures | [Conversion ABI, truncation and restoration](docs/research/RECONSTRUCTION_NOTES.md#battle-hit-bonus-roll) |
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
@@ -295,6 +295,11 @@ old VM requests or private near-matches as unfinished work. Dispatcher completio
 does not establish that all its callees are reconstructed or that every script
 path has runtime coverage.
 
+Resolve script JSON opcodes through the schema and
+`tools/report_battle_vm.py::opcode_number`; exports can contain names instead of
+numbers. Follow the packed resource ID through the archive-slot resolver to the
+actual script entry before choosing a save or an attack to exercise a handler.
+
 The resident interpreter serves different overlay-specific descriptor tables,
 variable namespaces and script containers. Consult the
 [VM reference](docs/research/SCRIPT_VM_SEMANTICS.md) for the actual instance;
@@ -309,6 +314,11 @@ literal masks. The existing `BattleVm_PackHalfwords` combines
 and is not interchangeable with an arithmetic right shift. Preserve mode-bit
 tests, in-place argument writes and their order relative to object lookup.
 Check full-word versus halfword comparisons separately, even in related handlers.
+
+Check each state's storage extent: [BattleAIState](include/game/battle_ai.h)
+is `0xC0` bytes including its continuation tail, while embedded party-state slots
+have a `0xB8` stride. Neither establishes the size of every VM buffer. Bound
+reads and writes by the actual containing allocation and the fields used there.
 
 The Scene dispatcher's opcode `0x04E` uses a documented 16-instruction inline-ASM
 height calculation. The remaining C-only discrepancy was a demonstrated compiler
@@ -395,6 +405,8 @@ compatible snapshots. Read their arguments and
   zero target calls provides no coverage for those functions. Use actual callers,
   script opcodes and save conditions to select another route before repeating it;
   a neighboring native attack helper does not prove that a VM wrapper executes.
+  A save number in a checkpoint filename does not identify its current encounter;
+  inspect the producer, earlier fixtures and live enemy/script state.
   Check the save's actual entry conditions first. For example, a fully healed
   party can prevent a healing item's recipient-selection path. Use another
   suitable save or a guarded, reversible fixture and label that evidence accordingly.
@@ -414,9 +426,12 @@ compatible snapshots. Read their arguments and
   hook timing separately: a value read in that callback or labeled `before` in
   a diagnostic report is not necessarily the pre-store value. Respect ARM
   condition codes and distinguish helper effects from subsequent caller stores.
-  Pair nested returns
-  using entry SP and LR; tail calls can share both, so finish all matching pending
-  records innermost first. Read ARM9 DTCM at `0x027E0000..0x027E4000` directly;
+  In the verified DeSmuME setter replay, false conditional stores delivered no
+  execution callback. Require the selected stores and independently check that
+  skipped destinations remain unchanged; do not require a hook at every address.
+  Pair nested returns using entry SP and LR; tail calls can share both, so finish
+  all matching pending records innermost first. Read ARM9 DTCM at
+  `0x027E0000..0x027E4000` directly;
   do not fold stack outputs into main-RAM mirrors.
   Check initialized stack locals after the prologue and initialization stores,
   at a guarded boundary such as the first helper entry. Derive offsets from the
@@ -582,6 +597,11 @@ case needs a valid exhausted heap, rather than a null list head that the allocat
 dereferences. A copied closed-file case covers that branch only; retain separate
 evidence for an open file and any hardware-dependent close path.
 
+Make branch fixtures distinguish the outcomes they claim to test. Shorter/longer
+duration selection needs distinct valid roots; equal roots cannot expose a wrong
+choice. Explicitly bound any emulated hardware contract: an immediate integer
+square-root result does not verify DS hardware latency, busy flags or IRQ timing.
+
 ### Debug menu and Nawatobi
 
 The debug menu teleports without necessarily initializing a complete game state.
@@ -665,3 +685,5 @@ reruns distinct. A suspected oracle correction is not a verified fix. Record
 any live process's session ID, command and output path; inspect it before starting
 a duplicate. Populated artifacts or elapsed time do not establish successful
 completion. Historical build logs are not checks run by the current task.
+Check the producer's final exit status and assertions even when its JSON says
+`PASS`; some private probes write that report before their final aggregate checks.
