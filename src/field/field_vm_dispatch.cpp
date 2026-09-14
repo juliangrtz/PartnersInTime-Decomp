@@ -34,7 +34,6 @@ extern FieldEntity *func_ov000_0208221c(
 extern int func_ov000_02082240(FieldScriptState *target,
                                FieldScriptState *parent, int owner_type,
                                const u16 *script);
-extern void func_ov000_020a4e84(FieldEntity *entity);
 extern void func_ov000_020a4214(FieldEntity *entity, int angle_mode,
                                 int target_angle, int angular_step,
                                 int signed_multiplier, int stop_at_target,
@@ -1645,7 +1644,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_RESTORE_ENTITY_INTERACTION_BOUNDS:
-            func_ov000_020a4e84(entity);
+            FieldEntity_RefreshInteractionBounds((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_SET_ENTITY_ANIMATION_SPEED: {

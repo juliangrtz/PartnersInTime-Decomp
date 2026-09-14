@@ -959,6 +959,20 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Field interaction bounds, input forwarding and action models
+
+Six functions add 1,356 matching bytes: Q12 line intersection, script/2D
+interaction-bound refresh, party input forwarding and region-71 action models.
+Private `eur_field_interaction_input/evidence_walk55_v1.json` checks 2,685 calls
+during natural walking and pause/return from save 55, including 12 intersections.
+It does not reach the script refresher. The input wrapper checks argument order and
+52 manager bytes outside its parties; child input effects remain observational.
+Renderer effects remain observational, with its two-byte animation field accepted
+at helper return. `isolated_v1.json` adds 180 ARM946 cases, including signed bounds
+indices, parallel lines, aliased outputs and action guards. Bounds setters execute
+natively; division, input and renderer stubs have explicit contracts. All six
+source objects and both ROMs match; 81 tests pass and 104 saves are unchanged.
+
 ### Touchscreen replies, card DMA and memory arenas
 
 Six functions add 1,236 matching C bytes: the touch FIFO callback, card DMA

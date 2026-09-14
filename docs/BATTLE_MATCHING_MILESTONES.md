@@ -8324,3 +8324,12 @@ both ROM comparisons and 81 tests pass. Private eur_nitro_input_arenas
 records 21 live arena/console calls and 136 isolated ARM946 cases. Touch/DMA
 coverage is isolated, with detector/callback stubs and modeled DMA I/O as
 specified in the reconstruction reference. All 104 saves are unchanged.
+
+## Field bounds, party input and action models - 2026-09-14
+
+Six functions add 1,356 matching bytes. Total: 767,508 / 1,563,700
+(49.0828%); symbolic ASM remains separate. Six actual source objects,
+both ROM comparisons and 81 tests pass. Private eur_field_interaction_input
+records 2,685 calls during natural save-55 walking/pause/return and 180 isolated
+ARM946 cases. Input/renderer child effects and division stubs have the explicit
+limits in the reconstruction reference. All 104 saves are unchanged.

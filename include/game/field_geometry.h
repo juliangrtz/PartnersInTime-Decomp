@@ -6,6 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldGeometry_IntersectLines(fx32 x1, fx32 x2, fx32 y1, fx32 y2, fx32 x3, fx32 x4, fx32 y3, fx32 y4, fx32 *x, fx32 *y);
 void FieldGeometry_ScaleVector(fx32 x, fx32 y, fx32 z, fx32 length, fx32 *out_x, fx32 *out_y, fx32 *out_z);
 fx32 FieldGeometry_GetVectorLength(fx32 x, fx32 y, fx32 z);
 fx32 FieldGeometry_GetOrbitLength(fx32 radius_x, fx32 radius_y);

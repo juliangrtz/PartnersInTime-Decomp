@@ -917,3 +917,11 @@ src/nitro/tp/tp_fifo.c
 src/nitro/mi/mi_card_dma.c
 src/nitro/os/os_console_type.c
 src/nitro/os/os_arena_low.c
+
+src/field/field_line_intersection.c
+src/field/field_interaction_refresh.c
+src/field/field_party_manager_input.c
+src/field/field_party_action_models.cpp
+
+src/field/field_planar_bounds_update.c
+src/field/field_party_manager_action_models.cpp
