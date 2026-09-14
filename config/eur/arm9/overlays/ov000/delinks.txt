@@ -317,3 +317,12 @@ src/field/field_game_over_transition.cpp:
 
 src/field/field_menu_transitions.cpp:
     .text start:0x0206aa44 end:0x0206b1fc
+
+src/field/field_party_indicator_init.c:
+    .text start:0x0209d024 end:0x0209d12c
+
+src/field/field_party_restore.c:
+    .text start:0x0209d254 end:0x0209d6f4
+
+src/field/field_party_story_presence.c:
+    .text start:0x020a23f8 end:0x020a260c

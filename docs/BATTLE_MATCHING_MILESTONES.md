@@ -8286,3 +8286,13 @@ caller match exactly. Seven build checks pass, including 81 tests and both
 golden-ROM comparisons. Private eur_field_scene_transitions records 67 checked
 calls during natural pause entry and 94 isolated cases with explicit helper
 stubs. The final capture shows the pause menu. All 104 saves are unchanged.
+
+## Field party restoration and story presence - 2026-09-14
+
+Three functions add 1,980 matching C bytes. Total: 763,200 / 1,563,700
+(48.8073%); symbolic ASM is separate. All new objects and affected
+callers match exactly. Seven build checks pass, including 81 tests and both
+ROM comparisons. Private eur_field_party_restore records 136 isolated ARM946
+cases and two live indicator calls on the natural pause-return route from
+save 55. Restore and story-presence coverage is isolated, with explicit VM
+read stubs. The final capture shows the field; all 104 saves are unchanged.

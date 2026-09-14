@@ -1,3 +1,4 @@
+#include <game/field_party_manager.h>
 #include <game/field_scene_transition.h>
 #include <game/field_resources.h>
 #include <game/field_room_interaction.h>
@@ -159,7 +160,6 @@ extern void func_ov000_02074d8c(u8 *field_context, int effect_slot,
                                 s16 y, s16 playback_speed);
 extern int func_ov000_02074d50(u8 *field_context, int effect_slot);
 extern void func_020052b0(int scene_id, int argument_1);
-extern void func_ov000_020a23f8(void *party_manager, int reserved);
 extern void func_ov000_02079d74(u8 *field_context, int party_mode);
 extern void func_ov000_0206ba2c(
     void *field_system, int start_mode, s16 encounter_id,
@@ -3280,7 +3280,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_APPLY_SAVED_PARTY_CONFIGURATION: {
-        func_ov000_020a23f8(party_manager, 0);
+        FieldPartyManager_ApplyStoryPresence((FieldPartyManager *)party_manager, 0);
         if (VM_ReadVariable(0x2005, 0, 0) ||
             VM_ReadVariable(0x2006, 0, 0)) {
             *(u32 *)(field_context + FIELD_VM_PARTY_OWNERSHIP_MASKS_OFFSET) |=

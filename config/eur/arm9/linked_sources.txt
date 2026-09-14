@@ -905,3 +905,7 @@ src/game/interval.c
 src/field/field_scene_dispatch.c
 src/field/field_game_over_transition.cpp
 src/field/field_menu_transitions.cpp
+
+src/field/field_party_indicator_init.c
+src/field/field_party_restore.c
+src/field/field_party_story_presence.c

@@ -959,6 +959,23 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Field party restoration and story presence
+
+Three functions add 1,980 matching C bytes: party-indicator initialization,
+controller snapshot restoration and story-driven party presence. Restoration
+preserves the native duplicate copy of action slot 2 and leaves slot 3 intact.
+The compact snapshot retains member snapshots by pointer; its storage must
+outlive their use. Existing controller/snapshot types describe the packed fields.
+
+Private `eur_field_party_restore/isolated_v1.json` checks 136 ARM946 cases,
+including every combination of three story flags, screen sides and packed
+snapshot boundaries. It compares all mapped memory except 256 stack bytes;
+story-variable reads are explicit stubs, while indicator initialization runs
+natively. `evidence_return55_v1.json` checks two indicator calls during natural
+pause exit from save 55 and reaches the visible field. That route does not call
+the snapshot restore or story-presence function. Their coverage is isolated.
+Both ROMs are byte-identical, all 81 tests pass and all 104 saves are unchanged.
+
 ### Field scene requests and transitions
 
 Sixteen functions add 3,180 matching C/C++ bytes: the field transition dispatcher,

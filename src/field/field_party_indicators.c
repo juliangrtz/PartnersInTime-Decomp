@@ -2,7 +2,6 @@
 #include <game/field_area.h>
 extern const s16 data_ov000_020c0f5c[];
 extern void func_ov000_02079d74(FieldAreaContext *, int);
-extern void func_ov000_0209d024(FieldPartyController *, int, int, int, int, int);
 extern void func_020093b4(FieldRenderObject *, int);
 static inline FieldAreaContext *GetArea(FieldPartyController *party, int side)
 {
@@ -124,7 +123,7 @@ void FieldParty_UpdateIndicatorVisibility(FieldPartyController *party)
                     FieldParty_SetIndicatorVisibility(party, 1, 0, 1);
                     paired = party->paired;
                     if (!paired->indicator_bits.visibility_transition) {
-                        func_ov000_0209d024(paired, paired->indicator_bits.visible != 0, 1, 1,
+                        FieldParty_InitializeIndicator(paired, paired->indicator_bits.visible != 0, 1, 1,
                                             paired->state_bits.unknown_14_17,
                                             paired->state_bits.movement_mode);
                         FieldParty_UpdateIndicatorPositions(party->paired);

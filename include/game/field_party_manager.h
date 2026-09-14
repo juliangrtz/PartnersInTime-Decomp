@@ -44,6 +44,7 @@ typedef char FieldPartyManagerSnapshot_SizeCheck[sizeof(FieldPartyManagerSnapsho
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldPartyManager_ApplyStoryPresence(FieldPartyManager *manager, int select_active);
 /* Both groups must be in ordinary field mode before beginning reunion. */
 void FieldPartyManager_BeginReunion(FieldPartyManager *manager, int side, int instant);
 int FieldPartyManager_IsReuniting(FieldPartyManager *manager);

@@ -192,6 +192,7 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_InitializeIndicator(FieldPartyController *party, int visible, int screen, int layout, int style, int mode);
 void FieldParty_ResetActionState(FieldPartyController *party, int immediate, int preserve_state);
 void FieldParty_BeginEntrySlide(FieldPartyController *party);
 void FieldParty_AlignMovementToFacing(FieldPartyController *party);

@@ -80,6 +80,7 @@ typedef char FieldPartyControllerSnapshot_SizeCheck[sizeof(FieldPartyControllerS
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_RestoreSnapshot(FieldPartyController *party, int screen, const FieldPartyControllerSnapshot *snapshot, FieldResourceContext **areas, u8 *resources);
 void FieldParty_SaveSnapshot(FieldPartyController *party, FieldPartyControllerSnapshot *snapshot);
 FieldPartyController *FieldParty_DestroyBackups(FieldPartyController *party);
 FieldPartyController *FieldParty_InitializeStorage(FieldPartyController *party);
