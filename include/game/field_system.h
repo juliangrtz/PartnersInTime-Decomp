@@ -21,7 +21,14 @@ typedef struct FieldSystem {
             FieldPrimaryResource *shared_primary;
             FieldSecondaryResource *shared_secondary, *temporary_secondary;
             u16 shared_palette[256];
-            u8 unknown_258[16];
+            union {
+                u8 unknown_258[16];
+                struct {
+                    struct { u16 phase : 4, unknown : 12; } scene_transition;
+                    u16 unknown_25a, save_location;
+                    u8 unknown_25e[10];
+                };
+            };
             struct {
                 u32 enabled : 1, state : 3;
                 s32 x : 9, y : 9;

@@ -308,3 +308,12 @@ src/field/field_message_window_slide.c:
 
 src/field/field_message_window_clip.c:
     .text start:0x0206f448 end:0x0206f768
+
+src/field/field_scene_dispatch.c:
+    .text start:0x02069eb0 end:0x0206a130
+
+src/field/field_game_over_transition.cpp:
+    .text start:0x0206a810 end:0x0206aa44
+
+src/field/field_menu_transitions.cpp:
+    .text start:0x0206aa44 end:0x0206b1fc

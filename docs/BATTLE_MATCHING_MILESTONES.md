@@ -8277,3 +8277,12 @@ eur_battle_helpers/isolated_v1.json passes 48 copied-RAM boundary cases with
 explicit stubs and complete mapped-memory checks except stack scratch space.
 No new natural gameplay coverage is claimed. All 104 saves remain unchanged;
 artifact_validation_v1.json checks source versions, inputs and source objects.
+
+## Field scene requests and transitions - 2026-09-14
+
+Sixteen functions add 3,180 matching C/C++ bytes. Total: 761,220 / 1,563,700
+(48.6807%); symbolic ASM is separate. New objects and the field VM
+caller match exactly. Seven build checks pass, including 81 tests and both
+golden-ROM comparisons. Private eur_field_scene_transitions records 67 checked
+calls during natural pause entry and 94 isolated cases with explicit helper
+stubs. The final capture shows the pause menu. All 104 saves are unchanged.

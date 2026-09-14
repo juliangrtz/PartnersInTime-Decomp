@@ -959,6 +959,25 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Field scene requests and transitions
+
+Sixteen functions add 3,180 matching C/C++ bytes: the field transition dispatcher,
+pause/save/shop requests and preparation, credits/game-over requests and cleanup,
+and five fade predicates. The low four bits at `FieldSystem + 0x258` select the
+transition phase; odd phases wait for area fades and even phases prepare the
+destination. Area fade activity is bit 0 of the byte at area `+0x2402`.
+
+Private `eur_field_scene_transitions/evidence_pause55_v2.json` checks 67 calls
+during natural Start-button entry from story save 55 and reaches a visible pause
+menu. `isolated_v2.json` checks 94 ARM946 cases across all 16 functions, including
+every phase, both area fade flags, request fields and nullable cleanup. It checks
+all mapped memory except 256 stack bytes and ordered helper arguments. Complex
+fade/cache/resource/IRQ helpers use explicit no-effect stubs in isolated cases;
+their internals and natural entry to the other destinations are not covered.
+The first live probe used the wrong status width; the first isolated probe had
+an incorrect stub target. Both failures are retained separately from corrected
+passing runs. Both ROMs are byte-identical; 81 tests pass; 104 saves are unchanged.
+
 ### Battle motion and shared value helpers
 
 Nine functions add 1,280 matching C bytes: model-animation and alternate-effect

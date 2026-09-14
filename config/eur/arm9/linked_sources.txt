@@ -901,3 +901,7 @@ src/battle/battle_path_motion.c
 src/battle/battle_resource_effect_attachment.c
 src/game/item_effect_value.c
 src/game/interval.c
+
+src/field/field_scene_dispatch.c
+src/field/field_game_over_transition.cpp
+src/field/field_menu_transitions.cpp

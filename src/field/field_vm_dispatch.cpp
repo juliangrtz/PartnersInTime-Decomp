@@ -1,3 +1,4 @@
+#include <game/field_scene_transition.h>
 #include <game/field_resources.h>
 #include <game/field_room_interaction.h>
 #include <game/field_room_transition.h>
@@ -166,18 +167,6 @@ extern void func_ov000_0206ba2c(
     int field_screen, FieldEntity *encounter_entity,
     FieldEntity *primary_entity, int party_context,
     int transition_variant);
-extern void func_ov000_0206b0a0(void *field_system, int scene_mode,
-                                int party_context, int initial_section,
-                                int fade_to_black,
-                                int return_screen_flag);
-extern void func_ov000_0206aeb0(void *field_system, int party_context,
-                                int fade_to_black,
-                                int return_screen_flag);
-extern void func_ov000_0206acf8(void *field_system, int shop_scene_id,
-                                int fade_to_black,
-                                int return_screen_flag);
-extern void func_ov000_0206abd8(void *field_system, int fade_to_black);
-extern void func_ov000_0206a9a4(void *field_system, int fade_to_black);
 extern void GameParty_Initialize(int new_game_preset);
 extern int GameInventory_Add(u16 item_id, int count_delta);
 extern const u16 data_02048f1a[];
@@ -1360,7 +1349,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     u8 *field_context = runtime->field_context;
     u8 *party_manager = *(u8 **)(field_context +
                                  FIELD_VM_PARTY_MANAGER_OFFSET);
-    void *field_system = *(void **)(field_context +
+    FieldSystem *field_system = *(FieldSystem **)(field_context +
                                     FIELD_VM_FIELD_SYSTEM_OFFSET);
     s32 *arguments = FieldVm_GetCommandArguments(command);
     FieldMapController *map_controller;
@@ -3744,7 +3733,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
     case FIELD_VM_OPEN_PAUSE_MENU:
         FieldVm_ResolveMenuPartyContext(runtime, &arguments[0]);
-        func_ov000_0206b0a0(
+        FieldSystem_RequestPause(
             field_system, 1, arguments[0], arguments[1],
             arguments[2] != 0, arguments[3] != 0);
         result = SCRIPT_VM_YIELDED;
@@ -3758,26 +3747,26 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
     case FIELD_VM_OPEN_SAVE_MENU:
         FieldVm_ResolveMenuPartyContext(runtime, &arguments[0]);
-        func_ov000_0206aeb0(
+        FieldSystem_RequestSave(
             field_system, arguments[0],
             arguments[1] != 0, arguments[2] != 0);
         result = SCRIPT_VM_YIELDED;
         break;
 
     case FIELD_VM_OPEN_SHOP:
-        func_ov000_0206acf8(
+        FieldSystem_RequestShop(
             field_system, arguments[0],
             arguments[1] != 0, arguments[2] != 0);
         result = SCRIPT_VM_YIELDED;
         break;
 
     case FIELD_VM_START_STAFF_CREDITS:
-        func_ov000_0206abd8(field_system, arguments[0] != 0);
+        FieldSystem_RequestCredits(field_system, arguments[0] != 0);
         result = SCRIPT_VM_YIELDED;
         break;
 
     case FIELD_VM_OPEN_GAME_OVER_MENU:
-        func_ov000_0206a9a4(field_system, arguments[0] != 0);
+        FieldSystem_RequestGameOver(field_system, arguments[0] != 0);
         result = SCRIPT_VM_YIELDED;
         break;
 
