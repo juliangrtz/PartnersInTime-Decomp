@@ -985,6 +985,32 @@ is stubbed. Checks include mapped memory outside 512 stack bytes and the named
 observational regions, ordered calls, results, SP and r4-r11. Both ROM builds,
 both source objects and 81 tests pass; all 104 original saves are unchanged.
 
+### Field roaming destinations and party lifecycle
+
+Four functions add 972 matching bytes. Random roaming makes at most eight
+attempts, selects an option and direction, and clips diagonal destinations at
+the configured boundaries. Its range comparisons use unsigned subtraction.
+The party lifecycle initializes the 1,440-byte record and dispatches deletion
+through each of its six auxiliary slots before destroying the spatial base.
+
+Private `eur_field_roaming_lifecycle/evidence_cold1_v1.json` verifies 35 natural
+calls from save 1: four empty constructors, 27 destination selections and four
+deleting destructors. RNG state and direction vectors are independently checked.
+Auxiliary deletion, attached-renderer cleanup and linear-motion helper effects
+are observational within bounded records; caller decisions are checked before
+these helpers. The final field image was inspected visually.
+
+`isolated_v2.json` covers 137 ARM946 cases, all eight directions, clipping at all
+four boundaries, eight failed attempts, zero distance and sparse/full auxiliary
+slots. It executes native RNG, vector arithmetic, constructors, clearing,
+null-renderer base destruction and parent heap coalescing. Auxiliary deletion
+and linear-motion setup account for 128 explicit no-op stubs. Full mapped memory
+outside 256 stack bytes and the calling convention are checked. The nondeleting
+destructor is isolated-only. The first isolated version used the wrong synthetic
+auxiliary vtable; v2 corrects it to 0x020C1194 and reruns all cases. All 104 saves
+are unchanged. Both ROM builds and 81 tests pass; the first build exposed a stale
+VM symbol reference, fixed before the successful second build.
+
 ### Field variable-entity animation and roaming options
 
 Ten functions add 1,588 matching bytes. The 1,328-byte variable entity now has

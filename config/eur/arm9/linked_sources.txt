@@ -968,3 +968,6 @@ src/field/field_oam_frame.c
 
 src/field/field_variable_controls.cpp
 src/field/field_roaming_options.c
+
+src/field/field_party_lifecycle.cpp
+src/field/field_roaming_choose.cpp

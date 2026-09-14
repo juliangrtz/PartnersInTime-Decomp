@@ -23,6 +23,8 @@ void FieldEntity_LoadBodyBounds(FieldRuntimeEntity *entity);
 void FieldRoaming_ClearOptions(FieldRuntimeEntity *entity,int index);
 int FieldRoaming_AddOption(FieldRuntimeEntity *entity,const FieldRoamingOptionInput *input,int index);
 void FieldRoaming_SetBounds(FieldRuntimeEntity *entity,int minimum_x,int minimum_y,int maximum_x,int maximum_y);
+/* Chooses a bounded destination, trying at most eight random directions. */
+void FieldRoaming_ChooseDestination(FieldRuntimeEntity *entity);
 void FieldRoaming_Update(FieldRuntimeEntity *entity);
 void FieldRoaming_Resume(FieldRuntimeEntity *entity);
 void FieldRoaming_Pause(FieldRuntimeEntity *entity);

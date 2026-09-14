@@ -8397,3 +8397,12 @@ byte-identical ROMs and 81 tests pass. Private eur_field_variable_roaming record
 44 natural calls and 314 isolated ARM946 cases. Six entry points are isolated-only;
 131 callback invocations are stubbed. Native constructors, null-renderer destruction,
 heap merging and nonmoving roaming stop execute fully. All 104 saves are unchanged.
+
+## Field roaming destinations and party lifecycle - 2026-09-14
+
+Four functions add 972 matching bytes: 776,604 / 1,563,700 (49.6645%).
+Both source objects and ROMs match; 81 tests pass. Private eur_field_roaming_lifecycle
+records 35 natural calls and 137 isolated cases. Native RNG/vector arithmetic and
+parent heap cleanup are independently checked; auxiliary deletion and linear setup
+have 128 isolated stubs. Nondeleting destruction is isolated-only. All 104 saves
+are unchanged. The constructor at 0x020BC3E8 remains unlinked.

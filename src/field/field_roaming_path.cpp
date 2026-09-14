@@ -2,7 +2,6 @@
 #include <game/field_linear.h>
 extern "C" {
 u32 Random_Next(void);
-void func_ov000_020b1b88(FieldRuntimeEntity *entity);
 void FieldPath_Clear(FieldRuntimeEntity *entity)
 {
     entity->unknown_3ec.path.flags.enabled = 0;
@@ -112,7 +111,7 @@ void FieldRoaming_Update(FieldRuntimeEntity *entity)
                     entity->roaming_state.moving = 0;
                     return;
                 }
-                func_ov000_020b1b88(entity);
+                FieldRoaming_ChooseDestination(entity);
                 return;
             }
             if (entity->unknown_3ec.path.flags.delay) {
@@ -127,7 +126,7 @@ void FieldRoaming_Update(FieldRuntimeEntity *entity)
             entity->unknown_3d8--;
         if (!entity->unknown_3d8) {
             if (!entity->roaming_state.path_mode)
-                func_ov000_020b1b88(entity);
+                FieldRoaming_ChooseDestination(entity);
             else
                 FieldPath_Advance(entity);
         }

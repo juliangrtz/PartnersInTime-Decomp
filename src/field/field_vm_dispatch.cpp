@@ -59,7 +59,6 @@ extern void func_ov000_020b26ac(
     int duration, int plane, int direction, int secondary_axis_scale,
     int stop_on_contact_mask, int stop_on_state_mask,
     int snap_to_final_angle, int reserved);
-extern void func_ov000_020b1b88(FieldEntity *entity);
 extern void func_ov000_020b1a24(FieldEntity *entity, const void *path,
                                 int path_size_halfwords);
 extern int func_ov000_0207133c(u8 *field_context, FieldEntity *entity);
@@ -2480,7 +2479,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_START_ENTITY_RANDOM_ROAMING:
-            func_ov000_020b1b88(entity);
+            FieldRoaming_ChooseDestination((FieldRuntimeEntity *)entity);
             break;
 
         case FIELD_VM_STOP_ENTITY_RANDOM_ROAMING:

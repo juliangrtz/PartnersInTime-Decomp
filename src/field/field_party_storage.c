@@ -1,21 +1,19 @@
 #include <game/field_party_snapshot.h>
-extern FieldPartyEntity *func_ov000_020bc354(FieldPartyEntity *);
-extern FieldPartyEntity *func_ov000_020bc3b0(FieldPartyEntity *);
 extern void func_020488bc(void *, int, u32, FieldPartyEntity *(*)(FieldPartyEntity *));
 extern void func_020489e0(void *, int, u32, FieldPartyEntity *(*)(FieldPartyEntity *),
                           FieldPartyEntity *(*)(FieldPartyEntity *));
 extern void func_0202cbd4(void *, int, u32);
 FieldPartyController *FieldParty_InitializeStorage(FieldPartyController *party)
 {
-    func_020489e0(party->backup_entities, 2, sizeof(FieldPartyEntity), func_ov000_020bc3b0,
-                  func_ov000_020bc354);
+    func_020489e0(party->backup_entities, 2, sizeof(FieldPartyEntity), FieldPartyEntity_InitEmpty,
+                  FieldPartyEntity_Destroy);
     func_0202cbd4(party, 0, sizeof(*party));
     party->unknown_055 = -1;
     return party;
 }
 FieldPartyController *FieldParty_DestroyBackups(FieldPartyController *party)
 {
-    func_020488bc(party->backup_entities, 2, sizeof(FieldPartyEntity), func_ov000_020bc354);
+    func_020488bc(party->backup_entities, 2, sizeof(FieldPartyEntity), FieldPartyEntity_Destroy);
     return party;
 }
 

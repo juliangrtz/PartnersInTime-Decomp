@@ -431,3 +431,9 @@ src/field/field_variable_controls.cpp:
 
 src/field/field_roaming_options.c:
     .text start:0x020b1e5c end:0x020b2044
+
+src/field/field_party_lifecycle.cpp:
+    .text start:0x020bc2f0 end:0x020bc3e8
+
+src/field/field_roaming_choose.cpp:
+    .text start:0x020b1b88 end:0x020b1e5c
