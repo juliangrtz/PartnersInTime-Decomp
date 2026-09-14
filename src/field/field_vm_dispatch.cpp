@@ -106,10 +106,7 @@ extern void func_ov000_020721c0(u8 *field_context, int bg_layer);
 extern void func_ov000_02072074(u8 *field_context, int axis,
                                 fx32 amplitude, int step, int half_cycles,
                                 int rumble_pattern);
-extern void func_ov000_02075c34(u8 *field_context, s16 start_brightness,
-                                s16 target_brightness, u16 duration);
 extern void func_ov000_0207c098(u8 *field_context);
-extern void func_ov000_02075bc8(u8 *field_context);
 extern void func_ov000_02075814(
     u8 *field_context, int animation_slot, int direction_profile,
     u16 object_mask_high, u16 object_mask_low, u16 standard_bg_mask,
@@ -135,16 +132,10 @@ extern void func_ov000_02069b24(void *field_system,
                                 const s32 *entity_selectors,
                                 int anchor_entity,
                                 const s32 *arrival_directions);
-extern void func_ov000_02069aac(void *field_system);
 extern void func_ov000_02069284(
     void *field_system, const s32 *entity_selectors, int anchor_entity,
     int destination_room_id, int argument_4, int argument_5,
     int orbit_entities, s16 center_x_offset, s16 center_y_offset);
-extern void func_ov000_0206900c(void *field_system, int reverse_direction,
-                                fx32 initial_speed, fx32 acceleration,
-                                fx32 maximum_speed);
-extern void func_ov000_02068fc4(void *field_system, fx32 deceleration);
-extern int func_ov000_02068fac(void *field_system);
 extern int func_ov000_02066c50(void *field_system);
 extern void func_ov000_02074e14(
     u8 *field_context, int screen, int resource_index, int anchor_entity_0,
@@ -2927,8 +2918,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         };
         FieldControlContext *control_context = (FieldControlContext *)field_context;
 
-        func_ov000_02075c34(
-            field_context, (s16)arguments[0],
+        FieldArea_StartBrightness(
+            (FieldAreaContext *)field_context, (s16)arguments[0],
             (s16)arguments[1], (u16)arguments[2]);
         if (FieldVm_GetSpecialPartyState(field_context)->field_screen == 0) {
             func_ov000_0207c098(field_context);
@@ -2964,7 +2955,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
     case FIELD_VM_REVERSE_MASTER_BRIGHTNESS_TRANSITION:
         if (FieldVm_GetBrightnessTransitionFlags(field_context)->active) {
-            func_ov000_02075bc8(field_context);
+            FieldArea_ReverseBrightness((FieldAreaContext *)field_context);
         }
         break;
 
@@ -3153,8 +3144,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_PREPARED_TIME_HOLE_ARRIVAL:
-        func_ov000_02069aac(
-            *(void **)(field_context + FIELD_VM_FIELD_SYSTEM_OFFSET));
+        FieldSystem_StartPreparedTimeHoleArrival(
+            *(FieldSystem **)(field_context + FIELD_VM_FIELD_SYSTEM_OFFSET));
         break;
 
     case FIELD_VM_START_TIME_HOLE_TUNNEL:
@@ -3165,20 +3156,20 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_FIELD_VERTICAL_ACCELERATING_SCROLL:
-        func_ov000_0206900c(
-            field_system, arguments[6],
+        FieldSystem_StartVerticalScroll(
+            (FieldSystem *)field_system, arguments[6],
             FieldVm_DecodeWideArgument(command, 0),
             FieldVm_DecodeWideArgument(command, 2),
             FieldVm_DecodeWideArgument(command, 4));
         break;
 
     case FIELD_VM_DECELERATE_FIELD_VERTICAL_SCROLL:
-        func_ov000_02068fc4(
-            field_system, -FieldVm_DecodeWideArgument(command, 0));
+        FieldSystem_DecelerateVerticalScroll(
+            (FieldSystem *)field_system, -FieldVm_DecodeWideArgument(command, 0));
         break;
 
     case FIELD_VM_WAIT_FIELD_VERTICAL_SCROLL:
-        if (func_ov000_02068fac(field_system)) {
+        if (FieldSystem_IsVerticalScrollActive((FieldSystem *)field_system)) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;

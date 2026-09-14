@@ -11,7 +11,6 @@ extern "C" {
 void func_ov000_02065f54(FieldSystem *);
 void func_ov000_0209ef28(FieldPartyManager *);
 void func_ov000_02080efc(FieldAreaContext *);
-void func_ov000_02075c34(FieldAreaContext *, int, int, int);
 extern u8 data_0205a00c;
 void func_ov000_0208b208(FieldPartyController *, int);
 
@@ -88,7 +87,7 @@ void FieldArea_QueuePartyRoomChange(FieldAreaContext *field, int side, int room,
     }
     if (fade) {
         field->transition.flags.fading = 1;
-        func_ov000_02075c34(field, 255, -16, 16);
+        FieldArea_StartBrightness(field, 255, -16, 16);
         FieldParty_AlignMovementToFacing(&field->party->parties[side]);
     }
     /* A visible paired room receives its own request before either screen reloads. */
@@ -131,7 +130,7 @@ void FieldArea_QueueBothPartyRoomChange(FieldAreaContext *field, int room, s16 x
     field->transition.z[1] = z1;
     if (fade) {
         field->transition.flags.fading = 1;
-        func_ov000_02075c34(field, 255, -16, 16);
+        FieldArea_StartBrightness(field, 255, -16, 16);
     }
     /* A visible paired room receives its own request before either screen reloads. */
     int paired_room = data_02048f18[room].paired_room;
@@ -161,7 +160,7 @@ void FieldArea_QueueRoomChange(FieldAreaContext *field, int room, s16 script, in
     field->transition.flags.bgm = bgm;
     if (fade) {
         field->transition.flags.fading = 1;
-        func_ov000_02075c34(field, 255, -16, 16);
+        FieldArea_StartBrightness(field, 255, -16, 16);
     }
 }
 

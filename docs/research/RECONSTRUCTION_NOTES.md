@@ -959,6 +959,22 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Field brightness, blending and time-hole state
+
+Thirteen new functions add 1,552 matching bytes: alpha and master-brightness
+updates, brightness start/reversal, vertical scrolling, time-hole state setup,
+color-cycle initialization, camera-origin offsets and planar script pause/resume.
+Private `eur_field_screen_transitions/evidence_walk55_v1.json` checks 1,620 calls
+on the natural save-55 walking/pause/return route. It covers four timed brightness
+starts/completions, 60 intermediate steps and 64 ordered brightness register
+writes. All 808 alpha updates take the inactive path; the other functions and
+branches have separate isolated coverage. `isolated_v2.json` checks 264 ARM946
+cases against copied live RAM/DTCM/MMIO, including full mapped memory outside
+256 stack bytes. Clear, division, brightness and motion helpers run natively,
+without stubs. MMIO backing does not model display timing, IRQs or rasterization.
+Six final source objects, both ROM builds and 81 tests pass. The final field
+capture was inspected; all 104 original saves remain unchanged.
+
 ### Field windows, camera and script controls
 
 Fourteen functions add 1,796 matching bytes: message-window queries/closing,

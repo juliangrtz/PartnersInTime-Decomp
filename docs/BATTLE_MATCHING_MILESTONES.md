@@ -8342,3 +8342,12 @@ both ROM comparisons and 81 tests pass. Private eur_field_area_services records
 2,606 natural save-55 calls and 209 isolated ARM946 cases. Projection and motion
 control coverage is isolated; helper stubs and observational child effects are
 specified in the reconstruction reference. All 104 saves remain unchanged.
+
+## Field brightness, blending and time-hole state - 2026-09-14
+
+Thirteen functions add 1,552 matching bytes: 770,856 / 1,563,700
+(49.2969%). Six actual source objects, two byte-identical ROMs
+and 81 tests pass. Private eur_field_screen_transitions records 1,620 natural
+save-55 calls, 64 ordered register writes and 264 isolated ARM946 cases.
+The reconstruction reference distinguishes natural coverage from isolated
+branches and modeled MMIO. All 104 original saves remain unchanged.

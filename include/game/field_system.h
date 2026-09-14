@@ -5,6 +5,7 @@
 #include <game/field_resources.h>
 #include <nitro/tp.h>
 #include <nitro/fx_vec.h>
+#include <game/field_time_hole.h>
 typedef struct FieldTimer FieldTimer;
 typedef struct FieldModelAnimation FieldModelAnimation;
 typedef struct FieldSpriteAnimation FieldSpriteAnimation;
@@ -38,6 +39,7 @@ typedef struct FieldSystem {
             TpData touch_sample;
             union {
                 u8 unknown_274[296];
+                FieldTimeHoleState time_hole;
                 struct {
                     u8 unknown_274_prefix[252];
                     VecFx32 camera_position, camera_up, camera_target;
@@ -80,6 +82,12 @@ enum FieldTouchState {
 #ifdef __cplusplus
 extern "C" {
 #endif
+int FieldSystem_IsVerticalScrollActive(FieldSystem *system);
+void FieldSystem_DecelerateVerticalScroll(FieldSystem *system, fx32 deceleration);
+void FieldSystem_StartVerticalScroll(FieldSystem *system, int reverse, fx32 speed, fx32 acceleration, fx32 limit);
+void FieldColorCycle_Initialize(void *unused, u8 initial, u8 target, u8 initial_duration, u8 approach_duration, u8 target_duration, u8 return_duration, FieldColorCycle *out);
+void FieldSystem_StartPreparedTimeHoleArrival(FieldSystem *system);
+void FieldSystem_PrepareTimeHoleEntity(FieldSystem *system, FieldRuntimeEntity *entity);
 void FieldSystem_LoadProjection(FieldSystem *field);
 void FieldSystem_AdjustMemberHp(FieldSystem *system, int member, int amount);
 void FieldSystem_RefillMemberHp(FieldSystem *system, int member);

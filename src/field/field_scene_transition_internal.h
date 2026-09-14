@@ -11,7 +11,6 @@ typedef struct PersistentTransitionFlags {
 } PersistentTransitionFlags;
 extern PersistentTransitionFlags data_0205a01c;
 void func_ov000_0206a130(FieldSystem *);
-void func_ov000_02075c34(FieldAreaContext *, int, int, int);
 void func_0202cbd4(void *, int, u32);
 typedef struct FieldSaveTransitionView {
     u8 prefix[0x558];
@@ -40,8 +39,8 @@ static inline int IsFadeActive(FieldSystem *system) {
 }
 
 static inline void FadeBoth(FieldSystem *system) {
-    func_ov000_02075c34(system->areas[0], 255, -16, 16);
-    func_ov000_02075c34(system->areas[1], 255, -16, 16);
+    FieldArea_StartBrightness(system->areas[0], 255, -16, 16);
+    FieldArea_StartBrightness(system->areas[1], 255, -16, 16);
 }
 
 static inline void SuspendAreaTasks(FieldSystem *system) {

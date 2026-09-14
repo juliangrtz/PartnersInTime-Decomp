@@ -6,6 +6,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldEntity2D_ResumeScript(FieldRuntimeEntity *entity);
+void FieldEntity2D_PauseScript(FieldRuntimeEntity *entity);
 void FieldEntity2D_StopScript(FieldRuntimeEntity *entity);
 void FieldEntity3D_StopScript(FieldRuntimeEntity *entity);
 void FieldEntity3D_PauseScript(FieldRuntimeEntity *entity);

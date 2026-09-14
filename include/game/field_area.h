@@ -150,6 +150,11 @@ typedef char FieldAreaSnapshot_SizeCheck[sizeof(FieldAreaSnapshot) == 16 ? 1 : -
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldArea_OffsetCameraOrigin(FieldAreaContext *area, fx32 x, fx32 y);
+void FieldArea_UpdateAlphaBlend(FieldAreaContext *area);
+void FieldArea_UpdateBrightness(FieldAreaContext *area);
+void FieldArea_ReverseBrightness(FieldAreaContext *area);
+void FieldArea_StartBrightness(FieldAreaContext *area, s16 initial, s16 target, u16 frames);
 int FieldArea_HasOpenMessageWindow(FieldAreaContext *area, int window);
 int FieldArea_HasNonClosingWindow(FieldAreaContext *area, int window);
 void FieldArea_CloseMessageWindows(FieldAreaContext *area, int window);
