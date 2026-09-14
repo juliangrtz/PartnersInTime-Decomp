@@ -8351,3 +8351,12 @@ and 81 tests pass. Private eur_field_screen_transitions records 1,620 natural
 save-55 calls, 64 ordered register writes and 264 isolated ARM946 cases.
 The reconstruction reference distinguishes natural coverage from isolated
 branches and modeled MMIO. All 104 original saves remain unchanged.
+
+## Battle object links and Pocket Chomp - 2026-09-14
+
+Sixteen functions add 1,216 matching bytes: 772,072 / 1,563,700
+(49.3747%). Five actual source objects, two byte-identical ROMs
+and 81 tests pass. Private eur_battle_object_links records 146 Pocket Chomp
+calls with automatic inputs and no RAM fixtures, plus 144 isolated ARM946 cases
+without helper stubs. Allocation sizes and live/isolated coverage are detailed
+in the reconstruction reference. All 104 original saves remain unchanged.

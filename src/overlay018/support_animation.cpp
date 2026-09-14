@@ -42,7 +42,7 @@ void PocketChomp_UpdateLinkedAnimation(BattleSceneObject *object, PocketChomp *c
         BattleSceneObject *target = center->object;
         if (object->y > object->motion_origin_y && model->get_animation_id() != 10) {
             model->set_animation(10, 0);
-            func_ov002_020b8a68(target, 0, 2, 2);
+            BattleObjectLink_SetTargetOffset(target, 0, 2, 2);
         }
     }
 }

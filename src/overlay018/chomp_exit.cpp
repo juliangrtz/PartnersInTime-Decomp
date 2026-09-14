@@ -15,7 +15,7 @@ u32 PocketChomp_BeginExit(PocketChomp *center)
     BattleSceneObject_MoveBy(object, 0, dx, dy, 0, duration);
     PocketChomp_SetAnimation(center, 3, 0);
     center->bits.animation_locked = 1;
-    func_ov002_020b8ab0(object, 0, -2, 8);
+    BattleObjectLink_SetSourceOffset(object, 0, -2, 8);
     u32 result = (center->flags & ~31) | POCKET_CHOMP_EXIT;
     center->flags = result;
     return result;

@@ -942,3 +942,9 @@ src/field/field_color_cycle_initialize.c
 src/field/field_time_hole_prepare.c
 src/field/field_camera_origin.c
 src/field/field_screen_fades.c
+
+src/battle/battle_object_link_trail.c
+src/battle/battle_object_link_follow.c
+src/battle/battle_object_link_segments.c
+src/battle/battle_flexible_link_reset.c
+src/battle/battle_flexible_link_actor.c

@@ -1,4 +1,5 @@
 extern "C" {
+#include <game/battle_object_link.h>
 #include <game/battle_sprite_grid_capture.h>
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
@@ -80,11 +81,6 @@ extern void func_ov002_020bb00c(BattleSceneObject *primary,
                                 int target_x, int target_y, int vertical_bias);
 extern int func_ov002_020badd8(BattleSceneObject *object,
                                int remaining_segment_offset);
-extern void func_ov002_020ba210(BattleSceneObject *primary,
-                                BattleSceneObject *secondary,
-                                int step_denominator, int path_numerator,
-                                int render_parameter, int primary_x_offset,
-                                int primary_y_offset, int base_z);
 extern int GameInventory_Add(u16 item_id, int count_delta);
 extern int GameInventory_GetCount(u16 item_id);
 extern int BattleItemList_RebuildActionItems(void);
@@ -2006,7 +2002,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     case BATTLE_VM_START_SEGMENTED_OBJECT_LINK:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
         reference = BattleSceneObject_GetById((u16)command->arguments[1]);
-        func_ov002_020ba210(
+        BattleObjectLink_InitializeSegments(
             object, reference, command->arguments[2], command->arguments[3],
             command->arguments[4], command->arguments[5],
             command->arguments[6], command->arguments[7]);

@@ -959,6 +959,26 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Battle object links and Pocket Chomp
+
+Sixteen functions add 1,216 matching bytes: link state creation, offsets, following
+flags, gravity and parameter setters, plus two flexible-link controls. The two
+creators reserve 252 or 508 bytes; the flexible state is 268 bytes. Only the
+508-byte trail has the parameter at offset 504. Source and target offsets are
+separate, and native segment velocities narrow after the divisions.
+
+Private `eur_battle_object_links/evidence_chomp83_v1.json` checks 146 calls over
+3,110 frames, including one new arena reservation and 17 retained allocations.
+Automatic key presses follow guarded Pocket Chomp phase/timer state; no RAM is
+patched. All observed object/state writes, slot ownership and arena cursor,
+helper arguments and return values are checked independently. The remaining
+functions and branches use 144 ARM946 cases in `isolated_v1.json`, including both
+creator sizes, new/reused/retained slots and skipping a still-owned slot. Every
+helper executes natively, without stubs. These cases compare full mapped memory
+outside 256 stack bytes and do not execute the installed rendering callback.
+Five source objects, both ROMs and 81 tests pass. The final battle capture was
+inspected, and all 104 original saves remain unchanged.
+
 ### Field brightness, blending and time-hole state
 
 Thirteen new functions add 1,552 matching bytes: alpha and master-brightness

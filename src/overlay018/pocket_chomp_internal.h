@@ -1,6 +1,7 @@
 #ifndef PIT_POCKET_CHOMP_INTERNAL_H
 #define PIT_POCKET_CHOMP_INTERNAL_H
 #include <game/pocket_chomp.h>
+#include <game/battle_object_link.h>
 #include <game/overlay018_attack.h>
 #include "attack_state.h"
 extern "C" {
@@ -25,14 +26,6 @@ extern PocketChompAttackWorkPrefix *data_ov002_020c0710;
 extern s16 FX_SinCosTable_[];
 extern int data_ov018_020c7180[];
 extern int Random_NextModulo(int), _s32_div_f(int, int);
-extern void func_ov002_020b8a58(BattleSceneObject *, int);
-extern void func_ov002_020b8a3c(BattleSceneObject *, int);
-extern void func_ov002_020b8a18(BattleSceneObject *, int);
-extern void func_ov002_020b8a08(BattleSceneObject *, int);
-extern int func_ov002_020b8ac8(BattleSceneObject *, int, int);
-extern int func_ov002_020b8ab0(BattleSceneObject *, int, int, int);
-extern void func_ov002_020b8b14(BattleSceneObject *, BattleSceneObject *, int, int, int);
-extern int func_ov002_020b8a68(BattleSceneObject *, int, int, int);
 extern void BattleMotion_StartFollower(BattleSceneObject *, BattleSceneObject *, int);
 extern void func_0200940c(BattleModel *, s16);
 extern void func_ov018_020c2e50(void *, int);

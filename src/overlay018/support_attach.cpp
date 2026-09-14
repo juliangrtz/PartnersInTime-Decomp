@@ -18,7 +18,7 @@ void PocketChompSupport_Attach(PocketChompSupport *support, PocketChomp *center,
         support->object->effect_anchor_z = -48;
         PocketChompSupport_SetLinkedAnimation(support, 9);
         linked->effect_anchor_z = -48;
-        func_ov002_020b8a68(target, 12 * sign, 1, 9);
+        BattleObjectLink_SetTargetOffset(target, 12 * sign, 1, 9);
         support->action_flags.unknown_00 = 0;
         u32 result = (support->flags & ~0x7c0) | (POCKET_CHOMP_SUPPORT_READY << 6);
         support->flags = result;

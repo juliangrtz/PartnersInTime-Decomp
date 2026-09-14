@@ -56,7 +56,7 @@ void PocketChomp_Reveal(PocketChomp *center)
     BattleSceneObject_AdjustPosition(linked, object->x + offset[0] - linked->x, object->y - linked->y,
                                      object->z - offset[1] + 22 - linked->z);
     PocketChomp_AttachObject(center, 0);
-    func_ov002_020b8a58(center->object, 16);
+    BattleObjectLink_SetGravity(center->object, 16);
     u16 sound = center->bits.rare_variant ? 104 : 236;
     BattleSound_Play(sound, 0, 0, 0);
     center->timer = 8;
@@ -67,7 +67,7 @@ void PocketChomp_Reveal(PocketChomp *center)
 u32 PocketChomp_BeginFall(PocketChomp *center)
 {
     BattleMotion_StartBallistic(center->object, 1, 0, 0, 1, -center->object->z, -112, 0, 1);
-    func_ov002_020b8a58(center->object, 56);
+    BattleObjectLink_SetGravity(center->object, 56);
     u32 result = (center->flags & ~31) | POCKET_CHOMP_FALL;
     center->flags = result;
     return result;
@@ -87,7 +87,7 @@ void PocketChomp_BeginRun(PocketChomp *center)
     func_ov018_020c40b8(center, _s32_div_f(12288, speed), 24, 0);
     func_ov018_020c40b8(center, _s32_div_f(8192, speed), 42, 1);
     func_ov018_020c3ea8(center);
-    func_ov002_020b8a58(object, 256);
+    BattleObjectLink_SetGravity(object, 256);
     PocketChompAttack_MoveAdultsOffscreen();
     u32 flags = (center->flags & ~31) | POCKET_CHOMP_RUN;
     center->flags = flags;

@@ -1,3 +1,4 @@
+#include <game/battle_object_link.h>
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_hit.h>
@@ -73,21 +74,7 @@ void func_ov002_020baf90(BattleSceneObject *object, int value);
 void func_ov002_020baf64(BattleSceneObject *object, int value);
 void func_ov002_020baf38(BattleSceneObject *object, int value);
 void func_ov002_020bae7c(BattleSceneObject *object, int value);
-void func_ov002_020bae44(BattleSceneObject *object, int value);
-void func_ov002_020baf18(BattleSceneObject *object, u16 value);
 void func_ov002_020ba0d8(BattleSceneObject *object, int value);
-void func_ov002_020ba0b0(BattleSceneObject *object, int value);
-void func_ov002_020b8b14(BattleSceneObject *object,
-                         BattleSceneObject *other, int a2, int a3, int a4);
-void func_ov002_020b8ac8(BattleSceneObject *object, int a1, int a2);
-void func_ov002_020b8aa0(BattleSceneObject *object, int value);
-void func_ov002_020b8a90(BattleSceneObject *object, int value);
-void func_ov002_020b8a80(BattleSceneObject *object, int value);
-void func_ov002_020b8a58(BattleSceneObject *object, int value);
-void func_ov002_020b8a3c(BattleSceneObject *object, int value);
-void func_ov002_020b8a28(BattleSceneObject *object, int value);
-void func_ov002_020b8a18(BattleSceneObject *object, int value);
-void func_ov002_020b8a08(BattleSceneObject *object, int value);
 void func_ov002_020b8128(u16 value);
 void func_ov002_020b815c(BattleSceneObject *object);
 void func_ov002_020b8114(BattleSceneObject *object, int value);
@@ -460,10 +447,10 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
         func_ov002_020bae7c(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_81:
-        func_ov002_020bae44(BattleSceneObject_GetById(actor_id), value);
+        BattleFlexibleLink_Reset(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_82:
-        func_ov002_020baf18(BattleSceneObject_GetById(actor_id), value);
+        BattleFlexibleLink_SetActor(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_ACTOR_FLAG_14: {
         int enabled;
@@ -487,7 +474,7 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
         func_ov002_020ba0d8(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_86:
-        func_ov002_020ba0b0(BattleSceneObject_GetById(actor_id), value);
+        BattleObjectLink_FollowSource(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_ACTOR_0E:
         FIELD_U16(BattleActor_GetById(actor_id), 0x0E) = value;
@@ -531,30 +518,30 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
     case BATTLE_PROPERTY_SCENE_OPERATION_103: {
         BattleSceneObject *object = BattleSceneObject_GetById(actor_id);
         BattleSceneObject *other = BattleSceneObject_GetById((u16)value);
-        func_ov002_020b8b14(object, other, 3584, 56, 6);
-        func_ov002_020b8ac8(object, 1, 1);
-        func_ov002_020b8a58(object, 112);
-        func_ov002_020b8a3c(object, 64);
-        func_ov002_020b8a28(object, 0);
+        BattleObjectLink_InitializeTrail(object, other, 3584, 56, 6);
+        BattleObjectLink_SetFollowing(object, 1, 1);
+        BattleObjectLink_SetGravity(object, 112);
+        BattleObjectLink_SetParameter0A(object, 64);
+        BattleObjectLink_SetGroundParameter(object, 0);
         break;
     }
     case BATTLE_PROPERTY_SCENE_OPERATION_104:
-        func_ov002_020b8ac8(BattleSceneObject_GetById(actor_id), 1, value);
+        BattleObjectLink_SetFollowing(BattleSceneObject_GetById(actor_id), 1, value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_105:
-        func_ov002_020b8aa0(BattleSceneObject_GetById(actor_id), value);
+        BattleObjectLink_SetSourceOffsetX(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_106:
-        func_ov002_020b8a90(BattleSceneObject_GetById(actor_id), value);
+        BattleObjectLink_SetSourceOffsetY(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_107:
-        func_ov002_020b8a80(BattleSceneObject_GetById(actor_id), value);
+        BattleObjectLink_SetSourceOffsetZ(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_108:
-        func_ov002_020b8a18(BattleSceneObject_GetById(actor_id), value);
+        BattleObjectLink_SetParameter0C(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_109:
-        func_ov002_020b8a08(BattleSceneObject_GetById(actor_id), value);
+        BattleObjectLink_SetParameter0E(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_110:
         func_ov002_020b8128(value);
