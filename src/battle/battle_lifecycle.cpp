@@ -20,9 +20,9 @@ void func_ov002_0206a008(u8 *);
 void func_ov002_0206a184(u8 *);
 void func_ov002_0206f384(BattleModel *);
 void func_ov002_0206f1b8(BattleModel *);
-void *func_ov002_020725a4(int (*)(void *), void *, int, int);
-void func_ov002_02072718(void *);
-void func_ov002_02072798(void *, int);
+void *BattleTransfer_EnqueueBeforeMapping(int (*)(void *), void *, int, int);
+void BattleSchedulerNode_Unlink(void *);
+void BattleSchedulerNode_Insert(void *, int);
 void func_ov002_02072fb0(void *, int, const void *);
 extern GameSessionTask *data_02059ffc;
 extern int data_ov002_020c071c;
@@ -92,7 +92,7 @@ extern "C" BattleFrameContextView *BattleMain_Create(u32 heap_start)
 
 extern "C" BattleFrameContextView *BattleMain_InitTask(BattleFrameContextView *battle, int priority)
 {
-    func_ov002_02072798(battle, priority);
+    BattleSchedulerNode_Insert(battle, priority);
     gBattleContext = (u8 *)battle;
     battle->update = BattleMain_Initialize;
     return battle;
@@ -182,7 +182,7 @@ extern "C" void *BattleMain_Destroy(void *task)
     } else {
         GameSessionTask_RequestStatePhase2(data_02059ffc, 0);
     }
-    func_ov002_02072718(task);
+    BattleSchedulerNode_Unlink(task);
     return task;
 }
 
@@ -239,5 +239,5 @@ extern "C" int BattleMain_UploadTextures(void *task)
 {
     BattleRenderModels_UpdateTextures(((BattleFrameContextView *)gBattleContext)->texture_banks, 1);
     GameTexturePalette_Upload(((BattleFrameContextView *)gBattleContext)->palette_banks);
-    return (int)func_ov002_020725a4(BattleMain_UploadTextures, 0, 0, 0);
+    return (int)BattleTransfer_EnqueueBeforeMapping(BattleMain_UploadTextures, 0, 0, 0);
 }

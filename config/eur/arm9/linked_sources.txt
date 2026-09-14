@@ -870,3 +870,4 @@ src/overlay007/menu_item_selection_sprites.cpp
 src/overlay007/menu_badge_description.cpp
 src/battle/battle_relative_effects.c
 src/battle/battle_hit_bonus.c
+src/battle/battle_scheduler_queues.c

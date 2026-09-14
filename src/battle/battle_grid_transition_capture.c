@@ -21,7 +21,7 @@ enum BattleGridCaptureConstant {
 
 extern int BattleGridTransition_DrawPhaseB(BattleGridCaptureState *state);
 extern void func_ov002_020b5d58(void *task);
-extern void *func_ov002_02072508(
+extern void *BattleTransfer_EnqueueAfterMapping(
     void (*callback)(void *task), void *argument,
     int unknown_2, int unknown_3);
 
@@ -68,7 +68,7 @@ void BattleGridCapture_BeginTask(BattleGridCaptureTask *task) {
     }
 
     *(u16 *)(gBattleContext + BATTLE_GRID_CAPTURE_INTENSITY_OFFSET) = 0;
-    func_ov002_02072508(func_ov002_020b5d58, 0, 0, 0);
+    BattleTransfer_EnqueueAfterMapping(func_ov002_020b5d58, 0, 0, 0);
     BattleDisplayCapture_QueueConfigure(0);
     task->callback = BattleGridCapture_UpdateTask;
 }

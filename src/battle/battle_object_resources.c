@@ -5,7 +5,7 @@ extern u8 *gBattleSystem;
 
 void func_0202cc58(const void *source, void *destination, u32 size);
 void func_0202cd2c(const void *source, void *destination, u32 size);
-void *func_ov002_020725a4(int (*callback)(BattleObjectUploadTask *task),
+void *BattleTransfer_EnqueueBeforeMapping(int (*callback)(BattleObjectUploadTask *task),
                           BattleSceneResource *resource, int unknown_2,
                           int unknown_3);
 
@@ -57,7 +57,7 @@ void BattleObjectData_CopyResource(BattleSceneResource *resource,
         return;
     }
 
-    func_ov002_020725a4(BattleObjectData_UploadTextureTask,
+    BattleTransfer_EnqueueBeforeMapping(BattleObjectData_UploadTextureTask,
                         load_state, 0, 0);
     *(u16 *)(gBattleSystem + 3574) =
         (*(u16 *)(gBattleSystem + 3574) & ~1) | 1;

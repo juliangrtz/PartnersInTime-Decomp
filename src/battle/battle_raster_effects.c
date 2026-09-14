@@ -40,7 +40,7 @@ typedef char BattleRasterEffectState_SizeCheck[
 typedef char BattleRasterEffectTask_SizeCheck[
     sizeof(BattleRasterEffectTask) == 0x18 ? 1 : -1];
 
-extern void *func_ov002_020725a4(
+extern void *BattleTransfer_EnqueueBeforeMapping(
     void (*callback)(void *task), void *argument_1,
     int argument_2, int argument_3);
 extern void BattleMap_SavePalette(void *task);
@@ -248,7 +248,7 @@ void BattleRasterResourceTransition_UpdateIn(BattleRasterEffectTask *task) {
             4, (u16)state->value, (s16)state->duration,
             (s16)state->progress);
         if ((s16)state->progress >= (s16)state->duration) {
-            func_ov002_020725a4(BattleMap_SavePalette, 0, 0, 0);
+            BattleTransfer_EnqueueBeforeMapping(BattleMap_SavePalette, 0, 0, 0);
             task->callback = 0;
         }
     }

@@ -31,7 +31,7 @@ void func_02036988(vu32 *, int, int, int, int);
 void func_02036ee0(int, int, int, int, int);
 void func_02036f24(int, int, int, int);
 void func_02036cc0(const MtxFx44 *);
-void *func_ov002_02072508(void (*)(void), void *, int, int);
+void *BattleTransfer_EnqueueAfterMapping(void (*)(void), void *, int, int);
 void func_ov002_020b6038(void);
 }
 #define REG32(address) (*(vu32 *)(address))
@@ -150,7 +150,7 @@ extern "C" void BattleEntry_InitializeGraphics(void)
                                 FRAME->main_palette, 0x3021, 32);
     BattleAI_Initialize();
     func_ov002_020b6038();
-    func_ov002_02072508(BattleEntry_ShowBattleDisplay, 0, 0, 0);
+    BattleTransfer_EnqueueAfterMapping(BattleEntry_ShowBattleDisplay, 0, 0, 0);
     FRAME->main_brightness_level = 32;
     FRAME->sub_brightness_level = 0;
     FRAME->vblank = BattleMain_VBlank;

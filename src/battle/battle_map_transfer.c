@@ -19,7 +19,7 @@ void func_02035a40(int);
 void *func_02036650(void);
 void *func_02036910(void);
 void func_0202cbd4(void *, int, u32);
-void func_ov002_02072508(void (*)(void), int, int, int);
+void BattleTransfer_EnqueueAfterMapping(void (*)(void), int, int, int);
 enum {
     BATTLE_MAP_ARCHIVE_BUFFER_OFFSET = 57704,
     BATTLE_MAP_SUB_OBJECT_OFFSET = 25900,
@@ -133,7 +133,7 @@ BattleQueuedTask *BattleMap_QueueSubDisplayLoad(void)
 {
     MapResource()->flags.raw |= 0x40000000;
     Context()->runtime.flags.raw |= 0x40;
-    func_ov002_02072508(BattleMap_ConfigureDisplays, 0, 0, 0);
+    BattleTransfer_EnqueueAfterMapping(BattleMap_ConfigureDisplays, 0, 0, 0);
     return BattleTaskQueue_Enqueue(BattleMap_BeginSubDisplayTask, 0);
 }
 
@@ -327,7 +327,7 @@ void BattleMap_PrepareReloadTask(BattleQueuedTask *task)
             (*MapAnimationTrack(1))->commands = 0;
             *MapAnimationTrack(1) = 0;
         }
-        func_ov002_02072508(BattleMap_ClearDisplays, 0, 0, 0);
+        BattleTransfer_EnqueueAfterMapping(BattleMap_ClearDisplays, 0, 0, 0);
         *(u16 *)((u8 *)gBattleSystem + BATTLE_GRAPHICS_LOAD_FLAGS_OFFSET) =
             (*(u16 *)((u8 *)gBattleSystem + BATTLE_GRAPHICS_LOAD_FLAGS_OFFSET) & ~1) | 1;
         task->callback = BattleMap_ReadReloadTask;

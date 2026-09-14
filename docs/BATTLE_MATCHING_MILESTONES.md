@@ -7864,3 +7864,34 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
   including symbolic assembly: **47.93%**.
   Overlay 2: **161,100 / 362,436 (44.45%)**.
   **37,594 bytes remain to reach 50% matching C/C++.**
+
+## 2026-09-14 - Battle scheduler queues and node operations (+868 C bytes)
+
+- Reconstructed nine contiguous functions at 0x020724C8..0x0207282C: scanline
+  timing, two transfer queues, task enqueue/promotion, idle and node-list helpers.
+  All 868 bytes match in public and actual build objects. The existing 100-byte
+  symbolic task-enqueue routine is now C, so combined coverage increases by 768.
+- Recovered the complete 3,584-byte scheduler layout, including four padding
+  bytes beyond the constructor's clearing range. Preserved deferred/ring queue
+  behavior, stable priority insertion, full-width comparisons and native head
+  removal. No assembly or compiler flags were added.
+- Full matching build, golden packaged/native ROMs, zero-difference native relink,
+  generated progress and all 81 tests pass.
+- A 380-frame checkpoint-83 Bro Flower setup replay independently checks 1,016
+  native calls across five functions and complete scheduler records. It covers
+  deferred before-mapping transfers and all three ring-wrap paths. No RAM/code
+  edits or pending calls; all 104 original saves remain unchanged.
+- Separately, 74 isolated ARM946 cases execute all nine guarded functions on copies
+  of live RAM. They check queue/list boundaries, promotion aliasing, signed/full-
+  width priorities, visible/VBlank timing, exact record-store order, complete
+  copied RAM/DTCM and native IRQ-mask restoration. These are controlled cases;
+  live node lifecycle and asynchronous IRQ timing remain outside their coverage.
+- Eight images, four graphics dumps and two RAM snapshots validate. Images and
+  graphics match the ordinary hit-bonus replay with identical inputs; the final
+  setup screen was inspected. See the
+  [reference](research/RECONSTRUCTION_NOTES.md#battle-scheduler-queues) and private
+  `build/runtime/eur_battle_scheduler/` reports for scope and source hashes.
+- Matching C/C++: **745,124 / 1,563,700 bytes (47.65%)**;
+  including symbolic assembly: **47.98%**.
+  Overlay 2: **161,968 / 362,436 (44.69%)**.
+  **36,726 bytes remain to reach 50% matching C/C++.**

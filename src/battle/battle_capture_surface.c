@@ -31,7 +31,7 @@ int func_0202cc58(const void *source, void *destination, u32 size);
 int func_0202cd2c(const void *source, void *destination, u32 size);
 const void *func_0203661c(void);
 const u16 *func_020368dc(void);
-void *func_ov002_020725a4(
+void *BattleTransfer_EnqueueBeforeMapping(
     int (*callback)(), const void *argument_1,
     void *argument_2, u32 argument_3);
 void func_ov002_020acd18(
@@ -136,7 +136,7 @@ void BattleCaptureSurface_DecodeRowTask(BattleQueuedTask *task) {
     row_group = row / tile_width;
 
     if (row_group == capture->tile_height) {
-        func_ov002_020725a4(
+        BattleTransfer_EnqueueBeforeMapping(
             (int (*)())BattleCaptureSurface_CopyTask,
             load_state->component_14, load_state->data,
             (row_group * destination_stride) << 6);
@@ -157,7 +157,7 @@ void BattleCaptureSurface_DecodeRowTask(BattleQueuedTask *task) {
         if (copied_size > 0x2000) {
             int copy_words = copied_size / 4;
 
-            func_ov002_020725a4(
+            BattleTransfer_EnqueueBeforeMapping(
                 (int (*)())BattleCaptureSurface_CopyTask,
                 load_state->component_14, load_state->data, copied_size);
             load_state->data += copy_words * 4;

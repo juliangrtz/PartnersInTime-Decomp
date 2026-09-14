@@ -112,6 +112,7 @@ one-time state edit; the remaining entries are inspection references.
 | Draw-node pool | `0x0206A3F8` | 20-byte pool object, overlay 5; eight-byte nodes and eight-byte links |
 | Draw lists | `0x0206A40C` | Two screens of 64 twelve-byte list records, overlay 5; distinct from the menu element lists |
 | Battle scene objects | `read32(0x020C0718) + 0x5B0 + 0x104 * index` | Overlay 2; 70 embedded 260-byte records, indices 0 through 69. Verify live slot/actor ownership; these are not separate heap allocations. See [relative effects](#battle-relative-effect-spawning). |
+| Battle scheduler | `read32(0x020C0714)` | Overlay 2; 3,584-byte allocation. Queues, list head and scanline clock are described under [scheduler queues](#battle-scheduler-queues). The final four bytes lie beyond the constructor's clearing range. |
 
 The shared source layouts are in
 [pause_scene.h](../../include/game/pause_scene.h),
@@ -652,6 +653,99 @@ Controlled RAM edits or temporary decoded-command substitutions are useful
 probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
+
+### Battle scheduler queues
+
+[battle_scheduler_queues.c](../../src/battle/battle_scheduler_queues.c) reconstructs
+nine contiguous routines at `0x020724C8..0x0207282C`, totaling 868 bytes. Both the
+isolated public object and the actual build object match every instruction,
+literal and relocation. No assembly or compiler flags were added. The 100-byte
+`BattleTaskQueue_Enqueue` previously had a symbolic-assembly reconstruction, so
+this adds 868 C bytes and 768 bytes to combined C/assembly coverage.
+
+| Entry | Routine | Bytes |
+|---|---|---:|
+| `0x020724C8` | `BattleScheduler_ElapsedScanlines` | 64 |
+| `0x02072508` | `BattleTransfer_EnqueueAfterMapping` | 156 |
+| `0x020725A4` | `BattleTransfer_EnqueueBeforeMapping` | 176 |
+| `0x02072654` | `BattleTaskQueue_Promote` | 92 |
+| `0x020726B0` | `BattleTaskQueue_Enqueue` | 100 |
+| `0x02072714` | `BattleScheduler_Idle` | 4 |
+| `0x02072718` | `BattleSchedulerNode_Unlink` | 64 |
+| `0x02072758` | `BattleSchedulerNode_UnlinkForCleanup` | 64 |
+| `0x02072798` | `BattleSchedulerNode_Insert` | 148 |
+
+The [internal layout](../../src/battle/battle_scheduler_internal.h) follows the
+native producers, VBlank consumer at `0x0207282C`, main consumer at `0x020729D4`
+and constructor at `0x02072FB0`. `BattleMain_Create` allocates 3,584 bytes for the
+scheduler; its constructor clears 2,492 bytes starting at offset 1,088. The final
+four padding bytes therefore remain outside that clearing operation.
+The two consumers themselves remain native code.
+
+All offsets below are from `read32(0x020C0714)` in ARM9 main RAM:
+
+| Storage | Offset and extent |
+|---|---|
+| Ordered node list | Pointer at `+1092`; each node's first 16 bytes contain next, update callback, VBlank callback, signed halfword priority and padding |
+| IRQ task | Pointer at `+1104`; constructor allocates 40 bytes |
+| Promoted task | Twelve-byte record at `+1116` |
+| Task ring | 32 twelve-byte records at `+1128`; halfword head/tail at `+1512/+1514` |
+| Transfers before bank restoration | 32 sixteen-byte records at `+1516`; 32 deferred records at `+2028`; halfword head/tail at `+2540/+2542` |
+| Transfers after bank restoration | 32 sixteen-byte records at `+2544`; 32 deferred records at `+3056`; halfword head/tail at `+3568/+3570` |
+| Clock and flags | Unsigned halfword VBlank count at `+3572`; flags at `+3574`: promoted task bit 0, VBlank-ready bit 1, inside-VBlank bit 2 |
+
+The transfer names describe execution around restoration of texture/palette-bank
+mappings. While inside VBlank, producers append to the first empty deferred
+record. Otherwise they append to their 32-entry ring and wrap its tail. A transfer
+record holds its callback and three full-width argument words; existing callers
+use specialized views of those words. Task promotion copies callback, state,
+timer and argument in native order, clears the source callback and sets flag 0.
+Node insertion is stable for equal priorities and compares the full signed input
+before storing its low halfword. Both unlink copies clear the list head when
+removing its first node, even when that node has a successor.
+
+The first queue draft narrowed its next index too early, adding two instructions.
+Keeping it full-width until the final halfword store recovered the native code.
+The scanline helper required the frame-counter read before adjustment of VCOUNT.
+The unlink loops required the native early return immediately after relinking.
+These corrections followed the differing instructions; no source permutations
+were used. The unrelated keyframe-updater draft remains unlinked.
+
+The private live probe is `build/analysis/probe_battle_scheduler.py`. It replays
+the same 380-frame Bro Flower setup prefix, checkpoint-83 save and compatible
+`ov17_bros_menu83.dst` snapshot described under [hit-bonus rolls](#battle-hit-bonus-roll).
+`build/runtime/eur_battle_scheduler/evidence_flower83.json` records 1,016 complete
+calls: 774 before-mapping transfers, 207 after-mapping transfers, 26 task enqueues,
+one promotion and eight scanline queries. Every call checks all 3,584 scheduler
+bytes and any touched records against an independent model. The replay covers
+380 deferred before-mapping transfers and ring wrapping in all three queues.
+VCOUNT and the frame counter are checked at their guarded native loads.
+No RAM or code is edited, and no calls remain pending.
+
+Separately, `build/analysis/check_battle_scheduler_arm.py` runs 74 isolated ARM946
+cases against copies of that paused RAM capture. All nine routines execute with
+complete original-byte guards. Cases cover visible/VBlank scanline boundaries,
+frame-counter extremes, transfer/task ring edges, empty and populated deferred
+queues, promotion including source/destination aliasing, both unlink copies,
+head removal with a successor, predecessor traversal, stable equal-priority
+insertion and full-width priorities that truncate only at the store.
+The native task/IRQ-enable and IRQ-mask helpers execute without stubs.
+
+`isolated_arm_cases.json` records exact return values, preserved registers, all
+four MiB of copied main RAM, all 16 KiB of DTCM including expected stack writes,
+the modeled I/O page, ordered record stores and temporary IE/IME masking writes.
+Synthetic list records occupy scratch bytes only in the copied RAM. These cases
+establish controlled function behavior; live node lifecycle, asynchronous IRQ
+timing and full-game navigation through those fixtures remain outside their scope.
+
+`artifact_validation.json` verifies eight 256-by-384 screenshots, four graphics
+dumps, the main-RAM/DTCM snapshots and all 104 unchanged source saves. Every image
+and graphics dump matches the ordinary hit-bonus replay with identical inputs;
+the final Bro Flower setup screen was visually inspected. Graphics equality is
+separate from an independent rasterization check. The build report is
+`build/analysis/battle_scheduler_build_validation.json`: full matching build,
+golden packaged/native ROMs, zero differing bytes, progress/check and 81 tests pass.
+Earlier build logs from before the four-byte padding correction are kept separately.
 
 ### Battle hit-bonus roll
 

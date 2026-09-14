@@ -97,7 +97,7 @@ extern s16 FX_SinCosTable_[8192];
 extern int func_ov002_020925bc(BattleSpriteTransform *transform,
                                BattleInterfaceLayer *layer);
 extern void func_02036cc0(BattleSpriteTransform *transform);
-extern void *func_ov002_020725a4(int (*callback)(void *task),
+extern void *BattleTransfer_EnqueueBeforeMapping(int (*callback)(void *task),
                                  void *argument, int priority, int flags);
 
 void BattleCommandMenu_Update(BattleInterfacePanelState *state) {
@@ -197,14 +197,14 @@ void BattleTargetLabel_Update(BattleInterfacePanelState *state) {
             state->transition_angle = 64;
             if (state->interface.layer.flags.bits.resource_ready != 0) {
                 state->interface.layer.flags.bits.resource_ready = 0;
-                func_ov002_020725a4(
+                BattleTransfer_EnqueueBeforeMapping(
                     BattleInterface_UploadTextTask, &state->interface.layer, 0, 0);
                 state->displayed_side = state->requested_side;
             }
         }
     } else if (state->interface.layer.flags.bits.resource_ready != 0) {
         state->interface.layer.flags.bits.resource_ready = 0;
-        func_ov002_020725a4(
+        BattleTransfer_EnqueueBeforeMapping(
             BattleInterface_UploadTextTask, &state->interface.layer, 0, 0);
     } else if (state->transition_angle > 0) {
         state->transition_angle -= 12;

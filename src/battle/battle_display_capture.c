@@ -17,10 +17,10 @@ enum BattleDisplayCaptureConstant {
 
 extern u8 *gBattleSystem;
 
-void *func_ov002_02072508(
+void *BattleTransfer_EnqueueAfterMapping(
     int (*callback)(BattleObjectUploadTask *task),
     BattleSceneResource *argument, int unknown_2, int unknown_3);
-void *func_ov002_020725a4(
+void *BattleTransfer_EnqueueBeforeMapping(
     int (*callback)(BattleObjectUploadTask *task),
     BattleSceneResource *argument, int unknown_2, int unknown_3);
 BattleQueuedTask *BattleCaptureSurface_QueueUpload(
@@ -39,7 +39,7 @@ int BattleDisplayCapture_RestoreConfigureModeTask(
 int BattleDisplayCapture_QueueConfigure(int capture_source) {
     *(u32 *)(gBattleContext + BATTLE_DISPLAY_STATE_OFFSET) |=
         BATTLE_DISPLAY_STATE_CAPTURE_ACTIVE;
-    return (int)func_ov002_020725a4(
+    return (int)BattleTransfer_EnqueueBeforeMapping(
         BattleDisplayCapture_RestoreConfigureModeTask,
         (BattleSceneResource *)capture_source, 0, 0);
 }
@@ -48,14 +48,14 @@ int BattleDisplayCapture_RestoreConfigureModeTask(
     BattleObjectUploadTask *task) {
     *(u32 *)(gBattleSystem + BATTLE_DISPLAY_MODE_OFFSET) =
         BATTLE_DISPLAY_MODE_RESTORE;
-    return (int)func_ov002_02072508(
+    return (int)BattleTransfer_EnqueueAfterMapping(
         BattleDisplayCapture_WriteControlTask, task->resource, 0, 0);
 }
 
 int BattleDisplayCapture_WriteControlTask(BattleObjectUploadTask *task) {
     *(volatile u32 *)REG_DISPCAPCNT_ADDRESS =
         BATTLE_CAPTURE_CONTROL_BASE | ((u32)task->resource << 24);
-    return (int)func_ov002_020725a4(
+    return (int)BattleTransfer_EnqueueBeforeMapping(
         (int (*)(BattleObjectUploadTask *))
             BattleDisplayCapture_FinishConfigureTask,
         0, 0, 0);
@@ -72,7 +72,7 @@ void BattleDisplayCapture_FinishConfigureTask(
 int BattleDisplayCapture_QueueReset(void) {
     *(u32 *)(gBattleContext + BATTLE_DISPLAY_STATE_OFFSET) |=
         BATTLE_DISPLAY_STATE_CAPTURE_ACTIVE;
-    return (int)func_ov002_020725a4(
+    return (int)BattleTransfer_EnqueueBeforeMapping(
         BattleDisplayCapture_RestoreResetModeTask, 0, 0, 0);
 }
 
@@ -80,13 +80,13 @@ int BattleDisplayCapture_RestoreResetModeTask(
     BattleObjectUploadTask *task) {
     *(u32 *)(gBattleSystem + BATTLE_DISPLAY_MODE_OFFSET) =
         BATTLE_DISPLAY_MODE_RESTORE;
-    return (int)func_ov002_02072508(
+    return (int)BattleTransfer_EnqueueAfterMapping(
         BattleDisplayCapture_QueueFinishResetTask, 0, 0, 0);
 }
 
 int BattleDisplayCapture_QueueFinishResetTask(
     BattleObjectUploadTask *task) {
-    return (int)func_ov002_020725a4(
+    return (int)BattleTransfer_EnqueueBeforeMapping(
         (int (*)(BattleObjectUploadTask *))
             BattleDisplayCapture_FinishResetTask,
         0, 0, 0);

@@ -25,7 +25,7 @@ void func_02035e04(int);
 void func_02035fd0(int);
 void func_0202cbd4(void *, int, u32);
 int func_0202dca8(const s16 *, int, u16 *, int, const u16 *, int);
-void *func_ov002_02072508(void (*)(void), void *, int, int);
+void *BattleTransfer_EnqueueAfterMapping(void (*)(void), void *, int, int);
 void func_ov002_02075818(void);
 void GameAudio_StartStream(int);
 }
@@ -72,7 +72,7 @@ extern "C" void BattleMain_Initialize(void)
     data_02059f58 = 0;
     FRAME->main_brightness_level = 32;
     BattleTaskQueue_Enqueue(BattleEntry_InitializeObjects, 0);
-    func_ov002_02072508(BattleEntry_ApplyFieldBrightness, 0, 0, 0);
+    BattleTransfer_EnqueueAfterMapping(BattleEntry_ApplyFieldBrightness, 0, 0, 0);
     FRAME->update = BattleEntry_FadeField;
 }
 
@@ -86,16 +86,16 @@ extern "C" void BattleEntry_ApplyFieldBrightness(void)
 
 extern "C" void BattleEntry_FadeField(void)
 {
-    func_ov002_02072508(BattleEntry_ApplyFieldBrightness, 0, 0, 0);
+    BattleTransfer_EnqueueAfterMapping(BattleEntry_ApplyFieldBrightness, 0, 0, 0);
     if (FRAME->main_brightness_level > 0)
         FRAME->main_brightness_level -= 3;
     if (FRAME->main_brightness_level <= 0) {
         FRAME->main_brightness_level = 0;
         if (DISPLAY_FLAGS->sub_screen) {
-            func_ov002_02072508(BattleEntry_MapCaptureBanks, 0, 0, 0);
+            BattleTransfer_EnqueueAfterMapping(BattleEntry_MapCaptureBanks, 0, 0, 0);
             FRAME->update = BattleEntry_CopySubDisplayToMain;
         } else {
-            func_ov002_02072508(BattleEntry_RestoreFieldDisplay, 0, 0, 0);
+            BattleTransfer_EnqueueAfterMapping(BattleEntry_RestoreFieldDisplay, 0, 0, 0);
             FRAME->update = BattleEntry_StartTransitionSound;
         }
     }
@@ -119,7 +119,7 @@ extern "C" void BattleEntry_CopySubDisplayToMain(void)
     CopyMemory((void *)0x06600000, (void *)0x06400000, 0x20000);
     CopyMemory((void *)0x05000400, (void *)0x05000000, 1024);
     CopyMemory((void *)0x07000400, (void *)0x07000000, 1024);
-    func_ov002_02072508(BattleEntry_RestoreFieldDisplay, 0, 0, 0);
+    BattleTransfer_EnqueueAfterMapping(BattleEntry_RestoreFieldDisplay, 0, 0, 0);
     FRAME->update = BattleEntry_StartTransitionSound;
 }
 
@@ -212,6 +212,6 @@ extern "C" void BattleEntry_StartTransitionSound(void)
 extern "C" void BattleEntry_CaptureScene(void)
 {
     REG32(0x04000064) = 0x80321010;
-    func_ov002_02072508(func_ov002_02075818, 0, 0, 0);
+    BattleTransfer_EnqueueAfterMapping(func_ov002_02075818, 0, 0, 0);
     FRAME->update = BattleEntry_WaitCapture;
 }

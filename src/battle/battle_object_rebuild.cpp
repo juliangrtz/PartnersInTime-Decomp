@@ -15,7 +15,7 @@ void *GameHeap_New(u32 size, u32 heap_id, void *allocator, int argument);
 void func_ov002_0206f1f0(BattleResourceModel *model,
                          BattleSceneResource *resource,
                          u32 component_offset);
-void func_ov002_02072654(BattleQueuedTask *task);
+void BattleTaskQueue_Promote(BattleQueuedTask *task);
 }
 
 void BattleObjectData_BeginRebuildTask(BattleQueuedTask *task) {
@@ -57,7 +57,7 @@ void BattleObjectData_BeginRebuildTask(BattleQueuedTask *task) {
     *(void **)destination->data = destination->component_14;
     model->component_index = 0;
     task->callback = BattleObjectData_RebuildNextComponentTask;
-    func_ov002_02072654(task);
+    BattleTaskQueue_Promote(task);
 }
 
 void BattleObjectData_RebuildNextComponentTask(BattleQueuedTask *task) {

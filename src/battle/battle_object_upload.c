@@ -11,10 +11,10 @@ int func_0200b374(u32 destination, const void *resource,
 int func_020096b0(BattleTextureDecodeState *state, int count);
 void ArchiveIO_QueueCompressedRead(u8 *system, BattleTextureUploadRequest *request,
                    void *destination);
-void *func_ov002_02072508(int (*callback)(BattleObjectUploadTask *task),
+void *BattleTransfer_EnqueueAfterMapping(int (*callback)(BattleObjectUploadTask *task),
                           BattleSceneResource *resource, int unknown_2,
                           int unknown_3);
-void *func_ov002_020725a4(int (*callback)(BattleObjectUploadTask *task),
+void *BattleTransfer_EnqueueBeforeMapping(int (*callback)(BattleObjectUploadTask *task),
                           BattleSceneResource *resource, int unknown_2,
                           int unknown_3);
 
@@ -72,7 +72,7 @@ void BattleObjectData_CompleteUploadTask(BattleQueuedTask *task) {
     if ((resource->flags.bits.resource_index == 0 ||
          resource->flags.bits.allocated) &&
         !resource->flags.bits.copy_flag) {
-        func_ov002_02072508(BattleObjectData_UploadSpriteTask,
+        BattleTransfer_EnqueueAfterMapping(BattleObjectData_UploadSpriteTask,
                             resource, 0, 0);
         if (resource->component_14 == gBattleContext + 0x37608) {
             *(u16 *)(gBattleSystem + 0xDF6) =
@@ -82,7 +82,7 @@ void BattleObjectData_CompleteUploadTask(BattleQueuedTask *task) {
 
     if (resource->flags.bits.resource_index != 0 &&
         !resource->flags.bits.upload_complete) {
-        func_ov002_020725a4(BattleObjectData_UploadTextureTask,
+        BattleTransfer_EnqueueBeforeMapping(BattleObjectData_UploadTextureTask,
                             resource, 0, 0);
         *(u16 *)(gBattleSystem + 0xDF6) =
             (*(u16 *)(gBattleSystem + 0xDF6) & ~1) | 1;

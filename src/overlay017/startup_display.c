@@ -10,7 +10,7 @@ enum Overlay17StartupDisplayConstant {
     OVERLAY17_DISPLAY_COPY_SIZE = 0x20,
 };
 
-extern void *func_ov002_020725a4(
+extern void *BattleTransfer_EnqueueBeforeMapping(
     void (*callback)(), const void *argument_1,
     void *argument_2, u32 argument_3);
 extern u8 data_ov017_020c6c98[];
@@ -72,6 +72,6 @@ void Overlay17Attack_InitializeDisplayPattern(void) {
 }
 
 void *Overlay17Attack_QueueDisplayInitialization(void) {
-    return func_ov002_020725a4(
+    return BattleTransfer_EnqueueBeforeMapping(
         Overlay17Attack_InitializeDisplayPattern, 0, 0, 0);
 }

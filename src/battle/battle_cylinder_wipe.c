@@ -29,7 +29,7 @@ extern void GX_SetVCountEqVal(void *allocation);
 extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 OS_EnableIrqMask(u32 mask);
 extern void OS_SetIrqFunction(u32 mask, void (*callback)(void));
-extern void *func_ov002_02072508(
+extern void *BattleTransfer_EnqueueAfterMapping(
     void (*callback)(BattleCylinderWipeRestoreTask *task), int argument,
     int unknown_2, int unknown_3);
 extern BattleAITask *func_ov002_020b5ef0(BattleAITask *task);
@@ -90,13 +90,13 @@ void BattleCylinderWipe_UpdateRotationTask(BattleCylinderWipeTask *task) {
         BattleCylinderWipe_Draw(32, angle << 8, 0);
         if (split_line > 192) {
             BattleCylinderWipe_Draw(32, (state->angle - 0xC00) << 8, 0);
-            func_ov002_02072508(BattleCylinderWipe_RestoreDisplayTask,
+            BattleTransfer_EnqueueAfterMapping(BattleCylinderWipe_RestoreDisplayTask,
                                 split_line - 120, 0, 0);
         }
         return;
     }
 
-    func_ov002_02072508(BattleCylinderWipe_RestoreDisplayTask, -1, 0, 0);
+    BattleTransfer_EnqueueAfterMapping(BattleCylinderWipe_RestoreDisplayTask, -1, 0, 0);
     state->angle -= 0xC00;
     BattleCylinderWipe_Draw(32, state->angle << 8, 0);
     task->callback = BattleCylinderWipe_UpdateFinishTask;

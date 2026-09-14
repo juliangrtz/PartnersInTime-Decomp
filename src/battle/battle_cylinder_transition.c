@@ -33,7 +33,7 @@ extern void GX_SetVCountEqVal(void *allocation);
 extern u32 OS_DisableIrqMask(u32 mask);
 extern u32 OS_EnableIrqMask(u32 mask);
 extern void OS_SetIrqFunction(u32 mask, void (*callback)(void));
-extern void *func_ov002_02072508(
+extern void *BattleTransfer_EnqueueAfterMapping(
     void (*callback)(BattleCylinderRestoreTask *task), int argument,
     int unknown_2, int unknown_3);
 extern void BattleCylinderTransition_Draw(int progress, int angle);
@@ -96,7 +96,7 @@ void BattleCylinderTransition_UpdateAlternateRotationTask(
         BattleCylinderTransition_Draw(32, angle << 8);
         if (split_line < 0) {
             BattleCylinderTransition_Draw(32, (state->angle + 0xC00) << 8);
-            func_ov002_02072508(
+            BattleTransfer_EnqueueAfterMapping(
                 BattleCylinderTransition_RestoreDisplayTask,
                 split_line + 120, 0, 0);
         }

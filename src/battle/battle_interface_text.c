@@ -8,7 +8,7 @@ extern u8 *gBattleSystem;
 extern u8 data_ov002_020c0c44[];
 void func_0202cbd4(void *destination, int value, u32 length);
 void func_0202cf04(void *source, u32 destination, int row_bytes, int height);
-void *func_ov002_020725a4(int (*callback)(void *), void *argument, int a, int b);
+void *BattleTransfer_EnqueueBeforeMapping(int (*callback)(void *), void *argument, int a, int b);
 
 void BattleInterface_ProcessResourceTask(BattleQueuedTask *task)
 {
@@ -36,7 +36,7 @@ complete:
     if (!layer->flags.bits.state_15)
         text->text = 0;
     if (layer->flags.bits.notify_on_complete) {
-        func_ov002_020725a4(BattleInterface_UploadTextTask, layer, 0, 0);
+        BattleTransfer_EnqueueBeforeMapping(BattleInterface_UploadTextTask, layer, 0, 0);
         *(u16 *)(gBattleSystem + BATTLE_INTERFACE_UPLOAD_FLAGS_OFFSET) =
             (*(u16 *)(gBattleSystem + BATTLE_INTERFACE_UPLOAD_FLAGS_OFFSET) & ~1) | 1;
     }
@@ -141,7 +141,7 @@ void BattleInterface_ProcessNumberTask(BattleQueuedTask *task)
 /* A shared exit preserves the native return at the four-token limit. */
 complete:
     if (layer->flags.bits.notify_on_complete) {
-        func_ov002_020725a4(BattleInterface_UploadTextTask, layer, 0, 0);
+        BattleTransfer_EnqueueBeforeMapping(BattleInterface_UploadTextTask, layer, 0, 0);
         *(u16 *)(gBattleSystem + BATTLE_INTERFACE_UPLOAD_FLAGS_OFFSET) =
             (*(u16 *)(gBattleSystem + BATTLE_INTERFACE_UPLOAD_FLAGS_OFFSET) & ~1) | 1;
     }

@@ -4,7 +4,7 @@ extern "C" {
 extern u8 *gBattleContext;
 void DC_FlushRange(const void *, u32);
 void func_02038448(const void *, u32, u32);
-void *func_ov002_02072508(void (*)(BattleWindowTransferTask *), const void *, void *, u32);
+void *BattleTransfer_EnqueueAfterMapping(void (*)(BattleWindowTransferTask *), const void *, void *, u32);
 extern GameOamEntry data_02060740[];
 }
 enum { BATTLE_SUB_BLEND_SOURCE_OFFSET = 54 };
@@ -15,7 +15,7 @@ extern "C" void BattleWindow_ScheduleSubUploads(BattleWindowManager *manager)
     u16 counts = (manager->base.state.bits.sub_count << 8) | manager->base.state.bits.main_count;
     int visible = counts >> 4;
     if (!visible && UPLOAD_FLAGS->bits.pending) {
-        func_ov002_02072508(BattleWindow_ResetSubScrollTask, 0, manager, 0);
+        BattleTransfer_EnqueueAfterMapping(BattleWindow_ResetSubScrollTask, 0, manager, 0);
         manager->flags &= ~1;
         return;
     }
@@ -23,10 +23,10 @@ extern "C" void BattleWindow_ScheduleSubUploads(BattleWindowManager *manager)
         manager->flags &= ~1;
         BattleWindowAnimator_CopySubOam((BattleWindowAnimator *)manager->base.animator, data_02060740);
         *(u16 *)(gBattleContext + BATTLE_SUB_BLEND_SOURCE_OFFSET) = 0;
-        func_ov002_02072508(BattleWindow_UploadSubTilemapTask, 0, manager, 0);
+        BattleTransfer_EnqueueAfterMapping(BattleWindow_UploadSubTilemapTask, 0, manager, 0);
         for (GameWindow *window = manager->base.sub_windows; window->next != (GameWindow *)-1;
              window = window->next)
-            func_ov002_02072508(BattleWindow_UploadSubWindowTask, window, manager, 0);
+            BattleTransfer_EnqueueAfterMapping(BattleWindow_UploadSubWindowTask, window, manager, 0);
     }
 }
 extern "C" void BattleWindow_UploadSubTilemap(BattleWindowManager *manager)
