@@ -493,3 +493,6 @@ src/battle/battle_particle_sweep_particle.c:
 
 src/battle/battle_relative_effects.c:
     .text start:0x02071e40 end:0x02072004
+
+src/battle/battle_hit_bonus.c:
+    .text start:0x020720fc end:0x020722ac

@@ -7836,3 +7836,31 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
   including symbolic assembly: **47.90%**.
   Overlay 2: **160,668 / 362,436 (44.33%)**.
   **38,026 bytes remain to reach 50% matching C/C++.**
+
+## 2026-09-14 - Stache-based battle hit-bonus roll (+432 bytes)
+
+- Reconstructed the roll used by Bro/Ice Flower setup to choose hit kind 6.
+  Preserved binary64 operations, truncations, badge branches and strict comparison.
+  Shared party/actor types and RNG API are used; no assembly or compiler flags.
+  Named the proven native unsigned conversion helper `_dfltu`; its name adds no
+  C/C++ bytes. Public and actual build objects match the full 432-byte function.
+- Full matching check, golden packaged/native ROMs, zero-difference native relink,
+  generated progress and all 81 tests pass.
+- Checkpoint 83: two 380-frame Bro Flower entry replays, 12 checked returns and
+  11 independently modeled RNG steps. Complete party/enemy/save records checked.
+  The six guarded cases cover zero Stache, optional target lookup, lower/upper
+  clamps, both badge modifiers with fractional truncation and equality rejection.
+- Every fixture restores its edited bytes plus the ordinary call's expected RNG
+  state and return result before the caller resumes. All 104 original saves stay
+  unchanged; no pending calls or failed restorations.
+- Sixteen screenshots and eight graphics dumps validate. All eight ordinary
+  captures match the historical input prefix. Restored fixture output separately
+  matches the ordinary captures, graphics and final RNG state. Both setup screens
+  inspected. Later damage, attack completion and independent rasterization remain
+  outside the new probe. See the
+  [reference](research/RECONSTRUCTION_NOTES.md#battle-hit-bonus-roll) and private
+  `build/runtime/eur_battle_hit_bonus/` reports.
+- Matching C/C++: **744,256 / 1,563,700 bytes (47.60%)**;
+  including symbolic assembly: **47.93%**.
+  Overlay 2: **161,100 / 362,436 (44.45%)**.
+  **37,594 bytes remain to reach 50% matching C/C++.**

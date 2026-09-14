@@ -4,10 +4,13 @@
 #include <nitro.h>
 
 struct BattleActor;
+struct BattlePartyActor;
 struct BattleHitRecord;
 struct BattleSceneObject;
 
 int BattleDamage_CalculateBase(int attacker_id, int defender_id, int scale_q8);
+int BattleParty_RollHitBonus(struct BattlePartyActor *user,
+                             struct BattleActor *target);
 int BattleDamage_ApplyEquipmentModifiers(u32 attacker_id, u32 defender_id,
                                          int scale_q8,
                                          int condition_active);

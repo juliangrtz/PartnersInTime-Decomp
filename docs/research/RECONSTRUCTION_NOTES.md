@@ -653,6 +653,83 @@ probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
 
+### Battle hit-bonus roll
+
+[battle_hit_bonus.c](../../src/battle/battle_hit_bonus.c) reconstructs
+`BattleParty_RollHitBonus` at `0x020720FC..0x020722AC` (432 bytes). It preserves
+the native floating-point operations, intermediate truncations and badge branch
+layout. The public isolated object and actual build object both match completely.
+No assembly or compiler flags were added. The unsigned integer-to-double helper
+at `0x02044BC0` is now named `_dfltu` in resident metadata, matching the compiler's
+symbol. Native inspection establishes normalization of unsigned `r0` and the
+IEEE-754 result in `r1:r0`; the adjacent `_dflt` additionally handles signed input.
+This helper rename adds no C/C++ coverage.
+
+The user argument is a `BattlePartyActor`; the optional target is a `BattleActor`.
+With no target, the routine resolves the user's unsigned target ID first.
+`actor.unk_00e` holds the Stache value copied from the save during battle entry.
+A zero value returns false without drawing a random number. Otherwise the base
+chance is the truncation toward zero of
+`64 * (256 * stache - 128 * target_level) / 65536`, using the target's unsigned
+seven-bit level. The native implementation evaluates this through separate
+binary64 conversions and operations; keep those source expressions intact.
+
+If the user has a scene-object pointer, its formation maps through the byte table
+at `0x020BE8FC` to a saved party member. The low badge byte at
+`read32(0x02059FE8) + 36 * member + 1048` selects the modifier: item `0x300E`
+multiplies the truncated base by `640/256`, and `0x3028` by `1152/256`, each with
+another truncation toward zero. The result is clamped to 1 through 99, then
+compared with `Random_NextModulo(100)` using a strict signed less-than test.
+Bro/Ice Flower setup calls this for six target slots. Its consumers at
+`0x020C2D24` and `0x020C4C10` choose hit kind 6 when true, otherwise kind 1.
+The public name describes that confirmed bonus selection without renaming the
+shared stat field or assigning a speculative item name.
+
+The private probe is `build/analysis/probe_battle_hit_bonus.py`. Both 380-frame
+routes use checkpoint 83 and the compatible `ov17_bros_menu83.dst` snapshot
+(SHA-1 `21d2e64a24b389689627292539103880c6761b47`). Two Down presses, each followed
+by 30 neutral frames, then `a:8`, `wait:100`, `a:8`, `wait:180`, with a released
+frame after every action, enter Bro Flower setup. All six rolls occur at frame
+197. `build/runtime/eur_battle_hit_bonus/evidence_fire83.json` records ordinary
+inputs; `evidence_fire83_cases.json` adds six guarded per-call fixtures:
+
+- Zero Stache returns false and consumes no random number.
+- A null target argument exercises target lookup; negative Stache clamps to 1.
+- Maximum signed-halfword Stache clamps to 99 and accepts a lower draw.
+- Badge `0x300E` truncates base 9 times 2.5 to 22.
+- Badge `0x3028` truncates base 9 times 4.5 to 40.
+- A draw equal to chance 88 returns false.
+
+The oracle checks complete 148-byte party storage, 672-byte enemy storage,
+the 1,380-byte save record and the six-byte formation map. An independent integer
+model checks the native binary64 result: the signed-halfword stat, seven-bit
+level, power-of-two scaling and badge products all remain exactly representable
+at these stages. Division toward zero models each conversion to integer.
+The RNG state at `0x02060E04`, its zero-seed fallback, next seed and modulo result
+are derived separately from [random.c](../../src/game/random.c). Across both
+routes, all 12 returns and 11 RNG steps pass; optional lookup runs once.
+
+Each fixture restores its changed stat, object-pointer, target-ID, level and/or
+badge bytes at the guarded return. It also restores the RNG state and `r0` result
+that the ordinary call would have produced, before the caller can consume them.
+Those original expectations agree with the corresponding ordinary-run records.
+All six restorations succeed; original save files are untouched. These cases
+verify controlled function behavior, not naturally encountered equipment or stats.
+
+`artifact_validation.json` validates 16 screenshots, eight graphics dumps and
+all 104 unchanged source saves. The ordinary route's eight captures match the
+identical prefix of the earlier flower replay. Separately, the restored fixture
+route produces the same captures, final graphics buffers and final RNG state
+as the ordinary run. Both final setup screens were visually inspected. Later
+damage, attack completion and independent rasterization are outside this probe;
+the boolean's meaning is supported by its native consumers rather than a later
+damage replay. No calls remain pending.
+
+Full matching checks, golden packaged/native ROM hashes, zero-difference native
+relinking, progress generation and all 81 tests pass. Current evidence is in
+`build/analysis/battle_hit_bonus_build_validation.json`; earlier build logs from
+before the shared forward declaration are retained separately.
+
 ### Battle relative-effect spawning
 
 [battle_relative_effects.c](../../src/battle/battle_relative_effects.c) contains
