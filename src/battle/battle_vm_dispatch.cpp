@@ -99,7 +99,7 @@ extern int GameInventory_Add(u16 item_id, int count_delta);
 extern int GameInventory_GetCount(u16 item_id);
 extern int BattleItemList_RebuildActionItems(void);
 extern int BattleItemList_RebuildUsableItems(void);
-extern void func_ov002_02076178(int sound_task_id);
+extern void BattleSound_Stop(int sound_task_id);
 extern u8 data_02050290[];
 extern u8 data_020505c4[];
 }
@@ -2564,7 +2564,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_STOP_SOUND_TASK:
         if (command->arguments[0] != -1) {
-            func_ov002_02076178((u16)command->arguments[0]);
+            BattleSound_Stop((u16)command->arguments[0]);
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -2572,7 +2572,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         for (index = 0; index < BATTLE_VM_SOUND_TASK_COUNT; index++) {
             if (((void **)(gBattleContext +
                            BATTLE_VM_SOUND_TASK_SLOTS_OFFSET))[index] != 0) {
-                func_ov002_02076178(index);
+                BattleSound_Stop(index);
             }
         }
         return SCRIPT_VM_CONTINUE;

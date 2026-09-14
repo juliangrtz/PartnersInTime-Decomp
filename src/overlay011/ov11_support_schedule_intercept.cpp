@@ -23,7 +23,7 @@ void Overlay11Support_LaunchAway(Overlay11Support *support, int speed_q8)
         BattleSceneObject_StartAcceleratedMotionForDuration(support->object, 3, 0, 0, 1, -support->object->z,
                                                             duration, 60, 1);
         if (support->effect_handle) {
-            func_ov002_02076178(support->effect_handle - 1);
+            BattleSound_Stop(support->effect_handle - 1);
             support->effect_handle = 0;
         }
         BattleEntity_BindResource(support->object->actor_id, work->controllers[0].actor_resource_id);

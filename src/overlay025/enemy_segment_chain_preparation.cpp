@@ -15,7 +15,7 @@ void Overlay25Enemy_EmitTravelEffects(Overlay25Task *task, BattleSceneObject *ob
     }
     if (!BattleSceneObject_IsAnimationChannelActive(object, 2)) {
         if (parameters->travel_sound != -1) {
-            func_ov002_02076178(parameters->travel_sound);
+            BattleSound_Stop(parameters->travel_sound);
             parameters->travel_sound = -1;
         }
         if (object->primary_model->flag_bits.panel_animation_trigger) {

@@ -8253,3 +8253,16 @@ Private eur_battle_common_frame reports retain 2,851 live calls and 15 isolated
 cases, along with source hashes, native guards, graphics captures and untouched
 104 saves. Runtime limits and the corrected initial C++ linkage failure are
 recorded in the reconstruction reference; artifact_validation_v1.json passes.
+
+## Battle sound scheduling - 2026-09-14
+
+Six functions add 1,036 matching C bytes. Total: 756,760 / 1,563,700 matching
+C/C++ bytes (48.3955%); symbolic ASM remains separate.
+Actual source objects, including renamed callers, are exact. All seven build
+checks pass, including 81 tests and both golden-ROM SHA-1 comparisons.
+Private eur_battle_sound/evidence_entry55_v1.json verifies 102 live calls;
+isolated_v1.json passes 44 boundary cases across all six functions with complete
+mapped-memory checks except stack scratch space. Audio stubs are explicit;
+audible output is unverified. The exit replay is retained as a failed coverage
+attempt with zero sound calls. All 104 saves are unchanged, and
+artifact_validation_v1.json checks artifacts, source versions and source objects.

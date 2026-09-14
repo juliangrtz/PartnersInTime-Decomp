@@ -6,7 +6,7 @@ void Overlay11Support_Reset(Overlay11Support *support)
     support->active = 0;
     support->state = 1;
     if (support->effect_handle) {
-        func_ov002_02076178(support->effect_handle - 1);
+        BattleSound_Stop(support->effect_handle - 1);
         support->effect_handle = 0;
     }
 }

@@ -80,7 +80,7 @@ extern s16 data_ov011_020c5f7c[][3];
 extern s16 data_ov011_020c5f7e[][3];
 extern s16 data_ov011_020c5f80[][3];
 extern u16 data_ov002_020be704[];
-void func_ov002_02076178(int);
+void BattleSound_Stop(int);
 void func_0200940c(BattleModel *, int);
 int func_02010960(int, int, int);
 extern u8 *gBattleContext;

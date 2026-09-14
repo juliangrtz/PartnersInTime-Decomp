@@ -562,3 +562,6 @@ src/battle/battle_reward_items_status.c:
 
 src/battle/battle_reward_items_initialize.c:
     .text       start:0x0206e4f8 end:0x0206e578
+
+src/battle/battle_sound.c:
+    .text start:0x02076178 end:0x02076584

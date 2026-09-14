@@ -959,6 +959,26 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Battle sound scheduling
+
+[Battle sound](../../src/battle/battle_sound.c) adds 1,036 matching C bytes.
+Six functions manage 16 sound slots and 20-byte pooled tasks. A negative repeat
+interval measures the first effect through its audio handle; a zero repeat count
+continues until cancellation. Timers wrap as signed halfwords. Repeat counts
+occupy 14 bits, with the audio handle in the upper two bits. Cancellation clears
+the callback; the task pool subsequently releases the slot.
+
+Private `eur_battle_sound/evidence_entry55_v1.json` verifies 102 calls across
+five functions over 706 frames. `isolated_v1.json` passes 44 copied-RAM cases
+across all six functions: timer wraparound, slot exhaustion, cancellation,
+argument truncation, repeat counters and handle completion. It compares all
+mapped memory except 256 stack bytes and executes native pool insertion.
+Audio entry points have explicit return-value stubs in isolated checks;
+live audio arguments and returned handles are checked, without claiming an
+independent audio-engine or audible-output verification. The retained exit probe
+fails its coverage requirement because this route makes no sound calls.
+Both rebuilt ROMs match the original, and all 104 saves remain unchanged.
+
 ### Battle capture fading and transition setup
 
 [Capture fading](../../src/battle/battle_capture_fade.c),
