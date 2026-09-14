@@ -973,3 +973,8 @@ src/field/field_party_lifecycle.cpp
 src/field/field_roaming_choose.cpp
 
 src/battle/battle_interface_quad.c
+
+src/overlay018/chomp_adult_exit.cpp
+src/overlay018/chomp_adult_jump.cpp
+src/overlay018/chomp_visibility.cpp
+src/battle/battle_motion_velocity_ratio.c

@@ -8414,3 +8414,12 @@ The actual source object and both ROMs match; 81 tests pass. Private
 eur_battle_text_quad checks 208 sampled natural calls, all 16 GPU stores per
 call, and 370 isolated ARM946 cases without stubs. The unlinked scroll helper
 remains observational in the live draw oracle. All 104 saves are preserved.
+
+## Pocket Chomp adult movement and velocity ratios - 2026-09-14
+
+Four functions add 576 matching bytes: 777,664 / 1,563,700 (49.7323%).
+All source objects and both ROMs match; 81 tests pass. Private
+eur_chomp_adult_motion checks 34 natural adult movement calls and 326 isolated
+ARM946 cases. The isolated checks use 396 explicit movement/animation stubs;
+visibility and the ratio helper were not reached on the live route.
+All 104 original saves are unchanged.

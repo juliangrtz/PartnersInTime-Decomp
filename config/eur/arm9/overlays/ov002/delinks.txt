@@ -598,3 +598,6 @@ src/battle/battle_flexible_link_actor.c:
 
 src/battle/battle_interface_quad.c:
     .text start:0x020925bc end:0x020927a0
+
+src/battle/battle_motion_velocity_ratio.c:
+    .text start:0x020be478 end:0x020be504

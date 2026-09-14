@@ -554,6 +554,11 @@ int BattleSceneObject_StartMotionWithVelocityForDuration(
     BattleSceneObject *object, int channel_index,
     int direction_x, int direction_y, int direction_z,
     int distance, int duration, int velocity);
+int BattleMotion_StartWithVelocityRatio(
+    BattleSceneObject *object, int channel_index,
+    int direction_x, int direction_y, int direction_z,
+    int distance, int duration, int velocity_ratio_q8,
+    int prefer_longer_duration);
 int BattleMotion_StartBallistic(
     BattleSceneObject *object, int channel_index,
     int direction_x, int direction_y, int direction_z,

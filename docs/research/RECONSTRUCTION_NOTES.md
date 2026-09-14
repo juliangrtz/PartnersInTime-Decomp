@@ -985,6 +985,29 @@ is stubbed. Checks include mapped memory outside 512 stack bytes and the named
 observational regions, ordered calls, results, SP and r4-r11. Both ROM builds,
 both source objects and 81 tests pass; all 104 original saves are unchanged.
 
+### Pocket Chomp adult movement and velocity ratios
+
+Four functions add 576 matching bytes. The adult exit chooses a side and derives
+travel time from the current speed. Jump setup uses the remaining horizontal
+motion duration and the scaled target height, then resets the input grade.
+A visibility callback writes render state 31 in phases 1 and 2. The battle VM's
+ratio helper derives initial velocity and acceleration with signed truncation.
+
+Private `eur_chomp_adult_motion/evidence_chomp83_v1.json` checks 17 jumps and
+17 exits during 3,110 frames from save 83, using 17 guarded automatic keypad
+presses. Both exit directions are reached. Full work/controller records, target
+lookup, threshold tables, arithmetic results, caller stores and helper arguments
+are checked. Movement/animation effects on scene objects and motion-list links
+remain bounded observations. The final battle image was inspected visually.
+
+`isolated_v1.json` checks 326 ARM946 cases: all visibility phases, both exit
+directions, threshold extremes, elapsed-time rounding, four motion channels and
+signed velocity ratios. Native lookup, threshold selection, height scaling and
+division execute fully; 396 movement/animation calls are explicit stubs. Full
+mapped RAM/DTCM/MMIO outside 256 stack bytes and the calling convention are
+checked. Visibility and velocity-ratio coverage is isolated-only. Both ROM
+builds and 81 tests pass; all 104 original saves are unchanged.
+
 ### Battle interface text quads
 
 `BattleInterface_DrawText` adds 484 matching bytes. It draws a text-buffer quad

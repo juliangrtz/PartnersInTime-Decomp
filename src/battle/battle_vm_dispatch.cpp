@@ -37,11 +37,6 @@ extern "C" {
 extern "C" {
 extern int BattleMap_GetEncounterResourceIndex(int encounter_id);
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
-extern int func_ov002_020be478(BattleSceneObject *object, int channel_index,
-                               int direction_x, int direction_y,
-                               int direction_z, int distance, int duration,
-                               int velocity_ratio_q8,
-                               int prefer_longer_duration);
 extern int func_ov002_020be3e8(BattleSceneObject *object, int channel_index,
                                int direction_x, int direction_y,
                                int direction_z, int distance,
@@ -1228,7 +1223,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_START_ACCELERATED_MOTION_WITH_RATIO:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020be478(
+        BattleMotion_StartWithVelocityRatio(
             object, (u16)command->arguments[1], command->arguments[2],
             command->arguments[3], command->arguments[4],
             command->arguments[5], command->arguments[6],

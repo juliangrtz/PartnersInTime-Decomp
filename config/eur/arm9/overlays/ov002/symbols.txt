@@ -837,7 +837,7 @@ func_ov002_020be060 kind:function(arm,size=0x2ac) addr:0x020be060
 func_ov002_020be30c kind:function(arm,size=0xa4) addr:0x020be30c
 BattleModel_StartAnimation kind:function(arm,size=0x38) addr:0x020be3b0
 func_ov002_020be3e8 kind:function(arm,size=0x90) addr:0x020be3e8
-func_ov002_020be478 kind:function(arm,size=0x8c) addr:0x020be478
+BattleMotion_StartWithVelocityRatio kind:function(arm,size=0x8c) addr:0x020be478
 data_ov002_020be504 kind:data(any) addr:0x020be504
 data_ov002_020be50c kind:data(any) addr:0x020be50c
 data_ov002_020be6ec kind:data(any) addr:0x020be6ec

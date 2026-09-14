@@ -70,6 +70,22 @@ typedef struct PocketChompSupport {
     u16 unknown_1e;
 } PocketChompSupport;
 
+typedef struct PocketChompAdultMotion {
+    BattlePartyActor *actor;
+    BattleSceneObject *object, *variant_object;
+    int resource_index, entry_timer;
+    union {
+        u32 flags;
+        struct {u32 mode:4,variant:2,phase:5,direction:1,unknown12:20;} bits;
+    };
+    int bounce_count, input_timer;
+    union {
+        u32 timing_flags;
+        struct {u32 grade:4,unknown04:28;} timing;
+    };
+} PocketChompAdultMotion;
+typedef char PocketChompAdultMotion_SizeCheck[sizeof(PocketChompAdultMotion) == 36 ? 1 : -1];
+
 typedef struct PocketChompTether {
     BattleSceneObject *target;
     s8 source_x, source_z, target_x, target_z;
@@ -89,6 +105,9 @@ void PocketChompAttack_ReturnBackdrop(void);
 int PocketChompAttack_IsBackdropIdle(void);
 int PocketChompAttack_AreAdultsIdle(void);
 int PocketChompAttack_MoveAdultsOffscreen(void);
+u32 PocketChompAdult_BeginExit(PocketChompAdultMotion *adult);
+u32 PocketChompAdult_BeginJump(PocketChompAdultMotion *adult);
+void PocketChomp_UpdateVisibility(PocketChomp *center);
 void PocketChomp_UpdateSquash(PocketChomp *center);
 u32 PocketChomp_BeginFall(PocketChomp *center);
 u32 PocketChomp_BeginSmallBounce(PocketChomp *center);
