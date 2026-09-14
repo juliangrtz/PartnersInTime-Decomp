@@ -73,19 +73,6 @@ extern void func_ov000_0209f644(
     int y, int z, int facing_direction, int animate_entry,
     s16 arrival_script_id, int bgm_policy, int preserve_field_0_anchor,
     int preserve_field_1_anchor);
-extern void func_ov000_02073498(
-    u8 *field_context, int coordinate_mode, fx32 x, fx32 y, int motion_3,
-    int motion_4, int motion_5, int motion_6, int x_motion_flag,
-    int y_motion_flag, int reserved);
-extern void func_ov000_020732f4(
-    u8 *field_context, int coordinate_mode, fx32 x, fx32 y, int duration,
-    int x_motion_flag, int y_motion_flag, int reserved);
-extern void func_ov000_020731bc(
-    u8 *field_context, FieldEntity *entity, fx32 x_offset, fx32 y_offset,
-    int motion_3, int x_motion_flag, int y_motion_flag, int reserved);
-extern void func_ov000_02073110(
-    u8 *field_context, FieldEntity *entity, fx32 x_offset, fx32 y_offset,
-    int duration, int x_motion_flag, int y_motion_flag, int reserved);
 extern void func_ov000_020727fc(
     u8 *field_context, int bg_layer, fx32 x_delta, fx32 y_delta,
     int motion_3, int motion_4, int motion_5, int motion_6,
@@ -2731,8 +2718,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_START_CAMERA_PROFILED_MOVEMENT:
-        func_ov000_02073498(
-            field_context, arguments[0],
+        FieldArea_MoveCameraWithProfile(
+            (FieldAreaContext *)field_context, arguments[0],
             arguments[1] << FX32B_INT,
             arguments[2] << FX32B_INT,
             arguments[3], arguments[4],
@@ -2744,8 +2731,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_CAMERA_TIMED_MOVEMENT:
-        func_ov000_020732f4(
-            field_context, arguments[0],
+        FieldArea_MoveCameraForDuration(
+            (FieldAreaContext *)field_context, arguments[0],
             arguments[1] << FX32B_INT,
             arguments[2] << FX32B_INT,
             arguments[3], arguments[4] != 0,
@@ -2755,9 +2742,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_CAMERA_PROFILED_ENTITY_TRACKING:
-        func_ov000_020731bc(
-            field_context,
-            FieldVm_GetEntityByIndex(field_context, arguments[0]),
+        FieldArea_TrackEntityAtSpeed(
+            (FieldAreaContext *)field_context,
+            (FieldRuntimeEntity *)FieldVm_GetEntityByIndex(field_context, arguments[0]),
             arguments[1] << FX32B_INT,
             arguments[2] << FX32B_INT,
             arguments[3], arguments[4] != 0,
@@ -2767,9 +2754,9 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_CAMERA_TIMED_ENTITY_TRACKING:
-        func_ov000_02073110(
-            field_context,
-            FieldVm_GetEntityByIndex(field_context, arguments[0]),
+        FieldArea_TrackEntityForDuration(
+            (FieldAreaContext *)field_context,
+            (FieldRuntimeEntity *)FieldVm_GetEntityByIndex(field_context, arguments[0]),
             arguments[1] << FX32B_INT,
             arguments[2] << FX32B_INT,
             arguments[3], arguments[4] != 0,

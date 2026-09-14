@@ -985,6 +985,27 @@ is stubbed. Checks include mapped memory outside 512 stack bytes and the named
 observational regions, ordered calls, results, SP and r4-r11. Both ROM builds,
 both source objects and 81 tests pass; all 104 original saves are unchanged.
 
+### Field camera motion setup
+
+Four C++ functions add 1,428 matching bytes: timed and speed-based entity
+tracking, timed movement and movement with acceleration/deceleration. They use
+the shared 52-byte camera record, preserve unrelated flag bits, clamp absolute
+or relative targets and retain native Q12 arithmetic. The profile setup applies
+a minimum velocity of one when an active axis rounds to zero. C++ bitfield
+assignment reproduces the native one-bit truncation without inline assembly.
+
+Private `eur_field_camera_setup/isolated_v1.json` checks 193 ARM946 cases on
+copied live RAM: default/external records, active-axis combinations, relative
+mode, coordinate limits and option bits. Full 11,216-byte areas, 52-byte camera
+records and 1,312-byte entities are checked, along with helper arguments,
+returns, SP/r4-r11 and all mapped RAM/DTCM/MMIO except 256 stack scratch bytes.
+Native direction lookup and signed division execute. Positive Q12 division and
+the unreconstructed profile-vector helper are explicit stubs; synthetic vector
+outputs test the caller's minimum-speed corrections. Hardware timing is outside
+this check. The 4,111-frame save-1 replay reached none of these four functions;
+its failed coverage assertion is retained, and no live camera coverage is
+claimed. Both ROM builds and 81 tests pass; all 104 original saves are unchanged.
+
 ### Pocket Chomp adult movement and velocity ratios
 
 Four functions add 576 matching bytes. The adult exit chooses a side and derives

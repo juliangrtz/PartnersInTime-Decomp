@@ -8423,3 +8423,11 @@ eur_chomp_adult_motion checks 34 natural adult movement calls and 326 isolated
 ARM946 cases. The isolated checks use 396 explicit movement/animation stubs;
 visibility and the ratio helper were not reached on the live route.
 All 104 original saves are unchanged.
+
+## Field camera motion setup - 2026-09-14
+
+Four functions add 1,428 matching bytes: 779,092 / 1,563,700 (49.8236%).
+All source objects and both ROMs match; 81 tests pass. Private
+ eur_field_camera_setup checks 193 isolated ARM946 cases, with explicit fixed
+point division and profile-vector stubs. The save-1 replay reaches none of the
+new functions; coverage is isolated-only. All 104 original saves are unchanged.

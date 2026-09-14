@@ -437,3 +437,6 @@ src/field/field_party_lifecycle.cpp:
 
 src/field/field_roaming_choose.cpp:
     .text start:0x020b1b88 end:0x020b1e5c
+
+src/field/field_camera_setup.cpp:
+    .text start:0x02073110 end:0x020736a4
