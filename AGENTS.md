@@ -106,6 +106,7 @@ that share ROM/save paths.
 | Battle scheduler, queues and isolated ARM checks | [Allocation layout and boundary cases](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-queues), [VBlank callback contracts and live replay](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-vblank-consumer) |
 | Battle scheduler construction and teardown | [Heap/file contracts, overlay transitions and replay limits](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-lifecycle) |
 | Shared sprite collection and initialization | [Renderer arguments, pool layouts and live versus isolated coverage](docs/research/RECONSTRUCTION_NOTES.md#overlay-5-sprite-collection-and-initialization) |
+| Battle exit and resource slots | [Dispatch boundaries, overlay replacement and coverage limits](docs/research/RECONSTRUCTION_NOTES.md#battle-transition-dispatch-and-resource-slots) |
 | Task, heap and archive lifecycle | [Normal tasks](src/game/task.cpp), [IRQ tasks](src/game/irq_task.cpp), [allocator](src/game/heap.c), [archive base](src/game/archive_lifecycle.c), [compressed archive](src/game/archive_compressed_lifecycle.c) |
 | Hit-bonus arithmetic and RNG fixtures | [Conversion ABI, truncation and restoration](docs/research/RECONSTRUCTION_NOTES.md#battle-hit-bonus-roll) |
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
@@ -185,6 +186,9 @@ or count initialization data merely to make the remaining inventory smaller.
    `blx`. Recover the callback type from those live inputs, not pseudocode arity.
    A later mask or narrow store also does not establish a narrow parameter;
    a full-word stack load followed by truncation may require a full-width type.
+   Recover each wrapper's contract independently: it can accept signed halfwords
+   and forward extended values to a factory with full-width parameters. Do not
+   propagate one signature along the call chain merely to make types uniform.
    A caller ignoring `r0` does not establish a `void` return type. Check the
    callee's return paths and consumers before correcting a shared declaration;
    preserve the actual helper instead of substituting a similarly named API.
@@ -215,9 +219,11 @@ or count initialization data merely to make the remaining inventory smaller.
    Give owner, panel and child roles explicit views or a named union; verify the
    creator's links and each live allocation instead of applying one layout to
    every object in the chain.
-   A common returned handle does not establish a common record layout. For
-   example, battle sprite and model effects occupy 48 and 56 bytes respectively;
-   recover the actual factory type before interpreting fields beyond the handle.
+   A common returned handle or allocation size does not establish a common record
+   layout. Battle sprite and model effects occupy 48 and 56 bytes respectively;
+   a matrix-animation track also occupies 56 bytes but has its own context and
+   owner fields. Recover the actual factory and release contracts before choosing
+   a shared type or interpreting fields beyond the handle.
    For a view based at an indexed interior address, check alignment and prove
    `view_offset + sizeof(view) <= allocation_size` for every valid index.
    Preserve whether native addressing applies the stride before the fixed field
@@ -240,6 +246,10 @@ or count initialization data merely to make the remaining inventory smaller.
    unless native dataflow or a demonstrated compiler rule suggests a correction.
    Recompile drafts against current headers and associate each comparison with
    the actual source, language mode and object. Address-named dumps may be overwritten.
+   Even one inline-ASM instruction can change optimization elsewhere in the
+   function; putting it in an inline helper does not isolate that effect.
+   Preserve the C-only draft, compare the complete result and defer the experiment
+   if surrounding code regresses without an evidence-based explanation.
 7. Inspect comparison text as well as exit status: some private checkers return
    success while reporting `DIFFERENT`. Equal sizes do not establish a match.
    Require the expected function identities, nonzero count and total code bytes;
@@ -250,6 +260,9 @@ or count initialization data merely to make the remaining inventory smaller.
    A checker may resolve an address-named helper that has since been renamed.
    Use its current public declaration; address resolution does not prove the
    public linker can resolve that obsolete name.
+   Record mixed private units per function. Exact neighbors do not validate a
+   differing function in the same object; keep an exact-only source/object pair
+   before extending a successful draft with another candidate.
 8. Integrate exact functions into the manifest and component metadata. Update
    declarations and maintained ASM references together. Preserve interior entry
    points through `config/eur/arm9/linker_aliases.json`; check
@@ -261,6 +274,9 @@ or count initialization data merely to make the remaining inventory smaller.
    Compare the actual build object as well as the isolated candidate. When
    extending a contiguous unit, recheck every function in that unit after the
    final shared-header change; an earlier comparison covers its earlier inputs.
+   Inspect the compiled source object, such as
+   `build/eur/src/battle/battle_script_state.o`, rather than `build/eur/delinks/...`,
+   which contains original reference objects.
 
 See the reference's compiler examples before attempting syntax or declaration
 changes. Separate switch arms, initialization order, bitfields and pointer
@@ -293,7 +309,9 @@ a proof of the whole VM or of source-language portability.
 
 Use Python 3.11+, Ninja and compatible Metrowerks tools in
 `tools/mwccarm/1.2/base/` (internally 2.0 build 72). Native relinking also uses
-LLVM's `llvm-mc`, `ld.lld` and `llvm-objcopy`. Known workstation executables:
+LLVM's `llvm-mc`, `ld.lld` and `llvm-objcopy`. Take the complete compiler flags
+from `tools/configure.py`, including `-O4,p`, ARM946E and soft float; private
+comparisons must use the same language mode and ABI. Known workstation executables:
 
 ```text
 C:\Users\Julian\AppData\Local\Programs\Python\Python312\python.exe
