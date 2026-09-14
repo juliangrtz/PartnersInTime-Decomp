@@ -5,7 +5,6 @@ MenuItemEffectTask *func_ov005_0206659c(void (*)(MenuItemEffectTask *), int, int
 void func_ov005_0206650c(MenuItemEffectTask *);
 MenuItemEffectSprite *Overlay5ResourceB_Attach(MenuItemEffectTask *, MenuItemEffectSprite *, int);
 MenuItemEffectSprite *Overlay5ResourceB_Get(MenuItemEffectTask *);
-void func_ov005_020695ec(MenuItemEffectSprite *, int);
 void func_ov005_02069330(MenuItemEffectSprite *, int);
 void func_ov005_020692c0(MenuItemEffectSprite *, u16, u16, int);
 void func_ov005_02069084(MenuItemEffectSprite *, int);
@@ -55,7 +54,7 @@ extern "C" void MenuItemGlow_Create(MenuItemEffectTask *parent, int x, int y, in
     task->glow.acceleration = -task->glow.velocity / duration;
     task->parent = parent;
     MenuItemEffectSprite *sprite = Overlay5ResourceB_Attach(task, 0, 1);
-    func_ov005_020695ec(sprite, 1);
+    Overlay5ObjectSprite_Init(sprite, 1);
     sprite->attributes_1 = (sprite->attributes_1 & ~0x3FF) | 0x61;
     sprite->attributes_1 = (sprite->attributes_1 & ~0xF000) | 0x3000;
     sprite->attributes_0 &= ~0x2000;

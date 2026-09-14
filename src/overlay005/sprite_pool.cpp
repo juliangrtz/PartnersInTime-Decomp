@@ -64,7 +64,7 @@ extern "C" {
 extern Overlay5SpritePool data_ov005_0206a3d8;
 extern const void *data_ov005_0206a02c[];
 
-extern void func_0200a4cc(Overlay5Sprite *sprite);
+extern void func_0200a4cc(Overlay5Sprite *sprite, GameOamEntry *oam, u8 *entry_count, u8 *affine_count);
 extern void *func_02048aac(void *memory, u32 count, u32 size, u32 header,
                            void *(*construct)(void *), void *(*destroy)(void *));
 extern void func_02048874(void *array, u32 size, u32 header, void *(*destroy)(void *));
@@ -183,6 +183,23 @@ void func_ov005_02068bc4(Overlay5Sprite *sprite) {
 
 u32 func_ov005_02068bbc(void) {
     return sizeof(Overlay5Sprite);
+}
+
+void Overlay5Sprite_CollectOam(Overlay5Sprite *sprite, GameOamEntry *oam, u8 *entry_count, u8 *affine_count)
+{
+    if (!sprite->active)
+        return;
+    s16 x = sprite->x;
+    s16 y = sprite->y;
+    sprite->x += sprite->offset_x;
+    sprite->y += sprite->offset_y;
+    if (sprite->camera) {
+        sprite->x -= sprite->camera->x >> 12;
+        sprite->y -= sprite->camera->y >> 12;
+    }
+    func_0200a4cc(sprite, oam, entry_count, affine_count);
+    sprite->x = x;
+    sprite->y = y;
 }
 
 }

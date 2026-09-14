@@ -1,5 +1,6 @@
 #include <nitro.h>
 #include <game/heap.h>
+#include <game/overlay005_resource.h>
 
 /* A pooled 64-byte overlay-5 item. */
 typedef struct Overlay5Item {
@@ -185,4 +186,29 @@ void func_ov005_02069660(void) {
 
 Overlay5Item *func_ov005_0206964c(void) {
     return func_ov005_020697b8(&data_ov005_0206aa18);
+}
+
+void Overlay5ObjectSprite_Init(Overlay5ObjectSprite *sprite, int screen)
+{
+    Overlay5Item *item = (Overlay5Item *)sprite;
+    vu16 zero;
+    item->active = 1;
+    /* The native fill wrapper stores and reloads this stack halfword. */
+    zero = 0;
+    MI_CpuFill16(item->cleared_14, zero, sizeof(item->cleared_14));
+    item->unknown_1c = 0;
+    item->unknown_20 = 0;
+    item->unknown_2c = 0;
+    item->unknown_2e = 0;
+    item->unknown_24 = 0;
+    item->unknown_28 = 0;
+    item->unknown_34 = 0;
+    item->screen = screen;
+}
+
+void func_ov005_020695cc(void *object)
+{
+    Overlay5Item *item = (Overlay5Item *)object;
+    item->active = 0;
+    func_ov005_020697dc(&data_ov005_0206aa18, item);
 }

@@ -7957,3 +7957,35 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
   including symbolic assembly: **48.05%**.
   Overlay 2: **163,120 / 362,436 (45.01%)**.
   **35,574 bytes remain to reach 50% matching C/C++.**
+
+
+## 2026-09-14 - Shared sprite collection and initialization (+252 C/C++ bytes)
+
+- Reconstructed the 156-byte OAM collection wrapper and 96-byte pooled sprite
+  initializer. Corrected three missing renderer arguments from native ABI
+  evidence; preserved signed offsets, Q12 camera subtraction, halfword narrowing,
+  position restoration, screen-byte truncation and untouched matrix/padding.
+- Consolidated the existing 32-byte release into item_pool.c without recounting.
+  Final build objects match all 15 sprite-pool and 18 item-pool functions.
+  Full matching, golden packaged/native ROMs, zero-difference relink, progress
+  checks and 81 tests pass; source/object/build-log/ROM hashes revalidated.
+- Two ordinary checkpoint-20 healing routes cover 243 frames, 3,648 collection
+  calls and 32 initializers; 14,912 ordered caller stores checked. No pending
+  calls or live RAM fixtures. All 104 original saves unchanged.
+- Native renderer output is observational within its 1,024-byte OAM buffer and
+  two counters; caller state, helper arguments, clear effects and the renderer's
+  mapping-global update are independently checked. 2,308 calls append OAM entries;
+  1,340 append none. Submission does not establish visible rasterization.
+- Eleven isolated native ARM946 cases cover inactive sprites, signed offsets,
+  halfword wrapping, fractional/negative cameras and screen-byte truncation.
+  Complete copied main RAM and caller behavior agree. The renderer takes its real
+  disabled early return; these cases add no rendering coverage. Helper stack,
+  asynchronous IRQ timing and resource allocation/release have explicit limits.
+- Seven images, eight graphics dumps and four RAM/DTCM snapshot pairs validated;
+  both final menu captures inspected. See the
+  [reference](research/RECONSTRUCTION_NOTES.md#overlay-5-sprite-collection-and-initialization)
+  and private build/runtime/eur_overlay5_sprite_helpers/ reports.
+- Matching C/C++: **746,528 / 1,563,700 bytes (47.74%)**;
+  including symbolic assembly: **48.07%**.
+  Overlay 5: **14,052 / 16,760 (83.84%)**.
+  **35,322 bytes remain to reach 50% matching C/C++.**

@@ -16,6 +16,7 @@ ordinary gameplay accessibility or coverage of unexercised branches.
 - [Compiler and linker behavior](#compiler-and-linker-behavior)
 - [Reconstructing and integrating code](#reconstructing-and-integrating-code)
 - [Runtime verification](#runtime-verification)
+- Shared sprite helpers: [OAM wrapper ABI and pooled initialization](#overlay-5-sprite-collection-and-initialization)
 - Code-derived findings: [pause party status](#pause-party-status)
 - Pause transitions: [verified exit tasks](#pause-exit-tasks-and-transition-state),
   [projection and callback ABI](#pause-transition-projection-and-callback-abi),
@@ -810,6 +811,75 @@ matching build, both golden ROM hashes, zero-difference native relink, generated
 progress and all 81 tests. Source and log hashes were rechecked after the intervening
 documentation commit; no source changes followed that full build. Final ten-function
 object comparisons are pinned by `battle_scheduler_vblank_object_provenance.json`.
+
+### Overlay-5 sprite collection and initialization
+
+[sprite_pool.cpp](../../src/overlay005/sprite_pool.cpp) now includes
+`Overlay5Sprite_CollectOam` at `0x02068B20` (156 bytes).
+[item_pool.c](../../src/overlay005/item_pool.c) includes
+`Overlay5ObjectSprite_Init` at `0x020695EC` (96 bytes), and incorporates the
+already-linked 32-byte release at `0x020695CC` without counting it again.
+Final build objects match all 15 sprite-pool functions (960 bytes) and all
+18 item-pool functions (1,060 bytes).
+
+The collection wrapper uses a 336-byte embedded sprite slot from the pool at
+`0x0206A3D8`. When active, it adds signed halfword offsets at `+332/+334` to
+positions at `+92/+94`, optionally subtracts the camera's signed Q12 coordinates,
+calls the resident renderer, then restores both positions. The active byte is
+at `+324`, camera pointer at `+328`, and camera coordinates at `+20/+24`.
+Each halfword store is a separate truncation point, before camera subtraction.
+
+The renderer at `0x0200A4CC` consumes four arguments: sprite, OAM buffer, and
+two byte-count pointers. Its previous declaration omitted the last three.
+Native incoming-register use and the virtual interface in
+[draw_lists.cpp](../../src/overlay005/draw_lists.cpp) established the ABI;
+correcting it immediately resolved the wrapper's 12-byte/register mismatch.
+This was an ABI defect, not evidence for register-allocation permutations.
+
+The initializer uses a 64-byte ResourceB slot from the pool at `0x0206AA18`.
+It sets active byte `+48`, clears eight bytes at `+20`, zeros selected fields,
+and stores the full-width screen argument into byte `+16`. Its matrix at
+`+56..+64` and other untouched bytes are preserved. Native stack halfword
+store/reload around `MI_CpuFill16` justifies the scoped `vu16` local. Callers
+with shorter prefix views still receive full 64-byte allocations; see the
+[shared declaration](../../include/game/overlay005_resource.h).
+
+Private `probe_overlay5_sprite_helpers.py` and `overlay5_sprite_helpers_oracle.py`
+run the existing checkpoint-20 healing routes. Reports are in
+`build/runtime/eur_overlay5_sprite_helpers/`: `evidence_mario_v1.json` uses
+`target20.dst` with `a:8,wait:100`; `evidence_luigi_v1.json` uses `heal20.dst`
+with `left:8,wait:8,a:4,wait:8,wait:100`. These are compatible snapshots from
+the earlier menu-item-effect work, not the original battery saves.
+
+Across 243 frames, 3,648 collection calls and 32 initializers finish with no
+pending calls or live RAM fixtures. Independent checks cover 14,912 ordered
+caller stores, complete slots, pool roots/array headers, the 1,380-byte save
+record, camera prefix, caller stack, arguments and SP/r4-r11. Native clear and
+the renderer's mapping-global update at `0x0205A8AC` are predicted separately.
+All live collection calls use the no-camera branch; 243 have nonzero offsets.
+2,308 calls append OAM entries and 1,340 append none. This counts submission,
+not visible rasterization. All live initializer screen arguments are 1.
+
+The native renderer's output is observational only within its 1,024-byte OAM
+buffer and two byte counters. Surrounding tracked state stays independently
+checked. Matrix arithmetic, other untracked helper memory, rasterization and
+asynchronous IRQ timing are outside the oracle; allocation/release coverage is
+not attributed to these two functions.
+
+`check_overlay5_sprite_helpers_arm.py` adds 11 ARM946 cases on copied live RAM:
+inactive sprites, signed offsets, halfword wrapping, positive/negative/fractional
+camera coordinates, and screen arguments 0, 1, `0x123456AB` and `0xFFFFFFFF`.
+Native code runs without stubs. Sprite fixtures disable the renderer through
+its real flag-bit-8 early return, so these cases add no drawing coverage.
+Complete main RAM, caller stores and registers agree; the renderer's helper
+stack is explicitly observational, with remaining DTCM checked independently.
+
+`artifact_validation_v1.json` validates seven images, eight graphics dumps,
+four RAM/DTCM snapshot pairs and all 104 unchanged saves. Both final menu
+captures were inspected. Build evidence in private
+`overlay5_sprite_helpers_build_validation.json` records full matching, both
+golden ROMs, zero-difference native relinking, progress checks and 81 tests;
+source/object/log/ROM hashes were revalidated before publication.
 
 ### Battle scheduler lifecycle
 

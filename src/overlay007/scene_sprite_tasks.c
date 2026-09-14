@@ -1,10 +1,10 @@
 #include <game/scene_script.h>
+#include <game/overlay005_resource.h>
 
 extern void *func_ov005_0206659c(
     int (*callback)(void *), int group, int priority);
 extern SceneSpriteTaskData *Overlay5ResourceB_Attach(
     void *task, int owner, int activate);
-extern void func_ov005_020695ec(SceneSpriteTaskData *sprite, int enabled);
 extern void func_ov005_02069330(SceneSpriteTaskData *sprite, int slot);
 
 void SceneSpriteTasks_Create(int width, int layout) {
@@ -29,7 +29,7 @@ void SceneSpriteTasks_Create(int width, int layout) {
 
         *(int *)((u8 *)task + 0x28) = task_index;
         sprite = Overlay5ResourceB_Attach(task, owner, 1);
-        func_ov005_020695ec(sprite, 1);
+        Overlay5ObjectSprite_Init((Overlay5ObjectSprite *)sprite, 1);
         sprite->attributes_1 =
             (sprite->attributes_1 & ~0x3FF) |
             (((y + base_y) / 2) & 0x3FF);

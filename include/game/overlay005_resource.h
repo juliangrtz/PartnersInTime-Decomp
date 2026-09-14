@@ -35,4 +35,13 @@ typedef struct Overlay5ObjectSprite {
 } Overlay5ObjectSprite;
 typedef char Overlay5ObjectSprite_SizeCheck[sizeof(Overlay5ObjectSprite) == 64 ? 1 : -1];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+/* Initialize a 64-byte pooled sprite; its matrix remains unchanged. */
+void Overlay5ObjectSprite_Init(Overlay5ObjectSprite *sprite, int screen);
+#ifdef __cplusplus
+}
+#endif
+
 #endif

@@ -359,7 +359,6 @@ src/overlay005/touch_panel.c
 src/overlay005/sprite_pool.cpp
 src/overlay005/draw_lists.cpp
 src/overlay005/item_pool.c
-src/overlay005/item_release.c
 src/overlay005/entry_list.cpp
 src/overlay005/archive_queue.c
 src/overlay005/holders.c
