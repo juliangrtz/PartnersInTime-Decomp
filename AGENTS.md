@@ -82,9 +82,12 @@ An object file's existence or timestamp does not prove its comparison passed.
 If the previous command's output was lost, record its result as unverified until
 the relevant check is recovered or rerun; preserve the draft in the meantime.
 
-Use `rg --files` and scoped `rg` searches. Quote PowerShell paths containing
-spaces; use `-g 'pattern'` for file globs. Parse large reports and print selected
-records. Serialize builds, metadata edits and replays that share ROM/save paths.
+Discover actual paths with `rg --files` before reading them; do not hide failed
+reads of guessed filenames. Use scoped `rg` searches and `rg -l` when only filenames
+are needed. Quote PowerShell paths containing spaces; use `-g 'pattern'` for globs.
+Parse large JSON reports and print selected records; recursive text searches can
+dump entire single-line databases. Serialize builds, metadata edits and replays
+that share ROM/save paths.
 
 ## Find the relevant evidence
 
@@ -102,6 +105,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Battle effect wrappers and scene-object ownership | [Projection, returned handles and embedded object records](docs/research/RECONSTRUCTION_NOTES.md#battle-relative-effect-spawning) |
 | Battle scheduler, queues and isolated ARM checks | [Allocation layout and boundary cases](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-queues), [VBlank callback contracts and live replay](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-vblank-consumer) |
 | Battle scheduler construction and teardown | [Heap/file contracts, overlay transitions and replay limits](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-lifecycle) |
+| Shared sprite collection and initialization | [Renderer arguments, pool layouts and live versus isolated coverage](docs/research/RECONSTRUCTION_NOTES.md#overlay-5-sprite-collection-and-initialization) |
 | Task, heap and archive lifecycle | [Normal tasks](src/game/task.cpp), [IRQ tasks](src/game/irq_task.cpp), [allocator](src/game/heap.c), [archive base](src/game/archive_lifecycle.c), [compressed archive](src/game/archive_compressed_lifecycle.c) |
 | Hit-bonus arithmetic and RNG fixtures | [Conversion ABI, truncation and restoration](docs/research/RECONSTRUCTION_NOTES.md#battle-hit-bonus-roll) |
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
@@ -121,8 +125,12 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 Native bytes are private under `extract/eur/arm9/` and
 `extract/eur/arm9_overlays/`; IDA databases live in `build/ida/`, and experiments
 in `build/analysis/`, including `local_decompiler/`. The EUR resident `arm9.bin`
-loads at `0x02004000`, not the start of main RAM. Derive offsets from component
-metadata and identify the CPU and overlay before interpreting an address.
+loads at `0x02004000`, not the start of main RAM. For overlay files, read the
+component's `base_address` from `extract/eur/arm9_overlays/overlays.yaml` and
+compute `file_offset = virtual_address - base_address`. In the verified EUR
+extraction, overlays 2 and 5 load at `0x02065D40`, and overlay 7 at `0x0206AB80`.
+Do not substitute a nearby function address for the load base. Check the file
+bounds, function boundary and CPU/overlay identity before interpreting a listing.
 
 Private scripts, snapshots and reports are local conveniences, not fresh-clone
 dependencies. Check availability, inputs and source/ROM provenance before reuse.
@@ -142,6 +150,11 @@ ignore blank/comment manifest entries and unnamed component-wide section heading
 Otherwise an inventory can silently miss linked ranges or count the entire
 component as owned. Confirm a proposed new range directly before reconstructing
 or counting it; historical `EXACT` records are only discovery leads.
+Check public definitions, private drafts and archived handoffs before calling a
+candidate unattempted. Account for semantic renames; a prototype is not a body,
+and a regex scan can miss definitions. A size-filtered inventory omits smaller
+helpers, while a short pseudocode body can hide an indirect dispatcher or an
+unusual register ABI. Inspect native instructions before ranking a target as easy.
 Inspect code-bearing sections such as `.init` as well as `.text`. Global C++
 construction can generate registration code and tables; recover their ownership
 and section placement before proposing a unit. Do not move code between sections
@@ -167,6 +180,9 @@ or count initialization data merely to make the remaining inventory smaller.
    registers through the callee and check the virtual interface before diagnosing
    a wrapper's register mismatch as a compiler problem. Restoring a missing
    argument can explain both register preservation and stack layout without hacks.
+   For indirect calls, inspect the callback table and its callees: a register can
+   retain a required argument from an earlier call even without a new `mov` before
+   `blx`. Recover the callback type from those live inputs, not pseudocode arity.
    A later mask or narrow store also does not establish a narrow parameter;
    a full-word stack load followed by truncation may require a full-width type.
    A caller ignoring `r0` does not establish a `void` return type. Check the
@@ -413,6 +429,8 @@ compatible snapshots. Read their arguments and
   truncation can add updates. Check the relevant paths instead of importing a
   neighboring callback's timing assumption. Count callback invocations separately
   from emulator frames, and preserve phase fallthrough within a single call.
+  Reaching exactly zero and crossing below zero can take different paths: a clamp
+  may dispatch immediately while an exact-zero result waits for the next call.
   For cached display updates, distinguish unchanged returns, redraws and removal
   paths. One redraw can call several numeric helpers. Derive totals from report
   counters and reconcile each partition before quoting them in documentation.
@@ -570,8 +588,10 @@ guide. A byte-exact ROM rebuild and a successful route do not establish complete
 C/C++ reconstruction or coverage of every branch.
 
 `docs/BATTLE_MATCHING_MILESTONES.md` has a legacy non-UTF-8 byte and mixed line
-endings. Append bytes while preserving the existing prefix, including when
-checking the staged Git blob. Do not decode with replacement and rewrite it.
+endings. Append bytes while preserving the existing prefix. Compare the working
+file's prefix with a raw pre-edit copy, and compare the staged prefix separately
+with the previous `HEAD` blob; Git's line-ending conversion can make those two
+baselines differ. Do not decode with replacement and rewrite it.
 The similarly named file under `docs/research/` is an older, different log.
 
 Keep ROMs, extracted assets, saves, proprietary tools, IDA databases, machine-code
