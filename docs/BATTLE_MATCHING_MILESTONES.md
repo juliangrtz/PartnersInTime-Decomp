@@ -7782,3 +7782,30 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
   including symbolic assembly: **47.83%**.
   Overlay 7: **78,008 / 142,264 (54.83%)**.
   **39,086 bytes remain to reach 50% matching C/C++.**
+
+## 2026-09-14 - Badge-description panels and strips (+608 bytes)
+
+- Reconstructed both callbacks with explicit owner/panel/child views, exact
+  saved-badge addressing and description-cache behavior. The contiguous 608-byte
+  module matches completely. No new assembly or compiler flags.
+- Full matching check, golden EUR ROM, zero-difference native relink, generated
+  progress and all 81 tests pass.
+- Saves 65 and 86: 3,640 frames, all 13,350 new calls checked, two panel and
+  28 strip lifetimes completed. All 86 watched tasks return. Both animations,
+  all four members, cached/frozen text and both position outcomes are exercised.
+- Save 86 uses ordinary inputs; save 65 temporarily suppresses one callback of
+  each type. Both input edits and the induced panel settled flag are verified
+  and restored before caller resume. All 104 original saves remain unchanged.
+- All 62 images and 558 graphics dumps validate; baseline input-prefix equality
+  covers 38 images and 342 dumps. Panel text and visible field returns inspected.
+  No pending calls, live watched tasks or drain frames remain.
+- Text lookup and caller behavior are independently checked. Glyph and animation
+  internals remain observations within bounded buffers; final rasterization and
+  the creator are outside that oracle. An inherited marker-visibility assumption
+  was corrected from save 65's live rows and shared-badge predicate; full per-call
+  assertions remain. Evidence: `build/runtime/eur_pause_badge_description/` and
+  the [reconstruction reference](research/RECONSTRUCTION_NOTES.md#pause-badge-description-panels).
+- Matching C/C++: **743,372 / 1,563,700 bytes (47.54%)**;
+  including symbolic assembly: **47.87%**.
+  Overlay 7: **78,616 / 142,264 (55.26%)**.
+  **38,478 bytes remain to reach 50% matching C/C++.**

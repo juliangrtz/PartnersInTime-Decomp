@@ -267,3 +267,6 @@ src/overlay007/pause_party_transition.cpp:
 
 src/overlay007/menu_item_selection_sprites.cpp:
     .text start:0x0207d6b0 end:0x0207db20
+
+src/overlay007/menu_badge_description.cpp:
+    .text start:0x0207bee0 end:0x0207c140

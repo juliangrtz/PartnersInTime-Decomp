@@ -867,3 +867,4 @@ src/overlay007/pause_hp_warning_update.cpp
 src/overlay007/pause_party_transition.cpp
 
 src/overlay007/menu_item_selection_sprites.cpp
+src/overlay007/menu_badge_description.cpp

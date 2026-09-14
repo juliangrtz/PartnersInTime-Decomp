@@ -3176,6 +3176,75 @@ generated progress and all 81 tests pass. Evidence is under
 The reports identify `build/analysis/probe_pause_item_quantity_v2.py` by hash;
 build/probe provenance is in `build/analysis/pause_item_quantity_batch_provenance.json`.
 
+### Pause badge-description panels
+
+[menu_badge_description.cpp](../../src/overlay007/menu_badge_description.cpp)
+reconstructs `MenuBadgeDescription_UpdateStrip` at `0x0207BEE0` (132 bytes)
+and `MenuBadgeDescription_UpdatePanel` at `0x0207BF64` (476 bytes), contiguous
+through `0x0207C140`. Both functions match completely, including relocations and
+literal pools. The initial panel draft confused the description lookup with the
+name lookup and the sub-screen allocation offset with a sprite pointer. Correcting
+those two native dataflow errors produced an exact match; no assembly or compiler
+changes were needed.
+
+The native creator at `0x0207B88C` creates these callbacks only for badges
+(item kind 3). One panel owns fourteen text strips, arranged in two rows of seven.
+All tasks occupy 72-byte slots and begin with timer 1. The
+[shared header](../../include/game/menu_badge_description.h) distinguishes the
+panel's owner from a strip's parent panel. The owner's transition flag is at
+`+60`; the panel's cached item, x/y position and settled flag are at
+`+40`, `+44/+48` and `+52`.
+
+The byte at workspace `+0x12E` suppresses both callbacks and clears the panel's
+settled flag. Otherwise the panel selects its y position and animation from the
+signed member byte at `+0x115`. The saved badge uses the unsigned interpretation:
+`save + 36 * member + 1048`. Preserve that addressing order and the unsigned
+16-bit conversion of `badge + 0x3000`. Members 0 through 3 fit within the
+1,380-byte save allocation. This workspace byte is distinct from `selected[0]`.
+The transition/settled flags gate position refresh and cached text updates.
+Strips copy the panel's position and submit at order 20; the model uses order 22.
+
+The independent runtime checks cover all 13,350 new callback invocations on
+story saves 65 and 86: 890 panel calls and 12,460 strip calls. There are 887 panel
+draws, 12,431 strip draws, 30 initial-delay returns and two suppression returns.
+All four members, both animations, pending/settled combinations and frozen/refreshed
+positions occur. Text updates eight times, remains cached 823 times and is frozen
+56 times. Both panel lifetimes and all 28 strip lifetimes complete; all 86 watched
+tasks return, with no pending calls or drain frames.
+
+Save 86 follows ordinary inputs. Save 65 adds two guarded per-call fixtures that
+set workspace `+0x12E` to 1: one strip callback and one settled panel callback.
+Each verifies suppression, then restores the input before the caller resumes.
+The panel fixture also verifies its `1 -> 0` settled change and restores that
+induced output. Both edits are restored, and all 104 original saves are unchanged.
+These fixtures establish the suppression branches, not a natural story trigger.
+
+Description IDs are independently checked against the native 20-byte badge records
+at `0x02050290`, field `+4`. Animation internals are observed within the 336-byte
+model. Text rendering observes the 4,428-byte party workspace and its bounded
+3,584-byte sub-OBJ transfer; the surrounding sub-OBJ memory must remain unchanged.
+The reserved graphics allocation is 7,168 bytes in both routes. Caller decisions,
+arguments, stores, full live records, draw-list insertion and pool returns are
+checked independently. The creator, glyph/animation algorithms, final rasterization,
+invalid member indices and arithmetic overflow remain outside that coverage.
+
+Both 1,820-frame replays pass. The description panels and final field captures
+were visually inspected. All 62 images and 558 graphics dumps validate; 38 images
+and 342 dumps match the applicable earlier input prefixes. The first artifact
+validator incorrectly required save 65 to hide an equipped marker and assumed
+all badge markers were unshared. Live inputs explain both differences: all equipped
+badges are visible on save 65, and a paired member shares a badge. The corrected
+validator retains the full per-call checks and reconciles both marker outcomes.
+
+Full matching checks, golden EUR ROM packaging, zero-difference native relinking,
+generated progress and all 81 tests pass. Evidence is under
+`build/runtime/eur_pause_badge_description/`: `badge_members/evidence_badges86.json`,
+`badge_members/evidence_badges65_cases.json` and `artifact_validation.json`.
+Both reports pin `build/analysis/probe_pause_badge_description.py`; the independent
+artifact validator is `verify_pause_badge_description_artifacts_v2.py` under
+`build/analysis/`. Build and source provenance is recorded in
+`build/analysis/pause_badge_description_batch_provenance.json`.
+
 ### Nawatobi
 
 When explaining a memory edit, specify CPU/address space, ROM region, pointer
