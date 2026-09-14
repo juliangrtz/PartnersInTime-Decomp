@@ -19,10 +19,10 @@ FieldVariableEntity *FieldVariableEntity_InitPlacement(FieldVariableEntity *enti
     func_0202cbd4(&entity->state, 0, sizeof(entity->state));
     entity->state.flags.mode = 0;
     entity->state.flags.enabled = 1;
-    entity->state.flags.unknown_04 = 1;
+    entity->state.flags.bobbing = 1;
     entity->state.flags.unknown_05 = 0;
-    entity->state.flags.unknown_06_13 = 0;
-    entity->state.flags.unknown_14_21 = -1;
+    entity->state.flags.bob_frame = 0;
+    entity->state.flags.bounce_frame = -1;
     SetCollisionChannel(&entity->entity, 0, 7);
     SetCollisionChannel(&entity->entity, 3, 7);
     SetCollisionChannel(&entity->entity, 6, 7);
@@ -51,14 +51,14 @@ FieldVariableEntity *FieldVariableEntity_InitVariablePlacement(FieldVariableEnti
     entity->entity.unknown_3d4 = placement->variable + (u16)-0x2000;
     entity->state.flags.mode = placement->flags.mode;
     entity->state.flags.enabled = VM_ReadVariable((u16)entity->entity.unknown_3d4, 0, 0) ^ 1;
-    entity->state.flags.unknown_04 = 1;
+    entity->state.flags.bobbing = 1;
     entity->state.flags.unknown_05 = 0;
-    entity->state.flags.unknown_06_13 = 0;
-    entity->state.flags.unknown_14_21 = -1;
+    entity->state.flags.bob_frame = 0;
+    entity->state.flags.bounce_frame = -1;
     entity->state.remaining_uses = placement->flags.parameter;
     entity->state.unknown_07 = placement->motion.amount_index;
-    entity->state.motion.unknown_00 = 0;
-    entity->state.motion.unknown_01_15 =
+    entity->state.motion.countdown = 0;
+    entity->state.motion.remaining_frames =
         entity->state.unknown_06 * data_ov000_020c0c64[placement->motion.direction];
     entity->state.unknown_08 = placement->unknown_02;
     entity->state.variable = placement->variable;

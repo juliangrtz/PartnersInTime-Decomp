@@ -8388,3 +8388,12 @@ and 81 tests pass. Private eur_field_task_contacts records 98 checked natural
 calls and 141 isolated ARM946 cases. Destruction, transfer and contact paths have
 isolated coverage only; 43 contact/rendering callback invocations are stubbed.
 Native task and heap helpers execute fully. All 104 saves remain unchanged.
+
+## Field variable-entity animation and roaming options - 2026-09-14
+
+Ten functions add 1,588 matching bytes: 775,632 / 1,563,700
+(49.6024%). Two new source objects, the corrected deferred-update caller, two
+byte-identical ROMs and 81 tests pass. Private eur_field_variable_roaming records
+44 natural calls and 314 isolated ARM946 cases. Six entry points are isolated-only;
+131 callback invocations are stubbed. Native constructors, null-renderer destruction,
+heap merging and nonmoving roaming stop execute fully. All 104 saves are unchanged.

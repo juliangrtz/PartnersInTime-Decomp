@@ -209,7 +209,7 @@ void FieldArea_PrepareRoomDeparture(FieldAreaContext *field)
     }
     for (i = field->entity_count - field->variable_count; i < field->entity_count; ++i) {
         FieldVariableEntity *entity = (FieldVariableEntity *)field->entities[i];
-        if (entity->state.flags.mode && entity->state.motion.unknown_00)
+        if (entity->state.flags.mode && entity->state.motion.countdown)
             VM_WriteVariable(entity->entity.unknown_3d4, 1, 0, 0);
     }
     for (i = 0; i < 4; ++i) {

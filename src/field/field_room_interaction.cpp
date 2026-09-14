@@ -61,7 +61,7 @@ int FieldArea_CollectEntityItem(FieldAreaContext *field, FieldVariableEntity *en
     func_ov000_0206f0b4(field, entity, added);
     if (added) {
         if (!--entity->state.remaining_uses)
-            entity->state.motion.unknown_01_15 = 0;
+            entity->state.motion.remaining_frames = 0;
         VM_WriteVariable(entity->entity.unknown_3d4, 1, 0, 0);
     }
     return added;

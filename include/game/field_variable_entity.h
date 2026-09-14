@@ -7,13 +7,13 @@
  * The specific gameplay object class is not yet confirmed. */
 typedef struct FieldVariableEntityState {
     struct {
-        u32 mode : 2, enabled : 1, unknown_03 : 1, unknown_04 : 1, unknown_05 : 1;
-        u32 unknown_06_13 : 8;
-        s32 unknown_14_21 : 8;
+        u32 mode : 2, enabled : 1, disable_after_bounce : 1, bobbing : 1, unknown_05 : 1;
+        u32 bob_frame : 8;
+        s32 bounce_frame : 8;
         u32 unknown_22_31 : 10;
     } flags;
     struct {
-        u16 unknown_00 : 1, unknown_01_15 : 15;
+        u16 countdown : 1, remaining_frames : 15;
     } motion;
     union { u8 unknown_06, remaining_uses; };
     union { u8 unknown_07, amount_index; };
@@ -43,6 +43,13 @@ typedef char FieldVariablePlacement_SizeCheck[sizeof(FieldVariablePlacement) == 
 #ifdef __cplusplus
 extern "C" {
 #endif
+FieldVariableEntity *FieldVariableEntity_InitEmpty(FieldVariableEntity *object);
+FieldVariableEntity *FieldVariableEntity_Destroy(FieldVariableEntity *object);
+FieldVariableEntity *FieldVariableEntity_Delete(FieldVariableEntity *object);
+void FieldVariableEntity_SetEnabled(FieldVariableEntity *object,int enabled);
+void FieldVariableEntity_SetBobbing(FieldVariableEntity *object,int enabled);
+void FieldVariableEntity_StartBounce(FieldVariableEntity *object,u8 countdown,u8 disable_after_bounce);
+void FieldVariableEntity_Update(FieldVariableEntity *object,FieldRuntimeEntity **entities);
 FieldVariableEntity *FieldVariableEntity_CopyState(FieldVariableEntity *, const FieldVariableEntity *);
 FieldVariableEntity *FieldVariableEntity_InitVariablePlacement(FieldVariableEntity *, int, int,
                                                                const FieldVariablePlacement *);

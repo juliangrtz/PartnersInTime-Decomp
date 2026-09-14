@@ -965,3 +965,6 @@ src/field/field_transfer_controls.c
 src/field/field_time_hole_active.c
 src/field/field_special_contact.cpp
 src/field/field_oam_frame.c
+
+src/field/field_variable_controls.cpp
+src/field/field_roaming_options.c

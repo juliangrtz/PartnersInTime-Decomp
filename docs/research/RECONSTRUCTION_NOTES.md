@@ -985,6 +985,36 @@ is stubbed. Checks include mapped memory outside 512 stack bytes and the named
 observational regions, ordered calls, results, SP and r4-r11. Both ROM builds,
 both source objects and 81 tests pass; all 104 original saves are unchanged.
 
+### Field variable-entity animation and roaming options
+
+Ten functions add 1,588 matching bytes. The 1,328-byte variable entity now has
+named bobbing and bounce counters, a countdown, enable/disable controls and its
+remaining lifecycle functions. The bobbing table has four signed bytes, each
+used for eight frames; the bounce table has seventeen. The halfword countdown
+preserves the native unsigned decrement. Roaming options occupy four 12-byte
+slots. Their five-word script inputs are narrowed only on assignment; bounds
+are whole pixels, and movement converts distance to Q12.
+
+The shared entity updater at 0x020B4990 consumes an entity-array argument when
+resolving a support entity. The deferred subclass now explicitly forwards that
+argument too. All eleven functions in its actual source object remain exact;
+this ABI correction contributes no additional matching bytes.
+
+Private `eur_field_variable_roaming/evidence_cold1_v1.json` checks 44 natural
+calls: eight option insertions covering all four slots, two bounds assignments,
+32 bobbing updates and two deleting destructors. Own-state changes are checked
+before common engine calls. Common-update effects, renderer changes, variable
+writes and attached-renderer destruction are observational, not independently
+reconstructed by this oracle. The final field image was inspected visually.
+
+`isolated_v1.json` checks 314 ARM946 cases and full copied RAM/DTCM/MMIO outside
+256 stack bytes. Constructors, clearing, null-renderer destruction, heap merging
+and nonmoving roaming stop execute native helpers. There are 131 explicit stubs
+for renderer calls, variable writes, common updates and nested bounce completion.
+Bobbing and bounce indices stay within their native tables. Six new entry points
+are covered only in isolation. All 104 saves remain unchanged; both ROM builds,
+the two new source objects and 81 tests pass.
+
 ### Field task lifecycle, transfer queries and OAM preparation
 
 Twelve functions add 884 matching bytes. FieldSystem allocates a 44-byte graphics

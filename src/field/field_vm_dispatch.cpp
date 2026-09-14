@@ -12,6 +12,7 @@
 #include <game/field_linear.h>
 #include <game/field_orbit.h>
 extern "C" {
+#include <game/field_variable_entity.h>
 #include <game/field_area_motion.h>
 #include <game/field_entity.h>
 #include <game/field_presentation.h>
@@ -58,18 +59,10 @@ extern void func_ov000_020b26ac(
     int duration, int plane, int direction, int secondary_axis_scale,
     int stop_on_contact_mask, int stop_on_state_mask,
     int snap_to_final_angle, int reserved);
-extern void func_ov000_020b2020(FieldEntity *entity, int minimum_x,
-                                int minimum_y, int maximum_x,
-                                int maximum_y);
-extern void func_ov000_020b1efc(FieldEntity *entity, const void *profile,
-                                int reserved);
 extern void func_ov000_020b1b88(FieldEntity *entity);
-extern void func_ov000_020b1e5c(FieldEntity *entity, int profile_slot);
 extern void func_ov000_020b1a24(FieldEntity *entity, const void *path,
                                 int path_size_halfwords);
 extern int func_ov000_0207133c(u8 *field_context, FieldEntity *entity);
-extern void func_ov000_020bc8e4(FieldEntity *entity, int enabled);
-extern void func_ov000_020bc7d0(FieldEntity *entity, int enabled);
 extern void func_ov000_02071a38(u8 *field_context, int layout_mode,
                                 int instant);
 extern void func_ov000_020a0c30(void *party_manager, int party_side,
@@ -2472,14 +2465,12 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_ENTITY_ROAMING_BOUNDS:
-            func_ov000_020b2020(
-                entity, arguments[1], arguments[2],
+            FieldRoaming_SetBounds((FieldRuntimeEntity *)entity, arguments[1], arguments[2],
                 arguments[3], arguments[4]);
             break;
 
         case FIELD_VM_ADD_ENTITY_ROAMING_PROFILE:
-            func_ov000_020b1efc(
-                entity, state->vm_state.script + arguments[1] + 2,
+            FieldRoaming_AddOption((FieldRuntimeEntity *)entity, (const FieldRoamingOptionInput *)(state->vm_state.script + arguments[1] + 2),
                 -1);
             break;
 
@@ -2505,7 +2496,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_CLEAR_ENTITY_ROAMING_PROFILES:
-            func_ov000_020b1e5c(entity, -1);
+            FieldRoaming_ClearOptions((FieldRuntimeEntity *)entity, -1);
             break;
 
         case FIELD_VM_LOAD_ENTITY_WAYPOINT_PATH:
@@ -2549,11 +2540,11 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_SET_FIELD_BLOCK_IDLE_BOBBING_ENABLED:
-            func_ov000_020bc8e4(entity, arguments[1] != 0);
+            FieldVariableEntity_SetBobbing((FieldVariableEntity *)entity, arguments[1] != 0);
             break;
 
         case FIELD_VM_SET_FIELD_BLOCK_BOUNCE_CONTROLLER_ENABLED:
-            func_ov000_020bc7d0(entity, arguments[1] != 0);
+            FieldVariableEntity_SetEnabled((FieldVariableEntity *)entity, arguments[1] != 0);
             break;
 
         case FIELD_VM_WAIT_FIELD_BLOCK_BOUNCE:

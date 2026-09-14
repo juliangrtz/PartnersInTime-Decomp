@@ -30,7 +30,7 @@ void FieldDeferredEntity_StopScript(FieldDeferredEntity *entity, int deferred);
 void FieldDeferredEntity_ResumeScript(FieldDeferredEntity *entity);
 void FieldDeferredEntity_UpdateBlink(FieldDeferredEntity *entity);
 void FieldDeferredEntity_BeginTimedPause(FieldDeferredEntity *entity);
-void FieldDeferredEntity_UpdateTimedPause(FieldDeferredEntity *entity);
+void FieldDeferredEntity_UpdateTimedPause(FieldDeferredEntity *entity, FieldRuntimeEntity **entities);
 #ifdef __cplusplus
 }
 #endif

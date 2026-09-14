@@ -8,7 +8,7 @@ extern FieldEntityVTable data_ov000_020c13e0;
 extern const s8 data_ov000_020c0c9c[];
 extern const s8 data_ov000_020c0cc0[];
 
-extern void func_ov000_020b4990(FieldRuntimeEntity *);
+extern void func_ov000_020b4990(FieldRuntimeEntity *, FieldRuntimeEntity **);
 extern void func_0202cbd4(void *, int, u32);
 
 FieldDeferredEntity *FieldDeferredEntity_Init(FieldDeferredEntity *entity, int entity_index,
@@ -49,9 +49,9 @@ FieldDeferredEntity *FieldDeferredEntity_Delete(FieldDeferredEntity *entity)
     return entity;
 }
 
-void FieldDeferredEntity_UpdateTimedPause(FieldDeferredEntity *entity)
+void FieldDeferredEntity_UpdateTimedPause(FieldDeferredEntity *entity, FieldRuntimeEntity **entities)
 {
-    func_ov000_020b4990(&entity->runtime);
+    func_ov000_020b4990(&entity->runtime, entities);
     if (entity->control.pause_frames) {
         entity->control.pause_frames = entity->control.pause_frames - 1;
         if (!entity->control.pause_frames)
