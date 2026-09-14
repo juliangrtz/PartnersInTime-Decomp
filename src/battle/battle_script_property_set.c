@@ -1,3 +1,5 @@
+#include <game/battle_effect_controls.h>
+#include <game/battle_link_effect.h>
 #include <game/battle_object_link.h>
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
@@ -81,8 +83,6 @@ void func_ov002_020b8114(BattleSceneObject *object, int value);
 void func_ov002_020b80fc(BattleSceneObject *object, int value);
 void func_ov002_020b8088(BattleSceneObject *object, u16 value, int channel);
 void func_ov002_020b6a5c(BattleSceneObject *object);
-void func_ov002_020b6a08(BattleSceneObject *object, int value);
-void func_ov002_020b68e0(BattleSceneObject *object, int channel, u16 value);
 
 #define FIELD_U16(object, offset) \
     (*(u16 *)((u8 *)(object) + (offset)))
@@ -568,19 +568,19 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
         func_ov002_020b6a5c(BattleSceneObject_GetById(actor_id));
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_121:
-        func_ov002_020b6a08(BattleSceneObject_GetById(actor_id), value);
+        BattleChainRig_StartSequence(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_CHANNEL_0:
-        func_ov002_020b68e0(BattleSceneObject_GetById(actor_id), 0, value);
+        BattleChainRig_SetActor(BattleSceneObject_GetById(actor_id), 0, value);
         break;
     case BATTLE_PROPERTY_SCENE_CHANNEL_1:
-        func_ov002_020b68e0(BattleSceneObject_GetById(actor_id), 1, value);
+        BattleChainRig_SetActor(BattleSceneObject_GetById(actor_id), 1, value);
         break;
     case BATTLE_PROPERTY_SCENE_CHANNEL_2:
-        func_ov002_020b68e0(BattleSceneObject_GetById(actor_id), 2, value);
+        BattleChainRig_SetActor(BattleSceneObject_GetById(actor_id), 2, value);
         break;
     case BATTLE_PROPERTY_SCENE_CHANNEL_3:
-        func_ov002_020b68e0(BattleSceneObject_GetById(actor_id), 3, value);
+        BattleChainRig_SetActor(BattleSceneObject_GetById(actor_id), 3, value);
         break;
     case BATTLE_PROPERTY_ACTOR_FLAG_15: {
         int enabled;

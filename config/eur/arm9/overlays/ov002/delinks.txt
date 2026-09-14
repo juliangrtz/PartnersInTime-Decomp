@@ -613,3 +613,24 @@ src/battle/battle_link_effect_update.c:
 
 src/battle/battle_link_effect_simulate.c:
     .text start:0x020be30c end:0x020be3b0
+
+src/battle/battle_chain_rig_actor.cpp:
+    .text start:0x020b68e0 end:0x020b6928
+
+src/battle/battle_chain_rig_sequence.cpp:
+    .text start:0x020b6a08 end:0x020b6a5c
+
+src/battle/battle_capture_overlay_start.c:
+    .text start:0x020b0580 end:0x020b05f0
+
+src/battle/battle_ground_ripple_create.c:
+    .text start:0x020ae940 end:0x020ae9c0
+
+src/battle/battle_link_effect_controls.c:
+    .text start:0x020bca44 end:0x020bcaa8
+
+src/battle/battle_object_link_sum.c:
+    .text start:0x020bdb38 end:0x020bdb88
+
+src/battle/battle_link_effect_upload.c:
+    .text start:0x020bdc18 end:0x020bdc50

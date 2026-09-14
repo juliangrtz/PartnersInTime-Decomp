@@ -26,6 +26,10 @@ extern "C" {
 void BattleLinkEffect_Update(BattleLinkEffectTask *task);
 void BattleLinkEffect_SimulateAndDraw(BattleLinkPoint *points, unsigned count, int spacing,
                                       int end_mass, int depth, int screen_y, u16 color, u8 width);
+void BattleLinkEffect_Stop(void);
+void BattleLinkEffect_DetachTarget(void);
+void BattleLinkEffect_UploadTileMap(void);
+void BattleLinkEffect_UploadTiles(void);
 #ifdef __cplusplus
 }
 #endif

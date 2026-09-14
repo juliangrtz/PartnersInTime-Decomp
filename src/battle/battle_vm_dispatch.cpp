@@ -1,4 +1,6 @@
 extern "C" {
+#include <game/battle_effect_controls.h>
+#include <game/battle_link_effect.h>
 #include <game/battle_object_link.h>
 #include <game/battle_sprite_grid_capture.h>
 #include <game/battle_actor.h>
@@ -61,12 +63,7 @@ extern void func_ov002_020bccc4(u16 source_object_id, u16 target_object_id,
                                 s8 source_y_offset, s8 target_x_offset,
                                 s8 target_y_offset, s8 render_mode,
                                 u16 color, int enabled);
-extern void func_ov002_020bca68(void);
-extern void func_ov002_020bca44(void);
 
-extern BattleAITask *func_ov002_020ae940(BattleSceneObject *object,
-                                         int radius, int growth_frames,
-                                         int hold_frames);
 extern int func_ov002_020ae9c0(int center_x, int center_y, int radius,
                                int band_width, int phase, int cutoff);
 extern void func_ov002_020bba60(BattleSceneObject *object);
@@ -1874,11 +1871,11 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_STOP_INTERPOLATED_OBJECT_LINK:
-        func_ov002_020bca68();
+        BattleLinkEffect_DetachTarget();
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_CANCEL_INTERPOLATED_OBJECT_LINK:
-        func_ov002_020bca44();
+        BattleLinkEffect_Stop();
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_SCREEN_PARTICLE_SWEEP:
@@ -1916,7 +1913,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_START_GROUND_RIPPLE:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020ae940(
+        BattleGroundRipple_Create(
             object, command->arguments[1], command->arguments[2],
             command->arguments[3]);
         return SCRIPT_VM_CONTINUE;
@@ -1932,7 +1929,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
             slot_index++;
         }
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        task = func_ov002_020ae940(
+        task = BattleGroundRipple_Create(
             object, command->arguments[1], command->arguments[2],
             command->arguments[3]);
         BattleTask_BindOwnerSlot(

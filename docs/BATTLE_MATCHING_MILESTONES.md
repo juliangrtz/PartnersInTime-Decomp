@@ -8440,3 +8440,13 @@ All source objects and both ROMs match; 81 tests pass. Private
 ring GPU writes. Chain solver/draw calls and resource allocation are explicit
 stubs. The Chomp route did not reach the resource-slot wrapper; coverage of
 this batch is isolated-only. All 104 original saves are unchanged.
+
+## Battle effect controls and shop equipment markers - 2026-09-14
+
+Thirteen functions add 1,416 matching bytes: 781,856 / 1,563,700 (50.0004%).
+All source objects and both ROMs match; 81 tests pass. Private eur_final_controls
+checks 372 isolated ARM946 cases, with four explicitly stubbed VRAM transfers.
+The save-65 selling route checks 32 marker calls on the not-visible path;
+drawing and the remaining functions have isolated coverage. The temporary
+shop-entry command is restored, the visible field return is inspected, and
+all 104 original saves remain unchanged. No inline assembly was added.

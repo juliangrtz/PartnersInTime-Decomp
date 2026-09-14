@@ -985,6 +985,35 @@ is stubbed. Checks include mapped memory outside 512 stack bytes and the named
 observational regions, ordered calls, results, SP and r4-r11. Both ROM builds,
 both source objects and 81 tests pass; all 104 original saves are unchanged.
 
+### Battle effect controls and shop equipment markers
+
+Thirteen functions add 1,416 matching bytes and bring matching C/C++ to
+781,856 / 1,563,700 (50.0004%). Battle code now includes ground-ripple creation,
+capture restart, chain actor/sequence controls, chain stop/detachment, segment
+summation and sub-BG0 tile/map uploads. Shop code adds equipped-item markers,
+panel-model drawing, selected-model removal and applying selected equipment.
+The ground-ripple task uses the existing 44-byte pool record; its initialized
+payload is only 14 bytes. Chain controls reuse the 7,088-byte overlay-25 work
+layout. Preserve the actor argument's unsigned-halfword ABI in the property VM.
+
+Private `eur_final_controls/isolated_v3.json` checks 372 ARM946 cases across all
+13 functions. Actor lookup/status, allocation, queues, clearing, selection,
+equipment application, deferred task removal and complete draw-list insertion
+execute natively. The independent model checks full mapped RAM/DTCM/MMIO outside
+256 stack scratch bytes, relevant allocations, arguments, returns and SP/r4-r11.
+Four transfer cases use explicit immediate-copy stubs for the two VRAM helpers;
+their byte ranges and the tile callback's ordered 32-bit scroll-register write
+are checked, but DMA, bank mapping, timing and rasterization are not modeled.
+
+The save-65 selling route (`evidence_shop65_sell_v3.json`) checks 32 marker calls
+with full native guards, task/sprite/save/panel state and restores the temporary
+shop-entry command. This route starts on consumables: the checked marker calls
+take the not-visible path. Drawing and the other functions are covered by the
+isolated cases. Screenshots confirm the selling menu and visible field return.
+The earlier buying routes missed the targets; their failed assertions remain
+recorded. Both ROM builds and 81 tests pass, all 104 original saves are unchanged,
+and no inline assembly was added.
+
 ### Battle point chains and ring transition drawing
 
 Four functions add 1,348 matching bytes. The ring transition emits concentric

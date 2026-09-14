@@ -985,3 +985,15 @@ src/battle/battle_curtain_draw.c
 src/battle/battle_resource_model_slots.c
 src/battle/battle_link_effect_update.c
 src/battle/battle_link_effect_simulate.c
+
+src/battle/battle_chain_rig_actor.cpp
+src/battle/battle_chain_rig_sequence.cpp
+src/battle/battle_capture_overlay_start.c
+src/battle/battle_ground_ripple_create.c
+src/battle/battle_link_effect_controls.c
+src/battle/battle_object_link_sum.c
+src/battle/battle_link_effect_upload.c
+src/overlay009/shop_equipped_marker.cpp
+src/overlay009/shop_panel_model.cpp
+src/overlay009/shop_apply_equipment.cpp
+src/overlay009/shop_selected_model.cpp
