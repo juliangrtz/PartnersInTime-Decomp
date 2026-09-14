@@ -1,4 +1,4 @@
-#include <game/window.h>
+#include <game/window_operations.h>
 void GameWindow_ReleaseAll(GameWindowManager *manager) {
     s16 i;
     if (manager->windows) {
@@ -12,8 +12,7 @@ void GameWindow_SetOrigin(GameWindowManager *manager, int screen, s16 x, s16 y) 
     if (!screen) { manager->main_origin_x = x; manager->main_origin_y = y; }
     else { manager->sub_origin_x = x; manager->sub_origin_y = y; }
 }
-extern void func_0201cc58(GameWindowManager *, GameWindow *);
 void GameWindow_Clear(GameWindowManager *manager, s16 index) {
-    func_0201cc58(manager, &manager->windows[index]);
+    GameWindow_DrawSkin(manager, &manager->windows[index]);
     manager->windows[index].allocation.bits.suppress_redraw = 1;
 }

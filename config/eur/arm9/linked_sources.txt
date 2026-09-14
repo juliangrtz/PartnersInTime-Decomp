@@ -953,3 +953,6 @@ src/field/field_effect_controls.cpp
 src/field/field_layer_motion_stop.c
 src/field/field_camera_motion_stop.c
 src/field/field_common_input_mask.c
+
+src/game/window_open.c
+src/game/window_skin.c

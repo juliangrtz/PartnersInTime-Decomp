@@ -959,6 +959,32 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Resident window opening and skin selection
+
+`GameWindow_Open` and `GameWindow_DrawSkin` add 528 matching resident bytes.
+The latter selects front/back buffers and aligned or shifted skin rendering.
+The shifted renderer uses the manager's 3,744-byte scratch region at +96;
+it lies inside the complete 3,908-byte manager. Skin indices 0 through 3
+reference the four native entries at 0x0205671C.
+
+Private `eur_window_skin_open/evidence_cold1_v6.json` records one natural skin-1
+call while talking to Toad from the original first story save, after 3,671
+frames of normal keypad navigation. Both 4,224-byte pixel buffers and the
+manager scratch are bounded observational renderer outputs; buffer selection,
+helper arguments and the remaining manager/window bytes are independently checked.
+The dialogue and returned field view were visually inspected. Earlier routes
+missed the targets; the first successful entry exposed the initially omitted
+scratch writes in the probe, corrected in the frozen v2 oracle.
+
+`isolated_v2.json` passes 80 ARM946 cases: 64 skin/buffer/alignment combinations
+and 16 opening cases. Native rasterizers, clearing and tilemap writing execute.
+Raster pixels and scratch are observational; clearing and tilemap values are
+independently derived. Opening has isolated coverage only: preparation is
+stubbed to return an already prepared slot or failure, and nonzero decoration
+is stubbed. Checks include mapped memory outside 512 stack bytes and the named
+observational regions, ordered calls, results, SP and r4-r11. Both ROM builds,
+both source objects and 81 tests pass; all 104 original saves are unchanged.
+
 ### Field palette controls, camera stops and input masks
 
 Seven functions add 560 matching bytes. Field palette controls share the existing

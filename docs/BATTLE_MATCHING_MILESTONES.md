@@ -8369,3 +8369,13 @@ and 81 tests pass. Private eur_field_effect_motion_controls records 778 natural
 input-mask calls and 265 isolated ARM946 cases. The other six functions have
 isolated coverage only; 16 angle cases stub fixed-point division. Both native
 palette-reversal helpers execute completely. All 104 saves remain unchanged.
+
+## Resident window opening and skin selection - 2026-09-14
+
+Two functions add 528 matching bytes: 773,160 / 1,563,700
+(49.4443%). Two exact source objects, both byte-identical ROMs
+and 81 tests pass. Private eur_window_skin_open records one naturally reached
+skin call from story save 1 and 80 isolated ARM946 cases. Opening is isolated
+only, with preparation and nonzero decoration stubbed; native skin raster
+outputs and the bounded manager scratch remain observational. All 104 saves
+remain unchanged. See the reconstruction reference for precise coverage.

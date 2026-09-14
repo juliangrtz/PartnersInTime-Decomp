@@ -759,3 +759,9 @@ src/nitro/os/os_console_type.c:
 
 src/nitro/os/os_arena_low.c:
     .text start:0x0203a0b4 end:0x0203a1c4
+
+src/game/window_open.c:
+    .text start:0x02020250 end:0x02020304
+
+src/game/window_skin.c:
+    .text start:0x0201cc58 end:0x0201cdb4
