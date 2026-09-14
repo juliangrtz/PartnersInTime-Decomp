@@ -1,3 +1,4 @@
+#include <game/battle_common_resources.h>
 extern "C" {
 #include <game/battle_entry.h>
 #include <game/battle_frame.h>
@@ -5,7 +6,7 @@ extern "C" {
 #include <game/save_data.h>
 #include <game/heap.h>
 void func_ov002_02068878(BattleObjectDataLoadState *, int, int);
-int func_ov002_0206a240(void);
+
 void func_ov002_0206f1f0(BattleModel *, BattleObjectDataLoadState *, int);
 void func_0202cc58(const void *, void *, u32);
 void func_0202cd2c(const void *, void *, u32);
@@ -176,7 +177,7 @@ extern "C" void BattleEntry_InitializeScene(void)
     BattleTaskList_Update(&FRAME->task_list_8b44);
     if (BattleObjectData_IsLoadPending(4))
         return;
-    if (!func_ov002_0206a240())
+    if (!BattleCommonResources_UpdateLoad())
         return;
     if (ENTRY->formation == 1) {
         BattleSceneObject_SwapSlots(56, 58);

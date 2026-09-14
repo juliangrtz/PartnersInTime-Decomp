@@ -959,6 +959,29 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Common battle-resource initialization and loading
+
+[Common resources](../../src/battle/battle_common_resources.cpp) reconstructs
+`0x0206A240..0x0206A608` (968 C++ bytes). Initialization allocates the shared
+70,976-byte workspace, graphics buffer, sprite and palette records, matrix/model
+animation pools and dialogue resources. The loader requests slot 20, waits for
+completion, builds its sprite catalog, binds reserved actors 16/17 and positions
+both at (-128, -256, 0) before reporting ready.
+
+Private `eur_battle_common_resources/evidence_entry55_v6.json` passes a 706-frame
+controlled battle entry: one initialization and 21 load calls, including phases
+0, 1 and 2. The encounter injection is restored before native battle entry.
+The probe checks the entire workspace, pool initialization, helper arguments,
+caller stores, actor positions and render-list topology. Graphics/dialogue/model
+helper internals remain bounded observations. Embedded actor palettes begin at
+object + 204; inserting another palette can change their neighbor links.
+`isolated_v2.json` adds 14 copied-RAM cases for pending/completed/invalid states
+and preservation of upper flag bits, checking all mapped memory and ordered
+writes. Allocation failure and workspace reuse remain untested. Earlier failed
+probes preserve the missing palette-neighbor, auxiliary-model and helper-stack
+checks that were corrected. Both builds match the original ROM; all 104 saves
+are unchanged. The final capture shows the battle command menu against Petey.
+
 ### Battle render-override reservation and mesh queries
 
 [Render control](../../src/battle/battle_scene_render_control.c) reconstructs

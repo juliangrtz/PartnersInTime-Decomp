@@ -1,3 +1,4 @@
+#include <game/battle_common_resources.h>
 extern "C" {
 #include <game/battle_entry.h>
 #include <game/battle_archive.h>
@@ -14,7 +15,7 @@ extern u8 *gBattleSystem;
 extern int data_ov002_020c071c;
 extern u8 data_ov002_020beaac[], data_ov002_020beabc[], data_ov002_020beacc[], data_ov002_020beadc[],
     data_ov002_020beaec[], data_ov002_020beafc[], data_ov002_020beb0c[], data_ov002_020beb14[];
-void func_ov002_0206a44c(void *);
+
 void *BattleTransfer_EnqueueBeforeMapping(int (*)(void *), void *, int, int);
 void func_02009078(int, void *, void *);
 void func_02037190(void);
@@ -172,7 +173,7 @@ extern "C" void BattleEntry_WaitArchives(void)
 {
     BattleTaskList_Update(&FRAME->task_list_8b44);
     if (*(u16 *)(gBattleSystem + 1512) == *(u16 *)(gBattleSystem + 1514)) {
-        func_ov002_0206a44c(gBattleContext);
+        BattleCommonResources_Initialize(gBattleContext);
         FRAME->update = BattleEntry_LoadResources;
     }
 }

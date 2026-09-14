@@ -885,3 +885,4 @@ src/battle/battle_model_stop_primary.cpp
 src/battle/battle_model_stop_alternate.cpp
 src/battle/battle_model_start_animation.cpp
 src/battle/battle_model_primary_descriptor.cpp
+src/battle/battle_common_resources.cpp

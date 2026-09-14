@@ -8203,3 +8203,19 @@ The isolated checks substitute native no-op virtual callbacks, check all mapped
 memory except 256 bytes of call-stack scratch, and preserve SP/register checks.
 All 104 original saves are unchanged. The first build's native relink failed on
 stale symbolic-assembly names; the complete V2 build passes after their update.
+
+## Common battle-resource initialization and loading - 2026-09-14
+
+Two functions add 968 matching C++ bytes: Initialize (444) and UpdateLoad (524).
+Total: 753,500 / 1,563,700 matching C/C++ bytes (48.1870%);
+symbolic ASM remains separate. Actual new and modified caller objects are exact.
+All seven build checks pass, including 81 tests; both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+
+Private eur_battle_common_resources/evidence_entry55_v6.json passes 706 frames,
+one initialization and 21 load calls. Controlled encounter inputs are restored.
+isolated_v2.json passes 14 loader-state cases with full mapped-memory and ordered
+write checks. Renderer/helper effects are bounded observations; workspace reuse
+and allocation failure remain untested. Earlier oracle failures are retained.
+All 104 original saves are unchanged; artifact_validation_v1.json validates the
+reports, captures, memory dumps, source hashes and actual compiled objects.
