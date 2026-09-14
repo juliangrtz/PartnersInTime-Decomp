@@ -145,6 +145,12 @@ struct BattleAITask *BattleModelEffect_SpawnFromResourceAttached(
     int x, s16 y, s16 z, int scale);
 int BattleModelEffect_SpawnFromResourceInFreeSlot(
     int resource_id, int animation_id, int x, int y, s16 z, int scale);
+/* These tasks own a palette record and a 304-byte alternate renderer. */
+struct BattleAITask *BattleAlternateModelEffect_Spawn(
+    int resource_id, int animation_id, int x, int y, s16 z, int scale);
+struct BattleAITask *BattleAlternateModelEffect_SpawnAttached(
+    struct BattleAITask **owner_slot, int resource_id, int animation_id,
+    int x, s16 y, s16 z, int scale);
 int BattleParty_SpawnLaunchImpact(struct BattleActor *actor);
 void BattleObjectEffect_SpawnDelayed(int animation_id, int delay,
                                      BattleSceneObject *object);

@@ -8111,3 +8111,22 @@ for addresses, routes, private reports, provenance and coverage limits.
 - Private evidence: build/analysis/battle_vm_vertical_build_validation.json,
   battle_vm_vertical_final_objects.json, and build/runtime/eur_battle_vm_vertical/
   evidence_shrowser103_intro_v2.json, isolated_v1.json and artifact_validation_v1.json.
+
+
+## Alternate model-effect tasks and VM sources (+640 C++ bytes)
+
+Reconstructed the attached factory, factory and updater at ov2 0206C2D4..0206C520
+(588 bytes), plus model-source resolution at 0207905C (52). Public declarations,
+VM callers and ownership are integrated; all four functions and the full battle
+dispatcher match exactly. C/C++ reaches 749856 / 1563700 bytes (47.9540%);
+symbolic ASM remains separate at 5012 bytes.
+
+Both ROMs retain SHA1 ba4ec2f99b4f2e0047601552bccf00aa73e28701; all seven build
+checks and 81 tests pass. Controlled Petey replay controlled55_v4 checks four
+resolvers, one factory, seven updates and actual task-pool return over 1120 frames.
+The temporary commands, shared table and original wait behavior are restored;
+the temporary effect finishes naturally. Isolated_v4 passes 12 groups of native
+ARM946 calls on copied state. All 104 saves are unchanged. Renderer internals
+remain bounded observations; no natural script entry or rasterization proof.
+See the alternate-effects section in docs/research/RECONSTRUCTION_NOTES.md and
+private build/runtime/eur_battle_alternate_effects/ reports for scopes/failures.

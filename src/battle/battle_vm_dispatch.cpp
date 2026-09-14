@@ -68,7 +68,6 @@ extern int func_ov002_02078e38(ScriptVm *vm, ScriptVmState *state,
                                ScriptVmCommand *command, int spawn_mode);
 extern int func_ov002_02078bb4(ScriptVm *vm, ScriptVmState *state,
                                ScriptVmCommand *command, int spawn_mode);
-extern int func_ov002_0207905c(int source, void **resolved_source);
 extern void func_ov002_020bccc4(u16 source_object_id, u16 target_object_id,
                                 u16 relaxation_period, u16 link_length,
                                 s8 flipped_y_adjustment, s8 source_x_offset,
@@ -483,7 +482,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
     BattleVmPosition alternate_model_handle_position;
     BattleVmPosition attached_sprite_position;
     BattleVmPosition attached_sprite_handle_position;
-    void *resource_sources[4];
+    BattleModel *resource_sources[4];
     u16 object_id;
     int script_target_id;
     int mode;
@@ -2081,17 +2080,17 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         resource_sources[1] = 0;
         resource_sources[2] = 0;
         resource_sources[3] = 0;
-        func_ov002_0207905c(
+        BattleModelAnimation_ResolveSource(
             command->arguments[0], &resource_sources[0]);
-        func_ov002_0207905c(
+        BattleModelAnimation_ResolveSource(
             command->arguments[1], &resource_sources[1]);
-        func_ov002_0207905c(
+        BattleModelAnimation_ResolveSource(
             command->arguments[2], &resource_sources[2]);
-        func_ov002_0207905c(
+        BattleModelAnimation_ResolveSource(
             command->arguments[3], &resource_sources[3]);
         BattleModelAnimation_SetModels(
-            (BattleModel *)resource_sources[0], (BattleModel *)resource_sources[1],
-            (BattleModel *)resource_sources[2], (BattleModel *)resource_sources[3]);
+            resource_sources[0], resource_sources[1],
+            resource_sources[2], resource_sources[3]);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_WORLD_POSITION:

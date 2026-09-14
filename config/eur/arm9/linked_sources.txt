@@ -875,3 +875,5 @@ src/battle/battle_scheduler_queues.c
 
 src/battle/battle_scheduler_lifecycle.cpp
 src/battle/battle_model_animation.c
+src/battle/battle_alternate_model_effects.cpp
+src/battle/battle_model_source.cpp

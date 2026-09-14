@@ -874,6 +874,62 @@ modeling excludes hardware latency and IRQ timing, and the checks do not prove
 later animation, rendering or completion of the battle. Artifact and final-build
 checks are recorded in `artifact_validation_v1.json` in the same private directory.
 
+### Alternate model effects and VM model sources
+
+[Alternate model effects](../../src/battle/battle_alternate_model_effects.cpp)
+cover `0x0206C2D4..0x0206C520` (588 matching C++ bytes). The attached wrapper
+binds the returned task to an owner slot. The factory allocates a 304-byte model
+from the heap at battle context `+0xE15C`, initializes its palette/controller,
+starts an animation, and stores its position and scale. This is a different heap
+field from `resource_heap_id` at `+0xE158`. The shared task pool at `+0x945C`
+contains 192 slots of 44 bytes: a 12-byte task prefix and a 32-byte payload with
+model pointer, 20-byte palette record and three signed coordinates.
+
+The factory accepts full-word resource/animation IDs, X/Y and scale, and signed
+halfword Z. The attached wrapper also narrows Y. Resource lookup uses the low
+16 bits; animation selection uses the low 8 bits. Native resource setup forwards
+a fourth argument from the load state's `resource_id`, omitted by pseudocode.
+The updater subtracts camera offsets, clamps negative depth, and reacts to model
+flag bit 2 by unlinking the palette, stopping and deleting the model, clearing
+its pointer and disabling the callback. Actual task-pool return happens later.
+The cached model pointer for the paired X/Y stores, integer promotion in the
+depth clamp, and two separate nullable deletion guards reproduce the native code.
+
+[Model-source resolution](../../src/battle/battle_model_source.cpp) adds 52 bytes
+at `0x0207905C`. Positive signed IDs are narrowed to 16 bits and resolve through
+the scene object's alternate-model pointer at `+0xC4`. Nonpositive values pass
+through unchanged. The dispatcher now uses the shared typed declaration; its
+complete 19,168-byte body still matches.
+
+Runtime evidence is private under `build/runtime/eur_battle_alternate_effects/`:
+
+- `evidence_controlled55_v4.json` runs 1,120 frames with the previously tested
+  Petey Jump inputs. Four resolver calls, one factory call, seven update calls
+  and the shared model-table setter pass their independent caller-state checks.
+  Temporary opcodes `0xBC` and `0xB8` replace two waiting `0x74` commands while
+  the enemy auxiliary script is nonnull. The original commands, descriptor-derived
+  rewind, yield result and model table are restored before VM continuation.
+  Descriptors are 32-bit entries at `read32(vm + 12)`, not halfword entries or
+  the VM's first word. The temporary model finishes naturally; no completion-flag
+  fixture fires, and its task returns to the 192-slot free list. The final capture
+  shows the ongoing battle and command wheel. All 104 battery saves are unchanged.
+- `isolated_v4.json` passes 12 groups on copied live RAM/DTCM and both display
+  engines' MMIO readbacks: six factory variants, an attached call, twelve updates
+  spanning active/completed state, and six resolver sentinel/ID cases. Native
+  helpers execute without stubs. Factory cases vary high argument bits, negative
+  depth/scale and resource selection. Resolver cases reuse the last copied state
+  after cleanup, with a synthetic alternate-model pointer.
+
+Checks cover the full battle allocation and caller frames, owner/task fields,
+model stores and palette-list links. Renderer/constructor internals and heap
+effects outside those ranges remain bounded observations; copied MMIO is not a
+hardware timing model. No ordinary selection of the injected commands or
+independent rasterization is claimed. The 81,854 exported battle commands contain
+no `0xB8..0xBB` calls and four `0xBC` calls, so the factories' normal story route
+remains unestablished. Earlier entry/idle probes reached no targets; V3 used an
+incorrect descriptor address despite obtaining the same rewind. Keep those
+attempts as historical artifacts, not accepted coverage. The accepted run is V4.
+
 ### Battle transition dispatch and resource slots
 
 The matching build includes two more overlay-2 helpers:
