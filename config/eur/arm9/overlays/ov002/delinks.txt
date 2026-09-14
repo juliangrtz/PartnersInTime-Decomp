@@ -105,7 +105,7 @@ src/battle/battle_scene_slots.c:
     .text       start:0x02090c18 end:0x02091118
 
 src/battle/battle_script_state.c:
-    .text       start:0x020922dc end:0x0209234c
+    .text       start:0x020922dc end:0x02092390
 
 src/battle/battle_scene_animation.cpp:
     .text       start:0x02091118 end:0x02091a90
@@ -376,6 +376,9 @@ src/battle/battle_iris_capture.c:
 
 src/battle/battle_iris_transition_phase_b.c:
     .text       start:0x020b5d04 end:0x020b5d58
+
+src/battle/battle_transition_dispatch.cpp:
+    .text       start:0x020b5f38 end:0x020b5fdc
 
 src/battle/battle_motion_parameters.cpp:
     .text start:0x0206e578 end:0x0206e64c

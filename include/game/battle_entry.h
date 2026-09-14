@@ -20,7 +20,8 @@ typedef struct BattleEntrySaveView {
             s16 unknown_low : 4;
             s16 approach : 4;
             u16 luigi : 1;
-            u16 unknown_high : 7;
+            u16 transition_kind : 4;
+            u16 unknown_13_15 : 3;
         };
     } flags;
 } BattleEntrySaveView;
@@ -33,6 +34,8 @@ typedef struct BattleEntryHeaps {
 
 typedef char BattleEntrySaveViewSizeCheck[sizeof(BattleEntrySaveView) == 10 ? 1 : -1];
 typedef char BattleEntryHeapsSizeCheck[sizeof(BattleEntryHeaps) == 24 ? 1 : -1];
+
+struct BattleAITask;
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,6 +60,7 @@ void BattleEntry_WaitArchives(void);
 void BattleEntry_LoadArchives(BattleQueuedTask *task);
 void BattleEntry_InitializeHeaps(BattleQueuedTask *task);
 void BattleEntry_InitializeObjects(BattleQueuedTask *task);
+void BattleTransition_UpdateExitWait(struct BattleAITask *task);
 #ifdef __cplusplus
 }
 #endif

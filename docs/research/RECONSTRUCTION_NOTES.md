@@ -17,6 +17,7 @@ ordinary gameplay accessibility or coverage of unexercised branches.
 - [Reconstructing and integrating code](#reconstructing-and-integrating-code)
 - [Runtime verification](#runtime-verification)
 - Shared sprite helpers: [OAM wrapper ABI and pooled initialization](#overlay-5-sprite-collection-and-initialization)
+- Battle exit: [transition dispatch and resource-slot selection](#battle-transition-dispatch-and-resource-slots)
 - Code-derived findings: [pause party status](#pause-party-status)
 - Pause transitions: [verified exit tasks](#pause-exit-tasks-and-transition-state),
   [projection and callback ABI](#pause-transition-projection-and-callback-abi),
@@ -654,6 +655,70 @@ Controlled RAM edits or temporary decoded-command substitutions are useful
 probes, but record exactly what changed and when it was restored. They do not
 demonstrate normal gameplay accessibility. Prefer read-only observation after
 the controlled setup. Never infer complete branch coverage from a matching ROM.
+
+### Battle transition dispatch and resource slots
+
+The matching build includes two more overlay-2 helpers:
+
+| Address | Function | C/C++ bytes |
+|---|---|---:|
+| `0x0209234C` | `BattleObjectData_ResolveSlot` | 68 |
+| `0x020B5F38` | `BattleTransition_UpdateExitWait` | 164 |
+
+The slot helper extends [battle_script_state.c](../../src/battle/battle_script_state.c).
+A 16-bit handle's high nibble selects a one-based archive slot; its low 12 bits
+become the entry index at offset 36 of that 44-byte request. The request array
+starts at battle-context offset `0x284` and contains 14 records. Native code
+reloads the context pointer before returning the selected slot.
+
+[battle_transition_dispatch.cpp](../../src/battle/battle_transition_dispatch.cpp)
+reduces the signed sub-screen brightness field at context offset `0x24` by two.
+An exact-zero result returns and waits for another invocation. Crossing below
+zero instead clamps to zero and continues immediately. Runtime flag bit 5 then
+blocks dispatch. When clear, save flags at `read32(0x02059FE8) + 0x560`, bits
+9..12, select an initializer from the four-entry table at `0x020C03C4`.
+The live task remains in `r0` across the indirect call; pseudocode omits that
+argument. The shared context flags now expose bit 5 separately, and the existing
+ten-byte encounter view names the transition selector without changing layout.
+
+The batch adds 232 matching C/C++ bytes. The slot helper replaces 68 bytes
+already counted as symbolic assembly, so combined source coverage grows by
+164 bytes. The actual build objects match all three functions in the two units,
+344 bytes including the existing 112-byte script-state helper. Both packaged
+and native-relinked ROMs retain the EUR SHA-1; all 81 tests passed. Private build
+and object records are `build/analysis/battle_transition_dispatch_build_validation.json`
+and `battle_transition_dispatch_object_provenance.json` in the same directory.
+
+Private runtime evidence is under `build/runtime/eur_battle_transition_dispatch/`:
+`evidence_entry55_v1.json` verifies two slot calls during the checkpoint-55
+encounter route, and `evidence_exit55_v2.json` verifies 17 exit-wait calls:
+16 countdown returns and one initializer dispatch. The 1,607 frames include
+19 completed calls and 18 ordered caller stores. Checks cover the complete
+401,416-byte battle allocation, save record, 28-byte task slot, caller stack,
+callback argument, initializer effects, return value where applicable, SP and
+callee-saved registers. The live selector is 1 with standard direction.
+
+Entry uses the previously documented temporary field-VM encounter command and
+restores its 72 bytes and cursor before native battle start. Exit selects turn
+state `0x500D` at a guarded update with all four party AI scripts idle, then
+restores the original state before context destruction. It does not demonstrate
+a natural victory. Both battle roots are checked at guarded destruction returns;
+field text and read-only data subsequently replace the battle overlay. The final
+capture is black, as in the earlier controlled exit, so a visible field return
+is not established. The failed `exit55_v1` report retained a final-zero assertion
+against addresses already reused by the field overlay. Its corrected replay
+preserves identical fixture records, target events, input snapshots and capture.
+
+`isolated_arm_cases_v1.json` adds 16 native ARM946 cases in copied live RAM,
+without helper stubs: first/last archive slots, low-12-bit boundaries, signed
+brightness extremes, zero versus underflow, blocking bit 5 and all four valid
+exit selectors. Full main RAM, caller stores/stack, arguments, return values,
+SP/r4-r11 and DTCM outside the bounded helper stack agree with the independent
+model. These cases do not cover the alternate VCount-IRQ initializer or live
+object lifetimes. `artifact_validation_v1.json` validates 15 images/memory
+artifacts, report/source versions and all 104 unchanged battery saves.
+Graphics dumps and the inspected battle-command-menu capture are observational;
+this batch does not independently verify rasterization.
 
 ### Battle scheduler queues
 

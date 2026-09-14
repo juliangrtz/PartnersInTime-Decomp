@@ -7989,3 +7989,26 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
   including symbolic assembly: **48.07%**.
   Overlay 5: **14,052 / 16,760 (83.84%)**.
   **35,322 bytes remain to reach 50% matching C/C++.**
+
+
+## Battle transition dispatch and archive-slot selection (+232 C/C++ bytes)
+
+Reconstructed `BattleObjectData_ResolveSlot` (68 bytes) and
+`BattleTransition_UpdateExitWait` (164 bytes) from native overlay-2 code.
+The slot helper joins the existing script-state unit; the wait callback preserves
+sub-brightness countdown timing, flag gating and the selected initializer's task
+argument. Shared flag views now expose the verified individual fields.
+
+Matching C/C++: **746,760 / 1,563,700 bytes (47.7560%)**. Symbolic assembly:
+5,012 bytes; combined coverage 48.0765%. The slot helper replaces 68 previously
+counted assembly bytes, so combined source coverage increases by 164 bytes.
+Both rebuilt ROMs are byte-identical to the EUR original; 81 tests pass.
+
+Checkpoint-55 entry/controlled exit checks complete 19 target calls over 1,607
+frames, with 18 ordered caller stores and full live records. Sixteen additional
+native ARM946 cases cover handle and brightness boundaries plus all four valid
+exit selectors. All 104 original saves remain unchanged. The controlled exit's
+final capture remains black; no natural victory or visible field return is claimed.
+See [the reconstruction reference](research/RECONSTRUCTION_NOTES.md#battle-transition-dispatch-and-resource-slots)
+for native addresses, inputs, the preserved failed ownership assertion and the
+corrected replay, artifact hashes, coverage and explicit limits.

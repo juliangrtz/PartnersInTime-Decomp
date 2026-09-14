@@ -1,4 +1,13 @@
-#include <game/battle_ai.h>
+#include <game/battle_context.h>
+
+/* Resource handles use the high nibble for the one-based archive slot. */
+BattleObjectResourceRequest *BattleObjectData_ResolveSlot(u16 packed_id) {
+    int index = (packed_id >> 12) - 1;
+
+    ((BattleContext *)gBattleContext)->ai_archives[index].entry_index =
+        packed_id & 0xFFF;
+    return &((BattleContext *)gBattleContext)->ai_archives[index];
+}
 
 BattleAIState *BattleScriptState_GetByObjectId(u16 object_id) {
     if (object_id < 0x28) {
