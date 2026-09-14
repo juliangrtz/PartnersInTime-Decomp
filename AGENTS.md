@@ -86,6 +86,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Pause list rendering | [Row sprites](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-sprites), [queued drawing and markers](docs/research/RECONSTRUCTION_NOTES.md#pause-queued-row-drawing-and-markers), [row refresh](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-refresh) |
 | Equipment list models | [Equipped-item markers](docs/research/RECONSTRUCTION_NOTES.md#pause-equipped-item-markers), [empty-equipment row sprites and ResourceA lifetime](docs/research/RECONSTRUCTION_NOTES.md#pause-empty-equipment-row-sprites) |
 | Category and list selection sprites | [Task layouts, Q12 coordinates, model attachments and tested scrolling routes](docs/research/RECONSTRUCTION_NOTES.md#pause-selection-sprites) |
+| Item-selection labels and quantities | [Label strips and screen offsets](docs/research/RECONSTRUCTION_NOTES.md#pause-item-selection-label-sprites), [quantity digits, hidden tens and boundary fixtures](docs/research/RECONSTRUCTION_NOTES.md#pause-item-selection-quantity-sprites) |
 | Equipment member-selection arrows | [Heading-switch inputs, failed routes and verified updater](docs/research/RECONSTRUCTION_NOTES.md#pause-member-selection-arrows) |
 | Equipment stat comparisons | [Save-field addressing, cached rows, numeric helper ABI and runtime counts](docs/research/RECONSTRUCTION_NOTES.md#pause-equipment-stat-comparison-rows) |
 | Party status and low-HP warnings | [Bitmap and status fields](docs/research/RECONSTRUCTION_NOTES.md#pause-party-status), [bitmap transitions and spring workspace](docs/research/RECONSTRUCTION_NOTES.md#pause-party-bitmap-transitions), [warning modes, threshold fixtures and lifetime checks](docs/research/RECONSTRUCTION_NOTES.md#pause-low-hp-warnings) |
@@ -144,6 +145,10 @@ or counting it; historical `EXACT` records are only discovery leads.
    Preserve verified interior data aliases and native table strides. Task payloads
    can reuse one offset for different phases; model that reuse explicitly and
    check every transition's initialization before giving the field one meaning.
+   A child and its parent can also interpret the same pointer offset differently.
+   Give owner, panel and child roles explicit views or a named union; verify the
+   creator's links and each live allocation instead of applying one layout to
+   every object in the chain.
    For a view based at an indexed interior address, check alignment and prove
    `view_offset + sizeof(view) <= allocation_size` for every valid index.
    Preserve whether native addressing applies the stride before the fixed field
@@ -249,6 +254,9 @@ compatible snapshots. Read their arguments and
 - Reuse tested routes with focused checks for the current functions and required
   helpers. The driver inserts one released frame after every action. Bound entry,
   assert that the target dispatch ran, and confirm the final scene from live state.
+  Inspect creation predicates before choosing a route: adjacent menu categories
+  can create different callbacks. Derive child counts from the creator's loops
+  and reconcile them with distinct task lifetimes, not just callback totals.
   A missed route is a coverage gap; do not remove its assertion to obtain a pass.
   Check the save's actual entry conditions first. For example, a fully healed
   party can prevent a healing item's recipient-selection path. Use another
@@ -308,6 +316,9 @@ compatible snapshots. Read their arguments and
   Derive display engine, BG layer and tilemap buffer separately; a buffer index
   does not identify the main or sub screen. Verify both writes in a register
   clear-then-set operation, even when the final register value would be identical.
+  For text, distinguish the saved item ID, name ID and description ID, and the
+  graphics allocation's offset, reserved size and actual transfer extent. Check
+  live lookup records against the native table and preserve its entry stride.
   Decode each hooked store's effective address, including shifted register
   indices, and reject unsupported forms. Check write-only BG scroll registers
   through the ordered stores rather than expecting readable register values.
@@ -317,12 +328,19 @@ compatible snapshots. Read their arguments and
   Retain surrounding controller graphics checks and route captures where needed.
   Document the checked ranges and any sampling. Speed up host-side inspection
   only when the same expected results and assertions are preserved.
+  If a renderer or animation helper remains observational, accept its writes
+  only within explicitly bounded ranges at its return. Continue independently
+  checking the caller's decisions, arguments, stores and surrounding memory;
+  do not replace the entire expected state with a fresh snapshot.
 - Record per-function/branch counts, ROM/save/state hashes, inputs and explicit
   limits. Separate ordinary routes from RAM fixtures and document restoration.
   For a per-call fixture, preserve the exact bytes, edit only at a guarded live
   boundary, verify the expected outputs, then restore at the guarded return
   boundary before the caller resumes. Provide cleanup on failure. For a fixture
   spanning navigation, specify and verify its later restoration boundary too.
+  Restoring the input alone may leave induced state behind, such as a cleared
+  readiness flag. Define which induced outputs must also be restored, check them
+  before restoration, and record the restored bytes separately from natural writes.
   A temporary removal-flag fixture proves the marking branch; a later ordinary
   group cleanup is separate evidence of release. Do not attribute it to a flag
   that was already restored. Test zero, below, equal and above a threshold where
@@ -345,6 +363,9 @@ compatible snapshots. Read their arguments and
   Associate every route with the exact probe source/version that produced it,
   including generated or composed copies. Preserve separate variants when the
   probe changes between routes; the current script cannot stand in for all of them.
+  Identify reports by a unique run tag; one route can have different saves or
+  fixtures. Derive the common input prefix explicitly when comparing different
+  routes, rather than assuming their full action lists match.
 - Confirm visible scene readiness as well as overlay ownership. Field code can
   already be loaded while a fade still renders black. Use a bounded neutral-frame
   extension and inspect the final capture before claiming a visible return.
@@ -355,6 +376,10 @@ compatible snapshots. Read their arguments and
   for bounded neutral frames. Keep failures and rerun corrected oracles; do not
   discard pending calls or change matching game code to satisfy a faulty model.
   Check whether the active probe imports its editable body or a composed copy.
+  When composing probes, use a unique name for the previous callback wrapper;
+  reusing an inherited global name can make it call itself recursively. Assert
+  replacement counts and name uniqueness, inspect the generated source, and
+  preserve the failed version before correcting and rerunning it.
 
 An optional private fast reader moves the existing DeSmuME byte-read loop into
 host C without changing accesses. Before reuse, validate it against the original
