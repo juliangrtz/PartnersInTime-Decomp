@@ -67,7 +67,7 @@ typedef struct BattleModelDestroyVTable {
 } BattleModelDestroyVTable;
 
 void OS_Terminate(void);
-void func_ov002_0206f1b8(BattleModel *model);
+void BattleModel_StopPrimary(BattleModel *model);
 void func_ov002_020bc73c(BattleSceneObject *object, int value);
 void func_ov002_020baf90(BattleSceneObject *object, int value);
 void func_ov002_020baf64(BattleSceneObject *object, int value);
@@ -507,7 +507,7 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
         BattleSceneObject *object = BattleSceneObject_GetById(actor_id);
         BattleModel *model = object->primary_model;
         if (model != 0) {
-            func_ov002_0206f1b8(model);
+            BattleModel_StopPrimary(model);
             object->primary_model->flags &= ~0x100;
             model = object->primary_model;
             if (model != 0) {

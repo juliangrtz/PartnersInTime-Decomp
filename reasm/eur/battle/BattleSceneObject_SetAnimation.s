@@ -16,9 +16,9 @@
 .extern BattleRenderModel_Init
 .extern GameHeap_New
 .extern func_ov002_020696f4
-.extern func_ov002_0206f1b8
+.extern BattleModel_StopPrimary
 .extern func_ov002_0206f1f0
-.extern func_ov002_0206f384
+.extern BattleModel_StopAlternate
 .extern gBattleContext
 
 .global BattleSceneObject_SetAnimation
@@ -462,7 +462,7 @@ BattleSceneObject_SetAnimation:
     ldr r0, [sb, #0xC4]
     cmp r0, #0
     beq .L_channel_selected
-    bl func_ov002_0206f384
+    bl BattleModel_StopAlternate
     b .L_channel_selected
 .L_update_secondary_channel:
     mov r0, sb
@@ -490,7 +490,7 @@ BattleSceneObject_SetAnimation:
     popeq {r4, r5, r6, r7, r8, sb, sl, fp, lr}
     bxeq lr
     mov r0, r6
-    bl func_ov002_0206f1b8
+    bl BattleModel_StopPrimary
     ldr r0, [r6, #0x7C]
     add sp, sp, #4
     bic r0, r0, #0x100
@@ -518,7 +518,7 @@ BattleSceneObject_SetAnimation:
     cmp r6, #0
     beq .L_ensure_model
     mov r0, r6
-    bl func_ov002_0206f1b8
+    bl BattleModel_StopPrimary
     ldr r0, [r6, #0x7C]
     bic r0, r0, #0x100
     str r0, [r6, #0x7C]

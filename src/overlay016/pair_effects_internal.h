@@ -97,8 +97,8 @@ void Overlay16Participant_PositionEffect(Overlay16Participant *participant);
 
 void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 void func_ov002_02071938(BattleSceneObject *, BattleSceneObject *, int);
-void func_ov002_0206f1b8(BattleModel *);
-void func_ov002_0206f384(BattleModel *);
+void BattleModel_StopPrimary(BattleModel *);
+void BattleModel_StopAlternate(BattleModel *);
 int BattleMotion_StartPursuit(BattleSceneObject *, int, int, BattleSceneObject *, int);
 
 void Overlay16PairEffect_Initialize(Overlay16PairEffect *effect, int primary_resource,

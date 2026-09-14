@@ -881,3 +881,7 @@ src/battle/battle_dialogue_control.cpp
 src/battle/battle_dialogue_destroy.cpp
 src/battle/battle_sprite_grid_capture.c
 src/battle/battle_scene_render_control.c
+src/battle/battle_model_stop_primary.cpp
+src/battle/battle_model_stop_alternate.cpp
+src/battle/battle_model_start_animation.cpp
+src/battle/battle_model_primary_descriptor.cpp

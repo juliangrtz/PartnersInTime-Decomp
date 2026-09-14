@@ -19,13 +19,13 @@ void Overlay16PairEffect_Initialize(Overlay16PairEffect *effect, int primary_res
 void Overlay16PairEffect_DestroyModels(Overlay16PairEffect *effect)
 {
     if (effect->primary.primary_model) {
-        func_ov002_0206f1b8(effect->primary.primary_model);
+        BattleModel_StopPrimary(effect->primary.primary_model);
         if (effect->primary.primary_model)
             effect->primary.primary_model->vtable->unknown_014(effect->primary.primary_model);
         effect->primary.primary_model = 0;
     }
     if (effect->secondary.alternate_model) {
-        func_ov002_0206f384(effect->secondary.alternate_model);
+        BattleModel_StopAlternate(effect->secondary.alternate_model);
         if (effect->secondary.alternate_model)
             effect->secondary.alternate_model->vtable->unknown_014(effect->secondary.alternate_model);
         effect->secondary.alternate_model = 0;

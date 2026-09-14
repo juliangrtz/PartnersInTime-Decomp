@@ -602,6 +602,9 @@ BattleSceneObject *BattleSceneObject_GetById(u32 object_id);
 /* Reuses a matching slot or reserves aligned state storage in the resource arena. */
 BattleSceneRenderOverride *BattleSceneObject_ReserveRenderOverride(
     BattleSceneObject *object, u32 state_size);
+void BattleModel_StopPrimary(BattleModel *model);
+void BattleModel_StopAlternate(BattleModel *model);
+int BattleModel_StartAnimation(BattleModel *model, int animation_id, int argument);
 int BattleModel_SetAlpha(BattleModel *model, u8 alpha, u8 mode);
 void BattleModel_AppendRenderList(BattleModel *model);
 void BattleModel_UnlinkRenderList(BattleModel *model);

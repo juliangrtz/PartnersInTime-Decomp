@@ -1183,9 +1183,9 @@
         "BattleRenderModel_Init": "0x02010634",
         "GameHeap_New": "0x02029BE0",
         "func_ov002_020696f4": "0x020696F4",
-        "func_ov002_0206f1b8": "0x0206F1B8",
+        "BattleModel_StopPrimary": "0x0206F1B8",
         "func_ov002_0206f1f0": "0x0206F1F0",
-        "func_ov002_0206f384": "0x0206F384",
+        "BattleModel_StopAlternate": "0x0206F384",
         "gBattleContext": "0x020C0718"
       },
       "expected_sha256": "8c3882394ff3468e7894c1460e3ffa4ea7a33a236d665acf31299453e285887f"

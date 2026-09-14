@@ -930,6 +930,35 @@ remains unestablished. Earlier entry/idle probes reached no targets; V3 used an
 incorrect descriptor address despite obtaining the same rewind. Keep those
 attempts as historical artifacts, not accepted coverage. The accepted run is V4.
 
+### Battle model stop, animation and descriptor helpers
+
+The primary and alternate model stop helpers call their renderer's stop/release
+methods, then clear animation-active bit 8. The alternate path also unlinks a
+non-null sprite palette. `BattleModel_StartAnimation` clears trigger bit 2,
+passes the low eight bits of the animation ID and signed low sixteen bits of the
+argument to the virtual animation method, and forwards its result.
+
+[Primary descriptor setup](../../src/battle/battle_model_primary_descriptor.cpp)
+initializes a 96-byte work record once: it copies the shared 88-byte renderer
+descriptor, adjusts screen/allocation flags, clears two state bytes and the
+controller pointer, and retains the two intervening padding bytes. The ready
+byte makes later calls return zero without changing the record.
+
+Private `eur_battle_model_controls/evidence_brat50_round_v1.json` verifies all
+four helpers during the same 2,820-frame Shrooboid Brat replay: 358 calls in total.
+The existing capture-effect checks also pass, with identical screenshots.
+Wrapper flags, argument widths, ordered calls, palette unlinking and descriptor
+contents are independent checks. Virtual renderer effects on the 128-byte model
+prefix are observations at call returns. All live descriptor calls find it ready.
+`isolated_v1.json` passes 25 copied-RAM cases, including cold initialization,
+nonzero ready bytes, animation truncation and null/single/head/middle/tail palettes
+on both screens. Virtual entries use native no-op callbacks to isolate wrapper
+contracts; palette unlink, flag update and copy helpers execute normally. Checks
+cover all mapped memory except 256 bytes of call-stack scratch, restored SP and
+callee-saved registers; non-initializer nonstack writes are also checked in order.
+These fixtures add no navigation or renderer-implementation coverage. All 104
+original saves remain unchanged.
+
 ### Battle render-override reservation and mesh queries
 
 [Render control](../../src/battle/battle_scene_render_control.c) reconstructs

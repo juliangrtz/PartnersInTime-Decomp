@@ -6,7 +6,7 @@ extern s8 data_ov014_020c6180[][4], data_ov014_020c6204[];
 extern int Overlay14Attack_PickTarget(int);
 extern void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 extern void func_0200940c(BattleModel *, s16);
-extern void func_ov002_0206f1b8(BattleModel *);
+extern void BattleModel_StopPrimary(BattleModel *);
 extern void Overlay10Motion_StopAll(BattleSceneObject *);
 extern void func_ov002_0206b5c0(BattleImpactParticlePayload *);
 int Overlay14Attack_HasTarget(void)
@@ -120,7 +120,7 @@ void Overlay14Projectile_Initialize(Overlay14Projectile *projectile, int resourc
 void Overlay14Projectile_ReleaseModel(BattleSceneObject *object)
 {
     if (object->primary_model) {
-        func_ov002_0206f1b8(object->primary_model);
+        BattleModel_StopPrimary(object->primary_model);
         if (object->primary_model)
             object->primary_model->unknown_14();
         object->primary_model = 0;

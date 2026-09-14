@@ -22,7 +22,7 @@ void Overlay17Participant_Initialize(Overlay17Participant *participant, int inde
 void Overlay17Participant_ReleaseModel(Overlay17Participant *participant)
 {
     if (participant->object.primary_model) {
-        func_ov002_0206f1b8(participant->object.primary_model);
+        BattleModel_StopPrimary(participant->object.primary_model);
         if (participant->object.primary_model)
             participant->object.primary_model->unknown_14();
         participant->object.primary_model = 0;

@@ -19,8 +19,8 @@ void *func_02036650(void);
 void func_02036988(vu32 *, int, int, int, int);
 void func_ov002_0206a008(u8 *);
 void func_ov002_0206a184(u8 *);
-void func_ov002_0206f384(BattleModel *);
-void func_ov002_0206f1b8(BattleModel *);
+void BattleModel_StopAlternate(BattleModel *);
+void BattleModel_StopPrimary(BattleModel *);
 void *BattleTransfer_EnqueueBeforeMapping(int (*)(void *), void *, int, int);
 extern GameSessionTask *data_02059ffc;
 extern int data_ov002_020c071c;
@@ -114,11 +114,11 @@ extern "C" void *BattleMain_Destroy(void *task)
         }
         for (int i = 0; i < 68; ++i) {
             if (FRAME->scene[i].alternate_model) {
-                func_ov002_0206f384(FRAME->scene[i].alternate_model);
+                BattleModel_StopAlternate(FRAME->scene[i].alternate_model);
                 DeleteModel(FRAME->scene[i].alternate_model);
             }
             if (FRAME->scene[i].primary_model) {
-                func_ov002_0206f1b8(FRAME->scene[i].primary_model);
+                BattleModel_StopPrimary(FRAME->scene[i].primary_model);
                 DeleteModel(FRAME->scene[i].primary_model);
             }
         }

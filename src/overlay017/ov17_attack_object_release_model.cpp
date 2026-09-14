@@ -65,7 +65,7 @@ void Overlay17AttackObject_ReleaseModel(Overlay17AttackObject *attack_object)
 {
     attack_object->flag_bits.state = 0;
     if (attack_object->object.primary_model) {
-        func_ov002_0206f1b8(attack_object->object.primary_model);
+        BattleModel_StopPrimary(attack_object->object.primary_model);
         if (attack_object->object.primary_model)
             attack_object->object.primary_model->unknown_14();
         attack_object->object.primary_model = 0;

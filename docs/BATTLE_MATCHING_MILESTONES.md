@@ -8181,3 +8181,25 @@ reservation and the prior capture effect over 2,820 frames, with identical
 screenshots. isolated_v1.json passes 26 alignment/reuse/ownership and mesh-query
 cases, each checking full mapped memory and ordered writes. Mesh queries and
 reuse branches have isolated coverage only. All 104 saves are unchanged.
+
+
+## Battle model cleanup, animation and descriptor setup - 2026-09-14
+
+Four functions add 348 matching C++ bytes: primary-model stop (56),
+alternate-model stop (72), animation start (56) and descriptor initialization
+(164). Total: 752,532 / 1,563,700 matching C/C++ bytes (48.1251%). Symbolic ASM
+remains separate. Existing C/C++ callers and native assembly references use the
+shared helper names.
+
+All seven build checks pass, including 81 tests; both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Private
+eur_battle_model_controls/evidence_brat50_round_v1.json passes 2,820 frames:
+288 animation starts, 40 alternate stops, nine primary stops and 21 descriptor
+checks. Screenshots match the earlier boss replay. isolated_v1.json passes
+25 cases covering argument truncation, flag states, palette-list positions on
+both screens and descriptor initialization. Cold descriptor initialization has
+isolated coverage only; virtual renderer internals are observed at call returns.
+The isolated checks substitute native no-op virtual callbacks, check all mapped
+memory except 256 bytes of call-stack scratch, and preserve SP/register checks.
+All 104 original saves are unchanged. The first build's native relink failed on
+stale symbolic-assembly names; the complete V2 build passes after their update.

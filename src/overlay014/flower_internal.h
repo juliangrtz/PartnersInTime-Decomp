@@ -49,7 +49,7 @@ extern u8 data_ov014_020c61c8[], data_ov014_020c61c9[], data_ov014_020c61ca[];
 extern int data_ov014_020c6198[4];
 extern u32 data_ov014_020c6130[], data_ov014_020c6138[], data_ov014_020c6168[];
 extern s16 data_ov014_020c614c[][3];
-void func_ov002_0206f1b8(BattleModel *);
+void BattleModel_StopPrimary(BattleModel *);
 void BattleFeedback_LoadResource();
 void BattleParty_RestoreIdleAnimation(Overlay10ActionActor *, BattleSceneObject *);
 int func_ov014_020c2bb4(BattleSceneObject *, int);

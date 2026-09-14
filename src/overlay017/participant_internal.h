@@ -5,7 +5,7 @@
 extern "C" {
 #include <game/battle_actor.h>
 #include <game/overlay010_motion.h>
-extern void func_ov002_0206f1b8(BattleModel *);
+extern void BattleModel_StopPrimary(BattleModel *);
 extern void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 extern void func_0200940c(BattleModel *, int);
 extern int func_ov002_02072004(BattleSceneObject *, int, int, int, int);

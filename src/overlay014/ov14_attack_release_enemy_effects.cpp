@@ -27,7 +27,7 @@ void Overlay14Attack_ReleaseEnemyEffects()
         BattleSceneObject *object = work->effects[i];
         for (int j = 0; j < 3; ++j, ++object) {
             if (object->primary_model) {
-                func_ov002_0206f1b8(object->primary_model);
+                BattleModel_StopPrimary(object->primary_model);
                 if (object->primary_model)
                     object->primary_model->unknown_14();
                 object->primary_model = 0;

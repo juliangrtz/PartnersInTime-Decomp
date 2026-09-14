@@ -529,3 +529,15 @@ src/battle/battle_sprite_grid_capture.c:
 
 src/battle/battle_scene_render_control.c:
     .text       start:0x020bb1c4 end:0x020bb2d4
+
+src/battle/battle_model_stop_primary.cpp:
+    .text       start:0x0206f1b8 end:0x0206f1f0
+
+src/battle/battle_model_stop_alternate.cpp:
+    .text       start:0x0206f384 end:0x0206f3cc
+
+src/battle/battle_model_start_animation.cpp:
+    .text       start:0x020be3b0 end:0x020be3e8
+
+src/battle/battle_model_primary_descriptor.cpp:
+    .text       start:0x0206f2e0 end:0x0206f384

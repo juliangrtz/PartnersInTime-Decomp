@@ -9,11 +9,11 @@ extern void *GameHeap_New(u32 size, u32 heap_id, const void *allocator,
 extern BattleModel *BattleRenderModel_Init(BattleModel *model);
 extern void func_ov002_020696f4(BattleSceneObject *object, int animation_id,
                                 int argument_2);
-extern void func_ov002_0206f1b8(BattleModel *model);
+extern void BattleModel_StopPrimary(BattleModel *model);
 extern void func_ov002_0206f1f0(BattleModel *model,
                                 BattleSceneResource *resource,
                                 u32 component_offset);
-extern void func_ov002_0206f384(BattleModel *model);
+extern void BattleModel_StopAlternate(BattleModel *model);
 extern const char data_ov002_020bf718[];
 }
 
@@ -267,7 +267,7 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
             if (object->flags.bits.use_alternate_model) {
                 object->flags.bits.use_alternate_model = 0;
                 if (object->alternate_model != 0) {
-                    func_ov002_0206f384(object->alternate_model);
+                    BattleModel_StopAlternate(object->alternate_model);
                 }
             }
         } else {
@@ -278,7 +278,7 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
             if (animation_id < 0) {
                 object->loaded_resource_id = object->resource->resource_id;
                 if (model != 0 && model->flag_bits.animation_active) {
-                    func_ov002_0206f1b8(model);
+                    BattleModel_StopPrimary(model);
                     model->flags &= ~BATTLE_MODEL_FLAG_ANIMATION_ACTIVE;
                 }
                 return;
@@ -301,7 +301,7 @@ void BattleSceneObject_SetAnimation(BattleSceneObject *object,
                 if ((u32)object->loaded_resource_id != resource_id) {
                     object->loaded_resource_id = resource_id;
                     if (model != 0) {
-                        func_ov002_0206f1b8(model);
+                        BattleModel_StopPrimary(model);
                         model->flags &= ~BATTLE_MODEL_FLAG_ANIMATION_ACTIVE;
                     }
                 }
