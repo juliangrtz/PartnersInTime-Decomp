@@ -14,6 +14,23 @@ Start with [checkout and handoff](#start-in-the-correct-checkout), then use
 [runtime checks](#runtime-verification) and [publication](#documentation-git-and-handoff)
 for the current task.
 
+## Session checklist
+
+1. Read the latest request and stopping point. Use the handoff to recover work,
+   then verify it; do not let an older continuation instruction start a code
+   batch during a documentation or research task.
+2. Enter the active checkout and inspect the branch, remotes, working tree and
+   index. Record unrelated dirty paths before editing. Preserve their raw bytes
+   as well as staged entries; normalized Git diffs can hide line-ending changes.
+3. Read current progress and the relevant source, metadata and research sections.
+   For reconstruction, identify one coherent group of genuinely unlinked ranges
+   and a usable runtime route before investing in a candidate.
+4. Establish what success means for this task: documentation checks, a tool test,
+   or full native matching, integration and focused runtime coverage. Complete
+   the applicable checks; record failures and untested paths explicitly.
+5. Review and publish only verified task-owned changes. Update the private
+   handoff with unfinished work and evidence, then stop at the requested boundary.
+
 ## Priorities and scope
 
 - Follow the latest user request and requested stopping point. Research or
@@ -46,6 +63,7 @@ Before editing:
 ```powershell
 Set-Location -LiteralPath 'C:\Users\Julian\Desktop\PartnersInTime-Decomp'
 git status --short
+git diff --cached --name-only
 git branch --show-current
 git log -5 --oneline
 git remote -v
@@ -76,7 +94,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Source actually used in the ROM | `config/eur/arm9/linked_sources.txt` |
 | Boundaries, load addresses and references | Resident `config/eur/arm9/{symbols,delinks,relocs}.txt`; overlays `config/eur/arm9/overlays/ovNNN/`; candidate object symbols and relocations |
 | Source organization and subsystem roles | [Source policy](docs/DECOMPILATION_STYLE.md), [overlay map](docs/research/OVERLAY_MAP.md), [battle map](docs/research/BATTLE_MAP.md) |
-| VMs | [Script VM semantics](docs/research/SCRIPT_VM_SEMANTICS.md), [Scene VM matching](docs/research/SCENE_VM_MATCHING.md) |
+| VMs | [VM maintenance](#vm-maintenance), [script VM semantics](docs/research/SCRIPT_VM_SEMANTICS.md), [Scene VM matching](docs/research/SCENE_VM_MATCHING.md) |
 | Native inspection and relinking | [IDA guide](tools/ida/README.md), [reassembly plan](docs/REASSEMBLY_PLAN.md) |
 | Emulator tooling and navigation | [Runtime guide](docs/research/RUNTIME_ANALYSIS.md), [tested routes](docs/research/RECONSTRUCTION_NOTES.md#runtime-verification) |
 | RAM roots, object extents and graphics ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference) |
@@ -87,6 +105,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | Equipment list models | [Equipped-item markers](docs/research/RECONSTRUCTION_NOTES.md#pause-equipped-item-markers), [empty-equipment row sprites and ResourceA lifetime](docs/research/RECONSTRUCTION_NOTES.md#pause-empty-equipment-row-sprites) |
 | Category and list selection sprites | [Task layouts, Q12 coordinates, model attachments and tested scrolling routes](docs/research/RECONSTRUCTION_NOTES.md#pause-selection-sprites) |
 | Item-selection labels and quantities | [Label strips and screen offsets](docs/research/RECONSTRUCTION_NOTES.md#pause-item-selection-label-sprites), [quantity digits, hidden tens and boundary fixtures](docs/research/RECONSTRUCTION_NOTES.md#pause-item-selection-quantity-sprites) |
+| Badge descriptions | [Panel/strip ownership, description lookup, graphics extents and suppression fixtures](docs/research/RECONSTRUCTION_NOTES.md#pause-badge-description-panels) |
 | Equipment member-selection arrows | [Heading-switch inputs, failed routes and verified updater](docs/research/RECONSTRUCTION_NOTES.md#pause-member-selection-arrows) |
 | Equipment stat comparisons | [Save-field addressing, cached rows, numeric helper ABI and runtime counts](docs/research/RECONSTRUCTION_NOTES.md#pause-equipment-stat-comparison-rows) |
 | Party status and low-HP warnings | [Bitmap and status fields](docs/research/RECONSTRUCTION_NOTES.md#pause-party-status), [bitmap transitions and spring workspace](docs/research/RECONSTRUCTION_NOTES.md#pause-party-bitmap-transitions), [warning modes, threshold fixtures and lifetime checks](docs/research/RECONSTRUCTION_NOTES.md#pause-low-hp-warnings) |
@@ -106,6 +125,11 @@ If absent, establish the needed evidence with public tools and user-supplied
 ROM/saves. Current native bytes, source, metadata and fresh checks take precedence
 over historical notes. Check existing declarations before accepting a handoff's
 claim that a shared prototype needs changing.
+
+Use `src/game/` for resident game helpers, `src/nitro/` for SDK code,
+`src/field/` and `src/battle/` for those subsystems, `src/overlayNNN/` for other
+overlay code, and `include/game/` for shared game interfaces. Private pseudocode
+folder names are not authoritative source paths or component identities.
 
 When checking candidate inventories, compare component and address ranges against
 the current linked manifest and delinks. Accept variable whitespace in metadata;
@@ -132,6 +156,9 @@ or counting it; historical `EXACT` records are only discovery leads.
    call is not an argument unless the next callee consumes its incoming value.
    A later mask or narrow store also does not establish a narrow parameter;
    a full-word stack load followed by truncation may require a full-width type.
+   A caller ignoring `r0` does not establish a `void` return type. Check the
+   callee's return paths and consumers before correcting a shared declaration;
+   preserve the actual helper instead of substituting a similarly named API.
    Derive display-coordinate offsets from the native drawing code; physical
    screen dimensions do not establish the engine's coordinate convention.
 3. Preserve load/store order, short-circuit calls, possible aliasing and accesses
@@ -191,6 +218,29 @@ or counting it; historical `EXACT` records are only discovery leads.
 See the reference's compiler examples before attempting syntax or declaration
 changes. Separate switch arms, initialization order, bitfields and pointer
 increments can explain a specific mismatch; they are not a search space to enumerate.
+
+## VM maintenance
+
+The Field, Battle, Common Battle and Scene dispatchers are already linked and
+byte-identical. Check their current source and manifest entries before treating
+old VM requests or private near-matches as unfinished work. Dispatcher completion
+does not establish that all its callees are reconstructed or that every script
+path has runtime coverage.
+
+The resident interpreter serves different overlay-specific descriptor tables,
+variable namespaces and script containers. Consult the
+[VM reference](docs/research/SCRIPT_VM_SEMANTICS.md) for the actual instance;
+do not transfer an opcode's argument contract from one VM to another. Preserve
+instruction-pointer advancement, operand decoding, yield/rewind behavior and
+the order of variable reads and writes when changing handlers.
+
+The Scene dispatcher's opcode `0x04E` uses a documented 16-instruction inline-ASM
+height calculation. The remaining C-only discrepancy was a demonstrated compiler
+conversion schedule. Read the [compiler evidence](docs/research/SCENE_VM_MATCHING.md)
+before revisiting it. If changing that block, run
+`python tools/verify_scene_alignment.py --negative-control` in addition to the
+normal matching checks. Its symbolic proof covers the modeled block; it is not
+a proof of the whole VM or of source-language portability.
 
 ## Build and verification
 
