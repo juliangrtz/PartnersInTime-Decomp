@@ -17,10 +17,12 @@ extern "C" {
 #include <game/battle_scene.h>
 #include <game/battle_script_properties.h>
 #include <game/battle_status.h>
+#include <game/battle_vm_motion.h>
 #include <game/item.h>
 #include <game/save_data.h>
 #include <nitro/fx.h>
 }
+#include "battle_vm_operands.h"
 
 /*
  * Complete high-level reconstruction of the battle-specific command range.
@@ -35,12 +37,6 @@ extern s32 _s32_div_f(s32 numerator, s32 denominator);
 extern int func_ov002_020789ec(ScriptVm *vm, ScriptVmState *state,
                                ScriptVmCommand *command, int write_result);
 extern int func_ov002_020787f0(ScriptVm *vm, ScriptVmState *state,
-                               ScriptVmCommand *command, int write_result);
-extern int func_ov002_020786d0(ScriptVm *vm, ScriptVmState *state,
-                               ScriptVmCommand *command, int write_result);
-extern int func_ov002_02078580(ScriptVm *vm, ScriptVmState *state,
-                               ScriptVmCommand *command, int write_result);
-extern int func_ov002_02078460(ScriptVm *vm, ScriptVmState *state,
                                ScriptVmCommand *command, int write_result);
 extern void func_ov002_020a3928(BattleSceneObject *object, int channel_index,
                                 int x, int y, int z, int duration,
@@ -367,21 +363,6 @@ typedef struct BattleVmPosition {
     s16 y;
     s16 z;
 } BattleVmPosition;
-
-static inline u32 BattleVm_PackHalfwords(s32 low, s32 high) {
-    return ((u32)low & 0xFFFF) | ((u32)high << 16);
-}
-
-static inline void BattleVm_DecodeFixedArgument(ScriptVmCommand *command,
-                                         int argument_index) {
-    if ((command->argument_modes & (1 << argument_index)) == 0) {
-        command->arguments[argument_index] =
-            (s32)BattleVm_PackHalfwords(
-                command->arguments[argument_index],
-                command->arguments[argument_index + 1]) /
-            16;
-    }
-}
 
 static inline void BattleVm_WriteResult(ScriptVm *vm, ScriptVmState *state,
                                  ScriptVmCommand *command, s32 value) {
@@ -1227,22 +1208,22 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         func_ov002_020787f0(vm, state, command, 1);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_START_DIRECTIONAL_KINEMATIC_A:
-        func_ov002_020786d0(vm, state, command, 0);
+        BattleVm_StartMotionWithPeakDistance(vm, state, command, 0);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_START_DIRECTIONAL_KINEMATIC_B:
-        func_ov002_02078580(vm, state, command, 0);
+        BattleVm_StartScaledAcceleratedMotion(vm, state, command, 0);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_START_DIRECTIONAL_BALLISTIC:
-        func_ov002_02078460(vm, state, command, 0);
+        BattleVm_StartBallisticMotion(vm, state, command, 0);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_START_DIRECTIONAL_KINEMATIC_A_GET_DURATION:
-        func_ov002_020786d0(vm, state, command, 1);
+        BattleVm_StartMotionWithPeakDistance(vm, state, command, 1);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_START_DIRECTIONAL_KINEMATIC_B_GET_DURATION:
-        func_ov002_02078580(vm, state, command, 1);
+        BattleVm_StartScaledAcceleratedMotion(vm, state, command, 1);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_START_DIRECTIONAL_BALLISTIC_GET_DURATION:
-        func_ov002_02078460(vm, state, command, 1);
+        BattleVm_StartBallisticMotion(vm, state, command, 1);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_VELOCITY_MOTION:

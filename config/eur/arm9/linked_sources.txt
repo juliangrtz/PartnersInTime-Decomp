@@ -35,6 +35,7 @@ src/battle/battle_vm_variables.c
 src/battle/battle_vm_helpers.c
 src/battle/battle_vm_common_dispatch.c
 src/battle/battle_vm_dispatch.cpp
+src/battle/battle_vm_motion.cpp
 src/battle/battle_scene_animation.cpp
 src/battle/battle_scene_movement_dispatch.c
 src/battle/battle_entity_resources.c

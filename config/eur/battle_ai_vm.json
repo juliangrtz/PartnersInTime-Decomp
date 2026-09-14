@@ -1079,52 +1079,52 @@
       "evidence": "BattleAI_DispatchOpcode case 0x061; func_ov002_020787f0; BattleSceneObject_MoveTo"
     },
     "98": {
-      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_or_speed", "parameter_fixed_low_or_variable", "parameter_fixed_high", "unused_9"],
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "peak_distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "prefer_longer_duration"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts directional kinematic motion using the first solver family and discards its computed duration",
-      "evidence": "BattleAI_DispatchOpcode case 0x062; func_ov002_020786d0; func_ov002_020a404c"
+      "evidence": "BattleAI_DispatchOpcode case 0x062; BattleVm_StartMotionWithPeakDistance; BattleSceneObject_StartMotionWithPeakDistance"
     },
     "99": {
-      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "parameter_5", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high", "unused_10"],
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "acceleration_fixed_low_or_variable", "acceleration_fixed_high", "prefer_longer_duration"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts directional kinematic motion using the second solver family and discards its computed duration",
-      "evidence": "BattleAI_DispatchOpcode case 0x063; func_ov002_02078580; func_ov002_020a40d4"
+      "evidence": "BattleAI_DispatchOpcode case 0x063; BattleVm_StartScaledAcceleratedMotion; BattleSceneObject_StartScaledAcceleratedMotion"
     },
     "100": {
-      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "parameter_fixed_low_or_variable", "parameter_fixed_high", "duration_or_mode", "unused_9"],
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "acceleration_fixed_low_or_variable", "acceleration_fixed_high", "signed_extent", "prefer_longer_duration"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts a directional ballistic motion and discards its computed duration",
-      "evidence": "BattleAI_DispatchOpcode case 0x064; func_ov002_02078460; BattleMotion_StartBallistic"
+      "evidence": "BattleAI_DispatchOpcode case 0x064; BattleVm_StartBallisticMotion; BattleMotion_StartBallistic"
     },
     "101": {
-      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "duration_or_speed", "parameter_fixed_low_or_variable", "parameter_fixed_high", "unused_9"],
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "peak_distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "prefer_longer_duration"],
       "result": "solved_duration",
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "performs the same directional kinematic setup as opcode 0x062 and returns its computed duration",
-      "evidence": "BattleAI_DispatchOpcode case 0x065; func_ov002_020786d0; func_ov002_020a404c"
+      "evidence": "BattleAI_DispatchOpcode case 0x065; BattleVm_StartMotionWithPeakDistance; BattleSceneObject_StartMotionWithPeakDistance"
     },
     "102": {
-      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "parameter_5", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high", "unused_10"],
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "acceleration_fixed_low_or_variable", "acceleration_fixed_high", "prefer_longer_duration"],
       "result": "solved_duration",
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "performs the same directional kinematic setup as opcode 0x063 and returns its computed duration",
-      "evidence": "BattleAI_DispatchOpcode case 0x066; func_ov002_02078580; func_ov002_020a40d4"
+      "evidence": "BattleAI_DispatchOpcode case 0x066; BattleVm_StartScaledAcceleratedMotion; BattleSceneObject_StartScaledAcceleratedMotion"
     },
     "103": {
-      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "parameter_fixed_low_or_variable", "parameter_fixed_high", "duration_or_mode", "unused_9"],
+      "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "acceleration_fixed_low_or_variable", "acceleration_fixed_high", "signed_extent", "prefer_longer_duration"],
       "result": "solved_duration",
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "performs the same directional ballistic setup as opcode 0x064 and returns its computed duration",
-      "evidence": "BattleAI_DispatchOpcode case 0x067; func_ov002_02078460; BattleMotion_StartBallistic"
+      "evidence": "BattleAI_DispatchOpcode case 0x067; BattleVm_StartBallisticMotion; BattleMotion_StartBallistic"
     },
     "117": {
       "arguments": ["actor_object_id"],

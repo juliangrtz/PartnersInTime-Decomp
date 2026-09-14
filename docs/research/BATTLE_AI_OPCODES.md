@@ -61,12 +61,12 @@ word loads observed from the command-record register (`r5`).
 | `0x5F` | `0x0207B52C` | — | — | `func_ov002_020787f0` |
 | `0x60` | `0x0207B544` | — | — | `func_ov002_020789ec` |
 | `0x61` | `0x0207B55C` | — | — | `func_ov002_020787f0` |
-| `0x62` | `0x0207B574` | — | — | `func_ov002_020786d0` |
-| `0x63` | `0x0207B58C` | — | — | `func_ov002_02078580` |
-| `0x64` | `0x0207B5A4` | — | — | `func_ov002_02078460` |
-| `0x65` | `0x0207B5BC` | — | — | `func_ov002_020786d0` |
-| `0x66` | `0x0207B5D4` | — | — | `func_ov002_02078580` |
-| `0x67` | `0x0207B5EC` | — | — | `func_ov002_02078460` |
+| `0x62` | `0x0207B574` | — | — | `BattleVm_StartMotionWithPeakDistance` |
+| `0x63` | `0x0207B58C` | — | — | `BattleVm_StartScaledAcceleratedMotion` |
+| `0x64` | `0x0207B5A4` | — | — | `BattleVm_StartBallisticMotion` |
+| `0x65` | `0x0207B5BC` | — | — | `BattleVm_StartMotionWithPeakDistance` |
+| `0x66` | `0x0207B5D4` | — | — | `BattleVm_StartScaledAcceleratedMotion` |
+| `0x67` | `0x0207B5EC` | — | — | `BattleVm_StartBallisticMotion` |
 | `0x68` | `0x0207B604` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28` | `BattleSceneObject_GetById`, `BattleSceneObject_StartMotionWithVelocityForDuration` |
 | `0x69` | `0x0207B68C` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28` | `BattleSceneObject_GetById`, `BattleSceneObject_StartMotionWithAccelerationForDuration` |
 | `0x6A` | `0x0207B714` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28` | `BattleSceneObject_GetById`, `BattleSceneObject_StartAcceleratedMotionForDuration` |

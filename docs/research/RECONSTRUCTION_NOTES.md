@@ -19,6 +19,7 @@ ordinary gameplay accessibility or coverage of unexercised branches.
 - Shared sprite helpers: [OAM wrapper ABI and pooled initialization](#overlay-5-sprite-collection-and-initialization)
 - Battle exit: [transition dispatch and resource-slot selection](#battle-transition-dispatch-and-resource-slots)
 - Battle model animations: [shared track creation and Mix Flowers](#battle-model-animation-starts)
+- Battle VM motion: [directional operand decoding and live channel checks](#battle-vm-directional-motion)
 - Code-derived findings: [pause party status](#pause-party-status)
 - Pause transitions: [verified exit tasks](#pause-exit-tasks-and-transition-state),
   [projection and callback ABI](#pause-transition-projection-and-callback-abi),
@@ -764,6 +765,65 @@ and an all-null case on copied RAM. Each uses native ARM946 execution without
 stubs, checks every main-RAM and DTCM byte, ordered writes and preserved registers,
 and seeds nonzero table entries to expose preservation versus clearing. Neither
 this leaf setter nor these checks establishes subsequent rendering or model use.
+
+### Battle VM directional motion
+
+The [motion handlers](../../src/battle/battle_vm_motion.cpp) reconstruct three
+contiguous functions at `0x02078460..0x020787F0` (912 bytes): ballistic motion,
+scaled accelerated motion and motion solved from a peak distance. Their six
+Battle VM opcodes are `0x062..0x067`, with and without duration writeback.
+The [shared operand decoder](../../src/battle/battle_vm_operands.h) also serves
+the main dispatcher; both final objects remain byte-identical, including the
+full 19,168-byte dispatcher.
+
+Each handler resolves its object ID as an unsigned halfword, then conditionally
+combines literal operand pairs into a signed 32-bit value and divides by 16
+toward zero. The mode bit determines whether a decoded variable already supplies
+that value. Peak-distance motion decodes argument 7; ballistic motion decodes 6;
+scaled motion decodes 6 and 8 in that order. The getter precedes these mutations.
+The writer branches pass the native motion helper's duration to `VM_WriteVariable`.
+The schema names the recovered velocity, acceleration, distance and duration-choice
+operands; the last operand is a used halfword flag, not an unused field.
+Shared declarations preserve the handlers' void interface and the helper's
+integer result, without assigning a meaning to an incidental return register.
+
+Two private replays in `build/runtime/eur_battle_vm_directional/` cover all three:
+
+- `evidence_petey55_v1.json` starts from the controlled encounter checkpoint
+  produced by the model-table entry replay. Three pairs of Mario/Luigi Jump
+  confirmations (`a:8, wait:100, a:8, wait:1000`, then the same with `b`) run
+  6,720 frames, including released frames. Six ballistic calls and one
+  peak-distance call pass, all using literal operands and duration writeback.
+- `evidence_shrowser103_v1.json` uses the compatible story-103 checkpoint
+  `eur_story_103_bowser6.dst` at Shrowser's introduction. Twenty-four
+  `a:8, wait:90` pairs and `wait:2400` run 4,801 frames. Eighteen scaled-motion
+  calls pass with literal operands and no writeback. Its input record pins the
+  existing dialogue-advance producer; the full earlier navigation history was
+  not reverified by this replay.
+
+The independent oracle predicts object lookup, decoded command words, signed
+32-bit arithmetic, integer square-root results, duration selection, motion-list
+membership, channel parameters, frame/deferred deltas and VM result stores.
+It checks the full 401,416-byte battle allocation, motion-list root, command,
+VM, caller stack, helper arguments/results, SP and preserved registers. All 25
+calls return before the replays finish; all 104 original saves remain unchanged.
+The final captures show continuing battles. Later animation and rendering are
+observations, not an independent rasterization or complete battle-lifecycle proof.
+
+`isolated_v2.json` adds 30 native ARM946 cases on copied live RAM. These cover
+variable operands, negative packed remainders, both writeback choices, opposed
+motion, distinct shorter/longer roots, high-half ID truncation and interactions
+with earlier active/later deferred channels. No function is stubbed. DS square-root registers
+use an immediate unsigned integer model, so hardware latency and IRQ timing are
+outside these cases. Main RAM and caller DTCM are checked independently; lower
+helper-stack bytes remain observations within the recorded bounds.
+
+Static discovery found 459 uses of the broader `0x05E..0x067` families. Resolve
+named opcodes through the schema when scanning JSON; treating them as numeric
+strings produces a false empty inventory. Shrowser also exercises the separate
+vertical handler at `0x020789EC`, while the combined movement handler at
+`0x020787F0` lies on a reflected-projectile script path. Those two private exact
+drafts remain outside this linked group and its independent checks.
 
 ### Battle transition dispatch and resource slots
 

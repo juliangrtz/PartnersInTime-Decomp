@@ -8062,3 +8062,29 @@ for addresses, routes, private reports, provenance and coverage limits.
   build/runtime/eur_battle_model_table/evidence_entry55_v3.json and isolated_v1.json.
   Preserve the v1 failed hook-count assumption and corrected v2/v3 producers;
   false conditional stores do not produce DeSmuME execution-hook callbacks.
+
+
+## 2026-09-14: Battle VM directional motion handlers
+
+- Reconstructed ballistic, scaled-acceleration and peak-distance command handlers
+  at overlay 2 0x02078460..0x020787F0: 912 matching C++ bytes. They share literal
+  operand decoding with the main dispatcher and retain the native call order,
+  argument widths, signed truncation and optional duration writeback.
+- The three-function final object and full 19,168-byte Battle dispatcher match.
+  Full matching, both golden EUR ROM hashes, progress checks and 81 tests pass.
+  Coverage: 748,252 / 1,563,700 = 47.8514% matching C/C++; symbolic ASM remains
+  5,012 bytes and combined coverage is 48.1719%.
+- Story-55 Petey and story-103 Shrowser replays independently check 25 live calls
+  across all three handlers. The oracle derives full battle allocation changes,
+  motion-list/channel/delta state, command decoding, helper ABI, fixed-point
+  arithmetic and VM writeback. All original saves are unchanged. Checkpoint
+  provenance and unverified earlier navigation are recorded; screenshots show
+  continuing battles, not independent rendering or full lifecycle coverage.
+- Thirty isolated native ARM946 cases cover variable/literal modes,
+  negative rounding, distinct duration roots, result flags, truncated IDs and
+  active/deferred channels.
+  Square-root MMIO is modeled without hardware latency; helper stack contents
+  below the caller frame remain bounded observations. No function stubs.
+- Private evidence: build/analysis/battle_vm_directional_build_validation_v2.json,
+  battle_vm_directional_final_objects.json, and build/runtime/eur_battle_vm_directional/
+  evidence_petey55_v1.json, evidence_shrowser103_v1.json and isolated_v2.json.
