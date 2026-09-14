@@ -100,7 +100,8 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | RAM roots, object extents and graphics ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference) |
 | ABI and compiler lessons | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md#reconstructing-and-integrating-code) |
 | Battle effect wrappers and scene-object ownership | [Projection, returned handles and embedded object records](docs/research/RECONSTRUCTION_NOTES.md#battle-relative-effect-spawning) |
-| Battle scheduler, queues and isolated ARM checks | [Allocation layout, callback contracts, live replay and boundary cases](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-queues) |
+| Battle scheduler, queues and isolated ARM checks | [Allocation layout and boundary cases](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-queues), [VBlank callback contracts and live replay](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-vblank-consumer) |
+| Task, heap and archive lifecycle | [Normal tasks](src/game/task.cpp), [IRQ tasks](src/game/irq_task.cpp), [allocator](src/game/heap.c), [archive base](src/game/archive_lifecycle.c), [compressed archive](src/game/archive_compressed_lifecycle.c) |
 | Hit-bonus arithmetic and RNG fixtures | [Conversion ABI, truncation and restoration](docs/research/RECONSTRUCTION_NOTES.md#battle-hit-bonus-roll) |
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
 | Pause navigation | [Page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return), [main menu and member selection](docs/research/RECONSTRUCTION_NOTES.md#pause-main-menu-and-member-selection), [status and Cobalt Star pages](docs/research/RECONSTRUCTION_NOTES.md#pause-status-and-cobalt-star-pages) |
@@ -216,6 +217,8 @@ or counting it; historical `EXACT` records are only discovery leads.
    the actual source, language mode and object. Address-named dumps may be overwritten.
 7. Inspect comparison text as well as exit status: some private checkers return
    success while reporting `DIFFERENT`. Equal sizes do not establish a match.
+   Require the expected function identities, nonzero count and total code bytes;
+   stale names can also produce an empty comparison with a successful exit status.
    Unknown relocations, missing candidate sections or unresolved functions must
    fail; never substitute original bytes for a missing candidate. Validate local
    data contents and ownership before mapping its symbol to a native address.
@@ -343,6 +346,10 @@ compatible snapshots. Read their arguments and
   reused after transitions; positively identify a foreign owner before excluding
   a hit. The runtime tool's 90% overlay-identification threshold is only a locator,
   not an exact guard. Unexplained byte mismatches remain failures.
+  Overlay ownership applies to data too. Check a cleared scene-global pointer
+  at the guarded destruction boundary while that overlay owns the address.
+  After a transition, establish the new owner before interpreting that address;
+  verify the destination scene using its own live state and visible readiness.
 - Hooks fire before the addressed instruction. Respect ARM condition codes and
   distinguish helper effects from subsequent caller stores. Pair nested returns
   using entry SP and LR; tail calls can share both, so finish all matching pending
@@ -382,6 +389,16 @@ compatible snapshots. Read their arguments and
   Derive their base, count and stride from the initializer and check current
   slot ownership. Battle scene objects use 70 embedded 260-byte records; see
   the [effect replay](docs/research/RECONSTRUCTION_NOTES.md#battle-relative-effect-spawning).
+- Distinguish initialization, base destruction and deleting destruction. A
+  destructor can unlink a task while leaving its allocation intact; a deleting
+  variant additionally returns the block to the heap. Check virtual slots,
+  returned pointers, task-list neighbors and allocator metadata at each boundary.
+  A custom allocator may retain payload bytes after release. Preserve any native
+  reads at that boundary, but retire the allocation from subsequent live-object
+  checks. Confirm the supported list topology before generalizing a cleanup loop.
+  Archive destruction can close an open file: inspect its actual flags and model
+  the file, archive queue and result, rather than assuming a closed handle or
+  accepting all helper writes through a fresh snapshot.
 - Derive timer behavior from its actual entry guard and recurrence. An initial
   zero may trigger now, persist indefinitely or have another meaning; integer
   truncation can add updates. Check the relevant paths instead of importing a
@@ -486,6 +503,10 @@ range checks from sampled ranges and observational helper effects. Report these
 cases separately from DeSmuME navigation: isolated calls do not establish live
 object lifetimes, asynchronous IRQ behavior or visible gameplay. Use them to
 supplement the focused live route, and state which branches each method covers.
+Fixture preconditions must follow the native helper too. An allocation-failure
+case needs a valid exhausted heap, rather than a null list head that the allocator
+dereferences. A copied closed-file case covers that branch only; retain separate
+evidence for an open file and any hardware-dependent close path.
 
 ### Debug menu and Nawatobi
 
