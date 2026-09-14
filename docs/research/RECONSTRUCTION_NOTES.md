@@ -985,6 +985,29 @@ is stubbed. Checks include mapped memory outside 512 stack bytes and the named
 observational regions, ordered calls, results, SP and r4-r11. Both ROM builds,
 both source objects and 81 tests pass; all 104 original saves are unchanged.
 
+### Battle interface text quads
+
+`BattleInterface_DrawText` adds 484 matching bytes. It draws a text-buffer quad
+using the caller's active matrix, texture allocation and signed scroll position.
+The explicit division call preserves the original load order. The state record
+is 72 bytes; the transform is 64 bytes and serves only as a null guard here.
+
+Private `eur_battle_text_quad/evidence_menu83_v3.json` checks 208 of 11,223
+observed calls during 3,741 frames of natural Bros-menu navigation from save 83.
+Sampling takes the first 16 calls per resource/scroll/delay/progress bucket.
+Each sample checks the three arithmetic helper contracts, unchanged drawing
+records, calling convention and all 16 ordered GPU stores. Sixteen samples call
+the still-unlinked scroll helper; its effects are observational, with drawing
+inputs captured at its guarded return. The final menu capture was inspected.
+
+`isolated_v2.json` checks 370 ARM946 cases without stubs, including a null
+transform, signed coordinate/scroll boundaries, texture dimensions and native
+scroll-delay/fractional-progress paths. It checks full mapped RAM, DTCM and MMIO
+outside 256 stack bytes. Full-tile scrolling, asynchronous uploads and rasterized
+pixels are outside this oracle. The first live probe failed on a register alias;
+the final version also corrects an over-wide transform check. All 104 original
+saves remain unchanged. Both ROM builds and 81 tests pass.
+
 ### Field roaming destinations and party lifecycle
 
 Four functions add 972 matching bytes. Random roaming makes at most eight

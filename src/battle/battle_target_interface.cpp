@@ -94,8 +94,6 @@ extern const BattleTargetLabelTransform gBattleTargetLabelTransformTemplate;
 extern const BattleTargetLabelTransform gBattleCommandMenuTransformTemplate;
 extern s16 FX_SinCosTable_[8192];
 
-extern int func_ov002_020925bc(BattleSpriteTransform *transform,
-                               BattleInterfaceLayer *layer);
 extern void func_02036cc0(BattleSpriteTransform *transform);
 extern void *BattleTransfer_EnqueueBeforeMapping(int (*callback)(void *task),
                                  void *argument, int priority, int flags);
@@ -180,7 +178,7 @@ void BattleCommandMenu_Draw(BattleInterfacePanelState *state) {
     transform.value.y = position.y << 8;
     BattleSprite_DrawFrame(
         19, 31, &transform.value, 0, 0x20, 3, 0x7FFF);
-    func_ov002_020925bc(&transform.value, &state->interface.layer);
+    BattleInterface_DrawText(&transform.value, &state->interface);
 }
 
 void BattleTargetLabel_Update(BattleInterfacePanelState *state) {
@@ -251,12 +249,12 @@ void BattleTargetLabel_Draw(BattleInterfacePanelState *state) {
         transform.value.z--;
         *(volatile u32 *)0x04000440 = 2;
         func_02036cc0(&transform.value);
-        func_ov002_020925bc(&transform.value, &state->interface.layer);
+        BattleInterface_DrawText(&transform.value, &state->interface);
         return;
     } else {
         BattleSprite_DrawFrame(
             19, 31, &transform.value, 0, 0x20, 3, 0x7FFF);
-        func_ov002_020925bc(&transform.value, &state->interface.layer);
+        BattleInterface_DrawText(&transform.value, &state->interface);
         return;
     }
 }

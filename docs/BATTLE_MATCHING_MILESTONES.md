@@ -8406,3 +8406,11 @@ records 35 natural calls and 137 isolated cases. Native RNG/vector arithmetic an
 parent heap cleanup are independently checked; auxiliary deletion and linear setup
 have 128 isolated stubs. Nondeleting destruction is isolated-only. All 104 saves
 are unchanged. The constructor at 0x020BC3E8 remains unlinked.
+
+## Battle interface text quads - 2026-09-14
+
+One function adds 484 matching bytes: 777,088 / 1,563,700 (49.6955%).
+The actual source object and both ROMs match; 81 tests pass. Private
+eur_battle_text_quad checks 208 sampled natural calls, all 16 GPU stores per
+call, and 370 isolated ARM946 cases without stubs. The unlinked scroll helper
+remains observational in the live draw oracle. All 104 saves are preserved.

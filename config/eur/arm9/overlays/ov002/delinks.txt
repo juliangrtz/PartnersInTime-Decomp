@@ -595,3 +595,6 @@ src/battle/battle_flexible_link_reset.c:
 
 src/battle/battle_flexible_link_actor.c:
     .text start:0x020baf18 end:0x020baf38
+
+src/battle/battle_interface_quad.c:
+    .text start:0x020925bc end:0x020927a0

@@ -127,7 +127,7 @@ typedef struct BattleInterfaceLayer {
 typedef struct BattleInterfaceLayerState {
     BattleInterfaceLayer layer;
     const void *resource;
-    u16 transition_progress;
+    s16 transition_progress;
     u8 transition_state;
     u8 transition_step;
 } BattleInterfaceLayerState;

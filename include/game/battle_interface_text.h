@@ -24,6 +24,8 @@ typedef char BattleInterfaceUploadTask_PrefixSizeCheck[sizeof(BattleInterfaceUpl
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct BattleSpriteTransform;
+void BattleInterface_DrawText(struct BattleSpriteTransform *transform, BattleInterfaceLayerState *state);
 void BattleInterface_ProcessResourceTask(BattleQueuedTask *task);
 int BattleInterface_UploadTextTask(void *argument);
 BattleQueuedTask *BattleInterface_QueueNumber(BattleInterfaceLayer *layer, int value, int x, int y,
