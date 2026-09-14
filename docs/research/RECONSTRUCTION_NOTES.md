@@ -959,6 +959,23 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Credits and menu textured quads
+
+Two functions add 856 matching C bytes. Both accept ten full-word arguments
+and submit palette, polygon, matrix, texture-coordinate and vertex commands.
+Alpha zero skips all GPU writes. The menu draw counters are at shared workspace
+`+0x188`; credits use the existing workspace's depth and polygon fields.
+
+Private `eur_frontend_quads` records 6,660 checked calls from initialized save
+menu 55 and 19,360 from controlled credits entry at checkpoint 86. Every call
+checks the ordered GPU stores, unchanged counter words and preserved registers.
+The credits request uses one 72-byte command fixture, restored before transition;
+it does not establish ordinary story completion. Final captures show the save
+menu and credits end screen. Another 48 isolated ARM946 cases check zero-alpha,
+palette formats, zero scale and signed coordinates against full mapped memory
+except 256 stack bytes. These checks verify command submission; rasterization
+is observed. Both ROMs match, 81 tests pass and all 104 saves are unchanged.
+
 ### Field party restoration and story presence
 
 Three functions add 1,980 matching C bytes: party-indicator initialization,

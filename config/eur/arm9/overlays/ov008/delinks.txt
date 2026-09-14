@@ -141,3 +141,6 @@ src/overlay008/load_menu_control.c:
 
 src/overlay008/load_menu_exit.c:
     .text start:0x0206d728 end:0x0206d82c
+
+src/overlay008/save_menu_textured_quad.c:
+    .text start:0x02073264 end:0x02073410

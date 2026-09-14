@@ -909,3 +909,6 @@ src/field/field_menu_transitions.cpp
 src/field/field_party_indicator_init.c
 src/field/field_party_restore.c
 src/field/field_party_story_presence.c
+
+src/overlay006/credits_textured_quad.c
+src/overlay008/save_menu_textured_quad.c

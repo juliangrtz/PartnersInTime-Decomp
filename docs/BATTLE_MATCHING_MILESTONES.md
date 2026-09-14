@@ -8296,3 +8296,12 @@ ROM comparisons. Private eur_field_party_restore records 136 isolated ARM946
 cases and two live indicator calls on the natural pause-return route from
 save 55. Restore and story-presence coverage is isolated, with explicit VM
 read stubs. The final capture shows the field; all 104 saves are unchanged.
+
+## Credits and menu textured quads - 2026-09-14
+
+Two functions add 856 matching C bytes. Total: 764,056 / 1,563,700
+(48.8621%); symbolic ASM is separate. Both source objects match.
+Seven build checks pass, including 81 tests and both ROM comparisons. Private
+eur_frontend_quads records 26,020 fully checked live calls, 48 isolated cases,
+ordered GPU writes and visible save-menu/credits captures. Credits entry uses
+one restored command fixture; source saves remain unchanged.

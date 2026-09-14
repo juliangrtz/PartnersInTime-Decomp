@@ -140,3 +140,6 @@ src/overlay006/credits_radial_delay.c:
 
 src/overlay006/credits_background_gradient.c:
     .text start:0x02079744 end:0x020798c8
+
+src/overlay006/credits_textured_quad.c:
+    .text start:0x02079e88 end:0x0207a034

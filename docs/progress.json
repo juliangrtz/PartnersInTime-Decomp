@@ -4,11 +4,11 @@
   "scope": "DSD ranges marked as ARM9 code; BSS, assets, and ARM7 mixed images are excluded",
   "totals": {
     "mapped_code_bytes": 1563700,
-    "matching_c_bytes": 763200,
+    "matching_c_bytes": 764056,
     "symbolic_asm_bytes": 4752,
-    "remaining_bytes": 795748,
-    "matching_c_percent": 48.8073,
-    "source_coverage_percent": 49.1112,
+    "remaining_bytes": 794892,
+    "matching_c_percent": 48.8621,
+    "source_coverage_percent": 49.166,
     "arm7_symbolic_bytes": 43852
   },
   "components": [
@@ -61,9 +61,9 @@
       "id": "arm9_ov006",
       "label": "Overlay 06",
       "mapped_code_bytes": 66492,
-      "matching_c_bytes": 48820,
+      "matching_c_bytes": 49248,
       "symbolic_asm_bytes": 0,
-      "remaining_bytes": 17672,
+      "remaining_bytes": 17244,
       "function_symbols": 245
     },
     {
@@ -79,9 +79,9 @@
       "id": "arm9_ov008",
       "label": "Overlay 08",
       "mapped_code_bytes": 54068,
-      "matching_c_bytes": 28192,
+      "matching_c_bytes": 28620,
       "symbolic_asm_bytes": 0,
-      "remaining_bytes": 25876,
+      "remaining_bytes": 25448,
       "function_symbols": 135
     },
     {
