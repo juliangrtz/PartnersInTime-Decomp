@@ -100,6 +100,8 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | RAM roots, object extents and graphics ranges | [EUR memory reference](docs/research/RECONSTRUCTION_NOTES.md#eur-memory-reference) |
 | ABI and compiler lessons | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md#reconstructing-and-integrating-code) |
 | Battle effect wrappers and scene-object ownership | [Projection, returned handles and embedded object records](docs/research/RECONSTRUCTION_NOTES.md#battle-relative-effect-spawning) |
+| Battle scheduler, queues and isolated ARM checks | [Allocation layout, callback contracts, live replay and boundary cases](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-queues) |
+| Hit-bonus arithmetic and RNG fixtures | [Conversion ABI, truncation and restoration](docs/research/RECONSTRUCTION_NOTES.md#battle-hit-bonus-roll) |
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
 | Pause navigation | [Page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return), [main menu and member selection](docs/research/RECONSTRUCTION_NOTES.md#pause-main-menu-and-member-selection), [status and Cobalt Star pages](docs/research/RECONSTRUCTION_NOTES.md#pause-status-and-cobalt-star-pages) |
 | Pause list rendering | [Row sprites](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-sprites), [queued drawing and markers](docs/research/RECONSTRUCTION_NOTES.md#pause-queued-row-drawing-and-markers), [row refresh](docs/research/RECONSTRUCTION_NOTES.md#pause-list-row-refresh) |
@@ -169,10 +171,17 @@ or counting it; historical `EXACT` records are only discovery leads.
    across callbacks. `const` does not establish non-overlap. Keep native masked
    and unmasked stores, packed-field truncation and neighboring bits. Do not
    simplify apparently redundant operations without explaining the instructions.
+   For queue consumers, distinguish a cached tail from live queue state and
+   preserve when the head advances relative to callbacks. Read linked-list
+   successors at the native boundary: callbacks may change the next node.
+   Derive each callback's arguments from its own ABI; a transfer-record callback
+   and a no-argument node callback are different interfaces.
 4. Use existing shared records and workspace types; retain compatible raw views.
    Add size/offset checks and neutral names for unknowns. A prefix's `sizeof`
    does not prove the allocation size. Search all declarations before changing
    shared layouts or signatures, then migrate and rebuild affected callers together.
+   Distinguish allocation size from the constructor's cleared extent. Include
+   trailing padding in memory checks without assuming it was initialized to zero.
    Preserve verified interior data aliases and native table strides. Task payloads
    can reuse one offset for different phases; model that reuse explicitly and
    check every transition's initialization before giving the field one meaning.
@@ -221,6 +230,9 @@ or counting it; historical `EXACT` records are only discovery leads.
 9. Complete the build and relevant runtime checks, update progress/evidence/map,
    then publish the coherent batch. A matching private neighbor is not linked
    progress, and an already linked helper contributes no new bytes when moved.
+   Compare the actual build object as well as the isolated candidate. When
+   extending a contiguous unit, recheck every function in that unit after the
+   final shared-header change; an earlier comparison covers its earlier inputs.
 
 See the reference's compiler examples before attempting syntax or declaration
 changes. Separate switch arms, initialization order, bitfields and pointer
@@ -277,6 +289,11 @@ python tools/generate_progress.py
 python tools/generate_progress.py --check
 python -m pytest -q tests
 ```
+
+Run dependent commands sequentially and stop on a nonzero exit status. PowerShell
+can continue after a failed native command; a later success does not validate an
+earlier integration or build. Check `$LASTEXITCODE` or use a subprocess runner
+that raises on failure, and retain a separate log for each command.
 
 Every C/C++ or shared-header change needs the full `ninja check`. The packaging
 wrapper restores checksum fields omitted by direct packaging; verify the final
@@ -454,6 +471,21 @@ host C without changing accesses. Before reuse, validate it against the original
 reader on paused RAM, DTCM and graphics ranges; see
 [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers).
 Host probe code does not contribute to matching-game coverage.
+
+### Isolated ARM boundary checks
+
+Copied live RAM and DTCM can support focused native execution for branches that
+an ordinary route misses. The scheduler reference documents this with Unicorn
+configured as ARM946. Pin the CPU model, emulator version, memory/register inputs
+and full native bytes, including executed helpers. Identify synthetic records,
+modeled I/O and any stubs explicitly; keep those edits inside the copied state.
+
+Derive results independently and check the relevant memory, ordered stores,
+return values, stack restoration and callee-saved registers. Distinguish complete
+range checks from sampled ranges and observational helper effects. Report these
+cases separately from DeSmuME navigation: isolated calls do not establish live
+object lifetimes, asynchronous IRQ behavior or visible gameplay. Use them to
+supplement the focused live route, and state which branches each method covers.
 
 ### Debug menu and Nawatobi
 
