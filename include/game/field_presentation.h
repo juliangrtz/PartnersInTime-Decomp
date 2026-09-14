@@ -6,6 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+int FieldEntity2D_IsOutsideScreen(FieldRuntimeEntity *entity);
 void FieldEntity_RefreshInteractionBounds(FieldRuntimeEntity *entity);
 void FieldEntity2D_UpdateBounds(FieldRuntimeEntity *entity);
 void FieldEntity_SetFacingDirection(FieldRuntimeEntity *entity, int relative, int direction, int refresh);

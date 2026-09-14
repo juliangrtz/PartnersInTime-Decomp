@@ -8333,3 +8333,12 @@ both ROM comparisons and 81 tests pass. Private eur_field_interaction_input
 records 2,685 calls during natural save-55 walking/pause/return and 180 isolated
 ARM946 cases. Input/renderer child effects and division stubs have the explicit
 limits in the reconstruction reference. All 104 saves are unchanged.
+
+## Field windows, camera and script controls - 2026-09-14
+
+Fourteen functions add 1,796 matching bytes. Total: 769,304 / 1,563,700
+(49.1977%); symbolic ASM remains separate. Ten actual source objects,
+both ROM comparisons and 81 tests pass. Private eur_field_area_services records
+2,606 natural save-55 calls and 209 isolated ARM946 cases. Projection and motion
+control coverage is isolated; helper stubs and observational child effects are
+specified in the reconstruction reference. All 104 saves remain unchanged.

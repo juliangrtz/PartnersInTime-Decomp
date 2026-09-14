@@ -4,6 +4,7 @@
 #include <game/task.h>
 #include <game/field_resources.h>
 #include <nitro/tp.h>
+#include <nitro/fx_vec.h>
 typedef struct FieldTimer FieldTimer;
 typedef struct FieldModelAnimation FieldModelAnimation;
 typedef struct FieldSpriteAnimation FieldSpriteAnimation;
@@ -35,7 +36,14 @@ typedef struct FieldSystem {
                 u32 previous_touch : 1, unknown_23_31 : 9;
             } touch;
             TpData touch_sample;
-            u8 unknown_274[296];
+            union {
+                u8 unknown_274[296];
+                struct {
+                    u8 unknown_274_prefix[252];
+                    VecFx32 camera_position, camera_up, camera_target;
+                    u8 unknown_394[8];
+                };
+            };
             FieldPartyManager *party_manager;
             FieldTimer *timer;
             FieldModelAnimation *model_animation;
@@ -72,6 +80,7 @@ enum FieldTouchState {
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldSystem_LoadProjection(FieldSystem *field);
 void FieldSystem_AdjustMemberHp(FieldSystem *system, int member, int amount);
 void FieldSystem_RefillMemberHp(FieldSystem *system, int member);
 void FieldSystem_CreateSpriteWindows(FieldSystem *system);

@@ -150,6 +150,12 @@ typedef char FieldAreaSnapshot_SizeCheck[sizeof(FieldAreaSnapshot) == 16 ? 1 : -
 #ifdef __cplusplus
 extern "C" {
 #endif
+int FieldArea_HasOpenMessageWindow(FieldAreaContext *area, int window);
+int FieldArea_HasNonClosingWindow(FieldAreaContext *area, int window);
+void FieldArea_CloseMessageWindows(FieldAreaContext *area, int window);
+void FieldArea_CenterCameraOnEntity(FieldAreaContext *area, struct FieldRuntimeEntity *entity, fx32 x, fx32 y);
+void FieldArea_SetCameraPosition(FieldAreaContext *area, fx32 x, fx32 y);
+void FieldArea_UpdateScriptsWhenIdle(FieldAreaContext *area);
 void FieldArea_InitializeQuadRegions(FieldAreaContext *field);
 void FieldArea_CreateVariableEntities(FieldAreaContext *field);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source);

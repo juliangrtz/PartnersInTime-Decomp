@@ -44,6 +44,7 @@ typedef char FieldPartyManagerSnapshot_SizeCheck[sizeof(FieldPartyManagerSnapsho
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldPartyManager_UpdateActions(FieldPartyManager *manager);
 void FieldPartyManager_ProcessInput(FieldPartyManager *manager, int active_held, int active_pressed, int inactive_held, u16 inactive_pressed);
 void FieldPartyManager_UpdateRegion71ActionModels(FieldPartyManager *manager);
 void FieldPartyManager_ApplyStoryPresence(FieldPartyManager *manager, int select_active);

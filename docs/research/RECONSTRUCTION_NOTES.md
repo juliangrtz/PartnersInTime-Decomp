@@ -959,6 +959,20 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Field windows, camera and script controls
+
+Fourteen functions add 1,796 matching bytes: message-window queries/closing,
+camera positioning/projection, frame submission, script-update gates and entity
+script controls. Private `eur_field_area_services/evidence_walk55_v1.json` checks
+2,606 calls during natural save-55 walking and pause/return: screen bounds, frame
+submission, VM gating, party updates and window closing. Other targets are covered
+by `isolated_v1.json`, with 209 ARM946 cases and full mapped-memory comparison
+outside stack scratch. Clamp and linear/scaling/vertical helpers execute natively;
+other helpers have explicit no-effect stubs. Projection checks ordered register
+writes without modeling rasterization or FIFO timing. Live VM, renderer and party
+effects beyond the caller checks remain observational. All ten source objects,
+both ROMs and 81 tests pass; all 104 saves are unchanged.
+
 ### Field interaction bounds, input forwarding and action models
 
 Six functions add 1,356 matching bytes: Q12 line intersection, script/2D

@@ -13,6 +13,7 @@ typedef char FieldPaletteBackup_SizeCheck[sizeof(FieldPaletteBackup) == 10752 ? 
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldDisplay_FinishFrame(void);
 void FieldDisplay_InitializeGeometry(void *unused);
 void FieldDisplay_InitializeVram(void *unused);
 void FieldDisplay_SavePalettes(void);

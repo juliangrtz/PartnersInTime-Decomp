@@ -57,8 +57,6 @@ extern void func_ov000_020b26ac(
     int duration, int plane, int direction, int secondary_axis_scale,
     int stop_on_contact_mask, int stop_on_state_mask,
     int snap_to_final_angle, int reserved);
-extern void func_ov000_020736a4(u8 *field_context, FieldEntity *entity,
-                                int argument_2, int argument_3);
 extern void func_ov000_020b2020(FieldEntity *entity, int minimum_x,
                                 int minimum_y, int maximum_x,
                                 int maximum_y);
@@ -190,9 +188,6 @@ extern int func_ov000_020700ec(
     int tail_x, int text_control_enabled, int text_archive_id,
     int message_id, int message_slot, int message_speed,
     u8 *message_state, FieldEntity *linked_owner);
-extern int func_ov000_0206fb74(u8 *field_context, int message_slot);
-extern int func_ov000_0206fc50(u8 *field_context, int message_slot);
-extern void func_ov000_0206facc(u8 *field_context, int message_slot);
 extern void func_ov000_0206f378(u8 *field_context, int window_slot,
                                 fx32 x, fx32 y, int duration);
 extern void GameAudio_PlayEffectDelayed(s16 sound_id, int playback_mode,
@@ -2217,8 +2212,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                     *(s8 *)(field_context +
                             FIELD_VM_SPECIAL_PARTY_ENTITY_ID_OFFSET) ==
                         *(u8 *)((u8 *)runtime_entity + 4)) {
-                    func_ov000_020736a4(
-                        field_context, &runtime_entity->base, 0, 0);
+                    FieldArea_CenterCameraOnEntity(
+                        (FieldAreaContext *)field_context, runtime_entity, 0, 0);
                 }
             }
             break;
@@ -4027,10 +4022,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     }
 
     case FIELD_VM_WAIT_MESSAGE_FINISHED:
-        if (func_ov000_0206fb74(
-                field_context, arguments[0]) &&
-            func_ov000_0206fc50(
-                field_context, arguments[0])) {
+        if (FieldArea_HasOpenMessageWindow(
+                (FieldAreaContext *)field_context, arguments[0]) &&
+            FieldArea_HasNonClosingWindow(
+                (FieldAreaContext *)field_context, arguments[0])) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -4038,8 +4033,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_WAIT_MESSAGE_CLOSED:
-        if (func_ov000_0206fb74(
-                field_context, arguments[0])) {
+        if (FieldArea_HasOpenMessageWindow(
+                (FieldAreaContext *)field_context, arguments[0])) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -4047,8 +4042,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_CLOSE_MESSAGE:
-        func_ov000_0206facc(
-            field_context, arguments[0]);
+        FieldArea_CloseMessageWindows(
+            (FieldAreaContext *)field_context, arguments[0]);
         break;
 
     case FIELD_VM_SET_MESSAGE_WINDOW_SLIDE_MASK_ENABLED:

@@ -925,3 +925,14 @@ src/field/field_party_action_models.cpp
 
 src/field/field_planar_bounds_update.c
 src/field/field_party_manager_action_models.cpp
+
+src/field/field_message_window_queries.c
+src/field/field_frame_finish.c
+src/field/field_projection.c
+src/field/field_camera_position.c
+src/field/field_script_update_gate.c
+src/field/field_party_action_update.c
+src/field/field_entity_screen_bounds.c
+src/field/field_planar_script_stop.cpp
+src/field/field_spatial_script_control.cpp
+src/field/field_message_window_close.cpp

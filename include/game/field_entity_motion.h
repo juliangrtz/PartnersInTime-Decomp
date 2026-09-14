@@ -6,6 +6,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldEntity2D_StopScript(FieldRuntimeEntity *entity);
+void FieldEntity3D_StopScript(FieldRuntimeEntity *entity);
+void FieldEntity3D_PauseScript(FieldRuntimeEntity *entity);
+void FieldEntity3D_ResumeScript(FieldRuntimeEntity *entity);
 
 /* The per-frame deltas are accumulated before the entity update applies them. */
 void FieldEntity2D_AccumulateMotion(FieldRuntimeEntity *entity, fx32 x, fx32 y);
