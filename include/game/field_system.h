@@ -10,6 +10,11 @@ typedef struct FieldTimer FieldTimer;
 typedef struct FieldModelAnimation FieldModelAnimation;
 typedef struct FieldSpriteAnimation FieldSpriteAnimation;
 typedef struct GameSpriteWindowManager GameSpriteWindowManager;
+/* Only the transfer's leading flags are interpreted here; this is a prefix,
+ * not the allocation size of its pixel buffers and animation state. */
+typedef struct FieldPendingTransfer {
+    struct { u16 phase : 3, dirty : 1, unknown : 12; } flags;
+} FieldPendingTransfer;
 typedef struct FieldSystem {
     GameTask task;
     u8 unknown_18[16];
@@ -40,6 +45,7 @@ typedef struct FieldSystem {
             union {
                 u8 unknown_274[296];
                 FieldTimeHoleState time_hole;
+                struct { u8 transfer_prefix[292]; FieldPendingTransfer *pending_transfer; };
                 struct {
                     u8 unknown_274_prefix[252];
                     VecFx32 camera_position, camera_up, camera_target;
@@ -82,6 +88,10 @@ enum FieldTouchState {
 #ifdef __cplusplus
 extern "C" {
 #endif
+int FieldSystem_IsTransferActive(FieldSystem *system);
+void FieldSystem_ResumeTransfer(FieldSystem *system);
+int FieldSystem_IsTransferPreparing(FieldSystem *system);
+int FieldSystem_IsTimeHoleActive(FieldSystem *system);
 int FieldSystem_IsVerticalScrollActive(FieldSystem *system);
 void FieldSystem_DecelerateVerticalScroll(FieldSystem *system, fx32 deceleration);
 void FieldSystem_StartVerticalScroll(FieldSystem *system, int reverse, fx32 speed, fx32 acceleration, fx32 limit);

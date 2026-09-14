@@ -3,14 +3,13 @@
 #include <game/field_display.h>
 #include <game/field_system.h>
 #include <game/heap.h>
+#include <game/field_tasks.h>
 #include <game/rumble.h>
 #include <game/save_data.h>
 extern GameTaskVTable data_ov000_020c0de4;
 extern FieldPersistentSystems data_0205a01c;
 extern const GameRumblePattern data_ov000_020bf9b0[];
 extern void func_0202cbd4(void *, int, u32);
-extern GameTask *func_ov000_02065f30(GameTask *, u32, u32, void *);
-extern GameIrqTask *func_ov000_02065e34(GameIrqTask *, u32, u32, void *);
 extern void VBlankIntrWait(void);
 FieldSystem *FieldSystem_Init(FieldSystem *system, u32 priority, u32 unused, void *argument)
 {
@@ -52,13 +51,13 @@ FieldSystem *FieldSystem_Init(FieldSystem *system, u32 priority, u32 unused, voi
     if (archive)
         archive = FieldArchive_Init(archive, 10, 0, system, -1);
     system->archive = archive;
-    update = GameHeap_New(40, 0, 0, 0);
+    update = GameHeap_New(sizeof(FieldFrameTask), 0, 0, 0);
     if (update)
-        update = func_ov000_02065f30(update, 11, 0, system);
+        update = (GameTask *)FieldFrameTask_Init((FieldFrameTask *)update, 11, 0, system);
     system->update_task = update;
-    irq = GameHeap_New(44, 0, 0, 0);
+    irq = GameHeap_New(sizeof(FieldGraphicsIrqTask), 0, 0, 0);
     if (irq)
-        irq = func_ov000_02065e34(irq, 8, 0, system);
+        irq = (GameIrqTask *)FieldGraphicsIrqTask_Init((FieldGraphicsIrqTask *)irq, 8, 0, system);
     system->irq_task = irq;
     sprites = GameHeap_New(sizeof(FieldSpriteAnimation), 0, 0, 0);
     if (sprites)

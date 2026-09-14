@@ -956,3 +956,12 @@ src/field/field_common_input_mask.c
 
 src/game/window_open.c
 src/game/window_skin.c
+
+src/field/field_irq_task_destroy.c
+src/field/field_irq_task_init.c
+src/field/field_frame_task.c
+src/field/field_transfer_active.c
+src/field/field_transfer_controls.c
+src/field/field_time_hole_active.c
+src/field/field_special_contact.cpp
+src/field/field_oam_frame.c

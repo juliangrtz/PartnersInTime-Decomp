@@ -20,6 +20,7 @@ typedef struct FieldColorCycle {
 typedef struct FieldTimeHoleState {
     union {
         u32 raw;
+        struct { u32 active_or_started : 2, other : 30; } activity;
         struct {
             u32 active : 1, started : 1, mode : 2, unknown4 : 3, reverse : 1;
             u32 entity : 6, unknown14 : 5, scrolling : 1, braking : 1, unknown21 : 1,

@@ -130,7 +130,6 @@ extern void func_ov000_02069284(
     void *field_system, const s32 *entity_selectors, int anchor_entity,
     int destination_room_id, int argument_4, int argument_5,
     int orbit_entities, s16 center_x_offset, s16 center_y_offset);
-extern int func_ov000_02066c50(void *field_system);
 extern void func_ov000_02074e14(
     u8 *field_context, int screen, int resource_index, int anchor_entity_0,
     int anchor_entity_1, int anchor_entity_2, int anchor_entity_3,
@@ -154,9 +153,6 @@ extern int GameInventory_Add(u16 item_id, int count_delta);
 extern const u16 data_02048f1a[];
 extern void func_ov000_02081bd4(int enabled);
 extern void func_ov000_02066b34(void *field_system);
-extern int func_ov000_02066b0c(void *field_system);
-extern void func_ov000_02066ae4(void *field_system);
-extern int func_ov000_020660f8(void *field_system);
 extern void GameRumble_PlayTimed(int rumble_pattern, int repeat_count);
 extern u8 data_0205a00c;
 extern void GameRumble_Stop(void);
@@ -3166,7 +3162,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_WAIT_TIME_HOLE_TRANSITION:
-        if (func_ov000_02066c50(field_system)) {
+        if (FieldSystem_IsTimeHoleActive((FieldSystem *)field_system)) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3834,7 +3830,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_WAIT_TOUCHSCREEN_MASK_ERASE_READY:
-        if (func_ov000_02066b0c(field_system)) {
+        if (FieldSystem_IsTransferPreparing((FieldSystem *)field_system)) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3842,11 +3838,11 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_TOUCHSCREEN_MASK_ERASE:
-        func_ov000_02066ae4(field_system);
+        FieldSystem_ResumeTransfer((FieldSystem *)field_system);
         break;
 
     case FIELD_VM_WAIT_TOUCHSCREEN_MASK_ERASE_COMPLETE:
-        if (func_ov000_020660f8(field_system)) {
+        if (FieldSystem_IsTransferActive((FieldSystem *)field_system)) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;

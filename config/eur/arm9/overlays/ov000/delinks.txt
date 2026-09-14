@@ -401,3 +401,27 @@ src/field/field_camera_motion_stop.c:
 
 src/field/field_common_input_mask.c:
     .text start:0x0207ec3c end:0x0207ec6c
+
+src/field/field_irq_task_destroy.c:
+    .text start:0x02065d40 end:0x02065d90
+
+src/field/field_irq_task_init.c:
+    .text start:0x02065e34 end:0x02065e64
+
+src/field/field_frame_task.c:
+    .text start:0x02065ee0 end:0x02065f54
+
+src/field/field_transfer_active.c:
+    .text start:0x020660f8 end:0x02066124
+
+src/field/field_transfer_controls.c:
+    .text start:0x02066ae4 end:0x02066b34
+
+src/field/field_time_hole_active.c:
+    .text start:0x02066c50 end:0x02066c68
+
+src/field/field_special_contact.cpp:
+    .text start:0x0206c42c end:0x0206c4fc
+
+src/field/field_oam_frame.c:
+    .text start:0x02070cfc end:0x02070e18

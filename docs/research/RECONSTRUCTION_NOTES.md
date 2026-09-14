@@ -985,6 +985,31 @@ is stubbed. Checks include mapped memory outside 512 stack bytes and the named
 observational regions, ordered calls, results, SP and r4-r11. Both ROM builds,
 both source objects and 81 tests pass; all 104 original saves are unchanged.
 
+### Field task lifecycle, transfer queries and OAM preparation
+
+Twelve functions add 884 matching bytes. FieldSystem allocates a 44-byte graphics
+IRQ task and a 40-byte frame-finalization task. Their virtual tables distinguish
+base destruction from heap release. The transfer pointer is at FieldSystem+920,
+after its 292-byte time-hole state; only the transfer's leading halfword is typed.
+The contact helper recognizes the existing 1360-byte FieldAuxiliaryEntity and its
+owner at +1352. Its other input uses an interaction-bearing entity prefix.
+
+Private `eur_field_task_contacts/evidence_cold1_v5.json` checks both constructors
+and 96 OAM-preparation calls on a normal save-1 cold boot: 32 inactive and 32 per
+screen. OAM and affine counts are bytes, and the caller reloads them after drawing.
+Ordered helper arguments, timer output, the HUD return-pointer chain and complete
+area records are checked. Renderer output and the palette's 40-byte effect state
+are observational; this is not a raster-output oracle. HUD motion flags and Y are
+modeled independently. The final field capture was inspected visually.
+
+`isolated_v2.json` adds 141 ARM946 cases on copied RAM, checking all twelve entry
+points and complete mapped memory outside 256 stack bytes. Native task insertion,
+unlinking and heap coalescing execute without stubs. The contact and OAM cases
+make 43 explicit stubbed callback invocations; they verify caller control flow
+and arguments, not those callback bodies. Destruction, transfer and contact paths
+have isolated coverage only. All 104 original saves remain unchanged. Eight actual
+source objects, both byte-identical ROM builds and 81 tests pass.
+
 ### Field palette controls, camera stops and input masks
 
 Seven functions add 560 matching bytes. Field palette controls share the existing

@@ -8379,3 +8379,12 @@ skin call from story save 1 and 80 isolated ARM946 cases. Opening is isolated
 only, with preparation and nonzero decoration stubbed; native skin raster
 outputs and the bounded manager scratch remain observational. All 104 saves
 remain unchanged. See the reconstruction reference for precise coverage.
+
+## Field tasks, transfer queries, contact filtering and OAM - 2026-09-14
+
+Twelve functions add 884 matching bytes: 774,044 / 1,563,700
+(49.5008%). Eight actual source objects, two byte-identical ROMs
+and 81 tests pass. Private eur_field_task_contacts records 98 checked natural
+calls and 141 isolated ARM946 cases. Destruction, transfer and contact paths have
+isolated coverage only; 43 contact/rendering callback invocations are stubbed.
+Native task and heap helpers execute fully. All 104 saves remain unchanged.
