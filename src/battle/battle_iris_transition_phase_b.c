@@ -1,3 +1,4 @@
+#include <game/battle_transition.h>
 #include <game/battle_ai.h>
 #include <game/battle_iris_transition.h>
 
@@ -6,7 +7,6 @@ enum BattleIrisTransitionPhaseBConstant {
 };
 
 extern void BattleIrisTransition_DrawPhaseB(int progress);
-extern BattleAITask *func_ov002_020b5ef0(BattleAITask *task);
 
 void BattleIrisTransitionPhaseB_UpdateTask(BattleIrisTransitionTask *task);
 
@@ -22,6 +22,6 @@ void BattleIrisTransitionPhaseB_UpdateTask(BattleIrisTransitionTask *task) {
     BattleIrisTransition_DrawPhaseB(task->progress);
     ++task->progress;
     if (task->progress >= BATTLE_IRIS_PHASE_B_DURATION) {
-        func_ov002_020b5ef0((BattleAITask *)task);
+        BattleTransition_BeginReturn((BattleAITask *)task);
     }
 }

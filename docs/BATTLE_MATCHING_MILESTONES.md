@@ -8219,3 +8219,25 @@ write checks. Renderer/helper effects are bounded observations; workspace reuse
 and allocation failure remain untested. Earlier oracle failures are retained.
 All 104 original saves are unchanged; artifact_validation_v1.json validates the
 reports, captures, memory dumps, source hashes and actual compiled objects.
+
+## Battle capture fading and transition setup - 2026-09-14
+
+Six functions add 1,392 matching C bytes: capture fade (680), display restoration
+(44), return preparation (364), return task creation (72), exit task creation
+(92) and entry task creation (140). Total: 754,892 / 1,563,700 matching C/C++
+bytes (48.2760%); symbolic ASM remains separate.
+All new and modified actual source objects are exact. Seven build checks pass,
+including 81 tests; both ROMs retain SHA-1 ba4ec2f99b4f2e0047601552bccf00aa73e28701.
+
+Private eur_battle_capture_transition/evidence_entry55_v1.json and
+evidence_exit55_v2.json pass controlled entry/exit routes (706/901 frames),
+checking 783 calls across all six functions. Two additional entry replays retain
+image variation despite identical checked calls and display-memory dumps;
+repeat_variation_v1.json records the differences without claiming their cause.
+The failed initial screenshot-equality check and first exit oracle are
+retained. isolated_v1.json adds 21 fade/capture/coordinate/reuse/display cases
+with full nonstack mapped-memory checks and ordered direct GPU/RAM writes.
+Draw/capture fade branches have isolated coverage only; live initializer task
+payloads are bounded observations. No visible field return is claimed for the
+black exit capture. All 104 saves are unchanged; artifact_validation_v1.json
+validates reports, source versions, captures, memory and actual source objects.

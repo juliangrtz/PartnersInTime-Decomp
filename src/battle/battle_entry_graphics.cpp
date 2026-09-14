@@ -1,3 +1,4 @@
+#include <game/battle_transition.h>
 extern "C" {
 #include <game/battle_entry.h>
 #include <game/battle_frame.h>
@@ -32,7 +33,6 @@ void func_02036ee0(int, int, int, int, int);
 void func_02036f24(int, int, int, int);
 void func_02036cc0(const MtxFx44 *);
 void *BattleTransfer_EnqueueAfterMapping(void (*)(void), void *, int, int);
-void func_ov002_020b6038(void);
 }
 #define REG32(address) (*(vu32 *)(address))
 #define REG16(address) (*(vu16 *)(address))
@@ -149,7 +149,7 @@ extern "C" void BattleEntry_InitializeGraphics(void)
     GameTexturePalette_Allocate((GameTexturePalette *)(gBattleContext + 52100), 2, 4, 256, 0, 0, 0,
                                 FRAME->main_palette, 0x3021, 32);
     BattleAI_Initialize();
-    func_ov002_020b6038();
+    BattleTransition_BeginEntry();
     BattleTransfer_EnqueueAfterMapping(BattleEntry_ShowBattleDisplay, 0, 0, 0);
     FRAME->main_brightness_level = 32;
     FRAME->sub_brightness_level = 0;

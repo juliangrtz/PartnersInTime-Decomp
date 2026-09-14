@@ -886,3 +886,6 @@ src/battle/battle_model_stop_alternate.cpp
 src/battle/battle_model_start_animation.cpp
 src/battle/battle_model_primary_descriptor.cpp
 src/battle/battle_common_resources.cpp
+src/battle/battle_transition_prepare.c
+src/battle/battle_transition_start.c
+src/battle/battle_capture_fade.c

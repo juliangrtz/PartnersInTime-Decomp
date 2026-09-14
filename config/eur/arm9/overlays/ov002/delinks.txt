@@ -544,3 +544,12 @@ src/battle/battle_model_primary_descriptor.cpp:
 
 src/battle/battle_common_resources.cpp:
     .text       start:0x0206a240 end:0x0206a608
+
+src/battle/battle_transition_prepare.c:
+    .text       start:0x20b5d58 end:0x20b5f38
+
+src/battle/battle_transition_start.c:
+    .text       start:0x20b5fdc end:0x20b60c4
+
+src/battle/battle_capture_fade.c:
+    .text       start:0x20ada98 end:0x20add40

@@ -1,3 +1,4 @@
+#include <game/battle_transition.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>
 #include <game/battle_line_transition.h>
@@ -14,7 +15,6 @@ enum BattleLineTransitionPhaseBConstant {
 
 extern void func_0202cbd4(void *destination, int value, u32 size);
 extern int BattleLineTransition_DrawPhaseB(BattleLineTransitionState *state);
-extern BattleAITask *func_ov002_020b5ef0(BattleAITask *task);
 
 void BattleLineTransitionPhaseB_UpdateTask(BattleLineTransitionTask *task);
 
@@ -43,6 +43,6 @@ void BattleLineTransitionPhaseB_UpdateTask(BattleLineTransitionTask *task) {
 
     ++state->frame;
     if (BattleLineTransition_DrawPhaseB(state) == 0) {
-        func_ov002_020b5ef0((BattleAITask *)task);
+        BattleTransition_BeginReturn((BattleAITask *)task);
     }
 }

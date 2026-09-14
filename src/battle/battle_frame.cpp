@@ -1,3 +1,4 @@
+#include <game/battle_transition.h>
 extern "C" {
 #include <game/battle_actor.h>
 #include <game/battle_scene.h>
@@ -16,7 +17,6 @@ int BattleTurnState_Update(int);
 void func_ov002_0206a0f0(void *);
 void BattlePartyActor_UpdateCommandMovement(BattlePartyActor *);
 void BattleCommandWheel_Update(void *, int);
-void func_ov002_020ada98(void);
 void func_ov002_020afb94(int);
 void func_02018ce0(void *, int, int, int);
 void func_02036cc0(const MtxFx44 *);
@@ -105,7 +105,7 @@ void BattleMain_Update(void)
     BATTLE_FRAME->scroll_position[5] += BATTLE_FRAME->scroll_step[5];
     BATTLE_FRAME->scroll_position[6] += BATTLE_FRAME->scroll_step[6];
     BATTLE_FRAME->scroll_position[7] += BATTLE_FRAME->scroll_step[7];
-    func_ov002_020ada98();
+    BattleCaptureSurface_UpdateFade();
     func_ov002_020afb94(0);
     BattleScene_RenderShadows();
     if (BATTLE_FRAME->image_effect_frames > 0)

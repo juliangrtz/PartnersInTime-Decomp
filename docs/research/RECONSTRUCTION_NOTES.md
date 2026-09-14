@@ -959,6 +959,35 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Battle capture fading and transition setup
+
+[Capture fading](../../src/battle/battle_capture_fade.c),
+[transition preparation](../../src/battle/battle_transition_prepare.c) and
+[task creation](../../src/battle/battle_transition_start.c) add 1,392 C bytes.
+The fade captures slot 14 once, waits while upload is pending, and adjusts alpha
+between 0 and 31 while drawing the captured image relative to the camera.
+Coordinate differences truncate to signed halfwords before Q8 translation.
+The transition code allocates or reuses 28-byte task slots, selects entry/return
+effects through the encounter flags, submits a black quad and restores battle
+display layers through the transfer queue. The power-control access is 16-bit.
+
+Private `eur_battle_capture_transition/evidence_entry55_v1.json` and
+`evidence_exit55_v2.json` pass 706/901-frame controlled routes, exercising all
+six functions: 778 idle fade calls and five setup calls. Final entry images vary
+between unchanged probe runs; checked calls, VRAM, palettes and OAM agree.
+The repeat report retains the small RAM differences without assigning a cause.
+The exit fixture is restored before destruction; its final
+black screen does not establish a visible field return. The first exit probe
+missed QueueConfigure's busy-bit write; that failed report and oracle are retained.
+`isolated_v1.json` passes 21 copied-RAM cases covering fade thresholds, pending
+uploads, coordinate wrapping, capture setup, task reuse and display masks.
+Checks cover full mapped memory except 256 stack scratch bytes, preserved
+registers, ordered direct RAM/GPU writes and independently modeled capture-queue
+effects. Draw/capture fade branches have isolated coverage only; rasterization
+and IRQ timing are not simulated. Live transition initializer payloads are
+observed within their 28-byte slots. Both ROMs match the original; 104 saves
+remain unchanged.
+
 ### Common battle-resource initialization and loading
 
 [Common resources](../../src/battle/battle_common_resources.cpp) reconstructs

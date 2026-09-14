@@ -1,3 +1,4 @@
+#include <game/battle_transition.h>
 #include <game/battle_ai.h>
 #include <game/battle_cylinder_wipe.h>
 #include <game/save_data.h>
@@ -32,7 +33,6 @@ extern void OS_SetIrqFunction(u32 mask, void (*callback)(void));
 extern void *BattleTransfer_EnqueueAfterMapping(
     void (*callback)(BattleCylinderWipeRestoreTask *task), int argument,
     int unknown_2, int unknown_3);
-extern BattleAITask *func_ov002_020b5ef0(BattleAITask *task);
 extern void BattleCylinderWipe_Draw(int progress, int angle, int captured);
 
 void BattleCylinderWipe_UpdateFinishTask(BattleCylinderWipeTask *task);
@@ -130,7 +130,7 @@ void BattleCylinderWipe_UpdateFinishTask(BattleCylinderWipeTask *task) {
     state->angle = previous_angle + state->velocity;
     state->velocity += 7;
     if (previous_angle < 1600 && state->angle >= 1600) {
-        func_ov002_020b5ef0(0);
+        BattleTransition_BeginReturn(0);
         state->flags.bits.captured = 1;
     }
     if (state->angle >= 3456) {
