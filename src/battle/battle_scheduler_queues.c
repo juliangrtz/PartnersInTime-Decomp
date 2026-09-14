@@ -1,7 +1,66 @@
 #include "battle_scheduler_internal.h"
 #include <game/task.h>
 
-void BattleScheduler_Idle(void);
+u32 func_02035818(void);
+u32 func_02035804(void);
+void func_02035c00(int banks);
+void func_02035b0c(int banks);
+
+void BattleScheduler_VBlank(void) {
+    BattleSchedulerNode *node;
+
+    ++gBattleSystem->vblank_count;
+    if (!gBattleSystem->flags.bits.vblank_ready) {
+        return;
+    }
+    gBattleSystem->flags.bits.vblank_ready = 0;
+    gBattleSystem->flags.bits.active_task = 0;
+    gBattleSystem->flags.raw |= 4;
+    gBattleSystem->texture_banks = func_02035818();
+    gBattleSystem->palette_banks = func_02035804();
+    {
+        int end = gBattleSystem->before_tail;
+        int index = gBattleSystem->before_head;
+
+        gBattleSystem->before_head = end;
+        while (index != end) {
+            BattleTransferTask *task = &gBattleSystem->before_mapping[index];
+            BattleTransferCallback callback = task->callback;
+
+            if (callback) {
+                callback(task);
+            }
+            if (++index == 32) {
+                index = 0;
+            }
+        }
+    }
+    func_02035c00(gBattleSystem->texture_banks);
+    func_02035b0c(gBattleSystem->palette_banks);
+    {
+        int end = gBattleSystem->after_tail;
+        int index = gBattleSystem->after_head;
+
+        gBattleSystem->after_head = end;
+        while (index != end) {
+            BattleTransferTask *task = &gBattleSystem->after_mapping[index];
+            BattleTransferCallback callback = task->callback;
+
+            if (callback) {
+                callback(task);
+            }
+            if (++index == 32) {
+                index = 0;
+            }
+        }
+    }
+    for (node = gBattleSystem->first; node; node = node->next) {
+        if (node->vblank) {
+            node->vblank();
+        }
+    }
+    gBattleSystem->flags.raw &= ~4;
+}
 
 BattleSchedulerNode *BattleSchedulerNode_Insert(BattleSchedulerNode *node, int priority) {
     BattleSchedulerNode *previous = 0;

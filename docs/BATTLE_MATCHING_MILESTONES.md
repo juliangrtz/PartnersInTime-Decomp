@@ -7895,3 +7895,33 @@ Overlay 7: 74,340 / 142,264 (52.26%). Remaining to 50%: 42,754 bytes.
   including symbolic assembly: **47.98%**.
   Overlay 2: **161,968 / 362,436 (44.69%)**.
   **36,726 bytes remain to reach 50% matching C/C++.**
+
+## 2026-09-14 - Battle scheduler VBlank consumer (+424 C bytes)
+
+- Reconstructed BattleScheduler_VBlank at 0x0207282C..0x020729D4 in the existing
+  queue module. All ten functions (1,292 bytes) match in isolated and actual
+  build objects. Shared node declarations now preserve pointer returns and C
+  linkage; affected lifecycle callers remain exact. No assembly or flag changes.
+- Preserved counter wrap, ready/active/inside-VBlank flags, cached queue tails,
+  head updates before callbacks, bank restoration boundaries and node callbacks.
+  Existing bank helpers are not counted again.
+- Full matching build, golden packaged/native ROMs, zero-difference native relink,
+  generated progress and 81 tests pass; final source/log/ROM hashes verified.
+- The 380-frame checkpoint-83 replay checks 380 controller returns and 3,420 own
+  stores, 1,520 bank-helper calls, 600 transfer and 380 node callbacks. Queue wraps
+  occur on both sides of bank restoration. The independent leaf probe also checks
+  1,016 calls. Callback effects are bounded observations; controller decisions,
+  arguments, stores, returned bank masks and final bank state are checked.
+- Separately, 32 ARM946 cases on copied RAM exercise not-ready returns, halfword
+  overflow, empty/wrapped rings, null/idle callbacks, node chains and bank masks.
+  Native helpers execute without stubs; complete copied RAM/DTCM and modeled I/O,
+  controller store/call order, SP and preserved registers pass. Asynchronous IRQ
+  behavior, hardware readback and live synthetic-node lifetimes are not claimed.
+- Eight images, four graphics dumps and two snapshots match the ordinary baseline;
+  final setup screen inspected and all 104 original saves unchanged. No live edits
+  or pending calls. See the [reference](research/RECONSTRUCTION_NOTES.md#battle-scheduler-vblank-consumer)
+  and private build/runtime/eur_battle_scheduler_vblank/ evidence.
+- Matching C/C++: **745,548 / 1,563,700 bytes (47.68%)**;
+  including symbolic assembly: **48.00%**.
+  Overlay 2: **162,392 / 362,436 (44.81%)**.
+  **36,302 bytes remain to reach 50% matching C/C++.**

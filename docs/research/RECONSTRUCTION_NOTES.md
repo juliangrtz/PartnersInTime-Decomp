@@ -656,8 +656,8 @@ the controlled setup. Never infer complete branch coverage from a matching ROM.
 
 ### Battle scheduler queues
 
-[battle_scheduler_queues.c](../../src/battle/battle_scheduler_queues.c) reconstructs
-nine contiguous routines at `0x020724C8..0x0207282C`, totaling 868 bytes. Both the
+The initial [battle_scheduler_queues.c](../../src/battle/battle_scheduler_queues.c)
+batch reconstructed nine routines at `0x020724C8..0x0207282C`, totaling 868 bytes. Both the
 isolated public object and the actual build object match every instruction,
 literal and relocation. No assembly or compiler flags were added. The 100-byte
 `BattleTaskQueue_Enqueue` previously had a symbolic-assembly reconstruction, so
@@ -680,7 +680,8 @@ native producers, VBlank consumer at `0x0207282C`, main consumer at `0x020729D4`
 and constructor at `0x02072FB0`. `BattleMain_Create` allocates 3,584 bytes for the
 scheduler; its constructor clears 2,492 bytes starting at offset 1,088. The final
 four padding bytes therefore remain outside that clearing operation.
-The two consumers themselves remain native code.
+The VBlank consumer is now also reconstructed; see the follow-up below. The
+main frame driver at `0x020729D4` remains native code.
 
 All offsets below are from `read32(0x020C0714)` in ARM9 main RAM:
 
@@ -746,6 +747,69 @@ separate from an independent rasterization check. The build report is
 `build/analysis/battle_scheduler_build_validation.json`: full matching build,
 golden packaged/native ROMs, zero differing bytes, progress/check and 81 tests pass.
 Earlier build logs from before the four-byte padding correction are kept separately.
+
+### Battle scheduler VBlank consumer
+
+`BattleScheduler_VBlank` at `0x0207282C..0x020729D4` adds 424 matching C bytes
+in the existing scheduler module. Both isolated and actual build objects match
+all ten functions, totaling 1,292 bytes. The first consumer draft was exact;
+its bank-restore declarations were aligned with the existing signed-int APIs
+without changing the result. Shared node-helper declarations now preserve their
+pointer returns and C linkage, with compatible prefix casts in the lifecycle
+caller. All caller bytes still match.
+
+The consumer increments the unsigned halfword counter even when not ready.
+When ready, it clears ready/active flags, sets inside-VBlank, saves the texture
+and texture-palette bank masks, and drains the first transfer ring while those
+banks are mapped to LCDC. It restores the banks before draining the second ring,
+then calls each node's no-argument VBlank callback and clears inside-VBlank.
+Each ring caches its tail and advances its head before calling its records;
+next-node reads follow callbacks. Preserve those boundaries when changing code.
+The four bank helpers were already linked C and contribute no new coverage.
+
+`build/analysis/probe_battle_scheduler_vblank.py` composes the existing leaf-queue
+probe with `battle_scheduler_vblank_oracle.py`. The checkpoint-83 Bro Flower
+setup route runs 380 frames and checks 380 ready calls, 3,420 controller stores,
+1,520 bank-helper calls, 600 transfer callbacks and 380 node callbacks. The
+before ring visits 394 records with 13 wraps; the after ring visits 206 records
+with six wraps. The separate leaf model still checks all 1,016 calls described
+above. No live memory is edited and no calls remain pending.
+
+The controller oracle independently checks its own stores, cached-tail traversal,
+callback targets/arguments/order, reset-helper return masks, and final GX state
+and VRAM-bank controls. It retains all 3,584 scheduler bytes, the 1,380-byte save,
+pointer roots and visited node prefixes. Arbitrary callback effects are observed
+only within explicit task/queue, flag, GX and bank-control ranges; other retained
+bytes must remain unchanged. This route's observed RAM changes are the first
+four bytes of the deferred-before queue, also covered by the separate producer
+oracle. DISP3DCNT readback and rendering remain observational. The report is
+`build/runtime/eur_battle_scheduler_vblank/evidence_flower83_v2.json`.
+
+A separate `check_battle_scheduler_vblank_arm.py` runs 32 isolated ARM946 cases
+on copies of the captured RAM/DTCM. They cover the not-ready branch with both
+inside-VBlank flag values, counter wraparound, empty/wrapped queues, null and
+native idle callbacks, node chains, all 16 texture masks and seven palette masks.
+Native bank helpers and idle callbacks execute without stubs. Checks include
+all four MiB of copied main RAM, all 16 KiB DTCM with predicted final stack bytes,
+the modeled I/O page, ordered controller stores and callbacks, bank-reset returns,
+SP and preserved registers. The synthetic nodes and I/O are explicit inputs in
+the copy. These cases do not establish asynchronous IRQ behavior, live synthetic
+node lifetimes or hardware register readback; bank-helper store order is outside
+their independent checks. See `isolated_arm_cases.json` in the same directory.
+
+All eight images, four graphics dumps and both memory snapshots match the earlier
+ordinary route and have validated extents/hashes. The final setup screen was
+inspected; all 104 source saves remain unchanged. `artifact_validation.json`
+records those checks. The first guard-loader attempt failed before ROM loading
+because a placeholder overlay has no `.text` range; its source/failure record is
+preserved. Using extracted overlay-table bases fixed the loader, and the v2 replay
+passed without removing runtime assertions.
+
+`build/analysis/battle_scheduler_vblank_build_validation.json` records the full
+matching build, both golden ROM hashes, zero-difference native relink, generated
+progress and all 81 tests. Source and log hashes were rechecked after the intervening
+documentation commit; no source changes followed that full build. Final ten-function
+object comparisons are pinned by `battle_scheduler_vblank_object_provenance.json`.
 
 ### Battle hit-bonus roll
 

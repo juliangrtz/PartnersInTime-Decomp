@@ -62,6 +62,17 @@ typedef struct BattleScheduler {
 
 typedef char BattleSchedulerSizeCheck[sizeof(BattleScheduler) == 3584 ? 1 : -1];
 typedef char BattleTransferTaskSizeCheck[sizeof(BattleTransferTask) == 16 ? 1 : -1];
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern BattleScheduler *gBattleSystem;
+void BattleScheduler_Idle(void);
+void BattleScheduler_VBlank(void);
+BattleSchedulerNode *BattleSchedulerNode_Insert(BattleSchedulerNode *node, int priority);
+BattleSchedulerNode *BattleSchedulerNode_Unlink(BattleSchedulerNode *node);
+BattleSchedulerNode *BattleSchedulerNode_UnlinkForCleanup(BattleSchedulerNode *node);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

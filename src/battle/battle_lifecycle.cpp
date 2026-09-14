@@ -1,5 +1,6 @@
 extern "C" {
 #include <game/battle_frame.h>
+#include "battle_scheduler_internal.h"
 #include <game/battle_entry.h>
 #include <game/battle_context.h>
 #include <game/save_data.h>
@@ -21,8 +22,6 @@ void func_ov002_0206a184(u8 *);
 void func_ov002_0206f384(BattleModel *);
 void func_ov002_0206f1b8(BattleModel *);
 void *BattleTransfer_EnqueueBeforeMapping(int (*)(void *), void *, int, int);
-void BattleSchedulerNode_Unlink(void *);
-void BattleSchedulerNode_Insert(void *, int);
 void func_ov002_02072fb0(void *, int, const void *);
 extern GameSessionTask *data_02059ffc;
 extern int data_ov002_020c071c;
@@ -92,7 +91,7 @@ extern "C" BattleFrameContextView *BattleMain_Create(u32 heap_start)
 
 extern "C" BattleFrameContextView *BattleMain_InitTask(BattleFrameContextView *battle, int priority)
 {
-    BattleSchedulerNode_Insert(battle, priority);
+    BattleSchedulerNode_Insert((BattleSchedulerNode *)battle, priority);
     gBattleContext = (u8 *)battle;
     battle->update = BattleMain_Initialize;
     return battle;
@@ -182,7 +181,7 @@ extern "C" void *BattleMain_Destroy(void *task)
     } else {
         GameSessionTask_RequestStatePhase2(data_02059ffc, 0);
     }
-    BattleSchedulerNode_Unlink(task);
+    BattleSchedulerNode_Unlink((BattleSchedulerNode *)task);
     return task;
 }
 
