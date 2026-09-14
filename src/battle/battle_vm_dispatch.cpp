@@ -16,6 +16,7 @@ extern "C" {
 #include <game/battle_particle_sweep.h>
 #include <game/battle_raster_effects.h>
 #include <game/battle_scene.h>
+#include <game/battle_curve_motion.h>
 #include <game/battle_script_properties.h>
 #include <game/battle_status.h>
 #include <game/battle_vm_motion.h>
@@ -35,10 +36,6 @@ extern "C" {
 extern "C" {
 extern int BattleMap_GetEncounterResourceIndex(int encounter_id);
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
-extern void func_ov002_020a3928(BattleSceneObject *object, int channel_index,
-                                int x, int y, int z, int duration,
-                                int argument_7, int argument_8,
-                                int argument_9);
 extern int func_ov002_020be478(BattleSceneObject *object, int channel_index,
                                int direction_x, int direction_y,
                                int direction_z, int distance, int duration,
@@ -49,13 +46,6 @@ extern int func_ov002_020be3e8(BattleSceneObject *object, int channel_index,
                                int direction_z, int distance,
                                int initial_velocity, int terminal_velocity,
                                int prefer_longer_duration);
-extern int func_ov002_020a3810(BattleSceneObject *object, int channel_index,
-                               s16 axis_start_x, s16 axis_start_y,
-                               s16 axis_start_z, s16 axis_end_x,
-                               s16 axis_end_y, s16 axis_end_z,
-                               s16 angle_step, s16 total_angle);
-extern void func_ov002_02078408(BattleSceneObject *object,
-                                BattleMotionChannel *channel);
 extern void func_ov002_020724b0(s16 *parameters, const void *keyframes,
                                 u16 keyframe_count, int extent_q16,
                                 int step_fixed);
@@ -1093,7 +1083,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
         motion_parameters = BattleSceneObject_BeginMotionChannel(
             object, (u16)command->arguments[1], 0,
-            func_ov002_02078408);
+            BattleMotion_UpdatePath);
         keyframe_record = (const s32 *)(
             (const u8 *)state->script + 2 * command->arguments[3]);
         if (((u32)keyframe_record & 3) != 0) {
@@ -1117,7 +1107,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_START_SINUSOIDAL_DIRECTION_MOTION:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020a3928(
+        BattleMotion_StartSineDisplacement(
             object, (u16)command->arguments[1], command->arguments[3],
             command->arguments[4], command->arguments[5],
             command->arguments[6], command->arguments[7],
@@ -1262,7 +1252,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_ROTATE_OBJECT_AROUND_AXIS:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020a3810(
+        BattleMotion_StartAxisRotation(
             object, (u16)command->arguments[1],
             (s16)command->arguments[2], (s16)command->arguments[3],
             (s16)command->arguments[4], (s16)command->arguments[5],

@@ -8266,3 +8266,14 @@ mapped-memory checks except stack scratch space. Audio stubs are explicit;
 audible output is unverified. The exit replay is retained as a failed coverage
 attempt with zero sound calls. All 104 saves are unchanged, and
 artifact_validation_v1.json checks artifacts, source versions and source objects.
+
+## Battle motion and shared value helpers - 2026-09-14
+
+Nine functions add 1,280 matching C bytes. Total: 758,040 / 1,563,700 matching
+C/C++ bytes (48.4773%); symbolic ASM remains separate.
+All new source objects and renamed callers are exact. Seven build checks pass,
+including 81 tests and both golden-ROM SHA-1 comparisons. Private
+eur_battle_helpers/isolated_v1.json passes 48 copied-RAM boundary cases with
+explicit stubs and complete mapped-memory checks except stack scratch space.
+No new natural gameplay coverage is claimed. All 104 saves remain unchanged;
+artifact_validation_v1.json checks source versions, inputs and source objects.

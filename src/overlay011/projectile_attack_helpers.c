@@ -14,7 +14,7 @@ enum {
 
 extern int BattleAnimation_GetDurationThroughFrame(u8 *resource_data, int animation_id,
                                int animation_frame, int scale);
-extern int func_020108f0(int first_start, int first_end,
+extern int GameIntervals_Overlap(int first_start, int first_end,
                          int second_start, int second_end);
 extern int func_02010960(int value, int direction, int limit);
 extern s16 data_ov011_020c6040[];
@@ -78,7 +78,7 @@ int Overlay11Attack_TestProjectileContact(Overlay11AttackController *state) {
         ((Overlay11BattleVariantFlags *)(context +
           OVERLAY11_CONTEXT_VARIANT_OFFSET))->bits.alternate;
 
-    if (func_020108f0(
+    if (GameIntervals_Overlap(
             actor_x - data_ov011_020c5f44[variant], actor_x,
             projectile->x +
                 *(s16 *)(view_state + 0x24),

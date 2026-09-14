@@ -959,6 +959,23 @@ callee-saved registers; non-initializer nonstack writes are also checked in orde
 These fixtures add no navigation or renderer-implementation coverage. All 104
 original saves remain unchanged.
 
+### Battle motion and shared value helpers
+
+Nine functions add 1,280 matching C bytes: model-animation and alternate-effect
+slot selection, axis-rotation and sine-displacement channel setup, path updates,
+resource-effect attachment, item-effect values and inclusive interval overlap.
+The slot helpers use the actual 64-entry context arrays. Motion setup preserves
+signed halfword parameters and native duration arithmetic; item effects retain
+the packed kind and amount fields and the original rounding rules.
+
+Private `eur_battle_helpers/isolated_v1.json` passes 48 ARM946 cases using copied
+live RAM, including slot exhaustion, coordinate wrapping, reversed intervals,
+item rounding and nonpositive motion durations. All mapped memory is checked
+except 256 stack bytes. Native division, channel creation and owner binding run;
+attached-effect factories, rotation and path decoding have explicit stubs.
+This batch adds no natural gameplay-route coverage. Both ROM builds match the
+original, all 81 tests pass, and all 104 story saves remain unchanged.
+
 ### Battle sound scheduling
 
 [Battle sound](../../src/battle/battle_sound.c) adds 1,036 matching C bytes.

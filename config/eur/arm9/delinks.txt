@@ -741,3 +741,9 @@ src/game/window_construct.c:
 
 src/game/graphics_screen_offsets.c:
     .text start:0x02009d24 end:0x02009ffc
+
+src/game/item_effect_value.c:
+    .text start:0x02018f48 end:0x0201904c
+
+src/game/interval.c:
+    .text start:0x020108f0 end:0x02010960

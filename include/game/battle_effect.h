@@ -151,6 +151,7 @@ struct BattleAITask *BattleAlternateModelEffect_Spawn(
 struct BattleAITask *BattleAlternateModelEffect_SpawnAttached(
     struct BattleAITask **owner_slot, int resource_id, int animation_id,
     int x, s16 y, s16 z, int scale);
+int BattleAlternateModelEffect_SpawnInFreeSlot(int resource, int animation, int x, s16 y, s16 z, int scale);
 int BattleParty_SpawnLaunchImpact(struct BattleActor *actor);
 void BattleObjectEffect_SpawnDelayed(int animation_id, int delay,
                                      BattleSceneObject *object);

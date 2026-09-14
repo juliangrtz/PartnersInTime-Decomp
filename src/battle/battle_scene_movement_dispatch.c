@@ -1,10 +1,7 @@
 #include <game/battle_scene.h>
+#include <game/battle_curve_motion.h>
 
 extern void OS_Terminate(void);
-extern void func_ov002_020a3928(BattleSceneObject *object, int channel_index,
-                                int x, int y, int z, int duration,
-                                int argument_7, int argument_8,
-                                int argument_9);
 enum BattleSceneMovementKind {
     BATTLE_SCENE_MOVEMENT_SET_POSITION,
     BATTLE_SCENE_MOVEMENT_MOVE_BY,
@@ -55,7 +52,7 @@ void BattleSceneObject_ApplyMovement(u32 object_id, int channel_index,
                 BattleSceneObject_GetById((u16)target_object_id));
             return;
         case BATTLE_SCENE_MOVEMENT_ACCELERATED:
-            func_ov002_020a3928(
+            BattleMotion_StartSineDisplacement(
                 object, channel_index, x, y, z, duration, target_object_id,
                 argument_8, argument_9);
             return;

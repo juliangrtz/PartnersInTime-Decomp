@@ -11,6 +11,8 @@ extern "C" {
 /* Positive object IDs resolve to alternate models. Nonpositive values are sentinels. */
 BattleModel *BattleModelAnimation_ResolveSource(int source, BattleModel **resolved_source);
 
+int BattleModelAnimation_StartInFreeSlot(int animation, BattleModel *model, int x, s16 y, s16 z, int speed);
+
 /* -1 clears the first slot and preserves each of the other three slots. */
 BattleModel **BattleModelAnimation_SetModels(BattleModel *first, BattleModel *second,
     BattleModel *third, BattleModel *fourth);

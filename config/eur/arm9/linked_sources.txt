@@ -893,3 +893,11 @@ src/battle/battle_reward_items_update.c
 src/battle/battle_reward_items_status.c
 src/battle/battle_reward_items_initialize.c
 src/battle/battle_sound.c
+
+src/battle/battle_model_animation_slots.c
+src/battle/battle_alternate_model_slots.c
+src/battle/battle_axis_motion.c
+src/battle/battle_path_motion.c
+src/battle/battle_resource_effect_attachment.c
+src/game/item_effect_value.c
+src/game/interval.c

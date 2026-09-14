@@ -19,8 +19,11 @@ typedef struct UsableItemRecord {
     };
     union { u16 interface_resource_id, description_id; };
     u8 unknown_08[4];
-    u32 effect_flags;
-    u8 unknown_10[4];
+    union {
+        u32 effect_flags;
+        struct { u32 unknown_effect_flags : 24, effect_kind : 7, unknown_effect_flag_31 : 1; };
+    };
+    union { u8 unknown_10[4]; struct { u16 amount, unknown_12; }; };
 } UsableItemRecord;
 
 typedef union ActionItemTargetFlags {
@@ -58,5 +61,13 @@ typedef char ActionItemRecord_SizeCheck[
 
 extern UsableItemRecord gItemRecords[];
 extern ActionItemRecord gActionItemRecords[];
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+int ItemEffect_CalculateValue(u16 item, int current, int maximum, int unused);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

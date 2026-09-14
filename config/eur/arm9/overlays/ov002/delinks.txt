@@ -565,3 +565,18 @@ src/battle/battle_reward_items_initialize.c:
 
 src/battle/battle_sound.c:
     .text start:0x02076178 end:0x02076584
+
+src/battle/battle_model_animation_slots.c:
+    .text start:0x0206c070 end:0x0206c104
+
+src/battle/battle_alternate_model_slots.c:
+    .text start:0x0206c240 end:0x0206c2d4
+
+src/battle/battle_axis_motion.c:
+    .text start:0x020a3810 end:0x020a39d0
+
+src/battle/battle_path_motion.c:
+    .text start:0x02078408 end:0x02078460
+
+src/battle/battle_resource_effect_attachment.c:
+    .text start:0x020ac7d4 end:0x020ac820
