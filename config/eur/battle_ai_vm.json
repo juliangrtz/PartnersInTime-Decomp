@@ -1920,7 +1920,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "configures four global object-resource source slots. Positive operands resolve to the selected scene object's attached resource pointer, nonpositive values remain literal, source_0 value -1 clears slot 0 to zero, and -1 in slots 1 through 3 preserves the previous value",
-      "evidence": "BattleAI_DispatchOpcode case 0x0BC; func_ov002_0207905c; func_ov002_0206c1e4"
+      "evidence": "BattleAI_DispatchOpcode case 0x0BC; func_ov002_0207905c; BattleModelAnimation_SetModels"
     },
     "197": {
       "arguments": ["eva", "evb"],

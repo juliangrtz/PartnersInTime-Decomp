@@ -2,7 +2,6 @@
 #include <game/battle_impact_effect.h>
 extern "C" {
 void func_ov025_020c5374(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
-void func_ov002_0206c1e4(int, int, BattleModel *, int);
 
 void Overlay25Enemy_BeginProjectileEffects(Overlay25Task *task, BattleSceneObject *object,
                                            Overlay25WorkPrefix *)
@@ -60,7 +59,8 @@ void Overlay25Enemy_ReleaseProjectileEffects(Overlay25Task *task, BattleSceneObj
         BattleSceneObject *projectile = BattleSceneObject_GetById(42);
         BattleSceneObject_AdjustPosition(projectile, -64 - projectile->x, -64 - projectile->y,
                                          -projectile->z);
-        func_ov002_0206c1e4(0, -1, BattleSceneObject_GetActiveModel(BattleSceneObject_GetById(42)), -1);
+        BattleModelAnimation_SetModels(0, (BattleModel *)-1,
+            BattleSceneObject_GetActiveModel(BattleSceneObject_GetById(42)), (BattleModel *)-1);
         work->tasks[7].update = Overlay25Enemy_ResetAnimation;
         task->update = func_ov025_020c5374;
     }

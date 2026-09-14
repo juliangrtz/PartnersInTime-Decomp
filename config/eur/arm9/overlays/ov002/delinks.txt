@@ -507,4 +507,4 @@ src/battle/battle_scheduler_lifecycle.cpp:
     .text start:0x02072d90 end:0x02073068
 
 src/battle/battle_model_animation.c:
-    .text start:0x0206c104 end:0x0206c1e4
+    .text start:0x0206c104 end:0x0206c240

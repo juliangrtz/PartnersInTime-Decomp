@@ -725,6 +725,46 @@ the caller's stack, return value and SP/r4-r11 are checked; lower helper-stack
 contents are observational within the recorded bounds. These cases supplement
 the live route and do not establish asynchronous behavior or rendering coverage.
 
+#### Four-model table updates
+
+`BattleModelAnimation_SetModels` at `0x0206C1E4` adds 92 matching C bytes to the
+same animation unit. It returns the four-pointer table at
+`read32(0x020C0660) + 0x1131C`. The first slot is always assigned, with pointer
+sentinel `-1` converted to null. For slots 1 through 3, `-1` preserves the old
+pointer. Null explicitly clears any slot. The Battle VM and overlay-25 caller
+now use the shared pointer-typed declaration and its actual table-pointer return.
+
+The checkpoint-55 entry replay
+`build/runtime/eur_battle_model_table/evidence_entry55_v3.json` runs the setter
+once at frame 70, with arguments `[0, 0x0228C570, -1, -1]`, then reaches the
+visible Jump command menu against Petey at frame 706. The focused oracle checks
+the full 70,976-byte workspace, its allocation header and root, ordered table
+writes, unchanged slots, surrounding caller stack, return pointer and SP/r4-r11.
+The existing controlled encounter fixture restores the field command and cursor
+before native battle start. This remains a controlled route using story save 55,
+not evidence of natural encounter entry. Original save hashes are unchanged.
+
+The first probe incorrectly required execution hooks at conditional stores whose
+conditions were false. The preserved v1 report fails that assertion. The corrected
+oracle requires the stores selected by the entry arguments and verifies skipped
+slots remain unchanged. Passing v2/v3/v4 have identical table-call records,
+target registers and DTCM. V3 additionally saves a compatible battle checkpoint;
+v4 repeats the same probe source. Execution-hook delivery differs from merely
+visiting an instruction address in a disassembly.
+
+Final captures differ across these replays, including the unchanged-source
+repeat. At both captured function entries, six main-RAM bytes differ outside
+the table workspace: `0x02060E04..05`, `0x020CD0AC`, `0x020CD0B0` and
+`0x023FFDED..EE`. The checked table workspace and final mapped VRAM, palette and
+OAM dumps agree. The cause of the different rendered images remains unconfirmed;
+do not claim image-identical replays from the matching setter checks.
+
+`isolated_v1.json` supplements the live call with all 16 sentinel combinations
+and an all-null case on copied RAM. Each uses native ARM946 execution without
+stubs, checks every main-RAM and DTCM byte, ordered writes and preserved registers,
+and seeds nonzero table entries to expose preservation versus clearing. Neither
+this leaf setter nor these checks establishes subsequent rendering or model use.
+
 ### Battle transition dispatch and resource slots
 
 The matching build includes two more overlay-2 helpers:

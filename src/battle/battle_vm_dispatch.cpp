@@ -10,6 +10,7 @@ extern "C" {
 #include <game/battle_hit.h>
 #include <game/battle_impact_effect.h>
 #include <game/battle_mesh.h>
+#include <game/battle_model_animation.h>
 #include <game/battle_object.h>
 #include <game/battle_particle_sweep.h>
 #include <game/battle_raster_effects.h>
@@ -76,8 +77,6 @@ extern int func_ov002_02078e38(ScriptVm *vm, ScriptVmState *state,
 extern int func_ov002_02078bb4(ScriptVm *vm, ScriptVmState *state,
                                ScriptVmCommand *command, int spawn_mode);
 extern int func_ov002_0207905c(int source, void **resolved_source);
-extern void func_ov002_0206c1e4(void *source_0, void *source_1,
-                                void *source_2, void *source_3);
 extern void func_ov002_020bccc4(u16 source_object_id, u16 target_object_id,
                                 u16 relaxation_period, u16 link_length,
                                 s8 flipped_y_adjustment, s8 source_x_offset,
@@ -2113,9 +2112,9 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
             command->arguments[2], &resource_sources[2]);
         func_ov002_0207905c(
             command->arguments[3], &resource_sources[3]);
-        func_ov002_0206c1e4(
-            resource_sources[0], resource_sources[1],
-            resource_sources[2], resource_sources[3]);
+        BattleModelAnimation_SetModels(
+            (BattleModel *)resource_sources[0], (BattleModel *)resource_sources[1],
+            (BattleModel *)resource_sources[2], (BattleModel *)resource_sources[3]);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_ARCHIVE_EFFECT_AT_WORLD_POSITION:

@@ -8040,3 +8040,25 @@ reports remain separate from passing v4/v5 evidence. Palette-placement choice,
 animation-setter internals, sound and rasterization remain observational.
 See [the reconstruction reference](research/RECONSTRUCTION_NOTES.md#battle-model-animation-starts)
 for addresses, routes, private reports, provenance and coverage limits.
+
+
+## 2026-09-14: Shared battle animation model table
+
+- Reconstructed BattleModelAnimation_SetModels (overlay 2, 0x0206C1E4, 92 bytes)
+  and extended the contiguous animation unit. Its pointer sentinel clears the
+  first model slot but preserves the other three; null clears any slot.
+- Migrated the Battle VM and overlay-25 projectile caller to the shared typed
+  API. All three animation functions, the full 19,168-byte dispatcher and all
+  four functions in the affected projectile unit match their native ranges.
+- Full matching, both byte-identical EUR ROMs, progress checks and 81 tests pass.
+  Coverage: 747,340 / 1,563,700 = 47.7931% matching C/C++; symbolic ASM 5,012
+  bytes, combined 48.1136%. This batch adds 92 C bytes.
+- Controlled story-55 battle entry checks the setter's live table, 70,976-byte
+  workspace, ordered stores, stack and return ABI. Frame 706 visibly reaches
+  the Jump menu against Petey. Seventeen isolated ARM946 cases cover sentinel
+  combinations and nulls with full RAM/DTCM and ordered-write checks; all original
+  saves remain unchanged. These cases do not prove later rendering or model use.
+- Private evidence: build/analysis/battle_model_table_build_validation.json,
+  build/runtime/eur_battle_model_table/evidence_entry55_v3.json and isolated_v1.json.
+  Preserve the v1 failed hook-count assumption and corrected v2/v3 producers;
+  false conditional stores do not produce DeSmuME execution-hook callbacks.

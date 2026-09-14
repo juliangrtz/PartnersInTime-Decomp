@@ -8,6 +8,9 @@
 extern "C" {
 #endif
 
+/* -1 clears the first slot and preserves each of the other three slots. */
+BattleModel **BattleModelAnimation_SetModels(BattleModel *first, BattleModel *second,
+    BattleModel *third, BattleModel *fourth);
 GameMatrixAnimationTrack *BattleModelAnimation_Start(int animation,
     BattleModel *model, int x, int y, s16 z, int speed);
 GameMatrixAnimationTrack *BattleModelAnimation_StartAttached(

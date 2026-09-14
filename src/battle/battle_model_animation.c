@@ -12,6 +12,24 @@ enum {
 
 #define BATTLE_ANIMATION_WORKSPACE ((u8 *)data_ov002_020c0660)
 
+BattleModel **BattleModelAnimation_SetModels(BattleModel *first, BattleModel *second,
+    BattleModel *third, BattleModel *fourth)
+{
+    BattleModel **models = (BattleModel **)(BATTLE_ANIMATION_WORKSPACE +
+        BATTLE_MODEL_ANIMATION_MODELS_OFFSET);
+
+    if (first == (BattleModel *)-1)
+        first = 0;
+    models[0] = first;
+    if (second != (BattleModel *)-1)
+        models[1] = second;
+    if (third != (BattleModel *)-1)
+        models[2] = third;
+    if (fourth != (BattleModel *)-1)
+        models[3] = fourth;
+    return models;
+}
+
 GameMatrixAnimationTrack *BattleModelAnimation_Start(int animation,
     BattleModel *model, int x, int y, s16 z, int speed)
 {
