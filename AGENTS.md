@@ -101,6 +101,7 @@ records. Serialize builds, metadata edits and replays that share ROM/save paths.
 | ABI and compiler lessons | [Reconstruction reference](docs/research/RECONSTRUCTION_NOTES.md#reconstructing-and-integrating-code) |
 | Battle effect wrappers and scene-object ownership | [Projection, returned handles and embedded object records](docs/research/RECONSTRUCTION_NOTES.md#battle-relative-effect-spawning) |
 | Battle scheduler, queues and isolated ARM checks | [Allocation layout and boundary cases](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-queues), [VBlank callback contracts and live replay](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-vblank-consumer) |
+| Battle scheduler construction and teardown | [Heap/file contracts, overlay transitions and replay limits](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-lifecycle) |
 | Task, heap and archive lifecycle | [Normal tasks](src/game/task.cpp), [IRQ tasks](src/game/irq_task.cpp), [allocator](src/game/heap.c), [archive base](src/game/archive_lifecycle.c), [compressed archive](src/game/archive_compressed_lifecycle.c) |
 | Hit-bonus arithmetic and RNG fixtures | [Conversion ABI, truncation and restoration](docs/research/RECONSTRUCTION_NOTES.md#battle-hit-bonus-roll) |
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
@@ -141,6 +142,10 @@ ignore blank/comment manifest entries and unnamed component-wide section heading
 Otherwise an inventory can silently miss linked ranges or count the entire
 component as owned. Confirm a proposed new range directly before reconstructing
 or counting it; historical `EXACT` records are only discovery leads.
+Inspect code-bearing sections such as `.init` as well as `.text`. Global C++
+construction can generate registration code and tables; recover their ownership
+and section placement before proposing a unit. Do not move code between sections
+or count initialization data merely to make the remaining inventory smaller.
 
 ## Reconstruct and integrate
 
@@ -158,6 +163,10 @@ or counting it; historical `EXACT` records are only discovery leads.
    from a stack argument, does not establish a narrow parameter. Check caller-side
    extensions, stack and hidden ABI arguments. A register left over from a previous
    call is not an argument unless the next callee consumes its incoming value.
+   Conversely, an existing prototype can omit forwarded arguments. Trace incoming
+   registers through the callee and check the virtual interface before diagnosing
+   a wrapper's register mismatch as a compiler problem. Restoring a missing
+   argument can explain both register preservation and stack layout without hacks.
    A later mask or narrow store also does not establish a narrow parameter;
    a full-word stack load followed by truncation may require a full-width type.
    A caller ignoring `r0` does not establish a `void` return type. Check the
@@ -462,6 +471,12 @@ compatible snapshots. Read their arguments and
   from an independent graphics oracle.
   A verified draw-list insertion does not prove a visible sprite: clipping can
   suppress it. State whether the evidence checks submission or rendered pixels.
+  If repeated captures differ, preserve the mismatch and compare target-entry
+  RAM, registers, checked events and graphics separately. Repeat an unchanged
+  probe when needed to distinguish a probe change from existing variation.
+  Equal constructor inputs or OAM do not prove identical later animation pixels;
+  leave the cause unconfirmed unless the evidence explains it. See the
+  [scheduler lifecycle replay](docs/research/RECONSTRUCTION_NOTES.md#battle-scheduler-lifecycle).
   Associate every route with the exact probe source/version that produced it,
   including generated or composed copies. Preserve separate variants when the
   probe changes between routes; the current script cannot stand in for all of them.
@@ -579,6 +594,10 @@ request, pushed revision, last verified code batch, pending paths and checks.
 For every gap, record component/address, native/candidate sizes, mismatch class
 and evidence needed to retry. Record exactness per function, including mixed
 private units; preserve unfinished drafts during documentation work.
+Archive an obsolete handoff before replacing it. Its new opening must identify
+the latest request, distinguish committed from working-tree coverage, and state
+the next missing check for each pending batch. Historical continuation language
+must not override the current task or turn a planned replay into completed work.
 
 Keep failed replay commands, exit status, logs, frame/assertion and successful
 reruns distinct. A suspected oracle correction is not a verified fix. Record
