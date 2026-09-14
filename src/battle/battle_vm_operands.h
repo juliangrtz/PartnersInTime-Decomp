@@ -21,6 +21,14 @@ static inline void BattleVm_DecodeFixedArgument(ScriptVmCommand *command,
     }
 }
 
+static inline void BattleVm_DecodePackedArgument(ScriptVmCommand *command,
+                                                int argument_index) {
+    if ((command->argument_modes & (1 << argument_index)) == 0) {
+        command->arguments[argument_index] = BattleVm_PackHalfwords(
+            command->arguments[argument_index], command->arguments[argument_index + 1]);
+    }
+}
+
 #ifdef __cplusplus
 }
 #endif

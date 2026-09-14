@@ -510,4 +510,4 @@ src/battle/battle_model_animation.c:
     .text start:0x0206c104 end:0x0206c240
 
 src/battle/battle_vm_motion.cpp:
-    .text start:0x02078460 end:0x020787f0
+    .text start:0x02078460 end:0x02078bb4

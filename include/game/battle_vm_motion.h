@@ -7,6 +7,11 @@ extern "C" {
 
 #include <game/script_vm.h>
 
+void BattleVm_StartVerticalMotion(ScriptVm *vm, ScriptVmState *state,
+    ScriptVmCommand *command, int write_result);
+void BattleVm_MoveWithVerticalDuration(ScriptVm *vm, ScriptVmState *state,
+    ScriptVmCommand *command, int write_result);
+
 void BattleVm_StartBallisticMotion(ScriptVm *vm, ScriptVmState *state,
     ScriptVmCommand *command, int write_result);
 void BattleVm_StartScaledAcceleratedMotion(ScriptVm *vm, ScriptVmState *state,

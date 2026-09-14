@@ -1047,36 +1047,36 @@
       "evidence": "BattleAI_DispatchOpcode case 0x056; BattleSceneObject field +0xF4"
     },
     "94": {
-      "arguments": ["object_id", "motion_slot", "solver_profile", "distance", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high"],
+      "arguments": ["object_id", "vertical_motion_slot", "solver_profile", "target_z", "duration_or_velocity_fixed_low_or_variable", "duration_or_velocity_fixed_high", "acceleration_or_curve_packed_low_or_variable", "acceleration_or_curve_packed_high"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "starts an axis-oriented kinematic motion; solver profile 4 uses the alternate fixed-point solver and other profiles use the standard solver",
-      "evidence": "BattleAI_DispatchOpcode case 0x05E; func_ov002_020789ec; func_ov002_020a4518; func_ov002_020a46a0"
+      "effect": "starts vertical motion to target_z; low-halfword profile 4 divides both packed parameters by 16 and uses velocity/acceleration, while other profiles divide only the first and use duration/velocity plus a curve parameter",
+      "evidence": "BattleAI_DispatchOpcode case 0x05E; BattleVm_StartVerticalMotion; BattleSceneObject_StartVerticalMotionTo; BattleSceneObject_StartVerticalArc"
     },
     "95": {
-      "arguments": ["object_id", "motion_slot", "solver_axis", "solver_profile", "target_x", "target_y", "target_z", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high"],
+      "arguments": ["object_id", "position_motion_slot", "vertical_motion_slot", "solver_profile", "target_x", "target_y", "target_z", "duration_or_velocity_fixed_low_or_variable", "duration_or_velocity_fixed_high", "acceleration_or_curve_packed_low_or_variable", "acceleration_or_curve_packed_high"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "solves a kinematic duration using the selected profile, then moves the object to the supplied target on the selected motion slot",
-      "evidence": "BattleAI_DispatchOpcode case 0x05F; func_ov002_020787f0; BattleSceneObject_MoveTo"
+      "effect": "starts vertical motion using its own channel, then moves to the target using the returned duration on the position channel; full-word profile 4 selects velocity/acceleration",
+      "evidence": "BattleAI_DispatchOpcode case 0x05F; BattleVm_MoveWithVerticalDuration; BattleSceneObject_MoveTo"
     },
     "96": {
-      "arguments": ["object_id", "motion_slot", "solver_profile", "distance", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high"],
+      "arguments": ["object_id", "vertical_motion_slot", "solver_profile", "target_z", "duration_or_velocity_fixed_low_or_variable", "duration_or_velocity_fixed_high", "acceleration_or_curve_packed_low_or_variable", "acceleration_or_curve_packed_high"],
       "result": "solved_duration",
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "performs the same axis-oriented kinematic setup as opcode 0x05E and returns the duration selected by the solver",
-      "evidence": "BattleAI_DispatchOpcode case 0x060; func_ov002_020789ec"
+      "evidence": "BattleAI_DispatchOpcode case 0x060; BattleVm_StartVerticalMotion"
     },
     "97": {
-      "arguments": ["object_id", "motion_slot", "solver_axis", "solver_profile", "target_x", "target_y", "target_z", "parameter_a_fixed_low_or_variable", "parameter_a_fixed_high", "parameter_b_fixed_low_or_variable", "parameter_b_fixed_high"],
+      "arguments": ["object_id", "position_motion_slot", "vertical_motion_slot", "solver_profile", "target_x", "target_y", "target_z", "duration_or_velocity_fixed_low_or_variable", "duration_or_velocity_fixed_high", "acceleration_or_curve_packed_low_or_variable", "acceleration_or_curve_packed_high"],
       "result": "solved_duration",
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "performs the same target motion as opcode 0x05F and returns the duration selected by the kinematic solver",
-      "evidence": "BattleAI_DispatchOpcode case 0x061; func_ov002_020787f0; BattleSceneObject_MoveTo"
+      "evidence": "BattleAI_DispatchOpcode case 0x061; BattleVm_MoveWithVerticalDuration; BattleSceneObject_MoveTo"
     },
     "98": {
       "arguments": ["object_id", "motion_slot", "direction_x", "direction_y", "direction_z", "distance", "peak_distance", "velocity_fixed_low_or_variable", "velocity_fixed_high", "prefer_longer_duration"],

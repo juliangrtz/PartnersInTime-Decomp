@@ -34,10 +34,6 @@ extern "C" {
 extern "C" {
 extern int BattleMap_GetEncounterResourceIndex(int encounter_id);
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
-extern int func_ov002_020789ec(ScriptVm *vm, ScriptVmState *state,
-                               ScriptVmCommand *command, int write_result);
-extern int func_ov002_020787f0(ScriptVm *vm, ScriptVmState *state,
-                               ScriptVmCommand *command, int write_result);
 extern void func_ov002_020a3928(BattleSceneObject *object, int channel_index,
                                 int x, int y, int z, int duration,
                                 int argument_7, int argument_8,
@@ -1196,16 +1192,16 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_AXIS_KINEMATIC_MOTION:
-        func_ov002_020789ec(vm, state, command, 0);
+        BattleVm_StartVerticalMotion(vm, state, command, 0);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_MOVE_WITH_KINEMATIC_DURATION:
-        func_ov002_020787f0(vm, state, command, 0);
+        BattleVm_MoveWithVerticalDuration(vm, state, command, 0);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_START_AXIS_KINEMATIC_MOTION_GET_DURATION:
-        func_ov002_020789ec(vm, state, command, 1);
+        BattleVm_StartVerticalMotion(vm, state, command, 1);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_MOVE_WITH_KINEMATIC_DURATION_GET_DURATION:
-        func_ov002_020787f0(vm, state, command, 1);
+        BattleVm_MoveWithVerticalDuration(vm, state, command, 1);
         return SCRIPT_VM_CONTINUE;
     case BATTLE_VM_START_DIRECTIONAL_KINEMATIC_A:
         BattleVm_StartMotionWithPeakDistance(vm, state, command, 0);

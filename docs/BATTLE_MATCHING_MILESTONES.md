@@ -8088,3 +8088,26 @@ for addresses, routes, private reports, provenance and coverage limits.
 - Private evidence: build/analysis/battle_vm_directional_build_validation_v2.json,
   battle_vm_directional_final_objects.json, and build/runtime/eur_battle_vm_directional/
   evidence_petey55_v1.json, evidence_shrowser103_v1.json and isolated_v2.json.
+
+
+## 2026-09-14: Battle VM vertical and coupled motion
+
+- Reconstructed overlay-2 handlers 0x020787F0/508 and 0x020789EC/456: 964 new
+  matching C++ bytes, completing the contiguous 1,876-byte motion-handler unit.
+  Recovered distinct profile widths, decode/lookup order, both vertical solvers,
+  optional duration writeback and the following position-channel movement.
+- All five motion functions and the full 19,168-byte dispatcher match. Seven
+  build checks pass, both EUR ROMs have the golden hash, and 81 tests pass.
+  Coverage: 749,216 / 1,563,700 = 47.9130% matching C/C++; symbolic ASM remains
+  5,012 bytes, with 48.2335% combined coverage.
+- Two Shrowser intro calls pass an independent full-allocation/channel/ABI oracle
+  in each of two 1,801-frame replays. Forty-three native ARM946 cases cover both
+  wrappers on copied RAM/DTCM, including profile 0x10004, immediate movement,
+  signed decoding and interfering motion channels. All original saves unchanged.
+- The combined wrapper's coverage is isolated execution only. The preserved
+  automatic reflection attempt sent no inputs because its generic jump predicate
+  stayed disabled, then failed when the battle allocation ended. No ordinary
+  reflection, later rendering, hardware latency or complete battle claim.
+- Private evidence: build/analysis/battle_vm_vertical_build_validation.json,
+  battle_vm_vertical_final_objects.json, and build/runtime/eur_battle_vm_vertical/
+  evidence_shrowser103_intro_v2.json, isolated_v1.json and artifact_validation_v1.json.

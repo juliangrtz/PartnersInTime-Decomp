@@ -20,6 +20,7 @@ ordinary gameplay accessibility or coverage of unexercised branches.
 - Battle exit: [transition dispatch and resource-slot selection](#battle-transition-dispatch-and-resource-slots)
 - Battle model animations: [shared track creation and Mix Flowers](#battle-model-animation-starts)
 - Battle VM motion: [directional operand decoding and live channel checks](#battle-vm-directional-motion)
+- Battle VM vertical motion: [solver modes, coupled channels and copied-state checks](#battle-vm-vertical-motion)
 - Code-derived findings: [pause party status](#pause-party-status)
 - Pause transitions: [verified exit tasks](#pause-exit-tasks-and-transition-state),
   [projection and callback ABI](#pause-transition-projection-and-callback-abi),
@@ -822,8 +823,56 @@ Static discovery found 459 uses of the broader `0x05E..0x067` families. Resolve
 named opcodes through the schema when scanning JSON; treating them as numeric
 strings produces a false empty inventory. Shrowser also exercises the separate
 vertical handler at `0x020789EC`, while the combined movement handler at
-`0x020787F0` lies on a reflected-projectile script path. Those two private exact
-drafts remain outside this linked group and its independent checks.
+`0x020787F0` has a separate Shrowser script entry at offset `0x2344`. See the
+[vertical-motion reconstruction](#battle-vm-vertical-motion) for their own checks.
+
+### Battle VM vertical motion
+
+The [motion unit](../../src/battle/battle_vm_motion.cpp) now also includes
+`BattleVm_MoveWithVerticalDuration` at `0x020787F0` (508 bytes) and
+`BattleVm_StartVerticalMotion` at `0x020789EC` (456 bytes). The five contiguous
+handlers total 1,876 matching C++ bytes through `0x02078BB4`; the full dispatcher
+still matches. These two functions implement opcodes `0x05E..0x061`.
+
+Both combine literal halfwords in place. The first parameter is divided by 16
+toward zero before reaching the vertical solver. Profile 4 also divides the
+second parameter by 16 and selects velocity/acceleration motion; other profiles
+pass that packed parameter directly as the arc curve. The vertical-only wrapper
+compares the profile's low halfword and resolves its object before decoding.
+The combined wrapper compares the full word and decodes before object lookup.
+It first starts vertical motion, then passes that solver's duration to `MoveTo`
+on the independently selected position channel. Both optionally write the duration
+to the VM result variable. The schema names these channels and target Z explicitly.
+
+The independent oracle models both vertical solvers, immediate position changes,
+list insertion, channel replacement, deferred deltas and the following `MoveTo`.
+It checks the full containing battle allocation, list/root words, command, VM,
+caller stack, ordered helper arguments/results, SP and preserved registers.
+The native helpers execute in every case; none is stubbed.
+
+- `build/runtime/eur_battle_vm_vertical/evidence_shrowser103_intro_v2.json`
+  runs 1,801 frames from the compatible story-103 introduction checkpoint:
+  twelve `a:8, wait:90` pairs, then `wait:600`, including released frames.
+  Two vertical-only calls at frames 303 and 315 pass with literal operands,
+  profile 3, no result write and duration 32. The final capture shows the ongoing
+  Shrowser battle. V1 is a separate passing replay; V2 adds the final capture
+  and a compatible output checkpoint. All 104 original saves remain unchanged.
+- `isolated_v1.json` checks 43 native ARM946 cases on copied Shrowser RAM/DTCM:
+  21 combined-motion cases and 22 vertical-only cases. These cover both profiles,
+  variable/literal decoding, signed remainders, result flags, immediate movement,
+  negative/zero durations, discriminants, ID truncation and active/deferred or
+  shared channels. Profile `0x10004` selects different helpers in the two wrappers,
+  confirming the full-word versus halfword comparison. Every main-RAM byte and
+  caller DTCM is checked; lower helper-stack bytes remain bounded observations.
+
+The combined wrapper has copied-state execution coverage only. The input-only
+`shrowser103_auto_v1` attempt never saw the generic party jump-enable flag, sent
+no inputs and failed when the battle allocation ended at frame 6,179. Preserve
+that failed route and its producer; it does not establish reflection gameplay.
+The intro replay's earlier checkpoint history was not reverified. Integer SQRT
+modeling excludes hardware latency and IRQ timing, and the checks do not prove
+later animation, rendering or completion of the battle. Artifact and final-build
+checks are recorded in `artifact_validation_v1.json` in the same private directory.
 
 ### Battle transition dispatch and resource slots
 

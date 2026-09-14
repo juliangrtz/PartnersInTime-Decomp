@@ -57,10 +57,10 @@ word loads observed from the command-record register (`r5`).
 | `0x5B` | `0x0207B070` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24` | `BattleSceneObject_GetById`, `BattleSceneObject_AdjustPosition`, `BattleSceneObject_MoveBy`, `BattleSceneObject_MoveTo`, `func_ov002_020a3b2c` |
 | `0x5C` | `0x0207B2D8` | — | `0x8`, `0xC`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24`, `0x28`, `0x2C` | `BattleSceneObject_GetById`, `func_ov000_020a3928` |
 | `0x5D` | `0x0207B338` | — | `0x8`, `0xC`, `0x10`, `0x14`, `0x18`, `0x1C`, `0x20`, `0x24` | `BattleSceneObject_GetById`, `FX_Sqrt`, `_s32_div_f`, `BattleSceneObject_MoveBy`, `BattleSceneObject_MoveTo`, `func_ov002_020a3b2c` |
-| `0x5E` | `0x0207B514` | — | — | `func_ov002_020789ec` |
-| `0x5F` | `0x0207B52C` | — | — | `func_ov002_020787f0` |
-| `0x60` | `0x0207B544` | — | — | `func_ov002_020789ec` |
-| `0x61` | `0x0207B55C` | — | — | `func_ov002_020787f0` |
+| `0x5E` | `0x0207B514` | — | — | `BattleVm_StartVerticalMotion` |
+| `0x5F` | `0x0207B52C` | — | — | `BattleVm_MoveWithVerticalDuration` |
+| `0x60` | `0x0207B544` | — | — | `BattleVm_StartVerticalMotion` |
+| `0x61` | `0x0207B55C` | — | — | `BattleVm_MoveWithVerticalDuration` |
 | `0x62` | `0x0207B574` | — | — | `BattleVm_StartMotionWithPeakDistance` |
 | `0x63` | `0x0207B58C` | — | — | `BattleVm_StartScaledAcceleratedMotion` |
 | `0x64` | `0x0207B5A4` | — | — | `BattleVm_StartBallisticMotion` |
