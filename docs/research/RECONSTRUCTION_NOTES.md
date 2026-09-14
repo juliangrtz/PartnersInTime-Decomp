@@ -930,6 +930,45 @@ remains unestablished. Earlier entry/idle probes reached no targets; V3 used an
 incorrect descriptor address despite obtaining the same rewind. Keep those
 attempts as historical artifacts, not accepted coverage. The accepted run is V4.
 
+### Battle sprite-grid capture controls
+
+[Sprite-grid capture](../../src/battle/battle_sprite_grid_capture.c) adds seven
+matching C functions at `0x020B9424..0x020B99BC` (1,432 bytes). Battle VM opcodes
+`0xB3..0xB7` call its initialization, start, advance, finish and active-state
+controls. EUR enemy record 34, Shrooboid Brat, selects packed AI resource `0xD004`:
+`BAI_mon_3_hn.dat` entry 4 contains the eleven relevant script commands.
+
+The effect uses a 1,028-byte state through `read32(read32(0x020C0DC8) + 4)`.
+The public C source uses an eight-byte prefix of the twelve-byte render-override
+slot. Signed phase is at `+0`, delay ranges at `+2/+4`, selected/visited cell
+masks at `+6/+8`, counts at `+10/+11`, signed displacement at `+12`, scanline
+fields at `+13..+15`, signed timer at `+16`, and flags at `+17`.
+Start selects among sixteen cells without replacement. Phases 0 and 5 report
+inactive. Finish clears flag bit 0; Advance preserves it. The queued callback
+ramps displacement between 0 and 8 and arms four 16-line bands on sub-screen
+BG1. Alternating bands add displacement to the shared signed origin plus 128;
+vertical offset is origin plus 32. Offsets wrap to nine bits at `0x04001014`.
+
+Private `eur_battle_grid_capture/evidence_brat50_round_v3.json` checks 2,820
+frames after normal entry from save 50: one initialization, one start, 92 active
+queries, 241 queued updates, 960 IRQ callbacks and one finish. All four bands
+execute 240 times, and the effect returns to phase 0. The recorded cold-boot
+route loads the Koopaseum save and jumps both adults onto the raised blue panel
+to activate the elevator; it uses no RAM edits. State, override and caller
+records, RNG steps, callback arguments, queue insertion and ordered target
+display-register stores are checked. DISPSTAT checks use the value loaded by
+the game: hardware status bits can change before its following store.
+
+`isolated_v1.json` adds 50 native ARM946 cases on copied live RAM, including
+Advance, rejected/reused starts, signed count and delay boundaries, upper mode
+bits, terminal phases, invalid band indices and wrapped display coordinates.
+Nineteen leaf cases check all mapped memory and ordered writes. Other cases
+use the same bounded record and helper checks as the live probe. The reserve
+helper's resource-pool mutations remain observations; there is no independent
+pixel renderer or proof of asynchronous IRQ timing. All 104 original saves
+retain their hashes. The first probes failed on literal-pool decoding, register
+aliases and changing DISPSTAT bits; their sources and failures remain private.
+
 ### Battle dialogue controls
 
 [Dialogue controls](../../src/battle/battle_dialogue_control.cpp) and

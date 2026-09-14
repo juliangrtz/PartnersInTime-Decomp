@@ -8148,3 +8148,21 @@ signed-index narrowing and both manager teardown branches. All 104 saves are unc
 Query/teardown branches outside that live route are isolated coverage; native UI and
 allocator effects are bounded observations, with task/sprite unlink neighbors checked.
 See the reconstruction reference for pointers, failed attempts and coverage limits.
+
+## Battle sprite-grid capture controls - 2026-09-14
+
+Seven functions add 1,432 matching C bytes for initialization, control operations,
+queued scanline setup and VCount interrupts. Total: 751,912 / 1,563,700 matching
+C/C++ bytes (48.0854%); symbolic ASM remains separate. The complete 19,168-byte
+Battle VM dispatcher still matches with the shared declarations.
+
+All seven build checks pass, including 81 tests. Both ROMs retain SHA-1
+ba4ec2f99b4f2e0047601552bccf00aa73e28701. Private
+eur_battle_grid_capture/evidence_brat50_round_v3.json checks 2,820 frames of the
+Shrooboid Brat fight entered normally from save 50: initialization/start/finish,
+92 active queries, 241 queued updates and 960 scanline callbacks. All four bands
+execute 240 times. isolated_v1.json passes 50 copied-state ARM946 cases; Advance
+and additional boundary branches have isolated coverage. Ordered target I/O,
+RNG steps, queue insertion and full effect records are checked, with stated
+limits for resource-pool internals, pixel rendering and asynchronous IRQ timing.
+All 104 original saves are unchanged. Failed probe versions remain preserved.

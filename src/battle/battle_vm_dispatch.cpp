@@ -1,4 +1,5 @@
 extern "C" {
+#include <game/battle_sprite_grid_capture.h>
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>
@@ -95,16 +96,6 @@ extern void func_ov002_020ba210(BattleSceneObject *primary,
                                 int step_denominator, int path_numerator,
                                 int render_parameter, int primary_x_offset,
                                 int primary_y_offset, int base_z);
-extern void func_ov002_020b9978(BattleSceneObject *object);
-extern void func_ov002_020b9854(BattleSceneObject *object,
-                                int cell_delay_range, int quarter_delay_range,
-                                int selected_cell_count,
-                                int use_scanline_reveal);
-extern void func_ov002_020b9818(BattleSceneObject *object,
-                                int cell_delay_range, int quarter_delay_range);
-extern void func_ov002_020b97d0(BattleSceneObject *object,
-                                int cell_delay_range, int quarter_delay_range);
-extern int func_ov002_020b97a8(BattleSceneObject *object);
 extern int GameInventory_Add(u16 item_id, int count_delta);
 extern int GameInventory_GetCount(u16 item_id);
 extern int BattleItemList_RebuildActionItems(void);
@@ -2034,32 +2025,32 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_INITIALIZE_SPRITE_GRID_CAPTURE:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020b9978(object);
+        BattleSpriteGridCapture_Initialize(object);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_SPRITE_GRID_CAPTURE:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020b9854(
+        BattleSpriteGridCapture_Start(
             object, command->arguments[1], command->arguments[2],
             command->arguments[3], command->arguments[4]);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_ADVANCE_SPRITE_GRID_CAPTURE:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020b9818(
+        BattleSpriteGridCapture_Advance(
             object, command->arguments[1], command->arguments[2]);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_FINISH_SPRITE_GRID_CAPTURE:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
-        func_ov002_020b97d0(
+        BattleSpriteGridCapture_Finish(
             object, command->arguments[1], command->arguments[2]);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_IS_SPRITE_GRID_CAPTURE_ACTIVE:
         object = BattleSceneObject_GetById((u16)command->arguments[0]);
         BattleVm_WriteResult(
-            vm, state, command, func_ov002_020b97a8(object));
+            vm, state, command, BattleSpriteGridCapture_IsActive(object));
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_SPAWN_OBJECT_DATA_EFFECT_AT_WORLD_POSITION:
