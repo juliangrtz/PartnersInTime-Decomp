@@ -2,6 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/analysis/ds-decomp-source" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/decomp-permuter" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/build/reference/pokediamond" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/third_party/py-desmume" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/build/third_party/py-desmume/desmume_src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/private/verification/public-clone" vcs="Git" />
   </component>
 </project>
