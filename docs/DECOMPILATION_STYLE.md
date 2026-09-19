@@ -17,6 +17,39 @@ European ROM exactly. Neither requirement is optional.
   their functions in descending runtime-address order. Headers own shared
   structures, enums, flags, and public declarations.
 
+### Directory layout
+
+`src/game/` holds resident game helpers, `src/nitro/` and `src/msl/` mirror the
+Nintendo SDK and Metrowerks library module layouts, and `src/field/` and
+`src/battle/` are overlays 0 and 2. Every other overlay has a directory named
+`<role>_ovNNN`, for example `shop_ov009` or `attack_pocket_chomp_ov018`: the
+role states what the code does and the padded overlay number keeps it tied to
+the delink metadata and the [overlay map](research/OVERLAY_MAP.md). Headers
+private to one overlay live beside its sources and are included with a
+relative path; shared interfaces belong in `include/game/`.
+
+### Renaming and merging units
+
+Use `tools/reorganize_sources.py` with a plan file rather than moving units by
+hand. It refuses anything that cannot be a valid translation unit - members
+from different components, a gap between their ranges in any section, members
+out of address order, mixed languages, a colliding basename - and rewrites
+`delinks.txt`, `linked_sources.txt` and `linker_aliases.json` together. Two
+units may only be merged when their native ranges already touch, and merging
+unrelated topics because their addresses happen to be adjacent is not an
+improvement. Run `tools/verify_refactor.ps1` afterwards.
+
+### Language per unit
+
+Whether a unit is `.c` or `.cpp` is a statement about the original translation
+unit, not a formatting choice: shared headers such as `include/game/task.h` and
+`include/game/field_entity.h` declare virtual classes under `__cplusplus` and
+plain structs with a vtable pointer otherwise, so the language changes what the
+code means. Change a unit's language only with evidence - virtual dispatch
+using a single scratch register, a constructor installing a vtable, an entry in
+`.ctor` - and only when the rebuilt object still reproduces the original bytes.
+A unit that stops matching when compiled as C++ was C.
+
 ## Readability and matching
 
 - Prefer structured `if`, `switch`, and loop constructs. Use `goto` only when a
@@ -29,6 +62,28 @@ European ROM exactly. Neither requirement is optional.
   casts, temporary variables, and control flow, then run the matching check.
 - Every C change must pass `ninja check`; milestone changes must also produce a
   native relink with zero differing bytes and pass the unit tests.
+
+## Comments
+
+Comments carry the knowledge that the code cannot: what a record is for, who
+owns it, which convention a number follows, and why the code is shaped the way
+it is. Use `/* */`; the original build has no `//` comments anywhere.
+
+- Open each module with a block comment naming its role, its component and its
+  native range, as in `src/battle/battle_hit.c`. The range is checked against
+  the delinks entry by `tests/test_module_comments.py`, so keep it accurate
+  when a unit moves.
+- Document a structure where it is declared, not at each use. Say what the
+  record is, what owns it and what its lifetime is; call out units (Q8, Q12,
+  frames, scanlines) and any field whose meaning depends on the caller's phase.
+- Explain a union's arms. Several records here read the same bytes differently
+  depending on which subsystem is looking, and that is invisible from the
+  declaration alone.
+- Where the code is shaped by the match rather than by the problem - a retained
+  redundant test, a preserved evaluation order, an unsplit switch - say so next
+  to it, so the next reader does not "fix" it.
+- Do not describe what a statement does when the statement already says it, and
+  do not invent meaning for a field that is still named `unknown`.
 
 ## Interior entry labels
 
