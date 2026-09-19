@@ -16,6 +16,7 @@ struct FieldVariablePlacement;
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldArea_PlayItemCollectionSound(struct FieldAreaContext *field, int item, int source);
 int FieldArea_CollectPlacementItem(struct FieldAreaContext *field,
                                    const struct FieldVariablePlacement *record);
 const struct FieldVariablePlacement *FieldArea_FindUncollectedPlacement(struct FieldAreaContext *field,

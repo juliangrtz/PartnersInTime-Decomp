@@ -24,7 +24,6 @@ enum {
 };
 
 extern const s8 data_ov000_020bfbfc[], data_ov000_020bfc1c[];
-void func_ov000_0207edc0(FieldAreaContext *, int, int);
 void func_ov000_0206f0b4(FieldAreaContext *, FieldVariableEntity *, int);
 void func_ov000_0206ec68(FieldAreaContext *, int, int, s16, s16, int);
 void func_ov000_0207bed8(FieldAreaContext *, int, int);
@@ -63,7 +62,7 @@ int FieldArea_CollectEntityItem(FieldAreaContext *field, FieldVariableEntity *en
     else
         amount = data_ov000_020bfc1c[entity->state.amount_index];
     int added = GameInventory_Add(item, amount) > 0;
-    func_ov000_0207edc0(field, item, 0);
+    FieldArea_PlayItemCollectionSound(field, item, 0);
     func_ov000_0206f0b4(field, entity, added);
     if (added) {
         if (!--entity->state.remaining_uses)
@@ -111,7 +110,7 @@ int FieldArea_CollectPlacementItem(FieldAreaContext *field, const FieldVariableP
         amount = data_ov000_020bfc1c[record->motion.amount_index];
     /* Bean placements increment the separate inventory counter. */
     int added = GameInventory_Add(item == FIELD_PLACEMENT_BEAN ? FIELD_INVENTORY_BEANS : item, amount) > 0;
-    func_ov000_0207edc0(field, item, 1);
+    FieldArea_PlayItemCollectionSound(field, item, 1);
     func_ov000_0206ec68(field, item, record->motion.amount_index,
                         record->x - (field->unknown_244c[0] - field->unknown_2464[0]),
                         record->y - record->z - (field->unknown_244c[1] - field->unknown_2464[1]), added);

@@ -416,3 +416,6 @@ src/field/field_party_context.cpp:
 
 src/field/field_input_read.cpp:
     .text start:0x0207ec6c end:0x0207ed28
+
+src/field/field_item_sound.cpp:
+    .text start:0x0207edc0 end:0x0207ef18

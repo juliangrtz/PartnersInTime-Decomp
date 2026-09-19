@@ -5290,3 +5290,45 @@ exactly; full ROM/native relink checks and 107 tests pass. Private reports:
 unaligned output fixture; v2 removes it to keep fixtures within the halfword
 pointer contract. The remapping helper remains native code and is not counted
 as new C/C++ progress here.
+
+
+## Item collection sound selection
+
+[Item collection sounds](../../src/field/field_item_sound.cpp) use byte 8 of a
+valid tagged item record to select one of three sound classes. Each class has
+a separate entity/placement sound and delay. Coins (`65535`) select the first
+class without a record lookup. Other IDs are narrowed to 16 bits for lookup,
+while the coin comparison uses the full incoming word. The native routine
+requires a valid item and source value; it does not handle arbitrary tags or
+out-of-range table indices. Typed record-prefix helpers preserve each table's
+20/28-byte stride. Both the first draft and named-prefix cleanup match without ASM.
+
+A controlled Save 83 replay starts from the recorded pre-pickup state in room
+459. A guarded decoded D0 command positions the parties at a block using its
+live placement record; the 72 command bytes are restored before the real room
+wrapper. D0 replaces the room scripts, so no original-script replay is claimed.
+An ordinary A press collects item `0x1003` at frame 660: class 1 selects sound
+342, delay 6 and the first free audio slot. The 811-frame run checks the whole
+selector and real delay/queue helpers, including arguments and independently
+modeled queue writes. Full 4 MiB main RAM and 16 KiB DTCM agree outside the exact
+24-byte call-chain stack frame. The pre-fixture emulator state is reloaded at
+completion; main RAM/DTCM and before/restored screenshots are identical. Field
+captures were inspected and all 104 original saves are unchanged.
+
+Another 212 isolated ARM946 cases cover all 99 native inventory records plus
+coins with both source values, each free queue slot, a full queue, full-word IDs
+with valid low halves, and explicit copied-table fixtures for zero/signed sound
+IDs. The selector and both real helpers execute without stubs. Full main RAM,
+scratch outside the exact 8/24-byte frame, SP and callee-saved registers are
+checked. All native delays are nonzero; actual playback/IRQ behavior and audible
+output are not independently verified by these checks.
+
+Actual selector and all four collection-caller functions match; full ROM/native
+relink checks and 107 tests pass. Private evidence lives in
+`build/runtime/eur_high_field_item_sound/{block83_v2,isolated_v1}.json`; producers
+`probe_field_item_sound.py` and `check_field_item_sound_isolated.py` are under
+`build/analysis/high_effort_50_to_55/`. The first replay failed before pickup
+because its oracle treated D0's synchronization argument as a fade argument.
+The VM explicitly supplies fade zero and forwards synchronization separately;
+the corrected replay checks the complete wrapper argument list. The failed run
+and its producer are preserved, and its pre-fixture state was restored too.

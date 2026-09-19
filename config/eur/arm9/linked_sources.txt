@@ -859,3 +859,5 @@ src/field/field_party_boundary.cpp
 src/field/field_party_context.cpp
 
 src/field/field_input_read.cpp
+
+src/field/field_item_sound.cpp

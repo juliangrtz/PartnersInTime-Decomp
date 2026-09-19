@@ -8606,3 +8606,13 @@ The input reader adds 188 matching C++ bytes, reaching 794,940 / 1,563,700
 tests pass. Ordinary navigation checks 1,130 calls; 136 isolated cases execute
 the reader and its real helpers without stubs. All original saves are unchanged.
 See [evidence and limits](research/RECONSTRUCTION_NOTES.md#field-physical-and-scripted-input).
+
+
+## Item collection sound selection
+
+The pickup sound selector adds 344 matching C++ bytes, reaching 795,284 /
+1,563,700 (50.8591%). Actual selector/caller objects, full ROM/native relink and
+107 tests pass. A controlled block-pickup replay checks sound/delay selection and
+the real queue write; 212 isolated cases cover all item records and queue edges.
+The complete pre-fixture emulator state is restored; original saves are unchanged.
+See [evidence and limits](research/RECONSTRUCTION_NOTES.md#item-collection-sound-selection).
