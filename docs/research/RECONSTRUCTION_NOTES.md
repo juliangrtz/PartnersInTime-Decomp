@@ -4786,3 +4786,37 @@ When naming traced call targets, resolve an address in the resident and currentl
 loaded overlay metadata. A global address-to-name map across every attack overlay
 can silently label overlay-21 code as overlay-26 code at the same load address.
 The final replay corrects that issue and repeats the earlier routes.
+
+
+## Jump support input and landing effects
+
+[Support update](../../src/attack_jump_ov020/support_update.cpp) owns
+`0x020C326C..0x020C34A4` (568 bytes), and
+[landing effects](../../src/attack_jump_ov020/landing_effect.cpp) own
+`0x020C2EAC..0x020C2EFC` (80 bytes). Both compiled source objects match fully,
+with no new ASM. Support timing uses the main participant's formation config:
+signed halfwords at +48/+50 bound the main timer inclusively. A masked button
+word must equal the expected key; a different key from the main participant's
+key marks failure. Phase 2 falls through to the channel-3 completion check in
+the same update, even if the vertical-position condition has not changed phase.
+Landing effects use the baby variant for formations 2/3 and the normal variant
+otherwise; the called shared helper projects and spawns a model effect.
+
+Three fresh 1,420-frame DeSmuME replays cover successful support timing, expiry
+without input, and a wrong button within the window. They complete 474 support
+updates and six landing-effect calls. The successful route traverses support
+phases 0 through 4; effects cover formations 2 and 4. Per-call checks compare the
+entire 32-byte support/main records, unchanged 116-byte configuration, input
+flags and every direct helper's arguments. Motion-channel activity is derived
+from its callback; model completion is observed from the returned model flag.
+The original 104 save files remain unchanged.
+
+Private reports: `build/runtime/eur_high_jump_support/high_jump_{perfect,timeout,wrong}_v1.json`.
+Producer: `build/analysis/high_effort_50_to_55/probe_jump_support.py`.
+The checkpoint is `eur_attack_helpers/ov17_native_start83.dst`, with provenance
+in the adjacent JSON: Save 83 entered encounter -32748 via a borrowed 0x11C
+command from room 306, script offset 0x2926; 72 script bytes were restored before
+the checkpoint. These replays make no further RAM edits. This is a controlled
+battle entry, not ordinary story-route coverage. Early input, null support and
+other formations remain untested; helper internals and rendered pixels are
+observational. The inspected success capture shows the paired jump in battle.

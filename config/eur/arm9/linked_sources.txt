@@ -818,3 +818,6 @@ src/shop_ov009/shop_selected_model.cpp
 
 src/attack_hammer_ov021/hammer_resolution.cpp
 src/attack_hammer_ov021/hammer_approach.cpp
+
+src/attack_jump_ov020/support_update.cpp
+src/attack_jump_ov020/landing_effect.cpp

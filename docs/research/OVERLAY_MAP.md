@@ -34,7 +34,7 @@ The source links open each overlay's main source directory.
 | [16](../../src/attack_mix_flower_ov016/) | Mix Flowers | 5,144 / 18,324 | 28.07% | Motion tables, paired effects, participant phases, resource changes, controller geometry, scaling, paired animation setup and cleanup. |
 | [17](../../src/attack_copy_flower_ov017/) | Copy Flowers | 4,604 / 16,784 | 27.43% | Tuning tables, participant entry/return, home positions, animation, effect objects, display setup and model cleanup. |
 | [18](../../src/attack_pocket_chomp_ov018/) | Pocket Chomps | 6,332 / 18,036 | 35.11% | Tuning tables, Chomp entry/exit, animation, support attachment and attacks, anchor offsets and tether setup. |
-| [20](../../src/attack_jump_ov020/) | Jump attack | 2,116 / 9,204 | 22.99% | Attack allocation, resources, actor approach, support states, animation timing, target-relative arcs and phase transitions. |
+| [20](../../src/attack_jump_ov020/) | Jump attack | 2,764 / 9,204 | 30.03% | Attack allocation, resources, actor approach, support input and return, landing effects, animation timing and target-relative arcs. |
 | [21](../../src/attack_hammer_ov021/) | Hammer attack | 4,448 / 5,280 | 84.24% | Entry, input windows, approach and return movement, hit effects and damage/status dispatch, primary/secondary transitions, model flags and cleanup. |
 | [25](../../src/elder_princess_shroob_ov025/) | Elder Princess Shroob fight | 15,844 / 38,024 | 41.67% | Projectile preparation, emission, trails and impacts; linked effects, damage, chain movement, task waits and cleanup. |
 | [26](../../src/battle_item_ov026/) | Battle item use | 3,716 / 14,452 | 25.71% | Resource selection, item entry and launch, party pairing, effect allocation and cleanup, saved state and position helpers. |

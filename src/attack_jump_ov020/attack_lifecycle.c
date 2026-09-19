@@ -43,7 +43,7 @@ void Overlay20Attack_Update(BattlePartyActor *actor)
 {
     Overlay20AttackWork *work = data_ov002_020c0710;
     *(u16 *)(gBattleContext + 0xcb80) = 0;
-    func_ov020_020c326c(&work->support, &work->main);
+    Overlay20Support_Update(&work->support, &work->main);
     func_ov020_020c3eec(&work->main, &work->support);
     switch (work->phase) {
     case 0:

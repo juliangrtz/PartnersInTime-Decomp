@@ -8478,3 +8478,20 @@ Private evidence: build/analysis/high_effort_50_to_55/hammer_build_v1.log,
 probe_hammer.py and build/runtime/eur_high_hammer/*v3.json (8,040 frames total).
 The final probe resolves callees in their owning overlays; earlier v1/v2 labels
 could collide across attack overlays and are superseded by these replays.
+
+
+## Jump support and landing effects (+648 bytes)
+
+Linked `Overlay20Support_Update` (568 bytes) and
+`Overlay20Attack_SpawnLandingEffect` (80 bytes) as matching C++, without new ASM.
+Coverage is 784,724 / 1,563,700 bytes (50.1838%); overlay 20 is 2,764 / 9,204.
+Both actual source objects match. All source objects, link checks, packaged ROM,
+native relink and 107 tests pass; EUR ROM SHA-1 remains
+`ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+Three live replays cover successful support input, timeout and a wrong button:
+4,260 frames, 474 support updates, six landing effects, 104 saves unchanged.
+Full state/config checks and helper argument checks passed; model/effect
+internals and rendering remain observational. The controlled encounter's
+checkpoint provenance and uncovered branches are recorded in the
+[research reference](research/RECONSTRUCTION_NOTES.md#jump-support-input-and-landing-effects).
+Private build log: `build/analysis/high_effort_50_to_55/jump_support_build_v1.log`.

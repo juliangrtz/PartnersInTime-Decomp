@@ -21,7 +21,10 @@ typedef union Overlay20AttackFlags {
 typedef struct Overlay20AttackConfig {
     s16 approach_x;
     u16 approach_duration;
-    u8 unknown_04[50];
+    u8 unknown_04[44];
+    s16 support_window_before;
+    s16 support_window_after;
+    u16 unknown_34;
     s16 support_gravity;
     s16 support_velocity;
     s16 arc_parameter_y;
@@ -55,6 +58,9 @@ void Overlay20Attack_ResetActorPosition(Overlay20AttackState *state);
 void Overlay20Attack_BeginFinish(Overlay20AttackState *state, Overlay20AttackState *other);
 void Overlay20Attack_SetMode(Overlay20AttackState *state, int mode);
 void Overlay20Attack_StartTargetArc(Overlay20AttackState *state);
+
+void Overlay20Support_Update(Overlay20AttackState *state, Overlay20AttackState *main);
+void Overlay20Attack_SpawnLandingEffect(Overlay20AttackState *state, int normal_effect, int baby_effect);
 
 void Overlay20Support_SetMode(Overlay20AttackState *state, int mode);
 void Overlay20Support_StartReturn(Overlay20AttackState *state, Overlay20AttackState *main);

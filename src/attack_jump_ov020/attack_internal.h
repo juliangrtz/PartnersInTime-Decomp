@@ -38,7 +38,6 @@ void func_ov002_020722ac(BattlePartyActor *, void (*)(BattlePartyActor *));
 void func_0202cbd4(void *, int, unsigned);
 void func_ov020_020c3eec(Overlay20AttackState *, Overlay20AttackState *);
 void func_ov020_020c2efc(Overlay20AttackState *, int);
-void func_ov020_020c326c(Overlay20AttackState *, Overlay20AttackState *);
 #ifdef __cplusplus
 }
 #endif

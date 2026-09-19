@@ -1,12 +1,12 @@
 Overlay20Attack_FitAnimationDuration kind:function(arm,size=0x60) addr:0x020c2ae0
 func_ov020_020c2b40 kind:function(arm,size=0x36c) addr:0x020c2b40
-func_ov020_020c2eac kind:function(arm,size=0x50) addr:0x020c2eac
+Overlay20Attack_SpawnLandingEffect kind:function(arm,size=0x50) addr:0x020c2eac
 func_ov020_020c2efc kind:function(arm,size=0x1f4) addr:0x020c2efc
 Overlay20Support_SetMode kind:function(arm,size=0x2c) addr:0x020c30f0
 Overlay20Support_StartReturn kind:function(arm,size=0x11c) addr:0x020c311c
 Overlay20Support_StopInput kind:function(arm,size=0x18) addr:0x020c3238
 Overlay20Support_BeginInput kind:function(arm,size=0x1c) addr:0x020c3250
-func_ov020_020c326c kind:function(arm,size=0x238) addr:0x020c326c
+Overlay20Support_Update kind:function(arm,size=0x238) addr:0x020c326c
 Overlay20Attack_StopObjects kind:function(arm,size=0x30) addr:0x020c34a4
 Overlay20Attack_Initialize kind:function(arm,size=0x68) addr:0x020c34d4
 Overlay20Attack_ResetActorPosition kind:function(arm,size=0x50) addr:0x020c353c
