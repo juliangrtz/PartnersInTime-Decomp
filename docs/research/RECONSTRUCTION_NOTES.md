@@ -121,9 +121,9 @@ one-time state edit; the remaining entries are inspection references.
 
 The shared source layouts are in
 [pause_scene.h](../../include/game/pause_scene.h),
-[pause_scene_internal.h](../../src/overlay007/pause_scene_internal.h),
+[pause_scene_internal.h](../../src/scene_menu_ov007/pause_scene_internal.h),
 [overlay007_party.h](../../include/game/overlay007_party.h) and
-[element_lists.c](../../src/overlay005/element_lists.c).
+[element_lists.c](../../src/scene_support_ov005/element_lists.c).
 The menu factory at `0x0206659C` takes `(callback, list, marker)` and allocates
 a 72-byte slot. It initializes the common fields through offset `0x20`, leaving
 the payload at `+0x24` onward unchanged. The caller initializes its own payload.
@@ -132,15 +132,15 @@ are distinct boundaries. Check the release callback and slot before pool return,
 then check only still-live pool, list and counter records.
 
 For sprite and draw allocation, use the actual layouts in
-[sprite_pool.cpp](../../src/overlay005/sprite_pool.cpp),
-[item_pool.c](../../src/overlay005/item_pool.c),
+[sprite_pool.cpp](../../src/scene_support_ov005/sprite_pool.cpp),
+[item_pool.c](../../src/scene_support_ov005/item_pool.c),
 [overlay005_resource.h](../../include/game/overlay005_resource.h) and
-[draw_lists.cpp](../../src/overlay005/draw_lists.cpp).
+[draw_lists.cpp](../../src/scene_support_ov005/draw_lists.cpp).
 `Overlay5ResourceOwner` has its release callback at `+0x18` and resource pointer
 at `+0x1C`; these fields belong to the owner, not the attached sprite.
 ResourceB attachment can install `Overlay5ResourceB_Release`, which releases the
 sprite and clears the owner's resource pointer. Track the task and sprite as
-separate lifetimes, using [resource_owner.c](../../src/overlay005/resource_owner.c)
+separate lifetimes, using [resource_owner.c](../../src/scene_support_ov005/resource_owner.c)
 and the removal helper to establish the actual sequence.
 Whole-pool destruction also ends allocations: verify the cleared pool pointers
 before discarding their allocation records. Retain any outstanding per-task
@@ -226,7 +226,7 @@ or pointer cast. A same-sized buffer alone does not establish compatible types.
    once that gap is recovered. Shared declarations and layouts belong in headers.
    Check source basenames across all components before adding a unit. The MW
    linker script selects objects by basename, so `attack_entry.c` would collide
-   with `src/overlay021/attack_entry.cpp` even in a different directory.
+   with `src/attack_hammer_ov021/attack_entry.cpp` even in a different directory.
 4. Preserve native function order. This MWCC setup generally emits the separate
    function sections in reverse source order, so definitions usually descend
    by original address. Verify the emitted order instead of assuming it.
@@ -334,7 +334,7 @@ sequence. Check all users and the full linked module after changing a flags
 union. Keep arithmetic operations justified by the instructions: the Smash Eggs
 signed halfword angle step uses multiplication by -1 (`SMULBB`), whereas unary
 negation produces a different instruction. See
-[pair motion](../../src/overlay015/pair_motion.c) for the matching expression.
+[pair motion](../../src/attack_smash_egg_ov015/pair_motion.c) for the matching expression.
 
 Use the recovered C++ virtual interface when native calls go through a vtable.
 `BattleModel` and its virtual methods are declared in
@@ -366,11 +366,11 @@ may be needed to reproduce a native logical shift. Signed division truncates tow
 zero, which differs from an arithmetic right shift or Python's `//` for negative
 values. Preserve the native order of division and Q12 scaling, and model signed
 division explicitly in runtime oracles. See the verified examples in
-[title model entry](../../src/overlay006/title_sequence_model.c) and
-[trail drawing](../../src/overlay006/title_trail.c).
+[title model entry](../../src/title_ov006/title_sequence_model.c) and
+[trail drawing](../../src/title_ov006/title_trail.c).
 
 Python oracles must also reproduce the native width of intermediate arithmetic.
-The [display affine helper](../../src/overlay005/display_bg.c) takes nine
+The [display affine helper](../../src/scene_support_ov005/display_bg.c) takes nine
 arguments: engine, background, horizontal scale, vertical scale, rotation,
 center X/Y and origin X/Y. Pseudocode that omits the final stack arguments is
 not a complete prototype. For zero vertical scale it substitutes `0x100000`;
@@ -396,9 +396,9 @@ entries when reconstructing virtual calls and reporting runtime coverage.
 Overlay 5's `func_ov005_0206650c` requests deferred removal by setting mask
 `0x0002` in the element's 16-bit flags at offset `+0x08`. It does not immediately
 free the object. Model this write separately from later list cleanup; see
-[element lifecycle](../../src/overlay005/element_lists.c). Title and credits tasks
+[element lifecycle](../../src/scene_support_ov005/element_lists.c). Title and credits tasks
 share the 72-byte `MenuElement` view in
-[the frontend header](../../src/overlay006/frontend_scene_internal.h). Reuse it instead
+[the frontend header](../../src/title_ov006/frontend_scene_internal.h). Reuse it instead
 of copying private task definitions into each module or probe.
 
 C comparisons yield `int`, while C++ comparisons yield `bool`; this MWCC setup
@@ -443,7 +443,7 @@ halfword at offset 40, including on the raw-read path. The title loader uses a
 44-byte extended raw request; a full `ArchiveCompressedRequest` is 64 bytes.
 See [the shared layout](../../include/game/archive_io.h),
 [the callee](../../src/game/archive_compressed.c), and
-[the title loader](../../src/overlay006/title_animation_resources.cpp).
+[the title loader](../../src/title_ov006/title_animation_resources.cpp).
 Preserve ownership flags and the native allocator/free pairing for converted
 resource tables; a non-null pointer alone does not establish ownership.
 
@@ -453,13 +453,13 @@ initializer notes incorrectly called them palette data. The rasterizer establish
 their purpose. Its two 24,576-byte destination buffers are linear pixels before
 tiled VRAM upload, and the second screen uses a sequence-space y-origin of 244.
 Do not infer a 192-pixel screen separation from the display height. Refer to
-[the sequence layout](../../src/overlay006/title_sequence_internal.h) and the trail
+[the sequence layout](../../src/title_ov006/title_sequence_internal.h) and the trail
 module when interpreting these captures; the remaining allocation tail is unknown.
 
 The sequence's 25 backdrops use a 52-byte record with a 48-byte model prefix,
 signed 16-bit horizontal velocity and a four-bit group. Their four groups have
 4/5/8/8 elements. Construction, release and skip hooks are linked in
-[title backdrop initialization](../../src/overlay006/title_backdrop_init.c); check
+[title backdrop initialization](../../src/title_ov006/title_backdrop_init.c); check
 current metadata before assuming that the scrolling callback or shared animation
 selector has also been reconstructed. Animation IDs alone do not identify the
 artwork or establish looping semantics.
@@ -472,9 +472,9 @@ adds `(80, 64)`.
 The X and Y table views have a 16-byte record stride. Preserve that stride and
 the actual typed workspace object; treating the workspace as a cast byte array
 changed the emitted address calculations. See
-[credits positions](../../src/overlay006/credits_positions.c),
-[shared declarations](../../src/overlay006/credits_transition_internal.h), and
-[motion setup](../../src/overlay006/credits_motion.c). Keep native integer operation
+[credits positions](../../src/title_ov006/credits_positions.c),
+[shared declarations](../../src/title_ov006/credits_transition_internal.h), and
+[motion setup](../../src/title_ov006/credits_motion.c). Keep native integer operation
 order and narrowing when modeling acceleration or easing; floating-point
 interpolation is not an equivalent oracle.
 
@@ -484,7 +484,7 @@ single meaning. Illustration loading uses a 32,768-byte texture staging buffer
 and a 512-byte palette; the task schedules sixteen texture chunks and a palette
 upload before clearing the workspace's `image_loading` field at `+0x8238`.
 The current layouts and buffer declarations are in the shared headers above;
-the state machine is in [credits image loading](../../src/overlay006/credits_image_loader.c).
+the state machine is in [credits image loading](../../src/title_ov006/credits_image_loader.c).
 Checking those queued jobs does not establish coverage of the native upload
 callbacks themselves.
 
@@ -601,8 +601,8 @@ algorithm and potentially reproducing the same interpretation error.
 Task creation can change a source object's list links when the new task is
 inserted after it. Resource attachment also writes the owner's release callback
 and resource pointer. Account for these helper writes using the recovered
-[element list](../../src/overlay005/element_lists.c) and
-[resource owner](../../src/overlay005/resource_owner.c) behavior before asserting that
+[element list](../../src/scene_support_ov005/element_lists.c) and
+[resource owner](../../src/scene_support_ov005/resource_owner.c) behavior before asserting that
 the entire source or task record stayed unchanged.
 
 An oracle failure may be a wrong expectation. Inspect the native helper before
@@ -664,7 +664,7 @@ the controlled setup. Never infer complete branch coverage from a matching ROM.
 The shared [battle model-animation unit](../../src/battle/battle_model_animation.c)
 reconstructs `BattleModelAnimation_StartAttached` at `0x0206C104` (68 bytes) and
 `BattleModelAnimation_Start` at `0x0206C148` (156). The
-[Mix Flowers controller unit](../../src/overlay016/pair_controller_animation.c)
+[Mix Flowers controller unit](../../src/attack_mix_flower_ov016/pair_controller_animation.c)
 adds `Overlay16PairController_StartAnimation` at `0x020C374C` (264), beside the
 existing 108-byte scale updater. All four functions in the final build objects
 match, including their literals and relocations; the new contribution is 488 bytes.
@@ -938,7 +938,7 @@ non-null sprite palette. `BattleModel_StartAnimation` clears trigger bit 2,
 passes the low eight bits of the animation ID and signed low sixteen bits of the
 argument to the virtual animation method, and forwards its result.
 
-[Primary descriptor setup](../../src/battle/battle_model_primary_descriptor.cpp)
+[Primary descriptor setup](../../src/battle/battle_model_descriptor.cpp)
 initializes a 96-byte work record once: it copies the shared 88-byte renderer
 descriptor, adjusts screen/allocation flags, clears two state bytes and the
 controller pointer, and retains the two intervening padding bytes. The ready
@@ -1564,7 +1564,7 @@ The matching build includes two more overlay-2 helpers:
 | `0x0209234C` | `BattleObjectData_ResolveSlot` | 68 |
 | `0x020B5F38` | `BattleTransition_UpdateExitWait` | 164 |
 
-The slot helper extends [battle_script_state.c](../../src/battle/battle_script_state.c).
+The slot helper extends [battle_script_state.c](../../src/battle/battle_object_load_control.c).
 A 16-bit handle's high nibble selects a one-based archive slot; its low 12 bits
 become the entry index at offset 36 of that 44-byte request. The request array
 starts at battle-context offset `0x284` and contains 14 records. Native code
@@ -1778,9 +1778,9 @@ object comparisons are pinned by `battle_scheduler_vblank_object_provenance.json
 
 ### Overlay-5 sprite collection and initialization
 
-[sprite_pool.cpp](../../src/overlay005/sprite_pool.cpp) now includes
+[sprite_pool.cpp](../../src/scene_support_ov005/sprite_pool.cpp) now includes
 `Overlay5Sprite_CollectOam` at `0x02068B20` (156 bytes).
-[item_pool.c](../../src/overlay005/item_pool.c) includes
+[item_pool.c](../../src/scene_support_ov005/item_pool.c) includes
 `Overlay5ObjectSprite_Init` at `0x020695EC` (96 bytes), and incorporates the
 already-linked 32-byte release at `0x020695CC` without counting it again.
 Final build objects match all 15 sprite-pool functions (960 bytes) and all
@@ -1796,7 +1796,7 @@ Each halfword store is a separate truncation point, before camera subtraction.
 The renderer at `0x0200A4CC` consumes four arguments: sprite, OAM buffer, and
 two byte-count pointers. Its previous declaration omitted the last three.
 Native incoming-register use and the virtual interface in
-[draw_lists.cpp](../../src/overlay005/draw_lists.cpp) established the ABI;
+[draw_lists.cpp](../../src/scene_support_ov005/draw_lists.cpp) established the ABI;
 correcting it immediately resolved the wrapper's 12-byte/register mismatch.
 This was an ABI defect, not evidence for register-allocation permutations.
 
@@ -2831,7 +2831,7 @@ other candidates' status; do not count a matching private object as linked code.
 Private evidence includes `build/analysis/pause_party_status.cpp` and the complete
 instruction and literal-pool listing `build/analysis/pause_party_status_native.txt`.
 
-The existing [pause workspace](../../src/overlay007/pause_scene_internal.h)
+The existing [pause workspace](../../src/scene_menu_ov007/pause_scene_internal.h)
 is a 90,600-byte `PauseSceneWork` at ARM9 RAM `0x020905F0` while overlay 7 is
 loaded. It is an object at that address, not a pointer stored there.
 The party-availability bytes start at `+0x116`. The indicator control byte is
@@ -2866,13 +2866,13 @@ halfwords. The task's member index is at `+0x28`. The private task layout is
 complete 336-byte slot when adding a runtime oracle. In particular, check the
 threshold equality case, suppression/control paths and eventual pool return.
 
-The linked [party bitmap pair](../../src/overlay007/pause_party_bitmap.cpp)
+The linked [party bitmap pair](../../src/scene_menu_ov007/pause_party_bitmap.cpp)
 comprises `PausePartyBitmap_Rebuild` at `0x0207923C` (356 bytes) and
 `PausePartyBitmap_DrawValue` at `0x020793A0` (396 bytes). Rebuild clears a
 4,480-byte member slice through workspace `owned8c` at `+0x8C`, then draws
 level/current/max HP labels and values. The formatter caps the value to its
 requested decimal width and optionally suppresses leading zeroes.
-[Pause resource initialization](../../src/overlay007/pause_resources.cpp)
+[Pause resource initialization](../../src/scene_menu_ov007/pause_resources.cpp)
 establishes the complete allocation as 17,920 bytes: four 112-by-40 member
 slices. Its other bitmap, `owned88`, has a separate 49,152-byte allocation.
 The clear wrapper's native stack halfword store/load explains its scoped
@@ -2917,7 +2917,7 @@ are observed, not independently rendered by the oracle. These results do not
 verify the low-HP callbacks; their lifecycle and threshold checks are recorded
 separately below.
 
-The linked [clock separator callback](../../src/overlay007/pause_numbers.cpp),
+The linked [clock separator callback](../../src/scene_menu_ov007/pause_numbers.cpp),
 `PauseClock_UpdateSeparator` at `0x02080EF4` (164 bytes), increments its signed
 timer at task `+0x24`. At 30 it subtracts 30, toggles the word at `+0x28`, and
 either draws tile 268 at (72, 161) or clears the 4-by-8 rectangle at (74, 165).
@@ -2939,7 +2939,7 @@ unlinked even though their effects are checked here.
 
 ### Pause party bitmap transitions
 
-[pause_party_transition.cpp](../../src/overlay007/pause_party_transition.cpp)
+[pause_party_transition.cpp](../../src/scene_menu_ov007/pause_party_transition.cpp)
 reconstructs the creator at `0x02078F5C` (100 bytes) and controller at
 `0x02078FC0` (636 bytes). Both match without assembly or compiler changes.
 The shared [task and mode definitions](../../include/game/pause_party_bitmap.h)
@@ -3004,8 +3004,8 @@ oracle does not add its native bytes to the C/C++ total.
 
 ### Pause low-HP warnings
 
-[pause_hp_warning_stop.cpp](../../src/overlay007/pause_hp_warning_stop.cpp) and
-[pause_hp_warning_update.cpp](../../src/overlay007/pause_hp_warning_update.cpp)
+[pause_hp_warning_stop.cpp](../../src/scene_menu_ov007/pause_hp_warning_stop.cpp) and
+[pause_hp_warning_update.cpp](../../src/scene_menu_ov007/pause_hp_warning_update.cpp)
 reconstruct the 20-byte stop routine at `0x02080C2C` and 160-byte updater at
 `0x02080D4C`. The shared [task and mode definitions](../../include/game/pause_hp_warning.h)
 preserve the complete 72-byte task and the existing workspace byte. The stop
@@ -3053,7 +3053,7 @@ count reconciliation. The failed artifact log is preserved separately.
 
 ### Pause numeric displays
 
-The linked [number module](../../src/overlay007/pause_numbers.cpp) contains
+The linked [number module](../../src/scene_menu_ov007/pause_numbers.cpp) contains
 `PauseNumber_Create` at `0x02080DEC` (264 bytes), the existing 164-byte clock
 callback, and `PauseNumber_Update` at `0x02080F98` (924 bytes). Consolidation
 adds 1,188 matching bytes; the clock is not counted again. The
@@ -3101,7 +3101,7 @@ observed. The clock's previous callback oracle was not rerun for this batch.
 ### Pause blend background
 
 `SceneMenu_PrepareBlendBackground` at `0x02081560` (260 bytes) is linked in
-[scene_menu_background.cpp](../../src/overlay007/scene_menu_background.cpp).
+[scene_menu_background.cpp](../../src/scene_menu_ov007/scene_menu_background.cpp).
 It configures main BG0, optionally clears its scroll and sets the existing
 window manager's `display.bits.fixed_main_scroll`, then masks and adds a tile
 bias to the visible 32-by-24 map. The flag belongs to the complete 3,908-byte
@@ -3137,7 +3137,7 @@ that oracle correction; no game-code change was required.
 
 ### Pause sprite positions and lifetime
 
-The linked [sprite callbacks](../../src/overlay007/pause_mode_sprite.cpp) are
+The linked [sprite callbacks](../../src/scene_menu_ov007/pause_mode_sprite.cpp) are
 `PauseModeSprite_Update` at `0x0207E93C` (112 bytes) and
 `PauseModeSprite_UpdateTimed` at `0x0207E9AC` (160 bytes). Their
 [task layout](../../include/game/pause_mode_sprite.h) is a 72-byte pool slot.
@@ -3182,7 +3182,7 @@ establish execution coverage; no oracle or game-code correction was needed.
 
 ### Pause list-row sprites
 
-The linked [row callbacks](../../src/overlay007/pause_list_row.cpp) cover
+The linked [row callbacks](../../src/scene_menu_ov007/pause_list_row.cpp) cover
 `PauseListRow_UpdateDigitSprite` at `0x02073FA0` (252 bytes),
 `PauseListRow_UpdateMarkerSprite` at `0x0207409C` (176 bytes), and
 `PauseListRow_UpdateTextSprite` at `0x0207414C` (152 bytes). The parent and child
@@ -3224,7 +3224,7 @@ or segments, and unobserved kinds/empty-item eligibility remain outside coverage
 
 ### Pause list visibility and row measurement
 
-The linked [list controls](../../src/overlay007/pause_list_control.cpp) cover
+The linked [list controls](../../src/scene_menu_ov007/pause_list_control.cpp) cover
 `PauseList_MeasureRowWidth` at `0x020742E0` (148 bytes), `PauseList_Hide` at
 `0x02074374` (132 bytes), and `PauseList_Show` at `0x020743F8` (308 bytes).
 Show allocates 340 OBJ tile units, prepares the current list, creates up to
@@ -3279,7 +3279,7 @@ second tab was visually identified as Key Items before the final named rerun.
 
 ### Pause list selection and row copies
 
-The linked [selection helpers](../../src/overlay007/pause_list_selection.cpp)
+The linked [selection helpers](../../src/scene_menu_ov007/pause_list_selection.cpp)
 cover `PauseList_GetTileRow` at `0x0207452C` (12 bytes),
 `PauseList_DrawSelectedLabel` at `0x02074538` (160),
 `PauseList_RedrawSelectedRow` at `0x020745D8` (220),
@@ -3338,7 +3338,7 @@ The four ordinary routes equal the prior control probe's 70 screenshots and
 
 ### Pause item lookup and rotating inventory order
 
-`src/overlay007/pause_item_lookup.cpp` owns four contiguous functions at
+`src/scene_menu_ov007/pause_item_lookup.cpp` owns four contiguous functions at
 `0x02074D48..0x020750BC` (884 bytes): description ID, name ID, rotated
 availability and rotating-order rebuilding. The lookup record strides are 20
 bytes for consumables/badges and 28 for clothing/Bros. Items. Names use halfword
@@ -3394,7 +3394,7 @@ verify its rendering algorithm.
 
 ### Pause item text and inventory tables
 
-`src/overlay007/pause_item_text.cpp` owns `0x02075B04..0x02075E10`
+`src/scene_menu_ov007/pause_item_text.cpp` owns `0x02075B04..0x02075E10`
 (780 bytes): `PauseItem_DrawText`, `PauseItem_GetText` and
 `PauseItem_GetValues`. Drawing selects name, description or built-in menu text,
 including the empty-clothing/badge fallback labels, then forwards all eight
@@ -3460,7 +3460,7 @@ an inventory category when that mode only reads the menu-text table.
 
 ### Pause party initialization and cleanup
 
-`src/overlay007/pause_party_lifecycle.cpp` owns the contiguous 152 bytes at
+`src/scene_menu_ov007/pause_party_lifecycle.cpp` owns the contiguous 152 bytes at
 `0x020762DC..0x02076374`. Both functions matched their first compiled draft.
 `PauseParty_Init` clears the image pointer and initializes the embedded
 48-byte `GameText` using the caller's font table and the scratch buffer at
@@ -3700,7 +3700,7 @@ native differences, and passes all 81 tests. The working total at publication is
 
 `PauseEquipmentHighlight_Stop`, `Start` and `Update` own the contiguous
 `0x02077164..0x020774CC` range (872 bytes) in
-[pause_equipment_highlight.cpp](../../src/overlay007/pause_equipment_highlight.cpp).
+[pause_equipment_highlight.cpp](../../src/scene_menu_ov007/pause_equipment_highlight.cpp).
 All three matched their first private draft. The state machine parallels the
 already reconstructed shop highlight, with pause-specific SUB BG1 selection
 and item eligibility. No compiler flags or assembly fragments changed.
@@ -3755,7 +3755,7 @@ progress checks and all 81 tests passed for this source and shared-header revisi
 
 ### Pause exit tasks and transition state
 
-The exit subset in [pause_transition_tasks.cpp](../../src/overlay007/pause_transition_tasks.cpp)
+The exit subset in [pause_transition_tasks.cpp](../../src/scene_menu_ov007/pause_transition_tasks.cpp)
 is `0x0206D418..0x0206D51C` (260 bytes): `PauseScene_PrepareExitTask` drains the
 archive queue and requests exit; `PauseScene_FadeOutTask` darkens both screens
 and advances the scene to cleanup. The latter matched immediately. Preparation's
@@ -3763,7 +3763,7 @@ only differing instruction was `MOV 255` where the original materializes -1
 with `MVN`; a local signed-byte access preserves that value without changing
 the shared workspace's existing unsigned view.
 
-[pause_scene_control.cpp](../../src/overlay007/pause_scene_control.cpp) owns
+[pause_scene_control.cpp](../../src/scene_menu_ov007/pause_scene_control.cpp) owns
 `0x02070AE8..0x02070B50` (104 bytes): `PauseScene_RequestExit` sets scene phase 5
 and resets the menu callback's phase, selecting the simple fade for mode 0
 and the existing shutter transition otherwise. `PauseTransition_GetProgress`
@@ -3816,12 +3816,12 @@ zero-difference native relink, progress checks and all 81 tests pass.
 
 ### Pause transition panels and controllers
 
-[pause_transition_tasks.cpp](../../src/overlay007/pause_transition_tasks.cpp)
+[pause_transition_tasks.cpp](../../src/scene_menu_ov007/pause_transition_tasks.cpp)
 owns `0x0206D418..0x0206E0D4`: the existing 260-byte exit subset and 3,000 new
 bytes for six callbacks. Entry/exit panels use the shared 64-byte sprite,
 progress controllers coordinate the screen transition, the window callback
 clips the main screen, and the alternate entry callback fades into the menu.
-[pause_transition_projection.cpp](../../src/overlay007/pause_transition_projection.cpp)
+[pause_transition_projection.cpp](../../src/scene_menu_ov007/pause_transition_projection.cpp)
 adds the 180-byte projection at `0x0206E1C8..0x0206E27C`; its separate unit is
 temporary while the intervening 244-byte affine-row producer remains native.
 Only the 3,180 new bytes count toward progress. The shared sprite's named
@@ -3987,7 +3987,7 @@ chooser itself; the preceding setup helper remains observed.
 ### Pause page entry and return
 
 The page-transition batch added the contiguous `0x0206E8DC..0x0206F04C` range
-to [pause_page_tasks.cpp](../../src/overlay007/pause_page_tasks.cpp): delayed rumble (60 bytes), entry
+to [pause_page_tasks.cpp](../../src/scene_menu_ov007/pause_page_tasks.cpp): delayed rumble (60 bytes), entry
 selection (124), page closing (532) and page opening (1,188), totaling 1,904
 new matching C++ bytes. Shared task layouts are in
 [pause_navigation.h](../../include/game/pause_navigation.h). The existing
@@ -4046,11 +4046,11 @@ and unvisited states remain outside this coverage. Probe sources are private
 
 ### Pause main menu and member selection
 
-[pause_menu_control.cpp](../../src/overlay007/pause_menu_control.cpp) adds
+[pause_menu_control.cpp](../../src/scene_menu_ov007/pause_menu_control.cpp) adds
 `PauseMenu_GetMemberPosition` at `0x0206F240` (96 bytes) and
 `PauseMenu_UpdateTask` at `0x0206F2A0` (1,204). The adjacent
 `PauseMenu_CanSelectMember` at `0x0206F04C` (152) extends
-[pause_page_tasks.cpp](../../src/overlay007/pause_page_tasks.cpp). All 1,452
+[pause_page_tasks.cpp](../../src/scene_menu_ov007/pause_page_tasks.cpp). All 1,452
 new bytes match without assembly or compiler-flag changes. The intervening
 preferred-member function at `0x0206F0E4` remains native.
 
@@ -4109,7 +4109,7 @@ this runtime coverage. The preferred-member and shutter setup gaps are private.
 
 ### Pause status and Cobalt Star pages
 
-[pause_page_control.cpp](../../src/overlay007/pause_page_control.cpp) owns
+[pause_page_control.cpp](../../src/scene_menu_ov007/pause_page_control.cpp) owns
 `PauseStarPage_UpdateTask` at `0x0206ABD0` (208 bytes) and
 `PauseStatusPage_UpdateTask` at `0x0206ACA0` (992). All 1,200 bytes match without
 assembly or compiler-flag changes. The page-opening dispatcher uses these names;
@@ -4160,7 +4160,7 @@ remain private; their presence does not add matching coverage.
 ### Pause list-row refresh
 
 `PauseListRow_Refresh` at `0x020741E4` adds 252 exact bytes to
-[pause_list_row.cpp](../../src/overlay007/pause_list_row.cpp), completing the gap
+[pause_list_row.cpp](../../src/scene_menu_ov007/pause_list_row.cpp), completing the gap
 before the list-control module. It uses the existing 72-byte
 [row task](../../include/game/pause_list_row.h). The callback wraps the tile-row
 index modulo nine before applying scroll offsets, derives the OBJ tile number,
@@ -4205,7 +4205,7 @@ decoder drafts remain private with classified differences.
 
 ### Pause equipped-item markers
 
-[pause_equipped_markers.cpp](../../src/overlay007/pause_equipped_markers.cpp)
+[pause_equipped_markers.cpp](../../src/scene_menu_ov007/pause_equipped_markers.cpp)
 owns `PauseEquippedMarker_Update` at `0x02073AF4` (416 bytes). It finds each
 displayed member's equipped clothing or badge among the first nine visible
 inventory rows. A missing or off-screen item produces no draw entry. Badge
@@ -4250,7 +4250,7 @@ marker and row creators remain private drafts with classified differences.
 
 ### Pause empty-equipment row sprites
 
-[pause_empty_row.cpp](../../src/overlay007/pause_empty_row.cpp) owns
+[pause_empty_row.cpp](../../src/scene_menu_ov007/pause_empty_row.cpp) owns
 `PauseList_CreateEmptyRowSprite` at `0x02073428` (136 bytes) and
 `PauseList_UpdateEmptyRowSprite` at `0x020734B0` (172). The creator attaches a
 ResourceA model to a list task, loads asset slot 82, starts animation zero and
@@ -4295,14 +4295,14 @@ work; their presence does not add linked coverage.
 
 ### Pause selection sprites
 
-[pause_category_cursor.cpp](../../src/overlay007/pause_category_cursor.cpp)
+[pause_category_cursor.cpp](../../src/scene_menu_ov007/pause_category_cursor.cpp)
 reconstructs the equipment category cursor's creator at `0x0207B1B0` (200 bytes)
 and updater at `0x0207B278` (80). It loads model asset 75 and positions the hand
 beside the selected Clothing/Badges row. The shared
 [task layout](../../include/game/pause_selection_sprites.h) is 72 bytes, with
 pixel origins at offsets 40 and 44. The page-opening caller uses the public
 no-argument creator declaration; the incoming register value is not consumed.
-[pause_list_cursor.cpp](../../src/overlay007/pause_list_cursor.cpp) owns the
+[pause_list_cursor.cpp](../../src/scene_menu_ov007/pause_list_cursor.cpp) owns the
 selection marker at `0x0207F4D8` (156 bytes) and cursor at `0x0207F574` (132).
 Both follow the selected list row, retaining the native Q12 conversion and
 signed division before storing pixel halfwords. All 568 bytes match without
@@ -4341,7 +4341,7 @@ coverage. Adjacent scroll-arrow and controller drafts are not linked progress.
 
 ### Pause member-selection arrows
 
-[menu_equipment_member_arrow.cpp](../../src/overlay007/menu_equipment_member_arrow.cpp)
+[menu_equipment_member_arrow.cpp](../../src/scene_menu_ov007/menu_equipment_member_arrow.cpp)
 reconstructs the 288-byte updater at `0x0207F268`. Its 72-byte task uses the
 `member_arrow` view in [menu_equipment.h](../../include/game/menu_equipment.h):
 Q12 offsets at 40/44, sine amplitude at 48, accumulated angle at 52 and signed
@@ -4392,7 +4392,7 @@ not claim that this route covers the empty-row drawing branch.
 
 ### Pause equipment stat comparison rows
 
-[menu_equipment_display.cpp](../../src/overlay007/menu_equipment_display.cpp)
+[menu_equipment_display.cpp](../../src/scene_menu_ov007/menu_equipment_display.cpp)
 now includes the 760-byte `MenuEquipment_UpdateStatRow` at `0x0207A388`.
 It extends the existing contiguous display unit; the heading creator, comparison
 arrow and number-strip updater continue to match. The existing
@@ -4459,7 +4459,7 @@ nor artifact validation needed an oracle correction or a rerun.
 
 ### Pause item-selection label sprites
 
-[menu_item_selection_sprites.cpp](../../src/overlay007/menu_item_selection_sprites.cpp)
+[menu_item_selection_sprites.cpp](../../src/scene_menu_ov007/menu_item_selection_sprites.cpp)
 reconstructs `MenuItemSelection_UpdateOffsetSprite` at `0x0207D8B0` (212 bytes)
 and `MenuItemSelection_UpdateLabelStrip` at `0x0207D984` (412 bytes). These two callbacks cover
 624 contiguous bytes and use the shared 64-byte sprite and
@@ -4548,7 +4548,7 @@ is pinned in `build/analysis/pause_item_selection_batch_provenance.json`.
 ### Pause item-selection quantity sprites
 
 `MenuItemSelection_UpdateQuantitySprite` at `0x0207D6B0..0x0207D8B0`
-adds 512 bytes to [menu_item_selection_sprites.cpp](../../src/overlay007/menu_item_selection_sprites.cpp).
+adds 512 bytes to [menu_item_selection_sprites.cpp](../../src/scene_menu_ov007/menu_item_selection_sprites.cpp).
 The complete 1,136-byte unit remains exact. The quantity callback matched on its
 first private compilation; naming the shared fields and integrating it preserved
 all three functions' matches. No assembly or compiler-flag changes were needed.
@@ -4601,7 +4601,7 @@ build/probe provenance is in `build/analysis/pause_item_quantity_batch_provenanc
 
 ### Pause badge-description panels
 
-[menu_badge_description.cpp](../../src/overlay007/menu_badge_description.cpp)
+[menu_badge_description.cpp](../../src/scene_menu_ov007/menu_badge_description.cpp)
 reconstructs `MenuBadgeDescription_UpdateStrip` at `0x0207BEE0` (132 bytes)
 and `MenuBadgeDescription_UpdatePanel` at `0x0207BF64` (476 bytes), contiguous
 through `0x0207C140`. Both functions match completely, including relocations and
@@ -4691,7 +4691,7 @@ This is a runtime state field, not a VRAM address or a ROM patch.
 
 Disable the edit hook and resume so the native transition can advance the
 phase. The task is dynamically allocated; an observed task address is not a
-universal address to patch. Its code is in `src/overlay007/nawatobi_*`;
+universal address to patch. Its code is in `src/scene_menu_ov007/nawatobi_*`;
 the selector and rope simulation were exercised, but a normal entry route
 remains unconfirmed.
 The compatible private starting snapshot is
@@ -4729,7 +4729,7 @@ function's guarded entry, and `read32` dereferences a little-endian pointer.
 The level callback copies the active level into shared variable zero before
 starting the primary script. The primary start clears its own `0xB8`-byte slot,
 preserving the shared variables; see
-[the script manager](../../src/overlay007/scene_script_manager.c). Its callback phases
+[the script manager](../../src/scene_menu_ov007/scene_script_manager.c). Its callback phases
 0, 1 and 2 mean start, wait for the script, and a 60-update return delay. These
 are code-derived meanings, not a claim that a runtime replay exercised every
 transition. The selector displays five rows but accepts ordinary confirmation

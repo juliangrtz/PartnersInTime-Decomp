@@ -3,15 +3,15 @@
     .data       start:0x020c3fa0 end:0x020c4140 kind:data align:32
     .bss        start:0x020c4140 end:0x020c4140 kind:bss align:32
 
-src/overlay021/attack_phase_state.c:
-    .text       start:0x020c2ae0 end:0x020c2bcc
+src/attack_hammer_ov021/attack_phase_state.c:
+    .text start:0x020c2ae0 end:0x020c2bcc
 
 
-src/overlay021/attack_transitions.cpp:
+src/attack_hammer_ov021/attack_transitions.cpp:
     .text start:0x020c3380 end:0x020c3864
 
-src/overlay021/attack_entry.cpp:
+src/attack_hammer_ov021/attack_entry.cpp:
     .text start:0x020c395c end:0x020c39b0
 
-src/overlay021/hammer_lifecycle.cpp:
+src/attack_hammer_ov021/hammer_lifecycle.cpp:
     .text start:0x020c3cf0 end:0x020c3f80

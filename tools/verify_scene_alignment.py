@@ -123,8 +123,8 @@ def execute(instructions, initial, memory):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--reference", type=Path, default=ROOT / "build/eur/delinks/src/overlay007/scene_vm_dispatch.o")
-    parser.add_argument("--candidate", type=Path, default=ROOT / "build/eur/src/overlay007/scene_vm_dispatch.o")
+    parser.add_argument("--reference", type=Path, default=ROOT / "build/eur/delinks/src/scene_menu_ov007/scene_vm_dispatch.o")
+    parser.add_argument("--candidate", type=Path, default=ROOT / "build/eur/src/scene_menu_ov007/scene_vm_dispatch.o")
     parser.add_argument("--negative-control", action="store_true",
                         help="also require rejection of a shift changed from 16 to 15 in memory")
     args = parser.parse_args()

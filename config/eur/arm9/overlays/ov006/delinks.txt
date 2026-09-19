@@ -6,140 +6,140 @@
     .bss        start:0x0207c4e0 end:0x020997e0 kind:bss align:32
 
 
-src/overlay006/title_animation_irq.c:
-    .text       start:0x0206ab80 end:0x0206acb8
+src/title_ov006/title_animation_irq.c:
+    .text start:0x0206ab80 end:0x0206acb8
 
-src/overlay006/title_animation_update.cpp:
-    .text       start:0x0206acb8 end:0x0206ae44
+src/title_ov006/title_animation_update.cpp:
+    .text start:0x0206acb8 end:0x0206ae44
 
-src/overlay006/title_sequence_cleanup.c:
-    .text       start:0x0206cea0 end:0x0206d2b4
+src/title_ov006/title_sequence_cleanup.c:
+    .text start:0x0206cea0 end:0x0206d2b4
 
-src/overlay006/title_sequence_init.cpp:
-    .text       start:0x0206d2b4 end:0x0206db4c
+src/title_ov006/title_sequence_init.cpp:
+    .text start:0x0206d2b4 end:0x0206db4c
 
-src/overlay006/title_sequence_model.c:
-    .text       start:0x02072988 end:0x02072ae4
+src/title_ov006/title_sequence_model.c:
+    .text start:0x02072988 end:0x02072ae4
 
-src/overlay006/title_trail.c:
-    .text       start:0x02072768 end:0x02072988
+src/title_ov006/title_trail.c:
+    .text start:0x02072768 end:0x02072988
 
-src/overlay006/title_prompt.c:
-    .text       start:0x02072ae4 end:0x02072ea8
+src/title_ov006/title_prompt.c:
+    .text start:0x02072ae4 end:0x02072ea8
 
-src/overlay006/title_menu_selection.c:
-    .text       start:0x02073870 end:0x0207393c
+src/title_ov006/title_menu_selection.c:
+    .text start:0x02073870 end:0x0207393c
 
-src/overlay006/title_sequence_update.cpp:
-    .text       start:0x0206c3c8 end:0x0206cea0
+src/title_ov006/title_sequence_update.cpp:
+    .text start:0x0206c3c8 end:0x0206cea0
 
-src/overlay006/title_animation_display.cpp:
-    .text       start:0x0206b2c0 end:0x0206b77c
+src/title_ov006/title_animation_display.cpp:
+    .text start:0x0206b2c0 end:0x0206b77c
 
-src/overlay006/title_animation_renderer.cpp:
-    .text       start:0x0206b1dc end:0x0206b2c0
+src/title_ov006/title_animation_renderer.cpp:
+    .text start:0x0206b1dc end:0x0206b2c0
 
-src/overlay006/title_animation_resources.cpp:
-    .text       start:0x0206b77c end:0x0206b9ec
+src/title_ov006/title_animation_resources.cpp:
+    .text start:0x0206b77c end:0x0206b9ec
 
-src/overlay006/title_animation_lifecycle.cpp:
-    .text       start:0x0206bd9c end:0x0206c3c8
+src/title_ov006/title_animation_lifecycle.cpp:
+    .text start:0x0206bd9c end:0x0206c3c8
 
-src/overlay006/title_startup.cpp:
-    .text       start:0x02075014 end:0x020754e4
+src/title_ov006/title_startup.cpp:
+    .text start:0x02075014 end:0x020754e4
 
-src/overlay006/title_resources.c:
-    .text       start:0x020754e4 end:0x020758d8
+src/title_ov006/title_resources.c:
+    .text start:0x020754e4 end:0x020758d8
 
-src/overlay006/title_scene_destroy.c:
-    .text       start:0x020759c8 end:0x02075b60
+src/title_ov006/title_scene_destroy.c:
+    .text start:0x020759c8 end:0x02075b60
 
-src/overlay006/title_irq_init.c:
-    .text       start:0x02075eb0 end:0x02075f44
+src/title_ov006/title_irq_init.c:
+    .text start:0x02075eb0 end:0x02075f44
 
-src/overlay006/credits_irq_destroy.c:
-    .text       start:0x02075f44 end:0x02075f94
+src/title_ov006/credits_irq_destroy.c:
+    .text start:0x02075f44 end:0x02075f94
 
-src/overlay006/credits_motion.c:
-    .text       start:0x02077b5c end:0x02077ce8
+src/title_ov006/credits_motion.c:
+    .text start:0x02077b5c end:0x02077ce8
 
-src/overlay006/credits_resources.c:
-    .text       start:0x0207a1dc end:0x0207a788
+src/title_ov006/credits_resources.c:
+    .text start:0x0207a1dc end:0x0207a788
 
-src/overlay006/credits_scene_lifecycle.c:
-    .text       start:0x0207a8f8 end:0x0207ade4
+src/title_ov006/credits_scene_lifecycle.c:
+    .text start:0x0207a8f8 end:0x0207ade4
 
-src/overlay006/credits_irq_init.c:
-    .text       start:0x0207af14 end:0x0207af38
+src/title_ov006/credits_irq_init.c:
+    .text start:0x0207af14 end:0x0207af38
 
-src/overlay006/title_panel_transition.c:
+src/title_ov006/title_panel_transition.c:
     .text start:0x02074538 end:0x02075014
 
-src/overlay006/title_texture.c:
+src/title_ov006/title_texture.c:
     .text start:0x020718fc end:0x02071d70
 
-src/overlay006/title_orbit.c:
+src/title_ov006/title_orbit.c:
     .text start:0x02071d70 end:0x0207214c
 
-src/overlay006/title_panel.c:
+src/title_ov006/title_panel.c:
     .text start:0x0206db4c end:0x0206e594
 
-src/overlay006/title_moving_sprite.c:
+src/title_ov006/title_moving_sprite.c:
     .text start:0x0206e644 end:0x0206e9e4
 
-src/overlay006/title_moving_sprite_orbit.c:
+src/title_ov006/title_moving_sprite_orbit.c:
     .text start:0x0206ec20 end:0x0206ed4c
 
-src/overlay006/title_sprite_sequence.c:
+src/title_ov006/title_sprite_sequence.c:
     .text start:0x0206ed4c end:0x02070c7c
 
-src/overlay006/title_localized_sequence.c:
+src/title_ov006/title_localized_sequence.c:
     .text start:0x02070c7c end:0x020718fc
 
-src/overlay006/title_model.cpp:
+src/title_ov006/title_model.cpp:
     .text start:0x02073f20 end:0x02074320
 
-src/overlay006/title_brightness.c:
+src/title_ov006/title_brightness.c:
     .text start:0x02074320 end:0x02074538
 
-src/overlay006/title_rumble_control.c:
-    .text       start:0x02072ea8 end:0x02072f44
+src/title_ov006/title_rumble_control.c:
+    .text start:0x02072ea8 end:0x02072f44
 
-src/overlay006/title_rumble_update.c:
-    .text       start:0x02073580 end:0x0207380c
+src/title_ov006/title_rumble_update.c:
+    .text start:0x02073580 end:0x0207380c
 
-src/overlay006/title_menu_cursor.c:
-    .text       start:0x0207393c end:0x02073bf8
+src/title_ov006/title_menu_cursor.c:
+    .text start:0x0207393c end:0x02073bf8
 
-src/overlay006/title_backdrop_init.c:
-    .text       start:0x02073bf8 end:0x02073dc0
+src/title_ov006/title_backdrop_init.c:
+    .text start:0x02073bf8 end:0x02073dc0
 
-src/overlay006/credits_fade.c:
+src/title_ov006/credits_fade.c:
     .text start:0x02075f94 end:0x020761c8
 
-src/overlay006/credits_positions.c:
+src/title_ov006/credits_positions.c:
     .text start:0x02078b8c end:0x02078c90
 
-src/overlay006/credits_particle_transitions.c:
+src/title_ov006/credits_particle_transitions.c:
     .text start:0x02076b7c end:0x02077a68
 
-src/overlay006/credits_music.c:
+src/title_ov006/credits_music.c:
     .text start:0x02078250 end:0x020783c8
 
-src/overlay006/credits_image_loader.c:
+src/title_ov006/credits_image_loader.c:
     .text start:0x020786e0 end:0x02078938
 
-src/overlay006/credits_cloud_motion.c:
+src/title_ov006/credits_cloud_motion.c:
     .text start:0x02079b98 end:0x02079bf8
 
-src/overlay006/credits_star_blink.c:
+src/title_ov006/credits_star_blink.c:
     .text start:0x02079dac end:0x02079e88
 
-src/overlay006/credits_radial_delay.c:
+src/title_ov006/credits_radial_delay.c:
     .text start:0x020762ec end:0x02076520
 
-src/overlay006/credits_background_gradient.c:
+src/title_ov006/credits_background_gradient.c:
     .text start:0x02079744 end:0x020798c8
 
-src/overlay006/credits_textured_quad.c:
+src/title_ov006/credits_textured_quad.c:
     .text start:0x02079e88 end:0x0207a034

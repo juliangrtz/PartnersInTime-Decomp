@@ -3,41 +3,41 @@
     .data       start:0x020c6c80 end:0x020c7000 kind:data align:32
     .bss        start:0x020c7000 end:0x020c7000 kind:bss align:32
 
-src/overlay017/attack_tuning.c:
-    .text       start:0x020c2c94 end:0x020c2e54
+src/attack_copy_flower_ov017/attack_tuning.c:
+    .text start:0x020c2c94 end:0x020c2e54
 
-src/overlay017/object_setup.cpp:
-    .text       start:0x020c2e54 end:0x020c30d0
+src/attack_copy_flower_ov017/object_setup.cpp:
+    .text start:0x020c2e54 end:0x020c30d0
 
-src/overlay017/startup_display.c:
-    .text       start:0x020c3280 end:0x020c33a4
+src/attack_copy_flower_ov017/startup_display.c:
+    .text start:0x020c3280 end:0x020c33a4
 
-src/overlay017/attack_object.cpp:
-    .text       start:0x020c33a4 end:0x020c3570
+src/attack_copy_flower_ov017/attack_object.cpp:
+    .text start:0x020c33a4 end:0x020c3570
 
-src/overlay017/attack_object_motion.cpp:
-    .text       start:0x020c3570 end:0x020c3748
+src/attack_copy_flower_ov017/attack_object_motion.cpp:
+    .text start:0x020c3570 end:0x020c3748
 
-src/overlay017/ov17_participant_get_travel_duration.cpp:
+src/attack_copy_flower_ov017/ov17_participant_get_travel_duration.cpp:
     .text start:0x020c2b44 end:0x020c2b8c
 
-src/overlay017/ov17_participant_get_home_position.cpp:
+src/attack_copy_flower_ov017/ov17_participant_get_home_position.cpp:
     .text start:0x020c2c28 end:0x020c2c94
 
-src/overlay017/ov17_attack_object_release_model.cpp:
+src/attack_copy_flower_ov017/ov17_attack_object_release_model.cpp:
     .text start:0x020c4260 end:0x020c4474
 
-src/overlay017/ov17_participant_begin_exit.cpp:
+src/attack_copy_flower_ov017/ov17_participant_begin_exit.cpp:
     .text start:0x020c4510 end:0x020c4620
 
-src/overlay017/ov17_participant_return_others.cpp:
+src/attack_copy_flower_ov017/ov17_participant_return_others.cpp:
     .text start:0x020c468c end:0x020c4794
 
-src/overlay017/ov17_participant_set_animation.cpp:
+src/attack_copy_flower_ov017/ov17_participant_set_animation.cpp:
     .text start:0x020c47d0 end:0x020c4994
 
-src/overlay017/ov17_participant_begin_entry.cpp:
+src/attack_copy_flower_ov017/ov17_participant_begin_entry.cpp:
     .text start:0x020c57a4 end:0x020c58cc
 
-src/overlay017/ov17_participant_hide.cpp:
+src/attack_copy_flower_ov017/ov17_participant_hide.cpp:
     .text start:0x020c5f90 end:0x020c60bc

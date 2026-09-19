@@ -458,7 +458,7 @@ source status:
 | Battle, `0x033..0x0E8` | `src/battle/battle_vm_dispatch.cpp` | 19,168 bytes | Byte-identical, linked |
 | Common battle, `0x0E9..0x103` | `src/battle/battle_vm_common_dispatch.c` | 1,844 bytes | Byte-identical, linked |
 | Field/world, `0x033..0x154` | `src/field/field_vm_dispatch.cpp` | 23,492 bytes | Byte-identical, linked |
-| Scene/object | `src/overlay007/scene_vm_dispatch.c` | 9,196 bytes | Byte-identical, linked; C with a small inline-assembly fragment |
+| Scene/object | `src/scene_menu_ov007/scene_vm_dispatch.c` | 9,196 bytes | Byte-identical, linked; C with a small inline-assembly fragment |
 
 These are monolithic dispatchers with the original reserved cases, nested
 switch tables, exceptional handler order, and retry/rewind behavior. Battle

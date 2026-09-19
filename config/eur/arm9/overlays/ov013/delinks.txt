@@ -3,15 +3,15 @@
     .data       start:0x020c5b00 end:0x020c5b60 kind:data align:32
     .bss        start:0x020c5b60 end:0x020c5b60 kind:bss align:32
 
-src/overlay013/object_pair_setup.c:
-    .text       start:0x020c2ae0 end:0x020c2cd4
+src/attack_trampoline_ov013/object_pair_setup.c:
+    .text start:0x020c2ae0 end:0x020c2cd4
 
-src/overlay013/object_pair_motion.cpp:
-    .text       start:0x020c3620 end:0x020c37e0
+src/attack_trampoline_ov013/object_pair_motion.cpp:
+    .text start:0x020c3620 end:0x020c37e0
 
 
-src/overlay013/ov13_attack_update_retreat.cpp:
+src/attack_trampoline_ov013/ov13_attack_update_retreat.cpp:
     .text start:0x020c37e0 end:0x020c4228
 
-src/overlay013/ov13_attack_show_landing_effect.cpp:
+src/attack_trampoline_ov013/ov13_attack_show_landing_effect.cpp:
     .text start:0x020c5848 end:0x020c5afc

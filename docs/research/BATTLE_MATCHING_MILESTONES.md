@@ -1,3 +1,8 @@
+<!-- Source paths in the entries below name the tree as it was when each batch
+landed. The 2026-09-19 reorganization renamed every src/overlayNNN directory to
+<role>_ovNNN and merged many single-function units into subsystem modules, so
+resolve an old path with `git log --follow` or by searching for the function. -->
+
 # Battle matching milestones toward 20 percent
 
 ## Global properties, damage, and motion channels

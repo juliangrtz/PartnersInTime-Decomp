@@ -1,5 +1,5 @@
 #include <game/save_menu.h>
-#include "../overlay006/title_graphics_internal.h"
+#include "../title_ov006/title_graphics_internal.h"
 /* Draw counters within the shared menu workspace. */
 typedef struct MenuQuadWork {
     u8 prefix[0x188];

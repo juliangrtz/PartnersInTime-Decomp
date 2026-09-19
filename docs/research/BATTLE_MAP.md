@@ -1515,10 +1515,10 @@ menu displayed that item, then entered `0x020C5B4C` with actor command 8 at
 identify an active attack. `gBattleContext` itself is the pointer stored at
 ARM9 RAM address `0x020C0718` in this EUR build.
 
-The [actor controller](../../src/overlay015/actor_controller.cpp) now covers
+The [actor controller](../../src/attack_smash_egg_ov015/actor_controller.cpp) now covers
 hit-window updates, support launches, reverse animation and idle checks along
 with the existing actor preparation functions. The
-[lifecycle module](../../src/overlay015/actor_lifecycle.cpp) initializes and
+[lifecycle module](../../src/attack_smash_egg_ov015/actor_lifecycle.cpp) initializes and
 restores the actors. Together these add 1,292 matching bytes. The shared
 52-byte controller contains a 24-byte support-motion record with animation
 component, Q8 velocity/duration and hit-window bounds. The owner halfword at
@@ -1547,9 +1547,9 @@ the phase-17 idle result and reverse animation for formation 4. The integer
 checks cover the observed values, not every overflow or invalid-state input.
 
 The next block adds 584 matching bytes in
-[targeting and badge adjustments](../../src/overlay015/attack_selection.c),
-[pair retreat](../../src/overlay015/pair_retreat.c) and
-[object hiding](../../src/overlay015/pair_motion.c). The pair's halfwords
+[targeting and badge adjustments](../../src/attack_smash_egg_ov015/attack_selection.c),
+[pair retreat](../../src/attack_smash_egg_ov015/pair_retreat.c) and
+[object hiding](../../src/attack_smash_egg_ov015/pair_motion.c). The pair's halfwords
 at `+0x18` and `+0x1A` hold the target actor ID and pending damage in the attack
 path; their earlier timer/rotation names were corrected. The rotation update
 itself remains native.
@@ -1569,9 +1569,9 @@ Multiple/no eligible enemies, zero RNG seed, table overflow and retreat for an
 even formation remain unexercised.
 
 The entry and reward block adds another 940 matching bytes:
-[entry update](../../src/overlay015/smash_eggs_entry.c) (464),
-[egg launch](../../src/overlay015/pair_motion.c) (308), and
-[reward icon display](../../src/overlay015/reward_display.c) (168). Launch and
+[entry update](../../src/attack_smash_egg_ov015/smash_eggs_entry.c) (464),
+[egg launch](../../src/attack_smash_egg_ov015/pair_motion.c) (308), and
+[reward icon display](../../src/attack_smash_egg_ov015/reward_display.c) (168). Launch and
 hiding share a contiguous module. The common attack context now describes its
 584-byte allocation, including both 52-byte actor controllers and the pair at
 `+0x198`. The pair view extends to 36 bytes but remains a prefix; native code

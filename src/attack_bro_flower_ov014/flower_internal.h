@@ -1,6 +1,6 @@
 #ifndef PIT_OVERLAY014_FLOWER_INTERNAL_H
 #define PIT_OVERLAY014_FLOWER_INTERNAL_H
-#include "../overlay010/attack_work.h"
+#include "../attack_common_ov010/attack_work.h"
 #include <game/overlay014_projectile.h>
 extern "C" {
 #include <game/overlay014_attack.h>

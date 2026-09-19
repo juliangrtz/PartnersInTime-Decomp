@@ -721,7 +721,7 @@ linked units:
 | Battle | `src/battle/battle_vm_dispatch.cpp` | 19,168 | 182 | 100%, linked |
 | Common battle | `src/battle/battle_vm_common_dispatch.c` | 1,844 | 27 | 100%, linked |
 | Field/world | `src/field/field_vm_dispatch.cpp` | 23,492 | 290 | 100%, linked |
-| Scene/object | `src/overlay007/scene_vm_dispatch.c` | 9,196 | all real/reserved slots | 100%, linked; C with a small inline-assembly fragment |
+| Scene/object | `src/scene_menu_ov007/scene_vm_dispatch.c` | 9,196 | all real/reserved slots | 100%, linked; C with a small inline-assembly fragment |
 
 The four linked units add 53,700 bytes of matching C/C++, including a 64-byte
 inline-assembly block in Scene opcode `0x04E`. Their control flow, reserved

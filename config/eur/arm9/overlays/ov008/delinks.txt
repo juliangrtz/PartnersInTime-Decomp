@@ -4,143 +4,143 @@
     .bss        start:0x02078280 end:0x0207aaa0 kind:bss align:32
 
 
-src/overlay008/save_irq_destroy.c:
-    .text       start:0x0206ab80 end:0x0206abd0
+src/save_menu_ov008/save_irq_destroy.c:
+    .text start:0x0206ab80 end:0x0206abd0
 
-src/overlay008/save_menu_motion.c:
-    .text       start:0x0206c290 end:0x0206c378
+src/save_menu_ov008/save_menu_motion.c:
+    .text start:0x0206c290 end:0x0206c378
 
-src/overlay008/save_geometry.c:
-    .text       start:0x0206c378 end:0x0206c474
+src/save_menu_ov008/save_geometry.c:
+    .text start:0x0206c378 end:0x0206c474
 
-src/overlay008/save_scene_lifecycle.c:
-    .text       start:0x0206c87c end:0x0206cfa4
+src/save_menu_ov008/save_scene_lifecycle.c:
+    .text start:0x0206c87c end:0x0206cfa4
 
-src/overlay008/save_irq_init.c:
-    .text       start:0x0206cfa4 end:0x0206d038
+src/save_menu_ov008/save_irq_init.c:
+    .text start:0x0206cfa4 end:0x0206d038
 
-src/overlay008/load_irq_destroy.c:
-    .text       start:0x0206d038 end:0x0206d088
+src/save_menu_ov008/load_irq_destroy.c:
+    .text start:0x0206d038 end:0x0206d088
 
-src/overlay008/load_menu_panels.c:
+src/save_menu_ov008/load_menu_panels.c:
     .text start:0x0206d088 end:0x0206d1d0
 
-src/overlay008/load_geometry.c:
-    .text       start:0x0206f48c end:0x0206f588
+src/save_menu_ov008/load_geometry.c:
+    .text start:0x0206f48c end:0x0206f588
 
-src/overlay008/load_scene_lifecycle.c:
-    .text       start:0x0206f7b0 end:0x0206fed8
+src/save_menu_ov008/load_scene_lifecycle.c:
+    .text start:0x0206f7b0 end:0x0206fed8
 
-src/overlay008/load_irq_init.c:
-    .text       start:0x0206ffb4 end:0x0206ffd8
+src/save_menu_ov008/load_irq_init.c:
+    .text start:0x0206ffb4 end:0x0206ffd8
 
-src/overlay008/game_over_irq_destroy.c:
-    .text       start:0x0206ffd8 end:0x02070028
+src/save_menu_ov008/game_over_irq_destroy.c:
+    .text start:0x0206ffd8 end:0x02070028
 
-src/overlay008/game_over_control.c:
+src/save_menu_ov008/game_over_control.c:
     .text start:0x02070028 end:0x02070560
 
-src/overlay008/game_over_geometry.c:
-    .text       start:0x0207075c end:0x02070858
+src/save_menu_ov008/game_over_geometry.c:
+    .text start:0x0207075c end:0x02070858
 
-src/overlay008/game_over_resources.c:
+src/save_menu_ov008/game_over_resources.c:
     .text start:0x02070858 end:0x02070a28
 
-src/overlay008/game_over_scene_lifecycle.c:
-    .text       start:0x02070c44 end:0x0207136c
+src/save_menu_ov008/game_over_scene_lifecycle.c:
+    .text start:0x02070c44 end:0x0207136c
 
-src/overlay008/game_over_irq_init.c:
-    .text       start:0x0207136c end:0x02071400
+src/save_menu_ov008/game_over_irq_init.c:
+    .text start:0x0207136c end:0x02071400
 
-src/overlay008/save_menu_summary.c:
-    .text       start:0x02073ac4 end:0x02073f04
+src/save_menu_ov008/save_menu_summary.c:
+    .text start:0x02073ac4 end:0x02073f04
 
-src/overlay008/save_menu_text_draw.c:
-    .text       start:0x02075228 end:0x02075a90
+src/save_menu_ov008/save_menu_text_draw.c:
+    .text start:0x02075228 end:0x02075a90
 
-src/overlay008/save_menu_texture_row.c:
-    .text       start:0x02075a90 end:0x02075ac8
+src/save_menu_ov008/save_menu_texture_row.c:
+    .text start:0x02075a90 end:0x02075ac8
 
-src/overlay008/save_menu_background.c:
-    .text       start:0x02075b5c end:0x02075be8
+src/save_menu_ov008/save_menu_background.c:
+    .text start:0x02075b5c end:0x02075be8
 
-src/overlay008/save_menu_object_strip.c:
-    .text       start:0x02075be8 end:0x02075cd4
+src/save_menu_ov008/save_menu_object_strip.c:
+    .text start:0x02075be8 end:0x02075cd4
 
-src/overlay008/save_menu_text_lookup.c:
-    .text       start:0x02075cd4 end:0x02075dc8
+src/save_menu_ov008/save_menu_text_lookup.c:
+    .text start:0x02075cd4 end:0x02075dc8
 
-src/overlay008/save_menu_text_init.c:
-    .text       start:0x02075e58 end:0x02076008
+src/save_menu_ov008/save_menu_text_init.c:
+    .text start:0x02075e58 end:0x02076008
 
-src/overlay008/erase_scene_lifecycle.c:
-    .text       start:0x02077904 end:0x02077e20
+src/save_menu_ov008/erase_scene_lifecycle.c:
+    .text start:0x02077904 end:0x02077e20
 
-src/overlay008/erase_irq_destroy.c:
-    .text       start:0x02076008 end:0x02076058
+src/save_menu_ov008/erase_irq_destroy.c:
+    .text start:0x02076008 end:0x02076058
 
-src/overlay008/erase_irq_init.c:
-    .text       start:0x02077e20 end:0x02077eb4
+src/save_menu_ov008/erase_irq_init.c:
+    .text start:0x02077e20 end:0x02077eb4
 
-src/overlay008/save_menu_resource_cleanup.c:
-    .text       start:0x0207275c end:0x020727d8
+src/save_menu_ov008/save_menu_resource_cleanup.c:
+    .text start:0x0207275c end:0x020727d8
 
-src/overlay008/save_menu_location_image.c:
-    .text       start:0x02071d30 end:0x02071ec8
+src/save_menu_ov008/save_menu_location_image.c:
+    .text start:0x02071d30 end:0x02071ec8
 
-src/overlay008/menu_resources.c:
+src/save_menu_ov008/menu_resources.c:
     .text start:0x02071ec8 end:0x0207275c
 
-src/overlay008/erase_resources.c:
+src/save_menu_ov008/erase_resources.c:
     .text start:0x020773b4 end:0x020777dc
 
-src/overlay008/save_menu_models.cpp:
+src/save_menu_ov008/save_menu_models.cpp:
     .text start:0x0206bf64 end:0x0206c078
 
-src/overlay008/load_menu_models.cpp:
+src/save_menu_ov008/load_menu_models.cpp:
     .text start:0x0206ed44 end:0x0206ee58
 
-src/overlay008/load_menu_motion.c:
+src/save_menu_ov008/load_menu_motion.c:
     .text start:0x0206f3a4 end:0x0206f48c
 
-src/overlay008/save_menu_scroll.cpp:
+src/save_menu_ov008/save_menu_scroll.cpp:
     .text start:0x020716e0 end:0x02071964
 
-src/overlay008/save_state_transfer.cpp:
+src/save_menu_ov008/save_state_transfer.cpp:
     .text start:0x02073410 end:0x02073ac4
 
-src/overlay008/save_menu_write.cpp:
+src/save_menu_ov008/save_menu_write.cpp:
     .text start:0x02073f04 end:0x0207431c
 
-src/overlay008/erase_confirmation.cpp:
+src/save_menu_ov008/erase_confirmation.cpp:
     .text start:0x02076934 end:0x02076b38
 
-src/overlay008/game_over_models.cpp:
+src/save_menu_ov008/game_over_models.cpp:
     .text start:0x02070560 end:0x02070688
 
-src/overlay008/save_write_brightness.c:
+src/save_menu_ov008/save_write_brightness.c:
     .text start:0x0206b0f8 end:0x0206b1d0
 
-src/overlay008/save_write_zoom.c:
+src/save_menu_ov008/save_write_zoom.c:
     .text start:0x0206b23c end:0x0206b37c
 
-src/overlay008/save_write_setup.c:
+src/save_menu_ov008/save_write_setup.c:
     .text start:0x0206ad54 end:0x0206ae78
 
-src/overlay008/save_write_rollback.c:
+src/save_menu_ov008/save_write_rollback.c:
     .text start:0x0206abd0 end:0x0206ac14
 
-src/overlay008/save_menu_control.c:
+src/save_menu_ov008/save_menu_control.c:
     .text start:0x0206b598 end:0x0206bf64
 
-src/overlay008/save_menu_panel_text.c:
+src/save_menu_ov008/save_menu_panel_text.c:
     .text start:0x02071964 end:0x02071a50
 
-src/overlay008/load_menu_control.c:
+src/save_menu_ov008/load_menu_control.c:
     .text start:0x0206e7f4 end:0x0206e9a0
 
-src/overlay008/load_menu_exit.c:
+src/save_menu_ov008/load_menu_exit.c:
     .text start:0x0206d728 end:0x0206d82c
 
-src/overlay008/save_menu_textured_quad.c:
+src/save_menu_ov008/save_menu_textured_quad.c:
     .text start:0x02072f08 end:0x02073410

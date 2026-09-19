@@ -3,168 +3,168 @@
     .data       start:0x0207e020 end:0x0207ea20 kind:data align:32
     .bss        start:0x0207ea20 end:0x0207f400 kind:bss align:32
 
-src/overlay009/shop_stock.c:
-    .text       start:0x0207df1c end:0x0207e008
+src/shop_ov009/shop_stock.c:
+    .text start:0x0207df1c end:0x0207e008
 
-src/overlay009/shop_irq_destroy.cpp:
-    .text       start:0x0206ab80 end:0x0206abd0
+src/shop_ov009/shop_irq_destroy.cpp:
+    .text start:0x0206ab80 end:0x0206abd0
 
-src/overlay009/shop_scene_lifecycle.cpp:
-    .text       start:0x0206ec50 end:0x0206fd40
+src/shop_ov009/shop_scene_lifecycle.cpp:
+    .text start:0x0206ec50 end:0x0206fd40
 
-src/overlay009/shop_irq_init.cpp:
-    .text       start:0x020700e8 end:0x0207010c
+src/shop_ov009/shop_irq_init.cpp:
+    .text start:0x020700e8 end:0x0207010c
 
-src/overlay009/shop_list_phase.c:
-    .text       start:0x0207d218 end:0x0207d220
+src/shop_ov009/shop_list_phase.c:
+    .text start:0x0207d218 end:0x0207d220
 
-src/overlay009/shop_list_constraints.c:
-    .text       start:0x0207d4f4 end:0x0207d660
+src/shop_ov009/shop_list_constraints.c:
+    .text start:0x0207d4f4 end:0x0207d660
 
-src/overlay009/shop_list_positions.c:
-    .text       start:0x0207d794 end:0x0207d92c
+src/shop_ov009/shop_list_positions.c:
+    .text start:0x0207d794 end:0x0207d92c
 
-src/overlay009/shop_list_lifecycle.c:
-    .text       start:0x0207dba4 end:0x0207dbc0
+src/shop_ov009/shop_list_lifecycle.c:
+    .text start:0x0207dba4 end:0x0207dbc0
 
-src/overlay009/shop_inventory_equipment.c:
-    .text       start:0x0207dcf0 end:0x0207ddac
+src/shop_ov009/shop_inventory_equipment.c:
+    .text start:0x0207dcf0 end:0x0207ddac
 
-src/overlay009/shop_inventory_counts.c:
-    .text       start:0x0207ddf4 end:0x0207df1c
+src/shop_ov009/shop_inventory_counts.c:
+    .text start:0x0207ddf4 end:0x0207df1c
 
-src/overlay009/shop_backgrounds.cpp:
-    .text       start:0x0206e288 end:0x0206e8ac
+src/shop_ov009/shop_backgrounds.cpp:
+    .text start:0x0206e288 end:0x0206e8ac
 
-src/overlay009/shop_irq_upload.cpp:
-    .text       start:0x0206fd40 end:0x020700e8
+src/shop_ov009/shop_irq_upload.cpp:
+    .text start:0x0206fd40 end:0x020700e8
 
-src/overlay009/shop_item_panel_queries.c:
-    .text       start:0x0207017c end:0x02070334
+src/shop_ov009/shop_item_panel_queries.c:
+    .text start:0x0207017c end:0x02070334
 
-src/overlay009/shop_stock_panel.c:
-    .text       start:0x02072d50 end:0x02072edc
+src/shop_ov009/shop_stock_panel.c:
+    .text start:0x02072d50 end:0x02072edc
 
-src/overlay009/shop_stock_panel_lifecycle.c:
-    .text       start:0x020731fc end:0x02073228
+src/shop_ov009/shop_stock_panel_lifecycle.c:
+    .text start:0x020731fc end:0x02073228
 
-src/overlay009/shop_icons.cpp:
-    .text       start:0x02074464 end:0x0207459c
+src/shop_ov009/shop_icons.cpp:
+    .text start:0x02074464 end:0x0207459c
 
-src/overlay009/shop_text_lookup.cpp:
-    .text       start:0x02074838 end:0x02074b7c
+src/shop_ov009/shop_text_lookup.cpp:
+    .text start:0x02074838 end:0x02074b7c
 
-src/overlay009/shop_resources.cpp:
+src/shop_ov009/shop_resources.cpp:
     .text start:0x0206d160 end:0x0206e288
 
-src/overlay009/shop_rows.cpp:
+src/shop_ov009/shop_rows.cpp:
     .text start:0x020710b8 end:0x020715e0
 
-src/overlay009/shop_inventory_panel.cpp:
+src/shop_ov009/shop_inventory_panel.cpp:
     .text start:0x020738a0 end:0x02074038
 
-src/overlay009/shop_inventory_list.cpp:
+src/shop_ov009/shop_inventory_list.cpp:
     .text start:0x020742c4 end:0x02074464
 
-src/overlay009/shop_panel_navigation.cpp:
+src/shop_ov009/shop_panel_navigation.cpp:
     .text start:0x02079444 end:0x02079808
 
-src/overlay009/shop_list_navigation.cpp:
+src/shop_ov009/shop_list_navigation.cpp:
     .text start:0x02079e20 end:0x0207a1d8
 
-src/overlay009/shop_particle.cpp:
+src/shop_ov009/shop_particle.cpp:
     .text start:0x0207689c end:0x020769bc
 
-src/overlay009/shop_buy_panel.cpp:
+src/shop_ov009/shop_buy_panel.cpp:
     .text start:0x020715e0 end:0x02071af0
 
-src/overlay009/shop_item_panel_lifecycle.cpp:
+src/shop_ov009/shop_item_panel_lifecycle.cpp:
     .text start:0x020708f0 end:0x02070978
 
-src/overlay009/shop_buy_panel_lifecycle.cpp:
+src/shop_ov009/shop_buy_panel_lifecycle.cpp:
     .text start:0x02071fe0 end:0x02072080
 
-src/overlay009/shop_item_panel_text.c:
+src/shop_ov009/shop_item_panel_text.c:
     .text start:0x0207065c end:0x02070764
 
-src/overlay009/shop_menu_navigation.cpp:
+src/shop_ov009/shop_menu_navigation.cpp:
     .text start:0x0207a1d8 end:0x0207a314
 
-src/overlay009/shop_menu_option_draw.cpp:
+src/shop_ov009/shop_menu_option_draw.cpp:
     .text start:0x0207a6a4 end:0x0207a844
 
-src/overlay009/shop_help_text.c:
+src/shop_ov009/shop_help_text.c:
     .text start:0x0207a844 end:0x0207a9a8
 
-src/overlay009/shop_party_label.cpp:
+src/shop_ov009/shop_party_label.cpp:
     .text start:0x0207b4f0 end:0x0207b574
 
-src/overlay009/shop_bitmap_placeholder.c:
+src/shop_ov009/shop_bitmap_placeholder.c:
     .text start:0x0207c230 end:0x0207c2ac
 
-src/overlay009/shop_bitmap_value.c:
+src/shop_ov009/shop_bitmap_value.c:
     .text start:0x0207c384 end:0x0207c464
 
-src/overlay009/shop_number_placeholder.cpp:
+src/shop_ov009/shop_number_placeholder.cpp:
     .text start:0x0207c5d4 end:0x0207c6a4
 
-src/overlay009/shop_glyph_expand.cpp:
+src/shop_ov009/shop_glyph_expand.cpp:
     .text start:0x0207cdd8 end:0x0207ce1c
 
-src/overlay009/shop_list_scale.cpp:
+src/shop_ov009/shop_list_scale.cpp:
     .text start:0x0207ceb0 end:0x0207cfc8
 
-src/overlay009/shop_list_point_model.cpp:
+src/shop_ov009/shop_list_point_model.cpp:
     .text start:0x0207d164 end:0x0207d218
 
-src/overlay009/shop_display_control.cpp:
+src/shop_ov009/shop_display_control.cpp:
     .text start:0x0207b9d0 end:0x0207bbe0
 
-src/overlay009/shop_panel_zoom.cpp:
+src/shop_ov009/shop_panel_zoom.cpp:
     .text start:0x02078460 end:0x0207865c
 
-src/overlay009/shop_panel_zoom_start.cpp:
+src/shop_ov009/shop_panel_zoom_start.cpp:
     .text start:0x020770a4 end:0x020770fc
 
-src/overlay009/shop_quantity.cpp:
+src/shop_ov009/shop_quantity.cpp:
     .text start:0x02077d50 end:0x02078460
 
-src/overlay009/shop_price_adjustment.cpp:
+src/shop_ov009/shop_price_adjustment.cpp:
     .text start:0x020789d8 end:0x02078d00
 
-src/overlay009/shop_panel_slide.cpp:
+src/shop_ov009/shop_panel_slide.cpp:
     .text start:0x02074ea8 end:0x02075020
 
-src/overlay009/shop_subscreen_text.c:
+src/shop_ov009/shop_subscreen_text.c:
     .text start:0x0207bbe0 end:0x0207bd84
     .data start:0x0207e31c end:0x0207e334
 
-src/overlay009/shop_party_bitmap.cpp:
+src/shop_ov009/shop_party_bitmap.cpp:
     .text start:0x0207bf1c end:0x0207c100
 
-src/overlay009/shop_confirmation_cursor.cpp:
+src/shop_ov009/shop_confirmation_cursor.cpp:
     .text start:0x02076fbc end:0x020770a4
 
-src/overlay009/shop_equipment_highlight.cpp:
+src/shop_ov009/shop_equipment_highlight.cpp:
     .text start:0x02076b28 end:0x02076fbc
 
-src/overlay009/shop_stock_caption.cpp:
+src/shop_ov009/shop_stock_caption.cpp:
     .text start:0x0207218c end:0x020721d4
 
-src/overlay009/shop_stock_rows.cpp:
+src/shop_ov009/shop_stock_rows.cpp:
     .text start:0x02072470 end:0x02072818
 
-src/overlay009/shop_stock_setup.cpp:
+src/shop_ov009/shop_stock_setup.cpp:
     .text start:0x02073098 end:0x020731fc
 
-src/overlay009/shop_equipped_marker.cpp:
+src/shop_ov009/shop_equipped_marker.cpp:
     .text start:0x0207337c end:0x02073538
 
-src/overlay009/shop_panel_model.cpp:
+src/shop_ov009/shop_panel_model.cpp:
     .text start:0x02075ab0 end:0x02075b84
 
-src/overlay009/shop_apply_equipment.cpp:
+src/shop_ov009/shop_apply_equipment.cpp:
     .text start:0x0207662c end:0x02076668
 
-src/overlay009/shop_selected_model.cpp:
+src/shop_ov009/shop_selected_model.cpp:
     .text start:0x02076ae4 end:0x02076b28

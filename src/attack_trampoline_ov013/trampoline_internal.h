@@ -1,6 +1,6 @@
 #ifndef PIT_OVERLAY013_TRAMPOLINE_INTERNAL_H
 #define PIT_OVERLAY013_TRAMPOLINE_INTERNAL_H
-#include "../overlay010/attack_common_internal.h"
+#include "../attack_common_ov010/attack_common_internal.h"
 #include <game/overlay013_attack.h>
 extern "C" {
 #include <game/battle_effect.h>

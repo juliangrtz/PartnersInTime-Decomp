@@ -4,59 +4,59 @@
     .bss        start:0x020cbfa0 end:0x020cbfc0 kind:bss align:32
 
 
-src/overlay025/ov25_enemy_begin_return.cpp:
+src/enemy_effect_ov025/ov25_enemy_begin_return.cpp:
     .text start:0x020c30cc end:0x020c31a0
 
-src/overlay025/ov25_effect_sequence_initialize_alternate.cpp:
+src/enemy_effect_ov025/ov25_effect_sequence_initialize_alternate.cpp:
     .text start:0x020c34e8 end:0x020c3748
 
-src/overlay025/ov25_effect_sequence_advance_sprite.cpp:
+src/enemy_effect_ov025/ov25_effect_sequence_advance_sprite.cpp:
     .text start:0x020c3c5c end:0x020c4084
 
-src/overlay025/enemy_projectile_impact.cpp:
+src/enemy_effect_ov025/enemy_projectile_impact.cpp:
     .text start:0x020c4268 end:0x020c47c8
 
-src/overlay025/ov25_projectile_wait_all.cpp:
+src/enemy_effect_ov025/ov25_projectile_wait_all.cpp:
     .text start:0x020c4f60 end:0x020c4fd8
 
-src/overlay025/ov25_projectile_update_trail.cpp:
+src/enemy_effect_ov025/ov25_projectile_update_trail.cpp:
     .text start:0x020c5260 end:0x020c5374
 
-src/overlay025/enemy_projectile_effects.cpp:
+src/enemy_effect_ov025/enemy_projectile_effects.cpp:
     .text start:0x020c5798 end:0x020c5da4
 
-src/overlay025/enemy_projectile_preparation.cpp:
+src/enemy_effect_ov025/enemy_projectile_preparation.cpp:
     .text start:0x020c5ea8 end:0x020c61e0
 
-src/overlay025/enemy_segment_chain_preparation.cpp:
+src/enemy_effect_ov025/enemy_segment_chain_preparation.cpp:
     .text start:0x020c6c4c end:0x020c7124
 
-src/overlay025/ov25_enemy_wait_animation.cpp:
+src/enemy_effect_ov025/ov25_enemy_wait_animation.cpp:
     .text start:0x020c7210 end:0x020c7250
 
-src/overlay025/ov25_enemy_finish_attached_effect.cpp:
+src/enemy_effect_ov025/ov25_enemy_finish_attached_effect.cpp:
     .text start:0x020c822c end:0x020c8268
 
-src/overlay025/enemy_chain_landing.cpp:
+src/enemy_effect_ov025/enemy_chain_landing.cpp:
     .text start:0x020c85f0 end:0x020c877c
 
-src/overlay025/ov25_task_wait_sibling.cpp:
+src/enemy_effect_ov025/ov25_task_wait_sibling.cpp:
     .text start:0x020c8ac8 end:0x020c8af4
 
-src/overlay025/enemy_chain_tracking.cpp:
+src/enemy_effect_ov025/enemy_chain_tracking.cpp:
     .text start:0x020c93d0 end:0x020c98d8
 
-src/overlay025/ov25_enemy_reset_stopped_animation.cpp:
+src/enemy_effect_ov025/ov25_enemy_reset_stopped_animation.cpp:
     .text start:0x020ca2f8 end:0x020ca350
 
-src/overlay025/ov25_enemy_begin_load_and_move.cpp:
+src/enemy_effect_ov025/ov25_enemy_begin_load_and_move.cpp:
     .text start:0x020cbe28 end:0x020cbf68
 
-src/overlay025/enemy_linked_effects.cpp:
+src/enemy_effect_ov025/enemy_linked_effects.cpp:
     .text start:0x020ca438 end:0x020cb664
 
-src/overlay025/enemy_projectile_sequence.cpp:
+src/enemy_effect_ov025/enemy_projectile_sequence.cpp:
     .text start:0x020cb838 end:0x020cbbb0
 
-src/overlay025/enemy_linked_damage.cpp:
+src/enemy_effect_ov025/enemy_linked_damage.cpp:
     .text start:0x020c98d8 end:0x020c9be0

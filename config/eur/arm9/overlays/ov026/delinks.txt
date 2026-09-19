@@ -3,23 +3,23 @@
     .data       start:0x020c6360 end:0x020c6580 kind:data align:32
     .bss        start:0x020c6580 end:0x020c65a0 kind:bss align:32
 
-src/overlay026/attack_control.c:
-    .text       start:0x020c2ae0 end:0x020c2d38
+src/battle_item_ov026/attack_control.c:
+    .text start:0x020c2ae0 end:0x020c2d38
 
-src/overlay026/party_pairing.c:
-    .text       start:0x020c34a8 end:0x020c3570
-
-
+src/battle_item_ov026/party_pairing.c:
+    .text start:0x020c34a8 end:0x020c3570
 
 
-src/overlay026/ov26_attack_get_phase_position.cpp:
+
+
+src/battle_item_ov026/ov26_attack_get_phase_position.cpp:
     .text start:0x020c3570 end:0x020c3850
 
-src/overlay026/ov26_attack_set_facing_animation.cpp:
+src/battle_item_ov026/ov26_attack_set_facing_animation.cpp:
     .text start:0x020c4988 end:0x020c49ac
 
-src/overlay026/ov26_attack_initialize.cpp:
+src/battle_item_ov026/ov26_attack_initialize.cpp:
     .text start:0x020c6264 end:0x020c6354
 
-src/overlay026/item_sequence.cpp:
+src/battle_item_ov026/item_sequence.cpp:
     .text start:0x020c2d38 end:0x020c34a8

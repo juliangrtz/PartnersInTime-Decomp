@@ -108,7 +108,7 @@ that share ROM/save paths.
 | Shared sprite collection and initialization | [Renderer arguments, pool layouts and live versus isolated coverage](docs/research/RECONSTRUCTION_NOTES.md#overlay-5-sprite-collection-and-initialization) |
 | Battle exit and resource slots | [Dispatch boundaries, overlay replacement and coverage limits](docs/research/RECONSTRUCTION_NOTES.md#battle-transition-dispatch-and-resource-slots) |
 | Battle model animations and Mix Flowers | [Track/context ownership, model-table sentinels, wrapper ABI and renderer extents](docs/research/RECONSTRUCTION_NOTES.md#battle-model-animation-starts) |
-| Task, heap and archive lifecycle | [Normal tasks](src/game/task.cpp), [IRQ tasks](src/game/irq_task.cpp), [allocator](src/game/heap.c), [archive base](src/game/archive_lifecycle.c), [compressed archive](src/game/archive_compressed_lifecycle.c) |
+| Task, heap and archive lifecycle | [Normal tasks](src/game/task.cpp), [IRQ tasks](src/game/task.cpp), [allocator](src/game/heap.c), [archive base](src/game/archive_io.c), [compressed archive](src/game/archive_compressed.c) |
 | Hit-bonus arithmetic and RNG fixtures | [Conversion ABI, truncation and restoration](docs/research/RECONSTRUCTION_NOTES.md#battle-hit-bonus-roll) |
 | Pause transitions | [Party lifecycle](docs/research/RECONSTRUCTION_NOTES.md#pause-party-initialization-and-cleanup), [transition evidence](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-panels-and-controllers), [projection ABI](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-projection-and-callback-abi), [setup calls](docs/research/RECONSTRUCTION_NOTES.md#pause-transition-setup-calls) |
 | Pause navigation | [Page entry and return](docs/research/RECONSTRUCTION_NOTES.md#pause-page-entry-and-return), [main menu and member selection](docs/research/RECONSTRUCTION_NOTES.md#pause-main-menu-and-member-selection), [status and Cobalt Star pages](docs/research/RECONSTRUCTION_NOTES.md#pause-status-and-cobalt-star-pages) |
@@ -142,9 +142,19 @@ over historical notes. Check existing declarations before accepting a handoff's
 claim that a shared prototype needs changing.
 
 Use `src/game/` for resident game helpers, `src/nitro/` for SDK code,
-`src/field/` and `src/battle/` for those subsystems, `src/overlayNNN/` for other
-overlay code, and `include/game/` for shared game interfaces. Private pseudocode
-folder names are not authoritative source paths or component identities.
+`src/field/` (overlay 0) and `src/battle/` (overlay 2) for those subsystems, and
+`include/game/` for shared game interfaces. Every other overlay has its own
+directory named `<role>_ovNNN`, for example `shop_ov009` or
+`attack_pocket_chomp_ov018`; run `ls src` for the current list. Private
+pseudocode folder names are not authoritative source paths or component
+identities.
+
+A source file is one translation unit that owns one contiguous native range per
+section. Use `tools/reorganize_sources.py` to rename or merge units: it checks
+contiguity, ordering, language and basename uniqueness, and updates
+`delinks.txt`, `linked_sources.txt` and `linker_aliases.json` together. Merge
+only units whose ranges already touch and that serve one topic; run
+`tools/verify_refactor.ps1` afterwards.
 
 When checking candidate inventories, compare component and address ranges against
 the current linked manifest and delinks. Accept variable whitespace in metadata;
