@@ -371,3 +371,9 @@ src/field/field_screen_wipe_cleanup.cpp:
 
 src/field/field_effect_animation.cpp:
     .text start:0x02074d50 end:0x020751d8
+
+src/field/field_placed_entities.cpp:
+    .text start:0x0207741c end:0x02077a44
+
+src/field/field_entity_update_order.cpp:
+    .text start:0x0207682c end:0x020768f8

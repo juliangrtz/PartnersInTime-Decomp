@@ -344,7 +344,8 @@ typedef struct FieldEntity {
 #else
     FieldEntityVTable *vtable;
 #endif
-    u8 index, unknown_005[3];
+    u8 index;
+    union { u8 unknown_005[3]; struct { u8 update_order, unknown_006[2]; }; };
     u16 unknown_008;
     union {
         u16 property_00a;
@@ -360,8 +361,10 @@ typedef struct FieldEntity {
         } property_00a_bits;
         struct { u16 unknown_00_06 : 7, unknown_07 : 1, unknown_08 : 1, unknown_09_15 : 7; } visibility_bits;
     };
-    s16 unknown_00c;
-    u8 unknown_00e[0x12];
+    union {
+        struct { s16 unknown_00c; u8 unknown_00e[0x12]; };
+        struct { u8 unknown_00c_prefix[4]; FieldRuntimeEntity *update_previous, *update_next; u8 unknown_018[8]; };
+    };
     union {
         u8 state_payload[0xCC];
         struct {

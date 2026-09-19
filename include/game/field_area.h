@@ -128,7 +128,10 @@ typedef struct FieldAreaContext {
     struct FieldPartyManager *party;
     FieldScriptManager scripts;
     union { u8 unknown_29d4[4]; struct FieldAreaContext *paired_area; };
-    struct FieldRuntimeEntity *entities[36];
+    union {
+        struct FieldRuntimeEntity *entities[36];
+        struct { struct FieldRuntimeEntity *entity_slots[32], *first_entity, *last_entity; void *unknown_2a60[2]; };
+    };
     void *shared_resources;
     void *unknown_2a6c;
     void *unknown_2a70;
@@ -185,6 +188,8 @@ void FieldArea_SetCameraPosition(FieldAreaContext *area, fx32 x, fx32 y);
 void FieldArea_UpdateScriptsWhenIdle(FieldAreaContext *area);
 void FieldArea_InitializeQuadRegions(FieldAreaContext *field);
 void FieldArea_CreateVariableEntities(FieldAreaContext *field);
+void FieldArea_CreatePlacedEntities(FieldAreaContext *area);
+void FieldArea_ResetEntityUpdateOrder(FieldAreaContext *area);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source);
 void FieldArea_UpdateGraphics(FieldAreaContext *field);
 void FieldArea_LoadWindowSprites(FieldAreaContext *field);

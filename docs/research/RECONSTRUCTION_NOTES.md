@@ -4916,3 +4916,39 @@ The cold routes use `probe_field_animation_v1.py`; room359_v3 uses
 `probe_field_animation.py`. `check_field_animation_isolated.py` uses the preserved
 room359_v2 RAM; v2/v3 call records and fixtures are identical. All producers are
 under `build/analysis/high_effort_50_to_55/` and are not build dependencies.
+
+
+## Room placements and entity update order
+
+[Placed entity creation](../../src/field/field_placed_entities.cpp) reconstructs
+`0x0207741C..0x02077A44` (1,576 bytes); [list initialization](../../src/field/field_entity_update_order.cpp)
+reconstructs `0x0207682C..0x020768F8` (204 bytes). Both match without ASM.
+Two placement arrays at area +0x2318 and counts at +0x2350 contain 28-byte
+records. The room mask and optional VM variable determine each enabled flag.
+Subtype selects the constructor and allocation: 0/1 use 1,440 bytes,
+2/3/5/6 use 1,312, 4 uses 1,316, 7 uses 1,328, 8 uses 688 and 9 uses 236.
+Do not infer all allocation extents from the shared runtime-entity prefix.
+
+There are 32 placement slots at +0x29D8, followed by list head/tail at
++0x2A58/+0x2A5C. The retained 36-pointer raw view includes these adjacent fields.
+Reset writes entity order at +5 and previous/next links at +0x10/+0x14, then
+sets the roots and null endpoints. Its native precondition is at least one
+entity. The subsequent dependency-based reorder remains unreconstructed.
+
+Ordinary cold loads of Saves 1, 65 and 103 pass 6,699 frames, six creation calls
+and 1,925 resets. Across 81 placements, subtypes 0/1/2/3/7/8/9 execute, including
+enabled and disabled records; five placements read a VM variable. Lists of
+3, 8, 11, 12, 20 and 27 entities are checked. The oracle checks the complete
+area, spawn records, constructor arguments, pointer publication and complete
+live entity allocations during resets. Allocator results, VM variable reads
+and constructor internals are observational; constructor writes are accepted
+only inside the newly allocated object. Final captures show normal field scenes.
+All 104 original saves remain unchanged.
+
+No live coverage is claimed for subtypes 4/5/6, a populated second set,
+allocation failure, unsupported subtypes, single-entity or full 32-slot lists.
+A type-2 room executes the forced low mask bits with an already all-ones mask,
+so their distinct effect is not tested. Full native relink, golden ROM build
+and 107 tests pass. Private reports are
+`build/runtime/eur_high_field_spawn/{cold1_v1,cold65_v1,cold103_v1}.json`, produced
+by `build/analysis/high_effort_50_to_55/probe_field_spawn.py`.

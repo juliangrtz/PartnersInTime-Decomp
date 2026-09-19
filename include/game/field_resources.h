@@ -3,6 +3,7 @@
 
 /* Room resource records, loaded buffers and the temporary archive requests. */
 #include <game/field_archive.h>
+#include <game/field_spawn.h>
 #include <game/field_entity.h>
 #include <game/model_resource.h>
 
@@ -77,12 +78,13 @@ typedef struct FieldResourceContext {
     const u32 *primary_ids[2];
     const u32 *secondary_ids[2];
     const u32 *alternate_ids[2];
-    u8 unknown_2318[0x18];
+    const FieldSpawnRecord *spawn_records[2];
+    u8 unknown_2320[0x10];
     const u32 *animation_ids[2];
     int primary_counts[2];
     int secondary_counts[2];
     int alternate_counts[2];
-    u8 unknown_2350[8];
+    int spawn_counts[2];
     int animation_counts[2];
     void *room_extra;
     u8 unknown_2364[0x78];

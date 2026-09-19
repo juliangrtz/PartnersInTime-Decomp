@@ -8523,3 +8523,12 @@ relink remain byte-exact, and 107 tests pass. Three live routes cover seven load
 seven completion polls and one visible sprite effect; 27 isolated boundary cases
 cover the wrappers and queries separately. Original saves are unchanged. See
 [evidence and limits](research/RECONSTRUCTION_NOTES.md#room-owned-field-effect-animations).
+
+
+## Room entity creation and update-list initialization (+1,780 bytes)
+
+Two functions match as readable C++ without ASM. Coverage reaches 789,652 /
+1,563,700 bytes (50.4989%); overlay 0 reaches 167,068 / 366,712. Actual source
+objects, full ROM and native relink match; 107 tests pass. Three ordinary save
+loads cover six creation calls, 81 placements and 1,925 list resets. All original
+saves are unchanged. See [evidence and limits](research/RECONSTRUCTION_NOTES.md#room-placements-and-entity-update-order).
