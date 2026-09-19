@@ -4872,3 +4872,47 @@ The preserved v1 probe passed the pattern route but failed on the rectangle
 because Capstone's `ip` alias was not mapped to DeSmuME's `r12`; all routes were
 repeated successfully after correcting the probe. Actual source objects,
 the changed area-state caller, the full build, native relink and 107 tests pass.
+
+
+## Room-owned field effect animations
+
+[Field effect animations](../../src/field/field_effect_animation.cpp) reconstruct
+the contiguous 1,160-byte range `0x02074D50..0x020751D8`: room data loading,
+request completion, sprite/model starters and active-track queries. No ASM is
+used. Two buffer arrays at area +0x22DC follow IDs at +0x2330 and counts at
++0x2358; IDs 0..3 also populate four special pointers at +0x22E4. Requests are
+44 bytes. Completion frees their array, while animation buffers remain owned
+by the room. A zero total leaves the existing request pointer/count untouched.
+
+The model wrapper resolves four entity IDs, mapping -1 to null, and passes the
+embedded four-model array at +0x2B18. Its signed-halfword speed is extended for
+the existing full-width starter. Sprite completion checks the command pointer;
+model completion checks the track's finished bit. The Field VM caller remains
+byte-exact after adopting these declarations.
+
+Live replays: ordinary Save 65 and Save 11 loads cover empty resource sets.
+A controlled Save 65 route queues room 359 through the normal room-change
+function, then dispatches that room's original sprite command at script offset
+0x110A: slot/index 0, position 128/62, speed 256. Both temporary 72-byte decoded
+commands are restored at dispatcher return. Entry 4's 888-byte payload and
+reported size match the extracted archive; the archive also occurs unchanged
+in the golden ROM. Captures show the star effect. This route is not a normal
+story entry. The three selected replays cover 7,799 frames, seven loaders,
+seven completion polls and one sprite starter. Entire area records, pointer
+arrays, caller stores, request contents before submission and helper arguments
+are checked; archive queue mutations and allocator/playback internals remain
+observational. All 104 original saves are unchanged.
+
+Separate ARM946 execution on copied live RAM passes 27 query, wrapper and poll
+boundary cases. Synthetic records and starter/delete stubs verify null/finished
+tracks, both slots, signed forwarding, entity sentinels and pending requests.
+They do not establish live model playback or heap-release behavior. No model
+start appears among the exported reachable field commands. Live coverage does
+not include the four special IDs, a populated second resource set or a pending
+read poll. Full ROM build, native relink and all 107 tests pass.
+
+Private reports: `build/runtime/eur_high_field_animation/{cold65_v1,cold11_v1,room359_v3,isolated_v1}.json`.
+The cold routes use `probe_field_animation_v1.py`; room359_v3 uses
+`probe_field_animation.py`. `check_field_animation_isolated.py` uses the preserved
+room359_v2 RAM; v2/v3 call records and fixtures are identical. All producers are
+under `build/analysis/high_effort_50_to_55/` and are not build dependencies.

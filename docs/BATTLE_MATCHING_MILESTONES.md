@@ -8512,3 +8512,14 @@ Active effects cover field screen 0. DMA execution, allocator internals and
 rendering are observational; normal story routes and other limits are recorded
 in the [research reference](research/RECONSTRUCTION_NOTES.md#field-screen-wipe-transfers-and-cleanup).
 Private build: `build/analysis/high_effort_50_to_55/field_wipe_build_v1.log`.
+
+
+## Room-owned field effect animations (+1,160 bytes)
+
+Six functions now match as C++: loading/completion and sprite/model start/query
+wrappers. Coverage is 787,872 / 1,563,700 bytes (50.3851%); overlay 0 is 165,288
+/ 366,712. Actual objects and the changed Field VM match, the full ROM and native
+relink remain byte-exact, and 107 tests pass. Three live routes cover seven loads,
+seven completion polls and one visible sprite effect; 27 isolated boundary cases
+cover the wrappers and queries separately. Original saves are unchanged. See
+[evidence and limits](research/RECONSTRUCTION_NOTES.md#room-owned-field-effect-animations).

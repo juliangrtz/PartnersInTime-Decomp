@@ -15,6 +15,7 @@
 #include <game/field_party_manager.h>
 #include <game/field_scene_transition.h>
 #include <game/field_resources.h>
+#include <game/field_effect_animation.h>
 #include <game/field_room_interaction.h>
 #include <game/field_room_transition.h>
 #include <game/field_roaming.h>
@@ -123,16 +124,6 @@ extern void func_ov000_02069284(
     void *field_system, const s32 *entity_selectors, int anchor_entity,
     int destination_room_id, int argument_4, int argument_5,
     int orbit_entities, s16 center_x_offset, s16 center_y_offset);
-extern void func_ov000_02074e14(
-    u8 *field_context, int screen, int resource_index, int anchor_entity_0,
-    int anchor_entity_1, int anchor_entity_2, int anchor_entity_3,
-    s16 x_offset, s16 y_offset, s16 z_offset, int attachment_mode,
-    s16 render_priority);
-extern int func_ov000_02074dd0(u8 *field_context);
-extern void func_ov000_02074d8c(u8 *field_context, int effect_slot,
-                                int screen, int resource_index, s16 x,
-                                s16 y, s16 playback_speed);
-extern int func_ov000_02074d50(u8 *field_context, int effect_slot);
 extern void func_020052b0(int scene_id, int argument_1);
 extern void func_ov000_02079d74(u8 *field_context, int party_mode);
 extern void func_ov000_0206ba2c(
@@ -3160,8 +3151,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_ANCHORED_FIELD_EFFECT_ANIMATION:
-        func_ov000_02074e14(
-            field_context, runtime->screen_selector_bits.field_screen,
+        FieldArea_StartModelAnimation(
+            (FieldAreaContext *)field_context, runtime->screen_selector_bits.field_screen,
             arguments[0], arguments[1],
             arguments[2], arguments[3],
             arguments[4], (s16)arguments[5],
@@ -3170,7 +3161,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_WAIT_ANCHORED_FIELD_EFFECT_ANIMATION:
-        if (func_ov000_02074dd0(field_context)) {
+        if (FieldArea_IsModelAnimationActive((FieldAreaContext *)field_context)) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;
@@ -3178,16 +3169,16 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_FIELD_EFFECT_ANIMATION:
-        func_ov000_02074d8c(
-            field_context, arguments[0],
+        FieldArea_StartSpriteAnimation(
+            (FieldAreaContext *)field_context, arguments[0],
             runtime->screen_selector_bits.field_screen, arguments[1],
             (s16)arguments[2], (s16)arguments[3],
             (s16)arguments[4]);
         break;
 
     case FIELD_VM_WAIT_FIELD_EFFECT_ANIMATION:
-        if (func_ov000_02074d50(
-                field_context, arguments[0])) {
+        if (FieldArea_IsSpriteAnimationActive(
+                (FieldAreaContext *)field_context, arguments[0])) {
             result = FieldVm_RetryCurrentCommand(
                 vm, state, command->opcode);
             break;

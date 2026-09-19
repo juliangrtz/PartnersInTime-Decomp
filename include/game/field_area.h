@@ -123,8 +123,8 @@ typedef struct FieldAreaContext {
     FieldNavigationChangeManager *navigation_changes;
     u8 unknown_2504[8], unknown_250c[44], unknown_2538[40];
     union { void *party_order; struct FieldTimer *timer; };
-    void *unknown_2564;
-    void *unknown_2568;
+    union { void *unknown_2564; struct FieldModelAnimation *model_animation; };
+    union { void *unknown_2568; struct FieldSpriteAnimation *sprite_animation; };
     struct FieldPartyManager *party;
     FieldScriptManager scripts;
     union { u8 unknown_29d4[4]; struct FieldAreaContext *paired_area; };
@@ -132,7 +132,10 @@ typedef struct FieldAreaContext {
     void *shared_resources;
     void *unknown_2a6c;
     void *unknown_2a70;
-    u8 unknown_2a74[180];
+    union {
+        u8 unknown_2a74[180];
+        struct { u8 unknown_2a74_prefix[0xA4]; struct FieldRenderObject *animation_models[4]; };
+    };
     u8 effect_owners[8];
     union {
         u16 state;

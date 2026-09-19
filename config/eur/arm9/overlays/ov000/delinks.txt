@@ -368,3 +368,6 @@ src/field/field_screen_wipe_rectangle.cpp:
 
 src/field/field_screen_wipe_cleanup.cpp:
     .text start:0x020744dc end:0x02074810
+
+src/field/field_effect_animation.cpp:
+    .text start:0x02074d50 end:0x020751d8

@@ -1,6 +1,7 @@
 #ifndef PIT_GAME_FIELD_RESOURCES_H
 #define PIT_GAME_FIELD_RESOURCES_H
 
+/* Room resource records, loaded buffers and the temporary archive requests. */
 #include <game/field_archive.h>
 #include <game/field_entity.h>
 #include <game/model_resource.h>
@@ -69,15 +70,20 @@ typedef struct FieldResourceContext {
     FieldPrimaryResource *primary[2];
     FieldSecondaryResource *secondary[2];
     FieldSecondaryResource *alternate[2];
-    u8 unknown_00cc[0x2234];
+    u8 unknown_00cc[0x2210];
+    u8 **animation_buffers[2];
+    u8 *special_animations[4];
+    u8 unknown_22f4[0xC];
     const u32 *primary_ids[2];
     const u32 *secondary_ids[2];
     const u32 *alternate_ids[2];
-    u8 unknown_2318[0x20];
+    u8 unknown_2318[0x18];
+    const u32 *animation_ids[2];
     int primary_counts[2];
     int secondary_counts[2];
     int alternate_counts[2];
-    u8 unknown_2350[0x10];
+    u8 unknown_2350[8];
+    int animation_counts[2];
     void *room_extra;
     u8 unknown_2364[0x78];
     FieldArchiveRequest *reads;
