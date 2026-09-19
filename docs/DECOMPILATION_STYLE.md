@@ -37,18 +37,24 @@ out of address order, mixed languages, a colliding basename - and rewrites
 `delinks.txt`, `linked_sources.txt` and `linker_aliases.json` together. Two
 units may only be merged when their native ranges already touch, and merging
 unrelated topics because their addresses happen to be adjacent is not an
-improvement. Run `tools/verify_refactor.ps1` afterwards.
+improvement. The plan must use independent operations and keep linked units
+separate from unlinked drafts. The tool checks object basenames across both
+languages and refuses to apply a plan over dirty source or metadata files;
+preserve or commit that work first. Run `tools/verify_refactor.ps1` afterwards.
 
 ### Language per unit
 
-Whether a unit is `.c` or `.cpp` is a statement about the original translation
-unit, not a formatting choice: shared headers such as `include/game/task.h` and
+Whether a reconstructed unit is `.c` or `.cpp` affects its ABI and object model:
+shared headers such as `include/game/task.h` and
 `include/game/field_entity.h` declare virtual classes under `__cplusplus` and
 plain structs with a vtable pointer otherwise, so the language changes what the
 code means. Change a unit's language only with evidence - virtual dispatch
 using a single scratch register, a constructor installing a vtable, an entry in
 `.ctor` - and only when the rebuilt object still reproduces the original bytes.
-A unit that stops matching when compiled as C++ was C.
+Matching C++ output supports that reconstruction; it does not prove the original
+source language or translation-unit boundaries. A mismatch after changing
+language can also come from declarations, layout, optimization or source shape.
+Record that evidence and retain the matching version until the cause is known.
 
 ## Readability and matching
 
@@ -67,7 +73,7 @@ A unit that stops matching when compiled as C++ was C.
 
 Comments carry the knowledge that the code cannot: what a record is for, who
 owns it, which convention a number follows, and why the code is shaped the way
-it is. Use `/* */`; the original build has no `//` comments anywhere.
+it is. Use `/* */` consistently in reconstructed sources and headers.
 
 - Open each module with a block comment naming its role, its component and its
   native range, as in `src/battle/battle_hit.c`. The range is checked against

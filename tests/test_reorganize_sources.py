@@ -1,4 +1,10 @@
 import unittest
+import json
+import subprocess
+
+import pytest
+
+from tools import reorganize_sources as reorganize
 
 from tools.reorganize_sources import PlanError, parse_delinks, rewrite_delinks, validate
 
@@ -79,6 +85,12 @@ class ValidateTests(unittest.TestCase):
         self.assertEqual(members, ["src/game/window_voice.c"])
         self.assertEqual(merged, {".text": (0x0201DC3C, 0x0201DC98)})
 
+    def test_rejects_duplicate_ownership_within_one_component(self):
+        duplicate = DELINKS + "\nsrc/game/window_voice.c:\n    .text start:0x0201f000 end:0x0201f004\n"
+        with self.assertRaisesRegex(PlanError, "appears in"):
+            validate({"target": "src/game/voice.c", "members": ["src/game/window_voice.c"]},
+                     {"arm9": parse_delinks(duplicate.splitlines())})
+
 
 class RewriteTests(unittest.TestCase):
     def test_merged_entry_replaces_the_members(self):
@@ -127,6 +139,119 @@ class RewriteTests(unittest.TestCase):
             "    .text start:0x02004000 end:0x02048ef8 kind:code align:32",
             delinks["arm9"].render(),
         )
+
+
+@pytest.fixture
+def plan_repo(tmp_path, monkeypatch):
+    """A real disposable Git index: rejection must preserve work and staging."""
+    config = tmp_path / "config/eur/arm9"
+    config.mkdir(parents=True)
+    (config / "delinks.txt").write_text(DELINKS)
+    members = [block.name for block in table()["arm9"].blocks if block.name]
+    for member in members:
+        path = tmp_path / member
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"/* {path.stem} */\n")
+    (config / "linked_sources.txt").write_text("\n".join(members) + "\n")
+    (config / "linker_aliases.json").write_text("[]\n")
+    def git(*args):
+        return subprocess.check_output(["git", *args], cwd=tmp_path)
+    git("init", "-q")
+    git("add", ".")
+    git("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+        "commit", "-qm", "fixture")
+    monkeypatch.setattr(reorganize, "ROOT", tmp_path)
+    return tmp_path, config, git
+
+
+def run_plan(monkeypatch, root, operations, apply=False):
+    plan = root / "plan.json"
+    plan.write_text(json.dumps(operations))
+    monkeypatch.setattr("sys.argv", ["reorganize_sources.py", "--plan", str(plan)]
+                        + (["--apply"] if apply else []))
+    return reorganize.main()
+
+
+def test_rejects_same_object_basename_across_languages(plan_repo, monkeypatch, capsys):
+    root, _, _ = plan_repo
+    assert run_plan(monkeypatch, root, [{"target": "src/other/window_pool.c",
+        "members": ["src/game/window_voice.c"]}]) == 1
+    assert "object basename collides" in capsys.readouterr().err
+
+
+def test_rejects_operations_that_consume_each_others_inputs(plan_repo, monkeypatch, capsys):
+    root, _, git = plan_repo
+    before = (root / "src/game/window_voice.c").read_bytes()
+    operations = [
+        {"target": "src/game/window_voice.c", "members": ["src/game/window_alignment.c"]},
+        {"target": "src/game/voice.c", "members": ["src/game/window_voice.c"]},
+    ]
+    assert run_plan(monkeypatch, root, operations, apply=True) == 1
+    assert "another operation's member" in capsys.readouterr().err
+    assert (root / "src/game/window_voice.c").read_bytes() == before
+    assert git("diff", "--cached", "--name-only") == b""
+
+
+def test_rejects_merging_linked_and_unlinked_ranges(plan_repo, monkeypatch, capsys):
+    root, config, _ = plan_repo
+    (config / "linked_sources.txt").write_text("src/game/window_alignment.c\n")
+    assert run_plan(monkeypatch, root, [{"target": "src/game/window_text.c", "members":
+        ["src/game/window_alignment.c", "src/game/window_voice.c"]}]) == 1
+    assert "linked and unlinked" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("staged", [False, True])
+def test_apply_preserves_dirty_source_and_index(plan_repo, monkeypatch, capsys, staged):
+    root, _, git = plan_repo
+    source = root / "src/game/window_voice.c"
+    source.write_bytes(b"/* work in progress */\r\n")
+    if staged:
+        git("add", "src/game/window_voice.c")
+        source.write_bytes(b"/* further unstaged work */\r\n")
+    before, index = source.read_bytes(), git("diff", "--cached", "--binary")
+    assert run_plan(monkeypatch, root, [{"target": "src/game/window_text.c", "members":
+        ["src/game/window_alignment.c", "src/game/window_voice.c"]}], apply=True) == 1
+    assert "dirty inputs" in capsys.readouterr().err
+    assert source.read_bytes() == before
+    assert git("diff", "--cached", "--binary") == index
+
+
+def test_missing_later_input_does_not_partially_apply_plan(plan_repo, monkeypatch, capsys):
+    root, _, git = plan_repo
+    (root / "src/game/window_skin.c").unlink()
+    assert run_plan(monkeypatch, root, [
+        {"target": "src/game/voice.c", "members": ["src/game/window_voice.c"]},
+        {"target": "src/game/skin.c", "members": ["src/game/window_skin.c"]},
+    ], apply=True) == 1
+    assert "missing source" in capsys.readouterr().err
+    assert (root / "src/game/window_voice.c").is_file()
+    assert not (root / "src/game/voice.c").exists()
+    assert git("diff", "--cached", "--name-only") == b""
+
+
+def test_merge_retains_later_member_name_and_alias(plan_repo, monkeypatch):
+    root, config, git = plan_repo
+    target = "src/game/window_voice.c"
+    (config / "linker_aliases.json").write_text(json.dumps([
+        {"source": "src/game/window_alignment.c", "owner": "Owner", "labels": ["Interior"]}]))
+    git("add", ".")
+    git("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+        "commit", "-qm", "alias")
+    assert run_plan(monkeypatch, root, [{"target": target, "members":
+        ["src/game/window_alignment.c", target]}], apply=True) == 0
+    assert (root / target).read_text() == "/* window_voice */\n\n/* window_alignment */\n"
+    metadata = reorganize.load_delinks(config / "delinks.txt")
+    assert metadata.get(target).sections == {".text": (0x0201DA48, 0x0201DC98)}
+    assert json.loads((config / "linker_aliases.json").read_text())[0]["source"] == target
+    assert "src/game/window_alignment.c" not in (config / "linked_sources.txt").read_text()
+
+
+@pytest.mark.parametrize("target", ["../outside.c", "C:/outside.c", "src/../outside.c"])
+def test_rejects_non_repository_target(plan_repo, monkeypatch, capsys, target):
+    root, _, _ = plan_repo
+    assert run_plan(monkeypatch, root, [{"target": target,
+        "members": ["src/game/window_voice.c"]}]) == 1
+    assert "repository-relative" in capsys.readouterr().err
 
 
 if __name__ == "__main__":

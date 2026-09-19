@@ -1,7 +1,8 @@
 /*
  * Object texture decode (overlay 2, 0x020897A0-0x020899F0).
  *
- * Prepares the decode of an object's body texture.
+ * Prepares the decode of an object's body texture. This draft is not enabled
+ * in linked_sources.txt; successful compilation does not establish matching.
  */
 
 #include <game/battle_context.h>
@@ -29,13 +30,13 @@ void BattleObjectData_PrepareBodyDecodeTask(BattleQueuedTask *task) {
              ->current_texture_upload->size & ~3);
     resource->component_10 =
         (u8 *)resource->component_0c +
-        ((BattleRenderModel_GetTextureConversionSize(resource->data,
+        ((BattleRenderModel_GetTextureConversionSize((const GameGraphicsResource *)resource->data,
                         resource->flags.bits.copy_flag == 0) + 3) /
             4) * 4;
     resource->component_14 =
         (u8 *)resource->component_10 +
         ((BattleModel_GetScreenTextureConversionSize(1, !resource->flags.bits.copy_flag,
-                        resource->data) + 3) / 4) * 4;
+                        (const GameGraphicsResource *)resource->data) + 3) / 4) * 4;
 
     ++((BattleContext *)gBattleContext)->current_texture_upload;
     ((BattleContext *)gBattleContext)->current_texture_upload->texture_id =

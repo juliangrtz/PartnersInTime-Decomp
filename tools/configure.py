@@ -318,6 +318,10 @@ def main():
         add_extract_build(n, project)
         add_delink_and_lcf_builds(n, project)
         add_mwcc_builds(n, project, mwcc_implicit)
+        # Compile unlinked drafts as well when checking source health. They stay
+        # out of the exact ROM until explicitly enabled in linked_sources.txt.
+        n.build(outputs="objects", rule="phony", inputs=project.source_object_files())
+        n.newline()
         add_mwld_and_rom_builds(n, project)
         add_check_builds(n, project)
         add_objdiff_builds(n, project)

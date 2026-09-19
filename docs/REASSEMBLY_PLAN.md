@@ -803,18 +803,9 @@ behavior that permissive emulators may hide.
 
 ## Immediate execution order
 
-1. Keep the Stage-0 matching build green.
-2. Continue promoting small overlay-2 battle leaf functions using the seventy-six
-   exact symbolic actor/damage units as the template.
-3. Return to the `ARM7_Main` call graph when game-code dependencies require it;
-   recover further ARM/Thumb boundaries and relocations without blocking the
-   overlay-2 work on unrelated SDK cleanup.
-4. Split section fallbacks at DSD translation-unit boundaries, then retire
-   fixed-layout patch registration.
-5. Promote the confirmed battle actor/stat structures into maintained headers.
-6. Replace a tiny matching function deliberately, build a nonmatching mod ROM,
-   and test it in an emulator.
-7. Expand outward by translation unit while never accepting unexplained diffs.
-
-This order gives a playable artifact at every stage without treating original
-binary slices as the desired final architecture.
+Use the [remaining-decompilation roadmap](DECOMPILATION_ROADMAP.md) and regenerate
+the address inventory with `python tools/decompilation_backlog.py`. The sections
+above describe the architecture and earlier reconstruction; they are not a
+current candidate queue. Keep the exact build green, reconstruct coherent groups
+with a usable runtime route, and retain ARM7 boundary recovery as a separate
+completion requirement.

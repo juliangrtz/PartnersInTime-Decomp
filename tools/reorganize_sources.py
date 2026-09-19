@@ -45,7 +45,7 @@ import re
 import subprocess
 import sys
 from dataclasses import dataclass, field
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -166,10 +166,20 @@ def validate(operation: dict, delinks: dict[str, Delinks]):
     members = operation["members"]
     if not members:
         raise PlanError(f"{target}: no members")
+    if len(set(members)) != len(members):
+        raise PlanError(f"{target}: duplicate member")
+    for source in [target, *members]:
+        path = PurePosixPath(source)
+        if (path.is_absolute() or "\\" in source or ":" in source
+                or ".." in path.parts or path.as_posix() != source
+                or path.parts[0] not in {"src", "libs"}
+                or path.suffix not in {".c", ".cpp"}):
+            raise PlanError(f"{source}: expected a repository-relative C/C++ source path")
 
     owners = {}
     for member in members:
-        hits = [key for key, value in delinks.items() if value.get(member) is not None]
+        hits = [key for key, value in delinks.items()
+                for block in value.blocks if block.name == member]
         if not hits:
             raise PlanError(f"{target}: {member} has no delinks entry")
         if len(hits) > 1:
@@ -294,10 +304,87 @@ def apply_operation(target: str, members: list[str]) -> None:
         for member in reversed(members)
     ]
     for member in members:
-        git("rm", "-q", "-f", member)
+        git("rm", "-q", "--", member)
     target_path.parent.mkdir(parents=True, exist_ok=True)
     write_lines(target_path, "\n\n".join(chunks).splitlines(), "\n")
     git("add", "--", target)
+
+
+def validate_plan(plan: list[dict], delinks: dict[str, Delinks],
+                  manifest: Path) -> list[tuple]:
+    """Preflight the whole plan against the original tree before any Git write.
+
+    Operations are independent, not a sequence of renames. In particular, a
+    target cannot consume another operation's input. Linked and unlinked units
+    cannot be combined: replacing a single manifest entry would enable both.
+    """
+    validated = []
+    targets = set()
+    claimed = {}
+    for operation in plan:
+        component, members, merged = validate(operation, delinks)
+        target = operation["target"]
+        if target.casefold() in targets:
+            raise PlanError(f"{target}: duplicate target")
+        targets.add(target.casefold())
+        for member in members:
+            key = member.casefold()
+            if key in claimed:
+                raise PlanError(f"{target}: {member} is already claimed by {claimed[key]}")
+            claimed[key] = target
+        validated.append((target, component, members, merged))
+
+    lines, _ = read_lines(manifest)
+    linked = {line.split("#", 1)[0].strip().replace("\\", "/") for line in lines}
+    owners = {block.name for table in delinks.values() for block in table.blocks
+              if block.name}
+    basenames = {}
+    for directory in ("src", "libs"):
+        for path in (ROOT / directory).rglob("*"):
+            if path.suffix not in {".c", ".cpp"}:
+                continue
+            relative = path.relative_to(ROOT).as_posix()
+            if relative.casefold() not in claimed:
+                # Both name.c and name.cpp compile to name.o. The linker also
+                # selects these objects by basename, regardless of directory.
+                basenames.setdefault(path.stem.casefold(), relative)
+    for target, _, members, _ in validated:
+        if target.casefold() in claimed and claimed[target.casefold()] != target:
+            raise PlanError(f"{target}: target is another operation's member")
+        if target not in members and ((ROOT / target).exists() or target in owners):
+            raise PlanError(f"{target}: target already exists")
+        if len({member in linked for member in members}) != 1:
+            raise PlanError(f"{target}: cannot merge linked and unlinked members")
+        for member in members:
+            path = ROOT / member
+            if not path.is_file() or not path.resolve().is_relative_to(ROOT.resolve()):
+                raise PlanError(f"{member}: missing source or outside repository")
+            # Fail on unreadable input before an earlier operation removes files.
+            path.read_text(encoding="utf-8")
+        if not (ROOT / target).resolve().is_relative_to(ROOT.resolve()):
+            raise PlanError(f"{target}: target outside repository")
+        key = Path(target).stem.casefold()
+        if key in basenames:
+            raise PlanError(f"{target}: object basename collides with {basenames[key]}")
+        basenames[key] = target
+    return validated
+
+
+def require_clean_inputs(validated: list[tuple], delinks: dict[str, Delinks],
+                         config: Path) -> None:
+    """Do not overwrite staged or unstaged work in any file the plan touches."""
+    paths = {config / "linked_sources.txt", config / "linker_aliases.json"}
+    for target, component, members, _ in validated:
+        paths.update(ROOT / member for member in [target, *members])
+        paths.add(delinks[component].path)
+    relative = sorted(path.relative_to(ROOT).as_posix() for path in paths)
+    result = subprocess.run(
+        ["git", "status", "--porcelain", "--untracked-files=all", "--", *relative],
+        cwd=ROOT, check=True, capture_output=True, text=True,
+    )
+    if result.stdout:
+        raise PlanError("plan touches dirty inputs; commit or preserve them first:\n"
+                        + result.stdout.rstrip())
 
 
 def main() -> int:
@@ -314,45 +401,12 @@ def main() -> int:
     delinks = component_delinks(args.version)
     config = ROOT / "config" / args.version / "arm9"
 
-    validated = []
-    errors: list[str] = []
-    seen: set[str] = set()
-    for operation in plan:
-        try:
-            component, members, merged = validate(operation, delinks)
-        except PlanError as error:
-            errors.append(str(error))
-            continue
-        target = operation["target"]
-        if target in seen:
-            errors.append(f"{target}: duplicate target")
-            continue
-        seen.add(target)
-        validated.append((target, component, members, merged))
-
-    claimed: dict[str, str] = {}
-    for target, _, members, _ in validated:
-        for member in members:
-            if member in claimed:
-                errors.append(f"{target}: {member} is already claimed by {claimed[member]}")
-            claimed[member] = target
-
-    # The Metrowerks linker selects objects by basename, so they stay unique.
-    basenames: dict[str, str] = {}
-    for path in list(ROOT.glob("src/**/*.c")) + list(ROOT.glob("src/**/*.cpp")):
-        basenames[path.name] = str(path.relative_to(ROOT)).replace("\\", "/")
-    for _, _, members, _ in validated:
-        for member in members:
-            basenames.pop(Path(member).name, None)
-    for target, _, _, _ in validated:
-        name = Path(target).name
-        if name in basenames:
-            errors.append(f"{target}: basename collides with {basenames[name]}")
-        basenames[name] = target
-
-    for message in errors:
-        print(f"error: {message}", file=sys.stderr)
-    if errors:
+    try:
+        validated = validate_plan(plan, delinks, config / "linked_sources.txt")
+        if args.apply:
+            require_clean_inputs(validated, delinks, config)
+    except PlanError as error:
+        print(f"error: {error}", file=sys.stderr)
         return 1
 
     touched: set[str] = set()

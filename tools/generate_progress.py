@@ -145,6 +145,7 @@ def parse_delinks(
     path: Path, matching_sources: set[str]
 ) -> tuple[list[Range], list[CoverageRange]]:
     code_ranges: list[Range] = []
+    code_sections: set[str] = set()
     source_ranges: list[CoverageRange] = []
     source: str | None = None
 
@@ -161,11 +162,12 @@ def parse_delinks(
         if source is None:
             if section.group("kind") == "code":
                 code_ranges.append(item)
+                code_sections.add(section.group("section"))
             continue
 
         source_path = ROOT / source
         if (
-            section.group("section") == ".text"
+            section.group("section") in code_sections
             and Path(source).suffix in {".c", ".cpp"}
             and source.replace("\\", "/") in matching_sources
             and source_path.is_file()

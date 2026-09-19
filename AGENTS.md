@@ -94,6 +94,7 @@ that share ROM/save paths.
 | Need | Resource |
 |---|---|
 | Coverage and counting rules | [Progress JSON](docs/progress.json), [metric](docs/PROGRESS.md) |
+| Remaining reconstruction and refactoring audit | [Roadmap](docs/DECOMPILATION_ROADMAP.md); regenerate the private inventory with `python tools/decompilation_backlog.py` |
 | Source actually used in the ROM | `config/eur/arm9/linked_sources.txt` |
 | Boundaries, load addresses and references | Resident `config/eur/arm9/{symbols,delinks,relocs}.txt`; overlays `config/eur/arm9/overlays/ovNNN/`; candidate object symbols and relocations |
 | Source organization and subsystem roles | [Source policy](docs/DECOMPILATION_STYLE.md), [overlay map](docs/research/OVERLAY_MAP.md), [battle map](docs/research/BATTLE_MAP.md) |
@@ -360,6 +361,7 @@ For a completed reconstruction batch, from the repository root:
 
 ```powershell
 python tools/configure.py eur
+ninja objects
 ninja check
 pwsh -NoProfile -ExecutionPolicy Bypass -File .\tools\build_nds.ps1 -DisableDataMods
 Get-FileHash -Algorithm SHA1 .\PiT_eur.nds
@@ -380,6 +382,10 @@ ROM hash. Keep `-DisableDataMods` to exclude private data modifications. Native
 relinking must report zero differing bytes. Regenerate progress before tests
 when linked ranges change; use the explicit `tests` directory to avoid private
 clones and incomplete unittest-only discovery.
+
+`ninja objects` also compiles unlinked drafts. `ninja check` alone builds only
+the sources selected for the exact ROM, so it can miss a broken draft. The
+refactoring gate runs both; compiling a draft does not make it matching or linked.
 
 On this workstation the wrapper has passed under the bundled PowerShell above.
 An earlier Windows PowerShell subprocess failed to resolve its final

@@ -7,9 +7,10 @@ extern "C" {
  * of them, and a snapshot of their state taken before the attack runs so the
  * result can be compared against it.
  *
- * Overlay10Enemy_IsSelectable is declared here as taking int, which is what the
- * callers in overlays 11-18 are compiled against; the definition takes u16. See
- * the note in the refactoring handoff before changing either.
+ * Overlay10Enemy_IsSelectable is declared and defined here with a u16 actor id.
+ * attack_common_internal.h still declares an int for some attack callers.
+ * Both views currently reproduce their native code. This is unresolved ABI
+ * declaration debt; reconcile the caller-side narrowing before unifying them.
  */
 
 #include <game/battle_actor.h>

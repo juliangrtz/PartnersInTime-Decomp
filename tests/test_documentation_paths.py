@@ -16,6 +16,7 @@ MAINTAINED = [
     "AGENTS.md",
     "README.md",
     "docs/DECOMPILATION_STYLE.md",
+    "docs/DECOMPILATION_ROADMAP.md",
     "docs/PROGRESS.md",
     "docs/PC_PORT.md",
     "docs/REASSEMBLY_PLAN.md",

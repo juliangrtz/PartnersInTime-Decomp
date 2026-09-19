@@ -63,3 +63,24 @@ class ProgressTrackerTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_linked_init_code_counts_but_constructor_data_and_drafts_do_not(tmp_path, monkeypatch):
+    monkeypatch.setattr(progress, "ROOT", tmp_path)
+    for name in ("startup.cpp", "draft.cpp"):
+        (tmp_path / name).write_text("/* fixture */\n")
+    delinks = tmp_path / "delinks.txt"
+    delinks.write_text(
+        "    .text start:0x1000 end:0x1040 kind:code\n"
+        "    .init start:0x2000 end:0x2040 kind:code\n"
+        "    .ctor start:0x3000 end:0x3040 kind:data\n"
+        "\nstartup.cpp:\n"
+        "    .text start:0x1000 end:0x1010\n"
+        "    .init start:0x2000 end:0x2010\n"
+        "    .ctor start:0x3000 end:0x3010\n"
+        "\ndraft.cpp:\n"
+        "    .init start:0x2010 end:0x2020\n"
+    )
+    code, covered = progress.parse_delinks(delinks, {"startup.cpp"})
+    assert code == [progress.Range(0x1000, 0x1040), progress.Range(0x2000, 0x2040)]
+    assert [(item.start, item.end) for item in covered] == [(0x1000, 0x1010), (0x2000, 0x2010)]

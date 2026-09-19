@@ -24,6 +24,7 @@ function Step($name, [scriptblock]$body) {
 }
 
 Step 'configure'    { python tools/configure.py eur }
+Step 'all source objects' { ninja objects 2>&1 | Select-Object -Last 3 }
 Step 'ninja check'  { ninja check 2>&1 | Select-Object -Last 3 }
 Step 'package rom'  { & $pwshExe -NoProfile -ExecutionPolicy Bypass -File .\tools\build_nds.ps1 -DisableDataMods 2>&1 | Select-String -Pattern 'SHA-1|Built ROM|error|Error' }
 
