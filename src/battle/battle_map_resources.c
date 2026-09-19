@@ -1,3 +1,12 @@
+/*
+ * Battle map resources (overlay 2, 0x0208BCB0-0x0208DB18).
+ *
+ * Loading the background a battle is fought on. An encounter id selects a
+ * resource index, and the load runs as a queued chain that opens the archive and
+ * reads the map's screens, characters and palettes into the display banks.
+ * Reloading exists separately because a battle can swap its map mid-fight.
+ */
+
 #include <game/battle_archive.h>
 #include <game/heap.h>
 #include <game/save_data.h>

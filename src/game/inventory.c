@@ -1,3 +1,12 @@
+/*
+ * Party inventory (ARM9 resident, 0x02018F48-0x020196F8).
+ *
+ * The item counts in the save file and the rules for changing them: adding an
+ * item respects the per-kind cap, and the item-effect helper turns a record into
+ * the amount it actually restores for a given member, which can be a percentage
+ * of the maximum rather than a fixed value.
+ */
+
 #include <game/inventory.h>
 #include <game/equipment.h>
 extern void func_0202cbd4(void *, int, u32);

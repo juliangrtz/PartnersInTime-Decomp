@@ -1,3 +1,13 @@
+/*
+ * Battle target and command interface (overlay 2, 0x02096990-0x02097A74).
+ *
+ * The on-screen part of choosing what to do: the command wheel, the label naming
+ * the current target, and the marker drawn over it. Each element is an
+ * Update/Draw pair - Update reads the player's input and the current selection,
+ * Draw pushes the sprites for this frame - so the interface holds no state of
+ * its own beyond what the selection already records.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

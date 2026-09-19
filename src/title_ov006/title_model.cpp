@@ -139,5 +139,4 @@ void TitleModel_Draw(void *element)
     }
 }
 
-
 }

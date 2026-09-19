@@ -1,3 +1,14 @@
+/*
+ * Battle scene object motion channels (overlay 2, 0x020A47EC-0x020A50D4).
+ *
+ * A scene object can be moved by several things at once - a script, an attack
+ * and an effect - so movement is split into independent channels. Beginning a
+ * channel reserves one, stopping it unlinks it, and the per-frame update pass
+ * sums the active channels into the object's position. That is why nothing here
+ * writes a position directly: AdjustPosition and AddPositionDelta go through the
+ * channel that owns the movement.
+ */
+
 #include <game/battle_scene.h>
 
 BattleMotionChannel *BattleSceneObject_GetMotionChannel(

@@ -1,3 +1,13 @@
+/*
+ * Palette animation (ARM9 resident, 0x0202D158-0x0202DAFC).
+ *
+ * Animated palettes: a track names a component of the animation table and an
+ * effect to apply to it. Cycle rotates the entries, Reflect mirrors them, and
+ * ApplyEffect writes the result into the live palette. The table accessors
+ * resolve a track to its component, falling back to the default track when a
+ * specific one is absent.
+ */
+
 #include <game/palette_animation.h>
 typedef struct PaletteEffectTemplate {
     s16 command_offset, terminator;

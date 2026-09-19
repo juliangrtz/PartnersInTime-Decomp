@@ -54,7 +54,6 @@ extern u32 Random_NextModulo(u32 modulus);
 
 #define VOLATILE_BATTLE_CONTEXT (*(u8 *volatile *)&gBattleContext)
 
-
 BattleAITask *BattleEnemy_StartDefeat(BattleSceneObject *object) {
     BattleEnemyDefeatTask *task;
     BattleEnemyDefeatPayload *payload;

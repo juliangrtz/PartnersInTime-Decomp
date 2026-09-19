@@ -1,3 +1,12 @@
+/*
+ * Shop scene lifecycle (overlay 9, 0x0206EC50-0x0207010C).
+ *
+ * Construction, per-frame graphics upload and teardown of the shop scene. Init
+ * allocates the scene and its IRQ task, the IRQ task copies the prepared frame
+ * into VRAM during the blanking period, and Destroy/Delete unwind that in the
+ * order the task lists require.
+ */
+
 #include "shop_scene_internal.h"
 
 extern "C" {

@@ -1,3 +1,15 @@
+/*
+ * VRAM bank assignment (Nitro SDK, 0x02035444-0x020364AC).
+ *
+ * The VRAMCNT registers: which of banks A..I is mapped to backgrounds, objects,
+ * textures, palettes or plain LCDC memory, for both engines. Assigning a bank
+ * returns its previous assignment so the caller can put it back, which is how
+ * the upload paths borrow a bank, write through LCDC and restore it.
+ *
+ * The module tracks the current assignment in its own state words rather than
+ * reading the registers back.
+ */
+
 #include <nitro/gx_vram.h>
 
 #define VRAM_A (*(vu8 *)0x04000240)

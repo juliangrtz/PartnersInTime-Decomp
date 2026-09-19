@@ -32,7 +32,6 @@ extern "C" {
 
 extern u8 data_02060340[2][1024];
 
-
 u32 func_02009474(const BattleTransformPack *pack, int word, int component);
 
 /* Adds a palette offset to every non-transparent pixel index. */

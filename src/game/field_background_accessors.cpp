@@ -3,7 +3,6 @@ extern "C" {
 #include <game/save_data.h>
 extern u32 data_0205a02c[2][2];
 
-
 void FieldBackground_SetScrollParameters(FieldBackground *background, s16 x, s16 y)
 {
     background->scroll_parameter_x = x;

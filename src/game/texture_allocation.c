@@ -1,3 +1,13 @@
+/*
+ * 3D texture and texture-palette memory (ARM9 resident, 0x0200E4BC-0x0200F25C).
+ *
+ * The same free-list scheme the sprite side uses, for the texture VRAM the 3D
+ * engine reads. An allocation is a node on an address-ordered list; palettes are
+ * kept on a second list because they live in their own bank and are uploaded
+ * separately. Buffers can be handed in from outside (SetBuffer/ReleaseBuffer)
+ * for resources that already have storage elsewhere.
+ */
+
 #include <game/texture_allocation.h>
 
 int GameTextureAllocation_Allocate(GameTextureAllocation *allocation, int mode, u32 size, int shared,

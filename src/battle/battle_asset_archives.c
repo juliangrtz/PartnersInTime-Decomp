@@ -1,3 +1,15 @@
+/*
+ * Battle interface and common asset loading (overlay 2, 0x02087EC4-0x02088BDC).
+ *
+ * Two queued chains. The interface chain opens the archive holding the HUD
+ * graphics, reads the localized and shared entries into the asset banks and then
+ * initializes the interface layers. The common-asset chain reads a header and an
+ * offset table first, because that archive is an index of entries whose
+ * positions are only known once the table is in memory.
+ *
+ * Each *Task function is one frame of the chain and installs its successor.
+ */
+
 #include <game/battle_archive.h>
 #include <game/battle_interface_assets.h>
 #include <game/save_data.h>

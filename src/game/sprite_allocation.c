@@ -1,3 +1,12 @@
+/*
+ * Sprite tile allocation (ARM9 resident, 0x020082D8-0x02008FC4).
+ *
+ * The allocator behind GameSpriteAllocation: an address-ordered list of tile
+ * runs per screen. Compact closes the gaps when the list fragments, which moves
+ * live allocations, so an offset read before a compaction is stale afterwards.
+ * Unlink returns a run without compacting.
+ */
+
 #include <game/sprite_output.h>
 
 int GameSpriteAllocation_Allocate(GameSpriteAllocation *allocation, int screen, int mode, u32 tiles,

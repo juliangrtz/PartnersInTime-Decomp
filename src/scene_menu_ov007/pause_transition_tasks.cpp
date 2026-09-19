@@ -76,7 +76,6 @@ struct PauseExitTask {
 };
 typedef char PauseExitTaskSize[sizeof(PauseExitTask) == 72 ? 1 : -1];
 
-
 /* First word of the shared transition workspace; preserve its raw byte view. */
 #define PROGRESS (*(s32 *)data_ov007_0208e1e8)
 

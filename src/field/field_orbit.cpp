@@ -1,4 +1,18 @@
 extern "C" {
+
+/*
+ * Orbital entity motion (overlay 0, 0x020A4F88-0x020A5BF4).
+ *
+ * Moves an entity along a circle around a fixed point or around another entity,
+ * which is what the field uses for circling NPCs and for camera arcs. A
+ * controller holds the centre, the radius and the angular step; each frame
+ * CalculatePosition turns the current angle into a position and AdvanceFrame
+ * steps the angle, so the caller never works with angles directly.
+ *
+ * The timed variants derive the step from a duration instead of taking a speed,
+ * so the orbit finishes on an exact frame.
+ */
+
 #include <nitro/fx.h>
 extern u16 FX_Atan2Idx(fx32, fx32);
 }
@@ -229,15 +243,11 @@ int FieldOrbit_StartTimedAroundEntity(FieldRuntimeEntity *entity, FieldRuntimeEn
     return 1;
 }
 }
-
-extern "C" {
-}
 #include <game/field_entity_motion.h>
 extern "C" {
 extern const s16 FX_SinCosTable_[];
 
 #define DEFAULT_ORBIT(entity) (&(entity)->orbit_controller)
-#define ORBIT_MUL(a, b) ((fx32)(((s64)(a) * (b) + 2048) >> 12))
 #define ORBIT_SIN(angle) FX_SinCosTable_[((((angle) - 0x4000) & 0xFFFF) >> 4) * 2]
 #define ORBIT_COS(angle) FX_SinCosTable_[((((angle) - 0x4000) & 0xFFFF) >> 4) * 2 + 1]
 

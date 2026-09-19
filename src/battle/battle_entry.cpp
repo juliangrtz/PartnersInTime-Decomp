@@ -1,3 +1,12 @@
+/*
+ * Battle entry setup (overlay 2, 0x02073A08-0x02075780).
+ *
+ * What runs when a battle starts: the VRAM bank assignment the battle scene
+ * needs, the saved field party state, and the placement of the actors and
+ * interface objects into the scene. The saved positions are what the field is
+ * restored from when the battle ends.
+ */
+
 #include <game/battle_transition.h>
 extern "C" {
 #include <game/battle_entry.h>
@@ -198,7 +207,6 @@ enum BattleEntryStorageOffset {
     BATTLE_ENTRY_SPRITE_ANIMATION_STORAGE_OFFSET = 0x12D68,
     BATTLE_ENTRY_MATRIX_ANIMATION_STORAGE_OFFSET = 0x10168
 };
-#define FRAME ((BattleFrameContextView *)gBattleContext)
 #define HEAPS ((BattleEntryHeaps *)(gBattleContext + 0xE148))
 
 #define CONTEXT ((BattleContext *)gBattleContext)
@@ -357,8 +365,6 @@ void func_0202cd2c(const void *, void *, u32);
 extern u8 data_ov002_020bea94[], data_ov002_020bea9c[];
 }
 
-#define ENTRY ((BattleEntrySaveView *)(gSaveData + 0x558))
-#define FRAME ((BattleFrameContextView *)gBattleContext)
 
 extern "C" void BattleEntry_LoadResources(void)
 {

@@ -1,3 +1,14 @@
+/*
+ * Fleeing a battle (overlay 2, 0x020A1064-0x020A1EF8).
+ *
+ * The run-away sequence, written as a chain of queued tasks: each function is
+ * one step and installs the next, so the animation plays across frames without
+ * blocking. The order is partner exit, then the fleeing actor's launch and run,
+ * then the scene transition that commits the exit.
+ *
+ * HasReducedCoinLoss answers what the escape costs; the rest is presentation.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_coin_loss.h>
 #include <game/battle_context.h>

@@ -16,7 +16,6 @@ int FSi_RomArchiveProc(FsFile *file, int command);
 int FSi_WriteDummyCallback(FsArchive *archive, void *buffer, u32 offset, u32 size);
 int FSi_ReadRomCallback(FsArchive *archive, void *buffer, u32 offset, u32 size);
 
-
 void FSi_OnRomReadDone(FsArchive *archive) { FS_NotifyArchiveAsyncEnd(archive, 0); }
 
 int FSi_ReadRomCallback(FsArchive *archive, void *buffer, u32 offset, u32 size) {

@@ -1,4 +1,15 @@
 extern "C" {
+
+/*
+ * Pause menu resources (overlay 7, 0x02070A2C-0x02071F80).
+ *
+ * Loads the graphics the pause menu draws from: the archive entries for its
+ * backgrounds, panels and icons, the background extended palettes it queues for
+ * upload, and the decompression of the entries that are stored compressed. Also
+ * holds the scene's exit and transition-progress entry points, which is where
+ * the menu hands control back.
+ */
+
 #include <nitro.h>
 }
 #include "pause_scene_internal.h"

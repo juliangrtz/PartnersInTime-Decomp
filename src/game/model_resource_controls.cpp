@@ -1,4 +1,14 @@
 extern "C" {
+
+/*
+ * Battle model resource controls (ARM9 resident, 0x0200B6C4-0x0200C5D8).
+ *
+ * The palette and animation-layer side of a battle model: how large its texture
+ * converts to, which palette it draws with, whether that palette is masked or
+ * buffered, and how its animation layers are copied. Resident rather than in the
+ * battle overlay because the field and menu scenes drive the same model type.
+ */
+
 #include <game/graphics_resource.h>
 }
 #include <game/model_resource.h>

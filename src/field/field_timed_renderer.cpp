@@ -140,7 +140,6 @@ void FieldTimedRenderer_Update(FieldTimedRenderer *model)
     }
 }
 
-
 FieldTimedRenderer *FieldTimedRenderer_DestroyBase(FieldTimedRenderer *model)
 {
     *(FieldRenderObjectVTable **)model = &data_ov000_020c14d4;

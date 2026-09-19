@@ -29,7 +29,6 @@ u16 ShopText_GetDescriptionIndex(ShopText *renderer, u16 item, int unused, int q
     return result;
 }
 
-
 const u8 *ShopText_GetString(ShopText *renderer, int kind, u16 item, u8 quantity)
 {
     const u8 *result = 0;

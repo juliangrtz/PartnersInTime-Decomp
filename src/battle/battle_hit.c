@@ -1,3 +1,16 @@
+/*
+ * Hit descriptors and the hit queue (overlay 2, 0x0209DFDC-0x0209EBFC).
+ *
+ * A hit is not applied where it is decided. An attack registers a descriptor -
+ * who is hitting whom, with what callback, and what kind of hit it is - and the
+ * queue is evaluated once per frame against the actors' collision bounds, so
+ * contact is detected at the moment the animation actually reaches the target.
+ *
+ * Descriptors are addressed by actor id and can be disabled again, which is what
+ * an attack does when its active window closes. ReflectQueuedHits turns pending
+ * hits back on their source for counter-attacks.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_hit.h>
 

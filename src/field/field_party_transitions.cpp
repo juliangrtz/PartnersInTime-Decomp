@@ -1,3 +1,16 @@
+/*
+ * Party formation transitions (overlay 0, 0x0208DC5C-0x020917F0).
+ *
+ * How the party changes shape in the field: stacking and separating the
+ * follower, the spin jump, the Bros. Ball roll and the returns to ordinary
+ * ground movement. Each transition is a Begin/Resume pair around the state the
+ * party entities are left in, because a transition takes several frames and the
+ * field script may interrupt it.
+ *
+ * The render-priority and facing helpers keep the follower drawn and oriented
+ * correctly while the pair is rearranging.
+ */
+
 #include <game/field_resources.h>
 #include "field_party_internal.h"
 #include <game/field_timed_renderer.h>

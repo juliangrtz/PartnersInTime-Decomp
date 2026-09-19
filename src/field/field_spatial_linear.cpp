@@ -177,12 +177,8 @@ int FieldLinear3D_StartTimedFollowing(FieldRuntimeEntity *entity, FieldRuntimeEn
     return 1;
 }
 }
-
-extern "C" {
-}
 #include <game/field_entity_motion.h>
 extern "C" {
-#define LINEAR_DEFAULT(entity) (&(entity)->linear_controller)
 
 void FieldLinear3D_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearController *movement)
 {

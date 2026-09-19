@@ -14,8 +14,6 @@ extern const BattleCommandWheelTransform
     gBattleCommandWheelTransformTemplate;
 extern const s8 gBattleCommandWheelFrames[];
 
-
-
 void BattleCommandWheel_Update(BattleCommandWheelState *state,
                                int selected_index) {
     BattleCommandWheelEntry *entries;

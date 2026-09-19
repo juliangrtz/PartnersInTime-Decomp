@@ -1,4 +1,19 @@
 extern "C" {
+
+/*
+ * Battle script dispatcher (overlay 2, 0x02079950-0x0207E430).
+ *
+ * The battle language's opcode table: actor motion and animation, damage and
+ * status application, targeting, effects, sound, inventory and the flow control
+ * that drives a turn. Kept as one switch for the same reason as the field
+ * dispatcher - the layout is part of the match.
+ *
+ * Commands that both this and the common-battle VM understand live in
+ * battle_vm_common_dispatch.c; an opcode's operand contract is not transferable
+ * between the two, so check docs/research/SCRIPT_VM_SEMANTICS.md for the
+ * instance you are reading.
+ */
+
 #include <game/battle_effect_controls.h>
 #include <game/battle_link_effect.h>
 #include <game/battle_object_link.h>

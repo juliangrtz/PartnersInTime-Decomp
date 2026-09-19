@@ -11,7 +11,6 @@ extern "C" {
 #include <nns/snd.h>
 }
 
-
 extern "C" {
 extern GameInput data_0206032c;
 extern GameTaskVTable data_ov006_0207b198, data_ov006_0207b38c;

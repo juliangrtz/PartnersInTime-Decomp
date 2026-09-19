@@ -1,3 +1,16 @@
+/*
+ * Overlay loading (Nitro SDK, 0x0203F654-0x0203FDB0).
+ *
+ * An ARM9 overlay is a file in the ROM plus a table entry describing where it
+ * loads and how large its BSS is. Loading one means reading the image, verifying
+ * its digest on retail hardware, decompressing it backwards if it is compressed,
+ * clearing the BSS and running its static constructors.
+ *
+ * Ending an overlay runs the destructors that live inside its address range and
+ * unlinks them from the global chain, which is why FS_EndOverlay walks that
+ * chain with interrupts disabled.
+ */
+
 #include <nitro/fs_overlay.h>
 
 extern const void *fsi_digest_key_ptr;

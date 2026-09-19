@@ -13,8 +13,6 @@ enum BattleObjectResourceConstant {
 
 extern void *gBattleObjectTextureComponents[3];
 
-
-
 void BattleObjectData_ResolveTextureMetadataTask(BattleQueuedTask *task) {
     BattleSceneResource *resource =
         (BattleSceneResource *)task->argument;

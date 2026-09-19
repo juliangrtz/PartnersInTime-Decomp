@@ -1,3 +1,17 @@
+/*
+ * Battle script scheduler (overlay 2, 0x0207E7A0-0x0207F080).
+ *
+ * Owns the four task pools - action, reaction, auxiliary and object - and steps
+ * every scheduled script once per frame. The Start* functions are how the rest
+ * of the battle asks for a script to run: they take a task out of the right
+ * pool, initialize its state from the script block, and link it in.
+ *
+ * HandleVmResult is where a script's return value is acted on: finish and
+ * release the task, chain the continuation script it queued, or leave it for the
+ * next frame. The party VM slots are the four fixed states the party members'
+ * scripts run in.
+ */
+
 #include <game/battle_ai.h>
 
 extern void func_ov002_020698cc(ScriptVm *vm, ScriptVmState *state);

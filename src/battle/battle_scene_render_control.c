@@ -15,7 +15,6 @@ typedef struct BattleRenderOverrideArena {
     BattleRenderOverrideSlot slots[1];
 } BattleRenderOverrideArena;
 
-
 extern void func_ov002_020bb2d4(BattleMeshTask *task);
 
 int BattleMesh_GetTaskState(BattleSceneObject *object) {

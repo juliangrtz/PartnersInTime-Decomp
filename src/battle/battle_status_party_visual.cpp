@@ -1,3 +1,16 @@
+/*
+ * Party status ailment visuals (overlay 2, 0x020A5F7C-0x020A73D4).
+ *
+ * The models drawn on a party member while an ailment is active - one Start and
+ * Update pair per ailment kind, plus the shared updater they converge on. Start
+ * allocates the render model and links it to the actor; Update follows the
+ * actor's position each frame and tears the model down when the ailment's
+ * duration runs out.
+ *
+ * The ailments are numbered rather than named because which number is which
+ * status has not been confirmed in game.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

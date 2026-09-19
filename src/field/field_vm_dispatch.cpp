@@ -1,3 +1,17 @@
+/*
+ * Field script dispatcher (overlay 0, 0x020823F8-0x02087FBC).
+ *
+ * The opcode table of the overworld's scripting language: everything a room
+ * script can do - move the party, run a cutscene, open a window, change the
+ * music, award an item, switch rooms - is a case in one switch here.
+ *
+ * The file is deliberately one large function. Splitting the cases into separate
+ * handlers would read better but would change the register allocation and the
+ * literal pools the original compiler produced for this switch, so the shape is
+ * part of the match. See docs/research/SCRIPT_VM_SEMANTICS.md for what the
+ * opcodes mean and how their operands are encoded.
+ */
+
 #include <game/field_party_manager.h>
 #include <game/field_scene_transition.h>
 #include <game/field_resources.h>
@@ -261,7 +275,6 @@ typedef struct FieldAsyncOperationFlags {
     u32 active : 1;
     u32 unknown_01_31 : 31;
 } FieldAsyncOperationFlags;
-
 
 typedef struct FieldControlFlags {
     u16 unknown_00_02 : 3;

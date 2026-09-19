@@ -1,3 +1,18 @@
+/*
+ * Linear entity motion (overlay 0, 0x020A5BF4-0x020A6690).
+ *
+ * Straight-line movement with acceleration: a controller carries the target,
+ * the current speed and the acceleration and deceleration rates, and
+ * UpdatePosition advances it one frame. Following mode re-reads the target from
+ * another entity every frame so the mover tracks something that is itself
+ * moving.
+ *
+ * CheckCompletion decides when to stop, comparing the remaining distance with
+ * the distance the current speed still needs to brake in - which is why this
+ * file needs FX_Sqrt and pulls nitro/fx.h in with C linkage before anything
+ * else.
+ */
+
 /* nitro/fx.h has no linkage guard of its own, so it has to be seen inside an
  * extern "C" block before any header pulls it in at C++ scope. */
 extern "C" {
@@ -141,12 +156,8 @@ int FieldLinear_StartTimedFollowing(FieldRuntimeEntity *entity, FieldRuntimeEnti
     return 1;
 }
 }
-
-extern "C" {
-}
 #include <game/field_entity_motion.h>
 extern "C" {
-#define LINEAR_DEFAULT(entity) (&(entity)->linear_controller)
 #define LINEAR_MUL(a, b) ((fx32)(((s64)(a) * (b) + 2048) >> 12))
 
 void FieldLinear_UpdatePosition(FieldRuntimeEntity *entity, FieldLinearController *movement)

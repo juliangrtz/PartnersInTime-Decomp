@@ -1,3 +1,13 @@
+/*
+ * Archive reader lifecycle (ARM9 resident, 0x0202B1CC-0x0202BE6C).
+ *
+ * Construction and teardown of the object that reads a game archive. The
+ * Init/Destroy pairs come in Base and Complete flavours: Base sets up the reader
+ * itself, Complete also takes ownership of the buffers, and Delete is the
+ * destructor slot that frees the object afterwards. Which one a caller uses
+ * decides who owns the memory when the reader goes away.
+ */
+
 #include <game/archive_io.h>
 #include <game/task.h>
 

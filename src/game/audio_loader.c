@@ -1,3 +1,13 @@
+/*
+ * Audio file loading (ARM9 resident, 0x02026524-0x02026DD8).
+ *
+ * Sequences, banks and wave archives are files, so playing music means reading
+ * them first. Requests are appended to the loader's queue and served one at a
+ * time; each carries the destination buffer and a callback fired when the file
+ * is in place. The read buffer is allocated from the sound heap, and the loaded
+ * range is flushed out of the data cache before the sound hardware reads it.
+ */
+
 #include <game/audio.h>
 
 extern void DC_StoreRange(const void *data, u32 size);

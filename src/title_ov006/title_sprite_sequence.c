@@ -1,3 +1,13 @@
+/*
+ * Title screen sprite choreography (overlay 6, 0x0206ED4C-0x02070C7C).
+ *
+ * The logos and characters that fly in over the title screen. Each sprite is
+ * given an arc - start, control and end points evaluated over a frame count -
+ * and the sequence steps every sprite once per frame until it settles, then
+ * switches it to its idle animation. Disappearing runs the same machinery in
+ * reverse.
+ */
+
 #include <game/title_animation.h>
 #include <game/title_sprite_sequence.h>
 #include <game/title_startup.h>

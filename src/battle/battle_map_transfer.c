@@ -1,3 +1,12 @@
+/*
+ * Battle map VRAM transfers (overlay 2, 0x02089F2C-0x0208B3CC).
+ *
+ * Queued transfers of the battle map into VRAM. Requests are ordered relative to
+ * the bank mapping step: some have to land while a bank is still mapped for CPU
+ * access and others only after it has been handed back to the display engine,
+ * which is why enqueueing distinguishes before-mapping from after-mapping.
+ */
+
 #include <game/battle_archive.h>
 #include <game/archive_io.h>
 #include <game/battle_scene.h>

@@ -1,3 +1,12 @@
+/*
+ * Battle script property writes (overlay 2, 0x0208FB6C-0x02090C18).
+ *
+ * The write half of the battle scripting language's property space. A script
+ * sets a property by number and this switch maps the number onto the actor,
+ * object, model or context field it names. Reads live in
+ * battle_script_properties.c and use the same numbering.
+ */
+
 #include <game/battle_effect_controls.h>
 #include <game/battle_link_effect.h>
 #include <game/battle_object_link.h>

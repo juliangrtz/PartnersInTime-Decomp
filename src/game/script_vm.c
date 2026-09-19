@@ -1,3 +1,18 @@
+/*
+ * Script VM core (ARM9 resident, 0x020063A4-0x020072E8).
+ *
+ * The interpreter every scripted subsystem shares. It does not know what the
+ * opcodes mean: it reads a command, resolves its arguments through the
+ * descriptor table its caller installed, and hands the command to that caller's
+ * dispatcher. Field, battle, common-battle and scene scripts therefore run on
+ * this code with four different opcode tables and variable namespaces.
+ *
+ * Execution is resumable. A handler returns a result that tells the VM to carry
+ * on, to yield until the next frame, or to rewind the instruction pointer so the
+ * same command is retried, which is how a script waits for an animation without
+ * blocking the frame.
+ */
+
 #include <game/script_vm.h>
 
 void VM_ReadCommand(

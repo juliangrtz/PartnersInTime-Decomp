@@ -1,3 +1,13 @@
+/*
+ * Touch panel driver (Nitro SDK, 0x02040678-0x02041270).
+ *
+ * Sampling runs on the ARM7: the ARM9 sends a request over PXI, the reply
+ * arrives in the FIFO callback, and the sample is published as two packed
+ * halfwords in shared RAM. Raw samples are in panel units; calibration turns
+ * them into screen pixels using the two reference points stored in the firmware,
+ * and CalcCalibrateParam is what derives that mapping.
+ */
+
 #include <nitro/tp.h>
 extern void OS_Terminate(void);
 typedef union TpPackedSample {
@@ -249,10 +259,6 @@ void TP_RequestAutoSamplingStopAsync(void) {
 }
 u16 TP_GetLatestIndexInAuto(void) { return data_02064c8c.index; }
 
-#define TP_DIVCNT (*(vu16 *)0x04000280)
-#define TP_NUMERATOR (*(vu32 *)0x04000290)
-#define TP_DENOMINATOR (*(volatile u64 *)0x04000298)
-#define TP_QUOTIENT (*(volatile s32 *)0x040002A0)
 
 int TP_CalcCalibrateParam(TpCalibration *output, u16 raw_x1, u16 raw_y1,
     u16 display_x1, u16 display_y1, u16 raw_x2, u16 raw_y2, u16 display_x2, u16 display_y2)

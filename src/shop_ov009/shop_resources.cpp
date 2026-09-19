@@ -130,7 +130,6 @@ extern void *Overlay5Archive_ReadEntry(Overlay5Archive *, u8, int, u32 *, int),
 extern void *func_ov005_0206687c(const void *, u32 *, int);
 extern Overlay5Asset *func_ov005_02066a7c(Overlay5Archive *, u16, u16, const void *, u8, int);
 extern void func_ov005_020698c8(u32, Overlay5Asset *);
-#define WORK data_ov009_0207ea3c
 #define SAVED_SHOP (((ShopSavedState *)gSaveData)->shop)
 void ShopScene_LoadResources(ShopSceneTask *task)
 {

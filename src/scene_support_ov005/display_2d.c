@@ -1,3 +1,16 @@
+/*
+ * 2D engine control (overlay 5, 0x0206786C-0x02068594).
+ *
+ * A thin, uniform layer over both 2D engines: which planes and windows are
+ * visible, how OBJ tiles are mapped, and where each background's screen and
+ * character data live. The loaders wrap the SDK's VRAM upload sequences,
+ * including the extended-palette windows that have to be opened and closed
+ * around a write.
+ *
+ * Every function takes the engine as its first argument, so scene code can drive
+ * the main and sub engines through one set of calls.
+ */
+
 #include <game/overlay005_display.h>
 
 extern void GX_EndLoadOBJExtPltt(void);

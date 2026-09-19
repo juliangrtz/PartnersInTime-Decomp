@@ -11,7 +11,6 @@ extern void func_02038310(const void *, u32, u32);
 extern void func_02038240(const void *, u32, u32);
 extern void func_020383e0(const void *, u32, u32);
 
-
 static inline void SetScroll(vu32 *registers, int x, int y)
 {
     *registers = (x & 0x1ff) | ((y << 16) & 0x1ff0000);

@@ -4,7 +4,6 @@
 
 extern u8 data_ov007_020905f0[];
 
-
 u16 func_ov007_02074d14(Overlay7Party *party, u8 kind, int base, int span);
 u16 func_ov007_02074c60(Overlay7Party *party, u8 kind, int base, int span);
 

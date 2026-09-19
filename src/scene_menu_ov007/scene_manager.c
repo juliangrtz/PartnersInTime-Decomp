@@ -1,3 +1,13 @@
+/*
+ * Scene manager construction (overlay 7, 0x020848F8-0x02084FBC).
+ *
+ * Builds the block the scene subsystem runs out of: loads the common archives
+ * and the entries they contain, then hands the same allocation to the runtime
+ * initializer, which sees it through a different view because the two describe
+ * different parts of it. data_ov007_020a6b90 is set here and is how the rest of
+ * overlay 7 finds the scene.
+ */
+
 #include <game/scene_script.h>
 
 typedef struct SceneResourceManagerLayout {

@@ -1,3 +1,13 @@
+/*
+ * Filesystem archive commands (Nitro SDK, 0x0203D738-0x0203E438).
+ *
+ * Every filesystem operation an archive supports is a command handler: open a
+ * file by id or by direct offsets, resolve a path, read, seek, walk a directory.
+ * The dispatcher runs the command the caller queued and releases it afterwards,
+ * which is what lets an archive be suspended and resumed while requests are
+ * still outstanding.
+ */
+
 #include <nitro/fs.h>
 
 extern int (*data_0204ff08[])(FsFile *file);

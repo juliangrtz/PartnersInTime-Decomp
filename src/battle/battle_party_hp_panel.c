@@ -1,3 +1,12 @@
+/*
+ * Party HP panel (overlay 2, 0x02097F58-0x020988B0).
+ *
+ * The HP and status readout for the party. UpdateMember recomputes one member's
+ * row when its values change, Update walks the party and Draw uploads the panel;
+ * the data cache is flushed before the upload because the panel is written with
+ * the CPU and read by the display hardware.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

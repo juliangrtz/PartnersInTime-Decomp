@@ -1,3 +1,16 @@
+/*
+ * Matrix animation tracks (ARM9 resident, 0x02017EC8-0x02018CE0).
+ *
+ * Drives an animated transform: a track holds keyframes and an owner, and each
+ * update evaluates the current frame into the owner's matrix. The Evaluate*
+ * functions are the interpolation modes a keyframe can select - hold, linear,
+ * smoothed, smoothed with wraparound - and EvaluateChanged reports whether the
+ * value moved at all, which callers use to skip work.
+ *
+ * ReleaseOwner exists because the track outlives the thing it animates: it
+ * clears the back-reference so a finished track cannot write into freed memory.
+ */
+
 #include <game/matrix_animation.h>
 extern const MtxFx44 data_02054f7c;
 extern void func_0202cbd4(void *, int, u32);

@@ -23,10 +23,6 @@ static inline void BattleTargetCursor_StorePosition(
         object->flags.bits.use_alternate_model);
 }
 
-
-
-
-
 void BattleTargetCursor_Draw(BattleTargetCursorState *state) {
     BattlePosition position;
     BattleTargetCursorTransform transform;
