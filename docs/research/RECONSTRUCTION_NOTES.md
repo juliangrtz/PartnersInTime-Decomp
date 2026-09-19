@@ -5127,3 +5127,46 @@ objects and the affected planar/update units match. Private reports:
 `build/runtime/eur_high_field_visibility/{cold65_v1,pause1_v1,isolated_v1}.json`.
 Producers are `probe_field_visibility.py` and `check_field_visibility_isolated.py`
 in `build/analysis/high_effort_50_to_55/`.
+
+
+## Spatial directional motion
+
+[FieldEntity3D_ResolveDirectionalMotion](../../src/field/field_directional_motion.cpp)
+reconstructs `0x020A8300..0x020A8478` (376 bytes), matching on the first compiled
+draft without ASM. The unused entity parameter is retained. Direction is a
+full-width integer; elevation is read as an unsigned halfword from the stack.
+Output pointers are independently optional. The Bros.-Ball caller now uses the
+shared prototype, retaining its explicit direction conversion.
+
+Planar mode returns sine/cosine-scaled X/Y and zero Z. Spatial mode additionally
+scales X/Y by elevation cosine, with division toward zero at each stage. Z is
+the raw speed-times-elevation-sine product: it has no division by 4096. Preserve
+this asymmetry and the X/Y/Z store order, including aliased outputs. The tested
+speed range has magnitude at most 24,576 and keeps signed products in range;
+no broader source-language overflow guarantee is established.
+
+A 90-frame DeSmuME run starts from the ordinary Save 65 field capture. A guarded
+Field VM opcode `0xC5` fixture, direction zero, invokes the actual Bros.-Ball
+manager/wrapper and the new function once. The decoded command and script cursor
+are restored before the wrapper continues, and replay of the original command is
+checked. The target's entire 4 MiB main RAM and 16 KiB DTCM are compared, excluding
+only its 16-byte native stack frame; output words and preserved registers are
+independently checked. This exercises spatial mode with X/Y outputs, null Z and
+zero elevation, producing X=0 and Y=-24576. It is controlled script execution,
+not evidence of ordinary story entry into a launcher.
+
+After the run, a private pre-fixture emulator state restores all main RAM and
+DTCM exactly, including induced gameplay changes. The restored image is identical
+to the pre-fixture capture; the fixture and restored images were inspected.
+All 104 original saves remain unchanged. There is no independent graphics oracle.
+
+Thirty-four isolated ARM946 cases execute the entire function and original angle
+table without stubs: both modes, all output-presence masks, aliased outputs,
+cardinal/fractional angles and positive/negative/zero speeds. Full main RAM,
+scratch outside the exact stack frame, SP and r4-r11 are checked. These cases
+supplement the live fixture; they do not establish gameplay or renderer coverage.
+Actual source and all 30 functions in the affected party-transition unit match;
+full ROM/native relink and 107 tests pass. Private reports are
+`build/runtime/eur_high_field_directional/{script65_v1,isolated_v1}.json`, produced
+by `probe_field_directional.py` and `check_field_directional_isolated.py` in
+`build/analysis/high_effort_50_to_55/`.

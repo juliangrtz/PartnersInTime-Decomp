@@ -15,6 +15,8 @@ void FieldEntity3D_ResumeScript(FieldRuntimeEntity *entity);
 
 /* The per-frame deltas are accumulated before the entity update applies them. */
 void FieldEntity2D_AccumulateMotion(FieldRuntimeEntity *entity, fx32 x, fx32 y);
+void FieldEntity3D_ResolveDirectionalMotion(FieldRuntimeEntity *entity, fx32 speed, int planar,
+    int direction, u16 elevation, fx32 *x, fx32 *y, fx32 *z);
 void FieldEntity3D_AccumulateMotion(FieldRuntimeEntity *entity, fx32 x, fx32 y, fx32 z);
 void FieldEntity_UpdateLocomotionState(FieldRuntimeEntity *entity);
 void FieldEntity2D_UpdateLocomotionState(FieldRuntimeEntity *entity);

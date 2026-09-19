@@ -21,7 +21,7 @@ extern "C" {
 extern u8 data_0205a00c;
 void func_ov000_020931b0(FieldPartyController *, FieldPartyEntity *, int);
 s16 func_02009224(FieldRenderObject *, int);
-void func_ov000_020a8300(FieldRuntimeEntity *, fx32, int, u16, int, fx32 *, fx32 *, int);
+
 extern const fx32 data_ov000_020c0978[][2], data_ov000_020c097c[][2];
 
 void FieldParty_CopyAttachedRenderPriorities(FieldPartyController *);
@@ -620,7 +620,7 @@ void FieldParty_BeginBrosBallState23(FieldPartyController *party, int direction)
     party->follower->entity.unknown_3c8 |= 4;
     party->follower->entity.unknown_3c8 |= 0x40000;
     party->leader->entity.field_state_flag_bits.track_ground = 0;
-    func_ov000_020a8300(&party->leader->entity, 24576, 0, (u16)(direction << 13), 0, &x, &y, 0);
+    FieldEntity3D_ResolveDirectionalMotion(&party->leader->entity, 24576, 0, (u16)(direction << 13), 0, &x, &y, 0);
     FieldLinear3D_Start(&party->leader->entity, 1, x, y, 0, 24576, 0, 24576, 0, 15, 15, 0,
                         &party->leader->movement);
     party->leader->entity.locomotion_state = 23;

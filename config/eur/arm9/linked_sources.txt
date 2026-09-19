@@ -847,3 +847,5 @@ src/field/field_party_frame.cpp
 src/field/field_entity_visibility.cpp
 
 src/field/field_visibility_pass.cpp
+
+src/field/field_directional_motion.cpp

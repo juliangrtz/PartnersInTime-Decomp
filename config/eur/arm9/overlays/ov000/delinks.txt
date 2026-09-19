@@ -398,3 +398,6 @@ src/field/field_entity_visibility.cpp:
 
 src/field/field_visibility_pass.cpp:
     .text start:0x0207ed28 end:0x0207edc0
+
+src/field/field_directional_motion.cpp:
+    .text start:0x020a8300 end:0x020a8478

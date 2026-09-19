@@ -8569,3 +8569,12 @@ Coverage reaches 792,488 / 1,563,700 bytes (50.6803%). Actual source objects,
 full ROM and native relink match; 107 tests pass. Two live routes check 720 entity
 and 45 area calls; 19 isolated cases cover additional caller branches. See
 [evidence and limits](research/RECONSTRUCTION_NOTES.md#field-screen-visibility).
+
+
+## Spatial directional motion
+
+The optional-output angle resolver now matches as C++ without ASM, preserving
+its per-stage truncation and unscaled Z product. Coverage reaches 792,864 /
+1,563,700 bytes (50.7044%). Full build/native relink, actual source objects and
+107 tests pass. A restored live script fixture and 34 isolated arithmetic cases
+verify the function. See [evidence](research/RECONSTRUCTION_NOTES.md#spatial-directional-motion).
