@@ -4980,3 +4980,49 @@ Private reports: `build/runtime/eur_high_party_placement/{cold1_v1,cold65_v2}.js
 producer: `build/analysis/high_effort_50_to_55/probe_party_placement.py`.
 The Save 65 repeat preserves identical call records and final image; its producer
 exit was captured explicitly. It is not counted as additional coverage.
+
+
+## Field entity update passes
+
+[FieldArea_UpdateEntities](../../src/field/field_entity_update.cpp) owns
+`0x02075D28..0x020760E4` (956 bytes). It updates room effects when the scene
+transition permits, handles pending room changes, then visits the live entity
+list in three passes: movement/contact callbacks, completion callbacks and
+render-priority updates. Type 9 records skip all three; type 8 records skip the
+spatial part of the first pass and the priority pass. Enabled party entities
+also update their six auxiliary slots. List successors, the area head and
+auxiliary pointers are reloaded after callbacks, as in the original code.
+
+The first-pass virtual slot `0x40` receives the area entity table: party update
+`0x020B9FF8` retains that argument and indexes it when following a support entity.
+The priority slot `0xA0` accepts the full register value. The area's two-bit field
+is forwarded without an extra byte conversion; renderer writes eventually
+truncate it. The existing party wrapper's byte parameter remains unchanged,
+and its whole compiled unit still matches. This ABI correction removed the
+new caller's extra mask; the complete 956-byte function matches without ASM.
+
+Three ordinary routes using Saves 1, 65 and 103 observe 2,743 calls over 7,176
+frames. The first call and every 61st subsequent call are fully checked:
+46 calls, with 4,448 helper calls, including 400 auxiliary updates and 428
+independently modeled support-clearance calls. The oracle checks decisions,
+call order, direct/virtual arguments, native-byte guards, caller writes and
+callee-saved registers. Full area, system, party-manager and current entity
+allocations are compared at caller boundaries. Arbitrary helper internals are
+observational only within those enumerated scene records; effect/window/layer
+helpers may refresh only the area record. This does not verify those helpers'
+internal behavior or graphics output.
+
+The routes cover transition phase 0, entity types 0/1/2/3/7/8/9 and party mode 6.
+Room-departure and pending-party-transition branches, other transition phases,
+types 4/5/6, suppressed entities and the partner vertical-sync store remain
+uncovered by the sampled calls. No RAM fixtures are used. Final captures were
+inspected: Saves 65 and 103 show field scenes, while Save 1 reaches the save menu
+through ordinary movement and A input. All 104 original saves remain unchanged.
+
+Full build, original ROM hash, native relink and 107 tests pass. Final formatted
+source objects and the affected party wrapper compare exactly. Private evidence:
+`build/runtime/eur_high_field_update/{cold65_v2,cold1_v2,cold103_v2}.json`, produced
+by `build/analysis/high_effort_50_to_55/probe_field_update.py`. The initial
+`cold65_v1` failed in the probe because a branch target was mistaken for a helper
+return. The correction pairs returns with the actual call site and stack pointer;
+its successful rerun is retained separately.

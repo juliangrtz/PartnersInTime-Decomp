@@ -835,3 +835,5 @@ src/field/field_placed_entities.cpp
 src/field/field_entity_update_order.cpp
 
 src/field/field_party_placement.cpp
+
+src/field/field_entity_update.cpp

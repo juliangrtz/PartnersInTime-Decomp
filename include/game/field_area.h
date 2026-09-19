@@ -189,6 +189,7 @@ void FieldArea_UpdateScriptsWhenIdle(FieldAreaContext *area);
 void FieldArea_InitializeQuadRegions(FieldAreaContext *field);
 void FieldArea_CreateVariableEntities(FieldAreaContext *field);
 void FieldArea_CreatePlacedEntities(FieldAreaContext *area);
+void FieldArea_UpdateEntities(FieldAreaContext *area);
 void FieldArea_ResetEntityUpdateOrder(FieldAreaContext *area);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source);
 void FieldArea_UpdateGraphics(FieldAreaContext *field);

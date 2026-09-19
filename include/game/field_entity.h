@@ -314,7 +314,7 @@ typedef struct FieldEntity {
     virtual void unknown_34();
     virtual void update_locomotion_state();
     virtual void map_locomotion_state();
-    virtual void unknown_40();
+    virtual void unknown_40(FieldRuntimeEntity **entities);
     virtual void unknown_44();
     virtual void update_linear_movement(FieldLinearController *controller);
     virtual int check_linear_completion(FieldLinearController *controller);
@@ -340,7 +340,8 @@ typedef struct FieldEntity {
     virtual void restore_collision_response_channels();
     virtual void unknown_98(void *argument);
     virtual void unknown_9c();
-    virtual void update_overlap_priorities(u8 default_priority);
+    /* The area updater forwards its priority field as a full register value. */
+    virtual void update_overlap_priorities(int default_priority);
 #else
     FieldEntityVTable *vtable;
 #endif

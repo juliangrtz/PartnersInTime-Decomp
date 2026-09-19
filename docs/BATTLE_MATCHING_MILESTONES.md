@@ -8541,3 +8541,13 @@ The party constructor now matches as C++ without ASM. Coverage reaches 790,320 /
 relink match; 107 tests pass. Two ordinary save loads check eight constructors,
 32 auxiliaries and full party records. Original saves remain unchanged. See
 [evidence and limits](research/RECONSTRUCTION_NOTES.md#party-entity-placement).
+
+
+## Field entity update passes (+956 bytes)
+
+The field's three entity-update passes now match in C++, including party
+auxiliaries and the virtual-call ABI. Coverage is 791,276 / 1,563,700 bytes
+(50.6028%). Actual source objects, full ROM and native relink match; 107 tests
+pass. Three automatic routes observe 2,743 calls, independently checking the
+caller at 46 sampled calls. Original saves are unchanged. See
+[evidence and limits](research/RECONSTRUCTION_NOTES.md#field-entity-update-passes).
