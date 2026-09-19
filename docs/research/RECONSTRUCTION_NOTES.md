@@ -5170,3 +5170,50 @@ full ROM/native relink and 107 tests pass. Private reports are
 `build/runtime/eur_high_field_directional/{script65_v1,isolated_v1}.json`, produced
 by `probe_field_directional.py` and `check_field_directional_isolated.py` in
 `build/analysis/high_effort_50_to_55/`.
+
+
+## Entity script property getters
+
+The [planar getter](../../src/field/field_planar_properties.cpp) reconstructs
+`0x020A3640..0x020A3854` (532 bytes), and the [spatial getter](../../src/field/field_spatial_properties.cpp)
+adds `0x020A8478..0x020A86A4` (556 bytes), both without ASM. The shared
+[property enum](../../include/game/field_entity_properties.h) names IDs 0..23.
+The planar draft matched immediately; the spatial draft matched after replacing
+a switch-based type test with the native bounded `0x403` mask and explicit
+result initialization. Types 0/1/10 classify party members and auxiliaries.
+The meaning of the related-object pointer at `+0x500`, flag 7 at `+0x38C` and
+mask `+0x3A8` remains neutral in the interface.
+
+Positions divide signed Q12 values toward zero; screen coordinates and renderer
+animation fields retain signed halfword values. The speed query prefers an active
+linear controller, then an active orbit, then the entity's free movement speed.
+Renderer properties require a live renderer. The spatial extension adds vertical
+state, contact bits, related-object classification, Z, the signed support index
+and the first set bit of `+0x3A8` (or -1 for an empty mask). Unknown IDs return zero.
+Properties 4/5 delegate to the existing base interaction helper.
+
+Two ordinary Save 65/Save 1 routes run for 4,903 frames and check every
+executed getter: 8,378 planar and 8,377 spatial calls.
+There are 8,365 nested planar delegations, so these are not distinct script
+requests. Live IDs are 1/2/10/11/12/16, on entity types 0/1/2/7/8. Full receiving
+entity records remain unchanged; queried renderer reads are checked over their
+312-byte base prefix. Returned values and helper targets/arguments are modeled
+independently. Save 65 ends in the field, Save 1 in the save menu; both captures
+were inspected. No live RAM fixtures are used; all 104 original saves are unchanged.
+
+A separate 103-case ARM946 run executes both full getters and the original base
+helper without stubs. It covers all 24 IDs and invalid IDs, controller precedence,
+interaction states, vertical/contact flags, null and varied related-object types,
+negative coordinates and first-set-bit masks including zero and bit 31. All
+4 MiB of main RAM stay unchanged; scratch outside the exact 8/16-byte call-chain
+frame, SP and r4-r11 are checked. This supplies branch evidence rather than live
+script coverage. No independent graphics oracle is claimed.
+
+Final source objects, full ROM/native relink and 107 tests pass. The first gate
+failed only the source-comment convention; opening comments were added and the
+complete gate passed. Private reports:
+`build/runtime/eur_high_field_properties/{cold65_v1,cold1_v1,isolated_v2}.json`.
+Producers in `build/analysis/high_effort_50_to_55/` are `probe_field_properties.py`
+and `check_field_properties_isolated.py`, with `field_property_oracle.py`.
+The earlier isolated v1 also passed, but allowed an unnecessarily large stack
+exclusion for the leaf base helper; v2 checks the tighter native frame.

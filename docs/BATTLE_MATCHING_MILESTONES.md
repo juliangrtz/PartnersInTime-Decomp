@@ -8578,3 +8578,12 @@ its per-stage truncation and unscaled Z product. Coverage reaches 792,864 /
 1,563,700 bytes (50.7044%). Full build/native relink, actual source objects and
 107 tests pass. A restored live script fixture and 34 isolated arithmetic cases
 verify the function. See [evidence](research/RECONSTRUCTION_NOTES.md#spatial-directional-motion).
+
+
+## Entity script property getters
+
+The 2D and 3D property getters now match as C++, with named property IDs and no
+ASM. Coverage reaches 793,952 / 1,563,700 bytes (50.7739%). Full build/native relink,
+actual source objects and 107 tests pass. Two live routes check both getters;
+103 isolated cases cover all property IDs and additional branches. See
+[evidence and limits](research/RECONSTRUCTION_NOTES.md#entity-script-property-getters).

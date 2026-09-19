@@ -401,3 +401,9 @@ src/field/field_visibility_pass.cpp:
 
 src/field/field_directional_motion.cpp:
     .text start:0x020a8300 end:0x020a8478
+
+src/field/field_planar_properties.cpp:
+    .text start:0x020a3640 end:0x020a3854
+
+src/field/field_spatial_properties.cpp:
+    .text start:0x020a8478 end:0x020a86a4
