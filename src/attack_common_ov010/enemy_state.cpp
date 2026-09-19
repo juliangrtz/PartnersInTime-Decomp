@@ -1,5 +1,17 @@
 extern "C" {
 
+/*
+ * Enemy selection and snapshot (overlay 10, 0x020C2340-0x020C259C).
+ *
+ * Which enemies an attack may target: collecting the selectable ids, the first
+ * of them, and a snapshot of their state taken before the attack runs so the
+ * result can be compared against it.
+ *
+ * Overlay10Enemy_IsSelectable is declared here as taking int, which is what the
+ * callers in overlays 11-18 are compiled against; the definition takes u16. See
+ * the note in the refactoring handoff before changing either.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_enemy_data.h>
 #include <game/battle_scene.h>

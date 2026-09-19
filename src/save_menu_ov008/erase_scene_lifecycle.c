@@ -1,3 +1,10 @@
+/*
+ * Erase scene lifecycle (overlay 8, 0x02077904-0x02077EB4).
+ *
+ * Init, Destroy and Delete for the erase scene, with the VBlank task that
+ * uploads its frame.
+ */
+
 #include "save_menu_internal.h"
 
 GameIrqTask *EraseSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent)

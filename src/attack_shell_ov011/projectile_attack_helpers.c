@@ -1,3 +1,11 @@
+/*
+ * Shell projectile helpers (overlay 11, 0x020C4968-0x020C4C2C).
+ *
+ * Contact tests, the clamped offset the shell is held at, the finish animation
+ * and the actor-resource restore. The battle variant flags decide which of these
+ * the Green and the Red Shell use.
+ */
+
 #include <game/battle_effect.h>
 #include <game/battle_object.h>
 #include <game/overlay011_attack.h>

@@ -1,3 +1,10 @@
+/*
+ * Title scene resources (overlay 6, 0x020754E4-0x020758D8).
+ *
+ * Loads the title scene's archives and chooses which greeting to show, which
+ * depends on what the save file contains.
+ */
+
 #include "frontend_scene_internal.h"
 
 void TitleScene_SelectGreeting(void)

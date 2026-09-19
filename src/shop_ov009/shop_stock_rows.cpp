@@ -1,3 +1,10 @@
+/*
+ * Stock panel rows (overlay 9, 0x02072470-0x02072818).
+ *
+ * Show and Hide for the owned-stock panel and the per-row drawing: text
+ * segment, icon and quantity digit.
+ */
+
 #include "shop_stock_rows_internal.h"
 
 extern "C" void ShopStockPanel_Show(ShopStockPanel *panel, int selection)

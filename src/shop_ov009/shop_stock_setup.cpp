@@ -1,3 +1,9 @@
+/*
+ * Stock list rebuild (overlay 9, 0x02073098-0x020731FC).
+ *
+ * Refills the owned-stock list from what the party is carrying.
+ */
+
 #include "shop_stock_rows_internal.h"
 extern "C" {
 #include <game/shop_stock.h>

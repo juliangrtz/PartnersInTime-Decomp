@@ -1,3 +1,9 @@
+/*
+ * Smash Egg reward display (overlay 15, 0x020C2E78-0x020C2F20).
+ *
+ * Shows the item the attack yielded.
+ */
+
 #include "actor_internal.h"
 
 void Overlay15Attack_ShowRewardItem(const Overlay15AttackRewardItemPrefix *item,

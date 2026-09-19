@@ -1,3 +1,10 @@
+/*
+ * Mix Flower pair geometry (overlay 16, 0x020C3378-0x020C34D0).
+ *
+ * The motion step the pair advances by and the radius test that decides when
+ * they have converged.
+ */
+
 #include "pair_effects_internal.h"
 
 int Overlay16PairController_GetMotionStep(Overlay16PairController *controller)

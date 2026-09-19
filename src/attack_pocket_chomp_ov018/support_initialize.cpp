@@ -1,3 +1,9 @@
+/*
+ * Pocket Chomp support lifecycle (overlay 18, 0x020C54A0-0x020C55CC).
+ *
+ * Initializes the support, clears its anchor and hides it.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

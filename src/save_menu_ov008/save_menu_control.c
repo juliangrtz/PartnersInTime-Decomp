@@ -1,3 +1,10 @@
+/*
+ * Save menu control (overlay 8, 0x0206B598-0x0206BF64).
+ *
+ * The save menu's state machine: entry, slot selection, the overwrite
+ * confirmation and the exit.
+ */
+
 #include "save_write_effects_internal.h"
 #include <game/audio.h>
 #include <game/save_menu_write.h>

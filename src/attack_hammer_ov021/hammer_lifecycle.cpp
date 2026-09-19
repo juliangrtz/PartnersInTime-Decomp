@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Hammer attack lifecycle (overlay 21, 0x020C3CF0-0x020C3F80).
+ *
+ * Creates the attack, steps it each frame and finishes the return.
+ */
+
 #include <nitro/fx.h>
 #include <game/battle_effect.h>
 #include <game/heap.h>

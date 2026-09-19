@@ -1,3 +1,9 @@
+/*
+ * Shop menu options (overlay 9, 0x0207A6A4-0x0207A844).
+ *
+ * Draws the top-level menu's option text and the model behind it.
+ */
+
 #include "shop_navigation_internal.h"
 
 extern "C" {

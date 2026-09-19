@@ -1,3 +1,12 @@
+/*
+ * Credits particle transitions (overlay 6, 0x02076B7C-0x02077A68).
+ *
+ * The illustration-to-illustration transitions built from per-cell particles:
+ * collapse, scatter, pattern collapse, column collapse and spiral collapse. Each
+ * is an Init that seeds the particles and an Update that steps them; ResetParticles
+ * is the shared seeding.
+ */
+
 #include "credits_transition_internal.h"
 #include <game/random.h>
 #include <nitro/fx_atan.h>

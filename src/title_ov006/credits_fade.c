@@ -1,3 +1,10 @@
+/*
+ * Credits fade transition (overlay 6, 0x02075F94-0x020761C8).
+ *
+ * One of the transitions between credits illustrations: every cell fades on its
+ * own schedule, initialized together and stepped per frame.
+ */
+
 #include "credits_transition_internal.h"
 
 /* Fade the illustration out, replace its cell positions, then fade it in. */

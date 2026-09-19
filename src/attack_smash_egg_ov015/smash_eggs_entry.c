@@ -1,3 +1,9 @@
+/*
+ * Smash Egg entry (overlay 15, 0x020C597C-0x020C5B4C).
+ *
+ * The per-frame entry update that runs while the attack is starting.
+ */
+
 #include "actor_internal.h"
 
 void Overlay15Attack_UpdateEntry(BattlePartyActor *actor)

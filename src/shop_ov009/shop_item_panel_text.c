@@ -1,3 +1,9 @@
+/*
+ * Item panel text (overlay 9, 0x0207065C-0x02070764).
+ *
+ * Queues the item panel's text for the next frame and applies it.
+ */
+
 #include "shop_text_tasks_internal.h"
 
 void ShopItemText_Update(ShopItemTextTask *task)

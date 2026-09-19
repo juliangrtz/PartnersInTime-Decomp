@@ -1,3 +1,9 @@
+/*
+ * Game-over scene setup (overlay 8, 0x0207075C-0x02070A28).
+ *
+ * Loads the game-over scene's resources and sets up the geometry it draws with.
+ */
+
 #include "save_write_effects_internal.h"
 #include <game/save_menu_write.h>
 #include <game/save_state_transfer.h>

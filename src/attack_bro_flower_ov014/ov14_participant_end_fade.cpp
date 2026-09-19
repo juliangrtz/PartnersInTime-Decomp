@@ -1,3 +1,9 @@
+/*
+ * Bro Flower participant fade (overlay 14, 0x020C2B78-0x020C2BB4).
+ *
+ * Starts and ends the fade a participant plays around its throw.
+ */
+
 #include "flower_internal.h"
 
 extern "C" {

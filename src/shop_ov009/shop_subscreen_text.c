@@ -1,3 +1,9 @@
+/*
+ * Shop sub-screen text (overlay 9, 0x0207BBE0-0x0207BD84).
+ *
+ * Initializes the text drawn on the shop's lower screen.
+ */
+
 #include <game/shop_panels.h>
 #include <game/shop_graphics.h>
 extern u8 data_ov009_0207ea3c[];

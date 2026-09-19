@@ -1,3 +1,9 @@
+/*
+ * Copy Flower participant exit (overlay 17, 0x020C4510-0x020C4620).
+ *
+ * Resumes the arc, plays the recovery animation and begins the exit.
+ */
+
 #include "participant_internal.h"
 
 extern "C" {

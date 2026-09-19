@@ -1,3 +1,10 @@
+/*
+ * Copy Flower party objects (overlay 17, 0x020C2E54-0x020C30D0).
+ *
+ * Configures the party's objects for the attack, advances their animations and
+ * reports when they are ready.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_scene.h>
 #include <game/overlay017_attack.h>

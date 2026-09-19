@@ -1,3 +1,10 @@
+/*
+ * Jump attack lifecycle (overlay 20, 0x020C4B74-0x020C4ED4).
+ *
+ * Creates the attack, steps it each frame, initializes the acting actor and
+ * clears the phase when it ends.
+ */
+
 #include "attack_internal.h"
 
 void Overlay20Attack_Create(BattlePartyActor *actor)

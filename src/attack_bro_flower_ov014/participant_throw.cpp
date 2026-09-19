@@ -1,3 +1,10 @@
+/*
+ * Bro Flower throws (overlay 14, 0x020C4734-0x020C4C10).
+ *
+ * The primary and secondary throws, the recovery that follows, the particles
+ * emitted along the way, and the projectile's own initialize/reset/release.
+ */
+
 #include <game/overlay014_projectile.h>
 extern "C" {
 #include <game/battle_effect.h>

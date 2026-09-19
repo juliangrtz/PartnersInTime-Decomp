@@ -1,3 +1,10 @@
+/*
+ * Elder Princess Shroob: enemy chain landing (overlay 25, 0x020C85F0-0x020C877C).
+ *
+ * Applies the damage a chain's landing deals and unlocks the party once the
+ * task that held it finishes.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

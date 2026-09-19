@@ -1,3 +1,10 @@
+/*
+ * Elder Princess Shroob: enemy projectile impact (overlay 25, 0x020C4268-0x020C47C8).
+ *
+ * The reflected impact and the spin a projectile plays when it is knocked back,
+ * and the effect sequence that positions what follows.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

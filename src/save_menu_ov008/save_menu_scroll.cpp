@@ -1,3 +1,10 @@
+/*
+ * Save menu scrolling (overlay 8, 0x020716E0-0x02071964).
+ *
+ * Scrolls the slot list and plays the sound that goes with a row change; the
+ * angle is derived from the scroll position so the motion eases.
+ */
+
 #include <game/battle_scene.h>
 #include <game/save_menu.h>
 

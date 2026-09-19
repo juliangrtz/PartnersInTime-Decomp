@@ -1,3 +1,9 @@
+/*
+ * Battle item setup (overlay 26, 0x020C6264-0x020C6354).
+ *
+ * Allocates the item attack's state.
+ */
+
 #include "item_internal.h"
 
 extern "C" {

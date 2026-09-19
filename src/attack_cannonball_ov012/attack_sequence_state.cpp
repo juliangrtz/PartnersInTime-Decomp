@@ -1,5 +1,13 @@
 extern "C" {
 
+/*
+ * Cannonballer sequence (overlay 12, 0x020C2C10-0x020C31E8).
+ *
+ * The order the party acts in (shuffled per use), the home positions they
+ * return to, the animation each phase plays, the damped arc the cannonball
+ * follows, and the hit display.
+ */
+
 #include <game/battle_actor.h>
 #include <game/overlay012_attack_state.h>
 

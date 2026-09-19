@@ -1,3 +1,9 @@
+/*
+ * Shop panel model (overlay 9, 0x02075AB0-0x02075B84).
+ *
+ * Draws the model a shop panel is framed by.
+ */
+
 #include "shop_rows_internal.h"
 extern "C" {
 extern u8 data_ov009_0207ea3c[];

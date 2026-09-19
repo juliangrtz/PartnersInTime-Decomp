@@ -1,3 +1,9 @@
+/*
+ * Pocket Chomp object controller (overlay 18, 0x020C6918-0x020C6A20).
+ *
+ * Initializes, clears and resets the controller that owns the attack's objects.
+ */
+
 #include <game/battle_scene.h>
 #include <game/overlay018_attack.h>
 

@@ -1,3 +1,10 @@
+/*
+ * Title sequence cleanup (overlay 6, 0x0206CEA0-0x0206D2B4).
+ *
+ * Releases the title animation's element sequence and reports when its orbits
+ * have stopped, which is what the exit waits for.
+ */
+
 #include "title_sequence_internal.h"
 #include <game/title_animation.h>
 #include <game/heap.h>

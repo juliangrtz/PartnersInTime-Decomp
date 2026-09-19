@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Hammer entry (overlay 21, 0x020C395C-0x020C39B0).
+ *
+ * Begins the hammer attack's entry.
+ */
+
 #include <nitro/fx.h>
 #include <game/battle_effect.h>
 }

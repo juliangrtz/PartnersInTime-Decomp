@@ -1,3 +1,9 @@
+/*
+ * Bitmap value drawing (overlay 9, 0x0207C384-0x0207C464).
+ *
+ * Draws a numeric value into one of the shop's bitmap panels.
+ */
+
 #include "shop_graphics_internal.h"
 
 void ShopBitmap_DrawValue(int x, int y, u32 value)

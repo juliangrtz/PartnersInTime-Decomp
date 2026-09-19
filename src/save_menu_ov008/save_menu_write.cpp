@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Save writing (overlay 8, 0x02073F04-0x0207431C).
+ *
+ * Starts the write to the battery file and steps it, showing and hiding the
+ * message that warns the player not to switch off.
+ */
+
 #include <game/save_menu_write.h>
 #include <game/save_storage.h>
 #include <game/save_state_transfer.h>

@@ -1,3 +1,9 @@
+/*
+ * Save write background zoom (overlay 8, 0x0206B23C-0x0206B37C).
+ *
+ * The background zoom played while the file is being written.
+ */
+
 #include "save_write_effects_internal.h"
 
 void SaveMenuWrite_UpdateBackgroundZoom(SaveWriteZoomTask *task)

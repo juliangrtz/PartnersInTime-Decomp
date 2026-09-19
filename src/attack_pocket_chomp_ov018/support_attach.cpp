@@ -1,3 +1,9 @@
+/*
+ * Pocket Chomp support attachment (overlay 18, 0x020C4DD8-0x020C4F3C).
+ *
+ * Attaches the support to the Chomp and stops the motion that was driving it.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

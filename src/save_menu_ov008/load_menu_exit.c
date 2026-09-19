@@ -1,3 +1,9 @@
+/*
+ * Load menu exit (overlay 8, 0x0206D728-0x0206D82C).
+ *
+ * The exit animation and the branch to the field or back to the title.
+ */
+
 #include "save_menu_internal.h"
 #include <game/audio.h>
 #define WORK (*(SaveMenuEntryWorkPrefix *)data_ov008_02078290)

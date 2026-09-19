@@ -1,3 +1,10 @@
+/*
+ * Object graphic bounds (overlay 10, 0x020C0FC0-0x020C1024).
+ *
+ * Reads the on-screen extent of an attack object's graphic, which the framing
+ * and collision code measures against.
+ */
+
 #include "attack_common_internal.h"
 
 extern "C" {

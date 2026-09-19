@@ -1,3 +1,10 @@
+/*
+ * Title menu cursor (overlay 6, 0x02073870-0x02073BF8).
+ *
+ * The cursor on the title menu: moving the selection, drawing the cursor and
+ * scaling it, plus the menu base that owns the selection index.
+ */
+
 #include "title_menu_internal.h"
 #include <game/audio.h>
 extern const s16 FX_SinCosTable_[];

@@ -1,3 +1,11 @@
+/*
+ * Overlay 5 touch panel input (overlay 5, 0x0206873C-0x02068908).
+ *
+ * Reads the auto-sampling buffer the touch driver fills and turns it into the
+ * frame's touch state. Also holds the texture-object helpers that share this
+ * address range in the original build.
+ */
+
 #include <game/battle_scene.h>
 #include <nitro.h>
 #include <nitro/tp.h>

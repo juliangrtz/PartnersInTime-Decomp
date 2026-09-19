@@ -1,3 +1,10 @@
+/*
+ * Title 3D models (overlay 6, 0x02073F20-0x02074320).
+ *
+ * Loads the title screen's 3D models and draws them to the main or sub screen.
+ * The controller's delete slot releases the model with it.
+ */
+
 #include <game/title_model.h>
 #include <game/sprite_output.h>
 #include <game/battle_effect.h>

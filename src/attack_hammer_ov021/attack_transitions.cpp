@@ -1,4 +1,13 @@
 extern "C" {
+
+/*
+ * Hammer transitions (overlay 21, 0x020C3380-0x020C3864).
+ *
+ * The state machine of a hammer swing: approach, wait for input, hit or miss,
+ * advance, return, then the same again for the secondary swing. An input that
+ * arrives too early has its own transition.
+ */
+
 #include <nitro/fx.h>
 #include <game/battle_effect.h>
 }

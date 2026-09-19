@@ -1,3 +1,9 @@
+/*
+ * Bro Flower enemy effects (overlay 14, 0x020C3388-0x020C348C).
+ *
+ * Allocates the per-enemy effects the flower applies and releases them again.
+ */
+
 #include "flower_internal.h"
 
 extern "C" {

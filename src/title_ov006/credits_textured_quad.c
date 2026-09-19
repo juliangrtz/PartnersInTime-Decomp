@@ -1,3 +1,9 @@
+/*
+ * Credits textured quad (overlay 6, 0x02079E88-0x0207A034).
+ *
+ * The quad helper the credits scene draws its illustrations and backdrop with.
+ */
+
 #include "title_graphics_internal.h"
 #include "frontend_scene_internal.h"
 void Credits_DrawTexturedQuad(int x, int y, int s, int t, int width, int height, int alpha,

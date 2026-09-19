@@ -1,3 +1,9 @@
+/*
+ * Badge check (overlay 10, 0x020C13BC-0x020C1410).
+ *
+ * Whether a party member has the badge whose effect the attack overlays query.
+ */
+
 #include "attack_common_internal.h"
 
 extern "C" {

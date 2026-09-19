@@ -1,3 +1,9 @@
+/*
+ * Credits scene lifecycle (overlay 6, 0x0207A8F8-0x0207ADE4).
+ *
+ * Init, Destroy and Delete for the staff credits scene.
+ */
+
 #include "frontend_scene_internal.h"
 
 CreditsSceneTask *CreditsScene_Init(CreditsSceneTask *task, u32 priority, u32 unused)

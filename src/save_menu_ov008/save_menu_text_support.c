@@ -1,3 +1,10 @@
+/*
+ * Save menu text helpers (overlay 8, 0x02075B5C-0x02075DC8).
+ *
+ * String lookup and width measurement, plus the queue-and-upload pair for the
+ * object strip and the background.
+ */
+
 #include "save_menu_internal.h"
 
 const u8 *SaveMenuText_GetString(SaveMenuText *context, int table, int entry)

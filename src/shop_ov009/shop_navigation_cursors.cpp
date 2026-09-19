@@ -1,3 +1,10 @@
+/*
+ * Shop navigation cursors (overlay 9, 0x02079E20-0x0207A314).
+ *
+ * The cursors and arrows on the top-level menu and on the item list, with the
+ * create/clear pair each of them is managed through.
+ */
+
 #include "shop_navigation_internal.h"
 
 extern "C" {

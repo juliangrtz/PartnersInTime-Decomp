@@ -1,3 +1,9 @@
+/*
+ * Equipment purchase (overlay 9, 0x0207662C-0x02076668).
+ *
+ * Applies the equipment the player selected to the chosen party member.
+ */
+
 #include "shop_rows_internal.h"
 extern "C" {
 #include <game/equipment.h>

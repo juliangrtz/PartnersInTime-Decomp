@@ -1,3 +1,9 @@
+/*
+ * Load menu selection (overlay 8, 0x0206E7F4-0x0206E9A0).
+ *
+ * Moves the selection between save slots and reacts to the player's choice.
+ */
+
 #include "save_menu_internal.h"
 extern void func_ov005_02066358(MenuElement *, void (*)(MenuElement *), int);
 extern void func_ov005_02069bcc(int, int, int, int);

@@ -1,3 +1,10 @@
+/*
+ * Elder Princess Shroob: effect sequence sprites (overlay 25, 0x020C3C5C-0x020C4084).
+ *
+ * Starts an effect sequence's model or sprite and advances the sprite each
+ * frame, positioning it as it goes.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

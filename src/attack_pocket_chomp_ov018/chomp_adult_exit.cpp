@@ -1,3 +1,9 @@
+/*
+ * Pocket Chomp adult exit (overlay 18, 0x020C6008-0x020C60BC).
+ *
+ * Begins the exit movement of an adult participant.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

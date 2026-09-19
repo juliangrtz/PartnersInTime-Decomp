@@ -1,3 +1,9 @@
+/*
+ * Cannonballer object visibility (overlay 12, 0x020C3480-0x020C34E0).
+ *
+ * Initializes the attack object and hides it again when its phase is over.
+ */
+
 #include "motion_internal.h"
 
 extern "C" {

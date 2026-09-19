@@ -1,3 +1,9 @@
+/*
+ * Load scene IRQ teardown (overlay 8, 0x0206D038-0x0206D088).
+ *
+ * Destroy and Delete for the load scene's VBlank task.
+ */
+
 #include "save_menu_internal.h"
 
 GameIrqTask *LoadSceneIrq_Delete(GameIrqTask *task)

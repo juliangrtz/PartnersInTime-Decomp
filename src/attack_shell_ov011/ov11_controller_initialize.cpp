@@ -1,3 +1,9 @@
+/*
+ * Shell controller setup (overlay 11, 0x020C5380-0x020C54B4).
+ *
+ * Initializes the controller that drives the shell itself.
+ */
+
 #include "shell_internal.h"
 
 extern "C" {

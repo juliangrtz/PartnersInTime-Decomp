@@ -1,3 +1,10 @@
+/*
+ * Shell attack setup (overlay 11, 0x020C5AF8-0x020C5EEC).
+ *
+ * Allocates the attack's work area and objects and puts the participants in
+ * their starting positions.
+ */
+
 #include "shell_internal.h"
 
 extern "C" {

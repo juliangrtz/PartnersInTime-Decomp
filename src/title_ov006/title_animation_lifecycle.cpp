@@ -1,3 +1,10 @@
+/*
+ * Title animation lifecycle (overlay 6, 0x0206BD9C-0x0206C3C8).
+ *
+ * Allocates the title animation, loads its archive tables and localized
+ * resources, and releases all of it in the reverse order.
+ */
+
 #include "title_animation_internal.h"
 #include <game/title_startup.h>
 extern "C" {

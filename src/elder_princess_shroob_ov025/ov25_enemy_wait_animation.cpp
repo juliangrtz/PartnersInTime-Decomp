@@ -1,3 +1,9 @@
+/*
+ * Elder Princess Shroob: enemy animation wait (overlay 25, 0x020C7210-0x020C7250).
+ *
+ * Holds the sequence until the enemy's animation has played out.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

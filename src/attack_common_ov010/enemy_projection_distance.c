@@ -1,3 +1,11 @@
+/*
+ * Projected damage and distances (overlay 10, 0x020C1F48-0x020C20F8).
+ *
+ * Applies damage to an enemy's projected (not yet committed) state so an attack
+ * can ask what a hit would do before it lands, plus the 2D and 3D distance
+ * helpers the motion code measures with.
+ */
+
 #include <nitro/fx.h>
 #include <game/battle_scene.h>
 #include <game/battle_actor.h>

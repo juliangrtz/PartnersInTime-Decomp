@@ -1,4 +1,14 @@
 extern "C" {
+
+/*
+ * Overlay 5 draw lists (overlay 5, 0x02068EE0-0x0206937C).
+ *
+ * Intrusive lists of draw nodes with their own pool. Objects register a node,
+ * the per-frame pass walks the list in order, and releasing a node returns it to
+ * the pool. The links are embedded in the objects, so nothing is allocated while
+ * a scene is running.
+ */
+
 #include <nitro.h>
 #include <nitro/fx.h>
 #include <game/heap.h>

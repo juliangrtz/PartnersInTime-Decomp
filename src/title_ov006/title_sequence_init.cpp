@@ -1,3 +1,10 @@
+/*
+ * Title sequence construction (overlay 6, 0x0206D2B4-0x0206DB4C).
+ *
+ * Allocates the title animation's element list - a single large block the
+ * elements are appended into - and wires the sequence up.
+ */
+
 #include "title_sequence_internal.h"
 #include "title_animation_internal.h"
 extern "C" {

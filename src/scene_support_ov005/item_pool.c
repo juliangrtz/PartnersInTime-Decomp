@@ -1,3 +1,11 @@
+/*
+ * Overlay 5 item pool and object sprites (overlay 5, 0x020695CC-0x020699F0).
+ *
+ * A pool of items linked into lists, plus the initializer that turns a pooled
+ * item into an object sprite. Clearing uses the 16-bit fill helpers because the
+ * targets are VRAM-backed.
+ */
+
 #include <nitro.h>
 #include <game/heap.h>
 #include <game/overlay005_resource.h>

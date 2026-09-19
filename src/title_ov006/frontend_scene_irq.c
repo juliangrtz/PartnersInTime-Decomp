@@ -1,3 +1,10 @@
+/*
+ * Frontend scene IRQ tasks (overlay 6, 0x02075EB0-0x02075F94).
+ *
+ * The VBlank glue shared by the overlay's two frontend scenes: the title
+ * scene's task construction and frame upload, and the credits task's teardown.
+ */
+
 #include "frontend_scene_internal.h"
 
 GameIrqTask *CreditsSceneIrq_Delete(GameIrqTask *task)

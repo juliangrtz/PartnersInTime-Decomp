@@ -1,3 +1,10 @@
+/*
+ * Game-over menu control (overlay 8, 0x02070028-0x02070560).
+ *
+ * The menu shown after a defeat: its entry and exit animations and the choice
+ * the player makes between them.
+ */
+
 #include "save_menu_internal.h"
 #include <game/audio.h>
 #include <game/save_menu_write.h>

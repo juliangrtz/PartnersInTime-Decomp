@@ -1,3 +1,10 @@
+/*
+ * Title animation resources (overlay 6, 0x0206B77C-0x0206B9EC).
+ *
+ * Reads an archive entry for the title animation and releases the model
+ * resources built from it.
+ */
+
 #include "title_animation_internal.h"
 extern "C" {
 #include <game/heap.h>

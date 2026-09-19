@@ -1,3 +1,11 @@
+/*
+ * Mix Flower pair effects (overlay 16, 0x020C43E0-0x020C4910).
+ *
+ * The paired effects the attack spawns: choosing a kind and its animation,
+ * starting the pursuit that follows a target, finding a free slot, and reporting
+ * when all of them are idle.
+ */
+
 #include "pair_effects_internal.h"
 
 void Overlay16PairEffect_ChangeKind(Overlay16PairEffect *effect, int kind)

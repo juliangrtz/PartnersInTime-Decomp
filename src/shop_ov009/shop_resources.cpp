@@ -1,3 +1,10 @@
+/*
+ * Shop resources (overlay 9, 0x0206D160-0x0206E8AC).
+ *
+ * Loads the shop scene's backgrounds and graphics, decompressing the entries
+ * that are stored compressed and flushing them before the display reads them.
+ */
+
 #include "shop_scene_internal.h"
 extern "C" {
 typedef struct ShopBackgroundEntry {

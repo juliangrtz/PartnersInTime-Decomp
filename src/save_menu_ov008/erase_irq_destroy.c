@@ -1,3 +1,9 @@
+/*
+ * Erase scene IRQ teardown (overlay 8, 0x02076008-0x02076058).
+ *
+ * Destroy and Delete for the erase scene's VBlank task.
+ */
+
 #include "save_menu_internal.h"
 
 GameIrqTask *EraseSceneIrq_Delete(GameIrqTask *task)

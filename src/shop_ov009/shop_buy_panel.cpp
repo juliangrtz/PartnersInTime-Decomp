@@ -1,3 +1,11 @@
+/*
+ * Buying panel (overlay 9, 0x020710B8-0x02071AF0).
+ *
+ * The list of items the shop sells: the price of a row after discounts, whether
+ * the player can afford it, whether it is new, and the sprites and models each
+ * row is drawn from. Show and Hide run the panel's open and close animations.
+ */
+
 #include "shop_rows_internal.h"
 #include "shop_price_internal.h"
 #include <game/save_data.h>

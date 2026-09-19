@@ -1,3 +1,10 @@
+/*
+ * Shell travel timing (overlay 11, 0x020C2E88-0x020C2F38).
+ *
+ * How long the shell takes to reach its target, and the reset that puts the
+ * support character back to its starting state.
+ */
+
 #include "shell_internal.h"
 
 extern "C" {

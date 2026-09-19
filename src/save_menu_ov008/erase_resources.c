@@ -1,3 +1,9 @@
+/*
+ * Erase scene resources (overlay 8, 0x020773B4-0x020777DC).
+ *
+ * Loads the erase scene's archives and prepares its text background.
+ */
+
 #include "menu_resource_internal.h"
 
 static inline void InitTextBackground(void)

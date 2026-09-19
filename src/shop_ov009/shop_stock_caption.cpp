@@ -1,3 +1,9 @@
+/*
+ * Stock caption (overlay 9, 0x0207218C-0x020721D4).
+ *
+ * Draws one segment of the stock panel's caption.
+ */
+
 #include "shop_stock_rows_internal.h"
 
 extern "C" void ShopStockCaption_DrawSegment(ShopStockRowTask *task)

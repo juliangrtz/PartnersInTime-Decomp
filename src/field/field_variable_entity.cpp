@@ -95,7 +95,6 @@ extern "C" {
 extern const s8 data_ov000_020c0c68[4], data_ov000_020c0c6c[17];
 void func_ov000_020b4990(FieldRuntimeEntity *, FieldRuntimeEntity **);
 void func_020093b4(FieldRenderObject *, int);
-void func_0202cbd4(void *, int, u32);
 FieldVariableEntity *FieldVariableEntity_InitEmpty(FieldVariableEntity *object) {
     FieldEntity3D_Init(&object->entity);
     *(FieldEntityVTable **)object = &data_ov000_020c1310;

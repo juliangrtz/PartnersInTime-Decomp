@@ -1,3 +1,9 @@
+/*
+ * Save write effects (overlay 8, 0x0206AD54-0x0206AE78).
+ *
+ * Starts the effects that accompany a save.
+ */
+
 #include "save_write_effects_internal.h"
 
 void SaveMenuWrite_StartEffects(void)

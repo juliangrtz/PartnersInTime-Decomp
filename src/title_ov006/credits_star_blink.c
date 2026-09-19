@@ -1,3 +1,9 @@
+/*
+ * Credits star blinking (overlay 6, 0x02079DAC-0x02079E88).
+ *
+ * Steps the blinking stars on the credits backdrop.
+ */
+
 #include "credits_transition_internal.h"
 #include <game/random.h>
 

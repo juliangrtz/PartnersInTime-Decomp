@@ -1,3 +1,10 @@
+/*
+ * Hammer phase state (overlay 21, 0x020C2AE0-0x020C2BCC).
+ *
+ * Sets and clears the primary and secondary phases and configures the animation
+ * each one plays.
+ */
+
 #include <game/overlay021_attack_state.h>
 
 extern void BattleSceneObject_SetAnimationMode01(BattleSceneObject *object, int value);

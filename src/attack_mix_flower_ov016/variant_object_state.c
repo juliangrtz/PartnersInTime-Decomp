@@ -1,3 +1,11 @@
+/*
+ * Mix Flower object state (overlay 16, 0x020C2D20-0x020C32F8).
+ *
+ * The linked object the attack throws: its initialize, update and hide, the
+ * phases it moves through, the launch toward a reference point, and the
+ * shrinking particle it leaves behind.
+ */
+
 #include <game/battle_effect.h>
 #include <game/battle_object.h>
 #include <game/battle_scene.h>

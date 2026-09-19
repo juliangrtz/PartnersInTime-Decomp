@@ -1,3 +1,9 @@
+/*
+ * Save menu numbers (overlay 8, 0x02072F08-0x02073410).
+ *
+ * Draws the coin count and play time as textured quads, digit by digit.
+ */
+
 #include <game/save_menu.h>
 #include "../title_ov006/title_graphics_internal.h"
 /* Draw counters within the shared menu workspace. */

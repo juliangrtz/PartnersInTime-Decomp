@@ -1,3 +1,10 @@
+/*
+ * Credits motion curves (overlay 6, 0x02077B5C-0x02077CE8).
+ *
+ * The ease-out and acceleration profiles the credits transitions move their
+ * cells along, plus the grid fade that uses them.
+ */
+
 #include "frontend_scene_internal.h"
 
 void CreditsMotion_SetEaseOut(CreditsMotion *motion, int frames)

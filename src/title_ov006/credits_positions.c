@@ -1,3 +1,10 @@
+/*
+ * Credits layout positions (overlay 6, 0x02078B8C-0x02078C90).
+ *
+ * Where a cell's origin, grid position and centre are, which the transitions
+ * move toward and away from.
+ */
+
 #include "credits_transition_internal.h"
 
 /* Credits use a 224-pixel origin offset for the second screen. */

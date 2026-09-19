@@ -1,3 +1,9 @@
+/*
+ * Elder Princess Shroob: enemy load and move (overlay 25, 0x020CBE28-0x020CBF68).
+ *
+ * Begins the phase that loads the enemy's resources while it is moving.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

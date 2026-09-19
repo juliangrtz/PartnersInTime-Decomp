@@ -1,3 +1,9 @@
+/*
+ * Title rumble prompt update (overlay 6, 0x02073580-0x0207380C).
+ *
+ * Steps the rumble prompt while it is on screen.
+ */
+
 #include "title_sequence_internal.h"
 #include <game/title_animation.h>
 #include <game/audio.h>

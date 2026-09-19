@@ -1,3 +1,11 @@
+/*
+ * Smash Egg pair helpers (overlay 15, 0x020C30AC-0x020C31DC).
+ *
+ * The hit descriptor the pair registers, the model flags it sets, the phase test
+ * that says whether both actors are linked, and the index clamp that keeps a
+ * context lookup in range.
+ */
+
 #include "actor_internal.h"
 
 enum {

@@ -1,3 +1,10 @@
+/*
+ * Title moving sprites (overlay 6, 0x0206E644-0x0206E9E4).
+ *
+ * Sprites that fly in and then orbit: the entry movement, the orbit it hands
+ * over to, and the draw and teardown around them.
+ */
+
 #include <game/title_model.h>
 #include <game/title_panel_motion.h>
 

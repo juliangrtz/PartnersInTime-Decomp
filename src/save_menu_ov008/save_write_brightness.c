@@ -1,3 +1,9 @@
+/*
+ * Save write brightness (overlay 8, 0x0206B0F8-0x0206B1D0).
+ *
+ * The brightness fade played while the file is being written.
+ */
+
 #include "save_write_effects_internal.h"
 
 void SaveMenuWrite_UpdateBrightness(SaveWriteBrightnessTask *task)

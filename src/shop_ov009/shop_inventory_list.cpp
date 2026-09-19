@@ -1,3 +1,10 @@
+/*
+ * Inventory panel lifecycle (overlay 9, 0x020742C4-0x02074464).
+ *
+ * Init, Destroy and Delete for the selling panel, and the rebuild that refills
+ * its list from the party's inventory.
+ */
+
 #include <game/shop_panels.h>
 #include <game/save_data.h>
 extern "C" {

@@ -1,3 +1,9 @@
+/*
+ * Save scene lifecycle (overlay 8, 0x0206C87C-0x0206D038).
+ *
+ * Init, Destroy and Delete for the save scene, with its frame upload task.
+ */
+
 #include "save_menu_internal.h"
 
 GameIrqTask *SaveSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent)

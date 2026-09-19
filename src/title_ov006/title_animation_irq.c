@@ -1,3 +1,10 @@
+/*
+ * Title animation IRQ task (overlay 6, 0x0206AB80-0x0206ACB8).
+ *
+ * The VBlank task that uploads the title animation's frame: its textures,
+ * palettes and OAM, prepared during the frame and pushed during blanking.
+ */
+
 #include <game/title_animation.h>
 #include <game/heap.h>
 #include <game/input.h>

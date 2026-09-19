@@ -1,3 +1,9 @@
+/*
+ * Title scene teardown (overlay 6, 0x020759C8-0x02075B60).
+ *
+ * Destroy and Delete for the title scene.
+ */
+
 #include "frontend_scene_internal.h"
 
 TitleSceneTask *TitleScene_Destroy(TitleSceneTask *task)

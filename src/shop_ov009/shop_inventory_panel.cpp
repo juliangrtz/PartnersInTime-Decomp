@@ -1,3 +1,11 @@
+/*
+ * Inventory panel (overlay 9, 0x020738A0-0x02074038).
+ *
+ * The list of items the player can sell: the price bonus, the quantity held,
+ * whether a row is sellable, the category cycling, and the sprites each row is
+ * drawn from. Shows an empty message when the category holds nothing.
+ */
+
 #include "shop_rows_internal.h"
 #include <game/save_data.h>
 #include "shop_price_internal.h"

@@ -1,3 +1,11 @@
+/*
+ * Copy Flower tuning tables (overlay 17, 0x020C2C94-0x020C2E54).
+ *
+ * Two tables of tuning parameters - one per group, one per pair - and the
+ * lookups that resolve a row. The parameters are still numbered because what
+ * each controls has not been established.
+ */
+
 #include <game/overlay017_attack.h>
 
 enum Overlay17AttackTuningConstant {

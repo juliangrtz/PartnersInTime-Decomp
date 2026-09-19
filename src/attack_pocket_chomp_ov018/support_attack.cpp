@@ -1,3 +1,9 @@
+/*
+ * Pocket Chomp support attack (overlay 18, 0x020C51B4-0x020C5214).
+ *
+ * Begins the support character's attack.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

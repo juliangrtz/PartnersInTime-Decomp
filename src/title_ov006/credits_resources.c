@@ -1,3 +1,9 @@
+/*
+ * Credits resources (overlay 6, 0x0207A1DC-0x0207A788).
+ *
+ * Loads the credits scene's archives and sets up the geometry it draws with.
+ */
+
 #include "frontend_scene_internal.h"
 
 void CreditsScene_LoadResources(CreditsSceneTask *task)

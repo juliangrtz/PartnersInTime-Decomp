@@ -1,3 +1,9 @@
+/*
+ * Glyph expansion (overlay 9, 0x0207CDD8-0x0207CE1C).
+ *
+ * Expands a packed glyph to 4bpp so it can be drawn into the shop's bitmaps.
+ */
+
 #include <game/shop_graphics.h>
 
 static inline u8 LowNibble(int value) { return value & 15; }

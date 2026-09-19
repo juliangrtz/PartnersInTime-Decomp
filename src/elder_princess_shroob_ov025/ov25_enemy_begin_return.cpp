@@ -1,3 +1,9 @@
+/*
+ * Elder Princess Shroob: enemy return (overlay 25, 0x020C30CC-0x020C31A0).
+ *
+ * Begins the enemy's return to its position.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

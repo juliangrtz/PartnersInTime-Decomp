@@ -1,3 +1,9 @@
+/*
+ * Buying panel lifecycle (overlay 9, 0x02071FE0-0x02072080).
+ *
+ * Init, Destroy and Delete for the buying panel.
+ */
+
 #include <game/shop_panels.h>
 extern "C" {
 #include <game/heap.h>

@@ -1,3 +1,12 @@
+/*
+ * Overlay 5 sprite pool and OAM collection (overlay 5, 0x02068B20-0x02068EE0).
+ *
+ * Pooled sprites on an intrusive list, collected into OAM once per frame.
+ * Collection applies the pool's camera offset while it walks the list and
+ * restores it afterwards, so sprites are positioned in world coordinates and
+ * emitted in screen coordinates.
+ */
+
 #include <game/battle_scene.h>
 extern "C" {
 #include <game/sprite_output.h>

@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Shop text lookup (overlay 9, 0x02074838-0x02074B7C).
+ *
+ * Resolves an item to its name and description indices, fetches the string and
+ * measures it, which the panels need before they can lay a row out.
+ */
+
 #include <game/shop_panels.h>
 #include <game/save_data.h>
 }

@@ -1,3 +1,9 @@
+/*
+ * Copy Flower participant animation (overlay 17, 0x020C47D0-0x020C4994).
+ *
+ * Sets a participant's animation and begins its removal.
+ */
+
 #include "participant_internal.h"
 
 extern "C" {

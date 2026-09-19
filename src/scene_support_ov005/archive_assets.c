@@ -1,3 +1,15 @@
+/*
+ * Overlay 5 archive and asset loading (overlay 5, 0x02066A7C-0x02067638).
+ *
+ * The shared archive service the scenes use: twelve archive slots, each with its
+ * descriptor and offset table, and a 128-entry request queue pumped once per
+ * frame. Entries can be read synchronously or asynchronously, and the LZ,
+ * Huffman and run-length variants are decompressed on the way out.
+ *
+ * Most functions here are still address-named; what is established is the slot
+ * and request structure, not yet the meaning of each caller.
+ */
+
 #include <game/overlay005_archive.h>
 #include <game/battle_archive.h>
 #include <game/heap.h>
@@ -177,7 +189,6 @@ extern void MI_UncompressRL16(const void *source, void *destination);
 
 extern Overlay5Entry *func_ov005_02069b08(u32 key);
 extern void func_ov005_02069acc(Overlay5Entry *entry, u32 key);
-extern Overlay5ArchiveRequest *func_ov005_02067184(Overlay5Archive *archive, u32 key);
 extern Overlay5ArchiveRequest *func_ov005_02067174(Overlay5Archive *archive, u32 group,
                                                   u32 entry);
 extern void func_ov005_0206735c(Overlay5Archive *archive, Overlay5ArchiveRequest *request);

@@ -1,3 +1,10 @@
+/*
+ * Cannonballer launch scheduling (overlay 12, 0x020C3D1C-0x020C3DB8).
+ *
+ * Prepares the controller and schedules the launch for the frame the timing
+ * window allows.
+ */
+
 #include "motion_internal.h"
 
 extern "C" {

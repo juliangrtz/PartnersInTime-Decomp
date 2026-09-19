@@ -1,3 +1,9 @@
+/*
+ * Enemy hit reaction (overlay 10, 0x020C20F8-0x020C21D0).
+ *
+ * Plays the reaction animation an enemy shows when an attack connects.
+ */
+
 #include "attack_common_internal.h"
 
 extern "C" {

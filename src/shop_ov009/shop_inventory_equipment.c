@@ -1,3 +1,10 @@
+/*
+ * Inventory equipment checks (overlay 9, 0x0207DCF0-0x0207DDAC).
+ *
+ * Adds a bought item to the inventory and reports whether a member may equip
+ * it.
+ */
+
 #include "shop_list_internal.h"
 
 void ShopInventory_Add(u16 item, s8 delta)

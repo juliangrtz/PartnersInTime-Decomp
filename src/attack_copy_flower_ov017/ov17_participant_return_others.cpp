@@ -1,3 +1,10 @@
+/*
+ * Copy Flower group return (overlay 17, 0x020C468C-0x020C4794).
+ *
+ * Returns the participants other than the acting one, forwarding the variant
+ * control they were started with.
+ */
+
 #include "participant_internal.h"
 
 extern "C" {

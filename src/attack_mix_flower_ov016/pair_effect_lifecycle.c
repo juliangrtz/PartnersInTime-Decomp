@@ -1,3 +1,9 @@
+/*
+ * Mix Flower pair effect lifecycle (overlay 16, 0x020C4E48-0x020C4F9C).
+ *
+ * Allocates a paired effect's models and destroys or resets them.
+ */
+
 #include "pair_effects_internal.h"
 
 void Overlay16PairEffect_Initialize(Overlay16PairEffect *effect, int primary_resource, int secondary_resource)

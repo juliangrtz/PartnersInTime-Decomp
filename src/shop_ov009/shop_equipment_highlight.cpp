@@ -1,3 +1,10 @@
+/*
+ * Equipment highlight (overlay 9, 0x02076B28-0x02076FBC).
+ *
+ * Highlights the stats an equipment change would affect: a tilemap that fades in
+ * and out over the comparison rows.
+ */
+
 #include "shop_scene_internal.h"
 #include <game/shop_equipment_highlight.h>
 

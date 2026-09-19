@@ -1,3 +1,9 @@
+/*
+ * Load menu models (overlay 8, 0x0206ED44-0x0206EE58).
+ *
+ * Creates the 3D models the load menu draws.
+ */
+
 #include <game/battle_scene.h>
 extern "C" {
 #include <game/save_menu.h>

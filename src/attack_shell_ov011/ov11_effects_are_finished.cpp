@@ -1,3 +1,11 @@
+/*
+ * Shell effects (overlay 11, 0x020C2B88-0x020C2DC0).
+ *
+ * The attached effects the shell drags along: spawning them, following the
+ * shell each frame, and reporting when they have all finished, which is what the
+ * sequence waits on before moving to the next phase.
+ */
+
 #include "shell_internal.h"
 
 extern "C" {

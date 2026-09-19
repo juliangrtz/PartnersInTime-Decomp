@@ -1,3 +1,11 @@
+/*
+ * Overlay 5 touch state (overlay 5, 0x02068594-0x020686CC).
+ *
+ * Derives the button-like view of the touch panel - held, pressed, repeat - from
+ * this frame's samples, and remembers the last valid position so a lifted stylus
+ * does not read as a jump to zero.
+ */
+
 #include <nitro.h>
 #include <nitro/tp.h>
 

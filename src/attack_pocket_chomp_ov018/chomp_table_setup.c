@@ -1,3 +1,9 @@
+/*
+ * Pocket Chomp table deltas (overlay 18, 0x020C2AE0-0x020C2C14).
+ *
+ * Applies the per-use deltas to the attack's tuning table.
+ */
+
 #include <game/overlay018_attack.h>
 
 extern s16 data_ov018_020c7400[][3], data_ov018_020c7478[][3];

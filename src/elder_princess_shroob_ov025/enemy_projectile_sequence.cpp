@@ -1,3 +1,10 @@
+/*
+ * Elder Princess Shroob: enemy projectile sequence (overlay 25, 0x020CB838-0x020CBBB0).
+ *
+ * The phase machine that emits projectiles: the pause before the phase, the
+ * emission itself, and the waits for the projectiles and for the return.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

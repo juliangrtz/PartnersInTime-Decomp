@@ -1,3 +1,9 @@
+/*
+ * Shop particles (overlay 9, 0x0207689C-0x020769BC).
+ *
+ * Steps the particles the shop scene emits.
+ */
+
 #include <game/menu_particles.h>
 
 extern "C" {

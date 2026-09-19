@@ -1,3 +1,11 @@
+/*
+ * Shell support movement (overlay 11, 0x020C303C-0x020C3388).
+ *
+ * The partner's part of the attack: launching away, starting the intercept and
+ * scheduling when it happens, with the speed updated each frame so the intercept
+ * lands on the intended frame.
+ */
+
 #include "shell_internal.h"
 
 extern "C" {

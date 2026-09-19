@@ -1,3 +1,10 @@
+/*
+ * Title sequence model (overlay 6, 0x02072988-0x02072AE4).
+ *
+ * The 3D model that takes part in the title sequence: its entry movement and the
+ * state it is left in when the entry finishes.
+ */
+
 #include "title_sequence_internal.h"
 void func_ov006_02073e6c(void *, int, int);
 

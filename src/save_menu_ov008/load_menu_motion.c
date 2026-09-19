@@ -1,3 +1,9 @@
+/*
+ * Load menu motion (overlay 8, 0x0206F3A4-0x0206F48C).
+ *
+ * The panel motion the load menu plays, initialized once and stepped per frame.
+ */
+
 #include <game/save_menu.h>
 extern u8 data_ov008_02078290[];
 

@@ -1,3 +1,9 @@
+/*
+ * Shop IRQ teardown (overlay 9, 0x0206AB80-0x0206ABD0).
+ *
+ * Destroy and Delete for the shop scene's VBlank task.
+ */
+
 #include "shop_scene_internal.h"
 
 extern "C" {

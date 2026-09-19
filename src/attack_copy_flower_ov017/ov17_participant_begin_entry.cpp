@@ -1,3 +1,9 @@
+/*
+ * Copy Flower participant entry (overlay 17, 0x020C57A4-0x020C58CC).
+ *
+ * Starts a participant's entry movement.
+ */
+
 #include "participant_internal.h"
 
 extern "C" {

@@ -1,3 +1,10 @@
+/*
+ * Mix Flower participant phases (overlay 16, 0x020C50E8-0x020C53D0).
+ *
+ * The phases a participant plays - one, three and eight - with the growing
+ * particle and the trail emitted between them.
+ */
+
 #include "pair_effects_internal.h"
 
 void Overlay16Participant_StartPhaseOne(Overlay16Participant *participant)

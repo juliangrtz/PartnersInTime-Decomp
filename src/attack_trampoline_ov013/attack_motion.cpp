@@ -1,3 +1,11 @@
+/*
+ * Trampoline motion (overlay 13, 0x020C3620-0x020C4228).
+ *
+ * The jump itself: the vertical entry, the bounce, the arc effects that trail
+ * it, the retreat, and the animation chosen from the angle the actor is moving
+ * at. Restoring the battle at the end puts the actors back where they started.
+ */
+
 #include "trampoline_internal.h"
 
 extern "C" {

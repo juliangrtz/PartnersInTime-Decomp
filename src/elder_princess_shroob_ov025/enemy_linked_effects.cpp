@@ -1,3 +1,11 @@
+/*
+ * Elder Princess Shroob: enemy linked effects (overlay 25, 0x020CA438-0x020CB664).
+ *
+ * Effects that stay linked to the enemy that spawned them: initialization, the
+ * animation waits between phases, the launch, the growth applied each frame, and
+ * the bursts spawned when a projectile connects.
+ */
+
 #include "effect_task_internal.h"
 #include <game/battle_impact_effect.h>
 

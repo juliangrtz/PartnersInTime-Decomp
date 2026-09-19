@@ -1,3 +1,10 @@
+/*
+ * Jump target arc (overlay 20, 0x020C34A4-0x020C3724).
+ *
+ * The arc toward the target, the mode the attack is in, the finish, and the
+ * reset that puts the actor back at its starting position.
+ */
+
 #include <game/battle_effect.h>
 #include <game/battle_scene.h>
 #include <game/overlay020_attack_state.h>

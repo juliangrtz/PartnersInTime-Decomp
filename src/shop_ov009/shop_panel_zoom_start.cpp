@@ -1,3 +1,9 @@
+/*
+ * Shop panel zoom start (overlay 9, 0x020770A4-0x020770FC).
+ *
+ * Begins a panel's closing zoom.
+ */
+
 #include "shop_panel_zoom_internal.h"
 
 extern "C" void ShopPanelZoom_BeginClose(void)

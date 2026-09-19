@@ -1,3 +1,10 @@
+/*
+ * Title prompt (overlay 6, 0x02072AE4-0x02072F44).
+ *
+ * The "press start" prompt: its scaling animation, its draw, and the rumble
+ * prompt shown when a Rumble Pak is present.
+ */
+
 #include "title_sequence_internal.h"
 #include <game/heap.h>
 void func_ov006_0207380c(void *);

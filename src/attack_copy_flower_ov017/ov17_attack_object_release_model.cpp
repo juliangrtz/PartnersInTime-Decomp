@@ -1,3 +1,10 @@
+/*
+ * Copy Flower object list (overlay 17, 0x020C4260-0x020C4474).
+ *
+ * The participant list the attack keeps: appending, removing the idle entries,
+ * and the attack object's own initialize and model release.
+ */
+
 #include "participant_internal.h"
 
 extern "C" {

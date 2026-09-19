@@ -1,3 +1,9 @@
+/*
+ * Elder Princess Shroob: projectile wait (overlay 25, 0x020C4F60-0x020C4FD8).
+ *
+ * Holds the sequence until every projectile has finished.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

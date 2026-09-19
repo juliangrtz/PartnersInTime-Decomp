@@ -36,15 +36,16 @@ The source links open each overlay's main source directory.
 | [18](../../src/attack_pocket_chomp_ov018/) | Pocket Chomps | 6,332 / 18,036 | 35.11% | Tuning tables, Chomp entry/exit, animation, support attachment and attacks, anchor offsets and tether setup. |
 | [20](../../src/attack_jump_ov020/) | Jump attack | 2,116 / 9,204 | 22.99% | Attack allocation, resources, actor approach, support states, animation timing, target-relative arcs and phase transitions. |
 | [21](../../src/attack_hammer_ov021/) | Hammer attack | 2,228 / 5,280 | 42.20% | Entry, hit setup, primary/secondary transitions, model flags and return cleanup. |
-| [25](../../src/enemy_effect_ov025/) | Enemy projectile and effect tasks | 15,844 / 38,024 | 41.67% | Projectile preparation, emission, trails and impacts; linked effects, damage, chain movement, task waits and cleanup. |
+| [25](../../src/elder_princess_shroob_ov025/) | Elder Princess Shroob fight | 15,844 / 38,024 | 41.67% | Projectile preparation, emission, trails and impacts; linked effects, damage, chain movement, task waits and cleanup. |
 | [26](../../src/battle_item_ov026/) | Battle item use | 3,716 / 14,452 | 25.71% | Resource selection, item entry and launch, party pairing, effect allocation and cleanup, saved state and position helpers. |
 
 The named attacks above are backed by recorded in-game selections and runtime
 checks in the [reconstruction milestones](../BATTLE_MATCHING_MILESTONES.md),
 [battle map](BATTLE_MAP.md) and [runtime notes](RUNTIME_ANALYSIS.md).
 Smash Eggs was confirmed through its menu selection, actor command 8 and
-overlay 15's native entry callback. Overlay 25's source establishes
-projectile and effect behavior, but does not yet identify every enemy using it.
+overlay 15's native entry callback. Overlay 25 holds the Elder Princess Shroob
+fight; its source establishes the projectile, chain and linked-effect behavior
+used there.
 Runtime coverage varies by function; matching bytes do not imply every branch
 has been exercised in the emulator.
 

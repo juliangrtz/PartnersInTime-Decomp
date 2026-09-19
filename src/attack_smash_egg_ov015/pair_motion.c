@@ -1,3 +1,9 @@
+/*
+ * Smash Egg pair launch (overlay 15, 0x020C3610-0x020C37B0).
+ *
+ * Hides the attack objects and begins the paired launch.
+ */
+
 #include "actor_internal.h"
 
 void Overlay15Attack_HideAttackObjects(Overlay15AttackObjectPairState *state)

@@ -1,3 +1,9 @@
+/*
+ * Selected panel model (overlay 9, 0x02076AE4-0x02076B28).
+ *
+ * Draws the model of the currently selected panel.
+ */
+
 #include "shop_rows_internal.h"
 extern "C" {
 extern s8 data_ov009_0207ea3c[];

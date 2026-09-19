@@ -1,3 +1,9 @@
+/*
+ * Pocket Chomp adult jump (overlay 18, 0x020C625C-0x020C6330).
+ *
+ * Begins an adult participant's jump.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

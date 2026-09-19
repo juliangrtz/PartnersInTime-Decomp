@@ -1,3 +1,10 @@
+/*
+ * Bro Flower projectile positioning (overlay 14, 0x020C50A0-0x020C53D4).
+ *
+ * Places the projectile relative to the participant holding it and switches it
+ * between carried and thrown mode.
+ */
+
 #include <game/overlay014_projectile.h>
 extern "C" {
 #include <game/battle_effect.h>

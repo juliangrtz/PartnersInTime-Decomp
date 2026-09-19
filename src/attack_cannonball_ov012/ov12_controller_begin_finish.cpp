@@ -1,3 +1,10 @@
+/*
+ * Cannonballer arc finish (overlay 12, 0x020C3888-0x020C3AFC).
+ *
+ * Continues the arc, advances its animation and begins the finishing phase once
+ * the controller reports it is idle.
+ */
+
 #include "motion_internal.h"
 
 extern "C" {

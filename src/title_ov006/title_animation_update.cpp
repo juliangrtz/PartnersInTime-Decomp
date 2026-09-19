@@ -1,3 +1,9 @@
+/*
+ * Title animation update (overlay 6, 0x0206ACB8-0x0206AE44).
+ *
+ * The per-frame step of the title animation controller.
+ */
+
 #include "title_animation_internal.h"
 extern "C" {
 #include <game/input.h>

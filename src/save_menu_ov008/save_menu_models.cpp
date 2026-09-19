@@ -1,3 +1,9 @@
+/*
+ * Save menu models (overlay 8, 0x0206BF64-0x0206C078).
+ *
+ * Creates the 3D models the save menu draws.
+ */
+
 #include <game/battle_scene.h>
 extern "C" {
 #include <game/save_menu.h>

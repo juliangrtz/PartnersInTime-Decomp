@@ -1,3 +1,11 @@
+/*
+ * Save menu resources (overlay 8, 0x02071D30-0x020727D8).
+ *
+ * Loads the save menu's archives, the location preview images and the text
+ * background, and builds the inverted palette the highlighted rows use. Freeing
+ * releases the three owned buffers the workspace holds.
+ */
+
 #include "save_menu_internal.h"
 
 typedef struct SaveMenuResourceView {

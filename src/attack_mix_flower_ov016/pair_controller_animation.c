@@ -1,3 +1,9 @@
+/*
+ * Mix Flower pair animation (overlay 16, 0x020C36E0-0x020C3854).
+ *
+ * Starts the paired controller's animation and scales it each frame.
+ */
+
 #include "pair_effects_internal.h"
 
 void Overlay16PairController_StartAnimation(Overlay16PairController *controller)

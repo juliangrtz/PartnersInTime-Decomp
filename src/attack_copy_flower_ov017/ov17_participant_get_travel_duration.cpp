@@ -1,3 +1,9 @@
+/*
+ * Copy Flower travel timing (overlay 17, 0x020C2B44-0x020C2B8C).
+ *
+ * How long a participant takes to reach its destination.
+ */
+
 #include "participant_internal.h"
 
 extern "C" {

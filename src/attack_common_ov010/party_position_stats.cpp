@@ -1,5 +1,13 @@
 extern "C" {
 
+/*
+ * Party positions and averaged stats (overlay 10, 0x020C259C-0x020C2978).
+ *
+ * Where an attack should place its effects and sparks relative to the party and
+ * the enemy's centre, and the averaged party stats the damage formula for a
+ * shared attack is computed from.
+ */
+
 #include <nitro/fx.h>
 #include <game/battle_scene.h>
 #include <game/battle_actor.h>

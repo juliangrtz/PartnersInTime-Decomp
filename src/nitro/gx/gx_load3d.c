@@ -26,7 +26,7 @@ extern u32 data_02062c98, data_02062c9c;
 extern int data_02059d78;
 extern void func_0203b380(int, const void *, void *, u32, void *, void *);
 extern void func_0203b578(int, const void *, void *, u32);
-extern void func_0203b7b4(const void *, void *, u32);
+extern void func_0203b7b4(const void *source, void *destination, u32 size);
 
 void GX_LoadTex(const u8 *source, u32 offset, u32 size)
 {
@@ -76,7 +76,6 @@ extern int func_02035804(void);
 extern void func_02035b0c(int banks);
 extern void func_0203b380(int channel, const void *source, void *destination,
                           u32 size, void *callback, void *argument);
-extern void func_0203b7b4(const void *source, void *destination, u32 size);
 
 void func_02038768(void) {
     int banks = func_02035804();

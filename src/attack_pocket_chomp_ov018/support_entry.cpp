@@ -1,3 +1,10 @@
+/*
+ * Pocket Chomp support entry (overlay 18, 0x020C5670-0x020C57B0).
+ *
+ * The adult's entry, the effect chosen for it, and the target height scaling the
+ * entry uses.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

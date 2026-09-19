@@ -1,3 +1,10 @@
+/*
+ * Title backdrop (overlay 6, 0x02073BF8-0x02073DC0).
+ *
+ * Builds the scrolling backdrop's point groups with their velocities and
+ * animations, releases them, and collapses the effect when the player skips.
+ */
+
 #include "title_sequence_internal.h"
 extern const TitleBackdropPoint data_ov006_0207b1d0[], data_ov006_0207b218[];
 extern const TitleBackdropPoint data_ov006_0207b254[], data_ov006_0207b27c[];

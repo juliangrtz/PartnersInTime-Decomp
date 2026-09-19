@@ -1,3 +1,10 @@
+/*
+ * Party equipment bitmap (overlay 9, 0x0207BF1C-0x0207C100).
+ *
+ * Draws the name of the item a party member has equipped into the party
+ * display's bitmap.
+ */
+
 #include "shop_scene_internal.h"
 extern "C" {
 #include <game/shop_graphics.h>

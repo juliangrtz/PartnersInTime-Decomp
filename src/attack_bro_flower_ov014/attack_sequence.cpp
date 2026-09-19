@@ -1,3 +1,10 @@
+/*
+ * Bro Flower sequence (overlay 14, 0x020C5724-0x020C5E2C).
+ *
+ * The per-frame entry and sequence updates, plus participant setup and the
+ * restore that returns an actor to its idle animation afterwards.
+ */
+
 #include "flower_internal.h"
 
 extern "C" {

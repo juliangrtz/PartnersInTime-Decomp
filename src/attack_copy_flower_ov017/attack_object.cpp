@@ -1,3 +1,10 @@
+/*
+ * Copy Flower object (overlay 17, 0x020C33A4-0x020C3748).
+ *
+ * Launching the object, its horizontal exit, the model configuration it uses,
+ * and the idle test the sequence waits on.
+ */
+
 #include <game/battle_scene.h>
 #include <game/overlay017_attack.h>
 

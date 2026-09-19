@@ -1,3 +1,9 @@
+/*
+ * Bitmap placeholder (overlay 9, 0x0207C230-0x0207C2AC).
+ *
+ * Draws the dash shown where a value is not available.
+ */
+
 #include "shop_graphics_internal.h"
 
 void ShopBitmap_DrawPlaceholder(int x, int y)

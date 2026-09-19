@@ -1,3 +1,10 @@
+/*
+ * Elder Princess Shroob: enemy segment chains (overlay 25, 0x020C6C4C-0x020C7124).
+ *
+ * Builds the segmented chains an enemy attack drags along and emits the travel
+ * effects that follow them.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

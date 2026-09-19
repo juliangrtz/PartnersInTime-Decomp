@@ -1,3 +1,9 @@
+/*
+ * Shop panel slide (overlay 9, 0x02074EA8-0x02075020).
+ *
+ * The vertical slide between the buying and selling panels.
+ */
+
 #include "shop_panel_slide_internal.h"
 
 extern "C" void ShopPanelSlide_Update(ShopPanelSlideTask *task)

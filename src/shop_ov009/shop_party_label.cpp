@@ -1,3 +1,9 @@
+/*
+ * Party label (overlay 9, 0x0207B4F0-0x0207B574).
+ *
+ * Draws a party member's label in the equipment comparison.
+ */
+
 #include "shop_party_internal.h"
 
 extern "C" void ShopPartyDisplay_DrawLabel(ShopRowTask *task)

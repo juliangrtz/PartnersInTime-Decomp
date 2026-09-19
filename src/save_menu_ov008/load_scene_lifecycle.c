@@ -1,3 +1,9 @@
+/*
+ * Load scene lifecycle (overlay 8, 0x0206F7B0-0x0206FED8).
+ *
+ * Init, Destroy and Delete for the load scene.
+ */
+
 #include "save_menu_internal.h"
 
 SaveSceneTask *LoadScene_Init(SaveSceneTask *task, u32 priority, u32 unused)

@@ -1,3 +1,9 @@
+/*
+ * Smash Egg pair retreat (overlay 15, 0x020C3278-0x020C337C).
+ *
+ * Begins the retreat both actors play after the throw.
+ */
+
 #include "actor_internal.h"
 
 enum { OVERLAY15_VIEW_ORIGIN_X_OFFSET = 0xCB9C };

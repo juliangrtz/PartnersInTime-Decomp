@@ -1,3 +1,11 @@
+/*
+ * Bro Flower projectile state (overlay 14, 0x020C4130-0x020C4464).
+ *
+ * Finds a free projectile slot, reports when they are all idle, and maps the
+ * projectile's level onto the animation it plays - the Bro and Ice variants
+ * share this code and differ by level.
+ */
+
 #include "flower_internal.h"
 
 extern "C" {

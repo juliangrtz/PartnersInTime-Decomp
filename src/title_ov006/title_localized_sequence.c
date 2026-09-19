@@ -1,3 +1,11 @@
+/*
+ * Localized title sequence (overlay 6, 0x02070C7C-0x020718FC).
+ *
+ * The part of the title animation that differs per language: its sprite
+ * animations are built from the localized archive, started with the sequence and
+ * released with it.
+ */
+
 #include <game/title_animation.h>
 #include <game/title_localized_sequence.h>
 #include <game/heap.h>

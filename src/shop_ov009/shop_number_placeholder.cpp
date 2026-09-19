@@ -1,3 +1,9 @@
+/*
+ * Number placeholder (overlay 9, 0x0207C5D4-0x0207C6A4).
+ *
+ * Draws the placeholder shown in a numeric field before it holds a value.
+ */
+
 #include "shop_graphics_internal.h"
 extern "C" {
 #include <game/overlay005_display.h>

@@ -1,3 +1,10 @@
+/*
+ * Smash Egg actor controller (overlay 15, 0x020C4028-0x020C4570).
+ *
+ * Drives the actors through the attack; the functions here are still
+ * address-named entry points reached through the controller's table.
+ */
+
 #include "actor_internal.h"
 
 enum Overlay15AttackObjectId {

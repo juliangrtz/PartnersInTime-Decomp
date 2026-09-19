@@ -1,3 +1,10 @@
+/*
+ * Title brightness fades (overlay 6, 0x02074320-0x02074538).
+ *
+ * The master-brightness fade the title screen opens and closes with: a curve
+ * evaluated each frame and uploaded to the brightness registers.
+ */
+
 #include <game/title_brightness.h>
 #include <nitro/gx_init.h>
 extern const s16 FX_SinCosTable_[];

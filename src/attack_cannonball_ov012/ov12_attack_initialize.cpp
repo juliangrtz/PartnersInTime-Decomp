@@ -1,3 +1,9 @@
+/*
+ * Cannonballer setup (overlay 12, 0x020C5614-0x020C59E0).
+ *
+ * Allocates the attack's work area, resources and objects.
+ */
+
 #include "motion_internal.h"
 
 extern "C" {

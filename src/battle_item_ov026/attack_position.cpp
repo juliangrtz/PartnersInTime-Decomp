@@ -1,3 +1,10 @@
+/*
+ * Battle item positions (overlay 26, 0x020C3570-0x020C3850).
+ *
+ * The world, view, actor and per-phase positions the item's effects are placed
+ * at.
+ */
+
 #include "item_internal.h"
 
 extern "C" {

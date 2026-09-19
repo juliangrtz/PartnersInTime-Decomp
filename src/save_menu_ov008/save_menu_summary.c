@@ -1,3 +1,10 @@
+/*
+ * Save slot summaries (overlay 8, 0x02073AC4-0x02073F04).
+ *
+ * Builds the line of information shown for a slot - from the live game state
+ * for the current file, from the stored file for the others.
+ */
+
 #include "save_menu_internal.h"
 
 typedef struct StoredSaveMenuPartyMember {

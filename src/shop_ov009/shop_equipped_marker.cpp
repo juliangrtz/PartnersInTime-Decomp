@@ -1,3 +1,9 @@
+/*
+ * Equipped-item markers (overlay 9, 0x0207337C-0x02073538).
+ *
+ * Marks the rows holding items a party member already has equipped.
+ */
+
 #include "shop_rows_internal.h"
 extern "C" {
 #include <game/save_data.h>

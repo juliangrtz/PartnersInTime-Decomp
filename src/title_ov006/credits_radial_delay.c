@@ -1,3 +1,10 @@
+/*
+ * Credits radial delay transition (overlay 6, 0x020762EC-0x02076520).
+ *
+ * A transition whose cells start after a delay proportional to their distance
+ * from the centre, so the change sweeps outward.
+ */
+
 #include "credits_transition_internal.h"
 extern const s32 data_ov006_0207bfe0[][4];
 void CreditsRadialDelay_Update(CreditsMotion *particle)

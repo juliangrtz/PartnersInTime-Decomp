@@ -1,4 +1,17 @@
 extern "C" {
+
+/*
+ * Overlay 5 resource registry and sound queue (overlay 5, 0x020699F0-0x02069D6C).
+ *
+ * The reference-counted registry: entries live on one intrusive list whose head
+ * and tail markers are embedded in the list itself, so insertion and removal
+ * never special-case the ends. Looking an entry up by key and releasing the last
+ * reference destroys it through the entry's own interface.
+ *
+ * The 32-slot delayed sound queue shares this file because its slots are
+ * registry entries too.
+ */
+
 #include <nitro.h>
 }
 

@@ -1,3 +1,9 @@
+/*
+ * Save menu motion (overlay 8, 0x0206C290-0x0206C378).
+ *
+ * The panel motion the save menu plays, initialized once and stepped per frame.
+ */
+
 #include "save_menu_internal.h"
 
 void SaveMenuMotion_Initialize(SaveMenuMotion *motion, int x, int y)

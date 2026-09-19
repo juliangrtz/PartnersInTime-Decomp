@@ -1,3 +1,9 @@
+/*
+ * Trampoline landing effect (overlay 13, 0x020C5848-0x020C5AFC).
+ *
+ * Attack setup and the effect shown where a jump lands.
+ */
+
 #include "trampoline_internal.h"
 
 extern "C" {

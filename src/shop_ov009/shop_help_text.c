@@ -1,3 +1,9 @@
+/*
+ * Shop help text (overlay 9, 0x0207A844-0x0207A9A8).
+ *
+ * The help line at the bottom of the shop and the background it is drawn on.
+ */
+
 #include <game/shop_panels.h>
 extern u8 data_ov009_0207ea3c[];
 extern ShopText *data_ov009_0207ea30;

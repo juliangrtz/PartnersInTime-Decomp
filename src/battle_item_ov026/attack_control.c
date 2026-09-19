@@ -1,3 +1,10 @@
+/*
+ * Battle item state (overlay 26, 0x020C2AE0-0x020C2D38).
+ *
+ * Whether the item's resources are still loading, the action and tracked-object
+ * state it is in, the animation it may set, and the teardown.
+ */
+
 #include <game/battle_object.h>
 #include <game/battle_actor.h>
 #include <game/overlay026_attack.h>

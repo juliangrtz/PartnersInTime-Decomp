@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Shop item icons (overlay 9, 0x02074464-0x0207459C).
+ *
+ * Finds an item's icon and copies it into the panel that displays it.
+ */
+
 #include <game/overlay005_display.h>
 }
 #include <game/shop_panels.h>

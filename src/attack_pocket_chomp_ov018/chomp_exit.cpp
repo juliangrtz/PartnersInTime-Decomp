@@ -1,3 +1,9 @@
+/*
+ * Pocket Chomp exit (overlay 18, 0x020C3F70-0x020C40B8).
+ *
+ * The Chomp's exit, with and without the support character attached.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

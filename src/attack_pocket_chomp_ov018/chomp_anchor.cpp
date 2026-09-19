@@ -1,3 +1,10 @@
+/*
+ * Pocket Chomp anchor (overlay 18, 0x020C3CFC-0x020C3EA8).
+ *
+ * The offset an object is attached at relative to the Chomp, and the attachment
+ * itself.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

@@ -1,3 +1,11 @@
+/*
+ * Title panels (overlay 6, 0x0206DB4C-0x0206E594).
+ *
+ * The panels the title logo is assembled from: their resources, the quad each
+ * is drawn as, the fade-in and pulse they play, and the trail they record and
+ * drain so a moving panel leaves a streak behind it.
+ */
+
 #include <game/title_animation.h>
 #include <game/title_panel_motion.h>
 #include <game/random.h>

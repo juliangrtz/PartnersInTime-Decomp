@@ -1,3 +1,9 @@
+/*
+ * Shop panel navigation (overlay 9, 0x02079444-0x02079808).
+ *
+ * The cursor and scroll arrows drawn over a shop panel.
+ */
+
 #include "shop_navigation_internal.h"
 extern "C" {
 void ShopPanelNavigation_DrawCursor(ShopRowTask *task)

@@ -1,3 +1,11 @@
+/*
+ * Pocket Chomp tuning tables (overlay 18, 0x020C30F0-0x020C3298).
+ *
+ * The threshold rows the attack reads its motion scale, travel speed, distance,
+ * input window, launch height, alternate-actor chance, duration and terminal
+ * velocity from. The Q8 values are fixed-point multipliers.
+ */
+
 #include <game/overlay018_attack.h>
 
 enum Overlay18AttackThresholdConstant {

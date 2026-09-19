@@ -1,3 +1,9 @@
+/*
+ * Save write rollback (overlay 8, 0x0206ABD0-0x0206AC14).
+ *
+ * Starts the rollback shown when a write fails.
+ */
+
 #include "save_write_effects_internal.h"
 
 void SaveMenuWrite_StartRollback(void)

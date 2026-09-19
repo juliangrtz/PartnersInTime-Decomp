@@ -1,3 +1,9 @@
+/*
+ * Load scene geometry (overlay 8, 0x0206F48C-0x0206F588).
+ *
+ * Sets up the projection and geometry state the load menu draws in.
+ */
+
 #include "save_menu_internal.h"
 
 void LoadScene_InitGeometry(SaveSceneTask *unused)

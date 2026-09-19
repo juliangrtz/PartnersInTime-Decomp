@@ -1,3 +1,9 @@
+/*
+ * Cannonballer controller (overlay 12, 0x020C4FA8-0x020C50C0).
+ *
+ * Sets up and tears down the controller that drives the launch.
+ */
+
 #include <game/battle_actor.h>
 #include <game/overlay012_attack_state.h>
 

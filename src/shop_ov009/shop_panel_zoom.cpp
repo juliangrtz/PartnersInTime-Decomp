@@ -1,3 +1,9 @@
+/*
+ * Shop panel zoom (overlay 9, 0x02078460-0x0207865C).
+ *
+ * The zoom a panel opens and closes with, stepped per frame.
+ */
+
 #include "shop_panel_zoom_internal.h"
 #define WORK data_ov009_0207ea3c
 

@@ -1,3 +1,10 @@
+/*
+ * Erase confirmation prompt (overlay 8, 0x02076934-0x02076B38).
+ *
+ * The yes/no prompt shown before a save file is erased: its cursor and the
+ * display planes that are switched on and off with it.
+ */
+
 #include <game/battle_scene.h>
 #include <game/save_menu.h>
 extern "C" {

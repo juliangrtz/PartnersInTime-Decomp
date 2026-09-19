@@ -1,3 +1,10 @@
+/*
+ * Elder Princess Shroob: alternate effect sequence (overlay 25, 0x020C34E8-0x020C3748).
+ *
+ * The alternate-renderer variant of an effect sequence, with the particle and
+ * model-effect teardown it finishes through.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

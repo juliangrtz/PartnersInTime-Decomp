@@ -1,3 +1,11 @@
+/*
+ * Shop stock tables (overlay 9, 0x0207DDF4-0x0207E008).
+ *
+ * What a shop sells: the tier descriptor for the shop being visited, the item
+ * pool it draws from, and the mapping from a menu category to the item class it
+ * lists. The inventory accessors return the party's array for that class.
+ */
+
 #include <game/shop_stock.h>
 
 extern const u32 gShop0TierDescriptors

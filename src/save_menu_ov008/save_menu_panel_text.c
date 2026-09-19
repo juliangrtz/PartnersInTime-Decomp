@@ -1,3 +1,9 @@
+/*
+ * Save panel text (overlay 8, 0x02071964-0x02071A50).
+ *
+ * Loads the location name for a slot and prepares the panel's text.
+ */
+
 #include "save_menu_internal.h"
 
 extern u16 data_ov008_0207aa66[3];

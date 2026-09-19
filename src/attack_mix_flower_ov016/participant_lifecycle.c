@@ -1,3 +1,9 @@
+/*
+ * Mix Flower participant lifecycle (overlay 16, 0x020C6560-0x020C65C4).
+ *
+ * Initializes a participant and hides it again.
+ */
+
 #include "pair_effects_internal.h"
 
 void Overlay16Participant_Initialize(Overlay16Participant *participant, BattleSceneObject *object,

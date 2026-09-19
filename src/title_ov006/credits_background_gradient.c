@@ -1,3 +1,10 @@
+/*
+ * Credits gradient background (overlay 6, 0x02079744-0x020798C8).
+ *
+ * Draws the credits backdrop as a stack of textured quads whose vertex colours
+ * interpolate, so the gradient costs no texture memory.
+ */
+
 #include "credits_transition_internal.h"
 
 /* Unit quad strip, expanded to the screen size by the matrix below. */

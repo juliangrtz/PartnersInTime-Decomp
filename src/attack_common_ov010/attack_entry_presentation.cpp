@@ -1,3 +1,11 @@
+/*
+ * Attack entry and rating display (overlay 10, 0x020C1C84-0x020C1F48).
+ *
+ * Shared by every Bros. Attack: bringing the participants on screen, stopping
+ * all motion channels again, moving the battle backdrop for the attack, and
+ * showing the rating the player earned when it ends.
+ */
+
 #include "attack_common_internal.h"
 
 extern "C" {

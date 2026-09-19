@@ -1,3 +1,12 @@
+/*
+ * Item panel queries (overlay 9, 0x0207017C-0x02070334).
+ *
+ * Reading the shared item panel: the current selection, the item on a row, how
+ * many rows are visible, whether the list can scroll further, and the panel's
+ * position. The list is a ring, so GetRingFirst is where the visible window
+ * starts.
+ */
+
 #include "shop_panels_internal.h"
 
 int ShopItemPanel_IsWindowAtEdge(ShopItemPanel *panel, int last)

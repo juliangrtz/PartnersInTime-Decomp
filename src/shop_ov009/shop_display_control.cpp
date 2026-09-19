@@ -1,3 +1,9 @@
+/*
+ * Shop display setup (overlay 9, 0x0207B9D0-0x0207BBE0).
+ *
+ * Brings up the shop's display configuration and draws the currency readout.
+ */
+
 #include "shop_currency_internal.h"
 
 extern "C" void ShopDisplay_Init(void)

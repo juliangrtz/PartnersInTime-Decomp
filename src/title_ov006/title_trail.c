@@ -1,3 +1,10 @@
+/*
+ * Title trail buffers (overlay 6, 0x02072768-0x02072988).
+ *
+ * The fading pixel trails the title elements leave: a stamp drawn into the trail
+ * buffers, which are dimmed each frame and uploaded as one image.
+ */
+
 #include "title_trail_internal.h"
 void *func_020365a4(void), *func_0203655c(void);
 void func_02018ce0(void *, int, int, int);

@@ -1,3 +1,10 @@
+/*
+ * Shop list positions (overlay 9, 0x0207D794-0x0207D92C).
+ *
+ * Where each point and row of the list sits, its draw priority, and the scale
+ * the whole list is drawn at, plus the exit that collapses it.
+ */
+
 #include "shop_list_internal.h"
 
 void ShopList_BeginExit(ShopList *list)

@@ -1,3 +1,9 @@
+/*
+ * Bro Flower projectile hiding (overlay 14, 0x020C3CE4-0x020C3DAC).
+ *
+ * Hides a projectile and starts the bounce it plays on impact.
+ */
+
 #include <game/overlay014_projectile.h>
 extern "C" {
 #include <game/battle_effect.h>

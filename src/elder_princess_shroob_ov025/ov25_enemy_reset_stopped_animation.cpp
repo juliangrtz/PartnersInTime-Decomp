@@ -1,3 +1,9 @@
+/*
+ * Elder Princess Shroob: stopped animation reset (overlay 25, 0x020CA2F8-0x020CA350).
+ *
+ * Puts an enemy whose animation was stopped back on a running one.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

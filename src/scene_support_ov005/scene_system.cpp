@@ -1,4 +1,14 @@
 extern "C" {
+
+/*
+ * Overlay 5 scene system tasks (overlay 5, 0x02065D40-0x02065F10).
+ *
+ * The two tasks that drive a scene frame: one reads input and the touch panel
+ * and advances the element lists, the other finishes the frame and waits for
+ * VBlank. The state words at the top are the scene's frame counter and mode,
+ * which the rest of the overlay reads through the accessors here.
+ */
+
 #include <game/task.h>
 #include <game/heap.h>
 }

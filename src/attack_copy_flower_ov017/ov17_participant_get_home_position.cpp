@@ -1,3 +1,9 @@
+/*
+ * Copy Flower home position (overlay 17, 0x020C2C28-0x020C2C94).
+ *
+ * Where a participant returns to after its part of the attack.
+ */
+
 #include "participant_internal.h"
 
 extern "C" {

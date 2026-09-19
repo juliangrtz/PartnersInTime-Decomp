@@ -1,3 +1,11 @@
+/*
+ * Title textures (overlay 6, 0x020718FC-0x02071D70).
+ *
+ * Loading and uploading the title screen's textures, decoding the format, width
+ * and height codes out of the archive header, and drawing a texture as a quad or
+ * as a laid-out group.
+ */
+
 #include <game/title_animation.h>
 #include <game/title_effects.h>
 #include "title_graphics_internal.h"

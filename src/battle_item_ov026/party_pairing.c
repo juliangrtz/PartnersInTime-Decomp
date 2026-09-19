@@ -1,3 +1,10 @@
+/*
+ * Battle item party pairing (overlay 26, 0x020C34A8-0x020C3570).
+ *
+ * Whether the chosen partner is a valid target and whether the baby pair is in
+ * a state that allows the item to be used.
+ */
+
 #include <game/battle_actor.h>
 #include <game/overlay026_attack.h>
 

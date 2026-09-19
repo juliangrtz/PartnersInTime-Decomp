@@ -1,3 +1,10 @@
+/*
+ * Trampoline object pair (overlay 13, 0x020C2AE0-0x020C2CD4).
+ *
+ * The two trampoline objects: preparing them, keeping them aligned, starting
+ * their retreat and advancing the motion tuning between uses.
+ */
+
 #include <game/battle_object.h>
 #include <game/overlay013_attack.h>
 

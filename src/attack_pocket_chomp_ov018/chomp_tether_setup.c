@@ -1,3 +1,10 @@
+/*
+ * Pocket Chomp tether (overlay 18, 0x020C2CA4-0x020C2D34).
+ *
+ * Starts the tether between the Chomp and its support and clamps the distance
+ * the support may be dragged to.
+ */
+
 #include <game/pocket_chomp.h>
 
 void func_ov018_020c2d34(BattleSceneObject *object, BattleMotionChannel *channel);

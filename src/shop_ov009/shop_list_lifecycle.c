@@ -1,3 +1,9 @@
+/*
+ * Shop list setup (overlay 9, 0x0207DBA4-0x0207DBC0).
+ *
+ * Initializes the shop's point list.
+ */
+
 #include "shop_list_internal.h"
 
 ShopList *ShopList_Init(ShopList *list)

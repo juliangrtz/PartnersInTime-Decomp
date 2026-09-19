@@ -1,3 +1,9 @@
+/*
+ * Shop list scaling (overlay 9, 0x0207CEB0-0x0207CFC8).
+ *
+ * Animates the list's scale between its collapsed and expanded sizes.
+ */
+
 #include "shop_list_effects_internal.h"
 
 extern "C" void ShopListScale_Update(ShopListScaleTask *task)

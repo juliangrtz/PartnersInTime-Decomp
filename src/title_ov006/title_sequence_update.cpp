@@ -1,3 +1,11 @@
+/*
+ * Title sequence state machine (overlay 6, 0x0206C3C8-0x0206CEA0).
+ *
+ * Runs the title animation's phases once per frame, draws and uploads its
+ * elements, and handles the exit request - including the idle timer that starts
+ * the demo when the player does nothing.
+ */
+
 #include "title_sequence_internal.h"
 #include "title_animation_internal.h"
 extern "C" {

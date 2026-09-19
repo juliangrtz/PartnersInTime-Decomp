@@ -1,3 +1,9 @@
+/*
+ * Pocket Chomp animation (overlay 18, 0x020C43DC-0x020C4518).
+ *
+ * Sets the Chomp's animation and places it on the requested side.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

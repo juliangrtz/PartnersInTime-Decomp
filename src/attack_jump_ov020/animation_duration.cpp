@@ -1,3 +1,9 @@
+/*
+ * Jump animation timing (overlay 20, 0x020C2AE0-0x020C2B40).
+ *
+ * Fits an animation into the duration the phase has left.
+ */
+
 #include "attack_internal.h"
 
 extern "C" {

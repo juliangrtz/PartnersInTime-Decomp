@@ -1,7 +1,7 @@
 #include <game/sprite_window.h>
 #include <game/heap.h>
-extern s16 func_0201d320(GameWindowManager *, const GameWindowProperties *, int);
 extern void func_0201a714(GameWindowManager *, GameWindow *);
+extern s16 func_0201d320(GameWindowManager *manager, const GameWindowProperties *properties, int requested_index);
 
 int GameSpriteWindow_OpenWithProperties(GameSpriteWindowManager *manager, const GameWindowProperties *properties, int requested_index)
 {
@@ -116,7 +116,6 @@ GameSpriteWindowManager *GameSpriteWindow_Delete(GameSpriteWindowManager *manage
     return manager;
 }
 
-extern s16 func_0201d320(GameWindowManager *manager, const GameWindowProperties *properties, int requested_index);
 
 s16 GameSpriteWindow_Open(GameSpriteWindowManager *manager, const GameWindowProperties *properties, int requested_index) {
     s16 free_slot;

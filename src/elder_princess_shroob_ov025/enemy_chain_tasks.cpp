@@ -1,3 +1,11 @@
+/*
+ * Elder Princess Shroob: enemy chain tasks (overlay 25, 0x020C93D0-0x020C9BE0).
+ *
+ * The queued tasks a chained enemy effect runs through: starting its model
+ * effect, picking the targets it tracks, waiting for the pair, and applying
+ * reflected and landing damage.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

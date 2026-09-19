@@ -1,3 +1,12 @@
+/*
+ * Overlay 5 resource holders (overlay 5, 0x02067638-0x0206786C).
+ *
+ * A holder owns two buffers and two registry entries and frees all four when it
+ * is released, which is how a scene hands a whole resource set back in one call.
+ * The master-brightness helper at the top of the range belongs to the same unit
+ * in the original build.
+ */
+
 #include <nitro.h>
 #include <game/heap.h>
 

@@ -1,3 +1,10 @@
+/*
+ * Credits illustration loading (overlay 6, 0x020786E0-0x02078938).
+ *
+ * Reads the next illustration out of the archive while the current one is still
+ * on screen, so the transition never waits on the filesystem.
+ */
+
 #include "credits_transition_internal.h"
 
 /* Fill the inactive texture slot in 16 chunks before switching illustrations. */

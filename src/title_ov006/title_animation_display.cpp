@@ -1,3 +1,10 @@
+/*
+ * Title animation display setup (overlay 6, 0x0206B1DC-0x0206B77C).
+ *
+ * Configures the display the title animation renders into and releases that
+ * render state again.
+ */
+
 #include "title_animation_internal.h"
 #include <game/palette_animation.h>
 #include <game/texture_allocation.h>

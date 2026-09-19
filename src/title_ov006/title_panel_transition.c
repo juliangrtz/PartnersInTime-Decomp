@@ -1,3 +1,12 @@
+/*
+ * Title panel split-screen transition (overlay 6, 0x02074538-0x02075014).
+ *
+ * The transition that splits the screen into scrolling bands. It drives the
+ * window and blend registers per scanline from an HBlank handler, which is why
+ * the layer setup, the scroll values and the HBlank enable all live together
+ * here.
+ */
+
 #include <game/title_animation.h>
 #include <game/title_panel_transition.h>
 #include <nitro.h>

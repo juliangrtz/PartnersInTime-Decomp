@@ -1,3 +1,10 @@
+/*
+ * Pocket Chomp support animation (overlay 18, 0x020C4908-0x020C4BD0).
+ *
+ * The support character's swing, the impact it spawns, the animation it plays in
+ * step with the Chomp, and the particles it emits.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

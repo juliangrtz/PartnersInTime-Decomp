@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Save slot packing (overlay 8, 0x02073410-0x02073AC4).
+ *
+ * Packs the live game state into the slot layout the battery file stores.
+ */
+
 #include <game/save_state_transfer.h>
 #include <game/save_storage.h>
 #include <game/equipment.h>

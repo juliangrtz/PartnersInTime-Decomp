@@ -1,3 +1,9 @@
+/*
+ * Jump support state (overlay 20, 0x020C30F0-0x020C326C).
+ *
+ * The support character's input window, its return and the mode it is left in.
+ */
+
 #include "attack_internal.h"
 
 void Overlay20Support_BeginInput(Overlay20AttackState *state)

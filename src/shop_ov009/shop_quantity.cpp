@@ -1,3 +1,10 @@
+/*
+ * Quantity panel (overlay 9, 0x02077D50-0x02078460).
+ *
+ * The how-many prompt: the up and down arrows, the digits, the item name and
+ * icon copied beside them, and the running total.
+ */
+
 #include "shop_quantity_internal.h"
 
 extern "C" void ShopQuantity_DrawArrow(ShopQuantityTask *task)

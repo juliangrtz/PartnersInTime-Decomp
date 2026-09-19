@@ -1,3 +1,10 @@
+/*
+ * Smash Egg targeting and badges (overlay 15, 0x020C2AE0-0x020C2BB8).
+ *
+ * Picks the enemy at random and applies the motion adjustments the equipped
+ * badges call for.
+ */
+
 #include "actor_internal.h"
 
 int Overlay15Attack_SelectRandomEnemy(void)

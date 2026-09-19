@@ -1,3 +1,10 @@
+/*
+ * Title scene entry (overlay 6, 0x02075014-0x020754E4).
+ *
+ * The scene's entry point and the task, IRQ and model-controller glue that
+ * brings the title screen up.
+ */
+
 #include <game/battle_scene.h>
 #include <game/battle_effect.h>
 #include <game/title_sprite_sequence.h>

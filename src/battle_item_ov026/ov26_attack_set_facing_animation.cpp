@@ -1,3 +1,9 @@
+/*
+ * Battle item facing (overlay 26, 0x020C4988-0x020C49AC).
+ *
+ * Sets the animation for the direction the actor is facing.
+ */
+
 #include "item_internal.h"
 
 extern "C" {

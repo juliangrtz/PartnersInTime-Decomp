@@ -1,5 +1,12 @@
 extern "C" {
 
+/*
+ * Target selection (overlay 10, 0x020C21D0-0x020C2340).
+ *
+ * Picks the enemy an attack aims at: the one projected to survive the damage
+ * already queued, and the one that should play the reaction.
+ */
+
 #include <nitro/fx.h>
 #include <game/battle_scene.h>
 #include <game/battle_actor.h>

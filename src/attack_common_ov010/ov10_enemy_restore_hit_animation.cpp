@@ -1,3 +1,9 @@
+/*
+ * Enemy hit animation restore (overlay 10, 0x020C11A8-0x020C1304).
+ *
+ * Puts an enemy back on its idle animation after a hit reaction has played out.
+ */
+
 #include "attack_common_internal.h"
 
 extern "C" {

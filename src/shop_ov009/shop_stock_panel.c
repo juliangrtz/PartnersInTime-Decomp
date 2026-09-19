@@ -1,3 +1,10 @@
+/*
+ * Stock panel queries (overlay 9, 0x02072D50-0x02072EDC).
+ *
+ * Reading the owned-stock panel: its category, its row count, the item and
+ * quantity on a row, and its position.
+ */
+
 #include "shop_text_tasks_internal.h"
 
 void ShopStockText_Update(ShopStockTextTask *task)

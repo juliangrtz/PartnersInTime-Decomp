@@ -1,3 +1,9 @@
+/*
+ * Save menu text setup (overlay 8, 0x02075E58-0x02076008).
+ *
+ * Allocates and initializes the save menu's text state.
+ */
+
 #include "save_menu_internal.h"
 
 SaveMenuText *SaveMenuText_Init(SaveMenuText *context)

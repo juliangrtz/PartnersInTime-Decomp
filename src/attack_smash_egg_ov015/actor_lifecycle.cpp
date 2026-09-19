@@ -1,3 +1,10 @@
+/*
+ * Smash Egg actor lifecycle (overlay 15, 0x020C5440-0x020C5570).
+ *
+ * Sets up the actor controller and the hit motion, and restores the actors when
+ * the attack ends.
+ */
+
 #include "actor_internal.h"
 
 extern "C" {

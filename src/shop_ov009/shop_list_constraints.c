@@ -1,3 +1,11 @@
+/*
+ * Shop list physics (overlay 9, 0x0207D4F4-0x0207D660).
+ *
+ * The point list the shop's item list is animated as: velocities are advanced,
+ * pinned points are restored to their anchors, and the whole set is stepped once
+ * per frame.
+ */
+
 #include "shop_list_internal.h"
 
 void ShopList_UpdateVelocities(ShopList *list, ShopListPoint *point, int count)

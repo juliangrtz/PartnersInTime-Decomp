@@ -1,3 +1,10 @@
+/*
+ * Bounce height scaling (overlay 10, 0x020C1304-0x020C13BC).
+ *
+ * Two helpers the attack overlays use to keep a bounce proportional: scaling a
+ * height and adjusting a bounce against the tuning the attack supplied.
+ */
+
 #include <nitro/fx.h>
 #include <game/battle_scene.h>
 #include <game/battle_actor.h>

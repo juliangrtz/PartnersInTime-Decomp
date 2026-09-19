@@ -1,3 +1,14 @@
+/*
+ * Overlay 5 element pool and update lists (overlay 5, 0x02066224-0x02066920).
+ *
+ * The pooled scene elements and the twelve intrusive lists they are distributed
+ * over, with the per-frame update, mark and sweep passes that step them.
+ *
+ * The two resource mixins at the end - ResourceA and ResourceB - are the
+ * attach/get/release protocol an element uses to hold a reference to a shared
+ * resource; the release callback is what unbinds it when the element dies.
+ */
+
 #include <nitro.h>
 #include <nitro/fs.h>
 #include <game/heap.h>

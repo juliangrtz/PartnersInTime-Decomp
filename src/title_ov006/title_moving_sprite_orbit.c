@@ -1,3 +1,9 @@
+/*
+ * Title sprite orbit reset (overlay 6, 0x0206EC20-0x0206ED4C).
+ *
+ * Puts a moving sprite's orbit back to its starting angle and radius.
+ */
+
 #include <game/title_panel_motion.h>
 #include <game/random.h>
 extern const s8 data_ov006_0207b0b8[];

@@ -1,3 +1,10 @@
+/*
+ * Mix Flower motion table (overlay 16, 0x020C2AE0-0x020C2BBC).
+ *
+ * The table of motion records the attack steps through, with the idle and
+ * completion tests the sequence waits on.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_scene.h>
 #include <game/overlay016_attack.h>

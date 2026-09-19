@@ -1,3 +1,10 @@
+/*
+ * Price adjustment display (overlay 9, 0x020789D8-0x02078D00).
+ *
+ * The plus/minus symbol, the adjusted value and the marker that shows how a
+ * price changed, with the mode that selects which of them is drawn.
+ */
+
 #include "shop_price_adjustment_internal.h"
 
 extern "C" void ShopPriceAdjustment_DrawSymbol(ShopPriceAdjustmentTask *task)

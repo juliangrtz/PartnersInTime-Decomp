@@ -1,3 +1,9 @@
+/*
+ * Jump approach (overlay 20, 0x020C3E64-0x020C3EEC).
+ *
+ * Starts the approach toward the target.
+ */
+
 #include "attack_internal.h"
 
 void Overlay20Attack_StartApproach(Overlay20AttackState *state)

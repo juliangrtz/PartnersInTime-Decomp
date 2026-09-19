@@ -1,3 +1,9 @@
+/*
+ * Load menu panels (overlay 8, 0x0206D088-0x0206D1D0).
+ *
+ * Builds the slot panels the load menu shows.
+ */
+
 #include "save_write_effects_internal.h"
 extern const u8 data_ov008_02077f30[2][2];
 extern void func_ov008_0206d47c(MenuElement *);

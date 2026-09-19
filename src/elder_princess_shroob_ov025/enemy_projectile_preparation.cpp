@@ -1,3 +1,10 @@
+/*
+ * Elder Princess Shroob: enemy projectile preparation (overlay 25, 0x020C5EA8-0x020C61E0).
+ *
+ * Loads the projectiles an attack needs and places them, then waits for the
+ * enemy to return before the sequence continues.
+ */
+
 #include "effect_task_internal.h"
 extern "C" {
 void func_ov025_020c5da4(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);

@@ -1,3 +1,9 @@
+/*
+ * Copy Flower participant lifecycle (overlay 17, 0x020C5F90-0x020C60BC).
+ *
+ * Initializes a participant, releases its model and hides it.
+ */
+
 #include "participant_internal.h"
 
 extern "C" {

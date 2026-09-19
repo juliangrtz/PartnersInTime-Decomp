@@ -1,3 +1,11 @@
+/*
+ * Pocket Chomp entry (overlay 18, 0x020C33BC-0x020C3B28).
+ *
+ * The Chomp's arrival: the entry, the small bounce, the reveal, the fall and the
+ * run, with the squash applied each frame. Also moves the adults off screen and
+ * returns the backdrop when the attack is over.
+ */
+
 #include "pocket_chomp_internal.h"
 
 extern "C" {

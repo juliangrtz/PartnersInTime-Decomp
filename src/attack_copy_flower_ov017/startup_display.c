@@ -1,3 +1,10 @@
+/*
+ * Copy Flower display setup (overlay 17, 0x020C3280-0x020C33A4).
+ *
+ * Configures the display for the attack, queues the pattern initialization and
+ * restores the display when it finishes.
+ */
+
 #include <game/battle_ai.h>
 #include <game/overlay017_attack.h>
 

@@ -1,3 +1,10 @@
+/*
+ * Item panel lifecycle (overlay 9, 0x020708F0-0x02070978).
+ *
+ * Init, Destroy and Delete for the shared item panel the buying and selling
+ * lists are built on.
+ */
+
 #include <game/shop_panels.h>
 extern "C" {
 #include <game/heap.h>

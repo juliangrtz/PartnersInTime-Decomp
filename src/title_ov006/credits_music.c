@@ -1,3 +1,10 @@
+/*
+ * Credits music (overlay 6, 0x02078250-0x020783C8).
+ *
+ * Advances the credits music and stops it after the delay the sequence ends
+ * with.
+ */
+
 #include "credits_transition_internal.h"
 
 /* The parent credits controller uses argument 7 as its music completion flag. */

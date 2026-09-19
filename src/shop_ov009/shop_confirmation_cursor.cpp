@@ -1,3 +1,9 @@
+/*
+ * Purchase confirmation cursor (overlay 9, 0x02076FBC-0x020770A4).
+ *
+ * The cursor on the yes/no prompt that confirms a purchase.
+ */
+
 #include "shop_navigation_internal.h"
 
 extern "C" {

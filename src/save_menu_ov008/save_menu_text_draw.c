@@ -1,3 +1,11 @@
+/*
+ * Save menu text drawing (overlay 8, 0x02075228-0x02075AC8).
+ *
+ * Draws the menu's text: the background rows, the object rows streamed a row at
+ * a time, the dialog box and the slot choice. Queueing a texture row defers the
+ * upload to the VBlank task.
+ */
+
 #include "save_menu_internal.h"
 
 void SaveMenuText_QueueTextureRow(int offset, int width, int row)

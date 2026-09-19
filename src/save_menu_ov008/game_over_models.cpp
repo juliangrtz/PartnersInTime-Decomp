@@ -1,3 +1,9 @@
+/*
+ * Game-over models (overlay 8, 0x02070560-0x02070688).
+ *
+ * Creates the 3D models the game-over screen draws.
+ */
+
 #include <game/battle_scene.h>
 #include <game/save_menu.h>
 extern "C" {

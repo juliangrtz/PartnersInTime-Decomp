@@ -1,3 +1,10 @@
+/*
+ * Battle item records (overlay 26, 0x020C2D38-0x020C34A8).
+ *
+ * Resolves the item being used to its record and its kind, which decides which
+ * sequence the overlay runs.
+ */
+
 #include "item_internal.h"
 
 static inline UsableItemRecord *Overlay26Item_GetRecord(u16 item)

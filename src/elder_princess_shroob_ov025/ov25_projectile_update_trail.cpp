@@ -1,3 +1,9 @@
+/*
+ * Elder Princess Shroob: projectile trail (overlay 25, 0x020C5260-0x020C5374).
+ *
+ * Waits out the projectile's spin and updates the trail behind it.
+ */
+
 #include "effect_task_internal.h"
 
 extern "C" {

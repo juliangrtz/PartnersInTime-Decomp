@@ -1,3 +1,9 @@
+/*
+ * Shell readiness (overlay 11, 0x020C4228-0x020C426C).
+ *
+ * Whether the shell has reached the state the next phase needs.
+ */
+
 #include "shell_internal.h"
 
 extern "C" {

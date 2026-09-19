@@ -1,3 +1,10 @@
+/*
+ * Elder Princess Shroob: enemy projectile effects (overlay 25, 0x020C5798-0x020C5DA4).
+ *
+ * Starting the effects that accompany a projectile, waiting for their animation
+ * and releasing them again.
+ */
+
 #include "effect_task_internal.h"
 #include <game/battle_impact_effect.h>
 extern "C" {

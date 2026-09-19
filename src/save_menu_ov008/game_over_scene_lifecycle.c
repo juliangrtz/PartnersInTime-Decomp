@@ -1,3 +1,9 @@
+/*
+ * Game-over scene lifecycle (overlay 8, 0x02070C44-0x02071400).
+ *
+ * Init, Destroy and Delete for the game-over scene, with its frame upload task.
+ */
+
 #include "save_menu_internal.h"
 
 GameIrqTask *GameOverSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent)

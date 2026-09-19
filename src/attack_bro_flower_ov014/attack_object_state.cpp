@@ -1,5 +1,13 @@
 extern "C" {
 
+/*
+ * Bro Flower attack state (overlay 14, 0x020C3588-0x020C3AA4).
+ *
+ * The attack's own state machine: approach, hide, target move, launch, finish.
+ * PickTarget chooses the enemy and ScheduleNextParticipant hands the attack to
+ * the next party member when one finishes.
+ */
+
 #include <game/battle_effect.h>
 #include <game/overlay014_attack.h>
 

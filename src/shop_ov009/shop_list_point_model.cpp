@@ -1,3 +1,9 @@
+/*
+ * Shop list point model (overlay 9, 0x0207D164-0x0207D218).
+ *
+ * Draws the model attached to one point of the list.
+ */
+
 #include "shop_list_effects_internal.h"
 
 extern "C" void ShopListPoint_DrawModel(ShopListPointTask *task)

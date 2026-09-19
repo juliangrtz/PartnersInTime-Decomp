@@ -1,3 +1,11 @@
+/*
+ * Title orbit effect (overlay 6, 0x02071D70-0x0207214C).
+ *
+ * The orbiting elements of the title animation: entry, expansion and pulse are
+ * the three motions they run through, with a reset that returns them to the
+ * start.
+ */
+
 #include <game/title_model.h>
 #include <game/title_effects.h>
 #include "title_trail_internal.h"
