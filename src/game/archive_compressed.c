@@ -1,4 +1,79 @@
 #include <game/archive_io.h>
+
+extern u32 data_02059c2c[];
+extern void GameHeap_Delete(void *allocation);
+
+ArchiveCompressedIO *ArchiveCompressedIO_InitComplete(ArchiveCompressedIO *archive, u32 priority, u32 unused, void *argument, int dma)
+{
+    ArchiveIO_InitComplete(&archive->base, priority, unused, argument, dma);
+    archive->base.vtable = data_02059c2c;
+    return archive;
+}
+
+ArchiveCompressedIO *ArchiveCompressedIO_InitBase(ArchiveCompressedIO *archive, u32 priority, u32 unused, void *argument, int dma)
+{
+    ArchiveIO_InitComplete(&archive->base, priority, unused, argument, dma);
+    archive->base.vtable = data_02059c2c;
+    return archive;
+}
+
+ArchiveCompressedIO *ArchiveCompressedIO_DestroyComplete(ArchiveCompressedIO *archive)
+{
+    archive->base.vtable = data_02059c2c;
+    ArchiveIO_DestroyBase(&archive->base);
+    return archive;
+}
+
+ArchiveCompressedIO *ArchiveCompressedIO_Delete(ArchiveCompressedIO *archive)
+{
+    archive->base.vtable = data_02059c2c;
+    ArchiveIO_DestroyBase(&archive->base);
+    GameHeap_Delete(archive);
+    return archive;
+}
+
+ArchiveCompressedIO *ArchiveCompressedIO_DestroyBase(ArchiveCompressedIO *archive)
+{
+    archive->base.vtable = data_02059c2c;
+    ArchiveIO_DestroyBase(&archive->base);
+    return archive;
+}
+
+extern s16 data_02060b2c[];
+
+static inline int ArchiveIO_GetVCount(void)
+{
+    return *(volatile u16 *)0x04000006;
+}
+
+void ArchiveIO_UpdateCompressed(ArchiveIO *archive)
+{
+    if (!data_02060b2c[15] &&
+        (ArchiveIO_GetVCount() < archive->scanline || ArchiveIO_GetVCount() >= 192)) {
+        archive->current_frame = 0;
+    } else if (archive->current_frame >= archive->interval_frames) {
+        archive->current_frame = archive->budget_frames;
+    } else {
+        archive->current_frame++;
+        if (archive->current_frame != archive->budget_frames + 1) return;
+    }
+    do {
+        if (archive->first) {
+            ArchiveIO_ProcessCompressedRead(archive);
+        } else if (archive->open_head != archive->open_tail) {
+            ArchiveIO_ProcessOpen(archive);
+        } else {
+            if (archive->overlay_state) {
+                ArchiveIO_ProcessOverlay(archive);
+            } else {
+                archive->current_frame = 0;
+                return;
+            }
+        }
+    } while (!data_02060b2c[15] &&
+        (ArchiveIO_GetVCount() < archive->scanline || ArchiveIO_GetVCount() >= 192));
+}
+
 #include <game/battle_archive.h>
 
 extern void func_0202bf10(u8 **source, u8 **destination);
@@ -158,4 +233,3 @@ int ArchiveIO_ProcessCompressedRead(ArchiveIO *archive)
     if (request->compressed_state == 2) request->compressed_state = 3;
     return 1;
 }
-

@@ -1,5 +1,272 @@
 #include <game/archive_io.h>
+#include <game/task.h>
+
+extern u32 data_02059bdc[];
+extern s16 data_02060b2c[];
+extern void GameHeap_Delete(void *allocation);
+extern int FS_SetDefaultDMA(int dma);
+
+ArchiveIO *ArchiveIO_InitComplete(ArchiveIO *archive, u32 priority, u32 unused, void *argument, int dma)
+{
+    GameTask_Init((GameTask *)archive, priority, unused, argument);
+    archive->vtable = data_02059bdc;
+    archive->last = 0;
+    archive->first = archive->last;
+    archive->scanline = 168;
+    archive->budget_frames = 5;
+    archive->interval_frames = 2;
+    archive->current_frame = 0;
+    archive->open_tail = archive->current_frame;
+    archive->open_head = archive->open_tail;
+    archive->overlay_state = 0;
+    if (dma != -32897) FS_SetDefaultDMA(dma);
+    FS_InitFile(&archive->file);
+    return archive;
+}
+
+ArchiveIO *ArchiveIO_InitBase(ArchiveIO *archive, u32 priority, u32 unused, void *argument, int dma)
+{
+    GameTask_Init((GameTask *)archive, priority, unused, argument);
+    archive->vtable = data_02059bdc;
+    archive->last = 0;
+    archive->first = archive->last;
+    archive->scanline = 168;
+    archive->budget_frames = 5;
+    archive->interval_frames = 2;
+    archive->current_frame = 0;
+    archive->open_tail = archive->current_frame;
+    archive->open_head = archive->open_tail;
+    archive->overlay_state = 0;
+    if (dma != -32897) FS_SetDefaultDMA(dma);
+    FS_InitFile(&archive->file);
+    return archive;
+}
+
+ArchiveIO *ArchiveIO_DestroyComplete(ArchiveIO *archive)
+{
+    archive->vtable = data_02059bdc;
+    if (FSi_TestFileFlag(&archive->file, 16)) FS_CloseFile(&archive->file);
+    GameTask_DestroyBase((GameTask *)archive);
+    return archive;
+}
+
+ArchiveIO *ArchiveIO_Delete(ArchiveIO *archive)
+{
+    archive->vtable = data_02059bdc;
+    if (FSi_TestFileFlag(&archive->file, 16)) FS_CloseFile(&archive->file);
+    GameTask_DestroyBase((GameTask *)archive);
+    GameHeap_Delete(archive);
+    return archive;
+}
+
+ArchiveIO *ArchiveIO_DestroyBase(ArchiveIO *archive)
+{
+    archive->vtable = data_02059bdc;
+    if (FSi_TestFileFlag(&archive->file, 16)) FS_CloseFile(&archive->file);
+    GameTask_DestroyBase((GameTask *)archive);
+    return archive;
+}
+
+static inline int ArchiveIO_GetVCount(void)
+{
+    return *(volatile u16 *)0x04000006;
+}
+
+void ArchiveIO_Update(ArchiveIO *archive)
+{
+    if (!data_02060b2c[15] &&
+        (ArchiveIO_GetVCount() < archive->scanline || ArchiveIO_GetVCount() >= 192)) {
+        archive->current_frame = 0;
+    } else if (archive->current_frame >= archive->interval_frames) {
+        archive->current_frame = archive->budget_frames;
+    } else {
+        archive->current_frame++;
+        if (archive->current_frame != archive->budget_frames + 1) return;
+    }
+    do {
+        if (archive->first) {
+            ArchiveIO_ProcessRead(archive);
+        } else if (archive->open_head != archive->open_tail) {
+            ArchiveIO_ProcessOpen(archive);
+        } else {
+            if (archive->overlay_state) {
+                ArchiveIO_ProcessOverlay(archive);
+            } else {
+                archive->current_frame = 0;
+                return;
+            }
+        }
+    } while (!data_02060b2c[15] &&
+        (ArchiveIO_GetVCount() < archive->scanline || ArchiveIO_GetVCount() >= 192));
+}
+
 #include <game/battle_archive.h>
+
+u32 BattleArchive_GetDescriptorSize(void *system, const void *descriptor)
+{
+    ArchiveIO *archive = system;
+    u32 size;
+    if (!ArchiveIO_OpenFile(archive, descriptor)) return 0;
+    FS_ReadFile(&archive->file, &size, 4);
+    return size;
+}
+
+int BattleArchive_Open(void *system, const u8 *source, u32 size, const void *descriptor)
+{
+    ArchiveIO *archive = system;
+    ArchiveOpenRequest *request = &archive->opens[archive->open_tail];
+    if (archive->open_tail == 7) archive->open_tail = 0;
+    else archive->open_tail++;
+    if (archive->open_head == archive->open_tail) {
+        if (!archive->open_tail) archive->open_tail = 7;
+        else archive->open_tail--;
+        return 0;
+    }
+    request->destination = (void *)source;
+    request->size = size;
+    request->path = descriptor;
+    request->state = 1;
+    return ArchiveIO_ProcessOpen(archive);
+}
+
+void ArchiveIO_WaitOpen(ArchiveIO *archive, const char *path)
+{
+    u16 end;
+    u16 index = archive->open_head;
+    end = archive->open_tail;
+    while (index != end) {
+        if (archive->opens[index].path == path) {
+            ArchiveOpenRequest *request = &archive->opens[index];
+            while (request->state) ArchiveIO_ProcessOpen(archive);
+            return;
+        }
+        if (index == 7) index = 0;
+        else index++;
+    }
+}
+
+int ArchiveIO_GetOpenState(ArchiveIO *archive, const char *path)
+{
+    u16 index = archive->open_head;
+    u16 end = archive->open_tail;
+    while (index != end) {
+        if (archive->opens[index].path == path) return archive->opens[index].state;
+        if (index == 7) index = 0;
+        else index++;
+    }
+    return 0;
+}
+
+u32 BattleArchive_GetEntrySize(void *system, const u8 *archive_cursor, u16 entry_index)
+{
+    const u32 *offsets = (const u32 *)archive_cursor;
+    return (&offsets[entry_index])[1] - offsets[entry_index];
+}
+
+void ArchiveIO_WaitRead(ArchiveIO *archive, ArchiveReadRequest *request)
+{
+    ArchiveReadRequest *cursor;
+    for (cursor = archive->first; cursor; cursor = cursor->next) {
+        if (cursor == request) break;
+    }
+    if (cursor) {
+        while (request->state) ArchiveIO_ProcessRead(archive);
+    }
+}
+
+extern void *data_02060d90;
+extern u16 data_02060d8c;
+extern FsOverlayInfo data_02060d94;
+extern FsFile data_02060dc0;
+extern void FS_Init(u32 dma);
+extern u32 FS_TryLoadTable(void *buffer, u32 size);
+extern int FS_LoadOverlay(int processor, u32 id);
+extern int FS_UnloadOverlay(int processor, u32 id);
+extern int FS_LoadOverlayImageAsync(FsOverlayInfo *overlay, FsFile *file);
+
+static inline int ArchiveIO_FileTablesFit(void *buffer, u32 size)
+{
+    if (FS_TryLoadTable(buffer, size) <= size) return 1;
+    return 0;
+}
+
+int ArchiveIO_LoadOverlay(u32 id, int processor)
+{
+    return FS_LoadOverlay(processor, id);
+}
+
+int ArchiveIO_BeginGlobalOverlay(u32 id, u32 unused, int processor)
+{
+    if (!FS_LoadOverlayInfo(&data_02060d94, processor, id)) return 0;
+    FS_ClearOverlayImage(&data_02060d94);
+    if (!data_02060d8c) {
+        FS_InitFile(&data_02060dc0);
+        data_02060d8c = 1;
+    }
+    if (!FS_LoadOverlayImageAsync(&data_02060d94, &data_02060dc0)) return 0;
+    return 1;
+}
+
+int ArchiveIO_FinishGlobalOverlay(void)
+{
+    if (FS_IsBusy(&data_02060dc0)) return 2;
+    FS_CloseFile(&data_02060dc0);
+    FS_StartOverlay(&data_02060d94);
+    return 0;
+}
+
+int ArchiveIO_BeginOverlay(ArchiveIO *archive, u32 id, int processor)
+{
+    FsFileId file;
+    FsOverlayInfo *overlay = &archive->overlay;
+    if (!FS_LoadOverlayInfo(overlay, processor, id)) return 0;
+    FS_ClearOverlayImage(overlay);
+    if (FSi_TestFileFlag(&archive->file, 16)) FS_CloseFile(&archive->file);
+    file = FS_GetOverlayFileID(overlay);
+    if (!FS_OpenFileFast(&archive->file, file)) return 0;
+    FS_ClearOverlayImage(overlay);
+    archive->overlay_cursor = overlay->address;
+    archive->overlay_remaining = overlay->ram_size;
+    archive->overlay_chunk = archive->overlay_remaining > 512 ? 512 : archive->overlay_remaining;
+    archive->overlay_state = 1;
+    ArchiveIO_ProcessOverlay(archive);
+    return 1;
+}
+
+int ArchiveIO_FinishOverlay(ArchiveIO *archive)
+{
+    if (archive->overlay_state) return 2;
+    FS_CloseFile(&archive->file);
+    FS_StartOverlay(&archive->overlay);
+    return 0;
+}
+
+int ArchiveIO_UnloadOverlay(u32 id, int processor)
+{
+    return FS_UnloadOverlay(processor, id);
+}
+
+u32 ArchiveIO_InitFilesystem(u32 dma, void *buffer, u32 size)
+{
+    FS_Init(dma);
+    if (buffer && ArchiveIO_FileTablesFit(buffer, size)) data_02060d90 = buffer;
+    return FS_TryLoadTable(0, 0);
+}
+
+u32 ArchiveIO_GetFileTableSize(void)
+{
+    return FS_TryLoadTable(0, 0);
+}
+
+int ArchiveIO_LoadFileTables(void *buffer, u32 size)
+{
+    int fits;
+    if (data_02060d90) return 0;
+    fits = FS_TryLoadTable(buffer, size) <= size;
+    if (!fits) return 0;
+    data_02060d90 = buffer;
+    return 1;
+}
 
 int ArchiveIO_OpenFile(ArchiveIO *archive, const char *path)
 {

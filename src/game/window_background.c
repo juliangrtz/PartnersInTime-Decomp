@@ -1,4 +1,31 @@
 #include <game/window.h>
+void GameWindow_WriteTilemap(GameWindowManager *manager, GameWindow *window) {
+    GameWindowProperties *properties = &window->properties;
+    s16 x, y;
+    u16 start_x = properties->position.bits.x >> 3;
+    u16 start_y = properties->position.bits.y >> 3;
+    u16 tile = window->allocation.bits.tile_offset;
+    u16 *map;
+    if (!window->properties.shape.bits.screen) {
+        map = manager->main_tilemap;
+        tile += manager->state.bits.main_bg_palette << 12;
+    } else {
+        map = manager->sub_tilemap;
+        tile += manager->state.bits.sub_bg_palette << 12;
+    }
+    y = start_y;
+    if (y < start_y + properties->position.bits.tile_height + 1) {
+        int row = y * 32;
+        do {
+            for (x = start_x; x < start_x + properties->position.bits.tile_pitch + 1; ++x) {
+                map[row + x] = tile++;
+            }
+            ++y;
+            row += 32;
+        } while (y < start_y + properties->position.bits.tile_height + 1);
+    }
+}
+
 extern void DC_FlushRange(const void *, u32);
 extern void GameWindow_Upload(GameWindowManager *, GameWindow *);
 extern void func_02038448(const void *, u32, u32);
@@ -87,6 +114,53 @@ void GameWindow_UploadDirty(GameWindowManager *manager) {
         if (window->allocation.bits.dirty) {
             window->allocation.bits.dirty = 0;
             GameWindow_Upload(manager, window);
+        }
+    }
+}
+
+extern void func_02038170(const void *, u32, u32);
+extern void func_020380a0(const void *, u32, u32);
+extern void func_02037fd0(const void *, u32, u32);
+extern void func_02037f00(const void *, u32, u32);
+extern void func_02038108(const void *, u32, u32);
+extern void func_02038038(const void *, u32, u32);
+extern void func_02037f68(const void *, u32, u32);
+extern void func_02037e98(const void *, u32, u32);
+
+void GameWindow_Upload(GameWindowManager *manager, GameWindow *window) {
+    DC_FlushRange(window->front, window->state.bits.size);
+    if (!window->properties.shape.bits.screen) {
+        switch (manager->state.bits.main_bg) {
+        case 0: func_02038170(window->front, window->allocation.bits.tile_offset * 32, window->state.bits.size); break;
+        case 1: func_020380a0(window->front, window->allocation.bits.tile_offset * 32, window->state.bits.size); break;
+        case 2: func_02037fd0(window->front, window->allocation.bits.tile_offset * 32, window->state.bits.size); break;
+        case 3: func_02037f00(window->front, window->allocation.bits.tile_offset * 32, window->state.bits.size); break;
+        }
+    } else {
+        switch (manager->state.bits.sub_bg) {
+        case 0: func_02038108(window->front, window->allocation.bits.tile_offset * 32, window->state.bits.size); break;
+        case 1: func_02038038(window->front, window->allocation.bits.tile_offset * 32, window->state.bits.size); break;
+        case 2: func_02037f68(window->front, window->allocation.bits.tile_offset * 32, window->state.bits.size); break;
+        case 3: func_02037e98(window->front, window->allocation.bits.tile_offset * 32, window->state.bits.size); break;
+        }
+    }
+}
+
+void GameWindow_ApplyScroll(GameWindowManager *manager) {
+    if (!manager->display.bits.fixed_main_scroll) {
+        switch (manager->state.bits.main_bg) {
+        case 0: *(vu32 *)0x04000010 = (manager->main_scroll_x & 0x1ff) | (((manager->main_scroll_y + 16) << 16) & 0x1ff0000); break;
+        case 1: *(vu32 *)0x04000014 = (manager->main_scroll_x & 0x1ff) | (((manager->main_scroll_y + 16) << 16) & 0x1ff0000); break;
+        case 2: *(vu32 *)0x04000018 = (manager->main_scroll_x & 0x1ff) | (((manager->main_scroll_y + 16) << 16) & 0x1ff0000); break;
+        case 3: *(vu32 *)0x0400001c = (manager->main_scroll_x & 0x1ff) | (((manager->main_scroll_y + 16) << 16) & 0x1ff0000); break;
+        }
+    }
+    if (!manager->display.bits.fixed_sub_scroll) {
+        switch (manager->state.bits.sub_bg) {
+        case 0: *(vu32 *)0x04001010 = (manager->sub_scroll_x & 0x1ff) | (((manager->sub_scroll_y + 16) << 16) & 0x1ff0000); break;
+        case 1: *(vu32 *)0x04001014 = (manager->sub_scroll_x & 0x1ff) | (((manager->sub_scroll_y + 16) << 16) & 0x1ff0000); break;
+        case 2: *(vu32 *)0x04001018 = (manager->sub_scroll_x & 0x1ff) | (((manager->sub_scroll_y + 16) << 16) & 0x1ff0000); break;
+        case 3: *(vu32 *)0x0400101c = (manager->sub_scroll_x & 0x1ff) | (((manager->sub_scroll_y + 16) << 16) & 0x1ff0000); break;
         }
     }
 }

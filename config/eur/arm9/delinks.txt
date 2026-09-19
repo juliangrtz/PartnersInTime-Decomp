@@ -60,13 +60,7 @@ src/nitro/gx/gx_command_list_end.c:
     .text       start:0x02038a04 end:0x02038ab4
 
 src/game/script_vm.c:
-    .text       start:0x020071b0 end:0x020072e8
-
-src/game/script_vm_control.c:
-    .text       start:0x020063a4 end:0x02006508
-
-src/game/script_vm_execute.c:
-    .text       start:0x02006508 end:0x020071b0
+    .text start:0x020063a4 end:0x020072e8
 
 src/game/script_vm_variables.c:
     .text       start:0x020055f8 end:0x02005ba8
@@ -228,31 +222,13 @@ src/nns/snd/snd_capture_effect.c:
     .text start:0x02030634 end:0x02030810
 
 src/game/archive_io.c:
-    .text start:0x0202b1cc end:0x0202b614
-
-src/game/archive_filesystem.c:
-    .text start:0x0202b614 end:0x0202b908
-
-src/game/archive_requests.c:
-    .text start:0x0202b908 end:0x0202bb5c
-
-src/game/archive_lifecycle.c:
-    .text start:0x0202bb5c end:0x0202be6c
+    .text start:0x0202b1cc end:0x0202be6c
 
 src/game/archive_compressed.c:
-    .text start:0x0202c0d0 end:0x0202c628
-
-src/game/archive_compressed_update.c:
-    .text start:0x0202c628 end:0x0202c748
-
-src/game/irq_task.cpp:
-    .text start:0x02029de4 end:0x0202a2c8
+    .text start:0x0202c0d0 end:0x0202c824
 
 src/game/task.cpp:
-    .text start:0x0202a2c8 end:0x0202a814
-
-src/game/archive_compressed_lifecycle.c:
-    .text start:0x0202c748 end:0x0202c824
+    .text start:0x02029de4 end:0x0202a814
 
 src/game/archive_memory_decoder.c:
     .text start:0x0202c824 end:0x0202cb48
@@ -332,11 +308,8 @@ src/game/task_factories.c:
 src/game/debug_console.c:
     .text start:0x0202acc8 end:0x0202b1cc
 
-src/game/audio_fade_delay.c:
-    .text start:0x020274d8 end:0x02027718
-
-src/game/audio_output.c:
-    .text start:0x02027718 end:0x020278c0
+src/game/audio_control.c:
+    .text start:0x020274d8 end:0x020278c0
 
 src/game/audio_playback.cpp:
     .text start:0x02027a2c end:0x02027fec
@@ -346,15 +319,6 @@ src/game/audio_destroy.c:
 
 src/game/audio_music_load.cpp:
     .text start:0x02027264 end:0x020274d8
-
-src/game/audio_dispose.c:
-    .text start:0x020267f4 end:0x020269bc
-
-src/game/audio_loader.c:
-    .text start:0x020269bc end:0x02026d04
-
-src/game/audio_wave_load.c:
-    .text start:0x02026d04 end:0x02026dd8
 
 src/game/audio_waves.c:
     .text start:0x02026e8c end:0x02027264
@@ -377,26 +341,17 @@ src/game/sprite_oam.c:
 src/game/sprite_palette.c:
     .text start:0x02007b94 end:0x02007ebc
 
-src/game/sprite_allocation_unlink.c:
-    .text start:0x020084d8 end:0x0200856c
-
 src/game/sprite_animator.c:
     .text start:0x02021b98 end:0x02021fac
 
-src/game/sprite_animation.cpp:
+src/game/sprite_animator_update.cpp:
     .text start:0x02022164 end:0x0202223c
 
 src/game/sprite_animator_tiles.c:
     .text start:0x020214ec end:0x02021654
 
 src/game/sprite_effect_pool.c:
-    .text start:0x0202223c end:0x0202234c
-
-src/game/sprite_effect_control.c:
-    .text start:0x020226d4 end:0x020228d0
-
-src/game/sprite_effect_animation.c:
-    .text start:0x0202234c end:0x020226d4
+    .text start:0x0202223c end:0x020228d0
 
 src/game/sprite_effect_scale.c:
     .text start:0x020239dc end:0x02023a60
@@ -419,59 +374,26 @@ src/game/text_control.c:
 src/game/text_next.cpp:
     .text start:0x02025774 end:0x02025dd8
 
-src/game/audio_map_waves.c:
-    .text start:0x02026524 end:0x020267f4
+src/game/audio_loader.c:
+    .text start:0x02026524 end:0x02026dd8
 
 src/game/audio_wave_list.c:
     .text start:0x020278c0 end:0x02027a2c
 
-src/game/sprite_allocation_compact.c:
-    .text start:0x020082d8 end:0x020084d8
-
-src/game/sprite_allocation_create.c:
-    .text start:0x0200856c end:0x02008fc4
+src/game/sprite_allocation.c:
+    .text start:0x020082d8 end:0x02008fc4
 
 src/game/texture_allocation.c:
-    .text start:0x0200ebc8 end:0x0200f25c
-
-src/game/texture_palette_allocate.c:
-    .text start:0x0200e6f8 end:0x0200eb48
-
-src/game/texture_palette_state.c:
-    .text start:0x0200e4bc end:0x0200e6f8
-
-src/game/texture_allocation_unlink.c:
-    .text start:0x0200eb48 end:0x0200ebc8
+    .text start:0x0200e4bc end:0x0200f25c
 
 src/game/graphics_texture_offsets.c:
     .text start:0x0200e110 end:0x0200e4bc
 
-src/game/inventory.c:
-    .text start:0x0201904c end:0x02019330
-
-src/game/party_initialize.c:
-    .text start:0x02019330 end:0x020196f8
-
-src/game/animation_values.c:
-    .text start:0x02017ee8 end:0x0201828c
-
 src/game/matrix_animation.c:
-    .text start:0x0201828c end:0x02018780
+    .text start:0x02017ec8 end:0x02018ce0
 
-src/game/matrix_animation_update.c:
-    .text start:0x02018780 end:0x02018af4
-
-src/game/matrix_animation_state.c:
-    .text start:0x02018af4 end:0x02018ce0
-
-src/game/matrix_animation_release.c:
-    .text start:0x02017ec8 end:0x02017ee8
-
-src/game/vector_cosine.c:
-    .text start:0x020163f0 end:0x020165c0
-
-src/game/vector_scale.c:
-    .text start:0x020165c0 end:0x020168f0
+src/game/vector_math.c:
+    .text start:0x020163f0 end:0x020168f0
 
 src/game/resource_read.c:
     .text start:0x020168f0 end:0x020169f8
@@ -479,38 +401,14 @@ src/game/resource_read.c:
 src/game/sprite_animation_color.c:
     .text start:0x020169f8 end:0x02016a6c
 
-src/game/sprite_animation_scan.c:
-    .text start:0x020179c0 end:0x02017b4c
-
-src/game/sprite_animation_update.c:
-    .text start:0x02017b4c end:0x02017d38
-
-src/game/sprite_animation_state.c:
-    .text start:0x02017d38 end:0x02017ec8
-
-src/game/window_scroll.c:
-    .text start:0x0201ab54 end:0x0201ad68
-
-src/game/window_upload.c:
-    .text start:0x0201ad68 end:0x0201af6c
+src/game/sprite_animation_tracks.c:
+    .text start:0x020179c0 end:0x02017ec8
 
 src/game/window_background.c:
-    .text start:0x0201af6c end:0x0201b37c
+    .text start:0x0201ab54 end:0x0201b4cc
 
-src/game/window_rebuild.c:
-    .text start:0x0201d030 end:0x0201d0d4
-
-src/game/window_release.c:
-    .text start:0x0201d0d4 end:0x0201d27c
-
-src/game/window_measure.c:
-    .text start:0x0201d27c end:0x0201d320
-
-src/game/window_alignment.c:
-    .text start:0x0201da48 end:0x0201dc3c
-
-src/game/window_voice.c:
-    .text start:0x0201dc3c end:0x0201dc98
+src/game/window_text.c:
+    .text start:0x0201da48 end:0x0201dc98
 
 src/game/window_irq.cpp:
     .text start:0x020196f8 end:0x020197ec
@@ -518,35 +416,11 @@ src/game/window_irq.cpp:
 src/game/window_cache.c:
     .text start:0x02019e00 end:0x02019e74
 
-src/game/window_tilemap.c:
-    .text start:0x0201b37c end:0x0201b4cc
-
-src/game/window_allocate.c:
-    .text start:0x0201cdb4 end:0x0201d030
-
 src/game/window_link_scroll.cpp:
     .text start:0x0201efb4 end:0x0201f150
 
-src/game/window_update.c:
-    .text start:0x0201f150 end:0x0201f2c4
-
-src/game/window_destroy.c:
-    .text start:0x0201f2c4 end:0x0201f50c
-
-src/game/window_pause.c:
-    .text start:0x0201fe5c end:0x0201fff8
-
-src/game/window_pool.c:
-    .text start:0x0201fff8 end:0x020200d0
-
-src/game/window_pool_allocate.c:
-    .text start:0x020200d0 end:0x020201fc
-
-src/game/window_close.c:
-    .text start:0x020201fc end:0x02020250
-
-src/game/window_properties.c:
-    .text start:0x02020304 end:0x02020420
+src/game/window_manager.c:
+    .text start:0x0201f150 end:0x02020420
 
 src/game/sprite_window_close.c:
     .text start:0x02020420 end:0x020204c4
@@ -560,11 +434,8 @@ src/game/sprite_window_update.c:
 src/game/sprite_window_objects.c:
     .text start:0x02020a1c end:0x02020d1c
 
-src/game/sprite_window_open.c:
-    .text start:0x02020d1c end:0x02020e44
-
 src/game/sprite_window.c:
-    .text start:0x02020e44 end:0x020211fc
+    .text start:0x02020d1c end:0x020211fc
 
 src/battle/battle_model_state.cpp:
     .text start:0x02009208 end:0x020096b0
@@ -594,26 +465,14 @@ src/game/field_background_controls.cpp:
 src/game/field_background_palettes.cpp:
     .text       start:0x02012548 end:0x02012ea4
 
-src/game/palette_animation_handlers.c:
-    .text       start:0x0202d158 end:0x0202d5e8
-
-src/game/palette_animation_keyframes.c:
-    .text       start:0x0202d5e8 end:0x0202d764
-
-src/game/palette_animation_cycle.c:
-    .text       start:0x0202d764 end:0x0202d928
-
-src/game/animation_table.c:
-    .text       start:0x0202d928 end:0x0202da0c
+src/game/palette_animation.c:
+    .text start:0x0202d158 end:0x0202dafc
 
 src/game/field_background_accessors.cpp:
     .text       start:0x020132a0 end:0x02013470
 
 src/game/field_background_lifecycle.c:
     .text       start:0x02015a38 end:0x02015ddc
-
-src/game/palette_effect.c:
-    .text       start:0x0202da0c end:0x0202dafc
 
 src/game/model_resource_controls.cpp:
     .text       start:0x0200b6c4 end:0x0200c5d8
@@ -694,14 +553,11 @@ src/nitro/os/os_reset.c:
 src/nitro/fs/fs_command.c:
     .text start:0x0203d738 end:0x0203e438
 
-src/game/window_construct.c:
-    .text start:0x0201f50c end:0x0201fe5c
-
 src/game/graphics_screen_offsets.c:
     .text start:0x02009d24 end:0x02009ffc
 
-src/game/item_effect_value.c:
-    .text start:0x02018f48 end:0x0201904c
+src/game/inventory.c:
+    .text start:0x02018f48 end:0x020196f8
 
 src/game/interval.c:
     .text start:0x020108f0 end:0x02010960
@@ -715,8 +571,5 @@ src/nitro/os/os_console_type.c:
 src/nitro/os/os_arena_low.c:
     .text start:0x0203a0b4 end:0x0203a1c4
 
-src/game/window_open.c:
-    .text start:0x02020250 end:0x02020304
-
-src/game/window_skin.c:
-    .text start:0x0201cc58 end:0x0201cdb4
+src/game/window_allocate.c:
+    .text start:0x0201cc58 end:0x0201d320
