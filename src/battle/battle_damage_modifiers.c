@@ -1,3 +1,9 @@
+/*
+ * Damage equipment modifiers (overlay 2, 0x0209BCCC-0x0209BF38).
+ *
+ * Applies the equipped items' modifiers to a damage figure.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_damage.h>
 #include <game/item.h>

@@ -1,3 +1,11 @@
+/*
+ * Battle task pools (overlay 2, 0x020A50D4-0x020A5294).
+ *
+ * The pooled tasks the battle runs its sequences on: allocation from the pool,
+ * insertion into the active list, the owner slot that lets a task unlink itself,
+ * and the per-frame update over the list.
+ */
+
 #include <game/battle_ai.h>
 
 void BattleTaskPool_Init(BattleTaskPool *pool, int count, u32 payload_size) {

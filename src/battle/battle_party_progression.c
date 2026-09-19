@@ -1,3 +1,9 @@
+/*
+ * Party experience (overlay 2, 0x0207FC78-0x0207FE2C).
+ *
+ * Awards experience to a party member and applies the level ups it triggers.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/save_data.h>

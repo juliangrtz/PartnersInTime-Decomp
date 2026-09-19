@@ -1,3 +1,11 @@
+/*
+ * Common battle script dispatcher (overlay 2, 0x020698D4-0x0206A008).
+ *
+ * The opcodes shared by the battle VM and the AI VM. An opcode's operand
+ * contract is not transferable between the two instances; see
+ * docs/research/SCRIPT_VM_SEMANTICS.md.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_dialogue.h>
 #include <game/battle_common_assets.h>

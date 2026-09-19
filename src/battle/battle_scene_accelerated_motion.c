@@ -1,3 +1,11 @@
+/*
+ * Scene accelerated motion (overlay 2, 0x020A3B2C-0x020A43D8).
+ *
+ * The motion primitives a battle object moves with: constant and scaled
+ * acceleration, a peak-distance arc, ballistic motion, and the duration-bounded
+ * forms. MoveToObject re-reads the target each frame so it tracks.
+ */
+
 #include <game/battle_scene.h>
 #include <hardware.h>
 

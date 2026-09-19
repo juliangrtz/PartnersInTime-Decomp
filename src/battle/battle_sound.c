@@ -1,3 +1,10 @@
+/*
+ * Battle sound (overlay 2, 0x02076178-0x02076584).
+ *
+ * The battle's delayed and repeating sound scheduling, including the repeat
+ * whose interval is measured from the first effect's own length.
+ */
+
 #include <game/battle_sound.h>
 #include <nitro.h>
 #include <game/audio.h>

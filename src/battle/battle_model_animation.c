@@ -1,3 +1,10 @@
+/*
+ * Model animations (overlay 2, 0x0206C070-0x0206C240).
+ *
+ * Starting a model's animation, free-standing or attached to an owner, and
+ * binding the models the animation drives.
+ */
+
 #include <game/battle_model_animation.h>
 #include <game/model_animation.h>
 #include <game/battle_context.h>

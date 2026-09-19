@@ -1,3 +1,12 @@
+/*
+ * Battle model render lists (ARM9 resident, 0x02009208-0x020096B0).
+ *
+ * The per-screen model render lists and the accessors over a battle model's
+ * state. Resident rather than in the battle overlay because the field and menu
+ * scenes draw the same model type. The draw walk dispatches through the model's
+ * virtual draw and sort key, which is why this unit is C++.
+ */
+
 #include <game/battle_scene.h>
 #include <game/affine.h>
 extern "C" {

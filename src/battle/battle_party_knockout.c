@@ -1,3 +1,10 @@
+/*
+ * Party knockout (overlay 2, 0x020A90F4-0x020A9478).
+ *
+ * The knockout sequence for a party member and the state it leaves the actor
+ * in.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

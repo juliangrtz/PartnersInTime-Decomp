@@ -1,3 +1,9 @@
+/*
+ * Path motion (overlay 2, 0x02078408-0x02078460).
+ *
+ * Advances an object along its path.
+ */
+
 #include <game/battle_scene.h>
 extern int func_ov002_020722d8(s16 *, int *, int *);
 void BattleMotion_UpdatePath(BattleSceneObject *object, BattleMotionChannel *channel) {

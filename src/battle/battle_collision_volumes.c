@@ -1,3 +1,10 @@
+/*
+ * Collision volumes (overlay 2, 0x0209EF3C-0x0209F59C).
+ *
+ * The volume-against-volume tests the object collision is built from, one case
+ * per pair of volume kinds.
+ */
+
 #include <game/battle_effect.h>
 #include <game/battle_hit.h>
 

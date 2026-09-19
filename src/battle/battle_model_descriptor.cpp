@@ -1,3 +1,10 @@
+/*
+ * Primary model descriptor (overlay 2, 0x0206F2E0-0x0206F3CC).
+ *
+ * One-time initialization of the shared primary-model resource descriptor, and
+ * the stop for the alternate renderer.
+ */
+
 #include <game/battle_scene.h>
 extern "C" void func_020093b4(BattleModel *, int);
 

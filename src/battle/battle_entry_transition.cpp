@@ -1,4 +1,14 @@
 extern "C" {
+
+/*
+ * Battle entry transition (overlay 2, 0x02075910-0x02076178).
+ *
+ * Leaving the field for a battle: the field's brightness and palettes are
+ * captured, the capture banks are mapped, the sub display is copied to the main
+ * one, and the transition sound starts. Restoring the field display is the same
+ * steps in reverse.
+ */
+
 #include <game/battle_entry.h>
 #include <game/battle_frame.h>
 #include <game/battle_context.h>

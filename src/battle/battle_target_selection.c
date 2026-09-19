@@ -1,3 +1,10 @@
+/*
+ * Target selection (overlay 2, 0x0209AE60-0x0209B540).
+ *
+ * Choosing the target from the player's input: the directional score that ranks
+ * the candidates, and the item cursor that follows the same selection.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

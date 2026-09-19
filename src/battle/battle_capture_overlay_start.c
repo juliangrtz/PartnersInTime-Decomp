@@ -1,3 +1,9 @@
+/*
+ * Capture overlay start (overlay 2, 0x020B0580-0x020B05F0).
+ *
+ * Starts the overlay drawn over the captured screen.
+ */
+
 #include <game/battle_effect_controls.h>
 #include <game/battle_context.h>
 typedef struct CaptureOverlayView {

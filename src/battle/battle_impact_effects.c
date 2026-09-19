@@ -1,3 +1,11 @@
+/*
+ * Impact effects (overlay 2, 0x020A9C18-0x020AA4C8).
+ *
+ * The emitters an impact spawns: the trail behind a launched actor, the burst of
+ * particles at the point of contact, and the property curve that animates an
+ * object's value over the impact.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_impact_effect.h>
 

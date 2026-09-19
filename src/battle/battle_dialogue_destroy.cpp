@@ -1,3 +1,9 @@
+/*
+ * Battle dialogue teardown (overlay 2, 0x02066B6C-0x02066BC4).
+ *
+ * Destroys the dialogue controller and releases what it owns.
+ */
+
 #include "battle_dialogue_control_internal.h"
 
 static inline void DeleteDialogueController(BattleDialogueController *controller)

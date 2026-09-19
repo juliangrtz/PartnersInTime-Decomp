@@ -1,3 +1,10 @@
+/*
+ * Scene render control (overlay 2, 0x020BB1C4-0x020BB2D4).
+ *
+ * Reserving the render override slot an effect draws through, and the mesh task
+ * state query.
+ */
+
 #include <game/battle_scene.h>
 #include <game/battle_mesh.h>
 

@@ -1,3 +1,10 @@
+/*
+ * Interface rendering (overlay 2, 0x02099598-0x020999D8).
+ *
+ * Drawing an interface sprite frame, a decimal number, and the intensity update
+ * that dims or brightens the HUD.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 #include <game/battle_object.h>

@@ -1,3 +1,15 @@
+/*
+ * Capture surface upload (overlay 2 - reconstructed, NOT linked).
+ *
+ * This unit is deliberately absent from config/eur/arm9/linked_sources.txt and
+ * has no delinks entry, so the shipped ROM still takes these functions from the
+ * delinked reference object. It compiles, but nothing here reaches the build
+ * output: treat it as a draft awaiting its range, not as shipped code.
+ *
+ * What it reconstructs: queueing the captured screen's upload and the per-row
+ * decode task that feeds it.
+ */
+
 #include <game/battle_capture_surface.h>
 #include <game/battle_context.h>
 #include <game/battle_object.h>

@@ -1,3 +1,9 @@
+/*
+ * Scale effects (overlay 2, 0x0206EDB8-0x0206EFA0).
+ *
+ * The shrink and appear motions an object plays when it enters or leaves.
+ */
+
 #include "battle_motion_effects_internal.h"
 
 extern "C" {

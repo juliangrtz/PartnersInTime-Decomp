@@ -1,3 +1,9 @@
+/*
+ * Accelerated motion update (overlay 2, 0x020A43D8-0x020A4518).
+ *
+ * One frame of an accelerated motion.
+ */
+
 #include <game/battle_scene.h>
 
 typedef struct BattleAcceleratedMotionParameters {

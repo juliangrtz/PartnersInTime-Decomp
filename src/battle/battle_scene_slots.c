@@ -1,3 +1,10 @@
+/*
+ * Scene object slots (overlay 2, 0x02090C18-0x02091118).
+ *
+ * Swaps two scene object slots, which is how the battle changes who occupies a
+ * position without moving the objects themselves.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_scene.h>

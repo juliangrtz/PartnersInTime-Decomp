@@ -1,3 +1,9 @@
+/*
+ * Battle transition start (overlay 2, 0x020B5FDC-0x020B60C4).
+ *
+ * Begins the battle's entry and exit transitions.
+ */
+
 #include <game/battle_transition.h>
 #include <game/battle_context.h>
 #include <game/battle_entry.h>

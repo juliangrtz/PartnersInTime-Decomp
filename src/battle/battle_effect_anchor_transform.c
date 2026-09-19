@@ -1,3 +1,10 @@
+/*
+ * Anchor stretch transform (overlay 2, 0x020A53E0-0x020A56EC).
+ *
+ * Stretches a scene object between two anchor points, which is how tethers and
+ * beams are drawn.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_effect.h>
 

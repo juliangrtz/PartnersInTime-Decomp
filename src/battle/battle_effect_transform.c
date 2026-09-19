@@ -1,3 +1,9 @@
+/*
+ * Effect transform (overlay 2, 0x020A5294-0x020A53E0).
+ *
+ * Builds the transform that places an effect between two points.
+ */
+
 #include <game/battle_effect.h>
 #include <hardware.h>
 

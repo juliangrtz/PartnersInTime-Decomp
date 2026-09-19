@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Battle exit dispatch (overlay 2, 0x020B5F38-0x020B5FDC).
+ *
+ * The exit wait: once the brightness countdown reaches zero, dispatches to the
+ * scene the battle is handing over to.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_entry.h>
 #include <game/battle_frame.h>

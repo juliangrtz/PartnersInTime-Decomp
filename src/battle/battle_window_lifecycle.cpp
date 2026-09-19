@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Battle window lifecycle (overlay 2, 0x020709B0-0x02070CDC).
+ *
+ * Construction, per-frame update and teardown of the battle's message window and
+ * the resources it owns.
+ */
+
 #include <game/battle_window_upload.h>
 }
 extern "C" {

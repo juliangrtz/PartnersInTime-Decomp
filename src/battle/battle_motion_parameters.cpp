@@ -1,3 +1,9 @@
+/*
+ * Motion parameters (overlay 2, 0x0206E578-0x0206E64C).
+ *
+ * The scale wave a motion can carry and the range parameters that bound it.
+ */
+
 #include "battle_motion_effects_internal.h"
 
 extern "C" {

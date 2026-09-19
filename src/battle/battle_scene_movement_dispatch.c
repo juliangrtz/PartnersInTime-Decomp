@@ -1,3 +1,10 @@
+/*
+ * Scene movement dispatch (overlay 2, 0x02091A90-0x02091C20).
+ *
+ * Applies the movement a scene object has accumulated this frame, choosing the
+ * channel that owns it.
+ */
+
 #include <game/battle_scene.h>
 #include <game/battle_curve_motion.h>
 

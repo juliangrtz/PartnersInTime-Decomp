@@ -1,3 +1,10 @@
+/*
+ * Level-up bonus (overlay 2, 0x0209401C-0x02094408).
+ *
+ * The stat bonus chosen at a level up: the rising object that presents it and
+ * the mapping from its phase to the value shown.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 #include <game/battle_scene.h>

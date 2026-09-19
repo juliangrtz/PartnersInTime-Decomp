@@ -1,3 +1,10 @@
+/*
+ * Axis motion (overlay 2, 0x020A3810-0x020A39D0).
+ *
+ * Sine displacement along an axis and rotation about one, both started and then
+ * stepped by the motion pass.
+ */
+
 #include <game/battle_scene.h>
 void func_ov002_020a33a4(s16 *position, int angle, int ax, int ay, int az, int bx, int by, int bz);
 void func_ov002_020a39d0(BattleSceneObject *, BattleMotionChannel *);

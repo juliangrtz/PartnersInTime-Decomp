@@ -1,3 +1,9 @@
+/*
+ * Chain rig sequence (overlay 2, 0x020B6A08-0x020B6A5C).
+ *
+ * Advances a chain rig's sequence.
+ */
+
 #include <game/overlay025_effect_task.h>
 #include <game/battle_object_link.h>
 #include <game/battle_damage.h>

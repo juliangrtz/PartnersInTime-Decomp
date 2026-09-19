@@ -1,3 +1,9 @@
+/*
+ * Object texture decode (overlay 2, 0x020897A0-0x020899F0).
+ *
+ * Prepares the decode of an object's body texture.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_scene.h>
 #include <game/battle_object.h>

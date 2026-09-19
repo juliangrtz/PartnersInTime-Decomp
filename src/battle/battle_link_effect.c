@@ -1,3 +1,10 @@
+/*
+ * Link effects (overlay 2, 0x020BCA44-0x020BCCC4).
+ *
+ * The links drawn between two objects: detaching a target and stopping the
+ * effect.
+ */
+
 #include <game/battle_scene.h>
 #include <game/battle_effect.h>
 #include <game/battle_context.h>

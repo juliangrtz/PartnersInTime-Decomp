@@ -1,3 +1,9 @@
+/*
+ * Grid transition (overlay 2, 0x020B1BBC-0x020B1C4C).
+ *
+ * The transition that breaks the screen into a grid.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_grid_transition.h>
 

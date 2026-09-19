@@ -1,3 +1,10 @@
+/*
+ * Battle return preparation (overlay 2, 0x020B5D58-0x020B5F38).
+ *
+ * Prepares the state the field is restored into and shows the battle layers
+ * again.
+ */
+
 #include <game/battle_transition.h>
 #include <nitro.h>
 #include <game/battle_context.h>

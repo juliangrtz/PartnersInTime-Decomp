@@ -1,3 +1,9 @@
+/*
+ * Texture catalog load (overlay 2, 0x0208DB18-0x0208DDD0).
+ *
+ * Opens and reads the object texture catalog, as a two-step task chain.
+ */
+
 #include <game/battle_archive.h>
 #include <game/heap.h>
 #include <game/save_data.h>

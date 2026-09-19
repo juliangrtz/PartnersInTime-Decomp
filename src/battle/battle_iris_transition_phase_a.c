@@ -1,3 +1,9 @@
+/*
+ * Iris transition, first phase (overlay 2, 0x020B53F8-0x020B5468).
+ *
+ * The opening phase of the iris transition.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_iris_transition.h>
 

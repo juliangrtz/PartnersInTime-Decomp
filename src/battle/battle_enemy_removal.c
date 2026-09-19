@@ -1,3 +1,10 @@
+/*
+ * Enemy removal (overlay 2, 0x020A9478-0x020A95CC).
+ *
+ * Steps the removal of a defeated enemy, immediately or after the delay its
+ * defeat effect needs.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_enemy_defeat.h>

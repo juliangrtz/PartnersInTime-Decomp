@@ -1,3 +1,10 @@
+/*
+ * Impact particle setup (overlay 2, 0x020AA8D4-0x020AAAC8).
+ *
+ * Creates an impact particle from an object's current appearance and executes
+ * the copy that captures it.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_impact_effect.h>
 

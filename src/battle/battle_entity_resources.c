@@ -1,3 +1,9 @@
+/*
+ * Entity resource binding (overlay 2, 0x02091C20-0x02091EDC).
+ *
+ * Binds a battle entity to the resource it draws from.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_enemy_data.h>

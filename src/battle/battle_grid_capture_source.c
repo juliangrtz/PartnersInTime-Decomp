@@ -1,3 +1,9 @@
+/*
+ * Grid capture source (overlay 2, 0x020B2AA8-0x020B2B48).
+ *
+ * The source half of the grid transition's capture.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_context.h>
 #include <game/battle_grid_transition.h>

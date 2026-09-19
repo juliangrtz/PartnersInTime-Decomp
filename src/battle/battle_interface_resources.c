@@ -1,3 +1,11 @@
+/*
+ * Interface resources (overlay 2, 0x020925BC-0x02092D94).
+ *
+ * Loads the interface's target names, target labels, command menu and item
+ * names, and draws text as textured quads with the width and height codes the
+ * texture format needs.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

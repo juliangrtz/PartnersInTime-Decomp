@@ -1,3 +1,11 @@
+/*
+ * Battle global properties (overlay 2, 0x0208E494-0x0208ED90).
+ *
+ * The get and set halves of the battle scripting language's global property
+ * space: a numbered property maps onto a field of the battle context or one of
+ * its flag bits.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_background.h>
 #include <game/battle_context.h>

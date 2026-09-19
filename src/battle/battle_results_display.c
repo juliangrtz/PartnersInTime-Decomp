@@ -1,3 +1,10 @@
+/*
+ * Battle results screen (overlay 2, 0x02095F6C-0x02096990).
+ *
+ * The screen shown after a victory: the counters that tick up and the per-member
+ * experience rows.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_effect.h>
 #include <game/save_data.h>

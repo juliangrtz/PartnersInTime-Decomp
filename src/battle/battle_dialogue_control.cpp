@@ -1,3 +1,10 @@
+/*
+ * Battle dialogue queries (overlay 2, 0x020660FC-0x02066314).
+ *
+ * Whether the battle's dialogue window is allocated or open, its visual
+ * properties, and the close.
+ */
+
 #include "battle_dialogue_control_internal.h"
 
 extern "C" {

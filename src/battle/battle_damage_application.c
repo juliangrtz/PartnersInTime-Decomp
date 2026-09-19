@@ -1,3 +1,11 @@
+/*
+ * Damage application (overlay 2, 0x0209D694-0x0209DFDC).
+ *
+ * Where a hit becomes damage: the dispatch that routes it to the party or the
+ * enemy path, the equipment effects that fire on being hit, and the HP change
+ * itself.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_damage.h>

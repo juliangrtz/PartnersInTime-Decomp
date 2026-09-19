@@ -1,3 +1,10 @@
+/*
+ * Damage reactions (overlay 2, 0x0209CE98-0x0209D694).
+ *
+ * The reaction an actor plays when hit, in its enemy, party, effect and launch
+ * variants, each a Start that arms it and an Update that runs it out.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

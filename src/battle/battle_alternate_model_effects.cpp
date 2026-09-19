@@ -1,4 +1,13 @@
 extern "C" {
+
+/*
+ * Alternate-renderer model effects (overlay 2, 0x0206C240-0x0206C520).
+ *
+ * Model effects drawn by the alternate renderer: spawning one free-standing,
+ * attached to an owner, or into the first free slot, and the per-frame update.
+ * The alternate renderer's object is 304 bytes, not the 440 of a primary model.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 #include <game/sprite_output.h>

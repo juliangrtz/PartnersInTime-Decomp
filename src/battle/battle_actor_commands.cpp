@@ -1,3 +1,10 @@
+/*
+ * Actor command helpers (overlay 2, 0x0208E10C-0x0208E494).
+ *
+ * Script-handle activity, an actor's animation layer configuration, removing an
+ * enemy from the battle, and the hit-lock query the turn order consults.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

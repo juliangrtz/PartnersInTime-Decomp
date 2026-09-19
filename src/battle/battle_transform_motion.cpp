@@ -1,3 +1,9 @@
+/*
+ * Transform motion (overlay 2, 0x0206E7E4-0x0206E89C).
+ *
+ * Starts a motion that animates an object's transform.
+ */
+
 #include "battle_motion_effects_internal.h"
 
 extern "C" {

@@ -1,3 +1,9 @@
+/*
+ * Reward items close (overlay 2, 0x0206CE30-0x0206CED4).
+ *
+ * Begins closing the reward item display.
+ */
+
 #include "battle_reward_items_internal.h"
 #include <game/battle_context.h>
 int BattleRewardItems_IsReady(void) { return data_ov002_020c06a4->flags.bits.ready; }

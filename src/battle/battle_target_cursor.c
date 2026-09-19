@@ -1,3 +1,10 @@
+/*
+ * Target cursor (overlay 2, 0x020988B0-0x02098B08).
+ *
+ * Draws the cursor over the current target and stores the position it settled
+ * at.
+ */
+
 #include <game/battle_selection_animation.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

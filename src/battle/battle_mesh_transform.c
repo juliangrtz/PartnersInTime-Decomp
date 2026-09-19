@@ -1,3 +1,10 @@
+/*
+ * Mesh transform (overlay 2, 0x020BC26C-0x020BC670).
+ *
+ * Transforms a mesh's vertices and centre into view space and sorts its
+ * triangles back to front before they are drawn.
+ */
+
 #include <game/battle_mesh.h>
 
 void BattleMesh_PrepareTriangles(BattleMeshTriangle *triangles, int count, const MtxFx44 *matrix, u16 color,

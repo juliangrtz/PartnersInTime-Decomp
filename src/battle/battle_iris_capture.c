@@ -1,3 +1,9 @@
+/*
+ * Iris capture (overlay 2, 0x020B581C-0x020B5950).
+ *
+ * Captures the screen for the iris transition and resets it afterwards.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_display_capture.h>
 #include <game/battle_iris_transition.h>

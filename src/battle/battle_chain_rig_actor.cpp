@@ -1,3 +1,9 @@
+/*
+ * Chain rig actor (overlay 2, 0x020B68E0-0x020B6928).
+ *
+ * Binds a chain rig to the actor it hangs from.
+ */
+
 #include <game/overlay025_effect_task.h>
 #include <game/battle_object_link.h>
 #include <game/battle_damage.h>

@@ -1,4 +1,14 @@
 extern "C" {
+
+/*
+ * Battle VM motion commands (overlay 2, 0x02078460-0x02078BB4).
+ *
+ * The script commands that move an object: each decodes its packed operands and
+ * starts the corresponding motion primitive. The operands are combined as
+ * ((low & 0xFFFF) | (high << 16)) and a following signed division by 16
+ * truncates toward zero - not an arithmetic shift.
+ */
+
 #include <game/battle_scene.h>
 #include <game/battle_vm_motion.h>
 }

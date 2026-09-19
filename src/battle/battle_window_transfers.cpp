@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Battle window transfers (overlay 2, 0x020713B4-0x0207157C).
+ *
+ * The queued tasks that upload the battle window's tiles, tilemap and sub-screen
+ * window, plus the animator that draws it.
+ */
+
 #include <game/battle_window_upload.h>
 extern void (*data_ov002_020be8b0[])(GameSpriteAnimator *, GameSpriteAnimation *);
 /* The ITCM routine builds store-multiple instructions from two adjacent templates. */

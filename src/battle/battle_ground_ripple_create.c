@@ -1,3 +1,9 @@
+/*
+ * Ground ripple (overlay 2, 0x020AE940-0x020AE9C0).
+ *
+ * Creates the ripple drawn on the ground under an impact.
+ */
+
 #include <game/battle_effect_controls.h>
 #include <game/battle_scene.h>
 #include <game/battle_ai.h>

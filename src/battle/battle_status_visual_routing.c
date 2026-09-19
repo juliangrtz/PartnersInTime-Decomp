@@ -1,3 +1,10 @@
+/*
+ * Status visual routing (overlay 2, 0x020A8320-0x020A87F4).
+ *
+ * Chooses which visual a status effect spawns for a given actor and stops the
+ * one an actor is carrying.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_status.h>
 

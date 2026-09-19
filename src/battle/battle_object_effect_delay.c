@@ -1,3 +1,10 @@
+/*
+ * Delayed object effects (overlay 2, 0x020A2658-0x020A2814).
+ *
+ * Effects an object spawns after a delay: the request records the frame count
+ * and the update fires it when the count runs out.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_effect.h>
 #include <game/battle_scene.h>

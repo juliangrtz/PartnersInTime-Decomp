@@ -1,3 +1,10 @@
+/*
+ * Party formation transitions (overlay 2, 0x0207F5A0-0x0207FC78).
+ *
+ * Moving the party between its six on-screen arrangements, including the two
+ * carrying states: the transition is started and then stepped to completion.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

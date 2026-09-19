@@ -1,3 +1,10 @@
+/*
+ * Command wheel (overlay 2, 0x02098B90-0x02099508).
+ *
+ * The rotating command menu: its per-frame update and the sprites it is drawn
+ * from.
+ */
+
 #include <game/battle_selection_animation.h>
 #include <game/battle_actor.h>
 #include <game/battle_context.h>

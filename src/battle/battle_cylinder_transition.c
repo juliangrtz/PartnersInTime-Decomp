@@ -1,3 +1,11 @@
+/*
+ * Cylinder transition (overlay 2, 0x020B3F58-0x020B42E0).
+ *
+ * The transition that wraps the captured screen onto a rotating cylinder. The
+ * reveal, rotation and fade are separate task phases, and the per-scanline work
+ * happens in a VCount interrupt.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_cylinder_transition.h>
 #include <game/save_data.h>

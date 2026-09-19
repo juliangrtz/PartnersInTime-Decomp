@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Battle window resources (overlay 2, 0x02070780-0x020708BC).
+ *
+ * Allocates the texture and sprite palettes and the window pool the battle's
+ * windows draw from.
+ */
+
 #include <game/battle_window.h>
 }
 extern "C" {

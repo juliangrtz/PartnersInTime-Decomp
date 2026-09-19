@@ -1,3 +1,9 @@
+/*
+ * Line capture (overlay 2, 0x020B3264-0x020B3410).
+ *
+ * Captures the screen for the line transition and resets it afterwards.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_display_capture.h>
 #include <game/battle_line_transition.h>

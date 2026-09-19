@@ -1,3 +1,10 @@
+/*
+ * Scene utilities (overlay 2, 0x02087B88-0x02087C84).
+ *
+ * Setting a scene object's battle animation, storing a battle-relative position,
+ * and the async square root the geometry here starts and collects.
+ */
+
 #include <game/battle_effect.h>
 #include <hardware.h>
 

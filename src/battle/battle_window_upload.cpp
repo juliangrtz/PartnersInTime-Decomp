@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Battle window upload (overlay 2, 0x0206FAA4-0x0206FC7C).
+ *
+ * Uploads the battle window's sub-screen tilemap and reports when the upload is
+ * ready.
+ */
+
 #include <game/battle_window_upload.h>
 #include <nitro.h>
 extern u8 *gBattleContext;

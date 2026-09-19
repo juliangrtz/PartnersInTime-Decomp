@@ -1,3 +1,11 @@
+/*
+ * Enemy ailment visuals (overlay 2, 0x020A7B60-0x020A8320).
+ *
+ * The models shown on an enemy while an ailment is active - one Start and Update
+ * pair per ailment kind. The ailments are numbered because which number is which
+ * status has not been confirmed in game.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

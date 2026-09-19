@@ -1,3 +1,11 @@
+/*
+ * Object link trail (overlay 2, 0x020B8A08-0x020B8CA4).
+ *
+ * The trailing link between two objects: the offsets at each end, the gravity
+ * that sags it, and the tuning parameters that are still numbered because what
+ * they control has not been established.
+ */
+
 #include <game/battle_object_link.h>
 extern void func_0202cbd4(void *, int, u32);
 extern int func_ov002_020b82d0(BattleSceneObject *, int);

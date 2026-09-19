@@ -1,3 +1,10 @@
+/*
+ * Reward effects (overlay 2, 0x0207F080-0x0207F5A0).
+ *
+ * The healing effect shown on a party member and the counters that present the
+ * coins and experience earned.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_effect.h>

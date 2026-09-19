@@ -1,3 +1,9 @@
+/*
+ * Object texture metadata (overlay 2, 0x02089C78-0x02089EEC).
+ *
+ * Resolves an object's texture metadata, the first step of its load chain.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_object.h>
 #include <game/battle_task_queue.h>

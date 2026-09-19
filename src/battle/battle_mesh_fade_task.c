@@ -1,3 +1,9 @@
+/*
+ * Mesh fade task (overlay 2, 0x020BB98C-0x020BBA60).
+ *
+ * Fades a battle mesh out over the frames its task was given.
+ */
+
 #include <game/battle_mesh.h>
 #include <game/battle_scene.h>
 

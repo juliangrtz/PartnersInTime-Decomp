@@ -1,3 +1,9 @@
+/*
+ * Model animation start (overlay 2, 0x020BE3B0-0x020BE3E8).
+ *
+ * Starts an animation on a battle model.
+ */
+
 #include <game/battle_scene.h>
 int BattleModel_StartAnimation(BattleModel *model, int animation_id, int argument)
 {

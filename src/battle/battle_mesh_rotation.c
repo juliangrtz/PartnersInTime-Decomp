@@ -1,3 +1,10 @@
+/*
+ * Mesh rotation (overlay 2, 0x020BBB5C-0x020BBC4C).
+ *
+ * Rotates a mesh and renormalizes the result, so repeated rotation does not
+ * accumulate scale error.
+ */
+
 #include <game/battle_mesh.h>
 #include <game/battle_scene.h>
 #include <game/vector_math.h>

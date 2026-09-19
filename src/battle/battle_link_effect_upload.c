@@ -1,3 +1,9 @@
+/*
+ * Link effect tiles (overlay 2, 0x020BDC18-0x020BDC50).
+ *
+ * Uploads the tiles a link effect is drawn from.
+ */
+
 #include <nitro.h>
 void func_02038108(const void *, u32, u32);
 void BattleLinkEffect_UploadTiles(void) {

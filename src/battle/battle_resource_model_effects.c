@@ -1,3 +1,9 @@
+/*
+ * Resource model effects (overlay 2, 0x020AC740-0x020AC820).
+ *
+ * Spawns a model effect from a scene resource, attached or in a free slot.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_effect.h>
 BattleAITask *BattleModelEffect_SpawnFromResourceAttached(BattleAITask **owner, int resource,

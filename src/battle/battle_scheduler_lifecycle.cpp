@@ -1,3 +1,9 @@
+/*
+ * Battle scheduler lifecycle (overlay 2, 0x02072D90-0x02073068).
+ *
+ * Init, Destroy and Delete for the battle scheduler and its IRQ task.
+ */
+
 #include "battle_scheduler_internal.h"
 #include <game/task.h>
 extern "C" {

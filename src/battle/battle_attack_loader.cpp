@@ -1,3 +1,11 @@
+/*
+ * Attack overlay loading (overlay 2, 0x0206F56C-0x0206F948).
+ *
+ * Starting the selected command or an item: the attack's overlay is requested,
+ * and the load is polled each frame until the overlay's entry point can be
+ * called.
+ */
+
 #include <game/battle_attack_loader.h>
 #include <game/linker_overlay_ids.h>
 extern "C" {

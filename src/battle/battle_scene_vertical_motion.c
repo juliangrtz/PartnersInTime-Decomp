@@ -1,3 +1,9 @@
+/*
+ * Scene vertical motion (overlay 2, 0x020A4518-0x020A47EC).
+ *
+ * The vertical arc and the move-to-height an object plays.
+ */
+
 #include <game/battle_scene.h>
 #include <hardware.h>
 

@@ -1,3 +1,9 @@
+/*
+ * Object load queue (overlay 2, 0x02089EEC-0x02089F2C).
+ *
+ * Queues an object's load.
+ */
+
 #include <game/battle_object.h>
 #include <game/battle_task_queue.h>
 

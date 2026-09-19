@@ -1,3 +1,9 @@
+/*
+ * Model source resolution (overlay 2, 0x0207905C-0x02079090).
+ *
+ * Resolves the model a script's animation command refers to.
+ */
+
 #include <game/battle_model_animation.h>
 
 /* Positive IDs select the alternate model; zero and negative sentinels pass through. */

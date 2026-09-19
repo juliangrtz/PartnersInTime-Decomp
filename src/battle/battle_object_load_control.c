@@ -1,3 +1,11 @@
+/*
+ * Object load control (overlay 2, 0x02091EDC-0x02092390).
+ *
+ * Allocating the load buffer, configuring the load, ensuring an object is
+ * resident before it is used, and resolving a packed resource slot handle to the
+ * scene resource it names.
+ */
+
 #include <game/battle_context.h>
 
 /* Resource handles use the high nibble for the one-based archive slot. */

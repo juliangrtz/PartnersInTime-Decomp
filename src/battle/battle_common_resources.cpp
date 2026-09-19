@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Common battle resources (overlay 2, 0x0206A0F0-0x0206A674).
+ *
+ * The graphics every battle needs regardless of the encounter: their load, the
+ * OAM they reserve, and the release at the end.
+ */
+
 #include <game/heap.h>
 }
 #include <game/battle_common_resources.h>

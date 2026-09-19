@@ -1,3 +1,11 @@
+/*
+ * Object upload (overlay 2, 0x02089300-0x020897A0).
+ *
+ * The tail of the object load chain: waiting out the decodes, queueing the final
+ * upload and copying the resource into place. Each function is one frame of the
+ * chain and installs its successor.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_object.h>
 #include <game/battle_task_queue.h>

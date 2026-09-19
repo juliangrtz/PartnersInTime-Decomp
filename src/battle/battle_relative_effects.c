@@ -1,3 +1,10 @@
+/*
+ * Object-relative effects (overlay 2, 0x02071E40-0x02072004).
+ *
+ * Spawns a sprite or model effect positioned relative to an object rather than
+ * in world coordinates.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 

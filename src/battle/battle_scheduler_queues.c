@@ -1,3 +1,12 @@
+/*
+ * Battle scheduler queues (overlay 2, 0x020724C8-0x020729D4).
+ *
+ * The scheduler's queues and the VBlank consumer that drains them. Transfers are
+ * enqueued either side of the bank mapping step, because some have to land while
+ * a bank is still mapped for CPU access and others only after it is handed back.
+ * ElapsedScanlines is how a consumer decides whether it still has time.
+ */
+
 #include "battle_scheduler_internal.h"
 #include <game/task.h>
 

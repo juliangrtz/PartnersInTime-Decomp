@@ -1,3 +1,10 @@
+/*
+ * Velocity ratio motion (overlay 2, 0x020BE478-0x020BE504).
+ *
+ * Starts a motion from a ratio between two velocities rather than an absolute
+ * speed.
+ */
+
 #include <game/battle_scene.h>
 
 int BattleMotion_StartWithVelocityRatio(BattleSceneObject *object, int channel, int direction_x,

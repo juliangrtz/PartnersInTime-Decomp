@@ -1,3 +1,11 @@
+/*
+ * Damage numbers (overlay 2, 0x0209CB3C-0x0209CE98).
+ *
+ * The numbers that pop up over a hit actor: spawning one, merging it with a
+ * number already attached so repeated hits add up, and the per-frame update and
+ * cleanup.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

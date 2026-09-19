@@ -1,3 +1,11 @@
+/*
+ * Battle script property reads (overlay 2, 0x0208ED90-0x0208FB6C).
+ *
+ * The read half of the battle scripting language's property space: a numbered
+ * property maps onto the actor, object, model or context field it names. Writes
+ * live in battle_script_property_set.c and use the same numbering.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

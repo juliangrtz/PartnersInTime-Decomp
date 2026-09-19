@@ -1,3 +1,9 @@
+/*
+ * Pursuit motion (overlay 2, 0x0206E984-0x0206EA08).
+ *
+ * Starts a motion that pursues a moving target.
+ */
+
 #include "battle_motion_effects_internal.h"
 
 extern "C" {

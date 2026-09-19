@@ -1,3 +1,10 @@
+/*
+ * Follow motion (overlay 2, 0x0206EB78-0x0206ECFC).
+ *
+ * Motion that follows another object, with the sine variant that weaves while it
+ * follows.
+ */
+
 #include "battle_motion_effects_internal.h"
 
 extern "C" {

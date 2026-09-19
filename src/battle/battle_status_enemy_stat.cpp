@@ -1,3 +1,10 @@
+/*
+ * Enemy stat visuals (overlay 2, 0x020A73D4-0x020A7B60).
+ *
+ * The models shown on an enemy while a stat modifier is active, started per
+ * modifier and stepped together.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

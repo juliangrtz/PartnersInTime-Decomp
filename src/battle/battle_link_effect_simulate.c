@@ -1,3 +1,9 @@
+/*
+ * Link effect simulation (overlay 2, 0x020BE30C-0x020BE3B0).
+ *
+ * Advances a link effect's simulation and draws the result.
+ */
+
 #include <game/battle_link_effect.h>
 void func_ov002_020be060(BattleLinkPoint *points, unsigned count, int end_mass, int spacing);
 void func_ov002_020bdc50(BattleLinkPoint *points, unsigned count, int depth, int screen_y,

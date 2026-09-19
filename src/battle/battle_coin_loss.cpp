@@ -1,3 +1,10 @@
+/*
+ * Coin loss effect (overlay 2, 0x020A0C64-0x020A1064).
+ *
+ * The coins scattered when the party is hit: the emitter that spawns them and
+ * the per-particle update that arcs them away.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_coin_loss.h>
 #include <game/battle_context.h>

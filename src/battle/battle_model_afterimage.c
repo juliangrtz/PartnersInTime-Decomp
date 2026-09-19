@@ -1,3 +1,10 @@
+/*
+ * Model afterimages (overlay 2, 0x0206BD74-0x0206BF3C).
+ *
+ * The trailing copies left behind a moving alternate-renderer object: creation
+ * from the object, the per-frame fade and the draw.
+ */
+
 #include <game/battle_effect.h>
 #include <game/battle_impact_effect.h>
 

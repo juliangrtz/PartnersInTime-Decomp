@@ -1,3 +1,10 @@
+/*
+ * Target cursor animation (overlay 2, 0x02098B08-0x02098B90).
+ *
+ * The cursor's per-frame animation and the bounce it plays when the target
+ * changes.
+ */
+
 #include <game/battle_selection_animation.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

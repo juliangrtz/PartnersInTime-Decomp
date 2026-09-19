@@ -1,3 +1,10 @@
+/*
+ * Object rebuild (overlay 2, 0x020890B4-0x02089300).
+ *
+ * Rebuilds an object's components one per frame after its data has been
+ * reloaded.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_scene.h>
 #include <game/battle_object.h>

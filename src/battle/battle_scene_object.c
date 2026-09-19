@@ -1,3 +1,10 @@
+/*
+ * Scene object flags (overlay 2, 0x020A32F4-0x020A33A4).
+ *
+ * The active model behind a scene object and the state and model flags a script
+ * can set on it.
+ */
+
 #include <game/battle_scene.h>
 
 BattleModel *BattleSceneObject_GetActiveModelById(int object_id) {

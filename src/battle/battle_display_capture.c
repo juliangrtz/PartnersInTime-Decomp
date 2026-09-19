@@ -1,3 +1,10 @@
+/*
+ * Display capture configuration (overlay 2, 0x020AD3C4-0x020AD5D0).
+ *
+ * Configuring and resetting the display capture unit, as queued tasks: the mode
+ * has to be restored around the control write, so each step is its own frame.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_display_capture.h>
 #include <game/battle_object.h>

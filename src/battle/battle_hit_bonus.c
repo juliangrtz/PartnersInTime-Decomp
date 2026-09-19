@@ -1,3 +1,10 @@
+/*
+ * Hit bonus roll (overlay 2, 0x020720FC-0x020722AC).
+ *
+ * Rolls the Stache-based bonus applied to a hit. The arithmetic widths and the
+ * truncation points are load-bearing; see the reconstruction notes.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_damage.h>
 #include <game/save_data.h>

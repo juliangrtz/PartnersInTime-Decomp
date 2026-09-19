@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Battle text controls (overlay 2, 0x02067014-0x02067264).
+ *
+ * Initializes the clipped and tiled text renderers and queues the resources they
+ * draw from.
+ */
+
 #include <game/battle_text.h>
 #include <game/battle_context.h>
 void func_0202cbd4(void *, int, u32);

@@ -1,3 +1,10 @@
+/*
+ * Battle object lookup (overlay 2, 0x02076EE8-0x0207707C).
+ *
+ * Resolving an id to a scene object, an actor or an enemy's stat record, and
+ * reading an object's load state. The actor accessors dispatch on the id range.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_enemy_data.h>

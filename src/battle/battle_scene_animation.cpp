@@ -1,3 +1,10 @@
+/*
+ * Scene object animation (overlay 2, 0x02091118-0x02091A90).
+ *
+ * Setting a scene object's animation, from an id or from a component, and the
+ * channel queries that say whether one is still running.
+ */
+
 #include <game/battle_scene.h>
 #include <game/battle_actor.h>
 #include <game/battle_context.h>

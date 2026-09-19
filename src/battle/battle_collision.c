@@ -1,3 +1,10 @@
+/*
+ * Object collision (overlay 2, 0x0209EBFC-0x0209EF30).
+ *
+ * Tests two battle objects against each other, the entry point the hit queue
+ * evaluates through.
+ */
+
 #include <game/battle_effect.h>
 #include <game/battle_hit.h>
 #include <game/battle_scene.h>

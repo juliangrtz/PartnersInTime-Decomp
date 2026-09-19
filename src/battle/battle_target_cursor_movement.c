@@ -1,3 +1,9 @@
+/*
+ * Target cursor movement (overlay 2, 0x0209B540-0x0209B664).
+ *
+ * Moves the cursor to an actor or to a whole group.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_scene.h>

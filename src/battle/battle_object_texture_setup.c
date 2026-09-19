@@ -1,3 +1,10 @@
+/*
+ * Object texture setup (overlay 2, 0x020899F0-0x02089C78).
+ *
+ * Sets up an object's body, tail and optional textures, each as a step of the
+ * load chain.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_object.h>
 #include <game/battle_task_queue.h>

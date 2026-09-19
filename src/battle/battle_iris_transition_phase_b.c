@@ -1,3 +1,9 @@
+/*
+ * Iris transition, second phase (overlay 2, 0x020B5D04-0x020B5D58).
+ *
+ * The closing phase of the iris transition.
+ */
+
 #include <game/battle_transition.h>
 #include <game/battle_ai.h>
 #include <game/battle_iris_transition.h>

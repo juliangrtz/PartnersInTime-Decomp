@@ -1,3 +1,9 @@
+/*
+ * Curtain transition (overlay 2, 0x020B42E0-0x020B4544).
+ *
+ * The curtain that closes over the screen, drawn as quads and driven by a task.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_curtain_transition.h>
 

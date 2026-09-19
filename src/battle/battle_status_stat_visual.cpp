@@ -1,3 +1,9 @@
+/*
+ * Party stat visuals (overlay 2, 0x020A56EC-0x020A5F7C).
+ *
+ * The models shown on a party member while a stat modifier is active.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

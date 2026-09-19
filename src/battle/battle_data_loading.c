@@ -1,3 +1,11 @@
+/*
+ * Battle data loading (overlay 2, 0x02088BDC-0x020890B4).
+ *
+ * Reading the encounter's data out of the archives: the enemy stat records and
+ * their object data with the pointer fixups it needs, and the action and party
+ * script blocks. Each load is a queued task chain.
+ */
+
 #include <game/battle_archive.h>
 #include <game/battle_context.h>
 #include <game/battle_enemy_data.h>

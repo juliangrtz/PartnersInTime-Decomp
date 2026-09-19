@@ -1,3 +1,11 @@
+/*
+ * Battle AI system (overlay 2, 0x0208DDD0-0x0208E10C).
+ *
+ * Initialization of the scripting system: loading the AI archives, the control
+ * mask that gates which actors run scripts, and the special handle whose script
+ * can be reloaded mid-battle.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_archive.h>

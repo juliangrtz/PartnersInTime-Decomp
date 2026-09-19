@@ -1,3 +1,12 @@
+/*
+ * Effect spawning (overlay 2, 0x020AC904-0x020ACD18).
+ *
+ * The factories for both effect kinds: sprite effects and model effects, each
+ * spawned free-standing, attached to an owner, or into the first free slot. The
+ * two records are different sizes, so the slot you spawn into decides what the
+ * returned handle may be read as.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 

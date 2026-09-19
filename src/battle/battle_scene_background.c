@@ -1,3 +1,10 @@
+/*
+ * Battle scene background (overlay 2, 0x02087C84-0x02087EC4).
+ *
+ * Loading the battle's background and toggling it, and the reload of the field
+ * assets when the battle gives the screen back. Both are queued task chains.
+ */
+
 #include <game/battle_background.h>
 #include <game/save_data.h>
 

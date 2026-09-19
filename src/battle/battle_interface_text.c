@@ -1,3 +1,10 @@
+/*
+ * Interface text tasks (overlay 2, 0x02093754-0x02093D30).
+ *
+ * The queued tasks that format a number and upload the interface's text, so the
+ * VRAM writes happen inside the blanking period.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_interface_text.h>
 #include <game/text.h>

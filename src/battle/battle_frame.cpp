@@ -1,3 +1,10 @@
+/*
+ * Battle frame update (overlay 2, 0x02073068-0x02073A08).
+ *
+ * The battle's per-frame update: steps the scheduler, the actors and the
+ * interface, and evaluates whether the party is still standing.
+ */
+
 #include <game/battle_common_resources.h>
 #include <game/battle_transition.h>
 extern "C" {

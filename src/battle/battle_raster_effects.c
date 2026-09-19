@@ -1,3 +1,11 @@
+/*
+ * Raster effects (overlay 2, 0x020B0ECC-0x020B1590).
+ *
+ * The per-scanline effects applied to the battle's backgrounds: the finite and
+ * persistent variants, the transition between two resources, and the particles
+ * that ride on them. The tables are written for both scanline banks.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_context.h>
 #include <game/battle_object.h>

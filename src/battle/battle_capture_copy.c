@@ -1,3 +1,9 @@
+/*
+ * Capture surface copy (overlay 2, 0x020AD058-0x020AD094).
+ *
+ * The queued task that copies the captured screen into the surface buffer.
+ */
+
 #include <game/battle_capture_surface.h>
 int func_0202cc58(const void *source, void *destination, u32 size);
 int func_0202cd2c(const void *source, void *destination, u32 size);

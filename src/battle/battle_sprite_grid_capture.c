@@ -1,3 +1,10 @@
+/*
+ * Sprite grid capture (overlay 2, 0x020B9424-0x020B99BC).
+ *
+ * Captures the sprite layer into a grid, driven per scanline from a VCount
+ * interrupt so the capture follows the beam down the screen.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_sprite_grid_capture.h>
 #include "battle_scheduler_internal.h"

@@ -1,3 +1,11 @@
+/*
+ * Battle lifecycle (overlay 2, 0x02077268-0x02077C38).
+ *
+ * Creating the battle task, its VBlank handler and its teardown, including the
+ * texture upload that runs inside the blanking period and the models, sprite and
+ * matrix animations released at the end.
+ */
+
 #include <game/battle_common_resources.h>
 extern "C" {
 #include <game/battle_frame.h>

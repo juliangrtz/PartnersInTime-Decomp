@@ -1,3 +1,11 @@
+/*
+ * Flee controller (overlay 2, 0x020A1EF8-0x020A2658).
+ *
+ * Starts the flee sequence: takes a task from the pool, loads what the escape
+ * animation needs, prepares the scene and drives the controller that hands over
+ * to the individual steps in battle_flee_run.c.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

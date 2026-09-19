@@ -1,3 +1,9 @@
+/*
+ * Line transition, first phase (overlay 2, 0x020B2E50-0x020B2F44).
+ *
+ * The opening phase of the line transition.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_line_transition.h>
 

@@ -1,4 +1,13 @@
 extern "C" {
+
+/*
+ * Animation helpers (overlay 2, 0x0207157C-0x02071938).
+ *
+ * Short helpers the attacks and scripts share: formation sounds, actor traits,
+ * restoring the idle animation, the duration of an animation up to a frame, and
+ * the feedback shown for damage that does not knock an actor out.
+ */
+
 #include <game/battle_feedback.h>
 #include <game/battle_context.h>
 #include <game/battle_damage.h>

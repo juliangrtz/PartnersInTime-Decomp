@@ -1,3 +1,11 @@
+/*
+ * Small actor queries (overlay 2, 0x02076AC8-0x02076C38).
+ *
+ * The short lookups the rest of the battle asks about an actor: status
+ * eligibility, the quarter-HP test, its view-relative position and its name in
+ * the text table.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_scene.h>
 

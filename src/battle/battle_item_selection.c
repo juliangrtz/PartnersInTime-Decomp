@@ -1,3 +1,10 @@
+/*
+ * Battle item selection (overlay 2, 0x0209AB3C-0x0209AE60).
+ *
+ * Rebuilds the action and usable item lists from the party's inventory and moves
+ * the selection through them, by index or by item id.
+ */
+
 #include <game/battle_context.h>
 #include <game/item.h>
 #include <game/save_data.h>

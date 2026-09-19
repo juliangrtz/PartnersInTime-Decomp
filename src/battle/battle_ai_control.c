@@ -1,3 +1,10 @@
+/*
+ * Script stop control (overlay 2, 0x0207E430-0x0207E684).
+ *
+ * Stopping a running battle script by its id, and unlinking the task that was
+ * carrying it.
+ */
+
 #include <game/battle_ai.h>
 
 void BattleAI_StopScriptById(int script_id) {

@@ -1,3 +1,9 @@
+/*
+ * Particle sweep emitter (overlay 2, 0x020AF97C-0x020AFA70).
+ *
+ * Creates the emitter for a sweeping particle effect.
+ */
+
 #include <game/battle_particle_sweep.h>
 #include <game/battle_context.h>
 

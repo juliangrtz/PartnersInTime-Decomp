@@ -1,3 +1,11 @@
+/*
+ * Party command movement (overlay 2, 0x0209B664-0x0209BCCC).
+ *
+ * The movement a party member makes for the command it was given, with the idle
+ * animation it settles into and the carry resource a member holding a baby
+ * uses.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

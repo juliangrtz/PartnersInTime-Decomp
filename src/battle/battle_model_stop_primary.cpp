@@ -1,3 +1,9 @@
+/*
+ * Primary model stop (overlay 2, 0x0206F1B8-0x0206F1F0).
+ *
+ * Stops the primary model's animation.
+ */
+
 #include <game/battle_scene.h>
 extern "C" void func_020093b4(BattleModel *, int);
 

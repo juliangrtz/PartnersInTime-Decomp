@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Battle feedback effects (overlay 2, 0x020719A4-0x02071C84).
+ *
+ * The small effects spawned to acknowledge a hit or an action, with the resource
+ * load they need and the completion test callers poll.
+ */
+
 #include <game/battle_feedback.h>
 #include <game/battle_context.h>
 extern BattleFeedbackOwnerPrefix *data_ov002_020c0710;

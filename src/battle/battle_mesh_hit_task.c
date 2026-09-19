@@ -1,3 +1,9 @@
+/*
+ * Mesh hit task (overlay 2, 0x020BB644-0x020BB6BC).
+ *
+ * Creates the task that plays a mesh's hit reaction.
+ */
+
 #include <game/battle_mesh.h>
 #include <game/battle_scene.h>
 #include <game/battle_ai.h>

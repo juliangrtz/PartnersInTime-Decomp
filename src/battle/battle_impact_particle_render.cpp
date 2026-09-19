@@ -1,3 +1,10 @@
+/*
+ * Impact particle rendering (overlay 2, 0x020AA4C8-0x020AA8D4).
+ *
+ * Draws the impact particles, including the copies taken from an object's own
+ * graphics.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 #include <game/battle_impact_effect.h>

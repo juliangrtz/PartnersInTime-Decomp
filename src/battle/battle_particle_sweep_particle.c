@@ -1,3 +1,9 @@
+/*
+ * Particle sweep particle (overlay 2, 0x020AF57C-0x020AF5F8).
+ *
+ * Creates one particle of a sweeping effect.
+ */
+
 #include <game/battle_particle_sweep.h>
 #include <game/battle_context.h>
 

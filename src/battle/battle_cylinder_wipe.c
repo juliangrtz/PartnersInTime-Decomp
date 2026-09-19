@@ -1,3 +1,10 @@
+/*
+ * Cylinder wipe (overlay 2, 0x020B4D28-0x020B5048).
+ *
+ * The wipe variant of the cylinder transition, with the same phase split and
+ * VCount interrupt.
+ */
+
 #include <game/battle_transition.h>
 #include <game/battle_ai.h>
 #include <game/battle_cylinder_wipe.h>

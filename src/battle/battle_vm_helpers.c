@@ -1,3 +1,11 @@
+/*
+ * Battle VM helpers (overlay 2, 0x02079320-0x02079950).
+ *
+ * The variable access the battle scripts read and write through, and the target
+ * searches they call: highest HP, lowest HP, most damaged, and a random actor
+ * eligible for a status.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 

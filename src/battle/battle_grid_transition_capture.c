@@ -1,3 +1,10 @@
+/*
+ * Grid transition capture (overlay 2, 0x020B2270-0x020B2440).
+ *
+ * Captures the screen for the grid transition and resets the capture afterwards,
+ * as a chain of tasks.
+ */
+
 #include <game/battle_transition.h>
 #include <game/battle_context.h>
 #include <game/battle_background.h>

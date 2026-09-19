@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Callback model (overlay 2, 0x0206F948-0x0206FAA4).
+ *
+ * A model whose draw and update are supplied by the caller, used where a battle
+ * element needs its own rendering rather than the standard model path.
+ */
+
 #include <game/battle_callback_model.h>
 #include <game/heap.h>
 extern BattleModelVTable data_ov002_020be7d8;

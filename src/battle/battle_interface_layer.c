@@ -1,3 +1,9 @@
+/*
+ * Interface layer resources (overlay 2, 0x02093EA8-0x0209401C).
+ *
+ * Queues and applies the resource an interface layer is filled from.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_context.h>
 #include <game/battle_interface_assets.h>

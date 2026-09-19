@@ -1,3 +1,9 @@
+/*
+ * Command wheel bounce (overlay 2, 0x02099508-0x02099598).
+ *
+ * Triggers the bounce the wheel plays when it appears.
+ */
+
 #include <game/battle_selection_animation.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

@@ -1,3 +1,10 @@
+/*
+ * Enemy defeat (overlay 2, 0x020A95CC-0x020A9C18).
+ *
+ * The defeat sequence: the effect chosen for the enemy kind, the item it drops
+ * and the state it leaves behind for the reward tally.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

@@ -1,3 +1,11 @@
+/*
+ * Party reload sequences (overlay 2, 0x020A87F4-0x020A90F4).
+ *
+ * Mario's and Luigi's reload sequences, each a chain of per-frame steps: wait for
+ * the resource, wait for the animation, retreat, request the baby, finish. The
+ * two are separate chains because the members are not symmetric.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

@@ -1,3 +1,9 @@
+/*
+ * Object link length (overlay 2, 0x020BDB38-0x020BDB88).
+ *
+ * Sums a link's segment lengths.
+ */
+
 #include <game/battle_object_link.h>
 void BattleObjectLink_SumSegments(s32 *out, const BattleObjectLinkSegment *segments, int count) {
     int x = 0, y = 0, z = 0;

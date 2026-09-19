@@ -1,3 +1,9 @@
+/*
+ * Line transition, second phase (overlay 2, 0x020B3714-0x020B37CC).
+ *
+ * The closing phase of the line transition.
+ */
+
 #include <game/battle_transition.h>
 #include <game/battle_ai.h>
 #include <game/battle_context.h>

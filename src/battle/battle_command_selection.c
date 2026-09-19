@@ -1,3 +1,10 @@
+/*
+ * Command selection (overlay 2, 0x020999D8-0x0209A0C8).
+ *
+ * Moving the selection around the command wheel and through the vertical menus,
+ * with the availability test that decides which commands may be chosen.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>

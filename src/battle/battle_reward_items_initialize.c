@@ -1,3 +1,9 @@
+/*
+ * Reward items setup (overlay 2, 0x0206E4F8-0x0206E578).
+ *
+ * Initializes the reward item display.
+ */
+
 #include "battle_reward_items_internal.h"
 #include <game/heap.h>
 extern int data_ov002_020c071c;

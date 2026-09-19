@@ -1,3 +1,9 @@
+/*
+ * Object link segments (overlay 2, 0x020BA210-0x020BA3B4).
+ *
+ * Initializes the segments a link is built from.
+ */
+
 #include <game/battle_object_link.h>
 extern void func_0202cbd4(void *, int, u32);
 extern int func_ov002_020b82d0(BattleSceneObject *, int);

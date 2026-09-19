@@ -1,3 +1,10 @@
+/*
+ * Capture surface fade (overlay 2, 0x020ADA98-0x020ADD40).
+ *
+ * Fades the captured screen, which is what the battle entry and exit dissolve
+ * through.
+ */
+
 #include <game/battle_transition.h>
 #include <nitro.h>
 #include <game/battle_context.h>
