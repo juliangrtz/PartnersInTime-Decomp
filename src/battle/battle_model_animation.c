@@ -9,7 +9,6 @@ enum {
     BATTLE_MODEL_ANIMATION_POOL_OFFSET = 0xD214,
     BATTLE_MODEL_ANIMATION_MODELS_OFFSET = 0x1131C
 };
-
 #define BATTLE_ANIMATION_WORKSPACE ((u8 *)data_ov002_020c0660)
 
 BattleModel **BattleModelAnimation_SetModels(BattleModel *first, BattleModel *second,
@@ -61,4 +60,24 @@ GameMatrixAnimationTrack *BattleModelAnimation_StartAttached(
     track->owner = owner;
     *owner = track;
     return track;
+}
+
+#include <game/battle_effect.h>
+typedef struct ModelSlotsView {
+    u8 prefix[52472];
+    GameMatrixAnimationTrack *animations[64];
+    BattleAITask *effects[64];
+} ModelSlotsView;
+#define SLOTS ((ModelSlotsView *)gBattleContext)
+int BattleModelAnimation_StartInFreeSlot(int animation, BattleModel *model, int x, s16 y, s16 z,
+                                         int speed) {
+    int slot;
+    for (slot = 0;; ++slot) {
+        if (slot == 64)
+            return -1;
+        if (!SLOTS->animations[slot])
+            break;
+    }
+    BattleModelAnimation_StartAttached(&SLOTS->animations[slot], animation, model, x, y, z, speed);
+    return slot;
 }

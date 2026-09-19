@@ -7,35 +7,20 @@
 src/battle/battle_vm_common_dispatch.c:
     .text       start:0x020698d4 end:0x0206a008
 
-src/battle/battle_ai_result.c:
-    .text       start:0x0207e7a0 end:0x0207e820
+src/battle/battle_ai_runtime.c:
+    .text start:0x0207e7a0 end:0x0207f080
 
 src/battle/battle_ai_control.c:
     .text       start:0x0207e430 end:0x0207e684
 
-src/battle/battle_ai_update.c:
-    .text       start:0x0207e820 end:0x0207eb14
-
-src/battle/battle_vm_variables.c:
-    .text       start:0x02079320 end:0x0207959c
-
 src/battle/battle_vm_helpers.c:
-    .text       start:0x0207959c end:0x02079950
+    .text start:0x02079320 end:0x02079950
 
 src/battle/battle_vm_dispatch.cpp:
     .text       start:0x02079950 end:0x0207e430
 
-src/battle/battle_actor_state.c:
-    .text       start:0x02076bac end:0x02076c38
-
 src/battle/battle_object_lookup.c:
     .text       start:0x02076ee8 end:0x0207707c
-
-src/battle/battle_ai_start.c:
-    .text       start:0x0207eb14 end:0x0207ee54
-
-src/battle/battle_ai_runtime.c:
-    .text       start:0x0207ee54 end:0x0207f080
 
 src/battle/battle_reward_effects.c:
     .text       start:0x0207f080 end:0x0207f5a0
@@ -52,26 +37,17 @@ src/battle/battle_scene_util.c:
 src/battle/battle_scene_background.c:
     .text       start:0x02087c84 end:0x02087ec4
 
-src/battle/battle_common_assets.c:
-    .text       start:0x02087ec4 end:0x020884e8
+src/battle/battle_asset_archives.c:
+    .text start:0x02087ec4 end:0x02088bdc
 
-src/battle/battle_interface_assets.c:
-    .text       start:0x020884e8 end:0x02088bdc
-
-src/battle/battle_action_scripts.c:
-    .text       start:0x02088bdc end:0x02088ef4
-
-src/battle/battle_enemy_data.c:
-    .text       start:0x02088ef4 end:0x020890b4
+src/battle/battle_data_loading.c:
+    .text start:0x02088bdc end:0x020890b4
 
 src/battle/battle_object_rebuild.cpp:
     .text       start:0x020890b4 end:0x02089300
 
-src/battle/battle_object_resources.c:
-    .text       start:0x02089300 end:0x020894d0
-
 src/battle/battle_object_upload.c:
-    .text       start:0x020894d0 end:0x020897a0
+    .text start:0x02089300 end:0x020897a0
 
 src/battle/battle_object_texture_decode.c:
     .text       start:0x020897a0 end:0x020899f0
@@ -90,10 +66,7 @@ src/battle/battle_actor_commands.cpp:
     .text       start:0x0208e10c end:0x0208e494
 
 src/battle/battle_global_properties.c:
-    .text       start:0x0208e494 end:0x0208e878
-
-src/battle/battle_global_property_set.c:
-    .text       start:0x0208e878 end:0x0208ed90
+    .text start:0x0208e494 end:0x0208ed90
 
 src/battle/battle_script_properties.c:
     .text       start:0x0208ed90 end:0x0208fb6c
@@ -103,9 +76,6 @@ src/battle/battle_script_property_set.c:
 
 src/battle/battle_scene_slots.c:
     .text       start:0x02090c18 end:0x02091118
-
-src/battle/battle_script_state.c:
-    .text       start:0x020922dc end:0x02092390
 
 src/battle/battle_scene_animation.cpp:
     .text       start:0x02091118 end:0x02091a90
@@ -117,13 +87,7 @@ src/battle/battle_entity_resources.c:
     .text       start:0x02091c20 end:0x02091edc
 
 src/battle/battle_object_load_control.c:
-    .text       start:0x02091edc end:0x020922dc
-
-src/battle/battle_texture_dimensions.c:
-    .text       start:0x020927a0 end:0x02092918
-
-src/battle/battle_interface_resources.c:
-    .text       start:0x02092918 end:0x02092d94
+    .text start:0x02091edc end:0x02092390
 
 src/battle/battle_interface_layer.c:
     .text       start:0x02093ea8 end:0x0209401c
@@ -131,11 +95,8 @@ src/battle/battle_interface_layer.c:
 src/battle/battle_level_up_bonus.c:
     .text       start:0x0209401c end:0x02094408
 
-src/battle/battle_level_up_stat_rows.c:
-    .text       start:0x02095648 end:0x02095c34
-
 src/battle/battle_level_up_growth.c:
-    .text       start:0x02095c34 end:0x02095e00
+    .text start:0x02095648 end:0x02095e00
 
 src/battle/battle_results_display.c:
     .text       start:0x02095f6c end:0x02096990
@@ -173,17 +134,11 @@ src/battle/battle_party_command_movement.c:
 src/battle/battle_damage_modifiers.c:
     .text       start:0x0209bccc end:0x0209bf38
 
-src/battle/battle_damage_base.c:
-    .text       start:0x0209bf38 end:0x0209bfa0
+src/battle/battle_damage_calculation.c:
+    .text start:0x0209bf38 end:0x0209c278
 
-src/battle/battle_damage_by_object.c:
-    .text       start:0x0209bfa0 end:0x0209c278
-
-src/battle/battle_status_clear.c:
-    .text       start:0x0209c278 end:0x0209c464
-
-src/battle/battle_status_apply.c:
-    .text       start:0x0209c464 end:0x0209cb3c
+src/battle/battle_status_effects.c:
+    .text start:0x0209c278 end:0x0209cb3c
 
 src/battle/battle_damage_numbers.c:
     .text       start:0x0209cb3c end:0x0209ce98
@@ -191,20 +146,11 @@ src/battle/battle_damage_numbers.c:
 src/battle/battle_damage_reactions.c:
     .text       start:0x0209ce98 end:0x0209d694
 
-src/battle/battle_actor_damage.c:
-    .text       start:0x0209d694 end:0x0209d718
-
 src/battle/battle_damage_application.c:
-    .text       start:0x0209d718 end:0x0209dfdc
+    .text start:0x0209d694 end:0x0209dfdc
 
 src/battle/battle_hit.c:
-    .text       start:0x0209dfdc end:0x0209e20c
-
-src/battle/battle_hit_queue.c:
-    .text       start:0x0209e20c end:0x0209ebac
-
-src/battle/battle_hit_lookup.c:
-    .text       start:0x0209ebac end:0x0209ebfc
+    .text start:0x0209dfdc end:0x0209ebfc
 
 src/battle/battle_collision.c:
     .text       start:0x0209ebfc end:0x0209ef30
@@ -215,11 +161,8 @@ src/battle/battle_collision_volumes.c:
 src/battle/battle_coin_loss.cpp:
     .text       start:0x020a0c64 end:0x020a1064
 
-src/battle/battle_flee_transition.c:
-    .text       start:0x020a1064 end:0x020a1284
-
 src/battle/battle_flee_run.c:
-    .text       start:0x020a1284 end:0x020a1ef8
+    .text start:0x020a1064 end:0x020a1ef8
 
 src/battle/battle_flee_controller.cpp:
     .text       start:0x020a1ef8 end:0x020a2658
@@ -228,10 +171,7 @@ src/battle/battle_object_effect_delay.c:
     .text       start:0x020a2658 end:0x020a2814
 
 src/battle/battle_scene_render.cpp:
-    .text       start:0x020a2814 end:0x020a2cb8
-
-src/battle/battle_scene_shadows.cpp:
-    .text       start:0x020a2cb8 end:0x020a32f4
+    .text start:0x020a2814 end:0x020a32f4
 
 src/battle/battle_scene_object.c:
     .text       start:0x020a32f4 end:0x020a33a4
@@ -245,20 +185,8 @@ src/battle/battle_scene_accelerated_motion_update.c:
 src/battle/battle_scene_vertical_motion.c:
     .text       start:0x020a4518 end:0x020a47ec
 
-src/battle/battle_scene_movement.c:
-    .text       start:0x020a47ec end:0x020a4bf4
-
-src/battle/battle_scene_motion_update.c:
-    .text       start:0x020a4bf4 end:0x020a4e08
-
-src/battle/battle_scene_motion_list.c:
-    .text       start:0x020a4e08 end:0x020a4f18
-
-src/battle/battle_scene_motion_stop.c:
-    .text       start:0x020a4f18 end:0x020a50c4
-
-src/battle/battle_scene_motion_channel.c:
-    .text       start:0x020a50c4 end:0x020a50d4
+src/battle/battle_scene_motion.c:
+    .text start:0x020a47ec end:0x020a50d4
 
 src/battle/battle_task.c:
     .text       start:0x020a50d4 end:0x020a5294
@@ -273,43 +201,19 @@ src/battle/battle_status_stat_visual.cpp:
     .text       start:0x020a56ec end:0x020a5f7c
 
 src/battle/battle_status_party_visual.cpp:
-    .text       start:0x020a5f7c end:0x020a6624
-
-src/battle/battle_status_party_ailment3.cpp:
-    .text       start:0x020a6624 end:0x020a6ce4
-
-src/battle/battle_status_party_ailment2.cpp:
-    .text       start:0x020a6ce4 end:0x020a7114
-
-src/battle/battle_status_party_ailment1.cpp:
-    .text       start:0x020a7114 end:0x020a73d4
+    .text start:0x020a5f7c end:0x020a73d4
 
 src/battle/battle_status_enemy_stat.cpp:
     .text       start:0x020a73d4 end:0x020a7b60
 
-src/battle/battle_status_enemy_ailment45.cpp:
-    .text       start:0x020a7b60 end:0x020a7edc
-
-src/battle/battle_status_enemy_ailment3.cpp:
-    .text       start:0x020a7edc end:0x020a81b4
-
-src/battle/battle_status_enemy_ailment2.cpp:
-    .text       start:0x020a81b4 end:0x020a8320
+src/battle/battle_status_enemy_visual.cpp:
+    .text start:0x020a7b60 end:0x020a8320
 
 src/battle/battle_status_visual_routing.c:
     .text       start:0x020a8320 end:0x020a87f4
 
-src/battle/battle_party_luigi_reload_finish.c:
-    .text       start:0x020a87f4 end:0x020a8990
-
-src/battle/battle_party_luigi_reload.c:
-    .text       start:0x020a8990 end:0x020a8c74
-
-src/battle/battle_party_mario_reload_finish.c:
-    .text       start:0x020a8c74 end:0x020a8e10
-
-src/battle/battle_party_mario_reload.c:
-    .text       start:0x020a8e10 end:0x020a90f4
+src/battle/battle_party_reload.c:
+    .text start:0x020a87f4 end:0x020a90f4
 
 src/battle/battle_party_knockout.c:
     .text       start:0x020a90f4 end:0x020a9478
@@ -318,13 +222,7 @@ src/battle/battle_enemy_defeat.c:
     .text       start:0x020a95cc end:0x020a9c18
 
 src/battle/battle_impact_effects.c:
-    .text       start:0x020a9c18 end:0x020a9ffc
-
-src/battle/battle_impact_particle_motion.c:
-    .text       start:0x020a9ffc end:0x020aa22c
-
-src/battle/battle_impact_emitters.c:
-    .text       start:0x020aa22c end:0x020aa4c8
+    .text start:0x020a9c18 end:0x020aa4c8
 
 src/battle/battle_impact_particle_render.cpp:
     .text       start:0x020aa4c8 end:0x020aa8d4
@@ -362,9 +260,6 @@ src/battle/battle_line_transition_phase_b.c:
 src/battle/battle_cylinder_transition.c:
     .text       start:0x020b3f58 end:0x020b42e0
 
-src/battle/battle_curtain_transition.c:
-    .text       start:0x020b44d0 end:0x020b4544
-
 src/battle/battle_cylinder_wipe.c:
     .text       start:0x020b4d28 end:0x020b5048
 
@@ -395,8 +290,8 @@ src/battle/battle_follow_motion.cpp:
 src/battle/battle_scale_effects.cpp:
     .text start:0x0206edb8 end:0x0206efa0
 
-src/battle/battle_position_helpers.c:
-    .text start:0x02076ac8 end:0x02076bac
+src/battle/battle_actor_queries.c:
+    .text start:0x02076ac8 end:0x02076c38
 
 src/battle/battle_map_resources.c:
     .text start:0x0208bcb0 end:0x0208db18
@@ -443,14 +338,8 @@ src/battle/battle_attack_loader.cpp:
 src/battle/battle_frame.cpp:
     .text start:0x02073068 end:0x02073a08
 
-src/battle/battle_entry_resources.cpp:
-    .text start:0x02073a08 end:0x02074724
-
-src/battle/battle_entry_tasks.cpp:
-    .text start:0x02074724 end:0x02075000
-
-src/battle/battle_entry_graphics.cpp:
-    .text start:0x02075000 end:0x02075780
+src/battle/battle_entry.cpp:
+    .text start:0x02073a08 end:0x02075780
 
 src/battle/battle_entry_capture_wait.cpp:
     .text start:0x020757fc end:0x02075818
@@ -506,9 +395,6 @@ src/battle/battle_scheduler_queues.c:
 src/battle/battle_scheduler_lifecycle.cpp:
     .text start:0x02072d90 end:0x02073068
 
-src/battle/battle_model_animation.c:
-    .text start:0x0206c104 end:0x0206c240
-
 src/battle/battle_vm_motion.cpp:
     .text start:0x02078460 end:0x02078bb4
 
@@ -533,14 +419,11 @@ src/battle/battle_scene_render_control.c:
 src/battle/battle_model_stop_primary.cpp:
     .text       start:0x0206f1b8 end:0x0206f1f0
 
-src/battle/battle_model_stop_alternate.cpp:
-    .text       start:0x0206f384 end:0x0206f3cc
-
 src/battle/battle_model_start_animation.cpp:
     .text       start:0x020be3b0 end:0x020be3e8
 
-src/battle/battle_model_primary_descriptor.cpp:
-    .text       start:0x0206f2e0 end:0x0206f384
+src/battle/battle_model_descriptor.cpp:
+    .text start:0x0206f2e0 end:0x0206f3cc
 
 src/battle/battle_common_resources.cpp:
     .text       start:0x0206a0f0 end:0x0206a674
@@ -566,8 +449,8 @@ src/battle/battle_reward_items_initialize.c:
 src/battle/battle_sound.c:
     .text start:0x02076178 end:0x02076584
 
-src/battle/battle_model_animation_slots.c:
-    .text start:0x0206c070 end:0x0206c104
+src/battle/battle_model_animation.c:
+    .text start:0x0206c070 end:0x0206c240
 
 src/battle/battle_alternate_model_slots.c:
     .text start:0x0206c240 end:0x0206c2d4
@@ -577,9 +460,6 @@ src/battle/battle_axis_motion.c:
 
 src/battle/battle_path_motion.c:
     .text start:0x02078408 end:0x02078460
-
-src/battle/battle_resource_effect_attachment.c:
-    .text start:0x020ac7d4 end:0x020ac820
 
 src/battle/battle_object_link_trail.c:
     .text start:0x020b8a08 end:0x020b8ca4
@@ -596,20 +476,17 @@ src/battle/battle_flexible_link_reset.c:
 src/battle/battle_flexible_link_actor.c:
     .text start:0x020baf18 end:0x020baf38
 
-src/battle/battle_interface_quad.c:
-    .text start:0x020925bc end:0x020927a0
+src/battle/battle_interface_resources.c:
+    .text start:0x020925bc end:0x02092d94
 
 src/battle/battle_motion_velocity_ratio.c:
     .text start:0x020be478 end:0x020be504
 
-src/battle/battle_curtain_draw.c:
-    .text start:0x020b42e0 end:0x020b44d0
+src/battle/battle_curtain_transition.c:
+    .text start:0x020b42e0 end:0x020b4544
 
-src/battle/battle_resource_model_slots.c:
-    .text start:0x020ac740 end:0x020ac7d4
-
-src/battle/battle_link_effect_update.c:
-    .text start:0x020bcaa8 end:0x020bccc4
+src/battle/battle_resource_model_effects.c:
+    .text start:0x020ac740 end:0x020ac820
 
 src/battle/battle_link_effect_simulate.c:
     .text start:0x020be30c end:0x020be3b0
@@ -626,8 +503,8 @@ src/battle/battle_capture_overlay_start.c:
 src/battle/battle_ground_ripple_create.c:
     .text start:0x020ae940 end:0x020ae9c0
 
-src/battle/battle_link_effect_controls.c:
-    .text start:0x020bca44 end:0x020bcaa8
+src/battle/battle_link_effect.c:
+    .text start:0x020bca44 end:0x020bccc4
 
 src/battle/battle_object_link_sum.c:
     .text start:0x020bdb38 end:0x020bdb88

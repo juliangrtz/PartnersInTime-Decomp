@@ -1,21 +1,14 @@
 # Only translation units that match the original ROM, including function order,
 # belong here. Delinked reference objects remain linked for all other C files.
 src/nitro/math/fx_coprocessor.c
-src/nitro/gx/gx_bank_state.c
-src/nitro/gx/gx_bank_reset.c
-src/nitro/gx/gx_bank_lcdc.c
-src/nitro/gx/gx_bank_assign.c
-src/battle/battle_actor_state.c
+src/nitro/gx/gx_vramcnt.c
+src/battle/battle_actor_queries.c
 src/battle/battle_object_lookup.c
-src/battle/battle_ai_start.c
-src/battle/battle_ai_result.c
-src/battle/battle_ai_control.c
-src/battle/battle_ai_update.c
 src/battle/battle_ai_runtime.c
+src/battle/battle_ai_control.c
 src/battle/battle_ai_system.c
 src/battle/battle_actor_commands.cpp
 src/battle/battle_global_properties.c
-src/battle/battle_global_property_set.c
 src/battle/battle_script_properties.c
 src/battle/battle_script_property_set.c
 src/battle/battle_scene_slots.c
@@ -23,15 +16,11 @@ src/battle/battle_reward_effects.c
 src/battle/battle_party_progression.c
 src/battle/battle_scene_util.c
 src/battle/battle_scene_background.c
-src/battle/battle_common_assets.c
-src/battle/battle_interface_assets.c
-src/battle/battle_action_scripts.c
-src/battle/battle_enemy_data.c
+src/battle/battle_asset_archives.c
+src/battle/battle_data_loading.c
 src/battle/battle_object_rebuild.cpp
-src/battle/battle_object_resources.c
 src/battle/battle_object_upload.c
 src/battle/battle_object_texture_setup.c
-src/battle/battle_vm_variables.c
 src/battle/battle_vm_helpers.c
 src/battle/battle_vm_common_dispatch.c
 src/battle/battle_vm_dispatch.cpp
@@ -40,11 +29,9 @@ src/battle/battle_scene_animation.cpp
 src/battle/battle_scene_movement_dispatch.c
 src/battle/battle_entity_resources.c
 src/battle/battle_object_load_control.c
-src/battle/battle_texture_dimensions.c
 src/battle/battle_interface_resources.c
 src/battle/battle_interface_layer.c
 src/battle/battle_level_up_bonus.c
-src/battle/battle_level_up_stat_rows.c
 src/battle/battle_level_up_growth.c
 src/battle/battle_results_display.c
 src/battle/battle_target_interface.cpp
@@ -52,51 +39,30 @@ src/battle/battle_party_hp_panel.c
 src/battle/battle_interface_render.c
 src/battle/battle_item_selection.c
 src/battle/battle_target_cursor_movement.c
-src/battle/battle_script_state.c
 src/battle/battle_transition_dispatch.cpp
-src/battle/battle_damage_base.c
-src/battle/battle_damage_by_object.c
+src/battle/battle_damage_calculation.c
 src/battle/battle_damage_numbers.c
-src/battle/battle_status_clear.c
-src/battle/battle_status_apply.c
+src/battle/battle_status_effects.c
 src/battle/battle_damage_reactions.c
-src/battle/battle_actor_damage.c
 src/battle/battle_damage_application.c
 src/battle/battle_hit.c
-src/battle/battle_hit_queue.c
-src/battle/battle_hit_lookup.c
 src/battle/battle_collision_volumes.c
 src/battle/battle_coin_loss.cpp
-src/battle/battle_flee_transition.c
 src/battle/battle_flee_run.c
 src/battle/battle_flee_controller.cpp
 src/battle/battle_object_effect_delay.c
 src/battle/battle_scene_render.cpp
-src/battle/battle_scene_shadows.cpp
 src/battle/battle_scene_object.c
 src/battle/battle_scene_accelerated_motion.c
-src/battle/battle_scene_movement.c
-src/battle/battle_scene_motion_update.c
-src/battle/battle_scene_motion_list.c
-src/battle/battle_scene_motion_channel.c
-src/battle/battle_scene_motion_stop.c
+src/battle/battle_scene_motion.c
 src/battle/battle_task.c
 src/battle/battle_effect_transform.c
 src/battle/battle_status_party_visual.cpp
-src/battle/battle_status_party_ailment3.cpp
-src/battle/battle_status_party_ailment2.cpp
-src/battle/battle_status_party_ailment1.cpp
-src/battle/battle_status_enemy_ailment45.cpp
-src/battle/battle_status_enemy_ailment3.cpp
-src/battle/battle_status_enemy_ailment2.cpp
+src/battle/battle_status_enemy_visual.cpp
 src/battle/battle_status_visual_routing.c
-src/battle/battle_party_luigi_reload_finish.c
-src/battle/battle_party_luigi_reload.c
-src/battle/battle_party_mario_reload_finish.c
-src/battle/battle_party_mario_reload.c
+src/battle/battle_party_reload.c
 src/battle/battle_party_knockout.c
 src/battle/battle_impact_effects.c
-src/battle/battle_impact_emitters.c
 src/battle/battle_impact_particle_setup.c
 src/battle/battle_effect_spawning.c
 src/battle/battle_display_capture.c
@@ -162,18 +128,15 @@ src/overlay020/target_arc_state.c
 src/overlay021/attack_phase_state.c
 src/overlay026/attack_control.c
 src/overlay026/party_pairing.c
-src/field/field_entity_state.c
+src/field/field_entity_base.c
 src/field/field_vm_dispatch.cpp
 src/nitro/gx/gx_bg_address.c
 src/nitro/gx/gx_blend_affine.c
 src/nitro/gx/gx_command_list.c
 src/nitro/gx/gx_geometry_state.c
-src/nitro/gx/gx_extended_palette.c
-src/nitro/gx/gx_vram_load.c
+src/nitro/gx/gx_load2d.c
 src/nitro/gx/gx_command_list_end.c
-src/nitro/gx/gx_texture_palette_load.c
-src/nitro/gx/gx_texture_load_end.c
-src/nitro/gx/gx_texture_load_begin.c
+src/nitro/gx/gx_load3d.c
 src/nitro/os/os_irq.c
 src/nitro/os/os_message.c
 src/nitro/os/os_mutex.c
@@ -183,24 +146,20 @@ src/nitro/os/os_tick.c
 src/nitro/os/os_alarm.c
 src/nitro/mi/mi_dma_control.c
 src/nitro/mi/mi_dma_transfer.c
-src/nitro/snd/snd_commands.c
-src/nitro/snd/snd_init.c
+src/nitro/snd/snd_command.c
 src/nitro/snd/snd_command_queue.c
-src/nitro/snd/snd_command_status.c
 src/nitro/snd/snd_shared.c
 src/nitro/snd/snd_bank.c
 src/nitro/pxi/pxi_fifo.c
 src/nitro/pxi/pxi_init.c
 src/nitro/fs/fs_archive.c
-src/nitro/fs/fs_commands.c
+src/nitro/fs/fs_command.c
 src/nitro/fs/fs_file.c
 src/nitro/fs/fs_rom.c
-src/nitro/fs/fs_overlay_io.c
-src/nitro/fs/fs_overlay_lifecycle.c
+src/nitro/fs/fs_overlay.c
 src/nitro/dgt/dgt_hash2.c
 src/nitro/cp/cp_context.c
-src/nitro/tp/tp_calibration_point.c
-src/nitro/tp/tp_io.c
+src/nitro/tp/tp.c
 src/nitro/pm/pm_control.c
 src/nitro/pm/pm_fifo.c
 src/nitro/rtc/rtc.c
@@ -302,18 +261,15 @@ src/game/sprite_effect_animation.c
 src/game/sprite_effect_control.c
 src/game/sprite_effect_scale.c
 src/game/sprite_image_decode.c
-src/battle/battle_impact_particle_motion.c
 src/game/audio_scene.c
 src/game/text_state.c
 src/game/text_measure.c
 src/game/text_control.c
 src/game/text_next.cpp
-src/nitro/fs/fs_path.c
 src/game/audio_map_waves.c
 src/game/audio_wave_list.c
 src/game/sprite_allocation_compact.c
 src/game/sprite_allocation_create.c
-src/nitro/tp/tp_calculate.c
 src/game/texture_allocation.c
 src/game/texture_palette_allocate.c
 src/game/texture_palette_state.c
@@ -385,7 +341,6 @@ src/game/affine_inverse.c
 src/game/model_animation_pool.c
 src/game/field_background_transfers.c
 src/game/field_background_tilemap.c
-src/nitro/gx/gx_texture_load.c
 src/game/field_background_palettes.cpp
 src/game/palette_animation_handlers.c
 src/game/palette_animation_keyframes.c
@@ -421,15 +376,13 @@ src/nitro/os/os_arena.c
 src/nitro/os/os_valarm.c
 src/nitro/os/os_vram_exclusive.c
 src/nitro/os/os_reset.c
-src/nitro/fs/fs_open_commands.c
 src/field/field_timer.c
 src/field/field_model_animation.c
 src/field/field_sprite_animation_lifecycle.c
 src/field/field_sprite_animation_start.c
-src/field/field_sprite_animation_controls.c
 src/field/field_timed_renderer.cpp
 src/field/field_geometry.c
-src/field/field_direction.c
+src/field/field_vector_math.c
 src/field/field_deferred_entity.cpp
 src/field/field_blink.c
 src/field/field_blink_callbacks.c
@@ -439,20 +392,13 @@ src/field/field_entity_lifecycle.cpp
 src/field/field_spatial_lifecycle.cpp
 src/field/field_orbit.cpp
 src/field/field_spatial_orbit.cpp
-src/field/field_orbit_start.cpp
 src/field/field_spatial_orbit_start.cpp
-src/field/field_distance.c
 src/field/field_linear.cpp
 src/field/field_spatial_linear.cpp
-src/field/field_linear_start.cpp
 src/field/field_entity_motion.cpp
-src/field/field_spatial_linear_start.cpp
-src/field/field_vertical_motion.cpp
-src/field/field_locomotion_state.cpp
-src/field/field_spatial_locomotion_state.cpp
+src/field/field_spatial_motion.cpp
+src/field/field_spatial_frame_state.cpp
 src/field/field_frame_snapshot.cpp
-src/field/field_spatial_frame_snapshot.cpp
-src/field/field_spatial_placement.cpp
 src/field/field_bounds_resources.cpp
 src/field/field_archive_lifecycle.c
 src/field/field_archive_lookup.c
@@ -649,7 +595,6 @@ src/overlay020/animation_duration.cpp
 src/overlay020/support_state.c
 src/overlay020/attack_approach.c
 src/overlay020/attack_lifecycle.c
-src/battle/battle_position_helpers.c
 src/battle/battle_map_resources.c
 src/battle/battle_texture_catalog_load.c
 src/battle/battle_map_transfer.c
@@ -670,8 +615,7 @@ src/overlay018/chomp_table_setup.c
 src/overlay018/chomp_tether_setup.c
 src/field/field_party_pairing.cpp
 src/field/field_party_snapshot.c
-src/field/field_base_copy.c
-src/field/field_planar_copy.c
+src/field/field_entity_planar.c
 src/field/field_spatial_copy.c
 src/field/field_party_storage.c
 src/field/field_variable_copy.c
@@ -724,9 +668,7 @@ src/battle/battle_animation_helpers.cpp
 src/battle/battle_feedback.cpp
 src/battle/battle_attack_loader.cpp
 src/battle/battle_frame.cpp
-src/battle/battle_entry_resources.cpp
-src/battle/battle_entry_tasks.cpp
-src/battle/battle_entry_graphics.cpp
+src/battle/battle_entry.cpp
 src/battle/battle_entry_capture_wait.cpp
 src/battle/battle_entry_transition.cpp
 src/battle/battle_lifecycle.cpp
@@ -744,14 +686,12 @@ src/overlay007/menu_equipment_motion.cpp
 src/overlay007/pause_menu_label.cpp
 src/overlay007/pause_menu_submenu_label.cpp
 src/overlay007/pause_menu_label_motion.cpp
-src/field/field_vector_scale.c
 src/field/field_palette_crossfade_start.c
 src/field/field_palette_crossfade_transfer.c
 src/overlay007/pause_background.cpp
 src/overlay007/pause_background_palette.cpp
 src/overlay007/pause_menu_cursor.cpp
 src/field/field_party_trail.cpp
-src/field/field_party_piggyback.cpp
 src/field/field_party_recovery.cpp
 src/field/field_party_manager_actions.cpp
 
@@ -770,8 +710,7 @@ src/field/field_room_interaction.cpp
 src/field/field_room_transition.cpp
 src/overlay025/enemy_linked_effects.cpp
 src/overlay025/enemy_projectile_sequence.cpp
-src/field/field_party_action_selection.c
-src/field/field_party_input.c
+src/field/field_party_input_actions.c
 src/field/field_window_sprites.c
 src/field/field_message_window_slide.c
 src/field/field_message_window_clip.c
@@ -882,9 +821,8 @@ src/battle/battle_dialogue_destroy.cpp
 src/battle/battle_sprite_grid_capture.c
 src/battle/battle_scene_render_control.c
 src/battle/battle_model_stop_primary.cpp
-src/battle/battle_model_stop_alternate.cpp
+src/battle/battle_model_descriptor.cpp
 src/battle/battle_model_start_animation.cpp
-src/battle/battle_model_primary_descriptor.cpp
 src/battle/battle_common_resources.cpp
 src/battle/battle_transition_prepare.c
 src/battle/battle_transition_start.c
@@ -894,31 +832,26 @@ src/battle/battle_reward_items_status.c
 src/battle/battle_reward_items_initialize.c
 src/battle/battle_sound.c
 
-src/battle/battle_model_animation_slots.c
 src/battle/battle_alternate_model_slots.c
 src/battle/battle_axis_motion.c
 src/battle/battle_path_motion.c
-src/battle/battle_resource_effect_attachment.c
+src/battle/battle_resource_model_effects.c
 src/game/item_effect_value.c
 src/game/interval.c
 
 src/field/field_scene_dispatch.c
-src/field/field_game_over_transition.cpp
-src/field/field_menu_transitions.cpp
+src/field/field_scene_transitions.cpp
 
-src/field/field_party_indicator_init.c
 src/field/field_party_restore.c
 src/field/field_party_story_presence.c
 
 src/overlay006/credits_textured_quad.c
 src/overlay008/save_menu_textured_quad.c
 
-src/nitro/tp/tp_fifo.c
 src/nitro/mi/mi_card_dma.c
 src/nitro/os/os_console_type.c
 src/nitro/os/os_arena_low.c
 
-src/field/field_line_intersection.c
 src/field/field_interaction_refresh.c
 src/field/field_party_manager_input.c
 src/field/field_party_action_models.cpp
@@ -927,12 +860,11 @@ src/field/field_planar_bounds_update.c
 src/field/field_party_manager_action_models.cpp
 
 src/field/field_message_window_queries.c
-src/field/field_frame_finish.c
+src/field/field_frame_tasks.c
 src/field/field_projection.c
 src/field/field_camera_position.c
 src/field/field_script_update_gate.c
 src/field/field_party_action_update.c
-src/field/field_entity_screen_bounds.c
 src/field/field_planar_script_stop.cpp
 src/field/field_spatial_script_control.cpp
 src/field/field_message_window_close.cpp
@@ -958,8 +890,6 @@ src/game/window_open.c
 src/game/window_skin.c
 
 src/field/field_irq_task_destroy.c
-src/field/field_irq_task_init.c
-src/field/field_frame_task.c
 src/field/field_transfer_active.c
 src/field/field_transfer_controls.c
 src/field/field_time_hole_active.c
@@ -972,7 +902,6 @@ src/field/field_roaming_options.c
 src/field/field_party_lifecycle.cpp
 src/field/field_roaming_choose.cpp
 
-src/battle/battle_interface_quad.c
 
 src/overlay018/chomp_adult_exit.cpp
 src/overlay018/chomp_adult_jump.cpp
@@ -981,16 +910,13 @@ src/battle/battle_motion_velocity_ratio.c
 
 src/field/field_camera_setup.cpp
 
-src/battle/battle_curtain_draw.c
-src/battle/battle_resource_model_slots.c
-src/battle/battle_link_effect_update.c
+src/battle/battle_link_effect.c
 src/battle/battle_link_effect_simulate.c
 
 src/battle/battle_chain_rig_actor.cpp
 src/battle/battle_chain_rig_sequence.cpp
 src/battle/battle_capture_overlay_start.c
 src/battle/battle_ground_ripple_create.c
-src/battle/battle_link_effect_controls.c
 src/battle/battle_object_link_sum.c
 src/battle/battle_link_effect_upload.c
 src/overlay009/shop_equipped_marker.cpp

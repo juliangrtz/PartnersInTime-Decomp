@@ -4,9 +4,6 @@
     .data       start:0x020c0d40 end:0x020c1660 kind:data align:32
     .bss        start:0x020c1660 end:0x020c1680 kind:bss align:32
 
-src/field/field_entity_state.c:
-    .text       start:0x020a2bbc end:0x020a2d04
-
 src/field/field_vm_dispatch.cpp:
     .text       start:0x020823f8 end:0x02087fbc
 
@@ -15,7 +12,7 @@ src/field/field_timer.c:
     .text       start:0x020beb24 end:0x020bee20
 
 src/field/field_model_animation.c:
-    .text       start:0x020bee20 end:0x020bf110
+    .text start:0x020bee20 end:0x020bf200
 
 src/field/field_sprite_animation_lifecycle.c:
     .text       start:0x020bf510 end:0x020bf5b8
@@ -23,17 +20,14 @@ src/field/field_sprite_animation_lifecycle.c:
 src/field/field_sprite_animation_start.c:
     .text       start:0x020bf2e0 end:0x020bf33c
 
-src/field/field_sprite_animation_controls.c:
-    .text       start:0x020bf110 end:0x020bf200
-
 src/field/field_timed_renderer.cpp:
     .text       start:0x020bd724 end:0x020bdc88
 
 src/field/field_geometry.c:
-    .text       start:0x020be280 end:0x020be344
+    .text start:0x020be280 end:0x020be654
 
-src/field/field_direction.c:
-    .text       start:0x020be758 end:0x020be7d0
+src/field/field_vector_math.c:
+    .text start:0x020be758 end:0x020be950
 
 src/field/field_deferred_entity.cpp:
     .text       start:0x020bd1ec end:0x020bd724
@@ -57,52 +51,31 @@ src/field/field_spatial_lifecycle.cpp:
     .text       start:0x020b4edc end:0x020b64e8
 
 src/field/field_orbit.cpp:
-    .text       start:0x020a4f88 end:0x020a5408
+    .text start:0x020a4f88 end:0x020a5bf4
 
 src/field/field_spatial_orbit.cpp:
     .text       start:0x020b2044 end:0x020b26ac
 
-src/field/field_orbit_start.cpp:
-    .text       start:0x020a5408 end:0x020a5bf4
-
 src/field/field_spatial_orbit_start.cpp:
     .text       start:0x020b2c08 end:0x020b2e9c
 
-src/field/field_distance.c:
-    .text       start:0x020be7d0 end:0x020be950
-
 src/field/field_linear.cpp:
-    .text       start:0x020a5bf4 end:0x020a61b8
+    .text start:0x020a5bf4 end:0x020a6690
 
 src/field/field_spatial_linear.cpp:
-    .text       start:0x020b3160 end:0x020b39a8
-
-src/field/field_linear_start.cpp:
-    .text       start:0x020a61b8 end:0x020a6690
+    .text start:0x020b3160 end:0x020b4220
 
 src/field/field_entity_motion.cpp:
-    .text       start:0x020a6690 end:0x020a681c
+    .text start:0x020a6690 end:0x020a695c
 
-src/field/field_spatial_linear_start.cpp:
-    .text       start:0x020b39a8 end:0x020b4220
-
-src/field/field_vertical_motion.cpp:
-    .text       start:0x020b4300 end:0x020b451c
-
-src/field/field_locomotion_state.cpp:
-    .text       start:0x020a681c end:0x020a695c
-
-src/field/field_spatial_locomotion_state.cpp:
-    .text       start:0x020b4c78 end:0x020b4d7c
+src/field/field_spatial_frame_state.cpp:
+    .text start:0x020b4c78 end:0x020b4edc
 
 src/field/field_frame_snapshot.cpp:
     .text       start:0x020a6ab4 end:0x020a6b4c
 
-src/field/field_spatial_frame_snapshot.cpp:
-    .text       start:0x020b4d7c end:0x020b4edc
-
-src/field/field_spatial_placement.cpp:
-    .text       start:0x020b4220 end:0x020b4300
+src/field/field_spatial_motion.cpp:
+    .text start:0x020b4220 end:0x020b451c
 
 src/field/field_bounds_resources.cpp:
     .text       start:0x020a6c14 end:0x020a7310
@@ -149,17 +122,11 @@ src/field/field_room_scripts.c:
 src/field/field_area_lifecycle.c:
     .text start:0x02081454 end:0x020815a0
 
-src/field/field_party_pairing.cpp:
-    .text start:0x0208d4a4 end:0x0208dbd4
-
 src/field/field_party_snapshot.c:
     .text start:0x020bb69c end:0x020bc2f0
 
-src/field/field_base_copy.c:
-    .text start:0x020a2a58 end:0x020a2bbc
-
-src/field/field_planar_copy.c:
-    .text start:0x020a3068 end:0x020a3640
+src/field/field_entity_base.c:
+    .text start:0x020a2a58 end:0x020a2d04
 
 src/field/field_spatial_copy.c:
     .text start:0x020a7a80 end:0x020a8300
@@ -257,9 +224,6 @@ src/field/field_party_entity_navigation.cpp:
 src/field/field_render_updates.cpp:
     .text start:0x020a9778 end:0x020a9d1c
 
-src/field/field_vector_scale.c:
-    .text start:0x020be4f0 end:0x020be654
-
 src/field/field_palette_crossfade_start.c:
     .text start:0x02075600 end:0x020756ac
 
@@ -269,8 +233,8 @@ src/field/field_palette_crossfade_transfer.c:
 src/field/field_party_trail.cpp:
     .text start:0x02092088 end:0x020923dc
 
-src/field/field_party_piggyback.cpp:
-    .text start:0x0208cd08 end:0x0208d4a4
+src/field/field_party_pairing.cpp:
+    .text start:0x0208cd08 end:0x0208dbd4
 
 src/field/field_party_recovery.cpp:
     .text start:0x0208b488 end:0x0208bdc8
@@ -294,11 +258,8 @@ src/field/field_room_interaction.cpp:
 src/field/field_room_transition.cpp:
     .text start:0x0207f4d0 end:0x020802e0
 
-src/field/field_party_action_selection.c:
-    .text start:0x0209ce00 end:0x0209d024
-
-src/field/field_party_input.c:
-    .text start:0x0209d12c end:0x0209d254
+src/field/field_party_input_actions.c:
+    .text start:0x0209ce00 end:0x0209d254
 
 src/field/field_window_sprites.c:
     .text start:0x02079b74 end:0x02079d74
@@ -312,23 +273,14 @@ src/field/field_message_window_clip.c:
 src/field/field_scene_dispatch.c:
     .text start:0x02069eb0 end:0x0206a130
 
-src/field/field_game_over_transition.cpp:
-    .text start:0x0206a810 end:0x0206aa44
-
-src/field/field_menu_transitions.cpp:
-    .text start:0x0206aa44 end:0x0206b1fc
-
-src/field/field_party_indicator_init.c:
-    .text start:0x0209d024 end:0x0209d12c
+src/field/field_scene_transitions.cpp:
+    .text start:0x0206a810 end:0x0206b1fc
 
 src/field/field_party_restore.c:
     .text start:0x0209d254 end:0x0209d6f4
 
 src/field/field_party_story_presence.c:
     .text start:0x020a23f8 end:0x020a260c
-
-src/field/field_line_intersection.c:
-    .text start:0x020be344 end:0x020be4f0
 
 src/field/field_interaction_refresh.c:
     .text start:0x020a4e84 end:0x020a4f4c
@@ -348,9 +300,6 @@ src/field/field_party_manager_action_models.cpp:
 src/field/field_message_window_queries.c:
     .text start:0x0206fb74 end:0x0206fd18
 
-src/field/field_frame_finish.c:
-    .text start:0x02065e64 end:0x02065ee0
-
 src/field/field_projection.c:
     .text start:0x02068d24 end:0x02068e04
 
@@ -363,8 +312,8 @@ src/field/field_script_update_gate.c:
 src/field/field_party_action_update.c:
     .text start:0x020a04e4 end:0x020a0544
 
-src/field/field_entity_screen_bounds.c:
-    .text start:0x020a2fcc end:0x020a3068
+src/field/field_entity_planar.c:
+    .text start:0x020a2fcc end:0x020a3640
 
 src/field/field_planar_script_stop.cpp:
     .text start:0x020a3854 end:0x020a3928
@@ -405,11 +354,8 @@ src/field/field_common_input_mask.c:
 src/field/field_irq_task_destroy.c:
     .text start:0x02065d40 end:0x02065d90
 
-src/field/field_irq_task_init.c:
-    .text start:0x02065e34 end:0x02065e64
-
-src/field/field_frame_task.c:
-    .text start:0x02065ee0 end:0x02065f54
+src/field/field_frame_tasks.c:
+    .text start:0x02065e34 end:0x02065f54
 
 src/field/field_transfer_active.c:
     .text start:0x020660f8 end:0x02066124

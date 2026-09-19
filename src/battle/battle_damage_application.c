@@ -17,19 +17,16 @@ enum BattleDamageApplicationConstant {
     SAVE_EQUIPMENT_RECORD_SIZE = 0x24,
     SAVE_EQUIPMENT_EFFECT_OFFSET = 0x418
 };
-
 enum BattleDamageApplicationEffect {
     BATTLE_ENEMY_REACTION_EFFECT_NORMAL = 0x11,
     BATTLE_ENEMY_REACTION_EFFECT_ALTERNATE = 0x13,
     BATTLE_ENEMY_POPUP_EFFECT = 7,
     EQUIPMENT_EFFECT_POWER_SPECIAL = 0x3024
 };
-
 enum BattleDamageApplicationResource {
     BATTLE_DAMAGE_SPECIAL_RESOURCE_1 = (s32)0xC1000082,
     BATTLE_DAMAGE_SPECIAL_RESOURCE_2 = (s32)0xC10000A4
 };
-
 typedef struct BattleDamagePopupControl {
     u8 unknown_00[4];
     u16 flags;
@@ -293,4 +290,28 @@ void BattleDamage_ApplyToEnemy(BattleSceneObject *object, int popup_offset_x,
                                  (s16)(position.y + popup_offset_y), position.z,
                                  BATTLE_DAMAGE_SCALE);
     }
+}
+
+int BattleActor_ApplyDamage(BattleSceneObject *object, int damage) {
+    BattleActor *actor;
+
+    if (damage < 1) {
+        return 0;
+    }
+
+    actor = BattleActor_GetById(object->actor_id);
+    actor->pending_damage = 0;
+    if (actor->current_hp <= 0) {
+        actor->current_hp = 0;
+        actor->flags |= BATTLE_ACTOR_FLAG_KO;
+        return 0;
+    }
+
+    if (actor->current_hp <= damage) {
+        actor->current_hp = 0;
+        actor->flags |= BATTLE_ACTOR_FLAG_KO;
+        return 1;
+    }
+    actor->current_hp -= damage;
+    return 0;
 }

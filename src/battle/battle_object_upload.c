@@ -103,3 +103,72 @@ int BattleObjectData_UploadTextureTask(BattleObjectUploadTask *task) {
 int BattleObjectData_UploadSpriteTask(BattleObjectUploadTask *task) {
     return func_ov002_02068134(task->resource);
 }
+
+void func_0202cc58(const void *source, void *destination, u32 size);
+void func_0202cd2c(const void *source, void *destination, u32 size);
+void *BattleTransfer_EnqueueBeforeMapping(int (*callback)(BattleObjectUploadTask *task),
+                          BattleSceneResource *resource, int unknown_2,
+                          int unknown_3);
+
+void BattleObjectData_CopyResource(BattleSceneResource *resource,
+                                   BattleObjectDataLoadState *load_state) {
+    u32 copy_size = resource->allocation_size;
+
+    if (resource->stream_state != 0) {
+        copy_size -= *(u8 **)resource->stream_state -
+                     (u8 *)resource->stream_state;
+    }
+
+    if (resource->data < load_state->data) {
+        func_0202cd2c(resource->data, load_state->data, copy_size);
+    } else {
+        func_0202cc58(resource->data, load_state->data, copy_size);
+    }
+
+    load_state->component_04 = resource->component_04 == 0
+        ? 0
+        : (void *)((u32)load_state->data + (u32)resource->component_04 -
+                   (u32)resource->data);
+    load_state->component_08 = resource->component_08 == 0
+        ? 0
+        : (void *)((u32)load_state->data + (u32)resource->component_08 -
+                   (u32)resource->data);
+    load_state->component_0c = resource->component_0c == 0
+        ? 0
+        : (void *)((u32)load_state->data + (u32)resource->component_0c -
+                   (u32)resource->data);
+    load_state->component_10 = resource->component_10 == 0
+        ? 0
+        : (void *)((u32)load_state->data + (u32)resource->component_10 -
+                   (u32)resource->data);
+    load_state->component_14 = resource->component_14 == 0
+        ? 0
+        : (void *)((u32)load_state->data + (u32)resource->component_14 -
+                   (u32)resource->data);
+    load_state->texture_set = resource->texture_set;
+    load_state->stream_state = 0;
+    load_state->texture_variant = resource->texture_variant;
+    load_state->resource_id = resource->resource_id;
+    load_state->flags.bits.copy_flag = resource->flags.bits.copy_flag;
+    load_state->flags.bits.upload_complete =
+        resource->flags.bits.upload_complete;
+
+    if (load_state->flags.bits.resource_index == 0 ||
+        load_state->flags.bits.upload_complete) {
+        return;
+    }
+
+    BattleTransfer_EnqueueBeforeMapping(BattleObjectData_UploadTextureTask,
+                        load_state, 0, 0);
+    *(u16 *)(gBattleSystem + 3574) =
+        (*(u16 *)(gBattleSystem + 3574) & ~1) | 1;
+}
+
+BattleQueuedTask *BattleObjectData_QueueLoadAndMarkPending(
+        BattleObjectDataLoadState *load_state, s32 resource_id) {
+    BattleQueuedTask *task =
+        BattleObjectData_QueueLoad(load_state, resource_id);
+
+    load_state->flags.raw |= 1 << 29;
+    return task;
+}

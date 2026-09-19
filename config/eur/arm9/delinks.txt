@@ -8,17 +8,8 @@
 src/nitro/math/fx_coprocessor.c:
     .text       start:0x0203476c end:0x02034a14
 
-src/nitro/gx/gx_bank_reset.c:
-    .text       start:0x02035598 end:0x020357b4
-
-src/nitro/gx/gx_bank_state.c:
-    .text       start:0x02035444 end:0x02035598
-
-src/nitro/gx/gx_bank_lcdc.c:
-    .text       start:0x020357b4 end:0x020358ac
-
-src/nitro/gx/gx_bank_assign.c:
-    .text       start:0x020358ac end:0x020364ac
+src/nitro/gx/gx_vramcnt.c:
+    .text start:0x02035444 end:0x020364ac
 
 src/nitro/gx/gx_bg_address.c:
     .text       start:0x020364ac end:0x02036964
@@ -32,17 +23,11 @@ src/nitro/gx/gx_command_list.c:
 src/nitro/gx/gx_geometry_state.c:
     .text       start:0x02036d70 end:0x02037328
 
-src/nitro/gx/gx_extended_palette.c:
-    .text       start:0x020379ac end:0x02037e98
+src/nitro/gx/gx_load2d.c:
+    .text start:0x020379ac end:0x0203869c
 
-src/nitro/gx/gx_texture_palette_load.c:
-    .text       start:0x0203869c end:0x020387b0
-
-src/nitro/gx/gx_texture_load_end.c:
-    .text       start:0x020387b0 end:0x02038820
-
-src/nitro/gx/gx_texture_load_begin.c:
-    .text       start:0x02038984 end:0x02038a04
+src/nitro/gx/gx_load3d.c:
+    .text start:0x0203869c end:0x02038a04
 
 src/nitro/os/os_irq.c:
     .text       start:0x02038af0 end:0x02038e34
@@ -86,23 +71,14 @@ src/game/script_vm_execute.c:
 src/game/script_vm_variables.c:
     .text       start:0x020055f8 end:0x02005ba8
 
-src/nitro/gx/gx_vram_load.c:
-    .text       start:0x02037e98 end:0x0203869c
-
-src/nitro/snd/snd_commands.c:
-    .text       start:0x0203bd6c end:0x0203c298
-
-src/nitro/snd/snd_init.c:
-    .text       start:0x0203c298 end:0x0203c30c
+src/nitro/snd/snd_command.c:
+    .text start:0x0203bd6c end:0x0203c570
 
 src/nitro/snd/snd_command_queue.c:
     .text       start:0x0203c5b0 end:0x0203cb30
 
 src/nitro/snd/snd_shared.c:
     .text       start:0x0203cb30 end:0x0203ccf8
-
-src/nitro/snd/snd_command_status.c:
-    .text       start:0x0203c30c end:0x0203c570
 
 src/nitro/snd/snd_bank.c:
     .text       start:0x0203ccf8 end:0x0203d3ac
@@ -119,17 +95,11 @@ src/nitro/fs/fs_archive.c:
 src/nitro/fs/fs_file.c:
     .text       start:0x0203ed24 end:0x0203f33c
 
-src/nitro/fs/fs_commands.c:
-    .text       start:0x0203ddb8 end:0x0203e438
-
 src/nitro/fs/fs_rom.c:
     .text       start:0x0203f33c end:0x0203f654
 
-src/nitro/fs/fs_overlay_io.c:
-    .text       start:0x0203f928 end:0x0203fdb0
-
-src/nitro/fs/fs_overlay_lifecycle.c:
-    .text       start:0x0203f654 end:0x0203f928
+src/nitro/fs/fs_overlay.c:
+    .text start:0x0203f654 end:0x0203fdb0
 
 src/nitro/dgt/dgt_hash2.c:
     .text       start:0x0203fdb0 end:0x02040598
@@ -137,11 +107,8 @@ src/nitro/dgt/dgt_hash2.c:
 src/nitro/cp/cp_context.c:
     .text       start:0x02040598 end:0x02040678
 
-src/nitro/tp/tp_calibration_point.c:
-    .text       start:0x02040678 end:0x020407d4
-
-src/nitro/tp/tp_io.c:
-    .text       start:0x02040a44 end:0x02040fb0
+src/nitro/tp/tp.c:
+    .text start:0x02040678 end:0x02041270
 
 src/nitro/pm/pm_control.c:
     .text       start:0x02041270 end:0x02041994
@@ -452,9 +419,6 @@ src/game/text_control.c:
 src/game/text_next.cpp:
     .text start:0x02025774 end:0x02025dd8
 
-src/nitro/fs/fs_path.c:
-    .text start:0x0203d7dc end:0x0203ddb8
-
 src/game/audio_map_waves.c:
     .text start:0x02026524 end:0x020267f4
 
@@ -466,9 +430,6 @@ src/game/sprite_allocation_compact.c:
 
 src/game/sprite_allocation_create.c:
     .text start:0x0200856c end:0x02008fc4
-
-src/nitro/tp/tp_calculate.c:
-    .text start:0x020407d4 end:0x02040a44
 
 src/game/texture_allocation.c:
     .text start:0x0200ebc8 end:0x0200f25c
@@ -624,9 +585,6 @@ src/game/field_background_transfers.c:
 src/game/field_background_tilemap.c:
     .text       start:0x02011750 end:0x02011858
 
-src/nitro/gx/gx_texture_load.c:
-    .text       start:0x02038820 end:0x02038984
-
 src/game/field_background_transfer_task.cpp:
     .text       start:0x02011918 end:0x02011c8c
 
@@ -733,8 +691,8 @@ src/nitro/os/os_vram_exclusive.c:
 src/nitro/os/os_reset.c:
     .text       start:0x0203af0c end:0x0203afe8
 
-src/nitro/fs/fs_open_commands.c:
-    .text       start:0x0203d738 end:0x0203d7dc
+src/nitro/fs/fs_command.c:
+    .text start:0x0203d738 end:0x0203e438
 
 src/game/window_construct.c:
     .text start:0x0201f50c end:0x0201fe5c
@@ -747,9 +705,6 @@ src/game/item_effect_value.c:
 
 src/game/interval.c:
     .text start:0x020108f0 end:0x02010960
-
-src/nitro/tp/tp_fifo.c:
-    .text start:0x02040fb0 end:0x02041270
 
 src/nitro/mi/mi_card_dma.c:
     .text start:0x0203bcbc end:0x0203bd48
