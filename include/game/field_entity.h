@@ -66,7 +66,7 @@ typedef struct FieldBaseStateFlags {
     u32 facing_direction : 3;
     u32 previous_facing_direction : 3;
     u32 retain_offscreen_contact : 1;
-    u32 unknown_09 : 1, unknown_10 : 1, unknown_11 : 1;
+    u32 unknown_09 : 1, outside_screen : 1, previous_outside_screen : 1;
     u32 reserved_state : 1;
     u32 blink_mode : 2;
     u32 blink_paused : 1;
@@ -312,7 +312,7 @@ typedef struct FieldEntity {
     virtual void unknown_28();
     virtual void release_renderers();
     virtual void unknown_30();
-    virtual void unknown_34();
+    virtual int is_outside_screen();
     virtual void update_locomotion_state();
     virtual void map_locomotion_state();
     virtual void unknown_40(FieldRuntimeEntity **entities);

@@ -6,6 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldEntity_UpdateScreenVisibility(FieldRuntimeEntity *entity);
 int FieldEntity2D_IsOutsideScreen(FieldRuntimeEntity *entity);
 void FieldEntity_RefreshInteractionBounds(FieldRuntimeEntity *entity);
 void FieldEntity2D_UpdateBounds(FieldRuntimeEntity *entity);

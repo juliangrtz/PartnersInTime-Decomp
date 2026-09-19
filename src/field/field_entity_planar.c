@@ -47,8 +47,8 @@ FieldRuntimeEntity *FieldEntity_CopyPlanarState(FieldRuntimeEntity *entity, cons
         source->base_state_flag_bits.previous_facing_direction;
     entity->base_state_flag_bits.retain_offscreen_contact =
         source->base_state_flag_bits.retain_offscreen_contact;
-    entity->base_state_flag_bits.unknown_10 = source->base_state_flag_bits.unknown_10;
-    entity->base_state_flag_bits.unknown_11 = source->base_state_flag_bits.unknown_11;
+    entity->base_state_flag_bits.outside_screen = source->base_state_flag_bits.outside_screen;
+    entity->base_state_flag_bits.previous_outside_screen = source->base_state_flag_bits.previous_outside_screen;
     entity->base_state_flag_bits.reserved_state = source->base_state_flag_bits.reserved_state;
     entity->base_state_flag_bits.blink_mode = source->base_state_flag_bits.blink_mode;
     entity->base_state_flag_bits.blink_paused = source->base_state_flag_bits.blink_paused;

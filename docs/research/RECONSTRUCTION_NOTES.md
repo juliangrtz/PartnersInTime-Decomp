@@ -5079,3 +5079,51 @@ producers are `probe_field_frame.py` and `check_field_party_wrappers_isolated.py
 in `build/analysis/high_effort_50_to_55/`. The earlier `pause65_v1` failed only its
 final all-functions coverage assertion because release was absent; that failed
 report and producer are preserved, and the successful replay states the gap.
+
+
+## Field screen visibility
+
+[Entity visibility](../../src/field/field_entity_visibility.cpp) reconstructs
+`0x020A695C..0x020A6AB4` (344 bytes); the [area pass](../../src/field/field_visibility_pass.cpp)
+adds `0x0207ED28..0x0207EDC0` (152 bytes). Both match without ASM on the first
+compiled draft. Virtual slot `0x34` returns an integer screen-boundary predicate:
+the planar vtable at `0x020C1008` points to `FieldEntity2D_IsOutsideScreen`, while
+the party vtable at `0x020C1244` points to the spatial test at `0x020A79DC`.
+The latter also uses the greater of screen Y and the signed value at `+0x3D0`
+for the lower boundary. State bits 10/11 at entity `+0x184` are the current and
+previous outside-screen result; shared declarations and consumers now name them.
+The history shifts even when property bit 0 suppresses the predicate call.
+
+Automatic renderer toggles require animation support, a renderer, no blink mode
+and property bit 7 clear. State bit 9 suppresses hiding but does not suppress
+showing. Showing can reset renderer state through the resident helper's virtual
+callback; this batch does not reconstruct that helper. The area pass runs only
+in phase 71 with no scene transition and skips type-9 markers. Its entity count
+and entries are read again as the loop advances.
+
+Two ordinary routes from Saves 65 and 1 run for 5,210 frames. Deterministic
+first/every-61st sampling checks 720 of 43,853 entity calls and 45 of 2,714 area
+calls. The oracle checks full entity allocations and area/system records,
+callback order/arguments, history bits and both known boundary predicates.
+It exercises types 0/1/2/3/7/8, enabled/disabled predicates, inside/outside results
+and marker skipping. All observed predicates are the two modeled implementations.
+The sampled calls do not toggle a renderer, and all sampled area calls use phase
+71 with transition zero. Final captures show field scenes; no pause round-trip
+is established. All 104 original saves remain unchanged; no live RAM fixtures
+are used. Renderer checks cover the 312-byte base prefix, not a full allocation;
+graphics are not independently checked.
+
+Nineteen separate ARM946 cases use copied RAM with synthetic records and stack.
+They cover hide/show, already-correct visibility, disabled animation/predicate,
+null renderer, blink suppression, the asymmetric bit-9 guard, explicit visibility,
+history, null system, active transition, inactive area, markers and an empty list.
+All 4 MiB of RAM, scratch outside the exact native stack frame, SP and r4-r11 are
+checked. Predicate, toggle and area-child helpers are ABI stubs; these cases
+verify caller decisions and writes, not actual renderer restart, graphics or live
+coverage of those branches.
+
+Full build, original ROM hash, native relink and 107 tests pass. Final source
+objects and the affected planar/update units match. Private reports:
+`build/runtime/eur_high_field_visibility/{cold65_v1,pause1_v1,isolated_v1}.json`.
+Producers are `probe_field_visibility.py` and `check_field_visibility_isolated.py`
+in `build/analysis/high_effort_50_to_55/`.

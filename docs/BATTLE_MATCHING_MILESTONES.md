@@ -8560,3 +8560,12 @@ Full source objects, ROM and native relink match; 107 tests pass. Two automated
 save routes verify frame snapshots, render-list resets and party forwarding;
 20 isolated cases supplement the unobserved release wrapper. Original saves
 are unchanged. See [evidence and limits](research/RECONSTRUCTION_NOTES.md#field-frame-snapshots-and-party-forwarding).
+
+
+## Field screen visibility
+
+The entity culling update and guarded area pass now match as C++ without ASM.
+Coverage reaches 792,488 / 1,563,700 bytes (50.6803%). Actual source objects,
+full ROM and native relink match; 107 tests pass. Two live routes check 720 entity
+and 45 area calls; 19 isolated cases cover additional caller branches. See
+[evidence and limits](research/RECONSTRUCTION_NOTES.md#field-screen-visibility).

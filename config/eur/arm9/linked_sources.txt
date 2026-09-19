@@ -843,3 +843,7 @@ src/field/field_frame_begin.cpp
 src/field/field_entity_render_order.cpp
 
 src/field/field_party_frame.cpp
+
+src/field/field_entity_visibility.cpp
+
+src/field/field_visibility_pass.cpp

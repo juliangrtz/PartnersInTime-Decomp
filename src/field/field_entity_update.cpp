@@ -44,7 +44,7 @@ extern "C"
         {
             if (entity->base.property_00a_bits.subtype != 9 && !entity->base.visibility_bits.unknown_08 &&
                 (entity->base_state_flag_bits.retain_offscreen_contact ||
-                 !entity->base_state_flag_bits.unknown_10))
+                 !entity->base_state_flag_bits.outside_screen))
             {
                 entity->base.unknown_40(area->entities);
                 if (entity->base.property_00a_bits.subtype != 8)
@@ -84,7 +84,7 @@ extern "C"
         {
             if (entity->base.property_00a_bits.subtype != 9 && !entity->base.visibility_bits.unknown_08 &&
                 (entity->base_state_flag_bits.retain_offscreen_contact ||
-                 !entity->base_state_flag_bits.unknown_10))
+                 !entity->base_state_flag_bits.outside_screen))
                 entity->base.unknown_44();
         }
         for (FieldRuntimeEntity *entity = area->first_entity; entity; entity = entity->base.update_next)
@@ -92,7 +92,7 @@ extern "C"
             if (entity->base.property_00a_bits.subtype != 9 && entity->base.property_00a_bits.subtype != 8 &&
                 !entity->base.visibility_bits.unknown_08 &&
                 (entity->base_state_flag_bits.retain_offscreen_contact ||
-                 !entity->base_state_flag_bits.unknown_10))
+                 !entity->base_state_flag_bits.outside_screen))
                 entity->base.update_overlap_priorities(area->flags.unknown_04_05);
         }
         func_ov000_02071ebc(area);

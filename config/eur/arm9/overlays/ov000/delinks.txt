@@ -392,3 +392,9 @@ src/field/field_entity_render_order.cpp:
 
 src/field/field_party_frame.cpp:
     .text start:0x020bb56c end:0x020bb69c
+
+src/field/field_entity_visibility.cpp:
+    .text start:0x020a695c end:0x020a6ab4
+
+src/field/field_visibility_pass.cpp:
+    .text start:0x0207ed28 end:0x0207edc0
