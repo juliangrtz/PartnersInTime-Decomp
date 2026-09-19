@@ -1,3 +1,15 @@
+/*
+ * Damage calculation (overlay 2, 0x0209BF38-0x0209C278).
+ *
+ * The base formula: attack against defense, scaled by the attacker's Q8 damage
+ * scale, then clamped. CalculateByObject is the entry the scripts use, which
+ * resolves the object to its actor first and applies the equipment effects the
+ * member has on.
+ *
+ * Division is signed and truncates toward zero, so the helper call is part of
+ * the result, not an implementation detail.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_damage.h>

@@ -1,3 +1,12 @@
+/*
+ * Level-up screen (overlay 2, 0x02095648-0x02095E00).
+ *
+ * The screen shown after a battle: one row per stat, each animating from the old
+ * value to the new one, spawned in sequence by the row spawner while the
+ * controller drives the screen's entrance and exit. The growth values come from
+ * the party member's level table.
+ */
+
 #include <game/battle_ai.h>
 #include <game/save_data.h>
 

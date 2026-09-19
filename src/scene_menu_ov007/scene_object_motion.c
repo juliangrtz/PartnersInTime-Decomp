@@ -1,3 +1,12 @@
+/*
+ * Scene object motion channels (overlay 7, 0x02086974-0x02087240).
+ *
+ * The scene subsystem's equivalent of the battle motion channels: independent
+ * movement channels per object, summed by the per-frame update pass, so a
+ * script, a cutscene and an effect can move the same object without fighting
+ * over its position.
+ */
+
 #include <game/scene_motion.h>
 #include <hardware.h>
 

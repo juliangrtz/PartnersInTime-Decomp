@@ -3,6 +3,17 @@
 
 #include <nitro.h>
 
+/* The bytecode interpreter the field, battle, common-battle and scene scripts
+   all run on. The VM itself knows nothing about the opcodes: a ScriptVm carries
+   the owner's command handler and its descriptor table, so the same code runs
+   four languages with four sets of opcodes, variable namespaces and script
+   containers. Do not carry an opcode's meaning from one instance to another;
+   docs/research/SCRIPT_VM_SEMANTICS.md documents them per VM.
+
+   The descriptor table entry for an opcode says how many arguments it takes
+   and whether it has a result variable and argument modes, which is how
+   VM_ReadCommand can decode a command it does not understand. */
+
 typedef struct ScriptVm ScriptVm;
 typedef struct ScriptVmState ScriptVmState;
 typedef struct ScriptVmCommand ScriptVmCommand;
@@ -16,6 +27,9 @@ enum ScriptVmCommandDescriptor {
     SCRIPT_VM_HAS_ARGUMENT_MODES = 0x40
 };
 
+/* What a handler tells the interpreter to do next. YIELDED stops for this
+   frame and resumes at the same script position, which is how a script waits
+   for something without blocking; RETURNED unwinds one call frame. */
 enum ScriptVmResult {
     SCRIPT_VM_CONTINUE = 0,
     SCRIPT_VM_FINISHED = 1,
@@ -37,6 +51,10 @@ enum ScriptVmJumpCondition {
     SCRIPT_VM_NOT_NEGATIVE_ONE = 10
 };
 
+/* A variable id's high nibble selects where it lives: the script's own state,
+   one of the save file's flag or word banks, the owning subsystem's context, or
+   an extension namespace the owner resolves itself. The low bits index within
+   that namespace - as a bit number for the flag banks. */
 enum ScriptVmVariableNamespace {
     SCRIPT_VM_VAR_STATE = 0x1000,
     SCRIPT_VM_VAR_SAVE_FLAGS_48 = 0x2000,
@@ -61,6 +79,7 @@ enum ScriptVmVariableMask {
     SCRIPT_VM_VAR_EXTENDED_INDEX_MASK = 0x1FFF
 };
 
+/* One VM instance: the owner's dispatcher and its opcode descriptor table. */
 struct ScriptVm {
     u32 unknown_00;
     u32 unknown_04;
@@ -68,6 +87,8 @@ struct ScriptVm {
     const u32 *command_descriptors;
 };
 
+/* One decoded command. `argument_modes` says per argument whether the value in
+   `arguments` is an immediate or a variable id still to be read. */
 struct ScriptVmCommand {
     u16 opcode;
     u16 result_variable;
@@ -76,6 +97,10 @@ struct ScriptVmCommand {
     s32 arguments[16];
 };
 
+/* One running script: its instruction pointer, its local variables, and the
+   stack that serves both loop counters and call frames - loop_stack_base
+   overlaps the first call slot because a script uses one or the other at a
+   given depth. `delay` is the frame countdown a yielding command sets. */
 struct ScriptVmState {
     const u16 *script;
     union {
@@ -98,6 +123,7 @@ typedef char ScriptVmCommand_SizeCheck[
 ];
 typedef char ScriptVmState_SizeCheck[sizeof(ScriptVmState) == 0xAC ? 1 : -1];
 
+/* Run steps commands until a handler yields or the script finishes. */
 s32 VM_ReadVariable(u16 variable, ScriptVm *vm, ScriptVmState *state);
 void VM_WriteVariable(
     u16 variable, s32 value, ScriptVm *vm, ScriptVmState *state

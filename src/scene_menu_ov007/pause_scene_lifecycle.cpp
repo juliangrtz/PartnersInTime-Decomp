@@ -1,3 +1,11 @@
+/*
+ * Pause scene lifecycle (overlay 7, 0x02072270-0x020731B8).
+ *
+ * Init, Destroy and Delete for the pause menu scene. Two addresses inside Delete
+ * are branch targets in the original build and are preserved through
+ * config/eur/arm9/linker_aliases.json, so the function must stay one unit.
+ */
+
 #include "pause_scene_internal.h"
 
 extern "C" {

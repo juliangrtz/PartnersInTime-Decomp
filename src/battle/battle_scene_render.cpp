@@ -1,3 +1,11 @@
+/*
+ * Battle scene rendering (overlay 2, 0x020A2814-0x020A32F4).
+ *
+ * Draws the battle scene's models: builds each model's transform and hands it to
+ * the renderer in the order the sort keys demand. GetSelectedModel is how the
+ * interface finds the model under the current selection.
+ */
+
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 #include <game/battle_object.h>

@@ -1,3 +1,12 @@
+/*
+ * Status application and clearing (overlay 2, 0x0209C278-0x0209CB3C).
+ *
+ * Whether a status lands is decided here: the target's eligibility and
+ * resistance are checked, then a roll against the chance. Clearing comes in two
+ * forms - dropping one effect and dropping all of them - because ending a battle
+ * and curing an ailment are different paths through the same slots.
+ */
+
 #include <game/battle_effect.h>
 #include <game/battle_enemy_data.h>
 #include <game/battle_status.h>

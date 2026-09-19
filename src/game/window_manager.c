@@ -1,3 +1,13 @@
+/*
+ * Window manager (ARM9 resident, 0x0201F150-0x02020420).
+ *
+ * Opening, closing and pooling windows. Open takes a window out of the pool,
+ * allocates its tiles and links it into its screen's list; Close runs the
+ * closing animation and Release gives the tiles back. The construct/destroy pair
+ * comes in Base and Complete forms depending on whether the manager owns the
+ * buffers it draws into.
+ */
+
 #include <game/window.h>
 void GameWindow_ResetProperties(GameWindowManager *manager, GameWindowProperties *properties) {
     properties->shape.bits.screen = 0;

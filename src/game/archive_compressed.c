@@ -1,3 +1,12 @@
+/*
+ * Compressed archive reader (ARM9 resident, 0x0202C0D0-0x0202C824).
+ *
+ * The compressed variant of the archive reader: the same Init/Destroy Base and
+ * Complete pairs as archive_io.c, over a stream that is decompressed as it is
+ * read. Reads are paced against the display: ArchiveIO_GetVCount is used to stop
+ * before the beam reaches the part of the frame the caller must not miss.
+ */
+
 #include <game/archive_io.h>
 
 extern u32 data_02059c2c[];

@@ -1,3 +1,12 @@
+/*
+ * Sprite effect pool (ARM9 resident, 0x0202223C-0x020228D0).
+ *
+ * A fixed pool of sprite effects with an update pass over the active ones.
+ * Effects can be paused and resumed as a group, which is what a scene does when
+ * it opens a menu over itself, and an effect returns to the pool when it
+ * finishes rather than being freed.
+ */
+
 #include <game/sprite_effect.h>
 
 extern const GameSpriteEffectFrame *data_02056650[];
