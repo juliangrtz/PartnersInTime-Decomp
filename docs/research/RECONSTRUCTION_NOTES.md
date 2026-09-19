@@ -4952,3 +4952,31 @@ so their distinct effect is not tested. Full native relink, golden ROM build
 and 107 tests pass. Private reports are
 `build/runtime/eur_high_field_spawn/{cold1_v1,cold65_v1,cold103_v1}.json`, produced
 by `build/analysis/high_effort_50_to_55/probe_field_spawn.py`.
+
+
+## Party entity placement
+
+[Party placement](../../src/field/field_party_placement.cpp) reconstructs
+`0x020BC3E8..0x020BC684` (668 bytes) without ASM. It initializes the spatial
+base, installs the party vtable, clears the 128-byte extension and applies
+adult/baby motion, collision snapshots and presentation defaults. The placement
+record must be non-null: native collision setup reads it before a later guard.
+The auxiliary-count table selects up to six owned 1,360-byte objects, which
+are published after their constructor returns. The party allocation is 1,440 bytes.
+
+Ordinary Save 1 and Save 65 loads cover eight calls in 4,466 frames, both age
+groups, enabled/disabled babies and 32 auxiliaries. Per-party auxiliary counts
+are 1, 3 and 6. The oracle checks the full party allocation, placement record,
+direct and virtual call arguments, motion resets and auxiliary publication.
+Base construction is observational only within its 1,312-byte prefix, auxiliary
+construction only within each new 1,360-byte allocation; allocator internals
+are observational. The checked motion reset includes its locomotion helper.
+Final captures show normal field scenes. All 104 original saves are unchanged.
+The second screen/resource set, zero auxiliaries and allocation failure remain
+untested. No RAM fixtures are used.
+
+Actual party/caller objects match; full ROM, native relink and 107 tests pass.
+Private reports: `build/runtime/eur_high_party_placement/{cold1_v1,cold65_v2}.json`;
+producer: `build/analysis/high_effort_50_to_55/probe_party_placement.py`.
+The Save 65 repeat preserves identical call records and final image; its producer
+exit was captured explicitly. It is not counted as additional coverage.

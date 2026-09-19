@@ -833,3 +833,5 @@ src/field/field_effect_animation.cpp
 src/field/field_placed_entities.cpp
 
 src/field/field_entity_update_order.cpp
+
+src/field/field_party_placement.cpp

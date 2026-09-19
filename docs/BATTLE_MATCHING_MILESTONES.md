@@ -8532,3 +8532,12 @@ Two functions match as readable C++ without ASM. Coverage reaches 789,652 /
 objects, full ROM and native relink match; 107 tests pass. Three ordinary save
 loads cover six creation calls, 81 placements and 1,925 list resets. All original
 saves are unchanged. See [evidence and limits](research/RECONSTRUCTION_NOTES.md#room-placements-and-entity-update-order).
+
+
+## Party placement and auxiliary ownership (+668 bytes)
+
+The party constructor now matches as C++ without ASM. Coverage reaches 790,320 /
+1,563,700 bytes (50.5417%). Actual constructor/caller objects, full ROM and native
+relink match; 107 tests pass. Two ordinary save loads check eight constructors,
+32 auxiliaries and full party records. Original saves remain unchanged. See
+[evidence and limits](research/RECONSTRUCTION_NOTES.md#party-entity-placement).

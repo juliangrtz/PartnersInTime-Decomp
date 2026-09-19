@@ -46,7 +46,7 @@ typedef struct FieldPartyEntity {
         } auxiliary_motion;
     };
     union { u16 *unknown_568; FieldPartyFollowerFlags *follower_flags; };
-    u8 unknown_56c[4];
+    union { u8 unknown_56c[4]; u32 unknown_56c_word; };
     struct FieldPartyEntity *linked_member;
     struct FieldPartyEntity *partner;
     union {
@@ -192,6 +192,8 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+FieldPartyEntity *FieldPartyEntity_InitPlacement(FieldPartyEntity *party, int index,
+    const FieldSpawnRecord *spawn, int screen, int resource_set, u8 enabled, int baby);
 void FieldParty_UpdateRegion71ActionModel(FieldPartyController *party, int member);
 void FieldParty_InitializeIndicator(FieldPartyController *party, int visible, int screen, int layout, int style, int mode);
 void FieldParty_ResetActionState(FieldPartyController *party, int immediate, int preserve_state);

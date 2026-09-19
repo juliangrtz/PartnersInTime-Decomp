@@ -11,8 +11,7 @@ extern "C" {
 #include <game/field_variable_entity.h>
 extern "C" {
 void func_0202cbd4(void *, int, u32);
-FieldPartyEntity *func_ov000_020bc3e8(FieldPartyEntity *, int, const FieldSpawnRecord *, int, int,
-                                      u8, int);
+
 FieldEntity *func_ov000_020a2d04(FieldEntity *, int, const FieldSpawnRecord *, int, int, u8);
 
 void FieldArea_CreatePlacedEntities(FieldAreaContext *area)
@@ -35,9 +34,9 @@ void FieldArea_CreatePlacedEntities(FieldAreaContext *area)
                 FieldPartyEntity *entity = (FieldPartyEntity *)GameHeap_New(
                     sizeof(FieldPartyEntity), area->heaps.main, 0, 1);
                 if (entity)
-                    entity = func_ov000_020bc3e8(entity, area->entity_count,
-                                                 &resources->spawn_records[set][i],
-                                                 area->flags.screen, set, enabled, 0);
+                    entity = FieldPartyEntity_InitPlacement(entity, area->entity_count,
+                                                            &resources->spawn_records[set][i],
+                                                            area->flags.screen, set, enabled, 0);
                 area->entities[area->entity_count] = (FieldRuntimeEntity *)entity;
                 break;
             }
@@ -45,9 +44,9 @@ void FieldArea_CreatePlacedEntities(FieldAreaContext *area)
                 FieldPartyEntity *entity = (FieldPartyEntity *)GameHeap_New(
                     sizeof(FieldPartyEntity), area->heaps.main, 0, 1);
                 if (entity)
-                    entity = func_ov000_020bc3e8(entity, area->entity_count,
-                                                 &resources->spawn_records[set][i],
-                                                 area->flags.screen, set, enabled, 1);
+                    entity = FieldPartyEntity_InitPlacement(entity, area->entity_count,
+                                                            &resources->spawn_records[set][i],
+                                                            area->flags.screen, set, enabled, 1);
                 area->entities[area->entity_count] = (FieldRuntimeEntity *)entity;
                 break;
             }
