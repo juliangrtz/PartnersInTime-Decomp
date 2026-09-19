@@ -1,3 +1,11 @@
+/*
+ * Field background palette controls (ARM9 resident, 0x0201208C-0x02012490).
+ *
+ * The palette effects a field background runs: configuring one, resetting it,
+ * editing the base palette and uploading it, plus the blend animation and the
+ * layer parameters the effects apply to.
+ */
+
 #include <game/field_background.h>
 extern "C" {
 extern void func_0203b7b4(const void *, void *, u32);

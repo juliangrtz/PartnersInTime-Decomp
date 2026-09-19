@@ -1,3 +1,10 @@
+/*
+ * Field model animation (overlay 0, 0x020BEE20-0x020BF200).
+ *
+ * Starting and stepping a field model's animation, binding it to the models it
+ * drives, and the sprite-animation track cancel that shares the range.
+ */
+
 #include <game/field_animation.h>
 #include <nitro/gx_init.h>
 

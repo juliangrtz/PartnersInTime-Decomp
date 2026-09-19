@@ -1,3 +1,10 @@
+/*
+ * Sprite image decoding (ARM9 resident, 0x020235FC-0x020239DC).
+ *
+ * Decodes the narrow sprite image formats - 8x8, 8x12 and 8x16 - into tile
+ * memory.
+ */
+
 #include <game/sprite_image.h>
 
 /* The decoded image uses a fixed 20-pixel row pitch. Each pair of input

@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Sprite animator update (ARM9 resident, 0x02022164-0x0202223C).
+ *
+ * The animator's per-frame step.
+ */
+
 #include <game/sprite_animator.h>
 }
 

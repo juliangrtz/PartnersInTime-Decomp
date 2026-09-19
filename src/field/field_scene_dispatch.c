@@ -1,3 +1,9 @@
+/*
+ * Field scene dispatch (overlay 0, 0x02069EB0-0x0206A130).
+ *
+ * Steps the pending transition out of the field into another scene.
+ */
+
 #include "field_scene_transition_internal.h"
 int FieldSystem_UpdateSceneTransition(FieldSystem *system) {
     switch (system->scene_transition.phase) {

@@ -1,3 +1,10 @@
+/*
+ * Party following (overlay 0, 0x0209B0B8-0x0209B6B0).
+ *
+ * The follower's behaviour: enabling and disabling following, the rejoin when it
+ * falls behind, and the collision policy it is given while it follows.
+ */
+
 #include <game/field_party.h>
 #include <game/field_entity_lifecycle.h>
 #include <game/field_entity_motion.h>

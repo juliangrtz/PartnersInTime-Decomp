@@ -1,3 +1,10 @@
+/*
+ * 3D frame state (overlay 0, 0x020B4C78-0x020B4EDC).
+ *
+ * A 3D entity's per-frame state: the navigation surfaces it is standing on, the
+ * locomotion state and its mapping to an animation, and the accumulated motion.
+ */
+
 #include <game/field_entity_motion.h>
 extern "C" {
 

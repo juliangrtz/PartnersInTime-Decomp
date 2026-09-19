@@ -1,3 +1,11 @@
+/*
+ * Script VM variables (ARM9 resident, 0x020055F8-0x02005BA8).
+ *
+ * Resolves a variable id to its storage and reads or writes it. The namespace in
+ * the id's high nibble decides whether it lands in the script's own state, a
+ * save-file bank or the owning subsystem's context.
+ */
+
 #include <game/battle_ai.h>
 #include <game/script_vm.h>
 

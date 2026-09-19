@@ -1,3 +1,9 @@
+/*
+ * Text state (ARM9 resident, 0x020261D8-0x02026470).
+ *
+ * Initializes a GameText for a walk and resets it between uses.
+ */
+
 #include <game/text.h>
 #include <game/save_data.h>
 

@@ -1,3 +1,9 @@
+/*
+ * Field background tilemap upload (ARM9 resident, 0x02011750-0x02011858).
+ *
+ * Uploads a field background's tilemap to VRAM.
+ */
+
 #include <game/field_background.h>
 extern void func_02036988(vu32 *, int, int, int, int);
 extern void func_0203b578(int, const void *, void *, u32);

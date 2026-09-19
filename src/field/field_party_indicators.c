@@ -1,3 +1,10 @@
+/*
+ * Party indicators (overlay 0, 0x0209B6B0-0x0209C020).
+ *
+ * The icons over the party members: swapping which member is shown, sliding them
+ * to new positions, and their visibility and layer.
+ */
+
 #include <game/field_party.h>
 #include <game/field_area.h>
 extern const s16 data_ov000_020c0f5c[];

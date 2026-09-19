@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Field effect slots (overlay 0, 0x020712FC-0x0207133C).
+ *
+ * Finds a free slot in the area's effect table.
+ */
+
 #include <nitro/fx.h>
 #include <game/rumble.h>
 #include <game/save_data.h>

@@ -1,3 +1,12 @@
+/*
+ * Field background palette animation (ARM9 resident, 0x02012548-0x02012EA4).
+ *
+ * Tile and palette animations on a field background: starting, pausing,
+ * resuming and clearing them, stepping them per frame, and restoring the
+ * original palette afterwards. Uploads are requested rather than performed, so
+ * they land in the transfer pass.
+ */
+
 #include <game/field_background.h>
 #include <game/palette_animation.h>
 extern "C" {

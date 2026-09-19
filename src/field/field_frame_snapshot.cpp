@@ -1,3 +1,10 @@
+/*
+ * 2D frame snapshot (overlay 0, 0x020A6AB4-0x020A6B4C).
+ *
+ * Records a 2D entity's state at the start of a frame, so the update can compare
+ * against where it was.
+ */
+
 #include <game/field_entity_motion.h>
 extern "C" {
 

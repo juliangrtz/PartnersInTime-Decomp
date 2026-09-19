@@ -1,3 +1,10 @@
+/*
+ * Field resource lookup (overlay 0, 0x02077A44-0x02077B0C).
+ *
+ * Finds a shared field resource and reports whether it is allocated from the
+ * alternate heap.
+ */
+
 #include <game/field_resources.h>
 FieldPrimaryResource *FieldResources_FindShared(void *field_context, u32 id)
 {

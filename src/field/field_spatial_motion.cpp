@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * 3D placement and vertical motion (overlay 0, 0x020B4220-0x020B451C).
+ *
+ * Placing a 3D entity, facing it at a target, keeping it clear of the surface it
+ * stands on, and the vertical launch and fall.
+ */
+
 #include <nitro/fx.h>
 }
 #include <game/field_entity_motion.h>

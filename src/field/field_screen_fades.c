@@ -1,3 +1,10 @@
+/*
+ * Field screen fades (overlay 0, 0x02075968-0x02075D28).
+ *
+ * The brightness fade and the alpha blend the field runs, each started, stepped
+ * and reversible.
+ */
+
 #include <game/field_system.h>
 extern void GXi_SetMasterBrightness(vu16 *, int);
 void FieldArea_StartBrightness(FieldAreaContext *area, s16 initial, s16 target, u16 frames) {

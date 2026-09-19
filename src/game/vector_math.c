@@ -1,3 +1,11 @@
+/*
+ * Vector math helpers (ARM9 resident, 0x020163F0-0x020168F0).
+ *
+ * The fixed-point helpers the game's own vector code uses: bit counting and the
+ * scaling built on it, the cross product, and the square root and cosine
+ * approximations.
+ */
+
 #include <game/vector_math.h>
 
 static inline int GameVector_LeadingZeros(u32 value) {

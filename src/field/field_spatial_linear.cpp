@@ -1,4 +1,13 @@
 extern "C" {
+
+/*
+ * 3D linear motion (overlay 0, 0x020B3160-0x020B4220).
+ *
+ * Straight-line movement in three dimensions, with the following and timed
+ * variants, the completion test and the stop masks a script can arm to interrupt
+ * it.
+ */
+
 #include <nitro/fx.h>
 extern u16 FX_Atan2Idx(fx32, fx32);
 }

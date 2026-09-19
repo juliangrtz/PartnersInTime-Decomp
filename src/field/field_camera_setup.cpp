@@ -1,3 +1,11 @@
+/*
+ * Camera movement (overlay 0, 0x02073110-0x020736A4).
+ *
+ * Moving the camera by a motion profile or over a fixed duration, and tracking
+ * an entity at a speed or for a duration. Tracking re-reads the entity every
+ * frame, so it follows something that is itself moving.
+ */
+
 #include <game/field_area_motion.h>
 #include <game/field_entity.h>
 extern "C" int _s32_div_f(int, int);

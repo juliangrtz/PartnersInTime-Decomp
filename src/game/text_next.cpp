@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Text glyph iteration (ARM9 resident, 0x02025774-0x02025DD8).
+ *
+ * One step of the text walk: selects the font for the character's code, resolves
+ * its glyph image and size, and advances the cursor.
+ */
+
 #include <game/text.h>
 #include <game/sprite_image.h>
 

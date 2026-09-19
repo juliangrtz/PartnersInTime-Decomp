@@ -1,3 +1,10 @@
+/*
+ * 2D entity lifecycle (overlay 0, 0x020A7310-0x020A79DC).
+ *
+ * Placing, constructing and destroying a 2D entity, allocating and releasing its
+ * animation renderer, and the locomotion parameters it starts with.
+ */
+
 #include <game/field_entity_lifecycle.h>
 #include <game/field_entity.h>
 #include <game/field_timed_renderer.h>

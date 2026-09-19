@@ -1,3 +1,10 @@
+/*
+ * System initialization (ARM9 resident, 0x02005114-0x02005214).
+ *
+ * Brings the game's resident systems up in dependency order after the SDK is
+ * initialized.
+ */
+
 #include <game/input.h>
 #include <game/system.h>
 #include <game/heap.h>

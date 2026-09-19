@@ -1,3 +1,10 @@
+/*
+ * Window backgrounds (ARM9 resident, 0x0201AB54-0x0201B4CC).
+ *
+ * Configuring the backgrounds windows are drawn on, writing a window into the
+ * tilemap, uploading the dirty parts and applying the scroll.
+ */
+
 #include <game/window.h>
 void GameWindow_WriteTilemap(GameWindowManager *manager, GameWindow *window) {
     GameWindowProperties *properties = &window->properties;

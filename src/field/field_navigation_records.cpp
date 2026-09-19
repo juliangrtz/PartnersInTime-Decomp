@@ -1,3 +1,10 @@
+/*
+ * Navigation records (overlay 0, 0x0207B944-0x0207BED8).
+ *
+ * Expands the room's packed navigation records into the runtime surfaces, with
+ * the edge masks and bounds the walking code tests against.
+ */
+
 #include <game/field_area.h>
 extern "C" {
 #include <game/heap.h>

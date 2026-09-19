@@ -1,3 +1,11 @@
+/*
+ * Heap allocator (ARM9 resident, 0x02029808-0x02029C04).
+ *
+ * The allocator itself: carving a heap out of its parent, serving an allocation
+ * from either end of the region, and freeing by merging with the free
+ * neighbours. See include/game/heap.h for the block layout.
+ */
+
 #include <game/heap.h>
 
 extern GameHeapRegion data_02060b6c[32];

@@ -1,3 +1,9 @@
+/*
+ * Sprite animator tile upload (ARM9 resident, 0x020214EC-0x02021654).
+ *
+ * Uploads the animator's tiles into the sprite tile memory it allocated.
+ */
+
 #include <game/sprite_animator.h>
 
 extern const u16 data_02049ba8[], data_02049bb0[];

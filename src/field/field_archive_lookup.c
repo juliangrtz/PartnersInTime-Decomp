@@ -1,3 +1,10 @@
+/*
+ * Field archive lookup (overlay 0, 0x020894B4-0x020895F0).
+ *
+ * Resolves a room to its archive index and the primary and secondary records
+ * inside it.
+ */
+
 #include <game/field_archive.h>
 #include <game/save_data.h>
 

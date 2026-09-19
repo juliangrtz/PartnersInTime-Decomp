@@ -1,3 +1,9 @@
+/*
+ * Binary formatting (ARM9 resident, 0x0202ABF4-0x0202ACC8).
+ *
+ * Formats a value as binary and measures the result.
+ */
+
 #include <game/format.h>
 
 int GameFormat_Length(const char *text)

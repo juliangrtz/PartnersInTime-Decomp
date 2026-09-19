@@ -1,3 +1,11 @@
+/*
+ * Body collision (overlay 0, 0x020B11F0-0x020B1530).
+ *
+ * The entity's body volumes: loading their bounds, keeping their angles in step
+ * with the entity's facing, and selecting which contact a collision resolves
+ * to. The flag groups decide which channels a body responds on.
+ */
+
 #include <game/field_roaming.h>
 extern s32 FX_Atan2(fx32, fx32);
 static inline void UpdateBodyAngles(FieldRuntimeEntity *entity)

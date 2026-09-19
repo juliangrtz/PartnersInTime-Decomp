@@ -1,3 +1,10 @@
+/*
+ * Display render lists (ARM9 resident, 0x02008FC4-0x02009174).
+ *
+ * The per-screen lists of models to draw, walked once per frame, and the VRAM
+ * engine assignment that is cleared before a scene rebuilds it.
+ */
+
 #include <game/battle_scene.h>
 extern "C" {
 #include <game/heap.h>

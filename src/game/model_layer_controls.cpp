@@ -1,3 +1,10 @@
+/*
+ * Model animation layers (ARM9 resident, 0x0200C5D8-0x0200C7A4).
+ *
+ * Per-layer animation state on a battle model: the animation playing, its mode,
+ * its speed and whether the layer is active.
+ */
+
 #include <game/battle_scene.h>
 #include <game/palette_animation.h>
 

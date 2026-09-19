@@ -1,3 +1,11 @@
+/*
+ * Rumble driver (ARM9 resident, 0x0202DE54-0x0202E384).
+ *
+ * The Rumble Pak driver: detection, the raw register write, and the alarm-driven
+ * playback of a pulse pattern. Removal is detected and reported to whoever
+ * registered a callback.
+ */
+
 #include <game/rumble.h>
 
 extern int data_02060e08;

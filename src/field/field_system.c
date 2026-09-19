@@ -1,3 +1,10 @@
+/*
+ * Field system (overlay 0, 0x0206E040-0x0206E4D8).
+ *
+ * Init, Destroy and Delete for the field system itself, the touch handling it
+ * owns, and the snapshot it saves.
+ */
+
 #include <game/field_timer.h>
 #include <game/field_animation.h>
 #include <game/field_display.h>

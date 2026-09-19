@@ -1,3 +1,9 @@
+/*
+ * Palette crossfade start (overlay 0, 0x02075600-0x020756AC).
+ *
+ * Begins a crossfade between two palettes.
+ */
+
 #include <game/field_palette_crossfade.h>
 void FieldPaletteCrossfade_Start(FieldAreaContext *field, int region, int source, int target, int duration)
 {

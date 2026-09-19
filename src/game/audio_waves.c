@@ -1,3 +1,11 @@
+/*
+ * Wave archives (ARM9 resident, 0x02026E8C-0x02027264).
+ *
+ * Loading sequence banks and their wave archives, including the deferred loads
+ * that are resolved after the sequence is already playing, and the wave table
+ * that maps an instrument to its archive.
+ */
+
 #include <game/audio.h>
 
 extern void DC_StoreRange(const void *data, u32 size);

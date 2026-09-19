@@ -1,3 +1,9 @@
+/*
+ * Palette effect controller lifecycle (ARM9 resident, 0x0200D6CC-0x0200D754).
+ *
+ * Init, Destroy and Delete for the palette effect controller.
+ */
+
 #include <game/palette_animation.h>
 #include <game/sprite_output.h>
 #include <game/heap.h>

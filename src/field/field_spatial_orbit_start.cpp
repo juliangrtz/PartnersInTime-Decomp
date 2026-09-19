@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * 3D orbit start (overlay 0, 0x020B2C08-0x020B2E9C).
+ *
+ * Starts a timed orbit around a fixed point.
+ */
+
 #include <nitro/fx.h>
 extern u16 FX_Atan2Idx(fx32, fx32);
 }

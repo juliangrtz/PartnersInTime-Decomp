@@ -1,3 +1,11 @@
+/*
+ * Audio control surface (ARM9 resident, 0x020274D8-0x020278C0).
+ *
+ * Starting and stopping streams and voices, the output effect, and the delayed
+ * effect queue that fires a sound a set number of frames later. Also steps the
+ * music fade.
+ */
+
 #include <game/audio.h>
 
 extern const int data_02059b00[];

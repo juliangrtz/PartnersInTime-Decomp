@@ -1,3 +1,9 @@
+/*
+ * Party manager storage (overlay 0, 0x020A28B4-0x020A2A58).
+ *
+ * Allocates the party manager's snapshot storage and saves into it.
+ */
+
 #include <game/field_party_manager.h>
 extern void func_0202cbd4(void *, int, u32);
 extern void func_020488bc(void *, int, u32, FieldPartyController *(*)(FieldPartyController *));

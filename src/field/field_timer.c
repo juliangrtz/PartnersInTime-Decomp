@@ -1,3 +1,10 @@
+/*
+ * Field timer display (overlay 0, 0x020BEB24-0x020BEE20).
+ *
+ * The on-screen timer: its image, value, position and visibility, stepped each
+ * frame.
+ */
+
 #include <game/field_timer.h>
 
 extern void func_0202cbd4(void *destination, int value, u32 size);

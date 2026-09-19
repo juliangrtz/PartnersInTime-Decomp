@@ -1,3 +1,10 @@
+/*
+ * Sprite window updates (ARM9 resident, 0x020207C4-0x02020A1C).
+ *
+ * Applies the tile offsets a sprite window's objects were allocated at and
+ * uploads the parts marked dirty.
+ */
+
 #include <game/sprite_window.h>
 
 extern void DC_FlushRange(const void *address, u32 size);

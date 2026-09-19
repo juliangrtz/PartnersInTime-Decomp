@@ -1,3 +1,9 @@
+/*
+ * Window scroll links (ARM9 resident, 0x0201EFB4-0x0201F150).
+ *
+ * Moves a window with the background it is attached to.
+ */
+
 #include <game/window.h>
 
 class GameWindowClearInterface {

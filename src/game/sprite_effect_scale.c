@@ -1,3 +1,9 @@
+/*
+ * Sprite effect scaling (ARM9 resident, 0x020239DC-0x02023A60).
+ *
+ * Scales a sprite effect's size.
+ */
+
 #include <game/sprite_effect.h>
 
 extern s32 FX_Div(s32 numerator, s32 denominator);

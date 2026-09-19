@@ -1,3 +1,10 @@
+/*
+ * Party action reset (overlay 0, 0x0209336C-0x02093E38).
+ *
+ * Aligns the party's movement to its facing, plays the entry slide, and resets
+ * the action state a member was left in.
+ */
+
 #include <game/field_party.h>
 #include <game/field_linear.h>
 #include <game/field_entity_lifecycle.h>

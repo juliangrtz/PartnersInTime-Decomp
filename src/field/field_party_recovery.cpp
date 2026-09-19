@@ -1,3 +1,10 @@
+/*
+ * Party recovery (overlay 0, 0x0208B488-0x0208BDC8).
+ *
+ * The states a member goes through after a fall or a hit: the hover, the
+ * recovery blink, and the paired variants when both members are affected.
+ */
+
 #include "field_party_internal.h"
 #include <game/field_blink.h>
 

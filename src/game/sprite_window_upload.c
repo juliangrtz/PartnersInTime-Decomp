@@ -1,3 +1,9 @@
+/*
+ * Sprite window upload (ARM9 resident, 0x020204C4-0x020207C4).
+ *
+ * Uploads a sprite window's tiles.
+ */
+
 #include <game/sprite_window.h>
 
 /* Object shape/size byte for a block of at most eight by eight tiles; index

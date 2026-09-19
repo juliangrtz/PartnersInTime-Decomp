@@ -1,3 +1,11 @@
+/*
+ * Auxiliary entity lifecycle (overlay 0, 0x020B72E0-0x020B756C).
+ *
+ * An auxiliary entity is one attached at an offset to another - a carried baby,
+ * a held object. This is its construction, its renderer allocation and its
+ * per-frame locomotion state.
+ */
+
 #include <game/field_auxiliary.h>
 
 extern "C" {

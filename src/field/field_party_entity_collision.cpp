@@ -1,3 +1,10 @@
+/*
+ * Party entity collision (overlay 0, 0x020B8760-0x020B8A90).
+ *
+ * The collision response channels a party entity answers on, set outright or
+ * through a mask, and the type-3 volume test.
+ */
+
 #include <game/field_party.h>
 
 extern "C" {

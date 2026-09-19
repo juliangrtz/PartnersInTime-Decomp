@@ -1,3 +1,9 @@
+/*
+ * Camera position (overlay 0, 0x020736A4-0x02073740).
+ *
+ * Places the camera directly or centres it on an entity.
+ */
+
 #include <game/field_area.h>
 #include <game/field_entity.h>
 void FieldArea_SetCameraPosition(FieldAreaContext *area, fx32 x, fx32 y) {

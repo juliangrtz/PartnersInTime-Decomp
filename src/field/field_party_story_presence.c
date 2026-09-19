@@ -1,3 +1,9 @@
+/*
+ * Party story presence (overlay 0, 0x020A23F8-0x020A260C).
+ *
+ * Which members the story has present at this point.
+ */
+
 #include <game/field_party_manager.h>
 #include <game/script_vm.h>
 typedef union PartyPresence {

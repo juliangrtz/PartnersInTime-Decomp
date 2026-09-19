@@ -1,3 +1,10 @@
+/*
+ * Equipment effects (ARM9 resident, 0x02029130-0x0202938C).
+ *
+ * The stat bonuses an equipped item grants and the application of them to a
+ * party member's working stats.
+ */
+
 #include <game/equipment.h>
 
 extern const s16 data_020505d4[][14];

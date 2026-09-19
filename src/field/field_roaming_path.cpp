@@ -1,3 +1,10 @@
+/*
+ * Roaming paths (overlay 0, 0x020B1530-0x020B1A24).
+ *
+ * The path a roaming entity walks: starting it, advancing it each frame, and
+ * the pause and resume a script can apply.
+ */
+
 #include <game/field_roaming.h>
 #include <game/field_linear.h>
 extern "C" {

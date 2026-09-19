@@ -1,3 +1,11 @@
+/*
+ * Auxiliary entity updates (overlay 0, 0x020B6560-0x020B6E98).
+ *
+ * The per-frame work for an auxiliary entity, all of it evaluated at the offset
+ * it is attached at: navigation, collision, contacts, renderer position,
+ * animation and render priority.
+ */
+
 #include <game/field_auxiliary.h>
 
 extern "C" {

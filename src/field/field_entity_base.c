@@ -1,3 +1,11 @@
+/*
+ * Entity base (overlay 0, 0x020A2A58-0x020A2D04).
+ *
+ * The construction shared by every field entity kind: installing one of the two
+ * dispatch tables, resetting the action state, and the state copy used for
+ * snapshots.
+ */
+
 #include <game/field_entity.h>
 
 extern FieldEntityVTable data_ov000_020c0fc4[];

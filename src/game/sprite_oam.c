@@ -1,3 +1,10 @@
+/*
+ * OAM sorting (ARM9 resident, 0x020078B4-0x02007AAC).
+ *
+ * Orders the appended OAM groups by their sort keys and emits the final table
+ * the hardware scans.
+ */
+
 #include <game/sprite_output.h>
 
 void GameOam_SortGroups(int screen)

@@ -1,3 +1,9 @@
+/*
+ * Message window slide (overlay 0, 0x0206F288-0x0206F378).
+ *
+ * Steps a message window's slide toward its target.
+ */
+
 #include <game/field_area.h>
 #include <game/window.h>
 

@@ -1,3 +1,10 @@
+/*
+ * Field area lifecycle (overlay 0, 0x02081454-0x020815A0).
+ *
+ * Constructs and destroys the area context, and captures the snapshot a room
+ * transition restores from.
+ */
+
 #include <game/field_area.h>
 
 extern const void *data_ov000_020c0e20[];

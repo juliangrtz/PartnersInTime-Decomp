@@ -1,3 +1,10 @@
+/*
+ * Render model lifecycle (ARM9 resident, 0x02010550-0x020106A4).
+ *
+ * Init, Destroy and Delete for a battle render model and the descriptor it is
+ * built from.
+ */
+
 #include <game/battle_scene.h>
 extern "C" {
 #include <game/heap.h>

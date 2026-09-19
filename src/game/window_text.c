@@ -1,3 +1,10 @@
+/*
+ * Window text layout (ARM9 resident, 0x0201DA48-0x0201DC98).
+ *
+ * Vertical alignment of a window's text within its frame, and the sound played
+ * when text starts appearing.
+ */
+
 #include <game/window.h>
 #include <game/audio.h>
 void GameWindow_StartTextSound(GameWindowManager *manager, GameWindow *window) {

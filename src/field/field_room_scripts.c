@@ -1,3 +1,9 @@
+/*
+ * Room scripts (overlay 0, 0x020797E4-0x02079B0C).
+ *
+ * Loads the scripts belonging to a room.
+ */
+
 #include <game/field_resources.h>
 #include <game/battle_archive.h>
 #include <game/heap.h>

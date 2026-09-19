@@ -1,5 +1,12 @@
 extern "C" {
 
+/*
+ * Roaming options (overlay 0, 0x020B1B88-0x020B2044).
+ *
+ * The destinations a roaming entity may pick: the bounds it stays inside, the
+ * option table, and the weighted choice of the next destination.
+ */
+
 #include <game/field_roaming.h>
 void FieldRoaming_SetBounds(FieldRuntimeEntity *entity, int minimum_x, int minimum_y, int maximum_x,
                             int maximum_y) {

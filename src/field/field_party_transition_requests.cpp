@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Party bounds transitions (overlay 0, 0x0209F230-0x0209F644).
+ *
+ * Transitions triggered by the party crossing a boundary: the pending transition
+ * is queued when the bounds are entered and applied at the frame boundary.
+ */
+
 #include <nitro/fx.h>
 }
 #include <game/field_party_manager.h>

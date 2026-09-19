@@ -1,3 +1,10 @@
+/*
+ * Field frame tasks (overlay 0, 0x02065E34-0x02065F54).
+ *
+ * The task that closes a field frame and the IRQ task that uploads its
+ * graphics.
+ */
+
 #include <game/field_tasks.h>
 #include <game/heap.h>
 extern GameTaskVTable data_ov000_020c0dd0, data_ov000_020c0df8;

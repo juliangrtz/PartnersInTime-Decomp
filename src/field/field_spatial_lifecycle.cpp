@@ -1,3 +1,9 @@
+/*
+ * 3D entity lifecycle (overlay 0, 0x020B4EDC-0x020B64E8).
+ *
+ * Construction and destruction of a 3D field entity and the renderers it owns.
+ */
+
 #include <game/field_entity_lifecycle.h>
 #include <game/field_entity.h>
 #include <game/field_timed_renderer.h>

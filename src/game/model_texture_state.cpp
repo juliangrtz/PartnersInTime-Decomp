@@ -1,3 +1,10 @@
+/*
+ * Render model texture state (ARM9 resident, 0x0200FB34-0x0200FCEC).
+ *
+ * The dirty flags that decide whether a model's texture or palette is re-uploaded
+ * this frame, and the reset that clears the texture lists.
+ */
+
 #include <game/battle_scene.h>
 
 extern "C" {

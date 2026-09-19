@@ -1,3 +1,11 @@
+/*
+ * Battle model controller setup (ARM9 resident, 0x0200CD68-0x0200D000).
+ *
+ * Init, Destroy and Delete for a battle model controller, with the resource
+ * configure and restore pair that binds it to the model it drives. The Base and
+ * Complete forms differ in who owns the resources.
+ */
+
 #include <game/battle_scene.h>
 #include <game/model_resource.h>
 extern "C" {

@@ -1,3 +1,10 @@
+/*
+ * Field background transfer task (ARM9 resident, 0x02011918-0x02011C8C).
+ *
+ * The task that drains the background transfer queue each frame, with the
+ * palette effect reversal that shares its range.
+ */
+
 #include <game/field_background.h>
 #include <game/task.h>
 #include <game/input.h>

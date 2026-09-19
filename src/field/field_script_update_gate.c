@@ -1,3 +1,9 @@
+/*
+ * Script update gate (overlay 0, 0x0207EB28-0x0207EB90).
+ *
+ * Runs the area's scripts only while nothing else holds control.
+ */
+
 #include <game/field_area.h>
 extern void func_ov000_02088c88(FieldScriptManager *);
 typedef struct FieldOwnerModeView {

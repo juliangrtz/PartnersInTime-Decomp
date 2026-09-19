@@ -1,3 +1,9 @@
+/*
+ * Audio teardown (ARM9 resident, 0x02028040-0x020280EC).
+ *
+ * Shuts the audio subsystem down and releases its heap.
+ */
+
 #include <game/audio.h>
 
 void GameAudio_Destroy(void)

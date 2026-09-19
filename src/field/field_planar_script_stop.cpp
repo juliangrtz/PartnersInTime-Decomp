@@ -1,3 +1,9 @@
+/*
+ * 2D entity script control (overlay 0, 0x020A3854-0x020A3928).
+ *
+ * Stop, pause and resume for the script attached to a 2D entity.
+ */
+
 #include <game/field_entity_motion.h>
 #include <game/field_linear.h>
 #include <game/field_orbit.h>

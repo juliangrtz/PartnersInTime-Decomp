@@ -1,3 +1,10 @@
+/*
+ * Field system resources (overlay 0, 0x0206D1DC-0x0206D400).
+ *
+ * Releases the field's shared resources, creates its sprite windows, and the HP
+ * refill and adjustment applied to a party member.
+ */
+
 #include <game/field_system.h>
 #include <game/field_resources.h>
 #include <game/sprite_window.h>

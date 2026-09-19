@@ -1,3 +1,10 @@
+/*
+ * Navigation changes (overlay 0, 0x0207AF94-0x0207B19C).
+ *
+ * Changes a script makes to the room's walkable surfaces, saved with the room
+ * state and reapplied when it is restored.
+ */
+
 #include <game/field_area.h>
 extern "C" {
 typedef struct SavedNav {

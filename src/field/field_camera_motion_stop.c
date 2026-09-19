@@ -1,3 +1,9 @@
+/*
+ * Camera motion stop (overlay 0, 0x02072A30-0x02072A9C).
+ *
+ * Stops the camera's current move and reports the direction it was going.
+ */
+
 #include <game/field_area_motion.h>
 #include <nitro/fx_atan.h>
 void FieldArea_StopCameraMotion(FieldAreaContext *area, FieldCameraMotion *motion, int snap) {

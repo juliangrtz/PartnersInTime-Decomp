@@ -1,3 +1,9 @@
+/*
+ * Room interaction (overlay 0, 0x0207EF18-0x0207F4D0).
+ *
+ * Deciding what the player's interaction button acts on in the current room.
+ */
+
 #include <game/field_area.h>
 #include <game/field_room_interaction.h>
 #include <game/field_party_manager.h>

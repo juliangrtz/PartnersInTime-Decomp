@@ -1,3 +1,9 @@
+/*
+ * Colour cycle setup (overlay 0, 0x020691F8-0x02069284).
+ *
+ * Initializes the palette colour cycling the field runs.
+ */
+
 #include <game/field_system.h>
 extern void func_0202cbd4(void *, int, u32);
 void FieldColorCycle_Initialize(void *unused, u8 initial, u8 target, u8 mode, u8 duration,

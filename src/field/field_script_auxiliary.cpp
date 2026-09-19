@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Auxiliary script start (overlay 0, 0x0208911C-0x02089188).
+ *
+ * Starts an auxiliary script alongside the room's main one.
+ */
+
 #include <nitro/fx.h>
 }
 #include <game/field_script_context.h>

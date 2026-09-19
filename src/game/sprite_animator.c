@@ -1,3 +1,10 @@
+/*
+ * Sprite animator (ARM9 resident, 0x02021B98-0x02021FAC).
+ *
+ * Construction of the sprite animator and the loads that bring a sprite's
+ * graphics in for the main screen, the sub screen or both.
+ */
+
 #include <game/sprite_animator.h>
 
 extern void (*data_02056614[])(GameSpriteAnimator *, GameSpriteAnimation *);

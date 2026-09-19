@@ -1,3 +1,9 @@
+/*
+ * Party action update (overlay 0, 0x020A04E4-0x020A0544).
+ *
+ * Steps the party's active actions once per frame.
+ */
+
 #include <game/field_party_manager.h>
 extern void func_ov000_0209c930(FieldPartyController *);
 extern void func_ov000_020a03a0(FieldPartyManager *);

@@ -1,3 +1,9 @@
+/*
+ * Field sprite animation lifecycle (overlay 0, 0x020BF510-0x020BF5B8).
+ *
+ * Init and Destroy for a field sprite animation.
+ */
+
 #include <game/field_animation.h>
 #include <game/heap.h>
 

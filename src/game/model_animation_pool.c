@@ -1,3 +1,10 @@
+/*
+ * Model animation contexts (ARM9 resident, 0x02010C34-0x02010E38).
+ *
+ * A pool of animation contexts: a model takes one when an animation starts and
+ * returns it when the animation ends, so nothing is allocated mid-scene.
+ */
+
 #include <game/model_animation.h>
 
 extern GameModelAnimation *data_0205a8c8;

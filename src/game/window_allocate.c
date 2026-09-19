@@ -1,3 +1,10 @@
+/*
+ * Window allocation (ARM9 resident, 0x0201CC58-0x0201D320).
+ *
+ * Reserving a window and its tiles, releasing them again, drawing its skin and
+ * rebuilding the screen's tilemap around it.
+ */
+
 #include <game/window.h>
 void GameWindow_MeasureText(GameWindowManager *manager, const u8 *string, const u32 *const *fonts, GameTextBounds *bounds, u8 compact) {
     GameText text;

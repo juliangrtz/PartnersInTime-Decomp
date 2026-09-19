@@ -1,3 +1,9 @@
+/*
+ * Party action models (overlay 0, 0x0209CCA0-0x0209CD84).
+ *
+ * Updates the model shown for the action available in region 71.
+ */
+
 #include <game/field_party_manager.h>
 typedef struct PartyActionModelView {
     u8 prefix[0x8c];

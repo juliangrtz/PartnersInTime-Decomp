@@ -1,3 +1,9 @@
+/*
+ * Party snapshot restore (overlay 0, 0x0209D254-0x0209D6F4).
+ *
+ * Restores the party from a saved snapshot.
+ */
+
 #include <game/field_party_snapshot.h>
 void FieldParty_RestoreSnapshot(FieldPartyController *party, int screen,
                                 const FieldPartyControllerSnapshot *snapshot,

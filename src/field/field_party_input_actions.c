@@ -1,3 +1,10 @@
+/*
+ * Party input and actions (overlay 0, 0x0209CE00-0x0209D254).
+ *
+ * Reads the pad for the party: toggling between the available actions, setting a
+ * member's action, and refreshing or resetting the selection.
+ */
+
 #include <game/field_party.h>
 #include <game/field_area.h>
 

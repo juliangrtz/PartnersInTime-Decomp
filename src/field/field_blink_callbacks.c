@@ -1,3 +1,9 @@
+/*
+ * Blink renderer callbacks (overlay 0, 0x020A9638-0x020A9778).
+ *
+ * The show and hide callbacks the blink drives its renderers through.
+ */
+
 #include <game/field_blink.h>
 extern void func_020093b4(FieldRenderObject *, int);
 

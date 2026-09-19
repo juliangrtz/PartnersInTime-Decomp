@@ -1,3 +1,9 @@
+/*
+ * Sprite window close (ARM9 resident, 0x02020420-0x020204C4).
+ *
+ * Closes a sprite window.
+ */
+
 #include <game/sprite_window.h>
 
 void GameSpriteWindow_Close(GameSpriteWindowManager *manager, s16 index) {

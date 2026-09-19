@@ -1,3 +1,10 @@
+/*
+ * Entity interaction bounds (overlay 0, 0x020A4DF8-0x020A4F88).
+ *
+ * The box an entity can be interacted with through, set explicitly or refreshed
+ * from its resource, and the behaviour mode that decides how it responds.
+ */
+
 #include <game/field_presentation.h>
 #include <game/field_timed_renderer.h>
 extern "C" {

@@ -1,3 +1,10 @@
+/*
+ * Special contact (overlay 0, 0x0206C42C-0x0206C4FC).
+ *
+ * Checks for the contacts that trigger something other than an ordinary
+ * collision response.
+ */
+
 #include <game/field_auxiliary.h>
 /* Interaction-bearing entities extend this common prefix. Auxiliary objects
  * use their own complete 1360-byte record and owner link. */

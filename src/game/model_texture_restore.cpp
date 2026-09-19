@@ -1,3 +1,10 @@
+/*
+ * Render model texture restore (ARM9 resident, 0x0200F804-0x0200F85C).
+ *
+ * The converted size of a model's texture and the release that hands its
+ * resources and controller back.
+ */
+
 #include <game/battle_scene.h>
 
 extern "C" {

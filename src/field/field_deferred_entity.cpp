@@ -1,3 +1,10 @@
+/*
+ * Deferred entity (overlay 0, 0x020BD1EC-0x020BD724).
+ *
+ * An entity whose script is suspended: the timed pause it is held in, the
+ * stop/pause/resume that control it, and the blink it may play meanwhile.
+ */
+
 #include <game/field_entity_lifecycle.h>
 #include <game/field_deferred_entity.h>
 #include <game/field_blink.h>

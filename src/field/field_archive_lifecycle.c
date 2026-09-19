@@ -1,3 +1,9 @@
+/*
+ * Field archive lifecycle (overlay 0, 0x020897D0-0x0208995C).
+ *
+ * Init, Destroy and Delete for the field's archive reader.
+ */
+
 #include <game/field_archive.h>
 #include <game/battle_archive.h>
 #include <game/heap.h>

@@ -1,3 +1,9 @@
+/*
+ * String formatting (ARM9 resident, 0x0202A944-0x0202AA74).
+ *
+ * The hex and string conversions the game's formatting helpers are built from.
+ */
+
 #include <game/format.h>
 
 extern const char *data_02059b60[2];

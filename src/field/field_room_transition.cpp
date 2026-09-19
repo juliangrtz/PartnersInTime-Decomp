@@ -1,3 +1,10 @@
+/*
+ * Room transition (overlay 0, 0x0207F4D0-0x020802E0).
+ *
+ * Changing rooms: the fade, the load of the next room's data and the placement
+ * of the party at the arrival point.
+ */
+
 #include <game/field_area.h>
 #include <game/field_party_manager.h>
 #include <game/field_system.h>

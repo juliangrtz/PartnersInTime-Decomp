@@ -1,3 +1,9 @@
+/*
+ * Localized text resources (ARM9 resident, 0x02018ED8-0x02018F48).
+ *
+ * Loads the localized text tables and resolves an entry in one.
+ */
+
 #include <game/save_data.h>
 #include <game/text.h>
 

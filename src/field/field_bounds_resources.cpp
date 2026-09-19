@@ -1,3 +1,10 @@
+/*
+ * Entity renderer and bounds resources (overlay 0, 0x020A6B4C-0x020A7310).
+ *
+ * Binding a 2D entity's renderer and bounds resources and refreshing the bounds
+ * from them each frame.
+ */
+
 #include <game/field_presentation.h>
 #include <game/field_timed_renderer.h>
 #include <game/sprite_output.h>

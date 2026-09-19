@@ -1,3 +1,9 @@
+/*
+ * Palette crossfade transfer (overlay 0, 0x020751D8-0x02075450).
+ *
+ * Interpolates the crossfade's current palette and transfers it.
+ */
+
 #include <game/field_palette_crossfade.h>
 extern u8 *data_ov000_020bfc5c[14];
 extern u32 func_020357b4(void), func_0203582c(void), func_020357dc(void), func_02035850(void);

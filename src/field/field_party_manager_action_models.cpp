@@ -1,3 +1,9 @@
+/*
+ * Party manager action models (overlay 0, 0x020A02E0-0x020A03A0).
+ *
+ * Updates the region 71 action models for the whole party.
+ */
+
 #include <game/field_party_manager.h>
 typedef struct PartyOwnerModeView {
     u8 prefix[600];

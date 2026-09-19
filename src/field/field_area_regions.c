@@ -1,3 +1,10 @@
+/*
+ * Area regions (overlay 0, 0x0207A890-0x0207AD4C).
+ *
+ * Creates the room's variable entities and sets up the quad regions the
+ * collision and trigger tests are indexed by.
+ */
+
 #include <game/field_area.h>
 #include <game/field_variable_entity.h>
 #include <game/heap.h>

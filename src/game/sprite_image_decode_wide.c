@@ -1,3 +1,9 @@
+/*
+ * Wide sprite image decoding (ARM9 resident, 0x02022DB0-0x02022E34).
+ *
+ * The 16-pixel-wide sprite image formats.
+ */
+
 #include <game/sprite_image.h>
 
 void GameSpriteImage_Decode16x16(const u32 *source, u8 *destination)

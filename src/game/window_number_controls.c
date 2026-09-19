@@ -1,3 +1,9 @@
+/*
+ * Window numbers (ARM9 resident, 0x0201A0C4-0x0201A1AC).
+ *
+ * Measures a number as it will be drawn in a window, with and without padding.
+ */
+
 #include <game/window.h>
 
 extern void func_0201a5fc(GameWindowManager *, GameWindow *, u8, int);

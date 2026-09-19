@@ -1,3 +1,10 @@
+/*
+ * Party entity state copy (overlay 0, 0x020B756C-0x020B7B68).
+ *
+ * Saving and restoring a party entity's render snapshot and its state, and
+ * finding the paired bounds it is standing in.
+ */
+
 #include <game/field_party.h>
 #include <game/field_bounds_records.h>
 #include <game/field_auxiliary.h>

@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Music loading (ARM9 resident, 0x02027264-0x020274D8).
+ *
+ * Prepares a music sequence: loads the common bank it shares with the rest of
+ * the game, then the sequence itself, and starts it once both are in place.
+ */
+
 #include <game/audio.h>
 
 extern void MI_CpuFill8(void *destination, u8 value, u32 size);

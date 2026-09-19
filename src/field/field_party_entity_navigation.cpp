@@ -1,3 +1,9 @@
+/*
+ * Party entity navigation (overlay 0, 0x020B8CA8-0x020B8E4C).
+ *
+ * The navigation-side type-3 volume test for a party entity.
+ */
+
 #include <game/field_party.h>
 
 extern "C" {

@@ -1,3 +1,11 @@
+/*
+ * Debug console (ARM9 resident, 0x0202ACC8-0x0202B1CC).
+ *
+ * A text console drawn into a background: cursor placement, printf-style
+ * formatting and the tile upload. Left in the retail build but not reachable
+ * from normal play.
+ */
+
 #include <game/debug_console.h>
 #include <game/input.h>
 

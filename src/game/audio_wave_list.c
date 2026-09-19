@@ -1,3 +1,9 @@
+/*
+ * Wave list loading (ARM9 resident, 0x020278C0-0x02027A2C).
+ *
+ * Loads the wave archives a bank's instrument list refers to.
+ */
+
 #include <game/audio.h>
 
 extern int func_0203cfec(SoundBank *bank, int instrument, int key, SoundInstrument *output);

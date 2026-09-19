@@ -1,3 +1,11 @@
+/*
+ * Random numbers (ARM9 resident, 0x0202CB48-0x0202CBD4).
+ *
+ * The game's linear congruential generator and the modulo helper. Random_Next
+ * advances the shared seed, so the sequence is shared by everything that calls
+ * it within a frame.
+ */
+
 #include <game/random.h>
 
 extern u32 data_02060e04;

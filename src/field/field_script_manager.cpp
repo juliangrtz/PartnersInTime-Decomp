@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Field script manager (overlay 0, 0x02089280-0x020894B4).
+ *
+ * Constructs the field's script manager and its VM instance, and copies it for a
+ * snapshot.
+ */
+
 #include <nitro/fx.h>
 }
 #include <game/field_script_context.h>

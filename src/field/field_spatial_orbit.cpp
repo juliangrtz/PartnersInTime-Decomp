@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * 3D orbital motion (overlay 0, 0x020B2044-0x020B26AC).
+ *
+ * Moving a 3D entity along a circle: the position for the current angle, the
+ * frame advance, the stop masks and the cancel.
+ */
+
 #include <nitro/fx.h>
 }
 #include <game/field_entity_motion.h>

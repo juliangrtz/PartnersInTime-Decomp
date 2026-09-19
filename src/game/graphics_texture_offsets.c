@@ -1,3 +1,10 @@
+/*
+ * Texture offsets (ARM9 resident, 0x0200E110-0x0200E4BC).
+ *
+ * The offset tables for individual and grouped textures, the format decoding
+ * they depend on, and the orthographic projection the 2D-style drawing uses.
+ */
+
 #include <game/graphics_resource.h>
 #include <nitro/gx_projection.h>
 

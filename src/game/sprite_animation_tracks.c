@@ -1,3 +1,10 @@
+/*
+ * Sprite animation tracks (ARM9 resident, 0x020179C0-0x02017EC8).
+ *
+ * Allocating, starting and stepping a sprite animation track, and the scan that
+ * finds the keyframe the current time falls in.
+ */
+
 #include <game/sprite_animation.h>
 extern void func_0202cbd4(void *, int, u32);
 GameSpriteAnimation *GameSpriteAnimation_Initialize(GameSpriteAnimation *animation, void *storage, int tracks, int buffer_size) {

@@ -1,3 +1,9 @@
+/*
+ * Baby spin action (overlay 0, 0x0208BDC8-0x0208CD08).
+ *
+ * The spin the babies perform, driven through the party manager's action state.
+ */
+
 #include "field_party_internal.h"
 /* Baby Spin entry, hovering, gliding, landing and cancellation were observed
  * with story save 83. The alternate state-68 and restore paths retain neutral

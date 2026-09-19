@@ -1,3 +1,11 @@
+/*
+ * Sprite palettes (ARM9 resident, 0x02007B94-0x02007EBC).
+ *
+ * The per-screen sprite palette list: marking a palette dirty, resolving its
+ * buffer, uploading one or all of them, and unlinking a palette that is no
+ * longer referenced.
+ */
+
 #include <game/sprite_output.h>
 
 extern u8 *data_02050960[2];

@@ -1,3 +1,10 @@
+/*
+ * Field background queries (ARM9 resident, 0x020132A0-0x02013470).
+ *
+ * Reading a field background's scroll parameters, origin, configuration and
+ * resources, and activating a tilemap patch.
+ */
+
 #include <game/field_background.h>
 extern "C" {
 #include <game/save_data.h>

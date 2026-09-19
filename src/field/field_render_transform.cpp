@@ -1,3 +1,10 @@
+/*
+ * Entity render transform (overlay 0, 0x020A3928-0x020A4214).
+ *
+ * The rotation and scaling applied to an entity's render object: starting a
+ * timed rotation, advancing the transform and deciding when it has arrived.
+ */
+
 #include <game/field_transform.h>
 static inline void SetScale(FieldRenderObject *renderer, s16 x, s16 y)
 {

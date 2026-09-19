@@ -1,3 +1,10 @@
+/*
+ * Sprite animation colour (ARM9 resident, 0x020169F8-0x02016A6C).
+ *
+ * Packs a colour for a sprite animation track and releases a track's owner
+ * reference.
+ */
+
 #include <game/sprite_animation.h>
 u32 GameSpriteAnimation_PackColor(const s32 *rgb) {
     int red = rgb[0];

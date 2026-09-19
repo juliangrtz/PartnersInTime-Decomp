@@ -1,3 +1,9 @@
+/*
+ * Message window close (overlay 0, 0x0206FACC-0x0206FB74).
+ *
+ * Closes the area's message windows.
+ */
+
 #include <game/field_area.h>
 #include <game/window.h>
 struct FieldWindowCloseInterface {

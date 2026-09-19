@@ -1,3 +1,10 @@
+/*
+ * Area state (overlay 0, 0x0206E4D8-0x0206EC68).
+ *
+ * Copies the area's state for a snapshot and refreshes the graphics that depend
+ * on it.
+ */
+
 #include <game/field_area.h>
 #include <game/field_palette_crossfade.h>
 extern void func_0202cc58(const void *, void *, u32);

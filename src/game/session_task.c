@@ -1,3 +1,9 @@
+/*
+ * Session task (ARM9 resident, 0x020062EC-0x020063A4).
+ *
+ * Init, Destroy and Delete for the task that owns the running session.
+ */
+
 #include <game/session.h>
 #include <game/save_data.h>
 #include <game/heap.h>

@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Script entity controls (overlay 0, 0x02087FBC-0x02088008).
+ *
+ * The animation wait a script can put an entity in, and the contact flag restore
+ * that follows it.
+ */
+
 #include <nitro/fx.h>
 }
 #include <game/field_script_manager.h>

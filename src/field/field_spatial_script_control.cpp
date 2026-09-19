@@ -1,3 +1,9 @@
+/*
+ * 3D entity script control (overlay 0, 0x020A86A4-0x020A87A4).
+ *
+ * Stop, pause and resume for the script attached to a 3D entity.
+ */
+
 #include <game/field_entity_motion.h>
 #include <game/field_linear.h>
 #include <game/field_transform.h>

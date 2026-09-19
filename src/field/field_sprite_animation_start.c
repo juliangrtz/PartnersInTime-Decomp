@@ -1,3 +1,9 @@
+/*
+ * Field sprite animation start (overlay 0, 0x020BF2E0-0x020BF33C).
+ *
+ * Starts a field sprite animation.
+ */
+
 #include <game/field_animation.h>
 
 extern void func_ov000_020bf33c(FieldSpriteAnimation *state);

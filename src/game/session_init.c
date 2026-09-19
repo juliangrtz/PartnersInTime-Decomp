@@ -1,3 +1,10 @@
+/*
+ * Session start (ARM9 resident, 0x02004D40-0x02004F9C).
+ *
+ * Starts a new game session: the settings it begins with and the save state
+ * reset that goes with it.
+ */
+
 #include <game/session.h>
 #include <game/heap.h>
 #include <game/inventory.h>

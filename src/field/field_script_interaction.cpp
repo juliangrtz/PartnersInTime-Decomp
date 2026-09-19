@@ -1,3 +1,10 @@
+/*
+ * Script interaction (overlay 0, 0x0208815C-0x0208834C).
+ *
+ * Begins and ends the interaction a script runs, which is what takes control
+ * away from the player and gives it back.
+ */
+
 #include <game/field_roaming.h>
 extern "C" {
 #include <nitro/fx.h>

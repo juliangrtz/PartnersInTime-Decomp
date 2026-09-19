@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Window IRQ task (ARM9 resident, 0x020196F8-0x020197EC).
+ *
+ * The VBlank task that uploads the window manager's dirty tilemaps and windows.
+ */
+
 #include <game/window.h>
 extern GameTaskVTable data_020564d4;
 }

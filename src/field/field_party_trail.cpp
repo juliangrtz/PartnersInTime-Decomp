@@ -1,3 +1,10 @@
+/*
+ * Party trail (overlay 0, 0x02092088-0x020923DC).
+ *
+ * The trail of copies a moving party member leaves, with the emitter that
+ * spawns them and the test for whether any are still alive.
+ */
+
 #include <game/field_party.h>
 #include <game/field_auxiliary.h>
 #include <game/field_presentation.h>

@@ -1,4 +1,13 @@
 extern "C" {
+
+/*
+ * 2D entity motion (overlay 0, 0x020A6690-0x020A695C).
+ *
+ * One frame of a 2D entity's movement: the locomotion state is updated and
+ * mapped to an animation, the accumulated motion is applied, and the facing
+ * follows.
+ */
+
 #include <nitro/fx.h>
 extern u16 FX_Atan2Idx(fx32, fx32);
 extern const u8 data_ov000_020c0b04[];

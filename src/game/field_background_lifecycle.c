@@ -1,3 +1,9 @@
+/*
+ * Field background lifecycle (ARM9 resident, 0x02015A38-0x02015DDC).
+ *
+ * Init, Destroy and Delete for a field background.
+ */
+
 #include <game/field_background.h>
 #include <game/task.h>
 #include <game/input.h>

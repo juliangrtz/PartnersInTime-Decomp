@@ -1,3 +1,10 @@
+/*
+ * Message window clipping (overlay 0, 0x0206F448-0x0206F768).
+ *
+ * The window planes that clip a field message window and the slide that moves it
+ * at a given speed.
+ */
+
 #include <game/field_area.h>
 #include <game/window.h>
 

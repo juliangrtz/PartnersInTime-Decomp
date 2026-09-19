@@ -1,3 +1,11 @@
+/*
+ * Entity blinking (overlay 0, 0x020A461C-0x020A4940).
+ *
+ * The blink an entity plays after taking damage: start, per-frame step and stop,
+ * with the sort key copied to the anchor so the flashing renderer stays layered
+ * correctly.
+ */
+
 #include <game/field_transform.h>
 #include <game/field_blink.h>
 extern const s8 data_ov000_020c0b10[];

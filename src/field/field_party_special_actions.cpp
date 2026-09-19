@@ -1,3 +1,11 @@
+/*
+ * Party special actions (overlay 0, 0x0208995C-0x0208B208).
+ *
+ * The scripted party moves: launching to an elevation, the baby drop and its
+ * landing, and the auxiliary launch and placement, each with the behaviour save
+ * and restore that brackets it.
+ */
+
 #include <game/field_resources.h>
 #include "field_party_internal.h"
 #include <game/field_blink.h>

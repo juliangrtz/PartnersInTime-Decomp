@@ -1,3 +1,10 @@
+/*
+ * Field scene requests (overlay 0, 0x0206A810-0x0206B1FC).
+ *
+ * The requests the field makes to leave for another scene - pause, save, shop,
+ * credits, game over - and the shop scene's preparation.
+ */
+
 #include "field_scene_release_internal.h"
 
 extern "C" {

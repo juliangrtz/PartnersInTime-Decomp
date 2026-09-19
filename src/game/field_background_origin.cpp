@@ -1,3 +1,9 @@
+/*
+ * Field background origin (ARM9 resident, 0x02013E90-0x02013F8C).
+ *
+ * Sets the origin the background's scroll is measured from.
+ */
+
 #include <game/field_background.h>
 
 extern "C" void FieldBackground_SetOrigin(FieldBackground *background, int origin_x, int origin_y)

@@ -1,3 +1,9 @@
+/*
+ * Field OAM frame (overlay 0, 0x02070CFC-0x02070E18).
+ *
+ * Prepares the OAM entries the field emits this frame.
+ */
+
 #include <game/field_area.h>
 #include <game/field_timer.h>
 #include <game/field_hud.h>

@@ -1,3 +1,9 @@
+/*
+ * Window text cache (ARM9 resident, 0x02019E00-0x02019E74).
+ *
+ * Resets a window's recorded draw commands.
+ */
+
 #include <game/window.h>
 void GameWindow_ResetTextCache(GameWindowManager *manager, GameWindow *window) {
     GameWindowTextCache *cache = &manager->text_cache[window->allocation.bits.group];

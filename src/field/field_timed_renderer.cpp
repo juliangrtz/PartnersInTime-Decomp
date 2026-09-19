@@ -1,3 +1,10 @@
+/*
+ * Timed animation renderer (overlay 0, 0x020BD724-0x020BDC88).
+ *
+ * A renderer whose animation runs for a set number of loops: the loop count, the
+ * restart, the per-frame update and the render list it is drawn from.
+ */
+
 #include <game/field_timed_renderer.h>
 #include <game/battle_scene.h>
 extern "C" {

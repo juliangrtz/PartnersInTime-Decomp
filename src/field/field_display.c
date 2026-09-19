@@ -1,3 +1,10 @@
+/*
+ * Field display setup (overlay 0, 0x0206DBA4-0x0206E040).
+ *
+ * Sets up the field's VRAM and geometry state and saves the palettes that a
+ * later effect will restore.
+ */
+
 #include <game/field_display.h>
 #include <game/heap.h>
 #include <nitro/gx_init.h>

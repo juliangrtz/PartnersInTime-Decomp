@@ -1,3 +1,12 @@
+/*
+ * Save backup device (ARM9 resident, 0x02028350-0x0202890C).
+ *
+ * Reads and writes of the cartridge's backup memory, in both the EEPROM and
+ * flash forms, with the lock that serializes them and the checksum the save
+ * file is validated by. Requests are asynchronous; Wait and GetState are how a
+ * caller follows one.
+ */
+
 #include <game/save_backup.h>
 
 extern u8 data_0205e300;

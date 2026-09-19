@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * HUD visibility (overlay 0, 0x02071CE8-0x02071DE8).
+ *
+ * Brings the HUD up and shows or hides its renderers.
+ */
+
 #include <nitro/fx.h>
 #include <game/rumble.h>
 #include <game/save_data.h>

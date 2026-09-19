@@ -1,3 +1,10 @@
+/*
+ * Field geometry (overlay 0, 0x020BE280-0x020BE654).
+ *
+ * Vector scaling, line intersection and orientation tests, plus the section
+ * lookup that finds a block inside a field resource.
+ */
+
 #include <game/field_geometry.h>
 #define FIELD_MUL(a, b) ((fx32)(((s64)(a) * (b) + 2048) >> 12))
 /* Reduce large components before squaring, then restore the length scale. */

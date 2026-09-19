@@ -1,3 +1,10 @@
+/*
+ * Field background transfers (ARM9 resident, 0x02011184-0x020114F4).
+ *
+ * Queueing a background's scroll, palette and blend changes and applying them.
+ * Going through a queue is what keeps the writes inside the blanking period.
+ */
+
 #include <game/field_background.h>
 extern void func_02036988(vu32 *, int, int, int, int);
 extern void func_0203b578(int, const void *, void *, u32);

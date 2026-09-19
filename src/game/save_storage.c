@@ -1,3 +1,11 @@
+/*
+ * Save storage layout (ARM9 resident, 0x0202890C-0x02028CE8).
+ *
+ * The structure of the battery file: the signature, the settings block, the
+ * slot directory and the per-slot footers, with the probe that identifies the
+ * device and the checks each region is validated by.
+ */
+
 #include <game/save_storage.h>
 
 extern u8 data_0205e328;

@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * 3D entity render updates (overlay 0, 0x020A9778-0x020A9D1C).
+ *
+ * A 3D entity's per-frame render state: its animation, whether its shadow is
+ * shown and where, and its screen position.
+ */
+
 #include <nitro/fx.h>
 }
 #include <game/field_entity.h>

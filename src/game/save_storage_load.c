@@ -1,3 +1,9 @@
+/*
+ * Save loading (ARM9 resident, 0x02028E6C-0x02028EF0).
+ *
+ * Loads a slot out of the battery file into the live save state.
+ */
+
 #include <game/save_storage.h>
 
 extern u8 data_0205e328;

@@ -1,3 +1,10 @@
+/*
+ * Render model palette (ARM9 resident, 0x0200D754-0x0200D7D0).
+ *
+ * The palette a render model draws with: its source, its colour count, whether
+ * it is buffered, and the transform and sort-key mode read alongside it.
+ */
+
 #include <game/battle_scene.h>
 
 extern "C" {

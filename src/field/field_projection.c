@@ -1,3 +1,9 @@
+/*
+ * Field projection (overlay 0, 0x02068D24-0x02068E04).
+ *
+ * The projection registers the field draws its 3D content through.
+ */
+
 #include <game/field_system.h>
 #include <nitro/gx_projection.h>
 extern void func_02037108(void);

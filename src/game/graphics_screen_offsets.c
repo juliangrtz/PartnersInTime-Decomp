@@ -1,3 +1,10 @@
+/*
+ * Screen texture offsets (ARM9 resident, 0x02009D24-0x02009FFC).
+ *
+ * Builds the offset table a screen's textures are addressed through, honouring
+ * the alignment each texture format requires.
+ */
+
 #include <game/graphics_resource.h>
 #include <game/sprite_output.h>
 extern const u16 data_02049940[12];

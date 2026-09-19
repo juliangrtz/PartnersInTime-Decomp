@@ -1,3 +1,9 @@
+/*
+ * Party storage (overlay 0, 0x0209D7EC-0x0209DD8C).
+ *
+ * Allocates the party's snapshot backups and saves into them.
+ */
+
 #include <game/field_party_snapshot.h>
 extern void func_020488bc(void *, int, u32, FieldPartyEntity *(*)(FieldPartyEntity *));
 extern void func_020489e0(void *, int, u32, FieldPartyEntity *(*)(FieldPartyEntity *),

@@ -1,3 +1,9 @@
+/*
+ * Sprite window objects (ARM9 resident, 0x02020A1C-0x02020D1C).
+ *
+ * Builds the OAM entries a sprite window is drawn from.
+ */
+
 #include <game/sprite_window.h>
 
 /* Object shape/size byte for a block of at most eight by eight tiles; index

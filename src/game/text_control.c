@@ -1,3 +1,10 @@
+/*
+ * Text control codes (ARM9 resident, 0x020250F8-0x02025774).
+ *
+ * Handles the escape sequences embedded in a string, including the line
+ * alignment they can request.
+ */
+
 #include <game/text.h>
 
 static inline void GameText_AlignLine(GameText *text)

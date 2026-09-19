@@ -1,3 +1,10 @@
+/*
+ * Model primary animation (ARM9 resident, 0x0200C91C-0x0200C9C8).
+ *
+ * The primary animation layer's animation, state, mode and speed, and the
+ * object size that follows from it.
+ */
+
 #include <game/battle_scene.h>
 
 extern "C" {

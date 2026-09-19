@@ -1,3 +1,10 @@
+/*
+ * Affine matrix inverse (ARM9 resident, 0x02010AA8-0x02010C34).
+ *
+ * Inverts a Q8 affine matrix, which the sprite and background code needs to map
+ * screen coordinates back through a rotation or scale.
+ */
+
 #include <game/affine.h>
 
 int GameAffine_InvertQ8(const AffineMatrixQ8 *source, AffineMatrixQ8 *destination)

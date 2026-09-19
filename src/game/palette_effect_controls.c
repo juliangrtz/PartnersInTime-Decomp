@@ -1,3 +1,10 @@
+/*
+ * Palette effect entries (ARM9 resident, 0x0200D000-0x0200D100).
+ *
+ * Configuring, resetting and reversing one palette effect entry, and reading its
+ * state back.
+ */
+
 #include <game/palette_animation.h>
 #include <game/sprite_output.h>
 #include <game/heap.h>

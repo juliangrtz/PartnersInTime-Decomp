@@ -1,3 +1,10 @@
+/*
+ * System VBlank (ARM9 resident, 0x02005330-0x0200547C).
+ *
+ * The resident VBlank work and the soft-reset key combination check that runs
+ * with it.
+ */
+
 #include <game/system.h>
 #include <game/task.h>
 #include <game/rumble.h>

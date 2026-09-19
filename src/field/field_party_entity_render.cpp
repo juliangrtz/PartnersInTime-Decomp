@@ -1,3 +1,11 @@
+/*
+ * Party entity rendering (overlay 0, 0x020B7EF8-0x020B80A4).
+ *
+ * Screen positions, auxiliary render priorities, the sort keys copied to the
+ * anchors, the blink renderers, and the state resources bound at offsets 18 and
+ * 1C.
+ */
+
 #include <game/field_resources.h>
 #include <game/field_party.h>
 #include <game/field_auxiliary.h>

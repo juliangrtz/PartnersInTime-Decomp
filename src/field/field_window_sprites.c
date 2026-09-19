@@ -1,3 +1,9 @@
+/*
+ * Field window sprites (overlay 0, 0x02079B74-0x02079D74).
+ *
+ * Loads the sprite graphics the area's windows are drawn from.
+ */
+
 #include <game/field_area.h>
 #include <game/window.h>
 

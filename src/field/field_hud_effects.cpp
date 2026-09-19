@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Field HUD and effects (overlay 0, 0x0207138C-0x02071A38).
+ *
+ * The HUD's positioning and drawing, and the effect slots the field starts and
+ * stops - both globally and attached to one entity.
+ */
+
 #include <nitro/fx.h>
 #include <game/rumble.h>
 #include <game/save_data.h>

@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Camera shake stop (overlay 0, 0x02071FEC-0x02072074).
+ *
+ * Ends the camera shake and restores the untouched position.
+ */
+
 #include <nitro/fx.h>
 #include <game/rumble.h>
 #include <game/save_data.h>

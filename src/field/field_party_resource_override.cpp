@@ -1,3 +1,10 @@
+/*
+ * Party action resources (overlay 0, 0x02092F30-0x02093108).
+ *
+ * Binds the resource an action needs and copies the render priorities of the
+ * attached entities so the override draws in the right order.
+ */
+
 #include <game/field_resources.h>
 #include <game/field_party.h>
 #define MEMBER party->members[member]

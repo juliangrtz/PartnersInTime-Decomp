@@ -1,3 +1,10 @@
+/*
+ * Resource reads (ARM9 resident, 0x020168F0-0x020169F8).
+ *
+ * Reads a resource file into memory, with the halfword move the aligned copies
+ * use.
+ */
+
 #include <nitro/fs.h>
 #include <game/heap.h>
 extern u8 data_02054f68[];

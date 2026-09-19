@@ -1,3 +1,11 @@
+/*
+ * Sprite windows (ARM9 resident, 0x02020D1C-0x020211FC).
+ *
+ * A window drawn as sprites rather than as a background: it reuses the window
+ * manager but allocates sprite slots instead of tiles, which is why open and
+ * release come in their own forms here.
+ */
+
 #include <game/sprite_window.h>
 #include <game/heap.h>
 extern void func_0201a714(GameWindowManager *, GameWindow *);

@@ -1,3 +1,10 @@
+/*
+ * Field effect controls (overlay 0, 0x020756AC-0x02075814).
+ *
+ * Whether the area's palette and background effects are running, and pausing or
+ * reversing them.
+ */
+
 #include <game/field_area.h>
 #include <game/field_background.h>
 #include <game/palette_animation.h>

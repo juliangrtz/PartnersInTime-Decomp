@@ -1,3 +1,10 @@
+/*
+ * Input and frame sync (ARM9 resident, 0x0202938C-0x02029730).
+ *
+ * Reads the pad into the frame's GameInput, waits for VBlank, and performs the
+ * OAM copy and clear that must happen inside it.
+ */
+
 #include <game/input.h>
 
 extern GameDisplayWork data_0206032c;

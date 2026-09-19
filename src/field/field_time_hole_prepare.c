@@ -1,3 +1,9 @@
+/*
+ * Time hole arrival (overlay 0, 0x02069AAC-0x02069B24).
+ *
+ * Prepares the entity that arrives out of a time hole and starts its arrival.
+ */
+
 #include <game/field_system.h>
 extern void func_0202cbd4(void *, int, u32);
 void FieldSystem_PrepareTimeHoleEntity(FieldSystem *system, FieldRuntimeEntity *entity) {

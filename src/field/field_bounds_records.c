@@ -1,3 +1,10 @@
+/*
+ * Boundary records (overlay 0, 0x0207B19C-0x0207B594).
+ *
+ * Expands the room's packed boundary and paired-bounds records into the runtime
+ * arrays the collision code walks.
+ */
+
 #include <game/field_bounds_records.h>
 
 void FieldArea_ExpandBoundaryRecords(void *unused, const FieldBoundaryRecord *record,

@@ -1,3 +1,10 @@
+/*
+ * Entity scaling (overlay 0, 0x020A4320-0x020A461C).
+ *
+ * Scaling an entity over time, with pause and resume, and the animation
+ * enable/disable that goes with it.
+ */
+
 #include <game/field_transform.h>
 extern "C" void func_020093b4(FieldRenderObject *, u8);
 static inline void SetScale(FieldRenderObject *renderer, s16 x, s16 y)

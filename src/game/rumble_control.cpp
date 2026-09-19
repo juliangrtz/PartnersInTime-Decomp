@@ -1,4 +1,13 @@
 extern "C" {
+
+/*
+ * Rumble control (ARM9 resident, 0x020072E8-0x02007664).
+ *
+ * The layer scenes drive rumble through: a bank of patterns is installed and
+ * played by index, timed or repeated, and the control pass stops playback if the
+ * cartridge is pulled.
+ */
+
 #include <game/rumble.h>
 #include <game/save_data.h>
 

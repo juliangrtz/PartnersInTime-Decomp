@@ -1,3 +1,10 @@
+/*
+ * Planar entity state (overlay 0, 0x020A2FCC-0x020A3640).
+ *
+ * The full copy of a 2D entity's planar state for a snapshot, and the test that
+ * says whether it has left the screen.
+ */
+
 #include <game/field_entity.h>
 extern void func_0202cc58(const void *, void *, u32);
 extern void func_0202cd2c(const void *, void *, u32);

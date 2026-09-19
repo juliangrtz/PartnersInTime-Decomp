@@ -1,3 +1,10 @@
+/*
+ * Interval overlap (ARM9 resident, 0x020108F0-0x02010960).
+ *
+ * Whether two closed intervals intersect, the primitive several collision tests
+ * are built on.
+ */
+
 #include <game/interval.h>
 int GameIntervals_Overlap(int a0, int a1, int b0, int b1) {
     if (a0 > a1) {

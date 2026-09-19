@@ -1,4 +1,14 @@
 extern "C" {
+
+/*
+ * Audio playback (ARM9 resident, 0x02027A2C-0x02027FEC).
+ *
+ * The game's playback surface: music start, stop, fade and state, and the sound
+ * effect calls including the delayed and play-once forms. Effects are addressed
+ * by handle, and PlayEffectOnFreeHandle is how a caller avoids cutting off a
+ * sound that is still playing.
+ */
+
 #include <game/audio.h>
 #include <nitro/fx.h>
 

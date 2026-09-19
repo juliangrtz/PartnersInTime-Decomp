@@ -1,3 +1,10 @@
+/*
+ * Message window queries (overlay 0, 0x0206FB74-0x0206FD18).
+ *
+ * Whether the area has a message window open, and whether one is open but not
+ * already closing - which is what a script checks before opening another.
+ */
+
 #include <game/field_area.h>
 #include <game/window.h>
 static inline GameWindow *AreaWindow(FieldAreaContext *area, int index) {

@@ -1,3 +1,13 @@
+/*
+ * Task scheduler (ARM9 resident, 0x02029DE4-0x0202A814).
+ *
+ * Both scheduler lists: the normal tasks stepped from the main loop and the IRQ
+ * tasks stepped from VBlank. A task links itself in at Init and out at Destroy,
+ * and the update pass restarts from the head whenever a task is still
+ * incomplete, so a task added or removed mid-pass is handled correctly. See
+ * include/game/task.h for what interval and counter mean.
+ */
+
 #include <game/task.h>
 
 extern "C" GameTaskVTable data_02059b54;

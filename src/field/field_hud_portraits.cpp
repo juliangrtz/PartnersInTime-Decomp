@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * HUD portraits (overlay 0, 0x02071B70-0x02071C08).
+ *
+ * Chooses which party portraits the HUD shows.
+ */
+
 #include <nitro/fx.h>
 #include <game/rumble.h>
 #include <game/save_data.h>

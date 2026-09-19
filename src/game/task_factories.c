@@ -1,3 +1,11 @@
+/*
+ * Scene task factories (ARM9 resident, 0x02028F0C-0x02029130).
+ *
+ * Creates the task for each top-level scene - title, scene controller, save,
+ * load, game over, shop and credits - installing its dispatch table and linking
+ * it into the normal list.
+ */
+
 #include <game/heap.h>
 #include <game/task.h>
 #include <game/save_menu.h>

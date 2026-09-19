@@ -1,3 +1,10 @@
+/*
+ * Field vector math (overlay 0, 0x020BE758-0x020BE950).
+ *
+ * Vector length, direction and orbit length in fixed point, built on the leading
+ * zero count that keeps the intermediate products in range.
+ */
+
 #include <game/field_geometry.h>
 #define FIELD_MUL(a, b) ((fx32)(((s64)(a) * (b) + 2048) >> 12))
 /* The SDK exposes CLZ as one instruction; all scaling and arithmetic is C. */

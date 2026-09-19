@@ -1,3 +1,11 @@
+/*
+ * Memory archive decoder (ARM9 resident, 0x0202C824-0x0202CB48).
+ *
+ * Decodes an archive that is already in memory, a slice per frame. Requests are
+ * queued and the update pass advances the current one, checking the scanline
+ * counter so the work stops before the display needs the bus.
+ */
+
 #include <game/archive_io.h>
 #include <game/task.h>
 

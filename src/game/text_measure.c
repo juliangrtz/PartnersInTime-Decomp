@@ -1,3 +1,10 @@
+/*
+ * Text measurement (ARM9 resident, 0x02025DD8-0x02026000).
+ *
+ * Runs the text walk without drawing to get a line's width, a block's height or
+ * its full bounds, and installs a control-code handler.
+ */
+
 #include <game/text.h>
 #include <game/sprite_output.h>
 

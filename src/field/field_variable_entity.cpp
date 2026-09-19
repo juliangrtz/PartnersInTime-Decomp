@@ -1,5 +1,13 @@
 extern "C" {
 
+/*
+ * Variable entity (overlay 0, 0x020BC684-0x020BD1EC).
+ *
+ * The entities a room places from its variable table: construction from a
+ * placement record, the bobbing and bounce they play, and the enable flag a
+ * script toggles them with.
+ */
+
 #include <game/field_variable_entity.h>
 extern FieldEntityVTable data_ov000_020c1310;
 extern const FieldSpawnRecord data_ov000_020c0c80;

@@ -1,3 +1,9 @@
+/*
+ * Field graphics IRQ teardown (overlay 0, 0x02065D40-0x02065D90).
+ *
+ * Destroy and Delete for the field's graphics VBlank task.
+ */
+
 #include <game/field_tasks.h>
 #include <game/heap.h>
 extern GameTaskVTable data_ov000_020c0dd0, data_ov000_020c0df8;

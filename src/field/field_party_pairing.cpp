@@ -1,3 +1,11 @@
+/*
+ * Party pairing (overlay 0, 0x0208CD08-0x0208DBD4).
+ *
+ * Linking two members into a pair: the paired following, the airborne transfer
+ * from one to the other, the piggyback mount, and the collision override that
+ * keeps them from pushing each other apart.
+ */
+
 #include "field_party_internal.h"
 
 extern "C" {

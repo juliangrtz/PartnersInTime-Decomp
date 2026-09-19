@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Party entity lifecycle (overlay 0, 0x020BB69C-0x020BC3E8).
+ *
+ * Construction and destruction of a party entity and the snapshot pair that
+ * saves and restores it across a room change.
+ */
+
 #include <game/heap.h>
 }
 #include <game/field_party.h>

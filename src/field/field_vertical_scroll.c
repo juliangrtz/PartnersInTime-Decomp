@@ -1,3 +1,9 @@
+/*
+ * Vertical scroll (overlay 0, 0x02068FAC-0x02069060).
+ *
+ * The vertical scroll the field runs, with the deceleration that ends it.
+ */
+
 #include <game/field_system.h>
 void FieldSystem_StartVerticalScroll(FieldSystem *system, int reverse, fx32 speed,
                                      fx32 acceleration, fx32 limit) {

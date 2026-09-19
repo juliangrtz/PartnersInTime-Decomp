@@ -1,3 +1,12 @@
+/*
+ * Party manager actions (overlay 0, 0x0209DD8C-0x0209EF28).
+ *
+ * The party-wide actions: the field mode, the reunion that brings the members
+ * back together, the piggyback mount, the Bros. Ball launch and the baby drops.
+ * Each is a Begin/Is-active/Complete triple because it plays out over frames and
+ * a script can cancel it.
+ */
+
 #include <game/field_resources.h>
 #include <game/field_party_manager.h>
 #include <game/field_entity_lifecycle.h>

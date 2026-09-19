@@ -1,3 +1,10 @@
+/*
+ * Party entity bounds (overlay 0, 0x020B85F8-0x020B86EC).
+ *
+ * Copies the partner's planar bounds and refreshes the renderers that follow
+ * them.
+ */
+
 #include <game/field_party.h>
 #include <game/field_auxiliary.h>
 

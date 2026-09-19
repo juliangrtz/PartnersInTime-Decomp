@@ -1,3 +1,10 @@
+/*
+ * Render model texture updates (ARM9 resident, 0x0200F25C-0x0200F364).
+ *
+ * The per-frame pass that uploads the models whose textures are dirty, plus the
+ * alpha and the controller binding.
+ */
+
 #include <game/battle_scene.h>
 
 extern "C" {

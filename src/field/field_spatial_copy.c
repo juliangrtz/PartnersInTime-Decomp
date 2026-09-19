@@ -1,3 +1,9 @@
+/*
+ * 3D entity state copy (overlay 0, 0x020A7A80-0x020A8300).
+ *
+ * The full copy of a 3D entity's spatial state for a snapshot.
+ */
+
 #include <game/field_entity.h>
 FieldRuntimeEntity *FieldEntity_CopySpatialState(FieldRuntimeEntity *entity, const FieldRuntimeEntity *source)
 {
