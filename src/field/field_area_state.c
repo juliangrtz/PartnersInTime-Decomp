@@ -130,7 +130,7 @@ FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaCo
 }
 
 extern void func_020090b8(int);
-extern void func_ov000_02073c54(FieldAreaContext *);
+extern void FieldScreenWipe_Upload(FieldAreaContext *);
 void FieldArea_UpdateGraphics(FieldAreaContext *field)
 {
     if (field->unknown_23f0 == 71 || field->flags.unknown_06) {
@@ -140,6 +140,6 @@ void FieldArea_UpdateGraphics(FieldAreaContext *field)
     }
     if (field->unknown_23f0 == 71) {
         FieldPaletteCrossfade_Transfer(field);
-        func_ov000_02073c54(field);
+        FieldScreenWipe_Upload(field);
     }
 }

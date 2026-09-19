@@ -4820,3 +4820,55 @@ the checkpoint. These replays make no further RAM edits. This is a controlled
 battle entry, not ordinary story-route coverage. Early input, null support and
 other formations remain untested; helper internals and rendered pixels are
 observational. The inspected success capture shows the paired jump in battle.
+
+
+## Field screen-wipe transfers and cleanup
+
+The field's pointer at +0x2BC8 owns a 24-byte screen-wipe record. Pattern modes
+0..3 use tile/map buffers; mode 4 uses two 192-halfword circle tables within one
+allocation; mode 5 holds eight signed rectangle extents. Flag bit 12 retains
+the final mask. Finish deactivates it; a second finish on an inactive retained
+mask requests cleanup. Clear releases the appropriate buffers and restores the
+display state. It darkens the screen for odd pattern modes or a zero final mask.
+
+Matching sources are [upload](../../src/field/field_screen_wipe_upload.cpp),
+[rectangle](../../src/field/field_screen_wipe_rectangle.cpp) and
+[cleanup](../../src/field/field_screen_wipe_cleanup.cpp): 1,988 bytes total,
+`0x02073C54..0x02074000`, `0x0207431C..0x02074400` and
+`0x020744DC..0x02074810`. The 796-byte updater, 220-byte circle-table builder
+and 1,344-byte initializer remain native. No new ASM is used.
+
+Window plane selection and the effect-enable bit are distinct operations;
+explicit inline helpers preserve their native instruction order. Rectangle
+coordinates are shifted before masking to the register's byte fields. The
+circle upload toggles the selected buffer bit, writes the first horizontal
+extent and streams the remaining halfwords to WIN1H with HBlank DMA 1 or 2.
+Only the base of the double buffer is freed.
+
+Fresh live tests use Save 65's initialized field checkpoint and recovered script
+parameters: pattern mode 2 from room 0/offset 0x086E; a 60-frame rectangle from
+room 15/0x0234; and room 549's retained circle, closing circle and reveal pattern
+at 0x2892, 0x28C8 and 0x2BF4. Each decoded command is temporarily replaced and
+restored on dispatcher return. Restoration must wait until then: the dispatcher
+reads some arguments again after the initializer returns. This is controlled
+effect entry, not coverage of those rooms' normal story sequences.
+
+The three 480-frame replays pass 2,880 uploads, 61 rectangle calculations,
+five finishes and four clears, with 551 ordered direct MMIO stores checked.
+Each target return checks the entire 11,216-byte area, 24-byte effect record,
+owner flags and preserved registers. Direct helper arguments and memory fills
+are checked; background-address getters, allocation/free internals and DMA
+execution remain observational. Active effects were exercised on field screen
+0; screen 1 had idle uploads only. Retention and later reinitialization were
+observed, but a second finish of an inactive retained mask was not exercised.
+Odd pattern modes, sub-screen effects and all clipping boundaries are untested.
+Captures show the rectangle and circle masks and a visible final field; they
+are visual observations, not an independent rasterization oracle. All 104
+original saves are unchanged.
+
+Private producer: `build/analysis/high_effort_50_to_55/probe_field_wipe.py`.
+Final reports: `build/runtime/eur_high_field_wipe/high_field_{pattern,rectangle,circle}_v2.json`.
+The preserved v1 probe passed the pattern route but failed on the rectangle
+because Capstone's `ip` alias was not mapped to DeSmuME's `r12`; all routes were
+repeated successfully after correcting the probe. Actual source objects,
+the changed area-state caller, the full build, native relink and 107 tests pass.

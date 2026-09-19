@@ -821,3 +821,9 @@ src/attack_hammer_ov021/hammer_approach.cpp
 
 src/attack_jump_ov020/support_update.cpp
 src/attack_jump_ov020/landing_effect.cpp
+
+src/field/field_screen_wipe_upload.cpp
+
+src/field/field_screen_wipe_rectangle.cpp
+
+src/field/field_screen_wipe_cleanup.cpp

@@ -8495,3 +8495,20 @@ internals and rendering remain observational. The controlled encounter's
 checkpoint provenance and uncovered branches are recorded in the
 [research reference](research/RECONSTRUCTION_NOTES.md#jump-support-input-and-landing-effects).
 Private build log: `build/analysis/high_effort_50_to_55/jump_support_build_v1.log`.
+
+
+## Field screen-wipe transfers and cleanup (+1,988 bytes)
+
+Reconstructed upload (940), rectangle registers (228), cleanup (700) and finish
+(120) as matching C++, with no new ASM. Coverage is 786,712 / 1,563,700 bytes
+(50.3109%); field overlay 0 is 164,128 / 366,712. Actual source objects and the
+changed caller match completely. Full build, native relink and 107 tests pass;
+the EUR ROM retains SHA-1 `ba4ec2f99b4f2e0047601552bccf00aa73e28701`.
+Three controlled live replays using recovered script parameters pass 1,440
+frames, 2,880 uploads, 61 rectangle calls, five finishes, four clears and 551
+direct register stores. Complete receiving records, owner flags, preserved
+registers, helper arguments and memory fills were checked; 104 saves unchanged.
+Active effects cover field screen 0. DMA execution, allocator internals and
+rendering are observational; normal story routes and other limits are recorded
+in the [research reference](research/RECONSTRUCTION_NOTES.md#field-screen-wipe-transfers-and-cleanup).
+Private build: `build/analysis/high_effort_50_to_55/field_wipe_build_v1.log`.

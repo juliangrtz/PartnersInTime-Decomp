@@ -359,3 +359,12 @@ src/field/field_roaming_options.cpp:
 
 src/field/field_camera_setup.cpp:
     .text start:0x02073110 end:0x020736a4
+
+src/field/field_screen_wipe_upload.cpp:
+    .text start:0x02073c54 end:0x02074000
+
+src/field/field_screen_wipe_rectangle.cpp:
+    .text start:0x0207431c end:0x02074400
+
+src/field/field_screen_wipe_cleanup.cpp:
+    .text start:0x020744dc end:0x02074810
