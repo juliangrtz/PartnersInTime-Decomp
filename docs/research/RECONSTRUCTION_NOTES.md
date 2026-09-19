@@ -5217,3 +5217,41 @@ Producers in `build/analysis/high_effort_50_to_55/` are `probe_field_properties.
 and `check_field_properties_isolated.py`, with `field_property_oracle.py`.
 The earlier isolated v1 also passed, but allowed an unnecessarily large stack
 exclusion for the leaf base helper; v2 checks the tighter native frame.
+
+
+## Party contact hints and automatic bounds
+
+[Contact hints](../../src/field/field_party_context.cpp) select the active
+member's hint from locomotion, facing, contact mask and the related entity's
+contact mode, then clear the inactive group's hint. Scene transitions suppress
+both changes. An absent or non-field area preserves the active hint.
+[Automatic bounds](../../src/field/field_party_boundary.cpp) gate the leader's
+paired-bounds lookup on scene/area transitions, a manager flag, presentation
+readiness and brightness. Exactly -4096 and +4096 suppress the lookup; nearby
+values do not. A successful record selects one of two transition helpers or
+returns without dispatch. The existing lookup updates current/previous signed
+byte indices. Both new functions matched their first compiled drafts without ASM.
+
+An ordinary Save 65 load and movement route checks every target call: 693 bounds
+checks, 692 hint updates and 490 real paired-bounds lookups across 2,477 frames.
+All live lookups return -1 and all computed hints are zero. The route covers
+area, transition and fade guards; it does not cover successful exits or nonzero
+hints. Full manager (16,764 bytes), system (952), area (11,216), member (1,440)
+and scanned bounds records are checked, including independently derived lookup
+returns and index writes. The final capture shows the field. No live RAM
+fixtures are used; all 104 original saves remain unchanged.
+
+Another 220 isolated ARM946 cases on copied RAM cover both groups, all eight
+contact modes/facings, null and suppressed inputs, both fade limits and adjacent
+values, successful bounds in all four cardinal directions, all dispatch modes
+and a second-record hit. They execute both complete native functions and the
+real lookup. The two transition helpers are explicit no-op ABI stubs: their
+arguments are checked, their internals are not. Full main RAM, scratch outside
+the exact call-chain frame, restored SP and callee-saved registers are checked.
+These synthetic cases do not establish live exit or graphics coverage.
+
+Actual source objects, the action-update caller and neighboring model-update
+wrapper compare exactly. Full ROM/native relink checks and 107 tests pass.
+Private evidence: `build/runtime/eur_high_party_contact/{cold65_v1,isolated_v1}.json`;
+producers `probe_party_contact.py`, `check_party_contact_isolated.py` and shared
+`party_contact_oracle.py` under `build/analysis/high_effort_50_to_55/`.

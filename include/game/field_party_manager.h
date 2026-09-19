@@ -15,7 +15,7 @@ typedef struct FieldPartyManager {
     union {
         u32 flags;
         struct {
-            u32 active_party : 1, unknown_01_06 : 6, unknown_07 : 1;
+            u32 active_party : 1, unknown_01 : 1, unknown_02_06 : 5, unknown_07 : 1;
             s32 unknown_08_11 : 4;
             u32 unknown_12 : 1, unknown_13 : 1, unknown_14 : 1, unknown_15 : 1;
             u32 unknown_16 : 1; s32 bgm : 7; u32 unknown_24_31 : 8;
@@ -44,6 +44,8 @@ typedef char FieldPartyManagerSnapshot_SizeCheck[sizeof(FieldPartyManagerSnapsho
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldPartyManager_CheckAutomaticBounds(FieldPartyManager *manager);
+void FieldPartyManager_UpdateContactHint(FieldPartyManager *manager);
 void FieldPartyManager_UpdateActions(FieldPartyManager *manager);
 void FieldPartyManager_ProcessInput(FieldPartyManager *manager, int active_held, int active_pressed, int inactive_held, u16 inactive_pressed);
 void FieldPartyManager_UpdateRegion71ActionModels(FieldPartyManager *manager);

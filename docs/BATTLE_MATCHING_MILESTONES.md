@@ -8587,3 +8587,13 @@ ASM. Coverage reaches 793,952 / 1,563,700 bytes (50.7739%). Full build/native re
 actual source objects and 107 tests pass. Two live routes check both getters;
 103 isolated cases cover all property IDs and additional branches. See
 [evidence and limits](research/RECONSTRUCTION_NOTES.md#entity-script-property-getters).
+
+
+## Party contact hints and automatic bounds
+
+Two readable C++ routines add 800 matching bytes, reaching 794,752 / 1,563,700
+(50.8251%). Actual source/caller objects, full ROM/native relink and 107 tests
+pass. Ordinary Save 65 navigation checks 1,385 target calls and 490 real bounds
+lookups; 220 separate isolated cases cover guards and dispatch branches with
+explicit transition-helper stubs. Original saves are unchanged. See
+[evidence and limits](research/RECONSTRUCTION_NOTES.md#party-contact-hints-and-automatic-bounds).
