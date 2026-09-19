@@ -8,6 +8,17 @@
 
 struct BattleActor;
 
+/* The battle context is the single ~260 KB allocation that holds a running
+   battle: its reward tally, the archive and texture requests in flight, the
+   interface layers, the per-object resource models and the AI script VM. Code
+   reaches it through the gBattleContext pointer rather than passing it around,
+   so most battle functions take an actor or object id and look the rest up
+   here.
+
+   Only the offsets that have been recovered are typed; the gaps are named
+   unknown_<offset> so the size checks at the end of this header keep every
+   known field pinned to its original address. */
+
 enum BattleContextOffset {
     BATTLE_CONTEXT_BACKGROUND_ID_OFFSET = 0x3A,
     BATTLE_RUNTIME_STATE_OFFSET = 0xD000,
@@ -28,6 +39,9 @@ enum BattleRuntimeFlag {
     BATTLE_RUNTIME_FLAG_BACKGROUND_FADED_OUT = 1 << 20
 };
 
+/* The runtime flag word at BATTLE_RUNTIME_FLAGS_OFFSET. Several bits are also
+   readable through the battle VM's global properties, which is what the
+   global_property_NN names record. */
 typedef union BattleRuntimeFlags {
     u32 raw;
     struct {
@@ -58,6 +72,8 @@ typedef union BattleRuntimeFlags {
     } bits;
 } BattleRuntimeFlags;
 
+/* One pending read out of a battle archive: where the reader is in the source,
+   where the bytes go, and which entry is being read. */
 typedef struct BattleArchiveReadRequest {
     u8 unknown_000[4];
     const u8 *archive_cursor;
@@ -107,6 +123,9 @@ typedef union BattleInterfaceLayerFlags {
     } bits;
 } BattleInterfaceLayerFlags;
 
+/* One layer of the battle interface: its pixel buffer, the resource it is being
+   filled from, where it lands in VRAM and how much of it is ready. The four
+   layers in BattleContext are the HUD surfaces drawn over the scene. */
 typedef struct BattleInterfaceLayer {
     void *pixel_buffer;
     const u8 *resource_cursor;
@@ -124,6 +143,7 @@ typedef struct BattleInterfaceLayer {
     u32 vram_offset;
 } BattleInterfaceLayer;
 
+/* A layer plus the slide/fade it is currently running. */
 typedef struct BattleInterfaceLayerState {
     BattleInterfaceLayer layer;
     const void *resource;
@@ -146,6 +166,11 @@ typedef struct BattleTextureUploadRequest {
 
 typedef GameGraphicsOffsetDecoder BattleTextureDecodeState;
 
+/* The part of the context that survives across the phases of one battle: the
+   flag word, the object texture catalogs, the per-object load states and the
+   heaps that object data and resources are allocated from. Reached with
+   BattleContext_GetRuntimeState rather than by field access, because it sits at
+   a fixed offset inside the larger allocation. */
 typedef struct BattleRuntimeState {
     u8 unknown_000[0x3A0];
     BattleRuntimeFlags flags;
@@ -242,6 +267,7 @@ typedef char BattleContext_KnownPrefixSizeCheck[
     sizeof(BattleContext) == 0x3F608 ? 1 : -1
 ];
 
+/* The runtime block lives at a fixed offset inside the context allocation. */
 static inline BattleRuntimeState *BattleContext_GetRuntimeState(void) {
     return (BattleRuntimeState *)(gBattleContext + BATTLE_RUNTIME_STATE_OFFSET);
 }

@@ -11,6 +11,13 @@ typedef struct BattleDamageReactionTask BattleDamageReactionTask;
 struct BattleSceneObject;
 struct BattleModel;
 
+/* Every combatant in a battle is a BattleActor, addressed by a small numeric
+   id rather than by pointer: ids 56..59 are the four party members and 60..67
+   the eight enemy slots, which is why BattleActor_GetById can decide from the
+   id alone which table to index. Party and enemy actors extend the common
+   record with their own trailing state, so a BattleActor * may point at either
+   and only the first 0x70 bytes are safe to touch through it. */
+
 enum BattleActorIdRange {
     BATTLE_ACTOR_PARTY_FIRST = 56,
     BATTLE_ACTOR_PARTY_COUNT = 4,
@@ -25,6 +32,8 @@ enum BattlePartyActorId {
     BATTLE_ACTOR_BABY_LUIGI
 };
 
+/* Which of the six on-screen party arrangements is in use. The two carrying
+   entries are the states where an adult is holding a baby. */
 enum BattlePartyFormationIndex {
     BATTLE_FORMATION_MARIO = 0,
     BATTLE_FORMATION_LUIGI = 1,
@@ -48,6 +57,9 @@ enum BattleActorFlag {
     BATTLE_ACTOR_FLAG_14 = 0x4000
 };
 
+/* One status effect on an actor: what it is, how long it lasts, and the effect
+   object drawn for it. Actors carry five of these - two ailment slots plus one
+   each for the power, defense and speed modifiers. */
 struct BattleStatusState {
     void *effect;
     s16 duration;
@@ -63,6 +75,13 @@ struct BattleStatusState {
     };
 };
 
+/* The part every combatant has. Stats come in pairs: the working value and the
+   base_ value it is restored to when a modifier expires. damage_scale_q8 is a
+   Q8 multiplier, so 0x100 means unmodified.
+
+   The five status slots and the animation state occupy the same bytes; which
+   reading applies depends on whether the actor is being animated or is holding
+   status effects, so pick the union arm that the caller's phase established. */
 struct BattleActor {
     struct BattleSceneObject *scene_object;
     s16 max_hp;
@@ -144,6 +163,8 @@ struct BattleActorAnimationState {
     struct BattleModel *model;
 };
 
+/* Party-only flags. The three readings are the same halfword seen by the
+   targeting code, the command code and the status code. */
 typedef union BattlePartyStateFlags {
     u16 raw;
     struct {
@@ -187,6 +208,8 @@ typedef struct BattlePartyActorStorage {
 } BattlePartyActorStorage;
 typedef char BattlePartyActorStorageSizeCheck[sizeof(BattlePartyActorStorage) == 148 ? 1 : -1];
 
+/* An enemy slot: the common actor plus its defeat and reaction state. The
+   trait bits are what BattleActor_HasTrait and the AI scripts test. */
 typedef struct BattleEnemyActor {
     BattleActor actor;
     u8 unknown_070[0x228];
@@ -241,6 +264,8 @@ int BattleParty_ShowHealingEffect(BattleActor *actor, int amount);
 u32 BattleParty_AddExperience(u32 member_id, u32 amount);
 int BattleParty_StartFormationTransition(int next_state, u16 mario_target_x,
                                          u16 luigi_target_x);
+/* GetById dispatches on the id range; the two slot accessors assume the caller
+   already knows which table the id belongs to and do not range-check. */
 BattleActor *BattleActor_GetEnemySlot(int actor_id);
 BattleActor *BattleActor_GetPartySlot(int actor_id);
 BattleActor *BattleActor_GetById(int actor_id);

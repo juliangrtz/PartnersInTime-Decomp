@@ -4,12 +4,25 @@
 #include <game/sprite_animator.h>
 #include <game/sprite_effect.h>
 #include <game/task.h>
+/* Message and menu windows. A GameWindowManager owns one pool of windows per
+   screen, the tile and tilemap memory they are drawn into, and the IRQ task
+   that uploads the dirty parts during VBlank. Individual windows are addressed
+   by a small index, not by pointer, so a scene can open, pause and close them
+   without tracking allocations.
+
+   Drawing is deferred throughout: writing to a window marks it dirty, the
+   manager rebuilds the affected tiles, and the IRQ task pushes them to VRAM. */
+
+/* The frame graphics: how thick the border is and the tile runs that make up
+   its horizontal and vertical edges. */
 typedef struct GameWindowSkin {
     u16 border_x, border_y;
     u8 reserved04[20];
     const s16 *horizontal;
     const s16 *vertical;
 } GameWindowSkin;
+/* What a window should look like, filled in by the caller before opening it.
+   Packed into four words because the original code copies them as words. */
 typedef struct GameWindowProperties {
     union { u32 raw; struct { u32 screen:1, skin:4, width:5, height:5, position_mode:3, sound:14; } bits; } shape;
     union { u32 raw; struct { u32 mode:4, flag4:1, style:4, flag9:1, width:8, extent:10, reserved28:4; } bits; } layout;
@@ -20,6 +33,9 @@ typedef struct GameWindowProperties {
     u32 reserved18;
 } GameWindowProperties;
 
+/* Replay buffer for a window's text: the draw commands are recorded here so the
+   window can be redrawn after a scroll or an effect without re-parsing the
+   string. */
 typedef struct GameWindowTextCache {
     u8 x, y, color, font;
     s16 scale_x, scale_y;
@@ -27,6 +43,8 @@ typedef struct GameWindowTextCache {
     u8 *cursor;
 } GameWindowTextCache;
 
+/* Ties a window to a scroll position, so it follows the background it sits on.
+   Each window carries two, one per screen. */
 typedef struct GameWindowLink {
     struct GameWindowLink *previous, *next;
     union { u32 raw; struct { u32 screen:1, reserved1:1, x:9, y:9, reserved20:6, linked:1, reserved27:4, fresh:1; } bits; } state;
@@ -34,6 +52,7 @@ typedef struct GameWindowLink {
     u8 reserved0e[10];
 } GameWindowLink;
 
+/* A number being typed out one digit per frame. */
 typedef struct GameWindowNumber {
     u8 text[8];
     const u8 *cursor;
@@ -41,6 +60,9 @@ typedef struct GameWindowNumber {
     u8 reserved[3];
 } GameWindowNumber;
 
+/* One open window. `front` and `back` are the tile buffers it draws into;
+   `links` are its two scroll attachments; the packed state words carry the
+   dirty and closing flags the manager's update pass looks at. */
 typedef struct GameWindow {
     struct GameWindow *previous, *next;
     GameWindowProperties properties;
@@ -58,6 +80,11 @@ typedef struct GameWindow {
     u8 sprite_slot;
     u8 reservedc5[7];
 } GameWindow;
+/* The owner: the window pool, both screens' tile and tilemap memory, the
+   sprite animator and effect pool it draws through, and the per-screen lists of
+   open windows with their scroll origins. Windows are kept on two intrusive
+   lists bracketed by head and tail markers, which is why the list fields come
+   in sets of four. */
 typedef struct GameWindowManager {
     void **vtable;
     u8 reserved04[36];
@@ -106,6 +133,8 @@ typedef char GameWindowTextCache_SizeCheck[sizeof(GameWindowTextCache) == 212 ? 
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* ConstructComplete builds a manager that also allocates its own buffers;
+   ConstructBase takes the buffers from the caller. */
 GameWindowManager *GameWindow_ConstructComplete(GameWindowManager *manager, int priority, int unused,
     u8 main_bg, u8 sub_bg, u8 main_priority, u8 sub_priority,
     const GameWindowBuffers *buffers, const GameWindowTilemaps *tilemaps, int configure,
@@ -132,6 +161,8 @@ GameIrqTask *GameWindowIrq_Init(GameIrqTask *task, u32 priority, u32 unused, voi
 void GameWindowIrq_Update(GameIrqTask *task);
 void GameWindow_ResetTextCache(GameWindowManager *manager, GameWindow *window);
 void GameWindow_WriteTilemap(GameWindowManager *manager, GameWindow *window);
+/* Allocate reserves a window and its tiles; Release gives both back. Close
+   runs the closing animation first, Clear only blanks the contents. */
 GameWindow *GameWindow_Allocate(GameWindowManager *manager, int screen, u32 size, s16 requested_index);
 void GameWindow_ScrollLink(GameWindowManager *manager, GameWindowLink *link);
 void GameWindow_RedrawAfterEffect(GameSpriteEffect *effect);

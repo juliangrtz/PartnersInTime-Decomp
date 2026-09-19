@@ -3,6 +3,10 @@
 
 #include <nitro.h>
 
+/* Item ids are tagged: the high nibble says which table the low twelve bits
+   index, so one id identifies an item across the inventory, the shops and the
+   battle menus without a separate kind field. */
+
 enum ItemIdTag {
     ITEM_ID_ACTION_TAG = 0x1000,
     ITEM_ID_USABLE_TAG = 0x2000,
@@ -12,6 +16,8 @@ enum ItemIdTag {
     ITEM_ID_INDEX_MASK = 0x0FFF
 };
 
+/* A consumable item (the 0x2000 table): its names, the icon the interface
+   draws for it, and what using it does. */
 typedef struct UsableItemRecord {
     union {
         u8 unknown_00[6];
@@ -34,6 +40,8 @@ typedef union ActionItemTargetFlags {
     } bits;
 } ActionItemTargetFlags;
 
+/* A battle action item (the 0x1000 table). Same leading fields as a usable
+   item, plus how the target menu may be driven for it. */
 typedef struct ActionItemRecord {
     union {
         u8 unknown_00[6];
@@ -45,6 +53,7 @@ typedef struct ActionItemRecord {
     u8 unknown_11[11];
 } ActionItemRecord;
 
+/* A badge (the 0x3000 table). Only its text ids have been recovered. */
 typedef struct BadgeItemRecord {
     u16 unknown_00, name_id, description_id;
     u8 unknown_06[14];
@@ -65,6 +74,8 @@ extern ActionItemRecord gActionItemRecords[];
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* How much an item restores, given the member's current and maximum value;
+   some effects are a percentage of the maximum rather than a fixed amount. */
 int ItemEffect_CalculateValue(u16 item, int current, int maximum, int unused);
 #ifdef __cplusplus
 }

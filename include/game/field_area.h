@@ -9,6 +9,16 @@ typedef struct FieldVariablePlacement FieldVariablePlacement;
 struct FieldPaletteCrossfade;
 struct FieldLayerMotion;
 
+/* The overworld area: the room that is loaded, the collision and navigation
+   data read for it, the script manager driving it, and the pending room change.
+   One FieldAreaContext exists at a time and everything in the field subsystem
+   reaches the world through it.
+
+   Only the parts that have been recovered are typed; the unknown_<offset> gaps
+   keep the known fields pinned to their original addresses. */
+
+/* A queued room change: where the party reappears, which script runs on
+   arrival, and what stays locked while the screen is faded out. */
 typedef struct FieldAreaTransition {
     struct {
         u32 pending:1, fading:1, party_mask:2, direction_0:3, direction_1:3, control_locked:1;
@@ -19,6 +29,7 @@ typedef struct FieldAreaTransition {
     s16 script, x[2], y[2], z[2];
 } FieldAreaTransition;
 typedef char FieldAreaTransition_SizeCheck[sizeof(FieldAreaTransition)==20?1:-1];
+/* A message window moving to a target position, in fixed point. */
 typedef struct FieldMessageWindowSlide {
     struct {
         u32 active : 1, fixed_duration : 1, window : 8;
@@ -28,6 +39,9 @@ typedef struct FieldMessageWindowSlide {
 } FieldMessageWindowSlide;
 typedef char FieldMessageWindowSlide_SizeCheck[sizeof(FieldMessageWindowSlide) == 36 ? 1 : -1];
 
+/* The loaded room. The record pointers are read-only data from the room
+   archive; the runtime arrays beside them are the mutable state built from it
+   (boundaries that can be switched off, navigation surfaces being walked). */
 typedef struct FieldAreaContext {
     const void *vtable;
     void *owner;

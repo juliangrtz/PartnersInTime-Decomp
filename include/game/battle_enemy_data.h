@@ -3,6 +3,11 @@
 
 #include <game/battle_task_queue.h>
 
+/* The enemy table read out of the battle archive: one stat record per enemy
+   kind, plus the items it can drop. The records are the data an encounter is
+   built from; the live combatant is a BattleEnemyActor initialized from one. */
+
+/* An item and the percentage chance of getting it, packed into one word. */
 typedef union BattleEnemyItemDrop {
     u32 packed;
     struct {
@@ -11,6 +16,10 @@ typedef union BattleEnemyItemDrop {
     } fields;
 } BattleEnemyItemDrop;
 
+/* One enemy kind. The same halfwords are read under several names because the
+   original code masks different bit ranges out of them depending on what it
+   wants: level and flags share one word, and the trait bits double as the
+   status resistances. */
 typedef struct BattleEnemyStatRecord {
     u16 name_id;
     u16 packed_object_data_id;

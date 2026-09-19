@@ -4,10 +4,24 @@
 #include <game/script_vm.h>
 #include <nitro.h>
 
+/* Battle behaviour is scripted. Every actor runs bytecode on the shared script
+   VM, and what the bytecode is for is encoded in the task type: an action is
+   what an actor does on its turn, a reaction is its answer to being hit, an
+   auxiliary script runs alongside those, and an object script drives a
+   non-actor. A task id therefore carries both the type and the actor
+   (BATTLE_AI_TASK_TYPE_MASK / _ACTOR_ID_MASK).
+
+   Tasks come from four fixed pools, one per type, and each holds a
+   BattleAIState: the script pointer, the VM's locals, and the ordering fields
+   that decide who acts first. Scripts yield rather than block, so a state is
+   normally resumed many frames after it started. */
+
 typedef struct BattleAIState BattleAIState;
 typedef struct BattleAITask BattleAITask;
 typedef struct BattleTaskPool BattleTaskPool;
 
+/* What a script returned to the scheduler: it finished, it wants another script
+   chained after it, or it is yielding until the next frame. */
 enum BattleAIVmResult {
     BATTLE_AI_VM_FINISHED = 1,
     BATTLE_AI_VM_CHAIN_SCRIPT = 2,
@@ -41,6 +55,9 @@ enum BattleAIContextOffset {
     BATTLE_AI_PARTY_STATE_STRIDE = 0xB8
 };
 
+/* Variable ids the battle VM resolves itself instead of reading from storage:
+   the owning actor, the current target, and a window into the context. The
+   0x4010..0x402F range is shared between all battle scripts. */
 enum BattleVmVariable {
     BATTLE_VM_VAR_OWNER_ACTOR_ID = 0x4000,
     BATTLE_VM_VAR_OWNER_TASK_TYPE = 0x4001,
@@ -70,6 +87,9 @@ extern BattleTaskPool gBattleAIObjectTaskPool;
 }
 #endif
 
+/* One script's state, 0xC0 bytes including the continuation tail. `order` and
+   `order_tie_break` place the owner in the turn sequence; the continuation_*
+   fields hold the script queued to run after this one. */
 struct BattleAIState {
     const void *script;
     u8 unk_004[0xA4];
@@ -95,6 +115,8 @@ struct BattleAIState {
     u16 continuation_tie_break;
 };
 
+/* A scheduled script. `owner_slot` points back at the pointer that refers to
+   this task, so releasing it can unlink without searching the list. */
 struct BattleAITask {
     BattleAITask *next;
     void (*callback)(BattleAITask *task);
@@ -104,6 +126,8 @@ struct BattleAITask {
     u16 padding_12;
 };
 
+/* A fixed-size pool: tasks move between the active list and the free list and
+   are never allocated during a battle. */
 struct BattleTaskPool {
     BattleAITask *active;
     BattleAITask *free;

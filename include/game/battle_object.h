@@ -3,6 +3,16 @@
 
 #include <nitro.h>
 
+/* Loading the models and textures a battle needs. A BattleSceneResource is one
+   loaded object: the archive entry it came from, the components decoded out of
+   it, and the flags the loader steps it through. The context keeps 72 of them,
+   one per object slot, and object ids index that table.
+
+   Loading runs as queued tasks, so a resource is normally seen part-built:
+   check the flags before touching a component pointer. */
+
+/* Cursor over the buffer a model writes its components into. The separate word
+   cursor and pending_word exist because the encoder emits sub-word fields. */
 typedef struct BattleResourceStream {
     u8 *cursor;
     u32 *word_cursor;
@@ -14,6 +24,9 @@ typedef struct BattleResourceStream {
 typedef struct BattleResourceModel BattleResourceModel;
 typedef struct BattleObjectTextureSet BattleObjectTextureSet;
 
+/* The dispatch table of a resource model, with the three slots this project
+   has identified. The C++ declaration below is the same table as a class; a
+   unit sees one or the other depending on the language it is compiled in. */
 typedef struct BattleResourceModelVTable {
     u8 unknown_00[0x14];
     void (*destroy)(BattleResourceModel *model);
@@ -95,6 +108,8 @@ struct BattleResourceModel {
 };
 #endif
 
+/* One loaded battle object. `flags.bits` is the loader's state machine:
+   allocated -> load_pending -> processing -> upload_complete. */
 typedef struct BattleSceneResource {
     u8 *data;
     void *component_04;
@@ -121,6 +136,8 @@ typedef struct BattleSceneResource {
     } flags;
 } BattleSceneResource;
 
+/* Which textures an object uses, plus the scene properties the object's
+   appearance depends on. Sets are looked up by variant in the catalog. */
 struct BattleObjectTextureSet {
     u16 body_texture_id;
     u16 variant_index;
@@ -151,18 +168,24 @@ typedef struct BattleObjectTextureVariant {
     u8 unknown_05[3];
 } BattleObjectTextureVariant;
 
+/* A variable-length array of texture sets read from the object archive; the
+   trailing member is sized by texture_set_count. */
 typedef struct BattleObjectTextureCatalog {
     u32 texture_set_count;
     u32 unknown_04;
     BattleObjectTextureSet texture_sets[1];
 } BattleObjectTextureCatalog;
 
+/* A fixed 32 KB slot at the end of the battle context used when an object has
+   to be loaded but no pooled resource is free. */
 typedef struct BattleObjectFallbackStorage {
     BattleSceneResource *source;
     BattleSceneResource resource;
     u8 data[0x7FCC];
 } BattleObjectFallbackStorage;
 
+/* One archive read in flight for an object, with `status` reporting progress
+   to whoever queued it. */
 typedef struct BattleObjectResourceRequest {
     u8 unknown_00[4];
     const u8 *archive_cursor;

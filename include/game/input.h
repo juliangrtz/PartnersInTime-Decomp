@@ -3,6 +3,10 @@
 
 #include <nitro.h>
 
+/* One frame of button state, derived by GameInput_Update from the raw held
+   mask. `repeated` reports auto-repeat: a button first repeats after
+   `first_delay` frames and then every `repeat_delay` frames, tracked per
+   button in `countdown`. */
 typedef struct GameInput {
     u16 held;
     u16 pressed;
@@ -13,6 +17,9 @@ typedef struct GameInput {
     u8 countdown[10];
 } GameInput;
 
+/* Frame-time instrumentation in scanlines: where the main loop and the IRQ
+   handler started and ended, how long each took, and the running peaks with
+   their hold timers. `pending_vblanks` counts VBlanks the main loop missed. */
 typedef struct GameFrameTiming {
     u8 reserved[20];
     union {
@@ -35,6 +42,8 @@ typedef struct GameFrameTiming {
     s16 irq_peak_hold;
 } GameFrameTiming;
 
+/* The resident per-frame workspace. Input sits at its start, which is why so
+   much code reaches the pad through this block. */
 typedef struct GameDisplayWork {
     GameInput input;
     u8 reserved[0x820];

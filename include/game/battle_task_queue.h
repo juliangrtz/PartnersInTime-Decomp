@@ -3,6 +3,13 @@
 
 #include <nitro.h>
 
+/* Battle work that has to be spread over several frames - opening an archive,
+   reading it, uploading the result - is written as a queued task instead of a
+   blocking call. The scheduler calls `callback` every frame; the callback
+   advances `state` itself and returns, so each step runs in its own frame and
+   `timer` can hold it for a while. Enqueue returns the task so the caller can
+   watch its state. */
+
 typedef struct BattleQueuedTask BattleQueuedTask;
 typedef void (*BattleQueuedTaskCallback)(BattleQueuedTask *task);
 

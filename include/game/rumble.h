@@ -4,6 +4,12 @@
 #include <nitro/ctrdg.h>
 #include <nitro/os_alarm.h>
 
+/* The Rumble Pak is a cartridge in the GBA slot, so the driver has to cope with
+   it being absent or pulled out mid-game; GameRumble_SetRemovedCallback is how
+   a scene hears about that.
+
+   A pattern is a sequence of up to six on/off pulse lengths in frames, played
+   `repeats` times with `rest` frames between repetitions. */
 typedef struct GameRumblePattern {
     u32 count;
     u32 rest;
@@ -12,6 +18,7 @@ typedef struct GameRumblePattern {
     u32 repeats;
 } GameRumblePattern;
 
+/* The pattern currently playing, advanced from an OS alarm. */
 typedef struct GameRumbleState {
     u32 step;
     u32 last_step;
@@ -42,6 +49,7 @@ void GameRumble_UpdateControl(void);
 void GameRumble_PlayTimed(int pattern, u32 frames);
 void GameRumble_PlayRepeated(int pattern, u32 repeats);
 void GameRumble_PlayPattern(const GameRumblePattern *pattern, u16 frames);
+/* Scenes install their own pattern bank and then play by index. */
 void GameRumble_SetPatterns(const GameRumblePattern *patterns, u8 bank);
 void GameRumble_InitControl(void);
 

@@ -4,6 +4,16 @@
 #include <game/battle_scene.h>
 #include <nitro.h>
 
+/* Transient visuals in a battle: hit sparks, numbers, status icons, the
+   graphics an attack throws around. Two kinds exist and they are NOT the same
+   record even though both are reached through a BattleEffect ** slot - a
+   sprite effect is 48 bytes and a model effect 56, so use the allocation the
+   factory actually returned.
+
+   Every effect stores the address of the pointer that owns it (owner_slot), so
+   when it finishes it can clear the owner's reference itself. That is why an
+   effect may be freed without the owner being told. */
+
 typedef struct BattleEffect BattleEffect;
 typedef struct BattleModelEffect BattleModelEffect;
 typedef struct BattlePosition BattlePosition;
@@ -16,6 +26,8 @@ struct BattlePosition {
     u16 padding_06;
 };
 
+/* A sprite effect. `complete` is what the owner polls; update_callback runs it
+   each frame and completion_callback is the teardown hook. */
 struct BattleEffect {
     u8 unknown_00[4];
     void (*update_callback)(BattleEffect *effect);
@@ -53,6 +65,7 @@ struct BattleEffect {
     BattleEffect **owner_slot;
 };
 
+/* A model effect. Positioned relative to `parent`, with its scale in Q4. */
 struct BattleModelEffect {
     u8 unknown_00[0x12];
     s16 scale_q4;

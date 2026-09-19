@@ -2,6 +2,16 @@
 #define PIT_GAME_TEXT_H
 #include <nitro.h>
 
+/* The text renderer. GameText is both the request and the cursor: callers fill
+   in the string, the font table and the starting position, then either draw it
+   into `destination` or run the same walk with measuring turned on to get its
+   extent without touching pixels. The bitfield unions pack what the original
+   code keeps in single words, so a whole cursor or style is loaded and stored
+   at once.
+
+   Coordinates are in pixels; `tile_pitch` is the stride of the destination in
+   8x8 tiles, because text is drawn straight into tile memory. */
+
 typedef union GameTextCursor {
     u32 raw;
     struct { u32 x:10, y:10, spacing:4, leading:4, base_color:4; } bits;
@@ -50,6 +60,8 @@ typedef union GameTextCharacter {
     u16 raw;
     struct { u8 image, index; } bytes;
 } GameTextCharacter;
+/* One step of the walk: the glyph that was consumed and where the cursor
+   stands afterwards. A code of zero ends the string. */
 typedef struct GameTextToken {
     union {
         u32 raw;
@@ -58,6 +70,9 @@ typedef struct GameTextToken {
     const u8 *text;
 } GameTextToken;
 typedef int (*GameTextCallback)(void *argument, GameText *text, int skip_controls);
+/* Escape sequences in a string call out to the game: a control code indexes
+   this table, the callback consumes `length` bytes of arguments and can inject
+   a number, a name or a pause. GameText_SetControl installs one. */
 typedef struct GameTextControl {
     s8 length;
     u8 reserved[3];
@@ -69,6 +84,8 @@ typedef char GameTextSizeCheck[sizeof(GameText) == 48 ? 1 : -1];
 typedef char GameTextTokenSizeCheck[sizeof(GameTextToken) == 8 ? 1 : -1];
 typedef char GameTextBoundsSizeCheck[sizeof(GameTextBounds) == 8 ? 1 : -1];
 extern GameTextControl data_0205a934[];
+/* Init prepares a walk; Next advances it one glyph. The Measure* functions run
+   the same walk without drawing. */
 void GameText_Reset(GameText *text);
 void GameText_Init(GameText *text, const u32 *const *fonts, void *destination,
     const u8 *string, u8 x, u8 y, u8 spacing, u8 leading, u8 color,

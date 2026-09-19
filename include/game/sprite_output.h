@@ -6,7 +6,23 @@
 extern "C" {
 #endif
 
+/* Getting sprites on screen. Two resources are rationed here: the OAM entries
+   the hardware scans, and the tile and palette memory the sprites are drawn
+   from. Both are managed per screen, so almost everything takes a `screen`
+   argument.
+
+   OAM is not written directly. Each drawing pass appends a group of entries
+   with a sort key; GameOam_SortGroups orders the groups and GameOam_BuildSorted
+   emits the final table, which is what lets unrelated subsystems draw in any
+   order and still layer correctly.
+
+   Tile and palette memory are intrusive free lists of allocations, compacted
+   when they fragment, so an allocation's offset is only valid until the next
+   compaction. */
+
+/* One hardware sprite. */
 typedef struct GameOamEntry { u16 attributes[3]; u16 affine; } GameOamEntry;
+/* One appended group: its sort key and the span of OAM entries it covers. */
 typedef struct GameOamSortRecord {
     u32 key;
     union { u32 raw; struct { u8 first, count, reserved[2]; } bytes; } range;
@@ -16,6 +32,9 @@ typedef union GameSpriteFlags {
     struct { u8 screen : 2; u8 shared : 1; u8 dirty : 1; u8 buffered : 1; u8 linked : 1; u8 reserved : 2; } bits;
 } GameSpriteFlags;
 typedef struct GameSpritePalette GameSpritePalette;
+/* A palette loaded into sprite palette memory, on the per-screen list.
+   `shared` marks one that several sprites reference, `dirty` one that still has
+   to be uploaded. */
 struct GameSpritePalette {
     GameSpritePalette *previous, *next;
     const void *data;
@@ -24,6 +43,8 @@ struct GameSpritePalette {
     GameSpriteFlags flags;
 };
 typedef struct GameSpriteAllocation GameSpriteAllocation;
+/* A run of sprite tiles, on the per-screen list in address order.
+   GameSpriteAllocation_Compact moves these, so re-read `offset` after it. */
 struct GameSpriteAllocation {
     u32 offset, size;
     GameSpriteAllocation *previous, *next;

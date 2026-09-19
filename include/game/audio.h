@@ -3,11 +3,20 @@
 #include <nns/snd_arc_stream.h>
 #include <nns/snd_capture_effect.h>
 
+/* The game's layer over the Nitro sound library. Sequences and banks live in
+   the filesystem, so starting music is a load first and a play afterwards:
+   requests are appended to a command queue and the loader works through it one
+   file at a time, calling back when each is in place.
+
+   Sound effects can also be scheduled: GameAudio_PlayEffectDelayed records a
+   frame count and the update pass fires the effect when it reaches zero. */
+
 typedef struct GameAudioFade { s32 volume, current, step, state; } GameAudioFade;
 typedef struct GameAudioDelayedEffect { s16 sequence, volume; int frames; } GameAudioDelayedEffect;
 typedef struct GameAudioMusic { int sequence; u8 bank; u8 reserved[3]; } GameAudioMusic;
 typedef struct GameAudioMusicFiles { void *sequence, *bank, *waves[4]; } GameAudioMusicFiles;
 typedef struct GameAudioLoadCommand GameAudioLoadCommand;
+/* One queued file read, linked into the loader's list. */
 struct GameAudioLoadCommand {
     GameAudioLoadCommand *next;
     u8 *destination;
@@ -15,6 +24,8 @@ struct GameAudioLoadCommand {
     void (*callback)(GameAudioLoadCommand *command);
     void *argument;
 };
+/* The loader: the command it is working on, the rest of the queue, and which
+   sequence and bank the current load belongs to. */
 typedef struct GameAudioLoader {
     GameAudioLoadCommand command;
     GameAudioLoadCommand *next;
@@ -31,6 +42,7 @@ typedef struct GameAudioQueueEnd {
     GameAudioLoadCommand **tail;
 } GameAudioQueueEnd;
 
+/* The instruments a bank needs, so their wave archives can be loaded with it. */
 typedef struct GameAudioWaveList {
     s16 count;
     u16 instruments[1];

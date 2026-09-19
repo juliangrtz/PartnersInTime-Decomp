@@ -4,6 +4,8 @@
 #include <game/battle_context.h>
 #include <game/battle_task_queue.h>
 
+/* Reading a battle archive: open it, ask an entry's size, then read
+   asynchronously into a destination the caller owns. */
 u32 BattleArchive_GetEntrySize(void *system, const u8 *archive_cursor, u16 entry_index);
 int BattleArchive_ReadAsync(void *system, void *request, int unknown_2, const u8 *archive_cursor,
                             const void *descriptor, u16 unknown_5);
@@ -18,6 +20,10 @@ typedef struct BattleMapChannelRecord {
 } BattleMapChannelRecord;
 typedef char BattleMapChannelRecord_SizeCheck[sizeof(BattleMapChannelRecord) == 8 ? 1 : -1];
 
+/* Loading a battle map is a chain of queued tasks: the Queue* functions start
+   one and the *Task functions are the per-frame steps it runs through. Each
+   step is public because the chain hands control from one to the next by
+   storing the successor in the task. */
 void BattleMap_UpdateReloadTask(BattleQueuedTask *task);
 void BattleMap_ReadReloadTask(BattleQueuedTask *task);
 void BattleMap_PrepareReloadTask(BattleQueuedTask *task);
