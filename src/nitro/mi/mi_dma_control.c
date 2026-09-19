@@ -1,3 +1,10 @@
+/*
+ * DMA control (ARM9 resident, 0x0203B158-0x0203B428).
+ *
+ * Starting and stopping DMA channels, with the checks that stop a transfer from
+ * being programmed over one that is already running.
+ */
+
 #include <nitro/os_sync.h>
 
 typedef void (*DmaCallback)(void *argument);

@@ -1,3 +1,9 @@
+/*
+ * Vector operations (ARM9 resident, 0x02034A14-0x02034C34).
+ *
+ * Dot product, cross product and normalization in fixed point.
+ */
+
 #include <hardware.h>
 #include <nitro/fx_vec.h>
 

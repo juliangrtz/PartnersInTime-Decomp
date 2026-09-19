@@ -1,3 +1,11 @@
+/*
+ * Pause page open and close (overlay 7, 0x0206E8DC-0x0206F0E4).
+ *
+ * Opening and closing a pause page, choosing which page the scene enters on, and
+ * the delayed rumble that accompanies the entry. CanSelectMember is the
+ * eligibility test the member grid applies.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_selection_sprites.h>
 #include <game/pause_navigation.h>

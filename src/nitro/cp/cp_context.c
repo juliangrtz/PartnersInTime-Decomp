@@ -1,3 +1,10 @@
+/*
+ * Coprocessor context (ARM9 resident, 0x02040598-0x02040678).
+ *
+ * Saves and restores the divider and square-root registers, so an interrupt can
+ * use them without corrupting a calculation in progress.
+ */
+
 #include <nitro.h>
 
 typedef struct CpContext {

@@ -1,3 +1,11 @@
+/*
+ * Scene object resources (overlay 7, 0x02089178-0x0208953C).
+ *
+ * Binding a scene object to its model and resource: loading a resource slot,
+ * reporting when it is ready, and the model flags - facing, flip, animation
+ * limit - that follow from it.
+ */
+
 #include "scene_object_internal.h"
 
 extern "C" {

@@ -1,3 +1,11 @@
+/*
+ * Pause backgrounds (overlay 7, 0x0206FE10-0x02070938).
+ *
+ * Loading and uploading the pause menu's backgrounds. Loads come in direct and
+ * buffered forms, and the upload is queued for the VBlank task; the bank swap is
+ * queued the same way so the display never reads a half-written bank.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_background.h>
 extern "C" void func_ov005_0206650c(PauseBackgroundTask *);

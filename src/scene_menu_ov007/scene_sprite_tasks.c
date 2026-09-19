@@ -1,3 +1,9 @@
+/*
+ * Scene sprite tasks (overlay 7, 0x02084FBC-0x02085168).
+ *
+ * Creates and steps the tasks that own the scene's sprites.
+ */
+
 #include <game/scene_script.h>
 
 extern u8 *data_ov007_020a6b90;

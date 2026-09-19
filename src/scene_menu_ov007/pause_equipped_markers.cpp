@@ -1,3 +1,9 @@
+/*
+ * Equipped-item markers (overlay 7, 0x02073AF4-0x02073C94).
+ *
+ * Marks the rows holding items a party member already has equipped.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/overlay005_resource.h>
 #include <game/overlay007_party.h>

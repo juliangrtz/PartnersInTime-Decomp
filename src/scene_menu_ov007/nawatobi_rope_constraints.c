@@ -1,3 +1,10 @@
+/*
+ * Jump-rope rope constraints (overlay 7, 0x0208B0C8-0x0208B1E8).
+ *
+ * Damps the rope points' velocities and pulls them back to their rest
+ * distances, the constraint half of the rope simulation.
+ */
+
 #include "nawatobi_rope_internal.h"
 
 void NawatobiRope_UpdateVelocities(NawatobiRopePoint *points, int count)

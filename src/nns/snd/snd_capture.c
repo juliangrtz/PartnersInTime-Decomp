@@ -1,3 +1,10 @@
+/*
+ * Sound capture (ARM9 resident, 0x0202FDAC-0x02030118).
+ *
+ * The capture unit that feeds effects back into the mixer, with the sleep hooks
+ * that stop and restart it.
+ */
+
 #include <nns/snd_capture_internal.h>
 
 void NNSi_SndCaptureStop(void)

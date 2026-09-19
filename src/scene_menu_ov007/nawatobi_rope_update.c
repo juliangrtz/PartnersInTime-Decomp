@@ -1,3 +1,9 @@
+/*
+ * Jump-rope rope update (overlay 7, 0x0208AFBC-0x0208B034).
+ *
+ * One frame of the rope: integrate, then constrain.
+ */
+
 #include "nawatobi_rope_internal.h"
 
 void NawatobiRope_Update(NawatobiRope *rope, int iterations)

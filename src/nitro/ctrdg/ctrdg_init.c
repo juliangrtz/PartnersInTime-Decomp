@@ -1,3 +1,9 @@
+/*
+ * GBA cartridge init (ARM9 resident, 0x020441AC-0x02044248).
+ *
+ * Initializes the GBA slot subsystem.
+ */
+
 #include <nitro/ctrdg.h>
 
 void CTRDG_Init(void) {

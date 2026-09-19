@@ -1,3 +1,10 @@
+/*
+ * 3D texture uploads (ARM9 resident, 0x0203869C-0x02038A04).
+ *
+ * Uploading textures and texture palettes. A transfer can straddle two physical
+ * spans, so the mapping table says where it has to switch.
+ */
+
 #include <nitro.h>
 
 extern u8 *data_02062c88;

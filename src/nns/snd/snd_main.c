@@ -1,3 +1,9 @@
+/*
+ * Sound library main (ARM9 resident, 0x0202EA1C-0x0202EB40).
+ *
+ * NNS_SndInit and the per-frame NNS_SndMain, plus the sleep hooks.
+ */
+
 #include <nns/snd.h>
 #include <nitro/pm.h>
 

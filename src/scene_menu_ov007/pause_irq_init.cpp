@@ -1,3 +1,9 @@
+/*
+ * Pause IRQ setup (overlay 7, 0x02073404-0x02073428).
+ *
+ * Creates the pause scene's VBlank task.
+ */
+
 #include "pause_scene_internal.h"
 
 extern "C" {

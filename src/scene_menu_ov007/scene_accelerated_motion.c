@@ -1,3 +1,11 @@
+/*
+ * Scene accelerated motion (overlay 7, 0x02085CB4-0x02086560).
+ *
+ * The motion primitives scene objects move with: constant acceleration, scaled
+ * acceleration, a peak-distance arc, ballistic motion, and the duration-bounded
+ * forms of each. MoveToObject re-reads the target each frame so it tracks.
+ */
+
 #include <game/scene_motion.h>
 #include <hardware.h>
 extern s32 _s32_div_f(s32, s32);

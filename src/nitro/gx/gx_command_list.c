@@ -1,3 +1,9 @@
+/*
+ * Geometry command lists (ARM9 resident, 0x02036A58-0x02036CDC).
+ *
+ * Packs 3D commands into the FIFO format the geometry engine consumes.
+ */
+
 #include <nitro/gx_command_list.h>
 
 extern void MI_Copy36B(const void *source, void *destination);

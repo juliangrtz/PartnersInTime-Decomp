@@ -1,3 +1,9 @@
+/*
+ * OS initialization (ARM9 resident, 0x0203A068-0x0203A0B4).
+ *
+ * Brings the OS subsystems up in the order they depend on each other.
+ */
+
 #include <nitro/os_lock.h>
 #include <nitro/os_arena.h>
 #include <nitro/os_alarm.h>

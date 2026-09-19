@@ -1,3 +1,9 @@
+/*
+ * Sound archive loading (ARM9 resident, 0x02031A80-0x02031F70).
+ *
+ * Loading a group, a sequence archive or a bank with everything it depends on.
+ */
+
 #include <nns/snd_archive.h>
 
 int NNS_SndArcLoadGroup(int index, NNSSndHeap *heap)

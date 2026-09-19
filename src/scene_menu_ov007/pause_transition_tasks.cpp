@@ -1,3 +1,11 @@
+/*
+ * Pause transition tasks (overlay 7, 0x0206D418-0x0206E0D4).
+ *
+ * The tasks that open and close the pause menu over the field: the fade, the
+ * progress the panels and window follow, and the exit preparation. Entry and
+ * exit are separate task chains because they are not mirror images.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_transition.h>
 #include <game/pause_navigation.h>

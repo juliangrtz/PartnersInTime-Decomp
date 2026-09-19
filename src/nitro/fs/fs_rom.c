@@ -1,3 +1,10 @@
+/*
+ * ROM filesystem (ARM9 resident, 0x0203F33C-0x0203F654).
+ *
+ * The archive implementation backed by cartridge ROM, including the default DMA
+ * channel its reads use.
+ */
+
 #include <nitro/fs_overlay.h>
 
 extern int data_02064c20;

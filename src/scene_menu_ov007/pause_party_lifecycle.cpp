@@ -1,3 +1,11 @@
+/*
+ * Pause party setup (overlay 7, 0x02075F6C-0x02076374).
+ *
+ * Allocates the pause menu's party state and list graphics and tears them down
+ * again. The two clear helpers exist because parts of the workspace are cleared
+ * as words and parts as halfwords.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/overlay007_party.h>
 

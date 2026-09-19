@@ -1,3 +1,9 @@
+/*
+ * Card requests (ARM9 resident, 0x02043934-0x02043A70).
+ *
+ * Issues one request to the card subsystem.
+ */
+
 #include <nitro/card.h>
 
 int CARDi_Request(CardWork *work, u32 command, int retries) {

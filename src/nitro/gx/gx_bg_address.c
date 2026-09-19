@@ -1,3 +1,10 @@
+/*
+ * Background VRAM addresses (ARM9 resident, 0x020364AC-0x02036964).
+ *
+ * Resolves a background's screen and character base into the VRAM address the
+ * CPU writes through, for both engines.
+ */
+
 #include <nitro.h>
 
 #define MAIN_DISPLAY (*(vu32 *)0x04000000)

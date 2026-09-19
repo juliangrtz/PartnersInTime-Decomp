@@ -1,3 +1,10 @@
+/*
+ * Stream callbacks (ARM9 resident, 0x02032C04-0x02032F50).
+ *
+ * The buffer callbacks the streamed sound player is driven by, including
+ * switching to the next stream when one ends.
+ */
+
 #include <nns/snd_arc_stream.h>
 
 void NNSi_SndArcStrmDisposeBuffer(void *memory, u32 size, u32 user0, u32 user1)

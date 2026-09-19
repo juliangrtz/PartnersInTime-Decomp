@@ -1,3 +1,11 @@
+/*
+ * Filesystem files (ARM9 resident, 0x0203ED24-0x0203F33C).
+ *
+ * Opening a file by path, by id or by direct offsets, and reading, seeking and
+ * closing it. Open files are kept on an intrusive list so an archive can cancel
+ * or wait on all of them.
+ */
+
 #include <nitro/fs.h>
 
 extern FsDirectoryPosition current_dir_pos;

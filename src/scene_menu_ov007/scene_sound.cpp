@@ -1,3 +1,10 @@
+/*
+ * Scene sound tasks (overlay 7, 0x02087240-0x020876E8).
+ *
+ * Sounds a script schedules: playing once, playing repeatedly, and the measured
+ * playback that derives its interval from the sound's own length.
+ */
+
 #include <game/scene_sound.h>
 
 extern "C" {

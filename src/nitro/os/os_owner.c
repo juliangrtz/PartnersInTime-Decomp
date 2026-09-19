@@ -1,3 +1,9 @@
+/*
+ * Owner information (ARM9 resident, 0x0203AFFC-0x0203B094).
+ *
+ * Reads the console's MAC address and the owner settings the firmware stores.
+ */
+
 #include <nitro/os_owner.h>
 
 extern void MIi_CpuCopy16(const void *, void *, u32);

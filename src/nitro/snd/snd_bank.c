@@ -1,3 +1,9 @@
+/*
+ * Sound banks (ARM9 resident, 0x0203CCF8-0x0203D3AC).
+ *
+ * Binds a bank's instruments to the wave archives that hold their samples.
+ */
+
 #include <nitro/snd_bank.h>
 
 extern const u8 data_0204fc34[724];

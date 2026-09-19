@@ -1,3 +1,10 @@
+/*
+ * Badge description panel (overlay 7, 0x0207BEE0-0x0207C140).
+ *
+ * The panel describing the highlighted badge and the text strip inside it, both
+ * updated when the selection moves.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/battle_scene.h>
 #include <game/menu_badge_description.h>

@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Item star sprite (overlay 7, 0x02078040-0x02078294).
+ *
+ * Steps the star drawn beside an item.
+ */
+
 #include <game/menu_item_effect.h>
 extern s16 FX_SinCosTable_[];
 extern const MenuItemStarFrames data_ov007_0208db44;

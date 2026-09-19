@@ -1,3 +1,11 @@
+/*
+ * Scene script archives (overlay 7, 0x0208462C-0x020848F8).
+ *
+ * Loads the primary and secondary script archives and starts the scripts in
+ * them. The loader and the runtime initializer see the same allocation through
+ * different views.
+ */
+
 #include <game/scene_script.h>
 
 typedef struct SceneSecondaryArchiveLayout {

@@ -1,3 +1,10 @@
+/*
+ * Arctangent (ARM9 resident, 0x02034C34-0x020350D0).
+ *
+ * FX_Atan and FX_Atan2 over the SDK's fixed-point angle units, from a lookup
+ * table with interpolation.
+ */
+
 #include <nitro/fx_atan.h>
 
 extern const s16 FX_AtanTable_[];
@@ -145,4 +152,3 @@ int FX_Atan2(fx32 y, fx32 x)
     if (add) return (s16)(angle + FX_AtanTable_[FX_Div(numerator, x) >> 5]);
     return (s16)(angle - FX_AtanTable_[FX_Div(numerator, x) >> 5]);
 }
-

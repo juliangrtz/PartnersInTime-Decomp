@@ -1,3 +1,12 @@
+/*
+ * Pause list navigation and values (overlay 7, 0x020750BC-0x0207567C).
+ *
+ * Moving the selection through a pause list, including the wrap and clamp rules
+ * that differ once the list is longer than the nine visible rows, and the
+ * per-kind values and limits a row shows. PauseItem_GetMarkerId picks the marker
+ * drawn beside a row.
+ */
+
 #include <game/overlay007_party.h>
 
 u8 func_ov007_02075324(Overlay7Party *, int);

@@ -1,3 +1,9 @@
+/*
+ * Stream initialization (ARM9 resident, 0x020339C0-0x02033AC4).
+ *
+ * Initializes the sound archive's stream player.
+ */
+
 #include <nns/snd_arc_stream.h>
 
 extern int data_02061e74;

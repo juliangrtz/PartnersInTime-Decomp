@@ -1,3 +1,9 @@
+/*
+ * Equipment member arrows (overlay 7, 0x0207F268-0x0207F388).
+ *
+ * The arrows that switch which party member the equipment screen is showing.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/battle_scene.h>
 #include <game/menu_equipment.h>

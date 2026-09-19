@@ -1,3 +1,10 @@
+/*
+ * Menu numbers (overlay 7, 0x020774CC-0x02077718).
+ *
+ * Draws a numeric value into the menu's glyph scratch buffer, or the
+ * unavailable placeholder when there is no value.
+ */
+
 #include "pause_scene_internal.h"
 extern "C" {
 #include <game/menu_number.h>

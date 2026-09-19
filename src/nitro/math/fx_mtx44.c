@@ -1,3 +1,9 @@
+/*
+ * 4x4 matrix operations (ARM9 resident, 0x02034238-0x0203476C).
+ *
+ * Concatenating 4x4 matrices and applying a translation or scale to one.
+ */
+
 #include <nitro/fx_mtx.h>
 
 extern void MI_Copy48B(const void *source, void *destination);

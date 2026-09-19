@@ -1,3 +1,10 @@
+/*
+ * Sound streams (ARM9 resident, 0x0202F738-0x0202FDAC).
+ *
+ * The low-level stream: channel allocation, the alarm that refills the buffer,
+ * and the volume and pan applied to it.
+ */
+
 #include <nns/snd_stream.h>
 
 extern int data_020617a0;

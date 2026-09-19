@@ -1,3 +1,10 @@
+/*
+ * Stream preparation (ARM9 resident, 0x02033310-0x020335E8).
+ *
+ * Reads the first part of a stream so playback can start without waiting on the
+ * filesystem.
+ */
+
 #include <nns/snd_arc_stream.h>
 
 int NNSi_SndArcStrmPrepare(NNSSndStrmHandle *handle, NNSSndArcStrmInfo *info,

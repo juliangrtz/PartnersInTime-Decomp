@@ -1,3 +1,9 @@
+/*
+ * Capture update (ARM9 resident, 0x02030480-0x020305EC).
+ *
+ * The capture thread and its per-frame step.
+ */
+
 #include <nns/snd_capture_internal.h>
 
 void NNS_SndCaptureCreateThread(int priority)
@@ -34,4 +40,3 @@ void NNSi_SndCaptureMain(void)
     func_0203bf94(capture->playing_channels, volume, 0);
     capture->volume = volume;
 }
-

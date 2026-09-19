@@ -1,3 +1,10 @@
+/*
+ * Scene VM state access (overlay 7, 0x020876E8-0x02087BA8).
+ *
+ * The input masks a script can set, the menu selection it can read, and the save
+ * values it is allowed to query.
+ */
+
 #include "scene_vm_state_internal.h"
 #include <game/item.h>
 

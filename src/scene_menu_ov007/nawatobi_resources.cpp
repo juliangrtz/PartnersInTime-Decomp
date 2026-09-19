@@ -1,3 +1,9 @@
+/*
+ * Jump-rope resources (overlay 7, 0x0208C860-0x0208CD88).
+ *
+ * Loads the minigame's graphics and draws its level menu.
+ */
+
 #include "nawatobi_internal.h"
 
 extern "C" {

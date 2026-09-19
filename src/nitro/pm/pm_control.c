@@ -1,3 +1,11 @@
+/*
+ * Power management (ARM9 resident, 0x02041270-0x02041994).
+ *
+ * The LEDs, the backlight, sleep mode and power-off. Each request is queued as a
+ * list entry and executed in order, because the ARM7 owns the power hardware and
+ * answers asynchronously.
+ */
+
 #include <nitro/pm.h>
 
 extern u16 data_02064cc4;

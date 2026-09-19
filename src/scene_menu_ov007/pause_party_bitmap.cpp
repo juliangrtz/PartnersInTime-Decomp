@@ -1,3 +1,10 @@
+/*
+ * Party status bitmap (overlay 7, 0x02078F5C-0x0207952C).
+ *
+ * The bitmap the party's status is drawn into, rebuilt when a value changes and
+ * cross-faded to the new version so the change is not a jump.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_party_bitmap.h>
 

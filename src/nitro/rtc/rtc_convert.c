@@ -1,3 +1,9 @@
+/*
+ * RTC conversion (ARM9 resident, 0x02041DC4-0x02041E58).
+ *
+ * Converts the clock's BCD fields to binary.
+ */
+
 #include <nitro/rtc.h>
 
 u32 RTCi_ConvertBcdToBinary(u32 value) {

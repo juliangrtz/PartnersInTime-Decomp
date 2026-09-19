@@ -1,3 +1,11 @@
+/*
+ * Queued row drawing (overlay 7, 0x020757C4-0x020758F0).
+ *
+ * Drawing a list row is deferred to a task, so a scroll queues one draw per row
+ * rather than redrawing the whole list in one frame. Copying the marker is part
+ * of the same step.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_list_row.h>
 #include <game/overlay007_party.h>

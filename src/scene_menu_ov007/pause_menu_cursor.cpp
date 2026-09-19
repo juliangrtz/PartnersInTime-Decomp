@@ -1,3 +1,9 @@
+/*
+ * Pause menu cursor (overlay 7, 0x02080078-0x020804E4).
+ *
+ * The main menu's cursor: its icon and the pulsing shadow underneath it.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/battle_scene.h>
 #include <game/pause_menu_cursor.h>

@@ -1,3 +1,9 @@
+/*
+ * Sound command queue (ARM9 resident, 0x0203C5B0-0x0203CB30).
+ *
+ * The queue the commands are allocated from and flushed out of.
+ */
+
 #include <nitro/os_sync.h>
 #include <nitro/snd_command.h>
 
@@ -151,4 +157,3 @@ void func_0203c5b0(u32 serial) {
     func_0203c3ac();
     while (!func_0203c51c(serial)) func_0203c8e4(1);
 }
-

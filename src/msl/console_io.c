@@ -1,3 +1,10 @@
+/*
+ * Console I/O (ARM9 resident, 0x02047000-0x0204709C).
+ *
+ * The read and write hooks the Metrowerks library's stdio goes through; on this
+ * target they have no console to talk to.
+ */
+
 #include <nitro.h>
 
 extern int func_02046fd4(void);

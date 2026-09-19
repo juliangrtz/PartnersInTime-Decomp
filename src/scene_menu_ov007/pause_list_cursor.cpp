@@ -1,3 +1,9 @@
+/*
+ * Pause list cursor (overlay 7, 0x0207F4D8-0x0207F5F8).
+ *
+ * The cursor and the marker drawn over the selected row.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_selection_sprites.h>
 #include <game/battle_scene.h>

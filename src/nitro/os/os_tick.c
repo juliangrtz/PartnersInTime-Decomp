@@ -1,3 +1,9 @@
+/*
+ * System tick (ARM9 resident, 0x0203A6FC-0x0203A8EC).
+ *
+ * The 64-bit tick counter and the conversions between ticks and time.
+ */
+
 #include <nitro/os_sync.h>
 
 extern u16 data_02062fec;

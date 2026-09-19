@@ -1,3 +1,10 @@
+/*
+ * Sound fader (ARM9 resident, 0x02034114-0x020341D0).
+ *
+ * A linear volume fader stepped once per frame, with the finished test callers
+ * poll.
+ */
+
 #include <nns/snd.h>
 
 void NNSi_SndFaderInit(NNSiSndFader *fader)

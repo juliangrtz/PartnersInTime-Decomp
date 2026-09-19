@@ -1,3 +1,10 @@
+/*
+ * Pause main menu (overlay 7, 0x0206F240-0x0206F754).
+ *
+ * The main pause menu's per-frame task and the position each party member's
+ * entry is drawn at.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_navigation.h>
 #include <game/pause_background.h>

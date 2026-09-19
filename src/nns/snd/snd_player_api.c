@@ -1,3 +1,10 @@
+/*
+ * Sequence player API (ARM9 resident, 0x0202F3B8-0x0202F738).
+ *
+ * The public surface over the sequence player: starting and stopping sequences,
+ * handles, volumes, channel priorities and the global variables scripts write.
+ */
+
 #include <nns/snd.h>
 
 extern NNSFndList data_02060ed4;

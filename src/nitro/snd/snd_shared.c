@@ -1,3 +1,10 @@
+/*
+ * Sound shared work (ARM9 resident, 0x0203CB30-0x0203CCF8).
+ *
+ * The work area both processors read, which is how the ARM9 sees the state of
+ * channels the ARM7 is driving.
+ */
+
 #include <nitro/snd_command.h>
 
 extern SoundAlarmCallback data_02064b20[8];

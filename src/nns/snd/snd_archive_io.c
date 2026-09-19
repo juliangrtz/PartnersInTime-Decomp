@@ -1,3 +1,10 @@
+/*
+ * Sound archive I/O (ARM9 resident, 0x02030810-0x0203096C).
+ *
+ * File offsets, sizes and reads inside the sound archive, and the disposal of
+ * its info, FAT and symbol blocks.
+ */
+
 #include <nns/snd_archive.h>
 
 u32 NNS_SndArcGetFileOffset(u32 file)

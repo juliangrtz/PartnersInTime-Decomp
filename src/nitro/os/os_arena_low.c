@@ -1,3 +1,10 @@
+/*
+ * OS arena bounds (ARM9 resident, 0x0203A0B4-0x0203A1C4).
+ *
+ * Reading and moving an arena's low and high water marks, which is how the
+ * allocators above it carve memory out.
+ */
+
 #include <nitro/os_arena.h>
 extern int data_02062f5c;
 extern u32 func_02039b34(void);

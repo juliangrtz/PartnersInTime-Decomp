@@ -1,3 +1,9 @@
+/*
+ * Scene menu blend and zoom (overlay 7, 0x0207FB40-0x0207FE60).
+ *
+ * The blend and zoom the menu opens over the scene with.
+ */
+
 #include "scene_menu_motion_internal.h"
 
 extern "C" {

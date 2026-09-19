@@ -1,3 +1,9 @@
+/*
+ * Mono capture effect (ARM9 resident, 0x02033AC4-0x02033B10).
+ *
+ * The mono downmix variant of the capture effect.
+ */
+
 #include <nns/snd_capture_effect.h>
 
 extern void MIi_CpuCopyFast(const void *source, void *destination, u32 size);

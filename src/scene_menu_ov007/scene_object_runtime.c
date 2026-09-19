@@ -1,3 +1,11 @@
+/*
+ * Scene object update pass (overlay 7, 0x0208435C-0x0208462C).
+ *
+ * The per-frame pass over the scene's objects: advancing the global scripts,
+ * then updating and drawing every object in the render rows. The manager view
+ * here includes the task slots, which the shorter view elsewhere omits.
+ */
+
 #include <game/scene_motion.h>
 
 typedef struct SceneManagerWork {

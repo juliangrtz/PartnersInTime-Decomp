@@ -1,3 +1,11 @@
+/*
+ * Scene script runtime (overlay 7, 0x02083EF8-0x0208435C).
+ *
+ * The scene VM's variable access, its per-object states, and the task that runs
+ * a script and acts on its result. Reads into the still-untyped part of the
+ * manager block are written as explicit byte offsets.
+ */
+
 #include <game/script_vm.h>
 
 typedef struct SceneScriptManager {

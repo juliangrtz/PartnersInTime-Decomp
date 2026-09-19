@@ -1,3 +1,9 @@
+/*
+ * Stream thread (ARM9 resident, 0x020322E0-0x02032350).
+ *
+ * The worker thread that refills the stream buffers.
+ */
+
 #include <nns/snd_arc_stream.h>
 
 extern void func_02032350(NNSiSndArcStrmCommand *command);

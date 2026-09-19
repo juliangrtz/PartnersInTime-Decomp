@@ -1,3 +1,10 @@
+/*
+ * PXI FIFO (ARM9 resident, 0x0203D3AC-0x0203D590).
+ *
+ * Sending and receiving words over the hardware FIFO between the two
+ * processors.
+ */
+
 #include <nitro/os_sync.h>
 
 typedef void (*PxiCallback)(u32 tag, u32 data, int error);

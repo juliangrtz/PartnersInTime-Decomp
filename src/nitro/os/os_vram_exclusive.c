@@ -1,3 +1,10 @@
+/*
+ * VRAM exclusivity (ARM9 resident, 0x0203B124-0x0203B158).
+ *
+ * Initializes the bookkeeping that stops both processors from claiming the same
+ * VRAM bank.
+ */
+
 #include <nitro.h>
 
 extern u32 data_02063028;

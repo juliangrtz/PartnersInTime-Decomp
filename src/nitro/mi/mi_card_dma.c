@@ -1,3 +1,9 @@
+/*
+ * Card DMA copy (ARM9 resident, 0x0203BCBC-0x0203BD48).
+ *
+ * The 32-bit DMA copy the card subsystem transfers with.
+ */
+
 #include <nitro/os_sync.h>
 extern void MIi_CheckAnotherAutoDMA(u32, u32);
 extern void MIi_CheckDma0SourceAddress(u32, const void *, u32, u32);

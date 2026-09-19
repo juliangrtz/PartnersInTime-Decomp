@@ -1,3 +1,10 @@
+/*
+ * Jump-rope scene lifecycle (overlay 7, 0x0208CEEC-0x0208D738).
+ *
+ * Init, Destroy and Delete for the unused jump-rope minigame, with its frame
+ * upload task. See the reconstruction notes for how the scene is reached.
+ */
+
 #include "nawatobi_internal.h"
 
 extern "C" {

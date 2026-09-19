@@ -1,3 +1,9 @@
+/*
+ * Menu number glyphs (overlay 7, 0x020778B8-0x02077990).
+ *
+ * Prepares the digit glyphs a numeric field is assembled from.
+ */
+
 #include "pause_scene_internal.h"
 extern "C" {
 #include <game/menu_number.h>

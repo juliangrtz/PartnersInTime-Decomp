@@ -1,3 +1,11 @@
+/*
+ * Equipment comparison rows (overlay 7, 0x0207A0D8-0x0207A680).
+ *
+ * The stat rows shown when equipment is being chosen: each row's value, the
+ * number strip it is drawn as, and the arrow saying whether the candidate is
+ * better or worse than what is equipped.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/battle_scene.h>
 #include <game/menu_number.h>

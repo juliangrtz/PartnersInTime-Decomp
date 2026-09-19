@@ -1,3 +1,10 @@
+/*
+ * OS mutexes (ARM9 resident, 0x02039D28-0x02039F6C).
+ *
+ * Recursive mutexes with ownership tracking; a thread that blocks on one is put
+ * on the mutex's wait list and woken when it is released.
+ */
+
 #include <nitro/os_sync.h>
 
 OsMutex *func_02039d28(OsThread *thread);

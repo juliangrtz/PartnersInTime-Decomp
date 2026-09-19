@@ -1,3 +1,10 @@
+/*
+ * C++ runtime support (ARM9 resident, 0x02044310-0x0204485C).
+ *
+ * The Metrowerks runtime's critical regions, buffered output flushing, and the
+ * abort and exit paths.
+ */
+
 #include <msl/runtime.h>
 #include <nitro/os_sync.h>
 

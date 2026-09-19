@@ -1,3 +1,10 @@
+/*
+ * Pause equipment highlight (overlay 7, 0x02077164-0x020774CC).
+ *
+ * Highlights the stats an equipment change would affect, as a tilemap that
+ * fades in and out.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/overlay007_party.h>
 #include <game/pause_equipment_highlight.h>

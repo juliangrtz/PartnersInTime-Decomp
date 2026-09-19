@@ -1,3 +1,9 @@
+/*
+ * Real-time clock (ARM9 resident, 0x020423E8-0x02042584).
+ *
+ * Reads the clock through the ARM7, synchronously or asynchronously.
+ */
+
 #include <nitro/rtc.h>
 
 extern u16 data_02064d20;
@@ -49,4 +55,3 @@ u32 RTC_GetTime(RtcTime *time) {
     if (!data_02064d24.sync_result) RTCi_WaitBusy();
     return data_02064d24.sync_result;
 }
-

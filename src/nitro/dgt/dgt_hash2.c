@@ -1,3 +1,10 @@
+/*
+ * SHA-1 and HMAC (ARM9 resident, 0x0203FDB0-0x02040598).
+ *
+ * The digest the overlay loader verifies images with: a streaming SHA-1 and the
+ * HMAC built on it.
+ */
+
 #include <nitro/dgt_hash.h>
 
 typedef struct DgtHash2Constants { u32 words[4]; } DgtHash2Constants;

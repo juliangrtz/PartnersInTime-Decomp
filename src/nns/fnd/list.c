@@ -1,3 +1,10 @@
+/*
+ * NNS intrusive lists (ARM9 resident, 0x0202E384-0x0202E5AC).
+ *
+ * The doubly linked list the NNS libraries build their containers from; the link
+ * is embedded in the object at an offset the list is initialized with.
+ */
+
 #include <nns/fnd.h>
 
 static inline NNSFndLink *NNSi_FndGetLink(NNSFndList *list, void *object)

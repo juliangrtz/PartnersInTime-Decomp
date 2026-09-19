@@ -1,3 +1,9 @@
+/*
+ * Console type (ARM9 resident, 0x02039B34-0x02039BAC).
+ *
+ * Reports which DS model the game is running on.
+ */
+
 #include <nitro.h>
 
 extern u32 data_02059d90;

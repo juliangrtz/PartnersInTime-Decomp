@@ -1,3 +1,9 @@
+/*
+ * Equipment category cursor (overlay 7, 0x0207B1B0-0x0207B2C8).
+ *
+ * The cursor over the equipment category tabs.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_selection_sprites.h>
 #include <game/battle_scene.h>

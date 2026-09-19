@@ -1,3 +1,10 @@
+/*
+ * Thread lists (ARM9 resident, 0x02039858-0x02039938).
+ *
+ * Inserting a thread into a priority-ordered list, used for both the run queue
+ * and the wait lists.
+ */
+
 #include <nitro/os_sync.h>
 
 int func_02039908(void) {

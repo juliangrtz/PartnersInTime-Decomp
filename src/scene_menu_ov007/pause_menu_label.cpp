@@ -1,3 +1,9 @@
+/*
+ * Pause menu labels (overlay 7, 0x0207AD1C-0x0207AE0C).
+ *
+ * Draws a page's labels and releases their rows again.
+ */
+
 #include "pause_scene_internal.h"
 extern "C" {
 #include <game/pause_menu_label.h>

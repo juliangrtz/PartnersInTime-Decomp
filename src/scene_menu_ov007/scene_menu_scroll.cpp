@@ -1,3 +1,9 @@
+/*
+ * Scene menu scrolling (overlay 7, 0x0207F5F8-0x0207F868).
+ *
+ * Starts and steps the menu's scroll and applies it to the display registers.
+ */
+
 #include "scene_menu_motion_internal.h"
 
 extern "C" {

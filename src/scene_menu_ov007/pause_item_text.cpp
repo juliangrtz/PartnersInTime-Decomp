@@ -1,3 +1,9 @@
+/*
+ * Pause item text (overlay 7, 0x02075B04-0x02075E10).
+ *
+ * The values and text a row shows and the draw that puts them on screen.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/overlay007_party.h>
 extern "C" {

@@ -1,3 +1,9 @@
+/*
+ * Jump-rope rope sprites (overlay 7, 0x0208C0E0-0x0208C180).
+ *
+ * Updates the sub-screen sprite the rope is drawn as.
+ */
+
 #include "nawatobi_render_internal.h"
 
 void NawatobiRope_UpdateSubSprite(NawatobiRopeSpriteTask *task)

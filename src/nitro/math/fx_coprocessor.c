@@ -1,3 +1,12 @@
+/*
+ * Division and square-root coprocessor (ARM9 resident, 0x0203476C-0x02034A14).
+ *
+ * Drives the hardware divider and square-root units. Each operation has a
+ * synchronous form that waits for the result and an async form that starts it
+ * and lets the caller collect it later, which is what makes the pipelining in
+ * the geometry code possible.
+ */
+
 #include <hardware.h>
 #include <nitro/fx.h>
 

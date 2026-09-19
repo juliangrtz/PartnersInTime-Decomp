@@ -1,3 +1,11 @@
+/*
+ * Graphics initialization (ARM9 resident, 0x020350D0-0x02035444).
+ *
+ * GX_Init and the display controls around it: turning the display on and off,
+ * selecting the graphics mode for each engine, the master brightness, and the
+ * H/V-blank interrupt enables.
+ */
+
 #include <nitro/gx_init.h>
 
 extern u16 data_02059d74;

@@ -1,3 +1,10 @@
+/*
+ * OS message queues (ARM9 resident, 0x02039BB4-0x02039D28).
+ *
+ * Fixed-capacity message queues between threads, blocking or not depending on
+ * the caller's request.
+ */
+
 #include <nitro/os_message.h>
 
 void func_02039d08(OsMessageQueue *queue, void **buffer, int capacity) {

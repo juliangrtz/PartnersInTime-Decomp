@@ -1,3 +1,10 @@
+/*
+ * IRQ table (ARM9 resident, 0x02038AF0-0x02038E34).
+ *
+ * The interrupt vector table: installing a handler for an interrupt and
+ * enabling, disabling or acknowledging its mask bit.
+ */
+
 #include <nitro.h>
 
 typedef void (*IrqCallbackFunction)(void *argument);

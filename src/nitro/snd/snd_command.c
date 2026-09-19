@@ -1,3 +1,11 @@
+/*
+ * Sound command channel (ARM9 resident, 0x0203BD6C-0x0203C570).
+ *
+ * The ARM9 side of the sound command channel: the command emitters, the mutex
+ * that serializes them, and the PXI send and completion polling. Commands are
+ * batched into the queue and flushed together.
+ */
+
 #include <nitro/os_sync.h>
 #include <nitro/snd_command.h>
 

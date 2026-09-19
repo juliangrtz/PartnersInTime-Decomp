@@ -1,3 +1,11 @@
+/*
+ * Card backup memory (ARM9 resident, 0x02042C1C-0x0204326C).
+ *
+ * Reading, programming and verifying the cartridge's backup memory, and
+ * identifying which backup device is fitted. Every access runs as a card task,
+ * so the calls here begin one and wait for it.
+ */
+
 #include <nitro/card.h>
 
 static inline void CARDi_BeginTask(CardWork *work) {

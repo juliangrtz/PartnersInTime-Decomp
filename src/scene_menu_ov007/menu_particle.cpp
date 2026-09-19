@@ -1,3 +1,9 @@
+/*
+ * Menu particles (overlay 7, 0x0207E4D0-0x0207E5E8).
+ *
+ * Steps the particles the pause menu emits.
+ */
+
 #include <game/menu_particles.h>
 
 extern "C" {

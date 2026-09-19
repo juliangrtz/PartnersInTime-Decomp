@@ -1,3 +1,9 @@
+/*
+ * Pause submenu label (overlay 7, 0x0207AEDC-0x0207AF44).
+ *
+ * Draws the label of the open submenu.
+ */
+
 #include "pause_scene_internal.h"
 extern "C" {
 #include <game/pause_menu_label.h>

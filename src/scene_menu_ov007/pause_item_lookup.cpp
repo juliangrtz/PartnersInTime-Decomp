@@ -1,3 +1,10 @@
+/*
+ * Pause item lookup (overlay 7, 0x02074D48-0x020750BC).
+ *
+ * The rotating order the inventory is presented in, whether a rotated entry is
+ * still available, and an item's name and description ids.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/overlay007_party.h>
 

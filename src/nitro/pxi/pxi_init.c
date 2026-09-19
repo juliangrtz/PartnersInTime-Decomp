@@ -1,3 +1,10 @@
+/*
+ * PXI initialization (ARM9 resident, 0x0203D5B8-0x0203D730).
+ *
+ * Sets up the shared work area and registers the per-tag receive callbacks that
+ * route an incoming word to its subsystem.
+ */
+
 #include <nitro/os_sync.h>
 
 typedef void (*PxiCallback)(u32 tag, u32 data, int error);
@@ -59,4 +66,3 @@ void PXI_SetFifoRecvCallback(u32 tag, PxiCallback callback) {
     else PXI_SYSTEM->callback_mask[0] &= ~(1 << tag);
     OS_RestoreInterrupts(state);
 }
-

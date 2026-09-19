@@ -1,3 +1,11 @@
+/*
+ * 3D projection matrices (ARM9 resident, 0x02037328-0x020379AC).
+ *
+ * Perspective, orthographic and look-at matrices. The construction is
+ * pipelined against the divider's async interface, so a division is started
+ * before the terms that do not depend on it are computed.
+ */
+
 #include <hardware.h>
 #include <nitro/gx_projection.h>
 

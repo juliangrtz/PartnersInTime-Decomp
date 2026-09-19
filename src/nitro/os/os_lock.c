@@ -1,3 +1,11 @@
+/*
+ * OS locks (ARM9 resident, 0x02038EC8-0x02039250).
+ *
+ * The word-based locks the SDK arbitrates shared hardware with. A lock word is
+ * owned by a processor id, so the cartridge and card locks here are what keep
+ * the two CPUs off the same bus at once.
+ */
+
 #include <nitro/os_lock.h>
 
 extern int data_02062d00;

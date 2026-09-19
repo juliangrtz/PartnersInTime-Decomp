@@ -1,3 +1,9 @@
+/*
+ * VBlank alarms (ARM9 resident, 0x0203AD78-0x0203ADE8).
+ *
+ * Initializes the alarm variant that fires on VBlank rather than on the timer.
+ */
+
 #include <nitro/os_alarm.h>
 
 extern u16 data_0206300c;

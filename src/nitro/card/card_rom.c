@@ -1,3 +1,9 @@
+/*
+ * Card ROM reads (ARM9 resident, 0x0204326C-0x0204345C).
+ *
+ * Reading from cartridge ROM, synchronously or through the task thread.
+ */
+
 #include <nitro/card.h>
 
 void CARDi_ReadRomSyncCore(CardWork *work) {

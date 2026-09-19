@@ -1,3 +1,10 @@
+/*
+ * Sound archive files (ARM9 resident, 0x02031518-0x02031A80).
+ *
+ * Loading a sequence, bank or wave archive out of the sound archive and
+ * disposing of it again.
+ */
+
 #include <nns/snd_archive.h>
 #include <nitro/snd_bank.h>
 #include <nitro/os_sync.h>
@@ -136,4 +143,3 @@ void NNSi_SndArcDisposeWave(void *memory, u32 size, u32 archive, u32 index)
     if (memory == func_0203cd6c(wave, index)) func_0203cdb4(wave, index, 0);
     func_0203be8c((u32)memory, (u32)memory + size);
 }
-

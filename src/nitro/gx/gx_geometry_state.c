@@ -1,3 +1,10 @@
+/*
+ * Geometry engine state (ARM9 resident, 0x02036D70-0x02037328).
+ *
+ * The 3D engine's render state: matrix modes, material and polygon attributes,
+ * and the swap-buffers that ends a frame.
+ */
+
 #include <nitro.h>
 
 #define REG16(address) (*(vu16 *)(address))

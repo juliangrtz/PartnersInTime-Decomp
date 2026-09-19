@@ -1,3 +1,11 @@
+/*
+ * Scene object animation (overlay 7, 0x02088894-0x02089000).
+ *
+ * Setting a scene object's primary and secondary animations, querying whether
+ * its motion is still running, swapping two object slots, and the generic
+ * property setter the scripts reach it through.
+ */
+
 #include "scene_object_internal.h"
 
 extern "C" {

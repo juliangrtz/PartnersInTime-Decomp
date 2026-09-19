@@ -1,3 +1,10 @@
+/*
+ * Card pullout handling (ARM9 resident, 0x02043A70-0x02043BB8).
+ *
+ * Detects the cartridge being removed and terminates cleanly instead of reading
+ * from a socket that is no longer there.
+ */
+
 #include <nitro/card.h>
 
 extern int data_02065720;

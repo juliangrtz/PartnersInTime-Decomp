@@ -1,3 +1,10 @@
+/*
+ * Stream commands (ARM9 resident, 0x02032F50-0x02033310).
+ *
+ * The command queue the stream player is controlled through, with the channel
+ * allocation and the worker thread it runs on.
+ */
+
 #include <nns/snd_arc_stream.h>
 
 void NNSi_SndArcStrmStop(NNSiSndArcStrmPlayer *player, int frames)

@@ -1,3 +1,9 @@
+/*
+ * Jump-rope level (overlay 7, 0x0208C4D0-0x0208C5BC).
+ *
+ * Advances the minigame's difficulty level as the player keeps going.
+ */
+
 #include "nawatobi_internal.h"
 
 extern "C" {

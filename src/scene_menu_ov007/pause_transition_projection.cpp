@@ -1,3 +1,10 @@
+/*
+ * Pause transition projection (overlay 7, 0x0206E1C8-0x0206E27C).
+ *
+ * Projects a point through the transition's current camera, which the panel and
+ * window tasks position themselves with.
+ */
+
 #include <game/pause_transition.h>
 
 extern "C" {

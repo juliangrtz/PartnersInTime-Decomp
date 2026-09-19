@@ -1,3 +1,9 @@
+/*
+ * Soft reset (ARM9 resident, 0x0203AF0C-0x0203AFE8).
+ *
+ * Sends the reset command to the ARM7 and runs the callback registered for it.
+ */
+
 #include <nitro/os_reset.h>
 #include <nitro/pxi.h>
 

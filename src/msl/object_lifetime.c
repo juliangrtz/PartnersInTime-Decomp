@@ -1,3 +1,10 @@
+/*
+ * Static object lifetime (ARM9 resident, 0x02048518-0x02048614).
+ *
+ * Runs the global constructors at startup, tears the destructor chain down at
+ * exit, and finds the exception entry for an address.
+ */
+
 #include <nitro.h>
 
 typedef struct MslDestructorNode {

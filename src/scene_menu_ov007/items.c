@@ -1,3 +1,11 @@
+/*
+ * Pause item row measurement (overlay 7, 0x02074A00-0x02074D48).
+ *
+ * Measures the rows of a pause list: the text a row will hold, how wide it is,
+ * and the per-kind quantity that goes with it. Identifiers are still
+ * address-named; what is established is that these feed the row layout.
+ */
+
 #include <game/overlay007_party.h>
 #include <game/save_data.h>
 #include <game/text.h>

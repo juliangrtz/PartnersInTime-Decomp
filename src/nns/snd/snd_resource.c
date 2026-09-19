@@ -1,3 +1,10 @@
+/*
+ * Sound resources (ARM9 resident, 0x0202EB40-0x0202EC9C).
+ *
+ * Allocates and frees the channels, capture units and alarms the sound library
+ * shares between its players.
+ */
+
 #include <nns/snd.h>
 
 extern u32 data_02060ebc;

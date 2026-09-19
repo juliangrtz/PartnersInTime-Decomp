@@ -1,3 +1,9 @@
+/*
+ * Scene window open (overlay 7, 0x02089670-0x02089980).
+ *
+ * Opens the scene's message window and reports whether one is open.
+ */
+
 #include "scene_window_internal.h"
 
 extern "C" {

@@ -1,3 +1,10 @@
+/*
+ * Sound archive info (ARM9 resident, 0x0203096C-0x02030C8C).
+ *
+ * The info records for each entry kind - sequences, banks, wave archives,
+ * streams, players and groups - read out of the archive header.
+ */
+
 #include <nns/snd_archive.h>
 
 typedef struct NNSiSndArcOffsetTable {

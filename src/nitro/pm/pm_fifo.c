@@ -1,3 +1,10 @@
+/*
+ * Power management FIFO (ARM9 resident, 0x02041A0C-0x02041DAC).
+ *
+ * The PXI side of power management: sending a command to the ARM7 and waiting
+ * for its reply.
+ */
+
 #include <nitro/pm.h>
 
 extern u16 data_02064cc4;
@@ -111,4 +118,3 @@ int PMi_SendUtilityCommand(u32 command, PmCallback callback, void *argument) {
     PMi_SendPxiData((command & 0xFFFF) | 0x01010000);
     return 0;
 }
-

@@ -1,3 +1,11 @@
+/*
+ * Filesystem archives (ARM9 resident, 0x0203E564-0x0203ECC0).
+ *
+ * The archive layer: registering an archive under a name, finding it, and the
+ * command pump that runs its requests synchronously or asynchronously. A memory
+ * archive is served by the read and write callbacks here.
+ */
+
 #include <nitro/fs.h>
 
 extern FsArchive *arc_list;
@@ -203,4 +211,3 @@ int FS_LoadArchive(FsArchive *archive, u32 base, u32 fat, u32 fat_size,
     archive->flags |= 2;
     return 1;
 }
-

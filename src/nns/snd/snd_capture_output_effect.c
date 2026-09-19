@@ -1,3 +1,10 @@
+/*
+ * Capture output effects (ARM9 resident, 0x02033D10-0x020340D4).
+ *
+ * The output effects applied to the captured samples - none, surround - with the
+ * clamp that keeps the result in range.
+ */
+
 #include <nns/snd_capture_effect.h>
 
 extern NNSiSndCaptureEffect data_02059c9c;

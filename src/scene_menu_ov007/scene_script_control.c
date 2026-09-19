@@ -1,3 +1,10 @@
+/*
+ * Scene script control (overlay 7, 0x02083B1C-0x02083C20).
+ *
+ * Readiness and stop control for the scene scripts, including stopping the
+ * script attached to one object.
+ */
+
 #include <game/scene_script.h>
 
 typedef void (*SceneTaskVisitor)(SceneTask *task);

@@ -1,3 +1,9 @@
+/*
+ * Equipment panel motion (overlay 7, 0x0207A81C-0x0207AD1C).
+ *
+ * Slides the equipment heading and stats panel into and out of place.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/battle_scene.h>
 extern "C" {

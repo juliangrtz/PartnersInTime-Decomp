@@ -1,3 +1,9 @@
+/*
+ * Scene window close (overlay 7, 0x0208953C-0x020895B8).
+ *
+ * Closes the scene's message window.
+ */
+
 #include "scene_window_internal.h"
 
 extern "C" {

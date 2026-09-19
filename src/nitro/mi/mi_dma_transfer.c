@@ -1,3 +1,9 @@
+/*
+ * DMA transfers (ARM9 resident, 0x0203B500-0x0203B76C).
+ *
+ * The copy and fill transfers the rest of the game requests DMA through.
+ */
+
 #include <nitro/os_sync.h>
 
 extern void func_01ff84c0(u32 channel, const void *source, void *destination, u32 control);
@@ -59,4 +65,3 @@ void func_0203b500(u32 channel, const void *source, void *destination, u32 size)
     func_01ff8558(channel, source, destination, 0x80000000 | (size >> 1));
     while (*control & 0x80000000) {}
 }
-

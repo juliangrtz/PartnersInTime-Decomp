@@ -1,3 +1,10 @@
+/*
+ * Card ROM DMA (ARM9 resident, 0x0204355C-0x020436B0).
+ *
+ * Attempts a DMA transfer out of cartridge ROM, falling back to a CPU copy when
+ * the channel is unavailable.
+ */
+
 #include <nitro/card.h>
 
 /* The ITCM lower bound aliases its first resident function. */

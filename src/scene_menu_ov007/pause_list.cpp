@@ -1,3 +1,12 @@
+/*
+ * Pause list rows (overlay 7, 0x02073FA0-0x020747E0).
+ *
+ * The list itself: show and hide, measuring a row's width, refreshing a row's
+ * state, and the three sprites each row is drawn from - its text, its marker and
+ * its quantity digit. Redrawing only the selected row is how the list stays
+ * cheap while the selection moves.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/overlay007_party.h>
 

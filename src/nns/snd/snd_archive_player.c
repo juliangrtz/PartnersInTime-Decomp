@@ -1,3 +1,9 @@
+/*
+ * Sound archive player (ARM9 resident, 0x02031F70-0x020322E0).
+ *
+ * Starting a sequence from the archive on a configured player.
+ */
+
 #include <nns/snd_archive.h>
 
 int NNS_SndArcPlayerSetup(NNSSndHeap *heap)

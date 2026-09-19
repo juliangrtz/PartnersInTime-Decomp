@@ -1,3 +1,9 @@
+/*
+ * Pause IRQ teardown (overlay 7, 0x0206AB80-0x0206ABD0).
+ *
+ * Destroy and Delete for the pause scene's VBlank task.
+ */
+
 #include "pause_scene_internal.h"
 
 extern "C" {

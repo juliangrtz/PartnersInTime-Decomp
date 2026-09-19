@@ -1,3 +1,10 @@
+/*
+ * Pause mode sprite (overlay 7, 0x0207E93C-0x0207EA4C).
+ *
+ * The sprite indicating the current mode, with a timed variant that hides itself
+ * again.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/battle_scene.h>
 #include <game/pause_mode_sprite.h>

@@ -1,3 +1,9 @@
+/*
+ * OS arena setup (ARM9 resident, 0x0203A2F0-0x0203A49C).
+ *
+ * Initializes the memory arenas from the region sizes the header declares.
+ */
+
 #include <nitro/os_arena.h>
 
 extern int data_02062f58;

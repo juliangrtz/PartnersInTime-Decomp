@@ -1,3 +1,9 @@
+/*
+ * Pause menu label motion (overlay 7, 0x0207B120-0x0207B1B0).
+ *
+ * Moves a label's icon and text rows to their positions.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/battle_scene.h>
 extern "C" {

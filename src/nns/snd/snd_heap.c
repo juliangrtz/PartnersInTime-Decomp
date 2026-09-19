@@ -1,3 +1,11 @@
+/*
+ * Sound heap (ARM9 resident, 0x02030F58-0x02031354).
+ *
+ * The heap sound data is loaded into. State can be saved and reloaded, so a
+ * scene can drop everything it added since a marker without tracking individual
+ * allocations.
+ */
+
 #include <nns/snd.h>
 
 extern u32 func_0203c570(void);

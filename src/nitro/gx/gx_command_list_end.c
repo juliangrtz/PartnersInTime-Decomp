@@ -1,3 +1,9 @@
+/*
+ * Geometry command list end (ARM9 resident, 0x02038A04-0x02038AB4).
+ *
+ * Closes a command list and flushes what is left in the packing buffer.
+ */
+
 #include <nitro/gx_command_list.h>
 
 u32 func_02038a04(GxCommandList *list) {

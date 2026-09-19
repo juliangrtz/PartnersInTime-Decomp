@@ -1,3 +1,10 @@
+/*
+ * Card ROM registers (ARM9 resident, 0x02043724-0x02043934).
+ *
+ * Programs the card interface registers for a transfer and reads results back
+ * out of the cache.
+ */
+
 #include <nitro/card.h>
 
 #define CARD_CONTROL (*(vu32 *)0x040001A4)

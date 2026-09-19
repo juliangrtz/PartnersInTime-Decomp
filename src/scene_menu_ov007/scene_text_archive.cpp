@@ -1,4 +1,12 @@
 extern "C" {
+
+/*
+ * Scene text archive (overlay 7, 0x0208A318-0x0208A5CC).
+ *
+ * Loads the scene's localized text archive a piece per frame and reports when it
+ * is complete; GetEntry is how the rest of the overlay reads a string out of it.
+ */
+
 #include <game/window.h>
 #include <game/scene_window.h>
 extern u8 *data_ov007_020a6b90;

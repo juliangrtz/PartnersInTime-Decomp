@@ -1,3 +1,11 @@
+/*
+ * 2D VRAM uploads (ARM9 resident, 0x020379AC-0x0203869C).
+ *
+ * Uploading background and object tiles, screens and palettes for both engines.
+ * The extended-palette paths need their bank mapped for CPU access first, which
+ * is why they come as Begin/Load/End triples.
+ */
+
 #include <nitro.h>
 
 extern int data_02059d78;

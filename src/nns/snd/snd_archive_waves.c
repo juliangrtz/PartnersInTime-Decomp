@@ -1,3 +1,9 @@
+/*
+ * Sound archive waves (ARM9 resident, 0x02031354-0x02031424).
+ *
+ * Loads the wave archives a bank's instruments refer to.
+ */
+
 #include <nns/snd_archive.h>
 
 int NNSi_SndArcLoadWaves(SoundWaveArchive *wave, SoundBank *bank, int slot, u32 file, NNSSndHeap *heap)

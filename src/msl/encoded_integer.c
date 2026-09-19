@@ -1,3 +1,10 @@
+/*
+ * Encoded integers (ARM9 resident, 0x0204709C-0x02047234).
+ *
+ * The variable-length integer decoding the exception tables use, plus the
+ * destructor for a caught exception.
+ */
+
 #include <nitro.h>
 
 typedef struct MslCaughtException {

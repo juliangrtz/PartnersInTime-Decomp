@@ -1,3 +1,10 @@
+/*
+ * GBA cartridge (ARM9 resident, 0x02043BB8-0x02043FE0).
+ *
+ * Detecting a cartridge in the GBA slot, locking the bus while it is accessed,
+ * and handling its removal.
+ */
+
 #include <nitro/ctrdg.h>
 
 #define CTRDG_EXMEM (*(vu16 *)0x04000204)

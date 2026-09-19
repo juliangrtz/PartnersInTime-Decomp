@@ -1,3 +1,10 @@
+/*
+ * Item selection sprites (overlay 7, 0x0207D6B0-0x0207DB20).
+ *
+ * The label strip, the offset sprite and the quantity sprite drawn for the item
+ * currently selected.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/menu_item_selection.h>
 #include <game/menu_item_effect.h>

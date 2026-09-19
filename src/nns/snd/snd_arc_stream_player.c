@@ -1,3 +1,10 @@
+/*
+ * Stream player (ARM9 resident, 0x020335E8-0x020339C0).
+ *
+ * Setting up, preparing, starting and stopping a streamed sound, and the main
+ * step that keeps its buffers fed.
+ */
+
 #include <nns/snd_arc_stream.h>
 
 extern const s16 data_0204fb34[128];

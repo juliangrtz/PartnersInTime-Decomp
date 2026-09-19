@@ -1,5 +1,12 @@
 extern "C" {
 
+/*
+ * Scene property selectors (overlay 7, 0x020883A0-0x02088468).
+ *
+ * The get and set selectors the scene scripts read and write scene properties
+ * through, plus the animation-layer clear.
+ */
+
 #include <game/scene_vm_state.h>
 #include <nitro.h>
 

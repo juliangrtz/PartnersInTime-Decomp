@@ -1,3 +1,11 @@
+/*
+ * Menu spring chains (overlay 7, 0x02076374-0x02076760).
+ *
+ * A mass-spring chain used for the menu's dangling elements: points are
+ * integrated, the links between them are constrained back to their rest length,
+ * and the velocities are damped. Fixed point throughout, hence FixedMultiply.
+ */
+
 #include <game/menu_spring.h>
 
 extern MenuSpringChain data_ov007_020a67dc[4];

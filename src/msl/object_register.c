@@ -1,3 +1,9 @@
+/*
+ * Static object registration (ARM9 resident, 0x02048824-0x02048868).
+ *
+ * Registers a global object's destructor on the chain and the terminate handler.
+ */
+
 #include <nitro.h>
 
 typedef struct MslDestructorNode {

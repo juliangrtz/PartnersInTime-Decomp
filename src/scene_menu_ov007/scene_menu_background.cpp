@@ -1,3 +1,9 @@
+/*
+ * Scene menu blend background (overlay 7, 0x02081560-0x02081664).
+ *
+ * Prepares the background the menu blends over.
+ */
+
 #include "scene_window_internal.h"
 #include <game/scene_menu_motion.h>
 extern "C" {

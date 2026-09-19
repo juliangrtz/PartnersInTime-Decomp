@@ -1,3 +1,9 @@
+/*
+ * Capture effects (ARM9 resident, 0x02030634-0x02030810).
+ *
+ * Starting and stopping the reverb and the other capture-based effects.
+ */
+
 #include <nns/snd_capture_internal.h>
 
 int NNS_SndCaptureStartReverb(void *buffer, u32 size, int format, int rate, int volume)
@@ -29,4 +35,3 @@ int NNS_SndCaptureStartEffect(void *buffer, u32 size, int format, int rate, int 
     DC_FlushRange(buffer, size);
     return NNSi_SndCaptureStart(1, buffer, (u8 *)buffer + (size >> 1), size >> 1, format, 0, 0, 1, rate, 127, 0, 127, blocks, callback, argument);
 }
-

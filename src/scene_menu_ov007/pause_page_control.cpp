@@ -1,3 +1,9 @@
+/*
+ * Pause page tasks (overlay 7, 0x0206ABD0-0x0206B080).
+ *
+ * The per-frame tasks of the status page and the Cobalt Star page.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_navigation.h>
 #include <game/pause_background.h>

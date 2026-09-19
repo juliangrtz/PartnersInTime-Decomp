@@ -1,3 +1,9 @@
+/*
+ * Jump-rope rendering tasks (overlay 7, 0x0208B944-0x0208BA98).
+ *
+ * Draws the rope each frame and creates and steps the follower character.
+ */
+
 #include "nawatobi_render_internal.h"
 #include <game/battle_scene.h>
 

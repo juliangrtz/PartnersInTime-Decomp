@@ -1,4 +1,11 @@
 extern "C" {
+
+/*
+ * Item use effects (overlay 7, 0x02077A1C-0x02077E84).
+ *
+ * The glow shown on an item as it is used and the healing effect that follows.
+ */
+
 #include <game/menu_item_effect.h>
 #include <game/save_state_transfer.h>
 MenuItemEffectTask *func_ov005_0206659c(void (*)(MenuItemEffectTask *), int, int);

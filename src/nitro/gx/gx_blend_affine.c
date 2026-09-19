@@ -1,3 +1,10 @@
+/*
+ * Blending and affine backgrounds (ARM9 resident, 0x02036964-0x02036A58).
+ *
+ * The blend and brightness registers and the affine transform applied to a
+ * rotation/scaling background.
+ */
+
 #include <nitro.h>
 
 /* The affine coefficients are reduced from Q12 to the hardware's Q8 format. */

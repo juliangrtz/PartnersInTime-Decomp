@@ -1,3 +1,9 @@
+/*
+ * Empty equipment row (overlay 7, 0x02073428-0x0207355C).
+ *
+ * The sprite drawn in place of a row when an equipment slot is empty.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_list_row.h>
 #include <game/battle_scene.h>

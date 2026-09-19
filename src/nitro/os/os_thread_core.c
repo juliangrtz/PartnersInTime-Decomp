@@ -1,3 +1,10 @@
+/*
+ * Thread scheduling (ARM9 resident, 0x02039250-0x020396D8).
+ *
+ * Sleeping, waking and rescheduling threads. Selection is by priority, so
+ * changing a thread's priority can preempt the running one immediately.
+ */
+
 #include <nitro/os_sync.h>
 
 extern int data_02062d04;

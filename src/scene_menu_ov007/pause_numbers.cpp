@@ -1,3 +1,11 @@
+/*
+ * Pause numeric readouts (overlay 7, 0x02080D4C-0x02081334).
+ *
+ * The interpolated numbers on the status screen - level, HP, coins, play time -
+ * the blinking clock separator, and the low-HP warning icon. Interpolated
+ * because a value counts up to its target rather than jumping.
+ */
+
 #include "pause_scene_internal.h"
 #include <game/pause_numbers.h>
 #include <game/pause_clock.h>

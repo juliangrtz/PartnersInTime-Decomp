@@ -1,3 +1,11 @@
+/*
+ * Scene motion commands (overlay 7, 0x02087BE0-0x020883A0).
+ *
+ * The script commands that move an object: each decodes its packed operands,
+ * looks the object up and starts the motion, writing the result back to the
+ * script's variable when the command asks for one.
+ */
+
 #include <game/scene_motion.h>
 #include "scene_vm_state_internal.h"
 

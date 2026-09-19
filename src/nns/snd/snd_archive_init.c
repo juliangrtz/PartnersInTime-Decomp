@@ -1,3 +1,9 @@
+/*
+ * Sound archive initialization (ARM9 resident, 0x02030C8C-0x02030F58).
+ *
+ * Opens a sound archive, reads its header and makes it the current one.
+ */
+
 #include <nns/snd_archive.h>
 
 void NNS_SndArcInit(NNSSndArc *archive, const char *path, NNSSndHeap *heap, int load_symbols)

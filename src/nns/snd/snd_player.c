@@ -1,3 +1,10 @@
+/*
+ * Sequence player (ARM9 resident, 0x0202EC9C-0x0202F3B8).
+ *
+ * The player that owns the running sequences: allocation, priority ordering,
+ * preparation, and the per-frame step that advances them.
+ */
+
 #include <nns/snd.h>
 
 extern NNSFndList data_02060ec8;

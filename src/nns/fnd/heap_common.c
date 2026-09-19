@@ -1,3 +1,10 @@
+/*
+ * NNS heap common (ARM9 resident, 0x0202E5AC-0x0202E6F4).
+ *
+ * The heap header and the list of heaps, shared by the frame heap and the other
+ * NNS heap kinds.
+ */
+
 #include <nns/fnd.h>
 
 extern int data_02060e88;

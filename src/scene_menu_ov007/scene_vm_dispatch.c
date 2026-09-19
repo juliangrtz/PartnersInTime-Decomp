@@ -1,3 +1,12 @@
+/*
+ * Scene script dispatcher (overlay 7, 0x02081730-0x02083B1C).
+ *
+ * The scene and object language's opcode table. Kept as one switch because its
+ * layout is part of the match; opcode 0x04E contains a documented inline-assembly
+ * height calculation. See docs/research/SCENE_VM_MATCHING.md before touching
+ * either.
+ */
+
 #include <game/scene_sound.h>
 #include <game/scene_vm_state.h>
 #include <game/scene_motion.h>

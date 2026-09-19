@@ -1,3 +1,11 @@
+/*
+ * Card task machinery (ARM9 resident, 0x02042584-0x02042A44).
+ *
+ * The card subsystem's task thread and the resource lock around it: a request is
+ * handed to the thread, the FIFO callback reports the ARM7's answer, and the
+ * caller either waits or polls.
+ */
+
 #include <nitro/card.h>
 
 extern void OS_UnlockCard(u16 lock_id);

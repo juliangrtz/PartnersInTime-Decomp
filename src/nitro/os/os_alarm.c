@@ -1,3 +1,11 @@
+/*
+ * OS alarms (ARM9 resident, 0x0203A8FC-0x0203AD78).
+ *
+ * Timer alarms: a callback fired once or periodically off the tick counter. The
+ * alarm list is kept sorted by fire time so the handler only has to look at its
+ * head.
+ */
+
 #include <nitro/os_alarm.h>
 
 typedef struct OsAlarmList {

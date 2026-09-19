@@ -1,3 +1,10 @@
+/*
+ * Scene transition controller (overlay 7, 0x02085168-0x0208552C).
+ *
+ * Drives a transition between scene states, creating and destroying the objects
+ * it needs as it goes.
+ */
+
 #include <game/scene_motion.h>
 
 typedef struct SceneTransitionTask {

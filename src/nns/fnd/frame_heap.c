@@ -1,3 +1,11 @@
+/*
+ * NNS frame heap (ARM9 resident, 0x0202E6F4-0x0202EA1C).
+ *
+ * A heap that allocates from both ends and frees by returning to a recorded
+ * state rather than per allocation, which is how the sound heap discards a
+ * whole load in one call.
+ */
+
 #include <nns/fnd.h>
 
 extern void func_0203b7a0(u32 value, void *destination, u32 size);
