@@ -99,6 +99,22 @@ class RewriteTests(unittest.TestCase):
         # Unrelated entries keep their own sections, including .rodata.
         self.assertIn(".rodata start:0x0204a000 end:0x0204a010", rendered)
 
+    def test_the_target_may_reuse_a_later_member_s_name(self):
+        delinks = table()
+        operation = {
+            "target": "src/game/window_voice.c",
+            "members": ["src/game/window_alignment.c", "src/game/window_voice.c"],
+        }
+        _, members, merged = validate(operation, delinks)
+        rewrite_delinks(delinks["arm9"], operation["target"], members, merged)
+        rendered = "\n".join(delinks["arm9"].render())
+        self.assertIn(
+            "src/game/window_voice.c:\n    .text start:0x0201da48 end:0x0201dc98",
+            rendered,
+        )
+        self.assertNotIn("0x0201dc3c", rendered)
+        self.assertEqual(rendered.count("src/game/window_voice.c:"), 1)
+
     def test_the_component_wide_heading_survives(self):
         delinks = table()
         operation = {

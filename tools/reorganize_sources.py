@@ -221,8 +221,16 @@ def validate(operation: dict, delinks: dict[str, Delinks]):
 
 def rewrite_delinks(table: Delinks, target: str, members: list[str],
                     merged: dict[str, tuple[int, int]]) -> None:
-    """Replace the first member's block with the merged one, drop the others."""
+    """Replace the first member's block with the merged one, drop the others.
+
+    The other members are dropped *before* the first block is renamed: a merge
+    target often reuses a member's own name, and renaming first would make the
+    lookup below find the freshly renamed block instead of the stale one.
+    """
     first = table.get(members[0])
+    for member in members[1:]:
+        table.blocks.remove(table.get(member))
+
     lines = [f"{target}:"]
     for name, (start, end) in merged.items():
         indent, rest = "    ", ""
@@ -236,9 +244,6 @@ def rewrite_delinks(table: Delinks, target: str, members: list[str],
     first.name = target
     first.lines = lines + trailing
     first.sections = dict(merged)
-
-    for member in members[1:]:
-        table.blocks.remove(table.get(member))
 
 
 def rewrite_manifest(path: Path, target: str, members: list[str]) -> None:
@@ -320,6 +325,13 @@ def main() -> int:
             continue
         seen.add(target)
         validated.append((target, component, members, merged))
+
+    claimed: dict[str, str] = {}
+    for target, _, members, _ in validated:
+        for member in members:
+            if member in claimed:
+                errors.append(f"{target}: {member} is already claimed by {claimed[member]}")
+            claimed[member] = target
 
     # The Metrowerks linker selects objects by basename, so they stay unique.
     basenames: dict[str, str] = {}
