@@ -46,11 +46,8 @@ src/scene_menu_ov007/items.c:
 src/scene_menu_ov007/vm_motion.c:
     .text start:0x02087be0 end:0x020883a0
 
-src/scene_menu_ov007/properties.c:
-    .text start:0x020883d0 end:0x02088468
-
-src/scene_menu_ov007/animation_layer.cpp:
-    .text start:0x020883a0 end:0x020883d0
+src/scene_menu_ov007/scene_vm_object_properties.cpp:
+    .text start:0x020883a0 end:0x02088468
 
 src/scene_menu_ov007/scene_object_animation.cpp:
     .text start:0x02088894 end:0x02089000

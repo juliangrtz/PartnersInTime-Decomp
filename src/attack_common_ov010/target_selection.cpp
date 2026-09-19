@@ -1,3 +1,5 @@
+extern "C" {
+
 #include <nitro/fx.h>
 #include <game/battle_scene.h>
 #include <game/battle_actor.h>
@@ -34,4 +36,6 @@ int Overlay10Enemy_SelectReactionTarget(void)
         if (Overlay10Enemy_IsSelectable((u16)(i + 60)))
             ids[count++] = i + 60;
     return count ? ids[Random_NextModulo(count)] : 0;
+}
+
 }

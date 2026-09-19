@@ -38,11 +38,8 @@ src/field/field_blink.c:
 src/field/field_blink_callbacks.c:
     .text       start:0x020a9638 end:0x020a9778
 
-src/field/field_behavior.cpp:
-    .text       start:0x020a4df8 end:0x020a4e84
-
-src/field/field_interaction_bounds.cpp:
-    .text       start:0x020a4f4c end:0x020a4f88
+src/field/field_entity_interaction.cpp:
+    .text start:0x020a4df8 end:0x020a4f88
 
 src/field/field_entity_lifecycle.cpp:
     .text       start:0x020a7310 end:0x020a79dc
@@ -76,9 +73,6 @@ src/field/field_frame_snapshot.cpp:
 
 src/field/field_spatial_motion.cpp:
     .text start:0x020b4220 end:0x020b451c
-
-src/field/field_bounds_resources.cpp:
-    .text       start:0x020a6c14 end:0x020a7310
 
 src/field/field_archive_lifecycle.c:
     .text       start:0x020897d0 end:0x0208995c
@@ -122,8 +116,8 @@ src/field/field_room_scripts.c:
 src/field/field_area_lifecycle.c:
     .text start:0x02081454 end:0x020815a0
 
-src/field/field_party_snapshot.c:
-    .text start:0x020bb69c end:0x020bc2f0
+src/field/field_party_entity_lifecycle.cpp:
+    .text start:0x020bb69c end:0x020bc3e8
 
 src/field/field_entity_base.c:
     .text start:0x020a2a58 end:0x020a2d04
@@ -134,26 +128,20 @@ src/field/field_spatial_copy.c:
 src/field/field_party_storage.c:
     .text start:0x0209d7ec end:0x0209dd8c
 
-src/field/field_variable_copy.c:
-    .text start:0x020bc684 end:0x020bc7d0
-
-src/field/field_variable_lifecycle.c:
-    .text start:0x020bcc1c end:0x020bd1ec
+src/field/field_variable_entity.cpp:
+    .text start:0x020bc684 end:0x020bd1ec
 
 src/field/field_party_copy.cpp:
     .text start:0x020b756c end:0x020b7b68
 
-src/field/field_party_auxiliary_copy.c:
-    .text start:0x020b6560 end:0x020b6744
+src/field/field_auxiliary_updates.cpp:
+    .text start:0x020b6560 end:0x020b6e98
 
-src/field/field_render_snapshot.c:
-    .text start:0x020a3928 end:0x020a3e38
+src/field/field_render_transform.cpp:
+    .text start:0x020a3928 end:0x020a4214
 
 src/field/field_area_state.c:
     .text start:0x0206e4d8 end:0x0206ec68
-
-src/field/field_transform_update.cpp:
-    .text start:0x020a3e38 end:0x020a4214
 
 src/field/field_scaling.cpp:
     .text start:0x020a4320 end:0x020a461c
@@ -202,9 +190,6 @@ src/field/field_roaming_path.cpp:
 
 src/field/field_party_special_actions.cpp:
     .text start:0x0208995c end:0x0208b208
-
-src/field/field_auxiliary_updates.cpp:
-    .text start:0x020b6744 end:0x020b6e98
 
 src/field/field_auxiliary_lifecycle.cpp:
     .text start:0x020b72e0 end:0x020b756c
@@ -282,17 +267,14 @@ src/field/field_party_restore.c:
 src/field/field_party_story_presence.c:
     .text start:0x020a23f8 end:0x020a260c
 
-src/field/field_interaction_refresh.c:
-    .text start:0x020a4e84 end:0x020a4f4c
-
 src/field/field_party_manager_input.c:
     .text start:0x020a1400 end:0x020a146c
 
 src/field/field_party_action_models.cpp:
     .text start:0x0209cca0 end:0x0209cd84
 
-src/field/field_planar_bounds_update.c:
-    .text start:0x020a6b4c end:0x020a6c14
+src/field/field_bounds_resources.cpp:
+    .text start:0x020a6b4c end:0x020a7310
 
 src/field/field_party_manager_action_models.cpp:
     .text start:0x020a02e0 end:0x020a03a0
@@ -372,17 +354,8 @@ src/field/field_special_contact.cpp:
 src/field/field_oam_frame.c:
     .text start:0x02070cfc end:0x02070e18
 
-src/field/field_variable_controls.cpp:
-    .text start:0x020bc7d0 end:0x020bcc1c
-
-src/field/field_roaming_options.c:
-    .text start:0x020b1e5c end:0x020b2044
-
-src/field/field_party_lifecycle.cpp:
-    .text start:0x020bc2f0 end:0x020bc3e8
-
-src/field/field_roaming_choose.cpp:
-    .text start:0x020b1b88 end:0x020b1e5c
+src/field/field_roaming_options.cpp:
+    .text start:0x020b1b88 end:0x020b2044
 
 src/field/field_camera_setup.cpp:
     .text start:0x02073110 end:0x020736a4

@@ -3,10 +3,6 @@
     .data       start:0x020c6120 end:0x020c6240 kind:data align:32
     .bss        start:0x020c6240 end:0x020c6240 kind:bss align:32
 
-src/attack_bro_flower_ov014/attack_object_state.c:
-    .text start:0x020c3700 end:0x020c3aa4
-
-
 src/attack_bro_flower_ov014/projectile_hide.cpp:
     .text start:0x020c3ce4 end:0x020c3dac
 
@@ -31,5 +27,5 @@ src/attack_bro_flower_ov014/ov14_participant_end_fade.cpp:
 src/attack_bro_flower_ov014/ov14_attack_release_enemy_effects.cpp:
     .text start:0x020c3388 end:0x020c348c
 
-src/attack_bro_flower_ov014/ov14_attack_schedule_next_participant.cpp:
-    .text start:0x020c3588 end:0x020c3700
+src/attack_bro_flower_ov014/attack_object_state.cpp:
+    .text start:0x020c3588 end:0x020c3aa4

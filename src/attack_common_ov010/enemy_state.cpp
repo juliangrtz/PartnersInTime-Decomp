@@ -1,3 +1,5 @@
+extern "C" {
+
 #include <game/battle_actor.h>
 #include <game/battle_enemy_data.h>
 #include <game/battle_scene.h>
@@ -105,4 +107,6 @@ int Overlay10Enemy_IsSelectable(u16 actor_id) {
 
     return BattleActor_CanReceiveStatus(BattleActor_GetById(actor_id)) &&
            !actor->flag_bits.excluded_from_targeting;
+}
+
 }

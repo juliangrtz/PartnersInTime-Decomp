@@ -398,9 +398,6 @@ src/battle/battle_scheduler_lifecycle.cpp:
 src/battle/battle_vm_motion.cpp:
     .text start:0x02078460 end:0x02078bb4
 
-src/battle/battle_alternate_model_effects.cpp:
-    .text       start:0x0206c2d4 end:0x0206c520
-
 src/battle/battle_model_source.cpp:
     .text       start:0x0207905c end:0x02079090
 
@@ -452,8 +449,8 @@ src/battle/battle_sound.c:
 src/battle/battle_model_animation.c:
     .text start:0x0206c070 end:0x0206c240
 
-src/battle/battle_alternate_model_slots.c:
-    .text start:0x0206c240 end:0x0206c2d4
+src/battle/battle_alternate_model_effects.cpp:
+    .text start:0x0206c240 end:0x0206c520
 
 src/battle/battle_axis_motion.c:
     .text start:0x020a3810 end:0x020a39d0

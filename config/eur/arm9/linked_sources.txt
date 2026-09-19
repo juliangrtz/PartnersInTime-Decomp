@@ -92,13 +92,13 @@ src/scene_menu_ov007/scene_sprite_tasks.c
 src/scene_menu_ov007/scene_transition_controller.c
 src/scene_menu_ov007/scene_manager.c
 src/shop_ov009/shop_stock.c
-src/attack_common_ov010/enemy_state.c
+src/attack_common_ov010/enemy_state.cpp
 src/attack_shell_ov011/projectile_attack_helpers.c
-src/attack_cannonball_ov012/attack_sequence_state.c
+src/attack_cannonball_ov012/attack_sequence_state.cpp
 src/attack_cannonball_ov012/attack_controller.c
 src/attack_trampoline_ov013/object_pair_setup.c
 src/attack_trampoline_ov013/attack_motion.cpp
-src/attack_bro_flower_ov014/attack_object_state.c
+src/attack_bro_flower_ov014/attack_object_state.cpp
 src/attack_smash_egg_ov015/attack_selection.c
 src/attack_smash_egg_ov015/reward_display.c
 src/attack_smash_egg_ov015/pair_attack_helpers.c
@@ -279,8 +279,7 @@ src/scene_menu_ov007/items.c
 src/game/display_render_list.cpp
 src/battle/battle_model_state.cpp
 src/scene_menu_ov007/vm_motion.c
-src/scene_menu_ov007/properties.c
-src/scene_menu_ov007/animation_layer.cpp
+src/scene_menu_ov007/scene_vm_object_properties.cpp
 src/game/affine_inverse.c
 src/game/model_animation_pool.c
 src/game/field_background_transfers.c
@@ -326,8 +325,7 @@ src/field/field_vector_math.c
 src/field/field_deferred_entity.cpp
 src/field/field_blink.c
 src/field/field_blink_callbacks.c
-src/field/field_behavior.cpp
-src/field/field_interaction_bounds.cpp
+src/field/field_entity_interaction.cpp
 src/field/field_entity_lifecycle.cpp
 src/field/field_spatial_lifecycle.cpp
 src/field/field_orbit.cpp
@@ -420,10 +418,10 @@ src/attack_bro_flower_ov014/participant_throw.cpp
 src/attack_bro_flower_ov014/participant_position.cpp
 src/attack_bro_flower_ov014/attack_sequence.cpp
 src/attack_common_ov010/bounce_height.c
-src/attack_common_ov010/motion_stop.c
+src/attack_common_ov010/attack_entry_presentation.cpp
 src/attack_common_ov010/enemy_projection_distance.c
-src/attack_common_ov010/target_selection.c
-src/attack_common_ov010/party_effect_position.c
+src/attack_common_ov010/target_selection.cpp
+src/attack_common_ov010/party_position_stats.cpp
 src/attack_hammer_ov021/attack_transitions.cpp
 src/attack_hammer_ov021/attack_entry.cpp
 src/attack_hammer_ov021/hammer_lifecycle.cpp
@@ -471,7 +469,6 @@ src/attack_shell_ov011/ov11_support_schedule_intercept.cpp
 src/attack_shell_ov011/ov11_projectile_is_ready.cpp
 src/attack_shell_ov011/ov11_controller_initialize.cpp
 src/attack_shell_ov011/ov11_attack_initialize.cpp
-src/attack_cannonball_ov012/ov12_attack_show_hit.cpp
 src/attack_cannonball_ov012/ov12_attack_hide_object.cpp
 src/attack_cannonball_ov012/ov12_controller_begin_finish.cpp
 src/attack_cannonball_ov012/ov12_controller_schedule_launch.cpp
@@ -479,14 +476,10 @@ src/attack_cannonball_ov012/ov12_attack_initialize.cpp
 src/attack_common_ov010/ov10_object_get_graphic_bounds.cpp
 src/attack_common_ov010/ov10_enemy_restore_hit_animation.cpp
 src/attack_common_ov010/ov10_party_has_badge_two.cpp
-src/attack_common_ov010/ov10_attack_move_background.cpp
-src/attack_common_ov010/ov10_attack_show_rating.cpp
 src/attack_common_ov010/ov10_enemy_play_hit_reaction.cpp
-src/attack_common_ov010/ov10_party_average_stats.cpp
 src/attack_bro_flower_ov014/ov14_attack_extend_duration.cpp
 src/attack_bro_flower_ov014/ov14_participant_end_fade.cpp
 src/attack_bro_flower_ov014/ov14_attack_release_enemy_effects.cpp
-src/attack_bro_flower_ov014/ov14_attack_schedule_next_participant.cpp
 src/attack_trampoline_ov013/ov13_attack_show_landing_effect.cpp
 src/battle_item_ov026/attack_position.cpp
 src/battle_item_ov026/ov26_attack_set_facing_animation.cpp
@@ -534,17 +527,15 @@ src/battle/battle_interface_text.c
 src/attack_pocket_chomp_ov018/chomp_table_setup.c
 src/attack_pocket_chomp_ov018/chomp_tether_setup.c
 src/field/field_party_pairing.cpp
-src/field/field_party_snapshot.c
+src/field/field_party_entity_lifecycle.cpp
 src/field/field_entity_planar.c
 src/field/field_spatial_copy.c
 src/field/field_party_storage.c
-src/field/field_variable_copy.c
-src/field/field_variable_lifecycle.c
+src/field/field_variable_entity.cpp
 src/field/field_party_copy.cpp
-src/field/field_party_auxiliary_copy.c
-src/field/field_render_snapshot.c
+src/field/field_auxiliary_updates.cpp
+src/field/field_render_transform.cpp
 src/field/field_area_state.c
-src/field/field_transform_update.cpp
 src/field/field_scaling.cpp
 src/field/field_party_manager_storage.c
 src/field/field_system.c
@@ -574,7 +565,6 @@ src/scene_menu_ov007/scene_menu_blend.cpp
 src/field/field_party_special_actions.cpp
 src/scene_menu_ov007/menu_particle.cpp
 src/shop_ov009/shop_particle.cpp
-src/field/field_auxiliary_updates.cpp
 src/field/field_auxiliary_lifecycle.cpp
 src/field/field_party_entity_render.cpp
 src/field/field_party_entity_bounds.cpp
@@ -741,7 +731,6 @@ src/battle/battle_reward_items_status.c
 src/battle/battle_reward_items_initialize.c
 src/battle/battle_sound.c
 
-src/battle/battle_alternate_model_slots.c
 src/battle/battle_axis_motion.c
 src/battle/battle_path_motion.c
 src/battle/battle_resource_model_effects.c
@@ -761,11 +750,9 @@ src/nitro/mi/mi_card_dma.c
 src/nitro/os/os_console_type.c
 src/nitro/os/os_arena_low.c
 
-src/field/field_interaction_refresh.c
 src/field/field_party_manager_input.c
 src/field/field_party_action_models.cpp
 
-src/field/field_planar_bounds_update.c
 src/field/field_party_manager_action_models.cpp
 
 src/field/field_message_window_queries.c
@@ -804,11 +791,8 @@ src/field/field_time_hole_active.c
 src/field/field_special_contact.cpp
 src/field/field_oam_frame.c
 
-src/field/field_variable_controls.cpp
-src/field/field_roaming_options.c
+src/field/field_roaming_options.cpp
 
-src/field/field_party_lifecycle.cpp
-src/field/field_roaming_choose.cpp
 
 
 src/attack_pocket_chomp_ov018/chomp_adult_exit.cpp

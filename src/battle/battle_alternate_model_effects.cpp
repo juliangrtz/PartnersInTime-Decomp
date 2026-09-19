@@ -17,7 +17,6 @@ enum {
     BATTLE_EFFECT_ORIGIN_X_OFFSET = 0xCBA0,
     BATTLE_EFFECT_ORIGIN_Y_OFFSET = 0xCBA2
 };
-
 struct BattleAlternateModelEffectPayload {
     BattleModel *model;
     GameSpritePalette palette;
@@ -104,4 +103,23 @@ BattleAITask *BattleAlternateModelEffect_SpawnAttached(BattleAITask **owner,
     BattleTask_BindOwnerSlot(task, owner);
     return task;
 }
+}
+
+extern "C" {
+
+#include "battle_model_slots_internal.h"
+int BattleAlternateModelEffect_SpawnInFreeSlot(int resource, int animation, int x, s16 y, s16 z,
+                                               int scale) {
+    int slot;
+    for (slot = 0;; ++slot) {
+        if (slot == 64)
+            return -1;
+        if (!SLOTS->effects[slot])
+            break;
+    }
+    BattleAlternateModelEffect_SpawnAttached(&SLOTS->effects[slot], resource, animation, x, y, z,
+                                             scale);
+    return slot;
+}
+
 }
