@@ -1,6 +1,10 @@
 #ifndef PIT_GAME_BATTLE_CYLINDER_WIPE_H
 #define PIT_GAME_BATTLE_CYLINDER_WIPE_H
 
+/*
+ * The wipe variant of the cylinder transition.
+ */
+
 #include <nitro.h>
 
 typedef union BattleCylinderWipeFlags {

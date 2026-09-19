@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_BATTLE_PARTICLE_SWEEP_H
 #define PIT_GAME_BATTLE_PARTICLE_SWEEP_H
+
+/*
+ * A sweeping particle effect: the emitter's parameters and the per-particle task
+ * it creates.
+ */
 #include <game/battle_ai.h>
 
 typedef struct BattleParticleSweepParameters {

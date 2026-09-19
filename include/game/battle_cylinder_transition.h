@@ -1,6 +1,12 @@
 #ifndef PIT_GAME_BATTLE_CYLINDER_TRANSITION_H
 #define PIT_GAME_BATTLE_CYLINDER_TRANSITION_H
 
+/*
+ * The transition that wraps the captured screen onto a rotating cylinder. Its
+ * per-scanline work runs in a VCount interrupt, so the state here is read by both
+ * the task and the handler.
+ */
+
 #include <nitro.h>
 
 typedef struct BattleCylinderTransitionState {

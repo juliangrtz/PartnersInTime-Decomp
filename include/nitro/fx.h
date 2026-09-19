@@ -1,3 +1,11 @@
+
+/*
+ * The SDK's fixed-point types and the operations over them. fx32 is Q19.12 and
+ * fx16 is Q3.12; angles are a 16-bit unit where 0x10000 is a full turn.
+ *
+ * This header has no linkage guard of its own, so a C++ unit must include it
+ * inside an extern "C" block before any other header pulls it in.
+ */
     #ifndef NITRO_MATH_FX_H
     #define NITRO_MATH_FX_H
 

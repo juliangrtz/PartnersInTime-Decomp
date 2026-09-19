@@ -1,5 +1,10 @@
 #ifndef PIT_OVERLAY010_ATTACK_WORK_H
 #define PIT_OVERLAY010_ATTACK_WORK_H
+
+/*
+ * The work area every Bros. Attack builds on: the acting actor, the transitions
+ * it steps through and the objects it owns.
+ */
 extern "C" {
 #include <nitro.h>
 #include <game/battle_actor.h>

@@ -1,6 +1,10 @@
 #ifndef NITRO_FX_VEC_H
 #define NITRO_FX_VEC_H
 
+/*
+ * Fixed-point vector operations.
+ */
+
 #include <nitro/fx.h>
 
 typedef struct VecFx32 { fx32 x, y, z; } VecFx32;

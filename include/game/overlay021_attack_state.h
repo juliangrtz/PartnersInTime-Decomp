@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_OVERLAY021_ATTACK_STATE_H
 #define PIT_GAME_OVERLAY021_ATTACK_STATE_H
+
+/*
+ * The hammer attack: the primary and secondary swing phases and the input window
+ * each one waits in.
+ */
 #include <game/battle_scene.h>
 #ifdef __cplusplus
 extern "C" {

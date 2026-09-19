@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_PAUSE_TRANSITION_H
 #define PIT_GAME_PAUSE_TRANSITION_H
+
+/*
+ * The transition that opens and closes the pause menu over the field.
+ */
 #include <nitro.h>
 
 typedef struct PauseTransitionProgressTask PauseTransitionProgressTask;

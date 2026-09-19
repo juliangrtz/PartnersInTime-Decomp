@@ -1,5 +1,10 @@
 #ifndef PIT_NAWATOBI_ROPE_INTERNAL_H
 #define PIT_NAWATOBI_ROPE_INTERNAL_H
+
+/*
+ * The jump-rope minigame's rope: its points, the links between them and the two
+ * phases - integrate, then constrain - its simulation runs in.
+ */
 #include <nitro.h>
 
 typedef struct NawatobiRopePoint {

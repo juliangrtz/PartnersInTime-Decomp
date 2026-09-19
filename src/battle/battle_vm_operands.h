@@ -1,6 +1,12 @@
 #ifndef PIT_BATTLE_VM_OPERANDS_H
 #define PIT_BATTLE_VM_OPERANDS_H
 
+/*
+ * How the battle VM's packed operands are decoded: two halfwords combined as
+ * ((low & 0xFFFF) | (high << 16)), with a signed division that truncates toward
+ * zero rather than an arithmetic shift.
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

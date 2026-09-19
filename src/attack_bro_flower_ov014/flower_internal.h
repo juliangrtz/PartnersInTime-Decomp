@@ -1,5 +1,9 @@
 #ifndef PIT_OVERLAY014_FLOWER_INTERNAL_H
 #define PIT_OVERLAY014_FLOWER_INTERNAL_H
+
+/*
+ * Declarations shared inside the Bro Flower overlay.
+ */
 #include "../attack_common_ov010/attack_work.h"
 #include <game/overlay014_projectile.h>
 extern "C" {

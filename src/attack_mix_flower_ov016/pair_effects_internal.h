@@ -1,5 +1,9 @@
 #ifndef PIT_OVERLAY016_PAIR_EFFECTS_INTERNAL_H
 #define PIT_OVERLAY016_PAIR_EFFECTS_INTERNAL_H
+
+/*
+ * The paired effects the Mix Flower spawns and the controller that drives them.
+ */
 #include <game/battle_scene.h>
 #include <game/overlay010_motion.h>
 #include <game/battle_effect.h>

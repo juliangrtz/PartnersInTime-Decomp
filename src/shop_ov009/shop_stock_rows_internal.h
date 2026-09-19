@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_STOCK_ROWS_INTERNAL_H
 #define PIT_SHOP_STOCK_ROWS_INTERNAL_H
+
+/*
+ * The rows of the owned-stock panel.
+ */
 #include "shop_scene_internal.h"
 #include "shop_sprite_internal.h"
 #include <game/shop_stock_rows.h>

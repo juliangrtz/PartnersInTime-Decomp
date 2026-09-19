@@ -1,6 +1,11 @@
 #ifndef NITRO_PXI_H
 #define NITRO_PXI_H
 
+/*
+ * The FIFO between the two processors and the per-tag receive callbacks that
+ * route an incoming word to its subsystem.
+ */
+
 #include <nitro.h>
 
 typedef void (*PxiCallback)(u32 tag, u32 data, int error);

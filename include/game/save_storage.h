@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_SAVE_STORAGE_H
 #define PIT_GAME_SAVE_STORAGE_H
 
+/*
+ * The structure of the battery file - signature, settings, slot directory and
+ * per-slot footers - and the checks each region is validated by.
+ */
+
 #include <game/save_backup.h>
 
 typedef struct SaveStorageSlot {

@@ -1,6 +1,11 @@
 #ifndef NITRO_GX_PROJECTION_H
 #define NITRO_GX_PROJECTION_H
 
+/*
+ * The perspective, orthographic and look-at matrices the 3D engine is set up
+ * with.
+ */
+
 #include <nitro/fx_mtx.h>
 #include <nitro/fx_vec.h>
 

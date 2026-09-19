@@ -1,5 +1,10 @@
 #ifndef PIT_SHOP_SCENE_INTERNAL_H
 #define PIT_SHOP_SCENE_INTERNAL_H
+
+/*
+ * The shop scene's workspace: its panels, its lists and the state shared between
+ * the units that draw them.
+ */
 extern "C" {
 #include <game/shop_scene.h>
 #include <game/shop_panel_slide.h>

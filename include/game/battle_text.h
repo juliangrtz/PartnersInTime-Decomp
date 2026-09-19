@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_BATTLE_TEXT_H
 #define PIT_GAME_BATTLE_TEXT_H
+
+/*
+ * The battle's two text renderers - clipped and tiled - and the flags that say
+ * what still has to be uploaded for them.
+ */
 #include <game/text.h>
 
 typedef union BattleTextUploadFlags {

@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_GRID_TRANSITION_H
 #define PIT_GAME_BATTLE_GRID_TRANSITION_H
 
+/*
+ * The transition that breaks the screen into a grid, with the capture and capture
+ * source that feed it.
+ */
+
 #include <nitro.h>
 
 typedef struct BattleGridTransitionState {

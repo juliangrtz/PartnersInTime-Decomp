@@ -1,6 +1,10 @@
 #ifndef PIT_GAME_BATTLE_LINE_TRANSITION_H
 #define PIT_GAME_BATTLE_LINE_TRANSITION_H
 
+/*
+ * The line transition and the capture it works on, split into two phases.
+ */
+
 #include <nitro.h>
 
 typedef struct BattleLineTransitionState {

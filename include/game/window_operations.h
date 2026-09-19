@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_WINDOW_OPERATIONS_H
 #define PIT_GAME_WINDOW_OPERATIONS_H
+
+/*
+ * The window operations a caller reaches the manager through.
+ */
 #include <game/window.h>
 #ifdef __cplusplus
 extern "C" {

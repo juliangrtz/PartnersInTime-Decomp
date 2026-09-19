@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_INTERFACE_ASSETS_H
 #define PIT_GAME_BATTLE_INTERFACE_ASSETS_H
 
+/*
+ * Requests for the interface's graphics - target names and labels, the command
+ * menu, item names - and the resource a layer is filled from.
+ */
+
 #include <game/battle_task_queue.h>
 
 #ifdef __cplusplus

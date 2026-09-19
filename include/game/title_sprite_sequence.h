@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_TITLE_SPRITE_SEQUENCE_H
 #define PIT_GAME_TITLE_SPRITE_SEQUENCE_H
+
+/*
+ * The sprites that fly in over the title screen: the arc each follows, the frame
+ * count it is evaluated over, and the idle animation it settles into.
+ */
 #include <game/title_effects.h>
 #include <game/sprite_animation.h>
 

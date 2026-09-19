@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_DEBUG_CONSOLE_H
 #define PIT_GAME_DEBUG_CONSOLE_H
+
+/*
+ * A text console drawn into a background. Present in the retail build but not
+ * reachable from normal play.
+ */
 #include <nitro.h>
 
 typedef struct GameConsole {

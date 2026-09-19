@@ -1,6 +1,11 @@
 #ifndef PARTNERS_IN_TIME_GAME_OVERLAY011_ATTACK_H
 #define PARTNERS_IN_TIME_GAME_OVERLAY011_ATTACK_H
 
+/*
+ * Green and Red Shells: the attack's work area, its controller, the projectile
+ * and the support character's state.
+ */
+
 #include <game/battle_scene.h>
 
 typedef union Overlay11ProjectileFlags {

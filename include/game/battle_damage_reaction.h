@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_DAMAGE_REACTION_H
 #define PIT_GAME_BATTLE_DAMAGE_REACTION_H
 
+/*
+ * The reaction an actor plays when hit, in its party, launch, effect and enemy
+ * variants. Each is a Start that arms the task and an Update that runs it out.
+ */
+
 #include <game/battle_actor.h>
 #include <game/battle_ai.h>
 #include <game/battle_effect.h>

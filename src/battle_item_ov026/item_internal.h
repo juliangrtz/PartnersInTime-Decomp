@@ -1,5 +1,9 @@
 #ifndef PIT_OVERLAY026_ITEM_INTERNAL_H
 #define PIT_OVERLAY026_ITEM_INTERNAL_H
+
+/*
+ * Declarations shared inside the battle item overlay.
+ */
 #include <game/battle_scene.h>
 extern "C" {
 #include <game/battle_actor.h>

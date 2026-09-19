@@ -1,6 +1,10 @@
 #ifndef NITRO_RTC_H
 #define NITRO_RTC_H
 
+/*
+ * The real-time clock, read through the ARM7.
+ */
+
 #include <nitro.h>
 
 typedef void (*RtcCallback)(u32 result, void *argument);

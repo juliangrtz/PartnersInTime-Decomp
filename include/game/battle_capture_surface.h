@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_BATTLE_CAPTURE_SURFACE_H
 #define PIT_GAME_BATTLE_CAPTURE_SURFACE_H
+
+/*
+ * The task that copies the captured screen into the battle's surface buffer.
+ */
 #include <nitro.h>
 typedef struct BattleCaptureCopyTask {
     int (*callback)(struct BattleCaptureCopyTask *task);

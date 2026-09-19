@@ -1,6 +1,10 @@
 #ifndef PARTNERS_IN_TIME_GAME_OVERLAY013_ATTACK_H
 #define PARTNERS_IN_TIME_GAME_OVERLAY013_ATTACK_H
 
+/*
+ * Trampolines: the paired objects and the jump and bounce state.
+ */
+
 #include <game/battle_scene.h>
 
 struct BattlePosition;

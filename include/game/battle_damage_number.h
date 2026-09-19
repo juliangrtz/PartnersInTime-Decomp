@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_DAMAGE_NUMBER_H
 #define PIT_GAME_BATTLE_DAMAGE_NUMBER_H
 
+/*
+ * The numbers that pop up over a hit actor. A number attached to an actor absorbs
+ * further hits rather than stacking, which is what MergeAttached does.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_effect.h>
 

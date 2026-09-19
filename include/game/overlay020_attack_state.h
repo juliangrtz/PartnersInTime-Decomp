@@ -1,6 +1,11 @@
 #ifndef PARTNERS_IN_TIME_GAME_OVERLAY020_ATTACK_STATE_H
 #define PARTNERS_IN_TIME_GAME_OVERLAY020_ATTACK_STATE_H
 
+/*
+ * The jump attack: its state, the target arc and the support character's input
+ * window.
+ */
+
 #include <game/battle_actor.h>
 
 typedef union Overlay20AttackFlags {

@@ -1,6 +1,11 @@
 #ifndef NITRO_FS_OVERLAY_H
 #define NITRO_FS_OVERLAY_H
 
+/*
+ * Overlay images: the table entry describing where one loads, and the load,
+ * start, end and unload that bracket its lifetime.
+ */
+
 #include <nitro/fs.h>
 
 typedef struct FsRomTable { u32 offset; u32 size; } FsRomTable;

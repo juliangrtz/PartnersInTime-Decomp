@@ -1,6 +1,11 @@
 #ifndef NNS_SND_ARCHIVE_H
 #define NNS_SND_ARCHIVE_H
 
+/*
+ * The sound archive: its header, info records and FAT, the heap its contents are
+ * loaded into, and the loads for sequences, banks, wave archives and groups.
+ */
+
 #include <nns/snd.h>
 #include <nitro/fs.h>
 #include <nitro/snd_bank.h>

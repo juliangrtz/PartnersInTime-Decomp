@@ -1,6 +1,13 @@
 #ifndef PIT_GAME_BATTLE_STATUS_H
 #define PIT_GAME_BATTLE_STATUS_H
 
+/*
+ * Status effects: applying one, clearing one or all of them, and the visuals
+ * spawned for each ailment and stat modifier. The ailment numbers are the
+ * original slot numbers; which number is which status has not been confirmed in
+ * game.
+ */
+
 #include <game/battle_actor.h>
 
 enum BattleStatusId {

@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_PANEL_SLIDE_INTERNAL_H
 #define PIT_SHOP_PANEL_SLIDE_INTERNAL_H
+
+/*
+ * The slide between the shop's buying and selling panels.
+ */
 #include "shop_scene_internal.h"
 #include <game/shop_panel_slide.h>
 

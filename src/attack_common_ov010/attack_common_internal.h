@@ -1,5 +1,10 @@
 #ifndef PIT_OVERLAY010_ATTACK_COMMON_INTERNAL_H
 #define PIT_OVERLAY010_ATTACK_COMMON_INTERNAL_H
+
+/*
+ * Declarations shared inside the common attack overlay and by the attack
+ * overlays that include it.
+ */
 #include "attack_work.h"
 extern "C" {
 extern Overlay10Work *data_ov002_020c0710;

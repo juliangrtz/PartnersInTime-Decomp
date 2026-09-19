@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_RASTER_EFFECTS_H
 #define PIT_GAME_BATTLE_RASTER_EFFECTS_H
 
+/*
+ * The per-scanline background effects the battle runs, and the particles that
+ * ride on them.
+ */
+
 #include <nitro.h>
 
 typedef struct BattleRasterEffectTask BattleRasterEffectTask;

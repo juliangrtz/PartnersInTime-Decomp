@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_FIELD_SCRIPT_H
 #define PIT_GAME_FIELD_SCRIPT_H
 
+/*
+ * The field script's interface to the world: the entity and area state a command
+ * may read or write, and the handles it addresses them by.
+ */
+
 #include <game/script_vm.h>
 
 typedef struct FieldEntity FieldEntity;

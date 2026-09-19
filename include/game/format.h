@@ -1,6 +1,10 @@
 #ifndef PIT_GAME_FORMAT_H
 #define PIT_GAME_FORMAT_H
 
+/*
+ * The game's own number and string formatting helpers.
+ */
+
 #include <nitro.h>
 
 int GameFormat_Length(const char *text);

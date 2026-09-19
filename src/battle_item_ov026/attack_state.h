@@ -1,6 +1,10 @@
 #ifndef PARTNERS_IN_TIME_OVERLAY026_ATTACK_STATE_H
 #define PARTNERS_IN_TIME_OVERLAY026_ATTACK_STATE_H
 
+/*
+ * The battle item attack's state.
+ */
+
 #include <nitro.h>
 
 enum Overlay26AttackConstant {

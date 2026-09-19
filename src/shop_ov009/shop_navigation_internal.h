@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_NAVIGATION_INTERNAL_H
 #define PIT_SHOP_NAVIGATION_INTERNAL_H
+
+/*
+ * Declarations shared by the shop's cursor and arrow units.
+ */
 #include "shop_rows_internal.h"
 #include <game/shop_navigation.h>
 extern "C" {

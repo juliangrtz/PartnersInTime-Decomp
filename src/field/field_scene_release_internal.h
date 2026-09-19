@@ -1,5 +1,9 @@
 #ifndef PIT_FIELD_SCENE_RELEASE_INTERNAL_H
 #define PIT_FIELD_SCENE_RELEASE_INTERNAL_H
+
+/*
+ * The resources the field releases when it hands the screen to another scene.
+ */
 #include "field_scene_transition_internal.h"
 #include <game/field_animation.h>
 #include <game/field_timer.h>

@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_PAUSE_HP_WARNING_H
 #define PIT_GAME_PAUSE_HP_WARNING_H
+
+/*
+ * The low-HP warning icon on the pause menu.
+ */
 #include <game/pause_scene.h>
 
 enum PauseHpWarningMode {

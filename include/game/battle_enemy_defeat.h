@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_ENEMY_DEFEAT_H
 #define PIT_GAME_BATTLE_ENEMY_DEFEAT_H
 
+/*
+ * The defeat sequence for an enemy and the removal that follows it, immediately
+ * or after the delay its effect needs.
+ */
+
 #include <game/battle_ai.h>
 
 struct BattleAITask;

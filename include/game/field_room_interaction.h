@@ -1,5 +1,11 @@
 #ifndef PIT_GAME_FIELD_ROOM_INTERACTION_H
 #define PIT_GAME_FIELD_ROOM_INTERACTION_H
+
+/*
+ * What the interaction button acts on in the current room: collecting a placed
+ * item or an entity's item, and the check that the required party member is
+ * present.
+ */
 #include <nitro.h>
 
 struct FieldAreaContext;

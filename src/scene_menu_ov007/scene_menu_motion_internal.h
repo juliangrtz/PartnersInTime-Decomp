@@ -1,5 +1,9 @@
 #ifndef PIT_SCENE_MENU_MOTION_INTERNAL_H
 #define PIT_SCENE_MENU_MOTION_INTERNAL_H
+
+/*
+ * Declarations shared by the scene menu's motion units.
+ */
 #include <game/scene_menu_motion.h>
 extern "C" {
 #include <game/overlay005_display.h>

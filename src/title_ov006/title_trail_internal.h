@@ -1,5 +1,10 @@
 #ifndef PIT_TITLE_TRAIL_INTERNAL_H
 #define PIT_TITLE_TRAIL_INTERNAL_H
+
+/*
+ * The fading pixel trails the title elements leave: the stamp drawn into the
+ * trail buffers and the dimming applied to them each frame.
+ */
 #include <game/title_sprite_sequence.h>
 
 typedef struct TitleTrailBuffers {

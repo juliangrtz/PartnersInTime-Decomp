@@ -1,6 +1,10 @@
 #ifndef PIT_GAME_BATTLE_CURTAIN_TRANSITION_H
 #define PIT_GAME_BATTLE_CURTAIN_TRANSITION_H
 
+/*
+ * The curtain that closes over the screen between scenes.
+ */
+
 #include <nitro.h>
 
 typedef struct BattleCurtainTransitionTask {

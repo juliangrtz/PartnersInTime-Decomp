@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_FIELD_DEFERRED_ENTITY_H
 #define PIT_GAME_FIELD_DEFERRED_ENTITY_H
 
+/*
+ * An entity whose script is suspended: the timed pause it is held in, the
+ * stop/pause/resume that control it, and the blink it may play meanwhile.
+ */
+
 #include <game/field_entity.h>
 #include <game/field_spawn.h>
 

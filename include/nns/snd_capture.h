@@ -1,5 +1,9 @@
 #ifndef NNS_SND_CAPTURE_H
 #define NNS_SND_CAPTURE_H
+
+/*
+ * The capture unit that feeds the mixer's output back into it.
+ */
 #include <nns/snd.h>
 #include <nitro/os_message.h>
 

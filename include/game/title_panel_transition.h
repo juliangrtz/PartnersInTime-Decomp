@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_TITLE_PANEL_TRANSITION_H
 #define PIT_GAME_TITLE_PANEL_TRANSITION_H
+
+/*
+ * The transition that splits the title screen into scrolling bands, driven per
+ * scanline from an HBlank handler.
+ */
 #include <nitro.h>
 
 enum TitlePanelTransitionState {

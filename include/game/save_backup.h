@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_SAVE_BACKUP_H
 #define PIT_GAME_SAVE_BACKUP_H
 
+/*
+ * The cartridge's backup memory: asynchronous reads and writes, the lock that
+ * serializes them and the checksum the data is validated by.
+ */
+
 #include <nitro/card.h>
 
 typedef int (*SaveBackupChecksum)(const void *data, u32 size);

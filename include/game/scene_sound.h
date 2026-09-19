@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_SCENE_SOUND_H
 #define PIT_GAME_SCENE_SOUND_H
+
+/*
+ * The sounds a scene script can schedule, including the repeat whose interval is
+ * measured from the sound's own length.
+ */
 #include <nitro.h>
 typedef struct SceneSoundTask SceneSoundTask;
 struct SceneSoundTask {

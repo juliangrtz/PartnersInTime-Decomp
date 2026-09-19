@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_VECTOR_MATH_H
 #define PIT_GAME_VECTOR_MATH_H
+
+/*
+ * The game's own fixed-point vector helpers.
+ */
 #include <nitro.h>
 int GameVector_CountBits(const s32 *vector);
 int GameVector_ScaleToBits(s32 *vector, int bits);

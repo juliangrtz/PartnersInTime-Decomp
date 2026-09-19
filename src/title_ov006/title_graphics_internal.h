@@ -1,5 +1,9 @@
 #ifndef PIT_TITLE_GRAPHICS_INTERNAL_H
 #define PIT_TITLE_GRAPHICS_INTERNAL_H
+
+/*
+ * The textured-quad drawing the title and save scenes share.
+ */
 #include <nitro.h>
 #define REG32(address) (*(volatile u32 *)(address))
 

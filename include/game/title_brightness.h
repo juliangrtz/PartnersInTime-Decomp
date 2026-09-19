@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_TITLE_BRIGHTNESS_H
 #define PIT_GAME_TITLE_BRIGHTNESS_H
+
+/*
+ * The master-brightness fade the title screen opens and closes with.
+ */
 #include <nitro.h>
 
 typedef struct TitleBrightness TitleBrightness;

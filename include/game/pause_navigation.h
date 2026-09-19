@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_PAUSE_NAVIGATION_H
 #define PIT_GAME_PAUSE_NAVIGATION_H
+
+/*
+ * Moving through the pause menu's pages and lists.
+ */
 #include <game/pause_scene.h>
 
 typedef struct PauseRumbleDelayTask {

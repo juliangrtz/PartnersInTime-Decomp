@@ -1,6 +1,11 @@
 #ifndef NNS_SND_ARC_STREAM_H
 #define NNS_SND_ARC_STREAM_H
 
+/*
+ * Streamed sounds out of a sound archive: the player, its buffers and the worker
+ * thread that keeps them fed.
+ */
+
 #include <nns/snd_stream.h>
 #include <nns/snd_archive.h>
 

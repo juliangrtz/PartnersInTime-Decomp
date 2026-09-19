@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_BATTLE_SELECTION_ANIMATION_H
 #define PIT_GAME_BATTLE_SELECTION_ANIMATION_H
+
+/*
+ * The command wheel and the target cursor: their entries, phases and the bounce
+ * each plays when the selection changes.
+ */
 #include <game/battle_scene.h>
 enum BattleCommandWheelConstant {
     BATTLE_COMMAND_WHEEL_OFFSET = 0x6530,

@@ -1,6 +1,10 @@
 #ifndef PIT_GAME_BATTLE_IRIS_TRANSITION_H
 #define PIT_GAME_BATTLE_IRIS_TRANSITION_H
 
+/*
+ * The iris transition and the capture it works on, split into two phases.
+ */
+
 #include <nitro.h>
 
 typedef struct BattleIrisTransitionTask {

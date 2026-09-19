@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_FIELD_PALETTE_CROSSFADE_H
 #define PIT_GAME_FIELD_PALETTE_CROSSFADE_H
+
+/*
+ * A crossfade between two palettes over a region of the field's palette memory.
+ */
 #include <game/field_area.h>
 enum FieldPaletteCrossfadeRegion {
     FIELD_PALETTE_OBJ,

@@ -1,6 +1,11 @@
 #ifndef PARTNERS_IN_TIME_GAME_OVERLAY010_ENEMY_STATE_H
 #define PARTNERS_IN_TIME_GAME_OVERLAY010_ENEMY_STATE_H
 
+/*
+ * The enemy snapshot the Bros. Attacks take before they run, so the result can be
+ * compared against it.
+ */
+
 #include <nitro.h>
 
 enum Overlay10EnemyConstant {

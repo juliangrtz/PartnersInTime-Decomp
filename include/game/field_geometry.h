@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_FIELD_GEOMETRY_H
 #define PIT_GAME_FIELD_GEOMETRY_H
 
+/*
+ * The field's geometry helpers: line intersection, vector scaling and length,
+ * orbit length, orientation, and the section lookup inside a field resource.
+ */
+
 #include <nitro/fx.h>
 
 #ifdef __cplusplus

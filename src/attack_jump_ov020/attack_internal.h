@@ -1,6 +1,10 @@
 #ifndef PIT_OVERLAY020_ATTACK_INTERNAL_H
 #define PIT_OVERLAY020_ATTACK_INTERNAL_H
 
+/*
+ * Declarations shared inside the jump attack overlay.
+ */
+
 #include <game/overlay020_attack_state.h>
 #include <game/battle_scene.h>
 #include <game/battle_effect.h>

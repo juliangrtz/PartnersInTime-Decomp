@@ -1,6 +1,11 @@
 #ifndef NNS_SND_STREAM_H
 #define NNS_SND_STREAM_H
 
+/*
+ * The low-level stream: its channels, the alarm that refills its buffer, and the
+ * volume and pan applied to it.
+ */
+
 #include <nns/snd.h>
 #include <nitro/pm.h>
 #include <nitro/snd_command.h>

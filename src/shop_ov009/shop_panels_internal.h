@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_PANELS_INTERNAL_H
 #define PIT_SHOP_PANELS_INTERNAL_H
+
+/*
+ * Declarations shared by the shop panel units.
+ */
 #include <game/shop_panels.h>
 #include <game/save_data.h>
 extern u8 data_ov009_0207ea3c[];

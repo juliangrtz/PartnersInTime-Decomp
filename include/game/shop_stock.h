@@ -1,6 +1,11 @@
 #ifndef PARTNERS_IN_TIME_GAME_SHOP_STOCK_H
 #define PARTNERS_IN_TIME_GAME_SHOP_STOCK_H
 
+/*
+ * What a shop sells: the tier descriptor, the item pool and the mapping from a
+ * menu category to an item class.
+ */
+
 #include <nitro.h>
 
 enum ShopItemClass {

@@ -1,5 +1,9 @@
 #ifndef PIT_SCENE_WINDOW_INTERNAL_H
 #define PIT_SCENE_WINDOW_INTERNAL_H
+
+/*
+ * Declarations shared by the scene window units.
+ */
 #include <game/window.h>
 #include <game/scene_window.h>
 struct SceneWindowInterface {

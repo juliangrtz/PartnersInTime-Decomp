@@ -1,6 +1,10 @@
 #ifndef PIT_GAME_FIELD_SCRIPT_MANAGER_H
 #define PIT_GAME_FIELD_SCRIPT_MANAGER_H
 
+/*
+ * The manager that owns the field's script VM instance and its running scripts.
+ */
+
 #include <game/field_entity.h>
 #ifdef __cplusplus
 extern "C" {

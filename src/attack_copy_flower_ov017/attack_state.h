@@ -1,6 +1,10 @@
 #ifndef PARTNERS_IN_TIME_OVERLAY017_ATTACK_STATE_H
 #define PARTNERS_IN_TIME_OVERLAY017_ATTACK_STATE_H
 
+/*
+ * The Copy Flower attack's state.
+ */
+
 #include <nitro.h>
 #include <game/battle_scene.h>
 #include <game/overlay017_participant.h>

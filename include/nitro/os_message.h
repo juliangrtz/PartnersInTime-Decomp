@@ -1,5 +1,9 @@
 #ifndef NITRO_OS_MESSAGE_H
 #define NITRO_OS_MESSAGE_H
+
+/*
+ * Fixed-capacity message queues between threads.
+ */
 #include <nitro/os_sync.h>
 
 typedef struct OsMessageQueue {

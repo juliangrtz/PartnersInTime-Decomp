@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SHOP_GRAPHICS_H
 #define PIT_GAME_SHOP_GRAPHICS_H
+
+/*
+ * The shop's graphics resources and the transfers that upload them.
+ */
 #include <game/shop_rows.h>
 typedef struct ShopCurrencyTask ShopCurrencyTask;
 

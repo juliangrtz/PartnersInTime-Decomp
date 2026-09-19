@@ -1,6 +1,10 @@
 #ifndef PARTNERS_IN_TIME_OVERLAY018_ATTACK_H
 #define PARTNERS_IN_TIME_OVERLAY018_ATTACK_H
 
+/*
+ * Pocket Chomps: the Chomp, its support character and the tether between them.
+ */
+
 #include <nitro.h>
 
 typedef struct Overlay18AttackObjectController

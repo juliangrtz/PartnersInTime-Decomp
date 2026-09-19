@@ -1,6 +1,11 @@
 #ifndef NITRO_CTRDG_H
 #define NITRO_CTRDG_H
 
+/*
+ * The GBA slot: detecting a cartridge, locking the bus while it is accessed and
+ * handling its removal.
+ */
+
 #include <nitro/os_sync.h>
 
 typedef int (*CtrdgCallback)(int event);

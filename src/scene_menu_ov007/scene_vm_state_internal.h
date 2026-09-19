@@ -1,5 +1,9 @@
 #ifndef PIT_SCENE_VM_STATE_INTERNAL_H
 #define PIT_SCENE_VM_STATE_INTERNAL_H
+
+/*
+ * Declarations shared by the scene VM state units.
+ */
 #include <game/scene_vm_state.h>
 #include <game/save_data.h>
 #include <game/overlay007_party.h>

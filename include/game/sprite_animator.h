@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_SPRITE_ANIMATOR_H
 #define PIT_GAME_SPRITE_ANIMATOR_H
+
+/*
+ * The animator that owns a sprite's graphics on one or both screens, uploads its
+ * tiles and steps its animation.
+ */
 #include <game/sprite_output.h>
 #include <game/heap.h>
 

@@ -1,6 +1,11 @@
 #ifndef NITRO_SND_COMMAND_H
 #define NITRO_SND_COMMAND_H
 
+/*
+ * The command channel to the ARM7 sound driver: commands are allocated from a
+ * queue, batched and flushed together.
+ */
+
 #include <nitro.h>
 
 typedef struct SoundCommand {

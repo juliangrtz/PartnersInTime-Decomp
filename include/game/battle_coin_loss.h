@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_COIN_LOSS_H
 #define PIT_GAME_BATTLE_COIN_LOSS_H
 
+/*
+ * The coins scattered when the party takes a hit: the emitter task and the
+ * per-particle task it spawns.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_scene.h>
 #include <nitro.h>

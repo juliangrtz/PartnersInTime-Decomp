@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_LIST_INTERNAL_H
 #define PIT_SHOP_LIST_INTERNAL_H
+
+/*
+ * Declarations shared by the shop list units.
+ */
 #include <game/shop_list.h>
 #include <game/save_data.h>
 #include <game/item.h>

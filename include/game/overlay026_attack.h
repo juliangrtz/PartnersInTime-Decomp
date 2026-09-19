@@ -1,6 +1,10 @@
 #ifndef PARTNERS_IN_TIME_OVERLAY026_ATTACK_H
 #define PARTNERS_IN_TIME_OVERLAY026_ATTACK_H
 
+/*
+ * Battle item use: the item's state and the party pairing it needs.
+ */
+
 #include <game/battle_scene.h>
 #include <nitro.h>
 

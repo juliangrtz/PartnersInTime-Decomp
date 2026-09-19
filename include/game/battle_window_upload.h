@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_BATTLE_WINDOW_UPLOAD_H
 #define PIT_GAME_BATTLE_WINDOW_UPLOAD_H
+
+/*
+ * The upload flags of the battle window's sub-screen surfaces and the readiness
+ * test a caller polls before drawing into them.
+ */
 #include <game/battle_window.h>
 
 typedef union BattleWindowUploadFlags {

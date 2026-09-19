@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_SCENE_VM_STATE_H
 #define PIT_GAME_SCENE_VM_STATE_H
+
+/*
+ * What a scene script may read and write: the input masks, the menu selection and
+ * the permitted save values.
+ */
 #include <game/scene_script.h>
 enum SceneSaveProperty {
     SCENE_SAVE_BASE_MAX_HP = 0,

@@ -1,5 +1,9 @@
 #ifndef PIT_SCENE_OBJECT_INTERNAL_H
 #define PIT_SCENE_OBJECT_INTERNAL_H
+
+/*
+ * Declarations shared by the scene object units.
+ */
 #include <game/battle_scene.h>
 extern "C" {
 #include <game/scene_object.h>

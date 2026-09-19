@@ -1,6 +1,10 @@
 #ifndef PIT_GAME_PAUSE_EQUIPMENT_HIGHLIGHT_H
 #define PIT_GAME_PAUSE_EQUIPMENT_HIGHLIGHT_H
 
+/*
+ * The highlight over the stats an equipment change would affect.
+ */
+
 typedef struct PauseEquipmentHighlightTask PauseEquipmentHighlightTask;
 #ifdef __cplusplus
 extern "C" {

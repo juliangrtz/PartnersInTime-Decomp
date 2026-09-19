@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_LIST_EFFECTS_INTERNAL_H
 #define PIT_SHOP_LIST_EFFECTS_INTERNAL_H
+
+/*
+ * The effects drawn over the shop's item list.
+ */
 #include "shop_navigation_internal.h"
 
 struct ShopListScaleTask {

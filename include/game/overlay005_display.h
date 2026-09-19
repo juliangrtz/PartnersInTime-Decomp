@@ -1,6 +1,13 @@
 #ifndef GAME_OVERLAY005_DISPLAY_H
 #define GAME_OVERLAY005_DISPLAY_H
 
+/*
+ * Overlay 5's 2D engine control: which planes and windows are visible, the VRAM
+ * addresses each background reads from, and the upload entry points. Every call
+ * takes the engine as its first argument so scene code can drive both screens
+ * through one interface.
+ */
+
 #include <nitro.h>
 #include <nitro/fx.h>
 

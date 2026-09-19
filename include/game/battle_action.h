@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_ACTION_H
 #define PIT_GAME_BATTLE_ACTION_H
 
+/*
+ * The action records a battle command resolves to: which script runs, which
+ * resources it needs, and the state an action in progress carries.
+ */
+
 #include <game/battle_scene.h>
 #include <game/battle_task_queue.h>
 

@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_FIELD_TIMER_H
 #define PIT_GAME_FIELD_TIMER_H
 
+/*
+ * The on-screen timer the field can show: its image, value, position and
+ * visibility.
+ */
+
 #include <game/sprite_output.h>
 
 typedef struct FieldTimerImage {

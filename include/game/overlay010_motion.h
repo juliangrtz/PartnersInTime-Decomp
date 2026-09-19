@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_OVERLAY010_MOTION_H
 #define PIT_GAME_OVERLAY010_MOTION_H
+
+/*
+ * The motion helpers the Bros. Attacks share.
+ */
 #include <game/battle_scene.h>
 #include <game/battle_actor.h>
 #include <game/overlay010_enemy_state.h>

@@ -1,5 +1,10 @@
 #ifndef NITRO_OS_LOCK_H
 #define NITRO_OS_LOCK_H
+
+/*
+ * The word-based locks the SDK arbitrates shared hardware with, including the
+ * cartridge and card locks that keep the two processors off the same bus.
+ */
 #include <nitro/os_sync.h>
 
 typedef struct OsLockWord {

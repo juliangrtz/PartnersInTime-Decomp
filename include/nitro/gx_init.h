@@ -1,6 +1,11 @@
 #ifndef NITRO_GX_INIT_H
 #define NITRO_GX_INIT_H
 
+/*
+ * Graphics initialization and the display controls: graphics mode, display on and
+ * off, master brightness and the blanking interrupts.
+ */
+
 #include <nitro.h>
 
 void GX_Init(void);

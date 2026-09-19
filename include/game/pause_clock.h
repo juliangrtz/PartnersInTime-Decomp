@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_PAUSE_CLOCK_H
 #define PIT_GAME_PAUSE_CLOCK_H
+
+/*
+ * The play-time readout on the pause menu's status page.
+ */
 #include <nitro.h>
 
 typedef struct PauseClockSeparatorTask {

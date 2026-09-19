@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_BATTLE_CURVE_MOTION_H
 #define PIT_GAME_BATTLE_CURVE_MOTION_H
+
+/*
+ * Motion along a curve: axis rotation, sine displacement and path following.
+ */
 #include <game/battle_scene.h>
 #ifdef __cplusplus
 extern "C" {

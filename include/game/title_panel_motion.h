@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_TITLE_PANEL_MOTION_H
 #define PIT_GAME_TITLE_PANEL_MOTION_H
+
+/*
+ * The panels the title logo is assembled from: their fade, pulse and the trail a
+ * moving panel records and drains.
+ */
 #include <game/title_effects.h>
 
 typedef struct TitleElementLink {

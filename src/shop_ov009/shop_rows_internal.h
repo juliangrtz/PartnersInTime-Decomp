@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_ROWS_INTERNAL_H
 #define PIT_SHOP_ROWS_INTERNAL_H
+
+/*
+ * The rows the shop's panels are drawn from.
+ */
 #include <game/battle_scene.h>
 #include <game/shop_list.h>
 #include <game/shop_panels.h>

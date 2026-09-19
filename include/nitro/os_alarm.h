@@ -1,6 +1,10 @@
 #ifndef NITRO_OS_ALARM_H
 #define NITRO_OS_ALARM_H
 
+/*
+ * Timer alarms, fired once or periodically off the tick counter.
+ */
+
 #include <nitro/os_sync.h>
 
 typedef void (*OsAlarmCallback)(void *argument);

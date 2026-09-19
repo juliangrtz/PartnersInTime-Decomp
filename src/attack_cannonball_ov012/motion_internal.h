@@ -1,5 +1,9 @@
 #ifndef PIT_OVERLAY012_MOTION_INTERNAL_H
 #define PIT_OVERLAY012_MOTION_INTERNAL_H
+
+/*
+ * Declarations shared inside the Cannonballer overlay.
+ */
 extern "C" {
 #include <nitro.h>
 #include <game/battle_actor.h>

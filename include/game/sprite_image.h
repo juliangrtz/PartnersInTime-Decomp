@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SPRITE_IMAGE_H
 #define PIT_GAME_SPRITE_IMAGE_H
+
+/*
+ * The sprite image formats and the decoders that expand them into tile memory.
+ */
 #include <game/sprite_effect.h>
 
 GameSpriteEffectSize GameSpriteImage_Draw(u16 x, u16 y, s32 scale_x, s32 scale_y,

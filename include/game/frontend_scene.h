@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_FRONTEND_SCENE_H
 #define PIT_GAME_FRONTEND_SCENE_H
+
+/*
+ * The title and credits scenes: their state, their tasks and the resources they
+ * load.
+ */
 #include <game/task.h>
 #include <game/text.h>
 

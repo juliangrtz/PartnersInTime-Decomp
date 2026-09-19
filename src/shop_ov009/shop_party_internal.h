@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_PARTY_INTERNAL_H
 #define PIT_SHOP_PARTY_INTERNAL_H
+
+/*
+ * The party display in the shop's equipment comparison.
+ */
 #include "shop_rows_internal.h"
 #include <game/shop_graphics.h>
 

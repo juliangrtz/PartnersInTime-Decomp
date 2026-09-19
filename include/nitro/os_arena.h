@@ -1,6 +1,10 @@
 #ifndef NITRO_OS_ARENA_H
 #define NITRO_OS_ARENA_H
 
+/*
+ * The memory arenas and their low and high water marks.
+ */
+
 #include <nitro.h>
 
 typedef enum OsArenaId {

@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SHOP_QUANTITY_H
 #define PIT_GAME_SHOP_QUANTITY_H
+
+/*
+ * The how-many prompt and the total it computes.
+ */
 #include <nitro.h>
 typedef struct ShopQuantityTask ShopQuantityTask;
 #ifdef __cplusplus

@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_GRAPHICS_RESOURCE_H
 #define PIT_GAME_GRAPHICS_RESOURCE_H
+
+/*
+ * The descriptors a graphics resource is read through, including the offset
+ * decoder that resolves an entry inside it.
+ */
 #include <nitro.h>
 #include <nitro/fx.h>
 

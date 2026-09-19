@@ -1,6 +1,13 @@
 #ifndef PIT_GAME_BATTLE_IMPACT_EFFECT_H
 #define PIT_GAME_BATTLE_IMPACT_EFFECT_H
 
+/*
+ * The particles and emitters an impact spawns: the trail behind a launched actor,
+ * the burst at the point of contact, and the property curve that animates a value
+ * over the impact. Particles can be rendered from a model frame, a resource frame
+ * or a copy of an object's own appearance.
+ */
+
 #include <game/battle_ai.h>
 #include <game/battle_scene.h>
 

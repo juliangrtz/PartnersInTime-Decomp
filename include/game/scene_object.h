@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SCENE_OBJECT_H
 #define PIT_GAME_SCENE_OBJECT_H
+
+/*
+ * A scene object and the properties a script may set on it.
+ */
 #include <game/scene_script.h>
 typedef struct BattleModel BattleModel;
 #ifdef __cplusplus

@@ -1,6 +1,11 @@
 #ifndef NITRO_OS_SYNC_H
 #define NITRO_OS_SYNC_H
 
+/*
+ * Threads and mutexes: the thread record, the priority-ordered lists it is kept
+ * on, and the recursive mutex a thread can block on.
+ */
+
 #include <nitro.h>
 
 typedef u16 OsThreadQueue;

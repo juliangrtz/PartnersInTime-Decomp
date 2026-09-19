@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_DISPLAY_CAPTURE_H
 #define PIT_GAME_BATTLE_DISPLAY_CAPTURE_H
 
+/*
+ * Configuring and resetting the display capture unit. Both are queued because the
+ * capture mode has to be restored around the control write.
+ */
+
 #include <nitro.h>
 
 struct BattleSceneResource;

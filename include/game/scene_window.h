@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SCENE_WINDOW_H
 #define PIT_GAME_SCENE_WINDOW_H
+
+/*
+ * The scene's message window.
+ */
 #include <nitro.h>
 #ifdef __cplusplus
 extern "C" {

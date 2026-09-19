@@ -1,5 +1,10 @@
 #ifndef PIT_OVERLAY011_SHELL_INTERNAL_H
 #define PIT_OVERLAY011_SHELL_INTERNAL_H
+
+/*
+ * Declarations shared inside the Shell overlay: the work area, the controller,
+ * the projectile and the support character.
+ */
 extern "C" {
 #include <nitro.h>
 }

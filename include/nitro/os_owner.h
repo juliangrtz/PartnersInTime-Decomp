@@ -1,5 +1,9 @@
 #ifndef NITRO_OS_OWNER_H
 #define NITRO_OS_OWNER_H
+
+/*
+ * The console's MAC address and the owner settings the firmware stores.
+ */
 #include <nitro.h>
 
 typedef struct OsOwnerInfo {

@@ -1,6 +1,12 @@
 #ifndef PIT_GAME_SCENE_SCRIPT_H
 #define PIT_GAME_SCENE_SCRIPT_H
 
+/*
+ * The scene VM's world: the objects it addresses, the per-object script states,
+ * the manager block they live in, and the tasks that run them. The manager is
+ * still partly untyped, so some code reaches into it with byte offsets.
+ */
+
 #include <game/script_vm.h>
 
 typedef struct SceneScriptState SceneScriptState;

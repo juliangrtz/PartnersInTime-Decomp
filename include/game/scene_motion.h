@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_SCENE_MOTION_H
 #define PIT_GAME_SCENE_MOTION_H
+
+/*
+ * The motion primitives a scene object moves with, and the channels that let
+ * several owners move one object at once.
+ */
 #include <game/scene_script.h>
 #ifdef __cplusplus
 extern "C" {

@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SHOP_PRICE_ADJUSTMENT_H
 #define PIT_GAME_SHOP_PRICE_ADJUSTMENT_H
+
+/*
+ * The display that shows how a price was adjusted.
+ */
 typedef struct ShopPriceAdjustmentTask ShopPriceAdjustmentTask;
 #ifdef __cplusplus
 extern "C" {

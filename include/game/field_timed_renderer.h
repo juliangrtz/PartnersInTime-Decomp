@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_FIELD_TIMED_RENDERER_H
 #define PIT_GAME_FIELD_TIMED_RENDERER_H
 
+/*
+ * A renderer whose animation runs for a set number of loops, with the render list
+ * it is drawn from.
+ */
+
 #include <game/field_entity.h>
 
 struct ModelRenderDescriptor;

@@ -1,5 +1,9 @@
 #ifndef PIT_BATTLE_MODEL_SLOTS_INTERNAL_H
 #define PIT_BATTLE_MODEL_SLOTS_INTERNAL_H
+
+/*
+ * The model slots the battle's alternate renderer draws from.
+ */
 #include <game/battle_model_animation.h>
 #include <game/battle_effect.h>
 #include <game/battle_context.h>

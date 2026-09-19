@@ -1,6 +1,10 @@
 #ifndef PARTNERS_IN_TIME_OVERLAY016_ATTACK_H
 #define PARTNERS_IN_TIME_OVERLAY016_ATTACK_H
 
+/*
+ * Mix Flowers: the attack's work area and the linked object it throws.
+ */
+
 #include <nitro.h>
 
 typedef struct Overlay16AttackObjectState Overlay16AttackObjectState;

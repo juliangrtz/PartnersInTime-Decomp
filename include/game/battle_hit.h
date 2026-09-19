@@ -1,6 +1,15 @@
 #ifndef PIT_GAME_BATTLE_HIT_H
 #define PIT_GAME_BATTLE_HIT_H
 
+/*
+ * How a hit is registered and resolved. An attack configures a descriptor - who
+ * hits whom, with what callback and of what kind - and the queue is evaluated
+ * once per frame against the actors' collision bounds, so contact is detected
+ * when the animation reaches the target rather than when the attack decided it.
+ * A descriptor can be disabled again, which is what closes an attack's active
+ * window.
+ */
+
 #include <nitro.h>
 
 typedef struct BattleHitDescriptor BattleHitDescriptor;

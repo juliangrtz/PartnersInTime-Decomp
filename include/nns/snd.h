@@ -1,6 +1,11 @@
 #ifndef NNS_SND_H
 #define NNS_SND_H
 
+/*
+ * The NNS sound library's public surface: players, handles, sequences and the
+ * volume and priority controls over them.
+ */
+
 #include <nns/fnd.h>
 
 typedef struct NNSiSndFader {

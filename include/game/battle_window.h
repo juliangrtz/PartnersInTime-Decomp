@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_WINDOW_H
 #define PIT_GAME_BATTLE_WINDOW_H
 
+/*
+ * The battle's message window: its manager, the animator that draws it and the
+ * queued transfer tasks that upload its tiles and tilemap.
+ */
+
 #include <game/window.h>
 #include <game/texture_allocation.h>
 

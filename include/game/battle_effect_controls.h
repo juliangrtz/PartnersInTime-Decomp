@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_BATTLE_EFFECT_CONTROLS_H
 #define PIT_GAME_BATTLE_EFFECT_CONTROLS_H
+
+/*
+ * Small effect entry points: the ground ripple, the capture overlay and the chain
+ * rig's actor binding and sequence.
+ */
 #include <game/battle_scene.h>
 #include <game/battle_ai.h>
 #ifdef __cplusplus

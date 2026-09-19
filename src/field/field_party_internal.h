@@ -1,5 +1,9 @@
 #ifndef PIT_FIELD_PARTY_INTERNAL_H
 #define PIT_FIELD_PARTY_INTERNAL_H
+
+/*
+ * Declarations shared by the field party units.
+ */
 #include <game/field_resources.h>
 #include <game/field_party.h>
 #include <game/field_room_interaction.h>

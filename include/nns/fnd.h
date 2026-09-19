@@ -1,6 +1,10 @@
 #ifndef NNS_FND_H
 #define NNS_FND_H
 
+/*
+ * The NNS foundation library: the intrusive list and the heaps built on it.
+ */
+
 #include <nitro.h>
 
 typedef struct NNSFndLink {

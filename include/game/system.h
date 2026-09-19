@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SYSTEM_H
 #define PIT_GAME_SYSTEM_H
+
+/*
+ * The resident system's initialization and per-frame entry points.
+ */
 #include <game/input.h>
 #include <nitro/tp.h>
 #include <nitro/os_owner.h>

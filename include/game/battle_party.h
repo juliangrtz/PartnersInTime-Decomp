@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_BATTLE_PARTY_H
 #define PIT_GAME_BATTLE_PARTY_H
 
+/*
+ * The party-side sequences: Mario's and Luigi's reload chains, each a series of
+ * per-frame steps, and the knockout.
+ */
+
 #include <game/battle_ai.h>
 
 struct BattleSceneObject;

@@ -1,6 +1,10 @@
 #ifndef PIT_GAME_BATTLE_VM_MOTION_H
 #define PIT_GAME_BATTLE_VM_MOTION_H
 
+/*
+ * The motion commands the battle scripts start an object moving with.
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

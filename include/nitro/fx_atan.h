@@ -1,6 +1,10 @@
 #ifndef NITRO_FX_ATAN_H
 #define NITRO_FX_ATAN_H
 
+/*
+ * Arctangent over the SDK's angle units.
+ */
+
 #include <nitro/fx.h>
 
 #ifdef __cplusplus

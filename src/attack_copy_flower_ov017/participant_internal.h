@@ -1,5 +1,9 @@
 #ifndef PIT_OVERLAY017_PARTICIPANT_INTERNAL_H
 #define PIT_OVERLAY017_PARTICIPANT_INTERNAL_H
+
+/*
+ * Declarations shared by the Copy Flower's participant code.
+ */
 #include <game/overlay017_participant.h>
 #include "attack_state.h"
 extern "C" {

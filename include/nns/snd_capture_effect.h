@@ -1,6 +1,11 @@
 #ifndef NNS_SND_CAPTURE_EFFECT_H
 #define NNS_SND_CAPTURE_EFFECT_H
 
+/*
+ * The effects applied to captured samples - reverb, surround and the mono
+ * downmix.
+ */
+
 #include <nns/snd_capture.h>
 
 typedef struct NNSiSndCaptureEffect NNSiSndCaptureEffect;

@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SPRITE_ANIMATION_H
 #define PIT_GAME_SPRITE_ANIMATION_H
+
+/*
+ * A sprite animation track: its keyframes and the owner it writes to.
+ */
 #include <nitro.h>
 typedef struct GameSpriteAnimationTrack {
     struct GameSpriteAnimationTrack *next;

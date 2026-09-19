@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_TITLE_STARTUP_H
 #define PIT_GAME_TITLE_STARTUP_H
+
+/*
+ * The title scene's entry point and the glue that brings it up.
+ */
 #include <game/task.h>
 
 typedef struct MenuElement MenuElement;

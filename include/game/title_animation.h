@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_TITLE_ANIMATION_H
 #define PIT_GAME_TITLE_ANIMATION_H
+
+/*
+ * The title animation controller and the element sequence it runs.
+ */
 #include <game/task.h>
 
 typedef struct TitleAnimationController TitleAnimationController;

@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_OVERLAY014_PROJECTILE_H
 #define PIT_GAME_OVERLAY014_PROJECTILE_H
+
+/*
+ * The flower projectile: its participant, its level - which is what distinguishes
+ * the Bro and Ice variants - and the animation each level plays.
+ */
 #include <game/battle_scene.h>
 #ifdef __cplusplus
 extern "C" {

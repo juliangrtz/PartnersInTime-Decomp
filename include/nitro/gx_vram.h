@@ -1,6 +1,11 @@
 #ifndef NITRO_GX_VRAM_H
 #define NITRO_GX_VRAM_H
 
+/*
+ * VRAM bank assignment. Assigning a bank returns its previous assignment, which
+ * is how the upload paths borrow a bank and put it back.
+ */
+
 #include <nitro.h>
 
 typedef struct GxVramState {

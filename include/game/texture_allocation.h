@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_TEXTURE_ALLOCATION_H
 #define PIT_GAME_TEXTURE_ALLOCATION_H
+
+/*
+ * 3D texture and texture-palette memory: address-ordered free lists with buffers
+ * that can be supplied from outside.
+ */
 #include <game/sprite_output.h>
 
 typedef struct GameTextureAllocation GameTextureAllocation;

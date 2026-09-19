@@ -4,6 +4,10 @@
 #include <nitro.h>
 
 #define rDIVCNT             ((vu16*)0x04000280)
+
+/*
+ * The DS hardware register addresses this project refers to by name.
+ */
 #define DIVCNTB_BUSY        15
 #define DIVCNTF_BUSY        (0b1 << DIVCNTB_BUSY)
 #define DIVCNTB_DIV0        14

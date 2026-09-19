@@ -1,6 +1,11 @@
 #ifndef PARTNERS_IN_TIME_GAME_OVERLAY017_ATTACK_H
 #define PARTNERS_IN_TIME_GAME_OVERLAY017_ATTACK_H
 
+/*
+ * Copy Flowers: the attack's work area, its participants and the objects they
+ * launch.
+ */
+
 #include <nitro.h>
 
 typedef struct Overlay17AttackObject Overlay17AttackObject;

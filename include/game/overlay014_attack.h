@@ -1,6 +1,10 @@
 #ifndef PARTNERS_IN_TIME_GAME_OVERLAY014_ATTACK_H
 #define PARTNERS_IN_TIME_GAME_OVERLAY014_ATTACK_H
 
+/*
+ * Bro Flowers and Ice Flowers: the attack's work area and participant list.
+ */
+
 #include <game/battle_scene.h>
 
 typedef struct Overlay14AttackObjectState {

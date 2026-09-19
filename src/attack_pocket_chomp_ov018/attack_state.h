@@ -1,6 +1,10 @@
 #ifndef PARTNERS_IN_TIME_OVERLAY018_ATTACK_STATE_H
 #define PARTNERS_IN_TIME_OVERLAY018_ATTACK_STATE_H
 
+/*
+ * The Pocket Chomp attack's state.
+ */
+
 #include <game/battle_scene.h>
 #include <nitro.h>
 

@@ -1,6 +1,14 @@
 #ifndef PIT_GAME_ARCHIVE_IO_H
 #define PIT_GAME_ARCHIVE_IO_H
 
+/*
+ * Reading the game's archives. An ArchiveIO owns an open archive and the request
+ * in flight on it; the compressed variant decodes as it reads, and the memory
+ * decoder does the same for an archive already resident. Reads are stepped a
+ * slice per frame rather than run to completion, so a caller queues a request and
+ * polls it.
+ */
+
 #include <nitro/fs_overlay.h>
 
 typedef struct ArchiveReadRequest ArchiveReadRequest;

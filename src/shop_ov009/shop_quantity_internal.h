@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_QUANTITY_INTERNAL_H
 #define PIT_SHOP_QUANTITY_INTERNAL_H
+
+/*
+ * The shop's how-many prompt.
+ */
 #include <game/shop_quantity.h>
 extern "C" {
 #include <game/overlay005_display.h>

@@ -1,5 +1,9 @@
 #ifndef PIT_POCKET_CHOMP_INTERNAL_H
 #define PIT_POCKET_CHOMP_INTERNAL_H
+
+/*
+ * Declarations shared inside the Pocket Chomp overlay.
+ */
 #include <game/pocket_chomp.h>
 #include <game/battle_object_link.h>
 #include <game/overlay018_attack.h>

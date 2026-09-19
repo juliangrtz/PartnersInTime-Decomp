@@ -1,6 +1,12 @@
 #ifndef PIT_GAME_BATTLE_DAMAGE_H
 #define PIT_GAME_BATTLE_DAMAGE_H
 
+/*
+ * The damage pipeline's public surface: the base calculation, the equipment
+ * modifiers and the Stache hit-bonus roll that feed it, the application to a
+ * party member or an enemy, and the reaction each plays.
+ */
+
 #include <nitro.h>
 
 struct BattleActor;

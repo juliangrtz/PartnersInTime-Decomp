@@ -1,6 +1,10 @@
 #ifndef NITRO_DGT_HASH_H
 #define NITRO_DGT_HASH_H
 
+/*
+ * SHA-1 and the HMAC built on it, which the overlay loader verifies images with.
+ */
+
 #include <nitro.h>
 
 typedef struct DgtHash2Context {

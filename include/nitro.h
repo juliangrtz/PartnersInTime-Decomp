@@ -1,3 +1,8 @@
+
+/*
+ * Pulls in the SDK headers this project uses, and the integer typedefs the rest
+ * of the code is written in terms of.
+ */
     #ifndef NITRO_H
     #define NITRO_H
 

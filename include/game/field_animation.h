@@ -1,6 +1,11 @@
 #ifndef PIT_GAME_FIELD_ANIMATION_H
 #define PIT_GAME_FIELD_ANIMATION_H
 
+/*
+ * Field animations in their two forms: a model animation bound to the models it
+ * drives, and a sprite animation running on the field's animation system.
+ */
+
 #include <game/model_animation.h>
 #include <game/sprite_animation.h>
 #include <game/battle_scene.h>

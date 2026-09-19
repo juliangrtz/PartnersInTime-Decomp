@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SESSION_H
 #define PIT_GAME_SESSION_H
+
+/*
+ * The running game session: the state it is in and the requests that move it.
+ */
 #include <game/task.h>
 
 typedef struct GameSessionSettings {

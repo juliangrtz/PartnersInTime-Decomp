@@ -1,6 +1,10 @@
 #ifndef NITRO_FX_MTX_H
 #define NITRO_FX_MTX_H
 
+/*
+ * Fixed-point matrix operations.
+ */
+
 #include <nitro/fx.h>
 
 typedef struct MtxFx44 {

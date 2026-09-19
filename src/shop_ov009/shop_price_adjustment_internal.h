@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_PRICE_ADJUSTMENT_INTERNAL_H
 #define PIT_SHOP_PRICE_ADJUSTMENT_INTERNAL_H
+
+/*
+ * The shop's price adjustment display.
+ */
 #include "shop_quantity_internal.h"
 #include <game/shop_price_adjustment.h>
 

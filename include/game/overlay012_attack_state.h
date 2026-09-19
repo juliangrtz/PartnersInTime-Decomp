@@ -1,6 +1,11 @@
 #ifndef PARTNERS_IN_TIME_GAME_OVERLAY012_ATTACK_STATE_H
 #define PARTNERS_IN_TIME_GAME_OVERLAY012_ATTACK_STATE_H
 
+/*
+ * Cannonballers: the attack's state, its controller and the arc the cannonball
+ * follows.
+ */
+
 #include <game/battle_scene.h>
 
 typedef union Overlay12AttackFlags {

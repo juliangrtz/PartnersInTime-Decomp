@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_SPRITE_EFFECT_H
 #define PIT_GAME_SPRITE_EFFECT_H
+
+/*
+ * The pooled sprite effects, which can be paused and resumed as a group and
+ * return to the pool when they finish.
+ */
 #include <game/heap.h>
 
 typedef struct GameSpriteEffectFrame {

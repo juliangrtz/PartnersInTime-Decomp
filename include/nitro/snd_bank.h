@@ -1,6 +1,10 @@
 #ifndef NITRO_SND_BANK_H
 #define NITRO_SND_BANK_H
 
+/*
+ * Sound banks and the wave archives their instruments draw samples from.
+ */
+
 #include <nitro/snd_command.h>
 
 typedef struct SoundWaveArchive SoundWaveArchive;

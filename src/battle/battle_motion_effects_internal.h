@@ -1,5 +1,9 @@
 #ifndef PIT_BATTLE_MOTION_EFFECTS_INTERNAL_H
 #define PIT_BATTLE_MOTION_EFFECTS_INTERNAL_H
+
+/*
+ * Declarations shared by the battle's motion effect units.
+ */
 extern "C" {
 #include <nitro.h>
 #include <nitro/fx_atan.h>

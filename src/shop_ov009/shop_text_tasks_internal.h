@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_TEXT_TASKS_INTERNAL_H
 #define PIT_SHOP_TEXT_TASKS_INTERNAL_H
+
+/*
+ * The queued tasks that update the shop's text.
+ */
 #include <game/shop_panels.h>
 #include <game/shop_text_tasks.h>
 extern ShopText *data_ov009_0207ea30;

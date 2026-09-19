@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SHOP_NAVIGATION_H
 #define PIT_GAME_SHOP_NAVIGATION_H
+
+/*
+ * The cursors and arrows the shop is navigated with.
+ */
 #include <game/shop_rows.h>
 #ifdef __cplusplus
 extern "C" {

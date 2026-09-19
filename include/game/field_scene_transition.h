@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_FIELD_SCENE_TRANSITION_H
 #define PIT_GAME_FIELD_SCENE_TRANSITION_H
+
+/*
+ * The requests the field makes to leave for another scene, and the update that
+ * carries the pending one out.
+ */
 #include <game/field_system.h>
 #ifdef __cplusplus
 extern "C" {

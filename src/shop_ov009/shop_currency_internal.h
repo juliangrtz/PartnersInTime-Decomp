@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_CURRENCY_INTERNAL_H
 #define PIT_SHOP_CURRENCY_INTERNAL_H
+
+/*
+ * The shop's currency readout.
+ */
 #include "shop_rows_internal.h"
 #include <game/shop_graphics.h>
 extern "C" {

@@ -1,6 +1,10 @@
 #ifndef NITRO_GX_COMMAND_LIST_H
 #define NITRO_GX_COMMAND_LIST_H
 
+/*
+ * Packing 3D commands into the FIFO format the geometry engine consumes.
+ */
+
 #include <nitro.h>
 
 typedef struct GxCommandList {

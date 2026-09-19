@@ -1,5 +1,9 @@
 #ifndef PIT_TITLE_MENU_INTERNAL_H
 #define PIT_TITLE_MENU_INTERNAL_H
+
+/*
+ * The title menu's selection state and the cursor drawn over it.
+ */
 #include <game/title_sprite_sequence.h>
 #include <game/title_model.h>
 

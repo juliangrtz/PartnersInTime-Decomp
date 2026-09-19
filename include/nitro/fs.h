@@ -1,6 +1,13 @@
 #ifndef NITRO_FS_H
 #define NITRO_FS_H
 
+/*
+ * The filesystem: archives registered under a name, files opened by path, id or
+ * direct offsets, and the command layer that runs a request synchronously or
+ * asynchronously. Open files are kept on a list so an archive can cancel or wait
+ * on all of them at once.
+ */
+
 #include <nitro/os_sync.h>
 
 typedef struct FsFile FsFile;

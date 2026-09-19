@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_SHOP_LIST_H
 #define PIT_GAME_SHOP_LIST_H
+
+/*
+ * The shop's item list, animated as a set of points with velocities and pinned
+ * anchors rather than as a fixed layout.
+ */
 #include <nitro.h>
 typedef struct ShopListPoint {
     s32 x, y, previous_x, previous_y, velocity_x, velocity_y;

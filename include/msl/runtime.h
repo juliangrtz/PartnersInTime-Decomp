@@ -1,6 +1,11 @@
 #ifndef MSL_RUNTIME_H
 #define MSL_RUNTIME_H
 
+/*
+ * The Metrowerks runtime entry points the game links against: critical regions,
+ * buffered output and the exit paths.
+ */
+
 #include <nitro.h>
 
 typedef void (*MslSignalHandler)(int signal);

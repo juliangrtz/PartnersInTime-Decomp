@@ -1,5 +1,10 @@
 #ifndef PIT_GAME_MATRIX_ANIMATION_H
 #define PIT_GAME_MATRIX_ANIMATION_H
+
+/*
+ * A track that animates a transform: keyframes, the owner whose matrix it writes,
+ * and the interpolation modes a keyframe can select.
+ */
 #include <nitro.h>
 #include <nitro/fx_mtx.h>
 typedef int (*GameAnimationEvaluator)(const s16 *command, int time);

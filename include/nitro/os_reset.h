@@ -1,6 +1,10 @@
 #ifndef NITRO_OS_RESET_H
 #define NITRO_OS_RESET_H
 
+/*
+ * Soft reset.
+ */
+
 #include <nitro.h>
 
 void OS_InitReset(void);

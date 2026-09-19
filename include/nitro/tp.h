@@ -1,6 +1,11 @@
 #ifndef NITRO_TP_H
 #define NITRO_TP_H
 
+/*
+ * The touch panel: the sample the ARM7 publishes and the calibration that turns
+ * panel units into screen pixels.
+ */
+
 #include <nitro/os_sync.h>
 
 typedef struct TpData { u16 x, y, touch, validity; } TpData;

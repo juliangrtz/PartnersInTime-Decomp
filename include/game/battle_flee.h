@@ -1,6 +1,12 @@
 #ifndef PIT_GAME_BATTLE_FLEE_H
 #define PIT_GAME_BATTLE_FLEE_H
 
+/*
+ * Fleeing a battle. The sequence is a chain of per-frame steps - partner exit,
+ * launch, run, scene transition, commit - each installing its successor, with the
+ * controller above them holding the flags and state they share.
+ */
+
 #include <game/battle_ai.h>
 #include <nitro.h>
 

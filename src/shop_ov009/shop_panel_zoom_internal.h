@@ -1,5 +1,9 @@
 #ifndef PIT_SHOP_PANEL_ZOOM_INTERNAL_H
 #define PIT_SHOP_PANEL_ZOOM_INTERNAL_H
+
+/*
+ * The zoom a shop panel opens and closes with.
+ */
 #include "shop_scene_internal.h"
 #include <game/shop_panel_zoom.h>
 

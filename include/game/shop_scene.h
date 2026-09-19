@@ -1,5 +1,9 @@
 #ifndef PIT_GAME_SHOP_SCENE_H
 #define PIT_GAME_SHOP_SCENE_H
+
+/*
+ * The shop scene's state and lifecycle.
+ */
 #include <game/task.h>
 typedef struct ShopSceneTask {
     GameTask base;
