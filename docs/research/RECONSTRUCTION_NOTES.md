@@ -4746,3 +4746,43 @@ stopped-script branch, all 60 delay decrements and callback return to the select
 it does not establish natural level completion or the script's own cleanup.
 The ordinary level captures match the preceding rendering probe's graphics
 buffers. Use the recorded fixtures and uncovered branches when extending it.
+
+
+## Hammer input and impact
+
+The overlay-21 input, impact, return and approach functions cover
+`0x020C2BCC..0x020C3380` and `0x020C3864..0x020C395C` (2,220 bytes).
+See [resolution](../../src/attack_hammer_ov021/hammer_resolution.cpp) and
+[approach](../../src/attack_hammer_ov021/hammer_approach.cpp).
+Primary and secondary input timers are separate. An exact-zero secondary timer
+changes phase before that call's decrement; primary timeout is strictly below
+zero. Input equality uses the complete masked button word, not a single-bit test.
+Return movement accepts the three established result states and selects their
+different durations. Its Q12 distance is rounded by `FX_Sqrt`, then multiplied
+and divided by 0x80000 with signed truncation toward zero.
+
+Impact coordinates use a full-width delta for the damage popup and separate
+signed-halfword narrowing for view projection. The effect table has 36-byte
+records indexed by primary/secondary swing and the observed hit-bonus result.
+The third argument forwarded by the update is unused by the impact function.
+Typed inline projection reproduces the native conversion order without ASM.
+
+Fresh live checks used private checkpoint-22 and checkpoint-83 state chains,
+with automatic button input and timeout variants, no new RAM edits and all
+104 original saves unchanged. Final reports are
+`build/runtime/eur_high_hammer/high_hammer_{perfect,timeout,save22,save22_timeout}_v3.json`;
+the producer is `build/analysis/high_effort_50_to_55/probe_hammer.py`.
+The four 2,010-frame replays check 578 complete 28-byte input states and four
+calls each to approach, impact and return, plus the immutable 64-byte configs.
+They cover susceptible and immune targets, successful primary timing and primary
+timeout, movement arguments and integer square roots, view-coordinate results,
+effect selection, damage forwarding, status arguments and screen-effect dispatch.
+Secondary swings and early inputs remain uncovered; the routes do not
+establish coverage of both hit-bonus outcomes.
+Damage/RNG internals, helper-owned allocations, GPU transfers and rasterization
+are observational. A matching ROM and these routes do not establish full coverage.
+
+When naming traced call targets, resolve an address in the resident and currently
+loaded overlay metadata. A global address-to-name map across every attack overlay
+can silently label overlay-21 code as overlay-26 code at the same load address.
+The final replay corrects that issue and repeats the earlier routes.

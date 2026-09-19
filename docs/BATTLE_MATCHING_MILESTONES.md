@@ -8455,3 +8455,26 @@ The save-65 selling route checks 32 marker calls on the not-visible path;
 drawing and the remaining functions have isolated coverage. The temporary
 shop-entry command is restored, the visible field return is inspected, and
 all 104 original saves remain unchanged. No inline assembly was added.
+
+
+## 2026-09-19 - Hammer input, impact and movement (+2,220 bytes)
+
+Reconstructed overlay 21's input windows (700 bytes), impact/damage wrapper
+(988), return movement (284) and approach (248) in readable C++, without new
+inline assembly. Matching C/C++ is 784,076 / 1,563,700 bytes (50.1424%);
+the hammer overlay is 4,448 / 5,280 (84.24%). Its 832-byte update remains native.
+
+Both compiled source objects and the complete build match. The packaged ROM
+and native relink reproduce EUR SHA-1 ba4ec2f99b4f2e0047601552bccf00aa73e28701;
+all 107 tests pass. Four live replays from checkpoints 22 and 83 cover primary
+hit and timeout input, susceptible and immune targets, and both return results:
+578 checked input calls and four calls each to approach, impact and return.
+All 104 source saves remain unchanged. The replay checks complete attack/config
+records, input flags and dispatch, movement math, impact projection and selected
+helper arguments. Secondary swings and early-input paths remain unexercised; both hit-bonus
+outcomes have not been covered; helper internals and rendered graphics are observational.
+
+Private evidence: build/analysis/high_effort_50_to_55/hammer_build_v1.log,
+probe_hammer.py and build/runtime/eur_high_hammer/*v3.json (8,040 frames total).
+The final probe resolves callees in their owning overlays; earlier v1/v2 labels
+could collide across attack overlays and are superseded by these replays.

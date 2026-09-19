@@ -58,6 +58,11 @@ typedef char Overlay21AttackState_SizeCheck[sizeof(Overlay21AttackState) == 28 ?
 #ifdef __cplusplus
 extern "C" {
 #endif
+void Overlay21Attack_UpdateInput(Overlay21AttackState *state);
+/* The shared update forwards an advance flag; the hammer's impact ignores it. */
+void Overlay21Attack_ApplyHit(Overlay21AttackState *state, int success, int advanced);
+u32 Overlay21Attack_BeginReturn(Overlay21AttackState *state);
+u32 Overlay21Attack_BeginApproach(Overlay21AttackState *state);
 void Overlay21Attack_Create(BattlePartyActor *actor);
 void Overlay21Attack_Update(BattlePartyActor *actor);
 void Overlay21Attack_ConfigureAnimation(Overlay21AttackState *, int, int);

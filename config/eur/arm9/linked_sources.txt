@@ -815,3 +815,6 @@ src/shop_ov009/shop_equipped_marker.cpp
 src/shop_ov009/shop_panel_model.cpp
 src/shop_ov009/shop_apply_equipment.cpp
 src/shop_ov009/shop_selected_model.cpp
+
+src/attack_hammer_ov021/hammer_resolution.cpp
+src/attack_hammer_ov021/hammer_approach.cpp
