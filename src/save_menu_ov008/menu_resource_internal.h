@@ -20,7 +20,9 @@ typedef struct MenuResourceWork {
     void *owned[3];
     u8 unknown_1c8[0x2808 - 456];
 } MenuResourceWork;
-extern MenuResourceWork data_ov008_02078290;
+extern u8 data_ov008_02078290[];
+/* The same workspace save_menu_internal.h exposes as raw bytes. */
+#define MENU_RESOURCE_WORK (*(MenuResourceWork *)data_ov008_02078290)
 extern SaveMenuText *data_ov008_0207828c;
 extern GameSpriteAllocation data_ov005_0206a1b0, data_ov005_0206a1c8;
 extern GameSpritePalette data_ov005_0206a1e0, data_ov005_0206a1f4;

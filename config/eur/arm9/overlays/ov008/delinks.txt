@@ -14,10 +14,7 @@ src/save_menu_ov008/save_geometry.c:
     .text start:0x0206c378 end:0x0206c474
 
 src/save_menu_ov008/save_scene_lifecycle.c:
-    .text start:0x0206c87c end:0x0206cfa4
-
-src/save_menu_ov008/save_irq_init.c:
-    .text start:0x0206cfa4 end:0x0206d038
+    .text start:0x0206c87c end:0x0206d038
 
 src/save_menu_ov008/load_irq_destroy.c:
     .text start:0x0206d038 end:0x0206d088
@@ -40,56 +37,32 @@ src/save_menu_ov008/game_over_irq_destroy.c:
 src/save_menu_ov008/game_over_control.c:
     .text start:0x02070028 end:0x02070560
 
-src/save_menu_ov008/game_over_geometry.c:
-    .text start:0x0207075c end:0x02070858
-
-src/save_menu_ov008/game_over_resources.c:
-    .text start:0x02070858 end:0x02070a28
+src/save_menu_ov008/game_over_scene_setup.c:
+    .text start:0x0207075c end:0x02070a28
 
 src/save_menu_ov008/game_over_scene_lifecycle.c:
-    .text start:0x02070c44 end:0x0207136c
-
-src/save_menu_ov008/game_over_irq_init.c:
-    .text start:0x0207136c end:0x02071400
+    .text start:0x02070c44 end:0x02071400
 
 src/save_menu_ov008/save_menu_summary.c:
     .text start:0x02073ac4 end:0x02073f04
 
 src/save_menu_ov008/save_menu_text_draw.c:
-    .text start:0x02075228 end:0x02075a90
+    .text start:0x02075228 end:0x02075ac8
 
-src/save_menu_ov008/save_menu_texture_row.c:
-    .text start:0x02075a90 end:0x02075ac8
-
-src/save_menu_ov008/save_menu_background.c:
-    .text start:0x02075b5c end:0x02075be8
-
-src/save_menu_ov008/save_menu_object_strip.c:
-    .text start:0x02075be8 end:0x02075cd4
-
-src/save_menu_ov008/save_menu_text_lookup.c:
-    .text start:0x02075cd4 end:0x02075dc8
+src/save_menu_ov008/save_menu_text_support.c:
+    .text start:0x02075b5c end:0x02075dc8
 
 src/save_menu_ov008/save_menu_text_init.c:
     .text start:0x02075e58 end:0x02076008
 
 src/save_menu_ov008/erase_scene_lifecycle.c:
-    .text start:0x02077904 end:0x02077e20
+    .text start:0x02077904 end:0x02077eb4
 
 src/save_menu_ov008/erase_irq_destroy.c:
     .text start:0x02076008 end:0x02076058
 
-src/save_menu_ov008/erase_irq_init.c:
-    .text start:0x02077e20 end:0x02077eb4
-
-src/save_menu_ov008/save_menu_resource_cleanup.c:
-    .text start:0x0207275c end:0x020727d8
-
-src/save_menu_ov008/save_menu_location_image.c:
-    .text start:0x02071d30 end:0x02071ec8
-
 src/save_menu_ov008/menu_resources.c:
-    .text start:0x02071ec8 end:0x0207275c
+    .text start:0x02071d30 end:0x020727d8
 
 src/save_menu_ov008/erase_resources.c:
     .text start:0x020773b4 end:0x020777dc

@@ -3,17 +3,11 @@
     .data       start:0x0207e020 end:0x0207ea20 kind:data align:32
     .bss        start:0x0207ea20 end:0x0207f400 kind:bss align:32
 
-src/shop_ov009/shop_stock.c:
-    .text start:0x0207df1c end:0x0207e008
-
 src/shop_ov009/shop_irq_destroy.cpp:
     .text start:0x0206ab80 end:0x0206abd0
 
 src/shop_ov009/shop_scene_lifecycle.cpp:
-    .text start:0x0206ec50 end:0x0206fd40
-
-src/shop_ov009/shop_irq_init.cpp:
-    .text start:0x020700e8 end:0x0207010c
+    .text start:0x0206ec50 end:0x0207010c
 
 src/shop_ov009/shop_list_phase.c:
     .text start:0x0207d218 end:0x0207d220
@@ -30,14 +24,8 @@ src/shop_ov009/shop_list_lifecycle.c:
 src/shop_ov009/shop_inventory_equipment.c:
     .text start:0x0207dcf0 end:0x0207ddac
 
-src/shop_ov009/shop_inventory_counts.c:
-    .text start:0x0207ddf4 end:0x0207df1c
-
-src/shop_ov009/shop_backgrounds.cpp:
-    .text start:0x0206e288 end:0x0206e8ac
-
-src/shop_ov009/shop_irq_upload.cpp:
-    .text start:0x0206fd40 end:0x020700e8
+src/shop_ov009/shop_stock.c:
+    .text start:0x0207ddf4 end:0x0207e008
 
 src/shop_ov009/shop_item_panel_queries.c:
     .text start:0x0207017c end:0x02070334
@@ -55,10 +43,10 @@ src/shop_ov009/shop_text_lookup.cpp:
     .text start:0x02074838 end:0x02074b7c
 
 src/shop_ov009/shop_resources.cpp:
-    .text start:0x0206d160 end:0x0206e288
+    .text start:0x0206d160 end:0x0206e8ac
 
-src/shop_ov009/shop_rows.cpp:
-    .text start:0x020710b8 end:0x020715e0
+src/shop_ov009/shop_buy_panel.cpp:
+    .text start:0x020710b8 end:0x02071af0
 
 src/shop_ov009/shop_inventory_panel.cpp:
     .text start:0x020738a0 end:0x02074038
@@ -69,14 +57,11 @@ src/shop_ov009/shop_inventory_list.cpp:
 src/shop_ov009/shop_panel_navigation.cpp:
     .text start:0x02079444 end:0x02079808
 
-src/shop_ov009/shop_list_navigation.cpp:
-    .text start:0x02079e20 end:0x0207a1d8
+src/shop_ov009/shop_navigation_cursors.cpp:
+    .text start:0x02079e20 end:0x0207a314
 
 src/shop_ov009/shop_particle.cpp:
     .text start:0x0207689c end:0x020769bc
-
-src/shop_ov009/shop_buy_panel.cpp:
-    .text start:0x020715e0 end:0x02071af0
 
 src/shop_ov009/shop_item_panel_lifecycle.cpp:
     .text start:0x020708f0 end:0x02070978
@@ -86,9 +71,6 @@ src/shop_ov009/shop_buy_panel_lifecycle.cpp:
 
 src/shop_ov009/shop_item_panel_text.c:
     .text start:0x0207065c end:0x02070764
-
-src/shop_ov009/shop_menu_navigation.cpp:
-    .text start:0x0207a1d8 end:0x0207a314
 
 src/shop_ov009/shop_menu_option_draw.cpp:
     .text start:0x0207a6a4 end:0x0207a844

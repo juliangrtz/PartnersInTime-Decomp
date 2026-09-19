@@ -140,7 +140,7 @@ For sprite and draw allocation, use the actual layouts in
 at `+0x1C`; these fields belong to the owner, not the attached sprite.
 ResourceB attachment can install `Overlay5ResourceB_Release`, which releases the
 sprite and clears the owner's resource pointer. Track the task and sprite as
-separate lifetimes, using [resource_owner.c](../../src/scene_support_ov005/resource_owner.c)
+separate lifetimes, using [resource_owner.c](../../src/scene_support_ov005/element_lists.c)
 and the removal helper to establish the actual sequence.
 Whole-pool destruction also ends allocations: verify the cleared pool pointers
 before discarding their allocation records. Retain any outstanding per-task
@@ -370,7 +370,7 @@ division explicitly in runtime oracles. See the verified examples in
 [trail drawing](../../src/title_ov006/title_trail.c).
 
 Python oracles must also reproduce the native width of intermediate arithmetic.
-The [display affine helper](../../src/scene_support_ov005/display_bg.c) takes nine
+The [display affine helper](../../src/scene_support_ov005/display_2d.c) takes nine
 arguments: engine, background, horizontal scale, vertical scale, rotation,
 center X/Y and origin X/Y. Pseudocode that omits the final stack arguments is
 not a complete prototype. For zero vertical scale it substitutes `0x100000`;
@@ -602,7 +602,7 @@ Task creation can change a source object's list links when the new task is
 inserted after it. Resource attachment also writes the owner's release callback
 and resource pointer. Account for these helper writes using the recovered
 [element list](../../src/scene_support_ov005/element_lists.c) and
-[resource owner](../../src/scene_support_ov005/resource_owner.c) behavior before asserting that
+[resource owner](../../src/scene_support_ov005/element_lists.c) behavior before asserting that
 the entire source or task record stayed unchanged.
 
 An oracle failure may be a wrong expectation. Inspect the native helper before
@@ -2939,7 +2939,7 @@ unlinked even though their effects are checked here.
 
 ### Pause party bitmap transitions
 
-[pause_party_transition.cpp](../../src/scene_menu_ov007/pause_party_transition.cpp)
+[pause_party_transition.cpp](../../src/scene_menu_ov007/pause_party_bitmap.cpp)
 reconstructs the creator at `0x02078F5C` (100 bytes) and controller at
 `0x02078FC0` (636 bytes). Both match without assembly or compiler changes.
 The shared [task and mode definitions](../../include/game/pause_party_bitmap.h)
@@ -3005,7 +3005,7 @@ oracle does not add its native bytes to the C/C++ total.
 ### Pause low-HP warnings
 
 [pause_hp_warning_stop.cpp](../../src/scene_menu_ov007/pause_hp_warning_stop.cpp) and
-[pause_hp_warning_update.cpp](../../src/scene_menu_ov007/pause_hp_warning_update.cpp)
+[pause_hp_warning_update.cpp](../../src/scene_menu_ov007/pause_numbers.cpp)
 reconstruct the 20-byte stop routine at `0x02080C2C` and 160-byte updater at
 `0x02080D4C`. The shared [task and mode definitions](../../include/game/pause_hp_warning.h)
 preserve the complete 72-byte task and the existing workspace byte. The stop
@@ -3182,7 +3182,7 @@ establish execution coverage; no oracle or game-code correction was needed.
 
 ### Pause list-row sprites
 
-The linked [row callbacks](../../src/scene_menu_ov007/pause_list_row.cpp) cover
+The linked [row callbacks](../../src/scene_menu_ov007/pause_list.cpp) cover
 `PauseListRow_UpdateDigitSprite` at `0x02073FA0` (252 bytes),
 `PauseListRow_UpdateMarkerSprite` at `0x0207409C` (176 bytes), and
 `PauseListRow_UpdateTextSprite` at `0x0207414C` (152 bytes). The parent and child
@@ -3224,7 +3224,7 @@ or segments, and unobserved kinds/empty-item eligibility remain outside coverage
 
 ### Pause list visibility and row measurement
 
-The linked [list controls](../../src/scene_menu_ov007/pause_list_control.cpp) cover
+The linked [list controls](../../src/scene_menu_ov007/pause_list.cpp) cover
 `PauseList_MeasureRowWidth` at `0x020742E0` (148 bytes), `PauseList_Hide` at
 `0x02074374` (132 bytes), and `PauseList_Show` at `0x020743F8` (308 bytes).
 Show allocates 340 OBJ tile units, prepares the current list, creates up to
@@ -3279,7 +3279,7 @@ second tab was visually identified as Key Items before the final named rerun.
 
 ### Pause list selection and row copies
 
-The linked [selection helpers](../../src/scene_menu_ov007/pause_list_selection.cpp)
+The linked [selection helpers](../../src/scene_menu_ov007/pause_list.cpp)
 cover `PauseList_GetTileRow` at `0x0207452C` (12 bytes),
 `PauseList_DrawSelectedLabel` at `0x02074538` (160),
 `PauseList_RedrawSelectedRow` at `0x020745D8` (220),
@@ -3763,7 +3763,7 @@ only differing instruction was `MOV 255` where the original materializes -1
 with `MVN`; a local signed-byte access preserves that value without changing
 the shared workspace's existing unsigned view.
 
-[pause_scene_control.cpp](../../src/scene_menu_ov007/pause_scene_control.cpp) owns
+[pause_scene_control.cpp](../../src/scene_menu_ov007/pause_resources.cpp) owns
 `0x02070AE8..0x02070B50` (104 bytes): `PauseScene_RequestExit` sets scene phase 5
 and resets the menu callback's phase, selecting the simple fade for mode 0
 and the existing shutter transition otherwise. `PauseTransition_GetProgress`
@@ -4160,7 +4160,7 @@ remain private; their presence does not add matching coverage.
 ### Pause list-row refresh
 
 `PauseListRow_Refresh` at `0x020741E4` adds 252 exact bytes to
-[pause_list_row.cpp](../../src/scene_menu_ov007/pause_list_row.cpp), completing the gap
+[pause_list_row.cpp](../../src/scene_menu_ov007/pause_list.cpp), completing the gap
 before the list-control module. It uses the existing 72-byte
 [row task](../../include/game/pause_list_row.h). The callback wraps the tile-row
 index modulo nine before applying scroll offsets, derives the OBJ tile number,

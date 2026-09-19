@@ -43,8 +43,8 @@ src/enemy_effect_ov025/enemy_chain_landing.cpp:
 src/enemy_effect_ov025/ov25_task_wait_sibling.cpp:
     .text start:0x020c8ac8 end:0x020c8af4
 
-src/enemy_effect_ov025/enemy_chain_tracking.cpp:
-    .text start:0x020c93d0 end:0x020c98d8
+src/enemy_effect_ov025/enemy_chain_tasks.cpp:
+    .text start:0x020c93d0 end:0x020c9be0
 
 src/enemy_effect_ov025/ov25_enemy_reset_stopped_animation.cpp:
     .text start:0x020ca2f8 end:0x020ca350
@@ -57,6 +57,3 @@ src/enemy_effect_ov025/enemy_linked_effects.cpp:
 
 src/enemy_effect_ov025/enemy_projectile_sequence.cpp:
     .text start:0x020cb838 end:0x020cbbb0
-
-src/enemy_effect_ov025/enemy_linked_damage.cpp:
-    .text start:0x020c98d8 end:0x020c9be0

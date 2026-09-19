@@ -26,7 +26,7 @@ void Overlay14Attack_UpdateEntry(Overlay10ActionActor *user)
     case 2:
         ++work->common.timer;
         if (work->common.timer >= 8) {
-            BattleParty_RestoreIdleAnimation(user, user->party.actor.scene_object);
+            BattleParty_RestoreIdleAnimation(&user->party, user->party.actor.scene_object);
             work->common.phase = 3;
         }
         break;
@@ -157,5 +157,27 @@ void Overlay14Attack_UpdateSequence(Overlay10ActionActor *user)
         Overlay14Attack_BeginHide(&work->attack);
         work->common.phase = 2;
     }
+}
+}
+
+#include <game/overlay014_projectile.h>
+extern "C" {
+#include <game/battle_effect.h>
+void Overlay14Participant_Initialize(Overlay14Participant *participant, BattlePartyActor *actor, s16 resource,
+                                     s8 side)
+{
+    participant->actor = actor;
+    participant->projectile = 0;
+    participant->timer = 0;
+    participant->resource = resource;
+    participant->phase = 0;
+    participant->remaining = 0;
+    participant->flags.side = (u8)side;
+}
+
+void Overlay14Participant_RestoreActor(Overlay14Participant *participant)
+{
+    if (participant->actor)
+        BattleParty_RestoreIdleAnimation(participant->actor, participant->actor->actor.scene_object);
 }
 }

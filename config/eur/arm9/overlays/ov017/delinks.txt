@@ -13,10 +13,7 @@ src/attack_copy_flower_ov017/startup_display.c:
     .text start:0x020c3280 end:0x020c33a4
 
 src/attack_copy_flower_ov017/attack_object.cpp:
-    .text start:0x020c33a4 end:0x020c3570
-
-src/attack_copy_flower_ov017/attack_object_motion.cpp:
-    .text start:0x020c3570 end:0x020c3748
+    .text start:0x020c33a4 end:0x020c3748
 
 src/attack_copy_flower_ov017/ov17_participant_get_travel_duration.cpp:
     .text start:0x020c2b44 end:0x020c2b8c

@@ -4,11 +4,8 @@
     .data       start:0x02069ee0 end:0x0206a160 kind:data align:32
     .bss        start:0x0206a160 end:0x0206ab80 kind:bss align:32
 
-src/scene_support_ov005/resource_owner.c:
-    .text start:0x02066224 end:0x02066358
-
-src/scene_support_ov005/display_bg.c:
-    .text start:0x02067aac end:0x02068594
+src/scene_support_ov005/element_lists.c:
+    .text start:0x02066224 end:0x02066920
 
 src/scene_support_ov005/touch_panel.c:
     .text start:0x0206873c end:0x02068908
@@ -25,20 +22,11 @@ src/scene_support_ov005/item_pool.c:
 src/scene_support_ov005/entry_list.cpp:
     .text start:0x020699f0 end:0x02069d6c
 
-src/scene_support_ov005/archive_queue.c:
-    .text start:0x02067174 end:0x02067638
-
 src/scene_support_ov005/holders.c:
     .text start:0x02067638 end:0x0206786c
 
-src/scene_support_ov005/display_windows.c:
-    .text start:0x0206786c end:0x02067aac
-
-src/scene_support_ov005/element_lists.c:
-    .text start:0x02066358 end:0x02066920
-
-src/scene_support_ov005/asset_loader.c:
-    .text start:0x02066bd4 end:0x02067174
+src/scene_support_ov005/display_2d.c:
+    .text start:0x0206786c end:0x02068594
 
 src/scene_support_ov005/touch_state.c:
     .text start:0x02068594 end:0x020686cc
@@ -46,5 +34,5 @@ src/scene_support_ov005/touch_state.c:
 src/scene_support_ov005/scene_system.cpp:
     .text start:0x02065d40 end:0x02065f10
 
-src/scene_support_ov005/asset_tables.c:
-    .text start:0x02066a7c end:0x02066bd4
+src/scene_support_ov005/archive_assets.c:
+    .text start:0x02066a7c end:0x02067638

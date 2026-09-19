@@ -12,7 +12,7 @@ src/battle_item_ov026/party_pairing.c:
 
 
 
-src/battle_item_ov026/ov26_attack_get_phase_position.cpp:
+src/battle_item_ov026/attack_position.cpp:
     .text start:0x020c3570 end:0x020c3850
 
 src/battle_item_ov026/ov26_attack_set_facing_animation.cpp:

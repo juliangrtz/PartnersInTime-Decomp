@@ -4,11 +4,8 @@
     .data       start:0x0208d920 end:0x0208e1e0 kind:data align:32
     .bss        start:0x0208e1e0 end:0x020a7260 kind:bss align:32
 
-src/scene_menu_ov007/scene_script_variables.c:
-    .text start:0x020841f8 end:0x0208435c
-
 src/scene_menu_ov007/scene_script_runtime.c:
-    .text start:0x02083ef8 end:0x020841f8
+    .text start:0x02083ef8 end:0x0208435c
 
 src/scene_menu_ov007/scene_script_control.c:
     .text start:0x02083b1c end:0x02083c20
@@ -17,51 +14,30 @@ src/scene_menu_ov007/scene_vm_dispatch.c:
     .text start:0x02081730 end:0x02083b1c
 
 src/scene_menu_ov007/scene_object_runtime.c:
-    .text start:0x020844e0 end:0x0208462c
-
-src/scene_menu_ov007/scene_object_render.c:
-    .text start:0x0208435c end:0x020844e0
+    .text start:0x0208435c end:0x0208462c
 
 src/scene_menu_ov007/scene_script_manager.c:
-    .text start:0x0208462c end:0x02084784
+    .text start:0x0208462c end:0x020848f8
 
-src/scene_menu_ov007/scene_secondary_archive.c:
-    .text start:0x02084784 end:0x020848f8
-
-src/scene_menu_ov007/scene_object_cleanup.c:
-    .text start:0x020848f8 end:0x02084ae8
-
-src/scene_menu_ov007/scene_manager_init.c:
-    .text start:0x02084ae8 end:0x02084c28
-
-src/scene_menu_ov007/scene_controller.c:
-    .text start:0x02084c28 end:0x02084ee4
-
-src/scene_menu_ov007/scene_manager_resources.c:
-    .text start:0x02084ee4 end:0x02084fbc
+src/scene_menu_ov007/scene_manager.c:
+    .text start:0x020848f8 end:0x02084fbc
 
 src/scene_menu_ov007/scene_sprite_tasks.c:
-    .text start:0x02084fbc end:0x020850d4
-
-src/scene_menu_ov007/scene_sprite_task.c:
-    .text start:0x020850d4 end:0x02085168
+    .text start:0x02084fbc end:0x02085168
 
 src/scene_menu_ov007/scene_transition_controller.c:
     .text start:0x02085168 end:0x0208552c
 
-src/scene_menu_ov007/party_values.c:
-    .text start:0x020750bc end:0x02075400
+src/scene_menu_ov007/party_list.c:
+    .text start:0x020750bc end:0x0207567c
 
 src/scene_menu_ov007/pause_item_row_draw.cpp:
     .text start:0x020757c4 end:0x020758f0
 
-src/scene_menu_ov007/pause_list_prepare.cpp:
-    .text start:0x02075f6c end:0x0207616c
+src/scene_menu_ov007/pause_party_lifecycle.cpp:
+    .text start:0x02075f6c end:0x02076374
 
-src/scene_menu_ov007/party_navigation.c:
-    .text start:0x02075400 end:0x0207567c
-
-src/scene_menu_ov007/point_motion.c:
+src/scene_menu_ov007/scene_object_motion.c:
     .text start:0x02086974 end:0x02087240
 
 src/scene_menu_ov007/items.c:
@@ -102,9 +78,6 @@ src/scene_menu_ov007/pause_irq_init.cpp:
 
 src/scene_menu_ov007/scene_text_archive.cpp:
     .text start:0x0208a318 end:0x0208a5cc
-
-src/scene_menu_ov007/pause_resources.cpp:
-    .text start:0x02070b50 end:0x02071f80
 
 src/scene_menu_ov007/nawatobi_resources.cpp:
     .text start:0x0208c860 end:0x0208cd88
@@ -175,8 +148,8 @@ src/scene_menu_ov007/pause_menu_label_motion.cpp:
 src/scene_menu_ov007/pause_background.cpp:
     .text start:0x0206fe10 end:0x02070938
 
-src/scene_menu_ov007/pause_background_palette.cpp:
-    .text start:0x02070a2c end:0x02070ae8
+src/scene_menu_ov007/pause_resources.cpp:
+    .text start:0x02070a2c end:0x02071f80
 
 src/scene_menu_ov007/pause_menu_cursor.cpp:
     .text start:0x02080078 end:0x020804e4
@@ -193,20 +166,14 @@ src/scene_menu_ov007/nawatobi_rope_subsprite.c:
 src/scene_menu_ov007/nawatobi_level.cpp:
     .text start:0x0208c4d0 end:0x0208c5bc
 
-src/scene_menu_ov007/pause_party_bitmap.cpp:
-    .text start:0x0207923c end:0x0207952c
-
-src/scene_menu_ov007/pause_numbers.cpp:
-    .text start:0x02080dec end:0x02081334
-
 src/scene_menu_ov007/scene_menu_background.cpp:
     .text start:0x02081560 end:0x02081664
 
 src/scene_menu_ov007/pause_mode_sprite.cpp:
     .text start:0x0207e93c end:0x0207ea4c
 
-src/scene_menu_ov007/pause_list_row.cpp:
-    .text start:0x02073fa0 end:0x020742e0
+src/scene_menu_ov007/pause_list.cpp:
+    .text start:0x02073fa0 end:0x020747e0
 
 src/scene_menu_ov007/pause_empty_row.cpp:
     .text start:0x02073428 end:0x0207355c
@@ -214,20 +181,11 @@ src/scene_menu_ov007/pause_empty_row.cpp:
 src/scene_menu_ov007/pause_equipped_markers.cpp:
     .text start:0x02073af4 end:0x02073c94
 
-src/scene_menu_ov007/pause_list_control.cpp:
-    .text start:0x020742e0 end:0x0207452c
-
-src/scene_menu_ov007/pause_list_selection.cpp:
-    .text start:0x0207452c end:0x020747e0
-
 src/scene_menu_ov007/pause_item_lookup.cpp:
     .text start:0x02074d48 end:0x020750bc
 
 src/scene_menu_ov007/pause_item_text.cpp:
     .text start:0x02075b04 end:0x02075e10
-
-src/scene_menu_ov007/pause_party_lifecycle.cpp:
-    .text start:0x0207616c end:0x02076374
 
 src/scene_menu_ov007/pause_equipment_highlight.cpp:
     .text start:0x02077164 end:0x020774cc
@@ -244,9 +202,6 @@ src/scene_menu_ov007/pause_menu_control.cpp:
 src/scene_menu_ov007/pause_transition_projection.cpp:
     .text start:0x0206e1c8 end:0x0206e27c
 
-src/scene_menu_ov007/pause_scene_control.cpp:
-    .text start:0x02070ae8 end:0x02070b50
-
 src/scene_menu_ov007/pause_category_cursor.cpp:
     .text start:0x0207b1b0 end:0x0207b2c8
 
@@ -259,11 +214,11 @@ src/scene_menu_ov007/menu_equipment_member_arrow.cpp:
 src/scene_menu_ov007/pause_hp_warning_stop.cpp:
     .text start:0x02080c2c end:0x02080c40
 
-src/scene_menu_ov007/pause_hp_warning_update.cpp:
-    .text start:0x02080d4c end:0x02080dec
+src/scene_menu_ov007/pause_numbers.cpp:
+    .text start:0x02080d4c end:0x02081334
 
-src/scene_menu_ov007/pause_party_transition.cpp:
-    .text start:0x02078f5c end:0x0207923c
+src/scene_menu_ov007/pause_party_bitmap.cpp:
+    .text start:0x02078f5c end:0x0207952c
 
 src/scene_menu_ov007/menu_item_selection_sprites.cpp:
     .text start:0x0207d6b0 end:0x0207db20

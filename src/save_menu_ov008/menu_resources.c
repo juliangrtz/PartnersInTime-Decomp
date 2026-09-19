@@ -1,3 +1,25 @@
+#include "save_menu_internal.h"
+
+typedef struct SaveMenuResourceView {
+    u8 unknown_00[444];
+    void *location_characters[3];
+} SaveMenuResourceView;
+void SaveMenu_FreeResources(void)
+{
+    int i;
+    SaveMenuText *text = data_ov008_0207828c;
+    if (text) {
+        SaveMenuText_DeleteOwned(text);
+        data_ov008_0207828c = 0;
+    }
+    for (i = 0; i < 3; ++i) {
+        if (((SaveMenuResourceView *)data_ov008_02078290)->location_characters[i]) {
+            GameHeap_DeleteArray(((SaveMenuResourceView *)data_ov008_02078290)->location_characters[i]);
+            ((SaveMenuResourceView *)data_ov008_02078290)->location_characters[i] = 0;
+        }
+    }
+}
+
 #include "menu_resource_internal.h"
 
 static inline void InitTextBackground(void)
@@ -34,7 +56,7 @@ void SaveMenu_LoadResources(void)
     u16 *screen;
     int i;
     SaveMenuText *text;
-    MI_CpuFill8(&data_ov008_02078290, 0, sizeof(data_ov008_02078290));
+    MI_CpuFill8(data_ov008_02078290, 0, sizeof(MenuResourceWork));
     GameSpriteAllocation_Allocate(&data_ov005_0206a1b0, 0, 0, 192, 0, 0xFFFF, 1, 0);
     GameSpriteAllocation_Allocate(&data_ov005_0206a1c8, 1, 0, 1008, 0, 0xFFFF, 1, 0);
     func_02007ebc(&data_ov005_0206a1e0, 0, 0, 16, 0, 2, 0, 0, 0, 0xFFFF);
@@ -162,4 +184,48 @@ void SaveMenu_LoadResources(void)
     if (text)
         text = SaveMenuText_Init(text);
     data_ov008_0207828c = text;
+}
+
+typedef struct MenuLocationEntry {
+    u16 value, unused;
+} MenuLocationEntry;
+extern const MenuLocationEntry data_ov008_02078150[], data_ov008_02078152[];
+extern u16 data_ov008_0207aa6c[];
+extern u8 data_ov008_0207aa64[];
+extern void *data_ov008_0207844c[];
+extern u32 data_ov008_02078458[];
+extern u16 data_ov008_02078464[][256], data_ov008_02078a64[][256], data_ov008_02079264[][1024];
+extern void *func_ov005_02066f78(Overlay5Archive *, int, u16, u32 *, int);
+void SaveMenu_BuildInversePalette(int slot)
+{
+    u16 *palette = data_ov008_02078a64[slot];
+    int i;
+    GameResource_Move16(data_ov008_02078464[slot], palette, 512);
+    for (i = 0; i < 256; ++i) {
+        *palette = (u8)(31 - (*palette & 31)) +
+                   (((u8)(31 - ((*palette >> 10) & 31)) << 10) + ((u8)(31 - ((*palette >> 5) & 31)) << 5));
+        ++palette;
+    }
+}
+
+void SaveMenu_LoadLocationImage(int slot, int location)
+{
+    u32 entry = data_ov008_02078152[location].value;
+    int first;
+    u32 length;
+    void *resource;
+    if (entry >= 33)
+        entry = 32;
+    first = 3 * entry;
+    data_ov008_0207844c[slot] =
+        func_ov005_02066f78(MENU_ARCHIVE, 3, (u16)first, &data_ov008_02078458[slot], 0);
+    resource = Overlay5Archive_ReadEntry(MENU_ARCHIVE, 3, (u16)(first + 2), &length, 0);
+    GameResource_Move16(resource, data_ov008_02078464[slot], length);
+    if (resource)
+        GameHeap_DeleteArray(resource);
+    resource = func_ov005_02066f78(MENU_ARCHIVE, 3, (u16)(first + 1), &length, 0);
+    GameResource_Move16(resource, data_ov008_02079264[slot], length);
+    if (resource)
+        GameHeap_DeleteArray(resource);
+    SaveMenu_BuildInversePalette(slot);
 }

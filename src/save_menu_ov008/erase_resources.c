@@ -34,7 +34,7 @@ void EraseScene_LoadResources(SaveSceneTask *unused)
     u16 *screen;
     int i;
     SaveMenuText *text;
-    MI_CpuFill8(&data_ov008_02078290, 0, sizeof(data_ov008_02078290));
+    MI_CpuFill8(data_ov008_02078290, 0, sizeof(MenuResourceWork));
     GameSpriteAllocation_Allocate(&data_ov005_0206a1b0, 0, 0, 192, 0, 0xFFFF, 1, 0);
     GameSpriteAllocation_Allocate(&data_ov005_0206a1c8, 1, 0, 1008, 0, 0xFFFF, 1, 0);
     func_02007ebc(&data_ov005_0206a1e0, 0, 0, 16, 0, 2, 0, 0, 0, 0xFFFF);

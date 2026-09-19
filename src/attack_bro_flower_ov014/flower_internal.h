@@ -51,7 +51,7 @@ extern u32 data_ov014_020c6130[], data_ov014_020c6138[], data_ov014_020c6168[];
 extern s16 data_ov014_020c614c[][3];
 void BattleModel_StopPrimary(BattleModel *);
 void BattleFeedback_LoadResource();
-void BattleParty_RestoreIdleAnimation(Overlay10ActionActor *, BattleSceneObject *);
+int BattleParty_RestoreIdleAnimation(BattlePartyActor *, BattleSceneObject *);
 int func_ov014_020c2bb4(BattleSceneObject *, int);
 void Overlay14Attack_UpdateEntry(Overlay10ActionActor *);
 void Overlay14Attack_UpdateSequence(Overlay10ActionActor *);

@@ -88,6 +88,10 @@ class Delinks:
         lines: list[str] = []
         for block in self.blocks:
             lines.extend(block.lines)
+        # write_lines terminates the last line, so a trailing blank one would
+        # leave the file ending in an empty line.
+        while lines and not lines[-1].strip():
+            lines.pop()
         return lines
 
 
