@@ -106,7 +106,15 @@ typedef struct FieldAreaContext {
     FieldMessageWindowSlide window_slide;
     u32 unknown_24c0;
     u16 input_masks[2];
-    u8 unknown_24c8[16];
+    union {
+        u8 unknown_24c8[16];
+        struct {
+            u16 scripted_held, scripted_pressed;
+            u8 unknown_24cc[4];
+            u16 scripted_held_mask, scripted_pressed_mask;
+            u8 unknown_24d4[4];
+        };
+    };
     struct {
         u16 unknown_00_13 : 14, visible : 1, moving : 1;
     } hud;
@@ -180,6 +188,7 @@ extern "C" {
 void FieldArea_ReverseEffects(FieldAreaContext *area,int index);
 void FieldArea_SetEffectsPaused(FieldAreaContext *area,int index,u8 paused);
 int FieldArea_AreEffectsActive(FieldAreaContext *area,int index);
+void FieldArea_ReadInput(FieldAreaContext *area, int mask, u16 *held, u16 *pressed, u8 mask_script);
 int FieldArea_GetCommonInputMask(FieldAreaContext *area);
 void FieldArea_OffsetCameraOrigin(FieldAreaContext *area, fx32 x, fx32 y);
 void FieldArea_UpdateAlphaBlend(FieldAreaContext *area);

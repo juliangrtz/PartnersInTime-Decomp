@@ -5255,3 +5255,38 @@ wrapper compare exactly. Full ROM/native relink checks and 107 tests pass.
 Private evidence: `build/runtime/eur_high_party_contact/{cold65_v1,isolated_v1}.json`;
 producers `probe_party_contact.py`, `check_party_contact_isolated.py` and shared
 `party_contact_oracle.py` under `build/analysis/high_effort_50_to_55/`.
+
+
+## Field physical and scripted input
+
+[FieldArea_ReadInput](../../src/field/field_input_read.cpp) combines physical
+held/pressed input with the area's scripted input. It intersects the caller mask
+with both common input masks, rotates the remaining physical directional bits,
+then adds the script's held/pressed bits. A byte parameter selects whether to
+apply the two script masks. Physical and script inputs are read before either
+output halfword is stored; identical or overlapping input/output records retain
+this order. The source matched its first compiled draft without ASM.
+
+An ordinary Save 65 load and left/right movement checks all 1,130 calls over
+2,477 frames, 565 with script masking and 565 without. Physical input is nonzero
+in 70 calls; this route has no scripted input and no directional rotation. Both
+real helper arguments and returns, all area/input records, output stores and
+callee-saved registers are checked. The final capture shows the field and all
+104 original saves are unchanged. There are no live RAM fixtures.
+
+Another 136 isolated ARM946 cases execute the complete reader, common-mask
+helper and directional-remapping helper with no stubs. Synthetic inputs cover
+all four rotations and directional combinations, both script-mask choices,
+zero/full/high masks and aligned output aliases, including reversed physical
+and scripted input words. Full main RAM, stack memory outside the exact 40-byte
+call-chain frame, SP and callee-saved registers are checked. These are separate
+from gameplay coverage and do not provide an independent graphics oracle.
+
+The actual reader, common-mask and shared-header area-state objects compare
+exactly; full ROM/native relink checks and 107 tests pass. Private reports:
+`build/runtime/eur_high_field_input/{cold65_v1,isolated_v2}.json`; producers
+`probe_field_input.py` and `check_field_input_isolated.py` under
+`build/analysis/high_effort_50_to_55/`. The earlier isolated v1 included an
+unaligned output fixture; v2 removes it to keep fixtures within the halfword
+pointer contract. The remapping helper remains native code and is not counted
+as new C/C++ progress here.

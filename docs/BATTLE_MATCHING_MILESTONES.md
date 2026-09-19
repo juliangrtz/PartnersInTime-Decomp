@@ -8597,3 +8597,12 @@ pass. Ordinary Save 65 navigation checks 1,385 target calls and 490 real bounds
 lookups; 220 separate isolated cases cover guards and dispatch branches with
 explicit transition-helper stubs. Original saves are unchanged. See
 [evidence and limits](research/RECONSTRUCTION_NOTES.md#party-contact-hints-and-automatic-bounds).
+
+
+## Field physical and scripted input
+
+The input reader adds 188 matching C++ bytes, reaching 794,940 / 1,563,700
+(50.8371%). Actual source/shared-header objects, full ROM/native relink and 107
+tests pass. Ordinary navigation checks 1,130 calls; 136 isolated cases execute
+the reader and its real helpers without stubs. All original saves are unchanged.
+See [evidence and limits](research/RECONSTRUCTION_NOTES.md#field-physical-and-scripted-input).
