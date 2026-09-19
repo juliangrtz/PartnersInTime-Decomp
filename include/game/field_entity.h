@@ -51,6 +51,7 @@ typedef struct FieldEntityVTable FieldEntityVTable;
 typedef struct FieldRenderObject FieldRenderObject;
 typedef struct FieldRenderObjectVTable FieldRenderObjectVTable;
 typedef struct FieldRuntimeEntity FieldRuntimeEntity;
+typedef struct FieldNavigationSurface FieldNavigationSurface;
 typedef void (*FieldEntityVisibilityCallback)(FieldEntity *entity);
 
 typedef struct FieldContactDirectionFlags {
@@ -332,7 +333,7 @@ typedef struct FieldEntity {
     virtual void unknown_78();
     virtual void save_render_snapshot(FieldRenderSnapshot *snapshot);
     virtual void restore_render_snapshot(const FieldRenderSnapshot *snapshot);
-    virtual void unknown_84();
+    virtual void set_navigation_surfaces(FieldNavigationSurface *surfaces, const void *resource);
     virtual void unknown_88();
     virtual void set_collision_response_channels(
         int channel_0, int channel_1, int channel_2, int channel_3, int channel_4);
@@ -346,7 +347,13 @@ typedef struct FieldEntity {
     FieldEntityVTable *vtable;
 #endif
     u8 index;
-    union { u8 unknown_005[3]; struct { u8 update_order, unknown_006[2]; }; };
+    union {
+        u8 unknown_005[3];
+        struct {
+            u8 update_order;
+            union { u8 unknown_006[2]; struct { u8 render_order, unknown_007; }; };
+        };
+    };
     u16 unknown_008;
     union {
         u16 property_00a;
@@ -364,7 +371,14 @@ typedef struct FieldEntity {
     };
     union {
         struct { s16 unknown_00c; u8 unknown_00e[0x12]; };
-        struct { u8 unknown_00c_prefix[4]; FieldRuntimeEntity *update_previous, *update_next; u8 unknown_018[8]; };
+        struct {
+            u8 unknown_00c_prefix[4];
+            FieldRuntimeEntity *update_previous, *update_next;
+            union {
+                u8 unknown_018[8];
+                struct { FieldRuntimeEntity *render_previous, *render_next; };
+            };
+        };
     };
     union {
         u8 state_payload[0xCC];

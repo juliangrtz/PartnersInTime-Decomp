@@ -73,6 +73,7 @@ The user's remote is `https://github.com/juliangrtz/PartnersInTime-Decomp.git`;
 work has used `main`. `upstream` is for reference. Preserve unrelated changes,
 use the configured Git identity, and stage explicit task-owned paths. History
 rewriting and attribution changes are separate tasks, not routine housekeeping.
+Use descriptive commit titles without appended matching-byte counts.
 
 Read private `build/analysis/CURRENT_HANDOFF.md` if present, then verify its
 claims against Git, source and artifacts. It can be stale even at the same

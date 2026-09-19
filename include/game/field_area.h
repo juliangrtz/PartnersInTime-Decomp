@@ -130,7 +130,13 @@ typedef struct FieldAreaContext {
     union { u8 unknown_29d4[4]; struct FieldAreaContext *paired_area; };
     union {
         struct FieldRuntimeEntity *entities[36];
-        struct { struct FieldRuntimeEntity *entity_slots[32], *first_entity, *last_entity; void *unknown_2a60[2]; };
+        struct {
+            struct FieldRuntimeEntity *entity_slots[32], *first_entity, *last_entity;
+            union {
+                void *unknown_2a60[2];
+                struct { struct FieldRuntimeEntity *first_render_entity, *last_render_entity; };
+            };
+        };
     };
     void *shared_resources;
     void *unknown_2a6c;
@@ -190,6 +196,8 @@ void FieldArea_InitializeQuadRegions(FieldAreaContext *field);
 void FieldArea_CreateVariableEntities(FieldAreaContext *field);
 void FieldArea_CreatePlacedEntities(FieldAreaContext *area);
 void FieldArea_UpdateEntities(FieldAreaContext *area);
+void FieldArea_BeginFrame(FieldAreaContext *area);
+void FieldArea_ResetEntityRenderOrder(FieldAreaContext *area);
 void FieldArea_ResetEntityUpdateOrder(FieldAreaContext *area);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source);
 void FieldArea_UpdateGraphics(FieldAreaContext *field);

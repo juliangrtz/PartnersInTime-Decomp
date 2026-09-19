@@ -5026,3 +5026,56 @@ by `build/analysis/high_effort_50_to_55/probe_field_update.py`. The initial
 `cold65_v1` failed in the probe because a branch target was mistaken for a helper
 return. The correction pairs returns with the actual call site and stack pointer;
 its successful rerun is retained separately.
+
+
+## Field frame snapshots and party forwarding
+
+`FieldArea_BeginFrame` (`0x020760E4..0x020761B4`, 208 bytes) snapshots the area's
+phase and, in phase 71, camera/offset fields before clearing this frame's offsets.
+It calls each non-null, non-suppressed entity through virtual slot 8.
+`FieldArea_ResetEntityRenderOrder` (`0x02076390..0x0207645C`, 204 bytes) restores
+placement order using the separate render-list links at entity `+0x18/+0x1C`,
+order byte `+6` and area head/tail `+0x2A60/+0x2A64`. It requires at least one
+entity, just like the update-list reset. Raw header views remain available.
+
+The four party wrappers in [field_party_frame.cpp](../../src/field/field_party_frame.cpp)
+cover `0x020BB56C..0x020BB69C` (304 bytes). They apply the spatial base operation
+first, then forward frame initialization, navigation pointers, renderer release
+or renderer allocation to each non-null auxiliary slot. Virtual slot `0x84`
+receives the navigation surface and resource pointers; its base implementation
+stores them at entity `+0x2B0/+0x2B4`. Slots are re-read after callbacks.
+All six functions matched on the first compiled draft, without ASM.
+
+Two automatic routes from Saves 65 and 1 run for 5,466 frames. Save 65 enters
+and leaves pause; Save 1 finishes in the field, without evidence of a pause
+round-trip. Both final captures were inspected. Of 3,332 area-frame and 5,440
+party-frame calls, the oracle fully checks 56 and 178 respectively: first/every
+61st outer entry, plus nested party calls in checked area frames. It also checks
+all six render-list resets, twelve allocations and twelve navigation setups.
+Reset lengths are 8, 11, 20 and 27; navigation setup forwards to 48 auxiliaries.
+Area phases include 0, 9, 12, 13, 14, 17, 50, 60 and 71. Null/suppressed area
+slots were not observed, although empty auxiliary slots were exercised.
+
+Full area/entity/auxiliary records are checked at caller boundaries. Frame
+snapshots, list links, callback order/arguments and navigation pointer writes
+are independently modeled. Other helper effects are observed only within the
+receiving object: spatial base helpers within 1,312 bytes, party calls within
+1,440 bytes and their owned 1,360-byte auxiliaries. Renderer heap internals and
+graphics are not independently verified. All 104 original saves are unchanged.
+
+The separate release wrapper did not execute live. Twenty isolated ARM946 cases
+on copied Save 65 RAM check all four wrappers with five auxiliary-presence masks,
+including empty and all-six slots. They compare all 4 MiB of main RAM, scratch
+outside the exact native stack frame, stack restoration and preserved registers.
+The navigation setter executes natively with synthetic pointer values; frame,
+allocation and release helpers are ABI-only stubs that clobber caller-saved
+registers. These cases establish forwarding behavior, not actual renderer release,
+heap lifetime or live coverage of the release wrapper.
+
+Full build/native relink, original ROM hash and 107 tests pass. Final source
+objects, including the neighboring entity updater, compare exactly. Private
+reports are `build/runtime/eur_high_field_frame/{pause65_v2,pause1_v2,isolated_wrappers_v1}.json`;
+producers are `probe_field_frame.py` and `check_field_party_wrappers_isolated.py`
+in `build/analysis/high_effort_50_to_55/`. The earlier `pause65_v1` failed only its
+final all-functions coverage assertion because release was absent; that failed
+report and producer are preserved, and the successful replay states the gap.

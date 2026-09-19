@@ -265,6 +265,11 @@ void FieldParty_SetIndicatorLayer(FieldPartyController *party, int alternate);
 void FieldParty_UpdateIndicatorPositions(FieldPartyController *party);
 void FieldParty_UpdateIndicatorSlide(FieldPartyController *party);
 void FieldParty_StartIndicatorSlide(FieldPartyController *party, int upward);
+void FieldPartyEntity_BeginFrame(FieldPartyEntity *party);
+void FieldPartyEntity_SetNavigationSurfaces(FieldPartyEntity *party, FieldNavigationSurface *surfaces,
+                                           const void *resource);
+void FieldPartyEntity_ReleaseRenderers(FieldPartyEntity *party);
+void FieldPartyEntity_AllocateRenderers(FieldPartyEntity *party);
 FieldPartyEntity *FieldPartyEntity_InitEmpty(FieldPartyEntity *party);
 FieldPartyEntity *FieldPartyEntity_Destroy(FieldPartyEntity *party);
 FieldPartyEntity *FieldPartyEntity_Delete(FieldPartyEntity *party);

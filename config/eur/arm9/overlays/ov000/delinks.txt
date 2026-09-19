@@ -383,3 +383,12 @@ src/field/field_party_placement.cpp:
 
 src/field/field_entity_update.cpp:
     .text start:0x02075d28 end:0x020760e4
+
+src/field/field_frame_begin.cpp:
+    .text start:0x020760e4 end:0x020761b4
+
+src/field/field_entity_render_order.cpp:
+    .text start:0x02076390 end:0x0207645c
+
+src/field/field_party_frame.cpp:
+    .text start:0x020bb56c end:0x020bb69c

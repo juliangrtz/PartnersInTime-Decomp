@@ -837,3 +837,9 @@ src/field/field_entity_update_order.cpp
 src/field/field_party_placement.cpp
 
 src/field/field_entity_update.cpp
+
+src/field/field_frame_begin.cpp
+
+src/field/field_entity_render_order.cpp
+
+src/field/field_party_frame.cpp

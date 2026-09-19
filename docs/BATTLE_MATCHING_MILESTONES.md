@@ -8551,3 +8551,12 @@ auxiliaries and the virtual-call ABI. Coverage is 791,276 / 1,563,700 bytes
 pass. Three automatic routes observe 2,743 calls, independently checking the
 caller at 46 sampled calls. Original saves are unchanged. See
 [evidence and limits](research/RECONSTRUCTION_NOTES.md#field-entity-update-passes).
+
+
+## Field frame snapshots and party forwarding
+
+Six functions add 716 matching C++ bytes, reaching 791,992 / 1,563,700 (50.6486%).
+Full source objects, ROM and native relink match; 107 tests pass. Two automated
+save routes verify frame snapshots, render-list resets and party forwarding;
+20 isolated cases supplement the unobserved release wrapper. Original saves
+are unchanged. See [evidence and limits](research/RECONSTRUCTION_NOTES.md#field-frame-snapshots-and-party-forwarding).
