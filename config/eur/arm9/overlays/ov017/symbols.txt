@@ -52,7 +52,7 @@ func_ov017_020c58cc kind:function(arm,size=0x6c4) addr:0x020c58cc
 Overlay17Participant_Hide kind:function(arm,size=0x44) addr:0x020c5f90
 Overlay17Participant_ReleaseModel kind:function(arm,size=0x44) addr:0x020c5fd4
 Overlay17Participant_Initialize kind:function(arm,size=0xa4) addr:0x020c6018
-func_ov017_020c60bc kind:function(arm,size=0x1dc) addr:0x020c60bc
+CopyFlowerAttack_Update kind:function(arm,size=0x1dc) addr:0x020c60bc
 func_ov017_020c6298 kind:function(arm,size=0x654) addr:0x020c6298
 func_ov017_020c68ec kind:function(arm,size=0x384) addr:0x020c68ec
 data_ov017_020c6c80 kind:data(any) addr:0x020c6c80

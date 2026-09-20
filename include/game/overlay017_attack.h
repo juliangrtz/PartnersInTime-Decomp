@@ -10,11 +10,13 @@
 
 typedef struct Overlay17AttackObject Overlay17AttackObject;
 struct GameTexturePalette;
+struct BattlePartyActor;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+void CopyFlowerAttack_Update(struct BattlePartyActor *actor);
 int Overlay17Attack_SelectNextTarget(u16 previous);
 u16 Overlay17Attack_LookupPairTuning(int value, int parameter_index);
 u16 Overlay17Attack_LookupGroupTuning(int value, int parameter_index);

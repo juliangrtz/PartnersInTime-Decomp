@@ -7224,6 +7224,43 @@ establish gameplay lifetimes or asynchronous behavior. Screenshots are observed,
 not independently rendered. All 104 original saves retain their baseline hashes.
 
 
+## Copy Flower round and return controller
+
+[`CopyFlowerAttack_Update`](../../src/attack_copy_flower_ov017/copy_attack_update.cpp)
+reconstructs overlay 17's outer controller at 0x020C60BC-0x020C6298 (476 bytes).
+It copies the four formation input bits, updates the linked participants, then
+spawns clones or waits for their return. Subsequent phases restore party objects,
+wait for readiness, unlink the display, release eight participant models and
+clear the attack callback/root. Clearing the root does not itself prove that
+the 16,356-byte work allocation is freed. Participant successors are read after
+their update calls, and dispatch uses the signed phase after child updates.
+The flag walk retains the shared 296-byte stride. The complete C++ function
+matches without assembly; the separate 900-byte initializer remains unlinked.
+
+Private `eur_high_copy_update/evidence_copy83_v1.json` checks 679 ordinary calls
+over 1,810 frames from `copy_verified_setup83.dst`: phases 0/1/2/3 execute
+614/29/35/1 times, with 13 clone starts. Ten timed keypad inputs match the prior
+input-helper route; no RAM edits are used. The final image is identical to that
+baseline and shows the battle command menu. Ordered outer calls/stores, input
+masks, list traversal, phase/timer decisions, idle-slot and tuning results,
+callback/root clearing and SP/r4-r11 are independently checked. Child writes
+within the complete work, party/enemy prefixes, scene objects and model payloads
+are bounded observations; RNG outcomes and child readiness returns are observed.
+Allocation lifetimes, graphics-list neighbors, other globals, sound and
+rasterization are not independently proved. Final graphics RAM is captured,
+but the prior report supplies no graphics-RAM baseline for comparison.
+
+`isolated_v1.json` adds 29 ARM946 cases on copied RAM/DTCM: signed timer limits,
+first/last/no idle slot, pending/completed stops, both readiness results,
+cleanup and out-of-range signed phases. Two child stubs change the next list
+link or dispatch phase to check that the caller rereads them. Idle-slot search
+and tuning lookup execute natively; other children use explicit return/write
+stubs. Full mapped memory except 256 stack bytes is checked. These fixtures
+do not establish gameplay lifetimes or child algorithms. All 42 linked functions
+in 17 current overlay objects are exact; stale objects from former source names
+are excluded. The EUR ROM is exact, 107 tests pass and 104 saves are unchanged.
+
+
 ## Save-storage initialization
 
 `SaveStorage_Initialize` (resident ARM9, `0x02028CE8`, 388 bytes) repairs

@@ -9248,3 +9248,16 @@ prior support route. Full EUR ROM match, zero native differences, 107 tests;
 104 original saves unchanged. All 57 Chomp functions in 22 objects are exact.
 Matching C/C++: 825540/1563700 (52.7940%); target860044, remaining34504.
 Private validation: high_effort_50_to_55/chomp_pursuit_validation.json.
+
+
+## Copy Flower round and return controller (2026-09-20)
+
+The outer clone-spawn, return and cleanup controller adds 476 matching C++
+bytes without assembly. An ordinary 1,810-frame replay checks 679 calls across
+all four phases and 13 clone starts; 29 copied-RAM ARM946 cases cover boundary
+branches and callback-mutated links/phases with explicit child stubs. The final
+image matches the prior route. Full EUR ROM match, zero native differences,
+107 tests; all 104 saves unchanged. All 42 linked functions in 17 overlay 17
+objects are exact. Child writes are bounded observations, not lifetime proofs.
+Matching C/C++: 826016/1563700 (52.8245%); target860044, remaining34028.
+Private validation: high_effort_50_to_55/copy_update_validation.json.
