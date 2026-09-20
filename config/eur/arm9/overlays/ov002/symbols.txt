@@ -830,7 +830,7 @@ func_ov002_020bd740 kind:function(arm,size=0x3f8) addr:0x020bd740
 gBattleLevelUpBonusPhaseOrder kind:data(short[8]) addr:0x020bf72c
 gBattleLevelUpBonusPhaseOffsets kind:data(short[8]) addr:0x020bf76c
 BattleObjectLink_SumSegments kind:function(arm,size=0x50) addr:0x020bdb38
-func_ov002_020bdb88 kind:function(arm,size=0x90) addr:0x020bdb88
+BattleObjectLink_AveragePositions kind:function(arm,size=0x90) addr:0x020bdb88
 BattleLinkEffect_UploadTiles kind:function(arm,size=0x38) addr:0x020bdc18
 func_ov002_020bdc50 kind:function(arm,size=0x410) addr:0x020bdc50
 func_ov002_020be060 kind:function(arm,size=0x2ac) addr:0x020be060

@@ -504,7 +504,7 @@ src/battle/battle_link_effect.c:
     .text start:0x020bca44 end:0x020bccc4
 
 src/battle/battle_object_link_sum.c:
-    .text start:0x020bdb38 end:0x020bdb88
+    .text start:0x020bdb38 end:0x020bdc18
 
 src/battle/battle_link_effect_upload.c:
     .text start:0x020bdc18 end:0x020bdc50

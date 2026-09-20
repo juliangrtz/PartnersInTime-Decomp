@@ -9512,3 +9512,23 @@ integer result, without establishing hardware latency or IRQ behavior. Full
 main RAM and DTCM outside the executed stack are checked. All 104 original
 saves remain unchanged. Matching C/C++: 837240/1563700 (53.5422%).
 Private evidence: high_effort_50_to_55/chomp_bounce_validation.json.
+
+
+## Flexible-link mean positions
+
+Reconstructed the 144-byte cumulative-position average in C and extended the
+existing contiguous object-link sum unit. The first draft and both compiled
+functions match exactly. Full verification passes: golden EUR ROM, zero
+native differences and 107 tests. A controlled Petey encounter checkpoint
+with ordinary alternating A/B Jump inputs reaches 248 independently checked
+calls, covering counts 1, 3, 4, 6, 7, 9 and 11. A weighted-sum oracle checks
+all three outputs and 744 signed-division arguments/results, the full 268-byte
+link state, owning 260-byte scene object, 12-byte arena slot, output range and
+callee-saved registers. No RAM edits are made during this replay. All six
+captures equal the discovery route; the final image shows the battle menu.
+Another 64 isolated ARM946 cases cover counts 1 through 16 and zero, positive,
+negative and mixed signed16 components, executing native division without
+stubs. Full main RAM and DTCM outside the executed stack are checked. This
+does not add allocation-lifetime or independent graphics coverage. All 104
+original saves remain unchanged. Matching C/C++: 837384/1563700 (53.5514%).
+Private evidence: high_effort_50_to_55/link_average_validation.json.

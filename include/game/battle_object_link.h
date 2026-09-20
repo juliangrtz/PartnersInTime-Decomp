@@ -78,6 +78,7 @@ BattleObjectLinkDraw BattleObjectLink_InitializeSegments(BattleSceneObject *obje
 void BattleFlexibleLink_Reset(BattleSceneObject *object, int unused);
 void BattleFlexibleLink_SetActor(BattleSceneObject *object, u16 actor);
 void BattleObjectLink_SumSegments(s32 *out, const BattleObjectLinkSegment *segments, int count);
+void BattleObjectLink_AveragePositions(s32 *out, const BattleObjectLinkSegment *segments, int count);
 #ifdef __cplusplus
 }
 #endif
