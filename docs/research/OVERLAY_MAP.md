@@ -26,7 +26,7 @@ The source links open each overlay's main source directory.
 
 | Overlay | Role | Matching C/C++ / mapped bytes | C/C++ % | Reconstructed code |
 |---:|---|---:|---:|---|
-| [11](../../src/attack_shell_ov011/) | Green and Red Shells | 4,496 / 13,372 | 33.62% | Attack and controller setup, entry animation and handoff, projectile timing/readiness, contact checks, support movement and effect completion. |
+| [11](../../src/attack_shell_ov011/) | Green and Red Shells | 6,052 / 13,372 | 45.26% | Attack and controller setup, entry animation and handoff, projectile timing/readiness, contact checks, support movement, catch/boost/return updates and effect completion. |
 | [12](../../src/attack_cannonball_ov012/) | Cannonballers | 3,628 / 12,032 | 30.15% | Party order, resource and object setup, launch scheduling, airborne motion, hit effects and cleanup. |
 | [13](../../src/attack_trampoline_ov013/) | Trampolines | 4,272 / 12,316 | 34.69% | Paired objects, resource setup, jump and bounce motion, retreat, landing effects and battle restoration. |
 | [14](../../src/attack_bro_flower_ov014/) | Bro Flowers and Ice Flowers | 6,536 / 13,860 | 47.16% | Attack sequencing, target selection, participant throws, projectile levels, fades and enemy-effect allocation and cleanup. |

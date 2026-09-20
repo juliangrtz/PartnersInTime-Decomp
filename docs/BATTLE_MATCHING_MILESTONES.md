@@ -9148,3 +9148,21 @@ All 665 automatic inputs and six capture hashes match the preceding route;
 the final command menu was viewed. No pending calls.
 Matching C/C++: 819744 / 1563700 (52.4234%); trial target860044, remaining40300.
 The Shell support updater is a private exact candidate, not linked progress.
+
+
+## Shell support update (2026-09-20)
+
+Reconstructed Overlay11Support_Update at ov011 0x020C33E8, 1556 bytes of pure C++.
+Recovered unsigned button and packed resting-animation/caught-side fields;
+aligned the local scale-helper declaration with its signed-halfword definition.
+All22functions/9actualShellobjects exact. Fullgatev2: goldenEUR/native0diff/107tests.
+Four live routes pass205updates each (820total), Red/Green with and without
+guarded support-button presses. Catch/input/boost/return/idle paths checked,
+including236boostticks and12expirations. No RAM edits;104saves unchanged.
+Complete ordinary-route actions/captures equal preceding entry baselines;
+four final menus viewed. New oracle checks caller stores/ABI and bounded
+receiving records, including external render/palette/texture list neighbors.
+Firstred83_v1 missing-neighbor failure and correctedv2 retained privately.
+States3-5/nullsupport/non-idleactorreturn branch remain outside live coverage;
+other limits and exact report names are in reconstruction notes.
+Matching C/C++:821300/1563700(52.5229%); trial target860044, remaining38744.

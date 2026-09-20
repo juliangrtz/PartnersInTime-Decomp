@@ -838,6 +838,50 @@ instructions show bits 4-5 receive `support.side + 1` when motion channel 3
 finishes. Version 2 predicts that store and bounds the associated follow-motion
 observation to the receiving scene object; both reruns pass without game changes.
 
+#### Shell support update and boost input
+
+[`Overlay11Support_Update`](../../src/attack_shell_ov011/shell_support_update.cpp)
+at `0x020C33E8` updates the optional support character. Its 28-byte record uses
+an unsigned button halfword at `+20`, a signed sound-handle offset at `+24`,
+state/side/formation bits at `+26` and a four-bit resting animation in bits 1–4
+of `+27`. On catching the shell, projectile byte `+27` bits 4–5 receive
+`support.side + 1`. The follower call takes `(shell, support_object, 3)`.
+Boosting advances a signed counter and emits the two effect types at separate
+table-defined intervals. Expiration restores the resting animation and scale,
+stops a nonzero sound handle and returns to the input-wait state. Scale arguments
+are signed halfwords, matching the resident scale helper's definition.
+
+The private reports under `build/runtime/eur_high_shell_support/` contain four
+passing replays: `red83_v2`, `green83_v2`, `red83_boost_v2` and
+`green83_boost_v2`. The ordinary routes take 2,150/2,110 frames and reproduce
+the preceding entry replay's complete action sequence and capture hashes.
+Each executes 205 support updates: 23 catching, 134 waiting for input,
+16 returning and 32 idle. The additional routes retain those frame budgets and
+add guarded support-button presses without RAM edits. Red uses ten automatic
+presses and checks nine boost starts, 116 boost ticks and seven expirations;
+Green uses eight presses and checks seven starts, 120 ticks and five expirations.
+The update counts remain 205 per route. Final battle menus were viewed, no calls
+remain pending and all 104 source saves are unchanged.
+
+The oracle checks the complete 612-byte attack allocation, actor records,
+260-byte scene objects and 440/304-byte renderers between helper boundaries.
+It independently predicts the updater's decisions, complete helper ABI, ordered
+own stores, signed division/remainder, model/channel query results, scale-helper
+writes and SP/r4-r11. Resource, animation and motion effects are observations
+bounded to the receiving records. The selected attached-effect slot's eight
+bytes are observational; other pool/global changes, audio, rasterization and
+object lifetimes are not independently modeled. Renderer/palette/texture
+placement inside a receiving record is observed, while roots and unowned
+neighbor links are derived and checked. States 3–5, a null support object and
+the return state's non-idle actor branch are not covered by these live routes.
+
+The first `red83_v1` probe failed at frame 533 because hiding the support also
+changed a render-list neighbor. Its report and original producer/oracle remain
+preserved. Version 2 includes the shared list-topology checks; all four routes
+pass without game-code changes. All 22 functions from the nine linked Shell
+source objects match after the shared-header changes; full verification retains
+the original EUR ROM, zero native differences and 107 passing tests.
+
 #### Mix Flower participant exit
 
 [`Overlay16Participant_BeginExit`](../../src/attack_mix_flower_ov016/mix_participant_exit.c)

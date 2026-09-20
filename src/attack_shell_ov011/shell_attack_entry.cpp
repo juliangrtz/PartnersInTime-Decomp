@@ -11,7 +11,6 @@ struct ShellEntryFlags {
 };
 extern "C" {
 extern s8 data_ov011_020c5f28[][2], data_ov011_020c5f29[][2];
-void func_ov011_020c33e8(Overlay11Support *, Overlay11Projectile *);
 void func_ov011_020c54b4(Overlay10ActionActor *);
 void func_ov002_020722ac(Overlay10ActionActor *, void (*)(Overlay10ActionActor *));
 
@@ -66,7 +65,7 @@ void Overlay11Attack_UpdateEntry(BattlePartyActor *user)
         }
         break;
     case 2:
-        func_ov011_020c33e8(&work->support, &work->projectile);
+        Overlay11Support_Update(&work->support, &work->projectile);
         if (work->support.state == 1) common->phase = 3;
         break;
     case 3:

@@ -35,14 +35,22 @@ struct Overlay11Controller {
 struct Overlay11Support {
     BattleSceneObject *object;
     int active, delay, duration, speed_q8;
-    s16 button, animation, effect_handle;
+    u16 button;
+    s16 animation, effect_handle;
     u8 state : 5, side : 1, formation : 2;
-    u8 reposition : 1, unknown_1b : 7;
+    union {
+        struct { u8 reposition : 1, unknown_1b : 7; };
+        struct { u8 unknown_bit0 : 1, rest_animation : 4, unknown_bits5 : 3; };
+    };
 };
 struct Overlay11Projectile {
     BattleSceneObject *object;
     u8 unknown_04[22];
-    u8 state, flags;
+    u8 state;
+    union {
+        u8 flags;
+        struct { u8 unknown_flags0 : 4, caught_side : 2, unknown_flags6 : 2; };
+    };
     void *unknown_1c;
     Overlay11Support *support;
     s16 collision_x, previous_collision_x;
@@ -78,6 +86,8 @@ struct Overlay11AttackWork {
 };
 typedef char WorkSize[sizeof(Overlay11AttackWork) == 612 ? 1 : -1];
 typedef char ControllerSize[sizeof(Overlay11Controller) == 44 ? 1 : -1];
+typedef char SupportSize[sizeof(Overlay11Support) == 28 ? 1 : -1];
+typedef char ProjectileSize[sizeof(Overlay11Projectile) == 48 ? 1 : -1];
 extern "C" {
 extern Overlay11AttackWork *data_ov002_020c0710;
 extern s16 data_ov011_020c6040[2][32];
@@ -86,7 +96,7 @@ extern s16 data_ov011_020c5f7e[][3];
 extern s16 data_ov011_020c5f80[][3];
 extern u16 data_ov002_020be704[];
 void BattleSound_Stop(int);
-void func_0200940c(BattleModel *, int);
+void func_0200940c(BattleModel *, s16);
 int func_02010960(int, int, int);
 extern u8 *gBattleContext;
 extern u8 data_ov011_020c5f20[];
@@ -112,6 +122,7 @@ int func_ov011_020c2e20(BattlePosition *position, Overlay11Controller *controlle
 int Overlay11Attack_GetTravelDuration(int start, int speed_q8, int target, int step);
 void Overlay11Support_Reset(Overlay11Support *support);
 void func_ov011_020c2f38(Overlay11Support *support);
+void Overlay11Support_Update(Overlay11Support *support, Overlay11Projectile *projectile);
 void Overlay11Support_ScheduleIntercept(Overlay11Support *support, int duration, int delay, int reposition,
                                         int animation);
 void Overlay11Support_StartIntercept(Overlay11Support *support, int duration, int reposition,
