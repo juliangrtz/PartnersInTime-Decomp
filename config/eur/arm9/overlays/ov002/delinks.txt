@@ -535,3 +535,6 @@ src/battle/battle_reward_items_begin_display.c:
 
 src/battle/battle_reward_items_draw.cpp:
     .text start:0x0206ced4 end:0x0206d270
+
+src/battle/battle_badge_healing.cpp:
+    .text start:0x020768a4 end:0x02076998

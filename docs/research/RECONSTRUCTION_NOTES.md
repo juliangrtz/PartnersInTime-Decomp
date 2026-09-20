@@ -6842,3 +6842,43 @@ not cartridge I/O or those helpers' internals. Nonzero stub results include -1.
 Full buffer, globals, signature, return value, preserved registers, DTCM and
 unused stack are checked; writes stay within the buffer and scratch stack.
 Maximum stack use is 64 bytes. All 104 original saves retain their baseline hashes.
+
+### Battle healing-item badge bonuses
+
+[battle_badge_healing.cpp](../../src/battle/battle_badge_healing.cpp) reconstructs
+`BattleItemEffect_ApplyBadgeBoost` at overlay 2 `0x020768A4..0x02076998`.
+The item user comes from the halfword at `gBattleContext + 0x20`; its party
+actor's resource pointer at `+0x6C` supplies the member index in the low byte
+of its first halfword. This selects the badge at live-save offset
+`0x418 + 36 * member`, independently of the healing target.
+
+Badge IDs `0x3008` and `0x3010` scale the HP increase by 150 and 200 percent.
+The native calculation adds 50 before signed division by 100, then adds the
+target's signed current HP and clamps to its signed maximum. Other badges
+return the supplied HP unchanged, without clamping. Preserve the division's
+truncation toward zero, including for negative deltas.
+
+Private `high_effort_50_to_55/probe_battle_badge.py` replays the established
+checkpoint-83 item route from `eur_attack_helpers/item_damaged_menu83.dst`.
+`build/runtime/eur_high_battle_badge/healing83_v1.json` passes over 1,720 frames:
+one ordinary call at frame 642 heals Mario from 87 to 100 HP, with badge 25
+(no bonus). The checkpoint inherits controlled encounter-entry provenance;
+this replay makes no RAM edits. Full native guards, the real party lookup's
+argument/result, return value, SP/r4-r11, the 401,416-byte battle allocation,
+1,380-byte live save, roots and resource member are checked. The final visible
+battle menu was inspected; this is not an independent graphics oracle.
+
+`check_battle_badge_isolated.py` and `battle_badge_isolated_v1.json` in the
+same private analysis directory pass 736 ARM946 cases using the actual compiled
+function and native lookup, without stubs. Copied RAM fixtures cover four users
+and four targets, both bonus badges and a neutral badge, ten arithmetic cases,
+all 256 byte-sized badge values, and a remapped resource member with a nonzero
+upper byte. Return values, unchanged records, helper arguments/results,
+SP/r4-r11, DTCM and unused scratch stack are checked; stores are restricted to
+the 16-byte stack frame. Boosted branches have isolated coverage, not live
+item-use coverage. All 104 original saves remain unchanged.
+
+The final source object matches all 244 bytes. `battle_badge_build_v1.log`
+records the full build, golden ROM SHA-1, zero differing native-relink bytes,
+updated progress and 107 passing tests. Runtime producers, snapshots and
+source/object hashes are pinned by `battle_badge_validation.json`.

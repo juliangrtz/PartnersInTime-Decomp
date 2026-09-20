@@ -9034,3 +9034,18 @@ Evidence and limits: the save-storage initialization section in
 `docs/research/RECONSTRUCTION_NOTES.md`, private reports
 `build/runtime/eur_high_save_storage_init/cold65_v1.json` and
 `build/analysis/high_effort_50_to_55/save_storage_init_isolated_v1.json`.
+
+
+### 2026-09-20: Battle healing-item badge bonuses
+
+Reconstructed BattleItemEffect_ApplyBadgeBoost in readable C++ (overlay 2,
+0x020768A4..0x02076998). It selects the active item's user's badge, scales the
+healing delta with native signed rounding, and clamps boosted HP to the target's
+maximum. Full source-object comparison, ROM hash and native relink pass; all
+107 tests pass. An ordinary checkpoint-83 item replay checks the neutral-badge
+branch; 736 isolated ARM946 cases cover both boosts, user/target separation,
+member-index truncation and arithmetic boundaries without stubs. The boosted
+branches remain isolated coverage. All original saves are unchanged.
+
+Linked matching C/C++: 816716 / 1563700 (52.2297%). Detailed evidence and limits:
+[healing-item badge bonuses](research/RECONSTRUCTION_NOTES.md#battle-healing-item-badge-bonuses).
