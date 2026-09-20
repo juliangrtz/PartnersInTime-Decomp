@@ -7828,3 +7828,43 @@ combinations, both copy directions and nonzero passes. Palette operations run
 natively; preparation and drawing are no-op stubs. The isolated checks predict
 all main-RAM changes and preserve DTCM outside a bounded 512-byte stack region.
 They add no gameplay, allocation-lifetime or upload coverage.
+
+
+## Bro Flower enemy effect stages
+
+[`enemy_effect_stage.cpp`](../../src/attack_bro_flower_ov014/enemy_effect_stage.cpp)
+raises an enemy's visual effect stage at 1, 6 and 12 successful hits. It can skip
+intermediate stages and never lowers the current stage. Six bytes at Flower
+work offset 8996 hold these stages; the existing raw eight-byte view remains
+available. The receiving scene objects are embedded in the attack work, three
+260-byte slots per enemy starting at offset 9004, with a 780-byte enemy stride.
+A stage change positions the selected slot, sets its depth relative to the
+enemy, starts its animation and reloads the resulting model pointer before
+writing its scales. Fire uses 128/153; Ice uses 256/256.
+
+The original palette-check routes did not execute this helper. The ordinary
+secondary throws reach it: for combined formations 4/5, use X/Y rather than
+A/B once a level-two projectile is ready. Private
+`build/runtime/eur_high_flower_stage/evidence_fire83_v1.json` and
+`evidence_ice83_v1.json` each record 58 calls, three stage changes and 55 unchanged
+returns, using 58 automatic button presses and no RAM edits. Fire runs 2790
+frames and retains the successful discovery route's captures; Ice runs 2830
+frames on its new input sequence. Both final captures show battle command
+selection. The earlier zero-call discovery reports remain separate.
+
+The oracle independently checks thresholds, ordered arguments and stores,
+position-helper outputs, depth and scale values, and preserved registers.
+Checks cover the complete 13724-byte attack work, enemy actor and scene object,
+touched primary models and roots. Movement and animation helper writes remain
+bounded observations within the receiving object/model; they do not establish
+allocation lifetimes, list neighbors or graphics correctness. The inherited
+palette oracle remains active. All 104 original saves are unchanged.
+
+`isolated_v1.json` adds 350 ARM946 cases across all six enemy slots, both
+variants, unchanged and skipped stages, exact thresholds, 65535 hit counts and
+the position helper's special resource cases. Lookup and position calculation
+execute natively; movement applies fixture coordinate deltas, while an animation
+stub replaces the model pointer to test the caller's reload. The checks predict
+all main-RAM changes, including 16-bit coordinate/depth wrapping, and preserve
+DTCM outside a bounded 64-byte stack region. These fixtures add no live gameplay,
+model lifetime, animation or rendering coverage.

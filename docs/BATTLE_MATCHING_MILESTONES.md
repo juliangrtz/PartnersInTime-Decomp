@@ -9426,3 +9426,16 @@ ARM946 cases cover flags, copy direction and frame boundaries. Preparation/draw
 are bounded observations live and explicit no-op stubs in isolated checks.
 All 104 original saves remain unchanged. Matching C/C++: 834476/1563700 (53.3655%).
 Private evidence: high_effort_50_to_55/flower_fade_validation.json.
+
+
+## Bro Flower enemy effect stages
+
+Reconstructed the 744-byte stage updater: thresholds1/6/12, embedded effect
+placement, depth, animation handoff and model-scale writes. Both natural
+secondary-throw routes check58calls each, allthree changes and55unchanged
+returns.350isolatedARM946 cases cover sixslots, bothvariants, thresholds,
+coordinate wrapping and modelreplacement, with explicit motion/animation stubs.
+Fullgatepasses: goldenEUR ROM, zero native differences,107tests.
+All104originalsaves preserved; no additional lifetime or rendering claim.
+Matching C/C++:835220/1563700 (53.4131%).
+Private evidence:high_effort_50_to_55/flower_stage_validation.json.

@@ -19,7 +19,10 @@ struct Overlay14Work {
     Overlay14AttackObjectState attack;
     int timer, delay;
     Overlay14Participant *active, *next;
-    u8 unknown_2324[8];
+    union {
+        u8 unknown_2324[8];
+        struct { u8 enemy_effect_stage[6], unknown_232a[2]; };
+    };
     BattleSceneObject effects[6][3];
     s16 bounds[6][2];
     u8 variant, enemy_trait[6], unknown_3593[6], rating, feedback, unknown_359b;
@@ -72,6 +75,7 @@ void Overlay14Participant_EndFade(Overlay14Participant *participant);
 void Overlay14Participant_StartFade(Overlay14Participant *participant);
 void Overlay14Attack_ReleaseEnemyEffects();
 void Overlay14Attack_InitializeEnemyEffects(int resource);
+void Overlay14Attack_UpdateEnemyEffectStage(u16 actor_id);
 void func_ov014_020c348c(s16 *position, BattleSceneObject *object, int location);
 void Overlay14Attack_ScheduleNextParticipant(Overlay14Participant *participant);
 int Overlay14Attack_PickTarget(int filter);
