@@ -49,7 +49,13 @@ typedef struct Overlay16Participant {
     int component;
     s16 timer2;
     u8 phase : 5, variant : 2, unknown_flag7 : 1;
-    u8 unknown23;
+    union {
+        u8 unknown23;
+        struct {
+            u8 effect_started : 1, pending_effect : 1, pending_animate : 1;
+            u8 unknown_flags23 : 5;
+        };
+    };
 } Overlay16Participant;
 
 typedef struct Overlay16LinkedObject {
@@ -99,6 +105,7 @@ void Overlay16Participant_EmitTrail(Overlay16Participant *participant);
 void Overlay16Particle_UpdateGrow(BattleAITask *task);
 void Overlay16Participant_PositionEffect(Overlay16Participant *participant);
 void Overlay16Participant_ChangeEffectKind(Overlay16Participant *participant, int kind);
+void Overlay16Participant_PrepareEffect(Overlay16Participant *participant, int kind, int animate);
 
 void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 void func_ov002_02071938(BattleSceneObject *, BattleSceneObject *, int);
@@ -118,7 +125,7 @@ void Overlay16PairEffect_SetAnimation(Overlay16PairEffect *effect, int animation
 void Overlay16PairEffect_BeginFinish(Overlay16PairEffect *effect);
 int Overlay16PairEffect_FindFree(void);
 int Overlay16PairEffect_AreAllIdle(Overlay16PairEffect *effect, int count);
-void Overlay16PairEffect_BeginKind(Overlay16PairEffect *effect, u8 kind);
+void Overlay16PairEffect_BeginKind(Overlay16PairEffect *effect, int kind);
 void Overlay16PairController_Initialize(Overlay16PairController *controller, int x, int y);
 void Overlay16PairController_Hide(Overlay16PairController *controller);
 void Overlay16Participant_Initialize(Overlay16Participant *participant, BattleSceneObject *object,

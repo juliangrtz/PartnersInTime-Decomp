@@ -9102,3 +9102,19 @@ renderers tracked. Passing mix83_v3 preserves the two failed oracle versions.
 real getters/scale and an explicit final-effect stub. All 104 saves unchanged.
 See the reconstruction reference for exact coverage and limitations.
 Matching C/C++: 818160 / 1563700 (52.3221%); trial target 860044, remaining 41884.
+
+
+## Mix Flower effect reservation (2026-09-20)
+
+Reconstructed Overlay16Participant_PrepareEffect at ov016 0x020C575C, 440 bytes.
+Named the packed retry/first-use flags and corrected BeginKind's integer ABI;
+its native byte store performs the narrowing. The new unit, all ten control-unit
+functions and the existing effect-kind unit match from actual compiled objects.
+Full gate passes: golden EUR ROM, zero native differences and 107 tests.
+Live mix83_v1: 4515 calls, all 32 free-slot indices, 3729 pool-full retries,
+782 already-started returns and four new visual pairs. No RAM edits; 104 saves
+unchanged. Complete input and six capture hashes equal the preceding route.
+92 isolated ARM946 cases execute real search/initializers without stubs; see
+reconstruction notes for scope, bounded sprite-scan observations and limits.
+The neighboring 384-byte launch remains private and nonmatching, not counted.
+Matching C/C++: 818600 / 1563700 (52.3502%); trial target 860044, remaining 41444.

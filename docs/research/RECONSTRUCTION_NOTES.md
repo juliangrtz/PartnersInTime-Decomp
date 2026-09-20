@@ -763,6 +763,40 @@ forwarding only. All main RAM, DTCM, ordered writes and SP/r4-r11 are checked;
 the lower 128-byte helper-stack area is observational (64 bytes used).
 These cases add no live gameplay, allocator or renderer coverage.
 
+#### Mix Flower effect reservation and first-use visuals
+
+[`Overlay16Participant_PrepareEffect`](../../src/attack_mix_flower_ov016/participant_effect_prepare.cpp)
+at `0x020C575C` uses the first idle record in the 32-slot paired-effect array.
+If none is available, participant byte `+23` keeps a retry flag in bit 1 and
+the low bit of the requested animation flag in bit 2. Bit 0 prevents duplicate
+first-use sprite/model effects. Kind `-1` chooses kind 2 for the active
+participant and kind 1 otherwise. `Overlay16PairEffect_BeginKind` accepts a
+full-width integer; truncation occurs at the stored kind byte, not at its call.
+
+The private `build/runtime/eur_high_mix_prepare/evidence_mix83_v1.json` passes
+the same 4,270-frame route with 4,515 complete calls: 3,729 full-pool retries,
+782 already-started returns and four first-use visual pairs. All 32 free-slot
+indices occur. The 4,399 searches, 120 animated changes, 666 direct initializations
+and four calls each to sprite/model/sound helpers have checked argument order.
+Full battle/common/attack records, participant flags and owner stores are checked.
+Animated changes reuse the preceding caller oracle. Sprite pool links and the
+track's pre-scan initialization are predicted; scan results are observations
+within the 48-byte track and the manager's first 20 bytes. Model pool links,
+the complete initialized 56-byte record, parent and owner are predicted.
+Audio internals and later effect release remain outside these independent checks.
+There are no RAM edits, all 104 source saves are unchanged, and all six captures
+and the complete input sequence equal the preceding verified route. The final
+battle command menu was also viewed.
+
+`build/analysis/high_effort_50_to_55/mix_prepare_isolated_v1.json` adds 92 ARM946
+cases with synthetic pool phases, flags and arguments in copied RAM. They cover
+full-pool flag preservation, first/last free slots, reuse, both default kinds and
+full-width signed kinds narrowed at the store. The real search, kind initializer
+and paired-effect initializer execute without helper stubs. Existing first-use
+flags suppress spawning in these cases. Full main RAM, DTCM, ordered writes and
+SP/r4-r11 are checked; the lower 128-byte stack bound is observational (64 used).
+These cases supplement the live route without extending its gameplay coverage.
+
 #### Four-model table updates
 
 `BattleModelAnimation_SetModels` at `0x0206C1E4` adds 92 matching C bytes to the

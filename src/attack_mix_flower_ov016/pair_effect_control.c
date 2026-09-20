@@ -119,7 +119,7 @@ int Overlay16PairEffect_AreAllIdle(Overlay16PairEffect *effect, int count)
     return 1;
 }
 
-void Overlay16PairEffect_BeginKind(Overlay16PairEffect *effect, u8 kind)
+void Overlay16PairEffect_BeginKind(Overlay16PairEffect *effect, int kind)
 {
     Overlay16PairEffect_Initialize(effect, 0, 0);
     effect->control.bits.kind = kind;

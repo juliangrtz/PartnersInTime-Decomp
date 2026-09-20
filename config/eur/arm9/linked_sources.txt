@@ -942,3 +942,4 @@ src/battle/battle_shared_model_resource.cpp
 
 src/save_menu_ov008/save_scene_resources.c
 src/attack_mix_flower_ov016/participant_effect_kind.cpp
+src/attack_mix_flower_ov016/participant_effect_prepare.cpp
