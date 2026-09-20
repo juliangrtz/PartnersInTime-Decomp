@@ -374,10 +374,10 @@ static inline void BattleVm_StorePackedObjectViewPosition(
     BattleVm_StoreObjectViewPosition((BattlePosition *)position, object);
 }
 
-static inline void BattleVm_RefreshModelAnimation(BattleModel *model) {
-    int animation_id = model->unknown_a4();
+static inline void BattleVm_RefreshModelPalette(BattleModel *model) {
+    const void *palette = model->get_palette_source();
 
-    model->unknown_a0(animation_id);
+    model->set_palette(palette);
 }
 
 static inline void BattleVm_SetActiveModelAnimation(BattleModel *model,
@@ -1017,7 +1017,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
             (u16)command->arguments[0], (u16)command->arguments[1]);
         if (model->animation_controller != 0 &&
             (u16)command->arguments[1] == 0xFFFF) {
-            BattleVm_RefreshModelAnimation(model);
+            BattleVm_RefreshModelPalette(model);
         }
         return SCRIPT_VM_CONTINUE;
 
@@ -1032,7 +1032,7 @@ int BattleAI_DispatchOpcode(ScriptVm *vm, ScriptVmState *state,
         active_model->animation_layer_states[command->arguments[2]] =
             command->arguments[3];
         if (command->arguments[1] == -1) {
-            BattleVm_RefreshModelAnimation(active_model);
+            BattleVm_RefreshModelPalette(active_model);
         }
         return SCRIPT_VM_CONTINUE;
     }

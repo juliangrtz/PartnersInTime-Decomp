@@ -854,15 +854,15 @@ void BattleStatus_UpdatePartyAilmentVisual(BattleAITask *base_task) {
             ->configure_animation_layer(
                 payload->flags.bits.animation_layer, -1, 1);
 
-        model->unknown_a0(model->unknown_a4());
+        model->set_palette(model->get_palette_source());
         {
-            int observer_animation_state =
+            const void *observer_palette =
                 (*(BattleModel **)(gBattleContext +
                                    BATTLE_ANIMATION_OBSERVER_OFFSET))
-                    ->unknown_a4();
+                    ->get_palette_source();
             (*(BattleModel **)(gBattleContext +
                                BATTLE_ANIMATION_OBSERVER_OFFSET))
-                ->unknown_a0(observer_animation_state);
+                ->set_palette(observer_palette);
         }
 
         if (model->animation_id != BATTLE_STATUS_TRANSITION_ANIMATION) {

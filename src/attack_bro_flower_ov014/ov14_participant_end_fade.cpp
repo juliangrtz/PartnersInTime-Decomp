@@ -11,7 +11,7 @@ void Overlay14Participant_StartFade(Overlay14Participant *participant)
 {
     Overlay14Fade *fade = (Overlay14Fade *)((u8 *)participant + 28);
     participant->actor->actor.scene_object->render_override = (BattleSceneRenderOverride *)fade;
-    fade->render = func_ov014_020c2bb4;
+    fade->render = Overlay14Participant_RenderFade;
     ((Overlay14ParticipantFade *)participant)->frame = 0;
 }
 

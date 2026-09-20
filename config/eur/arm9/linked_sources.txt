@@ -966,3 +966,5 @@ src/title_ov006/title_model_resources_load.cpp
 src/battle/battle_subscreen_render.cpp
 src/attack_mix_flower_ov016/mix_flowers_initialize.cpp
 src/shop_ov009/shop_member_selection.cpp
+
+src/attack_bro_flower_ov014/participant_palette_fade.cpp

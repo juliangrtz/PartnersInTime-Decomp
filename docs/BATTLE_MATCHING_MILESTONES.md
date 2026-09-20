@@ -9411,3 +9411,18 @@ and the receiving task, retaining member eligibility and 5192 buying-marker
 checks. isolated_v1.json covers 48 ARM946 cases without stubs. Original 104 saves
 are unchanged; the copied-state route purchases equipment and returns to field.
 No additional lifetime or independent graphics coverage is claimed.
+
+
+## Bro Flower participant palette pulse
+
+Reconstructed the 368-byte render override, including the triangular pulse,
+overlap-safe palette copy and stop-at-zero behavior. Corrected the shared virtual
+palette methods and their Battle VM/status-visual users to pointer contracts.
+All 62 checked functions in 16 current source objects match; the full gate passes
+with the golden EUR ROM, zero native differences and 107 tests.
+Fire and Ice live routes check 640 pulse calls, four stops and 644 skipped passes;
+all route captures and final graphics match prior replays. Another 162 isolated
+ARM946 cases cover flags, copy direction and frame boundaries. Preparation/draw
+are bounded observations live and explicit no-op stubs in isolated checks.
+All 104 original saves remain unchanged. Matching C/C++: 834476/1563700 (53.3655%).
+Private evidence: high_effort_50_to_55/flower_fade_validation.json.

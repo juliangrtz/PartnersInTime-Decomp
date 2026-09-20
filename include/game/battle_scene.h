@@ -168,9 +168,10 @@ struct BattleModelVTable {
                                      int animation_id, int enabled);
     u8 unknown_08c[4];
     int (*test_relation)(BattleModel *model, BattleModel *other);
-    u8 unknown_094[0x0C];
-    void (*unknown_0a0)(BattleModel *model, int value);
-    int (*unknown_0a4)(BattleModel *model);
+    u8 unknown_094[8];
+    void *(*get_palette_buffer)(BattleModel *model);
+    void (*set_palette)(BattleModel *model, const void *source);
+    const void *(*get_palette_source)(BattleModel *model);
     u8 unknown_0a8[0x20];
     struct BattleSpriteTransform *(*get_sprite_transform)(BattleModel *model);
 };
@@ -218,9 +219,9 @@ struct BattleModel {
     virtual int test_relation(BattleModel *other);
     virtual void unknown_94();
     virtual void unknown_98();
-    virtual void unknown_9c();
-    virtual void unknown_a0(int value);
-    virtual int unknown_a4();
+    virtual void *get_palette_buffer();
+    virtual void set_palette(const void *source);
+    virtual const void *get_palette_source();
     virtual void unknown_a8();
     virtual void unknown_ac();
     virtual void restore_resources(const void *descriptor);

@@ -7785,3 +7785,46 @@ duplicate entries and aliased output pointers. They check ordered writes and
 all RAM outside the 16-byte native stack frame, without helper stubs. The live
 route buys equipment only in copied emulator state; original saves are unchanged.
 These checks do not establish every gameplay route or independent rendering.
+
+
+## Bro Flower participant palette pulse
+
+[`participant_palette_fade.cpp`](../../src/attack_bro_flower_ov014/participant_palette_fade.cpp)
+implements the render override installed by `Overlay14Participant_StartFade`.
+It skips nonzero render passes, prepares the primary model and obtains its
+512-byte palette buffer. Unless both dirty and buffered flags are set, it copies
+the source palette using the original overlap-safe direction. The effect adds
+RGB555 color with saturation; the interpolation amount is
+`floor(min(frame, 16-frame) * 31 / 13)`. Frame advances through 0..15. A stop
+request removes the override only at frame zero, and that call still submits
+the model for drawing. The fade record is embedded at participant `+28`, rather
+than separately allocated.
+
+The observed model vtable at `0x02050BB0` maps offsets `0x9C`, `0xA0`, `0xA4`
+to the already linked palette-buffer, palette-set and palette-source wrappers.
+The shared C/C++ interfaces now use their pointer contracts and names. Existing
+Battle VM and status-visual callers refresh palettes, not animation IDs; their
+recompiled code remains exact. The callback and current Flower units, those two
+callers and resident palette wrappers total 62 checked functions in 16 actual
+source objects. Obsolete object files from earlier source organization are not
+part of that set; select objects through the current linked manifest.
+
+Private `build/runtime/eur_high_flower_fade/evidence_fire83_v1.json` checks
+384 pulse calls, two stop calls and 386 skipped passes over 2790 frames.
+`evidence_ice83_v1.json` checks 256 pulse calls, two stops and 258 skipped passes
+over 2830 frames, using the previous 41 automatic button presses. Both routes
+preserve their prior input sequences, screenshots and final display-memory
+hashes and return visibly to battle command selection. No RAM fixtures are
+used; all 104 original saves remain unchanged.
+
+The oracle independently checks call arguments, palette queries and copies,
+all 256 resulting colors, the effect template, frame/stop stores and preserved
+registers. It checks the full attack work, actors, scene object, primary model,
+palette and touched roots. Model preparation/drawing writes are accepted only
+within the 440-byte model record; other renderer state and hardware
+rasterization are not independently proved. `isolated_v1.json` adds 162 ARM946
+cases for both variants, frames 0/1/8/9/15, stop requests, all dirty/buffered flag
+combinations, both copy directions and nonzero passes. Palette operations run
+natively; preparation and drawing are no-op stubs. The isolated checks predict
+all main-RAM changes and preserve DTCM outside a bounded 512-byte stack region.
+They add no gameplay, allocation-lifetime or upload coverage.
