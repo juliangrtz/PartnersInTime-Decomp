@@ -9456,3 +9456,21 @@ Child animation/status writes remain bounded observations in the live probe;
 this does not add independent lifetime, graphics-list or renderer coverage.
 All 104 original saves are unchanged. Matching C/C++: 835796/1563700 (53.4499%).
 Private evidence: high_effort_50_to_55/flower_impact_validation.json.
+
+
+## Bro Flower final damage and feedback
+
+Reconstructed the 892-byte enemy finish routine: stop the three stage animations,
+check hit/target eligibility, commit projected damage, spawn the accumulated
+effects and update the attack feedback and rating. The full gate passes with
+the golden EUR ROM, zero native differences and 107 tests.
+Both automatic routes reach the finish at stage 3. Fire commits 232 damage
+(1000 to 768 HP); Ice commits 204 (1000 to 796). Inputs, captures and final
+display memory match the previous impact replays. The feedback effect's owner
+slot and identifier are checked explicitly. Another 452 isolated ARM946 cases
+cover all six slots, stages, early returns, trait/bonus priority, damage bounds
+and ratings, with explicit animation, damage and effect stubs.
+Live child animation/effect changes remain bounded observations; no additional
+allocation lifetime or independent rendering coverage is claimed. All 104
+original saves are unchanged. Matching C/C++: 836688/1563700 (53.5069%).
+Private evidence: high_effort_50_to_55/flower_finish_validation.json.

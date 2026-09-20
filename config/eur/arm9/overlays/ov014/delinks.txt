@@ -47,3 +47,6 @@ src/attack_bro_flower_ov014/enemy_effect_stage.cpp:
 
 src/attack_bro_flower_ov014/projectile_impact.cpp:
     .text start:0x020c3aa4 end:0x020c3ce4
+
+src/attack_bro_flower_ov014/enemy_finish.cpp:
+    .text start:0x020c2d24 end:0x020c30a0

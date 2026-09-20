@@ -115,7 +115,7 @@ void Overlay14Attack_UpdateSequence(Overlay10ActionActor *user)
                 BattleActor_GetById((u16)(i + 60));
                 BattleSceneObject_GetById((u16)(i + 60));
                 if (Overlay10Enemy_IsSelectable((u16)(i + 60)))
-                    func_ov014_020c2d24((u16)(i + 60), 1);
+                    Overlay14Attack_FinishEnemy((u16)(i + 60), 1);
             }
             BattleSound_Play(data_ov014_020c6158[work->variant][work->rating], 0, 0, 0);
             switch (work->feedback) {
