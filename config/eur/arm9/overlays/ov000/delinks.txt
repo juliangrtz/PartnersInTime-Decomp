@@ -458,3 +458,9 @@ src/field/field_follower_bind.cpp:
 
 src/field/field_follower_distance_scale.cpp:
     .text start:0x020bb1a0 end:0x020bb2dc
+
+src/field/field_party_locomotion.cpp:
+    .text start:0x020bae58 end:0x020bb1a0
+
+src/field/field_party_direction_speed.cpp:
+    .text start:0x020bb484 end:0x020bb56c

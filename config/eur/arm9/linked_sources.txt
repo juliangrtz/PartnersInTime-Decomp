@@ -913,3 +913,7 @@ src/field/field_party_follower_height.cpp
 
 src/field/field_follower_bind.cpp
 src/field/field_follower_distance_scale.cpp
+
+src/field/field_party_locomotion.cpp
+
+src/field/field_party_direction_speed.cpp

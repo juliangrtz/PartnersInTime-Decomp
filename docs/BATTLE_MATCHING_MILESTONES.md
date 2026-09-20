@@ -8903,3 +8903,15 @@ signed arithmetic; the geometry sampler is explicitly stubbed there. Native
 geometry executes in the live route, with its outputs observed. The golden
 ROM, zero-difference native relink and 107 tests pass. All original saves are
 unchanged. See the follower-binding and slope-distance reference for limits.
+
+
+### Party locomotion and direction speed
+
+The category mapper, partner-state updater and directional-speed selector
+bring matching C/C++ to 813512 / 1563700 (52.0248%). An ordinary castle route
+checks 1104 outer updates and 552 speed calls, including 1656 nested mapper
+calls. Another 470 isolated ARM946 cases cover missing mode, height, surface
+and alias branches. Only the slope multiplier is stubbed in the isolated
+cases; no geometry or graphics claim is made. The golden ROM, zero-difference
+native relink and 107 tests pass. Original saves remain unchanged. See the
+party-locomotion reference for detailed coverage.

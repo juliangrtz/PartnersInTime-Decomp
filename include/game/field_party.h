@@ -201,6 +201,9 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldPartyEntity_MapLocomotionState(FieldPartyEntity *member);
+void FieldPartyEntity_UpdateLocomotionState(FieldPartyEntity *member);
+fx32 FieldPartyEntity_GetDirectionVector(FieldPartyEntity *member, int direction, fx32 *x, fx32 *y);
 void FieldParty_ResetDefaultActions(FieldPartyController *party);
 void FieldParty_UpdateFollowerHeightGate(FieldPartyController *party);
 void FieldParty_BindFollowerState(FieldPartyEntity *member, void *state, FieldPartyEntity *target);

@@ -6438,3 +6438,49 @@ these cases, with all six arguments and output pointers checked. Actual
 compiled matching callers execute; full records, native write bounds,
 SP/r4-r11, DTCM and unused stack are checked. Maximum stack use is 48 bytes.
 These fixtures do not validate the geometry implementation or graphics.
+
+
+## Party locomotion and direction speed
+
+Overlay 0's `FieldPartyEntity_MapLocomotionState` (`0x020BAE58`, 620 bytes)
+selects a category from the locomotion-state table, applies field flag 7's
+category-1 suppression, then handles categories 0/1 according to subtype and
+movement mode. Mode 8 can read the member's and linked member's state-record
+bits 20..21; it short-circuits when the first record has value 2.
+
+`FieldPartyEntity_UpdateLocomotionState` (`0x020BB0C4`, 220 bytes) requires
+property flag 0. States 0..3 use the native 3D updater except for nonzero
+subtype in mode 6. In mode 6, subtype 0 also copies the resulting state to a
+partner whose state is at most 3. States 57/70 advance by one when current Z
+is strictly below previous Z. The final virtual category mapper still runs;
+the 3D update path invokes it twice in total.
+
+`FieldPartyEntity_GetDirectionVector` (`0x020BB484`, 232 bytes) starts with
+movement speed, then optionally uses the airborne speed or the native slope
+multiplier. The slope check requires a type-0 ground surface and at least one
+of its three vertex heights strictly above the member. The Q12 product rounds
+before narrowing. The selected scalar is cached at member +304, exposed as
+`party_direction_speed` alongside the existing shared velocity view. Ground
+surface +1292 likewise retains its old raw alias. The native vector helper
+writes X/Y and returns Y; idle direction -1 produces zeros.
+
+Private `build/runtime/eur_high_party_locomotion/live43_v1.json` records an
+ordinary 276-frame keypad route in the loaded room-150 castle state. All 1104
+outer updates and 552 speed calls pass independent full-record, argument,
+output and register checks. The updates contain 552 native 3D updates and
+1656 mapper calls; those nested calls are not counted again as outer calls.
+Partner-state copying and paired-subtype skipping each occur 552 times.
+Speed directions are -1 (412 calls) and 0/2/4/6 (35 each). Native slope and
+airborne replacement branches are not reached on this route. The final castle
+capture was inspected and all 104 original saves remain unchanged.
+
+`build/analysis/high_effort_50_to_55/party_locomotion_isolated_v1.json` adds 470
+ARM946 cases on copied live RAM/DTCM: 198 mapper, 107 updater and 165 speed
+cases. These cover modes/subtypes, category suppression and linked records,
+partner copying and disabled/special states, signed height boundaries,
+airborne selection, surface types and strict vertex-height tests, Q12 rounding,
+directions and aliased output pointers. The actual compiled functions and
+native 3D/vector helpers execute. Only the slope multiplier is explicitly
+stubbed, with arguments checked and prescribed Q12 results. Whole records,
+all native writes, SP/r4-r11, DTCM and unused stack are checked; maximum stack
+use is 32 bytes. This does not verify slope geometry or graphics.

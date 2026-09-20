@@ -629,7 +629,9 @@ struct FieldRuntimeEntity {
     u8 unknown_112[2];
     fx32 interaction_min_x, interaction_max_x, interaction_min_y, interaction_max_y;
     fx32 interaction_vertical_extent;
-    fx32 movement_speed, movement_velocity_x, movement_velocity_y, unknown_134;
+    fx32 movement_speed, movement_velocity_x;
+    union { fx32 movement_velocity_y; fx32 party_direction_speed; };
+    fx32 unknown_134;
     FieldLocomotionParameters locomotion, initial_locomotion;
     fx32 frame_delta_x, frame_delta_y;
     fx32 previous_frame_delta_x, previous_frame_delta_y;
@@ -797,7 +799,8 @@ struct FieldRuntimeEntity {
     FieldEntityMotionState unknown_3ec;
     void *unknown_4f0, *unknown_4f4;
     FieldRuntimeEntity *support_entity, *previous_support_entity;
-    void *unknown_500, *unknown_504, *unknown_508, *unknown_50c;
+    void *unknown_500, *unknown_504, *unknown_508;
+    union { void *unknown_50c; const FieldNavigationSurface *ground_surface; };
     FieldRenderObject *auxiliary_render_object;
     const struct FieldPrimaryResource *auxiliary_primary_resource;
     const struct FieldSecondaryResource *auxiliary_secondary_resource;
