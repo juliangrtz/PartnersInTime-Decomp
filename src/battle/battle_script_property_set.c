@@ -84,7 +84,6 @@ void func_ov002_020bc73c(BattleSceneObject *object, int value);
 void func_ov002_020baf90(BattleSceneObject *object, int value);
 void func_ov002_020baf64(BattleSceneObject *object, int value);
 void func_ov002_020baf38(BattleSceneObject *object, int value);
-void func_ov002_020bae7c(BattleSceneObject *object, int value);
 void func_ov002_020ba0d8(BattleSceneObject *object, int value);
 void func_ov002_020b8128(u16 value);
 void func_ov002_020b815c(BattleSceneObject *object);
@@ -453,7 +452,7 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
         func_ov002_020baf38(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_80:
-        func_ov002_020bae7c(BattleSceneObject_GetById(actor_id), value);
+        BattleFlexibleLink_Reverse(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_81:
         BattleFlexibleLink_Reset(BattleSceneObject_GetById(actor_id), value);

@@ -9532,3 +9532,22 @@ stubs. Full main RAM and DTCM outside the executed stack are checked. This
 does not add allocation-lifetime or independent graphics coverage. All 104
 original saves remain unchanged. Matching C/C++: 837384/1563700 (53.5514%).
 Private evidence: high_effort_50_to_55/link_average_validation.json.
+
+
+## Flexible-link reversal and actor switching
+
+Reconstructed the 156-byte reverse helper in C, extending the contiguous reset
+unit. It clears horizontal segment velocities, negates the supplied velocity
+and selects the other adult only when that actor passes the native eligibility
+check. The full compiled unit and property-dispatch caller match. Full build
+verification passes: golden EUR ROM, zero native differences and 107 tests.
+Seventy-two isolated ARM946 cases use copied live Petey RAM with synthetic
+counts -1/0/1/16, previous actors 0/56/57, selected-adult HP 0/1 and velocities
+-256/0/256. The complete native lookup and eligibility helpers execute without
+stubs or modeled hardware; expected stores, helper ABIs/results, full main RAM,
+DTCM outside the executed stack and callee-saved registers pass.
+The ordinary 6720-frame Petey replay reached the flexible-link factory once
+but did not invoke this reverse helper; its required-target assertion failed
+and that report is retained. Live counterattack coverage remains unverified.
+All 104 original saves are unchanged. Matching C/C++: 837540/1563700 (53.5614%).
+Private evidence: high_effort_50_to_55/flexible_reverse_validation.json.
