@@ -8664,3 +8664,13 @@ without assembly. Actual objects, full ROM/native relink and 107 tests pass.
 Ordinary routes check 2,256 new callback calls; 348 isolated cases cover further
 boundaries. All 30 screenshots match previous routes and 104 saves are unchanged.
 See [evidence and limits](research/RECONSTRUCTION_NOTES.md#pause-item-heading-and-scroll-arrow-updates).
+
+
+## Pause status numbers
+
+The saved-stat callback adds 300 matching C++ bytes, reaching 799,168 / 1,563,700
+(51.1075%). First draft exact, no assembly. Full ROM/native checks and 107 tests
+pass. Ordinary member switching checks 5,364 callbacks and their numeric helper;
+176 isolated cases check packed fields and default selectors. All 25 captures
+match the prior route; 104 original saves are unchanged.
+See [evidence and limits](research/RECONSTRUCTION_NOTES.md#pause-status-numbers).

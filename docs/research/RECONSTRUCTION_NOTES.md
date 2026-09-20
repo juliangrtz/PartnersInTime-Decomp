@@ -5526,3 +5526,41 @@ Private reports are `eur_high_pause_heading_arrows/clothing65_v1.json`,
 `items65_v1.json` and `isolated_v1.json`; producer hashes and captures are checked.
 The full ROM/native rebuild and 107 tests pass, all five functions in the two
 extended source units compare exactly, and all 104 source saves are unchanged.
+
+
+## Pause status numbers
+
+[pause_status_number.cpp](../../src/scene_menu_ov007/pause_status_number.cpp)
+reconstructs `PauseStatus_UpdateNumber` (`0x02078AC0`, 300 bytes). Its first C++
+draft matches using the shared `SavePartyMember` layout. The 72-byte task stores
+sprite index/member/stat as bytes at +40/+41/+42; digit count, cached value,
+divisor and Q12 coordinates occupy +44 through +60. The callback selects level,
+current/max HP, power, defense, speed, stache, experience or next-level threshold.
+Unknown stat IDs preserve the cached value. Level/experience share a word, and
+the threshold excludes its neighboring clothing byte. The sprite-pointer table
+at `0x02090900` indexes a contiguous 48-element array of 64-byte sprites; live
+checks validate each selected pointer against `WORK + 0x310` and its stride.
+
+An ordinary checkpoint-65 status route checks all four members and all nine
+stats: 5,364 callbacks across 1,340 frames. Each nested decimal-rendering call
+is independently checked too, including its ten arguments, 38,144 signed
+division results/remainders, 13,890 submitted digits and 5,182 suppressed leading
+digits. The oracle derives tile, palette, shape and coordinate writes plus draw
+pool/list insertion. It checks full tasks, the complete 3,072-byte sprite array,
+90,600-byte pause workspace, 4,428-byte party object, 1,380-byte save context
+and 176-byte display context at the watched boundaries. This establishes draw
+submission; it does not independently model rasterization or later task release.
+
+All 25 screenshots equal the prior status-switch route. The four member displays
+and visible field return were also inspected directly. Another 176 isolated
+copied-RAM cases test all members, the nine selectors plus defaults 9/255, distinct
+halfword values, maximum and high-bit 24-bit fields, neighboring packed bytes
+and preservation of the cached value. These execute the complete native callback
+with an explicit numeric-renderer ABI stub. All ten forwarded arguments, all
+main RAM, the 32-byte stack envelope, SP and callee-saved registers are checked.
+These synthetic values do not establish live renderer support for every value.
+
+Private evidence: `eur_high_pause_status_number/status65_v1.json` and
+`isolated_v1.json`, with producer/input/capture hashes validated. The actual
+compiled source object matches all 300 bytes, the full ROM and native relink
+remain exact, all 107 tests pass and all 104 original saves are unchanged.
