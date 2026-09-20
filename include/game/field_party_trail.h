@@ -30,6 +30,10 @@ void FieldPartyTrail_StartEmitter(struct FieldPartyController *party, struct Fie
                                   int resource, int animation_offset, int start, int count, u8 interval);
 void FieldPartyTrail_UpdateEmitter(struct FieldPartyController *party, struct FieldPartyEntity *owner,
                                    const FieldPartyTrailDirection *directions, s16 animation);
+/* A free auxiliary must exist when index is -1. delay is narrowed only for storage. */
+void FieldPartyTrail_StartSingleCopy(struct FieldPartyController *party, struct FieldPartyEntity *owner,
+    fx32 x, fx32 y, fx32 z, int resource, u8 relative, int animation_offset,
+    int index, int delay, int target, const FieldPartyTrailDirection *directions);
 void FieldPartyTrail_StopCopies(struct FieldPartyController *party, struct FieldPartyEntity *owner);
 void FieldPartyTrail_UpdateDelayedVisibility(struct FieldPartyController *party, struct FieldPartyEntity *owner);
 int FieldPartyTrail_HasActiveCopies(struct FieldPartyController *party, struct FieldPartyEntity *owner);

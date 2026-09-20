@@ -8936,3 +8936,13 @@ and four stop calls; 306 isolated ARM946 cases cover expiry, range boundaries
 and callback-mutated bounds with explicitly stubbed helpers. Runtime helper
 effects remain bounded observations. Golden ROM, native relink with zero
 differences and 107 tests pass. See the party-trail reference for coverage limits.
+
+
+### Single-copy party effects
+
+Matching C/C++ reaches 814976 / 1563700 (52.1184%). The new
+single-copy setup closes the gap between trail controls and the emitter code.
+One ordinary hammer call and 244 isolated ARM946 cases check its behavior;
+helper effects are bounded observations live and explicit stubs in fixtures.
+The full build reproduces the golden ROM, native relinking has zero differences,
+and 107 tests pass. See the single-copy reference for widths and coverage limits.

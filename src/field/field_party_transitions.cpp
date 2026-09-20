@@ -985,7 +985,7 @@ void FieldParty_BeginState34(FieldPartyController *party)
     }
     party->leader->entity.saved_presentation_flag_bits.behavior_mode = 1;
     party->leader->auxiliary->entity.base.unknown_30();
-    func_ov000_02091e58(party, party->leader, party->leader->entity.position_x,
+    FieldPartyTrail_StartSingleCopy(party, party->leader, party->leader->entity.position_x,
                         party->leader->entity.position_y, party->leader->entity.position_z, 62, 0, 8, 0,
                         data_ov000_020c0684[party->leader->entity.base_state_flag_bits.facing_direction] + 16,
                         -1, data_ov000_020c06ac);
@@ -1081,7 +1081,7 @@ void FieldParty_RestoreCollisionState(FieldPartyController *party, int check_con
         func_ov000_0208dbd4(party, party->areas[party->flags.field_screen]->entities,
                             party->areas[party->flags.field_screen]->entity_count);
     }
-    func_ov000_02091e58(party, party->leader, party->leader->entity.position_x,
+    FieldPartyTrail_StartSingleCopy(party, party->leader, party->leader->entity.position_x,
                         party->leader->entity.position_y, party->leader->entity.position_z, 62, 0, 9, 0, 2,
                         -1, data_ov000_020c068c);
     GameAudio_PlayEffectDelayed(228, 0, -1);

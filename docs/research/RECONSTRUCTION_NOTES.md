@@ -6569,3 +6569,43 @@ helpers are explicit stubs with checked arguments, prescribed bounded effects
 and caller-saved register clobbers. Full records, write bounds, stack restoration,
 r4-r11, DTCM and unused stack are checked. Maximum stack use is 24 bytes.
 These fixtures supplement the live routes without claiming live expiry coverage.
+
+
+## Single-copy party effects
+
+`FieldPartyTrail_StartSingleCopy` (overlay 0, `0x02091E58`, 560 bytes)
+selects an explicit auxiliary slot or the first non-null invisible slot. The
+caller must leave a usable slot when requesting automatic selection. It writes
+the emitter state, applies signed table offsets to Q12 coordinates, spawns the
+copy, sets its facing and animation, and attaches it to the owner or another
+auxiliary. Direction-relative mode uses an eight-byte record for each facing.
+The original table pointer is stored before selecting that record. Facing is
+read again after the spawn callback. The animation offset and delay are full
+integers: emitter storage truncates each to a byte, but the initial visibility
+choice tests the full delay and the animation addition uses the full offset.
+
+Private `build/runtime/eur_high_party_trail_single/hammer83_v2.json` checks one
+ordinary call in 231 gameplay frames: explicit slot 1, direction-relative mode,
+facing 6, no delay and target auxiliary 0. The final capture equals the inspected
+Star Hill hammer capture from the preceding trail-control check. Full party,
+owner, auxiliary records, selected renderers and table input are tracked;
+emitter fields, offset arithmetic, call arguments, target and final flags are
+independent expectations. Spawner effects are observational within the selected
+auxiliary and renderers; later helper observations are limited to its entity
+prefix and renderers. Heap/global-list effects and rasterization are outside
+this oracle. The first probe failed at frame 22 because it checked the caller's
+final stores at the helper return, before those stores executed; the corrected
+probe retains helper-boundary checks before modeling subsequent caller stores.
+No game-code change was needed. Failed v1 and successful v2 remain separate.
+
+`build/analysis/high_effort_50_to_55/party_trail_single_isolated_v1.json` adds
+244 ARM946 cases on copied RAM/DTCM with synthetic records: all six slots and
+eight directions, automatic selection past null/busy slots, relative-byte versus
+flag-bit semantics, owner/other/self targets, signed table and animation values,
+Q12 wrapping and full-word delays whose stored byte becomes zero. Callback
+fixtures also change owner facing to verify its reload. The actual 560-byte
+caller executes; spawning, facing and animation helpers are explicitly stubbed
+with argument checks, bounded prescribed effects and caller-saved register
+clobbers. Full records, write bounds, SP/r4-r11, DTCM, stack arguments and unused
+stack are checked; maximum stack use is 56 bytes. All 104 saves are unchanged.
+These fixtures do not prove helper implementation or live delayed-effect coverage.

@@ -473,4 +473,4 @@ src/field/field_party_follower_offset.cpp:
 
 
 src/field/field_party_trail_control.cpp:
-    .text start:0x02091d34 end:0x02091e58
+    .text start:0x02091d34 end:0x02092088
