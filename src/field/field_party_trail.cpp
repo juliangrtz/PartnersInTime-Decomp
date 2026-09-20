@@ -1,8 +1,8 @@
 /*
- * Party trail (overlay 0, 0x02092088-0x020923DC).
+ * Party trail (overlay 0, 0x02091D34-0x020923DC).
  *
- * The trail of copies a moving party member leaves, with the emitter that
- * spawns them and the test for whether any are still alive.
+ * Sets up individual copies and repeating trails, updates their visibility,
+ * and stops their renderers when the party action ends.
  */
 
 #include <game/field_party.h>
@@ -80,15 +80,6 @@ extern "C" void FieldPartyTrail_UpdateEmitter(FieldPartyController *party, Field
     }
 }
 
-/* Single party copies: setup, delayed visibility and cleanup.
- * Overlay 0, 0x02091D34-0x02092088.
- */
-
-#include <game/field_party.h>
-#include <game/field_auxiliary.h>
-#include <game/field_presentation.h>
-extern "C" void func_ov000_020929b8(FieldPartyController *, FieldPartyEntity *, fx32, fx32, fx32,
-                                    u8, int, int, s16, u8, u8, int);
 extern "C" void FieldPartyTrail_StartSingleCopy(FieldPartyController *party,
                                                 FieldPartyEntity *owner, fx32 x, fx32 y, fx32 z,
                                                 int resource, u8 relative, int animation_offset,
