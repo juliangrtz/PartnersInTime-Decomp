@@ -927,3 +927,5 @@ src/field/field_navigation_bounds.c
 src/field/field_body_overlap.c
 
 src/attack_copy_flower_ov017/ov17_participant_begin_exit_arc.cpp
+
+src/attack_copy_flower_ov017/ov17_target_selection.cpp

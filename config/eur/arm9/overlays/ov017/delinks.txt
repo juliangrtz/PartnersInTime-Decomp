@@ -41,3 +41,6 @@ src/attack_copy_flower_ov017/ov17_participant_hide.cpp:
 
 src/attack_copy_flower_ov017/ov17_participant_begin_exit_arc.cpp:
     .text start:0x020c52f4 end:0x020c5434
+
+src/attack_copy_flower_ov017/ov17_target_selection.cpp:
+    .text start:0x020c2b8c end:0x020c2c28

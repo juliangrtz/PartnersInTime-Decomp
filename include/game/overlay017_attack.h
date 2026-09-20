@@ -15,6 +15,7 @@ struct GameTexturePalette;
 extern "C" {
 #endif
 
+int Overlay17Attack_SelectNextTarget(u16 previous);
 u16 Overlay17Attack_LookupPairTuning(int value, int parameter_index);
 u16 Overlay17Attack_LookupGroupTuning(int value, int parameter_index);
 u16 Overlay17Attack_GetPairTuningParameter2(int value);

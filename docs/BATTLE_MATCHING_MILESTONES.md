@@ -8983,3 +8983,16 @@ caller cases use explicit helper stubs for conversion and callback boundaries.
 The full attack workspace is checked; live helper observations have bounded
 object/model ranges. See Copy Flower exit arc research notes and private
 copy83_v1 / copy_flower_leave_isolated_v1 reports. All 104 saves are unchanged.
+
+
+## Copy Flower target cycling
+
+Linked Overlay17Attack_SelectNextTarget with exact compiled matching. C/C++
+covers 815868 / 1563700 bytes (52.1755%). Full gate v2: golden ROM,
+zero native differences and 107 tests. Three controlled live calls use real
+enemy records and native helpers; 1153 isolated ARM946 cases check all six IDs,
+selectability combinations and trait passes without helper stubs. Native ID66
+behavior is preserved and tested only against a synthetic seventh record.
+Initial build v1 failed with a duplicate source basename; the new unit now has
+a unique ov17_target_selection basename. See target cycling research notes and
+controlled83_v2 / copy_flower_target_isolated_v1 reports. All 104 saves unchanged.

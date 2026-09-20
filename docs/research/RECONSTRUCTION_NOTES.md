@@ -6717,3 +6717,43 @@ are checked; native writes are limited to the phase halfword and scratch stack.
 Maximum stack use is 40 bytes. These fixtures verify the caller, not helper
 implementations or validity of every synthetic state in gameplay. All 104
 original saves retain their baseline hashes.
+
+
+## Copy Flower target cycling
+
+`Overlay17Attack_SelectNextTarget` (overlay 17, `0x020C2B8C`, 156 bytes)
+cycles enemy IDs, skips the previous target and first prefers selectable enemies
+without trait 1. A second pass allows that trait; exhaustion returns zero.
+The argument and cycle counter are unsigned 16-bit values. Incrementing the
+argument in place preserves the native input lifetime and avoids a premature
+conversion of a separate local candidate.
+
+The native skip has an edge case: after encountering previous ID 65, its extra
+increment produces ID 66 before the normal wrap check runs again. Preserve this
+behavior; it does not establish a seventh enemy slot in the normal game layout.
+
+Private `build/runtime/eur_high_copy_flower_target/controlled83_v2.json` checks
+three controlled calls at guarded Copy Flower exit-arc boundaries, with previous
+IDs 60, 61 and 62. Results are 0, 60 and 60. All selection and trait helpers run
+normally; an independent predicate model verifies their arguments, ordered calls
+and return values. The full 401,416-byte battle-context allocation and its root
+remain unchanged. Original registers and the decoded 16-byte entry push are
+restored before all three original exit-arc calls complete. The 1,810-frame route
+records A for eight frames plus 50 automatically timed input windows; the final
+capture shows the continuing Copy Flower attack. These are controlled selection
+calls, not ordinary target-change coverage. No game-record RAM fixture is used.
+Version 2 adds explicit input records and corrects the resumed-caller label;
+entry RAM/DTCM and final image hashes equal the preserved version 1.
+
+`build/analysis/high_effort_50_to_55/copy_flower_target_isolated_v1.json` adds
+1,153 ARM946 cases with the compiled selector and native lookup, selectability,
+status and trait helpers, without stubs. Synthetic records cover all six previous
+IDs, all 64 selectability masks and three trait masks, plus one explicit ID-66
+selection case. Rejections separately use zero/negative HP, missing resources
+and the exclusion flag; trait values 0, 1, 2 and 3 are distinguished. A deliberately
+allocated seventh record makes the native ID-66 read observable safely in copied
+RAM; 83 cases reach it and one returns it. This is not evidence for a valid seventh
+enemy in gameplay. Ordered helper calls/results, final results, whole context/root,
+SP/r4-r11, DTCM and unused stack are checked; native writes are permitted only to
+the scratch stack. Maximum stack use is 40 bytes. All 104 original saves retain
+their baseline hashes.
