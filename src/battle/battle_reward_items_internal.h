@@ -2,6 +2,18 @@
 #define PIT_BATTLE_REWARD_ITEMS_INTERNAL_H
 #include <game/battle_reward_items.h>
 #include <nitro.h>
+typedef struct BattleRewardCounter {
+    void *effect;
+    u16 item, count;
+    void *text;
+    s16 x, y;
+    u8 digits[4];
+    s16 delay;
+    struct { u8 flag0 : 1, flag1 : 1, flag2 : 1, rest : 5; } flags;
+    u8 row;
+} BattleRewardCounter;
+typedef char BattleRewardCounterSizeCheck[sizeof(BattleRewardCounter) == 24 ? 1 : -1];
+
 typedef struct BattleRewardItemEntry {
     u16 item, unknown_02;
     u8 counts[3], unknown_07;
@@ -23,6 +35,8 @@ typedef struct BattleRewardItemsWork {
 } BattleRewardItemsWork;
 typedef char BattleRewardItemsWorkSizeCheck[sizeof(BattleRewardItemsWork) == 1344 ? 1 : -1];
 typedef char BattleRewardItemEntrySizeCheck[sizeof(BattleRewardItemEntry) == 12 ? 1 : -1];
+void *BattleRewardItems_GetItemName(int item, int count);
+void BattleRewardCounter_Initialize(BattleRewardCounter *counter, int item, unsigned count, int y, int row);
 void BattleRewardItems_InitEntry(BattleRewardItemEntry *entries, int index, int item, int count, int category);
 int BattleRewardItems_FindEntry(BattleRewardItemEntry *entries, int count, int item, int category);
 

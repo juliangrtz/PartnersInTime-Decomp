@@ -8801,3 +8801,14 @@ C/C++ to 807116 / 1563700 (51.6158%). Full build, golden ROM, native relink and
 Full reward allocation, ordered isolated writes and ABI preservation are checked.
 This is controlled runtime coverage, not a natural victory route. All 104 original
 saves remain unchanged. See the reward-list reconstruction reference for details.
+
+
+### Battle reward item names and quantity labels
+
+Two exact C functions select singular/plural item names and initialize count
+labels, reaching 807612 / 1563700 matching bytes (51.6475%). Full build, golden
+ROM, native relink and 107 tests pass. A restored 90-frame victory fixture checks
+seven name lookups and five label initializations, with independent localized
+pointer and decimal-output checks. Another 400 isolated ARM946 cases execute
+the native helpers without stubs. All 104 saves are unchanged. Other languages
+and natural victory navigation remain outside this batch's runtime coverage.

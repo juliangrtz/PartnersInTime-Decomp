@@ -6031,3 +6031,42 @@ checked without helper stubs. The first isolated probe incorrectly allowed no
 stack frame for lookup; its preserved failure was corrected to the native frame.
 All 104 original saves are unchanged. Actual source objects match completely;
 the full build, golden ROM, zero-difference native relink and 107 tests pass.
+
+
+## Battle reward item names and quantity labels
+
+[battle_reward_item_text.c](../../src/battle/battle_reward_item_text.c) selects
+localized names at 0x0206C6E4-0x0206C848. Action items, usable items, badges and
+clothing use text tables 2, 6, 9 and 11. The name ID comes from item-record offset
+2; a signed count greater than one selects the following plural entry. The input
+item remains a full word; only its tag and low twelve index bits select a record.
+Invalid item tags are outside the native caller contract and dereference null.
+
+[battle_reward_counter_initialize.c](../../src/battle/battle_reward_counter_initialize.c)
+initializes a 24-byte count label at 0x0206CB7C-0x0206CC08. It caps the unsigned
+total at 99, keeps a halfword copy across name lookup and formatting, and stores
+the item, count, text pointer, coordinates, two-frame delay and row byte. Decimal
+text is space-padded to two characters and terminated with zero; the fourth
+buffer byte and effect pointer are preserved. Three separate flag-byte writes
+clear bits 0/1 and set bit 2 without clearing the remaining flags. An explicit
+zero-initialized plural flag and a retained halfword amount explain the original
+compiler differences. No assembly is used.
+
+Private `eur_high_reward_text/evidence_fixture55_v1.json` extends the guarded,
+restored victory fixture described above by one frame, through load phase 2.
+Over 90 frames it independently checks seven name lookups and five count-label
+initializations, plus the previous fifteen entry-helper calls. The checks cover
+all item classes and singular/plural names. Localized table offsets and returned
+string pointers are derived from the live save context and resource contents;
+decimal output, helper arguments, the entire 1344-byte reward allocation, SP and
+r4-r11 are checked. The restored battle capture equals the preceding fixture's
+capture and was visually inspected. Natural victory navigation is still untested.
+
+Another 400 isolated ARM946 cases use copied live RAM and native text/decimal
+helpers without stubs. They cover signed count extremes, high item-ID bits,
+singular/plural boundaries, counts 0/1/2/98/99/100/65536/0xFFFFFFFF, and coordinate
+and row truncation. Whole RAM/DTCM, ordered label writes, returns, callee-saved
+registers and scratch outside the maximum native call depth are checked. The
+current language's real tables are used; other language selections are untested.
+Full source-object comparisons, golden ROM, native relink, progress checks and
+107 tests pass. All 104 original saves are unchanged.

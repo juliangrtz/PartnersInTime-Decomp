@@ -520,3 +520,9 @@ src/battle/battle_oam_callbacks.c:
 
 src/battle/battle_reward_item_entries.c:
     .text start:0x0206de30 end:0x0206dfd0
+
+src/battle/battle_reward_item_text.c:
+    .text start:0x0206c6e4 end:0x0206c848
+
+src/battle/battle_reward_counter_initialize.c:
+    .text start:0x0206cb7c end:0x0206cc08
