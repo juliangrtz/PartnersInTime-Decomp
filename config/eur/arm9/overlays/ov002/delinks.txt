@@ -547,3 +547,6 @@ src/battle/battle_subscreen_render.cpp:
 
 src/battle/battle_level_up_border.cpp:
     .text start:0x02095e00 end:0x02095f6c
+
+src/battle/battle_capture_transform.c:
+    .text start:0x020b03b8 end:0x020b0484

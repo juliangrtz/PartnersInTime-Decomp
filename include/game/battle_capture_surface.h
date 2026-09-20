@@ -17,6 +17,9 @@ typedef char BattleCaptureCopyTask_SizeCheck[sizeof(BattleCaptureCopyTask) == 16
 #ifdef __cplusplus
 extern "C" {
 #endif
+typedef struct BattleCaptureTransform BattleCaptureTransform;
+/* Null pointers select the battle context buffers. Coordinates are stored as s16. */
+void BattleCaptureTransform_Initialize(BattleCaptureTransform *state, void *buffer, int x, int y);
 int BattleCaptureSurface_CopyTask(BattleCaptureCopyTask *task);
 #ifdef __cplusplus
 }

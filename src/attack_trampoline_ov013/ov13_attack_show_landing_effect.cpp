@@ -43,7 +43,7 @@ void Overlay13Attack_Initialize(Overlay10ActionActor *user)
         BattleSceneObject_GetById(user->party.linked_object_id)->resource->object_data_id;
     if (Overlay10Party_HasBadgeTwo())
         Overlay13Attack_AdvanceMotionTuning();
-    func_ov002_020b03b8(0, 0, 48, 80);
+    BattleCaptureTransform_Initialize(0, 0, 48, 80);
     Overlay10Attack_BeginEntry(user, func_ov013_020c5210);
     work->common.background_x = 48;
     work->common.background_y = 0;

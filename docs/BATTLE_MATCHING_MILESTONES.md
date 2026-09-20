@@ -9575,3 +9575,27 @@ failed because the harness switched CPU register banks after setting SP; the
 corrected run passes. There is no new allocation-lifetime or graphics oracle.
 All 104 original saves remain unchanged. Matching C/C++: 837764/1563700 (53.5757%).
 Private evidence: high_effort_50_to_55/chain_rig_active_validation.json.
+
+
+## Capture-transform initialization
+
+Reconstructed the capture initializer used by the Trampoline attack. It queues
+the surface upload, chooses default context storage for null pointers, stores
+the origin and enabled flag, initializes two matrices and clears the work buffer.
+One explained inline-ASM addition preserves the native two-step buffer address;
+the C-only expression combines its offsets and emits one fewer instruction.
+The complete 204-byte compiled function and affected linked objects match.
+Full build verification passes with the golden EUR ROM, zero native differences
+and 107 tests. The 850-frame Trampoline menu route reaches the initializer once
+with ordinary inputs and no new RAM edits. Its four helper calls, 140-byte state
+prefix, 3496-byte buffer, context root/header and preserved registers are checked.
+The identity-matrix and clear effects are derived independently; upload internals
+and other context/graphics state are outside this oracle. The final capture
+visibly shows the Trampoline attack, without claiming a completed attack route.
+Thirty-two isolated ARM946 cases cover each null/explicit pointer combination
+and eight signed coordinate pairs, including narrowing boundaries. Native matrix
+and fill helpers execute; the upload helper is a guarded no-write stub. Full
+main RAM and DTCM outside the actual stack match expected output. No additional
+allocation-lifetime, upload-scheduling or graphics coverage is claimed. All 104
+original saves remain unchanged. Matching C/C++: 837968/1563700 (53.5888%).
+Private evidence: high_effort_50_to_55/capture_transform_validation.json.

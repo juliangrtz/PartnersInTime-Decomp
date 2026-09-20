@@ -973,3 +973,4 @@ src/attack_bro_flower_ov014/projectile_impact.cpp
 src/attack_bro_flower_ov014/enemy_finish.cpp
 src/battle/battle_level_up_border.cpp
 src/attack_pocket_chomp_ov018/chomp_bounce_parameters.cpp
+src/battle/battle_capture_transform.c
