@@ -56,7 +56,7 @@ extern void Overlay10Party_AverageStats(void *, int);
 extern int func_ov018_020c2c14(int, BattleSceneObject *);
 extern void func_ov018_020c4c70(PocketChompSupport *, PocketChomp *);
 extern void func_ov018_020c3ea8(PocketChomp *);
-extern void func_ov018_020c40b8(PocketChomp *, int, int, int);
+extern void PocketChomp_ConfigureBounce(PocketChomp *, int, int, int);
 extern int func_ov002_02072004(BattleSceneObject *, int, int, int, int);
 }
 #endif

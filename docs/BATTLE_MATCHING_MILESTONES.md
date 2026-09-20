@@ -9493,3 +9493,22 @@ preserved upper bits and null models, using explicit prepare/draw stubs.
 The original emulator state is restored with full main-RAM/DTCM equality;
 all 104 saves remain unchanged. Matching C/C++: 837052/1563700 (53.5302%).
 Private evidence: high_effort_50_to_55/level_border_validation.json.
+
+
+## Pocket Chomp bounce parameters
+
+Reconstructed the 188-byte bounce solver in C++ without inline assembly.
+It derives Q12 velocity and acceleration from duration and height, retaining
+the native fixed-point rounding and signed 64-bit division. Full verification
+passes: golden EUR ROM, zero native differences and 107 tests. Ordinary save83
+navigation checks 40 solver calls (20 per index), all three math helper ABIs
+and results, the full 656-byte attack workspace, 260-byte scene object and
+callee-saved registers. The surrounding center oracle still checks 2922 calls.
+All 17 screenshots and final VRAM/palette/OAM captures match the prior route;
+the final capture visibly returns to the battle menu. No RAM fixture is used.
+Another 192 isolated ARM946 cases vary height, duration and index using copied
+RAM. Native math helpers execute; square-root MMIO supplies an immediate
+integer result, without establishing hardware latency or IRQ behavior. Full
+main RAM and DTCM outside the executed stack are checked. All 104 original
+saves remain unchanged. Matching C/C++: 837240/1563700 (53.5422%).
+Private evidence: high_effort_50_to_55/chomp_bounce_validation.json.

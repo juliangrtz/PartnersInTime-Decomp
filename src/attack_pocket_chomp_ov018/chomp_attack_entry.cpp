@@ -92,8 +92,8 @@ void PocketChomp_BeginRun(PocketChomp *center)
     int distance = dx > 0 ? dx : -dx;
     int duration = _s32_div_f(distance << 8, speed);
     BattleSceneObject_MoveBy(object, 0, dx, 0, 0, duration);
-    func_ov018_020c40b8(center, _s32_div_f(12288, speed), 24, 0);
-    func_ov018_020c40b8(center, _s32_div_f(8192, speed), 42, 1);
+    PocketChomp_ConfigureBounce(center, _s32_div_f(12288, speed), 24, 0);
+    PocketChomp_ConfigureBounce(center, _s32_div_f(8192, speed), 42, 1);
     func_ov018_020c3ea8(center);
     BattleObjectLink_SetGravity(object, 256);
     PocketChompAttack_MoveAdultsOffscreen();

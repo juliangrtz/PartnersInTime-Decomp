@@ -68,3 +68,6 @@ src/attack_pocket_chomp_ov018/chomp_boost.cpp:
 
 src/attack_pocket_chomp_ov018/chomp_prepare_pursuit.cpp:
     .text start:0x020c42ec end:0x020c43dc
+
+src/attack_pocket_chomp_ov018/chomp_bounce_parameters.cpp:
+    .text start:0x020c40b8 end:0x020c4174
