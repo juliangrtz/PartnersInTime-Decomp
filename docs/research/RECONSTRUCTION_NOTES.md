@@ -5660,3 +5660,45 @@ native pre-check lookups do not support them.
 Private evidence: `eur_high_shop_item_move/{wrap65_v3,isolated_v1}.json`, with
 the earlier route reports retained. Full source build, golden ROM, native relink
 and 107 tests pass; all 104 original saves retain their baseline hashes.
+
+
+## Shop buying-list equipment markers
+
+[shop_buy_marker.cpp](../../src/shop_ov009/shop_buy_marker.cpp) reconstructs
+`ShopBuyMarker_Update` (`0x02070AD0`, 556 bytes). Its first draft matches completely,
+using the established save-member layout and selling-marker logic. The callback
+finds the equipped clothing or badge within the visible buying rows. Badge partners
+share a row when both are available and wear the same badge; otherwise the marker's
+vertical offset is adjusted. Position and draw priority follow the animated list
+points. Scale at or below 409 suppresses submission while retaining the updated
+position; larger scales set a zero-angle affine matrix before drawing.
+
+The checkpoint-65 clothing/badge route checks 5,844 callbacks across 2,408 frames,
+1,461 per member. It covers 840 absent rows, 62 collapsed-list callbacks, 4,942
+matrix updates and draw-list insertions, and both shared/unshared badge cases.
+Equipment lookup, ordered helper arguments/results, Q12 positions, division,
+matrix entries and draw-pool/list writes are independently derived. Full task72,
+sprite64, buying-panel936, animated-list656, shop-work2492 and save1380 records,
+owner roots and touched draw-list records are checked at the watched boundaries.
+Task/resource pool membership and the ResourceB release callback establish ownership.
+
+The shop is entered using the guarded decoded-command fixture documented for
+[list selection](#shop-item-list-selection), then navigated by ordinary inputs.
+The fixture is restored before the wrapper resumes. No purchase is made. All 33
+capture hashes equal the prior selection route, including the visible field return;
+clothing, badges and final field were inspected. These captures observe rendering;
+draw submission alone is not an independent pixel oracle. Final task release is
+outside this focused check.
+
+Another 864 isolated ARM946 cases execute the whole function on copied RAM with
+explicit helper-contract stubs. They cover four members, clothing/badges,
+empty/absent/last-visible rows, missing/different/shared badge partners, scales
+0/409/410/4096 and signed nonintegral Q12 offsets. Whole main RAM, scratch outside
+the 32-byte frame, SP and callee-saved registers are checked. Stubbed helper
+results, matrix and draw-list writes are derived independently; these cases do
+not execute the real helpers or establish object lifetimes or rendered pixels.
+
+Private reports: `eur_high_shop_buy_marker/clothing_badges65_v1.json` and
+`isolated_v1.json`, with source, input and capture hashes validated. The actual
+linked object is exact, the full build reproduces the golden ROM, native relinking
+reports no differences, and all 107 tests pass. All 104 original saves are unchanged.

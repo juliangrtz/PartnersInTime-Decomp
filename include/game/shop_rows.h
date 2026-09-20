@@ -42,6 +42,7 @@ void ShopInventoryRow_DrawTextSegment(ShopInventoryRowTask *task);
 void ShopInventoryRow_DrawInsetSprite(ShopInventoryRowTask *task);
 void ShopInventoryRow_DrawQuantityDigit(ShopInventoryRowTask *task);
 void ShopInventoryRow_DrawValueSprite(ShopInventoryRowTask *task);
+void ShopBuyMarker_Update(ShopRowTask *task);
 void ShopRow_Update(ShopRowTask *task);
 void ShopRow_DrawTextSegment(ShopRowTask *task);
 void ShopRow_DrawInsetSprite(ShopRowTask *task);

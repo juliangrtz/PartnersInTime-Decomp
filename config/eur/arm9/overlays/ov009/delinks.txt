@@ -156,3 +156,6 @@ src/shop_ov009/shop_equipment_display.cpp:
 
 src/shop_ov009/shop_item_panel_navigation.cpp:
     .text start:0x02070334 end:0x020704ec
+
+src/shop_ov009/shop_buy_marker.cpp:
+    .text start:0x02070ad0 end:0x02070cfc

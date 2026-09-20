@@ -8693,3 +8693,12 @@ The selection callback adds 440 matching C++ bytes, reaching 800,184 / 1,563,700
 route verifies 1,397 calls, including clamping, wrapping, 36 help changes and
 11 scroll calls; 760 isolated cases cover additional boundaries. No assembly.
 See [evidence and limits](research/RECONSTRUCTION_NOTES.md#shop-item-list-selection).
+
+
+## Shop buying-list equipment markers
+
+The buying-list marker updater adds 556 matching C++ bytes, reaching
+800,740 / 1,563,700 (51.2080%). First draft exact, no assembly. Full ROM/native
+checks and 107 tests pass; 5,844 live callbacks, 4,942 draw-list insertions and
+864 isolated cases checked. All 33 captures equal the preceding shop route.
+See [evidence and limits](research/RECONSTRUCTION_NOTES.md#shop-buying-list-equipment-markers).
