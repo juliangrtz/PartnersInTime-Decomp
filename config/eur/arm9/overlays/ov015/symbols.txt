@@ -28,7 +28,7 @@ func_ov015_020c4a68 kind:function(arm,size=0x9d8) addr:0x020c4a68
 Overlay15Attack_RestoreActors kind:function(arm,size=0x64) addr:0x020c5440
 Overlay15Attack_InitializeHitMotion kind:function(arm,size=0x2c) addr:0x020c54a4
 Overlay15Attack_InitializeActorController kind:function(arm,size=0xa0) addr:0x020c54d0
-func_ov015_020c5570 kind:function(arm,size=0x40c) addr:0x020c5570
+Overlay15Attack_UpdateSequence kind:function(arm,size=0x40c) addr:0x020c5570
 Overlay15Attack_UpdateEntry kind:function(arm,size=0x1d0) addr:0x020c597c
 func_ov015_020c5b4c kind:function(arm,size=0x300) addr:0x020c5b4c
 data_ov015_020c5e60 kind:data(any) addr:0x020c5e60

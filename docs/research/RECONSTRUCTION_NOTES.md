@@ -7589,3 +7589,43 @@ support-hit coverage, object lifetimes or rendering. An earlier live probe
 failed on an incorrect RNG guard address; version 2 uses the symbol boundary
 0x0202CB6C and passes. All 87 functions in 31 checked objects match; the final
 full build, golden EUR ROM, zero-difference native relink and 107 tests pass.
+
+
+## Smash Eggs sequence and return
+
+[`smash_eggs_sequence.cpp`](../../src/attack_smash_egg_ov015/smash_eggs_sequence.cpp)
+owns 0x020C5570-0x020C597C. The controller updates both participants and the egg
+pair until the finish flag, both idle checks and the pair's linked-phase check
+allow exit. It starts the return movement and polls it in the same update,
+wraps the even-formation actor from beyond x=256 to x=-32, and finally restores
+actors, hides effects and clears the callback and attack root. A nonnull reward
+record adds one item before restoration. Keep the individual model flag writes
+and repeated motion queries: the original does not merge them. The initial
+two model lookups also remain even though their results are unused.
+
+The function matches without ASM. A bitfield gives the native completion-bit
+extraction; an inline absolute-position wrapper retains the original per-axis
+deltas. Separate loop counters preserve the native register allocation. Use a
+unique source basename: the linker selects object files without directories.
+
+Private `eur_high_egg_sequence/live_v1.json` checks all 278 calls during the
+2,110-frame checkpoint83 replay: 228 in phase 0, one in phase 1, 48 in phase 2
+and one in phase 3. It checks 1,561 ordered helper calls and 11 own stores,
+including one screen-edge wrap, phase-1 fallthrough and callback/root clearing.
+The same restored-command encounter and button policy as the preceding Smash
+Eggs probes are used, with no RAM edits. Full work, party prefixes, embedded
+objects and models are checked between events. Child effects are bounded
+observations; motion-channel and virtual-animation query results are observed.
+There is no reward on this route. The final capture shows the command wheel;
+VRAM/palette/OAM hashes are observations, and all 104 original saves are unchanged.
+
+`isolated_v2.json` checks 64 copied-RAM ARM946 cases for the exit gates, both
+parities, x=256/257, movement/animation states, optional reward and signed unknown
+phases. Native object/model lookup and idle/linked helpers execute; other children
+are explicit stubs. All mapped memory except 256 stack bytes, ordered own writes,
+arguments, SP and r4-r11 are checked. The reward case proves the caller's item
+and quantity arguments, not actual inventory mutation or live reward coverage.
+Version 1 failed because Unicorn hooks also see conditionally skipped ARM
+instructions; version 2 checks CPSR conditions before invoking the live oracle.
+All 26 functions in the 11 linked overlay-15 objects match. Full build, golden
+EUR ROM, zero-difference native relink and 107 tests pass.

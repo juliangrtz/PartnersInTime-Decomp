@@ -48,7 +48,7 @@ void Overlay15Attack_UpdateEntry(BattlePartyActor *actor)
             Overlay15Attack_PreparePrimaryActor(&context->actors[1]);
             context->timer = 0;
             context->phase = context->timer;
-            func_ov002_020722ac(actor, func_ov015_020c5570);
+            func_ov002_020722ac(actor, Overlay15Attack_UpdateSequence);
         } else {
             ++context->timer;
         }

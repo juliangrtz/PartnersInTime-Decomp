@@ -32,3 +32,6 @@ src/attack_smash_egg_ov015/actor_finish.cpp:
 
 src/attack_smash_egg_ov015/pair_hit.cpp:
     .text start:0x020c4728 end:0x020c4a68
+
+src/attack_smash_egg_ov015/smash_eggs_sequence.cpp:
+    .text start:0x020c5570 end:0x020c597c

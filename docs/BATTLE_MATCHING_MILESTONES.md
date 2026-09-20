@@ -9327,3 +9327,16 @@ arithmetic/RNG/lookup helpers and stub other engine calls. Live child effects
 remain bounded observations. All87 functions in31objects match; golden EUR ROM,
 native0diff,107tests and104preserved saves. Matching C/C++:829588/1563700 (53.0529%);
 target860044,remaining30456. Private:high_effort_50_to_55/egg_pair_hit_validation.json.
+
+
+## Smash Eggs sequence and return (2026-09-20)
+
+Reconstructed the outer attack sequence, return movement and callback cleanup in
+readable C++. Native flag extraction, per-axis position deltas, separate model
+stores and same-update phase fallthrough retained. Live route checks278calls in
+all4phases,1561helpercalls,11ownstores and one screen wrap.64isolatedcases include
+wait gates,bothparities,x256/257 and optional reward; inventory child is stubbed,
+so that case proves caller arguments only.26functions in11linkedobjects exact;
+goldenEUR ROM,native0diff,107tests,104originalsaves preserved.
+Matching C/C++:830624/1563700 (53.1191%);target860044,remaining29420.
+Private validation:high_effort_50_to_55/egg_sequence_validation.json.

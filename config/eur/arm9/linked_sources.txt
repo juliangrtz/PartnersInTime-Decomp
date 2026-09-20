@@ -959,3 +959,4 @@ src/attack_bro_flower_ov014/projectile_update.cpp
 src/scene_support_ov005/static_initializers.cpp
 src/attack_smash_egg_ov015/actor_finish.cpp
 src/attack_smash_egg_ov015/pair_hit.cpp
+src/attack_smash_egg_ov015/smash_eggs_sequence.cpp

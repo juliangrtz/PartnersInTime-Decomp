@@ -11,7 +11,14 @@
 typedef struct Overlay15AttackContext {
     s32 timer;
     u8 unknown_004[12];
-    u8 flags;
+    union {
+        u8 flags;
+        struct {
+            u8 unknown_0 : 1;
+            u8 finished : 1;
+            u8 unknown_2_7 : 6;
+        } flag_bits;
+    };
     s8 phase;
     u8 unknown_012[22];
     BattlePartyActor *user;
@@ -45,7 +52,7 @@ void Overlay15Attack_BeginActorFinish(Overlay15AttackModelController *state);
 void Overlay15Attack_ResolvePairHit(Overlay15AttackModelController *state,
     Overlay15AttackModelController *other, Overlay15AttackObjectPairState *pair);
 void func_ov015_020c31dc(Overlay15AttackObjectPairState *pair);
-void func_ov015_020c5570(BattlePartyActor *actor);
+void Overlay15Attack_UpdateSequence(BattlePartyActor *actor);
 void func_ov002_020722ac(BattlePartyActor *actor,
     void (*callback)(BattlePartyActor *));
 
