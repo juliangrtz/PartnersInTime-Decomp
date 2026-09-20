@@ -7547,3 +7547,45 @@ or live gameplay coverage of the early phases. Version 1 failed because the prob
 changed CPU mode after setting banked SP; the corrected setup passes all cases.
 All 24 functions across nine actual overlay-15 objects match; the full build,
 golden EUR ROM, zero-difference native relink and 107 tests pass.
+
+
+## Smash Eggs pair-hit resolution
+
+[`pair_hit.cpp`](../../src/attack_smash_egg_ov015/pair_hit.cpp) reconstructs
+0x020C4728-0x020C4A68 without ASM. Phases 8-10 increment the signed hit count
+only when `78 * count + height <= 380`, start the pair's return and toggle
+the alternate-actor bit. Other phases choose an enemy, calculate power using
+double arithmetic (`work.power + 64.0 * count`), roll the hit bonus, apply damage
+and start another launch. The alternate actor is randomized only when the
+unsigned table threshold is strictly greater than the random roll; equality
+toggles the existing bit without consuming another random number. Damage narrows
+to a signed halfword for projected HP and an unsigned halfword for the launch.
+
+The shared attack header now declares the damage target as `BattleActor *`,
+matching its native dereferences and the existing hammer caller. Threshold
+values are 32-bit integers, while threshold boundaries are signed halfwords.
+The Smash Eggs context exposes power at offset 260 with size/offset checks.
+
+Private `eur_high_egg_pair_hit/live_v2.json` uses the same restored-command
+checkpoint83 and button policy as the finish-transition replay. In 2,110 frames,
+one phase-4 hit checks ordered calls/stores, the double-helper ABI and results,
+clamped index, threshold lookup and every nested random call's seed/result.
+The observed hit has power 222, damage 34 and random roll 32 against threshold
+30; it takes the toggle path. All three random calls are checked, including
+target selection and the bonus roll. The attack returns to the command wheel.
+Full work, party/enemy prefixes, embedded scene objects and models are checked
+between caller events. Child effects, target eligibility, hit-bonus decision and
+damage result remain bounded observations, not independent child-algorithm
+proofs. Graphics captures are observations; all 104 original saves are preserved.
+
+`isolated_v1.json` adds 199 ARM946 cases on copied entry RAM/DTCM. These cover
+all phases, both parities, signed count extremes, the height threshold below,
+at and above 380, index clamping, random-threshold equality, bonus selection
+and signed/unsigned damage narrowing. Original double, RNG/division, clamp and
+threshold-lookup routines execute; other engine calls are explicitly stubbed.
+All mapped memory except 1,024 stack bytes, ordered writes, helper arguments
+and results, SP and r4-r11 are checked. These cases do not establish live
+support-hit coverage, object lifetimes or rendering. An earlier live probe
+failed on an incorrect RNG guard address; version 2 uses the symbol boundary
+0x0202CB6C and passes. All 87 functions in 31 checked objects match; the final
+full build, golden EUR ROM, zero-difference native relink and 107 tests pass.

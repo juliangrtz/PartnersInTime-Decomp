@@ -81,7 +81,7 @@ int Overlay10Enemy_GetCenter(s16 *center)
     return count;
 }
 
-int Overlay10Attack_CalculateDamage(BattlePartyActor *actor, int item, int argument, int target, int option)
+int Overlay10Attack_CalculateDamage(BattlePartyActor *actor, int item, int argument, BattleActor *target, int option)
 {
     return BattleDamage_CalculateAttack(actor, item, argument, target, 1, option);
 }

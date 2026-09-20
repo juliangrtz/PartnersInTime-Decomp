@@ -9314,3 +9314,16 @@ explicit stubs. Full build, golden EUR ROM, native relink and 107 tests pass;
 24 functions in nine actual overlay-15 objects match. Original104 saves unchanged.
 Matching C/C++: 828756/1563700 (52.9997%); target860044, remaining31288.
 Private validation: high_effort_50_to_55/egg_finish_validation.json.
+
+
+## Smash Eggs pair-hit resolution (2026-09-20)
+
+Reconstructed pair-hit resolution in readable C++ with native double arithmetic,
+strict unsigned RNG threshold comparison and distinct damage narrowing at each
+call. Shared damage target now has its native pointer type; work power and the
+32-bit threshold-value table have explicit types. Live phase4 checks the ordered
+caller behavior and all three RNG calls; 199 copied-RAM cases execute the native
+arithmetic/RNG/lookup helpers and stub other engine calls. Live child effects
+remain bounded observations. All87 functions in31objects match; golden EUR ROM,
+native0diff,107tests and104preserved saves. Matching C/C++:829588/1563700 (53.0529%);
+target860044,remaining30456. Private:high_effort_50_to_55/egg_pair_hit_validation.json.

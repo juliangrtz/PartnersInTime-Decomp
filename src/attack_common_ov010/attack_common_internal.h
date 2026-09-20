@@ -6,6 +6,7 @@
  * overlays that include it.
  */
 #include "attack_work.h"
+#include <game/overlay010_attack.h>
 extern "C" {
 extern Overlay10Work *data_ov002_020c0710;
 extern u8 *gBattleContext;
@@ -17,7 +18,7 @@ void func_0202cbd4(void *, int, u32);
 int Overlay10Enemy_CollectIds(u16 *, int);
 void Overlay10Enemy_Snapshot(Overlay10EnemyState *);
 int Overlay10Enemy_IsSelectable(int);
-int BattleDamage_CalculateAttack(BattlePartyActor *, int, int, int, int, int);
+int BattleDamage_CalculateAttack(BattlePartyActor *, int, int, BattleActor *, int, int);
 void func_ov002_020722ac(Overlay10ActionActor *, void (*)(Overlay10ActionActor *));
 void func_ov010_020c1410(Overlay10ActionActor *);
 void BattleFeedback_SpawnAtObject(int, BattleSceneObject *, int, int, int);
@@ -29,11 +30,8 @@ void Overlay10Object_GetGraphicBounds(s16 *bounds, BattleSceneObject *object);
 int Overlay10Party_HasBadgeTwo();
 void Overlay10Attack_MoveBackground();
 void Overlay10Attack_BeginEntry(Overlay10ActionActor *user, void (*callback)(Overlay10ActionActor *));
-void Overlay10Attack_ShowRating(const s16 *thresholds, const s8 (*offsets)[2], int offset_index,
-                                BattleSceneObject *object, int failed, const int *effects);
 void Overlay10Enemy_PlayHitReaction(int actor_id, int effect_id);
 void Overlay10Party_AverageStats(BattlePartyActor *output, int count);
-int Overlay10Attack_CalculateDamage(BattlePartyActor *actor, int item, int argument, int target, int option);
 int Overlay10Enemy_GetCenter(s16 *center);
 void Overlay10Party_GetSparkPositions(BattlePosition *sprite, BattlePosition *model, BattlePartyActor *actor);
 Overlay10Work *func_ov010_020c2978(Overlay10ActionActor *user, int size, int mode);

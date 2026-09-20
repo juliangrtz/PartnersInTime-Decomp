@@ -17,6 +17,7 @@ extern "C" {
 #include <game/battle_enemy_data.h>
 #include <game/battle_scene.h>
 #include <game/overlay010_enemy_state.h>
+#include <game/overlay010_attack.h>
 
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
 

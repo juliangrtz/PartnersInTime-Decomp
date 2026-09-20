@@ -17,7 +17,9 @@ typedef struct Overlay15AttackContext {
     BattlePartyActor *user;
     u8 unknown_02c[160];
     s32 index;
-    u8 unknown_0d0[96];
+    u8 unknown_0d0[52];
+    s32 power;
+    u8 unknown_108[40];
     Overlay15AttackModelController actors[2];
     Overlay15AttackObjectPairState pair;
     u8 unknown_1bc[4];
@@ -29,6 +31,8 @@ typedef struct Overlay15AttackContext {
 
 typedef char Overlay15AttackContext_SizeCheck[
     sizeof(Overlay15AttackContext) == 584 ? 1 : -1];
+typedef char Overlay15AttackContext_PowerOffsetCheck[
+    (u32)&((Overlay15AttackContext *)0)->power == 260 ? 1 : -1];
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,6 +42,8 @@ extern Overlay15AttackContext *data_ov002_020c0710;
 
 void Overlay15Attack_UpdateEntry(BattlePartyActor *actor);
 void Overlay15Attack_BeginActorFinish(Overlay15AttackModelController *state);
+void Overlay15Attack_ResolvePairHit(Overlay15AttackModelController *state,
+    Overlay15AttackModelController *other, Overlay15AttackObjectPairState *pair);
 void func_ov015_020c31dc(Overlay15AttackObjectPairState *pair);
 void func_ov015_020c5570(BattlePartyActor *actor);
 void func_ov002_020722ac(BattlePartyActor *actor,
