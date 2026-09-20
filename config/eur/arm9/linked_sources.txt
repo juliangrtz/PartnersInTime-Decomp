@@ -955,3 +955,4 @@ src/attack_pocket_chomp_ov018/chomp_prepare_pursuit.cpp
 src/attack_copy_flower_ov017/copy_attack_update.cpp
 src/attack_bro_flower_ov014/participant_update.cpp
 src/attack_bro_flower_ov014/participant_prepare.cpp
+src/attack_bro_flower_ov014/projectile_update.cpp

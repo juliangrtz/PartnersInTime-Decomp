@@ -49,6 +49,7 @@ typedef char Overlay14Participant_SizeCheck[sizeof(Overlay14Participant) == 44 ?
 extern "C" {
 #endif
 
+void Overlay14Projectile_Update(Overlay14Projectile *projectile);
 void Overlay14Projectile_StartBounce(Overlay14Projectile *projectile);
 void Overlay14Projectile_BeginHide(Overlay14Projectile *projectile);
 void Overlay14Projectile_SelectAnimation(Overlay14Projectile *projectile, int active);

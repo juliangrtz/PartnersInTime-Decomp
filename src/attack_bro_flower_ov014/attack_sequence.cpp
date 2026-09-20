@@ -16,7 +16,7 @@ void Overlay14Attack_UpdateEntry(Overlay10ActionActor *user)
     Overlay14Participant_Update(&work->participants[1], &work->participants[0]);
     Overlay14Attack_Update(&work->attack);
     for (int i = 0; i < 32; ++i)
-        func_ov014_020c4464(&work->projectiles[i]);
+        Overlay14Projectile_Update(&work->projectiles[i]);
     switch (work->common.phase) {
     case 0:
         Overlay14Attack_StartApproach(&work->attack);
@@ -81,7 +81,7 @@ void Overlay14Attack_UpdateSequence(Overlay10ActionActor *user)
     Overlay14Participant_Update(active, other);
     Overlay14Participant_Update(other, active);
     for (int i = 0; i < 32; ++i)
-        func_ov014_020c4464(&work->projectiles[i]);
+        Overlay14Projectile_Update(&work->projectiles[i]);
     Overlay14Attack_Update(&work->attack);
     switch (work->common.phase) {
     case 0:

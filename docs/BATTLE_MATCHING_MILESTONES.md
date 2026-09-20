@@ -9275,3 +9275,16 @@ All 42 linked overlay-14 functions in 11 objects are exact. Full EUR ROM match,
 zero native differences, 107 tests; all 104 saves unchanged.
 Matching C/C++: 827264/1563700 (52.9043%); target860044, remaining32780.
 Private validation: high_effort_50_to_55/flower_participant_validation.json.
+
+
+## Bro/Ice Flower projectile control (2026-09-20)
+
+Projectile animation, flight, bounce, impact dispatch and return add 720 matching
+C++ bytes without assembly. Bro/Ice routes observe 35,552 calls and fully check
+3,110: every nonzero-phase call and the first idle call per slot. Inputs,
+captures and final graphics match the preceding participant routes. The 46
+copied-RAM ARM946 cases cover additional branches with explicit child stubs.
+All 43 linked overlay-14 functions in 12 objects are exact. Full EUR ROM match,
+zero native differences, 107 tests; all 104 saves unchanged.
+Matching C/C++: 827984/1563700 (52.9503%); target860044, remaining32060.
+Private validation: high_effort_50_to_55/flower_projectile_validation.json.

@@ -7275,6 +7275,45 @@ the failed report and producer are retained. The final EUR ROM is exact,
 107 tests pass and all 104 original saves retain their baseline hashes.
 
 
+## Bro/Ice Flower projectile control
+
+[`Overlay14Projectile_Update`](../../src/attack_bro_flower_ov014/projectile_update.cpp)
+owns overlay 14's 0x020C4464-0x020C4734 range (720 bytes). It waits for model
+and motion-channel completion, advances flights, starts bounces, dispatches
+impact handling, hides projectiles and returns slots to phase zero. Channel
+activity is the nonzero callback at object +28 +40*channel. Phase and level
+are reread after motion helpers, which can change them. Low-level bounce
+completion emits sprite effect 287 for Bro Flowers or 535 for Ice Flowers,
+plus model effect 409 with a null parent. The first current typed C++ candidate
+matches fully; an older aggregate draft exists in private actor-helper notes.
+The separate 300-byte target-movement draft remains unlinked with six register
+differences. All 43 linked functions in 12 current overlay-14 objects are exact.
+
+Private `eur_high_flower_projectile/evidence_{fire,ice}83_v1.json` repeats the
+previous participant routes over 2,790 and 2,830 frames. It observes 23,712 and
+11,840 calls and independently checks 1,302 and 1,808: every nonzero-phase
+call, plus the first idle call for each of the 32 embedded projectile slots.
+The remaining idle calls are counted only. The routes check 42 flight advances,
+120 bounces, 44 resets and 22 low-level bounce effects. All inputs, captures and
+final graphics match the participant baselines; both final images show the
+battle command menu. No RAM edits are made. Ordered stores/calls, phase/level
+decisions, native model/channel query results, effect arguments including stack
+parameters, model-effect parent and SP/r4-r11 are independently checked. Child
+writes within the complete work, actor prefixes, scene objects, models and
+effect payloads are bounded observations. Heap lifetimes, graphics lists, other
+globals, sound and rasterization are not independently proved.
+
+`isolated_v1.json` adds 46 ARM946 cases on copied live RAM/DTCM: phases 0-9
+and default values, active/inactive channels, all projectile levels, both
+effect variants, animation completion and child-mutated phase/level/channel
+fields. Native model/channel queries execute; motion, impact, reset and effect
+children are explicit stubs. Full mapped memory except 256 stack bytes is
+checked. Phases 3/4/7, the impact-call branches and the Bro Flower low-level
+effect branch are covered only in isolation. These fixtures do not prove child
+algorithms or gameplay lifetimes. The full EUR ROM remains byte-identical,
+107 tests pass and all 104 original saves are unchanged.
+
+
 ## Copy Flower round and return controller
 
 [`CopyFlowerAttack_Update`](../../src/attack_copy_flower_ov017/copy_attack_update.cpp)
