@@ -115,7 +115,6 @@ extern "C" {
 void func_ov002_02069530(int, int);
 void func_ov002_020691b8(BattleSceneObject *, int, int, int);
 void func_ov002_02068b50(BattleSceneObject *, int, int, int, int);
-void func_ov002_02068878(BattleObjectDataLoadState *, int, int);
 int BattleCommonResources_UpdateLoad(void) {
     switch (LOAD_STATE.phase) {
     case 0:
@@ -141,7 +140,7 @@ int BattleCommonResources_UpdateLoad(void) {
         func_ov002_02068b50(second, 14, 1, 0, 0);
         BattleSceneObject_AdjustPosition(first, -128 - first->x, -256 - first->y, -first->z);
         BattleSceneObject_AdjustPosition(second, -128 - second->x, -256 - second->y, -second->z);
-        func_ov002_02068878(BattleObjectData_GetLoadState(17), 1, 0);
+        BattleObjectData_ControlResources(BattleObjectData_GetLoadState(17), 1, 0);
         LOAD_STATE.phase = 3;
     }
     /* Fall through once both reserved objects have been prepared. */

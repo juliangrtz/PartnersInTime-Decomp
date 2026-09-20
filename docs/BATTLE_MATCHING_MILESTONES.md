@@ -9049,3 +9049,17 @@ branches remain isolated coverage. All original saves are unchanged.
 
 Linked matching C/C++: 816716 / 1563700 (52.2297%). Detailed evidence and limits:
 [healing-item badge bonuses](research/RECONSTRUCTION_NOTES.md#battle-healing-item-badge-bonuses).
+
+
+### 2026-09-20: Shared battle-model resource control
+
+Reconstructed BattleObjectData_ControlResources (overlay 2,
+0x02068878..0x02068970), with named operations and a shared declaration used by
+the VM and battle setup. The complete build/source object match, golden ROM,
+zero-difference native relink and 107 tests pass. A guarded checkpoint-55 entry
+checks copy mode and actual shared-model creation; 40 isolated ARM946 cases
+cover boundary contracts with explicit stubs for creation helpers. Original
+saves remain unchanged. Failed probe versions and coverage limits are retained.
+
+Linked matching C/C++: 816964 / 1563700 (52.2456%).
+See [resource-control evidence](research/RECONSTRUCTION_NOTES.md#battle-shared-model-resource-control).

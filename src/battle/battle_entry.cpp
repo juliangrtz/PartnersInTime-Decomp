@@ -357,8 +357,6 @@ extern "C" void BattleEntry_WaitArchives(void)
 }
 
 extern "C" {
-void func_ov002_02068878(BattleObjectDataLoadState *, int, int);
-
 void func_ov002_0206f1f0(BattleModel *, BattleObjectDataLoadState *, int);
 void func_0202cc58(const void *, void *, u32);
 void func_0202cd2c(const void *, void *, u32);
@@ -400,7 +398,7 @@ extern "C" void BattleEntry_LoadResources(void)
     BattleObjectData_ConfigureLoad(18, 2268, 0);
     BattleObjectData_ConfigureLoad(16, 2048, 0);
     BattleObjectData_ConfigureLoad(15, 2268, 0);
-    func_ov002_02068878(BattleObjectData_GetLoadState(17), 0, 0);
+    BattleObjectData_ControlResources(BattleObjectData_GetLoadState(17), 0, 0);
     BattleObjectData_AllocateLoadBuffer(53, 0x10000);
     if (ENTRY->flags.luigi) {
         BattleObjectData_ConfigureLoad(53, 128, 1);

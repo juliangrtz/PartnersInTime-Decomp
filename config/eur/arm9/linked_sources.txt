@@ -937,3 +937,5 @@ src/attack_copy_flower_ov017/ov17_find_idle_participant.cpp
 src/game/save_storage_initialize.cpp
 
 src/battle/battle_badge_healing.cpp
+
+src/battle/battle_shared_model_resource.cpp

@@ -30,8 +30,6 @@ extern void func_ov002_02068b50(BattleSceneObject *object, int property_id,
                                 int element_index, int value, int unused);
 extern int func_ov002_02068970(BattleSceneObject *object, int property_id,
                                int element_index);
-extern void func_ov002_02068878(BattleObjectDataLoadState *load_state,
-                                int control_mode, int value);
 extern void func_ov002_020687ec(BattleSceneObject *object, int property_id,
                                 int value, int unused);
 extern int func_ov002_02068770(BattleSceneObject *object, int property_id,
@@ -170,7 +168,7 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_CONTROL_OBJECT_DATA_AUXILIARY_MODEL:
-        func_ov002_02068878(
+        BattleObjectData_ControlResources(
             BattleObjectData_GetLoadState((u16)arguments[0]),
             arguments[1], arguments[2]);
         return SCRIPT_VM_CONTINUE;

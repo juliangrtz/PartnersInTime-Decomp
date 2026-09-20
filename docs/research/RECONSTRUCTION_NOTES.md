@@ -6882,3 +6882,55 @@ The final source object matches all 244 bytes. `battle_badge_build_v1.log`
 records the full build, golden ROM SHA-1, zero differing native-relink bytes,
 updated progress and 107 passing tests. Runtime producers, snapshots and
 source/object hashes are pinned by `battle_badge_validation.json`.
+
+### Battle shared-model resource control
+
+[battle_shared_model_resource.cpp](../../src/battle/battle_shared_model_resource.cpp)
+reconstructs `BattleObjectData_ControlResources`, overlay 2
+`0x02068878..0x02068970` (248 bytes). Operation 0 sets the resource's copy bit
+from the low bit of its argument. Operation 1 allocates a 304-byte alternate
+model from the heap ID at `gBattleContext + 0xE15C`, initializes it, stores the
+returned model at common-workspace offset 70444, and binds the resource and
+embedded palette at 70448. It disables animation before selecting the model as
+the second entry of the four-model animation table: first entry cleared, last
+two preserved. Operation 2 delegates sprite release; other values do nothing.
+The original only guards the constructor against a null allocation; subsequent
+binding/preparation calls still receive that null pointer. No new recovery path
+has been invented.
+
+Private `high_effort_50_to_55/probe_shared_model.py` extends the existing
+common-resource entry probe. `build/runtime/eur_high_shared_model/`
+`evidence_entry55_v3.json` passes 706 frames and two completed target calls:
+copy mode at frame 24 and shared-model creation at frame 70. The checkpoint-55
+encounter command and VM cursor are temporarily supplied at guarded field
+boundaries and restored before battle initialization. This is controlled
+encounter entry, followed by native setup; the visible battle menu was inspected.
+All 104 original saves remain unchanged.
+
+The new oracle checks full battle/workspace allocations (401,416/70,976 bytes),
+resource fields, ordered helper arguments, constructor result propagation,
+shared model/table writes, animation-bit clearing and SP/r4-r11. It verifies the
+allocated model's 304-byte extent and independently predicts its render-list
+insertion. Constructor/binder effects on the model and embedded palette remain
+bounded observations. Sprite allocation/palette lists are checked for consistent
+head/tail/backlinks and unchanged existing payloads; their changed links are
+observed rather than independently predicted. Allocation internals, renderer
+internals and rasterization are not independently proved. Existing transition
+and common-resource checks also pass. The first two probes stopped at frame 71
+because the new oracle omitted an existing palette node's changed link; their
+reports and producer versions remain preserved.
+
+`check_shared_model_isolated.py` / `shared_model_isolated_v1.json` pass 40
+ARM946 cases with the compiled function. They cover copy-bit truncation and
+neighboring-bit preservation, unsupported operation values, native sprite-release
+no-op paths, and native animation-table updates. Allocation, constructor, binder
+and animation-preparation calls are explicitly stubbed in the creation cases,
+including a changed constructor return and a null allocation: these establish
+forwarding only, not safe handling of real allocation failure. Full tracked
+records, ordered nonstack stores, SP/r4-r11 and DTCM are checked. Actual linked
+sprite removal is outside this isolated test.
+
+The final source object matches all 248 bytes. `shared_model_build_v1.log`
+records the full build, golden ROM hash, zero native-relink differences and 107
+passing tests. `shared_model_validation.json` pins source objects, probes and
+reports; the actual ROM still matches the European original.

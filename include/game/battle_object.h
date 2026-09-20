@@ -262,6 +262,13 @@ void BattleObjectData_CopyResource(BattleSceneResource *resource,
                                    BattleObjectDataLoadState *load_state);
 int BattleObjectData_EnsureLoaded(u16 object_data_id, s32 resource_id);
 int BattleObjectData_IsLoadPending(int object_data_id);
+enum BattleResourceOperation {
+    BATTLE_RESOURCE_SET_COPY_MODE,
+    BATTLE_RESOURCE_CREATE_SHARED_MODEL,
+    BATTLE_RESOURCE_RELEASE_SPRITES
+};
+void BattleObjectData_ControlResources(BattleObjectDataLoadState *resource,
+                                       int operation, int copy);
 void BattleObjectData_ReleaseSprites(BattleObjectDataLoadState *resource);
 int BattleObjectData_UploadSprites(BattleObjectDataLoadState *resource);
 int BattleObjectData_ResetAll(void);
