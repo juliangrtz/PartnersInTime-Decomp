@@ -8777,3 +8777,16 @@ with and without a completion script; the ordinary route has no focus calls.
 Full RAM/DTCM restoration precedes the matching 185-frame baseline route.
 Five captures and four final graphics ranges agree; all 104 saves are unchanged.
 See the camera focus reference and private eur_high_field_camera_focus reports.
+
+
+### Field spin motion and partner positioning
+
+Three exact C++ functions add 624 bytes, reaching 806700 / 1563700 (51.5892%).
+They advance two spin speed profiles and synchronize a partner's position.
+No assembly. Full build, golden ROM, native relink and all 107 tests pass.
+A 551-frame ordinary route checks 793 rotation calls; four restored partner
+fixtures cover XYZ, planar and both early exits. Eight captures and four graphics
+ranges equal the baseline. Another 338 isolated ARM946 cases check signed and
+threshold boundaries, with an explicit facing-helper stub. All 104 saves are
+unchanged. See the spin-motion reference and private eur_high_field_spin reports
+for bounded helper observations and the distinction from natural action coverage.

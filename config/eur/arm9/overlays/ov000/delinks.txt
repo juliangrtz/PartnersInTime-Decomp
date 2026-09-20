@@ -428,3 +428,6 @@ src/field/field_layer_motion.cpp:
 
 src/field/field_camera_focus.cpp:
     .text start:0x02073740 end:0x02073860
+
+src/field/field_party_spin_motion.cpp:
+    .text start:0x020b97f8 end:0x020b9a68

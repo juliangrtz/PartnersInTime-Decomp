@@ -13,7 +13,6 @@ extern "C"
     void func_ov000_0207645c(FieldAreaContext *);
     void func_ov000_0206f110(FieldAreaContext *);
     void func_ov000_02071ebc(FieldAreaContext *);
-    void func_ov000_020b99b8(FieldPartyEntity *);
 
     void FieldArea_UpdateEntities(FieldAreaContext *area)
     {
@@ -55,7 +54,7 @@ extern "C"
                     FieldPartyEntity *party = (FieldPartyEntity *)entity;
                     if (entity->base.property_00a_bits.subtype == 0 && party->bits.movement_mode == 6)
                     {
-                        func_ov000_020b99b8(party);
+                        FieldPartyEntity_SyncPartnerPosition(party);
                         if (entity->runtime_flag_bits.contact_mask_b & 16)
                         {
                             FieldPartyEntity *partner = party->partner;

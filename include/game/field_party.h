@@ -106,7 +106,7 @@ typedef struct FieldPartyStateRecord {
         struct {
             fx32 velocity, acceleration, target_z;
             u16 angle, angular_speed;
-            s16 unknown_10;
+            union { s16 unknown_10; s16 angular_acceleration; };
             struct { u16 facing_direction : 3, unknown_03 : 1, unknown_04_15 : 12; } flags;
             s16 timer;
             u8 unknown_16[2];
@@ -192,6 +192,9 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldPartyEntity_AdvanceFastSpin(FieldPartyEntity *member);
+void FieldPartyEntity_AdvanceSlowSpin(FieldPartyEntity *member);
+void FieldPartyEntity_SyncPartnerPosition(FieldPartyEntity *member);
 FieldPartyEntity *FieldPartyEntity_InitPlacement(FieldPartyEntity *party, int index,
     const FieldSpawnRecord *spawn, int screen, int resource_set, u8 enabled, int baby);
 void FieldParty_UpdateRegion71ActionModel(FieldPartyController *party, int member);

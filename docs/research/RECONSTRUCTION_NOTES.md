@@ -5941,3 +5941,51 @@ of all 4 MiB main RAM and 16 KiB DTCM before the ordinary input route. All five
 subsequent captures and four final graphics ranges match the baseline; graphics
 remain observational. All 104 original saves are unchanged. Full build, golden
 ROM, native relink, progress checks and 107 tests pass.
+
+
+## Field spin motion and partner positioning
+
+[field_party_spin_motion.cpp](../../src/field/field_party_spin_motion.cpp)
+reconstructs three functions at 0x020B97F8-0x020B9A68, without assembly. The two
+rotation helpers add signed halfword speed to the angle, wrap it to 15 bits and
+set one of eight Q12 facing directions before accelerating the next frame's speed.
+Positive acceleration clamps at 2867 or 2048; negative acceleration stops at zero.
+The state record's +16 halfword now has an angular-acceleration alias. Its angle
+and speed remain unsigned in shared storage because other users need that view;
+these helpers explicitly preserve the native signed reads and halfword wrapping.
+
+Partner positioning runs only for member locomotion states 0-3 with a partner.
+A partner in states 0-3 receives the member's full XYZ position and the existing
+3D setter's previous-position/contact updates. Otherwise, it receives XY offset
+four pixels opposite the member's facing direction, through the planar setter.
+
+Private `eur_high_field_spin/evidence_spin83_v3.json` records 551 frames from the
+checkpoint-83 action-mode state: 59 slow and 734 fast rotation calls, covering
+steady speed, acceleration and the fast speed cap. Every call checks full
+1440-byte members, the owning 16764-byte manager, embedded state records, helper
+arguments, SP and callee-saved registers. The existing facing/animation helper's
+effects remain observational within member fields +378/2, +388/4, +404/4, +414/2
+and +972/4; facing itself is checked against the independently calculated angle.
+Renderer allocations and auxiliary renderer effects are not independently checked
+by this probe. The first replay failed because its observation bounds omitted the
+animation refresh's contact-dirty flag; corrected v2 and final v3 pass.
+
+`evidence_fixture83_v1.json` adds four partner cases at the fully guarded entity
+update boundary 0x02075F0C: 3D, planar, inactive and absent partner. It temporarily
+selects movement mode 6 and the required locomotion/partner fields. Both complete
+member allocations are restored at 0x02075F28 before the caller continues; cleanup
+also restores on failure. Position-setter writes and direction-vector results are
+independently derived. All eight captures and four final graphics ranges equal the
+ordinary route, and the final field scene was visually inspected. These partner
+cases are controlled entries, not natural action coverage.
+
+Another 338 isolated ARM946 calls use copied live RAM: 210 rotation cases cover
+signed limits, wraparound, positive/zero/negative acceleration and threshold
+crossings; 128 partner cases cover both early exits, both setters and all eight
+directions. The facing helper is explicitly stubbed; position setters and the
+direction helper execute their complete native code. Whole RAM/DTCM, SP, r4-r11
+and stack outside the maximum native call depth are checked. The initial stack
+guard omitted the direction helper's eight saved bytes; the corrected 24-byte
+partner depth passes. These checks do not add live gameplay coverage.
+All 104 original saves are unchanged. Complete source objects, the updated entity
+caller, golden ROM, native relink, progress checks and all 107 tests pass.
