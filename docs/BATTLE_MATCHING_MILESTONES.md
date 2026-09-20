@@ -8616,3 +8616,12 @@ The pickup sound selector adds 344 matching C++ bytes, reaching 795,284 /
 the real queue write; 212 isolated cases cover all item records and queue edges.
 The complete pre-fixture emulator state is restored; original saves are unchanged.
 See [evidence and limits](research/RECONSTRUCTION_NOTES.md#item-collection-sound-selection).
+
+
+## Shop equipped descriptions and attached sprites
+
+Two matching C++ callbacks add 816 bytes, reaching 796,100 / 1,563,700 (50.9113%).
+Actual objects, full ROM/native relink and 107 tests pass. The focused shop replay
+checks 3,747 calls; 124 isolated cases cover additional phases and boundary inputs
+with explicit animation/text stubs. Source saves remain unchanged. See
+[evidence and limits](research/RECONSTRUCTION_NOTES.md#shop-equipped-descriptions-and-attached-sprites).

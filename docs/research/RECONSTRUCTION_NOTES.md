@@ -5332,3 +5332,48 @@ because its oracle treated D0's synchronization argument as a fade argument.
 The VM explicitly supplies fade zero and forwards synchronization separately;
 the corrected replay checks the complete wrapper argument list. The failed run
 and its producer are preserved, and its pre-fixture state was restored too.
+
+
+## Shop equipped descriptions and attached sprites
+
+`ShopEquipment_UpdateDescription` (`0x020756B8`, 524 bytes) positions the
+description marker for the selected party member and redraws the equipped-item
+description when its cached item changes. The parent controller and latch delay
+that change during panel movement. `ShopPanel_DrawAttachedSprite` (`0x020758C4`,
+292 bytes) combines the parent's Q12 position and signed sixteenth-pixel offsets,
+adds the child's pixel offset and the native 240-pixel sub-screen offset, selects
+blending, then submits the sprite to draw list 5 or 59. Removal is deferred by a
+flag; the two callbacks have different phase thresholds.
+
+The shared task and parent views are 72 bytes. ResourceA owns a 336-byte model
+slot in the pool at `0x0206A3D8`; ResourceB owns a 64-byte sprite slot in the pool
+at `0x0206AA18`. The workspace view is only a prefix of the full 2,492-byte record.
+Its selected member at `+0x8D` has signed comparisons but unsigned save-array
+indexing; phase `+0x8B7` is unsigned. The text call uses description kind 1,
+sub-screen OBJ offset 10,880 and a seven-column, two-row output of 3,584 bytes.
+Whole functions match without inline assembly. MW emits these functions in
+reverse source order; the public unit preserves their native address order.
+
+Private `eur_high_shop_equipment/badges65_v2.json` checks 3,352 sprite calls and
+395 description calls across 2,121 frames. Save 65 uses the established guarded
+decoded shop-command fixture, restored at the request wrapper. Ordinary inputs
+select Badges, purchase a badge, open member selection and return to the field.
+Coverage includes both screen offsets, both blend states, members 0, 1 and 3,
+one countdown, three text redraws, 377 cache hits and 14 latched updates. Full
+task, parent, resource, workspace and live-save records are checked at call
+boundaries, as are helper arguments and draw-pool/list writes. Animation output
+is observed only inside its 336-byte receiver; existing palette nodes and roots
+are checked unchanged. Text output is observed in the 2,096-byte renderer and
+3,584-byte OBJ range, with surrounding sub OBJ memory checked unchanged.
+
+The separate `isolated_v1.json` checks 124 copied-RAM cases, including all four
+members, clothing/badge IDs, cache/latch combinations, countdowns, phase values
+0/1/2/255, blend values and signed coordinates. Both callbacks and the real
+accessors, marking and draw-pool helpers execute. Animation and text use explicit
+ABI stubs. Checks cover full main RAM, stack bounds, SP and callee-saved registers.
+These cases do not establish live removal or renderer coverage. Rasterization,
+purchase logic and task release are not independently verified by this probe.
+Screenshots show the description and visible field return; all 104 source saves
+retain their experiment-baseline hashes. Earlier clothing routes missed the
+description callback; the first badge run stopped on a probe register-alias error.
+Those failed reports and the original producer are retained separately.

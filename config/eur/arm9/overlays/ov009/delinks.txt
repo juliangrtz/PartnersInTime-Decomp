@@ -150,3 +150,6 @@ src/shop_ov009/shop_apply_equipment.cpp:
 
 src/shop_ov009/shop_selected_model.cpp:
     .text start:0x02076ae4 end:0x02076b28
+
+src/shop_ov009/shop_equipment_display.cpp:
+    .text start:0x020756b8 end:0x020759e8
