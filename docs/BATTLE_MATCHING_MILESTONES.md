@@ -8654,3 +8654,13 @@ ordinary-input routes check four creator calls plus the nested heading-arrow
 creator; 300 copied-RAM cases cover additional boundaries with explicit model
 and animation stubs. See
 [evidence and limits](research/RECONSTRUCTION_NOTES.md#pause-list-selection-sprite-creation).
+
+
+## Pause item headings and scroll arrows
+
+Two matching C++ updates add 1,000 bytes, reaching 798,868 / 1,563,700 (51.0883%).
+The existing inline position-setter pattern resolves the Q12 conversion schedule
+without assembly. Actual objects, full ROM/native relink and 107 tests pass.
+Ordinary routes check 2,256 new callback calls; 348 isolated cases cover further
+boundaries. All 30 screenshots match previous routes and 104 saves are unchanged.
+See [evidence and limits](research/RECONSTRUCTION_NOTES.md#pause-item-heading-and-scroll-arrow-updates).

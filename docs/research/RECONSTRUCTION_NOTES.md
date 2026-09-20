@@ -5481,3 +5481,48 @@ menu after exiting. The first isolated guard confused an interior instruction
 with a function start from another overlay. Failed runs remain separate from
 the passing reports. Actual source objects, the golden ROM, native relink and
 107 tests pass; all 104 original saves retain their experiment-baseline hashes.
+
+
+## Pause item heading and scroll-arrow updates
+
+`PauseList_UpdateItemHeading` (`0x0207EE84`, 664 bytes) slides the item-list
+heading in, delays and animates selection changes, publishes its position for
+the attached arrows, then marks its task for removal after sliding out.
+The close state falls through to its first movement immediately. Member lookup
+uses the signed menu index and compares the task's signed member byte with an
+unsigned mapping-table value. The 72-byte task reuses the equipment-heading
+layout; positions and steps are Q12.
+
+`PauseList_UpdateScrollArrow` (`0x0207F388`, 336 bytes) positions either scroll
+arrow, queries the list edge and selected row, and chooses animations 1/2 or 7/8.
+At an unselected edge it moves the model to (-128, -128) before submitting it to
+draw list 8. Both functions attach to existing contiguous source units. Their
+full objects match without assembly. The small inlined position setter already
+used in `menu_equipment_motion.cpp` preserves the native evaluation order of
+both Q12 arguments. This resolves the new heading's eight-instruction mismatch
+and the older scroll-arrow draft; the original drafts remain private.
+
+Two ordinary checkpoint-65 routes check 366 heading updates and 1,890 scroll-arrow
+updates across 2,674 frames. They cover entry, idle, a complete delayed selection
+change, close and removal marking, plus all six combinations of arrow direction
+and scroll/selected-edge/hidden-edge behavior. The oracle derives full task and
+model changes, workspace position publication, both query results and 2,255
+draw-list insertions. Scroll-arrow animation calls use frame -1; their output is observed
+only within the 336-byte model, with surrounding texture/palette lists checked.
+The previous creator checks remain active: three outer creations and one nested
+heading-arrow creation. Marking does not prove later resource release, and this
+probe does not independently verify rasterization.
+
+All 30 screenshot hashes equal the previously inspected routes, including both
+visible field returns. An additional 348 copied-RAM cases comprise 192 heading
+and 156 arrow cases: threshold equality and overshoot, delays, signed member
+comparison, forced close, inactive phases, negative Q12 rounding, both directions
+and short/long list states. The full native callbacks and query/mark/draw helpers
+execute; animation alone uses an explicit ABI stub. Checks compare all main RAM,
+scratch outside a 64-byte frame envelope, SP and callee-saved registers. These
+synthetic combinations are isolated evidence, separate from the live routes.
+
+Private reports are `eur_high_pause_heading_arrows/clothing65_v1.json`,
+`items65_v1.json` and `isolated_v1.json`; producer hashes and captures are checked.
+The full ROM/native rebuild and 107 tests pass, all five functions in the two
+extended source units compare exactly, and all 104 source saves are unchanged.
