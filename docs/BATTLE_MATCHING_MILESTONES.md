@@ -8790,3 +8790,14 @@ ranges equal the baseline. Another 338 isolated ARM946 cases check signed and
 threshold boundaries, with an explicit facing-helper stub. All 104 saves are
 unchanged. See the spin-motion reference and private eur_high_field_spin reports
 for bounded helper observations and the distinction from natural action coverage.
+
+
+### Battle reward-list entries
+
+Two exact C helpers initialize and search reward entries, bringing linked matching
+C/C++ to 807116 / 1563700 (51.6158%). Full build, golden ROM, native relink and
+107 tests pass. A guarded, restored victory-entry fixture checks 15 calls over
+89 frames; 480 isolated ARM946 cases cover narrowing, slot and search boundaries.
+Full reward allocation, ordered isolated writes and ABI preservation are checked.
+This is controlled runtime coverage, not a natural victory route. All 104 original
+saves remain unchanged. See the reward-list reconstruction reference for details.

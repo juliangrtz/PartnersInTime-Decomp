@@ -888,3 +888,5 @@ src/field/field_layer_motion.cpp
 src/field/field_camera_focus.cpp
 
 src/field/field_party_spin_motion.cpp
+
+src/battle/battle_reward_item_entries.c

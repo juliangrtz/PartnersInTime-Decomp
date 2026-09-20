@@ -5989,3 +5989,45 @@ guard omitted the direction helper's eight saved bytes; the corrected 24-byte
 partner depth passes. These checks do not add live gameplay coverage.
 All 104 original saves are unchanged. Complete source objects, the updated entity
 caller, golden ROM, native relink, progress checks and all 107 tests pass.
+
+
+## Battle reward-list entries
+
+[battle_reward_item_entries.c](../../src/battle/battle_reward_item_entries.c)
+owns 0x0206DE30-0x0206DFD0 in overlay 2. The 12-byte entry contains the item ID,
+three byte counts and a cached halfword from item-record offset 12. Initialization
+uses categories 1..3; lookup uses count indices 0..2, or -1 for any category.
+Initialization clears all four bytes at entry offset 4, including the trailing
+byte, and narrows the item ID/count. Lookup compares the full input integer with
+the stored unsigned halfword and returns the first qualifying index, or -1.
+The cached value participates in overflow selection; its general item-table
+meaning remains unnamed. Callers must provide valid tagged items and list bounds.
+
+The four separate checked item-table accessors reproduce the native predicated
+loads. Lookup tests a positive entry count before constructing its category
+cursor and keeps the two successful returns distinct. These dataflow differences
+explain the initial compiler mismatches; no assembly or source search was used.
+
+Private `eur_high_reward_entries/evidence_fixture55_v1.json` records a controlled
+victory entry from the initialized checkpoint-55 battle state. At fully guarded
+BattleMain_Update, with no pending party AI and no reward controller, the fixture
+selects turn phase 0x5029. Native transitions construct the result display and
+1344-byte reward controller. At initializer completion 0x0206E568, known item IDs
+and counts are placed in context offsets 140..209. Native resource loading then
+reaches the list builder. In 89 frames, six initializations and nine searches
+cover all four item tags, all three reward categories and successful/absent
+category-zero searches. Every call checks the complete reward allocation, SP
+and r4-r11. Other callbacks and rendering remain observational.
+
+The complete savestate is reloaded after list assembly, with equality checks
+over main RAM and DTCM before 30 neutral frames. The restored battle was visually
+checked. This proves a controlled entry, not a naturally completed battle.
+Another 480 isolated ARM946 calls use copied live RAM and real item tables:
+360 initializations cover first/middle/last slots, category and narrowing edges;
+120 searches cover empty/negative counts, duplicate IDs, all categories, misses
+and full-word ID comparisons. Whole RAM/DTCM, scratch memory outside the native
+16-byte stack frames, ordered writes, returns and callee-saved registers are
+checked without helper stubs. The first isolated probe incorrectly allowed no
+stack frame for lookup; its preserved failure was corrected to the native frame.
+All 104 original saves are unchanged. Actual source objects match completely;
+the full build, golden ROM, zero-difference native relink and 107 tests pass.

@@ -5,7 +5,7 @@
 typedef struct BattleRewardItemEntry {
     u16 item, unknown_02;
     u8 counts[3], unknown_07;
-    u32 unknown_08;
+    union { u32 unknown_08; u32 record_value; };
 } BattleRewardItemEntry;
 typedef struct BattleRewardItemsWork {
     void (*update)(void), (*draw)(void);
@@ -23,5 +23,8 @@ typedef struct BattleRewardItemsWork {
 } BattleRewardItemsWork;
 typedef char BattleRewardItemsWorkSizeCheck[sizeof(BattleRewardItemsWork) == 1344 ? 1 : -1];
 typedef char BattleRewardItemEntrySizeCheck[sizeof(BattleRewardItemEntry) == 12 ? 1 : -1];
+void BattleRewardItems_InitEntry(BattleRewardItemEntry *entries, int index, int item, int count, int category);
+int BattleRewardItems_FindEntry(BattleRewardItemEntry *entries, int count, int item, int category);
+
 extern BattleRewardItemsWork *data_ov002_020c06a4;
 #endif
