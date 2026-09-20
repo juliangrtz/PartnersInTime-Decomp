@@ -2,6 +2,7 @@
 #define PIT_BATTLE_REWARD_ITEMS_INTERNAL_H
 #include <game/battle_reward_items.h>
 #include <nitro.h>
+#include <game/battle_scene.h>
 typedef struct BattleRewardCounter {
     void *effect;
     u16 item, count;
@@ -22,7 +23,11 @@ typedef struct BattleRewardItemEntry {
 typedef struct BattleRewardItemsWork {
     void (*update)(void), (*draw)(void);
     /* Embedded scene objects and text/layout state. */
-    u8 unknown_008[1232];
+    u32 unknown_008;
+    BattleSceneObject objects[3];
+    BattleRewardCounter first_counters[8], second_counters[8];
+    u8 unknown_498[32];
+    struct { u16 item, visible; } rows[8];
     union {
         u32 raw;
         struct {

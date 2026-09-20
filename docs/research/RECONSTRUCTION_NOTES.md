@@ -6132,3 +6132,55 @@ the shared glyph scratch, whose native decoder and symbol bounds established
 the added observation range. Failed producers/reports are retained. The final
 live and isolated runs pass, as do actual source-object comparisons, the full
 golden-ROM build, zero-difference relink and 107 tests. All 104 saves are unchanged.
+
+
+## Battle reward-panel rendering
+
+[battle_reward_items_draw.cpp](../../src/battle/battle_reward_items_draw.cpp)
+reconstructs 0x0206CED4-0x0206D270. It submits the visible item icons and label
+layer, then a top panel sprite, one middle sprite per row and a bottom sprite.
+It collects these into a sub-screen OAM group and restores the panel's original
+Y coordinate. Tagged item records supply icon animation IDs at byte 9.
+
+The reward workspace embeds three 260-byte scene objects at offsets 12, 272
+and 532. Two eight-element arrays of 24-byte counters start at 792 and 984;
+eight four-byte item/visibility rows start at 1208. The shared workspace type
+now names these arrays without changing its 1344-byte size. Using typed row
+entries removed an extra induction variable from the first draft. Declaring
+saved locals in their observed stack order while retaining their initialization
+order resolved the final differences. The complete 924-byte function matches
+without assembly. The two panel/icon controllers allocate 304 bytes each;
+the label callback renderer allocates 324, with a 148-byte owned buffer.
+
+Private `eur_high_reward_draw/evidence_signal55_v3.json` replays the previous
+controlled reward-display route for 500 frames and verifies 200 complete draw
+calls. Two, four and six icons are visible during 25, 29 and 146 calls,
+respectively; all four item classes occur. The oracle checks helper order and
+arguments, the full workspace and three renderer allocations, the common
+workspace, OAM reservation/group bookkeeping, visibility flags, restored panel
+position and SP/r4-r11. Model-controller effects remain observational only in
+model offsets 84..92, 100..124 and 128..304. Draw helpers may update the
+1024-byte OAM output, two local count bytes, label payload and shared four-byte
+sort-key override pointer at 0x0205A8AC. Rasterization is not independently
+modeled. The final list was visually inspected; its capture and the restored
+battle capture are byte-identical to the preceding verified route. State
+restoration checks main RAM and DTCM before neutral frames. The route still
+uses controlled victory/readiness fixtures, not natural victory navigation.
+
+Another 54 isolated ARM946 cases cover list counts 0/1/8, hidden/all/alternating
+rows, panel Y values -40/30/250 and initial OAM reservations 0/32. Native helpers
+execute without stubs. The copied hardware interface permits only 32-bit main
+and sub DISPCNT reads, using values captured at the live draw entry; other I/O
+accesses fail. This does not model hardware timing. Whole main RAM/DTCM and
+scratch outside the observed native stack depth are checked; maximum depth is
+304 bytes. The same bounded renderer observations apply.
+
+The first isolated attempt exposed the missing sub DISPCNT read in the label
+renderer. A later whole-RAM comparison exposed the shared sort-key pointer;
+native renderer code calls the existing override setter with model offset 80.
+An intentionally near-full reservation of 120 entries then exceeded the
+128-entry output buffer. That invalid-capacity fixture and its overwrite trace
+are retained separately; the passing cases keep enough space for the complete
+group. The game code was not changed to accommodate these probe corrections.
+All ten reward source objects, the golden ROM, zero-difference native relink
+and 107 tests pass. All 104 original saves remain unchanged.

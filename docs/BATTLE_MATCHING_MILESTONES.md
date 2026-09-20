@@ -8823,3 +8823,14 @@ checks 135 calls; another 172 isolated ARM946 cases cover branch boundaries.
 Glyph pixels/cursor/scratch remain bounded observations, and isolated sound is
 stubbed. Full allocation and ABI checks, golden ROM, native relink and 107 tests
 pass; all 104 original saves are unchanged. See the reward-label reference.
+
+
+### Battle reward-panel and item-icon rendering
+
+The exact C++ drawing function brings linked matching code to
+809452 / 1563700 (51.7652%). It submits visible item icons, the label layer and
+a repeated panel frame, groups their OAM entries and restores the panel origin.
+A 500-frame controlled route checks 200 calls; 54 isolated ARM946 cases cover
+row visibility, count, clipping positions and valid OAM reservations. Renderer
+effects remain explicitly bounded observations. All ten reward objects match;
+golden ROM, native relink and 107 tests pass. Original saves are unchanged.
