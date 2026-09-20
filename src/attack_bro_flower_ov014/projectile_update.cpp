@@ -2,7 +2,6 @@
 #include "flower_internal.h"
 extern "C" {
 void func_ov014_020c3dac(Overlay14Projectile *);
-void func_ov014_020c3aa4(Overlay14Projectile *);
 static inline u8 AnimationFinished(BattleModel *model)
 {
     return model->flag_bits.unknown_09;
@@ -38,7 +37,7 @@ void Overlay14Projectile_Update(Overlay14Projectile *projectile)
             Overlay14Projectile_StartBounce(projectile);
         if (!BattleSceneObject_IsAnimationChannelActive(&projectile->object, 2)) {
             if (projectile->phase == 4)
-                func_ov014_020c3aa4(projectile);
+                Overlay14Projectile_ApplyImpact(projectile);
             Overlay14Projectile_Reset(projectile);
             projectile->phase = 0;
         }
@@ -59,7 +58,7 @@ void Overlay14Projectile_Update(Overlay14Projectile *projectile)
         break;
     case 7:
         if (!BattleSceneObject_IsAnimationChannelActive(&projectile->object, 2)) {
-            func_ov014_020c3aa4(projectile);
+            Overlay14Projectile_ApplyImpact(projectile);
             Overlay14Projectile_Reset(projectile);
             projectile->phase = 0;
         }

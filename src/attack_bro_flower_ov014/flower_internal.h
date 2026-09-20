@@ -25,7 +25,9 @@ struct Overlay14Work {
     };
     BattleSceneObject effects[6][3];
     s16 bounds[6][2];
-    u8 variant, enemy_trait[6], unknown_3593[6], rating, feedback, unknown_359b;
+    u8 variant, enemy_trait[6];
+    union { u8 enemy_hit[6], unknown_3593[6]; };
+    u8 rating, feedback, unknown_359b;
 };
 struct Overlay14ParticipantFade {
     u8 prefix[28];

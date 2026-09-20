@@ -969,3 +969,4 @@ src/shop_ov009/shop_member_selection.cpp
 
 src/attack_bro_flower_ov014/participant_palette_fade.cpp
 src/attack_bro_flower_ov014/enemy_effect_stage.cpp
+src/attack_bro_flower_ov014/projectile_impact.cpp

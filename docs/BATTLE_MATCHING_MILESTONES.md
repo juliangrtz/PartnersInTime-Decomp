@@ -9439,3 +9439,20 @@ Fullgatepasses: goldenEUR ROM, zero native differences,107tests.
 All104originalsaves preserved; no additional lifetime or rendering claim.
 Matching C/C++:835220/1563700 (53.4131%).
 Private evidence:high_effort_50_to_55/flower_stage_validation.json.
+
+
+## Bro Flower projectile impacts
+
+Reconstructed hit feedback, variant-specific status selection and chance,
+projected-HP gating, the saturated hit counter and enemy-effect stage handoff.
+The complete 576-byte function matches in the actual compiled source object.
+Both automatic Fire/Ice routes check 58 impacts; Ice covers all three choices
+(27 power, 23 defense and 8 speed changes). Inputs, captures and final display
+memory match the previous stage replays. Another 159 isolated ARM946 cases
+cover all six enemy slots, four projectile levels, HP and RNG boundaries,
+chance saturation and signed durations, with explicit child-effect stubs.
+Full verification passes: golden EUR ROM, zero native differences, 107 tests.
+Child animation/status writes remain bounded observations in the live probe;
+this does not add independent lifetime, graphics-list or renderer coverage.
+All 104 original saves are unchanged. Matching C/C++: 835796/1563700 (53.4499%).
+Private evidence: high_effort_50_to_55/flower_impact_validation.json.
