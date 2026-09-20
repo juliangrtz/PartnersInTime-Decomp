@@ -127,7 +127,7 @@ SaveSceneTask *SaveScene_Init(SaveSceneTask *task, u32 priority, u32 unused)
     GameIrqTask_Enable(task->irq);
     GX_DispOn();
     REG32(0x4001000) |= 0x10000u;
-    func_ov008_0206c474(task);
+    SaveScene_LoadResources(task);
     func_02036988((vu16 *)0x04000050, 1, 12, 16, 16);
     func_ov005_0206659c(SaveMenu_UpdateEntry, 0, 1);
     task->phase = 0;

@@ -161,6 +161,7 @@ void EraseScene_UploadFrame(void);
 GameIrqTask *EraseSceneIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
 void SaveMenu_FreeResources(void);
 void SaveMenu_LoadResources(void);
+void SaveScene_LoadResources(SaveSceneTask *task);
 void EraseScene_LoadResources(SaveSceneTask *task);
 void SaveMenu_LoadLocationName(int slot, int location);
 void SaveMenu_LoadLocationImage(int slot, int location);

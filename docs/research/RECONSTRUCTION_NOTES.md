@@ -2682,6 +2682,27 @@ dialog workspace effects are observed outputs with the caller's mode write
 checked separately. A pre-Start title-animation frame varied in sub-screen OAM;
 record that difference rather than claiming all cold-boot screenshots are equal.
 
+The save scene's resource initializer has a direct literal-pool alias for the
+second `SaveMenuSummary`: `0x02078330` is `0x02078290 + 0xA0`. Preserve that
+verified alias when calling `SaveMenu_BuildLiveSummary`; deriving the pointer
+from the workspace base introduced an extra ADD in the matching compiler.
+The remaining accesses still use the shared workspace views.
+
+Private `build/analysis/high_effort_50_to_55/probe_save_scene_resources.py`
+checks this initializer after ordinary B/A exit and re-entry from `save55.dst`.
+Its `occupied55_v1` and `empty55_v1` reports under
+`build/runtime/eur_high_save_scene_resources/` each contain one complete call,
+full scene/workspace/live-save/storage/text checks, independently derived
+summary fields and panel writes, and eight ordered affine stores. Shared
+resource-loader workspace effects and location drawing are bounded observations.
+The empty-slot fixture clears the active slot's occupancy bit in the byte at
+EUR ARM9 `0x0205E334`, once at fully guarded `SaveScene_LoadResources` entry
+(`0x0206C474`). It restores the original byte at that same scene's guarded
+`SaveScene_Delete` entry (`0x0206C87C`) after B cancels the menu; the induced
+menu resources are discarded by normal scene cleanup. No save is confirmed.
+Both the empty preview and the subsequent field return were visually checked;
+this is an injected occupancy condition, not a naturally empty saved file.
+
 ### Game Over
 
 The private `build/analysis/probe_game_over_entry.py` records a controlled entry

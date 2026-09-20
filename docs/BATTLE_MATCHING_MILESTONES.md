@@ -9063,3 +9063,26 @@ saves remain unchanged. Failed probe versions and coverage limits are retained.
 
 Linked matching C/C++: 816964 / 1563700 (52.2456%).
 See [resource-control evidence](research/RECONSTRUCTION_NOTES.md#battle-shared-model-resource-control).
+
+
+### Save-menu resource initialization
+
+`SaveScene_LoadResources` now owns overlay 8 `0x0206C474..0x0206C670`
+(508 matching bytes). The scene builds a stored-file summary when the selected
+slot is occupied, always builds the live-party summary, loads their location
+previews and initializes both panels and sub-screen affine backgrounds. The
+second summary has a native literal-pool alias at workspace offset `0xA0`.
+
+Full verification passed: golden EUR ROM, native relink with zero differing bytes
+and 107 tests. The new source object and all five functions in its changed
+lifecycle caller compare exactly. Private `eur_high_save_scene_resources`
+reports `occupied55_v1` and `empty55_v1` each replay 750 frames and one complete
+resource initialization. They check full scene/workspace/save/text records,
+stored/live summary values, the pixel clear, panel writes and eight ordered
+affine stores per call. The empty-slot run clears one RAM occupancy bit only,
+restores it on ordinary scene cancellation and returns visibly to the field.
+Both menu and field captures were inspected; all 104 original saves are unchanged.
+Archive/resource-loader internals and bounded drawing-helper effects are observed,
+not independently verified; no save confirmation or storage failure was simulated.
+
+Linked matching C/C++: **817,472 / 1,563,700 (52.2781%)**.
