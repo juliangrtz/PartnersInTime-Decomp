@@ -9,7 +9,7 @@
 extern "C" {
 void Overlay13Attack_Initialize(Overlay10ActionActor *user)
 {
-    Overlay13Work *work = (Overlay13Work *)func_ov010_020c2978(user, sizeof(Overlay13Work), 0);
+    Overlay13Work *work = (Overlay13Work *)Overlay10Attack_CreateWork(user, sizeof(Overlay13Work), 0);
     BattleObjectData_AllocateLoadBuffer(52, 4096);
     BattleObjectData_AllocateLoadBuffer(53, 32768);
     BattleObjectData_AllocateLoadBuffer(54, 32768);

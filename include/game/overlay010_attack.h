@@ -1,7 +1,7 @@
 #ifndef PIT_GAME_OVERLAY010_ATTACK_H
 #define PIT_GAME_OVERLAY010_ATTACK_H
 
-/* Shared Bros. Attack damage, rating and threshold lookup interfaces. */
+/* Shared Bros. Attack setup, damage, rating and threshold interfaces. */
 #include <game/battle_actor.h>
 #include <game/battle_scene.h>
 
@@ -10,7 +10,7 @@ extern "C" {
 #endif
 struct Overlay10ActionActor;
 struct Overlay10Work;
-struct Overlay10Work *func_ov010_020c2978(struct Overlay10ActionActor *user,
+struct Overlay10Work *Overlay10Attack_CreateWork(struct Overlay10ActionActor *user,
     int size, int mode);
 void Overlay10Attack_BeginEntry(struct Overlay10ActionActor *user,
     void (*callback)(struct Overlay10ActionActor *));

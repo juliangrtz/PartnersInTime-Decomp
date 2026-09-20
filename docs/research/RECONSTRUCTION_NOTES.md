@@ -7655,3 +7655,26 @@ writes,60 badge halfword updates and mapped memory outside256 stack bytes pass.
 This does not establish live badge or synthetic-allocation lifetime coverage.
 All58 functions in23 affected linked objects match; full build, golden EUR ROM,
 native relink and107 tests pass. All104 original saves remain unchanged.
+
+
+## Common attack-work allocation
+
+[`attack_work_create.cpp`](../../src/attack_common_ov010/attack_work_create.cpp)
+owns 0x020C2978-0x020C2A64. `Overlay10Attack_CreateWork` allocates and clears the
+requested extent, stores the user and unsigned target halfword, snapshots enemy
+state and averages party stats. Action-item flags select the averaging count.
+Only bit12 of the battle mode word changes; the mode argument contributes its
+low bit. The caller must supply a valid action item: the native lookup tests
+bit12 rather than the entire tag and does not handle a null result afterwards.
+Shell and Cannonballer callers explicitly cast their party prefixes and returned
+specialized work views; their factory declarations now share the common types.
+
+Private `eur_high_attack_work/linked_live_v1.json` checks the factory during the
+checkpoint83 Smash Eggs replay:584-byte allocation and clear, five child calls,
+five own stores and return/register state. Collection, snapshot and averaged-stat
+outputs are observations confined to their work ranges.48 copied-RAM cases in
+`isolated_v1.json` execute the native clear for304/584/612 bytes with trailing
+guards, exercise four count indices and mode values, and preserve targetFFFF.
+Other children are stubs; no live alternate-attack or allocator-internal coverage
+is claimed. Eight functions in five linked objects remain exact. Golden ROM,
+native relink,107 tests and preservation of104 original saves pass.

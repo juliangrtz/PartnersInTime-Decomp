@@ -43,7 +43,7 @@ typedef char Overlay14WorkSize[sizeof(Overlay14Work) == 13724 ? 1 : -1];
 extern "C" {
 extern Overlay10Work *data_ov002_020c0710;
 int Overlay10Enemy_IsSelectable(u16);
-Overlay10Work *func_ov010_020c2978(Overlay10ActionActor *,int,int);
+Overlay10Work *Overlay10Attack_CreateWork(Overlay10ActionActor *,int,int);
 void Overlay10Object_GetGraphicBounds(s16 *,BattleSceneObject *);
 int Overlay10Party_HasBadgeTwo();
 void Overlay10Attack_BeginEntry(Overlay10ActionActor *,void(*)(Overlay10ActionActor *));

@@ -27,7 +27,7 @@ Overlay10Attack_CalculateDamage kind:function(arm,size=0x28) addr:0x020c26f0
 Overlay10Enemy_GetCenter kind:function(arm,size=0xc0) addr:0x020c2718
 Overlay10Party_GetSparkPositions kind:function(arm,size=0x11c) addr:0x020c27d8
 Overlay10Party_GetEffectPosition kind:function(arm,size=0x84) addr:0x020c28f4
-func_ov010_020c2978 kind:function(arm,size=0xec) addr:0x020c2978
+Overlay10Attack_CreateWork kind:function(arm,size=0xec) addr:0x020c2978
 data_ov010_020c2a64 kind:data(any) addr:0x020c2a64
 data_ov010_020c2a70 kind:data(any) addr:0x020c2a70
 data_ov010_020c2aa0 kind:data(any) addr:0x020c2aa0

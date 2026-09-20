@@ -9349,3 +9349,12 @@ Live constructor:28 helper calls,17 own stores;432 isolated branch/boundary case
 58 affected functions exact; golden ROM, native relink and107 tests pass.
 Matching C/C++:831392/1563700 (53.1683%); target860044, remaining28652.
 Private evidence:high_effort_50_to_55/egg_initialize_validation.json.
+
+
+## Common attack-work allocation (2026-09-20)
+
+Integrated the exact private factory with typed caller views and a descriptive
+name. Live allocation/clear/caller checks and48 isolated cases pass; eight actual
+linked functions exact, golden ROM/native relink and107 tests pass.
+Matching C/C++:831628/1563700 (53.1833%); target860044, remaining28416.
+Private evidence:high_effort_50_to_55/attack_work_validation.json.

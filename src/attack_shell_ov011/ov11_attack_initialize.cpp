@@ -20,7 +20,7 @@ void Overlay11Attack_StartGreenShell(BattlePartyActor *user)
 
 void Overlay11Attack_Initialize(BattlePartyActor *user, int resource, int configuration)
 {
-    Overlay11AttackWork *work = func_ov010_020c2978(user, 612, data_ov011_020c5f20[configuration] == 2);
+    Overlay11AttackWork *work = (Overlay11AttackWork *)Overlay10Attack_CreateWork((Overlay10ActionActor *)user, 612, data_ov011_020c5f20[configuration] == 2);
     work->parameter = data_ov011_020c5fd0[configuration][0];
     work->parameter2 = data_ov011_020c5fdc[configuration][0];
     work->resource = resource;

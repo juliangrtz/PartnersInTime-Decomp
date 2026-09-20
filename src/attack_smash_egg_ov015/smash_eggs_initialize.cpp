@@ -11,7 +11,7 @@ extern s16 data_ov015_020c5e90[][3];
 void Overlay15Attack_Initialize(BattlePartyActor *user)
 {
     Overlay15AttackContext *context = (Overlay15AttackContext *)
-        func_ov010_020c2978((Overlay10ActionActor *)user, sizeof(Overlay15AttackContext), 0);
+        Overlay10Attack_CreateWork((Overlay10ActionActor *)user, sizeof(Overlay15AttackContext), 0);
     BattlePartyActor *owners[2];
     owners[0] = user;
     owners[1] = (BattlePartyActor *)BattleActor_GetById(user->linked_object_id);

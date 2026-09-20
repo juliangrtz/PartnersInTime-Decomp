@@ -9,7 +9,7 @@
 extern "C" {
 void Overlay12Attack_Initialize(BattlePartyActor *user)
 {
-    Overlay12AttackWork *work = func_ov010_020c2978(user, 452, 1);
+    Overlay12AttackWork *work = (Overlay12AttackWork *)Overlay10Attack_CreateWork((Overlay10ActionActor *)user, 452, 1);
     BattleSceneObject *primary = user->actor.scene_object;
     BattleSceneObject *baby = BattleSceneObject_GetById(42);
     BattleSceneObject *partner = BattleSceneObject_GetById(user->linked_object_id);
