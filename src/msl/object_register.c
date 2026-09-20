@@ -6,11 +6,7 @@
 
 #include <nitro.h>
 
-typedef struct MslDestructorNode {
-    struct MslDestructorNode *next;
-    void (*destructor)(void *object, int mode);
-    void *object;
-} MslDestructorNode;
+#include <msl/object_register.h>
 
 extern MslDestructorNode *__global_destructor_chain;
 extern void (*data_02059e98)(void);

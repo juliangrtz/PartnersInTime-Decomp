@@ -7,6 +7,7 @@
  */
 
 #include <nitro.h>
+#include <game/overlay005_pools.h>
 #include <game/heap.h>
 #include <game/overlay005_resource.h>
 
@@ -32,14 +33,6 @@ typedef struct Overlay5ItemLink {
     Overlay5Item *item;
     struct Overlay5ItemLink *next;
 } Overlay5ItemLink;
-
-typedef struct Overlay5ItemPool {
-    Overlay5Item *items;
-    Overlay5ItemLink *links;
-    Overlay5ItemLink *free_list;
-    Overlay5ItemLink *taken_list;
-    u32 count;
-} Overlay5ItemPool;
 
 typedef char Overlay5ItemSizeCheck[sizeof(Overlay5Item) == 0x40 ? 1 : -1];
 

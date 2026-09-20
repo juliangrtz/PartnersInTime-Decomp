@@ -9288,3 +9288,16 @@ All 43 linked overlay-14 functions in 12 objects are exact. Full EUR ROM match,
 zero native differences, 107 tests; all 104 saves unchanged.
 Matching C/C++: 827984/1563700 (52.9503%); target860044, remaining32060.
 Private validation: high_effort_50_to_55/flower_projectile_validation.json.
+
+
+## Scene pool and registry initializers (2026-09-20)
+
+Reconstructed overlay 5's complete .init range in readable C++: four static
+pool initializers, registry-marker construction and two empty initializers.
+Shared pool/destructor layouts; correct .init placement and function order.
+Three real overlay loads check 21 calls, 60 pool stores and 24 helper calls;
+21 copied-RAM cases execute all native callees and check nonzero initial state.
+All 200 functions in 13 affected/related objects match; golden EUR ROM,
+zero native differences, 107 tests, 104 original saves unchanged.
+Matching C/C++: 828316/1563700 (52.9715%); target860044, remaining31728.
+Private validation: high_effort_50_to_55/scene_initializers_validation.json.

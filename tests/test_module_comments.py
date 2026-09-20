@@ -53,8 +53,11 @@ class ModuleCommentTests(unittest.TestCase):
         owners = {}
         for component, table in component_delinks("eur").items():
             for block in table.blocks:
-                if block.name and ".text" in block.sections:
-                    owners[block.name] = (component, block.sections[".text"])
+                if block.name:
+                    ranges = [block.sections[name] for name in (".text", ".init")
+                              if name in block.sections]
+                    if ranges:
+                        owners[block.name] = (component, ranges)
 
         wrong = []
         for path in sorted(list(ROOT.glob("src/**/*.c")) + list(ROOT.glob("src/**/*.cpp"))):
@@ -66,12 +69,13 @@ class ModuleCommentTests(unittest.TestCase):
             if relative not in owners:
                 wrong.append(f"{relative}: documents a range but has no delinks entry")
                 continue
-            start, end = owners[relative][1]
+            ranges = owners[relative][1]
             documented = (int(match.group(1), 16), int(match.group(2), 16))
-            if documented != (start, end):
+            if documented not in ranges:
+                expected = ", ".join(f"{start:#010x}-{end:#010x}" for start, end in ranges)
                 wrong.append(
                     f"{relative}: comment says {documented[0]:#010x}-{documented[1]:#010x}, "
-                    f"delinks says {start:#010x}-{end:#010x}"
+                    f"delinks says {expected}"
                 )
         self.assertEqual(wrong, [], "module comments name the wrong native range")
 

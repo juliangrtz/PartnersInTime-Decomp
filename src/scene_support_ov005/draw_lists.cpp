@@ -10,6 +10,7 @@ extern "C" {
  */
 
 #include <nitro.h>
+#include <game/overlay005_pools.h>
 #include <nitro/fx.h>
 #include <game/heap.h>
 
@@ -33,14 +34,6 @@ typedef struct Overlay5DrawLink {
     Overlay5DrawNode *entry;
     struct Overlay5DrawLink *next;
 } Overlay5DrawLink;
-
-typedef struct Overlay5DrawPool {
-    Overlay5DrawNode *entries;
-    Overlay5DrawLink *links;
-    Overlay5DrawLink *free_list;
-    Overlay5DrawLink *taken_list;
-    u32 count;
-} Overlay5DrawPool;
 
 /* The drawn object: its list screen, hardware attributes and affine matrix. */
 typedef struct Overlay5Object {

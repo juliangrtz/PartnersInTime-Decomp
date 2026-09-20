@@ -7482,3 +7482,34 @@ The final source object matches all 248 bytes. `shared_model_build_v1.log`
 records the full build, golden ROM hash, zero native-relink differences and 107
 passing tests. `shared_model_validation.json` pins source objects, probes and
 reports; the actual ROM still matches the European original.
+
+
+## Overlay 5 static initialization
+
+[`static_initializers.cpp`](../../src/scene_support_ov005/static_initializers.cpp)
+reconstructs the complete 332-byte `.init` range, 0x02069D6C-0x02069EB8.
+Four initializers clear the element, sprite, draw-node and item pools and
+register their destructors. Another constructs two registry markers at a
+28-byte stride and registers their array cleanup. Two empty initializers are
+retained. Pool layouts and the MSL destructor-node layout have shared headers.
+The original `.ctor` table remains the caller; constructor code is not counted
+as data. Metrowerks requires `define_section` plus a `section ... begin/end`
+pair to emit `.init`. It emits these functions in reverse source order.
+Check both the actual object sections and linked addresses: matching individual
+functions alone would miss incorrect section placement or order.
+
+Private `eur_high_scene_initializers/boot65_v1.json` checks all seven functions
+across three overlay loads during 2,477 cold-boot/navigation frames, using the
+copied battery data from story save 65. It independently checks all 60 pool
+stores, 24 ordered helper calls, full pool/registration records, both markers,
+the destructor-chain root and return/SP/r4-r11. The final capture shows ordinary
+field gameplay. No RAM edits or savestate loading are used; 104 original saves
+remain unchanged. Graphics hashes are observations, not a rendering oracle.
+
+`isolated_v1.json` checks another 21 ARM946 calls on copied boot RAM/DTCM with
+three initial memory patterns and different prior destructor roots. All native
+callees execute, without stubs. Ordered stores, callback arguments and all mapped
+memory except 256 stack bytes are checked, including retained marker links and
+padding. These cases prove initialization, not later pool allocation/destruction
+or asynchronous hardware behavior. All 200 functions in the 13 checked overlay-5
+and MSL objects match. Full build, golden EUR ROM, native relink and 107 tests pass.

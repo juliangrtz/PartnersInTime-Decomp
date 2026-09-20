@@ -8,6 +8,7 @@
  */
 
 #include <game/battle_scene.h>
+#include <game/overlay005_pools.h>
 extern "C" {
 #include <game/sprite_output.h>
 #include <game/heap.h>
@@ -42,13 +43,7 @@ typedef struct Overlay5SpriteNode {
 } Overlay5SpriteNode;
 
 /* The pool keeps its entries on two lists: free entries and taken entries. */
-typedef struct Overlay5SpritePool {
-    Overlay5Sprite *sprites;
-    Overlay5SpriteNode *nodes;
-    Overlay5SpriteNode *free_list;
-    Overlay5SpriteNode *taken_list;
-    u32 count;
-} Overlay5SpritePool;
+
 
 typedef char Overlay5SpriteSizeCheck[sizeof(Overlay5Sprite) == 0x150 ? 1 : -1];
 

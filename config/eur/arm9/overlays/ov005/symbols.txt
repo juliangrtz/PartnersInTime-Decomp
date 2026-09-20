@@ -195,12 +195,12 @@ func_ov005_02069ba0 kind:function(arm,size=0x2c) addr:0x02069ba0
 func_ov005_02069bcc kind:function(arm,size=0xec) addr:0x02069bcc
 func_ov005_02069cb8 kind:function(arm,size=0x98) addr:0x02069cb8
 func_ov005_02069d50 kind:function(arm,size=0x1c) addr:0x02069d50
-func_ov005_02069d6c kind:function(arm,size=0x3c) addr:0x02069d6c
+Overlay5ElementPool_InitializeStatic kind:function(arm,size=0x3c) addr:0x02069d6c
 func_ov005_02069da8 kind:function(arm,size=0x4) addr:0x02069da8
-func_ov005_02069dac kind:function(arm,size=0x3c) addr:0x02069dac
-func_ov005_02069de8 kind:function(arm,size=0x3c) addr:0x02069de8
-func_ov005_02069e24 kind:function(arm,size=0x3c) addr:0x02069e24
-func_ov005_02069e60 kind:function(arm,size=0x54) addr:0x02069e60
+Overlay5SpritePool_InitializeStatic kind:function(arm,size=0x3c) addr:0x02069dac
+Overlay5DrawPool_InitializeStatic kind:function(arm,size=0x3c) addr:0x02069de8
+Overlay5ItemPool_InitializeStatic kind:function(arm,size=0x3c) addr:0x02069e24
+Overlay5Registry_InitializeStatic kind:function(arm,size=0x54) addr:0x02069e60
 func_ov005_02069eb4 kind:function(arm,size=0x4) addr:0x02069eb4
 data_ov005_02069ee0 kind:data(any) addr:0x02069ee0
 data_ov005_02069eec kind:data(any) addr:0x02069eec
