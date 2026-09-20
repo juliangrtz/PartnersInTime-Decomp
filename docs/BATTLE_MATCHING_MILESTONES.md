@@ -8684,3 +8684,12 @@ pattern explain the compiler differences; no assembly. Full ROM/native checks
 and 107 tests pass. The ordinary route checks 663 callbacks, three loads and
 659 draw insertions; 64 isolated cases cover additional control-flow boundaries.
 See [evidence and limits](research/RECONSTRUCTION_NOTES.md#pause-key-item-model-switching).
+
+
+## Shop item-list selection
+
+The selection callback adds 440 matching C++ bytes, reaching 800,184 / 1,563,700
+(51.1725%). Full ROM/native checks and 107 tests pass. The controlled-entry shop
+route verifies 1,397 calls, including clamping, wrapping, 36 help changes and
+11 scroll calls; 760 isolated cases cover additional boundaries. No assembly.
+See [evidence and limits](research/RECONSTRUCTION_NOTES.md#shop-item-list-selection).

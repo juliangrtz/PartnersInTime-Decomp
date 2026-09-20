@@ -5614,3 +5614,49 @@ internals and do not establish ordinary gameplay coverage of those branches.
 Private evidence is under `eur_high_pause_key_item/`: `keys65_v3.json` and
 `isolated_v1.json`, with producer/input/capture hashes verified. Full ROM/native
 checks and all 107 tests pass; all 104 original saves retain their baseline hashes.
+
+
+## Shop item-list selection
+
+[shop_item_panel_navigation.cpp](../../src/shop_ov009/shop_item_panel_navigation.cpp)
+reconstructs `ShopItemPanel_MoveSelection` (`0x02070334`, 440 bytes). It moves the
+signed-byte selection, clamps or wraps at list boundaries, scrolls the visible
+window when needed, plays the cursor sound when the logical row changes and
+refreshes help text when the item ID changes. Duplicate IDs can therefore change
+the row and sound without redrawing the description. The delta and wrap arguments
+are full words; the selection store truncates to a byte. The initial item lookup
+and modulo precede the count check, so the routine requires a nonempty list.
+Keeping the final item as `u16` matches the helper return/argument contract and
+removes an unnecessary extension. The complete actual linked object is exact;
+no assembly is used.
+
+Checkpoint 65 enters the shop through a guarded decoded scene-command fixture,
+restored before the wrapper resumes. Ordinary inputs then browse clothing and
+badges without buying. The final `wrap65_v3` route checks 1,397 calls in 2,408
+frames: 36 sound/help changes, eight ordinary scroll steps, three scroll wraps,
+and short-list wrapping and clamping. It checks helper order, arguments, query
+and signed-division results, and independently derives selection and ring/window
+changes. Full buying-panel allocation (936 bytes), inline items, shop workspace
+(2,492 bytes), save (1,380 bytes) and owner roots are checked at each watched
+boundary. Shop roots and vtables establish panel ownership.
+
+Scroll-task allocation, help-text rendering and audio internals are outside this
+focused state oracle. Captures show the clothing/badge lists and visible field
+return; they are observations of rendering. All 33 final-route captures have
+verified hashes/dimensions. The earlier `buy65_v1` route entered confirmation
+too soon and covered only unchanged selection; it passed its limited checks.
+`buy_sell65_v2` actually browsed two buying categories, despite its provisional
+name: 1,160 checked calls and eight scroll steps. Its six common-prefix captures
+equal the final route. No selling-panel coverage is claimed.
+
+Another 760 isolated ARM946 cases execute the complete native function on copied
+RAM with explicit helper-contract stubs. They cover small/equal/large row counts,
+both list ends and wrap modes, ring positions, repeated IDs and signed-byte
+truncation of large deltas. Whole main RAM, scratch outside the 24-byte frame,
+SP and callee-saved registers are checked. These cases do not execute rendering,
+audio or task-allocation internals. Empty-list calls are excluded because the
+native pre-check lookups do not support them.
+
+Private evidence: `eur_high_shop_item_move/{wrap65_v3,isolated_v1}.json`, with
+the earlier route reports retained. Full source build, golden ROM, native relink
+and 107 tests pass; all 104 original saves retain their baseline hashes.

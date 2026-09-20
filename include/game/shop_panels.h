@@ -99,6 +99,7 @@ void ShopItemPanel_SetVector334(ShopItemPanel *panel, s32 x, s32 y);
 s32 ShopItemPanel_GetY(ShopItemPanel *panel);
 s32 ShopItemPanel_GetX(ShopItemPanel *panel);
 void ShopItemPanel_SetPosition(ShopItemPanel *panel, s32 x, s32 y);
+void ShopItemPanel_MoveSelection(ShopItemPanel *panel, int delta, int wrap);
 u8 ShopItemPanel_GetCount(ShopItemPanel *panel);
 u8 ShopItemPanel_GetVisibleRows(ShopItemPanel *panel);
 u16 ShopItemPanel_GetRowItem(ShopItemPanel *panel, u16 row);
