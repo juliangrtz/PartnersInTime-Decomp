@@ -6646,3 +6646,33 @@ cases. The first report classified animation zero/count zero by its unchanged
 selected index; v2 corrects that label to the fallback branch and repeats all
 cases. Expected memory results were unchanged. All 104 original saves retain
 their trial-baseline hashes.
+
+
+## Body overlap masks
+
+`FieldEntity_GetBodyOverlapMask` (overlay 0, `0x020AE5FC`, 196 bytes)
+compares two entities' body volumes. Bits 0, 1 and 2 indicate X, Y and height
+overlap. For each axis, it takes the smaller of the two directed penetration
+distances. X/Y require a positive distance; height permits zero. Positions,
+bounds and arithmetic use the native 32-bit Q12 representation. Explicit cached
+positions and comparisons preserve the native load order and signed minimum.
+
+Private `build/runtime/eur_high_body_overlap/controlled43_v1.json` checks three
+controlled calls over 180 frames in Peach's Castle: two real party members in
+both argument orders, then one member against itself. Both complete 1,440-byte
+allocations remain unchanged; return masks are 5, 5 and 7. The independent model
+checks wrapped signed distances, results, SP and preserved registers. Original
+registers and the interrupted VM stack are restored, and all three original VM
+commands complete. The inspected final capture shows the field scene. Ordinary
+walking/jumping and hammer routes (`walk43_v1`, `hammer83_v1`) produced no calls;
+controlled coverage is not an ordinary gameplay invocation or a graphics oracle.
+
+`build/analysis/high_effort_50_to_55/body_overlap_isolated_v1.json` adds 439
+ARM946 cases using copied live RAM/DTCM and two synthetic records. Tests cover
+separated, touching and overlapping intervals, unequal X/Y widths, signed
+extrema and wrapping, reversed arguments, self-comparisons and degenerate or
+negative bounds. All eight masks occur. The actual compiled function executes
+without helpers or stubs; complete records, return values, SP/r4-r11, DTCM and
+unused stack are checked, with native writes permitted only in the scratch
+stack. Maximum stack use is 16 bytes. Extreme arithmetic fixtures do not prove
+that those records occur during gameplay. All 104 original saves are unchanged.

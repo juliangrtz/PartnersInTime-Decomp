@@ -474,3 +474,6 @@ src/field/field_party_trail.cpp:
 
 src/field/field_navigation_bounds.c:
     .text start:0x020ae520 end:0x020ae5fc
+
+src/field/field_body_overlap.c:
+    .text start:0x020ae5fc end:0x020ae6c0

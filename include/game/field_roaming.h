@@ -20,6 +20,8 @@ void FieldEntity_SetCollisionFlagGroups(FieldRuntimeEntity *entity, u8 mask, u8 
 void FieldEntity_UpdateCollisionFlagGroups(FieldRuntimeEntity *entity, int flag0, int flag23, int flag1,
                                            int flag6, int flag4);
 void FieldEntity_LoadBodyBounds(FieldRuntimeEntity *entity);
+/* Bits 0/1/2 report X/Y/height overlap, respectively. */
+int FieldEntity_GetBodyOverlapMask(FieldRuntimeEntity *entity, FieldRuntimeEntity *other);
 void FieldRoaming_ClearOptions(FieldRuntimeEntity *entity,int index);
 int FieldRoaming_AddOption(FieldRuntimeEntity *entity,const FieldRoamingOptionInput *input,int index);
 void FieldRoaming_SetBounds(FieldRuntimeEntity *entity,int minimum_x,int minimum_y,int maximum_x,int maximum_y);

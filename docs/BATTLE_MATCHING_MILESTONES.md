@@ -8959,3 +8959,15 @@ continuation. Another 206 isolated ARM946 cases cover signed resource indices,
 bounds extrema and aliasing without helper stubs. This is not ordinary story
 opcode coverage. See the navigation bounds restoration research notes and private
 live43_v1 / navigation_bounds_isolated_v2 reports. All 104 saves are unchanged.
+
+
+## Body overlap masks
+
+Linked FieldEntity_GetBodyOverlapMask with exact compiled matching. C/C++ now
+covers 815392 / 1563700 bytes (52.1450%). Full gate: golden ROM,
+zero native differences and 107 tests. Three controlled live calls verify both
+argument orders and self-overlap on real party members; 439 isolated ARM946
+cases cover all eight masks and arithmetic boundaries without helper stubs.
+Ordinary walking/jumping and hammer probes had no calls. See the body overlap
+research notes and controlled43_v1 / body_overlap_isolated_v1 private reports.
+All 104 original saves are unchanged.
