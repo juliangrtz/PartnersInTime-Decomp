@@ -8635,3 +8635,12 @@ with explicit animation/text stubs. Source saves remain unchanged. See
 +the earlier callbacks; 32 additional isolated cases cover its phase/latch edges.
 +See [evidence](research/RECONSTRUCTION_NOTES.md#shop-description-strips).
 +
++
++## Game boot entry
++
++The resident entry adds 544 matching C bytes, reaching 796,788 / 1,563,700
++(50.9553%). Actual object, full ROM/native relink and 107 tests pass. A real
++cold start checks initialization order, caller stores and entry into the game
++loop; 256 isolated console-flag cases use explicit initializer stubs. All source
++saves remain unchanged. See [evidence](research/RECONSTRUCTION_NOTES.md#game-boot-entry).
++

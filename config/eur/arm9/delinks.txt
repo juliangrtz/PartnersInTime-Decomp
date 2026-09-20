@@ -573,3 +573,6 @@ src/nitro/os/os_arena_low.c:
 
 src/game/window_allocate.c:
     .text start:0x0201cc58 end:0x0201d320
+
+src/game/game_boot.c:
+    .text start:0x02004b20 end:0x02004d40

@@ -5398,3 +5398,36 @@ Those failed reports and the original producer are retained separately.
 +accessor and draw helpers execute without stubs. The earlier animation/text stubs
 +apply only to the other callback cases. All original saves remain unchanged.
 +
++
++## Game boot entry
++
++The resident `main` (`0x02004B20..0x02004D40`, 544 bytes) is reconstructed in
++[game_boot.c](../../src/game/game_boot.c). It initializes graphics and VBlank,
++RTC and both task schedulers, clears the two OAM buffers and input, sets repeat
++delays and frame-timing hold durations, decodes console-type flags, then enters
++the game loop. The native master-interrupt sequence reads and writes a halfword
++at `0x04000208`; preserve that access width and the preceding read. The combined
++workspace spans `0x0206032C..0x02060B6C` (2,112 bytes), including the existing input,
++OAM and timing aliases. Unknown console-type fields retain bit-based names.
++
++The first C draft and actual public object match completely without assembly.
++Private `eur_high_game_boot/cold65_v1.json` checks a real cold start using Save 65,
++without a savestate or RAM fixture: all 14 ordered calls and their arguments,
++three hardware stores, seven RAM stores, full workspace, both DMA OAM fills and
++input clearing. The observed console flags are `0x82000001`; reaching the real
++nonreturning game loop completes the caller check. Ordinary title/load/navigation
++inputs continue to a visible field screen across 2,477 frames. No VBlank callback
++occurred during this startup check; the probe's bounded IRQ-timing observation
++path was not exercised. Other initializer internals and rasterization remain
++outside its independent expectations.
++
++The separate `isolated_v1.json` passes 256 combinations of high, middle and low
++console flags, including defaults and unrelated bits, with power/display patterns.
++The complete native entry executes; all initialization calls are explicit ABI
++stubs, modeling only DMA fills, input clear and the console result. These checks
++cover full main RAM, 8 KiB of modeled MMIO, ordered hardware writes, the eight-byte
++stack frame and callee-saved registers. A synthetic return from the game-loop stub
++tests the entry's epilogue; it does not claim that real gameplay returns there.
++All 104 original save hashes remain unchanged. The full ROM/native relink and
++107 tests pass. Resident coverage changes; overlay coverage is unchanged.
++

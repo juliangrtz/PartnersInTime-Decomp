@@ -863,3 +863,5 @@ src/field/field_input_read.cpp
 src/field/field_item_sound.cpp
 
 src/shop_ov009/shop_equipment_display.cpp
+
+src/game/game_boot.c
