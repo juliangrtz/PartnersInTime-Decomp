@@ -254,11 +254,14 @@ typedef struct FieldInteractionFlags {
 struct FieldRenderObjectVTable {
     u8 unknown_00[0x48];
     void (*unknown_48)(FieldRenderObject *, int);
-    u8 unknown_4c[0x1C];
+    u8 unknown_4c[0x14];
+    void (*reset_controller_work)(FieldRenderObject *render_object);
+    u8 unknown_64[4];
     void (*set_animation)(FieldRenderObject *render_object,
                           u8 resource_animation, s16 animation_id,
                           int restart);
-    u8 unknown_6c[0x10];
+    u8 unknown_6c[0xC];
+    void (*set_controller_animation)(FieldRenderObject *render_object, int animation, int reset);
     void (*set_palette_animation_paused)(
         FieldRenderObject *render_object, s8 slot, int paused);
     void (*set_palette_animation_mode)(
@@ -498,13 +501,13 @@ struct FieldRenderObject {
     virtual void update_orbit_movement(FieldOrbitController *controller);
     virtual int advance_orbit_frame(FieldOrbitController *controller);
     virtual void unknown_5c(const void *descriptor, void *controller, s16 animation);
-    virtual void unknown_60();
+    virtual void reset_controller_work();
     virtual void unknown_64(const void *descriptor, void *controller, s16 animation);
     virtual void set_animation(u8 resource_animation, s16 animation_id, int restart);
     virtual void unknown_6c();
     virtual void unknown_70();
     virtual void unknown_74();
-    virtual void unknown_78();
+    virtual void set_controller_animation(int animation, int reset);
     virtual void set_palette_animation_paused(s8 slot, int paused);
     virtual void set_palette_animation_mode(s8 slot, u8 mode);
     virtual void unknown_84();
@@ -517,7 +520,10 @@ struct FieldRenderObject {
     void *owner;
     u8 screen, unknown_011[3];
     GameSpriteAllocation texture;
-    u8 unknown_02c[0x1C];
+    union {
+        u8 unknown_02c[0x1C];
+        struct { GameSpritePalette *palette; u8 unknown_030[0x18]; };
+    };
     const FieldRenderAnimationRange *animation_ranges;
     const void *extra_resource_data;
     const u16 *texture_offsets;
@@ -537,7 +543,10 @@ struct FieldRenderObject {
         u32 state_flags;
         FieldRenderStateFlags state_flag_bits;
     };
-    u8 unknown_080[0x38];
+    union {
+        u8 unknown_080[0x38];
+        struct { u32 unknown_080_word; void *animation_controller; u8 unknown_088[0x30]; };
+    };
     u8 transition_active;
     u8 unknown_0b9[3];
     void *transition;

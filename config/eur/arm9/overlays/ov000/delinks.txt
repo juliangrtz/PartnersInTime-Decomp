@@ -446,3 +446,6 @@ src/field/field_party_default_actions.cpp:
 
 src/field/field_resource_allocate.cpp:
     .text start:0x020783c0 end:0x02078618
+
+src/field/field_entity_palette_profile.cpp:
+    .text start:0x02076f40 end:0x020770b0

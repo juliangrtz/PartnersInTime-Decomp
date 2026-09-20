@@ -340,8 +340,6 @@ typedef struct FieldEntityAnimationRuntimeFlags {
     u32 unknown_01_31 : 31;
 } FieldEntityAnimationRuntimeFlags;
 
-extern "C" void func_ov000_02076f40(u8 *field_context, FieldEntity *entity,
-                                int palette_selector);
 extern "C" void func_0200940c(FieldRenderObject *render_object, int speed);
 extern "C" s32 FX_Atan2(fx32 y, fx32 x);
 
@@ -1789,8 +1787,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 runtime_entity->saved_presentation_flag_bits.
                     has_saved_palette_profile = 1;
             }
-            func_ov000_02076f40(
-                field_context, &runtime_entity->base,
+            FieldEntity_SetPaletteProfile(
+                (FieldResourceContext *)field_context, runtime_entity,
                 arguments[1]);
             break;
 
@@ -1808,8 +1806,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 if ((runtime_entity->presentation_state & 0x80) != 0) {
                     palette_selector += 16;
                 }
-                func_ov000_02076f40(
-                    field_context, &runtime_entity->base,
+                FieldEntity_SetPaletteProfile(
+                    (FieldResourceContext *)field_context, runtime_entity,
                     palette_selector);
             }
             break;

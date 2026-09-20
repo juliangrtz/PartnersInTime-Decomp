@@ -8867,3 +8867,15 @@ directions; 22 isolated ARM946 cases verify empty and mixed sets, heap links,
 full payloads and write boundaries. No helpers are stubbed. Golden ROM, native
 relink and 107 tests pass; original saves remain unchanged. See the resource
 allocation reference for precise coverage and limits.
+
+
+### Field entity palette profiles
+
+The linked palette-profile switch brings matching C/C++ to 811480 / 1563700
+(51.8949%). Both resource sets and the renderer controller interface now use
+shared typed fields. Two controlled live calls and 56 isolated ARM946 cases
+check lookup boundaries and native controller resets without helper stubs.
+The temporary live changes are restored and interrupted commands replayed;
+this is not normal story-trigger coverage. Golden ROM, native relink and 107
+tests pass. All original saves remain unchanged; see the palette-profile
+reference for detailed coverage and limits.

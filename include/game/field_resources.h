@@ -71,7 +71,13 @@ typedef struct FieldResourceContext {
     FieldPrimaryResource *primary[2];
     FieldSecondaryResource *secondary[2];
     FieldSecondaryResource *alternate[2];
-    u8 unknown_00cc[0x2210];
+    union {
+        u8 unknown_00cc[0x2210];
+        struct {
+            FieldPaletteResource *palettes[2], *alternate_palettes[2];
+            u8 unknown_00dc[0x2200];
+        };
+    };
     u8 **animation_buffers[2];
     u8 *special_animations[4];
     u8 unknown_22f4[0xC];
@@ -137,6 +143,7 @@ void FieldEntity_ConfigureRendererResources(FieldRuntimeEntity *entity, const Fi
 int FieldResources_UsesAlternateHeap(void *field_context, int set, int resource_index);
 FieldPrimaryResource *FieldResources_FindShared(void *field_context, u32 id);
 void FieldResources_AllocateRoomBuffers(FieldResourceContext *field);
+void FieldEntity_SetPaletteProfile(FieldResourceContext *field, FieldRuntimeEntity *entity, int selector);
 void FieldResources_LoadRoomScripts(void *field_context);
 #ifdef __cplusplus
 }

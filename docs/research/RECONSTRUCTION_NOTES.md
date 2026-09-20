@@ -6296,3 +6296,46 @@ native allocation/fill helpers run without stubs or hardware maps. Checks cover
 all write destinations, heap links, untouched sixth index, SP/r4-r11, DTCM and
 unused scratch; maximum stack use is 92 bytes. These fixtures do not test
 exhausted positive allocations, asynchronous resource loading or graphics.
+
+
+## Field entity palette profiles
+
+`FieldEntity_SetPaletteProfile` (overlay 0, `0x02076F40`, 368 bytes) implements
+field commands `0x073` and `0x074`. Selectors below 16 search both standard
+palette sets for an inclusive `first <= selector <= first + count` interval.
+Larger selectors search alternate palettes by their low nibble, including
+shipped values above 127. The matched 24-byte palette and parallel 20-byte
+secondary resource supply the renderer's palette and animation controller.
+A valid matching entry is required: the native routine dereferences a null
+resource when the search fails.
+
+The entity stores the selector, with bit 7 marking alternate palettes. The
+renderer receives the low nibble at +96, palette pointer at +44 and controller
+at +132. Virtual slots +96/+120/+136 reset controller work, select the current
+resource animation and clear all eight auxiliary animation tracks. Both field
+renderer vtables (`0x020C1594`, `0x020C14D4`) resolve these slots to resident
+`0x0200CD68`, `0x0200C7A4` and `0x0200C5D8`. The middle callback takes full-width
+animation/reset arguments; the caller sign-extends its stored animation ID.
+The field resource and renderer headers now expose these shared fields and slots
+while retaining their raw views.
+
+Private `build/runtime/eur_high_palette_profile/live65_v2.json` records two
+controlled calls in 180 frames of the initialized save-65 field. Selectors 16
+and 17 select alternate-set-0 entries 0 and 1 from the current live tables.
+Temporary decoded command `0x073` edits are restored at dispatcher return,
+together with the affected entity and renderer. Restoring the entry registers
+and PC replays the interrupted original command; both original calls are also
+observed returning. No original save is written. Whole area (11216), entity
+(1440), renderer (316), visited palette/resource arrays and accessed controller
+table entries are checked independently. The three native controller callbacks
+run without stubs. The final visible Thwomp Volcano field capture was inspected.
+The earlier `live65_v1` run checked entry 0 twice; it is not extra branch coverage.
+
+`build/analysis/high_effort_50_to_55/palette_profile_isolated_v1.json` adds 56
+ARM946 cases on copied live RAM/DTCM. Synthetic tables cover both palette
+families and sets, first/later matches, inclusive interval ends, empty first
+sets, high alternate selectors, absent controllers and missing/default/specific
+animation tracks. Actual matching compiled code and native callees execute;
+all writes are bounded, and full receiving records, SP/r4-r11, DTCM and unused
+stack are checked. Maximum stack use is 124 bytes. These fixtures do not prove
+normal story-trigger coverage or subsequent palette transfers to VRAM.
