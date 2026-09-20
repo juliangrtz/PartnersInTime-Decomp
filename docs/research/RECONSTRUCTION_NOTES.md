@@ -1375,6 +1375,54 @@ Failed versions preserve an overly broad live phase assertion and Unicorn hooks
 for conditionally skipped ARM stores; the latter now honors CPSR conditions.
 Both ROM checks pass, 107 tests pass and all 104 original saves are unchanged.
 
+### Pocket Chomp participant updates
+
+[`chomp_adult_update.cpp`](../../src/attack_pocket_chomp_ov018/chomp_adult_update.cpp)
+and [`chomp_support_update.cpp`](../../src/attack_pocket_chomp_ov018/chomp_support_update.cpp)
+add 1,824 matching C++ bytes. The adult controller advances jumps, filters the
+active support's button, searches input grades from 4 down to 2, then dispatches
+landing/damage/return helpers. Phases 2/3 and 4/5 deliberately fall through to
+shared logic. The support controller handles attacks, swings and hiding. The
+verified 656-byte work layout is shared with the outer callbacks. All 55 Chomp
+functions across 20 compiled objects remain exact; no inline assembly was added.
+Capturing both input-window bounds before the test preserves the original eager
+loads. Keeping the timer as a field expression avoids the register exchange
+introduced by an unnecessary additional local.
+
+Private `eur_high_chomp_participants/evidence_chomp83_v3.json` checks 11,688 calls
+over the ordinary 4,111-frame route. Its inputs, 17 automatic presses, captures
+and final graphics equal the previous Chomp replay. It reaches 17 grade-4 inputs
+and 19 hit dispatches: two later misses occur after automatic input stops.
+`evidence_support83_v3.json` checks another 1,992 calls on a second 4,111-frame
+route, with guarded support-button presses and no RAM edits. It reaches 14 input
+triggers, one target-range hit, five attack expirations, seven swing impacts and
+six completed swings. Both final captures show the battle command menu.
+
+For automatic support input, phase 1 belongs to the active support pointer at
+work offset 636. The other support can swing in phase 3, but its button is not
+filtered by the adult input checker. Press it only when no adult is in phase
+2/3 with grade zero; otherwise the extra button can count as a wrong input.
+The initial support route omitted that participant and never reached phase 4.
+The successful route adds actual keypad input, without changing game RAM.
+
+The oracle independently checks phase/timer decisions, input filtering, timing
+rows and grades, ordered calls/stores, target/trait queries, enemy flag writes,
+sound visibility and SP/r4-r11. It checks the full attack work, party records,
+the target enemy's 672-byte prefix, embedded scene objects, models and neighboring
+graphics lists. Child damage/motion/animation outputs remain bounded observations.
+The support-hit helper publishes a feedback effect at work+12 and changes the
+enemy record; an earlier probe lacked these observations. Allocation lifetimes,
+other globals, screen/audio output and rasterization remain outside this oracle.
+
+`isolated_v1.json` adds 149 ARM946 cases on copied RAM/DTCM, including all 32
+phase values for each controller, six null-support cases, timer/key boundaries,
+wrong buttons, grade outcomes, the special target-trait branch and swing flags.
+Lookup/query helpers and the enemy flag setter execute natively; other children
+are explicit stubs. Full mapped memory except 256 stack bytes is compared.
+These fixtures cover caller branches, not live child lifetimes. Failed replays
+and exact producer versions are retained. Both ROM checks and 107 tests pass;
+all 104 original saves retain their hashes.
+
 ### Battle interface text quads
 
 `BattleInterface_DrawText` adds 484 matching bytes. It draws a text-buffer quad

@@ -8,28 +8,7 @@ extern "C" {
 #include <game/battle_feedback.h>
 }
 
-/* Complete 656-byte attack allocation. The common prefix is mostly opaque here. */
-struct PocketChompAttackWork {
-    u8 unknown00[16];
-    struct { u8 unknown0 : 1, stop : 1, unknown2 : 6; } action_flags;
-    s8 phase;
-    u8 unknown18[240];
-    u16 target_id;
-    u8 unknown260[44];
-    PocketChompAdultMotion adults[2];
-    PocketChompSupport supports[2];
-    PocketChomp center;
-    PocketChompAdultMotion *active_adult;
-    PocketChompSupport *active_support, *other_support;
-    u16 blocked_target, horizontal_offset, contact_offset, progress;
-    struct { u16 direction : 1, unknown : 15; } flags;
-    u16 padding;
-};
-typedef char PocketChompAttackWorkSize[sizeof(PocketChompAttackWork) == 656 ? 1 : -1];
-
 extern "C" {
-void func_ov018_020c6484(PocketChompAdultMotion *);
-void func_ov018_020c5214(PocketChompSupport *, PocketChomp *);
 int Overlay10Enemy_SelectReactionTarget(void);
 void func_ov018_020c3298(int, int);
 void PocketChompAttack_Update(BattlePartyActor *);
@@ -44,8 +23,8 @@ void PocketChompAttack_UpdateEntry(BattlePartyActor *user)
     PocketChompAdultMotion *adult = work->adults;
     PocketChompSupport *support = work->supports;
     for (i = 0; i < 2; ++i, ++adult, ++support) {
-        func_ov018_020c6484(adult);
-        func_ov018_020c5214(support, &work->center);
+        PocketChompAdult_Update(adult);
+        PocketChompSupport_Update(support, &work->center);
     }
     PocketChomp_Update(&work->center, work->adults, &work->supports[0], &work->supports[1]);
     switch (work->phase) {
@@ -76,14 +55,14 @@ void PocketChompAttack_Update(BattlePartyActor *user)
     int i = 0;
     PocketChompAdultMotion *adult = work->adults;
     do {
-        func_ov018_020c6484(adult);
+        PocketChompAdult_Update(adult);
         ++i;
         ++adult;
     } while (i < 2);
     int j;
     PocketChompSupport *support = work->supports;
     for (j = 0; j < 2; ++j, ++support)
-        func_ov018_020c5214(support, &work->center);
+        PocketChompSupport_Update(support, &work->center);
     PocketChomp_Update(&work->center, work->active_adult, work->active_support, work->other_support);
     switch (work->phase) {
     case 0:

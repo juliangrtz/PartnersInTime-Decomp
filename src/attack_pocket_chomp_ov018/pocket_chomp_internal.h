@@ -26,6 +26,25 @@ struct PocketChompAttackWorkPrefix {
     u16 horizontal_offset, contact_offset, progress;
 };
 typedef char PocketChompAttackWorkPrefix_SizeCheck[sizeof(PocketChompAttackWorkPrefix) == 652 ? 1 : -1];
+/* Complete 656-byte attack allocation. The common prefix is mostly opaque here. */
+struct PocketChompAttackWork {
+    u8 unknown00[16];
+    struct { u8 unknown0 : 1, stop : 1, unknown2 : 6; } action_flags;
+    s8 phase;
+    u8 unknown18[240];
+    u16 target_id;
+    u8 unknown260[44];
+    PocketChompAdultMotion adults[2];
+    PocketChompSupport supports[2];
+    PocketChomp center;
+    PocketChompAdultMotion *active_adult;
+    PocketChompSupport *active_support, *other_support;
+    u16 blocked_target, horizontal_offset, contact_offset, progress;
+    struct { u16 direction : 1, unknown : 15; } flags;
+    u16 padding;
+};
+typedef char PocketChompAttackWorkSize[sizeof(PocketChompAttackWork) == 656 ? 1 : -1];
+
 extern PocketChompAttackWorkPrefix *data_ov002_020c0710;
 extern s16 FX_SinCosTable_[];
 extern int data_ov018_020c7180[];

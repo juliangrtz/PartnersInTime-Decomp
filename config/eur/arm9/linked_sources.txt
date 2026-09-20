@@ -948,3 +948,5 @@ src/attack_mix_flower_ov016/mix_participant_exit.c
 src/attack_shell_ov011/shell_support_update.cpp
 src/attack_pocket_chomp_ov018/chomp_attack_update.cpp
 src/attack_pocket_chomp_ov018/chomp_center_update.cpp
+src/attack_pocket_chomp_ov018/chomp_adult_update.cpp
+src/attack_pocket_chomp_ov018/chomp_support_update.cpp

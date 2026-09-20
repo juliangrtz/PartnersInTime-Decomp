@@ -9210,3 +9210,17 @@ reconstruction reference for exact scope and preserved failed checks.
 Golden EUR ROM, zero native differences, 107 tests; original saves unchanged.
 Matching C/C++: 823276/1563700 (52.6492%); target860044, remaining36768.
 Private validation: high_effort_50_to_55/chomp_center_validation.json.
+
+
+## Pocket Chomp participant updates (2026-09-20)
+
+Adult timing/input grading and support attack/swing controllers add 1,824 matching
+C++ bytes. All 55 Chomp functions remain exact after sharing the full work layout.
+Two ordinary keypad routes check 13,680 calls, including support hits and swings;
+the adult-only route retains the previous capture hashes. An additional 149-case
+ARM946 check covers missing caller boundaries with explicit child-helper stubs.
+Both routes return visibly to the battle menu. Child effects and runtime limits
+are detailed in the reconstruction reference. Original saves remain unchanged.
+Golden EUR ROM, zero native differences, 107 tests.
+Matching C/C++: 825100/1563700 (52.7659%); target860044, remaining34944.
+Private validation: high_effort_50_to_55/chomp_participants_validation.json.
