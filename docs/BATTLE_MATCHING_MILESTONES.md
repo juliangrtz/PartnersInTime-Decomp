@@ -9015,3 +9015,22 @@ All 104 original saves are unchanged. See the input/idle-slot section in
 Private reports: `build/runtime/eur_high_copy_flower_input/copy83_v2.json`,
 `build/runtime/eur_high_copy_flower_input_controlled/controlled83_v1.json`,
 `build/analysis/high_effort_50_to_55/copy_flower_input_isolated_v1.json`.
+
+
+## 2026-09-20 - Save-storage initialization
+
+Linked the resident SaveStorage_Initialize in readable C++, preserving full versus
+version-only buffer reset, ordered header/slot writes, failure returns, the ignored
+footer result and the eight-byte settings clear. The C++ aggregate copy matches
+the native byte loads/stores where the old C draft emitted a loop.
+Matching C/C++ reaches 816472/1563700 (52.2141%); this batch adds 388 bytes.
+Full build, golden-ROM comparison, native relink and 107 tests pass.
+
+Runtime: one ordinary cold-start call with a valid save and 32 isolated ARM946
+cases covering reset/error paths. Device writes/waits are explicitly stubbed in
+the isolated cases; actual checksum and memory helpers execute. The normal route
+reaches the field using a copied ROM/save. Original saves104 unchanged.
+Evidence and limits: the save-storage initialization section in
+`docs/research/RECONSTRUCTION_NOTES.md`, private reports
+`build/runtime/eur_high_save_storage_init/cold65_v1.json` and
+`build/analysis/high_effort_50_to_55/save_storage_init_isolated_v1.json`.

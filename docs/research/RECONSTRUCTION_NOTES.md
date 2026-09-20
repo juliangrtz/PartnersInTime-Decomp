@@ -6801,3 +6801,44 @@ ordered data stores, search results, SP/r4-r11, unchanged DTCM and unused scratc
 stack. Maximum stack use is eight bytes. These copied-memory fixtures do not
 establish gameplay lifetimes or asynchronous behavior. Screenshots are observed,
 not independently rendered. All 104 original saves retain their baseline hashes.
+
+
+## Save-storage initialization
+
+`SaveStorage_Initialize` (resident ARM9, `0x02028CE8`, 388 bytes) repairs
+invalid save headers before the menus use the buffer. A bad magic signature
+clears all 8,192 bytes; an unsupported version with valid magic clears only
+8,128 bytes and preserves the final 64-byte footer. The default eight-byte
+signature is copied in and the directory is cleared. When backup storage is
+enabled, signature, settings, directory and four slots are written in order,
+with a wait after each slot. A failed write or wait returns zero immediately.
+Only a bad magic signature triggers the final footer write; its return value is
+ignored by the original. Invalid settings then clear eight bytes, covering the
+four-byte settings record and the first four bytes of the directory.
+
+The old C aggregate-assignment draft generates a byte-copy loop and totals
+324 bytes. Compiling the same body as C++ emits the native eight byte loads
+followed by eight stores and matches the complete 388-byte function. This is a
+compiler-language difference, not a volatile barrier or an assembly workaround.
+The final linked object and full ROM are exact.
+
+Private `build/runtime/eur_high_save_storage_init/cold65_v1.json` records one
+ordinary call at cold-start frame 15 with a current signature and valid settings.
+A copied ROM imports a copy of story save 65; 2,477 frames of title/load/field
+inputs reach the volcano field, confirmed by the final capture. Independent
+checks cover signature/settings results, ordered helper arguments, the entire
+8,192-byte save buffer, 44 backup globals, eight signature bytes, SP and r4-r11.
+The real signature and checksum helpers execute. No RAM fixture or backup-write
+branch is involved; the screenshot is observational rather than a graphics oracle.
+
+`build/analysis/high_effort_50_to_55/save_storage_init_isolated_v1.json` adds
+32 ARM946 cases on copied RAM/DTCM: valid, old-version and bad-magic signatures;
+disabled storage; valid/invalid settings; failures at each of the three header
+writes and all four slot writes/waits; and either footer return value. Twenty-two
+cases return failure. Actual signature, checksum, memory-fill and directory-clear
+helpers run. Backup writes, waits and footer writes are explicitly stubbed with
+no buffer effects, so these fixtures verify the caller's decisions and arguments,
+not cartridge I/O or those helpers' internals. Nonzero stub results include -1.
+Full buffer, globals, signature, return value, preserved registers, DTCM and
+unused stack are checked; writes stay within the buffer and scratch stack.
+Maximum stack use is 64 bytes. All 104 original saves retain their baseline hashes.

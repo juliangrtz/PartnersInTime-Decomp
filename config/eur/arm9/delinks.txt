@@ -576,3 +576,6 @@ src/game/window_allocate.c:
 
 src/game/game_boot.c:
     .text start:0x02004b20 end:0x02004d40
+
+src/game/save_storage_initialize.cpp:
+    .text start:0x02028ce8 end:0x02028e6c
