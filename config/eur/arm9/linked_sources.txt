@@ -875,3 +875,5 @@ src/scene_menu_ov007/pause_key_item_model.cpp
 src/shop_ov009/shop_item_panel_navigation.cpp
 
 src/shop_ov009/shop_buy_marker.cpp
+
+src/battle/battle_object_sprites.c

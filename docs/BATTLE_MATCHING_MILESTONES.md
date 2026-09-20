@@ -8702,3 +8702,20 @@ The buying-list marker updater adds 556 matching C++ bytes, reaching
 checks and 107 tests pass; 5,844 live callbacks, 4,942 draw-list insertions and
 864 isolated cases checked. All 33 captures equal the preceding shop route.
 See [evidence and limits](research/RECONSTRUCTION_NOTES.md#shop-buying-list-equipment-markers).
+
+
+### Battle object sprite tile allocation and release
+
+- Reconstructed both object-sprite helpers without ASM; final source objects
+  and all nine upload-caller functions match. C/C++ coverage: 801052 / 1563700
+  (51.2280%), adding 312 bytes.
+- Full verification passed: golden ROM SHA-1, native relink with no differences,
+  progress checks and 107 tests. The first integration check caught reversed
+  function order; corrected before the successful complete build.
+- Controlled story-55 entry/exit: 1607 frames, two uploads and eighty release
+  calls. Live releases skip copied/empty resources; 122 isolated cases cover
+  real unlink behavior plus upload boundaries with explicit allocator/upload
+  stubs. Final exit remains black; no visible field-return claim.
+- Private evidence: `build/runtime/eur_high_battle_object_sprites/`, probe
+  sources and `battle_object_sprites_validation.json` under
+  `build/analysis/high_effort_50_to_55/`. All 104 original saves unchanged.

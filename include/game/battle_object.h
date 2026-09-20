@@ -262,6 +262,8 @@ void BattleObjectData_CopyResource(BattleSceneResource *resource,
                                    BattleObjectDataLoadState *load_state);
 int BattleObjectData_EnsureLoaded(u16 object_data_id, s32 resource_id);
 int BattleObjectData_IsLoadPending(int object_data_id);
+void BattleObjectData_ReleaseSprites(BattleObjectDataLoadState *resource);
+int BattleObjectData_UploadSprites(BattleObjectDataLoadState *resource);
 int BattleObjectData_ResetAll(void);
 BattleObjectResourceRequest *BattleObjectData_ResolveSlot(u16 packed_id);
 

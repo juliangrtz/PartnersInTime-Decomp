@@ -508,3 +508,6 @@ src/battle/battle_object_link_sum.c:
 
 src/battle/battle_link_effect_upload.c:
     .text start:0x020bdc18 end:0x020bdc50
+
+src/battle/battle_object_sprites.c:
+    .text start:0x020680b0 end:0x020681e8

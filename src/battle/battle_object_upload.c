@@ -12,7 +12,6 @@
 
 extern u8 *gBattleSystem;
 
-int func_ov002_02068134(void *component);
 int func_0200b374(u32 destination, const void *resource,
                   const void *component, int component_index,
                   int end_index);
@@ -109,7 +108,7 @@ int BattleObjectData_UploadTextureTask(BattleObjectUploadTask *task) {
 }
 
 int BattleObjectData_UploadSpriteTask(BattleObjectUploadTask *task) {
-    return func_ov002_02068134(task->resource);
+    return BattleObjectData_UploadSprites(task->resource);
 }
 
 void func_0202cc58(const void *source, void *destination, u32 size);

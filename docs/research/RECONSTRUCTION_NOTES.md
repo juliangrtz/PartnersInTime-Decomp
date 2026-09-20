@@ -5702,3 +5702,55 @@ Private reports: `eur_high_shop_buy_marker/clothing_badges65_v1.json` and
 `isolated_v1.json`, with source, input and capture hashes validated. The actual
 linked object is exact, the full build reproduces the golden ROM, native relinking
 reports no differences, and all 107 tests pass. All 104 original saves are unchanged.
+
+
+## Battle object sprite tiles
+
+[battle_object_sprites.c](../../src/battle/battle_object_sprites.c) reconstructs
+`BattleObjectData_ReleaseSprites` (0x020680B0, 132 bytes) and
+`BattleObjectData_UploadSprites` (0x02068134, 180 bytes). Both compiled source
+functions match without assembly. The final object places the definitions in
+native order; MWCC emits them in reverse source order. The nine functions in the
+updated upload-caller object also match.
+
+The common-work allocation at `read32(0x020C0660)` starts with sixteen 24-byte
+`GameSpriteAllocation` records. The lookup key combines the resource ID's high
+byte with the texture set's body ID. Release skips copied resources and null
+texture sets, then unlinks every linked matching slot. Upload selects the first
+unlinked slot, reads the packed tile count, allocates shared tiles for the sub
+screen and uploads component 2 at `0x06600000 + allocation.offset`. The native
+loop falls through to slot 16 when all slots are occupied; reconstruction
+preserves that behavior without claiming normal reachability or safety.
+
+Private `build/runtime/eur_high_battle_object_sprites/evidence_entry55_v2.json`
+and `evidence_exit55_v2.json` cover 706 and 901 frames. The controlled story-55
+entry restores the decoded command and script cursor at the battle wrapper;
+the exit restores the battle state at destruction. Entry observes two uploads
+and sixty release calls; exit adds twenty release calls. Release takes the null
+texture path 76 times and copied-resource path four times. Neither route reaches
+a matching unlink; that branch is covered separately below. The entry capture
+shows the Petey battle command menu. The controlled exit reloads field code but
+its final capture is black, so this is not evidence of a visible field return.
+
+The probe checks complete native bodies, live resource-slot ownership, containing
+heap extents, full battle (401416-byte) and common-work (70976-byte) allocations,
+sprite list nodes/roots and mapped sub-OBJ VRAM. Caller decisions, ordered helper
+arguments and the packed count are independent checks. Allocator placement and
+compaction are observed only within existing list nodes, the selected record,
+roots and sub-OBJ VRAM; the upload is observed only within its selected tile
+allocation. These bounds do not independently verify rasterization or allocation
+placement. The exit captures and RAM/DTCM snapshots are identical across v1/v2.
+Entry's final animation pixels, some callback timing and RAM captures vary even
+between unchanged v2/v3 probes using the same byte-identical ROM. Both repeats
+pass the caller checks with the same function/branch totals; the cause of that
+variation remains unconfirmed. The extra entry repeat covers 706 frames. All
+104 original saves retain their baseline hashes.
+
+`isolated_v1.json` adds 122 ARM946 cases on copied RAM: copied/null-resource
+guards, no/head/middle/tail/all matching slots, each first-free index including
+native slot-16 fallthrough, packed counts 0/1/1023 and forwarded upload results.
+The complete target bodies execute with the real resident unlink and packed-field
+query. Allocation/upload use explicit ABI stubs; their execution is not covered
+by those isolated cases. Checks cover the complete 4 MiB RAM image, stack bounds,
+SP and r4-r11. This establishes unlink list writes without attributing them to
+ordinary gameplay or to the live exit route.
