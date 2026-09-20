@@ -1423,6 +1423,36 @@ These fixtures cover caller branches, not live child lifetimes. Failed replays
 and exact producer versions are retained. Both ROM checks and 107 tests pass;
 all 104 original saves retain their hashes.
 
+### Pocket Chomp support boost
+
+[`chomp_boost.cpp`](../../src/attack_pocket_chomp_ov018/chomp_boost.cpp)
+reconstructs `PocketChomp_Boost` at 0x020C3C34-0x020C3CFC. A support swing
+boosts the Chomp only in phases 1 and 2: it starts a 60-frame alternate-animation
+timer, sets the variant bit and render state, selects animation 4, then passes
+the scaled travel speed to the existing motion helper. Preserve the native
+double-precision expression `384.0 * speed / 256.0` and final integer truncation.
+The first candidate matches all 200 bytes; no inline assembly is needed.
+
+Private `eur_high_chomp_boost/evidence_support83_v1.json` checks seven calls on
+the ordinary 4,111-frame support-input route: four in phase 1, one in phase 2,
+and two inactive calls in phase 0. The oracle independently checks ordered
+stores, phase guards, the speed-table row, every software-double argument and
+result, and SP/r4-r11. It checks the attack allocation, party records, embedded
+scene objects, models and graphics-list neighbors. Animation and motion child
+writes are bounded observations; their lifetimes, internal motion lists, other
+globals and rasterization are not independently proved. Inputs, every capture
+and final graphics data equal the previous support route. The final capture
+shows the battle command menu; no game RAM was edited.
+
+`isolated_v1.json` adds 124 ARM946 cases using copied RAM/DTCM: all 32 phase
+values, both directions and travel-speed threshold boundaries, including
+progress 65535. Table lookup and software-double helpers execute natively;
+animation and motion are explicit no-write stubs. Full mapped memory except
+256 stack bytes is checked. These fixtures prove caller boundaries, not live
+child behavior. All 56 Chomp functions in 21 compiled objects remain exact;
+the full build reproduces the EUR ROM and passes 107 tests. All 104 original
+saves retain their hashes.
+
 ### Battle interface text quads
 
 `BattleInterface_DrawText` adds 484 matching bytes. It draws a text-buffer quad

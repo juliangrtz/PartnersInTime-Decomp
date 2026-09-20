@@ -112,6 +112,7 @@ int PocketChompAttack_MoveAdultsOffscreen(void);
 u32 PocketChompAdult_BeginExit(PocketChompAdultMotion *adult);
 u32 PocketChompAdult_BeginJump(PocketChompAdultMotion *adult);
 void PocketChomp_UpdateVisibility(PocketChomp *center);
+void PocketChomp_Boost(PocketChomp *center);
 void PocketChomp_UpdateSquash(PocketChomp *center);
 u32 PocketChomp_BeginFall(PocketChomp *center);
 u32 PocketChomp_BeginSmallBounce(PocketChomp *center);

@@ -8,7 +8,6 @@ extern u8 *gBattleContext;
 extern u16 data_ov002_020be704[];
 int func_ov018_020c513c(PocketChompSupport *);
 void func_ov018_020c4f3c(PocketChompSupport *);
-void func_ov018_020c3c34(PocketChomp *);
 
 void PocketChompSupport_Update(PocketChompSupport *support, PocketChomp *center)
 {
@@ -50,7 +49,7 @@ void PocketChompSupport_Update(PocketChompSupport *support, PocketChomp *center)
                 if (work->flags16.stop)
                     PocketChomp_UpdateVisibility(center);
                 else
-                    func_ov018_020c3c34(center);
+                    PocketChomp_Boost(center);
             }
             if ((u8)model->flag_bits.unknown_09) {
                 func_ov018_020c2e50(support, 1024);

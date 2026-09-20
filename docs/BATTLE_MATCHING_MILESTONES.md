@@ -9224,3 +9224,15 @@ are detailed in the reconstruction reference. Original saves remain unchanged.
 Golden EUR ROM, zero native differences, 107 tests.
 Matching C/C++: 825100/1563700 (52.7659%); target860044, remaining34944.
 Private validation: high_effort_50_to_55/chomp_participants_validation.json.
+
+
+## Pocket Chomp support boost (2026-09-20)
+
+The support-triggered Chomp boost adds 200 matching C++ bytes. Seven live calls
+cover both active phases and the inactive guard; 124 copied-RAM ARM946 fixtures
+check phase and table boundaries with native floating-point helpers and explicit
+animation/motion stubs. All captures and final graphics equal the existing
+support route. Full EUR ROM match, zero native differences, 107 tests; original
+saves unchanged. All 56 Chomp functions across 21 compiled objects are exact.
+Matching C/C++: 825300/1563700 (52.7786%); target860044, remaining34744.
+Private validation: high_effort_50_to_55/chomp_boost_validation.json.

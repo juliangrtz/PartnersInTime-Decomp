@@ -62,3 +62,6 @@ src/attack_pocket_chomp_ov018/chomp_adult_update.cpp:
 
 src/attack_pocket_chomp_ov018/chomp_support_update.cpp:
     .text start:0x020c5214 end:0x020c54a0
+
+src/attack_pocket_chomp_ov018/chomp_boost.cpp:
+    .text start:0x020c3c34 end:0x020c3cfc
