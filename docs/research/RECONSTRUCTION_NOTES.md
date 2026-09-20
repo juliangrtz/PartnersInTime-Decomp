@@ -843,8 +843,8 @@ observation to the receiving scene object; both reruns pass without game changes
 [`Overlay11Support_Update`](../../src/attack_shell_ov011/shell_support_update.cpp)
 at `0x020C33E8` updates the optional support character. Its 28-byte record uses
 an unsigned button halfword at `+20`, a signed sound-handle offset at `+24`,
-state/side/formation bits at `+26` and a four-bit resting animation in bits 1–4
-of `+27`. On catching the shell, projectile byte `+27` bits 4–5 receive
+state/side/formation bits at `+26` and a four-bit resting animation in bits 1-4
+of `+27`. On catching the shell, projectile byte `+27` bits 4-5 receive
 `support.side + 1`. The follower call takes `(shell, support_object, 3)`.
 Boosting advances a signed counter and emits the two effect types at separate
 table-defined intervals. Expiration restores the resting animation and scale,
@@ -872,7 +872,7 @@ bounded to the receiving records. The selected attached-effect slot's eight
 bytes are observational; other pool/global changes, audio, rasterization and
 object lifetimes are not independently modeled. Renderer/palette/texture
 placement inside a receiving record is observed, while roots and unowned
-neighbor links are derived and checked. States 3–5, a null support object and
+neighbor links are derived and checked. States 3-5, a null support object and
 the return state's non-idle actor branch are not covered by these live routes.
 
 The first `red83_v1` probe failed at frame 533 because hiding the support also
@@ -881,6 +881,33 @@ preserved. Version 2 includes the shared list-topology checks; all four routes
 pass without game-code changes. All 22 functions from the nine linked Shell
 source objects match after the shared-header changes; full verification retains
 the original EUR ROM, zero native differences and 107 passing tests.
+
+#### Shell entry wrappers and object hiding
+
+The Green and Red entry points in
+[`ov11_attack_initialize.cpp`](../../src/attack_shell_ov011/ov11_attack_initialize.cpp)
+tail-call the shared initializer with resource/variant pairs `0xc0000047, 1`
+and `0xc0000048, 0`. The projectile hide helper tail-calls the animation setter
+with `(object, -1, -1)`. Support hiding first checks for a null object, then
+hides its animation, reloads the object pointer and clears its signed halfword
+`effect_anchor_z` at offset 234.
+
+Private checkpoint-83 reports under `build/runtime/eur_high_shell_lifecycle/`
+(`evidence_red83_v1.json` and `evidence_green83_v1.json`) check one entry wrapper
+and both hide helpers per route. Tail target, arguments, unchanged LR/SP and
+preserved r4-r11 are checked; the initializer's resulting 612-byte work area
+has the expected resource and variant. Its internal writes remain observational.
+Hide checks cover the full work area, embedded 260-byte receiving object,
+440/304-byte models, and the support helper's own halfword store. Animation
+writes are observed only in the receiving records; renderer, palette and texture
+list roots and neighboring links are derived independently. The null-support
+branch was not reached. Other global writes, allocation lifetimes and rendering
+internals are outside this oracle.
+
+Both ordinary routes use unchanged inputs and no RAM edits. Their full capture
+sequences match the preceding support runs; final captures show the battle
+command menu. The existing entry and support oracles also run during these
+replays. All original saves are preserved.
 
 #### Mix Flower participant exit
 

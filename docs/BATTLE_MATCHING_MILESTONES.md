@@ -9166,3 +9166,20 @@ Firstred83_v1 missing-neighbor failure and correctedv2 retained privately.
 States3-5/nullsupport/non-idleactorreturn branch remain outside live coverage;
 other limits and exact report names are in reconstruction notes.
 Matching C/C++:821300/1563700(52.5229%); trial target860044, remaining38744.
+
+
+## Shell entry wrappers and object hiding (2026-09-20)
+
+Four C++ helpers add 128 matching bytes: Green/Red entry wrappers and support/
+projectile hiding. Existing contiguous units extend to own the new ranges.
+Two checkpoint-83 routes check all four functions, six completed calls in total,
+with tail ABI, support anchor store and bounded animation/list checks. Inputs
+and captures match the prior support routes; no RAM edits or original-save changes.
+Null-support handling remains untested. See the reconstruction reference for limits.
+
+The initial full gate caught three non-UTF-8 dashes introduced in the previous
+support documentation after its build check. Only those bytes were replaced.
+The corrected tree passes the complete gate, including documentation tests.
+Matching C/C++: 821428/1563700 (52.5310%); trial target 860044, remaining 38616.
+Private evidence: high_effort_50_to_55/shell_lifecycle_validation.json and
+build/runtime/eur_high_shell_lifecycle/evidence_{red,green}83_v1.json.

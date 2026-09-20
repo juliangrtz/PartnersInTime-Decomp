@@ -1,5 +1,5 @@
 /*
- * Shell attack setup (overlay 11, 0x020C5AF8-0x020C5EEC).
+ * Shell attack setup (overlay 11, 0x020C5AF8-0x020C5F1C).
  *
  * Allocates the attack's work area and objects and puts the participants in
  * their starting positions.
@@ -8,6 +8,16 @@
 #include "shell_internal.h"
 
 extern "C" {
+void Overlay11Attack_StartRedShell(BattlePartyActor *user)
+{
+    Overlay11Attack_Initialize(user, 0xc0000048, 0);
+}
+
+void Overlay11Attack_StartGreenShell(BattlePartyActor *user)
+{
+    Overlay11Attack_Initialize(user, 0xc0000047, 1);
+}
+
 void Overlay11Attack_Initialize(BattlePartyActor *user, int resource, int configuration)
 {
     Overlay11AttackWork *work = func_ov010_020c2978(user, 612, data_ov011_020c5f20[configuration] == 2);

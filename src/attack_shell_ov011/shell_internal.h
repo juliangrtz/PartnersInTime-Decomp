@@ -121,6 +121,7 @@ int func_ov011_020c2e20(BattlePosition *position, Overlay11Controller *controlle
                         Overlay11Projectile *projectile);
 int Overlay11Attack_GetTravelDuration(int start, int speed_q8, int target, int step);
 void Overlay11Support_Reset(Overlay11Support *support);
+void Overlay11Support_Hide(Overlay11Support *support);
 void func_ov011_020c2f38(Overlay11Support *support);
 void Overlay11Support_Update(Overlay11Support *support, Overlay11Projectile *projectile);
 void Overlay11Support_ScheduleIntercept(Overlay11Support *support, int duration, int delay, int reposition,
@@ -131,8 +132,11 @@ void Overlay11Support_LaunchAway(Overlay11Support *support, int speed_q8);
 void Overlay11Support_UpdateSpeed(Overlay11Support *support);
 void func_ov011_020c39fc(Overlay11Support *support, BattlePartyActor *user, int configuration, s16 side);
 int Overlay11Projectile_IsReady(Overlay11Projectile *projectile, int wait_for_support);
+void Overlay11Projectile_Hide(Overlay11Projectile *projectile);
 void Overlay11Controller_Initialize(Overlay11Controller *controller, int actor_id, BattlePartyActor *user,
                                     int load_id, u16 saved_id, Overlay11ControllerConfig *rows, int side);
 void Overlay11Attack_Initialize(BattlePartyActor *user, int resource, int configuration);
+void Overlay11Attack_StartRedShell(BattlePartyActor *user);
+void Overlay11Attack_StartGreenShell(BattlePartyActor *user);
 }
 #endif

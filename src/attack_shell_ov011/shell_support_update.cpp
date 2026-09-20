@@ -107,4 +107,13 @@ void Overlay11Support_Update(Overlay11Support *support, Overlay11Projectile *pro
         }
     }
 }
+
+void Overlay11Support_Hide(Overlay11Support *support)
+{
+    if (support->object) {
+        BattleSceneObject_SetAnimation(support->object, -1, -1);
+        support->object->effect_anchor_z = 0;
+    }
+}
+
 }

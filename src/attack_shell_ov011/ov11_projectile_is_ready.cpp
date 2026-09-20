@@ -1,5 +1,5 @@
 /*
- * Shell readiness (overlay 11, 0x020C4228-0x020C426C).
+ * Shell readiness (overlay 11, 0x020C4228-0x020C4284).
  *
  * Whether the shell has reached the state the next phase needs.
  */
@@ -7,6 +7,11 @@
 #include "shell_internal.h"
 
 extern "C" {
+void Overlay11Projectile_Hide(Overlay11Projectile *projectile)
+{
+    BattleSceneObject_SetAnimation(projectile->object, -1, -1);
+}
+
 int Overlay11Projectile_IsReady(Overlay11Projectile *projectile, int wait_for_support)
 {
     int state = projectile->state;

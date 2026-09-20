@@ -15,8 +15,8 @@ int ArchiveIO_FinishOverlay(void *);
 void BattleSpecialHandle_QueueReload(void *);
 void Overlay20Attack_Create(BattlePartyActor *);
 void Overlay21Attack_Create(BattlePartyActor *);
-void func_ov011_020c5f04(BattlePartyActor *);
-void func_ov011_020c5eec(BattlePartyActor *);
+void Overlay11Attack_StartRedShell(BattlePartyActor *);
+void Overlay11Attack_StartGreenShell(BattlePartyActor *);
 void Overlay13Attack_Initialize(BattlePartyActor *);
 void func_ov014_020c60f4(BattlePartyActor *);
 void func_ov014_020c60e4(BattlePartyActor *);
@@ -37,13 +37,13 @@ void BattleAttack_StartSelectedCommand(BattlePartyActor *actor)
         BattleAttack_RequestOverlay(actor, OVERLAY_21_ID, Overlay21Attack_Create);
         break;
     case 2:
-        BattleAttack_RequestOverlay(actor, OVERLAY_11_ID, func_ov011_020c5f04);
+        BattleAttack_RequestOverlay(actor, OVERLAY_11_ID, Overlay11Attack_StartRedShell);
         break;
     case 4:
         BattleAttack_RequestOverlay(actor, OVERLAY_13_ID, Overlay13Attack_Initialize);
         break;
     case 6:
-        BattleAttack_RequestOverlay(actor, OVERLAY_11_ID, func_ov011_020c5eec);
+        BattleAttack_RequestOverlay(actor, OVERLAY_11_ID, Overlay11Attack_StartGreenShell);
         break;
     case 7:
         BattleAttack_RequestOverlay(actor, OVERLAY_14_ID, func_ov014_020c60f4);
@@ -67,7 +67,7 @@ void BattleAttack_StartSelectedCommand(BattlePartyActor *actor)
         BattleAttack_RequestOverlay(actor, OVERLAY_17_ID, func_ov017_020c68ec);
         break;
     default:
-        BattleAttack_RequestOverlay(actor, OVERLAY_11_ID, func_ov011_020c5eec);
+        BattleAttack_RequestOverlay(actor, OVERLAY_11_ID, Overlay11Attack_StartGreenShell);
         break;
     }
 }
