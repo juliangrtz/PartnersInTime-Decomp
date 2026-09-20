@@ -9387,3 +9387,14 @@ cases and a visible return to the battle menu; child resource effects remain
 bounded observations. All 104 original saves are unchanged.
 Matching C/C++: 833872/1563700 (53.3269%); target 860044,
 remaining 26172. Private evidence: high_effort_50_to_55/mix_initialize_validation.json.
+
+
+## Shop member-selection eligibility (2026-09-20)
+
+Linked the grid-member eligibility predicate with its native shared success exit.
+The full build, golden ROM, native relink and 107 tests pass; 17 functions in the
+three relevant compiled objects match. Live navigation covers allowed and denied
+selection; 96 isolated ARM cases cover absence, bypass, item groups and wrapping.
+All 104 original saves are unchanged. The first route's missing coverage is retained.
+Matching C/C++: 834012/1563700 (53.3358%); target860044,
+remaining26032. Private evidence: high_effort_50_to_55/shop_member_validation.json.

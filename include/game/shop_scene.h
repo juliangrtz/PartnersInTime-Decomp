@@ -24,6 +24,7 @@ ShopSceneTask *ShopScene_Delete(ShopSceneTask *task);
 ShopSceneTask *ShopScene_Destroy(ShopSceneTask *task);
 void ShopScene_LoadBackgrounds(ShopSceneTask *task);
 void ShopScene_UploadFrame(void);
+int ShopScene_CanSelectMember(int column, int row);
 #ifdef __cplusplus
 }
 #endif

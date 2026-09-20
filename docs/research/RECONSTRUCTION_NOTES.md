@@ -7749,3 +7749,24 @@ execute native lookup and motion-table helpers; other children are explicit
 stubs. Live child writes are bounded observations, not independent proofs of
 resource loading, buffer payloads, heap lifetimes or rendering. Full caller
 matching and the checked runtime paths do not establish every child branch.
+
+
+## Shop member-selection eligibility
+
+[`shop_member_selection.cpp`](../../src/shop_ov009/shop_member_selection.cpp)
+checks the party member selected by the shop's two-by-two grid. It rejects
+absent members, then either accepts the scene's bypass mode or asks whether
+the selected item can be equipped. The grid table contains full words, but the
+member ID uses only the low byte. The presence flags retain their existing
+interior data alias; workspace byte `+0x9B` controls the bypass.
+
+Private `build/runtime/eur_high_shop_member/live_v2.json` records an allowed
+and a denied selection after buying Shell Slacks and opening the change-now
+prompt. The controlled shop-entry command is restored before ordinary navigation;
+all 104 original saves remain unchanged. The final capture shows the field again.
+The first route reached only purchase confirmation and failed the coverage check;
+its `live_v1.json` remains separate. Ninety-six copied-RAM cases in
+`isolated_v1.json` cover all four cells, absence, bypass, both clothing groups,
+badges and row wrapping. The predicate and query helpers execute without stubs.
+Checks cover arguments, returns, preserved registers and unchanged RAM; these
+fixtures do not add live object-lifetime or graphics coverage.
