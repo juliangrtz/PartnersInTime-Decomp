@@ -9183,3 +9183,17 @@ The corrected tree passes the complete gate, including documentation tests.
 Matching C/C++: 821428/1563700 (52.5310%); trial target 860044, remaining 38616.
 Private evidence: high_effort_50_to_55/shell_lifecycle_validation.json and
 build/runtime/eur_high_shell_lifecycle/evidence_{red,green}83_v1.json.
+
+
+## Pocket Chomp attack callbacks (2026-09-20)
+
+The entry and main callbacks add 840 matching C++ bytes, including participant
+update ordering, target handoff, repeated rounds and final callback/root cleanup.
+The full build passes with the golden EUR ROM, zero native differences and 107 tests.
+The 4,111-frame checkpoint-83 replay checks 2,922 calls across all five ordinary
+entry/main phases, 18 further rounds and final cleanup. Inputs and captures match
+the prior Chomp route through frame 3,110; neutral frames then reach the command
+menu. Child-helper outputs remain bounded observations; see the reconstruction
+reference for coverage limits and preserved failed probes. Original saves unchanged.
+Matching C/C++: 822268/1563700 (52.5848%); trial target 860044, remaining 37776.
+Private validation: high_effort_50_to_55/chomp_update_validation.json.

@@ -50,3 +50,6 @@ src/attack_pocket_chomp_ov018/chomp_adult_jump.cpp:
 
 src/attack_pocket_chomp_ov018/chomp_visibility.cpp:
     .text start:0x020c3c08 end:0x020c3c34
+
+src/attack_pocket_chomp_ov018/chomp_attack_update.cpp:
+    .text start:0x020c6a20 end:0x020c6d68

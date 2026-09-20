@@ -72,8 +72,8 @@ func_ov018_020c6484 kind:function(arm,size=0x494) addr:0x020c6484
 Overlay18Attack_ResetObjectController kind:function(arm,size=0x30) addr:0x020c6918
 Overlay18Attack_ClearObjectAnchor kind:function(arm,size=0x10) addr:0x020c6948
 Overlay18Attack_InitializeObjectController kind:function(arm,size=0xc8) addr:0x020c6958
-func_ov018_020c6a20 kind:function(arm,size=0x1f4) addr:0x020c6a20
-func_ov018_020c6c14 kind:function(arm,size=0x154) addr:0x020c6c14
+PocketChompAttack_Update kind:function(arm,size=0x1f4) addr:0x020c6a20
+PocketChompAttack_UpdateEntry kind:function(arm,size=0x154) addr:0x020c6c14
 func_ov018_020c6d68 kind:function(arm,size=0x3ec) addr:0x020c6d68
 data_ov018_020c7160 kind:data(any) addr:0x020c7160
 data_ov018_020c7164 kind:data(any) addr:0x020c7164

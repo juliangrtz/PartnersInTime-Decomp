@@ -1298,6 +1298,47 @@ mapped RAM/DTCM/MMIO outside 256 stack bytes and the calling convention are
 checked. Visibility and velocity-ratio coverage is isolated-only. Both ROM
 builds and 81 tests pass; all 104 original saves are unchanged.
 
+### Pocket Chomp attack callbacks
+
+[`chomp_attack_update.cpp`](../../src/attack_pocket_chomp_ov018/chomp_attack_update.cpp)
+reconstructs the adjacent update and entry callbacks at `0x020C6A20..0x020C6D68`.
+The 656-byte work area contains two 36-byte adult controllers at offset 304,
+two 32-byte support controllers at 376, the 192-byte Chomp at 440 and active
+participant pointers at 632. The entry callback updates adults and supports
+as pairs; the main callback updates all adults before all supports. Preserve
+that order. Once the center and adults finish entry, it selects a target and
+installs the main callback. Subsequent rounds choose participants through
+the selection helper. The final phase returns the backdrop, hides and clears
+participant objects, resets the actor callback and detaches the work root.
+This root clear does not itself free the allocation.
+
+Private `build/runtime/eur_high_chomp_update/evidence_chomp83_v6.json` passes
+4,111 frames from checkpoint 83 without RAM edits. Its first 3,110 frames use
+the previous Chomp route's identical inputs, 17 automatic keypad presses and
+capture hashes. A further 1,001 neutral frames let the attack finish; the final
+capture shows the battle command menu. All 2,922 callback invocations are checked:
+entry phases 0/1 run 1/160 times, main phases 0/1/2 run 2,726/1/34 times.
+The route reaches 18 further rounds, one stop transition and one final cleanup.
+The no-target branch and unsupported phase values were not reached.
+
+The oracle independently checks loops, phase decisions, ordered helper arguments,
+own stores, object lookups, idle-query results, callback-reset writes, SP and
+r4-r11. It checks the full work allocation, 136-byte party records, embedded
+260-byte scene objects, 440/304-byte models and surrounding renderer, palette
+and texture lists. Child-controller results remain observations within named
+participant/work fields and attack object/model records; target selection is
+also observed. Newly queued 24-byte texture records and their placement are
+observed, while existing neighbor/root links are derived. Damage, other globals,
+motion-list topology, allocation lifetimes, sound and rasterization are outside
+this oracle. All 104 original saves retain their hashes.
+
+Earlier failed probes are preserved: missing child rating fields, newly queued
+texture nodes, and the collision helper's stop-bit write. The original automatic
+route also ended before cleanup, motivating the neutral extension. These were
+probe corrections and coverage extensions; the reconstructed game code did not
+change. Both actual compiled functions match, and the full build retains the
+golden EUR ROM, zero native-relink differences and 107 passing tests.
+
 ### Battle interface text quads
 
 `BattleInterface_DrawText` adds 484 matching bytes. It draws a text-buffer quad
