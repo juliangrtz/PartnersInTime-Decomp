@@ -925,3 +925,5 @@ src/field/field_party_follower_offset.cpp
 src/field/field_navigation_bounds.c
 
 src/field/field_body_overlap.c
+
+src/attack_copy_flower_ov017/ov17_participant_begin_exit_arc.cpp

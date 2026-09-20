@@ -8971,3 +8971,15 @@ cases cover all eight masks and arithmetic boundaries without helper stubs.
 Ordinary walking/jumping and hammer probes had no calls. See the body overlap
 research notes and controlled43_v1 / body_overlap_isolated_v1 private reports.
 All 104 original saves are unchanged.
+
+
+## Copy Flower exit arcs
+
+Linked Overlay17Participant_BeginExitArc with exact compiled matching. C/C++
+covers 815712 / 1563700 bytes (52.1655%). Full gate: golden ROM,
+zero native differences and 107 tests. Ten ordinary keypad-driven calls cover
+four reverse and six forward animations in 1810 frames; 208 isolated ARM946
+caller cases use explicit helper stubs for conversion and callback boundaries.
+The full attack workspace is checked; live helper observations have bounded
+object/model ranges. See Copy Flower exit arc research notes and private
+copy83_v1 / copy_flower_leave_isolated_v1 reports. All 104 saves are unchanged.

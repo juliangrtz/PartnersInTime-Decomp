@@ -6676,3 +6676,44 @@ without helpers or stubs; complete records, return values, SP/r4-r11, DTCM and
 unused stack are checked, with native writes permitted only in the scratch
 stack. Maximum stack use is 16 bytes. Extreme arithmetic fixtures do not prove
 that those records occur during gameplay. All 104 original saves are unchanged.
+
+
+## Copy Flower exit arcs
+
+`Overlay17Participant_BeginExitArc` (overlay 17, `0x020C52F4`, 320 bytes)
+starts vertical channel 3 and horizontal channel 2 for the selected group tuning
+duration, moving toward X = 352. Y is saved before the vertical-motion helper
+and compared with the current Y afterward. Animation command `0x400C` precedes
+the formation check. Even formations restart the current animation at its last
+frame and negate its signed 16-bit rate; all formations enter phase 7. The
+animation getter's full result survives the length lookup and narrows to a byte
+only at the virtual setter. Frame subtraction and rate negation narrow to signed
+16-bit values. Keeping that conversion at the call matches the native schedule.
+
+Private `build/runtime/eur_high_copy_flower_leave/copy83_v1.json` checks ten
+ordinary calls over 1,810 frames, starting at the verified Copy Flower setup
+checkpoint for story save 83. Inputs are A for eight frames and a wait, with
+up to ten ordinary timed A/B/X/Y presses selected from the live input window.
+Four calls take the reverse-animation branch and six take the forward branch.
+The inspected final capture shows the battle command menu. Participants are
+296-byte embedded slots at workspace + 304, not separate heap allocations; the
+workspace allocation is 16,356 bytes, larger than the shared prefix type.
+The whole workspace, watched renderer allocations and tuning table are checked.
+Duration lookup, call arguments, conversions, final phase, SP and preserved
+registers have independent expectations. Movement/animation helper effects are
+observational only within the current 260-byte scene-object prefix and watched
+models. Animation ID/length results are observed; active-model selection and
+tuning results are independently checked. This does not verify helper internals,
+heap/global palette lists or rasterization. No game-record RAM fixture is used.
+
+`build/analysis/high_effort_50_to_55/copy_flower_leave_isolated_v1.json` adds
+208 ARM946 cases on copied RAM/DTCM with synthetic workspace, models and virtual
+table. It covers all formations, either model, byte/halfword conversion extremes,
+durations 0/1/65535 and signed coordinates. Explicit helper stubs check arguments,
+write prescribed state and clobber caller-saved registers. A changed Y tests the
+cached value; eight animation callback fixtures change formation/model selection
+to test their reload. Whole records, table, root, SP/r4-r11, DTCM and unused stack
+are checked; native writes are limited to the phase halfword and scratch stack.
+Maximum stack use is 40 bytes. These fixtures verify the caller, not helper
+implementations or validity of every synthetic state in gameplay. All 104
+original saves retain their baseline hashes.

@@ -57,6 +57,7 @@ void Overlay17Participant_ReturnOthers(Overlay17Participant *participant, int re
 void Overlay17Participant_ResumeArc(Overlay17Participant *participant);
 void Overlay17Participant_BeginRecoveryAnimation(Overlay17Participant *participant);
 void Overlay17Participant_BeginExit(Overlay17Participant *participant);
+void Overlay17Participant_BeginExitArc(Overlay17Participant *participant);
 void Overlay17AttackObject_Initialize(Overlay17AttackObject *attack_object, int group, int phase, int animation_component,
                                       int enabled);
 void Overlay17AttackObject_ReleaseModel(Overlay17AttackObject *attack_object);
