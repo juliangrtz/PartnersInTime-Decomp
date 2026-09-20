@@ -8644,3 +8644,13 @@ with explicit animation/text stubs. Source saves remain unchanged. See
 +loop; 256 isolated console-flag cases use explicit initializer stubs. All source
 +saves remain unchanged. See [evidence](research/RECONSTRUCTION_NOTES.md#game-boot-entry).
 +
+
+## Pause list selection sprite creation
+
+The cursor, marker, scroll-arrow and item-heading creator adds 1,080 matching
+C++ bytes, reaching 797,868 / 1,563,700 (51.0244%). The first draft and actual
+source object match; full ROM/native verification and 107 tests pass. Three
+ordinary-input routes check four creator calls plus the nested heading-arrow
+creator; 300 copied-RAM cases cover additional boundaries with explicit model
+and animation stubs. See
+[evidence and limits](research/RECONSTRUCTION_NOTES.md#pause-list-selection-sprite-creation).

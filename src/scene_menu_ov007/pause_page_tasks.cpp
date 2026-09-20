@@ -41,7 +41,6 @@ void func_ov007_0207b2dc(int, int);
 void func_ov007_0207ae0c(void);
 void func_ov007_020784a0(void);
 void func_ov007_020782a4(void);
-void func_ov007_0207ea4c(PausePageTask *, int);
 void func_ov007_0206c6a0(PauseMenuElement *);
 void func_ov007_0206c0e4(PauseMenuElement *);
 }
@@ -153,7 +152,7 @@ extern "C" void PausePage_OpenTask(PausePageTask *task)
             switch (menu) {
             case 0:
             case 3:
-                func_ov007_0207ea4c(task, 0);
+                PauseList_CreateSelectionSprites(task, 0);
                 func_ov005_02066358((PauseMenuElement *)task, func_ov007_0206c6a0, 0);
                 break;
             case 1:

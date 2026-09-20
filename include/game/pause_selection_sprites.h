@@ -1,6 +1,7 @@
 #ifndef PIT_GAME_PAUSE_SELECTION_SPRITES_H
 #define PIT_GAME_PAUSE_SELECTION_SPRITES_H
 #include <game/pause_scene.h>
+#include <game/pause_navigation.h>
 
 /* Category cursor origin in pixels; the selected category adds a row offset. */
 typedef struct PauseSelectionSpriteTask {
@@ -13,6 +14,7 @@ typedef char PauseSelectionSpriteTaskSize[sizeof(PauseSelectionSpriteTask) == 72
 #ifdef __cplusplus
 extern "C" {
 #endif
+void PauseList_CreateSelectionSprites(PausePageTask *parent, int suppress_heading);
 void PauseEquipment_CreateCategoryCursor(void);
 void PauseEquipment_UpdateCategoryCursor(PauseSelectionSpriteTask *task);
 void PauseList_UpdateSelectionMarker(PauseMenuElement *task);

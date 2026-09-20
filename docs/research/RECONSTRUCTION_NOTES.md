@@ -5431,3 +5431,53 @@ Those failed reports and the original producer are retained separately.
 +All 104 original save hashes remain unchanged. The full ROM/native relink and
 +107 tests pass. Resident coverage changes; overlay coverage is unchanged.
 +
+
+## Pause list selection sprite creation
+
+[PauseList_CreateSelectionSprites](../../src/scene_menu_ov007/pause_list_sprite_create.cpp)
+at `0x0207EA4C..0x0207EE84` creates a cursor and selected-row marker for nonempty
+lists. Lists longer than nine rows also receive two scroll arrows. Item kinds
+0/1 can create a heading unless the caller suppresses it or the workspace's
+`+0x11F` selector is zero. The selector values 1/2/3 choose animations 0/11/10;
+other nonzero values still create the heading but skip that animation call.
+The function preserves repeated list-kind queries and the lower arrow's flag
+store before its animation call. The first C++ draft matches all 1,080 bytes.
+
+All tasks occupy 72-byte pool slots. Arrow positions use signed halfword scroll
+origins and Q12 task coordinates; task offset 16 links to the page controller.
+Heading offset 40 stores one member byte, followed by Q12 x/y, target y and step.
+The creator reads the selected-menu index as signed and uses the existing member
+mapping table. It attaches 336-byte ResourceA models and uses assets 75/78.
+
+Three ordinary-input routes from checkpoint 65 cover Clothing, Items, Key Items
+and Bros. Items over 3,524 frames. Four calls to the new creator and one nested
+heading-arrow creation are checked, including lists with 18/13/2/7 entries,
+both heading-suppression values, both scroll-arrow outcomes and heading selector
+1. The oracle independently checks helper order/arguments, query results,
+15 task/model allocations and attachments, task-group links, caller fields,
+and full task/model/workspace/party/save/display records. Model initialization
+and animation are observed only within each 336-byte receiver. Thirty external
+texture/palette list insertions are derived from validated neighboring nodes
+and roots. All routes return visibly to the field with full overlay-0 guards;
+no RAM fixtures are used in these replays. Later cleanup and rasterization are
+outside this creator oracle's independent coverage.
+
+The separate 300-case copied-RAM check combines kinds 0..4, counts 0/1/9/10/255,
+both suppression values and heading selectors 0/1/2/3/4/255, varying all five
+selected-menu indices and signed scroll coordinates. It executes the complete
+native creator, queries, asset lookup and task/model pool helpers. Explicit
+initialization/animation stubs change flag bits and clobber caller-saved registers,
+checking store order across callbacks; the nested heading-arrow creator is an
+ABI stub here and is checked separately in the live route. Expected effects are
+compared against all 4 MiB of main RAM, bounded scratch memory, SP and r4-r11.
+These fixtures do not establish live behavior for the synthetic combinations.
+
+Private reports are `eur_high_pause_list_sprite_create/clothing65_v3.json`,
+`items65_v4.json`, `bros65_v4.json` and `isolated_v2.json`. Producers and failed
+versions are preserved under `build/analysis/high_effort_50_to_55/`. Initial
+probes corrected texture-list link offsets and recognition of a field function
+overlapping the watched pause address; the first item route reopened the pause
+menu after exiting. The first isolated guard confused an interior instruction
+with a function start from another overlay. Failed runs remain separate from
+the passing reports. Actual source objects, the golden ROM, native relink and
+107 tests pass; all 104 original saves retain their experiment-baseline hashes.
