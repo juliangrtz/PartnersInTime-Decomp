@@ -20,7 +20,7 @@ struct PocketChompAttackWorkPrefix {
     u8 unknown17[241];
     u16 target_id;
     u8 unknown260[372];
-    PocketChompSupport *controller;
+    PocketChompAdultMotion *active_adult;
     u8 unknown636[8];
     u16 blocked_target;
     u16 horizontal_offset, contact_offset, progress;
@@ -34,7 +34,7 @@ extern void BattleMotion_StartFollower(BattleSceneObject *, BattleSceneObject *,
 extern void func_0200940c(BattleModel *, s16);
 extern void func_ov018_020c2e50(void *, int);
 extern void Overlay10Party_AverageStats(void *, int);
-extern int func_ov018_020c2c14(u16, BattleSceneObject *);
+extern int func_ov018_020c2c14(int, BattleSceneObject *);
 extern void func_ov018_020c4c70(PocketChompSupport *, PocketChomp *);
 extern void func_ov018_020c3ea8(PocketChomp *);
 extern void func_ov018_020c40b8(PocketChomp *, int, int, int);

@@ -98,7 +98,9 @@ typedef char PocketChompSupport_SizeCheck[sizeof(PocketChompSupport) == 32 ? 1 :
 #ifdef __cplusplus
 extern "C" {
 #endif
-int PocketChompSupport_GetClampedDistance(PocketChompSupport *support, PocketChomp *center);
+int PocketChompAdult_GetClampedDistance(PocketChompAdultMotion *adult, PocketChomp *center);
+void PocketChomp_Update(PocketChomp *center, PocketChompAdultMotion *adult,
+    PocketChompSupport *support, PocketChompSupport *other_support);
 PocketChompTether *PocketChomp_StartTether(BattleSceneObject *object, int channel,
     BattleSceneObject *target, int source_x, int source_z, int target_x, int target_z);
 void PocketChompAttack_ReturnBackdrop(void);

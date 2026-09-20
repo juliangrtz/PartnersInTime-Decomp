@@ -1339,6 +1339,42 @@ probe corrections and coverage extensions; the reconstructed game code did not
 change. Both actual compiled functions match, and the full build retains the
 golden EUR ROM, zero native-relink differences and 107 passing tests.
 
+### Pocket Chomp phase updates
+
+[`chomp_center_update.cpp`](../../src/attack_pocket_chomp_ov018/chomp_center_update.cpp)
+reconstructs the full 1,008-byte updater at `0x020C4518..0x020C4908` in C++.
+It advances entry/reveal/run/exit phases, waits for motion channels, handles delayed
+launches and responds to collisions. Pending-launch and alternate-bounce timers
+are processed after the phase switch, including after a helper changes the phase.
+The sound helper at `0x020C2C14` accepts a full-width ID and narrows it internally;
+narrowing the caller's local value produces two extra instructions. Work offset
+632 points to the active 36-byte adult controller, so the distance helper now
+uses that type instead of the 32-byte support type. All 53 functions across the
+18 compiled Chomp objects remain exact after the shared declaration changes.
+
+Private `eur_high_chomp_center/evidence_chomp83_v2.json` checks 2,922 invocations
+over 4,111 frames with no RAM edits. Phase counts are 0:834, 1:1868, 4:60, 6:44,
+7:22, 8:9, 9:13 and 11:72. It checks 19 delayed launches, 18 completed rounds
+and one collision response. Inputs, automatic presses and every capture match
+the prior outer-callback replay; the final battle command menu was inspected.
+The full 656-byte work allocation, party/scene/model records and neighboring
+renderer/palette/texture lists are checked. Own stores, timer/phase decisions,
+ordered helper arguments, sound visibility, distance clamping, speed lookup,
+motion queries and the collision stop bit have independent expectations. Child
+motion/animation writes have bounded observations; collision geometry, other
+globals, resource lifetimes, screen/audio output and rasterization are unproved.
+
+The live route does not enter phase 2 or expire an alternate-bounce timer.
+`isolated_v2.json` supplements it with 76 copied-RAM ARM946 cases covering all
+32 phase values, motion-query outcomes, timer boundaries, directions, speed
+threshold extremes and collision return values. Lookup/query helpers execute
+natively; other child helpers are explicit stubs. The test checks ordered own
+stores, arguments, SP/r4-r11 and all mapped RAM/DTCM except 256 stack bytes.
+This proves caller branches under those fixtures, not live child transitions.
+Failed versions preserve an overly broad live phase assertion and Unicorn hooks
+for conditionally skipped ARM stores; the latter now honors CPSR conditions.
+Both ROM checks pass, 107 tests pass and all 104 original saves are unchanged.
+
 ### Battle interface text quads
 
 `BattleInterface_DrawText` adds 484 matching bytes. It draws a text-buffer quad

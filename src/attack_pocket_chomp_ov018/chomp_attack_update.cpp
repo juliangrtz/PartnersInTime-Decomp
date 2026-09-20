@@ -30,7 +30,6 @@ typedef char PocketChompAttackWorkSize[sizeof(PocketChompAttackWork) == 656 ? 1 
 extern "C" {
 void func_ov018_020c6484(PocketChompAdultMotion *);
 void func_ov018_020c5214(PocketChompSupport *, PocketChomp *);
-void func_ov018_020c4518(PocketChomp *, PocketChompAdultMotion *, PocketChompSupport *, PocketChompSupport *);
 int Overlay10Enemy_SelectReactionTarget(void);
 void func_ov018_020c3298(int, int);
 void PocketChompAttack_Update(BattlePartyActor *);
@@ -48,7 +47,7 @@ void PocketChompAttack_UpdateEntry(BattlePartyActor *user)
         func_ov018_020c6484(adult);
         func_ov018_020c5214(support, &work->center);
     }
-    func_ov018_020c4518(&work->center, work->adults, &work->supports[0], &work->supports[1]);
+    PocketChomp_Update(&work->center, work->adults, &work->supports[0], &work->supports[1]);
     switch (work->phase) {
     case 0: {
         work->contact_offset = 64;
@@ -85,7 +84,7 @@ void PocketChompAttack_Update(BattlePartyActor *user)
     PocketChompSupport *support = work->supports;
     for (j = 0; j < 2; ++j, ++support)
         func_ov018_020c5214(support, &work->center);
-    func_ov018_020c4518(&work->center, work->active_adult, work->active_support, work->other_support);
+    PocketChomp_Update(&work->center, work->active_adult, work->active_support, work->other_support);
     switch (work->phase) {
     case 0:
         if (!work->active_adult->bits.phase && !work->center.bits.phase) {

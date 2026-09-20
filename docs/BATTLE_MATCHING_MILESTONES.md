@@ -9197,3 +9197,16 @@ menu. Child-helper outputs remain bounded observations; see the reconstruction
 reference for coverage limits and preserved failed probes. Original saves unchanged.
 Matching C/C++: 822268/1563700 (52.5848%); trial target 860044, remaining 37776.
 Private validation: high_effort_50_to_55/chomp_update_validation.json.
+
+
+## Pocket Chomp phase updates (2026-09-20)
+
+The center updater adds 1,008 matching C++ bytes. Shared sound-ID and adult
+controller declarations are corrected, with all 53 Chomp functions still exact.
+The ordinary checkpoint-83 route checks 2,922 calls and matches every prior
+capture through the return to the battle menu. A separate 76-case ARM946 test
+covers missing caller branches with explicit child-helper stubs. See the
+reconstruction reference for exact scope and preserved failed checks.
+Golden EUR ROM, zero native differences, 107 tests; original saves unchanged.
+Matching C/C++: 823276/1563700 (52.6492%); target860044, remaining36768.
+Private validation: high_effort_50_to_55/chomp_center_validation.json.

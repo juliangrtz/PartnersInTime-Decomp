@@ -1,6 +1,6 @@
 Overlay18Attack_ApplyTableDeltas kind:function(arm,size=0x134) addr:0x020c2ae0
 func_ov018_020c2c14 kind:function(arm,size=0x90) addr:0x020c2c14
-PocketChompSupport_GetClampedDistance kind:function(arm,size=0x44) addr:0x020c2ca4
+PocketChompAdult_GetClampedDistance kind:function(arm,size=0x44) addr:0x020c2ca4
 PocketChomp_StartTether kind:function(arm,size=0x4c) addr:0x020c2ce8
 func_ov018_020c2d34 kind:function(arm,size=0xc8) addr:0x020c2d34
 func_ov018_020c2dfc kind:function(arm,size=0x54) addr:0x020c2dfc
@@ -38,7 +38,7 @@ func_ov018_020c4174 kind:function(arm,size=0x178) addr:0x020c4174
 func_ov018_020c42ec kind:function(arm,size=0xf0) addr:0x020c42ec
 PocketChomp_PositionAtSide kind:function(arm,size=0x98) addr:0x020c43dc
 PocketChomp_SetAnimation kind:function(arm,size=0xa4) addr:0x020c4474
-func_ov018_020c4518 kind:function(arm,size=0x3f0) addr:0x020c4518
+PocketChomp_Update kind:function(arm,size=0x3f0) addr:0x020c4518
 PocketChomp_Hide kind:function(arm,size=0x2c) addr:0x020c4908
 PocketChomp_Initialize kind:function(arm,size=0x4c) addr:0x020c4934
 PocketChompSupport_UpdateParticles kind:function(arm,size=0x78) addr:0x020c4980

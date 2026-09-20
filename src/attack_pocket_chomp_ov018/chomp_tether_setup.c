@@ -1,8 +1,8 @@
 /*
  * Pocket Chomp tether (overlay 18, 0x020C2CA4-0x020C2D34).
  *
- * Starts the tether between the Chomp and its support and clamps the distance
- * the support may be dragged to.
+ * Starts the tether between scene objects and clamps the distance
+ * between the active adult controller and the Chomp.
  */
 
 #include <game/pocket_chomp.h>
@@ -22,10 +22,10 @@ PocketChompTether *PocketChomp_StartTether(BattleSceneObject *object, int channe
     return tether;
 }
 
-int PocketChompSupport_GetClampedDistance(PocketChompSupport *support, PocketChomp *center)
+int PocketChompAdult_GetClampedDistance(PocketChompAdultMotion *adult, PocketChomp *center)
 {
-    int distance = support->object->x - center->object->x;
-    if (support->bits.direction == 1)
+    int distance = adult->object->x - center->object->x;
+    if (adult->bits.direction == 1)
         distance *= -1;
     if (distance < 24)
         distance = 24;
