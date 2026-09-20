@@ -16,7 +16,7 @@ void func_0202cbd4(void *, int, unsigned);
 void func_0202cc58(const void *, void *, unsigned);
 void func_0202cd2c(const void *, void *, unsigned);
 void func_ov006_020726b8(void);
-void func_ov006_0206b9ec(TitleAnimationController *, int, u32);
+
 void func_ov006_02072f44(void *, void *, const void *);
 extern TitleAnimationController *data_ov006_0207c4e4;
 extern TitleAnimationSequence *data_ov006_0207c4e0;
@@ -66,9 +66,9 @@ extern "C" void TitleAnimation_InitSequence(void)
     DC_FlushRange(SEQUENCE->palette, 512);
     func_ov006_020726b8();
     TitleScene_LoadBackgrounds();
-    func_ov006_0206b9ec(CONTROLLER, 0, 0xC2000033);
-    func_ov006_0206b9ec(CONTROLLER, 1, 0xC2000034);
-    func_ov006_0206b9ec(CONTROLLER, 2, 0xC0000087);
+    TitleAnimation_LoadModelResource(CONTROLLER, 0, 0xC2000033);
+    TitleAnimation_LoadModelResource(CONTROLLER, 1, 0xC2000034);
+    TitleAnimation_LoadModelResource(CONTROLLER, 2, 0xC0000087);
     Append(&SEQUENCE->brightness);
     TitleBrightness_Init(&SEQUENCE->brightness);
     TitleBrightness_Start(&SEQUENCE->brightness, 32, 16, 0, 0);

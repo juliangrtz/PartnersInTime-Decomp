@@ -9358,3 +9358,12 @@ name. Live allocation/clear/caller checks and48 isolated cases pass; eight actua
 linked functions exact, golden ROM/native relink and107 tests pass.
 Matching C/C++:831628/1563700 (53.1833%); target860044, remaining28416.
 Private evidence:high_effort_50_to_55/attack_work_validation.json.
+
+
+## Title model resource loading (2026-09-20)
+
+Reconstructed archive selection, localized model entries and owned/borrowed
+texture tables in matching C++. Three cold-boot loads and 48 isolated cases pass;
+the full ROM, linked objects and 107 tests pass. All 104 saves are unchanged.
+Matching C/C++: 832572/1563700 (53.2437%); target 860044, remaining 27472.
+Private evidence: high_effort_50_to_55/title_load_resource_validation.json.

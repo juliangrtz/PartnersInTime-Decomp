@@ -7678,3 +7678,27 @@ guards, exercise four count indices and mode values, and preserve targetFFFF.
 Other children are stubs; no live alternate-attack or allocator-internal coverage
 is claimed. Eight functions in five linked objects remain exact. Golden ROM,
 native relink,107 tests and preservation of104 original saves pass.
+
+
+## Title model resource loading
+
+[`title_model_resources_load.cpp`](../../src/title_ov006/title_model_resources_load.cpp)
+selects the first matching archive prefix, indexes 20-byte model or 8-byte other
+records, and applies the language offset only for localized entries. Its four
+texture-table slots distinguish borrowed data from allocated conversion arrays;
+each ownership bit follows the corresponding size query. Allocation sizes round
+down to whole halfwords. A valid archive prefix and resource slot are required.
+
+The cold-boot save-83 route checks all three model loads, including a localized
+entry and an auxiliary archive read. It reaches the visible load menu in 1,783
+frames without RAM edits. Checks cover the complete function, child arguments,
+ordered stores, resource records, allocation extents and preserved registers.
+Generated tables are observed only within their requested output ranges.
+
+Private `build/runtime/eur_high_title_resource/live_v2.json` and `isolated_v1.json`
+record the evidence. The 48 copied-RAM cases cover all ownership combinations,
+both entry strides, language indices 0/1/5, slots 0/15 and odd size rounding.
+Their archive, allocation and conversion helpers are explicit stubs; these cases
+do not establish alternate live languages, conversion algorithms or heap lifetime.
+The full ROM, linked loader and caller objects match; 107 tests pass and all 104
+original saves are unchanged.

@@ -27,6 +27,7 @@ GameIrqTask *TitleAnimationIrq_Destroy(GameIrqTask *task);
 GameIrqTask *TitleAnimationIrq_Init(GameIrqTask *task, u32 priority, u32 unused, void *parent);
 void *TitleAnimation_ReadArchiveEntry(TitleAnimationController *work, int archive, int entry,
                                      int compressed, int unused, int heap, u32 *size_out);
+void TitleAnimation_LoadModelResource(TitleAnimationController *work, int slot, u32 id);
 void TitleAnimation_ReleaseModelResources(TitleAnimationController *work);
 void TitleAnimation_ReleaseRenderState(TitleAnimationController *work);
 void TitleAnimation_ReleaseArchiveTables(TitleAnimationController *work);

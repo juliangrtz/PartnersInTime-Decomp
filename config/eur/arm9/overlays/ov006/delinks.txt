@@ -131,3 +131,6 @@ src/title_ov006/credits_background_gradient.c:
 
 src/title_ov006/credits_textured_quad.c:
     .text start:0x02079e88 end:0x0207a034
+
+src/title_ov006/title_model_resources_load.cpp:
+    .text start:0x0206b9ec end:0x0206bd9c
