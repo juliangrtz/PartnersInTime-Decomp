@@ -9398,3 +9398,16 @@ selection; 96 isolated ARM cases cover absence, bypass, item groups and wrapping
 All 104 original saves are unchanged. The first route's missing coverage is retained.
 Matching C/C++: 834012/1563700 (53.3358%); target860044,
 remaining26032. Private evidence: high_effort_50_to_55/shop_member_validation.json.
+
+
+## Shop member-grid position lookup
+
+Added the row-major reverse lookup with first-match and (0, 0) fallback behavior.
+Both functions in shop_member_selection.cpp match their complete 236-byte range;
+new coverage is 96 bytes, bringing linked C/C++ to 834108/1563700 (53.3419%).
+The full gate passed: golden EUR ROM, zero native differences, 107 tests.
+Private eur_high_shop_grid/live_v1.json checks one lookup, both output stores
+and the receiving task, retaining member eligibility and 5192 buying-marker
+checks. isolated_v1.json covers 48 ARM946 cases without stubs. Original 104 saves
+are unchanged; the copied-state route purchases equipment and returns to field.
+No additional lifetime or independent graphics coverage is claimed.

@@ -161,4 +161,4 @@ src/shop_ov009/shop_buy_marker.cpp:
     .text start:0x02070ad0 end:0x02070cfc
 
 src/shop_ov009/shop_member_selection.cpp:
-    .text start:0x0206c1d8 end:0x0206c264
+    .text start:0x0206c1d8 end:0x0206c2c4

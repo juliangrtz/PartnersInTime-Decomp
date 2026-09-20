@@ -7770,3 +7770,18 @@ its `live_v1.json` remains separate. Ninety-six copied-RAM cases in
 badges and row wrapping. The predicate and query helpers execute without stubs.
 Checks cover arguments, returns, preserved registers and unchanged RAM; these
 fixtures do not add live object-lifetime or graphics coverage.
+
+
+`ShopScene_GetMemberGridPosition` performs the reverse lookup, comparing full
+32-bit table entries in row-major order. It writes column before row, returns
+the first match, and falls back to `(0, 0)`. Its sole native caller uses the
+outputs at task offsets `+40` and `+44`; it does not consume a return value.
+Private `build/runtime/eur_high_shop_grid/live_v1.json` verifies one lookup
+while opening the equipment prompt, including both stores and the complete
+72-byte receiving task. The earlier eligibility and buying-marker checks remain
+active; the final capture shows the field. Forty-eight copied-RAM cases in
+`isolated_v1.json` cover all members, missing IDs, full-word comparisons,
+duplicate entries and aliased output pointers. They check ordered writes and
+all RAM outside the 16-byte native stack frame, without helper stubs. The live
+route buys equipment only in copied emulator state; original saves are unchanged.
+These checks do not establish every gameplay route or independent rendering.
