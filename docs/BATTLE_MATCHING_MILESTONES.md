@@ -8890,3 +8890,16 @@ visibility and link branches. Predicate/path helpers are explicitly stubbed
 in those isolated cases, while the live predicate executes natively. Golden
 ROM, native relink and 107 tests pass; original saves remain unchanged.
 See the follower-height reference for exact counts and coverage limits.
+
+
+### Follower state bindings and slope distance
+
+Two linked helpers bring matching C/C++ to 812440 / 1563700 (51.9563%).
+Four ordinary bindings during save-65 loading and eight controlled slope calls
+on a loaded castle triangle pass independent caller checks. All interrupted
+VM commands complete after restoration. Another 188 isolated ARM946 cases
+cover optional bindings, surface types, directions, coefficient selection and
+signed arithmetic; the geometry sampler is explicitly stubbed there. Native
+geometry executes in the live route, with its outputs observed. The golden
+ROM, zero-difference native relink and 107 tests pass. All original saves are
+unchanged. See the follower-binding and slope-distance reference for limits.

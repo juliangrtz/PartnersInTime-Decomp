@@ -910,3 +910,6 @@ src/field/field_resource_allocate.cpp
 src/field/field_entity_palette_profile.cpp
 
 src/field/field_party_follower_height.cpp
+
+src/field/field_follower_bind.cpp
+src/field/field_follower_distance_scale.cpp

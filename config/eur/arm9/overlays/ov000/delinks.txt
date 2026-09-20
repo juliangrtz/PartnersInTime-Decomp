@@ -452,3 +452,9 @@ src/field/field_entity_palette_profile.cpp:
 
 src/field/field_party_follower_height.cpp:
     .text start:0x0209c930 end:0x0209cb90
+
+src/field/field_follower_bind.cpp:
+    .text start:0x020b941c end:0x020b9440
+
+src/field/field_follower_distance_scale.cpp:
+    .text start:0x020bb1a0 end:0x020bb2dc

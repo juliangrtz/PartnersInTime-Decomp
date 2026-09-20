@@ -6386,3 +6386,55 @@ arguments. Full records, all write destinations, SP/r4-r11, untouched DTCM and
 unused stack are checked; maximum stack use is 24 bytes. These cases verify
 the caller, not collision geometry or path reconstruction. All original save
 hashes remain unchanged.
+
+
+## Follower bindings and slope distance
+
+`FieldParty_BindFollowerState` (overlay 0, `0x020B941C`, 36 bytes) replaces
+non-null state/target bindings at member offsets 1384/1388, then clears only
+state flag bit 0. A null state argument retains the previous binding, which
+must be valid. The state is an embedded 2208-byte party record.
+
+`FieldParty_GetSlopeDistanceScale` (`0x020BB1A0`, 316 bytes) returns Q12 one
+for a null surface or a surface of another type. For type 0 it samples the
+triangle's XY center and a direction-dependent offset using native height
+helper `0x020BDC88`. Direction is 0..7. Signed center division truncates toward
+zero. The absolute height difference is multiplied by a signed halfword
+coefficient, rounded by adding 2048 before shifting 12, narrowed to `fx32`,
+then subtracted from 4096. Surface slope-axis value 1 chooses one coefficient
+table; all other values choose the other. The member argument is unused.
+The shared sampler declaration retains a full-width flag; native code reads
+its low byte. Both current callers pass 1.
+
+Private `build/runtime/eur_high_follower_setup/cold65_v1.json` checks four
+ordinary bindings during a 2233-frame cold load of save 65. Both arguments
+are non-null in these calls. Full member/state records, pointer stores,
+enabled-bit preservation, SP and r4-r11 are checked. The final visible Thwomp
+Volcano field capture was inspected; original saves are unchanged.
+
+`live43_v5.json` uses the initialized `eur_story_043_navigation.dst` state,
+whose observed room is 150 (Peach's Castle). Eight controlled calls sample a
+loaded sloped triangle in all directions. Three produce increasing heights,
+three decreasing heights and two equal heights; all use slope axis 0.
+Member/surface records, input tables, six sampler arguments and caller return
+arithmetic are checked independently. Native geometry executes without stubs,
+but its height results are observed rather than independently recomputed.
+
+The probe temporarily redirects execution at a guarded Field VM entry.
+DeSmuME executes the already-decoded 36-byte push before redirecting; the probe
+restores those stack bytes and SP at the slope-function entry. At return it
+restores the original registers and lets the VM entry execute normally.
+All eight original commands are observed completing, and the final visible
+castle capture was inspected. This is controlled-call coverage, not a normal
+story trigger. Earlier attempts are retained: the save-65 room lacked type-0
+surfaces, and initial redirection attempts did not correctly handle the already
+decoded instruction. They are not successful verification runs.
+
+`build/analysis/high_effort_50_to_55/follower_setup_isolated_v1.json` adds 188
+ARM946 cases on copied live RAM/DTCM: eight binding combinations, 160 direction/
+axis/height-difference cases, 15 other surface types, a null surface and four
+signed center-division cases. The geometry helper is explicitly stubbed in
+these cases, with all six arguments and output pointers checked. Actual
+compiled matching callers execute; full records, native write bounds,
+SP/r4-r11, DTCM and unused stack are checked. Maximum stack use is 48 bytes.
+These fixtures do not validate the geometry implementation or graphics.

@@ -9,7 +9,6 @@
 extern "C" {
 #include <game/heap.h>
 extern const u8 data_ov000_020bfb94[];
-extern void func_ov000_020bdc88(FieldNavigationSurface *, fx32, fx32, fx32 *, fx32 *, int);
 
 static inline void ResetEdgeMasks(FieldNavigationSurface *surface, int count)
 {

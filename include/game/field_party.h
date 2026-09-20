@@ -46,7 +46,7 @@ typedef struct FieldPartyEntity {
         } auxiliary_motion;
     };
     union { u16 *unknown_568; FieldPartyFollowerFlags *follower_flags; };
-    union { u8 unknown_56c[4]; u32 unknown_56c_word; };
+    union { u8 unknown_56c[4]; u32 unknown_56c_word; struct FieldPartyEntity *following_target; };
     struct FieldPartyEntity *linked_member;
     struct FieldPartyEntity *partner;
     union {
@@ -203,6 +203,9 @@ extern "C" {
 #endif
 void FieldParty_ResetDefaultActions(FieldPartyController *party);
 void FieldParty_UpdateFollowerHeightGate(FieldPartyController *party);
+void FieldParty_BindFollowerState(FieldPartyEntity *member, void *state, FieldPartyEntity *target);
+fx32 FieldParty_GetSlopeDistanceScale(FieldPartyEntity *member, int direction,
+                                     const FieldNavigationSurface *surface);
 void FieldParty_ClearLeaderPaletteAnimation(FieldPartyController *party, int force);
 void FieldParty_StartLeaderPaletteAnimation(FieldPartyController *party, int force);
 void FieldPartyEntity_AdvanceFastSpin(FieldPartyEntity *member);

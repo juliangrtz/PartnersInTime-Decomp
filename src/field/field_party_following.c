@@ -16,7 +16,6 @@ static inline void SetCollisionPolicy(FieldRuntimeEntity *entity, int shift, int
     if (policy)
         entity->collision_policy |= (s32)((u32)policy << shift);
 }
-extern void func_ov000_020b941c(FieldPartyEntity *, void *, FieldPartyEntity *);
 extern void func_ov000_02093108(FieldPartyController *, FieldPartyEntity *, fx32, fx32 *, fx32 *);
 void FieldParty_RejoinFollower(FieldPartyController *party, int instant)
 {
@@ -67,7 +66,7 @@ void FieldParty_EnableFollowing(FieldPartyController *party)
 }
 void FieldParty_UpdateFollowing(FieldPartyController *party)
 {
-    func_ov000_020b941c(party->follower, party->follower_state, party->leader);
+    FieldParty_BindFollowerState(party->follower, party->follower_state, party->leader);
     if (!party->flags.special_contact_mode || party->leader->bits.movement_mode != 6) {
         party->follower->follower_flags->enabled = (u16)party->flags.movement_active;
     }

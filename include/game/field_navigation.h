@@ -83,6 +83,9 @@ typedef char FieldNavigationChangeManager_SizeCheck[sizeof(FieldNavigationChange
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* Native height sampler: only the low byte of the attribute-check flag is read. */
+void func_ov000_020bdc88(const FieldNavigationSurface *surface, fx32 x, fx32 y,
+                       fx32 *height, fx32 *lower_height, int check_attributes);
 void FieldArea_ApplyNavigationChange(FieldAreaContext *area, int index);
 void FieldArea_RestoreNavigationChanges(FieldAreaContext *area);
 void FieldArea_SaveNavigationChanges(FieldAreaContext *area);
