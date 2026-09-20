@@ -944,3 +944,4 @@ src/save_menu_ov008/save_scene_resources.c
 src/attack_mix_flower_ov016/participant_effect_kind.cpp
 src/attack_mix_flower_ov016/participant_effect_prepare.cpp
 src/attack_shell_ov011/shell_attack_entry.cpp
+src/attack_mix_flower_ov016/mix_participant_exit.c

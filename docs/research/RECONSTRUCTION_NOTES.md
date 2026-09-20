@@ -838,6 +838,41 @@ instructions show bits 4-5 receive `support.side + 1` when motion channel 3
 finishes. Version 2 predicts that store and bounds the associated follow-motion
 observation to the receiving scene object; both reruns pass without game changes.
 
+#### Mix Flower participant exit
+
+[`Overlay16Participant_BeginExit`](../../src/attack_mix_flower_ov016/mix_participant_exit.c)
+at `0x020C4F9C` chooses resource 56 or 57 from the participant variant's low
+bit. Variants 0/1 use component animation 2 and move to `entry_offset_x + 288`;
+variants 2/3 use animation 3 and move to `entry_offset_x - 32`. Both use channel
+3 for eight updates, preserve the object's freshly loaded Y, play sound 61 and
+enter phase 9. The two model-flag stores stay separate: bit 10 selects facing,
+then bit 11 is cleared while preserving the other bits.
+
+The private `build/runtime/eur_high_mix_exit/evidence_mix83_v1.json` passes the
+same 4,270-frame Mix Flower route. All four participants exit at frame 2,028:
+variants 2/3 target X=16, variants 0/1 X=336; their Y values are 112 or 152.
+The exit oracle independently checks ordered flag/phase stores, destinations,
+complete helper arguments, model lookup and SP/r4-r11. It checks the complete
+attack allocation, the 260-byte receiving scene object and its 440/304-byte
+renderers between calls. Resource/motion helper writes are observations within
+that object; animation writes are observations within the object/renderers.
+Other battle/global allocations, palette neighbors, helper internals, sound,
+rasterization and object lifetimes are outside this exit oracle's claims.
+
+All 665 automatic button inputs and six capture hashes equal the preceding
+verified reservation route; the final battle menu was viewed. No RAM was edited,
+all 104 source saves are unchanged, and no calls remain pending. The shared
+animation, effect-kind and reservation oracles also passed again. All 46
+functions from the 14 linked Mix Flower source objects match after the added
+declaration; the full build produces the original EUR ROM and passes 107 tests.
+
+The initial exit candidate differed only by swapping the cached work/object
+registers. Declaring the work pointer before the object pointer, while retaining
+the original order of their assignments, produced the complete native function.
+Declaration order can therefore explain a register mismatch in this compiler;
+it is not a general allocation formula. Check a specific dataflow hypothesis
+against the whole function instead of enumerating source permutations.
+
 #### Four-model table updates
 
 `BattleModelAnimation_SetModels` at `0x0206C1E4` adds 92 matching C bytes to the

@@ -9133,3 +9133,18 @@ The first probe failure (missing support-side projectile flag update) and the
 initial duplicate object-basename build failure remain recorded privately.
 See reconstruction notes for bounded helper observations and uncovered branches.
 Matching C/C++: 819412 / 1563700 (52.4021%); trial target860044, remaining40632.
+
+
+## Mix Flower participant exit (2026-09-20)
+
+Reconstructed Overlay16Participant_BeginExit at ov016 0x020C4F9C, 332 bytes,
+pure C. All 46 functions from 14 actual linked Mix Flower objects match.
+Full verification: golden EUR ROM, zero native differences and 107 tests.
+The 4270-frame mix83_v1 replay checks all four variants and both destinations,
+ordered flag/phase stores, complete helper ABI and SP/r4-r11. Full attack/object/
+model ranges checked with bounded resource, animation and motion observations;
+see reconstruction notes for limits. No RAM edits; 104 original saves unchanged.
+All 665 automatic inputs and six capture hashes match the preceding route;
+the final command menu was viewed. No pending calls.
+Matching C/C++: 819744 / 1563700 (52.4234%); trial target860044, remaining40300.
+The Shell support updater is a private exact candidate, not linked progress.

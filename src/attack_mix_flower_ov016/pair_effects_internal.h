@@ -131,6 +131,7 @@ void Overlay16PairController_Hide(Overlay16PairController *controller);
 void Overlay16Participant_Initialize(Overlay16Participant *participant, BattleSceneObject *object,
                                      int variant, int component);
 void Overlay16Participant_Hide(Overlay16Participant *participant);
+void Overlay16Participant_BeginExit(Overlay16Participant *participant);
 int Overlay16Participant_IsIdle(Overlay16Participant *participant);
 void Overlay16Participant_StartPhaseOne(Overlay16Participant *participant);
 void Overlay16Participant_StartPhaseThree(Overlay16Participant *participant);
