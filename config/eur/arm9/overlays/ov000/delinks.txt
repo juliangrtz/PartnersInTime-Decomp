@@ -443,3 +443,6 @@ src/field/field_party_music.cpp:
 
 src/field/field_party_default_actions.cpp:
     .text start:0x0209cd84 end:0x0209ce00
+
+src/field/field_resource_allocate.cpp:
+    .text start:0x020783c0 end:0x02078618

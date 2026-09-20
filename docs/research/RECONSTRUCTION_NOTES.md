@@ -6261,3 +6261,38 @@ The native default-action pairs are all zero; language variations do not reach
 the helper's localized action-9 branch. Maximum stack use is 24 bytes.
 These fixtures supplement the live calls and do not establish additional
 gameplay or sound-system coverage.
+
+
+## Field room resource and request allocation
+
+`FieldResources_AllocateRoomBuffers` (overlay 0, `0x020783C0`, 600 bytes)
+allocates primary, secondary and alternate resource arrays for two room sets.
+Their strides are 24, 20 and 20 bytes. A nonpositive count stores a null pointer;
+positive counts allocate from the main heap and clear the requested extent.
+Only five of the six special-resource indices are reset to -1.
+
+The temporary heap receives 44-byte ordinary requests for each primary resource
+and two for each secondary/alternate resource. Each primary resource also gets
+two 64-byte compressed requests. Both primary counts remain cached across the
+ordinary-request allocation. The routine clears both request arrays, publishes
+current cursors and resets the two 16-bit outstanding-read counters. Zero-size
+request arrays still call the native allocator and byte-fill helper; they return
+null and perform no payload writes. Positive allocation failure is not guarded
+by this caller. `func_0202cbd4` is its actual fill helper, distinct from
+`MI_CpuFill8`; substituting the latter changes call targets.
+
+Private `build/runtime/eur_high_resource_allocate/cold65_v1.json` records two
+calls and nine allocations in a 2233-frame ordinary cold load of save 65.
+The main/temporary heap pairs are 0/1 and 1/0, so both allocation directions
+are exercised live. Whole area records (11216 bytes), allocation pointers,
+visited heap headers/neighbors, full payloads including slack, zero-fill extents,
+counters and cursors are independently checked. The visible field capture was
+inspected; all 104 original save hashes remain unchanged.
+
+`build/analysis/high_effort_50_to_55/resource_allocate_isolated_v1.json` adds
+22 ARM946 cases on copied entry RAM/DTCM: empty, individual, mixed and eight-per-
+category sets with both heap assignments. The compiled matching caller and
+native allocation/fill helpers run without stubs or hardware maps. Checks cover
+all write destinations, heap links, untouched sixth index, SP/r4-r11, DTCM and
+unused scratch; maximum stack use is 92 bytes. These fixtures do not test
+exhausted positive allocations, asynchronous resource loading or graphics.

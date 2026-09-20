@@ -8856,3 +8856,14 @@ request and an action reset; 233 isolated ARM946 cases cover branch boundaries.
 Isolated audio calls are stubbed; sound internals remain outside the caller
 oracle. Golden ROM, native relink and 107 tests pass, with all original saves
 unchanged. See the queued-music reference for coverage limits.
+
+
+### Field room resource buffers and archive requests
+
+The exact C++ allocator brings matching code to 811112 / 1563700 (51.8713%).
+It sizes, allocates and clears both room resource sets and their request arrays.
+An automated cold load checks two calls and nine allocations across both heap
+directions; 22 isolated ARM946 cases verify empty and mixed sets, heap links,
+full payloads and write boundaries. No helpers are stubbed. Golden ROM, native
+relink and 107 tests pass; original saves remain unchanged. See the resource
+allocation reference for precise coverage and limits.

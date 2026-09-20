@@ -136,6 +136,7 @@ void FieldEntity_ConfigureRendererResources(FieldRuntimeEntity *entity, const Fi
                                             FieldPaletteResource *palette, int speed);
 int FieldResources_UsesAlternateHeap(void *field_context, int set, int resource_index);
 FieldPrimaryResource *FieldResources_FindShared(void *field_context, u32 id);
+void FieldResources_AllocateRoomBuffers(FieldResourceContext *field);
 void FieldResources_LoadRoomScripts(void *field_context);
 #ifdef __cplusplus
 }

@@ -904,3 +904,5 @@ src/field/field_party_palette.cpp
 
 src/field/field_party_music.cpp
 src/field/field_party_default_actions.cpp
+
+src/field/field_resource_allocate.cpp
