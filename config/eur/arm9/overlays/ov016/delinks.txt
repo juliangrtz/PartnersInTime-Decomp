@@ -40,3 +40,6 @@ src/attack_mix_flower_ov016/participant_effect_phases.c:
 
 src/attack_mix_flower_ov016/participant_effect_position.c:
     .text start:0x020c5914 end:0x020c5988
+
+src/attack_mix_flower_ov016/participant_effect_kind.cpp:
+    .text start:0x020c5988 end:0x020c5c38

@@ -727,6 +727,42 @@ the caller's stack, return value and SP/r4-r11 are checked; lower helper-stack
 contents are observational within the recorded bounds. These cases supplement
 the live route and do not establish asynchronous behavior or rendering coverage.
 
+#### Mix Flower participant effect changes
+
+[`Overlay16Participant_ChangeEffectKind`](../../src/attack_mix_flower_ov016/participant_effect_kind.cpp)
+at `0x020C5988` selects the participant pose and positions its paired effect.
+Kinds below 2 restore idle animation and orbit motion; entering a kind at least
+2 from kind 0/1 starts an approach motion and phase 11. Other changes use phase
+12. If the actor already has animation 3, those higher-kind branches preserve
+the participant phase and position. Every branch still refreshes model scale,
+clears the signed-halfword timer at participant `+20` and forwards the full-width
+kind to the paired effect. The four 10-byte offset records at `0x020C735C` are
+read as signed bytes; the last orbit argument is explicitly converted to `u16`.
+
+The private `build/runtime/eur_high_mix_kind/evidence_mix83_v3.json` repeats the
+4,270-frame checkpoint-83 route above without RAM edits: 130 complete calls,
+9 approach, 30 holding and 91 idle transitions, covering all four participants
+and requested kinds 1/2/3. Full battle, common and attack allocations are checked,
+along with receiving models, ordered helper arguments, phase/timer writes,
+model scale/mode, position deltas and SP/r4-r11. Animation and motion helper
+results remain bounded observations in their receiving records. Palette, render
+and texture-list placement is observed in owned nodes; outside neighbor/root
+changes are derived while preserving the other nodes' order and payload.
+Eight new renderers are observed with their actual 440/304-byte extents.
+The first two probes failed overly narrow assumptions about renderer creation
+and texture-palette neighbors; their reports and oracle versions are preserved.
+The corrected replay returns visibly to the Petey battle command menu, leaves
+no pending calls and preserves all 104 original saves.
+
+`build/analysis/high_effort_50_to_55/mix_kind_isolated_v1.json` checks 48 ARM946
+cases on copied RAM for the animation-3 shortcut absent from that live route.
+Both previous-kind branches, large positive kinds, phase-bit preservation and
+model-scale threshold boundaries are covered with the real model getters and
+scale helper. The final paired-effect change is explicitly stubbed to check
+forwarding only. All main RAM, DTCM, ordered writes and SP/r4-r11 are checked;
+the lower 128-byte helper-stack area is observational (64 bytes used).
+These cases add no live gameplay, allocator or renderer coverage.
+
 #### Four-model table updates
 
 `BattleModelAnimation_SetModels` at `0x0206C1E4` adds 92 matching C bytes to the

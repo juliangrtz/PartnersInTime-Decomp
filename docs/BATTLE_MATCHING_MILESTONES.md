@@ -9086,3 +9086,19 @@ Archive/resource-loader internals and bounded drawing-helper effects are observe
 not independently verified; no save confirmation or storage failure was simulated.
 
 Linked matching C/C++: **817,472 / 1,563,700 (52.2781%)**.
+
+
+## Mix Flower participant effect changes (2026-09-20)
+
+Reconstructed Overlay16Participant_ChangeEffectKind at ov016 0x020C5988:
+688 bytes, exact on the first private draft using the verified Bro Flower
+analogue and the full native call ABI. The actual linked object matches.
+Full verification rebuild: golden EUR ROM, zero native differences, 107 tests.
+Checkpoint-83 Mix Flower replay: 130 calls over all four participants, no RAM
+edits, 9 approach / 30 hold / 91 idle transitions. Bounded helper observations
+and independently derived caller stores and external list links; eight new
+renderers tracked. Passing mix83_v3 preserves the two failed oracle versions.
+48 copied-RAM ARM946 cases cover the unobserved animation-3 shortcut with
+real getters/scale and an explicit final-effect stub. All 104 saves unchanged.
+See the reconstruction reference for exact coverage and limitations.
+Matching C/C++: 818160 / 1563700 (52.3221%); trial target 860044, remaining 41884.

@@ -98,6 +98,7 @@ void Overlay16PairController_StartAnimation(Overlay16PairController *controller)
 void Overlay16Participant_EmitTrail(Overlay16Participant *participant);
 void Overlay16Particle_UpdateGrow(BattleAITask *task);
 void Overlay16Participant_PositionEffect(Overlay16Participant *participant);
+void Overlay16Participant_ChangeEffectKind(Overlay16Participant *participant, int kind);
 
 void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 void func_ov002_02071938(BattleSceneObject *, BattleSceneObject *, int);
