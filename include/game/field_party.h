@@ -117,6 +117,14 @@ typedef struct FieldPartyStateRecord {
 } FieldPartyStateRecord;
 typedef char FieldPartyStateRecord_SizeCheck[sizeof(FieldPartyStateRecord) == 32 ? 1 : -1];
 
+/* Partial view of the follower state; the height gate can restart its path. */
+typedef struct FieldPartyFollowerHeightState {
+    struct { u16 unknown_00 : 1, height_wait : 1, unknown_02 : 1, unknown_03_15 : 13; } flags;
+    u8 unknown_02[26];
+    int distance;
+    u8 unknown_20[2176];
+} FieldPartyFollowerHeightState;
+typedef char FieldPartyFollowerHeightState_SizeCheck[sizeof(FieldPartyFollowerHeightState)==2208?1:-1];
 typedef struct FieldPartyController {
     union {
         struct {
@@ -175,6 +183,7 @@ typedef struct FieldPartyController {
     union {
         u8 unknown_094[2212];
         struct { FieldRenderObject *unknown_094_render; u8 follower_state[2208]; };
+        struct { u8 unknown_094_prefix[4]; FieldPartyFollowerHeightState follower_height; };
     };
     FieldResourceContext **areas;
     struct FieldPartyController *paired;
@@ -193,6 +202,7 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 extern "C" {
 #endif
 void FieldParty_ResetDefaultActions(FieldPartyController *party);
+void FieldParty_UpdateFollowerHeightGate(FieldPartyController *party);
 void FieldParty_ClearLeaderPaletteAnimation(FieldPartyController *party, int force);
 void FieldParty_StartLeaderPaletteAnimation(FieldPartyController *party, int force);
 void FieldPartyEntity_AdvanceFastSpin(FieldPartyEntity *member);

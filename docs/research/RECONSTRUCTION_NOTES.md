@@ -6339,3 +6339,50 @@ animation tracks. Actual matching compiled code and native callees execute;
 all writes are bounded, and full receiving records, SP/r4-r11, DTCM and unused
 stack are checked. Maximum stack use is 124 bytes. These fixtures do not prove
 normal story-trigger coverage or subsequent palette transfers to VRAM.
+
+
+## Party follower height gate
+
+`FieldParty_UpdateFollowerHeightGate` (overlay 0, `0x0209C930`, 608 bytes)
+updates each party from `FieldPartyManager_UpdateActions`. It requires a loaded
+area with region value 71 and a room matching the party's ten-bit movement
+state. In member mode 3, movement enabled and neither follower visibility flag
+7 nor 8 set, it calls the separation predicate in both directions. Their low
+result bits are ORed into party flag 19; the other paths clear that flag.
+
+The embedded follower state starts at party +152. Its bit 1 gates following;
+bit 2 suppresses setting that gate. A set gate is cleared and the path restarted
+when separation ends, or when the follower has positive relative height, its
+previous-vertical-motion flag is clear and its current Z is at or below the
+previous Z. The path initializer receives the follower, two null arguments,
+the saved distance at party +180 and a zero fifth argument. Afterwards, setting
+the gate requires a higher follower, no active vertical motion and separation.
+A two-level link through entity +1264 suppresses it if the final entity index
+matches the leader. This link is distinct from `support_entity` at +1272.
+The shared header retains the raw follower-state view alongside these fields.
+
+Private `build/runtime/eur_high_follower_height/controls65_v1.json` checks 298
+calls and 440 native predicate invocations over 213 frames without RAM edits;
+its A input opens the save menu, and no save confirmation follows. A second
+route, `movement65_v3.json`, checks 578 calls and 616 predicate invocations in
+403 frames, including 164 region-gated returns. Its final capture shows the
+visible Thwomp Volcano field. The shorter `movement65_v2` ended during a black
+transition; the extended route has the same first 223 input frames and recorded
+call records. The short run is not separate visible-readiness evidence.
+
+Each applicable call independently checks the whole party (8356 bytes), area
+(11216), both member allocations (1440 each), accessed links, caller flags,
+height decisions, arguments and preserved registers. Native separation results
+are observed; the geometry implementation is outside this oracle. Live calls
+only observe a zero combined separation bit and never restart the path.
+
+`build/analysis/high_effort_50_to_55/follower_height_isolated_v1.json` adds 121
+ARM946 cases on copied RAM/DTCM. Both screen slots, area/region/room gates,
+member modes, visibility and movement flags, both predicate results, signed
+height and equality boundaries, restart/set/suppress conditions and link
+indices are covered. The actual compiled caller executes; the predicate and
+path initializer are explicitly stubbed at guarded native entries with checked
+arguments. Full records, all write destinations, SP/r4-r11, untouched DTCM and
+unused stack are checked; maximum stack use is 24 bytes. These cases verify
+the caller, not collision geometry or path reconstruction. All original save
+hashes remain unchanged.

@@ -5,10 +5,9 @@
  */
 
 #include <game/field_party_manager.h>
-extern void func_ov000_0209c930(FieldPartyController *);
 void FieldPartyManager_UpdateActions(FieldPartyManager *manager) {
-    func_ov000_0209c930(&manager->parties[manager->bits.active_party]);
-    func_ov000_0209c930(&manager->parties[manager->bits.active_party ^ 1]);
+    FieldParty_UpdateFollowerHeightGate(&manager->parties[manager->bits.active_party]);
+    FieldParty_UpdateFollowerHeightGate(&manager->parties[manager->bits.active_party ^ 1]);
     FieldPartyManager_UpdateContactHint(manager);
     FieldPartyManager_UpdateRegion71ActionModels(manager);
 }

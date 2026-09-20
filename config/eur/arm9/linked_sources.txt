@@ -908,3 +908,5 @@ src/field/field_party_default_actions.cpp
 src/field/field_resource_allocate.cpp
 
 src/field/field_entity_palette_profile.cpp
+
+src/field/field_party_follower_height.cpp

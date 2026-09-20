@@ -8879,3 +8879,14 @@ The temporary live changes are restored and interrupted commands replayed;
 this is not normal story-trigger coverage. Golden ROM, native relink and 107
 tests pass. All original saves remain unchanged; see the palette-profile
 reference for detailed coverage and limits.
+
+
+### Party follower height gate
+
+The linked follower height gate brings matching C/C++ to 812088 / 1563700
+(51.9337%). Ordinary controls check the caller in the save menu and field,
+including region-gated returns; 121 isolated ARM946 cases cover missing height,
+visibility and link branches. Predicate/path helpers are explicitly stubbed
+in those isolated cases, while the live predicate executes natively. Golden
+ROM, native relink and 107 tests pass; original saves remain unchanged.
+See the follower-height reference for exact counts and coverage limits.
