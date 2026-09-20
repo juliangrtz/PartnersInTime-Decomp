@@ -8915,3 +8915,14 @@ and alias branches. Only the slope multiplier is stubbed in the isolated
 cases; no geometry or graphics claim is made. The golden ROM, zero-difference
 native relink and 107 tests pass. Original saves remain unchanged. See the
 party-locomotion reference for detailed coverage.
+
+
+### Auxiliary animation transitions and follower offsets
+
+Two linked helpers bring matching C/C++ to 814124 / 1563700 (52.0640%).
+Ordinary hammer and spin routes check 11 auxiliary-animation calls and one
+follower-offset call. Another 492 animation-transition cases and 206 offset
+cases run on copied RAM. Only the offset suite stubs a helper (the slope-distance
+factor); neither suite claims rendered graphics coverage. The golden ROM,
+zero-difference native relink and 107 tests pass; all original saves are
+unchanged. See the auxiliary-transition and follower-offset reference.

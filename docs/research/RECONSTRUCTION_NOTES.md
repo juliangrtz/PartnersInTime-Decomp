@@ -6484,3 +6484,55 @@ native 3D/vector helpers execute. Only the slope multiplier is explicitly
 stubbed, with arguments checked and prescribed Q12 results. Whole records,
 all native writes, SP/r4-r11, DTCM and unused stack are checked; maximum stack
 use is 32 bytes. This does not verify slope geometry or graphics.
+
+
+## Auxiliary animation transitions and follower offsets
+
+`FieldParty_UpdateAuxiliaryAnimationTransition` (overlay 0, `0x020931B0`,
+444 bytes) updates auxiliary slot 0 (1360 bytes) using its renderer's signed
+animation ID and facing direction. State-record bit 11 optionally copies
+animation-table bits into the auxiliary's collision/synchronization flags.
+Three signed-byte table entries become Q12 offsets. Direction modes and the
+target pointer change immediately when requested, or when the member renderer's
+signed word at +100 is at most its signed halfword animation speed at +90.
+The deferred transition uses the next animation index. Native code caches the
+packed facing word before that increment, then extracts direction bits 2..4.
+The party state retains its raw view alongside the new flag alias.
+
+`FieldParty_GetFollowerOffset` (`0x02093108`, 168 bytes) uses the opposite
+facing direction and requested distance. A type-0 ground surface with any of
+its first three vertices above the member applies the reconstructed slope
+distance factor, with Q12 rounding before narrowing. The fifth argument is the
+Y-output pointer on the caller's stack; the function also returns Y from the
+native vector helper. The earlier private draft omitted the slope helper's
+third surface argument; the current public call includes it.
+
+Private `build/runtime/eur_high_party_auxiliary_transition/hammer83_v1.json`
+checks 11 ordinary calls in 231 frames from the initialized baby-hammer state83.
+All face direction 6 and span animation IDs 0..5. There is one immediate
+transition, four deferred transitions with flag copying, three deferred waits,
+and three deferred transitions without flag copying. Full party/member/
+auxiliary/state and actual renderer allocations, table reads, flags, offsets,
+targets, SP and r4-r11 are checked independently. The final Star Hill field
+capture was inspected. The target calls no helpers and uses no stubs.
+
+`spin83_offsets_v2.json` checks one ordinary follower-offset call in the known
+551-frame spin route, facing direction 6, with native vector arithmetic. It
+does not enter the slope branch. The final Star Hill capture was inspected.
+The earlier `hammer83_offsets_v1` attempt reached no offset call and failed
+its coverage assertion; it is not successful offset verification.
+
+`build/analysis/high_effort_50_to_55/party_auxiliary_transition_isolated_v1.json`
+adds 492 ARM946 cases on copied live RAM/DTCM: all eight directions, animation
+IDs 0..7, flag copying on/off, immediate/waiting transitions and signed threshold
+values below/equal/above, including halfword endpoints. Automatic next-animation
+fixtures use IDs 0..6 to stay within the direction's table entries. No stubs
+are used; 360 cases retarget and 132 wait, with maximum stack use 16 bytes.
+`party_follower_offset_isolated_v1.json` adds 206 cases for eight directions,
+null/other/triangular surfaces, strict vertex-height boundaries, signed/zero
+distances, Q12 rounding and aliased outputs. The actual caller and vector helper
+execute; the slope-distance helper is explicitly stubbed with checked arguments
+and prescribed coefficients in 0..4096. Maximum stack use is 24 bytes.
+Both suites check whole relevant records, native write bounds, stack arguments,
+SP/r4-r11, DTCM and unused stack. All 104 original saves are unchanged.
+These isolated fixtures do not establish geometry or rendered-graphics coverage.

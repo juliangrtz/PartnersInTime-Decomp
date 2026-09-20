@@ -16,7 +16,6 @@ static inline void SetCollisionPolicy(FieldRuntimeEntity *entity, int shift, int
     if (policy)
         entity->collision_policy |= (s32)((u32)policy << shift);
 }
-extern void func_ov000_02093108(FieldPartyController *, FieldPartyEntity *, fx32, fx32 *, fx32 *);
 void FieldParty_RejoinFollower(FieldPartyController *party, int instant)
 {
     fx32 x, y;
@@ -24,7 +23,7 @@ void FieldParty_RejoinFollower(FieldPartyController *party, int instant)
         FieldParty_EnableFollowing(party);
         return;
     }
-    func_ov000_02093108(party, party->leader, party->unknown_06c, &x, &y);
+    FieldParty_GetFollowerOffset(party, party->leader, party->unknown_06c, &x, &y);
     if (instant) {
         FieldEntity3D_SetPosition(&party->follower->entity, party->leader->entity.position_x + x,
                                   party->leader->entity.position_y + y, party->leader->entity.position_z);

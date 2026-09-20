@@ -917,3 +917,7 @@ src/field/field_follower_distance_scale.cpp
 src/field/field_party_locomotion.cpp
 
 src/field/field_party_direction_speed.cpp
+
+src/field/field_party_auxiliary_transition.cpp
+
+src/field/field_party_follower_offset.cpp

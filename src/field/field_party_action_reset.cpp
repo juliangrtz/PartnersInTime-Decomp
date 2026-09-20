@@ -18,7 +18,6 @@ extern "C" {
 #include <game/field_geometry.h>
 extern "C" {
 void func_ov000_02092e24(FieldPartyController *, FieldPartyEntity *);
-void func_ov000_02093108(FieldPartyController *, FieldPartyEntity *, fx32, fx32 *, fx32 *);
 void func_020093b4(FieldRenderObject *, int);
 extern const u8 data_ov000_020c0694[];
 void func_ov000_020b90b4(FieldPartyEntity *, void *, FieldPartyEntity *, int, fx32);
@@ -180,7 +179,7 @@ extern "C" void FieldParty_ResetActionState(FieldPartyController *party, int imm
                 func_020093b4(FOLLOWER->entity.render_object, 1);
                 if (party->flags.movement_active) {
                     fx32 offset_x, offset_y;
-                    func_ov000_02093108(party, LEADER, party->unknown_06c, &offset_x, &offset_y);
+                    FieldParty_GetFollowerOffset(party, LEADER, party->unknown_06c, &offset_x, &offset_y);
                     if (((FieldAreaContext *)party->areas[party->flags.field_screen])->unknown_23f0 == 71) {
                         FieldEntity3D_SetPosition(&FOLLOWER->entity, LEADER->entity.position_x,
                                                   LEADER->entity.position_y, LEADER->entity.position_z);

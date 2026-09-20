@@ -13,7 +13,6 @@
 #include <game/field_presentation.h>
 extern "C" {
 #include <game/audio.h>
-void func_ov000_02093108(FieldPartyController *, FieldPartyEntity *, fx32, fx32 *, fx32 *);
 
 int VM_ReadVariable(int, int, int);
 void func_020093b4(FieldRenderObject *, int);

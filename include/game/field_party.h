@@ -82,6 +82,10 @@ typedef struct FieldPartyStateRecord {
     union {
         u32 unknown_00[8];
         FieldPartyAnchorOrbit anchor_orbit;
+        struct {
+            struct { u32 unknown_00_10 : 11, copy_animation_flags : 1, unknown_12_31 : 20; } flags;
+            u8 unknown_04[28];
+        } auxiliary_animation;
         struct { u8 auxiliary_index, elapsed_frames, unknown_02[30]; } auxiliary_launch;
         struct {
             fx32 body_vertical_extent, navigation_vertical_extent;
@@ -204,6 +208,8 @@ extern "C" {
 void FieldPartyEntity_MapLocomotionState(FieldPartyEntity *member);
 void FieldPartyEntity_UpdateLocomotionState(FieldPartyEntity *member);
 fx32 FieldPartyEntity_GetDirectionVector(FieldPartyEntity *member, int direction, fx32 *x, fx32 *y);
+void FieldParty_UpdateAuxiliaryAnimationTransition(FieldPartyController *party, FieldPartyEntity *member, int immediate);
+fx32 FieldParty_GetFollowerOffset(FieldPartyController *party, FieldPartyEntity *member, fx32 distance, fx32 *x, fx32 *y);
 void FieldParty_ResetDefaultActions(FieldPartyController *party);
 void FieldParty_UpdateFollowerHeightGate(FieldPartyController *party);
 void FieldParty_BindFollowerState(FieldPartyEntity *member, void *state, FieldPartyEntity *target);

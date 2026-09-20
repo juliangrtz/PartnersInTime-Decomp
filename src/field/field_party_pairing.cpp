@@ -94,12 +94,12 @@ void FieldParty_StartPairedFollowing(FieldPartyController *party)
     party->leader->bits.movement_mode = 6;
     party->follower->bits.movement_mode = 6;
     *party->follower->unknown_568 &= ~1;
-    func_ov000_02093108(party, party->paired->leader, 8 * 4096, &x, &y);
+    FieldParty_GetFollowerOffset(party, party->paired->leader, 8 * 4096, &x, &y);
     party->leader->entity.field_state_flag_bits.track_ground = 0;
     party->follower->entity.field_state_flag_bits.track_ground = 0;
     FieldLinear3D_StartTimedFollowing(&party->leader->entity, &party->paired->leader->entity, x, y, 0, 8, 0,
                                       0, 1, &party->leader->movement);
-    func_ov000_02093108(party, party->paired->follower, 8 * 4096, &x, &y);
+    FieldParty_GetFollowerOffset(party, party->paired->follower, 8 * 4096, &x, &y);
     FieldLinear3D_StartTimedFollowing(&party->follower->entity, &party->paired->follower->entity, x, y, 0, 8,
                                       0, 0, 1, &party->follower->movement);
     party->state_bits.movement_mode = 14;

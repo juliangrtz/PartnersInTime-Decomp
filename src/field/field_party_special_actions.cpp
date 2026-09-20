@@ -81,7 +81,6 @@ extern "C" void FieldParty_LaunchToElevation(FieldPartyController *party, fx32 h
 #undef RECORD
 
 extern "C" {
-void func_ov000_020931b0(FieldPartyController *, FieldPartyEntity *, int);
 
 void FieldParty_BeginBabyDrop(FieldPartyController *party)
 {
@@ -217,7 +216,7 @@ void FieldParty_BeginState76(FieldPartyController *party)
             : renderer->overlap_priority_bytes[1];
     auxiliary->entity.render_object->overlap_priority_bytes[0] =
         auxiliary->entity.render_object->overlap_priority_bytes[1];
-    func_ov000_020931b0(party, party->follower, 1);
+    FieldParty_UpdateAuxiliaryAnimationTransition(party, party->follower, 1);
     FieldVertical_Start(&party->follower->entity, 8192, 1076, -1);
     GameAudio_PlayEffectDelayed(54, 0, -1);
 }

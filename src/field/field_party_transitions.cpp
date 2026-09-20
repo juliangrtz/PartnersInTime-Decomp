@@ -19,7 +19,6 @@
 extern "C" {
 #include <game/rumble.h>
 extern u8 data_0205a00c;
-void func_ov000_020931b0(FieldPartyController *, FieldPartyEntity *, int);
 s16 func_02009224(FieldRenderObject *, int);
 
 extern const fx32 data_ov000_020c0978[][2], data_ov000_020c097c[][2];
@@ -109,7 +108,7 @@ void FieldParty_SeparateFollower(FieldPartyController *party)
     party->follower->entity.saved_presentation_flag_bits.behavior_mode = 2;
     FieldEntity_SetFacingDirection(&party->follower->entity, 0,
                                    party->leader->entity.base_state_flag_bits.facing_direction, 1);
-    func_ov000_02093108(party, party->leader, 20 * 4096, &x, &y);
+    FieldParty_GetFollowerOffset(party, party->leader, 20 * 4096, &x, &y);
     FieldVertical_StartToHeight(&party->follower->entity, 0, -1, -1);
     FieldLinear3D_StartTimedFollowing(&party->follower->entity, &party->leader->entity, x, y, 0, 10, 0, 0, 1,
                                       &party->follower->movement);
@@ -507,7 +506,7 @@ void FieldParty_ExitBrosBall(FieldPartyController *party)
         data_ov000_020c0978[party->leader->entity.base_state_flag_bits.facing_direction][0],
         data_ov000_020c097c[party->leader->entity.base_state_flag_bits.facing_direction][0], 0, 16, 0, 0, 1,
         &party->leader->movement);
-    func_ov000_02093108(party, party->leader, 20 * 4096, &x, &y);
+    FieldParty_GetFollowerOffset(party, party->leader, 20 * 4096, &x, &y);
     FieldVertical_StartToHeight(&party->follower->entity, 0x10000, -1, -1);
     FieldLinear3D_StartTimedFollowing(&party->follower->entity, &party->leader->entity, x, y, 0, 16, 0, 0, 1,
                                       &party->follower->movement);
@@ -700,7 +699,7 @@ void FieldParty_BeginHammerSwing(FieldPartyController *party, int member)
     party->members[member]->state_record->unknown_00[0] |= 0x800;
     party->members[member]->state_record->unknown_00[0] &= ~0x3000u;
     party->members[member]->state_record->unknown_00[0] &= ~0x4000u;
-    func_ov000_020931b0(party, party->members[member], 1);
+    FieldParty_UpdateAuxiliaryAnimationTransition(party, party->members[member], 1);
     GameAudio_PlayEffectDelayed(54, 0, -1);
 }
 void FieldParty_EndHammerSwing(FieldPartyController *party, int member)
@@ -859,7 +858,7 @@ void FieldParty_ReturnFollowerToLeader(FieldPartyController *party)
     FieldEntity3D_SetPosition(
         &party->follower->entity, party->leader->entity.position_x, party->leader->entity.position_y,
         party->leader->entity.position_z + (height - party->follower->entity.navigation_vertical_extent));
-    func_ov000_02093108(party, party->leader, 16 * 4096, &x, &y);
+    FieldParty_GetFollowerOffset(party, party->leader, 16 * 4096, &x, &y);
     FieldVertical_StartToHeight(&party->follower->entity, 0, -1, -1);
     FieldLinear3D_StartTimedFollowing(&party->follower->entity, &party->leader->entity, x, y, 0, 10, 0, 0, 1,
                                       &party->follower->movement);
