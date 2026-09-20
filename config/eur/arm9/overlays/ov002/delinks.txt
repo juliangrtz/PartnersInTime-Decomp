@@ -511,3 +511,9 @@ src/battle/battle_link_effect_upload.c:
 
 src/battle/battle_object_sprites.c:
     .text start:0x020680b0 end:0x020681e8
+
+src/battle/battle_number_oam.c:
+    .text start:0x020684d8 end:0x02068770
+
+src/battle/battle_oam_callbacks.c:
+    .text start:0x0206a674 end:0x0206a7a4

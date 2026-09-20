@@ -5754,3 +5754,61 @@ query. Allocation/upload use explicit ABI stubs; their execution is not covered
 by those isolated cases. Checks cover the complete 4 MiB RAM image, stack bounds,
 SP and r4-r11. This establishes unlink list writes without attributing them to
 ordinary gameplay or to the live exit route.
+
+
+## Battle numeric and cached OAM callbacks
+
+[battle_number_oam.c](../../src/battle/battle_number_oam.c) reconstructs
+`BattleOam_DrawNumber` (0x020684D8, 664 bytes).
+[battle_oam_callbacks.c](../../src/battle/battle_oam_callbacks.c) adds
+`BattleNumberModel_Draw` (0x0206A674, 188) and `BattleCachedOamModel_Draw`
+(0x0206A730, 116). All three actual compiled source functions match without ASM.
+
+The callback renderer owns either a 28-byte numeric payload or a 24-byte cached
+OAM payload. Both contain a compact 12-byte `BattleOamTransform`; the matrix and
+position record called `BattleSpriteTransform` elsewhere is 64 bytes and has a
+different layout. Numeric payloads optionally read an unsigned byte, halfword or
+word from a source pointer; widths other than 2 and 4 select a byte. The result
+is cached as a word, then truncated to 16 bits for drawing. Hidden models neither
+read the source nor draw. Cached OAM counts are truncated from 16 to 8 bits.
+
+Number drawing emits at most three digits, right-to-left at eleven-pixel steps.
+Signed division and a 16-bit quotient truncation are preserved. A nonzero leading
+setting adds exactly one zero: setting 1 follows the emitted digits; other values
+anchor it relative to the original X. X/Y are narrowed at each OAM helper call.
+The first remainder assumes a valid digit-table index; the verified caller passes
+an unsigned 16-bit value. Native stack analysis confirms nine OAM helper arguments;
+the apparent tenth argument in pseudocode is a saved local X coordinate.
+
+An unmodified controlled battle-entry route did not execute these targets. The
+exported battle scripts contain one `configure_object_attachment` command in
+`BAI_sugiyama`, entry 0, and it selects text mode 5 rather than modes 3/4. That
+does not prove the numeric modes are unreachable through every native caller.
+
+Private `build/runtime/eur_high_battle_number/evidence_fixture55_v4.json` records
+706 frames with nine temporary draw-callback replacements on an existing live
+text renderer. Seven numeric callbacks, two cached callbacks and six nested
+number draws execute eighteen real OAM helper calls. Source widths, cached values,
+hidden paths, one/two/three-digit values and leading settings are checked. The
+ordinary catalog contains two text frames, so eleven temporary catalog boundaries
+select ten existing OAM entries as synthetic glyphs. These are not authentic
+number graphics. The original text callback is skipped during each replacement.
+
+At the guarded wrapper return, the full renderer allocation (324 bytes), original
+payload (148), OAM output (1024), count bytes and all changed catalog boundaries
+are restored and compared with their backups. Checks cover full battle/common
+allocations, payload ownership, ordered helper arguments and native truncations.
+OAM helper effects are observed only within its output buffer and count bytes;
+there is no independent pixel or normal-gameplay-equivalence claim. The final
+capture shows the battle command menu. All 104 original saves are unchanged.
+
+The v1/v2 fixture attempts exposed the incomplete ordinary catalog; v2 reached
+the OAM count guard with an invalid wrapped count. Failed reports and producers
+are retained, and those emulator instances were destroyed without saving state.
+The corrected bounded catalog passes in v3 and again after integration in v4.
+`isolated_v1.json` adds 333 cases using copied v3 RAM/DTCM, complete native target
+bodies and the real nested number-draw function. OAM emission is an explicit ABI
+stub. Cases cover source widths, visibility, 16-bit value/count truncation, signed
+coordinate narrowing and leading-zero placement. Full RAM/DTCM, stack bounds,
+SP and r4-r11 are checked. The full build also passes golden-ROM comparison,
+native relinking, progress checks and all 107 tests.

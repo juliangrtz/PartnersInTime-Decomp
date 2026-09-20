@@ -8719,3 +8719,19 @@ See [evidence and limits](research/RECONSTRUCTION_NOTES.md#shop-buying-list-equi
 - Private evidence: `build/runtime/eur_high_battle_object_sprites/`, probe
   sources and `battle_object_sprites_validation.json` under
   `build/analysis/high_effort_50_to_55/`. All 104 original saves unchanged.
+
+
+### Battle numeric and cached-sprite drawing
+
+Three C functions add 968 matching bytes, reaching 802020 / 1563700 (51.2899%).
+The numeric emitter preserves signed division, quotient narrowing, eleven-pixel
+spacing and the additional-zero anchor. Two callbacks use verified 28/24-byte
+payloads and a compact 12-byte transform.
+
+Full build, golden ROM, native relink, progress checks and 107 tests pass.
+Nine restored live callback/catalog fixtures cover fifteen target calls and
+eighteen OAM helper calls; 333 isolated cases cover arithmetic and width limits.
+Ordinary entry did not reach these callbacks. Synthetic glyphs and bounded OAM
+observations do not establish authentic numeric rendering or normal accessibility.
+All original saves remain unchanged. See the research reference's battle numeric
+and cached OAM section and private `eur_high_battle_number` reports.
