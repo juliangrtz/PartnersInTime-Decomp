@@ -19,7 +19,6 @@ void func_020093b4(FieldRenderObject *, int);
 int func_ov000_020ae5fc(FieldRuntimeEntity *, FieldRuntimeEntity *);
 void func_ov000_020b46d4(FieldRuntimeEntity *);
 
-void func_ov000_02091d34(FieldPartyController *, FieldPartyEntity *);
 void func_ov000_02091e58(FieldPartyController *, FieldPartyEntity *, fx32, fx32, fx32, int, u8, s16, int, int,
                          int, const s16 *);
 extern const s16 data_ov000_020c068c[];

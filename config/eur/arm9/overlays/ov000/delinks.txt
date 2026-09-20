@@ -470,3 +470,7 @@ src/field/field_party_auxiliary_transition.cpp:
 
 src/field/field_party_follower_offset.cpp:
     .text start:0x02093108 end:0x020931b0
+
+
+src/field/field_party_trail_control.cpp:
+    .text start:0x02091d34 end:0x02091e58

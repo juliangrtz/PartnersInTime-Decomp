@@ -8926,3 +8926,13 @@ cases run on copied RAM. Only the offset suite stubs a helper (the slope-distanc
 factor); neither suite claims rendered graphics coverage. The golden ROM,
 zero-difference native relink and 107 tests pass; all original saves are
 unchanged. See the auxiliary-transition and follower-offset reference.
+
+
+### Party trail visibility and stopping
+
+Two linked helpers bring matching C/C++ to 814416 / 1563700 (52.0826%).
+Hammer and rolling routes check 30 delayed-visibility calls (all zero-delay)
+and four stop calls; 306 isolated ARM946 cases cover expiry, range boundaries
+and callback-mutated bounds with explicitly stubbed helpers. Runtime helper
+effects remain bounded observations. Golden ROM, native relink with zero
+differences and 107 tests pass. See the party-trail reference for coverage limits.

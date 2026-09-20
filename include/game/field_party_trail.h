@@ -30,6 +30,8 @@ void FieldPartyTrail_StartEmitter(struct FieldPartyController *party, struct Fie
                                   int resource, int animation_offset, int start, int count, u8 interval);
 void FieldPartyTrail_UpdateEmitter(struct FieldPartyController *party, struct FieldPartyEntity *owner,
                                    const FieldPartyTrailDirection *directions, s16 animation);
+void FieldPartyTrail_StopCopies(struct FieldPartyController *party, struct FieldPartyEntity *owner);
+void FieldPartyTrail_UpdateDelayedVisibility(struct FieldPartyController *party, struct FieldPartyEntity *owner);
 int FieldPartyTrail_HasActiveCopies(struct FieldPartyController *party, struct FieldPartyEntity *owner);
 #ifdef __cplusplus
 }

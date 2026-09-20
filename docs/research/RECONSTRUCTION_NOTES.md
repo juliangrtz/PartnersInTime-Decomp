@@ -6536,3 +6536,36 @@ and prescribed coefficients in 0..4096. Maximum stack use is 24 bytes.
 Both suites check whole relevant records, native write bounds, stack arguments,
 SP/r4-r11, DTCM and unused stack. All 104 original saves are unchanged.
 These isolated fixtures do not establish geometry or rendered-graphics coverage.
+
+
+## Party trail visibility and stopping
+
+`FieldPartyTrail_UpdateDelayedVisibility` (overlay 0, `0x02091DC8`, 144 bytes)
+reuses the emitter interval byte as a one-shot countdown. On expiry it shows
+the selected auxiliary and copies its owner's facing direction. A zero byte
+does nothing. `FieldPartyTrail_StopCopies` (`0x02091D34`, 148 bytes) hides and
+stops bound renderers in the emitter range, reloading that range after callbacks.
+Its second virtual call uses slot `0x30` (`FieldAuxiliary_StopSpecialRenderer`),
+which resets the auxiliary resource index before stopping the renderer.
+
+Private `build/runtime/eur_high_party_trail_control/hammer83_v1.json` checks
+20 delayed-visibility calls and one stop call in 231 ordinary gameplay frames;
+`roll83_v1.json` checks another ten and three in 349 frames. The stop calls
+process one or five bound auxiliaries. All observed delays are zero, so these
+routes do not cover countdown expiry. Both final Star Hill captures were
+inspected. Whole party/owner/auxiliary records, timer changes, slot selection,
+callback arguments, live loop bounds and preserved registers are checked.
+Helper effects remain observational within each selected auxiliary's entity
+prefix and renderer allocations; the resource-index change is independently
+checked. This does not verify helper internals, heap/global-list effects or
+rasterization. All 104 original saves retain their trial-baseline hashes.
+
+`build/analysis/high_effort_50_to_55/party_trail_control_isolated_v1.json` adds
+306 ARM946 cases using copied live RAM/DTCM and synthetic records: six slots,
+eight directions, delay values 0/1/2/255, all valid start/count ranges, mixed
+bound/unbound renderers and callbacks that grow or shrink the active range.
+The actual compiled callers execute; visibility, facing and renderer-stop
+helpers are explicit stubs with checked arguments, prescribed bounded effects
+and caller-saved register clobbers. Full records, write bounds, stack restoration,
+r4-r11, DTCM and unused stack are checked. Maximum stack use is 24 bytes.
+These fixtures supplement the live routes without claiming live expiry coverage.

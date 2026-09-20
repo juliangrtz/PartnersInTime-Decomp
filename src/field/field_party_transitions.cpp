@@ -428,7 +428,7 @@ void FieldParty_StopBrosBallRoll(FieldPartyController *party)
 {
     FieldPartyEntity *leader;
     s16 last_frame;
-    func_ov000_02091d34(party, party->leader);
+    FieldPartyTrail_StopCopies(party, party->leader);
     GameAudio_StopEffect(312);
     party->flags.unknown_04 = 1;
     party->flags.unknown_05 = 0;
@@ -597,7 +597,7 @@ void FieldParty_RestoreBrosBallRoll(FieldPartyController *party)
         party->leader->presentation.behavior_saved = 0;
     }
     party->leader->entity.locomotion_state = 21;
-    func_ov000_02091d34(party, party->leader);
+    FieldPartyTrail_StopCopies(party, party->leader);
     FieldPartyTrail_StartEmitter(party, party->leader, 61, 0, 0, 5, 9);
     GameAudio_PlayEffectDelayed(312, 0, -1);
 }
@@ -708,7 +708,7 @@ void FieldParty_EndHammerSwing(FieldPartyController *party, int member)
     if (data_0205a00c)
         GameRumble_Stop();
     func_ov000_02092e24(party, party->members[member]);
-    func_ov000_02091d34(party, party->members[member]);
+    FieldPartyTrail_StopCopies(party, party->members[member]);
     party->members[member]->entity.locomotion_state = 0;
     party->flags.unknown_04 = 1;
     party->flags.unknown_14 = 1;
@@ -1025,7 +1025,7 @@ void FieldParty_RestartCollisionOverride(FieldPartyController *party)
 
 void FieldParty_RestoreCollisionState(FieldPartyController *party, int check_contacts)
 {
-    func_ov000_02091d34(party, party->leader);
+    FieldPartyTrail_StopCopies(party, party->leader);
     party->flags.previous_field_screen = party->flags.field_screen;
     party->flags.unknown_04 = 0;
     party->flags.unknown_06 = 0;
