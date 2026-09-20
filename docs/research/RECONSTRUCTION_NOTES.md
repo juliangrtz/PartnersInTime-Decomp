@@ -7726,3 +7726,26 @@ empty lists, mixed ownership, callback changes to successors and changed OAM
 counts. Full RAM and registers are checked, excluding the temporary stack area.
 The final live capture shows the battle command menu; graphics memory is captured
 as evidence, without an independent rasterization claim.
+
+
+## Mix Flowers allocation and resource setup
+
+[`mix_flowers_initialize.cpp`](../../src/attack_mix_flower_ov016/mix_flowers_initialize.cpp)
+allocates 17,292 bytes, initializes four participants and 32 embedded paired
+effects, prepares ten resource buffers and installs the entry callback. Formation
+bit 0 determines the adult ordering and the side-dependent resources. The two
+resource-table aliases at `0x020C72F0` and `0x020C72F4` retain their eight-byte
+stride. Resource 54's copy flag is cleared without changing neighboring bits.
+The center's X coordinate is a signed halfword; the entry offset stores X minus
+128 as a halfword. The optional badge adjustment advances the motion table.
+
+Private `build/runtime/eur_high_mix_initialize/live_v1.json` checks the complete
+initializer, its 82 child calls and seven own stores on the save-83 Mix Flowers
+route. The attack returns to the battle menu. All six captures, recorded inputs
+and four graphics-memory dumps match the preceding Mix Flowers replay.
+`isolated_v1.json` adds 72 copied-RAM ARM946 cases for formation indices, both
+badge states, signed-coordinate limits and nonzero initial bytes. Those cases
+execute native lookup and motion-table helpers; other children are explicit
+stubs. Live child writes are bounded observations, not independent proofs of
+resource loading, buffer payloads, heap lifetimes or rendering. Full caller
+matching and the checked runtime paths do not establish every child branch.

@@ -14,6 +14,9 @@ typedef struct Overlay16AttackTargetReference Overlay16AttackTargetReference;
 extern "C" {
 #endif
 
+struct BattlePartyActor;
+void Overlay16Attack_Initialize(struct BattlePartyActor *user);
+
 void Overlay16Attack_AdvanceMotionTable(void);
 void *Overlay16Attack_GetMotionRecord(u32 packed_index);
 int Overlay16Attack_IsObjectIdle(Overlay16AttackObjectState *state);

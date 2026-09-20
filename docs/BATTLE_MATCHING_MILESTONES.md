@@ -9376,3 +9376,14 @@ corrected the parent return interface. Full functions match. The 2,110-call live
 replay, 12 isolated traversal cases, golden ROM, native relink and 107 tests pass.
 Matching C/C++: 832768/1563700 (53.2563%); target 860044, remaining 27276.
 Private evidence: high_effort_50_to_55/subscreen_validation.json.
+
+
+## Mix Flowers allocation and resource setup (2026-09-20)
+
+Linked the initializer and named its loader callback. All 51 functions in the
+affected linked objects match. The full build, golden ROM, native relink and
+107 tests pass. Runtime: one live initializer, 82 child calls, 72 isolated ARM
+cases and a visible return to the battle menu; child resource effects remain
+bounded observations. All 104 original saves are unchanged.
+Matching C/C++: 833872/1563700 (53.3269%); target 860044,
+remaining 26172. Private evidence: high_effort_50_to_55/mix_initialize_validation.json.

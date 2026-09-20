@@ -56,7 +56,7 @@ Overlay16Participant_Hide kind:function(arm,size=0x18) addr:0x020c6560
 Overlay16Participant_Initialize kind:function(arm,size=0x4c) addr:0x020c6578
 func_ov016_020c65c4 kind:function(arm,size=0x524) addr:0x020c65c4
 func_ov016_020c6ae8 kind:function(arm,size=0x33c) addr:0x020c6ae8
-func_ov016_020c6e24 kind:function(arm,size=0x450) addr:0x020c6e24
+Overlay16Attack_Initialize kind:function(arm,size=0x450) addr:0x020c6e24
 data_ov016_020c7274 kind:data(any) addr:0x020c7274
 data_ov016_020c7278 kind:data(any) addr:0x020c7278
 data_ov016_020c72a0 kind:data(any) addr:0x020c72a0
