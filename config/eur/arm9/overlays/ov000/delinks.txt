@@ -425,3 +425,6 @@ src/field/field_camera_update.cpp:
 
 src/field/field_layer_motion.cpp:
     .text start:0x020721ec end:0x02072a30
+
+src/field/field_camera_focus.cpp:
+    .text start:0x02073740 end:0x02073860

@@ -38,6 +38,8 @@ typedef char FieldLayerMotion_SizeCheck[sizeof(FieldLayerMotion) == 56 ? 1 : -1]
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldArea_BeginCameraFocus(FieldAreaContext *area, int entity_index, s16 script);
+void FieldArea_CompleteCameraFocus(FieldAreaContext *area);
 void FieldArea_StopLayerMotion(FieldAreaContext *area, int layer);
 int FieldArea_UpdateLayerTargets(FieldAreaContext *area);
 void FieldArea_AdvanceLayerMotion(FieldAreaContext *area);

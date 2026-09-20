@@ -8765,3 +8765,15 @@ active updates. Another 240 isolated ARM946 cases cover setup with explicit help
 stubs. Five captures and four final graphics ranges equal the ordinary route.
 All 104 original saves are unchanged. See the field background layer motion
 reference and private eur_high_field_layer_motion reports for coverage limits.
+
+
+### Field camera focus transitions
+
+Two exact C++ functions add 288 bytes, reaching 806076 / 1563700 (51.5493%).
+They hand camera tracking to an entity and optionally start a completion script.
+No assembly. Full build, golden-ROM rebuild, native relink and 107 tests pass.
+Two controlled engine requests exercise both functions and their nested setup,
+with and without a completion script; the ordinary route has no focus calls.
+Full RAM/DTCM restoration precedes the matching 185-frame baseline route.
+Five captures and four final graphics ranges agree; all 104 saves are unchanged.
+See the camera focus reference and private eur_high_field_camera_focus reports.

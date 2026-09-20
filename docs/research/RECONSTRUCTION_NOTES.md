@@ -5907,3 +5907,37 @@ stubs in those isolated tests; they check setup behavior and ABI, not the helper
 implementations or live script execution. Full main RAM/DTCM and stack outside
 the native 32-byte frame are checked. All 104 original saves remain unchanged.
 The full build, golden ROM, native relink, progress checks and 107 tests pass.
+
+
+## Field camera focus transitions
+
+[field_camera_focus.cpp](../../src/field/field_camera_focus.cpp) owns the two
+functions at 0x02073740-0x02073860. Beginning a transition disables following,
+remembers the signed-byte entity index and starts a 12-pixel-per-frame move toward
+the entity's screen anchor. Completion restores following, caches X and Y minus Z,
+and optionally starts an auxiliary room script. A signed script index of -1
+suppresses that call. The shared area exposes these fields at +9210, +9211 and
++9212 without changing their existing aliases or layout. Both complete source
+functions match, without assembly.
+
+Private `eur_high_field_camera_focus/evidence_entry55_v1.json` is a 185-frame
+checkpoint-55 baseline with no focus calls. `evidence_fixture55_v1.json` adds two
+controlled pending requests, with script -1 and script 0, through native party
+update 0x020A146C. The live party manager's +28 area pointer and the area's +9214
+signed target byte and +9216 signed script halfword are the request fields;
+the current camera target at +9210 is separate. Entry requires complete native
+guards, the owning field system, verified area/manager/entity allocations and all
+four room script states inactive. Each request completes in two frames and checks
+one begin, one completion and one nested motion setup. This establishes controlled
+engine entry, not a natural story camera sequence.
+
+The oracle checks whole area/entity allocations, ordered helper arguments, SP and
+callee-saved registers. Nested motion setup is independently modeled; its parent's
+52-byte result observation is bounded. The vector helper's eight-byte output is
+observational. Auxiliary script-state initialization is independently checked;
+busy/disabled auxiliary slots and other entity indices were not exercised here.
+Each completed request reloads the original emulator state and verifies equality
+of all 4 MiB main RAM and 16 KiB DTCM before the ordinary input route. All five
+subsequent captures and four final graphics ranges match the baseline; graphics
+remain observational. All 104 original saves are unchanged. Full build, golden
+ROM, native relink, progress checks and 107 tests pass.

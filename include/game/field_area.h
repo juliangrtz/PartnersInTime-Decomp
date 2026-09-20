@@ -70,9 +70,9 @@ typedef struct FieldAreaContext {
         u16 screen : 1, party_active : 1, mode : 2, unknown_04_05 : 2, unknown_06 : 1;
         u16 unknown_07_12 : 6, unknown_13 : 1, unknown_14 : 1, unknown_15 : 1;
     } flags;
-    s8 area_value;
-    s8 unknown_23fb;
-    s16 unknown_23fc;
+    union { s8 area_value; s8 camera_target_index; };
+    union { s8 unknown_23fb; s8 pending_camera_target; };
+    union { s16 unknown_23fc; s16 camera_completion_script; };
     s8 unknown_23fe;
     u8 unknown_23ff[1];
     s16 unknown_2400;

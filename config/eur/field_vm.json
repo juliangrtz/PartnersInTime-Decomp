@@ -2507,7 +2507,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "toggles automatic camera tracking; a selector other than -1 replaces the tracked entity and immediately caches its anchor, while -1 preserves the existing selection",
-      "evidence": "func_ov000_020823f8 case 0x117, func_ov000_02073880, func_ov000_02073740, and func_ov000_020737cc"
+      "evidence": "func_ov000_020823f8 case 0x117, func_ov000_02073880, FieldArea_CompleteCameraFocus, and FieldArea_BeginCameraFocus"
     },
     "280": {
       "arguments": [],
