@@ -9367,3 +9367,12 @@ texture tables in matching C++. Three cold-boot loads and 48 isolated cases pass
 the full ROM, linked objects and 107 tests pass. All 104 saves are unchanged.
 Matching C/C++: 832572/1563700 (53.2437%); target 860044, remaining 27472.
 Private evidence: high_effort_50_to_55/title_load_resource_validation.json.
+
+
+## Battle sub-screen render stage (2026-09-20)
+
+Linked the model-list/OAM stage with its forwarded, unused context argument and
+corrected the parent return interface. Full functions match. The 2,110-call live
+replay, 12 isolated traversal cases, golden ROM, native relink and 107 tests pass.
+Matching C/C++: 832768/1563700 (53.2563%); target 860044, remaining 27276.
+Private evidence: high_effort_50_to_55/subscreen_validation.json.

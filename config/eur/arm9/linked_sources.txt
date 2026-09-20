@@ -963,3 +963,4 @@ src/attack_smash_egg_ov015/smash_eggs_sequence.cpp
 src/attack_smash_egg_ov015/smash_eggs_initialize.cpp
 src/attack_common_ov010/attack_work_create.cpp
 src/title_ov006/title_model_resources_load.cpp
+src/battle/battle_subscreen_render.cpp

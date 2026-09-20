@@ -7702,3 +7702,27 @@ Their archive, allocation and conversion helpers are explicit stubs; these cases
 do not establish alternate live languages, conversion algorithms or heap lifetime.
 The full ROM, linked loader and caller objects match; 107 tests pass and all 104
 original saves are unchanged.
+
+
+## Battle sub-screen render stage
+
+[`battle_subscreen_render.cpp`](../../src/battle/battle_subscreen_render.cpp)
+walks the sub-screen model list, updates anchors for owned models, calls each
+renderer and then prepares matrix animation and OAM. It reads each successor
+after the virtual callback and reloads OAM counts after preparation calls.
+The parent forwards the battle context in `r0`; the stage does not read it.
+Keeping that unused parameter preserves the observed call ABI. Both functions
+have `void` interfaces: the parent's sole caller ignores the result, and the
+stage's final call is the existing `void` OAM builder. Their full compiled ranges
+remain exact, without ASM or an invented C return value.
+
+Private `build/runtime/eur_high_subscreen/live_v2.json` checks all 2,110 stage
+calls in the save-83 Smash Eggs replay: 8,079 model visits, 5,969 owner branches
+and 28,818 child calls. Arguments, order, forwarded context and preserved
+registers are checked; receiving model-prefix changes are observations. Child
+algorithms and allocation lifetimes are outside this orchestration check.
+Twelve copied-RAM cases in `isolated_v1.json` use explicit child stubs to test
+empty lists, mixed ownership, callback changes to successors and changed OAM
+counts. Full RAM and registers are checked, excluding the temporary stack area.
+The final live capture shows the battle command menu; graphics memory is captured
+as evidence, without an independent rasterization claim.

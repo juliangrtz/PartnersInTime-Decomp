@@ -295,7 +295,7 @@ extern void MTX_ApplyRotZ44(int cosine, int sine,
 extern void func_ov002_020ad880(BattleSpriteTransform *transform,
                                 int animation_state);
 extern void func_ov002_020bc670(BattleSceneObject *object);
-extern int func_ov002_0206a02c(void);
+
 }
 
 enum BattleSceneRenderConstant {
@@ -314,7 +314,7 @@ struct BattleRenderObserver {
     virtual void begin_frame();
 };
 
-extern "C" int BattleScene_RenderModels(void) {
+extern "C" void BattleScene_RenderModels(void) {
     BattleRenderObserver *observer = *(BattleRenderObserver **)(
         gBattleContext + BATTLE_RENDER_OBSERVER_OFFSET);
     BattleModel *model;
@@ -457,7 +457,6 @@ extern "C" int BattleScene_RenderModels(void) {
         gBattleContext + BATTLE_RENDER_BUFFER_START_OFFSET;
     if (((*(u32 *)(gBattleContext + BATTLE_RUNTIME_FLAGS_OFFSET) << 25) >>
          31) == 0) {
-        return func_ov002_0206a02c();
+        BattleScene_RenderSubscreen(gBattleContext);
     }
-    return (int)gBattleContext;
 }

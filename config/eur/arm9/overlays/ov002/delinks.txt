@@ -541,3 +541,6 @@ src/battle/battle_badge_healing.cpp:
 
 src/battle/battle_shared_model_resource.cpp:
     .text start:0x02068878 end:0x02068970
+
+src/battle/battle_subscreen_render.cpp:
+    .text start:0x0206a02c end:0x0206a0f0

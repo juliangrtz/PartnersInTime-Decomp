@@ -485,7 +485,9 @@ u32 BattleMath_WaitForSqrtResult(void);
 
 void BattleSceneObject_SetStateFlags(BattleSceneObject *object, int state,
                                      int independent_flag);
-int BattleScene_RenderModels(void);
+void BattleScene_RenderModels(void);
+/* The context argument is forwarded by the caller but not read by this stage. */
+void BattleScene_RenderSubscreen(void *unused_context);
 void BattleScene_RenderShadows(void);
 void BattleScene_UpdateAlternateModelAnchor(BattleModel *model);
 int BattleScene_TestModelRelation(BattleSceneObject *first,
