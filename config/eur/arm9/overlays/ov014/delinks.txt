@@ -29,3 +29,9 @@ src/attack_bro_flower_ov014/ov14_attack_release_enemy_effects.cpp:
 
 src/attack_bro_flower_ov014/attack_object_state.cpp:
     .text start:0x020c3588 end:0x020c3aa4
+
+src/attack_bro_flower_ov014/participant_update.cpp:
+    .text start:0x020c53d4 end:0x020c5724
+
+src/attack_bro_flower_ov014/participant_prepare.cpp:
+    .text start:0x020c4f10 end:0x020c50a0

@@ -9261,3 +9261,17 @@ image matches the prior route. Full EUR ROM match, zero native differences,
 objects are exact. Child writes are bounded observations, not lifetime proofs.
 Matching C/C++: 826016/1563700 (52.8245%); target860044, remaining34028.
 Private validation: high_effort_50_to_55/copy_update_validation.json.
+
+
+## Bro/Ice Flower participant control and projectile preparation (2026-09-20)
+
+The participant phase controller and one-time projectile effects add 1,248
+matching C++ bytes without assembly. Two ordinary routes check 2,222 updates;
+separate repeats check 44 preparations, all four sprite IDs and both model IDs.
+All corresponding captures and final graphics agree. The 92 participant and
+64 preparation ARM946 fixtures cover additional branches with explicit child
+stubs; preparation v1's sentinel bug and the passing v2 are retained separately.
+All 42 linked overlay-14 functions in 11 objects are exact. Full EUR ROM match,
+zero native differences, 107 tests; all 104 saves unchanged.
+Matching C/C++: 827264/1563700 (52.9043%); target860044, remaining32780.
+Private validation: high_effort_50_to_55/flower_participant_validation.json.

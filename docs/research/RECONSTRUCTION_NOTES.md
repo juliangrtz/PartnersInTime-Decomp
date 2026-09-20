@@ -7224,6 +7224,57 @@ establish gameplay lifetimes or asynchronous behavior. Screenshots are observed,
 not independently rendered. All 104 original saves retain their baseline hashes.
 
 
+## Bro/Ice Flower participant control
+
+[`participant_update.cpp`](../../src/attack_bro_flower_ov014/participant_update.cpp)
+owns 0x020C53D4-0x020C5724 (848 bytes), and
+[`participant_prepare.cpp`](../../src/attack_bro_flower_ov014/participant_prepare.cpp)
+owns 0x020C4F10-0x020C50A0 (400 bytes). The update handles entry particles,
+automatic handoff, primary/secondary input, animation-marker launches and
+preparation of the next projectile. It rereads timer, phase and flags after
+children that can change them. Preparation selects the first idle projectile,
+chooses mode 1/2 from the active participant when mode is -1, and starts effects
+once. Participant +16 is the effect-owner slot; flag bit 2 at +24 records that
+the initial effects have started. Model effects use the 56-byte layout, with
+parent at +44 and owner backlink at +52. They are distinct from 48-byte sprite
+effects. Modes below 2 choose model effect 847 and sprite 540/542; modes at
+least 2 choose model 846 and sprite 539/541 for Bro/Ice Flowers respectively.
+
+The update's first C++ draft matches. Preparation initially extracted and
+rewrote the old six-bit unknown field, adding 28 bytes. Naming its evidenced
+single bit reproduces the native extraction and OR store; the whole function
+then matches. Both functions are pure C++, and all four update callers plus
+the five preparation calls use the public names. All 42 linked functions across
+11 current overlay-14 objects compare exactly after the shared-header change.
+
+Private `eur_high_flower_participant/evidence_{fire,ice}83_v1.json` checks
+1,482 and 740 ordinary updates over 2,790 and 2,830 frames. The fire route
+uses the established checkpoint/menu inputs; all ten captures match its prior
+baseline. Ice uses 41 timed keypad events and exercises repeated primary throws.
+`eur_high_flower_prepare/evidence_{fire,ice}83_v1.json` separately checks 3 and
+41 preparation calls, including all four sprite IDs and both model IDs. Its
+inputs, captures and final graphics match the corresponding participant runs.
+Both routes return visibly to the battle command menu. No RAM is edited.
+Caller stores, decisions, ordered arguments including stack parameters, model
+selection, effect-owner backlink/parent and SP/r4-r11 are independently checked.
+Child writes within bounded work, actor, object, model and effect records are
+observations; allocation lifetimes, graphics lists, other globals and rendered
+pixels are not independently derived.
+
+Participant `isolated_v1.json` adds 92 copied-RAM ARM946 cases for timers,
+flags, input priority, stop requests, secondary throws, marker boundaries and
+child-mutated fields. Preparation `isolated_v2.json` adds 64 cases for signed
+mode boundaries, first/last/full projectile pools, both variants and one-time
+effect flags. Native model lookup/free-slot search execute; other helpers are
+explicit stubs. Full mapped memory except 256 stack bytes is checked. These
+fixtures are separate from gameplay coverage: phases 6/7/8 and the stop branch
+are covered only in isolation. Preparation v1 failed its test-driver return
+check after 50 cases: it applied ARM condition filtering to the artificial
+return sentinel. V2 handles that sentinel directly and passes all 64 cases;
+the failed report and producer are retained. The final EUR ROM is exact,
+107 tests pass and all 104 original saves retain their baseline hashes.
+
+
 ## Copy Flower round and return controller
 
 [`CopyFlowerAttack_Update`](../../src/attack_copy_flower_ov017/copy_attack_update.cpp)

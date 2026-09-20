@@ -59,9 +59,7 @@ int BattleParty_RestoreIdleAnimation(BattlePartyActor *, BattleSceneObject *);
 int func_ov014_020c2bb4(BattleSceneObject *, int);
 void Overlay14Attack_UpdateEntry(Overlay10ActionActor *);
 void Overlay14Attack_UpdateSequence(Overlay10ActionActor *);
-void func_ov014_020c53d4(Overlay14Participant *, Overlay14Participant *);
 void func_ov014_020c4464(Overlay14Projectile *);
-void func_ov014_020c4f10(Overlay14Participant *, int);
 void func_ov014_020c2d24(u16, int);
 extern u16 data_ov014_020c6158[][4];
 struct Overlay14ScreenParameter {

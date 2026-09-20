@@ -31,12 +31,13 @@ typedef struct Overlay14Projectile {
 typedef struct Overlay14Participant {
     BattlePartyActor *actor;
     Overlay14Projectile *projectile;
-    int timer, particle_timer, unknown10;
+    int timer, particle_timer;
+    struct BattleEffect *effect;
     u16 resource;
     u8 phase;
     s8 remaining;
     struct {
-        u8 side : 1, flag1 : 1, unknown2 : 6;
+        u8 side : 1, flag1 : 1, effect_started : 1, unknown3 : 5;
     } flags;
     s8 animation_frame;
     u8 unknown1a[18];
@@ -56,6 +57,8 @@ void Overlay14Projectile_UpdateStopRequest(Overlay14Projectile *projectile);
 void Overlay14Projectile_Reset(Overlay14Projectile *projectile);
 void Overlay14Projectile_ReleaseModel(BattleSceneObject *object);
 void Overlay14Projectile_Initialize(Overlay14Projectile *projectile, int resource);
+void Overlay14Participant_PrepareProjectile(Overlay14Participant *participant, int mode);
+void Overlay14Participant_Update(Overlay14Participant *participant, Overlay14Participant *other);
 void Overlay14Participant_BeginEntry(Overlay14Participant *participant);
 void Overlay14Participant_UpdateParticles(Overlay14Participant *participant);
 void Overlay14Participant_UpdateParticle(BattleAITask *base);

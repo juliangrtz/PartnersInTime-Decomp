@@ -12,8 +12,8 @@ void Overlay14Attack_UpdateEntry(Overlay10ActionActor *user)
 {
     Overlay14Work *work = (Overlay14Work *)data_ov002_020c0710;
     BattleSceneObject_GetById(40);
-    func_ov014_020c53d4(&work->participants[0], &work->participants[1]);
-    func_ov014_020c53d4(&work->participants[1], &work->participants[0]);
+    Overlay14Participant_Update(&work->participants[0], &work->participants[1]);
+    Overlay14Participant_Update(&work->participants[1], &work->participants[0]);
     Overlay14Attack_Update(&work->attack);
     for (int i = 0; i < 32; ++i)
         func_ov014_020c4464(&work->projectiles[i]);
@@ -51,8 +51,8 @@ void Overlay14Attack_UpdateEntry(Overlay10ActionActor *user)
             work->active = &work->participants[0];
             work->next = 0;
             work->participants[0].remaining = func_ov014_020c2af8();
-            func_ov014_020c4f10(&work->participants[0], -1);
-            func_ov014_020c4f10(&work->participants[1], -1);
+            Overlay14Participant_PrepareProjectile(&work->participants[0], -1);
+            Overlay14Participant_PrepareProjectile(&work->participants[1], -1);
             work->participants[0].flags.flag1 = 1;
             work->participants[1].flags.flag1 = 1;
             Overlay14Attack_LaunchAtTarget(&work->attack, (Overlay14AttackTargetReference *)work->active);
@@ -78,8 +78,8 @@ void Overlay14Attack_UpdateSequence(Overlay10ActionActor *user)
     Overlay14Participant *active, *other;
     other = &work->participants[second];
     active = &work->participants[first];
-    func_ov014_020c53d4(active, other);
-    func_ov014_020c53d4(other, active);
+    Overlay14Participant_Update(active, other);
+    Overlay14Participant_Update(other, active);
     for (int i = 0; i < 32; ++i)
         func_ov014_020c4464(&work->projectiles[i]);
     Overlay14Attack_Update(&work->attack);
