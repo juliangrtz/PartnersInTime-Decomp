@@ -921,3 +921,5 @@ src/field/field_party_direction_speed.cpp
 src/field/field_party_auxiliary_transition.cpp
 
 src/field/field_party_follower_offset.cpp
+
+src/field/field_navigation_bounds.c

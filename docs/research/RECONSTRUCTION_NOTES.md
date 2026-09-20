@@ -6609,3 +6609,40 @@ with argument checks, bounded prescribed effects and caller-saved register
 clobbers. Full records, write bounds, SP/r4-r11, DTCM, stack arguments and unused
 stack are checked; maximum stack use is 56 bytes. All 104 saves are unchanged.
 These fixtures do not prove helper implementation or live delayed-effect coverage.
+
+
+## Navigation bounds restoration
+
+`FieldEntity_LoadNavigationBounds` (overlay 0, `0x020AE520`, 220 bytes)
+implements Field VM opcode `0x058`. With a bounds resource, it compares the
+unsigned 16-bit animation ID with the unsigned byte animation count and selects
+entry zero when the ID is out of range. Byte 1 of the six-byte animation record
+selects a five-byte bounds record through a signed byte index. Signed x, y,
+width, height and depth become Q12 navigation bounds; all five input bytes are
+loaded before the output stores. Without a resource, the rectangle is
+-8..8 by -8..0 with vertical extent 32 pixels, and the index is preserved.
+The explicit byte offset groups `stride * animation + 1` before adding the
+base, preserving the native multiply/add sequence used by the matching compiler.
+
+Private `build/runtime/eur_high_navigation_bounds/live43_v1.json` records three
+controlled native calls over 180 frames in Peach's Castle: current animation,
+out-of-range animation and no resource. Each uses a guarded live Field VM
+boundary, a verified 1,440-byte member and real resource records. Full member
+and input records, outputs, SP and preserved registers are checked. The original
+member bytes, registers and interrupted VM stack state are restored before each
+original VM command completes. The final capture shows the ordinary field scene.
+No occurrence of opcode `0x058` was found in the existing event-script export;
+this does not establish its absence from every game script. These calls prove
+controlled live execution, not an ordinary story invocation or graphics output.
+
+`build/analysis/high_effort_50_to_55/navigation_bounds_isolated_v2.json` adds
+206 ARM946 cases on copied live RAM/DTCM with synthetic member and resource
+records. These cover unsigned animation/count boundaries, signed indices and
+bounds extrema, defaults and source/output aliasing. The actual compiled
+function executes without helper stubs. Entire records and source pools, write
+bounds, SP/r4-r11, DTCM and unused stack are checked; maximum stack use is eight
+bytes. There are 140 fallback-selection, 62 current-selection and four default
+cases. The first report classified animation zero/count zero by its unchanged
+selected index; v2 corrects that label to the fallback branch and repeats all
+cases. Expected memory results were unchanged. All 104 original saves retain
+their trial-baseline hashes.

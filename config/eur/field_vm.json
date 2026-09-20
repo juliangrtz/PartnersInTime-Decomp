@@ -987,7 +987,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "restores the navigation collision bounds selected by the entity's current animation resource. An entity without a bound resource receives the default rectangle -8..8 by -8..0 and vertical extent 32 pixels",
-      "evidence": "func_ov000_020823f8 case 0x058 and func_ov000_020ae520, which selects the animation's second five-byte bounds profile through entity resource tables +0x10C and +0x2D8"
+      "evidence": "func_ov000_020823f8 case 0x058 and FieldEntity_LoadNavigationBounds, which selects the animation's second five-byte bounds profile through entity resource tables +0x10C and +0x2D8"
     },
     "89": {
       "arguments": ["entity_selector", "channel_0_or_minus_one", "channel_1_or_minus_one", "channel_2_or_minus_one", "channel_3_or_minus_one", "channel_4_or_minus_one"],

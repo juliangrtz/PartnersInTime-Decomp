@@ -55,7 +55,6 @@ extern void func_ov000_020a4214(FieldEntity *entity, int angle_mode,
                                 int target_angle, int angular_step,
                                 int signed_multiplier, int stop_at_target,
                                 int reserved);
-extern void func_ov000_020ae520(FieldEntity *entity);
 extern void func_ov000_020b2e9c(
     FieldEntity *entity, int relative_center, fx32 center_x, fx32 center_y,
     fx32 center_z, int relative_angle, int angle, int initial_speed,
@@ -2332,7 +2331,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             break;
 
         case FIELD_VM_RESTORE_ENTITY_NAVIGATION_COLLISION_BOUNDS:
-            func_ov000_020ae520(entity);
+            FieldEntity_LoadNavigationBounds(runtime_entity);
             break;
 
         case FIELD_VM_SET_ENTITY_COLLISION_RESPONSE_CHANNELS:

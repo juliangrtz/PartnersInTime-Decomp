@@ -471,3 +471,6 @@ src/field/field_party_follower_offset.cpp:
 
 src/field/field_party_trail.cpp:
     .text start:0x02091d34 end:0x020923dc
+
+src/field/field_navigation_bounds.c:
+    .text start:0x020ae520 end:0x020ae5fc

@@ -8946,3 +8946,16 @@ One ordinary hammer call and 244 isolated ARM946 cases check its behavior;
 helper effects are bounded observations live and explicit stubs in fixtures.
 The full build reproduces the golden ROM, native relinking has zero differences,
 and 107 tests pass. See the single-copy reference for widths and coverage limits.
+
+
+## Navigation bounds restoration
+
+Linked FieldEntity_LoadNavigationBounds and its typed Field VM call. Matching
+C/C++ is 815196 / 1563700 bytes (52.1325%). The actual source object and Field
+VM dispatcher compare exactly; the full gate passes with a byte-identical ROM,
+zero native differences and 107 tests. Three controlled live calls cover current,
+clamped and default bounds, with original object/register restoration and VM
+continuation. Another 206 isolated ARM946 cases cover signed resource indices,
+bounds extrema and aliasing without helper stubs. This is not ordinary story
+opcode coverage. See the navigation bounds restoration research notes and private
+live43_v1 / navigation_bounds_isolated_v2 reports. All 104 saves are unchanged.
