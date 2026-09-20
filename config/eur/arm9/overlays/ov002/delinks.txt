@@ -526,3 +526,9 @@ src/battle/battle_reward_item_text.c:
 
 src/battle/battle_reward_counter_initialize.c:
     .text start:0x0206cb7c end:0x0206cc08
+
+src/battle/battle_reward_counter_update.c:
+    .text start:0x0206c848 end:0x0206cb7c
+
+src/battle/battle_reward_items_begin_display.c:
+    .text start:0x0206d6e0 end:0x0206d740

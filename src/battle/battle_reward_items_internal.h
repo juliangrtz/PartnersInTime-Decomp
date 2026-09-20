@@ -9,7 +9,7 @@ typedef struct BattleRewardCounter {
     s16 x, y;
     u8 digits[4];
     s16 delay;
-    struct { u8 flag0 : 1, flag1 : 1, flag2 : 1, rest : 5; } flags;
+    struct { u8 done : 1, drawing_count : 1, flag2 : 1, effect_started : 1, rest : 4; } flags;
     u8 row;
 } BattleRewardCounter;
 typedef char BattleRewardCounterSizeCheck[sizeof(BattleRewardCounter) == 24 ? 1 : -1];
@@ -35,6 +35,8 @@ typedef struct BattleRewardItemsWork {
 } BattleRewardItemsWork;
 typedef char BattleRewardItemsWorkSizeCheck[sizeof(BattleRewardItemsWork) == 1344 ? 1 : -1];
 typedef char BattleRewardItemEntrySizeCheck[sizeof(BattleRewardItemEntry) == 12 ? 1 : -1];
+int BattleRewardCounter_Update(BattleRewardCounter *counter, int unused, int accelerate);
+void BattleRewardItems_BeginDisplay(void);
 void *BattleRewardItems_GetItemName(int item, int count);
 void BattleRewardCounter_Initialize(BattleRewardCounter *counter, int item, unsigned count, int y, int row);
 void BattleRewardItems_InitEntry(BattleRewardItemEntry *entries, int index, int item, int count, int category);

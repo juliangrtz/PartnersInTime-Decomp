@@ -8812,3 +8812,14 @@ seven name lookups and five label initializations, with independent localized
 pointer and decimal-output checks. Another 400 isolated ARM946 cases execute
 the native helpers without stubs. All 104 saves are unchanged. Other languages
 and natural victory navigation remain outside this batch's runtime coverage.
+
+
+### Battle reward-label drawing and display start
+
+Two exact C functions bring linked matching code to 808528 / 1563700 (51.7061%).
+They draw names and counts progressively, accelerate effects and start populated
+or empty reward displays. A restored 500-frame controlled readiness fixture
+checks 135 calls; another 172 isolated ARM946 cases cover branch boundaries.
+Glyph pixels/cursor/scratch remain bounded observations, and isolated sound is
+stubbed. Full allocation and ABI checks, golden ROM, native relink and 107 tests
+pass; all 104 original saves are unchanged. See the reward-label reference.

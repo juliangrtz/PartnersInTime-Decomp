@@ -6070,3 +6070,65 @@ registers and scratch outside the maximum native call depth are checked. The
 current language's real tables are used; other language selections are untested.
 Full source-object comparisons, golden ROM, native relink, progress checks and
 107 tests pass. All 104 original saves are unchanged.
+
+
+## Battle reward-label drawing
+
+[battle_reward_counter_update.c](../../src/battle/battle_reward_counter_update.c)
+reconstructs 0x0206C848-0x0206CB7C. It marks a row visible even when its label is
+already complete. Otherwise it counts down, draws one name glyph, switches to
+the decimal buffer when the name ends, then draws two digits at fixed positions.
+Acceleration clears the delay and speeds a live matrix-animation track to
+0x4000. The first draw starts animation 759, plays sound 242 and clears the two
+tile rows behind the label. Name completion, digit drawing and effect creation
+use distinct bits in the existing byte flags. The native second argument is
+unused. Reordering the name-end branch to match native fall-through resolved
+the initial 15 differing words; the full function matches without assembly.
+
+[battle_reward_items_begin_display.c](../../src/battle/battle_reward_items_begin_display.c)
+at 0x0206D6E0-0x0206D740 marks an empty list ready and clears its draw callback.
+For a populated list it clears readiness and the display phase, then installs
+the native display updater. Its first draft matched completely.
+
+The label renderer is a 324-byte callback-renderer allocation, accessed through
+the existing `BattleCallbackModelView`. Its owned buffer is 148 bytes; the
+64-byte upload record begins at buffer offset 28, with flag byte at offset 60.
+The updater clears upload bits 0/2 and sets bit 1, preserving the rest. The
+callback view's 320-byte prefix does not establish the allocation size. Existing
+matrix-animation tracks are 56-byte pooled records, distinct from renderers.
+
+Private `eur_high_reward_update/evidence_signal55_v7.json` extends the controlled
+victory route. Neutral input and a separate confirmation-button trial both
+stopped at phase 0x502C without reaching the new updater. Its native transition
+tests bit 2 in the result-panel primary model's flags. At frame 300, the fixture
+requires the guarded turn dispatcher, phase 0x502C, an initialized reward work
+with no update/draw callback, a 440-byte panel model and animation mode 0x1000.
+It supplies that bit once, verifies the returned phase 0x5008 and restores the
+original flag word before the caller resumes. The resulting display state is
+later removed by reloading the entire original savestate, with main RAM/DTCM
+equality before 30 neutral frames. A is held during frames 350..353.
+
+The 500-frame run checks one display start and 134 label updates: 34 delays,
+57 name characters, five name completions, five digit draws and 33 completed
+entries. It verifies the full reward work, callback renderer and owned buffer,
+existing animation tracks, helper arguments, return values and SP/r4-r11.
+Track/context creation and text initialization are independently modeled.
+GameText_Next remains observational only within its 48-byte cursor, eight-byte
+return token, 8192-byte pixel buffer and shared 480-byte glyph scratch at
+0x0205AAB4-0x0205AC94. Sound internals and rasterization are not independently
+modeled. The final reward-list and restored-battle captures are byte-identical to
+earlier captures that were visually inspected. This is a
+controlled readiness test, not natural victory coverage.
+
+Another 172 isolated ARM946 cases cover empty/nonempty starts, signed delay
+limits, completion flags, name/digit transitions and active/inactive tracks.
+Native animation creation, text initialization, glyph drawing and tile filling
+execute; only sound is stubbed. Whole RAM/DTCM, returns, callee-saved registers
+and scratch outside the observed stack depth are checked (maximum 304 bytes).
+The same bounded glyph observations apply. The first isolated guard mistakenly
+treated another overlay's interior address as a resident function entry; guards
+now select full native bodies present in the copied image. The next run exposed
+the shared glyph scratch, whose native decoder and symbol bounds established
+the added observation range. Failed producers/reports are retained. The final
+live and isolated runs pass, as do actual source-object comparisons, the full
+golden-ROM build, zero-difference relink and 107 tests. All 104 saves are unchanged.

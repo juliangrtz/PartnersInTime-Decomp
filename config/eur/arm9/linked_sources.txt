@@ -893,3 +893,6 @@ src/battle/battle_reward_item_entries.c
 
 src/battle/battle_reward_item_text.c
 src/battle/battle_reward_counter_initialize.c
+
+src/battle/battle_reward_counter_update.c
+src/battle/battle_reward_items_begin_display.c

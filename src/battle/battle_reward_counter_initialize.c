@@ -18,8 +18,8 @@ void BattleRewardCounter_Initialize(BattleRewardCounter *counter, int item, unsi
     counter->y = y;
     GameFormat_Decimal(counter->digits, 2, 0, amount);
     counter->delay = 2;
-    counter->flags.flag0 = 0;
-    counter->flags.flag1 = 0;
+    counter->flags.done = 0;
+    counter->flags.drawing_count = 0;
     counter->flags.flag2 = 1;
     counter->row = row;
 }
