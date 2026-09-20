@@ -8625,3 +8625,13 @@ Actual objects, full ROM/native relink and 107 tests pass. The focused shop repl
 checks 3,747 calls; 124 isolated cases cover additional phases and boundary inputs
 with explicit animation/text stubs. Source saves remain unchanged. See
 [evidence and limits](research/RECONSTRUCTION_NOTES.md#shop-equipped-descriptions-and-attached-sprites).
+
++
++## Shop description-strip following
++
++The adjacent text-strip callback adds 144 matching C++ bytes, reaching 796,244 /
++1,563,700 (50.9205%). All three functions in the extended unit, full ROM/native
++relink and 107 tests pass. The shop replay checks 5,530 strip calls and repeats
++the earlier callbacks; 32 additional isolated cases cover its phase/latch edges.
++See [evidence](research/RECONSTRUCTION_NOTES.md#shop-description-strips).
++

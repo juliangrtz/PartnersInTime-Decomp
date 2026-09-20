@@ -5377,3 +5377,24 @@ Screenshots show the description and visible field return; all 104 source saves
 retain their experiment-baseline hashes. Earlier clothing routes missed the
 description callback; the first badge run stopped on a probe register-alias error.
 Those failed reports and the original producer are retained separately.
+
++
++### Shop description strips
++
++The adjacent `ShopEquipment_DrawDescriptionStrip` (`0x02075628`, 144 bytes)
++follows the description owner's Q12 position after its countdown. Its parent
++pointer refers to that 72-byte owner, whose own parent is the 72-byte panel
++controller. The strip keeps its position while the controller is active and the
++owner is latched; otherwise it uses the owner's X and `166 * 4096 - owner.y`.
++It submits to draw list 20 or marks itself for deferred removal on a nonzero phase.
++
++The extended unit's three functions are exact. Private
++`eur_high_shop_strip/badges65_v1.json` repeats the preceding inputs and checks
++5,530 additional strip calls: 14 countdowns, 5,320 following updates and 196
++latched draws. Full strip, owner and controller records are checked separately,
++along with the sprite, workspace, save and draw-list changes. The same producer
++also rechecks the previous 3,747 callbacks. Its `isolated_v1.json` passes 156 cases,
++including 32 new strip countdown/latch/phase cases; the strip and real marking,
++accessor and draw helpers execute without stubs. The earlier animation/text stubs
++apply only to the other callback cases. All original saves remain unchanged.
++

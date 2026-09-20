@@ -44,6 +44,15 @@ struct ShopEquipmentDisplayTask {
 typedef char EquipmentWorkPrefixSize[sizeof(ShopEquipmentWork) == 0x8b8 ? 1 : -1];
 typedef char DisplayParentSize[sizeof(ShopEquipmentDisplayParent) == 72 ? 1 : -1];
 typedef char DisplayTaskSize[sizeof(ShopEquipmentDisplayTask) == 72 ? 1 : -1];
+struct ShopEquipmentDescriptionSpriteTask {
+    u8 unknown_00[16];
+    ShopEquipmentDisplayTask *owner;
+    u8 unknown_14[16];
+    int frames;
+    u8 unknown_28[32];
+};
+typedef char DescriptionSpriteTaskSize[sizeof(ShopEquipmentDescriptionSpriteTask) == 72 ? 1 : -1];
+
 #define WORK data_ov009_0207ea3c
 extern "C" void ShopPanel_DrawAttachedSprite(ShopEquipmentDisplayTask *task)
 {
@@ -114,5 +123,24 @@ extern "C" void ShopEquipment_UpdateDescription(ShopEquipmentDisplayTask *task)
                                     56, 0, 0, 0);
             }
         }
+    }
+}
+
+extern "C" void ShopEquipment_DrawDescriptionStrip(ShopEquipmentDescriptionSpriteTask *task)
+{
+    ShopRowSprite *sprite = Overlay5ResourceB_Get(task);
+    if (WORK.phase) {
+        func_ov005_0206650c(task);
+        return;
+    }
+    if (task->frames) {
+        --task->frames;
+    } else {
+        ShopEquipmentDisplayTask *owner = task->owner;
+        if (!owner->parent->active || !owner->latched) {
+            sprite->x = owner->x;
+            sprite->y = 0xa6000 - task->owner->y;
+        }
+        func_ov005_02069084(sprite, 20);
     }
 }
