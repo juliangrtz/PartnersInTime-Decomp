@@ -9474,3 +9474,22 @@ Live child animation/effect changes remain bounded observations; no additional
 allocation lifetime or independent rendering coverage is claimed. All 104
 original saves are unchanged. Matching C/C++: 836688/1563700 (53.5069%).
 Private evidence: high_effort_50_to_55/flower_finish_validation.json.
+
+
+## Level-up border fade and drawing
+
+Reconstructed the 364-byte border callback in C++ without inline assembly.
+It follows the model's animation flag to fade, preserves adjacent alpha bits,
+and draws 16 tiles at each screen edge. Full verification passes: golden EUR
+ROM, zero native differences, 107 tests. A controlled victory/level-target
+fixture reaches 387 checked calls: 15 fading in, 356 clamped, 15 fading out
+and one callback stop. All 13,124 virtual-call arguments, matrix writes and
+callee-saved registers are checked. The full 64-slot task pool, scene object
+and 440-byte model are covered; renderer changes within the model are bounded
+observations. Screenshots match repeated runs; VRAM, mapping registers,
+palettes and OAM are retained, without claiming independent rasterization.
+Another 195 isolated ARM946 cases cover all alpha values, both directions,
+preserved upper bits and null models, using explicit prepare/draw stubs.
+The original emulator state is restored with full main-RAM/DTCM equality;
+all 104 saves remain unchanged. Matching C/C++: 837052/1563700 (53.5302%).
+Private evidence: high_effort_50_to_55/level_border_validation.json.
