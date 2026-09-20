@@ -5564,3 +5564,53 @@ Private evidence: `eur_high_pause_status_number/status65_v1.json` and
 `isolated_v1.json`, with producer/input/capture hashes validated. The actual
 compiled source object matches all 300 bytes, the full ROM and native relink
 remain exact, all 107 tests pass and all 104 original saves are unchanged.
+
+
+## Pause key-item model switching
+
+[pause_key_item_model.cpp](../../src/scene_menu_ov007/pause_key_item_model.cpp)
+reconstructs `PauseKeyItem_UpdateModel` (`0x02073754`, 576 bytes). The callback
+uses a 72-byte task, phase +32, cached item +40 and ResourceA owner fields +24/+28.
+On selection change it releases the current model, drops asset slot 84, queues
+the new archive-group-3 asset and waits for its key to leave the request queue.
+It attaches the loaded model only if the selection still matches, then resets
+the phase. A hidden list waits for the read before closing archive table 3 and
+marking the task. The native code retains the model pointer across release and
+can still submit that pooled slot during the same callback; this order is kept.
+
+Key-item records have ten-byte stride. Their asset/animation halfwords and signed
+coordinate bytes use existing interior aliases. Modeling that stride removes
+the draft's extra multiply/shift sequence. The established inline position setter
+uses full-width pixel sums until the final halfword stores, matching the native
+evaluation schedule without assembly. All 576 compiled bytes match.
+
+An ordinary checkpoint-65 route checks 663 callbacks across 1,404 frames, switching
+between Beans and Toadbert's Drawing and back. It covers three load requests,
+three waiting and three ready checks, three model attachments and 659 draw-list
+insertions. ResourceA allocation/return links, asset-slot writes, queue-key
+readiness, caller fields and coordinates are independently derived. The oracle
+also verifies six texture/palette list insertions and four removals. Full task,
+model, pause workspace, party, save, display and archive records are checked at
+the watched boundaries. Model initialization/animation/finish internals are
+observed within their 336-byte receiver; the archive loader's output is observed
+within the 13,148-byte archive. Heap and resource-loader internals are outside
+this focused check. Pool return is distinct from final task-group cleanup.
+
+The first replay exposed a missing oracle rule for palette-list unlinking;
+the second completed the callbacks but incorrectly required the hidden-list
+close branch on an exit that instead uses group cleanup. Both failed reports
+are retained. The corrected `keys65_v3` passes, ends visibly in the field and
+has 15 validated captures. Its seven common-prefix captures equal the prior
+item-list route. Both displayed key objects and the field return were inspected.
+
+Another 64 copied-RAM cases execute the complete callback with explicit helper
+contract stubs. They cover hidden-list wait/mark, changed selection during loading,
+absent/existing models, inactive phases and signed coordinate overflow. The stubs
+check ordered arguments, mutate initialization/animation flags and clobber volatile
+registers. All main RAM, scratch outside the 24-byte frame, SP and callee-saved
+registers are checked. These cases do not execute loader, cleanup or rendering
+internals and do not establish ordinary gameplay coverage of those branches.
+
+Private evidence is under `eur_high_pause_key_item/`: `keys65_v3.json` and
+`isolated_v1.json`, with producer/input/capture hashes verified. Full ROM/native
+checks and all 107 tests pass; all 104 original saves retain their baseline hashes.

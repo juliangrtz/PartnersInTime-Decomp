@@ -8674,3 +8674,13 @@ pass. Ordinary member switching checks 5,364 callbacks and their numeric helper;
 176 isolated cases check packed fields and default selectors. All 25 captures
 match the prior route; 104 original saves are unchanged.
 See [evidence and limits](research/RECONSTRUCTION_NOTES.md#pause-status-numbers).
+
+
+## Pause key-item model switching
+
+The asynchronous key-item callback adds 576 matching C++ bytes, reaching
+799,744 / 1,563,700 (51.1444%). Ten-byte records and the existing position-setter
+pattern explain the compiler differences; no assembly. Full ROM/native checks
+and 107 tests pass. The ordinary route checks 663 callbacks, three loads and
+659 draw insertions; 64 isolated cases cover additional control-flow boundaries.
+See [evidence and limits](research/RECONSTRUCTION_NOTES.md#pause-key-item-model-switching).

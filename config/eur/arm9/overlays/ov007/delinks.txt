@@ -228,3 +228,6 @@ src/scene_menu_ov007/pause_list_sprite_create.cpp:
 
 src/scene_menu_ov007/pause_status_number.cpp:
     .text start:0x02078ac0 end:0x02078bec
+
+src/scene_menu_ov007/pause_key_item_model.cpp:
+    .text start:0x02073754 end:0x02073994

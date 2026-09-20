@@ -869,3 +869,5 @@ src/game/game_boot.c
 src/scene_menu_ov007/pause_list_sprite_create.cpp
 
 src/scene_menu_ov007/pause_status_number.cpp
+
+src/scene_menu_ov007/pause_key_item_model.cpp
