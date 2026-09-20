@@ -9340,3 +9340,12 @@ so that case proves caller arguments only.26functions in11linkedobjects exact;
 goldenEUR ROM,native0diff,107tests,104originalsaves preserved.
 Matching C/C++:830624/1563700 (53.1191%);target860044,remaining29420.
 Private validation:high_effort_50_to_55/egg_sequence_validation.json.
+
+
+## Smash Eggs allocation and entry setup (2026-09-20)
+
+Reconstructed allocation, participant/resource setup and entry coordinates.
+Live constructor:28 helper calls,17 own stores;432 isolated branch/boundary cases.
+58 affected functions exact; golden ROM, native relink and107 tests pass.
+Matching C/C++:831392/1563700 (53.1683%); target860044, remaining28652.
+Private evidence:high_effort_50_to_55/egg_initialize_validation.json.

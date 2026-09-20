@@ -30,7 +30,7 @@ Overlay15Attack_InitializeHitMotion kind:function(arm,size=0x2c) addr:0x020c54a4
 Overlay15Attack_InitializeActorController kind:function(arm,size=0xa0) addr:0x020c54d0
 Overlay15Attack_UpdateSequence kind:function(arm,size=0x40c) addr:0x020c5570
 Overlay15Attack_UpdateEntry kind:function(arm,size=0x1d0) addr:0x020c597c
-func_ov015_020c5b4c kind:function(arm,size=0x300) addr:0x020c5b4c
+Overlay15Attack_Initialize kind:function(arm,size=0x300) addr:0x020c5b4c
 data_ov015_020c5e60 kind:data(any) addr:0x020c5e60
 data_ov015_020c5e61 kind:data(any) addr:0x020c5e61
 data_ov015_020c5e64 kind:data(any) addr:0x020c5e64

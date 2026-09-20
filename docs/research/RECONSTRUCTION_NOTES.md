@@ -7629,3 +7629,29 @@ Version 1 failed because Unicorn hooks also see conditionally skipped ARM
 instructions; version 2 checks CPSR conditions before invoking the live oracle.
 All 26 functions in the 11 linked overlay-15 objects match. Full build, golden
 EUR ROM, zero-difference native relink and 107 tests pass.
+
+
+## Smash Eggs allocation and entry setup
+
+[`smash_eggs_initialize.cpp`](../../src/attack_smash_egg_ov015/smash_eggs_initialize.cpp)
+owns 0x020C5B4C-0x020C5E4C. It allocates the 584-byte work, initializes both
+controllers, loads resources and sets entry coordinates. Formation >=4 also
+initializes support hit motion. Resource indices use the 27-bit resource field;
+home tables use formation parity. The entry callback uses the common action-actor
+signature and accesses its party prefix. Shared declarations now live in
+`overlay010_attack.h`. The entire function matches without ASM.
+
+Private `eur_high_egg_initialize/live_v1.json` checks one constructor at frame117
+of the 2,110-frame checkpoint83 replay: formations4/5, no badge, center176/148,
+28 helper calls and17 own stores. Allocation header/root/584-byte extent, caller
+arguments, writes and preserved registers pass. Child effects in tracked work,
+actors, objects and models are observations; resource and heap internals are not
+independently proved. No RAM edits; the final screen returns to command selection.
+
+`isolated_v1.json` covers432 copied-RAM cases: all36 formation pairs, badge on/off,
+center -32768/176/32767 and zero/nonzero work fill. Object lookup and badge table
+addition execute natively; other helpers are explicit stubs. Ordered caller
+writes,60 badge halfword updates and mapped memory outside256 stack bytes pass.
+This does not establish live badge or synthetic-allocation lifetime coverage.
+All58 functions in23 affected linked objects match; full build, golden EUR ROM,
+native relink and107 tests pass. All104 original saves remain unchanged.

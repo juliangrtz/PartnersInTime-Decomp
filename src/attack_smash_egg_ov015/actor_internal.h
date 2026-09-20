@@ -47,7 +47,8 @@ extern "C" {
 #include <game/random.h>
 extern Overlay15AttackContext *data_ov002_020c0710;
 
-void Overlay15Attack_UpdateEntry(BattlePartyActor *actor);
+struct Overlay10ActionActor;
+void Overlay15Attack_UpdateEntry(struct Overlay10ActionActor *actor);
 void Overlay15Attack_BeginActorFinish(Overlay15AttackModelController *state);
 void Overlay15Attack_ResolvePairHit(Overlay15AttackModelController *state,
     Overlay15AttackModelController *other, Overlay15AttackObjectPairState *pair);

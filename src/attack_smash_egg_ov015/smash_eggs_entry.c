@@ -6,8 +6,11 @@
 
 #include "actor_internal.h"
 
-void Overlay15Attack_UpdateEntry(BattlePartyActor *actor)
+void Overlay15Attack_UpdateEntry(struct Overlay10ActionActor *action)
 {
+    /* The common entry callback carries the action actor; this phase only
+     * accesses its leading BattlePartyActor record. */
+    BattlePartyActor *actor = (BattlePartyActor *)action;
     Overlay15AttackContext *context = data_ov002_020c0710;
     BattleSceneObject *primary = BattleSceneObject_GetById(40);
     BattleSceneObject *user;

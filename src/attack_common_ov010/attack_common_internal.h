@@ -29,12 +29,9 @@ extern u8 data_02049924[], data_02049918[];
 void Overlay10Object_GetGraphicBounds(s16 *bounds, BattleSceneObject *object);
 int Overlay10Party_HasBadgeTwo();
 void Overlay10Attack_MoveBackground();
-void Overlay10Attack_BeginEntry(Overlay10ActionActor *user, void (*callback)(Overlay10ActionActor *));
 void Overlay10Enemy_PlayHitReaction(int actor_id, int effect_id);
 void Overlay10Party_AverageStats(BattlePartyActor *output, int count);
-int Overlay10Enemy_GetCenter(s16 *center);
 void Overlay10Party_GetSparkPositions(BattlePosition *sprite, BattlePosition *model, BattlePartyActor *actor);
-Overlay10Work *func_ov010_020c2978(Overlay10ActionActor *user, int size, int mode);
 void func_ov010_020c1024(s16 *bounds, const GameGraphicsResource *resource, int frame);
 void Overlay10Enemy_RestoreHitAnimation(int actor_id);
 }

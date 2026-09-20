@@ -97,6 +97,9 @@ typedef char Overlay15AttackRewardItemPrefix_SizeCheck[
 extern "C" {
 #endif
 
+struct BattlePartyActor;
+void Overlay15Attack_Initialize(struct BattlePartyActor *user);
+
 void Overlay15Attack_ConfigureModelFlags(
     Overlay15AttackModelController *state);
 int Overlay15Attack_ClampContextIndex(int offset);

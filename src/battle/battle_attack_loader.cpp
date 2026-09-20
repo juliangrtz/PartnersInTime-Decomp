@@ -7,6 +7,7 @@
  */
 
 #include <game/battle_attack_loader.h>
+#include <game/overlay015_attack.h>
 #include <game/linker_overlay_ids.h>
 extern "C" {
 extern void *gBattleSystem;
@@ -20,7 +21,6 @@ void Overlay11Attack_StartGreenShell(BattlePartyActor *);
 void Overlay13Attack_Initialize(BattlePartyActor *);
 void func_ov014_020c60f4(BattlePartyActor *);
 void func_ov014_020c60e4(BattlePartyActor *);
-void func_ov015_020c5b4c(BattlePartyActor *);
 void func_ov016_020c6e24(BattlePartyActor *);
 void Overlay12Attack_Initialize(BattlePartyActor *);
 void func_ov018_020c6d68(BattlePartyActor *);
@@ -49,7 +49,7 @@ void BattleAttack_StartSelectedCommand(BattlePartyActor *actor)
         BattleAttack_RequestOverlay(actor, OVERLAY_14_ID, func_ov014_020c60f4);
         break;
     case 8:
-        BattleAttack_RequestOverlay(actor, OVERLAY_15_ID, func_ov015_020c5b4c);
+        BattleAttack_RequestOverlay(actor, OVERLAY_15_ID, Overlay15Attack_Initialize);
         break;
     case 9:
         BattleAttack_RequestOverlay(actor, OVERLAY_16_ID, func_ov016_020c6e24);
