@@ -9236,3 +9236,15 @@ support route. Full EUR ROM match, zero native differences, 107 tests; original
 saves unchanged. All 56 Chomp functions across 21 compiled objects are exact.
 Matching C/C++: 825300/1563700 (52.7786%); target860044, remaining34744.
 Private validation: high_effort_50_to_55/chomp_boost_validation.json.
+
+
+## Pocket Chomp pursuit preparation (2026-09-20)
+
+Pursuit positioning, animation reset and delayed/immediate launch selection add
+240 matching C++ bytes. Two ordinary live calls cover delayed starts in both
+directions; 20 copied-RAM ARM946 cases cover immediate launch and delay/flag
+boundaries with explicit child stubs. Captures and final graphics equal the
+prior support route. Full EUR ROM match, zero native differences, 107 tests;
+104 original saves unchanged. All 57 Chomp functions in 22 objects are exact.
+Matching C/C++: 825540/1563700 (52.7940%); target860044, remaining34504.
+Private validation: high_effort_50_to_55/chomp_pursuit_validation.json.

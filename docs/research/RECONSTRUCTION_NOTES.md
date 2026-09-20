@@ -1453,6 +1453,34 @@ child behavior. All 56 Chomp functions in 21 compiled objects remain exact;
 the full build reproduces the EUR ROM and passes 107 tests. All 104 original
 saves retain their hashes.
 
+### Pocket Chomp pursuit preparation
+
+[`chomp_prepare_pursuit.cpp`](../../src/attack_pocket_chomp_ov018/chomp_prepare_pursuit.cpp)
+reconstructs `PocketChomp_PreparePursuit` at 0x020C42EC-0x020C43DC. It places
+the Chomp on the requested side, selects animation 2, clears its alternate
+animation and bounce state, then schedules or immediately starts the pursuit.
+The initial target lookup is retained even though the caller ignores its
+result. The direction contract is 0 or 1; the typed animation argument is s8.
+The first candidate matches all 240 bytes, without inline assembly.
+
+Private `eur_high_chomp_pursuit/evidence_support83_v1.json` follows the ordinary
+4,111-frame support-input route and checks two delayed starts: direction 0 with
+delay 21, then direction 1 with delay 8. It checks the lookup result, ordered
+reset stores, helper arguments, branch choice and SP/r4-r11. The full work,
+party records, embedded scene objects, models and graphics-list neighbors are
+checked; position, animation and launch child writes are bounded observations.
+Inputs, all captures and final graphics match the prior support route. The
+final capture shows the battle command menu. No game RAM was edited.
+
+`isolated_v1.json` covers 20 ARM946 cases on copied RAM/DTCM: both directions,
+all-clear/all-set flags, and delays INT_MIN, -1, 0, 1 and INT_MAX. Object lookup
+executes natively; position, animation and launch helpers are explicit no-write
+stubs. The zero-delay branch is covered only by these isolated cases. Full
+mapped memory except 256 stack bytes is compared. Child internals, motion-list
+updates, allocation lifetimes and rasterization are not independently proved.
+All 57 Chomp functions across 22 compiled objects remain exact. The build
+reproduces the EUR ROM, passes 107 tests and preserves all 104 original saves.
+
 ### Battle interface text quads
 
 `BattleInterface_DrawText` adds 484 matching bytes. It draws a text-buffer quad

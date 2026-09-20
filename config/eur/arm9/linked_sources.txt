@@ -951,3 +951,4 @@ src/attack_pocket_chomp_ov018/chomp_center_update.cpp
 src/attack_pocket_chomp_ov018/chomp_adult_update.cpp
 src/attack_pocket_chomp_ov018/chomp_support_update.cpp
 src/attack_pocket_chomp_ov018/chomp_boost.cpp
+src/attack_pocket_chomp_ov018/chomp_prepare_pursuit.cpp

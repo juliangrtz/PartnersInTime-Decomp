@@ -113,6 +113,7 @@ u32 PocketChompAdult_BeginExit(PocketChompAdultMotion *adult);
 u32 PocketChompAdult_BeginJump(PocketChompAdultMotion *adult);
 void PocketChomp_UpdateVisibility(PocketChomp *center);
 void PocketChomp_Boost(PocketChomp *center);
+void PocketChomp_PreparePursuit(PocketChomp *center, s8 direction, int delay);
 void PocketChomp_UpdateSquash(PocketChomp *center);
 u32 PocketChomp_BeginFall(PocketChomp *center);
 u32 PocketChomp_BeginSmallBounce(PocketChomp *center);
