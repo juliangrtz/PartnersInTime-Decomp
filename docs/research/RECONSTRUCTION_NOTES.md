@@ -6220,3 +6220,44 @@ Caller records, high collision-policy bits, stack restoration and r4-r11 are
 checked; maximum stack use is 64 bytes. These are isolated boundary checks,
 not additional live gameplay coverage. Both probes and their input hashes are
 recorded privately; they are not fresh-clone build dependencies.
+
+
+## Field queued music and default actions
+
+`FieldArea_ApplyQueuedMusic` (overlay 0, `0x0207C098`, 216 bytes) runs only
+on field screen 0 while save-context byte `gSaveData + 0x514`, bit 0 is clear.
+The party manager's word at +4 contains signed current music in bits 17..23,
+signed queued music in bits 24..30 and a bank-clear flag in bit 31. Queue -1
+means no change; zero stops playback, other values call `GameAudio_SetMusic`.
+Afterward the queued value is read again, copied into current music and reset
+to -1. Bit 31 requests clearing bank 1 even without a queued sequence; this
+function does not clear that flag. Signed encoding does not make every
+representable value a valid music sequence.
+
+`FieldParty_ResetDefaultActions` (`0x0209CD84`, 124 bytes) does nothing without
+a leader or outside movement modes 0/6. Otherwise it resets action selection
+through the existing helper. Special-contact mode with movement mode 6 then
+writes action 8 to both member slots. The shared controller and member layouts
+remain unchanged; the music fields now have names instead of one unknown byte.
+
+Private `eur_high_party_music/controls65_v2.json` under `build/runtime/`
+checks one no-change music call and one ordinary action reset over 2453 frames.
+The cold-load inputs are followed by the documented R/L/X/Y controls; the final
+inspected capture shows the Thwomp Volcano save menu, with no save confirmation.
+`music_cold1_v2.json` checks a real music-7 request over 2633 frames and ends
+in the visible castle field. No RAM fixtures are used; all 104 original saves
+retain their baseline hashes. The earlier cold65_v1 run failed its coverage
+requirement because it reached music but no action reset, not a memory mismatch.
+
+The oracle checks whole applicable area/manager/controller/member records,
+queue guards, sequence arguments, consumption order and action-table results.
+Audio helper internals, sound output and unrelated audio globals are outside
+that caller oracle. `build/analysis/high_effort_50_to_55/party_music_isolated_v1.json`
+adds 40 music cases and 193 action cases on copied ARM946 RAM/DTCM. Audio calls
+are explicitly stubbed there; action reset/refresh/member helpers execute native.
+Screen/disabled gates, signed queue boundaries, bank clearing, null leader and
+all 16 movement modes are covered, with SP/r4-r11 and untouched DTCM checks.
+The native default-action pairs are all zero; language variations do not reach
+the helper's localized action-9 branch. Maximum stack use is 24 bytes.
+These fixtures supplement the live calls and do not establish additional
+gameplay or sound-system coverage.

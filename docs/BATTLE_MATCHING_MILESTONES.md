@@ -8845,3 +8845,14 @@ calls; 64 isolated ARM946 cases cover guard and selection combinations.
 Renderer internals remain bounded observations. Golden ROM, native relink
 and 107 tests pass; all 104 original saves are unchanged. See the field-party
 binding reference for checked memory ranges and runtime limitations.
+
+
+### Field queued music and default actions
+
+Two exact C++ functions bring matching code to 810512 / 1563700 (51.8330%).
+They consume queued field music and reset member actions in supported movement
+modes. Two automated routes check a no-change music call, a real music-7
+request and an action reset; 233 isolated ARM946 cases cover branch boundaries.
+Isolated audio calls are stubbed; sound internals remain outside the caller
+oracle. Golden ROM, native relink and 107 tests pass, with all original saves
+unchanged. See the queued-music reference for coverage limits.

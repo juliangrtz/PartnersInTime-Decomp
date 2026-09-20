@@ -192,6 +192,7 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_ResetDefaultActions(FieldPartyController *party);
 void FieldParty_ClearLeaderPaletteAnimation(FieldPartyController *party, int force);
 void FieldParty_StartLeaderPaletteAnimation(FieldPartyController *party, int force);
 void FieldPartyEntity_AdvanceFastSpin(FieldPartyEntity *member);

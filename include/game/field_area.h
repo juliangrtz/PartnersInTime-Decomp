@@ -185,6 +185,7 @@ typedef char FieldAreaSnapshot_SizeCheck[sizeof(FieldAreaSnapshot) == 16 ? 1 : -
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldArea_ApplyQueuedMusic(FieldAreaContext *area);
 void FieldArea_BindPartyMembers(FieldAreaContext *area, int side, int force);
 void FieldArea_ReverseEffects(FieldAreaContext *area,int index);
 void FieldArea_SetEffectsPaused(FieldAreaContext *area,int index,u8 paused);

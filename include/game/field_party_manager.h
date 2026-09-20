@@ -18,7 +18,7 @@ typedef struct FieldPartyManager {
             u32 active_party : 1, unknown_01 : 1, unknown_02_06 : 5, unknown_07 : 1;
             s32 unknown_08_11 : 4;
             u32 unknown_12 : 1, unknown_13 : 1, unknown_14 : 1, unknown_15 : 1;
-            u32 unknown_16 : 1; s32 bgm : 7; u32 unknown_24_31 : 8;
+            u32 unknown_16 : 1; s32 bgm : 7; s32 queued_bgm : 7; u32 clear_music_bank : 1;
         } bits;
     };
     union { u8 unknown_08[16]; struct { u8 unknown_08_prefix[4]; u16 tracked_sounds[4]; u8 unknown_14[4]; }; };

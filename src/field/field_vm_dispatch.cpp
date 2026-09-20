@@ -89,7 +89,6 @@ extern void func_ov000_0209f644(
 extern void func_ov000_02072074(u8 *field_context, int axis,
                                 fx32 amplitude, int step, int half_cycles,
                                 int rumble_pattern);
-extern void func_ov000_0207c098(u8 *field_context);
 extern void func_ov000_02075814(
     u8 *field_context, int animation_slot, int direction_profile,
     u16 object_mask_high, u16 object_mask_low, u16 standard_bg_mask,
@@ -2883,7 +2882,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             (FieldAreaContext *)field_context, (s16)arguments[0],
             (s16)arguments[1], (u16)arguments[2]);
         if (FieldVm_GetSpecialPartyState(field_context)->field_screen == 0) {
-            func_ov000_0207c098(field_context);
+            FieldArea_ApplyQueuedMusic((FieldAreaContext *)field_context);
         }
         if (control_context->flags.release_party_action) {
             FieldParty_BeginEntrySlide((FieldPartyController *)FieldVm_GetPartyController(
@@ -3011,7 +3010,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         if (FieldVm_GetSpecialPartyState(field_context)->field_screen == 0 &&
             (arguments[0] == 0 ||
              arguments[0] == 2)) {
-            func_ov000_0207c098(field_context);
+            FieldArea_ApplyQueuedMusic((FieldAreaContext *)field_context);
         }
         break;
 
@@ -3026,7 +3025,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             field_context, 4, &circular_wipe_parameters);
         if (FieldVm_GetSpecialPartyState(field_context)->field_screen == 0 &&
             arguments[3] == 0) {
-            func_ov000_0207c098(field_context);
+            FieldArea_ApplyQueuedMusic((FieldAreaContext *)field_context);
         }
         break;
     }
@@ -3049,7 +3048,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         if (FieldVm_GetSpecialPartyState(field_context)->field_screen == 0 &&
             arguments[3] == 0 && arguments[4] == 0 &&
             arguments[5] == 0 && arguments[6] == 0) {
-            func_ov000_0207c098(field_context);
+            FieldArea_ApplyQueuedMusic((FieldAreaContext *)field_context);
         }
         break;
     }
@@ -3093,7 +3092,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
             *(void **)(field_context + FIELD_VM_FIELD_SYSTEM_OFFSET),
             arguments, arguments[4],
             &arguments[5]);
-        func_ov000_0207c098(field_context);
+        FieldArea_ApplyQueuedMusic((FieldAreaContext *)field_context);
         break;
 
     case FIELD_VM_START_PREPARED_TIME_HOLE_ARRIVAL:
