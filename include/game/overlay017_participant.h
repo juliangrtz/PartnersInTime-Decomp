@@ -10,6 +10,11 @@ extern "C" {
 #include <game/battle_effect.h>
 #include <game/overlay017_attack.h>
 typedef struct Overlay17Participant Overlay17Participant;
+typedef struct Overlay17ParticipantFlags {
+    u16 phase : 5, active : 1, formation : 2, input : 2, index : 5, unknown15 : 1;
+} Overlay17ParticipantFlags;
+typedef char Overlay17ParticipantFlags_SizeCheck[sizeof(Overlay17ParticipantFlags) == 2 ? 1 : -1];
+
 /* The native state base overlaps the four final bytes of BattleSceneObject. */
 typedef struct Overlay17ParticipantState {
     u8 shared_object_tail[4];
@@ -20,9 +25,7 @@ typedef struct Overlay17ParticipantState {
     s16 height;
     union {
         u16 flags;
-        struct {
-            u16 phase : 5, active : 1, formation : 2, input : 2, index : 5, unknown15 : 1;
-        } bits;
+        Overlay17ParticipantFlags bits;
     };
     u16 unknown26;
 } Overlay17ParticipantState;
@@ -41,6 +44,8 @@ typedef char Overlay17Participant_SizeCheck[sizeof(Overlay17Participant) == 296 
 #ifdef __cplusplus
 extern "C" {
 #endif
+void Overlay17Participant_ConsumeInput(Overlay17Participant *participant);
+int Overlay17Participant_FindIdleSlot(void);
 void Overlay17Participant_RemoveIdleFromList(void);
 void Overlay17Participant_BeginEntry(Overlay17Participant *participant, int formation);
 void Overlay17Participant_ReleaseModel(Overlay17Participant *participant);

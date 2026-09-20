@@ -929,3 +929,7 @@ src/field/field_body_overlap.c
 src/attack_copy_flower_ov017/ov17_participant_begin_exit_arc.cpp
 
 src/attack_copy_flower_ov017/ov17_target_selection.cpp
+
+src/attack_copy_flower_ov017/ov17_participant_input.cpp
+
+src/attack_copy_flower_ov017/ov17_find_idle_participant.cpp

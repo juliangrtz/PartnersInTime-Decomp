@@ -8996,3 +8996,22 @@ behavior is preserved and tested only against a synthetic seventh record.
 Initial build v1 failed with a duplicate source basename; the new unit now has
 a unique ov17_target_selection basename. See target cycling research notes and
 controlled83_v2 / copy_flower_target_isolated_v1 reports. All 104 saves unchanged.
+
+
+## 2026-09-20 - Copy Flower input and idle participant lookup
+
+Reconstructed and linked ConsumeInput and FindIdleSlot in overlay 17, preserving
+exact key equality, the input mask update and first phase-zero slot selection.
+Matching C/C++ reaches 816084/1563700 (52.1893%); this batch adds 216 bytes.
+Full build, golden-ROM comparison, native relink and 107 tests pass.
+The actual compiled functions match all native bytes including literal pools.
+
+Runtime evidence: 13 ordinary slot searches, three controlled input calls with
+workspace restoration, and 576 isolated ARM946 cases without helper stubs.
+The first combined replay failed its input-coverage requirement; the successful
+slot replay and separate controlled input replay record that distinction.
+All 104 original saves are unchanged. See the input/idle-slot section in
+`docs/research/RECONSTRUCTION_NOTES.md` for checked ranges and coverage limits.
+Private reports: `build/runtime/eur_high_copy_flower_input/copy83_v2.json`,
+`build/runtime/eur_high_copy_flower_input_controlled/controlled83_v1.json`,
+`build/analysis/high_effort_50_to_55/copy_flower_input_isolated_v1.json`.

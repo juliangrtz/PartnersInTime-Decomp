@@ -6757,3 +6757,47 @@ enemy in gameplay. Ordered helper calls/results, final results, whole context/ro
 SP/r4-r11, DTCM and unused stack are checked; native writes are permitted only to
 the scratch stack. Maximum stack use is 40 bytes. All 104 original saves retain
 their baseline hashes.
+
+
+## Copy Flower input and idle slots
+
+`Overlay17Participant_ConsumeInput` (overlay 17, `0x020C4474`, 156 bytes)
+returns immediately when the participant's two-bit input state is already set.
+Otherwise the pressed mask must equal the formation's key-table entry exactly;
+additional keys reject the input. Success sets input state 1 and clears that key
+from the attack's pending input mask, leaving the pressed mask unchanged.
+`Overlay17Participant_FindIdleSlot` (`0x020C4794`, 60 bytes) returns the first
+of eight slots with phase zero, or -1. The phase is independent of the active bit.
+The named two-byte flag view preserves the existing participant layout; the
+search computes its first flag offset from shared member layouts and advances
+by the 296-byte participant stride.
+
+Private `build/runtime/eur_high_copy_flower_input/copy83_v2.json` checks 13
+ordinary searches over 1,810 frames from `copy_verified_setup83.dst`, using
+A for eight frames and ten timed input windows. Slots 0 through 3 are observed;
+the final capture shows the battle command menu. The full 16,356-byte workspace,
+root, return value, SP and r4-r11 are checked. The earlier `copy83_v1.json` failed
+its coverage requirement because this route never called the input helper;
+its 13 successful search checks did not establish input coverage. Native callers
+place that helper in phases 6/12 and a target-unavailable path, rather than the
+ordinary successful input window.
+
+`build/runtime/eur_high_copy_flower_input_controlled/controlled83_v1.json`
+checks three input calls at guarded ordinary exit-arc entries: already consumed,
+wrong keys and accepted exact keys. Temporary participant input bits and attack
+input masks exercise those branches. An independent model checks the entire
+workspace, root and key-table bytes when read. The workspace is restored and
+verified before each original exit-arc call resumes; all three complete. The
+original registers and decoded entry push are also restored. This separate
+1,810-frame route uses 50 timed input windows and ends during the continuing
+attack. It establishes controlled helper behavior, not ordinary invocation.
+
+`build/analysis/high_effort_50_to_55/copy_flower_input_isolated_v1.json` adds
+576 ARM946 cases using the compiled functions without stubs: 320 input cases
+cover all formations and input states, five key combinations and four pending
+masks; 256 searches cover every occupancy mask. Nonzero phases and unrelated
+flag bits vary independently. Checks include full workspace/root/table ranges,
+ordered data stores, search results, SP/r4-r11, unchanged DTCM and unused scratch
+stack. Maximum stack use is eight bytes. These copied-memory fixtures do not
+establish gameplay lifetimes or asynchronous behavior. Screenshots are observed,
+not independently rendered. All 104 original saves retain their baseline hashes.
