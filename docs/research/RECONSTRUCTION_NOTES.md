@@ -5812,3 +5812,48 @@ stub. Cases cover source widths, visibility, 16-bit value/count truncation, sign
 coordinate narrowing and leading-zero placement. Full RAM/DTCM, stack bounds,
 SP and r4-r11 are checked. The full build also passes golden-ROM comparison,
 native relinking, progress checks and all 107 tests.
+
+
+## Field camera target and motion updates
+
+[field_camera_update.cpp](../../src/field/field_camera_update.cpp) reconstructs
+`FieldArea_UpdateCameraTarget` (0x02072A9C, 1000 bytes) and
+`FieldArea_AdvanceCameraMotion` (0x02072E84, 652). Both compiled source functions
+match completely without assembly. The shared camera record remains 52 bytes.
+
+The target check stops axes at their destinations, tests tracked entities against
+the previous/current camera positions and clamps completed moves to map limits.
+Its braking threshold sums discrete speed steps, including the last nonpositive
+step, and compares this with the Q12 distance. Each squared component is rounded
+before addition. The step function applies enabled velocity axes to the camera
+origin, updates speed and advances elapsed time. Tracking builds a temporary
+absolute motion and recursively steps it; an expired duration is clamped to one.
+X is evaluated before Y at the origin helper, which matters for exact compilation.
+
+Private `eur_high_field_camera_update/evidence_entry55_v1.json` records a
+185-frame checkpoint-55 replay: 740 calls to each target, all with inactive axes.
+This establishes ordinary entry and return behavior, not active-motion coverage.
+`evidence_fixture55_v2.json` adds 25 guarded per-call fixtures on live default
+motion records. It checks 743 step calls (including three recursive calls), 740
+target checks and three nested setup calls. Cases cover enabled axes, pause,
+acceleration and its cap, braking and its minimum speed, exact braking-distance
+equality, timed completion, clamping, corner stopping and tracked-target crossings.
+Entity tracking executes both timed and profiled setup; an expired duration is
+also exercised.
+
+Full 11,216-byte areas, 52-byte motion records and the live 1,440-byte party
+entities are checked, with heap extents, area ownership, complete native-byte
+guards, helper arguments, returns, SP and callee-saved registers. The parent's
+temporary-record observation is bounded to 52 bytes and the nested origin writes
+to eight bytes; the child calls are independently checked. The existing vector
+helper's eight-byte result remains observational. Square-root results are checked
+against independent integer arithmetic; DS hardware timing is not modeled.
+
+Each fixture restores the entire area and the ordinary return value before the
+caller continues. These are controlled boundary cases, not natural story camera
+sequences. All five captures and the four final VRAM/palette/OAM ranges equal the
+unmodified replay; the final field scene was visually inspected. No pixel oracle
+is claimed. The initial fixture v1 passed with a 1,312-byte entity prefix; v2
+strengthens this to the full party allocation and checks ownership on each call.
+All 104 original saves remain unchanged. The full gate passes golden-ROM rebuild,
+native relinking, progress consistency and all 107 tests.

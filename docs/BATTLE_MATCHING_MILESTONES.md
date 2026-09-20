@@ -8735,3 +8735,19 @@ Ordinary entry did not reach these callbacks. Synthetic glyphs and bounded OAM
 observations do not establish authentic numeric rendering or normal accessibility.
 All original saves remain unchanged. See the research reference's battle numeric
 and cached OAM section and private `eur_high_battle_number` reports.
+
+
+### Field camera target and motion updates
+
+Two matching C++ functions add 1652 bytes, reaching 803672 / 1563700
+(51.3955%). They handle target crossings, map limits, timed motion,
+acceleration/deceleration and recursive entity tracking without inline assembly.
+
+Full build, golden ROM, native relink, progress checks and 107 tests pass.
+A 185-frame ordinary route checks inactive callbacks; 25 restored live fixtures
+exercise active branches, including three independently checked recursive calls
+and three setup calls. Full area, motion and party allocations are checked.
+Vector-helper output is bounded observational data; square-root values are
+independently checked. Five captures and four graphics ranges match the ordinary
+replay. All 104 original saves are unchanged. See the research reference's field
+camera update section and private `eur_high_field_camera_update` reports.

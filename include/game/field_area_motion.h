@@ -49,6 +49,9 @@ int FieldArea_MoveCameraForDuration(FieldAreaContext *area, int relative, fx32 x
 int FieldArea_MoveCameraWithProfile(FieldAreaContext *area, int relative, fx32 x, fx32 y,
     fx32 speed, fx32 acceleration, fx32 maximum, fx32 deceleration,
     u8 option_x, u8 option_y, FieldCameraMotion *motion);
+/* option_x stops at a map corner; option_y enables target completion. */
+int FieldArea_UpdateCameraTarget(FieldAreaContext *area, FieldCameraMotion *motion);
+void FieldArea_AdvanceCameraMotion(FieldAreaContext *area, FieldCameraMotion *motion);
 void FieldArea_StopCameraMotion(FieldAreaContext *area, FieldCameraMotion *motion, int snap);
 #ifdef __cplusplus
 }

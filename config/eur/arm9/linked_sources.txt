@@ -880,3 +880,5 @@ src/battle/battle_object_sprites.c
 
 src/battle/battle_number_oam.c
 src/battle/battle_oam_callbacks.c
+
+src/field/field_camera_update.cpp
