@@ -9551,3 +9551,27 @@ but did not invoke this reverse helper; its required-target assertion failed
 and that report is retained. Live counterattack coverage remains unverified.
 All 104 original saves are unchanged. Matching C/C++: 837540/1563700 (53.5614%).
 Private evidence: high_effort_50_to_55/flexible_reverse_validation.json.
+
+
+## Chain-rig activity and reflected-hit processing
+
+Reconstructed the activity query in C++, extending the contiguous actor-binding
+unit. It processes queued hits from either adult when reflection is enabled,
+checks the eight task callbacks and clears the reflection latch when all finish.
+The second source check reloads the hit record after the first reflection call.
+The compiled unit and affected callers match completely. The full build passes
+with the golden EUR ROM, zero native differences and 107 tests.
+A 1470-frame replay from the controlled giant-phase boss checkpoint checks 1098
+ordinary calls: 839 active and two completed with reflection disabled, plus 257
+active with reflection enabled. No reflection helper call occurred on this route.
+Full battle context, rig and override records, results and preserved registers
+are checked; both captures match the discovery run. Another 189 isolated ARM946
+cases cover all eight task positions, no active task, zero/nonzero latch values
+and queue sentinels, including a source change between the two adult checks.
+These cases execute the native query with a guarded swap-only reflection stub;
+they do not verify damage calculation or the helper's full effects. Full main
+RAM and DTCM outside the actual stack are checked. The first isolated attempt
+failed because the harness switched CPU register banks after setting SP; the
+corrected run passes. There is no new allocation-lifetime or graphics oracle.
+All 104 original saves remain unchanged. Matching C/C++: 837764/1563700 (53.5757%).
+Private evidence: high_effort_50_to_55/chain_rig_active_validation.json.

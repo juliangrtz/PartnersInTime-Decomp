@@ -3,7 +3,7 @@
 
 /*
  * Small effect entry points: the ground ripple, the capture overlay and the chain
- * rig's actor binding and sequence.
+ * rig's actor binding, sequence and activity check.
  */
 #include <game/battle_scene.h>
 #include <game/battle_ai.h>
@@ -14,6 +14,8 @@ BattleAITask *BattleGroundRipple_Create(BattleSceneObject *object, int radius, i
                                         int hold_frames);
 void BattleCaptureOverlay_Start(void);
 void BattleChainRig_SetActor(BattleSceneObject *object, int chain, u16 actor_id);
+/* Processes pending reflected hits, then reports whether any rig task remains. */
+int BattleChainRig_IsActive(BattleSceneObject *object);
 void BattleChainRig_StartSequence(BattleSceneObject *object, int sequence);
 #ifdef __cplusplus
 }

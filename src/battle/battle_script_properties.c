@@ -9,6 +9,7 @@
 #include <game/battle_actor.h>
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
+#include <game/battle_effect_controls.h>
 #include <game/battle_hit.h>
 #include <game/battle_script_properties.h>
 
@@ -67,7 +68,6 @@ typedef char BattleSceneObjectScriptPropertyView_SizeCheck[
 
 void OS_Terminate(void);
 int func_ov002_020b8070(BattleSceneObject *object, int channel);
-int func_ov002_020b6928(BattleSceneObject *object);
 
 #define FIELD_S8(object, offset) \
     (*(s8 *)((u8 *)(object) + (offset)))
@@ -439,7 +439,7 @@ int BattleScript_GetProperty(u16 actor_id, int property) {
     case BATTLE_PROPERTY_CHANNEL_STATE_2:
         return func_ov002_020b8070(BattleSceneObject_GetById(actor_id), 2);
     case BATTLE_PROPERTY_SCENE_DERIVED_128:
-        return func_ov002_020b6928(BattleSceneObject_GetById(actor_id));
+        return BattleChainRig_IsActive(BattleSceneObject_GetById(actor_id));
     case BATTLE_PROPERTY_ACTOR_FLAG_15:
         return (u32)(BattleActor_GetById(actor_id)->flags << 16) >> 31;
     default:
