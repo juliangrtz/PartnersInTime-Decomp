@@ -9301,3 +9301,16 @@ All 200 functions in 13 affected/related objects match; golden EUR ROM,
 zero native differences, 107 tests, 104 original saves unchanged.
 Matching C/C++: 828316/1563700 (52.9715%); target860044, remaining31728.
 Private validation: high_effort_50_to_55/scene_initializers_validation.json.
+
+
+## Smash Eggs actor finish transition (2026-09-20)
+
+Reconstructed the actor finish transition in readable C++, retaining the cached
+model pointer, packed phase bits and ordering around pair retreat. Full function
+matches without ASM. Live replay checks phases 9 and 11, 15 helper calls and five
+own stores; 128 isolated caller cases cover all phases/parities/model selectors.
+Child effects in the live probe are bounded observations; isolated helpers are
+explicit stubs. Full build, golden EUR ROM, native relink and 107 tests pass;
+24 functions in nine actual overlay-15 objects match. Original104 saves unchanged.
+Matching C/C++: 828756/1563700 (52.9997%); target860044, remaining31288.
+Private validation: high_effort_50_to_55/egg_finish_validation.json.

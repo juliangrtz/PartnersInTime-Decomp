@@ -957,3 +957,4 @@ src/attack_bro_flower_ov014/participant_update.cpp
 src/attack_bro_flower_ov014/participant_prepare.cpp
 src/attack_bro_flower_ov014/projectile_update.cpp
 src/scene_support_ov005/static_initializers.cpp
+src/attack_smash_egg_ov015/actor_finish.cpp

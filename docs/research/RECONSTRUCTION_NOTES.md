@@ -7513,3 +7513,37 @@ memory except 256 stack bytes are checked, including retained marker links and
 padding. These cases prove initialization, not later pool allocation/destruction
 or asynchronous hardware behavior. All 200 functions in the 13 checked overlay-5
 and MSL objects match. Full build, golden EUR ROM, native relink and 107 tests pass.
+
+
+## Smash Eggs actor finish
+
+[`actor_finish.cpp`](../../src/attack_smash_egg_ov015/actor_finish.cpp) owns
+0x020C4570-0x020C4728. It disables actor/egg hit descriptors, selects the finish
+animation or completes an airborne support motion, starts pair retreat and sets
+the attack's completion flag. The active model pointer is deliberately cached
+before resource and animation calls. Phase 9 writes phase 11 before retreat;
+other phases write phase 7 after retreat. Packed upper bits survive both writes.
+Separate local declarations preserve native register allocation without changing
+the order of loads; the complete function matches without inline assembly.
+
+Private `eur_high_egg_finish/live_v1.json` replays 2,110 frames from
+`eur_overlay15/item_select83.dst`, using the existing button-only pair-test policy.
+The checkpoint comes from the restored-command encounter documented above, not
+a normal story encounter entry. Two calls cover phases 9 and 11: 15 ordered
+helper calls and five own stores, with complete function guards, return/SP/r4-r11,
+the 584-byte attack work, owner prefix, all 70 embedded scene objects and their
+nonnull models checked. Native child writes inside these bounds are observations;
+hit-descriptor globals, animation-list neighbors and heap lifetimes are not
+independently predicted. The final capture shows the battle command wheel and
+the attack pointer is cleared. VRAM/palette/OAM hashes are retained observations.
+All 104 original saves remain unchanged; this replay applies no RAM fixtures.
+
+`isolated_v2.json` supplements this with 128 ARM946 cases on copied RAM/DTCM:
+all 32 phases, both formation parities and both model selectors. Child calls are
+stubbed with checked arguments and explicit synthetic mutations to test reloads,
+ordering and the cached model pointer. Own ordered stores and all mapped memory
+except 256 stack bytes are checked. These cases do not prove child algorithms
+or live gameplay coverage of the early phases. Version 1 failed because the probe
+changed CPU mode after setting banked SP; the corrected setup passes all cases.
+All 24 functions across nine actual overlay-15 objects match; the full build,
+golden EUR ROM, zero-difference native relink and 107 tests pass.

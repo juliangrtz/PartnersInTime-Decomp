@@ -37,6 +37,7 @@ extern "C" {
 extern Overlay15AttackContext *data_ov002_020c0710;
 
 void Overlay15Attack_UpdateEntry(BattlePartyActor *actor);
+void Overlay15Attack_BeginActorFinish(Overlay15AttackModelController *state);
 void func_ov015_020c31dc(Overlay15AttackObjectPairState *pair);
 void func_ov015_020c5570(BattlePartyActor *actor);
 void func_ov002_020722ac(BattlePartyActor *actor,
