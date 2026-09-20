@@ -797,6 +797,47 @@ flags suppress spawning in these cases. Full main RAM, DTCM, ordered writes and
 SP/r4-r11 are checked; the lower 128-byte stack bound is observational (64 used).
 These cases supplement the live route without extending its gameplay coverage.
 
+#### Shell attack entry
+
+[`Overlay11Attack_UpdateEntry`](../../src/attack_shell_ov011/shell_attack_entry.cpp)
+at ov011 `0x020C57CC..0x020C5AF8` coordinates the initial jump, optional support
+intercept and landing effect. The shared work phase is a signed byte at `+17`.
+Bit 2 of byte `+16` prevents duplicate landing effects. On completion it clears
+that bit, enables controller bit 5 at `+344`, captures the projectile bounds at
+`+428`, and passes update callback `0x020C54B4` to `func_ov002_020722ac`.
+The callback is a real second argument, omitted by the older entry pseudocode.
+
+Support offsets are signed-byte interior views at `0x020C5F28` and `0x020C5F29`,
+with a two-byte stride. Their storage is writable: keep the reload after
+`Overlay11Support_StartIntercept` and before obtaining the model to set its
+halfword animation offsets at `+92/+94`. This is the immediate intercept helper
+at `0x020C3078`, rather than the scheduling helper at `0x020C303C`.
+
+Private reports `build/runtime/eur_high_shell_entry/evidence_red83_v2.json` and
+`evidence_green83_v2.json` use the established checkpoint-83 battle menu and
+ordinary buttons, with no RAM edits. They exercise configurations 0 and 1,
+respectively; each checks 34 completed calls: phase 0 once, phase 1 nine times,
+phase 2 twenty-three times and phase 3 once. Each reaches one landing effect and
+one callback handoff. The 2,150/2,110-frame routes return to the visible command
+menu. Both final captures and their earlier attack-menu selections were viewed;
+all 104 original saves are unchanged.
+
+The caller oracle checks the entire 612-byte attack allocation, the callback
+actor's 136-byte record, receiving 260-byte scene objects and selected renderer
+records between helper boundaries. It predicts caller stores, helper argument
+order, channel/model query results, callback replacement and SP/r4-r11. Motion,
+animation, resource and support internals are bounded observations in their
+receiving records; the arc duration and twelve collision-bound bytes are also
+observed. Other battle/global memory, sound and rasterization are outside this
+independent model. These routes both have a support actor; they do not cover
+the no-support branch or establish natural story entry or complete lifetimes.
+
+The preserved first Red Shell replay failed at frame 382 because the oracle
+omitted the support updater's phase-6 store to projectile byte `+419`. Native
+instructions show bits 4-5 receive `support.side + 1` when motion channel 3
+finishes. Version 2 predicts that store and bounds the associated follow-motion
+observation to the receiving scene object; both reruns pass without game changes.
+
 #### Four-model table updates
 
 `BattleModelAnimation_SetModels` at `0x0206C1E4` adds 92 matching C bytes to the

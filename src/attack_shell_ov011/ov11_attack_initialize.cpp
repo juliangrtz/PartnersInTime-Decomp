@@ -71,7 +71,7 @@ void Overlay11Attack_Initialize(BattlePartyActor *user, int resource, int config
     }
     BattleFeedback_LoadResource(effect);
     *(u16 *)(gBattleContext + 52096) = 0;
-    Overlay10Attack_BeginEntry(user, func_ov011_020c57cc);
+    Overlay10Attack_BeginEntry(user, Overlay11Attack_UpdateEntry);
     int i;
     Overlay11AttackWork *row = work;
     i = 0;

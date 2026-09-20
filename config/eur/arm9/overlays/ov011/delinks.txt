@@ -24,3 +24,6 @@ src/attack_shell_ov011/ov11_controller_initialize.cpp:
 
 src/attack_shell_ov011/ov11_attack_initialize.cpp:
     .text start:0x020c5af8 end:0x020c5eec
+
+src/attack_shell_ov011/shell_attack_entry.cpp:
+    .text start:0x020c57cc end:0x020c5af8

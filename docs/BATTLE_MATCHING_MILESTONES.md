@@ -9118,3 +9118,18 @@ unchanged. Complete input and six capture hashes equal the preceding route.
 reconstruction notes for scope, bounded sprite-scan observations and limits.
 The neighboring 384-byte launch remains private and nonmatching, not counted.
 Matching C/C++: 818600 / 1563700 (52.3502%); trial target 860044, remaining 41444.
+
+
+## Shell attack entry (2026-09-20)
+
+Reconstructed Overlay11Attack_UpdateEntry, ov011 0x020C57CC..0x020C5AF8,
+812 bytes of matching C++ without inline assembly. The callback handoff,
+writable offset-table reloads and immediate support intercept are preserved.
+Full gate passes: golden EUR ROM, zero native differences and 107 tests.
+Red/Green Shell checkpoint83 routes each check34 completed calls across all
+four entry phases, one landing effect and one callback handoff. No RAM edits;
+104 original saves unchanged. Final command-menu captures viewed.
+The first probe failure (missing support-side projectile flag update) and the
+initial duplicate object-basename build failure remain recorded privately.
+See reconstruction notes for bounded helper observations and uncovered branches.
+Matching C/C++: 819412 / 1563700 (52.4021%); trial target860044, remaining40632.
