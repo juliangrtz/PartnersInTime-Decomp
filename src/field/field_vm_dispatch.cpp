@@ -81,8 +81,6 @@ extern void func_ov000_02071a38(u8 *field_context, int layout_mode,
                                 int instant);
 extern void func_ov000_020a0c30(void *party_manager, int party_side,
                                 int instant, int reserved, int enabled);
-extern void func_ov000_0209cbfc(void *party_controller, int reserved);
-extern void func_ov000_0209cb90(void *party_controller, int reserved);
 extern void func_ov000_0209f644(
     void *party_manager, int party_side, int destination_room_id, int x,
     int y, int z, int facing_direction, int animate_entry,
@@ -3617,10 +3615,10 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
     case FIELD_VM_SET_PARTY_LEADER_ANIMATION_OVERRIDE:
         if (arguments[1] != 0) {
-            func_ov000_0209cbfc(FieldVm_GetPartyController(
+            FieldParty_StartLeaderPaletteAnimation((FieldPartyController *)FieldVm_GetPartyController(
                 party_manager, arguments[0]), 0);
         } else {
-            func_ov000_0209cb90(FieldVm_GetPartyController(
+            FieldParty_ClearLeaderPaletteAnimation((FieldPartyController *)FieldVm_GetPartyController(
                 party_manager, arguments[0]), 0);
         }
         break;

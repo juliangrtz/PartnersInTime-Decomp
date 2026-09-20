@@ -140,7 +140,7 @@ typedef struct FieldPartyController {
         u32 field_screen : 1, previous_field_screen : 1, special_contact_mode : 1;
         u32 unknown_10_13 : 4, unknown_14 : 1, follower_rejoin_active : 1;
         u32 unknown_16 : 1, active_member : 1, movement_active : 1;
-        u32 unknown_19 : 1, movement_state : 10, unknown_30_31 : 2;
+        u32 unknown_19 : 1, movement_state : 10, palette_animation_active : 1, unknown_31 : 1;
     } flags;
     u8 unknown_054;
     s8 unknown_055;
@@ -192,6 +192,8 @@ typedef char FieldPartyController_SizeCheck[sizeof(FieldPartyController) == 0x20
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldParty_ClearLeaderPaletteAnimation(FieldPartyController *party, int force);
+void FieldParty_StartLeaderPaletteAnimation(FieldPartyController *party, int force);
 void FieldPartyEntity_AdvanceFastSpin(FieldPartyEntity *member);
 void FieldPartyEntity_AdvanceSlowSpin(FieldPartyEntity *member);
 void FieldPartyEntity_SyncPartnerPosition(FieldPartyEntity *member);

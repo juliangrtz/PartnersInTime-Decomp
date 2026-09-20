@@ -26,7 +26,6 @@ enum {
 extern const s8 data_ov000_020bfbfc[], data_ov000_020bfc1c[];
 void func_ov000_0206f0b4(FieldAreaContext *, FieldVariableEntity *, int);
 void func_ov000_0206ec68(FieldAreaContext *, int, int, s16, s16, int);
-void func_ov000_0207bed8(FieldAreaContext *, int, int);
 void func_ov000_02079d74(FieldAreaContext *, int);
 void func_ov000_020b7b68(FieldPartyEntity *, const FieldQuadRegion *);
 
@@ -35,7 +34,7 @@ void FieldArea_EnsurePartyPresent(FieldAreaContext *field, int side, int x, int 
     if (field->party->parties[side].backup.active ||
         field->room_id != field->party->parties[side].flags.movement_state) {
         field->flags.mode |= 1 << side;
-        func_ov000_0207bed8(field, side, 0);
+        FieldArea_BindPartyMembers(field, side, 0);
         field->party->parties[side].flags.unknown_02 = 1;
         FieldPartyManager_SetFieldMode(field->party, side, 0, 1, 0);
         field->party->parties[side].leader->entity.base.property_00a_bits.property_00a_flag_00 = 1;

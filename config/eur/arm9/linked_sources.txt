@@ -898,3 +898,6 @@ src/battle/battle_reward_counter_update.c
 src/battle/battle_reward_items_begin_display.c
 
 src/battle/battle_reward_items_draw.cpp
+
+src/field/field_party_bind.cpp
+src/field/field_party_palette.cpp

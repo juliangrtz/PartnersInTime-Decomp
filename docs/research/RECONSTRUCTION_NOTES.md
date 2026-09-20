@@ -6184,3 +6184,39 @@ are retained separately; the passing cases keep enough space for the complete
 group. The game code was not changed to accommodate these probe corrections.
 All ten reward source objects, the golden ROM, zero-difference native relink
 and 107 tests pass. All 104 original saves remain unchanged.
+
+
+## Field party member binding and leader palettes
+
+`FieldArea_BindPartyMembers` (overlay 0, `0x0207BED8`, 448 bytes) selects
+the leader/follower from the area's entity slots using the two byte indices
+at controller +2/+3. It publishes both links, assigns the two embedded 32-byte
+state records and sets controller flag bit 4. Flag bit 3 selects either zero
+or seven for collision-policy bits 12..14 on both members; the signed 64-bit
+policy's remaining bits and both native read/modify/write steps are retained.
+
+Leader movement mode 6 or controller flag bit 3 selects palette clearing.
+Otherwise palette animation starts in slot 0: animation 2 normally, 3 for the
+special-contact flag. `FieldParty_ClearLeaderPaletteAnimation` at `0x0209CB90`
+and `FieldParty_StartLeaderPaletteAnimation` at `0x0209CBFC` are 108 and 164
+bytes. Controller bit 30 records whether the override is active; `force`
+bypasses the redundant-update guard. Clearing binds animation -1 and requests
+a base-palette reload. Starting unpauses the slot and selects mode 1.
+
+Private `build/runtime/eur_high_party_bind/cold65_v1.json` records an automated
+2233-frame cold load of save 65: two binding calls, one palette start and three
+clears, including a skipped clear. The final field capture was inspected.
+The checks independently cover whole area (11216), manager (16764) and member
+(1440) records, links, collision policies, callback arguments and flag changes.
+Virtual renderer effects are accepted only within the observed 316-byte
+renderer allocation; palette-track/global mutations and graphics internals
+remain observational. All 104 original saves are unchanged.
+
+`build/analysis/high_effort_50_to_55/party_bind_isolated_v2.json` adds 64 ARM946
+cases on copied entry RAM/DTCM, covering both groups, policy states, movement
+modes 0/6, force, active bit and contact mode. They execute compiled matching
+target bodies and native virtual callees, with no stubs or hardware maps.
+Caller records, high collision-policy bits, stack restoration and r4-r11 are
+checked; maximum stack use is 64 bytes. These are isolated boundary checks,
+not additional live gameplay coverage. Both probes and their input hashes are
+recorded privately; they are not fresh-clone build dependencies.

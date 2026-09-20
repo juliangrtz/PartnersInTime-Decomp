@@ -8834,3 +8834,14 @@ A 500-frame controlled route checks 200 calls; 54 isolated ARM946 cases cover
 row visibility, count, clipping positions and valid OAM reservations. Renderer
 effects remain explicitly bounded observations. All ten reward objects match;
 golden ROM, native relink and 107 tests pass. Original saves are unchanged.
+
+
+### Field party bindings and leader palette control
+
+Three exact C++ functions bring matching code to 810172 / 1563700 (51.8112%).
+They bind placed members and their state records, set collision policy and
+start/clear the leader's palette animation. A 2233-frame cold load checks six
+calls; 64 isolated ARM946 cases cover guard and selection combinations.
+Renderer internals remain bounded observations. Golden ROM, native relink
+and 107 tests pass; all 104 original saves are unchanged. See the field-party
+binding reference for checked memory ranges and runtime limitations.

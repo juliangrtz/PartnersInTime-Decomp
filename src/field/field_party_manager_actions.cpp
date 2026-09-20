@@ -15,7 +15,6 @@
 #include <game/field_linear.h>
 extern "C" {
 void func_ov000_0208b208(FieldPartyController *, int);
-void func_ov000_0209cb90(FieldPartyController *, int);
 void func_020093b4(FieldRenderObject *, int);
 void func_ov000_020a0c30(FieldPartyManager *, int, int, int, int);
 }
@@ -256,8 +255,8 @@ extern "C" void FieldPartyManager_CompleteReunion(FieldPartyManager *manager)
         BABY.unknown_090->unknown_060 = (u8)BABY.state_bits.movement_mode;
         BABY.unknown_088->unknown_060 = (u8)BABY.state_bits.movement_mode;
     }
-    func_ov000_0209cb90(&ADULT, 0);
-    func_ov000_0209cb90(&BABY, 0);
+    FieldParty_ClearLeaderPaletteAnimation(&ADULT, 0);
+    FieldParty_ClearLeaderPaletteAnimation(&BABY, 0);
     FieldParty_InitializeFollowing(&ADULT, 81920);
 }
 
