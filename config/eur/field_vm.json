@@ -2069,7 +2069,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts profiled scrolling for one of three field background layers; x/y deltas are converted to fx32 and applied through the field map manager's per-layer offset method",
-      "evidence": "func_ov000_020823f8 case 0x0E0, func_ov000_020727fc, and func_ov000_020721ec"
+      "evidence": "func_ov000_020823f8 case 0x0E0, FieldArea_MoveLayerWithProfile, and FieldArea_UpdateLayerTargets"
     },
     "225": {
       "arguments": ["bg_layer", "x_delta", "y_delta", "duration_frames", "motion_flag"],
@@ -2077,7 +2077,7 @@
       "control_flow": "fallthrough",
       "yield": "never",
       "effect": "starts timed scrolling for one of three field background layers; x/y deltas are converted to fx32 and applied over duration_frames",
-      "evidence": "func_ov000_020823f8 case 0x0E1, func_ov000_02072660, and func_ov000_020721ec"
+      "evidence": "func_ov000_020823f8 case 0x0E1, FieldArea_MoveLayerForDuration, and FieldArea_UpdateLayerTargets"
     },
     "226": {
       "arguments": ["bg_layer"],

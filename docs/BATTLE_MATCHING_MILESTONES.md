@@ -8751,3 +8751,17 @@ Vector-helper output is bounded observational data; square-root values are
 independently checked. Five captures and four graphics ranges match the ordinary
 replay. All 104 original saves are unchanged. See the research reference's field
 camera update section and private `eur_high_field_camera_update` reports.
+
+
+### Field background layer motion
+
+Four exact C++ functions add 2116 bytes, reaching 805788 / 1563700 (51.5309%).
+They configure, advance and complete movement of three background layers.
+No inline assembly; the shared field VM setup callers also remain fully exact.
+
+The full gate passes, including golden-ROM rebuild, native relinking and 107 tests.
+A 185-frame checkpoint-55 replay checks 740 calls; 21 restored live fixtures cover
+active updates. Another 240 isolated ARM946 cases cover setup with explicit helper
+stubs. Five captures and four final graphics ranges equal the ordinary route.
+All 104 original saves are unchanged. See the field background layer motion
+reference and private eur_high_field_layer_motion reports for coverage limits.

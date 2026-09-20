@@ -88,13 +88,6 @@ extern void func_ov000_0209f644(
     int y, int z, int facing_direction, int animate_entry,
     s16 arrival_script_id, int bgm_policy, int preserve_field_0_anchor,
     int preserve_field_1_anchor);
-extern void func_ov000_020727fc(
-    u8 *field_context, int bg_layer, fx32 x_delta, fx32 y_delta,
-    int motion_3, int motion_4, int motion_5, int motion_6,
-    int motion_flag);
-extern void func_ov000_02072660(u8 *field_context, int bg_layer,
-                                fx32 x_delta, fx32 y_delta, int duration,
-                                int motion_flag);
 extern void func_ov000_02072074(u8 *field_context, int axis,
                                 fx32 amplitude, int step, int half_cycles,
                                 int rumble_pattern);
@@ -2783,8 +2776,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_BG_LAYER_PROFILED_SCROLL:
-        func_ov000_020727fc(
-            field_context, arguments[0],
+        FieldArea_MoveLayerWithProfile(
+            (FieldAreaContext *)field_context, arguments[0],
             arguments[1] << FX32B_INT,
             arguments[2] << FX32B_INT,
             arguments[3], arguments[4],
@@ -2793,8 +2786,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_BG_LAYER_TIMED_SCROLL:
-        func_ov000_02072660(
-            field_context, arguments[0],
+        FieldArea_MoveLayerForDuration(
+            (FieldAreaContext *)field_context, arguments[0],
             arguments[1] << FX32B_INT,
             arguments[2] << FX32B_INT,
             arguments[3], arguments[4] != 0);

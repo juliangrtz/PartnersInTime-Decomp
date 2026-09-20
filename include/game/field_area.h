@@ -128,7 +128,7 @@ typedef struct FieldAreaContext {
         struct { FieldQuadRegion *quad_regions; const FieldVariablePlacement *variable_records; };
     };
     union { void *auxiliary; struct FieldSystem *system; };
-    FieldNavigationChangeManager *navigation_changes;
+    union { FieldNavigationChangeManager *navigation_changes; struct FieldBackground *background; };
     u8 unknown_2504[8], unknown_250c[44], unknown_2538[40];
     union { void *party_order; struct FieldTimer *timer; };
     union { void *unknown_2564; struct FieldModelAnimation *model_animation; };

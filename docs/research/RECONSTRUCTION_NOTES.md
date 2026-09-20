@@ -5857,3 +5857,53 @@ is claimed. The initial fixture v1 passed with a 1,312-byte entity prefix; v2
 strengthens this to the full party allocation and checks ownership on each call.
 All 104 original saves remain unchanged. The full gate passes golden-ROM rebuild,
 native relinking, progress consistency and all 107 tests.
+
+
+## Field background layer motion
+
+[field_layer_motion.cpp](../../src/field/field_layer_motion.cpp) reconstructs
+four contiguous functions at 0x020721EC-0x02072A30 (2116 bytes): target checks,
+per-frame movement, timed setup and speed-profile setup. All four actual source
+functions match completely, without assembly. The field VM's two setup callers
+use the shared declarations and remain fully exact.
+
+The area owns three 56-byte records through the pointer at +0x2BC4. Motion uses
+Q12 coordinates; the target updater divides coordinate differences by 16,
+truncating toward zero, before calling background virtual slot +0x18 with Q8
+scroll deltas. The tested area's +0x2500 pointer refers to a live 1936-byte
+FieldBackground with resident vtable 0x02050D60 and slot +0x18 at 0x02013470.
+The shared area now exposes this background view alongside its navigation view.
+Do not infer the allocation size from the shorter navigation prefix.
+
+The native step reads both enabled velocity components before writing either
+position. The completion mask combines each layer's two-bit axis mask shifted by
+the layer index, so adjacent layers' bits overlap. Profile completion clamps
+crossed positive/negative destinations; timed completion instead copies the
+current position into the destination and clears activity. Braking includes the
+final nonpositive speed step. Timed setup leaves disabled-axis velocities alone;
+profile setup returns early for zero displacement and forces nonzero active-axis
+velocities to at least one signed Q12 unit when the vector helper rounds to zero.
+
+Private `eur_high_field_layer_motion/evidence_entry55_v1.json` records a 185-frame
+checkpoint-55 field replay, with 370 step calls and 370 target checks, all inactive.
+`evidence_fixture55_v1.json` adds 21 guarded, restored cases to the same route:
+individual axes and all three layers, pause, acceleration/cap, braking/minimum,
+positive/negative target crossings, timed completion, exact braking-distance
+equality, distance scaling and negative fractional scroll deltas. Full area and
+layer allocations, helper arguments/returns, SP and callee-saved registers are
+checked. Vector length is independently derived. Existing vector output remains
+observational within eight bytes; renderer observations are limited to the current
+layer's two scroll words, dirty byte and 4096-byte tilemap. The surrounding
+1936-byte background and affected tilemap allocations are checked in full.
+
+Fixtures restore area, layer records, background, tilemaps and the ordinary return
+value before the caller resumes. All five captures and the four final graphics
+ranges equal the ordinary run; the final field scene was visually inspected.
+These are controlled active cases, not natural story scroll sequences. Setup is
+covered separately by 240 isolated ARM946 executions on copied checkpoint RAM:
+all three indices, zero/single/dual axes, signed division, stop-bit truncation and
+zero/nonzero vector output. Direction, division and vector helpers are explicit
+stubs in those isolated tests; they check setup behavior and ABI, not the helper
+implementations or live script execution. Full main RAM/DTCM and stack outside
+the native 32-byte frame are checked. All 104 original saves remain unchanged.
+The full build, golden ROM, native relink, progress checks and 107 tests pass.

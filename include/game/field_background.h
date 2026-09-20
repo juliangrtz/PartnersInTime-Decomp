@@ -91,7 +91,7 @@ struct FieldBackground {
     virtual void unknown_0c();
     virtual void unknown_10();
     virtual void set_scroll(u8 layer, int x, int y);
-    virtual void unknown_18();
+    virtual void offset_scroll(u8 layer, int x, int y);
     virtual void set_scroll_parameters(s16 x, s16 y);
     virtual void get_origin(s16 *x, s16 *y);
     virtual int is_ready();

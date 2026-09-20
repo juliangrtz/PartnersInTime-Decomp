@@ -39,6 +39,12 @@ typedef char FieldLayerMotion_SizeCheck[sizeof(FieldLayerMotion) == 56 ? 1 : -1]
 extern "C" {
 #endif
 void FieldArea_StopLayerMotion(FieldAreaContext *area, int layer);
+int FieldArea_UpdateLayerTargets(FieldAreaContext *area);
+void FieldArea_AdvanceLayerMotion(FieldAreaContext *area);
+int FieldArea_MoveLayerForDuration(FieldAreaContext *area, int layer, fx32 dx, fx32 dy,
+    int duration, u8 stop);
+int FieldArea_MoveLayerWithProfile(FieldAreaContext *area, int layer, fx32 dx, fx32 dy,
+    fx32 speed, fx32 acceleration, fx32 maximum, fx32 deceleration, u8 stop);
 u16 FieldArea_GetMotionDirection(FieldAreaContext *unused, fx32 dx, fx32 dy);
 int FieldArea_TrackEntityForDuration(FieldAreaContext *area, struct FieldRuntimeEntity *entity,
     fx32 x, fx32 y, int duration, u8 option_x, u8 option_y, FieldCameraMotion *motion);
