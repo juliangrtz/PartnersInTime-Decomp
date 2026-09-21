@@ -10775,3 +10775,13 @@ ROM and zero native differences. Controlled live checks pass 18 calls/781 stores
 576 isolated ARM946 cases pass with 24955 stores and real helpers. No natural
 exception, terminal-error or frame-boundary coverage is claimed. All 104 saves
 are unchanged. See [active-catch evidence](research/RECONSTRUCTION_NOTES.md#msl-active-catch-search).
+
+
+## Battle trail model copies
+
+Cumulative trail rendering adds 400 linked C++ bytes, reaching 856316 of
+1563700 (54.76%). Actual source matches; full verification passes 107 tests,
+the golden ROM and zero native differences. Five controlled live cases execute
+ten real matrix translations and six renderer calls; GPU vertex submissions
+are observed and original state is restored. All 104 saves are unchanged.
+No natural trail activation or pixel oracle is claimed. See [trail evidence](research/RECONSTRUCTION_NOTES.md#battle-trail-model-copies).

@@ -825,7 +825,7 @@ BattleLinkEffect_Update kind:function(arm,size=0x21c) addr:0x020bcaa8
 func_ov002_020bccc4 kind:function(arm,size=0x328) addr:0x020bccc4
 func_ov002_020bcfec kind:function(arm,size=0x514) addr:0x020bcfec
 func_ov002_020bd500 kind:function(arm,size=0xb0) addr:0x020bd500
-func_ov002_020bd5b0 kind:function(arm,size=0x190) addr:0x020bd5b0
+BattleTrail_DrawModelCopies kind:function(arm,size=0x190) addr:0x020bd5b0
 func_ov002_020bd740 kind:function(arm,size=0x3f8) addr:0x020bd740
 gBattleLevelUpBonusPhaseOrder kind:data(short[8]) addr:0x020bf72c
 gBattleLevelUpBonusPhaseOffsets kind:data(short[8]) addr:0x020bf76c

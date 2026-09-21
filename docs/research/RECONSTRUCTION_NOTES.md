@@ -8492,3 +8492,46 @@ reports therefore cover those same final bytes. Private reports are
 their producers under `build/analysis/high_effort_50_to_55/` are
 `probe_msl_active_catch.py`, `msl_active_catch_oracle.py` and
 `check_msl_active_catch_isolated.py`.
+
+
+## Battle trail model copies
+
+[Trail drawing](../../src/battle/battle_trail_draw.cpp) reconstructs overlay 2's
+`0x020BD5B0..0x020BD740`. The two native callers at `0x020B885C` and
+`0x020B9FA0` pass 12-byte point records. The renderer uses each point's first
+three signed halfwords as relative translations. It saves the model's 64-byte
+matrix and animation fields, optionally resets the first three matrix rows,
+applies the initial translation and then accumulates one translation per copy.
+The fourth row survives reset. Per-point depth is `-y / 16`, rounded toward
+zero; an arithmetic shift would differ for small positive heights. The shared
+model type supplies virtual drawing and matrix access. No new ASM is used.
+
+Controlled DeSmuME calls use an initialized, allocated 440-byte party renderer
+in the Save 55 checkpoint (`496c6a6836f08c15e95655bb5d78c4cde65dc688`). Five
+cases cover disabled rendering, zero/negative point counts, and three points
+with reset off/on. The points include heights +17 and -17. Checks independently
+derive cumulative Q12 matrix results and verify all helper arguments, full model,
+70,976-byte common workspace, roots, saved matrix and ABI. All real helpers run:
+four matrix getters, eight directional copies, ten matrix translations and six
+draw calls. Observed GPU submissions include 108 writes to VTX_16, 162 to
+VTX_XY, and six begin/end pairs. These counts confirm submission, not an
+independent pixel or renderer oracle.
+
+Draw calls additionally check full main RAM and DTCM, excluding the bounded CPU
+stack and asynchronous reverb capture buffer `0x0205B300..0x0205E300` owned by
+the audio loader. The sort-key override at `0x0205A8AC` is modeled from the
+draw helper's selector. Its update and audio DMA explained an initial full-RAM
+assertion; the failed report is preserved. An earlier probe failed by calling a
+nonexistent host memory method. Corrected v3 and v4 pass. Before each original
+common update resumes, the probe restores the full workspace, model, roots,
+saved matrix, sort-key cache and 1,040-byte stack/argument window. All five
+original updates complete over 400 frames. The final Gritzy Caves menu was
+viewed, and all 104 original saves remain unchanged. No natural trail activation,
+isolated boundary sweep or independent visible-trail comparison is claimed.
+
+The first valid C++ draft matches all 400 bytes; the actual integrated source
+object also matches. Full verification passes 107 tests, the golden ROM and
+zero native differences. Private evidence is
+`build/runtime/eur_high_battle_trail_draw/live55_v4.json`, produced by
+`build/analysis/high_effort_50_to_55/probe_battle_trail_draw.py`; v1/v2 failures
+and the successful v3 source/report remain separate.
