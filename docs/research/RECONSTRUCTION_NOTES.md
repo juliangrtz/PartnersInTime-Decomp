@@ -8308,3 +8308,61 @@ check; the corrected source passes. Reports are under
 `build/analysis/high_effort_50_to_55/` are `probe_mix_pair_update.py`,
 `mix_pair_update_oracle.py` and `check_mix_pair_update_isolated.py`;
 failed versions and logs are retained.
+
+
+## MSL exception frame records
+
+[Frame decoding](../../src/msl/unwind.c) reconstructs resident ARM9
+`0x02046E5C..0x02046FC0`. [Handler lookup](../../src/msl/object_lifetime.c)
+adds `0x020483F4..0x02048518` to the adjacent object-lifetime unit.
+The shared [context layout](../../src/msl/unwind_internal.h) is 112 bytes,
+with sixteen saved register words at +28, frame size/adjustment at +96/+100,
+a halfword mask at +104 and flags at +106..+108. Register restoration copies
+saved words into this context; it does not directly restore CPU registers.
+
+Header bits 6/5/7 select a frame pointer, a sixteen-byte stack header and r7
+versus r11 as the frame pointer. The second byte supplies saved-register bits
+4..11, with bit 14 added explicitly. One unsigned encoded integer gives frame
+size; bit 6 adds another for stack adjustment. Skipping a header consumes the
+same encoding. Table binding always returns the thirty twelve-byte native
+entries at `0x02048D90..0x02048EF8`, regardless of its address argument. This
+table remains native data; its end coincides with the start of `.init`.
+
+Handler lookup clears both output pointers, searches the exception table,
+selects inline or referenced instructions and scans delta-coded intervals.
+Entry ends are inclusive. At an address shared by adjacent entries, preserve
+the binary search's selected entry; a first-match linear scan can disagree.
+Handler interval starts and ends are also inclusive. An explicit interval-start
+temporary preserves the native operand order while keeping the C readable.
+
+Controlled live tests use the Save 55 checkpoint with SHA-1
+`496c6a6836f08c15e95655bb5d78c4cde65dc688`. At the guarded battle common-frame
+entry, 2,048 bytes of the live common workspace temporarily hold synthetic
+contexts, records, encoded headers and saved words. Twenty-eight calls across
+400 frames check 139 ordered writes, helper arguments, returns where meaningful,
+the full 70,976-byte workspace, root, read-only exception data and ABI.
+All original workspace bytes, a 256-byte stack window and registers are restored
+before each original frame update; all 28 updates finish. The final Gritzy Caves
+battle-menu capture was inspected. Both live runs pass; the second uses the
+corrected boundary oracle and produces the same final capture.
+
+The isolated replay uses copied live main RAM/DTCM, 128 KiB synthetic scratch,
+ARM946 execution, the actual five compiled functions and real unsigned-decoder
+and entry-search helpers, without stubs. Its 609 cases comprise 64 header skips,
+320 header decodes, 60 register-mask cases, 161 lookups and four table queries.
+Lookup cases include 150 native-table boundaries and eleven explicitly synthetic
+table/handler-interval cases. The checks cover 4,115 ordered writes, full memory
+outside the bounded CPU stack, return values, SP and r4-r11. Initial isolated
+v1 failed on a shared inclusive entry endpoint; v2 corrects only the independent
+search model and passes. The failed producer/model and log are preserved.
+
+These are controlled routine checks, not evidence of a naturally raised game
+exception, stack transfer, cleanup execution or destructor dispatch. All 104
+original saves are unchanged. Full verification passes 107 tests, the golden
+ROM and zero native differences; all eight functions in the affected source
+objects match. The first build failed because this toolchain has no `stddef.h`;
+the layout checks now use the repository's address-of-member convention.
+Private reports are `build/runtime/eur_high_msl_unwind/live55_v1.json`,
+`live55_v2.json` and `isolated_v2.json`. Producers under
+`build/analysis/high_effort_50_to_55/` are `msl_unwind_oracle.py`,
+`probe_msl_unwind.py` and `check_msl_unwind_isolated.py`.

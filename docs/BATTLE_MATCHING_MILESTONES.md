@@ -10722,3 +10722,23 @@ bounded observations. Another 148 isolated ARM946 cases cover missed phases
 and threshold boundaries, with explicit lifecycle stubs. Original saves are
 unchanged. See the [pair updater evidence](research/RECONSTRUCTION_NOTES.md#mix-flower-paired-effect-update)
 for coverage limits and the preserved failed oracle runs.
+
+
+### MSL exception frame descriptions and saved registers
+
+Five C functions add 648 matching bytes: frame-header parsing/skipping,
+exception-table binding, saved-register copying and handler-record lookup.
+Linked coverage is 855,032 / 1,563,700 (54.68%). The native exception table
+remains data; no assembly or table bytes are counted as new C.
+
+Full verification passes 107 tests, the golden ROM and zero native differences;
+all eight functions in the affected source objects match. Twenty-eight
+controlled live calls verify 139 ordered stores and restore the original
+workspace, stack and registers before the battle update resumes. Another
+609 isolated ARM946 cases check encoding widths, register masks, inclusive
+entry boundaries and handler intervals. The initial isolated oracle chose
+the first linear match at a shared endpoint; the corrected model follows
+the actual binary-search selection. No game-code change was needed.
+All 104 original saves remain unchanged. These checks do not claim a natural
+game exception or destructor dispatch. See the
+[MSL evidence](research/RECONSTRUCTION_NOTES.md#msl-exception-frame-records).

@@ -1556,10 +1556,10 @@ func_02046dcc kind:function(arm,size=0x8) addr:0x02046dcc
 func_02046dd4 kind:function(arm,size=0xc) addr:0x02046dd4
 func_02046de0 kind:function(arm,size=0x30) addr:0x02046de0
 func_02046e10 kind:function(arm,size=0x4c) addr:0x02046e10
-func_02046e5c kind:function(arm,size=0x38) addr:0x02046e5c
-func_02046e94 kind:function(arm,size=0x20) addr:0x02046e94
-func_02046eb4 kind:function(arm,size=0xa8) addr:0x02046eb4
-func_02046f5c kind:function(arm,size=0x64) addr:0x02046f5c
+MSL_SkipFrameHeader kind:function(arm,size=0x38) addr:0x02046e5c
+MSL_GetExceptionTable kind:function(arm,size=0x20) addr:0x02046e94
+MSL_DecodeFrameHeader kind:function(arm,size=0xa8) addr:0x02046eb4
+MSL_RestoreFrameRegisters kind:function(arm,size=0x64) addr:0x02046f5c
 func_02046fc0 kind:function(arm,size=0x14) addr:0x02046fc0
 func_02046fd4 kind:function(arm,size=0x14) addr:0x02046fd4
 func_02046fe8 kind:function(arm,size=0x10) addr:0x02046fe8
@@ -1579,7 +1579,7 @@ func_020477b4 kind:function(arm,size=0x87c) addr:0x020477b4
 func_02048030 kind:function(arm,size=0xc) addr:0x02048030
 func_0204803c kind:function(arm,size=0x39c) addr:0x0204803c
 func_020483d8 kind:function(arm,size=0x1c) addr:0x020483d8
-func_020483f4 kind:function(arm,size=0x124) addr:0x020483f4
+MSL_LookupUnwindRecord kind:function(arm,size=0x124) addr:0x020483f4
 MSL_FindExceptionEntry kind:function(arm,size=0x6c) addr:0x02048518
 MSL_DestroyGlobalChain kind:function(arm,size=0x58) addr:0x02048584
 MSL_RunGlobalConstructors kind:function(arm,size=0x38) addr:0x020485dc
@@ -2225,3 +2225,5 @@ data_02065c0c kind:bss addr:0x02065c0c
 data_02065ca4 kind:bss addr:0x02065ca4
 data_02065d0c kind:bss addr:0x02065d0c
 __global_destructor_chain kind:bss addr:0x02065d28
+
+gMslExceptionTable kind:data(any) addr:0x02048d90

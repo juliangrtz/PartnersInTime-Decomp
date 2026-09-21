@@ -1,23 +1,17 @@
 /*
- * Static object lifetime (ARM9 resident, 0x02048518-0x02048614).
+ * Static object lifetime (ARM9 resident, 0x020483F4-0x02048614).
  *
  * Runs the global constructors at startup, tears the destructor chain down at
  * exit, and finds the exception entry for an address.
  */
 
-#include <nitro.h>
+#include "unwind_internal.h"
 
 typedef struct MslDestructorNode {
     struct MslDestructorNode *next;
     void (*destructor)(void *object, int mode);
     void *object;
 } MslDestructorNode;
-
-typedef struct MslExceptionEntry {
-    u32 start;
-    u32 length_and_flags;
-    u32 information;
-} MslExceptionEntry;
 
 extern MslDestructorNode *__global_destructor_chain;
 extern void (*data_0204ff6c[])(void);
@@ -58,4 +52,45 @@ const MslExceptionEntry *MSL_FindExceptionEntry(const MslExceptionEntry *table, 
         }
     }
     return 0;
+}
+
+/* Handler intervals are delta-coded; both ends use the native inclusive tests. */
+void MSL_LookupUnwindRecord(u32 address, MslUnwindRecord *record)
+{
+    const MslExceptionEntry *entry;
+    const u8 *input;
+    u32 offset, cursor;
+    u32 skip, length, handler_offset;
+    record->instructions = 0;
+    record->handler = 0;
+    if (!MSL_GetExceptionTable(record, address))
+        return;
+    entry = MSL_FindExceptionEntry(record->table_start,
+        record->table_end - record->table_start, address);
+    if (!entry)
+        return;
+    if (entry->length_and_flags & 1)
+        record->instructions = (const u8 *)&entry->information;
+    else
+        record->instructions = (const u8 *)entry->information;
+    record->function = entry->start;
+    offset = address - entry->start;
+    input = MSL_SkipFrameHeader(record->instructions);
+    cursor = 0;
+    for (;;) {
+        u32 start;
+        input = MSL_DecodeUnsigned(input, &skip);
+        if (!skip)
+            return;
+        input = MSL_DecodeUnsigned(input, &length);
+        input = MSL_DecodeUnsigned(input, &handler_offset);
+        start = cursor + skip;
+        if (offset < start)
+            return;
+        cursor = start + length;
+        if (offset <= cursor) {
+            record->handler = record->instructions + handler_offset;
+            return;
+        }
+    }
 }
