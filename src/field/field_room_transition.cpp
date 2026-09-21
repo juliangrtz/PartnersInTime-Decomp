@@ -15,7 +15,6 @@ extern "C" {
 #include <game/audio.h>
 #include <game/save_data.h>
 #include <game/rumble.h>
-void func_ov000_02065f54(FieldSystem *);
 void func_ov000_0209ef28(FieldPartyManager *);
 void func_ov000_02080efc(FieldAreaContext *);
 extern u8 data_0205a00c;
@@ -183,7 +182,7 @@ void FieldArea_PrepareRoomDeparture(FieldAreaContext *field)
         timer->step = 0;
     }
     if (!field->flags.screen) {
-        func_ov000_02065f54(field->system);
+        FieldSystem_ReleaseMaskErase(field->system);
         FieldSystem *system = field->system;
         system->touch.enabled = 0;
         system->touch.state = 0;

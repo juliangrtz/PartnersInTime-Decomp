@@ -10038,3 +10038,39 @@ Full verification passes 107 tests, reproduces the golden EUR ROM and reports
 zero native relink differences; all 104 saves remain unchanged. Two initial
 builds failed the documentation-path test after a proposed module rename; the
 original path was restored and the complete verification gate rerun successfully.
+
+
+## 2026-09-21 - Touchscreen mask-erase cleanup
+
+`FieldSystem_ReleaseMaskErase` in `src/field/field_mask_erase_release.c`
+reconstructs overlay 0 at 0x02065F54..0x02066028 (212 bytes, C without ASM).
+It clears the owning pointer before graphics changes, restores 128 KiB of
+main-screen OBJ tiles, clears the window manager's fixed-scroll bit, and frees
+four loaded images followed by the 180460-byte mask-effect allocation. The
+shared record now describes the image pointers/sizes, saved tiles and alpha
+mask; the room-departure caller uses the named declaration.
+
+The actual source object and all four room-transition functions match their
+complete native ranges. The full verification gate passed: 107 tests, golden
+EUR ROM SHA-1 ba4ec2f99b4f2e0047601552bccf00aa73e28701, zero differing native
+relink bytes, and regenerated progress. Linked C/C++ reaches 843956 / 1563700
+bytes (53.9717%).
+
+Private runtime reports are in `build/runtime/eur_high_field_mask_release/`:
+`null83_v1.json` follows an ordinary room exit (353 frames, one null return).
+`prepared83_v1.json` first substitutes decoded command 0x132 once, restores all
+72 command bytes at the guarded native preparation entry, then uses ordinary
+movement to leave the room (474 frames). This checks one phase-1 effect cleanup,
+ten ordered helper calls/returns, four caller stores, all 131072 copied OBJ
+bytes, and five real heap frees with independently derived coalescing and
+neighbor/cursor changes. Full live system (952), effect (180460), window manager
+(3920) and image payloads are checked until their release, with SP/r4-r11.
+Complete function guards, source/ROM/state hashes and original-save checks are
+retained. All 104 original saves are unchanged. The mask capture and both final
+room captures were inspected; graphics memory is captured as observation.
+
+This is controlled effect preparation followed by natural room departure,
+not ordinary story entry or completion of the touchscreen erasure puzzle.
+Graphics setup helpers remain observational beyond their arguments and caller
+stores. The high-address copy branch is not exercised by these RAM allocations;
+there is no pixel/IRQ oracle or isolated ARM coverage claimed for this batch.

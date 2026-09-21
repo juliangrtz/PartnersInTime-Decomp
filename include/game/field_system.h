@@ -10,11 +10,20 @@ typedef struct FieldTimer FieldTimer;
 typedef struct FieldModelAnimation FieldModelAnimation;
 typedef struct FieldSpriteAnimation FieldSpriteAnimation;
 typedef struct GameSpriteWindowManager GameSpriteWindowManager;
-/* Only the transfer's leading flags are interpreted here; this is a prefix,
- * not the allocation size of its pixel buffers and animation state. */
+/* Touchscreen mask-erase effect. The factory allocates 180460 bytes: four
+ * asynchronous image requests, saved OBJ tiles, and a separate alpha mask. */
 typedef struct FieldPendingTransfer {
     struct { u16 phase : 3, dirty : 1, unknown : 12; } flags;
+    u8 unknown_02[186];
+    void *images[4];
+    u32 image_sizes[4];
+    u8 unknown_dc[16];
+    u8 saved_object_tiles[131072];
+    u8 alpha_mask[49152];
 } FieldPendingTransfer;
+typedef char FieldPendingTransfer_SizeCheck[
+    sizeof(FieldPendingTransfer) == 180460 ? 1 : -1
+];
 typedef struct FieldSystem {
     GameTask task;
     u8 unknown_18[16];
@@ -88,6 +97,7 @@ enum FieldTouchState {
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldSystem_ReleaseMaskErase(FieldSystem *system);
 int FieldSystem_IsTransferActive(FieldSystem *system);
 void FieldSystem_ResumeTransfer(FieldSystem *system);
 int FieldSystem_IsTransferPreparing(FieldSystem *system);

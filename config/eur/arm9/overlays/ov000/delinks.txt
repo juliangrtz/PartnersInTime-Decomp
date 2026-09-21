@@ -495,3 +495,6 @@ src/field/field_region_scripts.cpp:
 
 src/field/field_area_render_snapshots.cpp:
     .text start:0x02080944 end:0x020809bc
+
+src/field/field_mask_erase_release.c:
+    .text start:0x02065f54 end:0x02066028

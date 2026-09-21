@@ -989,3 +989,5 @@ src/field/field_area_render_snapshots.cpp
 
 src/title_ov006/credits_text_strip.c
 src/title_ov006/credits_particles.c
+
+src/field/field_mask_erase_release.c
