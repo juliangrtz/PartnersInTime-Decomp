@@ -1009,3 +1009,4 @@ src/field/field_message_window_completion.cpp
 
 src/field/field_surface_maximum.c
 src/field/field_planar_animation.cpp
+src/battle/battle_model_aux_properties.cpp

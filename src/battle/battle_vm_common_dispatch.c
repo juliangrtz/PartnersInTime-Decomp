@@ -30,9 +30,9 @@ extern void func_ov002_02068b50(BattleSceneObject *object, int property_id,
                                 int element_index, int value, int unused);
 extern int func_ov002_02068970(BattleSceneObject *object, int property_id,
                                int element_index);
-extern void func_ov002_020687ec(BattleSceneObject *object, int property_id,
+extern void BattleSceneObject_SetAuxModelProperty(BattleSceneObject *object, int property_id,
                                 int value, int unused);
-extern int func_ov002_02068770(BattleSceneObject *object, int property_id,
+extern int BattleSceneObject_GetAuxModelProperty(BattleSceneObject *object, int property_id,
                                int element_index, int unused);
 extern int func_ov002_02066314(
     int content_id, int horizontal_flip, int x, int y, int style_id,
@@ -175,13 +175,13 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_SET_ACTIVE_MODEL_AUX_PROPERTY:
         object = BattleSceneObject_GetById((u16)arguments[0]);
-        func_ov002_020687ec(
+        BattleSceneObject_SetAuxModelProperty(
             object, arguments[1], arguments[2], arguments[3]);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_GET_ACTIVE_MODEL_AUX_PROPERTY:
         object = BattleSceneObject_GetById((u16)arguments[0]);
-        value = func_ov002_02068770(
+        value = BattleSceneObject_GetAuxModelProperty(
             object, arguments[1], arguments[2], arguments[3]);
         BattleVm_WriteCommonResult(vm, state, command, value);
         return SCRIPT_VM_CONTINUE;

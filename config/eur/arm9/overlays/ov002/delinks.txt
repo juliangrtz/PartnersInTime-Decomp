@@ -553,3 +553,6 @@ src/battle/battle_capture_transform.c:
 
 src/battle/battle_three_part.cpp:
     .text start:0x020b8070 end:0x020b82d0
+
+src/battle/battle_model_aux_properties.cpp:
+    .text start:0x02068770 end:0x02068878

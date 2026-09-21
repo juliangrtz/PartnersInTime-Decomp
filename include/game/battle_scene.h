@@ -503,6 +503,8 @@ void BattleSceneObject_SetModelFlag11ById(int object_id, int enabled);
 void BattleSceneObject_SetModelFlag10(BattleSceneObject *object, int enabled);
 void BattleSceneObject_SetModelFlag10ById(int object_id, int enabled);
 BattleModel *BattleSceneObject_GetActiveModel(BattleSceneObject *object);
+int BattleSceneObject_GetAuxModelProperty(BattleSceneObject *object, int property, int element, int unused);
+void BattleSceneObject_SetAuxModelProperty(BattleSceneObject *object, int property, int value, int unused);
 BattleModel *BattleSceneObject_GetActiveModelById(int object_id);
 BattleMotionChannel *BattleSceneObject_GetMotionChannel(
     BattleSceneObject *object, int channel_index);

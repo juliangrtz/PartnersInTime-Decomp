@@ -10466,3 +10466,37 @@ Full RAM/DTCM and scratch outside the measured stack are checked. The initial
 isolated harness failed before execution because Unicorn requires immutable
 bytes; its source/log are preserved separately. The corrected producer exits
 successfully. Both ROM checks and all 107 tests pass.
+
+### Common battle script active-model properties
+
+Two adjacent helpers now implement the active-model properties used by common
+commands `0x0F3` and `0x0F4`. The getter returns an animation's end-minus-start
+frame count, the four-bit animation mode, or zero for unsupported properties.
+The setter changes that mode or resolves another object and invokes virtual
+slot `0x38` with both models. It narrows the other object's ID to 16 bits and
+reacquires the current model after the lookup. Both actual source functions
+match their complete native ranges (124 and 140 bytes), without inline ASM.
+The setter matched its first draft; the getter required the native common
+zero-return path instead of separate switch-arm returns.
+
+The initial 4,410-frame Princess Shroob replay did not execute either helper;
+`eur_high_model_aux/princess103_v1.json` records that coverage miss. In
+`fixtures103_v2.json`, ten temporary decoded AI commands exercise six setter
+and four getter calls on a live party object. Four mode writes include values
+that truncate to zero and fifteen. An animation-length query returns 13; the
+ordinary mode query returns 3. The full 70-object pool, live model allocations,
+helper arguments/results, stores and preserved registers are checked. Each
+fixture restores the original 72-byte command, 172-byte predecode VM state and
+four-byte model flags before continuation; all ten original commands are
+observed decoding again. The final battle screen at frame 901 was inspected.
+The checkpoint itself comes from an earlier controlled encounter, not an
+unmodified story entry. These fixtures do not exercise virtual slot `0x38`.
+
+`isolated_v1.json` checks 122 ARM946 cases with both model-selection branches,
+all property branches, signed frame-count differences and object-ID truncation
+across field, party, enemy and auxiliary tables. The real lookup helpers run;
+18 virtual calls use an explicit no-effect ABI stub. Full copied RAM/DTCM and
+scratch outside the measured stack are checked, including 16 mode stores.
+This establishes the wrapper's call contract, not the virtual helper's effects
+or graphics behavior. All 104 source saves remain unchanged; both ROM checks,
+actual source-object comparisons and all 107 tests pass.
