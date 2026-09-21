@@ -8690,3 +8690,52 @@ or substituted helpers are used. The demonstrations and final field capture
 were visually checked. Private evidence:
 `build/runtime/eur_high_scene_text/bros65_v1.json`, produced by
 `build/analysis/high_effort_50_to_55/probe_scene_text.py`.
+
+
+## Cannonballers landing bounces
+
+[Landing bounces](../../src/attack_cannonball_ov012/landing_bounce.cpp) reconstructs
+overlay 12's `0x020C34E0..0x020C3888` as 936 bytes of matching C++, without ASM.
+The caller enters this path when the target enemy's two-bit trait field equals
+one; ordinary successful hits take another route. The first call times the
+return home by summing three arcs. Subsequent calls start the individual bounces
+at heights derived from 200, repeatedly multiplied by 153.6 and divided by 256.0.
+Preserve the double operations and integer truncation at every step. Velocity
+comes from `FX_Sqrt((int)(4096.0 * height)) / 16`. Resource mode and formation
+select the two models' resources and animations independently.
+
+The home-position helper reads only the shared formation byte at controller
+offset 24. The first call resets the halfword at offset 22 and creates model
+effect 27 and sprite effect 12 after projection. Preserve both signed-halfword
+truncations around `12 - effect_anchor_z`; replacing the expression with literal
+12 loses native operations. The sound choice is narrowed to `u16` locally; this
+does not change the sound helper's full-width interface. Every call clears the
+vertical channel's callback/deferred flag, starts the arc and sets phase 12.
+
+The first private draft was 928/936 bytes with 30 differing words. Reading the
+native double literals, matching conditional assignment order and restoring the
+local sound-ID conversion yielded a complete match. The final compiled source
+object, full ROM checks, 107 tests and zero-difference native relink all pass.
+
+The ordinary checkpoint-83 Cannonballers replay reached no calls to this path.
+The focused replay therefore uses four explicit trait fixtures. At the real
+`BattleActor_HasTrait1` entry from the guarded overlay-12 controller, it sets bits
+6-7 of the live enemy word at `actor + 0x29C` to one. It executes the native
+query, verifies its result, and restores the entire original word before the
+caller resumes. The induced bounce route then runs to ordinary attack cleanup;
+it is not claimed to reproduce the original attack outcome.
+
+Over 2,210 frames, the replay checks 12 calls: all four formation variants and
+bounce indices 0, 1 and 2. It independently validates ordered helper arguments,
+double conversion/multiply/divide results, square roots, 24 arc durations,
+home/projection results, own model flags, channel resets, counter/state stores
+and preserved registers/stack. Checks cover the complete 452-byte attack record,
+both 260-byte scene objects and their 440/304-byte models at helper boundaries.
+Animation/resource writes are bounded observations in the receiving objects and
+models; movement internals are observed in the receiving object. External lists,
+effect/sound internals, independent pixels/audio and out-of-range bounce inputs
+are outside this replay's checks. The attack root is cleared at completion;
+the return to the command menu was visually checked. All 104 saves are unchanged.
+Private reports: `build/runtime/eur_high_cannonball_landing/cannon83_v1.json`
+(no target coverage) and `cannon83_trait_v2.json` (passed), each with its preserved
+probe version under `build/analysis/high_effort_50_to_55/`.

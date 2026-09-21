@@ -10822,3 +10822,12 @@ reaching 859176 / 1563700 (54.95%). Actual objects match without ASM;107 tests,
 golden ROM and native relink pass. Ordinary Green Shell/Bro Flower menu demos
 cover six captions and96 queued tasks over2480 frames;all104 saves unchanged.
 See [caption evidence](research/RECONSTRUCTION_NOTES.md#scene-object-captions).
+
+
+## Cannonballers landing bounces
+
+The complete 936-byte landing-bounce function is linked as readable C++ without
+ASM, reaching 860112 / 1563700 matching bytes (55.00%). Full checks pass:107 tests,
+golden ROM and native relink with zero differences. A documented trait fixture
+covers all four figures and three bounce indices; all104 original saves unchanged.
+See [landing-bounce evidence](research/RECONSTRUCTION_NOTES.md#cannonballers-landing-bounces).

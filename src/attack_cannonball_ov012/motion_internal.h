@@ -70,6 +70,7 @@ void func_ov012_020c2b48(int actor_id);
 void Overlay12Attack_ShowHit(int actor_id, Overlay12AttackController *controller, int unused, int bonus);
 int Overlay12Attack_HideObject(Overlay12AttackState *state);
 void Overlay12Attack_InitializeObject(Overlay12AttackState *state);
+void Overlay12Controller_StartLandingBounce(Overlay12AttackController *controller, int bounce);
 void Overlay12Controller_BeginFinish(Overlay12AttackController *controller);
 int Overlay12Controller_IsIdle(Overlay12AttackController *controller);
 void Overlay12Controller_UpdateArcAnimation(Overlay12AttackController *controller);
