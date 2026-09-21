@@ -7912,7 +7912,7 @@ old 96-byte descriptor check to the actual 3,920-byte window allocation.
 
 ## Party preparation for battle entry
 
-[FieldSystem_PreparePartyForBattle](../../src/field/field_battle_party_prepare.cpp)
+[FieldSystem_PreparePartyForBattle](../../src/field/field_battle_transition.cpp)
 reconstructs `0x0206B85C..0x0206BA2C` (464 bytes). The encounter setup and its
 entry wait routine call it before the battle scene handoff. The signed five-bit
 field at FieldSystem +0x258, bits 6..10, selects preparation for separated
@@ -7953,7 +7953,7 @@ reports are `build/runtime/eur_high_party_prepare/controlled83_v1.json`,
 
 ## Field handoff to battle
 
-[FieldSystem_PrepareBattleScene](../../src/field/field_battle_handoff.cpp) owns
+[FieldSystem_PrepareBattleScene](../../src/field/field_battle_transition.cpp) owns
 `0x0206B1FC..0x0206B3A0` (420 bytes). Before releasing the field, it saves each
 screen's three background scroll coordinates: six signed halfwords at save
 +0x564 for X and six at +0x570 for Y. Values use arithmetic Q8 shifting followed
@@ -7995,7 +7995,7 @@ Producers: `probe_battle_handoff.py` and `check_battle_handoff_isolated.py` unde
 
 ## Battle entry wait gates
 
-[FieldSystem_IsBattleEntryPending](../../src/field/field_battle_wait.cpp) covers
+[FieldSystem_IsBattleEntryPending](../../src/field/field_battle_transition.cpp) covers
 `0x0206B3A0..0x0206B85C` (1,212 bytes). It returns one while preparation remains
 pending and zero when the field dispatcher may advance. The party and initiating
 member come from the encounter request, with formation 1 selecting the second
