@@ -9742,3 +9742,38 @@ The 104 original saves are unchanged. Integration's first attempt stopped before
 metadata edits; its incomplete build failed the module-range documentation test.
 The completed metadata and final source pass the gate. Evidence, producer hashes
 and validation are private under `build/analysis/high_effort_50_to_55/`.
+
+
+## Field script starts and entity selection (2026-09-21)
+
+Linked `FieldScript_Begin` and `FieldScript_ResolveEntity` at overlay 0,
+`0x0208221C..0x020823F8`: 476 exact C bytes without inline assembly. Starting a
+script clears the local banks and call frames, resets execution fields and
+inherits parent context. Disabled states and active non-entity states reject the
+start unchanged. Entity parents forward their parent-type field, and full input
+context values select which owner bytes to copy even though the stored context
+is only two bits. Selector -1 resolves the script owner; valid other selectors
+index the area's entity table. The dispatcher and manager use shared declarations.
+
+The golden EUR save-103 field route uses ordinary movement and dialogue inputs,
+with no new RAM edits. Private `eur_high_field_script_begin/evidence_field103_v1.json`
+records four successful entity-script starts with distinct entity parents and
+context 3, plus 632 entity lookups (456 owner, 176 indexed) over 572 frames.
+Complete native guards, all 204 state bytes, parent preservation, return values,
+the three ordered clear calls, and lookup tables/runtime records are checked.
+The final capture shows the Peach's Castle dialogue before Shrowser.
+
+Private `isolated_v2.json` adds 599 ARM946 cases: 512 combinations of state flags,
+owner types, null/other/entity/self parents and contexts 0, 1, 2 and 5, plus the
+owner sentinel and all 86 indexed slots. The native fill helper executes without
+stubs. Full RAM, synthetic scratch records, DTCM outside the stack, returns and
+preserved registers match the byte-level oracle. The first run failed at the
+first accepted start because its stack bound omitted the fill helper's 36-byte
+save area; the corrected 60-byte combined bound passes. Both runs are retained.
+Partial overlaps, invalid selectors, live object lifetime, IRQ behavior and
+rendered pixels are outside these checks.
+
+All four affected source objects match, including the full field dispatcher.
+The build passes 107 tests, reproduces the golden ROM and reports zero native
+relink differences. All 104 original saves remain unchanged. Private sources,
+artifact hashes and checks are recorded in `high_effort_50_to_55/`.

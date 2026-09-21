@@ -16,7 +16,6 @@ extern const u32 data_ov000_020c00d0[];
 extern void func_0202cbd4(void *, int, u32);
 extern void func_0202cc58(const void *, void *, u32);
 extern void func_0202cd2c(const void *, void *, u32);
-extern int func_ov000_02082240(FieldScriptState *, FieldScriptState *, int, const u16 *);
 static inline void FieldScript_InitVm(FieldVmRuntime *runtime, const u8 *scripts, u32 variables)
 {
     runtime->vm.unknown_00 = (u32)scripts;
@@ -56,7 +55,7 @@ void FieldScriptManager_Init(FieldScriptManager *manager, void *field_context, i
         script = FieldScript_Lookup(field, 0, *field->area_header);
     else
         script = FieldScript_Lookup(field, 0, slot);
-    func_ov000_02082240(&manager->states[0], 0, 3, script);
+    FieldScript_Begin(&manager->states[0], 0, 3, script);
 }
 
 void FieldScriptManager_Destroy(FieldScriptManager *manager) {}

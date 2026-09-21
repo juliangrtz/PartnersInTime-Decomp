@@ -88,6 +88,17 @@ struct FieldVmRuntime {
 typedef char FieldScriptState_SizeCheck[
     sizeof(FieldScriptState) == 0xCC ? 1 : -1];
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+int FieldScript_Begin(FieldScriptState *state, FieldScriptState *parent,
+                      int context_type, const u16 *script);
+FieldEntity *FieldScript_ResolveEntity(FieldVmRuntime *runtime,
+                                       FieldScriptState *state, int selector);
+#ifdef __cplusplus
+}
+#endif
+
 int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *state,
                             ScriptVmCommand *command);
 

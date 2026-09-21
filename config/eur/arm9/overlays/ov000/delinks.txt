@@ -477,3 +477,6 @@ src/field/field_navigation_bounds.c:
 
 src/field/field_body_overlap.c:
     .text start:0x020ae5fc end:0x020ae6c0
+
+src/field/field_script_begin.c:
+    .text start:0x0208221c end:0x020823f8

@@ -46,11 +46,6 @@ extern "C" {
  * its C entry-point ABI and reproduce every byte in the European ROM.
  */
 
-extern FieldEntity *func_ov000_0208221c(
-    FieldVmRuntime *runtime, FieldScriptState *state, int entity_selector);
-extern int func_ov000_02082240(FieldScriptState *target,
-                               FieldScriptState *parent, int owner_type,
-                               const u16 *script);
 extern void func_ov000_020a4214(FieldEntity *entity, int angle_mode,
                                 int target_angle, int angular_step,
                                 int signed_multiplier, int stop_at_target,
@@ -867,7 +862,7 @@ static inline void FieldVm_StartEntityScript(FieldScriptState *caller,
                                              int chain_if_active) {
     if (!chain_if_active || target->flag_bits.active == 0) {
         entity->stop_script();
-        func_ov000_02082240(
+        FieldScript_Begin(
             target, caller,
             caller->flag_bits.context_type,
             script);
@@ -895,7 +890,7 @@ static inline void FieldVm_StartCurrentEntityScript(
     int chain_if_active) {
     if (!chain_if_active || target->flag_bits.active == 0) {
         entity->stop_script();
-        func_ov000_02082240(
+        FieldScript_Begin(
             target, caller, caller->flag_bits.context_type,
             caller->vm_state.script);
     } else {
@@ -1342,7 +1337,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
                 script = state->vm_state.script + arguments[1];
                 if (arguments[2] == 0 ||
                     target->flag_bits.active == 0) {
-                    func_ov000_02082240(target, state, 0, script);
+                    FieldScript_Begin(target, state, 0, script);
                 } else {
                     target->queued_script = script;
                     target->flag_bits.queued_parent_type =
@@ -1399,7 +1394,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_SET_ENTITY_ENABLED:
     case FIELD_VM_SET_ENTITY_SCRIPT_VALUE:
     case FIELD_VM_GET_ENTITY_SCRIPT_VALUE:
-        entity = func_ov000_0208221c(
+        entity = FieldScript_ResolveEntity(
             runtime, state, arguments[0]);
         target = FieldVm_GetEntityScript(entity);
         switch (command->opcode) {
@@ -1533,7 +1528,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_SPAWN_ENTITY_EFFECT_SPRITE:
     case FIELD_VM_REMOVE_ENTITY_EFFECT_SPRITE:
     case FIELD_VM_WAIT_ENTITY_EFFECT_SPRITE:
-        entity = func_ov000_0208221c(
+        entity = FieldScript_ResolveEntity(
             runtime, state, arguments[0]);
         runtime_entity = FieldVm_GetRuntimeEntity(entity);
         switch (command->opcode) {
@@ -2244,7 +2239,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
     case FIELD_VM_SET_ENEMY_SPIKED_JUMP_RESPONSE:
     case FIELD_VM_SET_ENEMY_SPECIAL_CONTACT_REMOVAL_ENABLED:
     case FIELD_VM_SET_ENEMY_IMMEDIATE_BATTLE_REMOVAL_ENABLED:
-        entity = func_ov000_0208221c(
+        entity = FieldScript_ResolveEntity(
             runtime, state, arguments[0]);
         runtime_entity = FieldVm_GetRuntimeEntity(entity);
         switch (command->opcode) {
@@ -3938,7 +3933,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         int message_speed;
         int message_slot;
 
-        entity = func_ov000_0208221c(
+        entity = FieldScript_ResolveEntity(
             runtime, state, arguments[0]);
         func_ov000_0206f8ac(field_context);
         if (FieldVm_GetContextType(state) == FIELD_SCRIPT_OWNER_PRIMARY) {
