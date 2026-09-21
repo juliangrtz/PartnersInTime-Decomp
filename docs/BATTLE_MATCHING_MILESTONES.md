@@ -10813,3 +10813,12 @@ passes 107 tests, golden ROM and zero native differences. 360 controlled live
 cases cover all four selection outcomes using real actor mapping and party
 lookups; original updates resume after state restoration. All 104 saves are
 unchanged. See [target-menu evidence](research/RECONSTRUCTION_NOTES.md#party-target-menu-construction).
+
+
+## Scene object captions
+
+Two-line caption rendering and upload-task creation add 588 linked C++ bytes,
+reaching 859176 / 1563700 (54.95%). Actual objects match without ASM;107 tests,
+golden ROM and native relink pass. Ordinary Green Shell/Bro Flower menu demos
+cover six captions and96 queued tasks over2480 frames;all104 saves unchanged.
+See [caption evidence](research/RECONSTRUCTION_NOTES.md#scene-object-captions).

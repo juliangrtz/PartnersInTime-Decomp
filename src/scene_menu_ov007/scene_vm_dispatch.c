@@ -176,8 +176,8 @@ extern void func_ov007_020724b0(
 extern void func_ov007_0207e770();
 extern void func_ov007_02077110();
 extern void func_ov007_02087ba8();
-extern void func_ov007_02083c20(
-    SceneObject *object, int tile_id, int palette, int x, int y
+extern void SceneText_RenderObjectTiles(
+    SceneObject *object, int mode, int table, int entry, int unused
 );
 extern int SceneScript_IsReady();
 extern void SceneText_LoadArchive();
@@ -1102,7 +1102,7 @@ int SceneVm_DispatchCommand(
     case 0x0C0: return SCRIPT_VM_CONTINUE;
     case SCENE_OP_RENDER_OBJECT_TEXT_TILES:
         object = SceneObject_GetById(ARG(0));
-        func_ov007_02083c20(object, ARG(1), ARG(2), ARG(3), ARG(4));
+        SceneText_RenderObjectTiles(object, ARG(1), ARG(2), ARG(3), ARG(4));
         return SCRIPT_VM_CONTINUE;
 
     case SCENE_OP_GET_OBJECT_TEXT_READY:

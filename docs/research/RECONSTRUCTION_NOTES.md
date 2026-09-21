@@ -8651,3 +8651,42 @@ controlled live calls, not natural item-menu navigation or malformed-pointer
 coverage. Private evidence is
 `build/runtime/eur_high_battle_wheel_targets/live55_v1.json`, produced by
 `build/analysis/high_effort_50_to_55/probe_battle_wheel_targets.py`.
+
+
+## Scene object captions
+
+[Scene text](../../src/scene_menu_ov007/scene_text.cpp) reconstructs overlay 7's
+`0x02083C20..0x02083E6C`: two-line rendering and upload-task creation. The Scene VM
+keeps its five-argument interface; only mode, table and entry are consumed. Mode
+zero truncates both lookup indices to unsigned halfwords, clears 4,096 bytes of
+the 12,288-byte scratch allocation, and handles `FF 00` as a line break. Each
+line queues eight strips. The first row uses width 256; the second uses the text
+cursor's width. The ready halfword is at `read32(0x020A6B90) + 0xA7EA`.
+
+The 72-byte factory matches on its first draft. The renderer matches all 516
+bytes after forwarding the current row, rather than a literal zero, to the
+first sprite-creation call. The final source objects match, with no ASM. The
+initial full build caught reversed function-section order; reversing definitions
+as required by MWCC fixed it. The complete verification then passed 107 tests,
+golden-ROM packaging and a native relink with zero differences. The adjacent
+140-byte upload callback remains unlinked; its private candidate differs.
+
+The original `MenuAI/BAI_iwasaki.dat` entries identify this as Bros. demonstration
+text. Normal Save 65 menu navigation visits Green Shell and Bro Flower demos,
+then returns to the visible field. Over 2,480 frames the probe checks six caption
+calls, 96 upload-task creations, 414 real glyph steps, 12 sprite-creation calls,
+six newline and six terminator paths. Table 3 entries 1, 2, 6 and 7 are reached.
+It independently checks initialization, lookup results, clearing, cursor edits,
+ordered helper arguments, task pool/list insertion and the final ready flag.
+Checked caller memory comprises the complete 90,600-byte workspace, 43,056-byte
+scene allocation, 12,288-byte scratch and 48-byte local text record; task checks
+include all 72 bytes and affected pool/list neighbors. Group cleanup marks 80
+existing tasks across the six calls. All 104 original saves remain unchanged.
+
+Glyph rendering is observed within the text record and 4,096-byte drawing area;
+sprite helper internals, asynchronous tile transfers, independent pixel output
+and nonzero-mode early returns are outside this replay's coverage. No RAM edits
+or substituted helpers are used. The demonstrations and final field capture
+were visually checked. Private evidence:
+`build/runtime/eur_high_scene_text/bros65_v1.json`, produced by
+`build/analysis/high_effort_50_to_55/probe_scene_text.py`.
