@@ -10268,3 +10268,31 @@ normal stop and origin restoration before restoring all induced fixture state.
 All twelve final captures agree and show the field; all 104 source saves remain
 unchanged. Rumble hardware, zero divisors and naturally triggered story shakes
 are not covered. Updater internals and graphics remain observational.
+
+
+## Field HUD decimal sprites
+
+`FieldHud_DrawNumber` emits right-aligned decimal sprites while preserving each
+OAM entry's affine halfword. It keeps the native signed division/remainder,
+coordinate wrapping and digit/tile truncation. The C++ loop matches all 212 native
+bytes, including its literal pool; all eight functions in the updated HUD caller
+object remain exact. The full build passes 107 tests, reproduces the golden EUR
+ROM and relinks with zero differing bytes. Matching C/C++ reaches 846508 / 1563700
+(54.1349%). No inline assembly was added.
+
+Private `build/runtime/eur_high_hud_digits/save83_v3.json` checks 396 calls and
+2640 ordered stores during the ordinary 413-frame save-menu open/cancel route.
+Every call compares both complete static OAM buffers (2048 bytes), the unchanged
+11216-byte field area, the returned buffer position and SP/r4-r11. The first probe
+mistook the separate sort scratch buffer for the field output; failed v1/v2 logs
+are retained, and v3 follows the field frame's static buffer ownership. All seven
+captures match the previous ordinary route, with a visible final field scene.
+
+`isolated_v2.json` adds 126 ARM946 cases on copied live RAM: zero, positive and
+negative numbers, signed limits, digit-count limits, coordinate wrapping and tile
+truncation. Full main RAM, DTCM outside the 32-byte call stack, ordered writes,
+return values and preserved registers are checked without helper stubs or I/O.
+The first isolated run failed because the CPU-mode change selected a different
+stack-register bank; v2 sets the mode before initializing registers. Synthetic
+graphics indices do not establish valid tile allocations or rendered pixels.
+All 104 original saves are unchanged; graphics inspection remains observational.

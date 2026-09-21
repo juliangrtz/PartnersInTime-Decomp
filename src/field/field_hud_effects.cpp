@@ -14,7 +14,6 @@ extern "C" {
 #include <game/field_hud.h>
 extern "C" {
 extern void func_020093b4(FieldRenderObject *, int);
-extern GameOamEntry *func_ov000_02071de8(void *, GameOamEntry *, s16, int, int, int, u32);
 enum { SAVE_PARTY_OFFSET = 1016, SAVE_COINS_OFFSET = 1160 };
 
 static inline void FieldHud_Position(FieldRenderObject *renderer, s16 x, s16 y)
@@ -47,19 +46,19 @@ GameOamEntry *FieldHud_Draw(void *field_context, GameOamEntry *output)
             FieldHud_UpdatePositions(field, single);
         }
         if (single) {
-            output = func_ov000_02071de8(field, output, 17, (s16)(field->hud_y + 175),
+            output = FieldHud_DrawNumber(field, output, 17, (s16)(field->hud_y + 175),
                                          ((SavePartyMember *)(gSaveData + 72 * field->party->active_group + SAVE_PARTY_OFFSET))[0].current_hp, 3,
                                          field->digit_graphics);
-            output = func_ov000_02071de8(field, output, 68, (s16)(field->hud_y + 175),
+            output = FieldHud_DrawNumber(field, output, 68, (s16)(field->hud_y + 175),
                                          *(u32 *)(gSaveData + SAVE_COINS_OFFSET), 6, field->digit_graphics);
         } else {
-            output = func_ov000_02071de8(field, output, 65, (s16)(field->hud_y + 175),
+            output = FieldHud_DrawNumber(field, output, 65, (s16)(field->hud_y + 175),
                                          ((SavePartyMember *)(gSaveData + 72 * field->party->active_group + SAVE_PARTY_OFFSET))[0].current_hp, 3,
                                          field->digit_graphics);
-            output = func_ov000_02071de8(field, output, 17, (s16)(field->hud_y + 175),
+            output = FieldHud_DrawNumber(field, output, 17, (s16)(field->hud_y + 175),
                                          ((SavePartyMember *)(gSaveData + 72 * field->party->active_group + SAVE_PARTY_OFFSET))[1].current_hp, 3,
                                          field->digit_graphics);
-            output = func_ov000_02071de8(field, output, 116, (s16)(field->hud_y + 175),
+            output = FieldHud_DrawNumber(field, output, 116, (s16)(field->hud_y + 175),
                                          *(u32 *)(gSaveData + SAVE_COINS_OFFSET), 6, field->digit_graphics);
         }
     }

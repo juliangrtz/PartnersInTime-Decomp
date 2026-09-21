@@ -61,6 +61,8 @@ void FieldEffect_Stop(void *field_context, int slot);
 int FieldEffect_Start(void *field_context, int slot, int animation, s16 x, s16 y, int duration);
 void FieldHud_UpdatePositions(void *field_context, int single);
 GameOamEntry *FieldHud_Draw(void *field_context, GameOamEntry *output);
+GameOamEntry *FieldHud_DrawNumber(void *field_context, GameOamEntry *output,
+                                s16 x, int y, int value, int digits, u32 graphics);
 void FieldHud_SelectPortraits(void *field_context, int single);
 void FieldHud_SetRenderersVisible(void *field_context, int visible, int single);
 void FieldHud_Init(void *field_context, int visible);

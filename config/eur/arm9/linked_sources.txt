@@ -999,3 +999,5 @@ src/field/field_graphics_irq.c
 src/field/field_bounce_shake.cpp
 
 src/field/field_camera_shake_start.cpp
+
+src/field/field_hud_digits.cpp
