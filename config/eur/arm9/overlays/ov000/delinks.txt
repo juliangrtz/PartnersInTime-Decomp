@@ -516,3 +516,9 @@ src/field/field_hud_digits.cpp:
 
 src/field/field_notifications.cpp:
     .text start:0x0206f768 end:0x0206facc
+
+src/field/field_item_pickup_effect.cpp:
+    .text start:0x0206f0b4 end:0x0206f110
+
+src/field/field_message_window_completion.cpp:
+    .text start:0x0206f110 end:0x0206f288

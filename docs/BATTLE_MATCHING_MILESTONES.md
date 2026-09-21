@@ -10334,3 +10334,38 @@ stack are compared, along with ordered caller writes, helper arguments and saved
 registers. The notification functions execute natively; external window-open and
 window-close calls are explicit stubs with the documented area effects. These
 cases do not establish window allocation lifetimes, rendering or story reachability.
+
+
+## Entity pickup presentation and message-window completion
+
+`FieldArea_ShowEntityItemPickup` forwards the entity's item, amount and projected
+position to the shared pickup effect, retaining signed-halfword coordinate sums.
+`FieldArea_UpdateMessageWindowSlideCompletion` clamps finished axes, stops their
+velocities and completes a fixed-duration slide only when elapsed equals duration.
+The initial typed C++ drafts match all 92 and 376 native bytes respectively.
+Both actual source objects and all five functions in their updated caller units
+remain exact. The full build passes 107 tests, reproduces the golden EUR ROM and
+relinks with zero differing bytes. Matching C/C++ reaches 847844 / 1563700
+(54.2204%), without new inline assembly.
+
+Private `build/runtime/eur_high_pickup_slide/block83_v1.json` repeats the verified
+item-block route. It checks one pickup wrapper's six forwarded arguments, complete
+1328-byte source entity and 11216-byte area; nested notification writes are checked
+by the notification oracle, and the area's effect index advances modulo four.
+Effect-renderer internals remain observational. All 1513 slide-completion calls
+on this route are inactive. `save83_v1.json` checks 264 completion calls, including
+twelve guarded, per-call RAM fixtures covering both movement directions, crossing
+and exact target values, timer equality versus passing the duration, and Q12
+coordinate truncation. It checks 29 ordered stores and two native origin-setter
+calls against complete areas and 3920-byte window managers. Each fixture restores
+all 44 changed input/output bytes and the ordinary inactive return value before
+the caller resumes. Captures match the preceding routes, and all 104 source saves
+remain unchanged.
+
+`isolated_v1.json` adds 40 ARM946 cases on copied live RAM. Twenty-four slide cases
+execute the real origin setter on both screens; sixteen pickup cases test narrow
+coordinate sums, item/amount widths and full-width forwarding of the added flag.
+All main RAM, DTCM outside the 8/16-byte stack, ordered writes, helper arguments,
+slide return values and preserved registers are checked. The pickup creator is
+an explicit no-effect stub in these isolated calls. The synthetic cases establish
+caller arithmetic and control flow, not additional effect rendering or story paths.

@@ -1003,3 +1003,6 @@ src/field/field_camera_shake_start.cpp
 src/field/field_hud_digits.cpp
 
 src/field/field_notifications.cpp
+
+src/field/field_item_pickup_effect.cpp
+src/field/field_message_window_completion.cpp

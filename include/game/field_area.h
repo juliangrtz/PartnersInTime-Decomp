@@ -237,6 +237,7 @@ void FieldArea_ClearNotifications(FieldAreaContext *area);
 void FieldArea_CloseNotification(FieldAreaContext *area, int index);
 void FieldArea_QueueNotification(FieldAreaContext *area, const u8 *text, int quantity, int y);
 void FieldArea_UpdateMessageWindowSlide(FieldAreaContext *area);
+int FieldArea_UpdateMessageWindowSlideCompletion(FieldAreaContext *area);
 void FieldArea_StartMessageWindowSlideBySpeed(FieldAreaContext *area, int window, fx32 x, fx32 y, fx32 speed);
 void FieldArea_UpdateMessageWindowClip(FieldAreaContext *area, int window);
 void FieldArea_SetMessageWindowClipEnabled(FieldAreaContext *area, int window, int enabled);

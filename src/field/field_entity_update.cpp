@@ -10,7 +10,6 @@ extern "C"
     void func_ov000_02075450(FieldAreaContext *);
     void func_ov000_02074000(FieldAreaContext *);
     void func_ov000_0207645c(FieldAreaContext *);
-    void func_ov000_0206f110(FieldAreaContext *);
     void func_ov000_02071ebc(FieldAreaContext *);
 
     void FieldArea_UpdateEntities(FieldAreaContext *area)
@@ -37,7 +36,7 @@ extern "C"
             func_ov000_0207645c(area);
         }
         FieldArea_UpdateMessageWindowSlide(area);
-        func_ov000_0206f110(area);
+        FieldArea_UpdateMessageWindowSlideCompletion(area);
         for (FieldRuntimeEntity *entity = area->first_entity; entity; entity = entity->base.update_next)
         {
             if (entity->base.property_00a_bits.subtype != 9 && !entity->base.visibility_bits.unknown_08 &&
