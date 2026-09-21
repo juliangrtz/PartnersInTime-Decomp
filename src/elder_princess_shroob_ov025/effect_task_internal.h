@@ -11,7 +11,7 @@ extern u8 *gBattleContext;
 #define OVERLAY25_PROJECTILE_TARGETS ((u32 *)(gBattleContext + 27108))
 extern void BattleSound_Stop(int);
 
-extern void func_ov025_020c34c4(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
+extern void func_ov025_020c31a0(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c3a08(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c4fd8(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020cbbb0(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);

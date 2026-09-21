@@ -73,7 +73,7 @@ void Overlay25EffectSequence_AdvanceSprite(Overlay25Task *task, BattleSceneObjec
             task->update = func_ov025_020c3a08;
         }
         if (parameters->mode == 2)
-            task->update = func_ov025_020c34c4;
+            task->update = Overlay25EffectSequence_BeginSequentialLaunch;
     }
 }
 }

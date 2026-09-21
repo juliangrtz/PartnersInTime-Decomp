@@ -9675,3 +9675,27 @@ predecessor. These isolated cases establish no live target, real allocation or
 lifetime, animation/audio internals, IRQ or graphics coverage. All 104 original
 saves remain unchanged. Full-build and actual-object evidence is recorded in
 `build/analysis/high_effort_50_to_55/boss_effect_approach_validation.json`.
+
+
+### Boss particle-task completion and sequence transitions
+
+Added three complete overlay-25 callbacks: BeginSequentialLaunch
+(0x020C34C4..0x020C34E8), WaitParticleTasks (0x020C3748..0x020C37E4) and
+WaitFirstChild (0x020C7250..0x020C7268). They initialize the sequential-emission
+index/timer, wait for active particle tasks before clearing seven attachment slots,
+and finish a controller after its first child. The existing contiguous units now
+own these ranges. BeginSequentialLaunch has one explained four-byte ASM addition:
+Metrowerks otherwise folds the payload pointer into direct task offsets. All three
+complete functions match, including that fragment and their literal pools.
+
+Private runtime report `build/runtime/eur_high_boss_task_waits/isolated_v1.json`
+checks 576 copied-boss-RAM ARM946 cases: every six-bit count mask with zero, all or
+one active child; timer boundaries in all eight task slots; and first-child waits,
+including a task that aliases its child. No helper stubs or hardware I/O are used.
+The sprite record is synthetic and separate from the copied live allocation.
+Whole main RAM and scratch memory, DTCM outside the actual stack, preserved
+registers and independently derived field updates are checked. This establishes
+neither a real sprite lifetime nor live gameplay coverage: the 1470-frame discovery
+route reaches none of these callbacks. All 104 original saves remain unchanged.
+Full build and actual-object checks are in
+`build/analysis/high_effort_50_to_55/boss_task_waits_validation.json`.

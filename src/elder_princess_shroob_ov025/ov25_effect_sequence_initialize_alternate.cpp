@@ -1,5 +1,5 @@
 /*
- * Elder Princess Shroob: alternate effect sequence (overlay 25, 0x020C34E8-0x020C3748).
+ * Elder Princess Shroob: alternate effect sequence (overlay 25, 0x020C34C4-0x020C37E4).
  *
  * The alternate-renderer variant of an effect sequence, with the particle and
  * model-effect teardown it finishes through.
@@ -8,6 +8,22 @@
 #include "effect_task_internal.h"
 
 extern "C" {
+void Overlay25EffectSequence_WaitParticleTasks(Overlay25Task *task, BattleSceneObject *,
+                                              Overlay25WorkPrefix *work)
+{
+    int i;
+    for (i = 0; i < 6; ++i) {
+        /* Index the shared context before applying the particle-count field offset. */
+        if (((u32 *)(gBattleContext + i * sizeof(u32)))[27108 / sizeof(u32)] &&
+            work->tasks[i + 1].update)
+            return;
+    }
+    for (i = 0; i < 7; ++i)
+        work->slots[i] = 0;
+    work->sprite_effect->sprite_flags &= ~0x4000;
+    task->update = Overlay25EffectSequence_FinishParticles;
+}
+
 void Overlay25EffectSequence_FinishParticles(Overlay25Task *task, BattleSceneObject *,
                                              Overlay25WorkPrefix *work)
 {
@@ -59,5 +75,16 @@ void Overlay25EffectSequence_InitializeAlternate(Overlay25Task *task, BattleScen
     parameters->angle = 0;
     parameters->mode = 2;
     task->update = Overlay25EffectSequence_BeginPositioning;
+}
+
+void Overlay25EffectSequence_BeginSequentialLaunch(Overlay25Task *task, BattleSceneObject *,
+                                                   Overlay25WorkPrefix *)
+{
+    Overlay25Parameters *parameters;
+    /* Keep the native payload-base calculation; C alone folds it into task offsets. */
+    asm { add parameters, task, #4 }
+    parameters->timer = 0;
+    task->parameters.index = -1;
+    task->update = func_ov025_020c31a0;
 }
 }

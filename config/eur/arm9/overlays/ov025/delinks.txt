@@ -8,7 +8,7 @@ src/elder_princess_shroob_ov025/ov25_enemy_begin_return.cpp:
     .text start:0x020c2ee4 end:0x020c31a0
 
 src/elder_princess_shroob_ov025/ov25_effect_sequence_initialize_alternate.cpp:
-    .text start:0x020c34e8 end:0x020c3748
+    .text start:0x020c34c4 end:0x020c37e4
 
 src/elder_princess_shroob_ov025/ov25_effect_sequence_advance_sprite.cpp:
     .text start:0x020c3c5c end:0x020c4084
@@ -32,7 +32,7 @@ src/elder_princess_shroob_ov025/enemy_segment_chain_preparation.cpp:
     .text start:0x020c6c4c end:0x020c7124
 
 src/elder_princess_shroob_ov025/ov25_enemy_wait_animation.cpp:
-    .text start:0x020c7210 end:0x020c7250
+    .text start:0x020c7210 end:0x020c7268
 
 src/elder_princess_shroob_ov025/ov25_enemy_finish_attached_effect.cpp:
     .text start:0x020c822c end:0x020c8268
