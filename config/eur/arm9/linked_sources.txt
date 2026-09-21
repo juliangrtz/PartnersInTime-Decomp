@@ -1026,3 +1026,4 @@ src/msl/active_catch.cpp
 src/battle/battle_trail_draw.cpp
 src/battle/battle_wheel_actor.c
 src/battle/battle_party_rebound.c
+src/battle/battle_wheel_targets.cpp

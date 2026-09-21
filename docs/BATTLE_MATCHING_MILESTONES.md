@@ -10803,3 +10803,13 @@ Actual source objects match; full verification passes 107 tests, golden ROM
 and zero native differences. 48 controlled live calls cover waiting, timer
 wrap and shadow projection/aliasing; later effect, arc and cleanup branches
 remain outside this replay. All 104 saves are unchanged. See [rebound evidence](research/RECONSTRUCTION_NOTES.md#party-rebound-update-and-shadow).
+
+
+## Party target menu construction
+
+The target-list builder adds 1208 linked C++ bytes, reaching 858588 of
+1563700 (54.91%). First draft and actual source object match. Full verification
+passes 107 tests, golden ROM and zero native differences. 360 controlled live
+cases cover all four selection outcomes using real actor mapping and party
+lookups; original updates resume after state restoration. All 104 saves are
+unchanged. See [target-menu evidence](research/RECONSTRUCTION_NOTES.md#party-target-menu-construction).

@@ -8613,3 +8613,41 @@ matching covers the whole function; the live coverage is limited to the paths
 listed above. Private evidence is
 `build/runtime/eur_high_battle_party_rebound/live55_v1.json`, produced by
 `build/analysis/high_effort_50_to_55/probe_battle_party_rebound.py`.
+
+
+## Party target menu construction
+
+[Target-menu construction](../../src/battle/battle_wheel_targets.cpp) reconstructs
+overlay 2's `0x0209A0C8..0x0209A580`. Mode 1 and modes >=4 offer the group target
+when any party member is eligible. Other modes build individual actor icons from
+the adult slots' formations and all four actors' exclusion flags. Usable-item
+effect kind 2 adds the appropriate separated adult entries. Every list ends with
+icon 11. The selection searches for the requested actor, the current actor,
+its partner, then the first entry. Each icon write preserves bit 15; only native
+angle writes reset angles, leaving other entry animation fields intact.
+
+The first C++ draft matches all 1,208 bytes. Replacing its temporary raw item
+view with the shared `UsableItemRecord.effect_kind` preserves the match, as does
+the final named-offset source. The actual build object matches completely,
+without ASM. Full verification passes 107 tests, golden-ROM packaging and
+zero-difference native relinking.
+
+The Save 55 checkpoint (`496c6a6836f08c15e95655bb5d78c4cde65dc688`) supplies
+initialized party slots. A 360-case live matrix combines six formation pairs,
+five modes, six exclusion masks and two item kinds, rotating requested/current
+actors. A temporary item descriptor occupies a verified free pool slot. Expected
+list contents and selection are derived independently, and checked against the
+full context allocation, root and preserved registers at helper boundaries and
+return. All 1,104 direct party lookups and 1,427 actor-mapping calls execute;
+the mapper performs 2,854 additional real party lookups with checked arguments.
+Selection outcomes cover requested actor (125), current actor (47), partner (6)
+and first entry (182). Fixtures preserve unrelated flag/animation bits so the
+comparison also detects unintended resets.
+
+The probe restores the full context, root and 256-byte stack window before
+each original common update; all 360 updates complete over 600 frames. The final
+Gritzy Caves menu was viewed and all 104 saves remain unchanged. These are
+controlled live calls, not natural item-menu navigation or malformed-pointer
+coverage. Private evidence is
+`build/runtime/eur_high_battle_wheel_targets/live55_v1.json`, produced by
+`build/analysis/high_effort_50_to_55/probe_battle_wheel_targets.py`.
