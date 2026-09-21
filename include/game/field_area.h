@@ -209,6 +209,7 @@ void FieldArea_CreatePlacedEntities(FieldAreaContext *area);
 void FieldArea_UpdateEntities(FieldAreaContext *area);
 void FieldArea_UpdateEntityVisibility(FieldAreaContext *area);
 void FieldArea_BeginFrame(FieldAreaContext *area);
+void FieldArea_SaveEntityRenderSnapshots(FieldAreaContext *area);
 void FieldArea_ResetEntityRenderOrder(FieldAreaContext *area);
 void FieldArea_ResetEntityUpdateOrder(FieldAreaContext *area);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source);

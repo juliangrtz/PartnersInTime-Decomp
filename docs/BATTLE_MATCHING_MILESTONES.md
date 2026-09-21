@@ -9884,3 +9884,43 @@ match in full. The full build passes 107 tests, reproduces the golden EUR ROM an
 reports zero native relink differences. All 104 original saves remain unchanged.
 The separate region-lookup draft remains private and differing; it contributes
 no matching progress.
+
+
+## Area-wide entity render snapshots (2026-09-21)
+
+`FieldArea_SaveEntityRenderSnapshots` reconstructs overlay 0 range
+`0x02080944..0x020809BC` as matching C++. Before leaving the field, it visits the
+area's entity slots, skips subtype 9 and dispatches each remaining entity's
+snapshot method. Party methods also visit their six auxiliary slots. The loop
+re-reads the area's count after each callback, as the native code does. This adds
+120 bytes, bringing linked matching C/C++ to 841752 / 1563700 (53.8308%).
+
+Private `eur_high_area_render_snapshots/evidence_cold65_v2.json` verifies ordinary
+pause entry from save 65 over 2607 frames. Both area calls complete: 31 entities
+include one skipped subtype-9 entity, four party wrappers and 46 base snapshot
+calls. Thirty snapshots are valid and sixteen have their validity flag cleared.
+Checks cover complete area and subtype-sized entity records, 1360-byte auxiliary
+records, the accessed 316-byte renderer prefix, ordered virtual/helper boundaries
+and preserved registers. All native ranges are guarded. The final pause-menu
+capture was visually inspected. No RAM edits are used.
+
+The first probe failed because it applied the 1312-byte spatial-entity extent to
+688-byte planar entities, overlapping neighboring records. The corrected probe
+uses the allocation sizes established by placement creation. Its failed version,
+report and source hashes are retained; no game-code change was needed.
+
+Private `isolated_v2.json` passes 90 ARM946 cases on copied RAM. Cases cover empty,
+single, paired, ten-slot and full 32-slot lists; all entity subtypes; absent,
+invalid and valid renderer state; zero, one and six auxiliaries; shared auxiliary
+pointers and repeated entity slots. Native virtual methods execute without stubs.
+Full RAM and scratch, DTCM outside the observed stack, intermediate records,
+ordered calls and preserved registers match independent expectations. The first
+isolated harness selected the CPU mode after setting its banked stack pointer;
+that setup error is preserved separately from the successful corrected run.
+Arbitrary callbacks that change the traversal count, renderer allocation tails,
+allocation lifetime, asynchronous IRQ behavior and independent pixels are untested.
+
+The actual linked object matches all 120 bytes. Full verification passes 107 tests,
+reproduces the golden EUR ROM and reports zero native relink differences. All 104
+original saves remain unchanged. The separate paired-room-change candidate remains
+private with eight register/scheduling differences and contributes no progress.

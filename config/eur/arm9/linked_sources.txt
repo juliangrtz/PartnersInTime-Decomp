@@ -984,3 +984,5 @@ src/field/field_party_contact_restore.c
 src/field/field_party_separation.c
 
 src/field/field_region_scripts.cpp
+
+src/field/field_area_render_snapshots.cpp

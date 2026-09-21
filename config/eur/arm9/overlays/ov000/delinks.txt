@@ -492,3 +492,6 @@ src/field/field_party_separation.c:
 
 src/field/field_region_scripts.cpp:
     .text start:0x02088978 end:0x02088c88
+
+src/field/field_area_render_snapshots.cpp:
+    .text start:0x02080944 end:0x020809bc
