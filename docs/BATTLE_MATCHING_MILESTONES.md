@@ -10126,3 +10126,37 @@ owners. Invalid allocation failure, high-address copy, complete touch erasure,
 pixel rendering and isolated ARM cases are not claimed. The two earlier route
 capture sequences retain identical hashes. All 104 original saves are unchanged;
 source/report/artifact hashes and full native guards are retained privately.
+
+
+## Field quad-region state persistence
+
+`FieldArea_SaveQuadRegionState` in `src/field/field_area_regions.c` reconstructs
+180 bytes at overlay 0 `0x0207A7DC..0x0207A890`. It clears this screen's saved
+halfword, then collects each quad region's active bit before field suspension.
+The two native data symbols alias the same saved halfwords. The unsigned shift
+preserves the native operation without a signed left-shift overflow.
+
+The first typed C draft matched; no inline assembly was needed. All three
+functions in the extended source object match, totaling 1392 bytes. The complete
+verification gate passes 107 tests, the golden ROM SHA-1 and native relinking
+with zero differences. Linked matching C/C++ reaches 844584 / 1563700 bytes
+(54.0119%); overlay 0 reaches 185896 / 366712 bytes (50.69%).
+
+Private `build/runtime/eur_high_quad_region_save/pause83_v1.json` records a
+723-frame ordinary pause open/close and room departure from checkpoint 83.
+Both screen calls return with three checked halfword stores in total. The parent
+captures both area owners before detachment; full 11216-byte areas, allocated
+quad arrays including their terminal records, both saved halfwords, SP and
+r4-r11 are checked. This room supplies one inactive region and one empty list.
+Seven captures retain the preceding route's hashes; the final visible room was
+inspected. Graphics captures are observational, and all 104 original saves
+remain unchanged.
+
+`isolated_v1.json` supplements that limited live input with 112 ARM946 cases
+in Unicorn 2.1.3 using copied RAM/DTCM: both screens, null/present arrays, counts
+0/1/2/15/16/17/31 and four activation patterns. The checks cover ordered stores,
+the opposite screen's mask, full main RAM and scratch memory, stack bounds and
+callee-saved registers. These synthetic cases establish neither live lifetimes
+nor the game's region-count domain. Counts above 31 remain untested. No helper,
+I/O or stub behavior is involved. Probe, report and input hashes are retained
+privately with producer completion records.

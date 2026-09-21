@@ -1,5 +1,5 @@
 /*
- * Area regions (overlay 0, 0x0207A890-0x0207AD4C).
+ * Area regions (overlay 0, 0x0207A7DC-0x0207AD4C).
  *
  * Creates the room's variable entities and sets up the quad regions the
  * collision and trigger tests are indexed by.
@@ -80,4 +80,16 @@ void FieldArea_InitializeQuadRegions(FieldAreaContext *area)
     } else
         area->quad_regions = 0;
     data_0205a040[area->flags.screen] = 0;
+}
+
+/* Store active region bits for this screen before the field scene is suspended. */
+void FieldArea_SaveQuadRegionState(FieldAreaContext *area)
+{
+    u32 i;
+    data_0205a040[area->flags.screen] = 0;
+    if (area->quad_regions) {
+        for (i = 0; i < area->quad_region_count; ++i) {
+            data_0205a01c.enabled[area->flags.screen] |= (u32)area->quad_regions[i].flags.active << i;
+        }
+    }
 }

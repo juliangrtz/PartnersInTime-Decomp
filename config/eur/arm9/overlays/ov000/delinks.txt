@@ -168,7 +168,7 @@ src/field/field_bounds_records.c:
     .text start:0x0207b19c end:0x0207b594
 
 src/field/field_area_regions.c:
-    .text start:0x0207a890 end:0x0207ad4c
+    .text start:0x0207a7dc end:0x0207ad4c
 
 src/field/field_navigation_changes.cpp:
     .text start:0x0207af94 end:0x0207b19c
