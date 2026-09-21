@@ -306,8 +306,8 @@ src/field/field_message_window_close.cpp:
 src/field/field_vertical_scroll.c:
     .text start:0x02068fac end:0x02069060
 
-src/field/field_color_cycle_initialize.c:
-    .text start:0x020691f8 end:0x02069284
+src/field/field_color_cycle.c:
+    .text start:0x02069060 end:0x02069284
 
 src/field/field_time_hole_prepare.c:
     .text start:0x02069aac end:0x02069b24

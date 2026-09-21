@@ -10398,3 +10398,41 @@ Every native memory write is rejected, and complete RAM, DTCM and scratch
 ranges, return value, stack pointer and preserved registers are checked.
 There are no helper stubs. These cases supplement the live type-zero calls
 without claiming additional gameplay or allocation-lifetime coverage.
+
+
+### Time-hole color cycle update
+
+`FieldColorCycle_Update` adds the 408-byte range at `ov000:0x02069060`.
+Its first C draft matches every instruction. The existing 140-byte initializer
+and the updater now share `field_color_cycle.c`; both complete functions remain
+exact. The updater holds the initial color, interpolates toward a target, holds
+that target, then returns. It preserves the timer's byte accesses, signed
+quotient truncation and five-bit color storage. Interpolation durations must
+be nonzero; a zero hold duration leaves the current phase unchanged.
+
+Private `build/runtime/eur_high_color_cycle/tunnel83_v5.json` checks 1,654
+native calls, all four phases, 2,783 ordered color stores and 480 real signed
+divider calls with their quotient and remainder. Each call checks the complete
+952-byte system, ownership of its embedded eight-byte cycle, stack pointer and
+preserved registers. The controlled route uses decoded commands for tunnel
+start, whiteout, scene-music fade and brightness reveal on both screens.
+The commands and their pre-decode VM states are restored and the original
+commands are redecoded. A final ordinary room-reload command uses the entry
+party coordinates to restore the background graphics; that reload replaces its
+original script. Captures at 100 and 960 frames show the tunnel and the fully
+visible field respectively. All 104 source saves remain unchanged.
+
+Earlier attempts are retained: v1 did not request whiteout or stop scene music;
+v2 stopped a different sequence player and still failed the inactive-state
+assertion. V3 completed the native tunnel but retained white brightness; v4
+revealed the map and sprites while the background tiles remained cleared.
+Neither is claimed as a complete visual return. V5 finishes the controlled
+route. Tunnel setup, rendering and cleanup internals are observational; the
+color-cycle checks are independent, and this is not an unmodified story entry.
+
+`isolated_v1.json` adds 192 ARM946 cases using the compiled updater and the
+real 524-byte signed divider on copied live RAM. They cover every phase,
+remaining counters 0/1/2/255, equal colors, both interpolation directions and
+zero-duration holds. Ordered stores, divider arguments/results, full RAM/DTCM,
+scratch outside the measured 16-byte stack, stack restoration and preserved
+registers pass. There are no helper stubs or zero-divisor cases.

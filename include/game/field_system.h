@@ -120,6 +120,7 @@ int FieldSystem_IsTimeHoleActive(FieldSystem *system);
 int FieldSystem_IsVerticalScrollActive(FieldSystem *system);
 void FieldSystem_DecelerateVerticalScroll(FieldSystem *system, fx32 deceleration);
 void FieldSystem_StartVerticalScroll(FieldSystem *system, int reverse, fx32 speed, fx32 acceleration, fx32 limit);
+void FieldColorCycle_Update(void *unused, FieldColorCycle *cycle);
 void FieldColorCycle_Initialize(void *unused, u8 initial, u8 target, u8 initial_duration, u8 approach_duration, u8 target_duration, u8 return_duration, FieldColorCycle *out);
 void FieldSystem_StartPreparedTimeHoleArrival(FieldSystem *system);
 void FieldSystem_PrepareTimeHoleEntity(FieldSystem *system, FieldRuntimeEntity *entity);

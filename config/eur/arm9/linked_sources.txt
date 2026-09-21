@@ -766,7 +766,7 @@ src/field/field_spatial_script_control.cpp
 src/field/field_message_window_close.cpp
 
 src/field/field_vertical_scroll.c
-src/field/field_color_cycle_initialize.c
+src/field/field_color_cycle.c
 src/field/field_time_hole_prepare.c
 src/field/field_camera_origin.c
 src/field/field_screen_fades.c
