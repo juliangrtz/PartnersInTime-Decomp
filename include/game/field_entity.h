@@ -828,6 +828,7 @@ FieldRuntimeEntity *FieldEntity_CopySpatialState(FieldRuntimeEntity *entity, con
 void FieldEntity3D_UpdateScreenPosition(FieldRuntimeEntity *entity, s16 camera_x, s16 camera_y);
 void FieldEntity3D_UpdateShadow(FieldRuntimeEntity *entity);
 int FieldEntity3D_ShouldShowShadow(FieldRuntimeEntity *entity);
+void FieldEntity2D_UpdateAnimationState(FieldRuntimeEntity *entity);
 void FieldEntity3D_UpdateAnimationState(FieldRuntimeEntity *entity);
 #ifdef __cplusplus
 }

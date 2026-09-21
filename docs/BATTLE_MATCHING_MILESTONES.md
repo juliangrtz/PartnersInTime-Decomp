@@ -10436,3 +10436,33 @@ remaining counters 0/1/2/255, equal colors, both interpolation directions and
 zero-duration holds. Ordered stores, divider arguments/results, full RAM/DTCM,
 scratch outside the measured 16-byte stack, stack restoration and preserved
 registers pass. There are no helper stubs or zero-divisor cases.
+
+### Planar entity animation policy
+
+`FieldEntity2D_UpdateAnimationState` reconstructs the planar entity's per-frame
+animation decisions, including behavior-mode selection, direction/state changes,
+finished-animation resets and movement-scaled playback speed. Its first typed
+C++ draft and the actual linked source object both match the complete 580-byte
+native function. The shared entity view accesses only the planar 688-byte prefix;
+its animation renderer is 316 bytes. The 3D variant has additional airborne
+states that this planar updater does not select.
+
+Private `eur_high_planar_animation/save83_v1.json` records 396 ordinary calls
+through the Star Shrine save-menu route: 132 each for behavior 1, behavior 0 and
+the disabled gate. The probe checks full live heap allocations, helper arguments,
+caller writes, speed/reset effects and preserved registers. There are 264 native
+speed-setter calls and 264 final virtual animation calls. Those final virtual
+calls remain bounded observations of the entity and renderer; external resources,
+list mutations and graphics are not independently verified. No RAM fixture was
+used. The final visible field was inspected, and all 104 source saves are unchanged.
+
+`isolated_v2.json` adds 1,155 ARM946 cases using copied live RAM: all eight behavior
+modes, entry gates, loop-counter signs, facing changes, idle/first/continued/other
+movement and signed/scaled playback. The actual compiled function, native reset,
+speed setter and signed divider execute, with 3,804 ordered writes, 276 resets
+and 192 divider calls checked. The virtual setter is an explicit no-effect stub;
+96 square-root calls use a rounded integer-result stub, not a DS timing model.
+Full RAM/DTCM and scratch outside the measured stack are checked. The initial
+isolated harness failed before execution because Unicorn requires immutable
+bytes; its source/log are preserved separately. The corrected producer exits
+successfully. Both ROM checks and all 107 tests pass.

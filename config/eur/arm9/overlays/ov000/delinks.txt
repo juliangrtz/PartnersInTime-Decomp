@@ -525,3 +525,6 @@ src/field/field_message_window_completion.cpp:
 
 src/field/field_surface_maximum.c:
     .text start:0x020aa7e4 end:0x020aa830
+
+src/field/field_planar_animation.cpp:
+    .text start:0x020a4bb4 end:0x020a4df8
