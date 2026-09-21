@@ -9699,3 +9699,46 @@ neither a real sprite lifetime nor live gameplay coverage: the 1470-frame discov
 route reaches none of these callbacks. All 104 original saves remain unchanged.
 Full build and actual-object checks are in
 `build/analysis/high_effort_50_to_55/boss_task_waits_validation.json`.
+
+
+## Three-part effect initialization and controls (2026-09-21)
+
+Linked the six functions at overlay 2, `0x020B8070..0x020B82D0`, as
+`src/battle/battle_three_part.cpp`. All 608 bytes match, without inline assembly.
+The initializer reserves a 472-byte resource-owned workspace, initializes three
+156-byte segments, and binds a 304-byte alternate model. The controls prepare
+resource flags, set two halfword parameters, bind/detach segment actors, and read
+signed status values. Parameter semantics beyond the native +192 bias remain
+unnamed. Both property dispatchers now use the shared declarations.
+
+The golden-EUR replay enters Princess Shroob using the original field command
+from room 549, member 0, offset `0x1942`: encounter -28650 (`0x9016`). The packed
+ID selects archive slot 8, `BAI_scn_4_hn`, entry 22. The temporary decoded command
+and VM cursor are restored at the guarded native battle-start boundary. Ordinary
+button inputs then reach monster script `BAI_mon_4_hn`, entry 4, property 111 at
+`0x11DC`. This is controlled encounter entry, not normal story navigation.
+
+Private `eur_high_three_part/evidence_princess_checked103_v1.json` records 10,290
+frames, one initializer, one resource preparation, both parameter setters once,
+12 actor bindings (six attach, six detach), and 252 status reads. Full native
+entry/helper guards, the complete workspace, override slot and owner record,
+helper arguments, and the model's flag transitions are checked independently.
+Model allocation, resource binding, virtual-stop internals and the explicitly
+passed palette remain observational; this does not verify heap/list lifetime,
+IRQ behavior or rendered pixels. The route covers model allocation and cleared
+copy flags; model reuse, allocation failure and the other copy-flag branch remain
+untested. Discovery reports and input checkpoint hashes are retained separately.
+
+Private `eur_high_three_part/isolated_v1.json` adds 69 ARM946 cases: all three
+status channels, signed and wrapping halfword inputs, and six resource flag
+patterns across four valid slots. Full main RAM, scratch memory, DTCM outside
+the stack, preserved registers and both ordered flag stores match independent
+expectations. The native lookup runs without stubs; the workspace is synthetic
+inside copied live RAM. These cases do not add gameplay or graphics coverage.
+
+All three affected source objects match completely. The full build passes 107
+tests, reproduces the golden EUR ROM and reports zero native-relink differences.
+The 104 original saves are unchanged. Integration's first attempt stopped before
+metadata edits; its incomplete build failed the module-range documentation test.
+The completed metadata and final source pass the gate. Evidence, producer hashes
+and validation are private under `build/analysis/high_effort_50_to_55/`.

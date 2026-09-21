@@ -550,3 +550,6 @@ src/battle/battle_level_up_border.cpp:
 
 src/battle/battle_capture_transform.c:
     .text start:0x020b03b8 end:0x020b0484
+
+src/battle/battle_three_part.cpp:
+    .text start:0x020b8070 end:0x020b82d0

@@ -10,6 +10,7 @@
 #include <game/battle_context.h>
 #include <game/battle_effect.h>
 #include <game/battle_effect_controls.h>
+#include <game/battle_three_part.h>
 #include <game/battle_hit.h>
 #include <game/battle_script_properties.h>
 
@@ -67,7 +68,6 @@ typedef char BattleSceneObjectScriptPropertyView_SizeCheck[
     sizeof(BattleSceneObjectScriptPropertyView) == 0x104 ? 1 : -1];
 
 void OS_Terminate(void);
-int func_ov002_020b8070(BattleSceneObject *object, int channel);
 
 #define FIELD_S8(object, offset) \
     (*(s8 *)((u8 *)(object) + (offset)))
@@ -433,11 +433,11 @@ int BattleScript_GetProperty(u16 actor_id, int property) {
         return (((BattleEnemyScriptPropertyView *)
                  BattleActor_GetEnemySlot(actor_id))->flags_29c << 26) >> 31;
     case BATTLE_PROPERTY_CHANNEL_STATE_0:
-        return func_ov002_020b8070(BattleSceneObject_GetById(actor_id), 0);
+        return BattleThreePart_GetStatus(BattleSceneObject_GetById(actor_id), 0);
     case BATTLE_PROPERTY_CHANNEL_STATE_1:
-        return func_ov002_020b8070(BattleSceneObject_GetById(actor_id), 1);
+        return BattleThreePart_GetStatus(BattleSceneObject_GetById(actor_id), 1);
     case BATTLE_PROPERTY_CHANNEL_STATE_2:
-        return func_ov002_020b8070(BattleSceneObject_GetById(actor_id), 2);
+        return BattleThreePart_GetStatus(BattleSceneObject_GetById(actor_id), 2);
     case BATTLE_PROPERTY_SCENE_DERIVED_128:
         return BattleChainRig_IsActive(BattleSceneObject_GetById(actor_id));
     case BATTLE_PROPERTY_ACTOR_FLAG_15:

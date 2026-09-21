@@ -8,6 +8,7 @@
  */
 
 #include <game/battle_effect_controls.h>
+#include <game/battle_three_part.h>
 #include <game/battle_link_effect.h>
 #include <game/battle_object_link.h>
 #include <game/battle_actor.h>
@@ -85,11 +86,6 @@ void func_ov002_020baf90(BattleSceneObject *object, int value);
 void func_ov002_020baf64(BattleSceneObject *object, int value);
 void func_ov002_020baf38(BattleSceneObject *object, int value);
 void func_ov002_020ba0d8(BattleSceneObject *object, int value);
-void func_ov002_020b8128(u16 value);
-void func_ov002_020b815c(BattleSceneObject *object);
-void func_ov002_020b8114(BattleSceneObject *object, int value);
-void func_ov002_020b80fc(BattleSceneObject *object, int value);
-void func_ov002_020b8088(BattleSceneObject *object, u16 value, int channel);
 void func_ov002_020b6a5c(BattleSceneObject *object);
 
 #define FIELD_U16(object, offset) \
@@ -552,25 +548,25 @@ void BattleScript_SetProperty(u16 actor_id, int property, int value) {
         BattleObjectLink_SetParameter0E(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_110:
-        func_ov002_020b8128(value);
+        BattleThreePart_PrepareResource(value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_111:
-        func_ov002_020b815c(BattleSceneObject_GetById(actor_id));
+        BattleThreePart_Initialize(BattleSceneObject_GetById(actor_id));
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_112:
-        func_ov002_020b8114(BattleSceneObject_GetById(actor_id), value);
+        BattleThreePart_SetParameter1D4(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_113:
-        func_ov002_020b80fc(BattleSceneObject_GetById(actor_id), value);
+        BattleThreePart_SetParameter1D6(BattleSceneObject_GetById(actor_id), value);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_114:
-        func_ov002_020b8088(BattleSceneObject_GetById(actor_id), value, 0);
+        BattleThreePart_BindActor(BattleSceneObject_GetById(actor_id), value, 0);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_115:
-        func_ov002_020b8088(BattleSceneObject_GetById(actor_id), value, 1);
+        BattleThreePart_BindActor(BattleSceneObject_GetById(actor_id), value, 1);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_116:
-        func_ov002_020b8088(BattleSceneObject_GetById(actor_id), value, 2);
+        BattleThreePart_BindActor(BattleSceneObject_GetById(actor_id), value, 2);
         break;
     case BATTLE_PROPERTY_SCENE_OPERATION_120:
         func_ov002_020b6a5c(BattleSceneObject_GetById(actor_id));
