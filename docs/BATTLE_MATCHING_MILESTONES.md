@@ -9963,3 +9963,47 @@ ROM and reports zero native relink differences. All 104 original saves are
 unchanged. An initial formatting edit split equality operators and failed the
 build; its corrected version passes the complete gate. Separate pause-row and
 credits-particle drafts remain private and differing, with no progress counted.
+
+
+## Credits final-text particle trail
+
+`CreditsParticleEmitter_Update` and `CreditsSmallParticle_Update` reconstruct
+`0x02079158..0x02079620` in one C unit with typed 72-byte pooled records and no
+inline assembly. The emitter progressively reveals the ending text, allocates
+particles with alternating randomized vertical motion, then notifies its parent.
+Particles advance through six texture frames, decelerate, draw on the appropriate
+screen pass and fade. Matrix depth is Q12 while the shared counter counts slots.
+Both full source-object ranges, including pools and relocations, match exactly.
+The 1224 newly linked bytes bring matching C/C++ to 843572 / 1563700 (53.9472%).
+
+Private `eur_high_credits_particles/evidence_credits86_v2.json` passes a
+12000-frame controlled checkpoint-86 credits route. The decoded 72-byte request
+fixture is restored at the guarded request helper before transition. This does
+not establish ordinary story completion. There are 209 emitter updates, 208
+particle allocations, 832 RNG calls and 6240 particle updates. The latter divide
+into 3016 draws, 3016 skipped screen passes and 208 removal marks; each screen
+variant occurs 3120 times. The emitter also marks itself on completion. All 75818
+GPU writes match the independently derived ordered sequence.
+
+Checks cover complete emitter, particle and touched parent records, workspace
+prefix, 32 alpha halfwords, localized widths, save-language byte, RNG state and
+pool/list/free-link/neighbor/count records. Native factory, allocator, RNG,
+division and removal helpers execute, with arguments, results and intermediate
+memory checked independently. Removal flags are checked, not later pool release.
+The two distinct captures at frames 6000 and 12000 were visually inspected; the
+latter shows the completed ending text. VRAM, palettes and OAM are recorded as
+observations, without an independent pixel or asynchronous IRQ oracle.
+
+Private `isolated_v1.json` passes 226 ARM946 cases on copied live RAM. Synthetic
+records cover delays, emitter phases, all six language indices, emission parity,
+zero and nonzero RNG seeds, signed alpha saturation/wrapping, screen boundaries,
+frame and alpha expiry, timer wrap and signed velocity extremes. Full main RAM,
+scratch memory, DTCM outside the actual stack, preserved registers and ordered
+GPU submissions are checked. Native helpers execute without stubs; mapped GPU
+registers model submission only, not hardware timing or rasterization.
+
+Full verification passes 107 tests, reproduces the golden EUR ROM and reports
+zero native relink differences. All 104 original saves remain unchanged. The
+first live probe stopped at frame 9515 because its register accessor did not map
+Capstone's `ip` name to `r12`; the corrected probe passes from the initial state.
+The game code required no change for that probe correction.

@@ -137,3 +137,6 @@ src/title_ov006/title_model_resources_load.cpp:
 
 src/title_ov006/credits_text_strip.c:
     .text start:0x02078f04 end:0x02079158
+
+src/title_ov006/credits_particles.c:
+    .text start:0x02079158 end:0x02079620
