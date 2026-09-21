@@ -522,3 +522,6 @@ src/field/field_item_pickup_effect.cpp:
 
 src/field/field_message_window_completion.cpp:
     .text start:0x0206f110 end:0x0206f288
+
+src/field/field_surface_maximum.c:
+    .text start:0x020aa7e4 end:0x020aa830

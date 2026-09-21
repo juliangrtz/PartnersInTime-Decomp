@@ -10369,3 +10369,32 @@ All main RAM, DTCM outside the 8/16-byte stack, ordered writes, helper arguments
 slide return values and preserved registers are checked. The pickup creator is
 an explicit no-effect stub in these isolated calls. The synthetic cases establish
 caller arithmetic and control flow, not additional effect rendering or story paths.
+
+
+### Navigation surface maximum height
+
+`FieldNavigation_GetMaximumHeight` reconstructs the 76-byte range at
+`ov000:0x020AA7E4`. Type-zero surfaces return the maximum signed height of the
+first three vertices; other types return the first height. The fourth vertex
+and the entity argument are unused. The C implementation matches the complete
+function without assembly.
+
+The ordinary save-menu replay in `build/runtime/eur_high_surface_maximum/`
+(`save83_v1.json`) made no calls and is retained as a coverage miss. Inspection
+of room 459's live navigation table identified the ramps at x=204..304,
+y=280..344, with height z=x-204. `ramp83_v1.json` uses the established controlled
+room-reload procedure to place the pair on that ramp, restores decoded commands
+and the later non-reload VM states, then applies ordinary right/left movement.
+Its 143 calls check the signed result, the entire unchanged 92-byte surface,
+membership in the current area's surface table, stack pointer and preserved
+registers. The final capture shows both characters on the visible ramp. This
+is a controlled runtime route, not an unmodified story entry; the reload
+replaces the original room script. All 104 source saves remain unchanged.
+
+`isolated_v1.json` executes the compiled function on copied live RAM using
+Unicorn's ARM946 model. Its 2,000 synthetic surface cases cover all sixteen
+type values, height permutations, equal heights and signed 32-bit extremes.
+Every native memory write is rejected, and complete RAM, DTCM and scratch
+ranges, return value, stack pointer and preserved registers are checked.
+There are no helper stubs. These cases supplement the live type-zero calls
+without claiming additional gameplay or allocation-lifetime coverage.

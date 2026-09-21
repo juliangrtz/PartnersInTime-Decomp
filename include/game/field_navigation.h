@@ -83,6 +83,7 @@ typedef char FieldNavigationChangeManager_SizeCheck[sizeof(FieldNavigationChange
 #ifdef __cplusplus
 extern "C" {
 #endif
+fx32 FieldNavigation_GetMaximumHeight(const FieldRuntimeEntity *entity, const FieldNavigationSurface *surface);
 /* Native height sampler: only the low byte of the attribute-check flag is read. */
 void func_ov000_020bdc88(const FieldNavigationSurface *surface, fx32 x, fx32 y,
                        fx32 *height, fx32 *lower_height, int check_attributes);
