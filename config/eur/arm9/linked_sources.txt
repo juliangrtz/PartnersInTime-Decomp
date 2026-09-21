@@ -495,7 +495,6 @@ src/scene_menu_ov007/nawatobi_rope_update.c
 src/scene_menu_ov007/nawatobi_rope_constraints.c
 src/scene_menu_ov007/nawatobi_rope_integrate.c
 src/attack_mix_flower_ov016/pair_effect_control.c
-src/attack_mix_flower_ov016/pair_effect_reset_request.c
 src/attack_mix_flower_ov016/pair_effect_lifecycle.c
 src/attack_mix_flower_ov016/participant_idle.c
 src/attack_mix_flower_ov016/participant_lifecycle.c
@@ -1019,4 +1018,3 @@ src/battle/battle_reward_model_cleanup.cpp
 src/battle/battle_oam_transform_init.c
 src/battle/battle_impact_saved_primary.c
 src/battle/battle_attack_callback.c
-src/attack_mix_flower_ov016/pair_effect_update.c

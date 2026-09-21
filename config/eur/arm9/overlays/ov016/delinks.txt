@@ -10,10 +10,7 @@ src/attack_mix_flower_ov016/motion_table.c:
 
 
 src/attack_mix_flower_ov016/pair_effect_control.c:
-    .text start:0x020c43e0 end:0x020c4910
-
-src/attack_mix_flower_ov016/pair_effect_reset_request.c:
-    .text start:0x020c4b18 end:0x020c4b54
+    .text start:0x020c43e0 end:0x020c4b54
 
 src/attack_mix_flower_ov016/pair_effect_lifecycle.c:
     .text start:0x020c4e48 end:0x020c4f9c
@@ -52,7 +49,3 @@ src/attack_mix_flower_ov016/mix_participant_exit.c:
 
 src/attack_mix_flower_ov016/mix_flowers_initialize.cpp:
     .text start:0x020c6e24 end:0x020c7274
-
-
-src/attack_mix_flower_ov016/pair_effect_update.c:
-    .text start:0x020c4910 end:0x020c4b18

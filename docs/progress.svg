@@ -4345,7 +4345,7 @@
 <rect class="cell" x="899.58" y="534.42" width="12.21" height="17.50" fill="#263244"><title>Overlay 16 · func_ov016_020c4b54 · 684 B · remaining</title></rect>
 <rect class="cell" x="899.58" y="551.92" width="12.21" height="13.51" fill="#263244"><title>Overlay 16 · func_ov016_020c34d0 · 528 B · remaining</title></rect>
 <rect class="cell" x="911.80" y="516.82" width="12.01" height="13.63" fill="#263244"><title>Overlay 16 · func_ov016_020c53d0 · 524 B · remaining</title></rect>
-<rect class="cell" x="911.80" y="530.45" width="12.01" height="13.53" fill="#2dd4a0"><title>Overlay 16 · pair_effect_update · 520 B · matching C/C++</title></rect>
+<rect class="cell" x="911.80" y="530.45" width="12.01" height="13.53" fill="#2dd4a0"><title>Overlay 16 · pair_effect_control · 520 B · matching C/C++</title></rect>
 <rect class="cell" x="911.80" y="543.98" width="12.01" height="11.45" fill="#2dd4a0"><title>Overlay 16 · participant_effect_prepare · 440 B · matching C/C++</title></rect>
 <rect class="cell" x="911.80" y="555.43" width="12.01" height="9.99" fill="#263244"><title>Overlay 16 · func_ov016_020c55dc · 384 B · remaining</title></rect>
 <rect class="cell" x="923.81" y="516.82" width="10.24" height="10.86" fill="#263244"><title>Overlay 16 · func_ov016_020c2bbc · 356 B · remaining</title></rect>
@@ -4383,7 +4383,7 @@
 <rect class="cell" x="944.75" y="556.86" width="4.67" height="4.55" fill="#2dd4a0"><title>Overlay 16 · participant_effect_phases · 68 B · matching C/C++</title></rect>
 <rect class="cell" x="944.75" y="561.41" width="4.67" height="4.02" fill="#2dd4a0"><title>Overlay 16 · pair_effect_control · 60 B · matching C/C++</title></rect>
 <rect class="cell" x="949.42" y="552.04" width="4.49" height="4.18" fill="#2dd4a0"><title>Overlay 16 · pair_effect_control · 60 B · matching C/C++</title></rect>
-<rect class="cell" x="953.91" y="552.04" width="4.49" height="4.18" fill="#2dd4a0"><title>Overlay 16 · pair_effect_reset_request · 60 B · matching C/C++</title></rect>
+<rect class="cell" x="953.91" y="552.04" width="4.49" height="4.18" fill="#2dd4a0"><title>Overlay 16 · pair_effect_control · 60 B · matching C/C++</title></rect>
 <rect class="cell" x="958.39" y="552.04" width="4.19" height="4.18" fill="#2dd4a0"><title>Overlay 16 · variant_object_state · 56 B · matching C/C++</title></rect>
 <rect class="cell" x="949.42" y="556.22" width="3.53" height="4.96" fill="#2dd4a0"><title>Overlay 16 · pair_effect_control · 56 B · matching C/C++</title></rect>
 <rect class="cell" x="949.42" y="561.18" width="3.53" height="4.25" fill="#2dd4a0"><title>Overlay 16 · pair_effect_control · 48 B · matching C/C++</title></rect>

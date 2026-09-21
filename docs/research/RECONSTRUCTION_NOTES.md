@@ -8259,7 +8259,7 @@ compared separately in `battle_small_controls_actual.txt`.
 
 ## Mix Flower paired-effect update
 
-[The updater](../../src/attack_mix_flower_ov016/pair_effect_update.c), overlay 16
+[The updater](../../src/attack_mix_flower_ov016/pair_effect_control.c), overlay 16
 `0x020C4910..0x020C4B18`, advances animation, convergence and reset phases of
 each 524-byte paired effect. The attack allocation holds 32 slots at +400;
 its 32-byte controller is at +17168. The first active-model pointer is cached
