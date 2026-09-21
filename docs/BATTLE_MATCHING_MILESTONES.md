@@ -9810,3 +9810,38 @@ The actual linked source object matches all 160 bytes. Full build verification
 passes 107 tests, reproduces the golden ROM and reports zero native relink
 differences. All 104 original saves remain unchanged. Private probe versions,
 reports and artifact hashes are retained under `high_effort_50_to_55/`.
+
+
+## Party separation and contact restoration (2026-09-21)
+
+`FieldParty_UpdateSeparation` reconstructs `0x02094140..0x0209418C` and
+`FieldPartyEntity_RestoreContactFlags` reconstructs `0x020B64E8..0x020B6560`.
+The former stores the leader-minus-follower coordinates for formation changes,
+including native 32-bit wrapping. The latter restores the saved contact byte,
+then clears its low four flags when the member's follower flag is enabled,
+falling back to the linked member only when its own flag pointer is absent.
+Both routines are matching C without inline assembly. They add 196 bytes,
+bringing linked matching C/C++ to 840848 / 1563700 (53.7730%).
+
+Private `eur_high_party_contact_separation/evidence_spin83_v2.json` verifies one
+separation call on the established save-83 Spin Jump route over 145 frames.
+Checks cover the full 8356-byte party record, both 1440-byte member records,
+all coordinate outputs and preserved registers. Native guards cover the complete
+function. The final field capture was inspected. The contact routine was not
+called on this route or during an additional 2477-frame save-65 boot/walk replay.
+The initial combined replay and the save-65 attempt retain failed coverage
+assertions; neither establishes live contact coverage.
+
+Private `isolated_v1.json` passes 354 ARM946 cases on copied live RAM: 256 contact
+variants and 98 separation variants. Contact cases cover absent, own, linked and
+self-linked pointers, pointer precedence, and flag halfwords aliased to the
+restored byte. Separation cases include signed extremes, wrapping differences
+and identical member pointers. Full RAM, DTCM, scratch records, preserved
+registers and ordered byte/word stores match the independent oracle. These leaf
+functions execute without helper stubs. Allocation lifetime, asynchronous IRQ
+behavior and rendered pixels are outside these checks.
+
+The actual source objects and updated formation-transition caller match in full.
+The build passes 107 tests, reproduces the golden ROM and reports zero native
+relink differences. All 104 original saves remain unchanged. The neighboring
+input-motion draft remains deferred with its previously recorded differences.

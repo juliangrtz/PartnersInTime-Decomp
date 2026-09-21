@@ -43,7 +43,7 @@ void FieldParty_StackFollower(FieldPartyController *party)
     party->leader->entity.locomotion_state = 7;
     party->follower->entity.locomotion_state = 4;
     party->follower->follower_flags->enabled = 0;
-    func_ov000_02094140(party);
+    FieldParty_UpdateSeparation(party);
     FieldVertical_StartToHeight(
         &party->follower->entity,
         party->leader->entity.position_z - party->follower->entity.position_z + 147456, -1, -1);
@@ -386,7 +386,7 @@ void FieldParty_BeginBrosBall(FieldPartyController *party)
             data_ov000_020c0878[leader->entity.base_state_flag_bits.facing_direction][0],
         leader->entity.position_y +
             data_ov000_020c087c[leader->entity.base_state_flag_bits.facing_direction][0]);
-    func_ov000_02094140(party);
+    FieldParty_UpdateSeparation(party);
     party->follower->entity.base.visibility_bits.unknown_07 = 1;
     party->follower->entity.saved_presentation_flag_bits.unknown_31 = 1;
     func_020093b4(party->follower->entity.render_object, 0);
@@ -759,7 +759,7 @@ void FieldParty_RaiseFollowerToLeader(FieldPartyController *party)
     party->leader->entity.locomotion_state = 31;
     party->follower->entity.locomotion_state = 28;
     *party->follower->unknown_568 &= ~1;
-    func_ov000_02094140(party);
+    FieldParty_UpdateSeparation(party);
     FieldVertical_StartToHeight(
         &party->follower->entity,
         party->leader->entity.position_z - party->follower->entity.position_z + 24 * 4096, -1, -1);

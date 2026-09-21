@@ -211,6 +211,8 @@ fx32 FieldPartyEntity_GetDirectionVector(FieldPartyEntity *member, int direction
 void FieldParty_UpdateAuxiliaryAnimationTransition(FieldPartyController *party, FieldPartyEntity *member, int immediate);
 fx32 FieldParty_GetFollowerOffset(FieldPartyController *party, FieldPartyEntity *member, fx32 distance, fx32 *x, fx32 *y);
 void FieldParty_ResetDefaultActions(FieldPartyController *party);
+void FieldParty_UpdateSeparation(FieldPartyController *party);
+void FieldPartyEntity_RestoreContactFlags(FieldPartyEntity *member);
 void FieldParty_UpdateFollowerHeightGate(FieldPartyController *party);
 void FieldParty_BindFollowerState(FieldPartyEntity *member, void *state, FieldPartyEntity *target);
 fx32 FieldParty_GetSlopeDistanceScale(FieldPartyEntity *member, int direction,

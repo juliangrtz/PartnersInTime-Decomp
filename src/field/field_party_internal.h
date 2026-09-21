@@ -26,6 +26,5 @@ extern const u8 data_ov000_020c0684[];
 extern const FieldPartyTrailDirection data_ov000_020c06ac[];
 extern const u8 data_ov000_020c06a4[];
 void func_ov000_02092e24(FieldPartyController *, FieldPartyEntity *);
-void func_ov000_02094140(FieldPartyController *);
 }
 #endif

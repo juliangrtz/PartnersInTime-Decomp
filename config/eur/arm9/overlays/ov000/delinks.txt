@@ -483,3 +483,9 @@ src/field/field_script_begin.c:
 
 src/field/field_renderer_visibility.c:
     .text start:0x02066dc0 end:0x02066e60
+
+src/field/field_party_contact_restore.c:
+    .text start:0x020b64e8 end:0x020b6560
+
+src/field/field_party_separation.c:
+    .text start:0x02094140 end:0x0209418c

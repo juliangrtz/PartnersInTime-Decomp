@@ -978,3 +978,7 @@ src/battle/battle_three_part.cpp
 src/field/field_script_begin.c
 
 src/field/field_renderer_visibility.c
+
+src/field/field_party_contact_restore.c
+
+src/field/field_party_separation.c
