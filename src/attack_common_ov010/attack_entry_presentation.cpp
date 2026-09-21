@@ -88,7 +88,7 @@ void Overlay10Attack_BeginEntry(Overlay10ActionActor *user, void (*callback)(Ove
         work->transitions[i].phase = 0;
         ++i;
     } while (i < 2);
-    func_ov002_020722ac(user, func_ov010_020c1410);
+    BattleAttack_SetCallback(user, func_ov010_020c1410);
 }
 
 void Overlay10Attack_MoveBackground()

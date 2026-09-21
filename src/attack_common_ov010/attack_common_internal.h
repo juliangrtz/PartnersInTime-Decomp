@@ -19,7 +19,7 @@ int Overlay10Enemy_CollectIds(u16 *, int);
 void Overlay10Enemy_Snapshot(Overlay10EnemyState *);
 int Overlay10Enemy_IsSelectable(int);
 int BattleDamage_CalculateAttack(BattlePartyActor *, int, int, BattleActor *, int, int);
-void func_ov002_020722ac(Overlay10ActionActor *, void (*)(Overlay10ActionActor *));
+void BattleAttack_SetCallback(Overlay10ActionActor *, void (*)(Overlay10ActionActor *));
 void func_ov010_020c1410(Overlay10ActionActor *);
 void BattleFeedback_SpawnAtObject(int, BattleSceneObject *, int, int, int);
 int BattleActor_IsDamageImmune(int);

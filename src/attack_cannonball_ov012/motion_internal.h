@@ -58,7 +58,7 @@ void BattleFeedback_SpawnVariant(BattleSceneObject *, int, int, int);
 void BattleMotion_StartTransform(BattleSceneObject *, int, int, int, int, int, int, int, int, int, int);
 void func_ov012_020c3db8(Overlay12AttackController *);
 void func_ov012_020c31e8(Overlay12AttackState *);
-void func_ov002_020722ac(BattlePartyActor *, void (*)(BattlePartyActor *));
+void BattleAttack_SetCallback(BattlePartyActor *, void (*)(BattlePartyActor *));
 void func_ov012_020c50c0(BattlePartyActor *);
 void Overlay12Motion_UpdateDampedArc(BattleSceneObject *, BattleMotionChannel *);
 

@@ -12,7 +12,7 @@ struct ShellEntryFlags {
 extern "C" {
 extern s8 data_ov011_020c5f28[][2], data_ov011_020c5f29[][2];
 void func_ov011_020c54b4(Overlay10ActionActor *);
-void func_ov002_020722ac(Overlay10ActionActor *, void (*)(Overlay10ActionActor *));
+void BattleAttack_SetCallback(Overlay10ActionActor *, void (*)(Overlay10ActionActor *));
 
 static inline void SetModelOffset(BattleSceneObject *object, s16 x, s16 y)
 {
@@ -75,7 +75,7 @@ void Overlay11Attack_UpdateEntry(BattlePartyActor *user)
             work->controllers[0].flag_5 = 1;
             BattleSceneObject_SetAnimation(work->controllers[0].actor->actor.scene_object, 0, -1);
             BattleCollision_GetBounds((BattleCollisionBounds *)&work->projectile.collision_x, 40, 0, 0);
-            func_ov002_020722ac((Overlay10ActionActor *)user, func_ov011_020c54b4);
+            BattleAttack_SetCallback((Overlay10ActionActor *)user, func_ov011_020c54b4);
         }
         return;
     }

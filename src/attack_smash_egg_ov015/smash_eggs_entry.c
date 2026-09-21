@@ -51,7 +51,7 @@ void Overlay15Attack_UpdateEntry(struct Overlay10ActionActor *action)
             Overlay15Attack_PreparePrimaryActor(&context->actors[1]);
             context->timer = 0;
             context->phase = context->timer;
-            func_ov002_020722ac(actor, Overlay15Attack_UpdateSequence);
+            BattleAttack_SetCallback(actor, Overlay15Attack_UpdateSequence);
         } else {
             ++context->timer;
         }

@@ -1016,3 +1016,6 @@ src/field/field_battle_transition.cpp
 src/field/field_time_hole_arrival.cpp
 src/battle/battle_rumble.c
 src/battle/battle_reward_model_cleanup.cpp
+src/battle/battle_oam_transform_init.c
+src/battle/battle_impact_saved_primary.c
+src/battle/battle_attack_callback.c

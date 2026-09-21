@@ -25,7 +25,7 @@ void Overlay13Attack_RestoreBattle(Overlay10ActionActor *user)
         BattleSceneObject_GetById((u16)i)->effect_anchor_z = 0;
     user->party.actor.scene_object->effect_anchor_z = 0;
     BattleSceneObject_GetById(user->party.linked_object_id)->effect_anchor_z = 0;
-    func_ov002_020722ac(user, 0);
+    BattleAttack_SetCallback(user, 0);
     *(u16 *)(gBattleContext + 54) = work->background[3];
     *(u16 *)(gBattleContext + 52) = work->background[2];
     *(u16 *)(gBattleContext + 50) = work->background[1];

@@ -34,7 +34,7 @@ int BattleAnimation_GetDurationThroughFrame(void *, int, int, int);
 int BattleFeedback_IsResourceLoadPending(void);
 int BattleFeedback_IsEffectComplete(void);
 void BattleFeedback_LoadResource(void);
-void func_ov002_020722ac(BattlePartyActor *, void (*)(BattlePartyActor *));
+void BattleAttack_SetCallback(BattlePartyActor *, void (*)(BattlePartyActor *));
 void func_0202cbd4(void *, int, unsigned);
 void func_ov020_020c3eec(Overlay20AttackState *, Overlay20AttackState *);
 void func_ov020_020c2efc(Overlay20AttackState *, int);

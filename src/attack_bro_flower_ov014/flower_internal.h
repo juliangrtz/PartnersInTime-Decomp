@@ -52,7 +52,7 @@ Overlay10Work *Overlay10Attack_CreateWork(Overlay10ActionActor *,int,int);
 void Overlay10Object_GetGraphicBounds(s16 *,BattleSceneObject *);
 int Overlay10Party_HasBadgeTwo();
 void Overlay10Attack_BeginEntry(Overlay10ActionActor *,void(*)(Overlay10ActionActor *));
-void func_ov002_020722ac(Overlay10ActionActor *,void(*)(Overlay10ActionActor *));
+void BattleAttack_SetCallback(Overlay10ActionActor *,void(*)(Overlay10ActionActor *));
 extern int data_ov014_020c6124;
 extern u8 data_ov014_020c61c8[], data_ov014_020c61c9[], data_ov014_020c61ca[];
 extern int data_ov014_020c6198[4];

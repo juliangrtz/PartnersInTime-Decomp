@@ -15,7 +15,7 @@ extern void BattleSceneObject_SetAnimationMode01(BattleSceneObject *, int);
 extern void func_0200940c(BattleModel *, s16);
 extern void BattleModel_StopPrimary(BattleModel *);
 extern void Overlay10Motion_StopAll(BattleSceneObject *);
-extern void func_ov002_0206b5c0(BattleImpactParticlePayload *);
+extern void BattleImpactParticle_RenderSavedPrimary(BattleImpactParticlePayload *);
 int Overlay14Attack_HasTarget(void)
 {
     return Overlay14Attack_PickTarget(0) != 0;
@@ -82,7 +82,7 @@ void Overlay14Participant_UpdateParticle(BattleAITask *base)
             particle->render_bits.size = alpha;
             particle->scale_x = scale;
             particle->scale_y = scale;
-            func_ov002_0206b5c0(particle);
+            BattleImpactParticle_RenderSavedPrimary(particle);
         }
     }
 }

@@ -19,7 +19,7 @@ extern Overlay21AttackWork *data_ov002_020c0710;
 void func_0202cbd4(void *, int, u32);
 int BattleFeedback_IsEffectComplete(void), BattleFeedback_IsResourceLoadPending(void);
 void BattleFeedback_LoadResource(void);
-void func_ov002_020722ac(BattlePartyActor *, void (*)(BattlePartyActor *));
+void BattleAttack_SetCallback(BattlePartyActor *, void (*)(BattlePartyActor *));
 void func_ov021_020c39b0(Overlay21AttackState *);
 enum {
     HAMMER_ATTACK_RESOURCE_SLOT = 52,
@@ -47,7 +47,7 @@ void Overlay21Attack_Create(BattlePartyActor *actor)
     BattleObjectData_EnsureLoaded(HAMMER_ATTACK_RESOURCE_SLOT, config->resource);
     BattleFeedback_LoadResource();
     *(u16 *)(gBattleContext + HAMMER_INPUT_FLAGS_OFFSET) = 0;
-    func_ov002_020722ac(actor, Overlay21Attack_Update);
+    BattleAttack_SetCallback(actor, Overlay21Attack_Update);
 }
 
 void Overlay21Attack_Update(BattlePartyActor *actor)
@@ -68,7 +68,7 @@ void Overlay21Attack_Update(BattlePartyActor *actor)
         break;
     case 2:
         if (BattleFeedback_IsEffectComplete()) {
-            func_ov002_020722ac(actor, 0);
+            BattleAttack_SetCallback(actor, 0);
             data_ov002_020c0710 = 0;
             *(u16 *)(gBattleContext + HAMMER_INPUT_FLAGS_OFFSET) = 0;
         }

@@ -1613,3 +1613,9 @@ stops enabled playback without clearing delayed requests. Both are byte-exact;
 [replay evidence](RECONSTRUCTION_NOTES.md#reward-model-cleanup-and-rumble-stop)
 distinguishes real alternate-model cleanup from isolated primary-model and
 enabled-rumble call-contract checks.
+
+
+[Compact battle helpers](RECONSTRUCTION_NOTES.md#battle-callback-and-compact-render-helpers)
+now cover attack callback installation, packed OAM transform initialization
+and forwarding a particle through the saved-state primary-model renderer.
+The latter renderer remains native; the wrapper is reconstructed.

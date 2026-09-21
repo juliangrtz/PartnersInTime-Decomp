@@ -21,7 +21,7 @@ typedef char CopyFlowerAttackWorkSize[sizeof(CopyFlowerAttackWork) == 16356 ? 1 
 extern "C" {
 extern u8 *gBattleContext;
 void func_ov017_020c58cc(Overlay17Participant *);
-void func_ov002_020722ac(BattlePartyActor *, void (*)(BattlePartyActor *));
+void BattleAttack_SetCallback(BattlePartyActor *, void (*)(BattlePartyActor *));
 
 void CopyFlowerAttack_Update(BattlePartyActor *actor)
 {
@@ -78,7 +78,7 @@ void CopyFlowerAttack_Update(BattlePartyActor *actor)
                 ++i;
             } while (i < 8);
         }
-        func_ov002_020722ac(actor, 0);
+        BattleAttack_SetCallback(actor, 0);
         data_ov002_020c0710 = 0;
         break;
     }

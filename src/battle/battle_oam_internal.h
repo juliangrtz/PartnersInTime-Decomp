@@ -4,9 +4,14 @@
 #include <game/battle_callback_model.h>
 #include <game/sprite_output.h>
 typedef struct BattleOamTransform {
-    s16 scale_x, scale_y;
-    u16 rotation;
-    s8 offset_x, offset_y;
+    union {
+        struct { s16 scale_x, scale_y; };
+        u32 scale_pair;
+    };
+    union {
+        struct { u16 rotation; s8 offset_x, offset_y; };
+        u32 rotation_offsets;
+    };
     u32 flags;
 } BattleOamTransform;
 typedef struct BattleNumberDisplay {
@@ -35,5 +40,6 @@ void func_ov002_0206acbc(GameOamEntry *, u8 *, u8 *, const GameOamEntry *, u8, s
 void BattleOam_DrawNumber(GameOamEntry *, u8 *, u8 *, int, int, int, int, BattleOamTransform *);
 void BattleNumberModel_Draw(BattleModel *, void *, u8 *, u8 *);
 void BattleCachedOamModel_Draw(BattleModel *, void *, u8 *, u8 *);
+void BattleOam_InitializeTransforms(BattleOamTransform *transforms, int count);
 
 #endif

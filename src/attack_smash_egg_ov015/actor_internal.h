@@ -54,7 +54,7 @@ void Overlay15Attack_ResolvePairHit(Overlay15AttackModelController *state,
     Overlay15AttackModelController *other, Overlay15AttackObjectPairState *pair);
 void func_ov015_020c31dc(Overlay15AttackObjectPairState *pair);
 void Overlay15Attack_UpdateSequence(BattlePartyActor *actor);
-void func_ov002_020722ac(BattlePartyActor *actor,
+void BattleAttack_SetCallback(BattlePartyActor *actor,
     void (*callback)(BattlePartyActor *));
 
 /* Interleaved X/Y offsets; each actor's entry occupies two bytes. */

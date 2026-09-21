@@ -94,7 +94,7 @@ void Overlay15Attack_UpdateSequence(BattlePartyActor *actor)
         Overlay15Attack_HideAttackObjects(&context->pair);
         BattleSceneObject_SetAnimation(BattleSceneObject_GetById(43), -1, -1);
         BattleSceneObject_SetAnimation(BattleSceneObject_GetById(47), -1, -1);
-        func_ov002_020722ac(actor, 0);
+        BattleAttack_SetCallback(actor, 0);
         data_ov002_020c0710 = 0;
         break;
     }

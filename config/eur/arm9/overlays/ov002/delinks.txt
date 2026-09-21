@@ -567,3 +567,13 @@ src/battle/battle_rumble.c:
 
 src/battle/battle_reward_model_cleanup.cpp:
     .text start:0x02065d40 end:0x02065dfc
+
+
+src/battle/battle_oam_transform_init.c:
+    .text start:0x0206b08c end:0x0206b0c0
+
+src/battle/battle_impact_saved_primary.c:
+    .text start:0x0206b5c0 end:0x0206b5f0
+
+src/battle/battle_attack_callback.c:
+    .text start:0x020722ac end:0x020722d8

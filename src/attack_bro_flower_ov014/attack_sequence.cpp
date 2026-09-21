@@ -57,7 +57,7 @@ void Overlay14Attack_UpdateEntry(Overlay10ActionActor *user)
             work->participants[1].flags.flag1 = 1;
             Overlay14Attack_LaunchAtTarget(&work->attack, (Overlay14AttackTargetReference *)work->active);
             work->common.phase = 0;
-            func_ov002_020722ac(user, Overlay14Attack_UpdateSequence);
+            BattleAttack_SetCallback(user, Overlay14Attack_UpdateSequence);
         }
         break;
     }
@@ -148,7 +148,7 @@ void Overlay14Attack_UpdateSequence(Overlay10ActionActor *user)
             Overlay14Projectile_ReleaseModel(&work->projectiles[i].object);
         Overlay14Attack_Stop(&work->attack);
         Overlay14Attack_ReleaseEnemyEffects();
-        func_ov002_020722ac(user, 0);
+        BattleAttack_SetCallback(user, 0);
         data_ov002_020c0710 = 0;
         return;
     }

@@ -36,7 +36,7 @@ void Overlay20Attack_Create(BattlePartyActor *actor)
     }
     BattleFeedback_LoadResource();
     *(u16 *)(gBattleContext + 0xcb80) = 0;
-    func_ov002_020722ac(actor, Overlay20Attack_Update);
+    BattleAttack_SetCallback(actor, Overlay20Attack_Update);
 }
 
 void Overlay20Attack_Update(BattlePartyActor *actor)
@@ -59,7 +59,7 @@ void Overlay20Attack_Update(BattlePartyActor *actor)
             work->phase = 3;
         break;
     case 3:
-        func_ov002_020722ac(actor, 0);
+        BattleAttack_SetCallback(actor, 0);
         data_ov002_020c0710 = 0;
         *(u16 *)(gBattleContext + 0xcb80) = 0;
         break;

@@ -12,7 +12,7 @@ extern "C" {
 int Overlay10Enemy_SelectReactionTarget(void);
 void func_ov018_020c3298(int, int);
 void PocketChompAttack_Update(BattlePartyActor *);
-void func_ov002_020722ac(BattlePartyActor *, void (*)(BattlePartyActor *));
+void BattleAttack_SetCallback(BattlePartyActor *, void (*)(BattlePartyActor *));
 int func_ov018_020c2dfc(void);
 
 void PocketChompAttack_UpdateEntry(BattlePartyActor *user)
@@ -43,7 +43,7 @@ void PocketChompAttack_UpdateEntry(BattlePartyActor *user)
             work->target_id = Overlay10Enemy_SelectReactionTarget();
             func_ov018_020c3298(0, 0);
             work->phase = 0;
-            func_ov002_020722ac(user, PocketChompAttack_Update);
+            BattleAttack_SetCallback(user, PocketChompAttack_Update);
         }
         break;
     }
@@ -98,7 +98,7 @@ void PocketChompAttack_Update(BattlePartyActor *user)
                 PocketChompSupport_ClearAnchor(support);
             }
             PocketChomp_Hide(&work->center);
-            func_ov002_020722ac(user, 0);
+            BattleAttack_SetCallback(user, 0);
             /* Detach the active workspace; this callback does not free it. */
             data_ov002_020c0710 = 0;
         }

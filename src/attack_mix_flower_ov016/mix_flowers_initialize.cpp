@@ -9,7 +9,7 @@ extern int data_ov016_020c72cc;
 extern u32 data_ov016_020c72f0[][2], data_ov016_020c72f4[][2];
 int Overlay10Party_HasBadgeTwo();
 void func_ov016_020c6ae8(BattlePartyActor *);
-void func_ov002_020722ac(BattlePartyActor *, void (*)(BattlePartyActor *));
+void BattleAttack_SetCallback(BattlePartyActor *, void (*)(BattlePartyActor *));
 void Overlay16Attack_Initialize(BattlePartyActor *user)
 {
     Overlay16AttackWork *work = (Overlay16AttackWork *)Overlay10Attack_CreateWork(
@@ -106,6 +106,6 @@ void Overlay16Attack_Initialize(BattlePartyActor *user)
     work->entry_offset_x = work->center_x - 128;
     Overlay16PairController_Initialize(&work->controller, work->center_x, work->center_y);
     Overlay16LinkedObject_Initialize(&work->linked);
-    func_ov002_020722ac(user, func_ov016_020c6ae8);
+    BattleAttack_SetCallback(user, func_ov016_020c6ae8);
 }
 }

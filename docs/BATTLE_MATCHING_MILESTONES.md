@@ -10689,3 +10689,20 @@ Private evidence: `build/runtime/eur_high_reward_cleanup/`
 `build/runtime/eur_high_battle_rumble/stop55_v1.json`. Full build, golden ROM,
 zero native differences and 107 tests pass; all seven affected compiled
 functions match. See the reconstruction reference for scope and provenance.
+
+
+### Battle callback, OAM transform and saved-render helpers
+
+Three first-draft matches add 144 C bytes: attack callback installation with
+timer/flag reset, packed OAM transform initialization preserving flags, and
+primary-model forwarding to the saved-state particle renderer. The renderer
+itself remains native. Linked coverage is 853,864 / 1,563,700 (54.61%).
+
+A normal Bro Flower route checks four callback changes, twelve ordered writes
+and 96 renderer-wrapper calls, with no RAM edits. Five separately controlled
+initializer calls cover counts -1, 0, 1, 2 and 4, verify fourteen writes and
+restore all fixtures before the original battle update. Full build, golden
+ROM, zero native differences and 107 tests pass; all 104 saves are unchanged.
+Private evidence: `build/runtime/eur_high_battle_small_controls/flower83_v2.json`
+and `init55_v1.json`. The first flower probe failed on the host register alias
+`ip`; v2 uses `r12`. Its failed report and source are retained.

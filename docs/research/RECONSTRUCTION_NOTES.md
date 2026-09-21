@@ -8202,3 +8202,56 @@ and `build/runtime/eur_high_battle_rumble/stop55_v1.json`. Producers are
 `battle_reward_cleanup_oracle.py`, `probe_battle_reward_cleanup.py`,
 `probe_battle_rumble_stop.py` and `check_battle_cleanup_isolated.py` under
 `build/analysis/high_effort_50_to_55/`. The failed oracle is preserved as v1.
+
+
+## Battle callback and compact render helpers
+
+[Attack callback installation](../../src/battle/battle_attack_callback.c) at
+overlay 2 `0x020722AC..0x020722D8` clears the attack-work timer at +0 and
+bit 0 of its flag byte at +16, then stores the callback at actor +120. It
+does not immediately invoke the callback. Attack-specific allocations share
+that prefix; later layouts remain separate.
+
+[OAM transform initialization](../../src/battle/battle_oam_transform_init.c)
+at `0x0206B08C..0x0206B0C0` traverses count twelve-byte entries, writes both
+Q8 scales as one and zeros rotation/offsets. It preserves the flags word at +8;
+a nonpositive count writes nothing. The shared transform exposes these packed
+words through unions without changing its layout.
+
+[Saved-primary rendering](../../src/battle/battle_impact_saved_primary.c) at
+`0x0206B5C0..0x0206B5F0` forwards the particle, its object's primary model and
+three sign-extended halfword coordinates to `BattleImpactParticle_RenderSavedModel`
+at `0x0206B0C0`. That 1,280-byte renderer remains native and contributes no
+new C/C++ coverage. A private draft shares much of the existing impact renderer,
+but differs in coordinate conversion and register allocation; it is deferred.
+Its native fifth argument is read as a full word, unlike the tested narrow-
+parameter draft's halfword load.
+
+The Bro Flower replay uses the Save 83 battle-menu state with SHA-1
+`21d2e64a24b389689627292539103880c6761b47` and ordinary recorded inputs.
+Across 2,790 frames it verifies four callback installations (three nonnull,
+one null), twelve ordered stores and 96 wrapper/helper calls. Callback checks
+cover the full 13,724-byte attack allocation and 401,416-byte battle context.
+Wrapper checks cover the 36-byte particle task, 260-byte scene object, root,
+primary-model selection and signed coordinates. The real renderer executes,
+but its model/global/graphics effects are observational. SP and r4-r11 are
+checked at return. The attack work is released and the battle menu is visible
+at the end; no RAM edits are used. Failed v1 used unsupported host alias `ip`;
+corrected v2 uses `r12` and passes with unchanged game code.
+
+A separate 400-frame Save 55 replay makes five controlled initializer calls
+with counts -1, 0, 1, 2 and 4. Synthetic transform entries temporarily occupy
+four slots within the live common workspace. Fourteen ordered stores, unchanged
+flag words (including nonzero sentinels), full 70,976-byte workspace, root,
+28-byte rumble controls and ABI are checked. Fixture/decoded-stack/register
+state is restored before each original common-frame call, and all five finish.
+This tests initialization in the emulator, not a natural allocation route or
+rendering those fixture entries. Final captures from both routes were inspected.
+All 104 original saves remain unchanged. No isolated replay is claimed.
+
+Reports: `build/runtime/eur_high_battle_small_controls/flower83_v1.json` (failed),
+`flower83_v2.json` and `init55_v1.json` (passed). Producers under
+`build/analysis/high_effort_50_to_55/`: `probe_battle_small_controls.py`
+and `probe_oam_transform_init.py`. Full verification passes 107 tests, the
+golden ROM and zero native differences; selected actual source objects are
+compared separately in `battle_small_controls_actual.txt`.

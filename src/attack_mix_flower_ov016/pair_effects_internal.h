@@ -90,7 +90,7 @@ extern "C" {
 extern Overlay16AttackWork *data_ov002_020c0710;
 extern u8 *gBattleContext;
 extern int data_ov016_020c7400[][2];
-void func_ov002_0206b5c0(BattleImpactParticlePayload *);
+void BattleImpactParticle_RenderSavedPrimary(BattleImpactParticlePayload *);
 void Overlay16Attack_UpdateEntryObject(Overlay16AttackObjectState *state);
 void Overlay16Particle_UpdateShrink(BattleAITask *task);
 void Overlay16LinkedObject_Update(Overlay16LinkedObject *state);

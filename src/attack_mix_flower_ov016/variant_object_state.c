@@ -146,7 +146,7 @@ void Overlay16Particle_UpdateShrink(BattleAITask *task)
             particle->render_bits.size = size;
             particle->scale_x = scale;
             particle->scale_y = scale;
-            func_ov002_0206b5c0(particle);
+            BattleImpactParticle_RenderSavedPrimary(particle);
         }
     }
 }
