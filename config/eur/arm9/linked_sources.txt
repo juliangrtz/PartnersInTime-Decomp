@@ -1019,3 +1019,4 @@ src/battle/battle_oam_transform_init.c
 src/battle/battle_impact_saved_primary.c
 src/battle/battle_attack_callback.c
 src/msl/unwind.c
+src/msl/type_info.c

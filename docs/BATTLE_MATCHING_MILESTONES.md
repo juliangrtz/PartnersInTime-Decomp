@@ -10742,3 +10742,15 @@ the actual binary-search selection. No game-code change was needed.
 All 104 original saves remain unchanged. These checks do not claim a natural
 game exception or destructor dispatch. See the
 [MSL evidence](research/RECONSTRUCTION_NOTES.md#msl-exception-frame-records).
+
+
+## MSL RTTI destruction
+
+Reconstructed the eight type-info destructor entries as matching C, including
+base, complete and deleting variants. Added 264 linked bytes; total 855296 of
+1563700 (54.70%). All actual functions match; full verification passes 107
+tests, the golden ROM and zero native differences. Controlled live checks pass
+29 calls/168 ordered stores, with full restoration before 29 original updates;
+384 isolated ARM946 cases pass with 1332 ordered stores and real heap helpers.
+These fixtures do not establish natural exception dispatch. All 104 saves are
+unchanged. See [RTTI evidence](research/RECONSTRUCTION_NOTES.md#msl-rtti-destruction).

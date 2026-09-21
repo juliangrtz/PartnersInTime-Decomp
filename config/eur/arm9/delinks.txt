@@ -582,3 +582,6 @@ src/game/save_storage_initialize.cpp:
 
 src/msl/unwind.c:
     .text start:0x02046e5c end:0x02046fc0
+
+src/msl/type_info.c:
+    .text start:0x02048be0 end:0x02048ce8

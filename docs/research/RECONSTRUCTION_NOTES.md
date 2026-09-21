@@ -8366,3 +8366,41 @@ Private reports are `build/runtime/eur_high_msl_unwind/live55_v1.json`,
 `live55_v2.json` and `isolated_v2.json`. Producers under
 `build/analysis/high_effort_50_to_55/` are `msl_unwind_oracle.py`,
 `probe_msl_unwind.py` and `check_msl_unwind_isolated.py`.
+
+
+## MSL RTTI destruction
+
+[RTTI destructors](../../src/msl/type_info.c) cover the eight resident entry
+points at `0x02048BE0..0x02048CE8`. Native RTTI names establish `type_info`,
+`__class_type_info` and `__si_class_type_info`. Their vtables remain native data
+at `0x02059ED4`, `0x02059EF4` and `0x02059EE4`. Base and complete destructors
+remain separate ABI entries; deleting variants additionally call
+`GameHeap_Delete`. Every entry returns the original pointer, including deleting
+variants, which perform no object reads after release. The shared prefix is
+eight bytes; single-inheritance descriptors add a four-byte base-type pointer.
+
+Controlled DeSmuME calls use the Save 55 checkpoint with SHA-1
+`496c6a6836f08c15e95655bb5d78c4cde65dc688`. A temporary, valid four-block heap
+in the common workspace tests all combinations of free predecessor/successor
+and two heap cursor positions. All eight entries and the real Delete/Free/Merge
+helpers execute: 29 controlled calls, 168 ordered writes and 29 completed
+original common updates across 400 frames. Checks include helper arguments,
+returns, ABI, all 70,976 common bytes, the 512-byte heap table, root and RTTI
+data. The original workspace, heap table, root, 256-byte stack window and
+registers are restored before each original update. Released storage is checked
+as allocator state, not as a live object. The final Gritzy Caves menu was viewed.
+
+The isolated ARM946 replay uses copied live RAM/DTCM and 128 KiB scratch.
+Its 384 cases combine eight entries, four free-neighbor patterns, four cursor
+positions and heap IDs 0, 1 and 31. All compiled target bytes and real helpers
+are guarded; no helpers are stubbed. The checks cover 1,332 ordered writes,
+full memory outside the bounded CPU stack, returned pointers and callee-saved
+registers. Heap 1's distinct cursor update is included. These are controlled
+routine checks, not evidence of naturally allocated RTTI objects, exception
+dispatch or asynchronous heap operations. All 104 original saves are unchanged.
+
+Full verification passes 107 tests, the golden ROM and zero native differences;
+all eight actual source functions match. Private reports are
+`build/runtime/eur_high_msl_type_info/live55_v1.json` and `isolated_v1.json`;
+their producers are `probe_msl_type_info.py`, `msl_type_info_oracle.py` and
+`check_msl_type_info_isolated.py` under `build/analysis/high_effort_50_to_55/`.
