@@ -8040,3 +8040,51 @@ differences and 107 tests pass. All 104 original saves are unchanged. Private
 reports: `build/runtime/eur_high_battle_wait/controlled83_v1.json` and
 `isolated_v2.json`; producers `probe_battle_wait_controlled.py` and
 `check_battle_wait_isolated.py` in `build/analysis/high_effort_50_to_55/`.
+
+
+## Time-hole arrival participants
+
+[FieldSystem_PrepareTimeHoleArrival](../../src/field/field_time_hole_arrival.cpp)
+covers `0x02069B24..0x02069D38` (532 bytes). The field VM passes four writable
+32-bit entity indices, an anchor index and four arrival directions. A missing
+index is -1. Baby entities in movement mode 6 are excluded by writing -1 back
+into the caller's argument array; the old declaration incorrectly marked that
+array const. The function saves behavior, disables visibility and updates,
+places accepted participants at the anchor and records their angle/radius.
+Party resource setup is called only for entity subtypes 0/1.
+
+The shared 292-byte time-hole state now exposes the participant mask at bits
+14..17, four direction bytes at +4, four signed index bytes at +20, four angle
+halfwords at +36 and four Q12 radii at +44. Departure and tunnel modes reuse
+this storage, so the previous opaque views remain available. Each squared
+coordinate is rounded and shifted separately before their sum reaches FX_Sqrt.
+The initial private C++ candidate and actual integrated object both match fully;
+no inline assembly is needed.
+
+Twelve controlled native calls on the Save 83 field state cover missing indices
+and excluded-baby masks, using two live anchors. The real 104-byte preparation
+helper is independently checked, including its complete 292-byte reset, anchor
+index and coordinates. All 88 own stores, full live system (952), main area
+(11,216), manager (16,764), anchor/baby records (1,440 each), argument scratch,
+SP and r4-r11 are checked. All inputs and induced changes, borrowed argument
+storage, decoded VM stack and registers are restored before each original VM
+call completes. The final field capture was inspected. This route does not
+exercise an accepted participant's renderer or a natural time-hole transition.
+
+Another 384 isolated ARM946 cases exercise every four-slot participation mask,
+baby movement modes 0/6, saved behavior modes 0/3/7, two anchors and two coordinate
+and direction patterns. These execute the actual arrival function and real
+preparation, behavior, position and facing helpers. They check 7,104 own stores
+and 8,928 stores from those helpers, full RAM/DTCM/scratch outside the measured
+stack, all call arguments, SP and r4-r11. Memory clearing is modeled; party
+resource setup, renderer refresh and two virtual callbacks use no-effect stubs.
+The atan/sqrt stubs assert the known-axis inputs (65,536, 0) and 1,048,576 and
+return 16,384 and 65,536. SDK math internals, graphics, hardware and live resource
+lifetimes are not established by these isolated cases.
+
+Golden ROM, zero native differences and 107 tests pass. Arrival, preparation,
+activity helpers and the field VM's actual objects match. All 104 original saves
+are unchanged. Private reports: `build/runtime/eur_high_time_hole_arrival/`:
+`controlled83_v1.json` and `isolated_v1.json`. Producers in
+`build/analysis/high_effort_50_to_55/`: `probe_time_hole_arrival_controlled.py`
+and `check_time_hole_arrival_isolated.py`.

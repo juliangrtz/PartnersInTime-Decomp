@@ -10637,3 +10637,16 @@ remain outside this isolated coverage.
   three explicit helper stubs. No natural encounter/helper-internals claim.
 - Evidence: [battle entry gates](research/RECONSTRUCTION_NOTES.md#battle-entry-wait-gates).
   Private reports: build/runtime/eur_high_battle_wait/{controlled83_v1,isolated_v2}.json.
+
+
+### Time-hole arrival participants
+
+- Linked FieldSystem_PrepareTimeHoleArrival (532 bytes of C++). Total: 853,012 /
+  1,563,700 matching C/C++ bytes (54.55%). No inline ASM.
+- Actual arrival/preparation/activity/VM objects match; golden ROM, zero native
+  differences and 107 tests pass. All 104 original saves unchanged.
+- Twelve controlled live calls check 88 own stores and complete state restoration.
+  Accepted participants are covered separately in 384 isolated cases with four
+  real helpers and explicitly documented resource/renderer/math stubs.
+- Evidence: [arrival participants](research/RECONSTRUCTION_NOTES.md#time-hole-arrival-participants).
+  Private reports: build/runtime/eur_high_time_hole_arrival/{controlled83_v1,isolated_v1}.json.

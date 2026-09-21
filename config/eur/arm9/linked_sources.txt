@@ -1013,3 +1013,4 @@ src/battle/battle_model_aux_properties.cpp
 src/battle/battle_attached_properties.cpp
 
 src/field/field_battle_transition.cpp
+src/field/field_time_hole_arrival.cpp

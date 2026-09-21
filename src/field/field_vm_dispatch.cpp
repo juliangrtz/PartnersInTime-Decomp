@@ -97,10 +97,7 @@ extern void func_ov000_02069d38(
     int destination_room_id, int arrival_script_id,
     int paired_arrival_script_id, int legacy_parameter,
     int travel_direction, int transit_room_id);
-extern void func_ov000_02069b24(void *field_system,
-                                const s32 *entity_selectors,
-                                int anchor_entity,
-                                const s32 *arrival_directions);
+
 extern void func_ov000_02069284(
     void *field_system, const s32 *entity_selectors, int anchor_entity,
     int destination_room_id, int argument_4, int argument_5,
@@ -3075,8 +3072,8 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_PREPARE_TIME_HOLE_ARRIVAL:
-        func_ov000_02069b24(
-            *(void **)(field_context + FIELD_VM_FIELD_SYSTEM_OFFSET),
+        FieldSystem_PrepareTimeHoleArrival(
+            *(FieldSystem **)(field_context + FIELD_VM_FIELD_SYSTEM_OFFSET),
             arguments, arguments[4],
             &arguments[5]);
         FieldArea_ApplyQueuedMusic((FieldAreaContext *)field_context);
