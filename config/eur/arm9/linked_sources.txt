@@ -986,3 +986,5 @@ src/field/field_party_separation.c
 src/field/field_region_scripts.cpp
 
 src/field/field_area_render_snapshots.cpp
+
+src/title_ov006/credits_text_strip.c

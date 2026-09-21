@@ -42,7 +42,10 @@ typedef struct CreditsResourceEntry {
 typedef struct CreditsWorkspace {
     s32 draw_depth;
     u32 polygon_id;
-    u8 unknown_08[16];
+    union {
+        u8 unknown_08[16];
+        struct { u8 unknown_08_0f[8]; s32 text_scroll_speed; u32 unknown_14; };
+    };
     s32 background_variant;
     int layout, variant, screen, active;
     u32 unknown_2c;

@@ -9924,3 +9924,42 @@ The actual linked object matches all 120 bytes. Full verification passes 107 tes
 reproduces the golden EUR ROM and reports zero native relink differences. All 104
 original saves remain unchanged. The separate paired-room-change candidate remains
 private with eight register/scheduling differences and contributes no progress.
+
+
+## Credits text-strip scrolling and scaling (2026-09-21)
+
+`CreditsTextStrip_Update` reconstructs overlay 6 range `0x02078F04..0x02079158`
+as matching C without inline assembly. Each pooled strip scrolls across the two
+screens, waits for staggered scale ramps, restores ordinary sprite mode when both
+ramps finish, then shrinks and marks itself for removal above the upper edge.
+The shared sprite and credits-workspace layouts retain their raw views alongside
+named mode and scroll-speed fields. This adds 596 bytes, bringing linked matching
+C/C++ to 842348 / 1563700 (53.8689%).
+
+Private `eur_high_credits_text_strip/evidence_credits86_v1.json` passes a 6000-frame
+controlled credits replay from checkpoint 86. One decoded credits-request command
+is restored in full at the guarded request helper before transition; this is not
+ordinary story completion. The run checks 394038 strip updates, 12838 affine
+updates, 376389 draw-list submissions and 412 removal marks. Both screen variants
+execute. Every call checks the full 72-byte task, 64-byte sprite and 52-byte
+workspace prefix, plus touched pool, free/taken link, draw node, list and previous
+tail records. Ordered native helper arguments, results, intermediate records and
+preserved registers match independent expectations. Removal marks do not prove
+later pool release. Captures at frames 1500 and 6000 were visually inspected;
+VRAM, palettes and OAM are retained as observations, without a pixel oracle.
+
+Private `isolated_v1.json` passes 352 ARM946 cases on copied live RAM with synthetic
+tasks, sprites and draw-pool records. Cases straddle the removal, screen-seam,
+entry-limit and fade thresholds, exercise all four mode values, both screen
+variants, delayed and clamped ramps, negative scale values, 32-bit wrapping and
+empty/nonempty draw-list tails. Native helpers execute without stubs or modeled
+I/O. Full RAM and scratch, DTCM outside the observed stack, ordered helper
+boundaries and preserved registers are checked. Allocation lifetime and
+asynchronous IRQ behavior remain outside scope.
+
+The actual source object matches the complete 596-byte native range, including
+its literal pool. Full verification passes 107 tests, reproduces the golden EUR
+ROM and reports zero native relink differences. All 104 original saves are
+unchanged. An initial formatting edit split equality operators and failed the
+build; its corrected version passes the complete gate. Separate pause-row and
+credits-particle drafts remain private and differing, with no progress counted.

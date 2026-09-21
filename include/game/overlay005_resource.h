@@ -21,7 +21,10 @@ typedef struct Overlay5ObjectSprite {
             u8 unknown_11[3];
         };
     };
-    u32 attributes_0;
+    union {
+        u32 attributes_0;
+        struct { u32 unknown_00_07 : 8, mode : 2, unknown_10_31 : 22; } attributes_0_bits;
+    };
     union {
         u32 attributes_1;
         struct {

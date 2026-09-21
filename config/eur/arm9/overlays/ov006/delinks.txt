@@ -134,3 +134,6 @@ src/title_ov006/credits_textured_quad.c:
 
 src/title_ov006/title_model_resources_load.cpp:
     .text start:0x0206b9ec end:0x0206bd9c
+
+src/title_ov006/credits_text_strip.c:
+    .text start:0x02078f04 end:0x02079158
