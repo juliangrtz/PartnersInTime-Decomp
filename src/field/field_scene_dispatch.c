@@ -15,7 +15,7 @@ int FieldSystem_UpdateSceneTransition(FieldSystem *system) {
         }
         break;
     case 2:
-        func_ov000_0206b1fc(system);
+        FieldSystem_PrepareBattleScene(system);
         system->task.status = 3;
         system->scene_transition.phase = 0;
         return 1;

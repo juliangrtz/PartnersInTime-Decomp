@@ -7949,3 +7949,45 @@ reports are `build/runtime/eur_high_party_prepare/controlled83_v1.json`,
 `isolated_v1.json` and `discovery_ball83_v2/evidence.json`. Producers are
 `probe_party_prepare_controlled.py` and `check_party_prepare_isolated.py` in
 `build/analysis/high_effort_50_to_55/`; discovery uses `tools/runtime_probe.py`.
+
+
+## Field handoff to battle
+
+[FieldSystem_PrepareBattleScene](../../src/field/field_battle_handoff.cpp) owns
+`0x0206B1FC..0x0206B3A0` (420 bytes). Before releasing the field, it saves each
+screen's three background scroll coordinates: six signed halfwords at save
++0x564 for X and six at +0x570 for Y. Values use arithmetic Q8 shifting followed
+by halfword truncation. These extend the checked save prefix to 1,404 bytes;
+the earlier 1,380-byte transfer view is not an allocation-size claim.
+
+The airborne-entry bit (FieldSystem +0x258, bit 4) requests trail-copy stopping.
+Preparation mode 1 ends the selected member's hammer swing; modes 2/3/5/6 reset
+the party's action state. Common field teardown then runs. Finally, two separate
+stores set the persistent transition fields to 23 and 46 while preserving
+the flags published by that helper. The disassembly is authoritative here:
+pseudocode collapses these two stores into one expression.
+
+A 706-frame Save 55 replay reaches the battle command menu using the established
+room-306 scripted encounter command fixture; command bytes and script cursor
+are restored at encounter setup. One handoff checks all 14 own stores and the
+teardown call, full live system/areas/backgrounds/party records and save prefix
+before teardown, plus SP/r4-r11. The teardown's allocations, copies, releases
+and graphics effects are observational. Old object records are retired across
+that call; the save prefix remains checked, and persistent state is captured
+at helper return before independently checking the two final stores. This
+route executes preparation mode 0 and does not cover optional party helpers.
+
+Another 264 isolated ARM946 cases check formations -1/0/1, both member indices,
+airborne-entry selection, every preparation branch and signed/default values.
+Two scroll patterns include signed 32-bit extremes, negative Q8 boundaries and
+halfword truncation. All 3,696 own stores, call arguments, complete RAM/DTCM,
+synthetic records and surrounding scratch memory are checked. Four helpers are
+stubbed; the teardown stub supplies two distinct persistent-state patterns to
+verify the caller preserves the newly returned flags. Helper internals, live
+lifetimes and hardware behavior are not established by these isolated cases.
+
+Actual handoff, party-preparation and dispatcher objects match. Golden ROM,
+zero native differences and 107 tests pass; all 104 original saves are unchanged.
+Private evidence: `build/runtime/eur_high_battle_handoff/{entry55_v1,isolated_v1}.json`.
+Producers: `probe_battle_handoff.py` and `check_battle_handoff_isolated.py` under
+`build/analysis/high_effort_50_to_55/`. The final battle capture was inspected.

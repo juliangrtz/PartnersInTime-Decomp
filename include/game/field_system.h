@@ -54,7 +54,7 @@ typedef struct FieldSystem {
             union {
                 u8 unknown_258[16];
                 struct {
-                    u16 unknown_00_05 : 6;
+                    u16 unknown_00_03 : 4, airborne_entry : 1, unknown_05 : 1;
                     s16 party_preparation : 5;
                     u16 unknown_11_15 : 5;
                 } battle_transition;

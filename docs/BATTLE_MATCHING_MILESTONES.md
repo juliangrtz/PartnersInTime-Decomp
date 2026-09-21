@@ -10609,3 +10609,17 @@ remain outside this isolated coverage.
   reach the wrapper; no natural encounter or live special-action coverage claim.
 - Evidence: [party preparation](research/RECONSTRUCTION_NOTES.md#party-preparation-for-battle-entry).
   Private reports: build/runtime/eur_high_party_prepare/{controlled83_v1,isolated_v1}.json.
+
+
+### Field handoff to battle
+
+- Linked FieldSystem_PrepareBattleScene (420 bytes of C++). Total: 851,268 /
+  1,563,700 matching C/C++ bytes (54.44%). No inline ASM.
+- Actual affected objects match; golden ROM, zero native differences, 107 tests.
+- Controlled encounter replay reaches battle: all 12 scroll saves and two
+  persistent-flag stores checked. Common teardown internals remain observational;
+  released field records are not inspected afterward as live allocations.
+- 264 isolated cases check 3,696 stores, signed scroll conversion, party helper
+  selection and flags after a modeled teardown. Four helper stubs are disclosed.
+- Evidence: [field handoff](research/RECONSTRUCTION_NOTES.md#field-handoff-to-battle).
+  Private reports: build/runtime/eur_high_battle_handoff/{entry55_v1,isolated_v1}.json.
