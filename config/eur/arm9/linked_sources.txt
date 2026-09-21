@@ -1024,3 +1024,4 @@ src/msl/catch_record.c
 src/msl/exception_spec.c
 src/msl/active_catch.cpp
 src/battle/battle_trail_draw.cpp
+src/battle/battle_wheel_actor.c

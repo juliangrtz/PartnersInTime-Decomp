@@ -8535,3 +8535,42 @@ zero native differences. Private evidence is
 `build/runtime/eur_high_battle_trail_draw/live55_v4.json`, produced by
 `build/analysis/high_effort_50_to_55/probe_battle_trail_draw.py`; v1/v2 failures
 and the successful v3 source/report remain separate.
+
+
+## Command wheel actor mapping
+
+[Actor mapping](../../src/battle/battle_wheel_actor.c) reconstructs overlay 2's
+`0x0209A580..0x0209A768`. It reads the selected entry's signed 15-bit icon ID,
+ignoring the dismiss bit. Icons 13/14 through 19/20 select adults or babies
+according to the two adult slots' formation indices; 21/22 select Mario.
+Nonzero `enabled_only` excludes the even icons. Icon 11 returns zero, while
+unsupported entries return -1. The two switches preserve native branch order.
+Call sites are `0x02083A08`, `0x02083BF4`, `0x0209A408`, `0x0209A490`,
+`0x0209A4FC` and `0x0209A558`.
+
+The first draft differed in eight words: four conditionally selected return
+pairs were emitted in the opposite order. Expressing those conditions in the
+native order produces an exact 488-byte function without ASM. The integrated
+source object also matches. The first full gate caught a missing opening module
+comment; the corrected source passes all 107 tests, golden-ROM packaging and
+zero-difference native relinking.
+
+The Save 55 checkpoint (`496c6a6836f08c15e95655bb5d78c4cde65dc688`) supplies
+live initialized party state. Across 500 frames, 216 controlled calls cover
+18 icon values, both dismiss-bit values, three mode values and two formation
+pairs, rotating through all five entry indices. Signed icon extremes, defaults
+and all actor pairs are included. An independent arithmetic mapping checks
+each result; all 432 real party lookups execute with checked arguments and
+returns. The full context allocation, its root, the two embedded 148-byte party
+slots and preserved registers remain unchanged by each call. Fixtures and the
+256-byte CPU stack window are restored before all 216 original common updates.
+The final Gritzy Caves command menu was viewed; all 104 original saves remain
+unchanged. This is controlled live coverage, not natural target-menu navigation.
+
+The first probe incorrectly expected separate party allocations and stopped
+before injecting any call. The initializer and shared frame layout establish
+embedded slots at context `+0x4DA8`, stride 148. The corrected v2 probe checks
+those exact relationships and the containing allocation bounds. Private evidence
+is `build/runtime/eur_high_battle_wheel_actor/live55_v2.json`, produced by
+`build/analysis/high_effort_50_to_55/probe_battle_wheel_actor.py`; the failed v1
+report and source are retained separately.

@@ -10785,3 +10785,12 @@ the golden ROM and zero native differences. Five controlled live cases execute
 ten real matrix translations and six renderer calls; GPU vertex submissions
 are observed and original state is restored. All 104 saves are unchanged.
 No natural trail activation or pixel oracle is claimed. See [trail evidence](research/RECONSTRUCTION_NOTES.md#battle-trail-model-copies).
+
+
+## Command wheel actor mapping
+
+The actor lookup adds 488 linked C bytes, reaching 856804 of 1563700
+(54.79%). Full verification passes 107 tests, the golden ROM and zero native
+differences. 216 controlled live cases execute 432 real party lookups and
+restore state before the original updates. All 104 saves are unchanged.
+See [actor mapping evidence](research/RECONSTRUCTION_NOTES.md#command-wheel-actor-mapping).

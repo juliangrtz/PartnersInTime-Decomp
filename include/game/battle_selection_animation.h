@@ -101,6 +101,8 @@ typedef char BattleTargetCursorState_SizeCheck[sizeof(BattleTargetCursorState) =
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* Returns 0 for icon 11 and -1 when no actor entry applies. */
+int BattleCommandWheel_GetEntryActor(int entry_index, int enabled_only);
 int BattleCommandWheel_TriggerEntryBounce(int dismiss_after_bounce);
 int BattleTargetCursor_TriggerBounce(void);
 void BattleTargetCursor_Update(BattleTargetCursorState *state);
