@@ -10007,3 +10007,34 @@ zero native relink differences. All 104 original saves remain unchanged. The
 first live probe stopped at frame 9515 because its register accessor did not map
 Capstone's `ip` name to `r12`; the corrected probe passes from the initial state.
 The game code required no change for that probe correction.
+
+
+## Title backdrop scrolling and wrap motion
+
+`TitleBackdrop_Update` adds overlay 6 range `0x02073DC0..0x02073E6C` to the existing
+backdrop module. Each of its four groups advances by its signed velocity and
+wraps to the group's final point after crossing the left boundary. Four explained
+single-instruction ASM additions preserve native table-relative pointers; plain
+C folds them into extra literal addresses. The entire 628-byte module, including
+its three previously linked functions, matches native code and pools. Only the
+new 172-byte updater is counted: 843744 / 1563700 matching C/C++ (53.9582%).
+
+Private `eur_high_title_backdrop_wrap/english83_v1.json` passes a 1783-frame
+cold boot with save 83 and no RAM fixtures. All 25 embedded backdrop slots are
+observed after initialization. There are 30775 independently checked updates,
+30795 ordered X writes and 20 wraps, covering all four groups. Checks include
+the whole 52-byte element, selected table, owner pointer and slot bounds,
+SP and preserved registers. Release entry retires all 25 slots from tracking;
+model destruction and heap release internals are not independently verified.
+Captures at frames 1501 and 1783 were visually inspected, showing the title and
+load menu. VRAM, palette and OAM captures remain observations, not a pixel oracle.
+
+Private `isolated_v1.json` passes 308 ARM946 cases on copied live RAM, covering
+four initialized groups, positive/negative/zero velocities, signed-halfword
+extremes, wrap-threshold neighbors and signed-word extremes. Full RAM/scratch,
+DTCM outside the eight-byte stack frame and ordered writes match expectations.
+Invalid, uninitialized group values are outside the native contract tested here.
+Full verification passes 107 tests, reproduces the golden EUR ROM and reports
+zero native relink differences; all 104 saves remain unchanged. Two initial
+builds failed the documentation-path test after a proposed module rename; the
+original path was restored and the complete verification gate rerun successfully.

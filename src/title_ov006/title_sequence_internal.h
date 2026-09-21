@@ -55,6 +55,7 @@ typedef char TitleBackdropPointSize[sizeof(TitleBackdropPoint) == 4 ? 1 : -1];
 #ifdef __cplusplus
 extern "C" {
 #endif
+void TitleBackdrop_Update(void *element);
 void TitleBackdrop_OnSkip(TitleBackdrop *work);
 void TitleBackdrop_Release(TitleBackdrop *work);
 void TitleBackdrop_InitAll(TitleBackdrop *work);

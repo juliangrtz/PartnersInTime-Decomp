@@ -100,7 +100,7 @@ src/title_ov006/title_rumble_update.c:
     .text start:0x02073580 end:0x0207380c
 
 src/title_ov006/title_backdrop_init.c:
-    .text start:0x02073bf8 end:0x02073dc0
+    .text start:0x02073bf8 end:0x02073e6c
 
 src/title_ov006/credits_fade.c:
     .text start:0x02075f94 end:0x020761c8

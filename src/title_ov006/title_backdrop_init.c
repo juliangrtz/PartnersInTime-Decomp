@@ -1,5 +1,5 @@
 /*
- * Title backdrop (overlay 6, 0x02073BF8-0x02073DC0).
+ * Title backdrop (overlay 6, 0x02073BF8-0x02073E6C).
  *
  * Builds the scrolling backdrop's point groups with their velocities and
  * animations, releases them, and collapses the effect when the player skips.
@@ -9,8 +9,36 @@
 extern const TitleBackdropPoint data_ov006_0207b1d0[], data_ov006_0207b218[];
 extern const TitleBackdropPoint data_ov006_0207b254[], data_ov006_0207b27c[];
 void func_ov006_02073e6c(void *, int, int);
-void func_ov006_02073dc0(void *element);
 
+void TitleBackdrop_Update(void *element)
+{
+    TitleBackdrop *work = element;
+    const TitleBackdropPoint *left, *right;
+    work->model.header.x += work->velocity_x;
+    /* Groups 0..3 are set by InitAll. Their final point is the wrap target.
+     * Keep the native base-relative address calculation: plain C folds these
+     * additions into extra literal-pool addresses and changes the ROM. */
+    switch (work->group) {
+    case 0:
+        left = data_ov006_0207b1d0;
+        asm { add right, left, #20 }
+        break;
+    case 1:
+        left = data_ov006_0207b218;
+        asm { add right, left, #24 }
+        break;
+    case 2:
+        left = data_ov006_0207b254;
+        asm { add right, left, #36 }
+        break;
+    case 3:
+        left = data_ov006_0207b27c;
+        asm { add right, left, #36 }
+        break;
+    }
+    if (work->model.header.x / 4096 <= left->x)
+        work->model.header.x = right->x << 12;
+}
 void TitleBackdrop_InitAll(TitleBackdrop *work)
 {
     int depth = 64;
@@ -33,7 +61,7 @@ void TitleBackdrop_InitAll(TitleBackdrop *work)
             work->model.header.y = (points->y + 244) << 12;
             work->model.header.depth = depth;
             work->velocity_x = velocity;
-            work->model.header.update = func_ov006_02073dc0;
+            work->model.header.update = TitleBackdrop_Update;
             work->group = group;
             work->model.sub_model->flag_bits.unknown_00_01 = 3;
             ++work;
