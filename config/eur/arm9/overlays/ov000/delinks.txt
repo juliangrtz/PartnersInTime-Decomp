@@ -534,3 +534,6 @@ src/field/field_battle_party_prepare.cpp:
 
 src/field/field_battle_handoff.cpp:
     .text start:0x0206b1fc end:0x0206b3a0
+
+src/field/field_battle_wait.cpp:
+    .text start:0x0206b3a0 end:0x0206b85c

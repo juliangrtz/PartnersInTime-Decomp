@@ -10623,3 +10623,17 @@ remain outside this isolated coverage.
   selection and flags after a modeled teardown. Four helper stubs are disclosed.
 - Evidence: [field handoff](research/RECONSTRUCTION_NOTES.md#field-handoff-to-battle).
   Private reports: build/runtime/eur_high_battle_handoff/{entry55_v1,isolated_v1}.json.
+
+
+### Battle entry wait gates
+
+- Linked FieldSystem_IsBattleEntryPending (1,212 bytes of C++). Total: 852,480 /
+  1,563,700 matching C/C++ bytes (54.52%). No inline ASM.
+- Actual wait/handoff/preparation/dispatcher objects match; golden ROM, zero
+  native differences and 107 tests pass. All 104 original saves unchanged.
+- Controlled live replay checks 96 calls and 76 ordered stores; original VM
+  state restored after each call. Final field image inspected.
+- 3,888 isolated cases check 4,248 stores and all register/stack arguments to
+  three explicit helper stubs. No natural encounter/helper-internals claim.
+- Evidence: [battle entry gates](research/RECONSTRUCTION_NOTES.md#battle-entry-wait-gates).
+  Private reports: build/runtime/eur_high_battle_wait/{controlled83_v1,isolated_v2}.json.

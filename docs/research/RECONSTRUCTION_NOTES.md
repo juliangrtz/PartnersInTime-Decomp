@@ -7991,3 +7991,52 @@ zero native differences and 107 tests pass; all 104 original saves are unchanged
 Private evidence: `build/runtime/eur_high_battle_handoff/{entry55_v1,isolated_v1}.json`.
 Producers: `probe_battle_handoff.py` and `check_battle_handoff_isolated.py` under
 `build/analysis/high_effort_50_to_55/`. The final battle capture was inspected.
+
+
+## Battle entry wait gates
+
+[FieldSystem_IsBattleEntryPending](../../src/field/field_battle_wait.cpp) covers
+`0x0206B3A0..0x0206B85C` (1,212 bytes). It returns one while preparation remains
+pending and zero when the field dispatcher may advance. The party and initiating
+member come from the encounter request, with formation 1 selecting the second
+party. FieldSystem +0x258 bit 4 updates delayed trail visibility; bit 5 waits for
+the selected member's vertical velocity to become nonpositive. At that point it
+clears bit 5, freezes that member's updates and invokes party preparation if the
+signed five-bit preparation mode is nonzero.
+
+Other branches wait for hammer states 25/26 and a small state-record field,
+separation/ball clearance, auxiliary state byte 3, or both recovery states at
+most 3. Mode 4 changes to mode 3 when the leader reaches locomotion state 22.
+Ready paired branches freeze both members. Approaches -2/-1 rebind the selected
+member's resources, using its current facing direction, update-bounds 1 and
+speed 256. Modes 2/3 use shared resource `55 + member index`; modes 5/6 use
+`57 + (member index & 1)`. The native range test for hammer states adds the
+wrapped 16-bit negative bound; the state-record check extracts an 11-bit field.
+These explain the first candidate's instruction differences without register
+permutations.
+
+A 440-frame controlled replay makes 96 native calls on the live field system:
+both parties and both selectors across 24 waiting/release scenarios. All 76
+ordered stores, return values, full system (952), party manager (16,764), selected
+members (1,440 each), save prefix (1,380), SP and r4-r11 are checked. The fixtures
+clear airborne entry and use approach zero, so no helper executes. Every input
+and induced change, decoded VM stack and register state is restored before the
+original VM resumes; all 96 original calls complete. The final field capture
+was inspected. This is controlled function coverage, not ordinary battle entry.
+
+Another 3,888 isolated ARM946 calls use copied live RAM/DTCM and synthetic records.
+They cover formations -1/0/1, both selectors and airborne bits, approaches
+-8/-3/-2/-1/0/7, plus signed preparation modes and positive/zero/negative velocity.
+All 4,248 ordered stores, return values, helper register/stack arguments,
+full RAM/DTCM and scratch outside the measured stack, SP and r4-r11 are checked.
+Trail visibility (1,944 calls), party preparation (1,440) and renderer rebinding
+(144) are explicit no-effect stubs; their internals and live graphics/lifetimes
+are outside this isolated check. The first fixture producer failed on a missing
+optional elapsed field; its log/source are retained, and the corrected producer
+completed with exit zero. No game-code change was needed.
+
+Actual wait/handoff/preparation/dispatcher objects match; golden ROM, zero native
+differences and 107 tests pass. All 104 original saves are unchanged. Private
+reports: `build/runtime/eur_high_battle_wait/controlled83_v1.json` and
+`isolated_v2.json`; producers `probe_battle_wait_controlled.py` and
+`check_battle_wait_isolated.py` in `build/analysis/high_effort_50_to_55/`.

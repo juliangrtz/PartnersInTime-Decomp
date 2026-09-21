@@ -8,7 +8,7 @@
 int FieldSystem_UpdateSceneTransition(FieldSystem *system) {
     switch (system->scene_transition.phase) {
     case 1:
-        if (!func_ov000_0206b3a0(system)) {
+        if (!FieldSystem_IsBattleEntryPending(system)) {
             GameAudio_StopEffects();
             system->scene_transition.phase = 2;
             FreezeFieldIrq(system);

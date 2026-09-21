@@ -1014,3 +1014,4 @@ src/battle/battle_attached_properties.cpp
 
 src/field/field_battle_party_prepare.cpp
 src/field/field_battle_handoff.cpp
+src/field/field_battle_wait.cpp

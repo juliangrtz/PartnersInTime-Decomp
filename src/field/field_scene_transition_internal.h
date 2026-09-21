@@ -66,7 +66,6 @@ void FieldSystem_PrepareSaveScene(FieldSystem *system);
 int FieldSystem_IsSaveFadeActive(FieldSystem *system);
 void FieldSystem_PreparePauseScene(FieldSystem *system);
 int FieldSystem_IsPauseFadeActive(FieldSystem *system);
-int func_ov000_0206b3a0(FieldSystem *);
 void GameAudio_StopEffects(void);
 typedef struct FieldIrqTransitionView {
     u8 prefix[40];
