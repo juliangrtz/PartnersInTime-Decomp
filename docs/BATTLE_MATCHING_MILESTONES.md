@@ -10160,3 +10160,42 @@ callee-saved registers. These synthetic cases establish neither live lifetimes
 nor the game's region-count domain. Counts above 31 remain untested. No helper,
 I/O or stub behavior is involved. Probe, report and input hashes are retained
 privately with producer completion records.
+
+
+## Field entity bounce and horizontal shake
+
+`src/field/field_bounce_shake.cpp` reconstructs the contiguous overlay-0 range
+`0x020B451C..0x020B4728`: update (356 bytes), stop (84), and start (84).
+Starting pauses the entity script and launches vertical motion. Landing starts
+a three-update delay followed by a sixty-update horizontal shake. Stopping
+clears the horizontal offset and resumes the script. The shared entity keeps
+its existing raw field view alongside named phase/countdown fields.
+
+All 524 new bytes match in the actual compiled source object without inline
+assembly. The native virtual calls, explicit inactive switch arm and timer-zero
+branch explain the differences from the initial C draft. Spatial copying and
+all seven neighboring motion functions remain exact after the shared-header
+change. The full gate passes 107 tests, golden-ROM SHA-1 verification and native
+relinking with zero differences. Linked matching C/C++ reaches 845108 / 1563700
+bytes (54.0454%); overlay 0 reaches 186420 / 366712 bytes (50.84%).
+
+Private `build/runtime/eur_high_bounce_shake/save83_v3.json` covers 413 frames
+from checkpoint 83: opening and cancelling the save menu, then returning to
+the field. It checks 3432 inactive updater calls across 26 entities. Every call
+checks current area-table or parent ownership, allocation extent, the complete
+entity, its parent when applicable, the 11216-byte area, SP and r4-r11. The first
+probe rejected a party auxiliary omitted from its ownership model; the corrected
+probe follows the six verified auxiliary slots. The earlier successful capture
+prefix is unchanged. Save-menu and final field captures were inspected. Original
+saves are unchanged; graphics captures remain observational.
+
+`isolated_v1.json` adds 199 ARM946/Unicorn 2.1.3 cases on copied live RAM/DTCM:
+87 update, 64 start and 48 stop cases. It executes the native common 3D virtual
+pause/resume methods, linear/scaling helpers and vertical launch without stubs
+or I/O. Cases include velocity sign boundaries, active/inactive vertical motion,
+all phases, countdown zero/one/max values, controller activity and default
+terminal velocity. Full main RAM, DTCM outside the bounded stack, ordered stores,
+helper arguments/order and callee-saved registers are checked. Natural activation,
+a complete bounce physics loop, other subclass overrides and rendered shake
+pixels remain untested. The live idle checks and isolated active cases are
+separate coverage, not proof of a naturally triggered visible sequence.

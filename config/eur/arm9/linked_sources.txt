@@ -995,3 +995,5 @@ src/field/field_mask_erase_release.c
 src/field/field_mask_erase_prepare.c
 
 src/field/field_graphics_irq.c
+
+src/field/field_bounce_shake.cpp

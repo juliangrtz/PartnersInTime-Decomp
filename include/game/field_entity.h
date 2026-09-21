@@ -779,7 +779,10 @@ struct FieldRuntimeEntity {
     };
     s16 unknown_3d0, unknown_3d2;
     s16 unknown_3d4;
-    struct { u16 unknown_00_01 : 2, unknown_02_15 : 14; } unknown_3d6_bits;
+    union {
+        struct { u16 unknown_00_01 : 2, unknown_02_15 : 14; } unknown_3d6_bits;
+        struct { u16 phase : 2, remaining : 14; } bounce_shake;
+    };
     u32 unknown_3d8;
     union {
         u16 unknown_3dc;

@@ -31,6 +31,11 @@ void FieldVertical_StartToHeight(FieldRuntimeEntity *entity, fx32 height, fx32 g
 void FieldVertical_Update(FieldRuntimeEntity *entity);
 void FieldVertical_Stop(FieldRuntimeEntity *entity);
 
+/* Bounce, landing delay and horizontal shake while the entity script pauses. */
+void FieldEntity3D_StartBounceShake(FieldRuntimeEntity *entity);
+void FieldEntity3D_StopBounceShake(FieldRuntimeEntity *entity);
+void FieldEntity3D_UpdateBounceShake(FieldRuntimeEntity *entity);
+
 /* BeginFrame snapshots previous state and clears this frame's motion/contact accumulators. */
 void FieldEntity2D_BeginFrame(FieldRuntimeEntity *entity);
 void FieldEntity3D_BeginFrame(FieldRuntimeEntity *entity);

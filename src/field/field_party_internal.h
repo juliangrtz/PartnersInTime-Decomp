@@ -17,7 +17,7 @@ extern "C" {
 int VM_ReadVariable(int, int, int);
 void func_020093b4(FieldRenderObject *, int);
 int func_ov000_020ae5fc(FieldRuntimeEntity *, FieldRuntimeEntity *);
-void func_ov000_020b46d4(FieldRuntimeEntity *);
+void FieldEntity3D_StartBounceShake(FieldRuntimeEntity *);
 
 extern const FieldPartyTrailDirection data_ov000_020c068c[];
 void func_ov000_0208dbd4(FieldPartyController *, FieldRuntimeEntity **, int);
