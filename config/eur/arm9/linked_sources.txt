@@ -982,3 +982,5 @@ src/field/field_renderer_visibility.c
 src/field/field_party_contact_restore.c
 
 src/field/field_party_separation.c
+
+src/field/field_region_scripts.cpp

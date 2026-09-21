@@ -9845,3 +9845,42 @@ The actual source objects and updated formation-transition caller match in full.
 The build passes 107 tests, reproduces the golden ROM and reports zero native
 relink differences. All 104 original saves remain unchanged. The neighboring
 input-motion draft remains deferred with its previously recorded differences.
+
+
+## Field region-trigger scripts (2026-09-21)
+
+`FieldScriptManager_TryRegionScript` reconstructs overlay 0 range
+`0x02088978..0x02088C88` as matching C++ without inline assembly. It selects
+entry/exit regions, suppresses repeated or disabled triggers, waits for conflicting
+party actions, and starts the region script in the primary or enabled secondary
+slot. The manager retains its existing layout with an explicit pending-region
+view. The native region lookup's return declaration is corrected in its existing
+caller. This adds 784 bytes, bringing linked matching C/C++ to
+841632 / 1563700 (53.8231%).
+
+Private `eur_high_field_region_scripts/evidence_walk65_v1.json` verifies 2257
+ordinary calls and 33 successful primary-slot script starts over 2660 frames.
+Navigation from save 65 uses the region coordinates read from live RAM and the
+native direction table: after the established boot/walk sequence, down for 40
+frames and left for 80 reaches the trigger. No RAM edits are used. The final
+Thwomp Volcano field capture was inspected. Separate save-103 and initial save-65
+routes verify 2288 and 1960 no-hit calls respectively. Checks cover full area,
+manager and member records, region entries, ordered helper arguments/results,
+intermediate script-state writes and preserved registers. Complete native guards
+cover executed targets and helpers; all three routes finish without pending calls.
+
+Private `isolated_v1.json` passes 422 ARM946 cases on copied live RAM. These cover
+three region shapes, entry/exit/repeat modes, member and height guards, primary,
+secondary and unavailable slots, pending-action sides/subtypes, backup and active
+states, auxiliary states 94/95, bounded cancellation paths and the maximum 15-bit
+script index. Native helpers execute without stubs. Full RAM and synthetic scratch
+records, DTCM outside the stack, ordered helper boundaries, return values and
+preserved registers match independent expectations. Complex action cancellation,
+allocation lifetime, asynchronous IRQ behavior and independently verified pixels
+remain outside scope; secondary-slot and pending-action coverage is isolated.
+
+Actual source objects, including the affected room-interaction and manager units,
+match in full. The full build passes 107 tests, reproduces the golden EUR ROM and
+reports zero native relink differences. All 104 original saves remain unchanged.
+The separate region-lookup draft remains private and differing; it contributes
+no matching progress.

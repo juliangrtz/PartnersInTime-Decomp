@@ -27,7 +27,7 @@ extern const s8 data_ov000_020bfbfc[], data_ov000_020bfc1c[];
 void func_ov000_0206f0b4(FieldAreaContext *, FieldVariableEntity *, int);
 void func_ov000_0206ec68(FieldAreaContext *, int, int, s16, s16, int);
 void func_ov000_02079d74(FieldAreaContext *, int);
-void func_ov000_020b7b68(FieldPartyEntity *, const FieldQuadRegion *);
+int func_ov000_020b7b68(FieldPartyEntity *, const FieldQuadRegion *);
 
 void FieldArea_EnsurePartyPresent(FieldAreaContext *field, int side, int x, int y, s16 z, int direction)
 {

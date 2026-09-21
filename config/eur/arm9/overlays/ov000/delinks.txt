@@ -489,3 +489,6 @@ src/field/field_party_contact_restore.c:
 
 src/field/field_party_separation.c:
     .text start:0x02094140 end:0x0209418c
+
+src/field/field_region_scripts.cpp:
+    .text start:0x02088978 end:0x02088c88
