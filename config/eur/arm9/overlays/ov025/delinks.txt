@@ -41,7 +41,7 @@ src/elder_princess_shroob_ov025/enemy_chain_landing.cpp:
     .text start:0x020c85f0 end:0x020c877c
 
 src/elder_princess_shroob_ov025/ov25_task_wait_sibling.cpp:
-    .text start:0x020c8ac8 end:0x020c8af4
+    .text start:0x020c8ac8 end:0x020c8bf0
 
 src/elder_princess_shroob_ov025/enemy_chain_tasks.cpp:
     .text start:0x020c93d0 end:0x020c9be0

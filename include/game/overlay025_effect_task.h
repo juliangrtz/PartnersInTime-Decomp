@@ -146,6 +146,7 @@ void Overlay25Enemy_WaitReturn(Overlay25Task *task, BattleSceneObject *object, O
 void Overlay25Enemy_WaitAttachedEffect(Overlay25Task *task, BattleSceneObject *object,
                                        Overlay25WorkPrefix *work);
 void Overlay25Task_WaitSibling(Overlay25Task *task, BattleSceneObject *, Overlay25WorkPrefix *work);
+void Overlay25Chain_RetractForRetry(Overlay25Task *task, BattleSceneObject *enemy, Overlay25WorkPrefix *work);
 void Overlay25Chain_ApplyLandingDamage(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 void Overlay25LinkedEffect_ApplyPartyLandingDamage(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 void Overlay25LinkedEffect_ApplyReflectedDamage(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);

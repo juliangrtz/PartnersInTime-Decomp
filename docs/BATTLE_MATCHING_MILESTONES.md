@@ -9599,3 +9599,28 @@ main RAM and DTCM outside the actual stack match expected output. No additional
 allocation-lifetime, upload-scheduling or graphics coverage is claimed. All 104
 original saves remain unchanged. Matching C/C++: 837968/1563700 (53.5888%).
 Private evidence: high_effort_50_to_55/capture_transform_validation.json.
+
+
+## Boss-chain retraction before retry
+
+Reconstructed the 252-byte chain retry callback in C++, extending the adjacent
+sibling-wait unit. It shortens the chain toward its minimum length, counts down
+the retry delay and re-enables its hit descriptor before resuming tracking.
+The first typed draft matches; no inline assembly is needed. Full compiled-unit
+and affected-source comparisons pass, as do the golden EUR ROM rebuild, native
+relink with zero differences and 107 tests.
+The 1470-frame giant-phase replay reaches the tracking callback 245 times but
+does not produce the successful party counterattack needed to enter retraction.
+There is no live target-coverage claim. Its captured RAM supports 128 isolated
+ARM946 cases across both observed chain indices, contraction and minimum gates,
+signed length wrapping, retry timers, signed divisors and existing/new hit-list
+membership. The complete native callback, divisions, hit configuration and
+object/descriptor lookups execute; only sound uses a guarded no-write stub.
+Expected helper arguments/results, list updates, full main RAM, DTCM outside
+the actual stack and preserved registers pass. An earlier fixture placed its
+neighbor descriptor outside the descriptor array; that report is retained but
+excluded from the evidence. The corrected fixture uses the two actual slots.
+These checks add no live counterattack, audio, graphics or allocation-lifetime
+coverage. All 104 original saves remain unchanged. Matching C/C++:
+838220/1563700 (53.6049%). Private evidence:
+high_effort_50_to_55/chain_retract_validation.json.
