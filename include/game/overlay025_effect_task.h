@@ -98,6 +98,8 @@ void Overlay25Enemy_BeginReturn(Overlay25Task *task, BattleSceneObject *object, 
 void Overlay25Enemy_UpdateReturn(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25EffectSequence_InitializeAlternate(Overlay25Task *task, BattleSceneObject *object,
                                                  Overlay25WorkPrefix *);
+void Overlay25EffectSequence_UpdateApproach(Overlay25Task *task, BattleSceneObject *object,
+                                            Overlay25WorkPrefix *work);
 void Overlay25EffectSequence_BeginPositioning(Overlay25Task *task, BattleSceneObject *object,
                                               Overlay25WorkPrefix *);
 void Overlay25EffectSequence_FinishModelEffect(Overlay25Task *task, BattleSceneObject *,

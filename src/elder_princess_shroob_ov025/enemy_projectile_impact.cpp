@@ -1,5 +1,5 @@
 /*
- * Elder Princess Shroob: enemy projectile impact (overlay 25, 0x020C4268-0x020C47C8).
+ * Elder Princess Shroob: enemy projectile impact (overlay 25, 0x020C4084-0x020C47C8).
  *
  * The reflected impact and the spin a projectile plays when it is knocked back,
  * and the effect sequence that positions what follows.
@@ -89,7 +89,34 @@ void Overlay25EffectSequence_BeginPositioning(Overlay25Task *task, BattleSceneOb
         Overlay25Object_StartDistance(dx, dy);
         BattleSceneObject_MoveBy(object, 2, dx, dy, 0, ((int)*(vu32 *)0x40002B4 << 8) / 256);
         parameters->sound = BattleSound_Play(24, 0, -1, 0);
-        task->update = func_ov025_020c4084;
+        task->update = Overlay25EffectSequence_UpdateApproach;
+    }
+}
+
+void Overlay25EffectSequence_UpdateApproach(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work)
+{
+    Overlay25Parameters *parameters = &task->parameters;
+    if (++parameters->timer > 8) {
+        parameters->timer = 0;
+        BattlePosition trail;
+        Overlay25Object_GetViewPosition(&trail, object);
+        BattleModelEffect_Spawn(793, 0, trail.x, trail.y, trail.z, 256);
+    }
+    if (!BattleSceneObject_IsAnimationChannelActive(object, 2)) {
+        if (parameters->sound != -1) {
+            BattleSound_Stop(parameters->sound);
+            parameters->sound = -1;
+        }
+        // Wait for the primary model before switching to the attached-effect phase.
+        if ((u32)(object->primary_model->flags << 29) >> 31) {
+            BattleSceneObject_SetAnimation(object, 28, -1);
+            BattlePosition position;
+            Overlay25Object_GetViewPosition(&position, object);
+            BattleSpriteEffect_Spawn(528, position.x, position.y, position.z, 256);
+            BattleModelEffect_SpawnAttached(&work->model_effect, 831, object, 0, 0, 0, 256);
+            task->update = Overlay25EffectSequence_PositionEffect;
+            BattleSound_Play(119, 0, 0, 0);
+        }
     }
 }
 }

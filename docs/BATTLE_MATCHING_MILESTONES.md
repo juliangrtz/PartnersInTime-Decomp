@@ -9651,3 +9651,27 @@ no-write stubs. Full main RAM and DTCM outside the actual stack are checked.
 These add no new helper lifetime, graphics or audio proof. All 104 original saves
 remain unchanged. Matching C/C++: 838708/1563700 (53.6361%). Private evidence:
 high_effort_50_to_55/boss_return_validation.json.
+
+
+### Boss effect approach and attachment
+
+Reconstructed `Overlay25EffectSequence_UpdateApproach` (overlay 25,
+`0x020C4084..0x020C4268`, 484 bytes) in the contiguous projectile-impact unit.
+The first typed C++ candidate matches the complete function without inline ASM.
+It emits a periodic trail, waits for motion and model readiness, stops the signed
+8-bit sound handle, then starts animation 28 and attaches model effect 831.
+
+Runtime evidence: `build/runtime/eur_high_boss_effect_approach/isolated_v1.json`
+contains 320 copied-RAM ARM946 cases covering timer overflow, motion/model flags,
+signed sound handles and all raw/alternate view combinations. Native projection,
+channel query and attachment wrapper execute; both attachment owner links are
+checked. Factories and audio use guarded no-write stubs with synthetic model
+handles. The bounded animation stub sometimes changes Y to test post-call reads.
+All main RAM and scratch memory, DTCM outside the actual stack, preserved registers,
+ordered helper arguments and projected outputs are checked independently.
+
+The 1470-frame giant-phase discovery route reached neither this callback nor its
+predecessor. These isolated cases establish no live target, real allocation or
+lifetime, animation/audio internals, IRQ or graphics coverage. All 104 original
+saves remain unchanged. Full-build and actual-object evidence is recorded in
+`build/analysis/high_effort_50_to_55/boss_effect_approach_validation.json`.

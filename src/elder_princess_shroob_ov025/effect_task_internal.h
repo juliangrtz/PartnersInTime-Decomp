@@ -13,7 +13,6 @@ extern void BattleSound_Stop(int);
 
 extern void func_ov025_020c34c4(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c3a08(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
-extern void func_ov025_020c4084(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c4fd8(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020cbbb0(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 static inline void Overlay25Object_GetViewPosition(BattlePosition *pos, BattleSceneObject *object)
