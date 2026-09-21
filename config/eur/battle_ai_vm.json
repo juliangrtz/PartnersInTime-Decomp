@@ -987,8 +987,8 @@
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "resets both battle screen-effect channels and their shared state",
-      "evidence": "BattleVm_DispatchCommonOpcode case 0x103; func_ov002_02065dfc"
+      "effect": "stops active Rumble Pak playback when the cartridge is enabled; queued requests remain",
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x103; BattleRumble_Stop"
     },
     "55": {
       "arguments": ["object_data_slot", "resource_id_low", "resource_id_high"],

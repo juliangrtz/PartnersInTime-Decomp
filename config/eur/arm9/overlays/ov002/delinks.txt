@@ -562,4 +562,8 @@ src/battle/battle_attached_properties.cpp:
 
 
 src/battle/battle_rumble.c:
-    .text start:0x02065e30 end:0x02066004
+    .text start:0x02065dfc end:0x02066004
+
+
+src/battle/battle_reward_model_cleanup.cpp:
+    .text start:0x02065d40 end:0x02065dfc

@@ -1,4 +1,4 @@
-/* Four-slot Rumble Pak scheduling (overlay 2, 0x02065E30..0x02066004).
+/* Four-slot Rumble Pak scheduling (overlay 2, 0x02065DFC..0x02066004).
  * A positive delay counts down to zero; playback starts on the following update.
  * Delayed amounts are stored as signed halfwords, unlike immediate calls. */
 
@@ -78,4 +78,11 @@ void BattleRumble_PlayRepeated(int pattern, int duration, int delay)
         task->repeated = 1;
         task->duration = duration;
     } else GameRumble_PlayRepeated(pattern - 1, duration);
+}
+
+/* Stopping playback does not discard queued requests. */
+extern u8 data_0205a00c;
+void BattleRumble_Stop(void)
+{
+    if (data_0205a00c) GameRumble_Stop();
 }

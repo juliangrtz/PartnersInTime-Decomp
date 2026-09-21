@@ -1604,3 +1604,12 @@ Both 2,110-frame replays preserve all 104 original save hashes. Reports are
 alternate launch damage, positive rotation and ordinary six-launch completion
 remain unexercised. Reward message construction and selection, the main attack
 updates, pair return and rotation still use native code.
+
+
+The [reward-model cleanup](../../src/battle/battle_reward_model_cleanup.cpp)
+stops and deletes models in twelve reserved scene slots before reward display,
+unlinking alternate-model palette records. The [rumble stop wrapper](../../src/battle/battle_rumble.c)
+stops enabled playback without clearing delayed requests. Both are byte-exact;
+[replay evidence](RECONSTRUCTION_NOTES.md#reward-model-cleanup-and-rumble-stop)
+distinguishes real alternate-model cleanup from isolated primary-model and
+enabled-rumble call-contract checks.

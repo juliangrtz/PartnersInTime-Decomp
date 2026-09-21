@@ -10662,3 +10662,30 @@ remain outside this isolated coverage.
   calls completed after full fixture restoration. Actual absent-Pak driver
   branch tested; no enabled cartridge or physical vibration claim.
 - Evidence: [Rumble Pak scheduling](research/RECONSTRUCTION_NOTES.md#battle-rumble-pak-scheduling).
+
+
+### Reward-model cleanup and Rumble Pak stop
+
+Reconstructed the twelve reserved scene-model cleanup slots before reward
+display and the guarded Rumble Pak stop wrapper. Both complete native ranges
+match (240 new C/C++ bytes); linked coverage is 853,720 / 1,563,700 (54.60%).
+The stop wrapper leaves queued rumble requests intact.
+
+The controlled Save 55 reward route verifies one cleanup call, two alternate
+model stop/delete pairs, two palette unlinks and two owning-pointer clears.
+Twelve complete embedded objects and palette-list neighbors are checked.
+The initial replay failed because its oracle skipped a clear at a helper-return
+address; the corrected replay passes with unchanged game code. The full
+savestate is restored and original saves remain unchanged. A separate live
+stop fixture verifies the absent-Pak path and original common-frame resumption.
+Twenty-three isolated ARM946 cases supplement primary/alternate/empty slots,
+callbacks clearing their owning pointers, real palette unlinking and the stop
+enable byte. Model virtual methods and the rumble driver are stubs there;
+model internals and physical vibration are not independently verified.
+
+Private evidence: `build/runtime/eur_high_reward_cleanup/`
+(`evidence_reward55_v1.json`, failed; `evidence_reward55_v2.json`, passed;
+`isolated_v1.json`, passed), and
+`build/runtime/eur_high_battle_rumble/stop55_v1.json`. Full build, golden ROM,
+zero native differences and 107 tests pass; all seven affected compiled
+functions match. See the reconstruction reference for scope and provenance.

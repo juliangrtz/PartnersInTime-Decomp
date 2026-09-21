@@ -8139,3 +8139,66 @@ Private evidence: `build/runtime/eur_high_battle_rumble/controlled55_v1.json`.
 Producers and failed/successful build logs are under
 `build/analysis/high_effort_50_to_55/`, including `probe_battle_rumble.py`,
 `battle_rumble_oracle.py` and `battle_rumble_build_v4.log`.
+
+
+## Reward-model cleanup and rumble stop
+
+[Reward cleanup](../../src/battle/battle_reward_model_cleanup.cpp) owns
+overlay 2 `0x02065D40..0x02065DFC` (188 bytes). The reward initializer at
+`0x0206DFD0` calls it in phase zero, at `0x0206E008`. It gets object ID 16
+and traverses twelve contiguous, embedded 260-byte scene slots. It stops each
+alternate model (+196), unlinks the embedded palette (+204), rereads the model
+pointer, calls deleting virtual slot +20 when present and clears the pointer.
+It then stops, rereads, deletes and clears the primary model (+192). Virtual
+stop uses slot +40. The explicit small inline deletion helper retains the
+native null check; no inline assembly was needed.
+
+`BattleRumble_Stop`, appended to [battle rumble](../../src/battle/battle_rumble.c),
+owns `0x02065DFC..0x02065E30` (52 bytes). It calls resident `GameRumble_Stop`
+only when the byte at `0x0205A00C` is nonzero. It leaves the four delayed
+request slots intact. Common VM opcode 0x103 now calls the named wrapper;
+its historical serialized opcode name is retained.
+
+The controlled reward route uses the Save 55 battle state with SHA-1
+`1e565ff9db7da1e8dfc463ff6e657bbdbe8aa38e`. At the guarded idle battle update
+it sets phase 0x5029, then injects reward arrays at initializer completion.
+The 89-frame replay checks one cleanup, two alternate stop/delete pairs,
+two palette unlinks and two pointer stores. Full twelve-slot storage, root,
+lookup, list neighbors and roots, call arguments, SP and r4-r11 are checked.
+Real virtual methods execute with native guards; their model-internal, heap
+and resource-list effects remain observational. Freed models are not read
+after deletion. No primary model is present in this live call.
+
+The first oracle returned immediately from a helper-return hook that was
+also an owning-pointer store. Its next comparison therefore failed at offset
+196. Preserved v1 fails; v2 processes both events and passes without changing
+the matching game code. Full 4 MiB main RAM and 16 KiB DTCM match the restored
+savestate before 30 neutral frames. The restored battle menu was inspected;
+the transitional reward capture is not a completed victory-screen check.
+This is a controlled phase entry, not a natural victory route.
+
+A separate 400-frame live replay calls the stop wrapper once at the guarded
+common-frame boundary with the actual absent-Pak flag zero. Full 70,976-byte
+workspace, root, 28-byte rumble controls and ABI are checked, and all fixture
+writes, decoded stack and registers are restored before the original frame
+call completes. Its final battle-menu capture was inspected.
+
+Twenty-three isolated ARM946 cases use copied RAM/DTCM. Twenty cleanup cases
+combine five slot occupancy patterns with four virtual-stop pointer-clear
+masks. The real 148-byte palette unlink executes 112 times, with 560 ordered
+helper stores; 112 caller stores are checked. Three stop cases use enable
+bytes 0, 1 and 255. Lookup, virtual stop/delete and rumble-driver calls are
+stubbed with checked arguments; stop stubs optionally clear the owning slot.
+Full RAM/DTCM and 128 KiB scratch outside measured stack writes, ordered stores
+and ABI are checked. These cases cover missing live branches but do not prove
+model lifetimes, IRQ behavior, enabled hardware or visible gameplay.
+
+All 104 original saves are unchanged. Full verification passes 107 tests,
+the golden ROM and native relinking with zero differences. All seven affected
+compiled functions match, including the extended rumble unit and common VM.
+Reports are in `build/runtime/eur_high_reward_cleanup/`
+(`evidence_reward55_v1.json`, `evidence_reward55_v2.json`, `isolated_v1.json`)
+and `build/runtime/eur_high_battle_rumble/stop55_v1.json`. Producers are
+`battle_reward_cleanup_oracle.py`, `probe_battle_reward_cleanup.py`,
+`probe_battle_rumble_stop.py` and `check_battle_cleanup_isolated.py` under
+`build/analysis/high_effort_50_to_55/`. The failed oracle is preserved as v1.

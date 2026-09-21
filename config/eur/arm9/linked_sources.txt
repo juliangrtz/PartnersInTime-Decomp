@@ -1015,3 +1015,4 @@ src/battle/battle_attached_properties.cpp
 src/field/field_battle_transition.cpp
 src/field/field_time_hole_arrival.cpp
 src/battle/battle_rumble.c
+src/battle/battle_reward_model_cleanup.cpp

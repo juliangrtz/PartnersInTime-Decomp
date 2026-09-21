@@ -1,5 +1,5 @@
-func_ov002_02065d40 kind:function(arm,size=0xbc) addr:0x02065d40
-func_ov002_02065dfc kind:function(arm,size=0x34) addr:0x02065dfc
+BattleRewardItems_ReleaseSceneModels kind:function(arm,size=0xbc) addr:0x02065d40
+BattleRumble_Stop kind:function(arm,size=0x34) addr:0x02065dfc
 BattleRumble_PlayRepeated kind:function(arm,size=0x94) addr:0x02065e30
 BattleRumble_PlayTimed kind:function(arm,size=0x94) addr:0x02065ec4
 BattleRumble_UpdateDelayed kind:function(arm,size=0x74) addr:0x02065f58

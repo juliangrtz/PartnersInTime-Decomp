@@ -47,7 +47,6 @@ extern int func_ov002_020665cc(
 extern void func_ov002_02066004(int owner_object_id, int alignment_mode,
                                 int reference_object_id, int view_offset,
                                 int unused_4, int unused_5);
-extern void func_ov002_02065dfc(void);
 extern s32 _s32_div_f(s32 numerator, s32 denominator);
 extern u8 *data_ov002_020c0660;
 
@@ -298,7 +297,7 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_RESET_SCREEN_EFFECTS:
-        func_ov002_02065dfc();
+        BattleRumble_Stop();
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_LEGACY_NOOP_0EA:
