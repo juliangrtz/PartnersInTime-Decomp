@@ -1011,3 +1011,5 @@ src/field/field_surface_maximum.c
 src/field/field_planar_animation.cpp
 src/battle/battle_model_aux_properties.cpp
 src/battle/battle_attached_properties.cpp
+
+src/field/field_battle_party_prepare.cpp

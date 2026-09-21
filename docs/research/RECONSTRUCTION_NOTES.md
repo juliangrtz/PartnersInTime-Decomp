@@ -7908,3 +7908,44 @@ Private reports are `build/runtime/eur_high_sprite_graphics/room359_v2.json` and
 The failed v1 probe and its source are preserved: its register accessor did not
 translate Capstone's `ip` alias to `r12`. The successful probe also expands the
 old 96-byte descriptor check to the actual 3,920-byte window allocation.
+
+
+## Party preparation for battle entry
+
+[FieldSystem_PreparePartyForBattle](../../src/field/field_battle_party_prepare.cpp)
+reconstructs `0x0206B85C..0x0206BA2C` (464 bytes). The encounter setup and its
+entry wait routine call it before the battle scene handoff. The signed five-bit
+field at FieldSystem +0x258, bits 6..10, selects preparation for separated
+partners, Bros-Ball, an active state record, auxiliary placement or recovery.
+The save request selects party 1 only when its formation equals 1; bit 8 of
+the halfword at save +0x560 selects the initiating member. Both callers discard
+the return register. The member flag cleared at +10, bit 8, gates ordinary
+entity updates in FieldArea_UpdateEntities.
+
+A normal 353-frame Bros-Ball navigation attempt from the compatible Save 83
+checkpoint reaches neither the wrapper nor encounter setup. Separate controlled
+calls at guarded Field VM boundaries test both parties, both member selectors
+and signed preparation modes -16/0/1/4/7/15: 24 calls and 52 ordered stores.
+Full system (952 bytes), party manager (16,764), both selected members (1,440
+each), save prefix (1,380), SP and r4-r11 are checked. The mode-4 state record
+is required to belong to that party's embedded records. Inputs and induced
+changes, registers and the already-decoded VM stack are restored before each
+of the 24 original commands completes. No helper or stub executes in these
+controlled branches. The final capture shows the original field scene.
+
+An additional 264 isolated ARM946 cases cover formations -1/0/1, both member
+selectors with different movement modes, both special-contact flags, all
+preparation branches and representative signed/default values. They check
+1,152 ordered stores and call arguments, full RAM/DTCM and synthetic records,
+surrounding scratch memory and ABI. FieldVertical_Stop executes its real native
+48-byte implementation 120 times. Seven other party helpers use no-effect ABI
+stubs (120 calls); their internal transitions are not validated here. These
+cases do not establish natural encounter, live special-action or graphics
+coverage. All 104 original saves remain unchanged.
+
+The actual compiled wrapper matches; the complete build produces the golden
+ROM, the native relink has zero differences, and all 107 tests pass. Private
+reports are `build/runtime/eur_high_party_prepare/controlled83_v1.json`,
+`isolated_v1.json` and `discovery_ball83_v2/evidence.json`. Producers are
+`probe_party_prepare_controlled.py` and `check_party_prepare_isolated.py` in
+`build/analysis/high_effort_50_to_55/`; discovery uses `tools/runtime_probe.py`.

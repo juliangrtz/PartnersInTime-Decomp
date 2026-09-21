@@ -10,6 +10,7 @@
 extern "C" {
 #endif
 int FieldSystem_UpdateSceneTransition(FieldSystem *system);
+void FieldSystem_PreparePartyForBattle(FieldSystem *system);
 void FieldSystem_RequestPause(FieldSystem *system, int option, int party_context,
                               int initial_section, u8 fade, u8 side);
 void FieldSystem_RequestSave(FieldSystem *system, int party_context, int fade, int side);

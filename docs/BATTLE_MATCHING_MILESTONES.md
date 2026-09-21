@@ -10596,3 +10596,16 @@ remain outside this isolated coverage.
   No ordinary-story or independent rasterization claim; all 104 saves unchanged.
 - Evidence and limits: [sprite graphics setup](research/RECONSTRUCTION_NOTES.md#field-sprite-animation-graphics-setup).
   Private reports: build/runtime/eur_high_sprite_graphics/{room359_v2,isolated_v1}.json.
+
+
+### Party preparation for battle entry
+
+- Linked FieldSystem_PreparePartyForBattle (overlay 0, 464 bytes of C++). Total:
+  850,848 / 1,563,700 matching C/C++ bytes (54.41%). No inline ASM.
+- Complete build, golden ROM, zero native differences and 107 tests pass.
+- 24 restored controlled live calls check 52 stores, full records and ABI;
+  264 isolated cases check 1,152 stores, real vertical-stop execution and
+  arguments to explicitly stubbed party helpers. Ordinary navigation did not
+  reach the wrapper; no natural encounter or live special-action coverage claim.
+- Evidence: [party preparation](research/RECONSTRUCTION_NOTES.md#party-preparation-for-battle-entry).
+  Private reports: build/runtime/eur_high_party_prepare/{controlled83_v1,isolated_v1}.json.
