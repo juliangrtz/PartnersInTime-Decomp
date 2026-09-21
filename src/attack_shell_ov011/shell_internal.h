@@ -109,7 +109,8 @@ struct Overlay10ActionActor;
 struct Overlay10Work;
 Overlay10Work *Overlay10Attack_CreateWork(Overlay10ActionActor *, int, int);
 int Overlay10Party_HasBadgeTwo();
-void func_ov011_020c2ae0();
+void Overlay11Attack_ApplyBadgeOffsets();
+int Overlay11Attack_GetTargetPosition(BattlePosition *out, BattleSceneObject *object);
 void Overlay11Attack_UpdateEntry(BattlePartyActor *);
 void Overlay10Attack_BeginEntry(BattlePartyActor *, void (*)(BattlePartyActor *));
 

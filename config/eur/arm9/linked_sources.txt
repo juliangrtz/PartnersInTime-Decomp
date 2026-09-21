@@ -463,7 +463,7 @@ src/save_menu_ov008/erase_resources.c
 src/scene_menu_ov007/nawatobi_resources.cpp
 src/scene_menu_ov007/nawatobi_lifecycle.cpp
 src/scene_menu_ov007/nawatobi_irq_destroy.cpp
-src/attack_shell_ov011/ov11_effects_are_finished.cpp
+src/attack_shell_ov011/shell_attack_helpers.cpp
 src/attack_shell_ov011/ov11_attack_get_travel_duration.cpp
 src/attack_shell_ov011/ov11_support_schedule_intercept.cpp
 src/attack_shell_ov011/ov11_projectile_is_ready.cpp

@@ -1,9 +1,9 @@
-func_ov011_020c2ae0 kind:function(arm,size=0xa8) addr:0x020c2ae0
+Overlay11Attack_ApplyBadgeOffsets kind:function(arm,size=0xa8) addr:0x020c2ae0
 Overlay11Effects_AreFinished kind:function(arm,size=0x48) addr:0x020c2b88
 Overlay11Effects_UpdatePositions kind:function(arm,size=0xd4) addr:0x020c2bd0
 Overlay11Effects_SpawnAttached kind:function(arm,size=0xd8) addr:0x020c2ca4
 Overlay11Attack_GetSpeed kind:function(arm,size=0x44) addr:0x020c2d7c
-func_ov011_020c2dc0 kind:function(arm,size=0x60) addr:0x020c2dc0
+Overlay11Attack_GetTargetPosition kind:function(arm,size=0x60) addr:0x020c2dc0
 func_ov011_020c2e20 kind:function(arm,size=0x68) addr:0x020c2e20
 Overlay11Attack_GetTravelDuration kind:function(arm,size=0x68) addr:0x020c2e88
 Overlay11Support_Reset kind:function(arm,size=0x48) addr:0x020c2ef0

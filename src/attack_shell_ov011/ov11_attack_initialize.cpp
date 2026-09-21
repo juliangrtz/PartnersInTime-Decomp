@@ -28,7 +28,7 @@ void Overlay11Attack_Initialize(BattlePartyActor *user, int resource, int config
     work->controller_config = &data_ov011_020c6000[configuration];
     work->particle_config = &data_ov011_020c5fac[configuration];
     if (Overlay10Party_HasBadgeTwo())
-        func_ov011_020c2ae0();
+        Overlay11Attack_ApplyBadgeOffsets();
     u16 partner_resource;
     BattlePartyActor *partner = (BattlePartyActor *)BattleActor_GetById(user->linked_object_id);
     u16 user_resource = user->formation_index >= 4 ? 57 : user->actor.scene_object->resource->object_data_id;

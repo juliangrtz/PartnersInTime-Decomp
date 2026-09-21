@@ -7,8 +7,8 @@ src/attack_shell_ov011/projectile_attack_helpers.c:
     .text start:0x020c4968 end:0x020c4c2c
 
 
-src/attack_shell_ov011/ov11_effects_are_finished.cpp:
-    .text start:0x020c2b88 end:0x020c2dc0
+src/attack_shell_ov011/shell_attack_helpers.cpp:
+    .text start:0x020c2ae0 end:0x020c2e20
 
 src/attack_shell_ov011/ov11_attack_get_travel_duration.cpp:
     .text start:0x020c2e88 end:0x020c2f38

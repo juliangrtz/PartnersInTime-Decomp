@@ -26,7 +26,7 @@ The source links open each overlay's main source directory.
 
 | Overlay | Role | Matching C/C++ / mapped bytes | C/C++ % | Reconstructed code |
 |---:|---|---:|---:|---|
-| [11](../../src/attack_shell_ov011/) | Green and Red Shells | 6,180 / 13,372 | 46.22% | Green/Red entry points, attack and controller setup, entry animation and handoff, projectile timing/readiness and hiding, contact checks, support movement, catch/boost/return updates and effect completion. |
+| [11](../../src/attack_shell_ov011/) | Green and Red Shells | 6,444 / 13,372 | 48.19% | Green/Red entry points, attack and controller setup, badge-dependent speed/position table adjustments and collision-based target positioning, entry animation and handoff, projectile timing/readiness and hiding, contact checks, support movement, catch/boost/return updates and effect completion. |
 | [12](../../src/attack_cannonball_ov012/) | Cannonballers | 3,628 / 12,032 | 30.15% | Party order, resource and object setup, launch scheduling, airborne motion, hit effects and cleanup. |
 | [13](../../src/attack_trampoline_ov013/) | Trampolines | 4,272 / 12,316 | 34.69% | Paired objects, resource setup, jump and bounce motion, retreat, landing effects and battle restoration. |
 | [14](../../src/attack_bro_flower_ov014/) | Bro Flowers and Ice Flowers | 11,084 / 13,860 | 79.97% | Attack sequencing, target selection, participant input/animation phases, projectile selection, flight/bounce/return phases and effects, throws, projectile levels, participant palette pulses and fade control, enemy effect-stage thresholds and placement, projectile hit feedback and status chances, final enemy damage and attack rating, and effect allocation and cleanup. |

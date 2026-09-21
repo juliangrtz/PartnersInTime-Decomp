@@ -10536,3 +10536,49 @@ properties, valid transform indices, signed extremes and four flag patterns.
 All 4,784 data reads stayed within the fixture allocations; no stores occurred.
 Full RAM/DTCM and scratch, return values, SP and r4-r11 were checked. No helper
 stubs were needed. These cases do not add live object-lifetime or graphics coverage.
+
+
+## Shell badge offsets and collision-based target positioning
+
+Reconstructed `Overlay11Attack_ApplyBadgeOffsets` (0x020C2AE0, 168 bytes) and
+`Overlay11Attack_GetTargetPosition` (0x020C2DC0, 96 bytes). They extend the adjacent
+Shell helper module, now `src/attack_shell_ov011/shell_attack_helpers.cpp`.
+All six functions in the resulting contiguous 832-byte module match completely.
+The badge helper adjusts 32 speed entries and six controller Y offsets for the
+selected variant, preserving signed halfword addition and wrap. The position
+helper combines object X, the first collision bound and a configuration offset;
+it writes only X/Y and also returns Y. Existing shared types are reused.
+
+The full gate passed 107 tests, reproduced the golden EUR ROM and reported zero
+native-relink differences. Linked matching C/C++ is 849,916 / 1,563,700.
+Private evidence is under `build/analysis/high_effort_50_to_55/` in
+`shell_helpers_actual.txt`, `shell_helpers_build_v1.log` and
+`shell_helpers_validation.json`; runtime reports are in
+`build/runtime/eur_high_shell_helpers/`.
+
+Both badge-table variants were checked in the running game from controlled
+checkpoint 83. Because the real badge query returned zero, a guarded fixture
+changed that return to one. Each call independently checked all 38 ordered table
+stores, the complete 612-byte work area and all four table arrays, then restored
+the original destination tables and return register before setup resumed.
+`green83_v1.json` contains variant 0 (Red Shell), and `red83_v3.json` contains
+variant 1 (Green Shell): the early run-tag labels were reversed; the recorded
+variant and selection are authoritative. All 104 original saves were unchanged.
+Both final captures were inspected and show the battle command menu.
+
+The ordinary and automated routes did not execute the position helper. The
+initial ordinary route missed both functions. The first automated attempt used
+the wrong controller phase; reading its native branch identified phase 0 as the
+input gate. The corrected route issued 117 guarded controller-button inputs but
+still missed target positioning. These misses are retained, and no live position
+coverage is claimed. Captures establish visible continuation, not a graphics
+oracle or natural story entry.
+
+`isolated_v1.json` passed 66 ARM946 cases on copied RAM/DTCM: 12 badge-table cases
+cover both variants, signed limits and repeated additions; 54 position cases
+cover signed X/Y/configuration limits and output truncation. The actual native
+collision helper executes its constant-bound actor-8/9 branch without stubs.
+All 564 non-stack stores were checked in order; full RAM/DTCM and scratch outside
+the measured stack, helper arguments and its 12-byte result, return values, SP
+and r4-r11 were checked. Model-derived collision bounds and live object lifetimes
+remain outside this isolated coverage.
