@@ -10,7 +10,7 @@ extern u8 *gBattleContext;
 /* This shared table holds actor IDs during projectile preparation. */
 #define OVERLAY25_PROJECTILE_TARGETS ((u32 *)(gBattleContext + 27108))
 extern void BattleSound_Stop(int);
-extern void func_ov025_020c2ee4(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
+
 extern void func_ov025_020c34c4(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c3a08(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);
 extern void func_ov025_020c4084(Overlay25Task *, BattleSceneObject *, Overlay25WorkPrefix *);

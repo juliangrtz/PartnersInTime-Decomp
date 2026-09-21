@@ -1,6 +1,6 @@
 func_ov025_020c2ae0 kind:function(arm,size=0x3d0) addr:0x020c2ae0
 func_ov025_020c2eb0 kind:function(arm,size=0x34) addr:0x020c2eb0
-func_ov025_020c2ee4 kind:function(arm,size=0x1e8) addr:0x020c2ee4
+Overlay25Enemy_UpdateReturn kind:function(arm,size=0x1e8) addr:0x020c2ee4
 Overlay25Enemy_BeginReturn kind:function(arm,size=0xd4) addr:0x020c30cc
 func_ov025_020c31a0 kind:function(arm,size=0x324) addr:0x020c31a0
 func_ov025_020c34c4 kind:function(arm,size=0x24) addr:0x020c34c4

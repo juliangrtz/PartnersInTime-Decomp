@@ -95,6 +95,7 @@ void Overlay25Enemy_BeginLinkedEffects(Overlay25Task *task, BattleSceneObject *o
 void Overlay25Projectile_CheckHit(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_EmitProjectile(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25Enemy_BeginReturn(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *);
+void Overlay25Enemy_UpdateReturn(Overlay25Task *task, BattleSceneObject *object, Overlay25WorkPrefix *work);
 void Overlay25EffectSequence_InitializeAlternate(Overlay25Task *task, BattleSceneObject *object,
                                                  Overlay25WorkPrefix *);
 void Overlay25EffectSequence_BeginPositioning(Overlay25Task *task, BattleSceneObject *object,

@@ -9624,3 +9624,30 @@ These checks add no live counterattack, audio, graphics or allocation-lifetime
 coverage. All 104 original saves remain unchanged. Matching C/C++:
 838220/1563700 (53.6049%). Private evidence:
 high_effort_50_to_55/chain_retract_validation.json.
+
+
+## Boss return trail and completion
+
+Reconstructed the 488-byte return updater in C++, adjoining its existing entry
+helper. It advances the shared trail counter according to horizontal movement,
+spawns direction-specific effects and waits for both movement and the model's
+ready flag before returning to idle and ending the task. The sound handle is
+stopped and cleared once the movement channel finishes. The C-only draft uses
+the native two-shift flag extraction; no inline assembly is needed.
+The complete compiled unit and affected objects match. Full verification passes
+with the golden EUR ROM, zero native differences and 107 tests. The ordinary
+1470-frame boss replay checks 83 calls: 76 with movement active, six waiting for
+the model and one finishing. Eight effect-796 spawns and one sound stop occur.
+Independent checks cover counter/task stores, effect choice, projection, channel
+results, helper arguments, complete rig/scene/model records and saved registers.
+Animation changes are observed only within the owned scene/models; palette,
+render and texture-list neighbors are checked from the observed placement.
+Effect-creation internals and sound output are outside this oracle. Both route
+captures match discovery. Another 240 isolated ARM946 cases cover movement in
+both directions and no movement, counter thresholds and signed16 overflow,
+channel/model/sound states and raw/alternate-view flags. Native projection and
+channel queries run; effect creation, sound stop and animation use guarded
+no-write stubs. Full main RAM and DTCM outside the actual stack are checked.
+These add no new helper lifetime, graphics or audio proof. All 104 original saves
+remain unchanged. Matching C/C++: 838708/1563700 (53.6361%). Private evidence:
+high_effort_50_to_55/boss_return_validation.json.
