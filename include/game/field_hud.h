@@ -64,6 +64,8 @@ GameOamEntry *FieldHud_Draw(void *field_context, GameOamEntry *output);
 void FieldHud_SelectPortraits(void *field_context, int single);
 void FieldHud_SetRenderersVisible(void *field_context, int visible, int single);
 void FieldHud_Init(void *field_context, int visible);
+void FieldCamera_StartShake(void *field_context, int axis, fx32 amplitude, fx32 step,
+                           int half_cycles, int rumble_pattern);
 void FieldCamera_StopShake(void *field_context);
 #ifdef __cplusplus
 }

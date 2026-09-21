@@ -10240,3 +10240,31 @@ callee-saved registers are checked. Vertical dispatch uses a paused helper;
 active physics and the completion pass's contact-refresh branch are untested.
 These synthetic cases do not establish live support lifetimes. Graphics remain
 observational, and all 104 original save files retain their hashes.
+
+
+## Field camera-shake setup
+
+`FieldCamera_StartShake` now initializes the selected camera axis, saved origin,
+amplitude, step and half-cycle count in matching C++. The full-width axis selects
+the origin before its one-bit stored form is used by the updater. Signed eight-bit
+rumble selection preserves both native fixed-point division calls for automatic
+selection. The separate update candidate remains unlinked because its register
+allocation differs; no new inline assembly was added.
+
+The actual starter object matches all 332 bytes, and the changed Field VM caller
+and existing stop helper also compare exactly. The complete build passes 107 tests,
+produces the golden EUR ROM and relinks with zero differing bytes. Linked matching
+C/C++ reaches 846296 / 1563700 (54.1214%).
+
+Private `build/runtime/eur_high_camera_shake_start/case0_v1.json` through
+`case10_v1.json`, plus `case11_v2.json`, check twelve restored decoded Field VM
+commands in live save-83 state. They cover both axes, full-width axis versus stored
+bit behavior, halfword/eight-bit truncation, disabled/explicit rumble and automatic
+selection below, at and above its threshold, including negative ratios. Complete
+11216-byte owner areas and 28-byte rumble-control state, 106 ordered starter/stop
+stores, 16 native divider results, nine rumble calls, helper arguments, SP and
+r4-r11 are checked. The final case runs eight observed native updates and verifies
+normal stop and origin restoration before restoring all induced fixture state.
+All twelve final captures agree and show the field; all 104 source saves remain
+unchanged. Rumble hardware, zero divisors and naturally triggered story shakes
+are not covered. Updater internals and graphics remain observational.

@@ -507,3 +507,6 @@ src/field/field_graphics_irq.c:
 
 src/field/field_bounce_shake.cpp:
     .text start:0x020b451c end:0x020b4728
+
+src/field/field_camera_shake_start.cpp:
+    .text start:0x02072074 end:0x020721c0

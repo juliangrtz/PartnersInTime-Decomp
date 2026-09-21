@@ -80,9 +80,6 @@ extern void func_ov000_0209f644(
     int y, int z, int facing_direction, int animate_entry,
     s16 arrival_script_id, int bgm_policy, int preserve_field_0_anchor,
     int preserve_field_1_anchor);
-extern void func_ov000_02072074(u8 *field_context, int axis,
-                                fx32 amplitude, int step, int half_cycles,
-                                int rumble_pattern);
 extern void func_ov000_02075814(
     u8 *field_context, int animation_slot, int direction_profile,
     u16 object_mask_high, u16 object_mask_low, u16 standard_bg_mask,
@@ -2799,7 +2796,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_START_CAMERA_SHAKE:
-        func_ov000_02072074(
+        FieldCamera_StartShake(
             field_context, arguments[0],
             arguments[1] << FX32B_INT, arguments[2],
             arguments[3], arguments[4]);
