@@ -1,9 +1,9 @@
 func_ov002_02065d40 kind:function(arm,size=0xbc) addr:0x02065d40
 func_ov002_02065dfc kind:function(arm,size=0x34) addr:0x02065dfc
-BattleScreenEffect_StartSecondary kind:function(arm,size=0x94) addr:0x02065e30
-BattleScreenEffect_StartPrimary kind:function(arm,size=0x94) addr:0x02065ec4
-BattleScreenEffect_UpdateDelayed kind:function(arm,size=0x74) addr:0x02065f58
-BattleScreenEffect_FindFreeDelaySlot kind:function(arm,size=0x38) addr:0x02065fcc
+BattleRumble_PlayRepeated kind:function(arm,size=0x94) addr:0x02065e30
+BattleRumble_PlayTimed kind:function(arm,size=0x94) addr:0x02065ec4
+BattleRumble_UpdateDelayed kind:function(arm,size=0x74) addr:0x02065f58
+BattleRumble_FindFreeDelaySlot kind:function(arm,size=0x38) addr:0x02065fcc
 func_ov002_02066004 kind:function(arm,size=0xf8) addr:0x02066004
 BattleDialogue_GetVisualProperty kind:function(arm,size=0x60) addr:0x020660fc
 BattleDialogue_Close kind:function(arm,size=0x7c) addr:0x0206615c

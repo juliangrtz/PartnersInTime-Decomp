@@ -119,5 +119,5 @@ void BattleParty_ApplyNonfatalDamageFeedback(BattlePartyActor *actor, int unused
         number->party_style = 12;
     if ((actor->formation_index & 1) == 1)
         number->party_style = 13;
-    BattleScreenEffect_StartPrimary(1, 60, 0);
+    BattleRumble_PlayTimed(1, 60, 0);
 }

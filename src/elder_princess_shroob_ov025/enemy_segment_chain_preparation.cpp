@@ -51,7 +51,7 @@ void Overlay25Enemy_InitializeSegmentChains(Overlay25Task *task, BattleSceneObje
     Overlay25ChainMotionParameters *parameters = &task->chain_motion;
     if (enemy->primary_model->flag_bits.panel_animation_trigger) {
         BattleSound_Play(265, 0, 0, 0);
-        BattleScreenEffect_StartPrimary(3, 20, 0);
+        BattleRumble_PlayTimed(3, 20, 0);
         BattleSceneObject_SetAnimation(enemy, 23, -1);
         BattlePosition position;
         Overlay25Object_GetViewPosition(&position, enemy);

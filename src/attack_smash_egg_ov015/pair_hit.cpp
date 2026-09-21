@@ -32,12 +32,12 @@ void Overlay15Attack_ResolvePairHit(Overlay15AttackModelController *state,
         }
         func_ov015_020c337c(pair, other, 0);
         BattleSound_Play(284, 0, 0, 0);
-        BattleScreenEffect_StartSecondary(6, 1, 0);
+        BattleRumble_PlayRepeated(6, 1, 0);
         pair->flags.bits.alternate_actor =
             (u8)(pair->flags.bits.alternate_actor ^ 1);
     } else {
         BattleSound_Play(63, 0, 0, 0);
-        BattleScreenEffect_StartSecondary(5, 1, 0);
+        BattleRumble_PlayRepeated(5, 1, 0);
         state->phase_flags.raw |= 128;
         BattleHitDescriptor_DisableByActor(40);
         int target_id = Overlay15Attack_SelectRandomEnemy();

@@ -29,7 +29,7 @@ void Overlay25LinkedEffect_ApplyReflectedDamage(Overlay25Task *task, BattleScene
         BattleDamage_ApplyToEnemy(enemy, 0, 0, damage, 12, 7, 0);
         BattleSceneObject_GetById(40)->flags.bits.stop_impact_particles = 1;
         linked->flags.bits.stop_impact_particles = 1;
-        BattleScreenEffect_StartPrimary(1, 120, 0);
+        BattleRumble_PlayTimed(1, 120, 0);
         work->slots[0] = 0;
         work->slots[1] = 0;
         work->slots[2] = 0;

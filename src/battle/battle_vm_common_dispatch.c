@@ -288,12 +288,12 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_PRIMARY_SCREEN_EFFECT:
-        BattleScreenEffect_StartPrimary(
+        BattleRumble_PlayTimed(
             arguments[0], arguments[1], arguments[2]);
         return SCRIPT_VM_CONTINUE;
 
     case BATTLE_VM_START_SECONDARY_SCREEN_EFFECT:
-        BattleScreenEffect_StartSecondary(
+        BattleRumble_PlayRepeated(
             arguments[0], arguments[1], arguments[2]);
         return SCRIPT_VM_CONTINUE;
 

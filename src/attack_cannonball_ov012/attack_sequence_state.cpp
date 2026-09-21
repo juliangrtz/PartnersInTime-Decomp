@@ -177,7 +177,7 @@ void Overlay12Attack_ShowHit(int actor_id, Overlay12AttackController *controller
             Overlay10Enemy_PlayHitReaction(actor_id, 407);
             BattleSound_Play(56, 0, 0, 0);
         }
-        BattleScreenEffect_StartSecondary(5, 1, 0);
+        BattleRumble_PlayRepeated(5, 1, 0);
         Overlay10Enemy_AddScaleSteps((Overlay10EnemyState *)work, actor_id, 1);
     } else {
         BattleEffect_SetVariant(-1);

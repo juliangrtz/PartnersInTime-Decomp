@@ -448,7 +448,7 @@ void BattleFlee_UpdateRun(BattleAITask *base_task) {
             int coin_count;
             int object_id;
 
-            BattleScreenEffect_StartPrimary(6, 8, 12);
+            BattleRumble_PlayTimed(6, 8, 12);
             BattleSceneObject_SetAnimation(
                 BattleSceneObject_GetById(BATTLE_FLEE_HELPER_OBJECT_ID),
                 -1, -1);

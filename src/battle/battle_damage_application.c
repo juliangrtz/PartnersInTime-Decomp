@@ -156,7 +156,7 @@ void BattleDamage_ApplyToParty(BattleSceneObject *object, int popup_offset_x,
     switch (hit_kind) {
     case 0:
         BattleSound_Play(0x24, 0, 0, 0);
-        BattleScreenEffect_StartPrimary(3, 6, 0);
+        BattleRumble_PlayTimed(3, 6, 0);
         number = (BattleDamageNumberEffect *)BattleDamage_SpawnNumber(
             damage, position.x + popup_offset_x, position.y + popup_offset_y, 4,
             0);
@@ -164,7 +164,7 @@ void BattleDamage_ApplyToParty(BattleSceneObject *object, int popup_offset_x,
         break;
     case 1:
         BattleSound_Play(0x24, 0, 0, 0);
-        BattleScreenEffect_StartPrimary(3, 6, 0);
+        BattleRumble_PlayTimed(3, 6, 0);
         number = (BattleDamageNumberEffect *)BattleDamage_SpawnNumber(
             damage, position.x + popup_offset_x, position.y + popup_offset_y, 5,
             0);
@@ -172,7 +172,7 @@ void BattleDamage_ApplyToParty(BattleSceneObject *object, int popup_offset_x,
         break;
     case 2:
         BattleSound_Play(0x25, 0, 0, 0);
-        BattleScreenEffect_StartPrimary(1, 0x3C, 0);
+        BattleRumble_PlayTimed(1, 0x3C, 0);
         number = (BattleDamageNumberEffect *)BattleDamage_SpawnNumber(
             damage, position.x + popup_offset_x, position.y + popup_offset_y, 4,
             0);
@@ -184,21 +184,21 @@ void BattleDamage_ApplyToParty(BattleSceneObject *object, int popup_offset_x,
                                  BATTLE_DAMAGE_SCALE);
         break;
     case 3:
-        BattleScreenEffect_StartPrimary(1, 0x28, 0);
+        BattleRumble_PlayTimed(1, 0x28, 0);
         number = (BattleDamageNumberEffect *)BattleDamage_SpawnNumber(
             damage, position.x + popup_offset_x, position.y + popup_offset_y, 4,
             0);
         BattleSceneObject_SetAnimation(object, 0x1F, -1);
         break;
     case 4:
-        BattleScreenEffect_StartPrimary(1, 0x28, 0);
+        BattleRumble_PlayTimed(1, 0x28, 0);
         number = (BattleDamageNumberEffect *)BattleDamage_SpawnNumber(
             damage, position.x + popup_offset_x, position.y + popup_offset_y, 4,
             0);
         BattleSceneObject_SetAnimation(object, 0x21, -1);
         break;
     case 5:
-        BattleScreenEffect_StartPrimary(1, 0x28, 0);
+        BattleRumble_PlayTimed(1, 0x28, 0);
         number = (BattleDamageNumberEffect *)BattleDamage_SpawnNumber(
             damage, position.x + popup_offset_x, position.y + popup_offset_y, 4,
             0);

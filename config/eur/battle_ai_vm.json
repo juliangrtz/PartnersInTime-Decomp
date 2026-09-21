@@ -967,20 +967,20 @@
       "evidence": "BattleVm_DispatchCommonOpcode case 0x0FF; func_ov002_020660fc"
     },
     "257": {
-      "arguments": ["effect_id", "duration", "parameter"],
+      "arguments": ["pattern_id", "duration_frames", "delay_frames"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "starts the primary battle screen-effect channel",
-      "evidence": "BattleVm_DispatchCommonOpcode case 0x101; BattleScreenEffect_StartPrimary"
+      "effect": "plays a timed Rumble Pak pattern, immediately or through the four-slot delay queue",
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x101; BattleRumble_PlayTimed"
     },
     "258": {
-      "arguments": ["effect_id", "duration", "parameter"],
+      "arguments": ["pattern_id", "repeat_count", "delay_frames"],
       "result": null,
       "control_flow": "fallthrough",
       "yield": "never",
-      "effect": "starts the secondary battle screen-effect channel",
-      "evidence": "BattleVm_DispatchCommonOpcode case 0x102; BattleScreenEffect_StartSecondary"
+      "effect": "plays a repeated Rumble Pak pattern, immediately or through the four-slot delay queue",
+      "evidence": "BattleVm_DispatchCommonOpcode case 0x102; BattleRumble_PlayRepeated"
     },
     "259": {
       "arguments": [],

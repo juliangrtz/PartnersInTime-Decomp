@@ -30,7 +30,7 @@
 .extern BattleStatus_ClearEffect
 .extern BattleStatus_TryApply
 .extern BattleDamage_StartPartyReaction
-.extern BattleScreenEffect_StartPrimary
+.extern BattleRumble_PlayTimed
 .extern BattlePosition_StoreViewRelative
 .extern BattleActor_CanReceiveStatus
 .extern BattleSceneObject_SetAnimation
@@ -133,7 +133,7 @@ BattleDamage_ApplyToParty:
     mov r0, #3
     mov r1, #6
     mov r2, sb
-    bl BattleScreenEffect_StartPrimary
+    bl BattleRumble_PlayTimed
     mov r1, sb
     str r1, [sp]
     ldrsh r1, [sp, #LOCAL_POSITION]
@@ -159,7 +159,7 @@ BattleDamage_ApplyToParty:
     mov r0, #3
     mov r1, #6
     mov r2, sb
-    bl BattleScreenEffect_StartPrimary
+    bl BattleRumble_PlayTimed
     mov r1, sb
     str r1, [sp]
     ldrsh r1, [sp, #LOCAL_POSITION]
@@ -185,7 +185,7 @@ BattleDamage_ApplyToParty:
     mov r0, #1
     mov r1, #0x3C
     mov r2, sb
-    bl BattleScreenEffect_StartPrimary
+    bl BattleRumble_PlayTimed
     mov r1, sb
     str r1, [sp]
     ldrsh r1, [sp, #LOCAL_POSITION]
@@ -230,7 +230,7 @@ BattleDamage_ApplyToParty:
     mov r2, sb
     mov r0, #1
     mov r1, #0x28
-    bl BattleScreenEffect_StartPrimary
+    bl BattleRumble_PlayTimed
     mov r0, sb
     str r0, [sp]
     ldrsh r1, [sp, #LOCAL_POSITION]
@@ -251,7 +251,7 @@ BattleDamage_ApplyToParty:
     mov r2, sb
     mov r0, #1
     mov r1, #0x28
-    bl BattleScreenEffect_StartPrimary
+    bl BattleRumble_PlayTimed
     mov r0, sb
     str r0, [sp]
     ldrsh r1, [sp, #LOCAL_POSITION]
@@ -272,7 +272,7 @@ BattleDamage_ApplyToParty:
     mov r2, sb
     mov r0, #1
     mov r1, #0x28
-    bl BattleScreenEffect_StartPrimary
+    bl BattleRumble_PlayTimed
     mov r0, sb
     str r0, [sp]
     ldrsh r1, [sp, #LOCAL_POSITION]

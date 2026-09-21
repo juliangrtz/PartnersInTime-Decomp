@@ -10,7 +10,7 @@
 .extern BattleParty_UpdateKnockout
 .extern BattleSceneObject_SetAnimation
 .extern BattleSceneObject_SetStateFlags
-.extern BattleScreenEffect_StartPrimary
+.extern BattleRumble_PlayTimed
 .extern BattleSound_Play
 .extern BattleStatus_ClearAll
 .extern BattleTaskList_Insert
@@ -142,7 +142,7 @@ BattleParty_StartKnockout:
     mov r0, #3
     mov r1, #0x0A
     mov r2, #0x0C
-    bl BattleScreenEffect_StartPrimary
+    bl BattleRumble_PlayTimed
     mov r0, r5
     pop {r4, r5, r6, lr}
     bx lr

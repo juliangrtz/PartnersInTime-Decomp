@@ -3,14 +3,14 @@
 .syntax unified
 .arch armv5te
 .arm
-.section .pit_BattleScreenEffect_FindFreeDelaySlot, "ax", %progbits
+.section .pit_BattleRumble_FindFreeDelaySlot, "ax", %progbits
 .balign 4
 
 .extern data_ov002_020c0660
 
-.global BattleScreenEffect_FindFreeDelaySlot
-.type BattleScreenEffect_FindFreeDelaySlot, %function
-BattleScreenEffect_FindFreeDelaySlot:
+.global BattleRumble_FindFreeDelaySlot
+.type BattleRumble_FindFreeDelaySlot, %function
+BattleRumble_FindFreeDelaySlot:
     ldr r1, .L_runtime_context
     mov r0, #0
     ldr r2, [r1]
@@ -27,4 +27,4 @@ BattleScreenEffect_FindFreeDelaySlot:
     bx lr
 .L_runtime_context:
     .word data_ov002_020c0660
-.size BattleScreenEffect_FindFreeDelaySlot, . - BattleScreenEffect_FindFreeDelaySlot
+.size BattleRumble_FindFreeDelaySlot, . - BattleRumble_FindFreeDelaySlot

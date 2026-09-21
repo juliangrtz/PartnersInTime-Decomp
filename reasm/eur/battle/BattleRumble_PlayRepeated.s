@@ -3,17 +3,17 @@
 .syntax unified
 .arch armv5te
 .arm
-.section .pit_BattleScreenEffect_StartSecondary, "ax", %progbits
+.section .pit_BattleRumble_PlayRepeated, "ax", %progbits
 .balign 4
 
-.extern BattleScreenEffect_FindFreeDelaySlot
-.extern BattleScreenEffect_UpdateDelayed
+.extern BattleRumble_FindFreeDelaySlot
+.extern BattleRumble_UpdateDelayed
 .extern data_ov002_020c0660
 .extern GameRumble_PlayRepeated
 
-.global BattleScreenEffect_StartSecondary
-.type BattleScreenEffect_StartSecondary, %function
-BattleScreenEffect_StartSecondary:
+.global BattleRumble_PlayRepeated
+.type BattleRumble_PlayRepeated, %function
+BattleRumble_PlayRepeated:
     push {r4, r5, r6, lr}
     mov r6, r0
     mov r5, r1
@@ -23,7 +23,7 @@ BattleScreenEffect_StartSecondary:
     bxmi lr
     cmp r4, #0
     beq .L_start_now
-    bl BattleScreenEffect_FindFreeDelaySlot
+    bl BattleRumble_FindFreeDelaySlot
     mvn r1, #0
     cmp r0, r1
     popeq {r4, r5, r6, lr}
@@ -54,5 +54,5 @@ BattleScreenEffect_StartSecondary:
 .L_delay_slots_offset:
     .word 0x11354
 .L_update_callback:
-    .word BattleScreenEffect_UpdateDelayed
-.size BattleScreenEffect_StartSecondary, . - BattleScreenEffect_StartSecondary
+    .word BattleRumble_UpdateDelayed
+.size BattleRumble_PlayRepeated, . - BattleRumble_PlayRepeated

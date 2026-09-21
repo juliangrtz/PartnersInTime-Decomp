@@ -130,11 +130,11 @@ void Overlay21Attack_ApplyHit(Overlay21AttackState *state, int success,
         BattleStatus_TryApply(enemy, 2, *(s16 *)(gBattleContext + 300), 0,
                               config->status_chance);
       if (effects->screen_duration)
-        BattleScreenEffect_StartSecondary(effects->screen_kind,
+        BattleRumble_PlayRepeated(effects->screen_kind,
                                           effects->screen_duration,
                                           effects->screen_delay);
       else
-        BattleScreenEffect_StartPrimary(effects->screen_kind,
+        BattleRumble_PlayTimed(effects->screen_kind,
                                         effects->screen_duration,
                                         effects->screen_delay);
     } else {

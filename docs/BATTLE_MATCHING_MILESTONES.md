@@ -10650,3 +10650,15 @@ remain outside this isolated coverage.
   real helpers and explicitly documented resource/renderer/math stubs.
 - Evidence: [arrival participants](research/RECONSTRUCTION_NOTES.md#time-hole-arrival-participants).
   Private reports: build/runtime/eur_high_time_hole_arrival/{controlled83_v1,isolated_v1}.json.
+
+
+### Battle Rumble Pak scheduling
+
+- Reconstructed four functions (468 bytes), replacing symbolic ASM with C.
+  Matching C/C++: 853,480 / 1,563,700 bytes (54.58%).
+- Full v4 gate: 107 tests, golden ROM and zero native differences; all four
+  actual compiled functions match. Earlier integration failures retained.
+- Controlled battle replay: 66 calls, 112 ordered stores, all original frame
+  calls completed after full fixture restoration. Actual absent-Pak driver
+  branch tested; no enabled cartridge or physical vibration claim.
+- Evidence: [Rumble Pak scheduling](research/RECONSTRUCTION_NOTES.md#battle-rumble-pak-scheduling).

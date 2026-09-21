@@ -3,15 +3,15 @@
 .syntax unified
 .arch armv5te
 .arm
-.section .pit_BattleScreenEffect_UpdateDelayed, "ax", %progbits
+.section .pit_BattleRumble_UpdateDelayed, "ax", %progbits
 .balign 4
 
-.extern BattleScreenEffect_StartPrimary
-.extern BattleScreenEffect_StartSecondary
+.extern BattleRumble_PlayTimed
+.extern BattleRumble_PlayRepeated
 
-.global BattleScreenEffect_UpdateDelayed
-.type BattleScreenEffect_UpdateDelayed, %function
-BattleScreenEffect_UpdateDelayed:
+.global BattleRumble_UpdateDelayed
+.type BattleRumble_UpdateDelayed, %function
+BattleRumble_UpdateDelayed:
     push {r4, lr}
     mov r4, r0
     ldr r0, [r4]
@@ -31,17 +31,17 @@ BattleScreenEffect_UpdateDelayed:
     ldrsh r1, [r4, #4]
     mov r2, #0
     add r0, r0, #1
-    bl BattleScreenEffect_StartPrimary
+    bl BattleRumble_PlayTimed
     b .L_release
 .L_secondary:
     ldrb r0, [r4, #7]
     ldrsh r1, [r4, #4]
     mov r2, #0
     add r0, r0, #1
-    bl BattleScreenEffect_StartSecondary
+    bl BattleRumble_PlayRepeated
 .L_release:
     mov r0, #0
     str r0, [r4, #8]
     pop {r4, lr}
     bx lr
-.size BattleScreenEffect_UpdateDelayed, . - BattleScreenEffect_UpdateDelayed
+.size BattleRumble_UpdateDelayed, . - BattleRumble_UpdateDelayed

@@ -126,7 +126,7 @@ void Overlay14Attack_UpdateSequence(Overlay10ActionActor *user)
                 BattleSound_Play(49, 0, 0, 0);
                 break;
             }
-            BattleScreenEffect_StartPrimary(data_ov014_020c61b0[work->rating].value,
+            BattleRumble_PlayTimed(data_ov014_020c61b0[work->rating].value,
                                             data_ov014_020c61b2[work->rating].value,
                                             data_ov014_020c61b4[work->rating].value);
             work->common.timer = 0;

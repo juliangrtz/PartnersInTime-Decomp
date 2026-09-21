@@ -86,7 +86,7 @@ void PocketChomp_BeginRun(PocketChomp *center)
     BattleSceneObject *object = center->object;
     PocketChompAttackWorkPrefix *work = data_ov002_020c0710;
     BattleModelEffect_SpawnRelative(396, object, 0, 0, 0, 0, 256);
-    BattleScreenEffect_StartPrimary(1, 50, 0);
+    BattleRumble_PlayTimed(1, 50, 0);
     int speed = Overlay18Attack_GetTravelSpeedQ8(work->progress);
     int dx = work->horizontal_offset - 144 - object->x;
     int distance = dx > 0 ? dx : -dx;

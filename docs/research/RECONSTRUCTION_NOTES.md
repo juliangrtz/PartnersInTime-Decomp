@@ -8088,3 +8088,54 @@ are unchanged. Private reports: `build/runtime/eur_high_time_hole_arrival/`:
 `controlled83_v1.json` and `isolated_v1.json`. Producers in
 `build/analysis/high_effort_50_to_55/`: `probe_time_hole_arrival_controlled.py`
 and `check_time_hole_arrival_isolated.py`.
+
+
+## Battle Rumble Pak scheduling
+
+[Battle rumble](../../src/battle/battle_rumble.c) reconstructs
+`0x02065E30..0x02066004` (468 bytes), replacing symbolic ASM with C. The old
+`BattleScreenEffect_*` names described these functions incorrectly: their two
+playback paths call the resident timed/repeated Rumble Pak drivers. Callers,
+the VM reference and maintained ASM symbols now use `BattleRumble_*` names.
+The playback functions have no meaningful return contract; callers discard r0.
+Serialized opcode names for 0x101/0x102 retain their historical screen-effect
+spellings; their argument/effect documentation now identifies rumble playback.
+
+Four 12-byte slots live at +70,484 in the 70,976-byte common workspace reached
+through `data_ov002_020c0660` (0x020C0660). Each slot contains a signed 32-bit
+delay, signed 16-bit duration/repeat amount, mode byte, zero-based pattern byte
+and callback pointer. A null callback marks a free slot. Pattern arguments are
+one-based; nonpositive values are ignored. Zero delay calls the driver directly;
+any nonzero delay queues in the first free slot, or is dropped if all four slots
+are occupied. Queued amounts truncate to 16 bits and are sign-extended when
+played; immediate amounts retain all 32 bits. Positive delays decrement to zero
+and play on the following update. A nonpositive delay dispatches mode 0/1 and
+clears the callback; other modes only clear it.
+
+The first candidate matched both playback functions. Native LDRSH established
+the signed amount field; the free-slot loop advances a pointer before adding the
+fixed workspace offset. Those corrections made all four functions exact.
+Integration also required reverse source order for MW's function emission,
+forward declarations and synchronized maintained ASM references. Failed build
+logs v1-v3 are retained separately; the final v4 gate passes 107 tests, the
+golden ROM and native relinking with zero differences. All actual compiled
+functions match their complete native ranges, including literal pools.
+
+A 400-frame replay from the derived Save 55 battle-menu state checks 66 controlled
+calls at the guarded common-frame boundary and 112 ordered stores. Fixtures cover
+both playback types, immediate/positive/negative delays, ignored patterns,
+pattern-byte truncation, signed queued amounts, all 16 slot-occupancy masks and
+both recognized/one unknown callback modes. The real free-slot function executes
+40 times; each resident playback driver executes seven times. Full common
+workspace, root, 28-byte rumble control region, stack and callee-saved registers
+are checked. Every fixture and induced write, borrowed decoded stack and register
+value is restored before the original common-frame call completes; all 66 original
+calls complete. The final Jump-menu capture was inspected, and all 104 original
+saves are unchanged. The actual absent-Pak flag is zero; this verifies that driver
+branch, not enabled cartridge playback or physical vibration. These are controlled
+calls, not natural attack-trigger coverage, and no isolated replay is claimed.
+
+Private evidence: `build/runtime/eur_high_battle_rumble/controlled55_v1.json`.
+Producers and failed/successful build logs are under
+`build/analysis/high_effort_50_to_55/`, including `probe_battle_rumble.py`,
+`battle_rumble_oracle.py` and `battle_rumble_build_v4.log`.

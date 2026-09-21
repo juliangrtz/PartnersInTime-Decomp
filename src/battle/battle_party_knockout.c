@@ -90,7 +90,7 @@ BattleAITask *BattleParty_StartKnockout(BattleSceneObject *object) {
         break;
     }
 
-    BattleScreenEffect_StartPrimary(3, 10, 12);
+    BattleRumble_PlayTimed(3, 10, 12);
     return task;
 }
 

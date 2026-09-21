@@ -90,7 +90,7 @@ void PocketChomp_Update(PocketChomp *center, PocketChompAdultMotion *adult,
         case 2:
             func_ov018_020c5d34(adult, 0);
             BattleSound_Play(377, 0, 0, 0);
-            BattleScreenEffect_StartPrimary(1, 60, 0);
+            BattleRumble_PlayTimed(1, 60, 0);
             BattleSound_Play(data_ov018_020c7190[adult->bits.mode], 0, 0, 0);
             PocketChomp_BeginExitWithSupport(center, support);
             break;

@@ -16,11 +16,11 @@
       "module": "arm9_ov002",
       "address": "0x02065E30",
       "size": "0x94",
-      "section": ".pit_BattleScreenEffect_StartSecondary",
-      "source": "battle/BattleScreenEffect_StartSecondary.s",
+      "section": ".pit_BattleRumble_PlayRepeated",
+      "source": "battle/BattleRumble_PlayRepeated.s",
       "externals": {
-        "BattleScreenEffect_FindFreeDelaySlot": "0x02065FCC",
-        "BattleScreenEffect_UpdateDelayed": "0x02065F58",
+        "BattleRumble_FindFreeDelaySlot": "0x02065FCC",
+        "BattleRumble_UpdateDelayed": "0x02065F58",
         "data_ov002_020c0660": "0x020C0660",
         "GameRumble_PlayRepeated": "0x020074BC"
       },
@@ -30,11 +30,11 @@
       "module": "arm9_ov002",
       "address": "0x02065EC4",
       "size": "0x94",
-      "section": ".pit_BattleScreenEffect_StartPrimary",
-      "source": "battle/BattleScreenEffect_StartPrimary.s",
+      "section": ".pit_BattleRumble_PlayTimed",
+      "source": "battle/BattleRumble_PlayTimed.s",
       "externals": {
-        "BattleScreenEffect_FindFreeDelaySlot": "0x02065FCC",
-        "BattleScreenEffect_UpdateDelayed": "0x02065F58",
+        "BattleRumble_FindFreeDelaySlot": "0x02065FCC",
+        "BattleRumble_UpdateDelayed": "0x02065F58",
         "data_ov002_020c0660": "0x020C0660",
         "GameRumble_PlayTimed": "0x02007408"
       },
@@ -44,11 +44,11 @@
       "module": "arm9_ov002",
       "address": "0x02065F58",
       "size": "0x74",
-      "section": ".pit_BattleScreenEffect_UpdateDelayed",
-      "source": "battle/BattleScreenEffect_UpdateDelayed.s",
+      "section": ".pit_BattleRumble_UpdateDelayed",
+      "source": "battle/BattleRumble_UpdateDelayed.s",
       "externals": {
-        "BattleScreenEffect_StartPrimary": "0x02065EC4",
-        "BattleScreenEffect_StartSecondary": "0x02065E30"
+        "BattleRumble_PlayTimed": "0x02065EC4",
+        "BattleRumble_PlayRepeated": "0x02065E30"
       },
       "expected_sha256": "638fa93bdd5b4e42384646430f208d65b87d2a0cce72c54dddbc716cbaf95b8b"
     },
@@ -56,8 +56,8 @@
       "module": "arm9_ov002",
       "address": "0x02065FCC",
       "size": "0x38",
-      "section": ".pit_BattleScreenEffect_FindFreeDelaySlot",
-      "source": "battle/BattleScreenEffect_FindFreeDelaySlot.s",
+      "section": ".pit_BattleRumble_FindFreeDelaySlot",
+      "source": "battle/BattleRumble_FindFreeDelaySlot.s",
       "externals": {
         "data_ov002_020c0660": "0x020C0660"
       },
@@ -1234,7 +1234,7 @@
         "BattleSound_Play": "0x02076428",
         "BattleStatus_ClearAll": "0x0209C3F8",
         "BattleTaskList_Insert": "0x020A51F8",
-        "BattleScreenEffect_StartPrimary": "0x02065EC4",
+        "BattleRumble_PlayTimed": "0x02065EC4",
         "BattleSceneObject_SetStateFlags": "0x020A32F4",
         "gBattleContext": "0x020C0718"
       },
@@ -1568,7 +1568,7 @@
         "BattleSound_Play": "0x02076428",
         "BattleStatus_ClearEffect": "0x0209C278",
         "BattleStatus_TryApply": "0x0209C464",
-        "BattleScreenEffect_StartPrimary": "0x02065EC4",
+        "BattleRumble_PlayTimed": "0x02065EC4",
         "BattlePosition_StoreViewRelative": "0x02076B0C",
         "BattleActor_CanReceiveStatus": "0x02076BD4",
         "BattleSceneObject_SetAnimation": "0x02091198",
