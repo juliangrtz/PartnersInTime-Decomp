@@ -10500,3 +10500,39 @@ scratch outside the measured stack are checked, including 16 mode stores.
 This establishes the wrapper's call contract, not the virtual helper's effects
 or graphics behavior. All 104 source saves remain unchanged; both ROM checks,
 actual source-object comparisons and all 107 tests pass.
+
+
+## Attached-model transform and text queries
+
+Reconstructed `BattleSceneObject_GetAttachedModelProperty` in
+`src/battle/battle_attached_properties.cpp` (overlay 2, 0x02068970..0x02068B50).
+The complete 480-byte compiled function matches, including its switch tables.
+Transform fields preserve signed byte/halfword access and packed two-bit mode.
+Text kinds 2 and 5 intentionally read the same clipped-text offsets, as the
+native getter does; their setters use different layouts. Unsupported properties
+return -1. The factory allocates a 324-byte callback model and a 148-byte text
+payload; cached OAM and numeric payloads are smaller and expose transforms.
+
+The complete build passed 107 tests, reproduced the golden EUR ROM and yielded
+zero differing native-relink bytes. Linked matching C/C++ is 849,652 / 1,563,700.
+Private evidence: `build/analysis/high_effort_50_to_55/attached_actual.txt`,
+`attached_build_v1.log`, `attached_factory_native.log`, and
+`build/runtime/eur_high_attached_properties/fixtures103_v1.json`.
+
+The existing controlled Princess checkpoint from save 103 supplied object 16's
+live kind-5 text attachment. Thirty-three temporary decoded AI commands covered
+all getter properties and both transform rows over 901 frames. Each call checked
+the full 70-object pool, 324-byte renderer and 148-byte payload unchanged, the
+return value, SP and callee-saved registers. Result variable 15 was checked before
+restoring the original 72-byte command and 172-byte predecode state; all 33
+original commands were then decoded again. All 104 original saves were unchanged.
+The final capture was inspected and shows the complete battle command menu.
+These are controlled command fixtures, not ordinary script coverage: the scanned
+exports contain 26 setter uses and no getter uses. Kind 2 was not exercised live.
+
+`isolated_v1.json` adds 1,552 ARM946 cases on copied RAM/DTCM with synthetic
+24/28/148-byte payloads. It covers all 16 kind values, supported/unsupported
+properties, valid transform indices, signed extremes and four flag patterns.
+All 4,784 data reads stayed within the fixture allocations; no stores occurred.
+Full RAM/DTCM and scratch, return values, SP and r4-r11 were checked. No helper
+stubs were needed. These cases do not add live object-lifetime or graphics coverage.

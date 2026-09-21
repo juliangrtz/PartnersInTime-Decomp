@@ -28,8 +28,6 @@ extern void func_ov002_020691b8(BattleSceneObject *object, int attachment_mode,
                                 int catalog_or_value, int element_index);
 extern void func_ov002_02068b50(BattleSceneObject *object, int property_id,
                                 int element_index, int value, int unused);
-extern int func_ov002_02068970(BattleSceneObject *object, int property_id,
-                               int element_index);
 extern void BattleSceneObject_SetAuxModelProperty(BattleSceneObject *object, int property_id,
                                 int value, int unused);
 extern int BattleSceneObject_GetAuxModelProperty(BattleSceneObject *object, int property_id,
@@ -160,7 +158,7 @@ int BattleVm_DispatchCommonOpcode(ScriptVm *vm, ScriptVmState *state,
 
     case BATTLE_VM_GET_ATTACHED_MODEL_PROPERTY:
         object = BattleSceneObject_GetById((u16)arguments[0]);
-        value = func_ov002_02068970(object, arguments[1], arguments[2]);
+        value = BattleSceneObject_GetAttachedModelProperty(object, arguments[1], arguments[2]);
         BattleVm_WriteCommonResult(vm, state, command, value);
         return SCRIPT_VM_CONTINUE;
 
