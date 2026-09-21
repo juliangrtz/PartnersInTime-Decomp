@@ -66,7 +66,7 @@ src/field/field_entity_motion.cpp:
     .text start:0x020a6690 end:0x020a695c
 
 src/field/field_spatial_frame_state.cpp:
-    .text start:0x020b4c78 end:0x020b4edc
+    .text start:0x020b4920 end:0x020b4edc
 
 src/field/field_frame_snapshot.cpp:
     .text       start:0x020a6ab4 end:0x020a6b4c

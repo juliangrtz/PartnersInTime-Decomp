@@ -39,6 +39,8 @@ void FieldEntity3D_UpdateBounceShake(FieldRuntimeEntity *entity);
 /* BeginFrame snapshots previous state and clears this frame's motion/contact accumulators. */
 void FieldEntity2D_BeginFrame(FieldRuntimeEntity *entity);
 void FieldEntity3D_BeginFrame(FieldRuntimeEntity *entity);
+void FieldEntity3D_UpdateMotion(FieldRuntimeEntity *entity, FieldRuntimeEntity **entities);
+void FieldEntity3D_FinishMotion(FieldRuntimeEntity *entity);
 void FieldEntity3D_SetPosition(FieldRuntimeEntity *entity, fx32 x, fx32 y, fx32 z);
 void FieldEntity_FaceTarget(FieldRuntimeEntity *entity, FieldRuntimeEntity *target);
 void FieldEntity3D_UpdateSupportClearance(FieldRuntimeEntity *entity);

@@ -10199,3 +10199,44 @@ helper arguments/order and callee-saved registers are checked. Natural activatio
 a complete bounce physics loop, other subclass overrides and rendered shake
 pixels remain untested. The live idle checks and isolated active cases are
 separate coverage, not proof of a naturally triggered visible sequence.
+
+
+## Spatial motion and navigation bounds
+
+The extended `src/field/field_spatial_frame_state.cpp` adds
+`FieldEntity3D_UpdateMotion` (744 bytes at `0x020B4990`) and
+`FieldEntity3D_FinishMotion` (112 bytes at `0x020B4920`). The update advances
+controllers, carries movement from the previous supporting entity, corrects
+height, and bounds the navigation search using previous and current positions.
+The completion pass dispatches contact-dependent work, locomotion, stop masks
+and the reconstructed bounce/shake updater.
+
+The first typed draft exposed six strict/non-strict min/max condition differences
+and a misidentified virtual slot. Native instructions establish the equality
+choices and slot 0x9C; its shared name remains unknown. All seven functions in
+the extended 1468-byte unit match, as do the 21 functions in the two updated
+caller units. No inline assembly was needed. The full gate passes 107 tests,
+the golden ROM hash and native relinking with zero differences. Linked matching
+C/C++ reaches 845964 / 1563700 bytes (54.1001%); overlay 0 reaches
+187276 / 366712 bytes (51.07%).
+
+Private `build/runtime/eur_high_spatial_frame/save83_v1.json` checks the ordinary
+413-frame save-menu open/cancel route and visible field return. It records 792
+motion updates, 3432 completion calls, 6600 ordered caller stores and 19140 helper
+returns across 26 entities. Current entity/parent ownership, full allocations,
+owner areas, accessed support and navigation records, arguments/order, SP and
+r4-r11 are checked. The caller model independently derives each decision and
+store. Helpers other than bounce/shake remain observational within the target
+entity allocation; other tracked records remain checked. All seven captures
+match the preceding route, and the final field image was inspected.
+
+`isolated_v1.json` adds 328 ARM946/Unicorn 2.1.3 motion-update cases using copied
+RAM/DTCM and synthetic support/table/navigation records. Native idle helpers
+execute without stubs or I/O. Tests cover support ascent/descent, tracking and
+height correction, movement in both directions and equality, null/sentinel/scanned
+navigation lists, disabled entities and the skip flag. Full main RAM and scratch
+memory, DTCM outside the measured stack, ordered writes, helper arguments and
+callee-saved registers are checked. Vertical dispatch uses a paused helper;
+active physics and the completion pass's contact-refresh branch are untested.
+These synthetic cases do not establish live support lifetimes. Graphics remain
+observational, and all 104 original save files retain their hashes.

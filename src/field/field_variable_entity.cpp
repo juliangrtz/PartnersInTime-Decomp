@@ -101,7 +101,7 @@ extern "C" {
 #include <game/field_variable_entity.h>
 extern "C" {
 extern const s8 data_ov000_020c0c68[4], data_ov000_020c0c6c[17];
-void func_ov000_020b4990(FieldRuntimeEntity *, FieldRuntimeEntity **);
+void FieldEntity3D_UpdateMotion(FieldRuntimeEntity *, FieldRuntimeEntity **);
 void func_020093b4(FieldRenderObject *, int);
 FieldVariableEntity *FieldVariableEntity_InitEmpty(FieldVariableEntity *object) {
     FieldEntity3D_Init(&object->entity);
@@ -154,7 +154,7 @@ void FieldVariableEntity_Update(FieldVariableEntity *object, FieldRuntimeEntity 
             }
         }
     }
-    func_ov000_020b4990(&object->entity, entities);
+    FieldEntity3D_UpdateMotion(&object->entity, entities);
 }
 
 void FieldVariableEntity_StartBounce(FieldVariableEntity *object, u8 countdown,
