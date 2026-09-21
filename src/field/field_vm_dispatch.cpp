@@ -120,7 +120,6 @@ extern void func_ov000_02081bd4(int enabled);
 extern void GameRumble_PlayTimed(int rumble_pattern, int repeat_count);
 extern u8 data_0205a00c;
 extern void GameRumble_Stop(void);
-extern void func_ov000_0206f8ac(u8 *field_context);
 extern int func_ov000_02070930(
     u8 *field_context, int window_mode, int x, int y, int width,
     int height, int tail_style, int tail_size, int vertical_placement,
@@ -3908,7 +3907,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         int message_speed;
         int message_slot;
 
-        func_ov000_0206f8ac(field_context);
+        FieldArea_ClearNotifications((FieldAreaContext *)field_context);
         message_speed = VM_ReadVariable(0xC000, vm, base_state);
         message_slot = func_ov000_02070930(
             field_context, arguments[4],
@@ -3931,7 +3930,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
 
         entity = FieldScript_ResolveEntity(
             runtime, state, arguments[0]);
-        func_ov000_0206f8ac(field_context);
+        FieldArea_ClearNotifications((FieldAreaContext *)field_context);
         if (FieldVm_GetContextType(state) == FIELD_SCRIPT_OWNER_PRIMARY) {
             linked_owner = FieldVm_GetEntityByIndex(
                 field_context, (s8)state->owner_data[0]);

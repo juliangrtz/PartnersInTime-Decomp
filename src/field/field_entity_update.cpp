@@ -9,7 +9,6 @@ extern "C"
 {
     void func_ov000_02075450(FieldAreaContext *);
     void func_ov000_02074000(FieldAreaContext *);
-    void func_ov000_0206f768(FieldAreaContext *);
     void func_ov000_0207645c(FieldAreaContext *);
     void func_ov000_0206f110(FieldAreaContext *);
     void func_ov000_02071ebc(FieldAreaContext *);
@@ -34,7 +33,7 @@ extern "C"
             if (area->party->pending_transition.active && area->flags.screen == 1 &&
                 !area->unknown_2402.unknown_00)
                 FieldPartyManager_ApplyPendingTransition(area->party);
-            func_ov000_0206f768(area);
+            FieldArea_UpdateNotifications(area);
             func_ov000_0207645c(area);
         }
         FieldArea_UpdateMessageWindowSlide(area);

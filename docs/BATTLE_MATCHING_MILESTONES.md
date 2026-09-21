@@ -10296,3 +10296,41 @@ The first isolated run failed because the CPU-mode change selected a different
 stack-register bank; v2 sets the mode before initializing registers. Synthetic
 graphics indices do not establish valid tile allocations or rendered pixels.
 All 104 original saves are unchanged; graphics inspection remains observational.
+
+
+## Field item notifications
+
+The area's two-slot item notification queue is reconstructed: formatting and
+queuing the item name and quantity, admitting pending notices, expiring the
+60-update timer, closing a notice and clearing the queue before other dialogue.
+The update pass can replace the current notice during its final 30 updates.
+Shared records preserve the original byte, halfword and bitfield accesses and
+retain the prior raw area view. The four C++ functions match all 868 native bytes;
+no inline assembly was added. Matching C/C++ reaches 847376 / 1563700 (54.1904%).
+
+The first integration exposed reverse C++ function emission within the unit;
+reordering definitions restores their native linked addresses. The corrected
+full build passes 107 tests, reproduces the golden EUR ROM and relinks with zero
+differing bytes. The compiled notification unit, entity-update caller and Field VM
+all compare exactly.
+
+Private `build/runtime/eur_high_notifications/block83_v2.json` checks the established
+811-frame controlled positioning route followed by ordinary item-block interaction.
+It observes 1513 update calls, one queued notice, one clear and one close, with 95
+ordered stores. The live item name and quantity become a visible "Ice Flowers x 2"
+notification; it expires after 60 active updates. `save83_v1.json` adds the ordinary
+save-menu open/cancel route with 262 updates, two clears and eight stores. Checks
+cover complete 11216-byte areas, unchanged source strings, caller stores, helper
+arguments/order, SP and r4-r11. The window-open result is observed; its three area
+writes are independently modeled. Window-manager, pool and rendering internals
+remain observational. Common captures match the prior routes, including the
+final visible field scenes; all 104 original saves retain their hashes.
+
+`isolated_v1.json` adds 400 ARM946 cases on copied live RAM. These cover both
+slots, full queues, text terminators, maximum fitting strings, quantity suffixes,
+index fallback, reserved bits, timer wrap/thresholds, both screens and window-open
+success/failure. All main RAM, text scratch and DTCM outside the measured call
+stack are compared, along with ordered caller writes, helper arguments and saved
+registers. The notification functions execute natively; external window-open and
+window-close calls are explicit stubs with the documented area effects. These
+cases do not establish window allocation lifetimes, rendering or story reachability.

@@ -39,6 +39,15 @@ typedef struct FieldMessageWindowSlide {
 } FieldMessageWindowSlide;
 typedef char FieldMessageWindowSlide_SizeCheck[sizeof(FieldMessageWindowSlide) == 36 ? 1 : -1];
 
+/* Two queued item notices. Text is copied with native FF 0A 00 termination;
+   callers must supply a name that fits the 64-byte formatted buffer. */
+typedef struct FieldNotification {
+    struct { u16 active : 1, pending : 1, reserved : 14; } flags;
+    s16 y;
+    u8 text[64];
+} FieldNotification;
+typedef char FieldNotification_SizeCheck[sizeof(FieldNotification) == 68 ? 1 : -1];
+
 /* The loaded room. The record pointers are read-only data from the room
    archive; the runtime arrays beside them are the mutable state built from it
    (boundaries that can be switched off, navigation surfaces being walked). */
@@ -46,8 +55,15 @@ typedef struct FieldAreaContext {
     const void *vtable;
     void *owner;
     u8 unknown_0008[34];
-    s8 unknown_2a;
-    u8 unknown_002b[8913];
+    union {
+        struct { s8 unknown_2a; u8 unknown_002b[8913]; };
+        struct {
+            s8 notification_index;
+            u8 notification_timer;
+            FieldNotification notifications[2];
+            u8 unknown_00b4[8776];
+        };
+    };
     const FieldQuadRegionRecord *quad_records;
     u8 unknown_2300[188];
     const FieldNavigationResource *navigation_resource;
@@ -216,6 +232,10 @@ void FieldArea_ResetEntityUpdateOrder(FieldAreaContext *area);
 FieldAreaContext *FieldArea_CopyState(FieldAreaContext *field, const FieldAreaContext *source);
 void FieldArea_UpdateGraphics(FieldAreaContext *field);
 void FieldArea_LoadWindowSprites(FieldAreaContext *field);
+void FieldArea_UpdateNotifications(FieldAreaContext *area);
+void FieldArea_ClearNotifications(FieldAreaContext *area);
+void FieldArea_CloseNotification(FieldAreaContext *area, int index);
+void FieldArea_QueueNotification(FieldAreaContext *area, const u8 *text, int quantity, int y);
 void FieldArea_UpdateMessageWindowSlide(FieldAreaContext *area);
 void FieldArea_StartMessageWindowSlideBySpeed(FieldAreaContext *area, int window, fx32 x, fx32 y, fx32 speed);
 void FieldArea_UpdateMessageWindowClip(FieldAreaContext *area, int window);
