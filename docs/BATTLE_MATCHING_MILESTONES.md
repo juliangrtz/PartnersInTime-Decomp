@@ -10754,3 +10754,14 @@ tests, the golden ROM and zero native differences. Controlled live checks pass
 384 isolated ARM946 cases pass with 1332 ordered stores and real heap helpers.
 These fixtures do not establish natural exception dispatch. All 104 saves are
 unchanged. See [RTTI evidence](research/RECONSTRUCTION_NOTES.md#msl-rtti-destruction).
+
+
+## MSL catch records and exception specifications
+
+Three helpers add 280 linked C bytes: catch-record initialization, packed
+exception-specification matching and handler-kind lookup. Total 855576 of
+1563700 (54.71%). Seven actual source functions match; full verification passes
+107 tests, the golden ROM and zero native differences. Controlled live checks
+pass 25 calls/46 stores; 834 isolated ARM946 cases pass with 1246 stores and
+real type-matcher calls. No natural exception or class-hierarchy coverage is
+claimed. All 104 saves are unchanged. See [catch evidence](research/RECONSTRUCTION_NOTES.md#msl-catch-records-and-exception-specifications).

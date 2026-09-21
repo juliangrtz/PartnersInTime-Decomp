@@ -153,7 +153,7 @@ src/msl/encoded_integer.c:
     .text start:0x0204709c end:0x02047234
 
 src/msl/object_lifetime.c:
-    .text start:0x020483f4 end:0x02048614
+    .text start:0x020483d8 end:0x02048614
 
 src/msl/object_register.c:
     .text start:0x02048824 end:0x02048868
@@ -585,3 +585,9 @@ src/msl/unwind.c:
 
 src/msl/type_info.c:
     .text start:0x02048be0 end:0x02048ce8
+
+src/msl/catch_record.c:
+    .text start:0x02047318 end:0x02047388
+
+src/msl/exception_spec.c:
+    .text start:0x020475d4 end:0x02047660

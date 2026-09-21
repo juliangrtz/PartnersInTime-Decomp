@@ -1020,3 +1020,5 @@ src/battle/battle_impact_saved_primary.c
 src/battle/battle_attack_callback.c
 src/msl/unwind.c
 src/msl/type_info.c
+src/msl/catch_record.c
+src/msl/exception_spec.c

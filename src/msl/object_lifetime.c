@@ -1,5 +1,5 @@
 /*
- * Static object lifetime (ARM9 resident, 0x020483F4-0x02048614).
+ * Static object lifetime (ARM9 resident, 0x020483D8-0x02048614).
  *
  * Runs the global constructors at startup, tears the destructor chain down at
  * exit, and finds the exception entry for an address.
@@ -93,4 +93,10 @@ void MSL_LookupUnwindRecord(u32 address, MslUnwindRecord *record)
             return;
         }
     }
+}
+
+/* The low five bits select the action; bit 7 marks a frame boundary. */
+u8 MSL_GetUnwindHandlerKind(const MslUnwindRecord *record)
+{
+    return record->handler ? *record->handler & 31 : 0;
 }

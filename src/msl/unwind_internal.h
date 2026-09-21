@@ -38,6 +38,7 @@ const u8 *MSL_SkipFrameHeader(const u8 *input);
 int MSL_GetExceptionTable(MslUnwindRecord *record, u32 address);
 void MSL_DecodeFrameHeader(MslUnwindContext *context, const MslUnwindRecord *record);
 u32 MSL_RestoreFrameRegisters(MslUnwindContext *context);
+u8 MSL_GetUnwindHandlerKind(const MslUnwindRecord *record);
 void MSL_LookupUnwindRecord(u32 address, MslUnwindRecord *record);
 const MslExceptionEntry *MSL_FindExceptionEntry(const MslExceptionEntry *table, int count, u32 address);
 

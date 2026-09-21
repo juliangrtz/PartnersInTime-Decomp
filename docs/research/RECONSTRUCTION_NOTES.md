@@ -8404,3 +8404,51 @@ all eight actual source functions match. Private reports are
 `build/runtime/eur_high_msl_type_info/live55_v1.json` and `isolated_v1.json`;
 their producers are `probe_msl_type_info.py`, `msl_type_info_oracle.py` and
 `check_msl_type_info_isolated.py` under `build/analysis/high_effort_50_to_55/`.
+
+
+## MSL catch records and exception specifications
+
+[Catch setup](../../src/msl/catch_record.c) at `0x02047318..0x02047388`
+writes a record into the saved frame: object, type name, destructor and adjusted
+object pointer. For a pointer exception (`'*'`), the fourth word points to the
+fifth word, which contains the adjusted pointer value. Other exceptions point
+directly into the thrown object. The context view is only a 28-byte prefix;
+the complete context includes saved registers. The native caller consumes no
+return from this initializer; a `void` definition reproduces the complete
+function, whereas returning the stored member adds loads.
+
+[Specification matching](../../src/msl/exception_spec.c) at
+`0x020475D4..0x02047660` scans a count of packed little-endian type pointers and
+stops at the first match. The native type matcher remains unreconstructed.
+Each local candidate pairs its type pointer and adjustment output, preserving
+the native stack layout and store before the helper call. The adjacent
+[handler-kind accessor](../../src/msl/object_lifetime.c) adds
+`0x020483D8..0x020483F4`: null yields zero, otherwise the low five bits select
+the action. These three entries add 280 linked C bytes.
+
+Controlled DeSmuME checks use the Save 55 checkpoint with SHA-1
+`496c6a6836f08c15e95655bb5d78c4cde65dc688`. Across 400 frames, four catch setups,
+eight kind queries and thirteen specification queries produce 46 ordered stores
+and fourteen real type-matcher calls. All 25 original common-frame updates
+complete after restoration of the full 70,976-byte workspace, root, 256-byte
+stack window and registers. Inputs occupy 2,048 temporary workspace bytes;
+checks cover the full workspace, read-only RTTI data, arguments, meaningful
+returns and ABI. The final Gritzy Caves menu was inspected. Initial live v1
+failed because the probe attempted a zero-length emulator write for an empty
+list; v2 skips that host write and passes. Game code did not change.
+
+The isolated ARM946 replay passes 834 cases: 36 catch setups, 257 kind queries
+and 541 specification queries. It checks 1,246 ordered stores and 542 real
+matcher calls, all handler bytes/null, positive/negative frame adjustments,
+packed-list alignments, builtin names, pointer/reference qualifiers, void-pointer
+and catch-all entries. Full copied main RAM/DTCM and 128 KiB scratch outside the
+bounded CPU stack are checked; no helpers are stubbed. This does not cover class
+hierarchy encodings, a naturally thrown exception, destructor dispatch or CPU
+unwind. All 104 saves remain unchanged.
+
+All seven functions in the three affected compiled objects match. Full
+verification passes 107 tests, the golden ROM and zero native differences.
+Private reports are `build/runtime/eur_high_msl_catch/live55_v2.json` and
+`isolated_v1.json`; producers under `build/analysis/high_effort_50_to_55/` are
+`msl_catch_oracle.py`, `probe_msl_catch.py` and `check_msl_catch_isolated.py`.
+The failed v1 probe/model and report are preserved separately.
