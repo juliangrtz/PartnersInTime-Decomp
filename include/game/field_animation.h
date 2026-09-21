@@ -18,9 +18,17 @@ typedef struct FieldModelAnimation {
     GameMatrixAnimationTrack *tracks[2];
 } FieldModelAnimation;
 
+/* Prefix of GameSpriteWindowManager through base.display (the owner is 3920 bytes). */
+typedef struct FieldSpriteWindowState {
+    u8 unknown_00[0x54];
+    u32 display_flags;
+} FieldSpriteWindowState;
+typedef char FieldSpriteWindowState_SizeCheck[sizeof(FieldSpriteWindowState) == 0x58 ? 1 : -1];
+
+/* FieldSystem prefix through its owned sprite window manager. */
 typedef struct FieldSpriteAnimationSystem {
     u8 unknown_000[0x3AC];
-    ModelRenderDescriptor *render_descriptor;
+    FieldSpriteWindowState *windows;
 } FieldSpriteAnimationSystem;
 
 typedef struct FieldSpriteAnimation {
@@ -59,6 +67,7 @@ GameMatrixAnimationTrack *FieldModelAnimation_Start(FieldModelAnimation *state, 
 FieldSpriteAnimation *FieldSpriteAnimation_Init(FieldSpriteAnimation *state, void *field_system);
 FieldSpriteAnimation *FieldSpriteAnimation_Destroy(FieldSpriteAnimation *state);
 void FieldSpriteAnimation_Stop(FieldSpriteAnimation *state);
+void FieldSpriteAnimation_InitializeGraphics(FieldSpriteAnimation *state);
 void FieldSpriteAnimation_CancelTrack(FieldSpriteAnimation *state, int index);
 GameSpriteAnimationTrack *FieldSpriteAnimation_Start(FieldSpriteAnimation *state, int index,
                                                      const s16 *commands, int x, s16 y, s16 speed);

@@ -7868,3 +7868,43 @@ stub replaces the model pointer to test the caller's reload. The checks predict
 all main-RAM changes, including 16-bit coordinate/depth wrapping, and preserve
 DTCM outside a bounded 64-byte stack region. These fixtures add no live gameplay,
 model lifetime, animation or rendering coverage.
+
+
+## Field sprite animation graphics setup
+
+[FieldSpriteAnimation_InitializeGraphics](../../src/field/field_sprite_animation_start.c)
+reconstructs `0x020BF33C..0x020BF510` (468 bytes) in ordinary C. An active
+animation returns immediately. Otherwise it selects 3D BG0, configures geometry
+and orthographic projection, preserves all five ordered DISP3DCNT writes, and
+sets seven matrix elements. Existing alpha blending is reused; otherwise the
+animation records ownership so Stop can disable it later.
+
+The pointer at FieldSystem +0x3AC owns a 3,920-byte GameSpriteWindowManager,
+allocated by FieldSystem's resource setup. Its +0x54 word is base.display, and
+bit 25 fixes main-window scrolling. The former ModelRenderDescriptor view was
+incorrect; Start and Stop now share an explicitly bounded window prefix. The
+prefix is not the allocation size.
+
+A Save 65 cold replay uses the established restored decoded-command fixtures
+to enter room 359 and start its part-0 effect at script offset 0x110A. Across
+3,333 frames, one initializer enables blending. The oracle checks all 18 own
+stores in order and eight helper calls, full sprite state (10,324 bytes),
+FieldSystem (952 bytes), window manager (3,920 bytes), SP and r4-r11. Register
+operands are captured immediately before their reads. Real graphics helpers
+execute, but their hardware effects are observational. The final capture shows
+the field; this controlled route does not establish ordinary story entry.
+
+Another 108 isolated ARM946 cases cover active returns and both blend branches
+with varied preserved flag/register bits: 1,296 stores and 576 helper entries.
+These use no-effect helper stubs and modeled read/write I/O. They check caller
+arguments, full RAM/DTCM, synthetic records, surrounding scratch memory and ABI;
+they do not verify hardware timing, rasterization or live object lifetimes.
+All 104 original saves remain unchanged. The final actual source objects match,
+and full build/native relink plus 107 tests pass.
+
+Private reports are `build/runtime/eur_high_sprite_graphics/room359_v2.json` and
+`isolated_v1.json`; producers are `probe_sprite_graphics.py` and
+`check_sprite_graphics_isolated.py` under `build/analysis/high_effort_50_to_55/`.
+The failed v1 probe and its source are preserved: its register accessor did not
+translate Capstone's `ip` alias to `r12`. The successful probe also expands the
+old 96-byte descriptor check to the actual 3,920-byte window allocation.

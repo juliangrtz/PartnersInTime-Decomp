@@ -10582,3 +10582,17 @@ All 564 non-stack stores were checked in order; full RAM/DTCM and scratch outsid
 the measured stack, helper arguments and its 12-byte result, return values, SP
 and r4-r11 were checked. Model-derived collision bounds and live object lifetimes
 remain outside this isolated coverage.
+
+
+### Field sprite animation graphics initialization
+
+- Linked FieldSpriteAnimation_InitializeGraphics (overlay 0, 468 bytes of C);
+  corrected the window-manager prefix shared with Stop. Total: 850,384 /
+  1,563,700 matching C/C++ bytes (54.38%).
+- Actual functions match; golden EUR ROM, zero native differences and 107 tests.
+- Controlled room359 replay: one initializer, 18 ordered stores, eight helper
+  calls, full live records and ABI checked. Additional 108 isolated cases cover
+  both blend branches and active returns with modeled I/O and helper stubs.
+  No ordinary-story or independent rasterization claim; all 104 saves unchanged.
+- Evidence and limits: [sprite graphics setup](research/RECONSTRUCTION_NOTES.md#field-sprite-animation-graphics-setup).
+  Private reports: build/runtime/eur_high_sprite_graphics/{room359_v2,isolated_v1}.json.

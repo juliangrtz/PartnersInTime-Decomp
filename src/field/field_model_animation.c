@@ -24,7 +24,7 @@ void FieldSpriteAnimation_Stop(FieldSpriteAnimation *state)
     else *(vu16 *)0x04000050 = 0;
     *(vu32 *)0x04000540 = 1;
     GX_SetGraphicsMode(1, 0, 0);
-    state->field_system->render_descriptor->flags &= ~0x02000000;
+    state->field_system->windows->display_flags &= ~0x02000000;
     state->flags.active = 0;
 }
 

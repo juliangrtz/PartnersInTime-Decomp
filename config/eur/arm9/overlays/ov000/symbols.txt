@@ -720,7 +720,7 @@ FieldSpriteAnimation_Stop kind:function(arm,size=0xc4) addr:0x020bf110
 FieldSpriteAnimation_CancelTrack kind:function(arm,size=0x2c) addr:0x020bf1d4
 func_ov000_020bf200 kind:function(arm,size=0xe0) addr:0x020bf200
 FieldSpriteAnimation_Start kind:function(arm,size=0x5c) addr:0x020bf2e0
-func_ov000_020bf33c kind:function(arm,size=0x1d4) addr:0x020bf33c
+FieldSpriteAnimation_InitializeGraphics kind:function(arm,size=0x1d4) addr:0x020bf33c
 FieldSpriteAnimation_Destroy kind:function(arm,size=0x3c) addr:0x020bf510
 FieldSpriteAnimation_Init kind:function(arm,size=0x6c) addr:0x020bf54c
 data_ov000_020bf5b8 kind:data(any) addr:0x020bf5b8
