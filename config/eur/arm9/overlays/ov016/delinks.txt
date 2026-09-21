@@ -52,3 +52,7 @@ src/attack_mix_flower_ov016/mix_participant_exit.c:
 
 src/attack_mix_flower_ov016/mix_flowers_initialize.cpp:
     .text start:0x020c6e24 end:0x020c7274
+
+
+src/attack_mix_flower_ov016/pair_effect_update.c:
+    .text start:0x020c4910 end:0x020c4b18

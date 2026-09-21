@@ -118,6 +118,9 @@ void Overlay16PairEffect_Initialize(Overlay16PairEffect *effect, int primary_res
 void Overlay16PairEffect_DestroyModels(Overlay16PairEffect *effect);
 void Overlay16PairEffect_Reset(Overlay16PairEffect *effect);
 void Overlay16PairEffect_ResetIfRequested(Overlay16PairEffect *effect);
+void Overlay16PairEffect_Update(Overlay16PairEffect *effect, Overlay16PairController *controller);
+void func_ov016_020c34d0(Overlay16PairController *controller, int larger_kind);
+void func_ov016_020c4b54(Overlay16PairEffect *effect, Overlay16PairController *controller);
 void Overlay16PairEffect_ChangeKind(Overlay16PairEffect *effect, int kind);
 void Overlay16PairEffect_ApplyKindAnimation(Overlay16PairEffect *effect, int active);
 void Overlay16PairEffect_StartPursuit(Overlay16PairEffect *effect, BattleSceneObject **target);

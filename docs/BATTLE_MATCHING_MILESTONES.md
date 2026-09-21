@@ -10706,3 +10706,19 @@ ROM, zero native differences and 107 tests pass; all 104 saves are unchanged.
 Private evidence: `build/runtime/eur_high_battle_small_controls/flower83_v2.json`
 and `init55_v1.json`. The first flower probe failed on the host register alias
 `ip`; v2 uses `r12`. Its failed report and source are retained.
+
+
+### Mix Flower paired-effect update
+
+Reconstructed the paired-effect phase updater in C, adding 520 matching bytes.
+Linked coverage is 854,384 / 1,563,700 (54.64%). The first candidate matches;
+48 functions in affected compiled source units also match after integration.
+Full verification passes 107 tests, the golden ROM and zero native differences.
+
+The automatic Save 83 replay checks 39,367 of 49,216 observed updater calls
+across 4,270 frames, including all nonidle calls and one idle call per slot.
+It checks 673 caller stores and 665 arrival spawns; helper internals remain
+bounded observations. Another 148 isolated ARM946 cases cover missed phases
+and threshold boundaries, with explicit lifecycle stubs. Original saves are
+unchanged. See the [pair updater evidence](research/RECONSTRUCTION_NOTES.md#mix-flower-paired-effect-update)
+for coverage limits and the preserved failed oracle runs.

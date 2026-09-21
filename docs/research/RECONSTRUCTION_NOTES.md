@@ -8255,3 +8255,56 @@ Reports: `build/runtime/eur_high_battle_small_controls/flower83_v1.json` (failed
 and `probe_oam_transform_init.py`. Full verification passes 107 tests, the
 golden ROM and zero native differences; selected actual source objects are
 compared separately in `battle_small_controls_actual.txt`.
+
+
+## Mix Flower paired-effect update
+
+[The updater](../../src/attack_mix_flower_ov016/pair_effect_update.c), overlay 16
+`0x020C4910..0x020C4B18`, advances animation, convergence and reset phases of
+each 524-byte paired effect. The attack allocation holds 32 slots at +400;
+its 32-byte controller is at +17168. The first active-model pointer is cached
+across the reset-request helper. Phase 4 either tests projected Y <= -160,
+checks controller radius, or waits for animation channel 3. The secondary
+object always follows the primary through the existing relative-position helper.
+Separate phase 5 and 6 arms preserve the native duplicated reset blocks.
+
+The Save 83 replay starts from the derived battle-menu checkpoint with SHA-1
+`21d2e64a24b389689627292539103880c6761b47`. Recorded navigation and 665 guarded
+automatic button inputs use no RAM fixtures. Across 4,270 frames, 49,216 calls
+are observed and 39,367 fully checked: every nonidle call, plus the first idle
+call for each of 32 slots. Checked phase counts are 0:32, 1:61, 2:633, 3:897,
+4:37740 and 6:4. There are 673 ordered caller stores, 665 growth/arrival calls
+and one controller-animation start. Existing animation checks also verify one
+attach/start/release sequence. The final battle-menu capture was inspected.
+
+Checks cover the full 17,292-byte attack allocation, owned scene objects and
+models, controller, camera, palette/render/texture-list neighbors, ordered
+arguments/stores and ABI. Radius results and bounded animation/reset/spawn
+effects are observed at helper return; this does not independently verify
+their algorithms. The 665 newly observed renderers and palette records have
+validated allocation extents and ownership; external list/root changes are
+derived independently. Allocation internals, later releases and rendered pixels
+are not proved by those checks. Failed v1 omitted a newly inserted renderer's
+external link; preserved v2 corrects the oracle and passes with unchanged game code.
+
+Another 148 isolated ARM946 cases use copied main RAM/DTCM from the earlier
+Mix Flower replay, synthetic records, the actual compiled updater and real
+model lookup, projection, channel and position helpers. Cases cover phases
+0/1/2/3/5/6/7/31, controller phases 0..6/31, projected Y -161/-160/-159,
+radius outcomes, kinds 0/1/2/255 and moving versus immediate position updates.
+They check 60 caller stores, 1,182 real helper stores, full memory outside
+measured stack writes and ABI. Reset, animation, controller start, radius,
+growth, spawn and finish helpers are explicit stubs with checked arguments.
+These cases supplement missing live paths; they do not establish gameplay
+lifetimes, heap behavior or hardware timing. The first host producer failed
+while writing its output due to a shadowed path variable; v2 passes.
+
+All 104 original saves remain unchanged. Full verification passes 107 tests,
+the golden ROM and zero native differences; 48 functions in 16 affected actual
+source objects match. The initial build failed only the required module-comment
+check; the corrected source passes. Reports are under
+`build/runtime/eur_high_mix_pair_update/`: `evidence_mix83_v1.json` (failed),
+`evidence_mix83_v2.json` and `isolated_v2.json` (passed). Producers under
+`build/analysis/high_effort_50_to_55/` are `probe_mix_pair_update.py`,
+`mix_pair_update_oracle.py` and `check_mix_pair_update_isolated.py`;
+failed versions and logs are retained.
