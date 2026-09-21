@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 void FieldEntity_UpdateScreenVisibility(FieldRuntimeEntity *entity);
+void FieldEntity_SetRendererVisibility(FieldRuntimeEntity *entity, int visible);
 int FieldEntity2D_IsOutsideScreen(FieldRuntimeEntity *entity);
 void FieldEntity_RefreshInteractionBounds(FieldRuntimeEntity *entity);
 void FieldEntity2D_UpdateBounds(FieldRuntimeEntity *entity);

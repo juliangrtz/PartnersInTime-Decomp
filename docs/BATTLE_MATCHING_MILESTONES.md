@@ -9777,3 +9777,36 @@ All four affected source objects match, including the full field dispatcher.
 The build passes 107 tests, reproduces the golden ROM and reports zero native
 relink differences. All 104 original saves remain unchanged. Private sources,
 artifact hashes and checks are recorded in `high_effort_50_to_55/`.
+
+
+## Field renderer visibility (2026-09-21)
+
+`FieldEntity_SetRendererVisibility` reconstructs overlay 0 range
+`0x02066DC0..0x02066E60` as matching C. It preserves the requested entity flag,
+updates the primary renderer if present, and enables the auxiliary renderer only
+when the shadow flag and height/override condition permit it. Without a primary
+renderer, the auxiliary renderer remains unchanged. This adds 160 matching bytes,
+bringing the linked total to 840652 / 1563700 (53.7604%). The adjacent resident
+model helpers were already linked and contribute no additional progress here.
+
+Private `eur_high_field_renderer_visibility/evidence_field103_v2.json` checks ten
+ordinary visibility changes and twenty model-helper calls over 572 frames, using
+the golden save-103 checkpoint. All 1328 entity bytes, helper arguments, 128-byte
+model prefixes and five sort-key callbacks are checked independently. Complete
+native guards cover the target and executed helpers. The final capture shows the
+Peach's Castle dialogue before Shrowser. The first replay retained observational
+virtual-callback handling; the second independently checks those writes too.
+
+`isolated_v1.json` passes 1440 ARM946 cases on copied RAM. These cover absent,
+single, paired and aliased renderer pointers; shadow and override flags; negative,
+zero and positive height; enabled values 0, 1, 2 and -1; active flags; and the
+sort-key suppression guards. Native helpers execute without stubs. Checks include
+full RAM and scratch records, DTCM outside the stack, preserved registers, and
+ordered calls and stores. Synthetic model records cover the required prefix;
+complete renderer allocations, live lifetime, other virtual implementations,
+IRQ behavior and independent rendered-pixel verification remain outside scope.
+
+The actual linked source object matches all 160 bytes. Full build verification
+passes 107 tests, reproduces the golden ROM and reports zero native relink
+differences. All 104 original saves remain unchanged. Private probe versions,
+reports and artifact hashes are retained under `high_effort_50_to_55/`.

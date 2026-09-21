@@ -976,3 +976,5 @@ src/attack_pocket_chomp_ov018/chomp_bounce_parameters.cpp
 src/battle/battle_capture_transform.c
 src/battle/battle_three_part.cpp
 src/field/field_script_begin.c
+
+src/field/field_renderer_visibility.c
