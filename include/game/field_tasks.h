@@ -18,6 +18,7 @@ typedef char FieldFrameTask_SizeCheck[sizeof(FieldFrameTask) == 40 ? 1 : -1];
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldGraphicsIrqTask_Update(FieldGraphicsIrqTask *task);
 FieldGraphicsIrqTask *FieldGraphicsIrqTask_Init(FieldGraphicsIrqTask *, u32, u32, void *);
 FieldGraphicsIrqTask *FieldGraphicsIrqTask_Destroy(FieldGraphicsIrqTask *);
 FieldGraphicsIrqTask *FieldGraphicsIrqTask_Delete(FieldGraphicsIrqTask *);

@@ -13,8 +13,13 @@ typedef struct GameSpriteWindowManager GameSpriteWindowManager;
 /* Touchscreen mask-erase effect. The factory allocates 180460 bytes: four
  * asynchronous image requests, saved OBJ tiles, and a separate alpha mask. */
 typedef struct FieldPendingTransfer {
-    struct { u16 phase : 3, dirty : 1, unknown : 12; } flags;
-    u8 unknown_02[186];
+    union {
+        struct {
+            struct { u16 phase : 3, dirty : 1, unknown : 12; } flags;
+            u8 unknown_02[186];
+        };
+        struct { u8 request_prefix[12]; FieldArchiveRequest requests[4]; };
+    };
     void *images[4];
     u32 image_sizes[4];
     u8 unknown_dc[16];
@@ -23,6 +28,15 @@ typedef struct FieldPendingTransfer {
 } FieldPendingTransfer;
 typedef char FieldPendingTransfer_SizeCheck[
     sizeof(FieldPendingTransfer) == 180460 ? 1 : -1
+];
+typedef char FieldPendingTransfer_RequestOffsetCheck[
+    (u32)&((FieldPendingTransfer *)0)->requests == 12 ? 1 : -1
+];
+typedef char FieldPendingTransfer_ImageOffsetCheck[
+    (u32)&((FieldPendingTransfer *)0)->images == 188 ? 1 : -1
+];
+typedef char FieldPendingTransfer_TileOffsetCheck[
+    (u32)&((FieldPendingTransfer *)0)->saved_object_tiles == 236 ? 1 : -1
 ];
 typedef struct FieldSystem {
     GameTask task;
@@ -97,6 +111,7 @@ enum FieldTouchState {
 #ifdef __cplusplus
 extern "C" {
 #endif
+void FieldSystem_PrepareMaskErase(FieldSystem *system);
 void FieldSystem_ReleaseMaskErase(FieldSystem *system);
 int FieldSystem_IsTransferActive(FieldSystem *system);
 void FieldSystem_ResumeTransfer(FieldSystem *system);

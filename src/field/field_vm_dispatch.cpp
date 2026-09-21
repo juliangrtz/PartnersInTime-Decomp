@@ -120,7 +120,6 @@ extern void GameParty_Initialize(int new_game_preset);
 extern int GameInventory_Add(u16 item_id, int count_delta);
 extern const u16 data_02048f1a[];
 extern void func_ov000_02081bd4(int enabled);
-extern void func_ov000_02066b34(void *field_system);
 extern void GameRumble_PlayTimed(int rumble_pattern, int repeat_count);
 extern u8 data_0205a00c;
 extern void GameRumble_Stop(void);
@@ -3789,7 +3788,7 @@ int FieldVm_DispatchCommand(ScriptVm *vm, ScriptVmState *base_state,
         break;
 
     case FIELD_VM_PREPARE_TOUCHSCREEN_MASK_ERASE:
-        func_ov000_02066b34(field_system);
+        FieldSystem_PrepareMaskErase((FieldSystem *)field_system);
         break;
 
     case FIELD_VM_WAIT_TOUCHSCREEN_MASK_ERASE_READY:

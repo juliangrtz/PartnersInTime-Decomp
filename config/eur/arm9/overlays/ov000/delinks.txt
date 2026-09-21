@@ -498,3 +498,9 @@ src/field/field_area_render_snapshots.cpp:
 
 src/field/field_mask_erase_release.c:
     .text start:0x02065f54 end:0x02066028
+
+src/field/field_mask_erase_prepare.c:
+    .text start:0x02066b34 end:0x02066c50
+
+src/field/field_graphics_irq.c:
+    .text start:0x02065d90 end:0x02065e34

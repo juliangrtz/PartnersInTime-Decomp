@@ -10074,3 +10074,55 @@ not ordinary story entry or completion of the touchscreen erasure puzzle.
 Graphics setup helpers remain observational beyond their arguments and caller
 stores. The high-address copy branch is not exercised by these RAM allocations;
 there is no pixel/IRQ oracle or isolated ARM coverage claimed for this batch.
+
+
+## 2026-09-21 - Mask-erase setup and field VBlank graphics
+
+`FieldSystem_PrepareMaskErase` (0x02066B34..0x02066C50, 284 bytes) and
+`FieldGraphicsIrqTask_Update` (0x02065D90..0x02065E34, 164 bytes) are linked
+matching C without ASM. The setup clears a 180460-byte effect, allocates and
+queues four image reads, saves 128 KiB of OBJ tiles, then publishes the owner
+pointer. The shared record now exposes four 44-byte archive requests at +12,
+retains its raw view, and checks the request/image/tile offsets and total size.
+The VM calls the named setup API. The IRQ callback preserves the VBlank gate,
+palette-backup flag, mask upload, optional area updates and OAM ordering.
+`FieldDisplay_SavePalettes` now declares its unused incoming pointer, as passed
+by this caller; its complete 696-byte body remains unchanged.
+
+Full verification passes 107 tests, the golden EUR ROM hash, and zero native
+relink differences. Actual source-object comparisons cover both new functions,
+all three display helpers and the 23492-byte Field VM. Linked C/C++ reaches
+844404 / 1563700 bytes (54.0004%). The first gate passed; an additional offset
+check initially referenced unavailable stddef.h. Target-compiler constant
+checks replaced that dependency and the full gate passed again.
+
+Private reports in `build/runtime/eur_high_field_mask_prepare/` cover:
+
+- `prepared83_v1.json`: 474 frames, one setup, five checked heap allocations,
+  one full zero-fill, four size and descriptor lookups, four asynchronous-read
+  calls and one full OBJ backup. Entries 16, 18, 17, 19 allocate 65552, 512,
+  1040 and 192 bytes. Heap block selection, splitting, headers and cursors are
+  derived independently; the whole 952-byte system, effect, archive and owned
+  image records remain checked around caller/helper boundaries. The previous
+  phase-1 cleanup oracle also passes, including five actual frees.
+- `null83_v1.json`: 353 frames, ordinary room departure with no mask fixture.
+- `pause83_v2.json`: 723 frames, ordinary pause open/close and room departure.
+  This adds the pending palette backup and absent-area branches. The pause and
+  final room captures were inspected. The initial pause probe stopped on reused
+  addresses; the second version positively identifies complete overlay-5 native
+  functions before excluding foreign entries. The failed log is retained.
+
+Together the routes check 1383 IRQ returns: 1167 with VBlank work permitted,
+216 gated returns, 5830 helper returns, one palette backup and three absent
+checks for each area. Task status values 0, 1 and 2 occur; the status-above-2
+branch is untested. The full 44-byte IRQ task and 952-byte owner, owner pointer,
+allocation extent, helper arguments/order, pending-bit write and SP/r4-r11 are
+checked. Graphics helpers remain observational outside these caller records.
+
+The mask route uses the previously documented restored 0x132 decoded-command
+fixture; it is not the shipped room-558 puzzle route. Asynchronous file/read
+processing is observed only within explicitly bounded archive/request/image
+owners. Invalid allocation failure, high-address copy, complete touch erasure,
+pixel rendering and isolated ARM cases are not claimed. The two earlier route
+capture sequences retain identical hashes. All 104 original saves are unchanged;
+source/report/artifact hashes and full native guards are retained privately.

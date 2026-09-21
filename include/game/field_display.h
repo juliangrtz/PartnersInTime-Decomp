@@ -16,7 +16,7 @@ extern "C" {
 void FieldDisplay_FinishFrame(void);
 void FieldDisplay_InitializeGeometry(void *unused);
 void FieldDisplay_InitializeVram(void *unused);
-void FieldDisplay_SavePalettes(void);
+void FieldDisplay_SavePalettes(void *unused);
 #ifdef __cplusplus
 }
 #endif

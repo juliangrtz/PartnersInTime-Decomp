@@ -1,6 +1,6 @@
 FieldGraphicsIrqTask_Destroy kind:function(arm,size=0x24) addr:0x02065d40
 FieldGraphicsIrqTask_Delete kind:function(arm,size=0x2c) addr:0x02065d64
-func_ov000_02065d90 kind:function(arm,size=0xa4) addr:0x02065d90
+FieldGraphicsIrqTask_Update kind:function(arm,size=0xa4) addr:0x02065d90
 FieldGraphicsIrqTask_Init kind:function(arm,size=0x30) addr:0x02065e34
 FieldDisplay_FinishFrame kind:function(arm,size=0x7c) addr:0x02065e64
 FieldFrameTask_Delete kind:function(arm,size=0x2c) addr:0x02065ee0
@@ -12,7 +12,7 @@ FieldSystem_IsTransferActive kind:function(arm,size=0x2c) addr:0x020660f8
 func_ov000_02066124 kind:function(arm,size=0x9c0) addr:0x02066124
 FieldSystem_ResumeTransfer kind:function(arm,size=0x28) addr:0x02066ae4
 FieldSystem_IsTransferPreparing kind:function(arm,size=0x28) addr:0x02066b0c
-func_ov000_02066b34 kind:function(arm,size=0x11c) addr:0x02066b34
+FieldSystem_PrepareMaskErase kind:function(arm,size=0x11c) addr:0x02066b34
 FieldSystem_IsTimeHoleActive kind:function(arm,size=0x18) addr:0x02066c50
 func_ov000_02066c68 kind:function(arm,size=0x158) addr:0x02066c68
 FieldEntity_SetRendererVisibility kind:function(arm,size=0xa0) addr:0x02066dc0

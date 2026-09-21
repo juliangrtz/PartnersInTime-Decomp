@@ -991,3 +991,7 @@ src/title_ov006/credits_text_strip.c
 src/title_ov006/credits_particles.c
 
 src/field/field_mask_erase_release.c
+
+src/field/field_mask_erase_prepare.c
+
+src/field/field_graphics_irq.c

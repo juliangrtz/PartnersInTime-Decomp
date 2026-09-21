@@ -40,7 +40,7 @@ static inline void ClearFast(void *destination, u32 bytes)
     volatile u32 zero = 0;
     MIi_CpuClearFast(zero, destination, bytes);
 }
-void FieldDisplay_SavePalettes(void)
+void FieldDisplay_SavePalettes(void *unused)
 {
     int bank;
     data_0205a01c.main = GameHeap_NewArray(sizeof(FieldPaletteBackup), 2, 0, 0);
