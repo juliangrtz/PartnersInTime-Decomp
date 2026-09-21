@@ -8452,3 +8452,43 @@ Private reports are `build/runtime/eur_high_msl_catch/live55_v2.json` and
 `isolated_v1.json`; producers under `build/analysis/high_effort_50_to_55/` are
 `msl_catch_oracle.py`, `probe_msl_catch.py` and `check_msl_catch_isolated.py`.
 The failed v1 probe/model and report are preserved separately.
+
+
+## MSL active catch search
+
+[Active catch search](../../src/msl/active_catch.cpp) reconstructs
+`0x02047660..0x020477B4`. It copies a 24-byte record and 112-byte context to a
+private cursor, advances through handler actions, and resolves action 13's
+signed offset relative to the saved frame pointer. Only the original context's
+type, object, destructor and active-catch fields are updated. The record embeds
+the shared 20-byte lookup prefix; its sixth word remains opaque. Explicit scalar
+copies followed by the 84-byte saved-state aggregate preserve native copying.
+Actions 1, 14 and 19 terminate this search; jumps are consumed inside the
+advance helper after a valid skippable action. The advance helper remains native.
+
+Controlled DeSmuME checks on the Save 55 checkpoint
+(`496c6a6836f08c15e95655bb5d78c4cde65dc688`) pass 18 calls and 781 ordered
+stores across 400 frames. Checks include scalar and aggregate copies, actual
+handler/decoder helpers, returned pointers, ABI, full 70,976-byte common workspace,
+root and read-only RTTI data. The workspace, root, 512-byte CPU stack window and
+registers are restored before all 18 original updates complete. The final Gritzy
+Caves menu was viewed. Live v1 failed a probe-local variable shadowing error;
+v2 exposed an invalid action-19 fixture. The preserved v3 model excludes it.
+
+The isolated ARM946 replay passes 576 cases and 24,955 ordered stores, using
+copied live RAM/DTCM, 128 KiB scratch, compiled target bytes and real helpers.
+It covers immediate catches, skippable actions 2..12 and 15..18, multi-action
+streams, encoded operand lengths, signed frame offsets and jumps after skips.
+Full memory outside the bounded CPU stack, ordered calls/stores, return and ABI
+are checked. An earlier fixture incorrectly started with a jump; the failed
+version is preserved. Frame-boundary traversal, terminal errors, naturally
+raised exceptions and CPU unwind are not covered. All 104 saves remain unchanged.
+
+The actual compiled function matches all 340 bytes. Full verification passes
+107 tests, the golden ROM and zero native differences. Reusing the shared
+record prefix leaves the compared machine code and ROM unchanged; the runtime
+reports therefore cover those same final bytes. Private reports are
+`build/runtime/eur_high_msl_active_catch/live55_v3.json` and `isolated_v2.json`;
+their producers under `build/analysis/high_effort_50_to_55/` are
+`probe_msl_active_catch.py`, `msl_active_catch_oracle.py` and
+`check_msl_active_catch_isolated.py`.

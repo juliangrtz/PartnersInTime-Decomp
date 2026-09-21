@@ -591,3 +591,6 @@ src/msl/catch_record.c:
 
 src/msl/exception_spec.c:
     .text start:0x020475d4 end:0x02047660
+
+src/msl/active_catch.cpp:
+    .text start:0x02047660 end:0x020477b4

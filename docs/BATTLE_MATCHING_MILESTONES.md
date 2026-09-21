@@ -10765,3 +10765,13 @@ exception-specification matching and handler-kind lookup. Total 855576 of
 pass 25 calls/46 stores; 834 isolated ARM946 cases pass with 1246 stores and
 real type-matcher calls. No natural exception or class-hierarchy coverage is
 claimed. All 104 saves are unchanged. See [catch evidence](research/RECONSTRUCTION_NOTES.md#msl-catch-records-and-exception-specifications).
+
+
+## MSL active catch search
+
+Active catch search adds 340 linked C++ bytes, reaching 855916 of 1563700
+(54.74%). Actual source matches; full verification passes 107 tests, the golden
+ROM and zero native differences. Controlled live checks pass 18 calls/781 stores;
+576 isolated ARM946 cases pass with 24955 stores and real helpers. No natural
+exception, terminal-error or frame-boundary coverage is claimed. All 104 saves
+are unchanged. See [active-catch evidence](research/RECONSTRUCTION_NOTES.md#msl-active-catch-search).

@@ -1022,3 +1022,4 @@ src/msl/unwind.c
 src/msl/type_info.c
 src/msl/catch_record.c
 src/msl/exception_spec.c
+src/msl/active_catch.cpp
