@@ -10794,3 +10794,12 @@ The actor lookup adds 488 linked C bytes, reaching 856804 of 1563700
 differences. 216 controlled live cases execute 432 real party lookups and
 restore state before the original updates. All 104 saves are unchanged.
 See [actor mapping evidence](research/RECONSTRUCTION_NOTES.md#command-wheel-actor-mapping).
+
+
+## Party rebound update and shadow
+
+Two functions add 576 linked C bytes, reaching 857380 of 1563700 (54.83%).
+Actual source objects match; full verification passes 107 tests, golden ROM
+and zero native differences. 48 controlled live calls cover waiting, timer
+wrap and shadow projection/aliasing; later effect, arc and cleanup branches
+remain outside this replay. All 104 saves are unchanged. See [rebound evidence](research/RECONSTRUCTION_NOTES.md#party-rebound-update-and-shadow).

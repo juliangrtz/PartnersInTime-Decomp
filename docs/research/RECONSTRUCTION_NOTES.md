@@ -8574,3 +8574,42 @@ those exact relationships and the containing allocation bounds. Private evidence
 is `build/runtime/eur_high_battle_wheel_actor/live55_v2.json`, produced by
 `build/analysis/high_effort_50_to_55/probe_battle_wheel_actor.py`; the failed v1
 report and source are retained separately.
+
+
+## Party rebound update and shadow
+
+[Rebound updates](../../src/battle/battle_party_rebound.c) reconstruct overlay 2's
+`0x02077C38..0x02077E78`: a 512-byte task callback and its 64-byte partner-shadow
+helper. The still-native creator at `0x02077E78` copies a 16-byte formation preset
+into a 28-byte slot in the context's `+0x8B44` pool. Packed IDs occupy two seven-bit
+fields. The update follows the actor while channel 3 runs, decrements a signed
+16-bit delay, and either ends the reaction or reduces the next arc by its decay
+percentage. The shadow copies x/y and uses the signed projected y position to
+choose z=-192 or the native 282-unit offset. Source order preserves aliasing
+when both object pointers are equal. These constants come from the instructions.
+
+The callback matches on its first valid C draft. The shadow's earlier private
+draft emitted 68 bytes instead of 64; expressing the nonnegative branch first,
+as in native code, removes the extra branch. Both integrated source functions
+match completely without ASM. Full verification passes 107 tests, golden-ROM
+packaging and zero native differences.
+
+Forty-eight controlled live calls use the Save 55 checkpoint
+(`496c6a6836f08c15e95655bb5d78c4cde65dc688`). They cover active/inactive channel 3,
+three delay values including signed-halfword wrap, four coordinate pairs including
+both projection signs and signed extremes, and separate/aliased shadow objects.
+All real party lookup, object lookup, shadow and channel-query helpers run.
+An independent memory model checks their arguments, results and expected stores,
+the complete context allocation, its root and preserved registers. The fixture
+uses a verified free pool slot temporarily; the slot, full context and 256-byte
+CPU stack window are restored before every original common update. All 48 original
+updates finish over 400 frames. The final Gritzy Caves menu was viewed, and all
+104 saves remain unchanged.
+
+This replay deliberately keeps the delay nonnegative after decrement. Effect
+creation, sounds, amplitude decay/square root/new-arc setup, animation cleanup,
+knockout and natural recoil activation remain untested by this replay. Exact
+matching covers the whole function; the live coverage is limited to the paths
+listed above. Private evidence is
+`build/runtime/eur_high_battle_party_rebound/live55_v1.json`, produced by
+`build/analysis/high_effort_50_to_55/probe_battle_party_rebound.py`.
